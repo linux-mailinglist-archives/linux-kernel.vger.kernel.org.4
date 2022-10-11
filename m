@@ -2,126 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3AD5FBE6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8D05FBD97
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJKXcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 19:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
+        id S229471AbiJKWEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 18:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiJKXce (ORCPT
+        with ESMTP id S229451AbiJKWEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 19:32:34 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF67A344F;
-        Tue, 11 Oct 2022 16:32:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnBs64hymz4xGj;
-        Wed, 12 Oct 2022 10:32:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665531147;
-        bh=x+Eov3eRwg7TSgwoiQwZSVfI7w+4NiORozuvJ9NhAlI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uHZtas+aMxhpn+qMhzdq2xmL2ejCX5Ke882xadn9fZILU6Sv58f7GLevm5Gq7PEFO
-         1qd1sUQjKvK1wGYD+YjAeD9/ktYfTCeFGcz3K2VTzREmuQiyEUtfXo/e3BomqQcJa/
-         Vfy4VAafZfaheyBYvEmzwE3VtvdW6Onfhr1v9G4vUsT+Zi522mQwl1FpzfHC8rQWDQ
-         MtJZ05E75UOUvd5tuAR9oe5wyqvBMpxW7XEbcj0SfYvmNbYNuMQW3Rc82a29/UUoLN
-         RWdUnKfXw13WcZvrylWmX1WEr2cEuwDOTQ61kRhjpZG9oEuF5lQm2u/tgsgV5GRltS
-         508KWJwCy8phw==
-Date:   Wed, 12 Oct 2022 08:46:11 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bitmap tree with the random
- tree
-Message-ID: <20221012084611.53852c92@canb.auug.org.au>
-In-Reply-To: <20221007161411.731900ea@canb.auug.org.au>
-References: <20221007161411.731900ea@canb.auug.org.au>
+        Tue, 11 Oct 2022 18:04:04 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390471C406;
+        Tue, 11 Oct 2022 15:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1665525843; x=1697061843;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=J9/5n4tS46/xKKVi9EpzbSUpnYma+DcmN/Zm80P/0Qc=;
+  b=Uf0lYF4O8xYMI93g59hTYRovW0UMwVFWbfKgTgGvqSzDPrc0pEPq4Wqo
+   Ti8gsj+GpVtjoKOMLgcYsBE6XXMEMcPoA8k/cunN/pQ6fH7tpSYGX0OD1
+   E2E7Fa92Pxg5sif/XgUVOiG5vHb7eP6lKnup4pbEc160/pf0i44j3oZOJ
+   0=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Oct 2022 15:04:02 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 15:04:02 -0700
+Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 15:04:01 -0700
+Message-ID: <bf9d4365-7750-399f-e488-1611eecca13a@quicinc.com>
+Date:   Tue, 11 Oct 2022 15:04:01 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5syZWPfTHPSEH.=wYfNFEbl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM
+ Console Services
+Content-Language: en-US
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Arnd Bergmann" <arnd@arndb.de>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221011000840.289033-1-quic_eberman@quicinc.com>
+ <20221011000840.289033-14-quic_eberman@quicinc.com>
+ <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/5syZWPfTHPSEH.=wYfNFEbl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Fri, 7 Oct 2022 16:14:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the bitmap tree got a conflict in:
->=20
->   include/linux/nodemask.h
->=20
-> between commit:
->=20
->   82f33a32b4d2 ("treewide: use prandom_u32_max() when possible")
->=20
-> from the random tree and commit:
->=20
->   97848c10f9f8 ("lib/bitmap: remove bitmap_ord_to_pos")
->=20
-> from the bitmap tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc include/linux/nodemask.h
-> index 66ee9b4b7925,0c45fb066caa..000000000000
-> --- a/include/linux/nodemask.h
-> +++ b/include/linux/nodemask.h
-> @@@ -508,8 -508,7 +508,7 @@@ static inline int node_random(const nod
->  =20
->   	w =3D nodes_weight(*maskp);
->   	if (w)
-> - 		bit =3D bitmap_ord_to_pos(maskp->bits,
-> - 			prandom_u32_max(w), MAX_NUMNODES);
->  -		bit =3D find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
-> ++		bit =3D find_nth_bit(maskp->bits, MAX_NUMNODES, prandom_u32_max(w));
->   	return bit;
->   #else
->   	return 0;
+On 10/10/2022 11:02 PM, Jiri Slaby wrote:
+> On 11. 10. 22, 2:08, Elliot Berman wrote:
+>> Gunyah provides a console for each VM using the VM console resource
+>> manager APIs. This driver allows console data from other
+>> VMs to be accessed via a TTY device and exports a console device to dump
+>> Linux's own logs to our console.
+> ...
+>> +struct rm_cons_drv_data {
+>> +    struct tty_driver *tty_driver;
+>> +    struct device *dev;
+>> +
+>> +    spinlock_t ports_lock;
+>> +    struct rm_cons_port *ports[RM_CONS_TTY_ADAPATERS];
+>> +
+>> +    struct notifier_block rm_cons_notif;
+>> +    struct console console;
+>> +
+>> +    /* below are for printk console.
+>> +     * gh_rm_console_* calls will sleep and console_write can be 
+>> called from
+>> +     * atomic ctx. Two xmit buffers are used. The active buffer is 
+>> tracked with
+>> +     * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
+>> +     * A work is scheduled to flush the bytes. The work will swap the 
+>> active buffer
+>> +     * and write out the other buffer.
+>> +     */
+> 
+> Ugh, why? This is too ugly and unnecessary. What about passing the kfifo 
+> to gh_rm_console_write() instead? You do memcpy() there anyway.
+> 
 
-This is now a conflict between the random tree and Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5syZWPfTHPSEH.=wYfNFEbl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNF5CMACgkQAVBC80lX
-0GwEbAf+LQapnjSWPK1HNUTZuyc4u80gSj/Riyi7ppuxfeauIrQ9V3cHywMbVxxK
-Tni2exuyTr1LDEHVQmD3+BmbdDIEWS3tNzvABYTb2Mgc/BShY36HmhGmuBbJME3y
-gxNPpo1lmwXo2FEEQAzcTlR623B8TwUhvXYsMeGcnoyN1TfNXzSSgjs4RIrKRoYk
-8R1Fh8sljfy1mIamPk6IgtYn+rStWzqbxHPYOjSgnyW/xcaxDtP5hBEKGy58Ob0h
-vatR2vVssNjUBIivgHWvWfiZ6AEVfZQU5kczpk4ItGd6zOn2V0zDNlJ9hxbHVr02
-C2d+b2vF2bHmBQk2fEQB8S+mN82IdA==
-=1McD
------END PGP SIGNATURE-----
-
---Sig_/5syZWPfTHPSEH.=wYfNFEbl--
+Sure, I can do this instead.
