@@ -2,96 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A715FBDD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158A85FBDDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJKWWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 18:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S229617AbiJKWYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 18:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJKWWf (ORCPT
+        with ESMTP id S229519AbiJKWY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 18:22:35 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6C81AD9C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:22:34 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id n7so14567502plp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ya+CrD6RQ5p1FsGwF6+V+S0eZMj0JP4hh6Oy/+hJ7f4=;
-        b=EproxsXPwDwkz7NeJxiKx0xV5B+FL8MhUsL1YDElBzk+7TPFMlIrsgHkX7RW+4d1Rq
-         0IneH/P6OX5ynCTdW9Do+GL+NnRCveMX4djAUkDdkk9HTHX1Jvsidm2r5UaOc3AHJYsn
-         GIWDOT9fM78hYz/ouyodRkImJirjJdE+DEPDc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ya+CrD6RQ5p1FsGwF6+V+S0eZMj0JP4hh6Oy/+hJ7f4=;
-        b=fdM2MMFsKjvE1mxkPAYnIpYtppFlQ0+G7Pv0JXzuHsoqrXY+t3o99o3lDbZHS6cKnh
-         ElVhE7ofxZRtEwEfIMiJHtI/dDiYC39pbH++0H8lDynokbxO7SbWAnaI70D/UIKSUxVX
-         02+H7nxh0gxlJGA+iBuITffPIM0qqm4MDrbGi835aeThVPbnE7c/Nuc+p2TdUqjlWUsC
-         uUjMvHyEwS5AGhPB4syAs3R94J/Vd1DzYURereUSNSRHvCPRQ4tSgt9qQ8/DPfzJwpmd
-         oAjYIrpHYxxPx7DURWzjNljTVVuhy1DlRZDvV2KDxrDiZUuaOFRiQtjtINHtXayopo+U
-         xJSA==
-X-Gm-Message-State: ACrzQf3L+nKYYDYqz8tG0igNH48kCs2j3pCAlbhqL3RFDis+z9reV1Qa
-        lXXfYKG+rLPdojxvXRu2UZ69oax9zYsJUw==
-X-Google-Smtp-Source: AMsMyM5g6041duagWXSq4ZLQGnXcqgrjcCpSN7o0m9PhHoi07/8ONF/gpRG29fW+wheHBi3r4stG2w==
-X-Received: by 2002:a17:902:b20a:b0:178:6f5b:f903 with SMTP id t10-20020a170902b20a00b001786f5bf903mr27366200plr.39.1665526954109;
-        Tue, 11 Oct 2022 15:22:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h9-20020a17090a054900b0020adf65cebbsm86406pjf.8.2022.10.11.15.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 15:22:33 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 15:22:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paramjit Oberoi <pso@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH 1/1] pstore/ram: Ensure stable pmsg address with per-CPU
- ftrace buffers
-Message-ID: <202210111521.B8D8156490@keescook>
-References: <20221011183630.3113666-1-pso@chromium.org>
- <20221011113511.1.I1cf52674cd85d07b300fe3fff3ad6ce830304bb6@changeid>
- <202210111209.7F1541F5BE@keescook>
- <CAHqLn7Hd6KaNYA=goS7=dumrG3wZedbV1+ANa+-dZzFPiP_vsQ@mail.gmail.com>
- <202210111302.3179DB77@keescook>
- <CAHqLn7EG=iKmu1tMJ_Um4MmpLVztshfzACnrzcZqPvvcRRCKuQ@mail.gmail.com>
+        Tue, 11 Oct 2022 18:24:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13372B27C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665527068; x=1697063068;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zWLh6lckIuD6uRmP7t7beHp+id3OGg9p0XzTNSvHSO8=;
+  b=iIOycd3I2EAjrE1gGKk1/SfQjn3SM5Om6gcG62BfaSOZdqFPsyvAkzUp
+   d6JrayMbQpnsqY7Fct8jrIGZd6/arpKEuv9G9H24d2yJHVLRJUAEch6CP
+   oaQ1gpTCBTMvTUw6TZHbo8FRllxOkCceB6IKcoaJg3w3RgYrtg3pqkiwz
+   Y/U82lQ2pxskRnxLgmT/KAnCNjKAdgz9Layb6FVeL/wuc6EUD6xD8wUag
+   xH0steS851+97wLxYfsLjw3IJ2jr2KQuJjVjBHvHRRomFbAP6IA/xQLxo
+   YeDZD13+0RkqxqC970fCoSNzpixwVEu9iBmQVTAwzRd0/chtgpKP3MrZx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="390946343"
+X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
+   d="scan'208";a="390946343"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 15:24:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="689419429"
+X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
+   d="scan'208";a="689419429"
+Received: from viggo.jf.intel.com (HELO ray2.amr.corp.intel.com) ([10.54.77.144])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Oct 2022 15:24:25 -0700
+From:   Dave Hansen <dave.hansen@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     chang.seok.bae@intel.com, x86@kernel.org,
+        Yuan Yao <yuan.yao@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] x86/fpu: Remove dynamic features from xcomp_bv for init_fpstate
+Date:   Tue, 11 Oct 2022 15:24:25 -0700
+Message-Id: <20221011222425.866137-1-dave.hansen@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHqLn7EG=iKmu1tMJ_Um4MmpLVztshfzACnrzcZqPvvcRRCKuQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 01:44:54PM -0700, Paramjit Oberoi wrote:
-> > > The only downside is it would break some code that works today because
-> it
-> > > ran in contexts where the pmsg address was stable (no per-cpu ftrace
-> > > buffers, or power-of-two CPUs).
-> >
-> > I don't follow? And actually, I wonder about the original patch now --
-> > nothing should care about the actual addresses. Everything should be
-> > coming out of the pstore filesystem.
-> 
-> We are running VMs with the pstore RAM mapped to a file, and using some
-> tools outside the VM to read/manipulate the pstore after VM shutdown.
+From: Yuan Yao <yuan.yao@intel.com>
 
-Ah-ha! Interesting. Well, I think it will be more stable this way even
-for that. :)
+This was found a couple of months ago in a big old AMX
+backport.  But, it looks to be a problem in mainline too.
+Please let me know if this looks OK.  I'd also especially
+appreciate some testing from folks that have AMX hardware
+handy.
 
+Builds and survives a quick boot test on non-AMX hardware.
+
+--
+
+== Background ==
+
+'init_fpstate' is a sort of template for all of the fpstates
+that come after it.  It is copied when new processes are
+execve()'d or XRSTOR'd to get fpregs into a known state.
+
+That means that it represents the *starting* state for a
+process's fpstate which includes only the 'default' features.
+Dynamic features can, of course, be acquired later, but
+processes start with only default_features.
+
+During boot the kernel decides whether all fpstates will be
+kept in the compacted or uncompacted format.  This choice is
+communicated to the hardware via the XCOMP_BV field in all
+XSAVE buffers, including 'init_fpstate'.
+
+== Problem ==
+
+But, the existing XCOMP_BV calculation is incorrect.  It uses
+the set of 'max_features', not the default features.
+
+As a result, when XRSTOR operates on buffers derived from
+'init_fpstate', it may attempt to "tickle" dynamic features which
+are at offsets for which there is no space allocated in the
+fpstate.
+
+== Scope ==
+
+This normally results in a relatively harmless out-of-bounds
+memory read.  It's harmless because it never gets consumed.  But,
+if the fpstate is next to some unmapped memory, this "tickle" can
+cause a page fault and an oops.
+
+This only causes issues on systems when dynamic features are
+available and when an XSAVE buffer is next to uninitialized
+memory.  In other words, it only affects recent Intel server
+CPUs, and in relatively few memory locations.
+
+Those two things are why it took relatively long to catch this.
+
+== Solution ==
+
+Use 'default_features' to establish the init_fpstate
+xcomp_bv value.  Reset individual fpstate xcomp_bv values
+when the rest of the fpstate is reset.
+
+[ dhansen: add reset code from tglx, rewrites
+	   commit message and comments ]
+
+Fixes: 1c253ff2287f ("x86/fpu: Move xstate feature masks to fpu_*_cfg")
+Suggested-by: Dave Hansen <dave.hansen@intel.com>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Yuan Yao <yuan.yao@intel.com>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/kernel/fpu/core.c   | 3 +++
+ arch/x86/kernel/fpu/xstate.c | 7 ++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 3b28c5b25e12..4d64de34da12 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -526,6 +526,9 @@ static void __fpstate_reset(struct fpstate *fpstate, u64 xfd)
+ 	fpstate->xfeatures	= fpu_kernel_cfg.default_features;
+ 	fpstate->user_xfeatures	= fpu_user_cfg.default_features;
+ 	fpstate->xfd		= xfd;
++
++	/* Ensure that xcomp_bv matches ->xfeatures */
++	xstate_init_xcomp_bv(&fpstate->regs.xsave, fpstate->xfeatures);
+ }
+ 
+ void fpstate_reset(struct fpu *fpu)
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c8340156bfd2..f9f45610c72f 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -360,7 +360,12 @@ static void __init setup_init_fpu_buf(void)
+ 
+ 	print_xstate_features();
+ 
+-	xstate_init_xcomp_bv(&init_fpstate.regs.xsave, fpu_kernel_cfg.max_features);
++	/*
++	 * 'init_fpstate' is sized for the default feature
++	 * set without any of the dynamic features.
++	 */
++	xstate_init_xcomp_bv(&init_fpstate.regs.xsave,
++			     fpu_kernel_cfg.default_features);
+ 
+ 	/*
+ 	 * Init all the features state with header.xfeatures being 0x0
 -- 
-Kees Cook
+2.34.1
+
