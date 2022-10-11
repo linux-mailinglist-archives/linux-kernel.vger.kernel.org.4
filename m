@@ -2,267 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B0D5FB8A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218235FB8AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiJKQy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 12:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
+        id S229890AbiJKQz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 12:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJKQyy (ORCPT
+        with ESMTP id S229829AbiJKQzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 12:54:54 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903F71183A;
-        Tue, 11 Oct 2022 09:54:52 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c20so4181478plc.5;
-        Tue, 11 Oct 2022 09:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMzI9+OaDvcpj7FaffFnxmnsgehAD2eJ0gWU0iCg7nA=;
-        b=nhVS2wqyN/9hPFe85hZ3vn2SwpzV7oFg9VdcG7yoLkD316RWKlIP+8FkvZJ6Zoz4s9
-         4Mc5aPpl1g9yvfLpkDKAfw06HCSYzx8CVqODGVok3GpU6AABF/dsglUD33hGzOusK0lr
-         dVTx3Oza2i74Woxc6ZeknCmT2L2Ut+5C776fCX1NQBUtzYF6qITlj303mtYUvmIv/wKV
-         YSUmdnAjTtMyMfiJJ3djnVe1tgvRz+EDBK8/8Awm8hPFa/OX8IiW7uyTocOOVWnpSX/Y
-         VFWtefqMRf56xw7K4bUERvq2BKO8c+Gv4sCn+uS94G72drJumaXS4r80XhYDv4Jeh7+g
-         AmVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sMzI9+OaDvcpj7FaffFnxmnsgehAD2eJ0gWU0iCg7nA=;
-        b=4ieOCoESg7qlKx1xhqZv77pxe7BbMXEllgBRWHII3AQWQG34oHViqz2+1a/aT7V6UX
-         5i4pGnTAn9nd6zrimgTLm4y22cveHsE//MgWzHiFIq41nHl8+ULYyBEuRfZ8ScGJI4Hd
-         wKbge5Ftjzj+yPfTuDssoKpQN1w9lpJeCkclvFz76YPwRp82UsIT7gzhx4Ty75NuYGTF
-         7kJS1ehtXnaKDzMRIP/Bv9EqQrgdZ4qlP5TlW8x6E4clvYYVq0N+I2FESN1hJ3L/9zsh
-         BqXK31gjjWMCog73VS4/GWamo3sWLdNBYFA5Dt9yDreJSclk9L0PeT1bNCwMjC/SrvMr
-         0JNQ==
-X-Gm-Message-State: ACrzQf0y7B0NL7ZTZRRz+opXkkCAdtyHuo6C/aJ9OCqANwFcK1CXcdfL
-        Fm60HP1bUwSjHmjzotSpkxw=
-X-Google-Smtp-Source: AMsMyM5nnDvGQ+iPaeOERvCjB9lMfxpLws3nWOvz56Xuxgbp6oPRFCbZpmnvKkzmNePMnyRaZbsvjQ==
-X-Received: by 2002:a17:902:9048:b0:17f:93a5:4638 with SMTP id w8-20020a170902904800b0017f93a54638mr24781693plz.108.1665507292009;
-        Tue, 11 Oct 2022 09:54:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o8-20020a170902d4c800b00179c81f6693sm8918889plg.264.2022.10.11.09.54.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 09:54:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2e3c55a0-256d-f318-a983-17ad3f8e8909@roeck-us.net>
-Date:   Tue, 11 Oct 2022 09:54:49 -0700
+        Tue, 11 Oct 2022 12:55:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC2222B3;
+        Tue, 11 Oct 2022 09:55:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B5BCB81636;
+        Tue, 11 Oct 2022 16:55:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D53C433C1;
+        Tue, 11 Oct 2022 16:55:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665507311;
+        bh=XhAZyckRCPAFshg1YwE1cWtM5ptq2V0EJ1cI4a3T4lk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eyZNjF9l9nEHnymnGoqS9M5gQlP0iK8MgO7fbz4RABuHtVDGxZaeAJ0L0dO01LqRu
+         vDo1//wYKRhP22Saxjkt3NRzR5jVsKcseMrst8wKP0wEtaWg9d3YoHdvQiUMHztYES
+         z/RKDsM0gxlNIvesdFrrfsTz6PeOZd0dVReGcceCd39wBORuoPM+dBmfOwi+4eG0Hf
+         YFWF4oNC+vTt3Vpv7+dr4K6rM7yxl8DUwOFsfEgWj5BHtndMo3W0ERAJ/VRvq/NMwq
+         5cowW8DisOULOy0O0+nE9JlUGOTbijZti0U0VtgeKFf+L9D7YRuCcr86e/6QdcZk1S
+         aTCJPtGxFPqfA==
+Received: by pali.im (Postfix)
+        id 1F1CF7B3; Tue, 11 Oct 2022 18:55:08 +0200 (CEST)
+Date:   Tue, 11 Oct 2022 18:55:08 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vidya Sagar <vidyas@nvidia.com>, linux-tegra@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: tegra: Use PCI_CONF1_EXT_ADDRESS() macro
+Message-ID: <20221011165508.ezpwvmzmxywqoj4u@pali>
+References: <20220928121911.14994-1-pali@kernel.org>
+ <220b0fe7-8b7b-cf9b-e28d-d9d81647fb80@nvidia.com>
+ <20221011161638.ycxpg3ox2wv63vym@pali>
+ <18a48407-9fd7-175d-0c7f-5702b077f13d@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: hwmon: Add binding for max6639
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roland Stigge <stigge@antcom.de>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20221011104739.53262-1-Naresh.Solanki@9elements.com>
- <20221011104739.53262-3-Naresh.Solanki@9elements.com>
- <b0519e16-7826-a043-d0a4-7a2f43d0ae94@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <b0519e16-7826-a043-d0a4-7a2f43d0ae94@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <18a48407-9fd7-175d-0c7f-5702b077f13d@nvidia.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 09:28, Krzysztof Kozlowski wrote:
-> On 11/10/2022 06:47, Naresh Solanki wrote:
->> From: Marcello Sylvester Bauer <sylv@sylv.io>
->>
->> Add Devicetree binding documentation for Maxim MAX6639 temperature
->> monitor with PWM fan-speed controller.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   .../bindings/hwmon/maxim,max6639.yaml         | 116 ++++++++++++++++++
->>   1 file changed, 116 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> new file mode 100644
->> index 000000000000..bbefb0a57ab3
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
->> @@ -0,0 +1,116 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +
->> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Maxim max6639
->> +
->> +maintainers:
->> +  - Roland Stigge <stigge@antcom.de>
->> +
->> +description: |
->> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
->> +  fan-speed controller.  It monitors its own temperature and one external
->> +  diode-connected transistor or the temperatures of two external diode-connected
->> +  transistors, typically available in CPUs, FPGAs, or GPUs.
->> +
->> +  Datasheets:
->> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - maxim,max6639
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  '#address-cells':
->> +    const: 1
->> +
->> +  '#size-cells':
->> +    const: 0
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +patternProperties:
->> +  "^ot[0-1]_indication$":
+On Tuesday 11 October 2022 17:47:50 Jon Hunter wrote:
+> On 11/10/2022 17:16, Pali Rohár wrote:
 > 
-> No underscores in names.
+> ...
 > 
->> +    type: boolean
->> +    default: false
->> +    description:
->> +      If true then enable OT pin indication.
+> > I see, this is stupid mistake. PCIe config read and write operations
+> > needs to be 4-byte aligned, so normally it is done by calculating 4-byte
+> > aligned base address and then using appropriate cpu load/store
+> > instruction to access just defined size/offset of 4-byte config space
+> > register.
+> > 
+> > pci-tegra.c is using common helper functions pci_generic_config_read()
+> > and pci_generic_config_write(), which expects final address with offset,
+> > and not 4-byte aligned address.
+> > 
+> > I'm not sure what should be the proper fix, but for me it looks like
+> > that pci_generic_config_read() and pci_generic_config_write() could be
+> > adjusted to handle it.
+> > 
+> > In any case, above patch is a regressions and I see there two options
+> > for now:
+> > 
+> > 1) Reverting that patch
+> > 
+> > 2) Adding "offset |= where & 0x3;" after the PCI_CONF1_EXT_ADDRESS()
+> >     macro to set also lower 2 bits of accessed register.
+> > 
+> > Jon, Lorenzo, what do you think? Could you test if 2) is working fine?
 > 
-> Description copies the name of property. Not really useful. Describe
-> that it does.
 > 
-> Why this has 0 and 1 numbers? Isn't it connected with fan?
+> I tested 'offset |= where & 0xff' which is essentially the same as the above
+> and that is working and so I am sure that the above works too. However, I do
+> wonder if reverting is simpler because we already have a '&
+> ~PCI_CONF1_ENABLE' and now adding '| where & 0x3' seems to diminish the
+> value of this change.
 > 
+> Cheers
+> Jon
+> 
+> -- 
+> nvpublic
 
-I had to look up the suggested code to understand what it means.
-All the _indication properties actually configure the chip
-to enable or disable various alarm output pins (ALERT, OT,
-THERM, and FANFAIL). I for my part find the therm "indication"
-quite confusing.
+Well, if decision would be that pci_generic_config_read() could be
+modified in the future to handle aligning, then '|= where & 0x3' block
+would be moved from driver to generic function...
 
-Guenter
-
->> +
->> +  "^therm[0-1]_indication$":
->> +    type: boolean
->> +    default: false
->> +    description:
->> +      If true then enable THERM pin indication.
-> 
-> Ditto
-> 
->> +
->> +  "^fan@[0-1]$":
-> 
-> [01]
-> The same in other cases.
-> 
->> +    type: object
->> +    description: |
->> +      Represents the two fans and their specific configuration.
->> +
->> +    $ref: fan-common.yaml#
->> +
->> +    properties:
->> +      reg:
->> +        description: |
->> +          The fan number.
->> +        items:
->> +          minimum: 0
->> +          maximum: 1
->> +
->> +      maxim,fan-spin-up:
->> +        type: boolean
->> +        description:
->> +          If true then whnever the fan starts up from zero drive, it
-> 
-> whenever
-> run spell-check
-> 
->> +          is driven with 100% duty cycle for 2s to ensure that it
->> +          starts.
->> +
->> +      maxim,full-speed-on-therm:
->> +        type: boolean
->> +        description:
->> +          If true then force fan to full speed if THERM pin goes low.
->> +
->> +      maxim,fanfail_indication:
-> 
-> No underscores
-> 
->> +        type: boolean
->> +        description:
->> +          If true then enable fanfail pin indication.
-> 
-> Missing blank line
-> 
->> +    required:
->> +      - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +
->> +      max6639@10 {
-> 
-> Node names should be generic.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> 
->> +        compatible = "maxim,max6639";
->> +        reg = <0x10>;
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        fan@0 {
->> +          reg = <0x0>;
->> +          pulses-per-revolution = <2>;
->> +          max-rpm = <4000>;
->> +          pwm-frequency = <25000>;
->> +        };
->> +
->> +        fan@1 {
->> +          reg = <0x1>;
->> +          pulses-per-revolution = <2>;
->> +          max-rpm = <32000>;
->> +          pwm-frequency = <25000>;
->> +        };
->> +      };
->> +    };
->> +...
-> 
-> Best regards,
-> Krzysztof
-> 
-
+I'm really not sure which option to choose.
