@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DF75FB08E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A23A5FB093
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJKKiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S229771AbiJKKk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJKKiO (ORCPT
+        with ESMTP id S229600AbiJKKkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:38:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3549D8A1D5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:38:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9CA961163
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21731C433D6;
-        Tue, 11 Oct 2022 10:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665484684;
-        bh=qQxzs9+WhhINB/xESPKt75oMF6IfPfDkJnmpR3udCxY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Gj+u3l/p8HrR8foOtNaQerpWinZW8glFVdAy8fvxab2X0w14KpgyQewuSPWaVbX17
-         NB0x7cFYBa5d63YJ0pu7fS9n4lpyjC1PPiRpETaa/pIzS7YylxW4Srb/tH+pO2gjh3
-         n6mIvx3kfw26gFtFuSngrkzNGhErAdQl1TVqq932GtfK2MdTW+L1bfGcfszz8F9g9+
-         uE8vLGCjvw3eJrEvxS71tz4Wjl59MknSna9QqZAjwMtUEI7yx/qSbWH5dDFNDCOfuh
-         xhgb36AkakADWCrkjloW5f2/gxPAyvBnrUB7tmXbBIbnbD58vIgHnojgX70GhikcFH
-         cDhwFeCPWA7gg==
-Date:   Tue, 11 Oct 2022 13:37:49 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memblock updates for v6.1
-Message-ID: <Y0VHfYkFUqYwVAru@kernel.org>
+        Tue, 11 Oct 2022 06:40:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FEB07D7B1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:40:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13F761042;
+        Tue, 11 Oct 2022 03:40:57 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B8F33F766;
+        Tue, 11 Oct 2022 03:40:49 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 11:40:47 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Cc:     sudeep.holla@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, quic_rgottimu@quicinc.com
+Subject: Re: Query regarding "firmware: arm_scmi: Free mailbox channels if
+ probe fails"
+Message-ID: <Y0VILyEaNOQiTpO5@e120937-lin>
+References: <cfa26ff3-c95a-1986-58fc-b49fc9be49d5@quicinc.com>
+ <Yyx3IAcMX309QEjB@e120937-lin>
+ <Yyx/DKcc7XupQmnx@e120937-lin>
+ <c81540cc-e485-0c45-9e4e-248d3279e1ea@quicinc.com>
+ <YzriGCLf+MFNGO2n@e120937-lin>
+ <b1de7e87-9590-3aad-d62b-167a7685746a@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b1de7e87-9590-3aad-d62b-167a7685746a@quicinc.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Oct 11, 2022 at 03:34:45PM +0530, Shivnandan Kumar wrote:
+> 
+> Hi Cristian,
+> 
 
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+Hi Shivnandan,
 
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+> >>Ok, just out of curiosity, once done, can you point me at your downstream
+> public sources so I can see the issue and the fix that you are applying to
+> your trees ?
+> 
+> https://source.codeaurora.org/quic/la/kernel/msm-5.10/tree/drivers/soc/qcom/qcom_rimps.c?h=KERNEL.PLATFORM.1.0.r1-07800-kernel.0
+> 
+> I have added lock while accessing con_priv inside irq handler and shutdown
+> function.
+> 
 
-are available in the Git repository at:
+Thanks !
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock for-next
+> 
+> I have one input regarding timeout from firmware, can we enable BUG on
+> response  time out in function do_xfer based on some debug config flag,this
+> will help to debug firmware timeout issue faster.
+> 
+> We will only enable that config flag during internal testing.
+> 
 
-for you to fetch changes up to 3e4519b7afc2f9d99f9303468ee0b23f88399c8d:
+I understand a sort of 'Panic-on-timeout' would be useful to just freeze
+the system as it is and debug, but it seems to me pretty much invasive
+(and generally frowned upon) to BUG_ON timeouts, given on some SCMI
+platforms/transports a few timeouts can happen really not so infrequently
+due to transient conditions during moments of peak SCMI traffic.
 
-  memblock tests: add generic NUMA tests for memblock_alloc_try_nid* (2022-09-18 10:30:20 +0300)
+Even though you mention to make it conditional to Kconfig, I'm not sure
+this could fly, especially if you want to enable only for internal
+testing...I'll ping Sudeep about this to see what he thinks.
 
-----------------------------------------------------------------
-memblock: test suite improvements
+As an alternative, what if I try to improve SCMI tracing/debug, let's say
+dumping more info in dmesg about the offending (timed-out) message instead
+of hanging the system as a whole ?
 
-* Added verification that memblock allocations zero the allocated memory
-* Added more test cases for memblock_add(), memblock_remove(),
-  memblock_reserve() and memblock_free()
-* Added tests for memblock_*_raw() family
-* Added tests for NUMA-aware allocations in memblock_alloc_try_nid() and
-  memblock_alloc_try_nid_raw()
+I'd have also some still-brewing-and-not-published patches to add some
+SCMI stats somewhere in sysfs to be able to read current SCMI errors/timeouts
+and transport anomalies, would that be of interest ?
 
-----------------------------------------------------------------
-Rebecca Mckeever (16):
-      memblock tests: add command line help option
-      memblock tests: update reference to obsolete build option in comments
-      memblock tests: update tests to check if memblock_alloc zeroed memory
-      memblock tests: update zeroed memory check for memblock_alloc_* tests
-      memblock tests: add labels to verbose output for generic alloc tests
-      memblock tests: add additional tests for basic api and memblock_alloc
-      memblock tests: update alloc_api to test memblock_alloc_raw
-      memblock tests: update alloc_nid_api to test memblock_alloc_try_nid_raw
-      memblock tests: add tests for memblock_*bottom_up functions
-      memblock tests: add tests for memblock_trim_memory
-      memblock tests: remove 'cleared' from comment blocks
-      memblock_tests: move variable declarations to single block
-      memblock tests: add simulation of physical memory with multiple NUMA nodes
-      memblock tests: add top-down NUMA tests for memblock_alloc_try_nid*
-      memblock tests: add bottom-up NUMA tests for memblock_alloc_try_nid*
-      memblock tests: add generic NUMA tests for memblock_alloc_try_nid*
+...maybe, we could combine some of these stats and some sort of
+BUG_ON/WARN_ON (if it will fly eventually..) into some kind SCMI_DEBUG mode
+...any input on your needs about which kind of SCMI info you'll like to see
+exposed by the stack would be welcome.
 
- tools/testing/memblock/scripts/Makefile.include  |    2 +-
- tools/testing/memblock/tests/alloc_api.c         |  223 ++-
- tools/testing/memblock/tests/alloc_helpers_api.c |   52 +-
- tools/testing/memblock/tests/alloc_nid_api.c     | 1814 +++++++++++++++++++---
- tools/testing/memblock/tests/alloc_nid_api.h     |   16 +
- tools/testing/memblock/tests/basic_api.c         |  767 +++++++++
- tools/testing/memblock/tests/common.c            |   42 +-
- tools/testing/memblock/tests/common.h            |   86 +-
- 8 files changed, 2664 insertions(+), 338 deletions(-)
--- 
-Sincerely yours,
-Mike.
+Last but not least, since we are talking about SCMI Server/FW testing,
+have you (or your team) seen this work-in-progress of mine:
+
+https://lore.kernel.org/linux-arm-kernel/20220903183042.3913053-1-cristian.marussi@arm.com/
+
+about a new unified userspace interface to inject/snoop SCMI messages to
+test/fuzz/stress the SCMI server wherever it is placed ?
+
+Any feedback on the API proprosed in the cover-letter would be highly welcome;
+I'll post a new V4 next week possibly, and the changes to the existing ARM SCMI
+Compliance suite (mentioned in the cover) to support this new SCMI Raw
+mode are in their final stage too.
+
+Thanks,
+Cristian
