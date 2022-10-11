@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9ED5FB9BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BC55FB9C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiJKRgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S230180AbiJKRg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJKRfu (ORCPT
+        with ESMTP id S230151AbiJKRgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:35:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9407595AD8;
-        Tue, 11 Oct 2022 10:33:17 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-114.nat.spd-mgts.ru [109.252.119.114])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BECC86602358;
-        Tue, 11 Oct 2022 18:31:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665509511;
-        bh=FbjwvyBn8Jk5nWNvSwUKiVg917Dtcke8nkTgpCuxGHg=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=j9FFZ8t9+K/yyb3uyYTMRMmOZwbPmrFNo2nLiwt+NaQZrbzcY4YA8uPgvq9KqKyKu
-         qfSxAQSs3xdybENOLmYyju3gm2jzJes8ytBnen1UmrG70xGfL9X93PKjnudy4jAGU9
-         gl+8JqZyTgX4VAz30gatLmK/w1aZ0uiSfREFVnx4BKEjtHICZB25vE8HLEsmHDTqCu
-         yIpeJVFLrAb6mYjYFS9OIEMj1EcqLBHaz1mjNnYKGPhtHbHH9fs9DzhtYGqeU92wP3
-         bGYgN3stcLAlbVz256MpW1wDubM6bGRxeP+1wxa5ae3PSGyqaSwxKah/5yl/VkpzQm
-         rYhgIy9tlB8RA==
-Message-ID: <fd3baeeb-2277-768c-e0d1-f3adcecb848a@collabora.com>
-Date:   Tue, 11 Oct 2022 20:31:45 +0300
+        Tue, 11 Oct 2022 13:36:36 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A123DDF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:34:36 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id u10so22731182wrq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WuO9Fb816Vy8uVLyDzep/0aqImYubOKw3e2ZsyFbmAE=;
+        b=Wdmc4NJdmMQkOGy71g1/3+3oCDzlfEpuHu2CgXF51DmeK2s1WSEd6j4mmAeWt7WWdz
+         OcNQbWswzkgEu4Af9cQhvwuufSZQZqViR19qKpShT6u5j/o/6RSM0ztct9alxa5EQ9TA
+         EzH0iT0RkS/BfeNGHdaFFbhCdKf7pC6fl1ydLpL982lGvrYwhZctvI66H0ik66t8I9W4
+         8axma+z4EGXEc37kPg+mppIstf+cWfpda388gP5Mi7AsEtU71bVlK0Bq6dDeXsvuh8hn
+         uAhd8hXPAi6m5kYec1HLhsEFBwAHJSNpH630/msxxFYnz9Dk6abe0nGw6zC/OawS2GQ1
+         9bTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WuO9Fb816Vy8uVLyDzep/0aqImYubOKw3e2ZsyFbmAE=;
+        b=gFFgZcL9qy9KMhI9FLaOD+A2jwyzGl132BOQqAh3h85+lu/VcXcXRO6zrpjTlrh1N1
+         RarhjHHAtJMUCh+ewPoQLG2eG3RcFesR1VOnJ7wlnoHSM9ddQ1Z8fCXcvIdIqMCQxAIF
+         fmwKgK7VwA9wmw9TzpalKKG5XoiuXQKGUWpUexKtEWW37MsItvh9l2s1p+AdF0fxfNkJ
+         thG4q1b3EJDWGSNseYz4AauQMLJlzLFe59ECgEt/JzHVyV+XTr9YvFuytNoYYPY2OXXK
+         KG8UZJ0QFffyyDWXolKSX9jCyGe3v9oDpD4C/ftH/9rgK+DtOydC3cdlZDZtW1ifKq/Y
+         VRFA==
+X-Gm-Message-State: ACrzQf36VcUsuV0ZpF93f/Ip7h1g0Xvn7DWF2pyP/I/lpu/preWGYkSH
+        ty6JWLcrjkg9F0NeZDm8Wgt9ejQzPoYXrgr215vZ1A==
+X-Google-Smtp-Source: AMsMyM75W4Wx1zA2bO2IGKlwaRypsso3UgjbCNV6fbBqtmkN76CPDIZaro0ja1BNk45PoojYa6G+Va+FdNLLS5LZrs8=
+X-Received: by 2002:a5d:6741:0:b0:22e:2c5c:d611 with SMTP id
+ l1-20020a5d6741000000b0022e2c5cd611mr16036204wrw.210.1665509675038; Tue, 11
+ Oct 2022 10:34:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v6 00/21] Move all drivers to a common dma-buf locking
- convention
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Ruhl Michael J <michael.j.ruhl@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220928191600.5874-1-dmitry.osipenko@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20220928191600.5874-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+In-Reply-To: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 11 Oct 2022 10:33:58 -0700
+Message-ID: <CAJD7tkYOs4LKa=j+xNRMRiK=ors7_uCBtAjp6axRNQo0NHQqWA@mail.gmail.com>
+Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
+To:     John Stultz <jstultz@google.com>, tglx@linutronix.de,
+        sboyd@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 22:15, Dmitry Osipenko wrote:
-> Hello,
-> 
-> This series moves all drivers to a dynamic dma-buf locking specification.
-> From now on all dma-buf importers are made responsible for holding
-> dma-buf's reservation lock around all operations performed over dma-bufs
-> in accordance to the locking specification. This allows us to utilize
-> reservation lock more broadly around kernel without fearing of a potential
-> deadlocks.
-> 
-> This patchset passes all i915 selftests. It was also tested using VirtIO,
-> Panfrost, Lima, Tegra, udmabuf, AMDGPU and Nouveau drivers. I tested cases
-> of display+GPU, display+V4L and GPU+V4L dma-buf sharing (where appropriate),
-> which covers majority of kernel drivers since rest of the drivers share
-> same or similar code paths.
+On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> Hey everyone,
+>
+> I have a question about ktime_get_mono_fast_ns(), which is used by the
+> BPF helper bpf_ktime_get_ns() among other use cases. The comment above
+> this function specifies that there are cases where the observed clock
+> would not be monotonic.
+>
+> I had 2 beginner questions:
+>
+> 1) Is there a (rough) bound as to how much the clock can go backwards?
+> My understanding is that it is bounded by (slope update * delta), but
+> I don't know what's the bound of either of those (if any).
+>
+> 2) The comment specifies that for a single cpu, the only way for this
+> behavior to happen is when observing the time in the context of an NMI
+> that happens during an update.
+> For observations across different cpus, are the scenarios where the
+> non-monotonic behavior happens also tied to observing time within NMI
+> contexts? or is it something that can happen outside of NMI contexts
+> as well?
+>
+> Thanks in advance! (and please excuse any dumb/obvious questions :) )
 
-All the non-drm patches have been acked by the respective maintainers.
-I'm now feeling comfortable to take this series into drm-misc-next and
-going to do it later this week.
-
-If anyone have more comments to add, then please do it now. It won't be
-possible to drop out patches from drm-misc once they will be merged. All
-further changes will have to be made on top of the applied patches.
-
-Thanks to all who reviewed this patchset!
-
--- 
-Best regards,
-Dmitry
-
+Anyone can help me with this? :)
