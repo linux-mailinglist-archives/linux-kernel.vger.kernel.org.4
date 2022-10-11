@@ -2,167 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158A85FBDDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A715FBDDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiJKWYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 18:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S229924AbiJKW3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 18:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJKWY3 (ORCPT
+        with ESMTP id S229764AbiJKW3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 18:24:29 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13372B27C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665527068; x=1697063068;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zWLh6lckIuD6uRmP7t7beHp+id3OGg9p0XzTNSvHSO8=;
-  b=iIOycd3I2EAjrE1gGKk1/SfQjn3SM5Om6gcG62BfaSOZdqFPsyvAkzUp
-   d6JrayMbQpnsqY7Fct8jrIGZd6/arpKEuv9G9H24d2yJHVLRJUAEch6CP
-   oaQ1gpTCBTMvTUw6TZHbo8FRllxOkCceB6IKcoaJg3w3RgYrtg3pqkiwz
-   Y/U82lQ2pxskRnxLgmT/KAnCNjKAdgz9Layb6FVeL/wuc6EUD6xD8wUag
-   xH0steS851+97wLxYfsLjw3IJ2jr2KQuJjVjBHvHRRomFbAP6IA/xQLxo
-   YeDZD13+0RkqxqC970fCoSNzpixwVEu9iBmQVTAwzRd0/chtgpKP3MrZx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="390946343"
-X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
-   d="scan'208";a="390946343"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 15:24:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="689419429"
-X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
-   d="scan'208";a="689419429"
-Received: from viggo.jf.intel.com (HELO ray2.amr.corp.intel.com) ([10.54.77.144])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Oct 2022 15:24:25 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     chang.seok.bae@intel.com, x86@kernel.org,
-        Yuan Yao <yuan.yao@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH] x86/fpu: Remove dynamic features from xcomp_bv for init_fpstate
-Date:   Tue, 11 Oct 2022 15:24:25 -0700
-Message-Id: <20221011222425.866137-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 18:29:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173157F099;
+        Tue, 11 Oct 2022 15:29:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C51AAB811BD;
+        Tue, 11 Oct 2022 22:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8219FC433C1;
+        Tue, 11 Oct 2022 22:29:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665527368;
+        bh=W2WbCQE0t6PqKU9qAdAvO5D/Hb7sa8sdKSfdcfwYLRk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=mlF0HUnV89LSwxf2b3/OP39sdV4wzSRBuvnv1BlIpuRyUzmLFkA9JbEPc3yY0BxRP
+         QVBtw4maZn7+Ndj2zxpOEDyzu83Zv+5e7HxdNzST3J0mSoo9dabAs2mn4FY4j7WF93
+         zUT2Gpqsnr669J4Fbg/3FIc0UCCL8yMbBL0/RpzrnDBF81wk46oAlhrneeToO2ExpA
+         2uwvZMHWnYHFejL5TZgdk3oNIepFG/2O7VXnW6DgYNYmEcZZpTUIgLaPrIZQEx+yVT
+         O2FWyvtDkDKNWlYrl7hTZmUJ3c0WgqFxrt7r+nkMJi1H0FubDk1K6RfEF9nyMKnX8K
+         Gid6emNXnNgCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DFAEE29F34;
+        Tue, 11 Oct 2022 22:29:28 +0000 (UTC)
+Subject: Re: [GIT PULL] perf tools changes for v6.1: 1st batch
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221007203153.228388-1-acme@kernel.org>
+References: <20221007203153.228388-1-acme@kernel.org>
+X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221007203153.228388-1-acme@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.1-1-2022-10-07
+X-PR-Tracked-Commit-Id: d79310700590b8b40d8c867012d6c899ea6fd505
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d465bff130bf4ca17b6980abe51164ace1e0cba4
+Message-Id: <166552736843.5559.17685157672560730621.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Oct 2022 22:29:28 +0000
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Disha Goel <disgoel@linux.vnet.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Ian Rogers <irogers@google.com>,
+        Nick Forrington <nick.forrington@arm.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Raul Silvera <rsilvera@google.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Xin Gao <gaoxin@cdjrlc.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuan Yao <yuan.yao@intel.com>
+The pull request you sent on Fri,  7 Oct 2022 17:31:53 -0300:
 
-This was found a couple of months ago in a big old AMX
-backport.  But, it looks to be a problem in mainline too.
-Please let me know if this looks OK.  I'd also especially
-appreciate some testing from folks that have AMX hardware
-handy.
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.1-1-2022-10-07
 
-Builds and survives a quick boot test on non-AMX hardware.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d465bff130bf4ca17b6980abe51164ace1e0cba4
 
---
+Thank you!
 
-== Background ==
-
-'init_fpstate' is a sort of template for all of the fpstates
-that come after it.  It is copied when new processes are
-execve()'d or XRSTOR'd to get fpregs into a known state.
-
-That means that it represents the *starting* state for a
-process's fpstate which includes only the 'default' features.
-Dynamic features can, of course, be acquired later, but
-processes start with only default_features.
-
-During boot the kernel decides whether all fpstates will be
-kept in the compacted or uncompacted format.  This choice is
-communicated to the hardware via the XCOMP_BV field in all
-XSAVE buffers, including 'init_fpstate'.
-
-== Problem ==
-
-But, the existing XCOMP_BV calculation is incorrect.  It uses
-the set of 'max_features', not the default features.
-
-As a result, when XRSTOR operates on buffers derived from
-'init_fpstate', it may attempt to "tickle" dynamic features which
-are at offsets for which there is no space allocated in the
-fpstate.
-
-== Scope ==
-
-This normally results in a relatively harmless out-of-bounds
-memory read.  It's harmless because it never gets consumed.  But,
-if the fpstate is next to some unmapped memory, this "tickle" can
-cause a page fault and an oops.
-
-This only causes issues on systems when dynamic features are
-available and when an XSAVE buffer is next to uninitialized
-memory.  In other words, it only affects recent Intel server
-CPUs, and in relatively few memory locations.
-
-Those two things are why it took relatively long to catch this.
-
-== Solution ==
-
-Use 'default_features' to establish the init_fpstate
-xcomp_bv value.  Reset individual fpstate xcomp_bv values
-when the rest of the fpstate is reset.
-
-[ dhansen: add reset code from tglx, rewrites
-	   commit message and comments ]
-
-Fixes: 1c253ff2287f ("x86/fpu: Move xstate feature masks to fpu_*_cfg")
-Suggested-by: Dave Hansen <dave.hansen@intel.com>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Yuan Yao <yuan.yao@intel.com>
-Cc: stable@vger.kernel.org
----
- arch/x86/kernel/fpu/core.c   | 3 +++
- arch/x86/kernel/fpu/xstate.c | 7 ++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 3b28c5b25e12..4d64de34da12 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -526,6 +526,9 @@ static void __fpstate_reset(struct fpstate *fpstate, u64 xfd)
- 	fpstate->xfeatures	= fpu_kernel_cfg.default_features;
- 	fpstate->user_xfeatures	= fpu_user_cfg.default_features;
- 	fpstate->xfd		= xfd;
-+
-+	/* Ensure that xcomp_bv matches ->xfeatures */
-+	xstate_init_xcomp_bv(&fpstate->regs.xsave, fpstate->xfeatures);
- }
- 
- void fpstate_reset(struct fpu *fpu)
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8340156bfd2..f9f45610c72f 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -360,7 +360,12 @@ static void __init setup_init_fpu_buf(void)
- 
- 	print_xstate_features();
- 
--	xstate_init_xcomp_bv(&init_fpstate.regs.xsave, fpu_kernel_cfg.max_features);
-+	/*
-+	 * 'init_fpstate' is sized for the default feature
-+	 * set without any of the dynamic features.
-+	 */
-+	xstate_init_xcomp_bv(&init_fpstate.regs.xsave,
-+			     fpu_kernel_cfg.default_features);
- 
- 	/*
- 	 * Init all the features state with header.xfeatures being 0x0
 -- 
-2.34.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
