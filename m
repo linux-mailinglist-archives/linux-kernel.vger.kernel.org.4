@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A6D5FB2FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64145FB302
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiJKNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S229992AbiJKNPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJKNOw (ORCPT
+        with ESMTP id S229624AbiJKNOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Oct 2022 09:14:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351E1DEAF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35151D118;
         Tue, 11 Oct 2022 06:14:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEABE61196;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB26861191;
         Tue, 11 Oct 2022 13:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C00FC43141;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6698CC4347C;
         Tue, 11 Oct 2022 13:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665494087;
-        bh=1+P6yo0W1ucxyznL6paoX+Shezy9L9z8yKXUSd66CkE=;
+        bh=RF58hFyL1MLDn0pyVsEIIt4x+LIAiys30BgnvGFyNsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UR2+h5pv324uOPTvp2zNT9KScvCDUm8HM7dDVDnEgZ6Pl9NYnDzoFCJYUhqBSCw6Y
-         g2SVOieBjVHcDgysQZgEWM/QK/4kPk4R2ZD1mP+vOukl7caTwLbPOaYRfUKuY2NNCt
-         Qw7S0MJNO1SbZU+QDL70rl9CXUpVIrpN+6n+8cVNmfK36jmdOtZdqzPKw/5wY0L1Ux
-         V+tpm4IUPqenKyYAxKIyEg+QrS3o8U5TyqZlT+gVi/yHsG0A5bKQ6227oKbbSkDPVR
-         C3gEg1UEIYPFOMVz+XsI/mRtLF/x/bjGZHcHqZvTfxjaQOlk/zVpxqra5EY+9pWn/E
-         TNUW29kdm4cyg==
+        b=Vy/LpNYj58cXH/Sx9AJiZK7EXxTqi5B74AoX9xiThyXfFPUU6/Q9NCyJ4+5HcMODS
+         V6/4m52RXpxf3gds0fFRE1U7aJ8Yb2kG2yByhKMRPS9gK42s6LUybtsahJC3r64vNI
+         lDuqWvl5wSIHZk6AY43gjPzH73LZk3uRNkZySADIwvdIv3IVNJ+CEDuNpbjJBRoRHA
+         3iGuYW0jzaisNMn/h7tmAa+O2BIPUfI4+3lHuQpxgoULtjCiyp8kd64NbPF93JY3fo
+         0VsfnhkqQf9bb6XqiDjS0wlvSZqGHwIb3KkHnAOJJBcAlbwJ4CdDF+WtY7dPd3nE6C
+         iqQIA68wgTiOA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oiF5i-0000eh-Cg; Tue, 11 Oct 2022 15:14:38 +0200
+        id 1oiF5i-0000ej-FE; Tue, 11 Oct 2022 15:14:38 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 03/13] phy: qcom-qmp-combo: drop unused in-layout configuration
-Date:   Tue, 11 Oct 2022 15:14:06 +0200
-Message-Id: <20221011131416.2478-4-johan+linaro@kernel.org>
+Subject: [PATCH 04/13] phy: qcom-qmp-pcie: drop redundant ipq8074 power on
+Date:   Tue, 11 Oct 2022 15:14:07 +0200
+Message-Id: <20221011131416.2478-5-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221011131416.2478-1-johan+linaro@kernel.org>
 References: <20221011131416.2478-1-johan+linaro@kernel.org>
@@ -62,21 +62,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QMP combo PHY driver does not use the "in-layout" configuration
-macro to configure registers that are typically accessed using
-"regs_layout" arrays (e.g. QPHY_START_CTRL) so drop this unused
-feature.
+The PCS initialisation table for IPQ8074 includes updates of the reset
+and start-control registers which is already handled explicitly by the
+driver during power on.
+
+Drop the redundant register write from the IPQ8074 configuration table
+and along with it the now unused "in-layout" configuration macro and
+code.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 54 ++++++-----------------
- 1 file changed, 14 insertions(+), 40 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 42 +++++-------------------
+ 1 file changed, 9 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 3889dcf73c59..84380852ba5b 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -69,11 +69,6 @@
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+index de04d8dd5350..fa8bc6aeedf1 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+@@ -42,11 +42,6 @@
  struct qmp_phy_init_tbl {
  	unsigned int offset;
  	unsigned int val;
@@ -88,7 +91,7 @@ index 3889dcf73c59..84380852ba5b 100644
  	/*
  	 * mask of lanes for which this register is written
  	 * for cases when second lane needs different values
-@@ -88,14 +83,6 @@ struct qmp_phy_init_tbl {
+@@ -61,14 +56,6 @@ struct qmp_phy_init_tbl {
  		.lane_mask = 0xff,	\
  	}
  
@@ -103,15 +106,24 @@ index 3889dcf73c59..84380852ba5b 100644
  #define QMP_PHY_INIT_CFG_LANE(o, v, l)	\
  	{				\
  		.offset = o,		\
-@@ -1346,7 +1333,6 @@ static const struct qmp_phy_combo_cfg sm8250_usb3dpphy_cfg = {
+@@ -388,8 +375,6 @@ static const struct qmp_phy_init_tbl ipq8074_pcie_pcs_tbl[] = {
+ 	QMP_PHY_INIT_CFG(QPHY_V2_PCS_RX_SIGDET_LVL, 0x99),
+ 	QMP_PHY_INIT_CFG(QPHY_V2_PCS_TXDEEMPH_M6DB_V0, 0x15),
+ 	QMP_PHY_INIT_CFG(QPHY_V2_PCS_TXDEEMPH_M3P5DB_V0, 0xe),
+-	QMP_PHY_INIT_CFG_L(QPHY_SW_RESET, 0x0),
+-	QMP_PHY_INIT_CFG_L(QPHY_START_CTRL, 0x3),
  };
  
- static void qmp_combo_configure_lane(void __iomem *base,
+ static const struct qmp_phy_init_tbl ipq8074_pcie_gen3_serdes_tbl[] = {
+@@ -1896,7 +1881,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+ };
+ 
+ static void qmp_pcie_configure_lane(void __iomem *base,
 -					const unsigned int *regs,
  					const struct qmp_phy_init_tbl tbl[],
  					int num,
  					u8 lane_mask)
-@@ -1361,19 +1347,15 @@ static void qmp_combo_configure_lane(void __iomem *base,
+@@ -1911,30 +1895,25 @@ static void qmp_pcie_configure_lane(void __iomem *base,
  		if (!(t->lane_mask & lane_mask))
  			continue;
  
@@ -123,87 +135,64 @@ index 3889dcf73c59..84380852ba5b 100644
  	}
  }
  
- static void qmp_combo_configure(void __iomem *base,
--				   const unsigned int *regs,
- 				   const struct qmp_phy_init_tbl tbl[],
- 				   int num)
+ static void qmp_pcie_configure(void __iomem *base,
+-					const unsigned int *regs,
+ 					const struct qmp_phy_init_tbl tbl[],
+ 					int num)
  {
--	qmp_combo_configure_lane(base, regs, tbl, num, 0xff);
-+	qmp_combo_configure_lane(base, tbl, num, 0xff);
+-	qmp_pcie_configure_lane(base, regs, tbl, num, 0xff);
++	qmp_pcie_configure_lane(base, tbl, num, 0xff);
  }
  
- static int qmp_combo_serdes_init(struct qmp_phy *qphy)
-@@ -1384,28 +1366,24 @@ static int qmp_combo_serdes_init(struct qmp_phy *qphy)
- 	const struct qmp_phy_init_tbl *serdes_tbl = cfg->serdes_tbl;
- 	int serdes_tbl_num = cfg->serdes_tbl_num;
+ static void qmp_pcie_serdes_init(struct qmp_phy *qphy, const struct qmp_phy_cfg_tables *tables)
+ {
+-	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 	void __iomem *serdes = qphy->serdes;
  
--	qmp_combo_configure(serdes, cfg->regs, serdes_tbl, serdes_tbl_num);
-+	qmp_combo_configure(serdes, serdes_tbl, serdes_tbl_num);
+ 	if (!tables)
+ 		return;
  
- 	if (cfg->type == PHY_TYPE_DP) {
- 		switch (dp_opts->link_rate) {
- 		case 1620:
--			qmp_combo_configure(serdes, cfg->regs,
--					       cfg->serdes_tbl_rbr,
-+			qmp_combo_configure(serdes, cfg->serdes_tbl_rbr,
- 					       cfg->serdes_tbl_rbr_num);
- 			break;
- 		case 2700:
--			qmp_combo_configure(serdes, cfg->regs,
--					       cfg->serdes_tbl_hbr,
-+			qmp_combo_configure(serdes, cfg->serdes_tbl_hbr,
- 					       cfg->serdes_tbl_hbr_num);
- 			break;
- 		case 5400:
--			qmp_combo_configure(serdes, cfg->regs,
--					       cfg->serdes_tbl_hbr2,
-+			qmp_combo_configure(serdes, cfg->serdes_tbl_hbr2,
- 					       cfg->serdes_tbl_hbr2_num);
- 			break;
- 		case 8100:
--			qmp_combo_configure(serdes, cfg->regs,
--					       cfg->serdes_tbl_hbr3,
-+			qmp_combo_configure(serdes, cfg->serdes_tbl_hbr3,
- 					       cfg->serdes_tbl_hbr3_num);
- 			break;
- 		default:
-@@ -2069,29 +2047,25 @@ static int qmp_combo_power_on(struct phy *phy)
- 	}
+-	qmp_pcie_configure(serdes, cfg->regs, tables->serdes, tables->serdes_num);
++	qmp_pcie_configure(serdes, tables->serdes, tables->serdes_num);
+ }
  
- 	/* Tx, Rx, and PCS configurations */
--	qmp_combo_configure_lane(tx, cfg->regs, cfg->tx_tbl, cfg->tx_tbl_num, 1);
-+	qmp_combo_configure_lane(tx, cfg->tx_tbl, cfg->tx_tbl_num, 1);
+ static void qmp_pcie_lanes_init(struct qmp_phy *qphy, const struct qmp_phy_cfg_tables *tables)
+@@ -1946,29 +1925,26 @@ static void qmp_pcie_lanes_init(struct qmp_phy *qphy, const struct qmp_phy_cfg_t
+ 	if (!tables)
+ 		return;
  
--	if (cfg->lanes >= 2) {
--		qmp_combo_configure_lane(qphy->tx2, cfg->regs, cfg->tx_tbl,
--					 cfg->tx_tbl_num, 2);
--	}
-+	if (cfg->lanes >= 2)
-+		qmp_combo_configure_lane(qphy->tx2, cfg->tx_tbl, cfg->tx_tbl_num, 2);
+-	qmp_pcie_configure_lane(tx, cfg->regs, tables->tx, tables->tx_num, 1);
++	qmp_pcie_configure_lane(tx, tables->tx, tables->tx_num, 1);
  
- 	/* Configure special DP tx tunings */
- 	if (cfg->type == PHY_TYPE_DP)
- 		cfg->configure_dp_tx(qphy);
+ 	if (cfg->lanes >= 2)
+-		qmp_pcie_configure_lane(qphy->tx2, cfg->regs, tables->tx, tables->tx_num, 2);
++		qmp_pcie_configure_lane(qphy->tx2, tables->tx, tables->tx_num, 2);
  
--	qmp_combo_configure_lane(rx, cfg->regs, cfg->rx_tbl, cfg->rx_tbl_num, 1);
-+	qmp_combo_configure_lane(rx, cfg->rx_tbl, cfg->rx_tbl_num, 1);
+-	qmp_pcie_configure_lane(rx, cfg->regs, tables->rx, tables->rx_num, 1);
++	qmp_pcie_configure_lane(rx, tables->rx, tables->rx_num, 1);
+ 	if (cfg->lanes >= 2)
+-		qmp_pcie_configure_lane(qphy->rx2, cfg->regs, tables->rx, tables->rx_num, 2);
++		qmp_pcie_configure_lane(qphy->rx2, tables->rx, tables->rx_num, 2);
+ }
  
--	if (cfg->lanes >= 2) {
--		qmp_combo_configure_lane(qphy->rx2, cfg->regs, cfg->rx_tbl,
--					 cfg->rx_tbl_num, 2);
--	}
-+	if (cfg->lanes >= 2)
-+		qmp_combo_configure_lane(qphy->rx2, cfg->rx_tbl, cfg->rx_tbl_num, 2);
+ static void qmp_pcie_pcs_init(struct qmp_phy *qphy, const struct qmp_phy_cfg_tables *tables)
+ {
+-	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 	void __iomem *pcs = qphy->pcs;
+ 	void __iomem *pcs_misc = qphy->pcs_misc;
  
- 	/* Configure link rate, swing, etc. */
- 	if (cfg->type == PHY_TYPE_DP)
- 		cfg->configure_dp_phy(qphy);
- 	else
--		qmp_combo_configure(pcs, cfg->regs, cfg->pcs_tbl, cfg->pcs_tbl_num);
-+		qmp_combo_configure(pcs, cfg->pcs_tbl, cfg->pcs_tbl_num);
+ 	if (!tables)
+ 		return;
  
- 	if (cfg->has_pwrdn_delay)
- 		usleep_range(cfg->pwrdn_delay_min, cfg->pwrdn_delay_max);
+-	qmp_pcie_configure(pcs, cfg->regs,
+-			   tables->pcs, tables->pcs_num);
+-	qmp_pcie_configure(pcs_misc, cfg->regs,
+-			   tables->pcs_misc, tables->pcs_misc_num);
++	qmp_pcie_configure(pcs, tables->pcs, tables->pcs_num);
++	qmp_pcie_configure(pcs_misc, tables->pcs_misc, tables->pcs_misc_num);
+ }
+ 
+ static int qmp_pcie_init(struct phy *phy)
 -- 
 2.35.1
 
