@@ -2,172 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46D85FA8D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF3B5FA8D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiJKABo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 20:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        id S229451AbiJKAAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 20:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJKABl (ORCPT
+        with ESMTP id S229778AbiJKAAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:01:41 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0230575FEA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:01:40 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AMVA2B022603;
-        Tue, 11 Oct 2022 00:00:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=MUav98Gqd8+jnPeoXL3mH1XPkjFXSCLleskfAKiCeP0=;
- b=nUvkvxmJSWQzRAcDKpK9n3/z4s7vmVQJxV4/k8z07b7LnWl0gbSJMVZP6E6un2y731hZ
- dULr2wD58tYfAXP78lLZTxvc9U4bjDa+kq4Fgsqq7y1ktA7APwmFoYdMQwfNJj2gkCKU
- 2VZc/bLGK/KG8k5GeCKainf1RMy34l6vbCyprdPsckLeN03qKiXvP5KttjvbdrLBWa5y
- q0nZe0lagWTo9MjobPBbKIEnc0VdIx2XuQX6/oT5Ns/r1qywbNGTeuPbNBMkQrOyyXHu
- untFZCJOxOcRQ3Dr/TcRBkJ0fLWe/NbhKPyLVSEx3Zw20OrfYJpmfg0GmreTBU4bgiIL MQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7vx7j1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 00:00:37 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29B007R9013158;
-        Tue, 11 Oct 2022 00:00:36 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7vx7h0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 00:00:36 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29ANodQl023738;
-        Tue, 11 Oct 2022 00:00:34 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9bdw0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 00:00:34 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ANtoIK25755940
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Oct 2022 23:55:50 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A59A52052;
-        Tue, 11 Oct 2022 00:00:32 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5EA555204F;
-        Tue, 11 Oct 2022 00:00:31 +0000 (GMT)
-Received: from [9.43.172.4] (unknown [9.43.172.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 1A07A602EB;
-        Tue, 11 Oct 2022 11:00:18 +1100 (AEDT)
-Message-ID: <d402a6a0a11d84906ecba3909f4c8f880298dc0f.camel@linux.ibm.com>
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, rmclure@linux.ibm.com
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        christophe.leroy@csgroup.eu, cuigaosheng1@huawei.com,
-        david@redhat.com, farosas@linux.ibm.com, geoff@infradead.org,
-        gustavoars@kernel.org, haren@linux.ibm.com, hbathini@linux.ibm.com,
-        joel@jms.id.au, lihuafei1@huawei.com, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, linuxppc-dev@lists.ozlabs.org,
-        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
-        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
-        pali@kernel.org, paul@paul-moore.com, ruscur@russell.cc,
-        windhl@126.com, wsa+renesas@sang-engineering.com,
-        ye.xingchen@zte.com.cn, yuanjilin@cdjrlc.com,
-        zhengyongjun3@huawei.com
-Date:   Tue, 11 Oct 2022 11:00:15 +1100
-In-Reply-To: <Y0ScAhqysKK6Hrks@zx2c4.com>
-References: <87edvhntv0.fsf@mpe.ellerman.id.au> <Y0RxpSFyn9m68zIb@zx2c4.com>
-         <Y0R6fcvgGA858TQA@zx2c4.com> <Y0ScAhqysKK6Hrks@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 36w4YCAQ4nTGdgqjFxiN2AM5kFcUeosw
-X-Proofpoint-GUID: IdWhmLj7iNQ56oqIgH1w5wqO-vj6xDLc
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 10 Oct 2022 20:00:41 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEA67268C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:00:40 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id h2-20020a056602154200b006bb5f8574afso8233509iow.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:00:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbvS0X3m3SbRe3ACMhfuRQZ14nncl70F/pfj7aK5Oak=;
+        b=JRBxa6F0CWuOcInU3Lk1JS/w33cSFizdepHYuKKDvf0AtaQsdCE65F93eOD600d+V+
+         zpV64XRA5re5AVgjHHnqZFeboUHWepbAAOwursxyLC12//o4/DO8Pfh8G7l5BNsrNwoE
+         chNWkGdKMTQHb4oH4h0D/AR/GyeV1Sa1P8TmCCHepn7iTanIhBj4mU47L55tkZB8SANX
+         gY4Z/HgUiFzqSqHxhNIXygIMCNL2l6l0L7C+qRl17KiU3bbVyuPmF7W9KyPmgme1GYM/
+         0JGd+Q1Ud4PDHtSFCN9fOz+EOW8Tv1red+J5wMbikggrvG34pb8aEAJY9d2uY5EgRoEp
+         7EbQ==
+X-Gm-Message-State: ACrzQf1+X6D6YBqgJszY/ejMKj9W3Ckfx+ZDZ/WwaA4Prgl3snmixl/+
+        oopVcJEMliLUttsYSsmCw55PkuRVrFOdtQegrR2KqgsSRQLl
+X-Google-Smtp-Source: AMsMyM533gTkDEzvWDwybUS2DzbBpkMuCqS+TnEE3zECelkRknEw6C/GiR4OfzEHlyIKR+x0t5QPt09RpeVgRk8VK6zs4fUBILab
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_12,2022-10-10_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=905
- mlxscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100139
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id
+ u3-20020a056638304300b00341d8a473e8mr11553257jak.239.1665446440106; Mon, 10
+ Oct 2022 17:00:40 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 17:00:40 -0700
+In-Reply-To: <00000000000093079705ea9aada2@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007482b905eab6f749@google.com>
+Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in dbFindCtl
+From:   syzbot <syzbot+7edb85bc97be9f350d90@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-10 at 16:26 -0600, Jason A. Donenfeld wrote:
-> 
-> Bisected:
-> 
-> 7e92e01b724526b98cbc7f03dd4afa0295780d56 is the first bad commit
-> commit 7e92e01b724526b98cbc7f03dd4afa0295780d56
-> Author: Rohan McLure <rmclure@linux.ibm.com>
-> Date:   Wed Sep 21 16:56:01 2022 +1000
-> 
->     powerpc: Provide syscall wrapper
-> 
->     Implement syscall wrapper as per s390, x86, arm64. When enabled
->     cause handlers to accept parameters from a stack frame rather
-> than
->     from user scratch register state. This allows for user registers
-> to be
->     safely cleared in order to reduce caller influence on speculation
->     within syscall routine. The wrapper is a macro that emits syscall
->     handler symbols that call into the target handler, obtaining its
->     parameters from a struct pt_regs on the stack.
-> 
->     As registers are already saved to the stack prior to calling
->     system_call_exception, it appears that this function is executed
-> more
->     efficiently with the new stack-pointer convention than with
-> parameters
->     passed by registers, avoiding the allocation of a stack frame for
-> this
->     method. On a 32-bit system, we see >20% performance increases on
-> the
->     null_syscall microbenchmark, and on a Power 8 the performance
-> gains
->     amortise the cost of clearing and restoring registers which is
->     implemented at the end of this series, seeing final result of
-> ~5.6%
->     performance improvement on null_syscall.
-> 
->     Syscalls are wrapped in this fashion on all platforms except for
-> the
->     Cell processor as this commit does not provide SPU support. This
-> can be
->     quickly fixed in a successive patch, but requires
-> spu_sys_callback to
->     allocate a pt_regs structure to satisfy the wrapped calling
-> convention.
-> 
->     Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
->     Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
->     Signed-off-by: Rohan McLure <rmclure@linux.ibm.com>
->     Reviewed-by: Nicholas Piggin <npiggin@gmai.com>
->     [mpe: Make incompatible with COMPAT to retain clearing of high
-> bits of args]
->     Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->     Link:
-> https://lore.kernel.org/r/20220921065605.1051927-22-rmclure@linux.ibm.com
+syzbot has found a reproducer for the following issue on:
 
-Thanks for bisecting, this is interesting! Could you provide your
-.config and the environment you're running in? Your reproducer doesn't
-seem to trigger it on my baremetal POWER8 pseries_le_defconfig.
+HEAD commit:    4899a36f91a9 Merge tag 'powerpc-6.1-1' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12ead462880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2021a61197ebe02
+dashboard link: https://syzkaller.appspot.com/bug?extid=7edb85bc97be9f350d90
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1404403a880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10789852880000
 
--- 
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1a98722ff83f/disk-4899a36f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7a31d6690395/vmlinux-4899a36f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/6fb347a504fa/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7edb85bc97be9f350d90@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 32768
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:1671:12
+shift exponent 1834973817 is too large for 64-bit type 'long long int'
+CPU: 0 PID: 3603 Comm: syz-executor644 Not tainted 6.0.0-syzkaller-09413-g4899a36f91a9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
+ dbFindCtl.cold+0x52/0x57 fs/jfs/jfs_dmap.c:1671
+ dbAllocAny+0xa4/0x1a0 fs/jfs/jfs_dmap.c:1502
+ dbAlloc+0x46d/0xa70 fs/jfs/jfs_dmap.c:859
+ diNewExt+0x724/0x1a10 fs/jfs/jfs_imap.c:2251
+ diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+ diAllocAG+0x15f1/0x2200 fs/jfs/jfs_imap.c:1662
+ diAlloc+0x82d/0x1730 fs/jfs/jfs_imap.c:1583
+ ialloc+0x89/0xaa0 fs/jfs/jfs_inode.c:56
+ jfs_mkdir+0x1f0/0xab0 fs/jfs/namei.c:225
+ vfs_mkdir+0x489/0x740 fs/namei.c:4013
+ do_mkdirat+0x28c/0x310 fs/namei.c:4038
+ __do_sys_mkdir fs/namei.c:4058 [inline]
+ __se_sys_mkdir fs/namei.c:4056 [inline]
+ __x64_sys_mkdir+0xf2/0x140 fs/namei.c:4056
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc402fc5c29
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc056f56d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc402fc5c29
+RDX: 00007fc402f84123 RSI: 0000000000000000 RDI: 00000000200052c0
+RBP: 00007fc402f853f0 R08: 0000555555d8a2c0 R09: 0000000000000000
+R10: 00007ffc056f55a0 R11: 0000000000000246 R12: 00000000f8008000
+R13: 0000000000000000 R14: 00080000000000f4 R15: 0000000000000000
+ </TASK>
+================================================================================
 
