@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C325FBAC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4339A5FBAD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiJKSv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S230004AbiJKS4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJKSvY (ORCPT
+        with ESMTP id S229963AbiJKS42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:51:24 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16CC7D1E5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:51:23 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 3so12807252pfw.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fKZTcqhNfH6XEVr/io5w7ZWWmBBV8QD/bwvnyWmu+g0=;
-        b=mGVfRbWvuSjpb+0blFVwritqEKYvtR52XGW3xkRTNmJz+SBDqG1SCiBZAVEQx7Eyyk
-         0isWp+d2DATDH3WYqoKoIjbI6L7cJ7l9UQTc1MZXw0mareCpXzWUwi+xsrJA2ifwHB2m
-         wiD4PbdJubOQylrDFQ7gW+ViCmbDhSsHnS2LbI5gDuvWGcytw2CtrcOwfXgD9RrUMKwR
-         K1FeSuAH9MdrvjtjEXLEN0g2egFCPT3LLl75EP42NuADU/vxQVPax62oBw28owcw/VvA
-         IeKnI+uK67QoXoXoTBMBQbWmfKEXfI1XgILWUPWUQZ0+Nprp6xUhUEkbNaVuBJkwHWhz
-         OgyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fKZTcqhNfH6XEVr/io5w7ZWWmBBV8QD/bwvnyWmu+g0=;
-        b=nIWSlc/sOXjCDqXSRtAfq7xmzk02XqZqWbZvVVSEom+kHQ2UznfVxljWh6WF1gxtdS
-         Rs3b91N2/5JBt86a5g6uR07wtHFuIKRzpDfxZHWihpIN2NtBiRL/wB0y6TIVs20B6mOF
-         hAQR9AffbeVSX2gukJAeLsHg7yxPw1te00O6Efpa/C35MZyG5bx/+FrM30uKjKOgcJwb
-         bi7nViNnWWUKDf+UcuVbyidefeuemoY10tkMvrlnO0Pc7YIY9wNxz56tFewot4IjvmPW
-         PQ6vrj6PLFn8wYnKR+WK7ircxiVi3+RxzAyOsDhHt3ifvsIyOWefJ0udOcZOMbTBUW9s
-         U+2Q==
-X-Gm-Message-State: ACrzQf1DlYD1ZsaD+OLqTKrZH8rcwdxsVX4tMCVtwu5OXL5NtJc2P7YS
-        kJuoWcuBeeT5lDITK2mfyKixbQ==
-X-Google-Smtp-Source: AMsMyM6HUuRERGX7sUjc7sux75wTMI5F+DBqNQx5P9N3m+LZp6R8a1/F0+T/fLWd98Ejoqq+zK/0dg==
-X-Received: by 2002:a63:ff5c:0:b0:434:dc60:73d with SMTP id s28-20020a63ff5c000000b00434dc60073dmr23060827pgk.136.1665514283177;
-        Tue, 11 Oct 2022 11:51:23 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m11-20020a1709026bcb00b001811a197797sm6848431plt.194.2022.10.11.11.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 11:51:22 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 18:51:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, bilbao@vt.edu
-Subject: Re: [PATCH] KVM: SEV: Fix a few small typos
-Message-ID: <Y0W7J9+2P2u83EaD@google.com>
-References: <20220928173142.2935674-1-carlos.bilbao@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928173142.2935674-1-carlos.bilbao@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 14:56:28 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3880BE9;
+        Tue, 11 Oct 2022 11:56:27 -0700 (PDT)
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BHNtK7000518;
+        Tue, 11 Oct 2022 18:56:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=2xXCj9pupcZ+eq8rcJhUB7SjmJADAHy3fewK97q3xic=;
+ b=lXFVnIYfcCd3nwoEkKyVr4kQ1tYHDYZPGgezrljIaOSux0N5DSTOtuq+6LaBidsJMKg1
+ q/vzYCDJHf6pssHeEPHURPDJy3j9POgHYGzb5BJXm+Xk2TShCpeSFpIGn8s2BprvKuZz
+ Z9RFRBdcib6vJGE9bmrWO7RnVq/PSvl4Rtx62mhT7ZjHBHfvaKl5B82UxocIPdCMOdM6
+ 75wiihcBPqeFK1z5ArahBVNY9UI1WqGK+dpOho/gf53hvt0zHx+gpCEy0sP8WMfyVfIN
+ rjTHq0ud3rp8IZJVqQYZNyRFimzVj7LX15t2SId52wa/klC4ypaQB6cIMwfmKlO81K/l Fg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3k5cd4gvkw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 18:56:01 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id A33BAD25E;
+        Tue, 11 Oct 2022 18:56:00 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id E689580873C;
+        Tue, 11 Oct 2022 18:55:59 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v1 0/5] Add PLREG and SPI Driver GXP Support
+Date:   Tue, 11 Oct 2022 13:55:20 -0500
+Message-Id: <20221011185525.94210-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: gHh7P8wiBi4bMmCE8x7PkeHT3OUR5IZ0
+X-Proofpoint-ORIG-GUID: gHh7P8wiBi4bMmCE8x7PkeHT3OUR5IZ0
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ impostorscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 bulkscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210110110
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022, Carlos Bilbao wrote:
-> @@ -3510,7 +3510,7 @@ bool sev_snp_init_protected_guest_state(struct kvm_vcpu *vcpu)
->  
->  	ret = __sev_snp_update_protected_guest_state(vcpu);
->  	if (ret)
-> -		vcpu_unimpl(vcpu, "snp: AP state update on init failed\n");
-> +		vcpu_unimpl(vcpu, "SNP: AP state update on init failed\n");
->  
->  unlock:
->  	mutex_unlock(&svm->snp_vmsa_mutex);
-> @@ -4170,7 +4170,7 @@ void sev_es_prepare_guest_switch(struct vcpu_svm *svm, unsigned int cpu)
->  	/* PKRU is restored on VMEXIT, save the current host value */
->  	hostsa->pkru = read_pkru();
->  
-> -	/* MSR_IA32_XSS is restored on VMEXIT, save the currnet host value */
-> +	/* MSR_IA32_XSS is restored on VMEXIT, save the current host value */
->  	hostsa->xss = host_xss;
->  }
->  
-> @@ -4223,7 +4223,7 @@ struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu)
->  	 * Allocate an SNP safe page to workaround the SNP erratum where
->  	 * the CPU will incorrectly signal an RMP violation  #PF if a
->  	 * hugepage (2mb or 1gb) collides with the RMP entry of VMCB, VMSA
-> -	 * or AVIC backing page. The recommeded workaround is to not use the
-> +	 * or AVIC backing page. The recommended workaround is to not use the
->  	 * hugepage.
->  	 *
->  	 * Allocate one extra page, use a page which is not 2mb aligned
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-SNP support doesn't exist upstream, looks like this was generated against an SNP
-branch.
+The GXP SoC is interfaced with a programmable logic device that takes
+inputs/outputs from the server board. All these inputs/outputs are
+presented in register form to the SoC. The Programmable Logic
+Register driver enables access to these registers and provides a
+standard way to provide access across the HPE portfolio. Additionally
+this patchset also enables the SPI driver that already exists in linux
+in the spi driver as spi-gxp file
+
+Nick Hawkins (5):
+  soc: hpe: add support for HPE GXP Programmable Register Driver
+  dt-bindings: soc: hpe: Add hpe,gxp-plreg
+  ARM: dts: hpe: Add PLREG/SPI Support
+  ARM: multi_v7_defconfig: Enable GXP SPI and PLREG Drivers
+  MAINTAINERS: Add HPE SOC Drivers
+
+ .../bindings/soc/hpe/hpe,gxp-plreg.yaml       |   43 +
+ MAINTAINERS                                   |    3 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  275 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |   28 +-
+ arch/arm/configs/multi_v7_defconfig           |    2 +
+ drivers/soc/Kconfig                           |    1 +
+ drivers/soc/Makefile                          |    1 +
+ drivers/soc/hpe/Kconfig                       |   19 +
+ drivers/soc/hpe/Makefile                      |    7 +
+ drivers/soc/hpe/gxp-plreg.c                   | 1207 +++++++++++++++++
+ drivers/soc/hpe/gxp-soclib.c                  |   19 +
+ drivers/soc/hpe/gxp-soclib.h                  |   15 +
+ include/linux/soc/hpe/gxp.h                   |   15 +
+ 13 files changed, 1634 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-plreg.yaml
+ create mode 100644 drivers/soc/hpe/Kconfig
+ create mode 100644 drivers/soc/hpe/Makefile
+ create mode 100644 drivers/soc/hpe/gxp-plreg.c
+ create mode 100644 drivers/soc/hpe/gxp-soclib.c
+ create mode 100644 drivers/soc/hpe/gxp-soclib.h
+ create mode 100644 include/linux/soc/hpe/gxp.h
+
+-- 
+2.17.1
+
