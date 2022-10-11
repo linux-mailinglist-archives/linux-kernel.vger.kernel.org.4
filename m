@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A23A5FB093
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AB55FB097
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJKKk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
+        id S229648AbiJKKlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJKKkx (ORCPT
+        with ESMTP id S229600AbiJKKl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:40:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FEB07D7B1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:40:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13F761042;
-        Tue, 11 Oct 2022 03:40:57 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B8F33F766;
-        Tue, 11 Oct 2022 03:40:49 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 11:40:47 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Shivnandan Kumar <quic_kshivnan@quicinc.com>
-Cc:     sudeep.holla@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, quic_rgottimu@quicinc.com
-Subject: Re: Query regarding "firmware: arm_scmi: Free mailbox channels if
- probe fails"
-Message-ID: <Y0VILyEaNOQiTpO5@e120937-lin>
-References: <cfa26ff3-c95a-1986-58fc-b49fc9be49d5@quicinc.com>
- <Yyx3IAcMX309QEjB@e120937-lin>
- <Yyx/DKcc7XupQmnx@e120937-lin>
- <c81540cc-e485-0c45-9e4e-248d3279e1ea@quicinc.com>
- <YzriGCLf+MFNGO2n@e120937-lin>
- <b1de7e87-9590-3aad-d62b-167a7685746a@quicinc.com>
+        Tue, 11 Oct 2022 06:41:29 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B7B43634;
+        Tue, 11 Oct 2022 03:41:28 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mmsjj715qz67N5b;
+        Tue, 11 Oct 2022 18:39:53 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 12:41:26 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
+ 2022 11:41:26 +0100
+Date:   Tue, 11 Oct 2022 11:41:25 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [RFC V2 PATCH 01/11] cxl/mbox: Add debug of hardware error code
+Message-ID: <20221011114125.00003bd2@huawei.com>
+In-Reply-To: <20221010224131.1866246-2-ira.weiny@intel.com>
+References: <20221010224131.1866246-1-ira.weiny@intel.com>
+        <20221010224131.1866246-2-ira.weiny@intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b1de7e87-9590-3aad-d62b-167a7685746a@quicinc.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 03:34:45PM +0530, Shivnandan Kumar wrote:
+On Mon, 10 Oct 2022 15:41:21 -0700
+ira.weiny@intel.com wrote:
+
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> Hi Cristian,
+> If a mailbox command fails the driver always reports ENXIO.  But this
+> may not be enough information to understand why the hardware, or in my
+> case Qemu, was failing.
 > 
-
-Hi Shivnandan,
-
-> >>Ok, just out of curiosity, once done, can you point me at your downstream
-> public sources so I can see the issue and the fix that you are applying to
-> your trees ?
+> Add a debug print of the error code returned from the hardware.
 > 
-> https://source.codeaurora.org/quic/la/kernel/msm-5.10/tree/drivers/soc/qcom/qcom_rimps.c?h=KERNEL.PLATFORM.1.0.r1-07800-kernel.0
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Seems very sensible to me.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  drivers/cxl/core/mbox.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> I have added lock while accessing con_priv inside irq handler and shutdown
-> function.
-> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index 16176b9278b4..6c4d024ad0e8 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -181,8 +181,11 @@ int cxl_mbox_send_cmd(struct cxl_dev_state *cxlds, u16 opcode, void *in,
+>  	if (rc)
+>  		return rc;
+>  
+> -	if (mbox_cmd.return_code != CXL_MBOX_CMD_RC_SUCCESS)
+> +	if (mbox_cmd.return_code != CXL_MBOX_CMD_RC_SUCCESS) {
+> +		dev_dbg(cxlds->dev, "MB error : %s\n",
+> +			cxl_mbox_cmd_rc2str(&mbox_cmd));
+>  		return cxl_mbox_cmd_rc2errno(&mbox_cmd);
+> +	}
+>  
+>  	/*
+>  	 * Variable sized commands can't be validated and so it's up to the
 
-Thanks !
-
-> 
-> I have one input regarding timeout from firmware, can we enable BUG on
-> response  time out in function do_xfer based on some debug config flag,this
-> will help to debug firmware timeout issue faster.
-> 
-> We will only enable that config flag during internal testing.
-> 
-
-I understand a sort of 'Panic-on-timeout' would be useful to just freeze
-the system as it is and debug, but it seems to me pretty much invasive
-(and generally frowned upon) to BUG_ON timeouts, given on some SCMI
-platforms/transports a few timeouts can happen really not so infrequently
-due to transient conditions during moments of peak SCMI traffic.
-
-Even though you mention to make it conditional to Kconfig, I'm not sure
-this could fly, especially if you want to enable only for internal
-testing...I'll ping Sudeep about this to see what he thinks.
-
-As an alternative, what if I try to improve SCMI tracing/debug, let's say
-dumping more info in dmesg about the offending (timed-out) message instead
-of hanging the system as a whole ?
-
-I'd have also some still-brewing-and-not-published patches to add some
-SCMI stats somewhere in sysfs to be able to read current SCMI errors/timeouts
-and transport anomalies, would that be of interest ?
-
-...maybe, we could combine some of these stats and some sort of
-BUG_ON/WARN_ON (if it will fly eventually..) into some kind SCMI_DEBUG mode
-...any input on your needs about which kind of SCMI info you'll like to see
-exposed by the stack would be welcome.
-
-Last but not least, since we are talking about SCMI Server/FW testing,
-have you (or your team) seen this work-in-progress of mine:
-
-https://lore.kernel.org/linux-arm-kernel/20220903183042.3913053-1-cristian.marussi@arm.com/
-
-about a new unified userspace interface to inject/snoop SCMI messages to
-test/fuzz/stress the SCMI server wherever it is placed ?
-
-Any feedback on the API proprosed in the cover-letter would be highly welcome;
-I'll post a new V4 next week possibly, and the changes to the existing ARM SCMI
-Compliance suite (mentioned in the cover) to support this new SCMI Raw
-mode are in their final stage too.
-
-Thanks,
-Cristian
