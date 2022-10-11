@@ -2,101 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E485FB10C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F2C5FB116
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJKLJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
+        id S229703AbiJKLKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJKLJl (ORCPT
+        with ESMTP id S229501AbiJKLKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:09:41 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60591D73;
-        Tue, 11 Oct 2022 04:09:37 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 005F72B066FE;
-        Tue, 11 Oct 2022 07:09:34 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 11 Oct 2022 07:09:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665486574; x=1665490174; bh=RM6oJ+Wm8I
-        //KZ/oFLABpSMFlOHOa+xN+BM+5SLLxTE=; b=aSIYxCtYdt1yek8Ky0J+MBBZGd
-        YNsaNQ38C8MlliiHZiynR73WHIEKlaMYrUM/xptOq/d1VGxGKHilri/wt4TPhIFl
-        64pWwEtnf3Mm+GBlyIbpVJpQnIu9y4g0d9eCxZLWYdqXFtjPyxTjbNw9ilvakv0s
-        kTrl5vahN583XPq/hWNgme/dnMN0//GaRZfS9XwvyoL/O8sPfeDb8mVlY1H3DBz1
-        tsPsgCvF/r+aJNF6QQAjG70KR4G0PF6amSQjNEACaEL8rf2MK4osNJnaWCfaBIl3
-        xyB1psknJFftHp9vNRmjc1vTmSguTPn70u5jJmIgnouMXY3jQ+mF8YwbruLA==
+        Tue, 11 Oct 2022 07:10:05 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D725C11A0A;
+        Tue, 11 Oct 2022 04:10:00 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id A8AD93200983;
+        Tue, 11 Oct 2022 07:09:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 11 Oct 2022 07:09:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1665486596; x=1665572996; bh=ua7Nyh85XFVll13jSOnPQNcQr
+        tUvqtku7ANNgc6cAo0=; b=oe/I9u21BBIuiWtVCHWUKd87rev3V/BYMhQiMSkvr
+        BG8Txs0oU9hPsl2euGRNkWCx6uHWgxIcrZaGfgsGjZoRi1Wjo1ZN3Ee2y8HRxC29
+        alh963AzBpZlhdps9Sjv1ZE5aTdcNWQFkQrPb3ltpk843FkzTh0VAN5T1eV6+pMe
+        mdX4fmjgHEquemFEmJBj9XKblrlHxOAAJPziUg1VThjHOiWIPhfi7cNSyeq5wvTS
+        zv0qUk3gTewDlkawmAvasrGvHApewbSlVdZPkepJZtpGipom2gUHDb1nnVhQdSae
+        1pSAuUBNM4Gu7BCq3sC19dd6BgL8r17uqmJj8aFyxTOXA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665486574; x=1665490174; bh=RM6oJ+Wm8I//KZ/oFLABpSMFlOHO
-        a+xN+BM+5SLLxTE=; b=jflLYEknFINqe7qRTsk0daaR0znwMVl7nJ1IGdyv2ncY
-        bVqpuAfif81zf9VlFFkyx4IUQoxDrHT8FtR/CGpTze63zrHIVbL1Q+fMroo/Z2dY
-        pyd8G7jevH56aCaY4REcLf7jDd/DM4ioJvsToesOIgYmUg/Pp9v0fjWsbM/ULdQU
-        1llbnH6kO5bK+hMIMfzpiS1/CL6hZahPp9t3/yDhMt37JQWUfw/SiWQgJwCEJvVY
-        PvBWDFObOFEzSiPMWB9n8kguEKV6oVYvvMC84SfDlTANpR8pJEx/QXM66QIjwJv/
-        UnKlF1rNoJ6V+kVms7q4RXjJxWsUchfap5IawwCxrQ==
-X-ME-Sender: <xms:7k5FY_vwrB21dr5I-_tycqIxrn-vjDge8tsH9Kv-V3NzbDTGvWAYaA>
-    <xme:7k5FYwc5fhyKd0kE9p10FFRWBbghqc2bpSz8sAVxmXT-fPPSE19_4I3ahqnTcZyWJ
-    Frr_J0OVNjkEC2Muhs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgfedvucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1665486596; x=1665572996; bh=ua7Nyh85XFVll13jSOnPQNcQrtUvqtku7AN
+        Ngc6cAo0=; b=DSP6gftXA7xPjqGV4fJqddQJcoYpGW0b1LNSyiFn7bURBOeP5PQ
+        lCzRWdDG76nQza9GCVC55iyq+lYBW0CrVC3YfaroIHFPVATt+MdN2XtQyPV3lD5R
+        jRO7KpOjt0gbgfdIGWEDxz8vZ1upglQWcZpTfDl8xfrypRVQN2vylF2gqNqObk/B
+        4XkM2ag73RxpDdLo0aZbBla+DF5D2uXg/00m2rUDPBAboe3iFUeBFfldj3IS2RXn
+        dUyWyJ8yNRoSj4akKDRoafJSb2/dA9wdYH/SEvOfDc5dth6BuDClC7WXJBgr/XgE
+        aAnQZpfJThINwnbQco2Oqcsi9VEistMwLrw==
+X-ME-Sender: <xms:A09FY6IpJqQAPBNOOfdqUhGfHubdshi2X5lEu4ZOwEJimmv2jWNp8A>
+    <xme:A09FYyJi9VKDKzIkS8IIbXjQpgAgkG2S-2aGcAtGhzkO7ky7dG5sYe6oFpZDeeejk
+    IO1uvUUwajxhggjACw>
+X-ME-Received: <xmr:A09FY6usXbM8cdPT3-OltTQZhTWXMpPYeat3Ox9p1QmhtJm6P5BeNLPNwijK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgfeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:7k5FYyzqziQBZRQ0Hlsh_jpYvdINfcj15npmDLShu1EAKIwtbms89g>
-    <xmx:7k5FY-Oo8N9U2caNl5qYk7udqrpZq0DOZs-IaO1W7RR3e_HA2KbNNg>
-    <xmx:7k5FY_-eu1g9YafbA0dDkaMf1xZB_23gMIJaN56laXcOXrjUYnx6oA>
-    <xmx:7k5FY384T46l2ky4ckvjowwTBWaP2xs0Q-JhSsNpZGfEEsn6w0lE2z_SfE0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2CA43B60086; Tue, 11 Oct 2022 07:09:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <85ca7eb4-3e0c-4ffb-8bac-a435594ca0f7@app.fastmail.com>
-In-Reply-To: <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
-References: <20221011000840.289033-1-quic_eberman@quicinc.com>
- <20221011000840.289033-14-quic_eberman@quicinc.com>
- <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
-Date:   Tue, 11 Oct 2022 13:09:13 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jiri Slaby" <jirislaby@kernel.org>,
-        "Elliot Berman" <quic_eberman@quicinc.com>,
-        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     "Murali Nalajala" <quic_mnalajal@quicinc.com>,
-        "Trilok Soni" <quic_tsoni@quicinc.com>,
-        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
-        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
-        "Prakruthi Deepak Heragu" <quic_pheragu@quicinc.com>,
-        "Andy Gross" <agross@kernel.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Jassi Brar" <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM Console
- Services
-Content-Type: text/plain
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:A09FY_aSi0SC7i1hmZvXNsKyarmvmeCD0w-4QcmJ48Tr7cc5cb2gbA>
+    <xmx:A09FYxZbgqDk4C2Wd88F3YbzAkA-q7I4-3IsePnR66Uaf8IzCf4_hw>
+    <xmx:A09FY7AohQLBPxDmUxsjbDylexED_oNcRE3HIzxNZHhyzy4JKisbzg>
+    <xmx:BE9FY0xyhnU-0Mn10nfQuURp4U_Xp_zB2eWcayOfvmSjbAIVOfHPlQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Oct 2022 07:09:54 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-api@vger.kernel.org, greg@kroah.com, f.fainelli@gmail.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v6] MIPS: Expose prid and globalnumber to sysfs
+Date:   Tue, 11 Oct 2022 12:09:51 +0100
+Message-Id: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -106,24 +81,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022, at 8:02 AM, Jiri Slaby wrote:
-> On 11. 10. 22, 2:08, Elliot Berman wrote:
->> +
->> +	/* below are for printk console.
->> +	 * gh_rm_console_* calls will sleep and console_write can be called from
->> +	 * atomic ctx. Two xmit buffers are used. The active buffer is tracked with
->> +	 * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
->> +	 * A work is scheduled to flush the bytes. The work will swap the active buffer
->> +	 * and write out the other buffer.
->> +	 */
->
-> Ugh, why? This is too ugly and unnecessary. What about passing the kfifo 
-> to gh_rm_console_write() instead? You do memcpy() there anyway.
+Some application would like to know precise model and rev of processor
+to do errata workaround or optimization.
 
-Another problem here is that you really want the console output to be
-printed from atomic context, otherwise one would never see e.g. the
-output of a panic() call. Having a deferred write is probably fine for
-normal tty operations, but you probably want a different device for the
-console here, e.g. the hvc_dcc driver.
+Expose them in sysfs as:
+/sys/devices/system/cpu/cpuX/regs/identification/prid
+/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
 
-     Arnd
+Reusing AArch64 CPU registers directory.
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+v2: Drop static qualifier for kobj (gregkh)
+v3: Use kzalloc to allocate struct cpuregs.
+    note: When Greg mentioned about static I was thinking about
+    static qualifier of percpu variable. After reading documents
+    again it turns out kobjs should be allocated at runtime. Arm64's
+    cpuinfo kobj is also on a percpu variable... I guess that was a
+    intentional use?
+v4: Properly handle err of kobj creation. (gregkh)
+v5: Drop invalid kfree
+v6: Correct offline routine, use kobject_put
+---
+ .../ABI/testing/sysfs-devices-system-cpu      |  9 ++
+ arch/mips/kernel/topology.c                   | 97 +++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 5bf61881f012..9dea45ad5a22 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -512,6 +512,15 @@ Description:	information about CPUs heterogeneity.
+ 
+ 		cpu_capacity: capacity of cpuX.
+ 
++What:		/sys/devices/system/cpu/cpuX/regs/identification/prid
++		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
++Date:		October 2022
++Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
++Description:	MIPS CPU registers
++
++		'identification' directory exposes the Processor ID and Global Number
++		registers for identifying model and revision of the CPU.
++
+ What:		/sys/devices/system/cpu/vulnerabilities
+ 		/sys/devices/system/cpu/vulnerabilities/meltdown
+ 		/sys/devices/system/cpu/vulnerabilities/spectre_v1
+diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+index 9429d85a4703..85588ffd6bac 100644
+--- a/arch/mips/kernel/topology.c
++++ b/arch/mips/kernel/topology.c
+@@ -5,6 +5,8 @@
+ #include <linux/node.h>
+ #include <linux/nodemask.h>
+ #include <linux/percpu.h>
++#include <linux/seq_file.h>
++#include <linux/smp.h>
+ 
+ static DEFINE_PER_CPU(struct cpu, cpu_devices);
+ 
+@@ -26,3 +28,98 @@ static int __init topology_init(void)
+ }
+ 
+ subsys_initcall(topology_init);
++
++static struct kobj_type cpuregs_kobj_type = {
++	.sysfs_ops = &kobj_sysfs_ops,
++};
++
++struct cpureg {
++	struct kobject kobj;
++	struct cpuinfo_mips *info;
++};
++static DEFINE_PER_CPU(struct cpureg *, cpuregs);
++
++#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
++#define CPUREGS_ATTR_RO(_name, _field)						\
++	static ssize_t _name##_show(struct kobject *kobj,			\
++			struct kobj_attribute *attr, char *buf)			\
++	{									\
++		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
++										\
++		return sysfs_emit(buf, "0x%08x\n", info->_field);	\
++	}									\
++	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
++
++CPUREGS_ATTR_RO(prid, processor_id);
++CPUREGS_ATTR_RO(globalnumber, globalnumber);
++
++static struct attribute *cpuregs_id_attrs[] = {
++	&cpuregs_attr_prid.attr,
++	&cpuregs_attr_globalnumber.attr,
++	NULL
++};
++
++static const struct attribute_group cpuregs_attr_group = {
++	.attrs = cpuregs_id_attrs,
++	.name = "identification"
++};
++
++static int cpuregs_cpu_online(unsigned int cpu)
++{
++	int rc;
++	struct device *dev;
++	struct cpureg *reg;
++
++	dev = get_cpu_device(cpu);
++	if (!dev) {
++		rc = -ENODEV;
++		goto out;
++	}
++	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
++	if (!reg) {
++		rc = -ENOMEM;
++		goto out;
++	}
++	reg->info = &cpu_data[cpu];
++
++	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
++					&dev->kobj, "regs");
++	if (rc)
++		goto out_kobj;
++	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
++	if (rc)
++		goto out_kobj;
++
++	return 0;
++out_kobj:
++	kobject_put(&reg->kobj);
++out:
++	return rc;
++}
++
++static int cpuregs_cpu_offline(unsigned int cpu)
++{
++	struct cpureg *reg = per_cpu(cpuregs, cpu);
++
++	if (!reg)
++		return -ENODEV;
++	sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
++	kobject_put(&reg->kobj);
++
++	return 0;
++}
++
++static int __init cpuinfo_regs_init(void)
++{
++	int ret;
++
++	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "mips/topology:online",
++				cpuregs_cpu_online, cpuregs_cpu_offline);
++	if (ret < 0) {
++		pr_err("cpuinfo: failed to register hotplug callbacks.\n");
++		return ret;
++	}
++	return 0;
++}
++
++device_initcall(cpuinfo_regs_init);
+-- 
+2.37.0 (Apple Git-136)
+
