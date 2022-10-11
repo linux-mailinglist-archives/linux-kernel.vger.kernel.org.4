@@ -2,72 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531045FA943
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2665FA935
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiJKAXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 20:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S229810AbiJKASq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 20:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJKAXM (ORCPT
+        with ESMTP id S229716AbiJKAS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:23:12 -0400
-X-Greylist: delayed 319 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Oct 2022 17:23:09 PDT
-Received: from mail.yuka.dev (mail.yuka.dev [IPv6:2a0f:4ac0:0:1::ec3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D800E7FFA6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:23:09 -0700 (PDT)
-Message-ID: <9b7e4894-deec-39ba-bb7c-3c6d6427fa1d@yuka.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yuka.dev; s=mail;
-        t=1665447465; bh=ZEXWibNk0G+0njFhoJ+ESklUwZYerAFgwVyY2eFpiks=;
-        h=Date:From:Subject:To:Cc;
-        b=upu52iPC5a+qk/xHIMVsMQKXit+TDMIKjgAoldduOzz8futJdBDS8o18xy5WpWHSu
-         uTeetSPPCUPaP9vZFm30vjK15xIhOmhzZk4TmH4k8f1AjyQaJOOssmsMLnfr9dvsLp
-         BF+DzcdNlD0p3D9Ua8Qlkvx+62256FzHWFdxMB5Y=
-Date:   Tue, 11 Oct 2022 02:17:43 +0200
+        Mon, 10 Oct 2022 20:18:29 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301DB5C9E3;
+        Mon, 10 Oct 2022 17:18:28 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 204so12054289pfx.10;
+        Mon, 10 Oct 2022 17:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xm8Uch19R6NmYEbBkjcqkxQLt/DtdpQviAbU+5kyHeg=;
+        b=HBXnfJdLfLouo9iEPM66BHhv/PtDj/o/wxFo1cOhKl/R5e1EWC6xOAGDiaw0T1frh+
+         QuCSxWZLMbBAtcHs2EZ+10XspyM7Vsi6Z2OnpUhJ2Y7m8RSSikhiqgQJ4lDMYZ425Yei
+         bhO7e/Focu7uTT1h+Nx1QpZs4+BZ1Ze/bDoqcyY5Hav29eBAW8/8a9eNjtplJArxP8/x
+         N/qDDfqGIiGI+SwaNDbzujkHfMOvd8T25luGAFsbVcgKx9FkDQqFSPhzZjHysqGag6Bu
+         NWfJxrXndFcrX22F6bvnLh6q9rqZhP1FnjtBuhe7M46mjW95TnA0Bya8gFdyvjGQypH5
+         I5oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xm8Uch19R6NmYEbBkjcqkxQLt/DtdpQviAbU+5kyHeg=;
+        b=jfb2waQdL03g6cjQw4BcU/poBoNa0yz2q4IWrScDJcwsxXLT5AZCIQX6qpOGhB8MgW
+         LuMfln4vaX//YUHRc0HT4GYTUt3GKuO/dxQQN7DKmwjnlNBFL0UlEpL4oqQlqJE6AN34
+         Nrppuz16cb+ygiyDHn2FVc14gbpufcrLbyJvA0kBCuTRGIenf+DB9UJXVFOKk8zdrx5m
+         MYvbRjHpqVA2WAf3mLLnSG6yg9D5z/4s/BDE4Vb8/91Y2fvoHAgPunlaSVUDGthCgGS2
+         juRfJmr3P90AqWR8wh2YxHhfYCo3j6vHWY5g4hf5Q/f1puLsnlQLbjp5zDKnqULd0nE+
+         KLUA==
+X-Gm-Message-State: ACrzQf2bQvfwdv0k6W38Z/pXNOvziByGud/mvBC1mu2iqe7JALbNuuin
+        cHPZeIkd+84OhtUw98B+hOM=
+X-Google-Smtp-Source: AMsMyM6bdfpr/R75A28nYjhdauGVB7hAOtJRLtv7DZ3d5D7k2S9Ypzqr8t3MG5ylFEVSyxAuiXUJDw==
+X-Received: by 2002:a63:942:0:b0:43c:428d:16a9 with SMTP id 63-20020a630942000000b0043c428d16a9mr18164718pgj.423.1665447507505;
+        Mon, 10 Oct 2022 17:18:27 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id g20-20020a63dd54000000b0043c9da02729sm6852023pgj.6.2022.10.10.17.18.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 17:18:27 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Oct 2022 14:18:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] cgroup: add cgroup_all_get_from_[fd/file]()
+Message-ID: <Y0S2UeE4reIRUdBH@slm.duckdns.org>
+References: <20221010235845.3379019-1-yosryahmed@google.com>
+ <20221010235845.3379019-3-yosryahmed@google.com>
+ <Y0S0nFSyivpU4H0n@slm.duckdns.org>
+ <CAJD7tkbDNqxE+bYQvo5YAbK01qz7UVd-s6bOf==Ao44bmNsk=Q@mail.gmail.com>
 MIME-Version: 1.0
-From:   Yureka <yuka@yuka.dev>
-Subject: [PATCH] speakup: remove usage of non-standard u_char
-To:     samuel.thibault@ens-lyon.org
-Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com,
-        chris@the-brannons.com, gregkh@linuxfoundation.org,
-        speakup@linux-speakup.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkbDNqxE+bYQvo5YAbK01qz7UVd-s6bOf==Ao44bmNsk=Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yureka Lilian <yuka@yuka.dev>
+On Mon, Oct 10, 2022 at 05:14:24PM -0700, Yosry Ahmed wrote:
+> On Mon, Oct 10, 2022 at 5:11 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > On Mon, Oct 10, 2022 at 11:58:44PM +0000, Yosry Ahmed wrote:
+> > > Add cgroup_all_get_from_fd() and cgroup_all_get_from_file() that
+> > > support both cgroup1 and cgroup2.
+> >
+> > Looks generally good. How about cgroup_v1v2_ as the prefix?
+> 
+> Thanks for taking a look.
+> 
+> I don't have a strong opinion here. I picked cgroup_all_* vs
+> cgroup12_* or cgroup_v1v2_* because it's easier on the eyes.
 
-This code is included in the build tools makemapdata and genmap, and it
-expects that libc exposes a definition of u_char. But u_char is not
-defined in either C or POSIX standards, and some systems don't have it.
-Namely this breaks the build on hosts using musl libc, because musl only
-exposes u_char if _GNU_SOURCE is defined.
+I'd rather have something which is really distinctive because the difference
+is rather subtle.
 
-Signed-off-by: Yureka Lilian <yuka@yuka.dev>
----
- drivers/accessibility/speakup/utils.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> My preference would have been to rename the old versions to
+> cgroup_dfl_* instead, but like you said this might confuse existing
+> users.
 
-diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-index 4bf2ee8ac..4ce9a12f7 100644
---- a/drivers/accessibility/speakup/utils.h
-+++ b/drivers/accessibility/speakup/utils.h
-@@ -54,7 +54,7 @@ static inline int oops(const char *msg, const char *info)
- 
- static inline struct st_key *hash_name(char *name)
- {
--   u_char *pn = (u_char *)name;
-+   unsigned char *pn = (unsigned char *)name;
-    int hash = 0;
- 
-    while (*pn) {
+Yeah, it's confusing to have parallel file / id lookup functions with
+different behaviors and we've asssumed that all these from-userspace lookups
+are cgroup2 only for a while now.
+
+> Anyway, I am fine with whatever you choose. Let me know if you need me
+> to send a v2 for changing the prefix.
+
+Please send an updated version. I don't mind whether it's cgroup12_ or
+cgroup_v1v2_.
+
+Thanks.
+
 -- 
-2.37.3
+tejun
