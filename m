@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49175FAA6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AE05FAA6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiJKCAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 22:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S229617AbiJKCB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 22:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJKCAn (ORCPT
+        with ESMTP id S229492AbiJKCBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 22:00:43 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5528660527
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:00:42 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id x8so1001453qtv.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:00:42 -0700 (PDT)
+        Mon, 10 Oct 2022 22:01:25 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0062AB1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:01:24 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h15so3378211qtu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:01:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vv2dJz5tlq73HXaoaG/mq43YykBqoKsaIM/hqD5FsXg=;
-        b=VYvyIXKE8VJUyeay6YvtK2lh0IxanH33tOABo5696GTXpSfEMEy/liGKszi+gBRFf9
-         J3bgy7AaBZWGM8z0e7UAZzkg+u+DPG7z7YuRRyhJZut5o2sqh6QadjZD9XRqJOyGW1nI
-         +vXlwGS6eXe8ag1qaQlwlBDB7yMyeYM4YNrSI=
+        bh=ORicAiyRp2xEN2rltMwZEQe7uHMjmlXqhAWmpOdSq5I=;
+        b=H1LAYRyJEgpkQ57aGdJHIkLjBYRzXfVIIpOCS5FM6HVaohDOhq3WorsMO3pjYKL8cP
+         g1ctFlY1rLDyXNScAeCIbyunfhl4CSK+S4yTVbNs6PbXfTQNDip40HI+IjV6yn9FTl+l
+         /12o6qNFonsAU0ZwButFeCdoXCW+z3wsdAWtQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vv2dJz5tlq73HXaoaG/mq43YykBqoKsaIM/hqD5FsXg=;
-        b=DaKn/ZkhiQ2BTdbXHQAYVfRy3TiklzODf8LKuON8vGlZzDzdZ98RSZFgM7rAtoQmnZ
-         Ke8fMtaizbr/+e7Nubk5t05eNWqoIUeoKoMwFi/LKJ4dolLCFiV3BYaKW1yT0vQ0F9su
-         DAGXgCZ8fX860+WP/ImHZOfgBg+Fy1BkfdXFj0FxqEDG6MuK8JnJCmknXDXuqCWaM4r5
-         1jI6lGeOytGFx5f+NUbZLH1OCJPGIG1zFyxQJQHHdKR/rTGob01dsp3/WGB3RS0fNfjv
-         4mYUfsRPvbh4AGdcnHrHti/1nuvNdeUo190voLHafBOPEwrK3DJwJH/QzkJw9PJSSsGy
-         6eKA==
-X-Gm-Message-State: ACrzQf2eDsp9pkJMoXfMKEzqjEJX3Y5V25javOzJiUIQBIPelLiOE+md
-        8dh/khDmCzLmFErVFlo1z9W00IPEDk12Zg==
-X-Google-Smtp-Source: AMsMyM62WQ3Jl+CBGbBmMt+cEAX15iFN/EwCTBSK21LInLBw1clDk3mXnFeFmn9ORJhRyGRldIotBw==
-X-Received: by 2002:a05:622a:5a0b:b0:35b:b8fc:874f with SMTP id fy11-20020a05622a5a0b00b0035bb8fc874fmr17417913qtb.267.1665453641322;
-        Mon, 10 Oct 2022 19:00:41 -0700 (PDT)
+        bh=ORicAiyRp2xEN2rltMwZEQe7uHMjmlXqhAWmpOdSq5I=;
+        b=bwZLb0i0L2EqDmER3MFGzchZxd5F5+dfP3BULW0Od+8eC9cmxBxKm05ryR69GUNRCK
+         NnlTypC/zf8Iuy1+8fa0GXN85Rawx+nGYUeoMz/Ne9tM0ACN9TPAqcojfH/LewES3pVv
+         147qjmtCDMyV7GfjKgxlI8VqlWNJ57yDW5MSRjFrt/pRpkBHt74kTflgIsE1sDdqjHqe
+         Qxv8OYHeh+Zl43mTlsX6AcOezsd4Q3BLMnXyYZ1UWwXF/PC4eLOO2GvZm2oh1uyNr6z1
+         Jgk6CokjX1YdXpAiQPtkIcJynhHJNqhKEstt9Qp84ggSAk9KtvGTIOkwxzX8w6tQG/rk
+         +6wA==
+X-Gm-Message-State: ACrzQf3eKVEBnDMOwMAIfDNuyW/kNw2SndIiI3q1Sdgbdof6UuhnJaWc
+        TUvxCVGTYFakRTwclDZ+/4z4YQ==
+X-Google-Smtp-Source: AMsMyM7PA9yKtHUCMspsjs6kVoVo+ARNryV+nxDzF02IgwSysj5B9R0IxY2foP3cskjwCNDzIeGhGA==
+X-Received: by 2002:a05:622a:3c9:b0:391:984a:9391 with SMTP id k9-20020a05622a03c900b00391984a9391mr17456020qtx.420.1665453683852;
+        Mon, 10 Oct 2022 19:01:23 -0700 (PDT)
 Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05620a284a00b006e2a1999263sm11644725qkp.62.2022.10.10.19.00.40
+        by smtp.gmail.com with ESMTPSA id o21-20020a05622a009500b00394d7000941sm9116846qtw.85.2022.10.10.19.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 19:00:40 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 02:00:40 +0000
+        Mon, 10 Oct 2022 19:01:23 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 02:01:23 +0000
 From:   Joel Fernandes <joel@joelfernandes.org>
 To:     Frederic Weisbecker <frederic@kernel.org>
 Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] rcu/nocb: Spare bypass locking upon normal enqueue
-Message-ID: <Y0TOSE3ZM/3uHRWX@google.com>
+Subject: Re: [PATCH 1/2] rcu: Fix missing nocb gp wake on rcu_barrier()
+Message-ID: <Y0TOc8eigdzanBGQ@google.com>
 References: <20221010223956.1041247-1-frederic@kernel.org>
- <20221010223956.1041247-3-frederic@kernel.org>
+ <20221010223956.1041247-2-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010223956.1041247-3-frederic@kernel.org>
+In-Reply-To: <20221010223956.1041247-2-frederic@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,165 +68,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:39:56AM +0200, Frederic Weisbecker wrote:
-> When a callback is to be enqueued to the normal queue and not the bypass
-> one, a flush to the bypass queue is always tried anyway. This attempt
-> involves locking the bypass lock unconditionally. Although it is
-> guaranteed not to be contended at this point, because only call_rcu()
-> can lock the bypass lock without holding the nocb lock, it's still not
-> free and the operation can easily be spared most of the time by just
-> checking if the bypass list is empty. The check is safe as nobody can
-> queue nor flush the bypass concurrently.
+On Tue, Oct 11, 2022 at 12:39:55AM +0200, Frederic Weisbecker wrote:
+> Upon entraining a callback to a NOCB CPU, no further wake up is
+> issued on the corresponding nocb_gp kthread. As a result, the callback
+> and all the subsequent ones on that CPU may be ignored, at least until
+> an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
+> to the same group enqueues a callback on an empty queue.
 > 
+> Here is a possible bad scenario:
+> 
+> 1) CPU 0 is NOCB unlike all other CPUs.
+> 2) CPU 0 queues a callback
+> 2) The grace period related to that callback elapses
+> 3) The callback is moved to the done list (but is not invoked yet),
+>    there are no more pending callbacks for CPU 0
+> 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
+> 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
+> 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
+>    callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
+> 
+> Make sure the necessary wake up is produced whenever necessary.
+> 
+> Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Fixes: 5d6742b37727 ("rcu/nocb: Use rcu_segcblist for no-CBs CPUs")
 > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+
+Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+And if Paul is taking this, I'll rebase and drop this patch from the lazy
+series.
+
+thanks,
+
+ - Joel
+
+
 > ---
->  kernel/rcu/tree_nocb.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  kernel/rcu/tree.c      | 6 ++++++
+>  kernel/rcu/tree.h      | 1 +
+>  kernel/rcu/tree_nocb.h | 5 +++++
+>  3 files changed, 12 insertions(+)
 > 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 96d678c9cfb6..025f59f6f97f 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3914,6 +3914,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  {
+>  	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
+>  	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
+> +	bool wake_nocb = false;
+> +	bool was_alldone = false;
+>  
+>  	lockdep_assert_held(&rcu_state.barrier_lock);
+>  	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
+> @@ -3922,6 +3924,7 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  	rdp->barrier_head.func = rcu_barrier_callback;
+>  	debug_rcu_head_queue(&rdp->barrier_head);
+>  	rcu_nocb_lock(rdp);
+> +	was_alldone = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
+>  	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
+>  	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+>  		atomic_inc(&rcu_state.barrier_cpu_count);
+> @@ -3929,7 +3932,10 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  		debug_rcu_head_unqueue(&rdp->barrier_head);
+>  		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
+>  	}
+> +	wake_nocb = was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
+>  	rcu_nocb_unlock(rdp);
+> +	if (wake_nocb)
+> +		wake_nocb_gp(rdp, false);
+>  	smp_store_release(&rdp->barrier_seq_snap, gseq);
+>  }
+>  
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index d4a97e40ea9c..925dd98f8b23 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
+>  static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+>  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+>  static void rcu_init_one_nocb(struct rcu_node *rnp);
+> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+>  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  				  unsigned long j);
+>  static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
 > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 094fd454b6c3..30c3d473ffd8 100644
+> index f77a6d7e1356..094fd454b6c3 100644
 > --- a/kernel/rcu/tree_nocb.h
 > +++ b/kernel/rcu/tree_nocb.h
-> @@ -423,8 +423,10 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->  		if (*was_alldone)
->  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->  					    TPS("FirstQ"));
-> -		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-> -		WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
-> +		if (rcu_cblist_n_cbs(&rdp->nocb_bypass)) {
-> +			WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-> +			WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
-> +		}
->  		return false; // Caller must enqueue the callback.
->  	}
-
-Instead of this, since as you mentioned that the bypass lock is not contended
-in this path, isn't it unnecessary to even check or attempt to acquire the
-lock in call_rcu() path? So how about something like the following, or would
-this not work for some reason?
-
-Thanks.
-
----8<-----------------------
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index ad8d4e52ae92..6235e72cca07 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3950,7 +3950,7 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
- 	debug_rcu_head_queue(&rdp->barrier_head);
- 	rcu_nocb_lock(rdp);
- 	was_done = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
--	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
-+	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false, false));
- 	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
- 		atomic_inc(&rcu_state.barrier_cpu_count);
- 	} else {
-@@ -4379,7 +4379,7 @@ void rcutree_migrate_callbacks(int cpu)
- 	my_rdp = this_cpu_ptr(&rcu_data);
- 	my_rnp = my_rdp->mynode;
- 	rcu_nocb_lock(my_rdp); /* irqs already disabled. */
--	WARN_ON_ONCE(!rcu_nocb_flush_bypass(my_rdp, NULL, jiffies, false));
-+	WARN_ON_ONCE(!rcu_nocb_flush_bypass(my_rdp, NULL, jiffies, false, false));
- 	raw_spin_lock_rcu_node(my_rnp); /* irqs already disabled. */
- 	/* Leverage recent GPs and set GP for new callbacks. */
- 	needwake = rcu_advance_cbs(my_rnp, rdp) ||
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 1d803d39f0d1..0adb8f97a56d 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -442,7 +442,7 @@ static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
- static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
- static void rcu_init_one_nocb(struct rcu_node *rnp);
- static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
--				  unsigned long j, bool lazy);
-+				  unsigned long j, bool lazy, bool nolock);
- static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 				bool *was_alldone, unsigned long flags,
- 				bool lazy);
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index c9a791407650..2164f5d79dec 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -328,7 +328,7 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
-  * Note that this function always returns true if rhp is NULL.
-  */
- static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp_in,
--				     unsigned long j, bool lazy)
-+				     unsigned long j, bool lazy, bool nolock)
- {
- 	struct rcu_cblist rcl;
- 	struct rcu_head *rhp = rhp_in;
-@@ -359,7 +359,8 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp_
- 
- 	rcu_segcblist_insert_pend_cbs(&rdp->cblist, &rcl);
- 	WRITE_ONCE(rdp->nocb_bypass_first, j);
--	rcu_nocb_bypass_unlock(rdp);
-+	if (!nolock)
-+		rcu_nocb_bypass_unlock(rdp);
- 	return true;
- }
- 
-@@ -372,13 +373,14 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp_
-  * Note that this function always returns true if rhp is NULL.
-  */
- static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
--				  unsigned long j, bool lazy)
-+				  unsigned long j, bool lazy, bool nolock)
- {
- 	if (!rcu_rdp_is_offloaded(rdp))
- 		return true;
- 	rcu_lockdep_assert_cblist_protected(rdp);
--	rcu_nocb_bypass_lock(rdp);
--	return rcu_nocb_do_flush_bypass(rdp, rhp, j, lazy);
-+	if (!nolock)
-+		rcu_nocb_bypass_lock(rdp);
-+	return rcu_nocb_do_flush_bypass(rdp, rhp, j, lazy, nolock);
- }
- 
- /*
-@@ -391,7 +393,7 @@ static void rcu_nocb_try_flush_bypass(struct rcu_data *rdp, unsigned long j)
- 	if (!rcu_rdp_is_offloaded(rdp) ||
- 	    !rcu_nocb_bypass_trylock(rdp))
- 		return;
--	WARN_ON_ONCE(!rcu_nocb_do_flush_bypass(rdp, NULL, j, false));
-+	WARN_ON_ONCE(!rcu_nocb_do_flush_bypass(rdp, NULL, j, false, false));
- }
- 
- /*
-@@ -473,7 +475,7 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
- 					    TPS("FirstQ"));
- 
--		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false));
-+		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false, true));
- 		WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
- 		return false; // Caller must enqueue the callback.
- 	}
-@@ -487,7 +489,7 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 		rcu_nocb_lock(rdp);
- 		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
- 
--		if (!rcu_nocb_flush_bypass(rdp, rhp, j, lazy)) {
-+		if (!rcu_nocb_flush_bypass(rdp, rhp, j, lazy, true)) {
- 			if (*was_alldone)
- 				trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
- 						    TPS("FirstQ"));
-@@ -1136,7 +1138,7 @@ static long rcu_nocb_rdp_deoffload(void *arg)
- 	 * return false, which means that future calls to rcu_nocb_try_bypass()
- 	 * will refuse to put anything into the bypass.
- 	 */
--	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
-+	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false, false));
- 	/*
- 	 * Start with invoking rcu_core() early. This way if the current thread
- 	 * happens to preempt an ongoing call to rcu_core() in the middle,
-@@ -1717,7 +1719,7 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
- }
- 
- static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
--				  unsigned long j, bool lazy)
-+				  unsigned long j, bool lazy, bool nolock)
- {
- 	return true;
- }
+> @@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
+>  {
+>  }
+>  
+> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
+> +{
+> +	return false;
+> +}
+> +
+>  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  				  unsigned long j)
+>  {
+> -- 
+> 2.25.1
+> 
