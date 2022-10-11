@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28855FAE4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8FF5FAE4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiJKIUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S229546AbiJKIV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJKIUL (ORCPT
+        with ESMTP id S229495AbiJKIV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:20:11 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EA14D4F6;
-        Tue, 11 Oct 2022 01:20:10 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id hh9so7801311qtb.13;
-        Tue, 11 Oct 2022 01:20:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s5cy4m+JeTeSbqK/4ChAVWDQ8MECbJ/i57t04QpddHE=;
-        b=IzgZUGtq+krgDnUd/FXSs4xJkV9y6VMdblsqToJz2/PkTkFZVRYdRTZHJEGYoOsbQJ
-         MVujlFPQ6jMczgD6bKnlELldRNWvHN29JjEoKCudoM6Zv9qjgfSMbB1Ypw3EH3WozZQw
-         UXf7e9Enic0Wa4HucbwDOkQfjIPBaYsOPfRbJ0fcOG3YBLEOn7ojkK82rVUJzhV7UPbL
-         7Z1iWqZxz0MBZ/PJcG6JrX3UZsKxuxpG5gZnyso0bH0Tvo8yNq7DsT0SZsHU8wUxxGm7
-         qEhc5InYqkIW3beKQyOg67Ghwni2w3SuqrYZRttuDXFx8rJAd3exNnteRJs1tPKxP0Db
-         aG5w==
-X-Gm-Message-State: ACrzQf2cuRhD589BRpiHaX9hIioxyR4ckZGNk/xCbUU7u8hWZj+rfWCG
-        pewtaFLiuQ9Ax+LPd6wCFxrBNs6s/FrYCA==
-X-Google-Smtp-Source: AMsMyM45v/oqmzdNUSy4TuwVAAVEOU7YLDOfbDiloQiGI9m0r7M4ATBxcZgLOZZkUo06e5q3PALgLw==
-X-Received: by 2002:a05:622a:1109:b0:39c:1d87:3b6c with SMTP id e9-20020a05622a110900b0039c1d873b6cmr1964616qty.139.1665476409565;
-        Tue, 11 Oct 2022 01:20:09 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id m8-20020ac84448000000b0039a1146e0e1sm4324641qtn.33.2022.10.11.01.20.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:20:09 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3321c2a8d4cso120783297b3.5;
-        Tue, 11 Oct 2022 01:20:08 -0700 (PDT)
-X-Received: by 2002:a81:848c:0:b0:356:e173:2c7a with SMTP id
- u134-20020a81848c000000b00356e1732c7amr20188073ywf.502.1665476408490; Tue, 11
- Oct 2022 01:20:08 -0700 (PDT)
+        Tue, 11 Oct 2022 04:21:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 320C02126F;
+        Tue, 11 Oct 2022 01:21:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DD01ED1;
+        Tue, 11 Oct 2022 01:22:02 -0700 (PDT)
+Received: from [10.57.1.254] (unknown [10.57.1.254])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 762813F766;
+        Tue, 11 Oct 2022 01:21:54 -0700 (PDT)
+Message-ID: <d3ebd0c8-bea6-1c30-6c9e-52c459766b40@arm.com>
+Date:   Tue, 11 Oct 2022 09:21:53 +0100
 MIME-Version: 1.0
-References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221009230044.10961-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221009230044.10961-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:19:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXwPnWfb8hfxNGHH8r168ToapBOkdOWJAx9Tj3D6KRTcQ@mail.gmail.com>
-Message-ID: <CAMuHMdXwPnWfb8hfxNGHH8r168ToapBOkdOWJAx9Tj3D6KRTcQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] arm64: dts: renesas: r9a07g043: Drop WDT2 node
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
+ util-awareness
+Content-Language: en-US
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Doug Smythies <dsmythies@telus.net>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+ <CAAYoRsXgmwQXNzDPgVe=_cW=C8_7__GYHCyRKkfX=6dFY9dybw@mail.gmail.com>
+ <Y0PvRz83+lklWeyb@e126311.manchester.arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <Y0PvRz83+lklWeyb@e126311.manchester.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 1:01 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
-> used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> WDT2 node from RZ/G2UL SoC DTSI.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hi Doug, Kajetan,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.2.
+On 10/10/22 11:09, Kajetan Puchalski wrote:
+> On Thu, Oct 06, 2022 at 05:06:58PM -0700, Doug Smythies wrote:
+>>
+>> I would suggest a completely new governor for your
+>> only 2 idle states, and of similar power use, scenario.
+>> Incredibly simple:
+>>
+>> If CPU utilization >= threshold
+>>    select idle state 0
+>> Else
+>>    Select idle state 1
+>> Endif
+> 
+> That would be easy to implement at least but sadly just doesn't really
+> work at all. It would just result in huge amounts of too deep C1 sleeps
+> which are the main problem for us at the moment. For all intents and
+> purposes, only ever selecting C0 gives better results than this approach
+> on our hardware.
+> 
+>> As previously mentioned, you are overriding
+>> everything that teo does anyhow.
+> 
+> To an extent yes, this just came from observations of how cpuidle
+> behaves on arm. We tried an approach with only ever using C0 and it was
+> all right on power usage, the device would just heat up too much and
+> lose performance. That's why this approach of using TEO when the core is
+> completely idle and moving to the lower state when it's not achieves the
+> best of both worlds.
+> 
+>> Note to other readers: I also sent Kajetan an off-list email with more
+>> tests descriptions and web links to results graphs and such.
 
-Gr{oetje,eeting}s,
+Thanks Doug for testing this work, we really appreciate that.
+Doug maybe you could post these into some public space, so wider
+community would also see them. Kajetan has used github to put
+a report with testing results containing some graphs/plots.
 
-                        Geert
+> 
+> Looks like the email got lost in my inbox, could be some email filtering
+> or something like that.. Could you possibly resend and cc my private
+> email (kajetan.puchalski@tuta.io)?
+> So far I've not directly received any of your emails, they show up on
+> the mailing list archive but not in my inbox. Could be an IT issue on my
+> end but might be worth checking your email setup regardless.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I also have some issues with the email inbox. Me apologies Doug, we will
+sort it.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Lukasz
