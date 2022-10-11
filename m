@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85855FA477
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AE55FA356
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiJJUBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        id S229659AbiJJSYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJJUBK (ORCPT
+        with ESMTP id S229607AbiJJSYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:01:10 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3935A8A1;
-        Mon, 10 Oct 2022 13:01:08 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id qw20so26492091ejc.8;
-        Mon, 10 Oct 2022 13:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6b+KaCx09GA3QolK3KuClvOKT2GfkyeZNoDE6Qz59iQ=;
-        b=QD2c9mI0hGjr2S9pTnRJ9VjvS2XsFp/HC+3XbVw5FaU0fn064zySsdyw0FnVYHnOTa
-         d31u0tzok+8mMKbnXeWJBE/oVqKHFOTryaQMmln0OwzuPo9Eruihnr8DcMxZzfKPXL/0
-         PSPCR4C9pf5roOKoz7BJNFbBCkWN3/pBM24gfos7762pplcw99vOEhOUR8cYxV2RzmD8
-         uKQ5gVupjmX1RHkkPpwMgsuJz0TIFB3+p0g6ndzf1Gy6/+YK1vX/TMj3JD0OpsU1bwDd
-         FeF/B4Q97F7qLEcl29dmuCt3tVQtC50A4SQ7M24/IQPQUg366aNxrlCBKtHr3eal41pO
-         1Crw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6b+KaCx09GA3QolK3KuClvOKT2GfkyeZNoDE6Qz59iQ=;
-        b=YNMYc8odvayXgFcQNfcyOHidPEpTAxOzElcObFWV5ipHOVsiCi+H/m2NTYnEt48tYz
-         dga4oZOmxsZ3TVQpjdyve2VfNbckESvwOYYLsQnSvlvE2I4hrwIFBHovz9MMnQoaWuhu
-         uhUR6cStyyrlRb8+l9ACNNVPmOcbCyG7oV+0ajhcWeYfTDrQuD0ai82WbrloYqKqr+0p
-         ECNx5Bas1PBnKOlpYs7PHVizsiTsO40YFORWOfOfeBg+A/boYREC7/yJg/xJQJYO2A8m
-         S/0VyN6//MoDoZvUAATEzLDxWBQjc5hq7gP6PnpoeKFrUbpiI5oKTm2ezMM6Rceb6dGQ
-         97FQ==
-X-Gm-Message-State: ACrzQf2r8GGOtk8F2BU7ma2lHw5aYIbA+cY7jdnsnScCR/sdBH0Z8Zhz
-        var1s+veshoA95w4nGV6IqqnzPAejjut3fWs59HrdsQj0qHdjQ==
-X-Google-Smtp-Source: AMsMyM7o7nc8gZq5drAITDcdLLEM/8u5lmS/UZSANjBN8uxmCSuzRwxy+MShw9wfOHL1Hb34dYP1sbXDHuq/plwOVL4=
-X-Received: by 2002:a17:907:6ea1:b0:78d:4c16:a68b with SMTP id
- sh33-20020a1709076ea100b0078d4c16a68bmr15994226ejc.447.1665432067395; Mon, 10
- Oct 2022 13:01:07 -0700 (PDT)
+        Mon, 10 Oct 2022 14:24:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230911165;
+        Mon, 10 Oct 2022 11:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665426279; x=1696962279;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lV/sOxd9UMgNF8rqRvEeaHHOWcvWfkCR7DG0x3ALpa4=;
+  b=euqbn5BzqcxrH7uaA0OULUoiQEDEoVhdVa3kv+BZEwFBLdYQUiolynhf
+   XauWSgFaXc7ee/O5Z5HRJKaGGgTkWfumTjA117AJxkLBStTioct4iESNj
+   mhIuuohJw4+N3R1xvYTFy5/tchPQfcv4nY2AspxLPn+YNcrLmv3jvVb/V
+   ysQQYWirt4MXrMtBCMe7omuLapgjHPGDUr0RaLQCRZnIfRt7nHX6TQnUN
+   GIPiXAaWcp9S1Q9gLqNEgf9kn7pn48dNX00/q+td4GYJ+rICpM2Xwx0Zu
+   pBgUVf56c2FLRIr7UOiU5fPPC3YFityh+Bq44n4Dlibj68rj0l4HJwEVB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="291592274"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="291592274"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 11:24:37 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="751448870"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="751448870"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 11:24:34 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, ihkose@gmail.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH] Change the I2C slave address for ds4422/4424 to its correct value
+Date:   Tue, 11 Oct 2022 23:54:37 +0530
+Message-Id: <20221011182437.662719-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221009230044.10961-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y0PBdDtFzcsmbtMv@shikoro>
-In-Reply-To: <Y0PBdDtFzcsmbtMv@shikoro>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 10 Oct 2022 21:00:41 +0100
-Message-ID: <CA+V-a8sOxyQj8J06kqnRN5G=L6KPdusJ-qLWntVa8kgFBh-MEQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] arm64: dts: renesas: rzg2l-smarc-som: Drop enabling WDT2
-To:     Wolfram Sang <wsa@kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+The datasheet states that the slave address for the device is 0x20
+when the pins A0 and A1 are ground. The DT binding has been using
+0x10 as the value and I think it should be 0x20 as per datasheet.
 
-Thank you for the review.
+Let me know if I am wrong about this.
 
-On Mon, Oct 10, 2022 at 7:53 AM Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Mon, Oct 10, 2022 at 12:00:40AM +0100, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
-> > used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> > enabling WDT2.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->
-> I'd squash patches 1+2, but that's minor.
->
-OK, I'll wait for Geert before sending a v2.
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
+ Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-Prabhakar
+diff --git a/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml b/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml
+index 264fa7c5fe3a..1955b1a97cd6 100644
+--- a/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml
++++ b/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml
+@@ -38,7 +38,7 @@ examples:
+ 
+         dac@10 {
+             compatible = "maxim,ds4424";
+-            reg = <0x10>; /* When A0, A1 pins are ground */
++            reg = <0x20>; /* When A0, A1 pins are ground */
+             vcc-supply = <&vcc_3v3>;
+         };
+     };
+-- 
+2.34.1
+
