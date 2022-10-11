@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81885FACF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D68A5FACF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJKGjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S229817AbiJKGjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJKGi6 (ORCPT
+        with ESMTP id S229459AbiJKGjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:38:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AB36525D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:38:56 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:ae63:39ed:8275:38f4] (unknown [IPv6:2a01:e0a:120:3210:ae63:39ed:8275:38f4])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 833AF6602343;
-        Tue, 11 Oct 2022 07:38:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665470334;
-        bh=4OqSDwAWB/8lJv+0r9Z1nmJEkUKrOhG1b7aYoMOaaZc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=d+xhUNiy8Vzv2upP0uDiAboiLyyvfkBeLdHocQtqCCGQycYHsF+MKIL0xZy6REvWx
-         dNHJTODHtmr+dYlaC9Af0P5O01ofQt+mNiN6OMAem6jMaXooU3q8EQG6v4221rBdfi
-         sl5biSu57db0Ci50HrP2LyimzLVzpC0ZvduXqGiKLfZiBJKe/aigPAENw4WxQ5R1Mi
-         MWt6qOjDDKjMrlIfWP+O7AONNPHQ0hjyhwd3HPyYxdngjhS7JUPG19ievePYiRt5Ud
-         VwrMjl28ywFzfq4R39Ofww5HO5yoYn4g0zpBDAL6QWJlYtj6fcVBbwvlLXqfC8ryXx
-         Rkl5pmAfb2Bmg==
-Message-ID: <bdfacbcc-c4e2-e1f2-1b83-082306170952@collabora.com>
-Date:   Tue, 11 Oct 2022 08:38:52 +0200
+        Tue, 11 Oct 2022 02:39:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1A32701
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:39:45 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 08:39:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1665470383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P4M4Z6LkJSe0TOSPA/aXD3SiGURucta9d1btRgw14nQ=;
+        b=WqnO8a2iocJygWu9MwVg8zU/oBEGB0e2XuXW3iBPOSOHGXqJE8jurgQIx5PhsFgPbrkK5w
+        tX1G+i4E+Xg+nIO2a1umKt+uwR2+Axf/Uiu828dlZ6hN8v+LKIYbZuJFenemsfQ3i3Ouky
+        AF9X45989kGbSEyBBhw/2qZVKBwfRBnppMyzoVXYs1gcv0FdSn+3bqaaaf9qh9YWAjVFsq
+        u6114sZLINwL4WR/zgPgV2CTUlg559UafbrMKZ1Bz2wXkiXPuYzrFxvugF35qWyDD67Gna
+        CEfJ9zlG+D75AoHLAvi2bReUIaexm+AblC+v6ewtOEzkozvfkyxEiAjZYS/SzA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1665470383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P4M4Z6LkJSe0TOSPA/aXD3SiGURucta9d1btRgw14nQ=;
+        b=Kpm3EwYaaijD862rWj7eJFFD9z6kC09bbCvBPkuUGZPwajeRBcuWrGqpoGAriXHoFphUvU
+        ogFZ3tizHoEHd6Dg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: mm/memcontrol.c:600:9: sparse: sparse: incorrect type in
+ argument 1 (different address spaces)
+Message-ID: <Y0UPrZmNB2BC4CQi@linutronix.de>
+References: <202210111422.hzXZGNdz-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] soc: imx: imx8m-blk-ctrl: Defer probe if 'bus' genpd
- is not yet ready
-Content-Language: en-US
-To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220919121302.597993-1-benjamin.gaignard@collabora.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <20220919121302.597993-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202210111422.hzXZGNdz-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +57,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-10-11 14:35:04 [+0800], kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   60bb8154d1d77042a5d43d335a68fdb202302cbe
+> commit: e575d401583273a7ac5dfb27520e41c821e81816 mm/memcontrol: Replace the PREEMPT_RT conditionals
+> date:   3 weeks ago
+> config: loongarch-randconfig-s032-20221010
+> compiler: loongarch64-linux-gcc (GCC) 12.1.0
+> reproduce:
 
-Le 19/09/2022 à 14:13, Benjamin Gaignard a écrit :
-> Depending of the boot sequence 'bus' genpd could be probed after imx8m-blk-ctrl
-> which led driver probe to fail. Change the returned error to allow
-> to defer the probe in this case.
+Did this change with the commit change or was it the case before? IMHO
+the whole file isn't sparse clean.
 
-Gentle reminder about this patch.
-
-Thanks,
-Benjamin
-
->
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
-> v3:
-> - only return -EPROBE_DEFER if 'bus' device hasn't be found.
->
-> v2:
-> - keep dev_err_probe only change the return value.
->
->   drivers/soc/imx/imx8m-blk-ctrl.c | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-> index dff7529268e4..1c195e9e8895 100644
-> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-> @@ -214,9 +214,14 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->   		return -ENOMEM;
->   
->   	bc->bus_power_dev = genpd_dev_pm_attach_by_name(dev, "bus");
-> -	if (IS_ERR(bc->bus_power_dev))
-> -		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-> -				     "failed to attach power domain \"bus\"\n");
-> +	if (IS_ERR(bc->bus_power_dev)) {
-> +		if (PTR_ERR(bc->bus_power_dev) == -ENODEV)
-> +			return dev_err_probe(dev, -EPROBE_DEFER,
-> +					     "failed to attach power domain \"bus\"\n");
-> +		else
-> +			return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
-> +					     "failed to attach power domain \"bus\"\n");
-> +	}
->   
->   	for (i = 0; i < bc_data->num_domains; i++) {
->   		const struct imx8m_blk_ctrl_domain_data *data = &bc_data->domains[i];
+Sebastian
