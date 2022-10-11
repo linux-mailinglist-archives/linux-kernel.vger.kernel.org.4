@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEF85FAE48
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28855FAE4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiJKITu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S229673AbiJKIUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJKITs (ORCPT
+        with ESMTP id S229495AbiJKIUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:19:48 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D427C140A7;
-        Tue, 11 Oct 2022 01:19:46 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id a18so5142473qko.0;
-        Tue, 11 Oct 2022 01:19:46 -0700 (PDT)
+        Tue, 11 Oct 2022 04:20:11 -0400
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EA14D4F6;
+        Tue, 11 Oct 2022 01:20:10 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id hh9so7801311qtb.13;
+        Tue, 11 Oct 2022 01:20:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xlyNfj0a7dGLJLnND8iCa6F2UpgFM8hbpwL3tXCOrfM=;
-        b=4/CSVFK50Usfeye+WIIVnGkEZNJWHSgb9fSaPAfePYLrGW5z0ptpRX0W86Oa8Kj2aS
-         xjEv12wztYDqn5psmq7/8539mHcopqh7H3bbwwzKAO5aQmrdcYEYUWOFCW9zAa5ByX0v
-         aLJ9dSKXZ1TtjnxuyPTOz9+m4lD+VQlHrwyiD6kNDrBEUWOz4bpZ8gXxUHbLh8E6Vbmc
-         swrpFiCHQ1Zbn2LxrqopEs/RUe1AjEZcP8qA/jV1MCwjxa7DDILGvSVFfEPvETA4XPRJ
-         7LMTe8N6EFgvGVU0d3kQ5uhXaVdMJr3jJcg0ej9Qw7Fh/ww7h+Ya4z+hsRuZjZILlR3l
-         RBXA==
-X-Gm-Message-State: ACrzQf0NUrTFIFF53B+MKylXm3ZnZDzCnvpYrHZLh3SWgiiVSMh0UDd8
-        1ArwveJm8pxOqWzfyhH83KQIvTepOVZ2Lw==
-X-Google-Smtp-Source: AMsMyM7G8+AuUE8isWfrRIyPILtWIrX7KPzxSr9kJ6X2ilRvpjATG9wWlW6hWkvsgei96p2QGBeP6A==
-X-Received: by 2002:a05:620a:17a8:b0:6ce:99f0:7626 with SMTP id ay40-20020a05620a17a800b006ce99f07626mr15531857qkb.194.1665476385608;
-        Tue, 11 Oct 2022 01:19:45 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id c24-20020a05620a269800b006b5cc25535fsm12396804qkp.99.2022.10.11.01.19.44
+        bh=s5cy4m+JeTeSbqK/4ChAVWDQ8MECbJ/i57t04QpddHE=;
+        b=IzgZUGtq+krgDnUd/FXSs4xJkV9y6VMdblsqToJz2/PkTkFZVRYdRTZHJEGYoOsbQJ
+         MVujlFPQ6jMczgD6bKnlELldRNWvHN29JjEoKCudoM6Zv9qjgfSMbB1Ypw3EH3WozZQw
+         UXf7e9Enic0Wa4HucbwDOkQfjIPBaYsOPfRbJ0fcOG3YBLEOn7ojkK82rVUJzhV7UPbL
+         7Z1iWqZxz0MBZ/PJcG6JrX3UZsKxuxpG5gZnyso0bH0Tvo8yNq7DsT0SZsHU8wUxxGm7
+         qEhc5InYqkIW3beKQyOg67Ghwni2w3SuqrYZRttuDXFx8rJAd3exNnteRJs1tPKxP0Db
+         aG5w==
+X-Gm-Message-State: ACrzQf2cuRhD589BRpiHaX9hIioxyR4ckZGNk/xCbUU7u8hWZj+rfWCG
+        pewtaFLiuQ9Ax+LPd6wCFxrBNs6s/FrYCA==
+X-Google-Smtp-Source: AMsMyM45v/oqmzdNUSy4TuwVAAVEOU7YLDOfbDiloQiGI9m0r7M4ATBxcZgLOZZkUo06e5q3PALgLw==
+X-Received: by 2002:a05:622a:1109:b0:39c:1d87:3b6c with SMTP id e9-20020a05622a110900b0039c1d873b6cmr1964616qty.139.1665476409565;
+        Tue, 11 Oct 2022 01:20:09 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id m8-20020ac84448000000b0039a1146e0e1sm4324641qtn.33.2022.10.11.01.20.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:19:45 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id k3so15588067ybk.9;
-        Tue, 11 Oct 2022 01:19:44 -0700 (PDT)
-X-Received: by 2002:a25:4fc2:0:b0:6be:afb4:d392 with SMTP id
- d185-20020a254fc2000000b006beafb4d392mr20488877ybb.604.1665476384274; Tue, 11
- Oct 2022 01:19:44 -0700 (PDT)
+        Tue, 11 Oct 2022 01:20:09 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3321c2a8d4cso120783297b3.5;
+        Tue, 11 Oct 2022 01:20:08 -0700 (PDT)
+X-Received: by 2002:a81:848c:0:b0:356:e173:2c7a with SMTP id
+ u134-20020a81848c000000b00356e1732c7amr20188073ywf.502.1665476408490; Tue, 11
+ Oct 2022 01:20:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221009230044.10961-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221009230044.10961-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221009230044.10961-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221009230044.10961-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:19:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWcvfWVid+bFFENFDXe9eG32J=OxzSp95+myk=ADdao=w@mail.gmail.com>
-Message-ID: <CAMuHMdWcvfWVid+bFFENFDXe9eG32J=OxzSp95+myk=ADdao=w@mail.gmail.com>
-Subject: Re: [PATCH 4/5] arm64: dts: renesas: r9a07g054: Drop WDT2 node
+Date:   Tue, 11 Oct 2022 10:19:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXwPnWfb8hfxNGHH8r168ToapBOkdOWJAx9Tj3D6KRTcQ@mail.gmail.com>
+Message-ID: <CAMuHMdXwPnWfb8hfxNGHH8r168ToapBOkdOWJAx9Tj3D6KRTcQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] arm64: dts: renesas: r9a07g043: Drop WDT2 node
 To:     Prabhakar <prabhakar.csengg@gmail.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -70,48 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
 On Mon, Oct 10, 2022 at 1:01 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
 > WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
 > used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> WDT2 node from RZ/V2L SoC DTSI.
+> WDT2 node from RZ/G2UL SoC DTSI.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
-> @@ -1000,21 +1000,6 @@ wdt1: watchdog@12800c00 {
->                         status = "disabled";
->                 };
->
-> -               wdt2: watchdog@12800400 {
-> -                       compatible = "renesas,r9a07g054-wdt",
-> -                                    "renesas,rzg2l-wdt";
-> -                       reg = <0 0x12800400 0 0x400>;
-> -                       clocks = <&cpg CPG_MOD R9A07G054_WDT2_PCLK>,
-> -                                <&cpg CPG_MOD R9A07G054_WDT2_CLK>;
-> -                       clock-names = "pclk", "oscclk";
-> -                       interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
-> -                       interrupt-names = "wdt", "perrout";
-> -                       resets = <&cpg R9A07G054_WDT2_PRESETN>;
-> -                       power-domains = <&cpg>;
-> -                       status = "disabled";
-> -               };
-> -
->                 ostm0: timer@12801000 {
->                         compatible = "renesas,r9a07g054-ostm",
->                                      "renesas,ostm";
-
-As this is hardware description, and the node is disabled by default,
-we could keep it.  However, as it is to be used by the CM33, its
-interrupts property should point to the CM33 NVIC instead of the
-CA55 GIC.  So let's drop it for now...
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 i.e. will queue in renesas-devel for v6.2.
