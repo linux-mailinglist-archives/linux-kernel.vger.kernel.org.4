@@ -2,167 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D195FB03E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F065FB046
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiJKKP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S229501AbiJKKSM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Oct 2022 06:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJKKPW (ORCPT
+        with ESMTP id S229490AbiJKKSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:15:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B49A3EA54;
-        Tue, 11 Oct 2022 03:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665483320; x=1697019320;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=scpMZ8OoUYg6AwNLLdYw0RPM+zhh4mPXBovWavPlwA4=;
-  b=YHFSVCDwNbObbdjj3l2iUSiikbfAkXGUD6IbyRZ63xDB0hdlLzALvPus
-   me05tYwr+T6xfIR1+O//2l8ZPtiisyrTmp5bMZ/ItHRi7Bqt2qKElxV8y
-   mqNSvy8rZCPc5RyDbclNMBeBSLaHHU6ShC+PMvpM1FXPfl7gn+YLylePZ
-   +O5n4aLkzUrdM3+KCBPvwU8ECdiGBE0e/oMqonK5MBf4QP0MgHaHjYmdQ
-   ab+/R/taR/aXCCpot0FJVwSNIQdHJrQQrh3OpWW02nHsfuDmIGPSoBP7q
-   yjACs9my5Qsy4ardW34rF2+9C1SpzAHOXzYyYtBCoa22aUhL26vulf0qj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="390772786"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="390772786"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 03:15:20 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="659486227"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="659486227"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.214])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 03:15:18 -0700
-Message-ID: <65d813c6-65c0-fb5b-2709-8068e1dc89c1@intel.com>
-Date:   Tue, 11 Oct 2022 13:15:12 +0300
+        Tue, 11 Oct 2022 06:18:09 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8B86FA1E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:18:07 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-286-09IWco5YP-G3TOKGjGh0fQ-1; Tue, 11 Oct 2022 11:18:04 +0100
+X-MC-Unique: 09IWco5YP-G3TOKGjGh0fQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 11 Oct
+ 2022 11:18:03 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Tue, 11 Oct 2022 11:18:03 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Willy Tarreau' <w@1wt.eu>
+CC:     Alexey Dobriyan <adobriyan@gmail.com>,
+        "lkp@intel.com" <lkp@intel.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: RE: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Thread-Topic: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Thread-Index: AQHY3A4FfEAIYReKOkCQTHoqkpVhA64HYvoggAFHY4CAACsgsA==
+Date:   Tue, 11 Oct 2022 10:18:03 +0000
+Message-ID: <b5de4f7b61f1467baea10267c96d6db4@AcuMS.aculab.com>
+References: <Y0LsreRGq3nbe2xC@localhost.localdomain>
+ <20221009175920.GA28685@1wt.eu> <20221009183604.GA29069@1wt.eu>
+ <9e16965f1d494084981eaa90d73ca80e@AcuMS.aculab.com>
+ <20221011062055.GC5107@1wt.eu>
+In-Reply-To: <20221011062055.GC5107@1wt.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCHv3 1/2] mmc: block: Remove error check of hw_reset on reset
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <0d0ef6651ed44fc780e95c8797294708@hyperstone.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <0d0ef6651ed44fc780e95c8797294708@hyperstone.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 17:03, Christian Löhle wrote:
-> Before switching back to the right partition in mmc_blk_reset
-> there used to be a check if hw_reset was even supported.
-> This return value was removed, so there is no reason to check.
-> Furthermore ensure part_curr is not falsely set to a valid value
-> on reset or partition switch error.
+From: Willy Tarreau
+> Sent: 11 October 2022 07:21
 > 
-> Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|sw_reset()")
-> Cc: stable@vger.kernel.org
+> On Mon, Oct 10, 2022 at 10:03:53AM +0000, David Laight wrote:
+> > From: Willy Tarreau <w@1wt.eu>
+> > > Sent: 09 October 2022 19:36
+> > ...
+> > > By the way, just for the sake of completeness, the one that consistently
+> > > gives me a better output is this one:
+> > >
+> > >   size_t strlen(const char *str)
+> > >   {
+> > >           const char *s0 = str--;
+> > >
+> > >           while (*++str)
+> > >   		;
+> > >           return str - s0;
+> > >   }
+> > >
+> > > Which gives me this:
+> > >
+> > >
+> > >   0000000000000000 <strlen>:
+> > >      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
+> > >      4:   48 ff c0                inc    %rax
+> > >      7:   80 38 00                cmpb   $0x0,(%rax)
+> > >      a:   75 f8                   jne    4 <len+0x4>
+> > >      c:   48 29 f8                sub    %rdi,%rax
+> > >      f:   c3                      ret
+> > >
+> > > But this is totally ruined by the addition of asm() in the loop. However
+> > > I suspect that the construct is difficult to match against a real strlen()
+> > > since it starts on an extra character, thus placing the asm() statement
+> > > before the loop could durably preserve it. It does work here (the code
+> > > remains the exact same one), but for how long, that's the question. Maybe
+> > > we can revisit the various loop-based functions in the future with this in
+> > > mind.
+> >
+> > clang wilfully and persistently generates:
+> >
+> > strlen:                                 # @strlen
+> >         movq    $-1, %rax
+> > .LBB0_1:                                # =>This Inner Loop Header: Depth=1
+> >         cmpb    $0, 1(%rdi,%rax)
+> >         leaq    1(%rax), %rax
+> >         jne     .LBB0_1
+> >         retq
+> >
+> > But feed the C for that into gcc and it generates a 'jmp strlen'
+> > at everything above -O1.
 > 
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-> ---
-> -v3: Ensure invalid part_curr on error
-> -v2: Do not attempt to switch partitions if reset failed
+> Interesting, that's not the case for me here with 12.2 from kernel.org
+> on x86_64, which gives this at -O1, -O2, -O3 and -Ofast:
 > 
->  drivers/mmc/core/block.c | 29 ++++++++++++++---------------
->  1 file changed, 14 insertions(+), 15 deletions(-)
+>   0000000000000000 <strlen>:
+>      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
+>      4:   0f 1f 40 00             nopl   0x0(%rax)
+>      8:   48 83 c0 01             add    $0x1,%rax
+>      c:   80 38 00                cmpb   $0x0,(%rax)
+>      f:   75 f7                   jne    8 <strlen+0x8>
+>     11:   48 29 f8                sub    %rdi,%rax
+>     14:   c3                      ret
 > 
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index ce89611a136e..45a44edcc31a 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -134,6 +134,7 @@ struct mmc_blk_data {
->  	 * track of the current selected device partition.
->  	 */
->  	unsigned int	part_curr;
-> +#define MMC_BLK_PART_INVALID	UINT_MAX	/* Unknown partition active */
->  	int	area_type;
->  
->  	/* debugfs files (only in main mmc_blk_data) */
-> @@ -991,29 +992,27 @@ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
->  			 int type)
->  {
->  	int err;
-> +	struct mmc_blk_data *main_md = dev_get_drvdata(&host->card->dev);
-> +	int part_err;
->  
->  	if (md->reset_done & type)
->  		return -EEXIST;
->  
->  	md->reset_done |= type;
-> +	main_md->part_curr = MMC_BLK_PART_INVALID;
+> Out of curiosity what version were you using ?
 
-This forces a partition switch even if it is not necessary.
+Clang 12.0.0 onwards, see https://godbolt.org/z/67Gnzs8js
 
->  	err = mmc_hw_reset(host->card);
+> > I suspect that might run with less clocks/byte than the code above.
+> 
+> Certainly for large strings, but not for short ones.
 
-This would be better:
+For short strings not needing the final sub and not having
+the read depend on the increment should make the leal one faster.
+(The nop to align the loop label is monumentally pointless.)
 
-	/*
-	 * A successful reset will leave the card in the main partition, but
-	 * upon failure it might not be, so set it to MMC_BLK_PART_INVALID
-	 * in that case.
-	 */
-	main_md->part_curr = err ? MMC_BLK_PART_INVALID : main_md->part_type;
+For long strings what matters is how many clocks it takes
+to schedule the 4 uops in the loop.
+It might be possible to get down to 2 clocks - but I think
+both the loops are 3 clocks (assuming the adjacent cmp/jne fuse).
 
-> +	if (err)
-> +		return err;
+I'm not going to try to instrument the loops though!
 
-There was a time when mmc requests would be retried directly without
-going back through the block layer.  I don't think that can happen
-anymore after a failed reset.  However, if you are going to skip the
-partition switch, the commit message needs to explain that you have
-checked the code paths and we never retry a request directly after a
-failed reset.  Also a comment is needed to say the same.
+	David
 
->  	/* Ensure we switch back to the correct partition */
-> -	if (err) {
-> -		struct mmc_blk_data *main_md =
-> -			dev_get_drvdata(&host->card->dev);
-> -		int part_err;
-> -
-> -		main_md->part_curr = main_md->part_type;
-> -		part_err = mmc_blk_part_switch(host->card, md->part_type);
-> -		if (part_err) {
-> -			/*
-> -			 * We have failed to get back into the correct
-> -			 * partition, so we need to abort the whole request.
-> -			 */
-> -			return -ENODEV;
-> -		}
-> +	part_err = mmc_blk_part_switch(host->card, md->part_type);
-> +	if (part_err) {
-
-Don't really need part_err. i.e. could be 
-
-	if (mmc_blk_part_switch(host->card, md->part_type) {
-
-> +		/*
-> +		 * We have failed to get back into the correct
-> +		 * partition, so we need to abort the whole request.
-> +		 */
-> +		return -ENODEV;
->  	}
-> -	return err;
-> +	return 0;
->  }
->  
->  static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int type)
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
