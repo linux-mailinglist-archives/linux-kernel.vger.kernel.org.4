@@ -2,121 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F4F5FB407
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515495FB40F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiJKOAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S229831AbiJKODi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJKOAq (ORCPT
+        with ESMTP id S229470AbiJKODc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:00:46 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440994DB51;
-        Tue, 11 Oct 2022 07:00:42 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Mmy6n4p5dz6R4n2;
-        Tue, 11 Oct 2022 21:58:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgD39sgGd0VjWO5uAA--.46133S4;
-        Tue, 11 Oct 2022 22:00:40 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     axboe@kernel.dk, ming.lei@redhat.com, hare@suse.de,
-        john.garry@huawei.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v2] blk-mq: fix null pointer dereference in blk_mq_clear_rq_mapping()
-Date:   Tue, 11 Oct 2022 22:22:53 +0800
-Message-Id: <20221011142253.4015966-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 11 Oct 2022 10:03:32 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B946FA14;
+        Tue, 11 Oct 2022 07:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=D73BjQfIrSTnj6EqtQCxORHOxjQyNOc/wJqBUfiO9Q8=; b=SABjHiClB4JQLpcyV5/NJW5d3o
+        7qiqIFwxs3yuoRYvHYEUmakkgOL5QJruLYYiLrB8KNBxvc9M0m1MoPYCe3IOz0IAw0eNWihsAXV/P
+        5Y+f4dExVkJIGRYxLQbJ5kAOwfVu5T6Pm67GO++RvcH0pmN82akGPlefH2VZrln++lzM7rjbIHmLX
+        OGbnU3htHC2Rq9KOnboXIhUwg0DEfnfpXfP1N++I2+o6Ukub7Ckdu6lBrxmW1FB4Cb9KB7FurUxMk
+        eNByW8y5b+lmZE8M/V8PaAIkYFv7qB7CIAzpDcxJNW9ZAkwV7KHd56f56h5fcbaZVr9iX5gjnz055
+        cLqo9vfg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oiFqT-002aUL-ES; Tue, 11 Oct 2022 14:02:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 557723000E3;
+        Tue, 11 Oct 2022 16:02:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 449D529AC89DB; Tue, 11 Oct 2022 16:02:56 +0200 (CEST)
+Date:   Tue, 11 Oct 2022 16:02:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        will@kernel.org, robh@kernel.org, mingo@redhat.com,
+        catalin.marinas@arm.com, ndesaulniers@google.com,
+        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v2] perf: Rewrite core context handling
+Message-ID: <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
+References: <20221008062424.313-1-ravi.bangoria@amd.com>
+ <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
+ <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD39sgGd0VjWO5uAA--.46133S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ury8ZF1fAr4rXF1UWryUJrb_yoW8AFyfpF
-        4UGa1YkFZYqr1Uua18Xa9rA34jqa1kWryrCa15C3sYvryjkry2kF1vyrWjqr1FyrZ3AFZr
-        Jr4ak3y8Ar1DJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Tue, Oct 11, 2022 at 06:49:55PM +0530, Ravi Bangoria wrote:
+> On 11-Oct-22 4:59 PM, Peter Zijlstra wrote:
+> > On Sat, Oct 08, 2022 at 11:54:24AM +0530, Ravi Bangoria wrote:
+> > 
+> >> +static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
+> >> +					  struct perf_event_context *next_ctx)
+> >> +{
+> >> +	struct perf_event_pmu_context *prev_epc, *next_epc;
+> >> +
+> >> +	if (!prev_ctx->nr_task_data)
+> >> +		return;
+> >> +
+> >> +	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
+> >> +				    struct perf_event_pmu_context,
+> >> +				    pmu_ctx_entry);
+> >> +	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
+> >> +				    struct perf_event_pmu_context,
+> >> +				    pmu_ctx_entry);
+> >> +
+> >> +	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
+> >> +	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
+> >> +
+> >> +		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
+> >> +
+> >> +		/*
+> >> +		 * PMU specific parts of task perf context can require
+> >> +		 * additional synchronization. As an example of such
+> >> +		 * synchronization see implementation details of Intel
+> >> +		 * LBR call stack data profiling;
+> >> +		 */
+> >> +		if (prev_epc->pmu->swap_task_ctx)
+> >> +			prev_epc->pmu->swap_task_ctx(prev_epc, next_epc);
+> >> +		else
+> >> +			swap(prev_epc->task_ctx_data, next_epc->task_ctx_data);
+> > 
+> > Did I forget to advance the iterators here?
+> 
+> Yeah. Seems so. I overlooked it too.
 
-Our syzkaller report a null pointer dereference, root cause is
-following:
+OK; so I'm not slowly going crazy staring at this code ;-) Let me go add
+it now then. :-)
 
-__blk_mq_alloc_map_and_rqs
- set->tags[hctx_idx] = blk_mq_alloc_map_and_rqs
-  blk_mq_alloc_map_and_rqs
-   blk_mq_alloc_rqs
-    // failed due to oom
-    alloc_pages_node
-    // set->tags[hctx_idx] is still NULL
-    blk_mq_free_rqs
-     drv_tags = set->tags[hctx_idx];
-     // null pointer dereference is triggered
-     blk_mq_clear_rq_mapping(drv_tags, ...)
-
-This is because commit 63064be150e4 ("blk-mq:
-Add blk_mq_alloc_map_and_rqs()") merged the two steps:
-
-1) set->tags[hctx_idx] = blk_mq_alloc_rq_map()
-2) blk_mq_alloc_rqs(..., set->tags[hctx_idx])
-
-into one step:
-
-set->tags[hctx_idx] = blk_mq_alloc_map_and_rqs()
-
-Since tags is not initialized yet in this case, fix the problem by
-checking if tags is NULL pointer in blk_mq_clear_rq_mapping().
-
-Fixes: 63064be150e4 ("blk-mq: Add blk_mq_alloc_map_and_rqs()")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
----
-Changes in v2:
- - fix spelling mistakes
- - add review tag
-
- block/blk-mq.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 8070b6c10e8d..33292c01875d 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -3112,8 +3112,11 @@ static void blk_mq_clear_rq_mapping(struct blk_mq_tags *drv_tags,
- 	struct page *page;
- 	unsigned long flags;
- 
--	/* There is no need to clear a driver tags own mapping */
--	if (drv_tags == tags)
-+	/*
-+	 * There is no need to clear mapping if driver tags is not initialized
-+	 * or the mapping belongs to the driver tags.
-+	 */
-+	if (!drv_tags || drv_tags == tags)
- 		return;
- 
- 	list_for_each_entry(page, &tags->page_list, lru) {
--- 
-2.31.1
-
+But first I gotta taxi the kids around for a bit, bbl.
