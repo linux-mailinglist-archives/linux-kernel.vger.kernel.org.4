@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A19C5FAE5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92385FAE5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJKIZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
+        id S229657AbiJKIZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiJKIZn (ORCPT
+        with ESMTP id S229468AbiJKIZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:25:43 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCCF6EF05;
-        Tue, 11 Oct 2022 01:25:41 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id s21so7827760qtx.6;
-        Tue, 11 Oct 2022 01:25:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uc8mlP1Bb6ZoEtqh2ABXLZMg75TrHHL0bj3Jd8LQsuE=;
-        b=Eh8P/Ob/yhzLV4PRXekB2iz5BrBH87AVPhhBtbzTcRRhWU8UPTaiTuw5nlY2i3S9ha
-         wY9YVPB3olSeUwrjzqfyEYbaL9qNRPKOcHnpcYmD2A5kX/RP/DQ1QFTG1QzvpIDukhMD
-         h+KF+yl21pKbTz5YkhJwshm9F9Cl1+MZ9eHwwSRbv/ne+lq6pHTTJEpcy0vACQCSTNbj
-         TRy31T9M/ISmYFvDLT+DFcGI1AzopNwp1B67mdqqGTgEH4pG0tIMt8tJzYtPsnZRoTHJ
-         f0xyJx2WbWxtrgqw+kgWV8vlk8BySVRCAdzVMuAIMLpPD/GbIjD0GgQTGWb3WoP7y+lH
-         4S8w==
-X-Gm-Message-State: ACrzQf02t+fa+oZh/4RVQaZxceUhmMtCemIfiEQiC4nvP9P2EDS4Inn4
-        jyEZvNepec1AiJgBHYR3mnBDjsAZ4uQo4w==
-X-Google-Smtp-Source: AMsMyM4KSEd2ApiBgrYFLJezcKVeJQhJBFjYOwNO5rysTAWfEZbNKxRhnb7Xe9IozKqx0WktwxQOjg==
-X-Received: by 2002:ac8:5a41:0:b0:35c:fa93:f227 with SMTP id o1-20020ac85a41000000b0035cfa93f227mr18055534qta.102.1665476740565;
-        Tue, 11 Oct 2022 01:25:40 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05620a408e00b006bb83c2be40sm3380476qko.59.2022.10.11.01.25.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:25:38 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id y205so15606107yby.13;
-        Tue, 11 Oct 2022 01:25:37 -0700 (PDT)
-X-Received: by 2002:a25:2d49:0:b0:6bf:87:706f with SMTP id s9-20020a252d49000000b006bf0087706fmr21550886ybe.202.1665476737646;
- Tue, 11 Oct 2022 01:25:37 -0700 (PDT)
+        Tue, 11 Oct 2022 04:25:37 -0400
+Received: from outbound-smtp26.blacknight.com (outbound-smtp26.blacknight.com [81.17.249.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F697101CB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 01:25:35 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp26.blacknight.com (Postfix) with ESMTPS id D6034CAB71
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:25:33 +0100 (IST)
+Received: (qmail 28258 invoked from network); 11 Oct 2022 08:25:33 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 11 Oct 2022 08:25:33 -0000
+Date:   Tue, 11 Oct 2022 09:25:30 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 1/1] mm/page_alloc: Leave IRQs enabled for per-cpu page
+ allocations
+Message-ID: <20221011082530.p2fk44dhglxulsou@techsingularity.net>
+References: <20220824141802.23395-1-mgorman@techsingularity.net>
+ <CAOUHufbxqn5gjYxnZDLsRtaKgtauFXwL+qq_829Eg5PSJaSPgg@mail.gmail.com>
+ <20221010142208.ctsasloh7hbudupc@techsingularity.net>
+ <a7092c47-63ef-200a-8968-7e3402e19a38@suse.cz>
 MIME-Version: 1.0
-References: <20221009231013.14791-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221009231013.14791-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:25:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUVmEppLQ7_oH6M0dtZS+qoU32tZAv4YTOoiw5vzP9r+Q@mail.gmail.com>
-Message-ID: <CAMuHMdUVmEppLQ7_oH6M0dtZS+qoU32tZAv4YTOoiw5vzP9r+Q@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: r9a07g044: Drop WDT2 clock and reset entry
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <a7092c47-63ef-200a-8968-7e3402e19a38@suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 1:10 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
-> used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> WDT2 clock and reset entries.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Mon, Oct 10, 2022 at 10:45:43PM +0200, Vlastimil Babka wrote:
+> On 10/10/22 16:22, Mel Gorman wrote:
+> > On Wed, Aug 24, 2022 at 10:58:26PM -0600, Yu Zhao wrote:
+> > > On Wed, Aug 24, 2022 at 8:18 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+> > > > 
+> > > > The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
+> > > > allocating from the PCP must not re-enter the allocator from IRQ context.
+> > > > In each instance where IRQ-reentrancy is possible, the lock is acquired using
+> > > > pcp_spin_trylock_irqsave() even though IRQs are disabled and re-entrancy
+> > > > is impossible.
+> > > > 
+> > > > Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
+> > > > case at the cost of some IRQ allocations taking a slower path. If the PCP
+> > > > lists need to be refilled, the zone lock still needs to disable IRQs but
+> > > > that will only happen on PCP refill and drain. If an IRQ is raised when
+> > > > a PCP allocation is in progress, the trylock will fail and fallback to
+> > > > using the buddy lists directly. Note that this may not be a universal win
+> > > > if an interrupt-intensive workload also allocates heavily from interrupt
+> > > > context and contends heavily on the zone->lock as a result.
+> > > 
+> > > Hi,
+> > > 
+> > > This patch caused the following warning. Please take a look.
+> > > 
+> > > Thanks.
+> > > 
+> > >    WARNING: inconsistent lock state
+> > >    6.0.0-dbg-DEV #1 Tainted: G S      W  O
+> > >    --------------------------------
+> > 
+> > I finally found time to take a closer look at this and I cannot reproduce
+> > it against 6.0. What workload triggered the warning, on what platform and
+> > can you post the kernel config used please? It would also help if you
+> > can remember what git commit the patch was tested upon.
+> > 
+> > Thanks and sorry for the long delay.
+> 
+> I didn't (try to) reproduce this, but FWIW the report looked legit to me, as
+> after the patch, pcp_spin_trylock() has to be used for both allocation and
+> freeing to be IRQ safe. free_unref_page() uses it, so it's fine. But as the
+> stack trace in the report shows, free_unref_page_list() does pcp_spin_lock()
+> and not _trylock, and that's IMHO the problem.
+> 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk-for-v6.2.
+I completely agree, it was a surprise to me that IO completion would
+happen in soft IRQ context even though blk_done_softirq indicates that
+it is normal and I didn't manage to trigger that case myself. I wondered
+if there was an easy way to force that which would have made testing of
+this easier. I can live without the reproduction case and cc Yu Zhao after
+6.1-rc1 comes out and I've fixed this.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Mel Gorman
+SUSE Labs
