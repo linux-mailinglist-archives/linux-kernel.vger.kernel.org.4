@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F1D5FB9F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CF95FB9F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiJKRwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S229966AbiJKRwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiJKRwf (ORCPT
+        with ESMTP id S230015AbiJKRwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:52:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D79940037;
-        Tue, 11 Oct 2022 10:52:31 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1665510739tbwjqr9m
-Received: from [192.168.1.231] ( [113.72.146.141])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Oct 2022 01:52:18 +0800 (CST)
-X-QQ-SSF: 0100000000200090B000B00A0000000
-X-QQ-FEAT: eSZ1CZgv+JDpbz+8SZtFjGpBaoHZNJKphrrKecDmH7nFw9yOYamWc6tnUXtiK
-        5hqBaXLrf5CuIHQTdb0xFyaOht6w2j/pHl/eluwYwBsXw/EYe1upcfnk8v/ClL+IhgLqg1D
-        NQWyxjYe2HsuXrYs0WZNLcSpZYVdZC7iJCx0Pruqa/KnemRMSq9WYz9/OtaPqOrh8r+eFrn
-        77a4bV7aFLfWOzNgU3oekYrgRNUegBHk8OhXbHqYfwIPeC6kkc1nuw7f+NPrXtWJIpCEjy+
-        W+lDWWcd1xXRXOz8KqzeDSadVBRMPFcB3o8T9bdwfcYhDvuaEE8pihJHU/taIhOdmcCRC/r
-        CpfCAVlKq4JPAfRbyNoY0rHYmdeAA==
-X-QQ-GoodBg: 0
-Message-ID: <6BB36B91BD2046FD+e637d229-f656-a548-c45a-8d62a0c7928d@linux.starfivetech.com>
-Date:   Wed, 12 Oct 2022 01:52:18 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 17/30] dt-bindings: clock: Add
- starfive,jh7110-clkgen-sys bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        Tue, 11 Oct 2022 13:52:45 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C194F18E;
+        Tue, 11 Oct 2022 10:52:44 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id h1-20020a4aa741000000b004756c611188so10587040oom.4;
+        Tue, 11 Oct 2022 10:52:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=06y4LPa2ARF61oYkkmp5uqG5RC795RcUrnsHXwHkyVI=;
+        b=17On4Z1I0IRgh+mwDuwyeiFzz0SiT5lLktUiMvWv377IZ7ORDJ11JxRWxko/Zkdr31
+         CEk2A0i19wVuAOZ/3dGZSbfpINWfPOZ0vLEMjM70y7ukUDqceDSgRwyOzMutueBCXqJE
+         rjnxldz3XLmr7VKuAKPD78021ADDUSOFC8h4pX7Z2Sf22cypmmTZ/Aua4Mes3yxbVuKn
+         QxheXejVE8vbYI2OHAGrS71LBV350Db+rbBKWVCwCTGS+897sE87rgOAe9aMwQbhyTQ1
+         51DAxHRo40uJ9y33Ev1Vjl7raDRP/hD0cRA5+uqRreuqmK50TVoBBmpe5ePHqJKqQUDc
+         FlHg==
+X-Gm-Message-State: ACrzQf1KcHZUv+SSi1sduKwMhkPhXjCEydwmIhE1Gw9UfRoHqv1cfM2+
+        3KaGd4IxteOsZ+c4oJW/QQ==
+X-Google-Smtp-Source: AMsMyM6qzjWoKY66x3ERX/h+VaCthT/iVnP1s+NJpheeyaoElqOI8gxqgwb90rNfuE84zsFOyBMrHw==
+X-Received: by 2002:a05:6820:408:b0:476:229c:141d with SMTP id o8-20020a056820040800b00476229c141dmr9570931oou.64.1665510763475;
+        Tue, 11 Oct 2022 10:52:43 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p186-20020acabfc3000000b00354b0850fb6sm1638072oif.33.2022.10.11.10.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 10:52:42 -0700 (PDT)
+Received: (nullmailer pid 3191691 invoked by uid 1000);
+        Tue, 11 Oct 2022 17:52:44 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
- <c99f6552-db04-fe30-ed69-4a08b0af5276@linaro.org>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <c99f6552-db04-fe30-ed69-4a08b0af5276@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Subject: [PATCH] dt-bindings: thermal: Convert generic-adc-thermal to DT schema
+Date:   Tue, 11 Oct 2022 12:52:35 -0500
+Message-Id: <20221011175235.3191509-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,40 +66,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 12:58:12 +0200, Krzysztof Kozlowski wrote:
-> On 30/09/2022 00:26, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > Add bindings for the system clock generator on the JH7110
-> > RISC-V SoC by StarFive Technology Ltd.
-> > 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> 
-> (...)
-> 
-> > +  '#clock-cells':
-> > +    const: 1
-> > +    description:
-> > +      See <dt-bindings/clock/starfive-jh7110-sys.h> for valid indices.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - clocks
-> > +  - clock-names
-> > +  - '#clock-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    syscrg_clk: clock-controller@13020000 {
-> 
-> Does not look like you tested the bindings. Please run `make
-> dt_binding_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Convert the 'generic-adc-thermal' binding to DT schema format.
 
-Will rewrite the bindings and test them. Thanks.
+The binding said '#thermal-sensor-cells' should be 1, but all in tree
+users are 0 and 1 doesn't make sense for a single channel.
 
-Best regards,
-Hal
+Drop the example's related providers and consumers of the
+'generic-adc-thermal' node as the convention is to not have those in
+the examples.
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/thermal/generic-adc-thermal.yaml | 84 ++++++++++++++++
+ .../bindings/thermal/thermal-generic-adc.txt  | 95 -------------------
+ 2 files changed, 84 insertions(+), 95 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
+
+diff --git a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+new file mode 100644
+index 000000000000..f1fc3b0d8608
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+@@ -0,0 +1,84 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/generic-adc-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: General Purpose Analog To Digital Converter (ADC) based thermal sensor
++
++maintainers:
++  - Laxman Dewangan <ldewangan@nvidia.com>
++
++description:
++  On some of platforms, thermal sensor like thermistors are connected to
++  one of ADC channel and sensor resistance is read via voltage across the
++  sensor resistor. The voltage read across the sensor is mapped to
++  temperature using voltage-temperature lookup table.
++
++properties:
++  compatible:
++    const: generic-adc-thermal
++
++  '#thermal-sensor-cells':
++    const: 0
++
++  io-channels:
++    maxItems: 1
++
++  io-channel-names:
++    const: sensor-channel
++
++  temperature-lookup-table:
++    description: |
++      Lookup table to map the relation between ADC value and temperature.
++      When ADC is read, the value is looked up on the table to get the
++      equivalent temperature.
++
++      If not specified, driver assumes the ADC channel gives milliCelsius
++      directly.
++    $ref: /schemas/types.yaml#/definitions/int32-matrix
++    items:
++      items:
++        - description: Temperature in milliCelsius
++        - description: ADC read value
++
++required:
++  - compatible
++  - '#thermal-sensor-cells'
++  - io-channels
++  - io-channel-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/thermal/thermal.h>
++
++    thermal-sensor {
++        compatible = "generic-adc-thermal";
++        #thermal-sensor-cells = <0>;
++        io-channels = <&ads1015 1>;
++        io-channel-names = "sensor-channel";
++        temperature-lookup-table = <
++              (-40000) 2578
++              (-39000) 2577
++              (-38000) 2576
++              (-37000) 2575
++              (-36000) 2574
++              (-35000) 2573
++              (-34000) 2572
++              (-33000) 2571
++              (-32000) 2569
++              (-31000) 2568
++              (-30000) 2567
++              /* skip */
++              118000 254
++              119000 247
++              120000 240
++              121000 233
++              122000 226
++              123000 220
++              124000 214
++              125000 208>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt b/Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
+deleted file mode 100644
+index e136946a2f4f..000000000000
+--- a/Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
++++ /dev/null
+@@ -1,95 +0,0 @@
+-General Purpose Analog To Digital Converter (ADC) based thermal sensor.
+-
+-On some of platforms, thermal sensor like thermistors are connected to
+-one of ADC channel and sensor resistance is read via voltage across the
+-sensor resistor. The voltage read across the sensor is mapped to
+-temperature using voltage-temperature lookup table.
+-
+-Required properties:
+-===================
+-- compatible:		     Must be "generic-adc-thermal".
+-- #thermal-sensor-cells:     Should be 1. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description
+-		             of this property.
+-Optional properties:
+-===================
+-- temperature-lookup-table:  Two dimensional array of Integer; lookup table
+-			     to map the relation between ADC value and
+-			     temperature. When ADC is read, the value is
+-			     looked up on the table to get the equivalent
+-			     temperature.
+-
+-			     The first value of the each row of array is the
+-			     temperature in milliCelsius and second value of
+-			     the each row of array is the ADC read value.
+-
+-			     If not specified, driver assumes the ADC channel
+-			     gives milliCelsius directly.
+-
+-Example :
+-#include <dt-bindings/thermal/thermal.h>
+-
+-i2c@7000c400 {
+-	ads1015: ads1015@4a {
+-		reg = <0x4a>;
+-		compatible = "ads1015";
+-		sampling-frequency = <3300>;
+-		#io-channel-cells = <1>;
+-	};
+-};
+-
+-tboard_thermistor: thermal-sensor {
+-	compatible = "generic-adc-thermal";
+-	#thermal-sensor-cells = <0>;
+-	io-channels = <&ads1015 1>;
+-	io-channel-names = "sensor-channel";
+-	temperature-lookup-table = <    (-40000) 2578
+-					(-39000) 2577
+-					(-38000) 2576
+-					(-37000) 2575
+-					(-36000) 2574
+-					(-35000) 2573
+-					(-34000) 2572
+-					(-33000) 2571
+-					(-32000) 2569
+-					(-31000) 2568
+-					(-30000) 2567
+-					::::::::::
+-					118000 254
+-					119000 247
+-					120000 240
+-					121000 233
+-					122000 226
+-					123000 220
+-					124000 214
+-					125000 208>;
+-};
+-
+-dummy_cool_dev: dummy-cool-dev {
+-	compatible = "dummy-cooling-dev";
+-	#cooling-cells = <2>; /* min followed by max */
+-};
+-
+-thermal-zones {
+-	Tboard {
+-		polling-delay = <15000>; /* milliseconds */
+-		polling-delay-passive = <0>; /* milliseconds */
+-		thermal-sensors = <&tboard_thermistor>;
+-
+-		trips {
+-			therm_est_trip: therm_est_trip {
+-				temperature = <40000>;
+-				type = "active";
+-				hysteresis = <1000>;
+-			};
+-		};
+-
+-		cooling-maps {
+-			map0 {
+-				trip = <&therm_est_trip>;
+-				cooling-device = <&dummy_cool_dev THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+-				contribution = <100>;
+-			};
+-
+-		};
+-	};
+-};
+-- 
+2.35.1
+
