@@ -2,164 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394935FB917
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323025FB91C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiJKRVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S230006AbiJKRWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJKRVa (ORCPT
+        with ESMTP id S229630AbiJKRWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:21:30 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E0A5A897
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:21:29 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bj12so32835127ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:21:29 -0700 (PDT)
+        Tue, 11 Oct 2022 13:22:37 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996E75A897
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:22:36 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a26so32919231ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dDH/yqMBY6z65ZJG9YUJcRxt5TLwOS8GZpBny1UR+wU=;
-        b=LaM8+qFG1my8Jgpzmgkwd2c1XQ3CJfP3M/S+A5zp45CCeJhA2l0XTf0twHAYpk8Zj4
-         kEp56yDKYvjnZtHEPfLlAAiS5Gy5wXhP/Xe+bGZ/tBtN/M+s3sdTXlDB9fEtyXbbUqbj
-         Acy9wf3dQvzqraceTxSpOQIA4igavGsxfuXFkVk5ZSIIA/c9SaR/JXz0S7Qf4yH3uS//
-         9seOf7/JyiUSvNMuSvgrVUXfb+0KTR9VaFk5uQn4sSu/NfrwYR41ajMyvxz/OcBSsEsu
-         7u8sy7GVw9nuWNKDgeXz+nu7EcTTiIgfHD+5j11wS6GiFAGlqZWysHua12KhNwkiS2UL
-         tRbQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tD9jR7qHoo8YjCPFAxtMgRghcsI0I3euLcmHX/AlDvk=;
+        b=EG3pijXaCZAx0z7+DzNm/ASYYg3E5j3bCUvD9D1vXPg0vGbv7rSmWRFf+49wNrOjPC
+         XgB9u2o/1y2tnzLsdca6ebyRx8nNHH+TcgbL4bosKJZBi3Q6JBHOnWZhuWd3TMiGpK0W
+         qUqplH1WfiIV27fsfHUt9ko6yhHMZp32J6NLnAYkBDd4AQSkHidIiGKvs5DCXkvBO5hF
+         subwyAFDVEt33ulB4j6S8wDFl/z7aH4H73nqR0aPqy/DSs/DCwi98lV5QH3cvDLQMMft
+         zGXv1Z3V2aDk5tyMCO22+B1TZ7WjzVHijfIx/Ek4rbzQXt0uvboaMorpjZHSA/OP/KNt
+         8VNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dDH/yqMBY6z65ZJG9YUJcRxt5TLwOS8GZpBny1UR+wU=;
-        b=2LiU5O0SctZkhUkhT6RTH20lfw4fqlrqEC27138o76vbCcvwCGs4FzGeTbPRiWT8Bb
-         El29AeLrolTq4wbPRaFrl2yXNSxemF5MHaUmzg3SMPoQc4A7YChqqQn52vkQ3AsSeBAr
-         oqa9a957lYLytPMipMdtvA2qM8e0SKHyHKqbvWPjHvfmRFM5/vUgBIDLWmW1ylrtj1Yd
-         gEQCsU5JBf2Nf8ch7bdrdyhJBDo2DcXxFQoMboT1dw6ohDzQvsGz/d1p8/t6sT8H6Ruz
-         k9pndxT8wYNsTqPHpULzcIJy129hEX1rix+70+327OvJ+4zya1amQLSt6fShJQf1gwV5
-         S2dw==
-X-Gm-Message-State: ACrzQf0NqLK176/A4LBHmXLohYfYTpppxOwWVQU7BPWc2ZEv1Z6rPZAI
-        vGhL7A8pXwAdBfvGwrDyW0uOf0JAPIqDqw==
-X-Google-Smtp-Source: AMsMyM7Ysdj7qDeAq5GSAX1M7OKEZKLjyhDmK7KAEeekQ2yxzv+UJ2NGaWADd65guNvdOYPICU0EbA==
-X-Received: by 2002:a17:906:db0a:b0:781:f24:a782 with SMTP id xj10-20020a170906db0a00b007810f24a782mr19551598ejb.399.1665508887606;
-        Tue, 11 Oct 2022 10:21:27 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id a14-20020a170906368e00b0078d46aa3b82sm44170ejc.21.2022.10.11.10.21.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 10:21:27 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 19:21:26 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, lkp@lists.01.org,
-        lkp@intel.com, Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [oliver.sang@intel.com: [cpumask] b9a7ecc71f:
- WARNING:at_include/linux/cpumask.h:#__is_kernel_percpu_address]
-Message-ID: <20221011172126.24csegoozshpy34z@kamzik>
-References: <YzeclACdH9JmaRza@yury-laptop>
- <CAHk-=wiK5wyj58x3uvt+otsO9=79N13OO6Nf57DFVYO=QX==ig@mail.gmail.com>
- <Yzh19JhBMzkMr4+L@yury-laptop>
- <20221011170949.upxk3tcfcwnkytwm@kamzik>
- <Y0Wk0WD6CL4aFEIi@yury-laptop>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tD9jR7qHoo8YjCPFAxtMgRghcsI0I3euLcmHX/AlDvk=;
+        b=l6IRg99Sz+OfscmAqV07JbEnc41faJ084ULpUFmxhZ+NwpMy1lsL0B6ca0JOhLKD3+
+         0/PcCnV41iQzPMCm6gBhYkVL1jM/cjnaGBmWxk0gs+QS2Ka9MhEY4AItTVDWgS5u5dUN
+         evG0EzB1mP4Msrs74kJwICmhj6ay+p62GtKW1GgKmhtvDjajpT2lYCVdkbDTQ3dt9yZC
+         Hb1mTKKH+9WfReVV268hpnD5XFl1dfHrrswsGVMqf9KRljNNc3oGembVkzUrNONR7GoE
+         069PXhesnN9bRwy/U4KZq52uxnqgRTudmv6uMqGCZA/HE7bjBJyALJMy3YFPqPCX7x26
+         NFfg==
+X-Gm-Message-State: ACrzQf37aio2+okR974QDz5qbDmjQHZYe4EAdy0HQWtZO3l+GclkNztB
+        LVlYXc2Wf+L84pzLyV8hBuMBWTHaHX6HRsQ01ImZyQ==
+X-Google-Smtp-Source: AMsMyM5ZC8bySD0ur+e6jyv+eDlRBwAazeHKoD2ZcGUoZbIE0AMED9AS38/kZXKX5FECDsvvfbQ8I6W0UQAoyEgijY4=
+X-Received: by 2002:a17:906:4fca:b0:78d:b042:eeca with SMTP id
+ i10-20020a1709064fca00b0078db042eecamr9869193ejw.685.1665508955072; Tue, 11
+ Oct 2022 10:22:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0Wk0WD6CL4aFEIi@yury-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
+ <CAPTztWYTGOb8ZQzfgThqJn+fyi4ZB8=JQQZi5_rUoDhdftKtvg@mail.gmail.com> <Y0WE/lEiNvl2ljo1@dhcp22.suse.cz>
+In-Reply-To: <Y0WE/lEiNvl2ljo1@dhcp22.suse.cz>
+From:   Frank van der Linden <fvdl@google.com>
+Date:   Tue, 11 Oct 2022 10:22:23 -0700
+Message-ID: <CAPTztWZZOxtzdEm=wbOiL_VDPJuCaW0XVCvsdRpCHE+ph+5eZQ@mail.gmail.com>
+Subject: Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 10:16:01AM -0700, Yury Norov wrote:
-> > Hi Yury,
-> > 
-> > I just wanted to report that the warning fires when doing
-> > 'cat /proc/cpuinfo' on at least x86 and riscv. I don't think
-> > those are false positives. I'm guessing a patch should be
-> > something like the following diff. If you haven't already
-> > addressed this and I'm not off in left field, then I guess
-> > we should integrate it into your series.
-> > 
-> > Thanks,
-> > drew
->  
-> Hi Andrew,
-> 
-> Can you please send it as a patch with a description?
+On Tue, Oct 11, 2022 at 8:00 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 10-10-22 09:22:13, Frank van der Linden wrote:
+> > For consistency with process_madvise(), I would suggest calling it
+> > process_set_mempolicy.
+>
+> This operation has per-thread rather than per-process semantic so I do
+> not think your proposed naming is better.
 
-Will do. I'll send two patches, one for each arch.
+True. I suppose you could argue that it should have been
+pidfd_madvise() then for consistency, but that ship has sailed.
 
-> 
-> > 
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 4aa8cd749441..4c5dfa230d4b 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -166,9 +166,12 @@ static void print_mmu(struct seq_file *f)
-> >  
-> >  static void *c_start(struct seq_file *m, loff_t *pos)
-> >  {
-> > -	*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> > -	if ((*pos) < nr_cpu_ids)
-> > -		return (void *)(uintptr_t)(1 + *pos);
-> > +	if (*pos < nr_cpu_ids) {
-> > +		*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> > +		if ((*pos) < nr_cpu_ids)
-> 
-> Braces around *pos are not needed.
+>
+> > Other than that, this makes sense. To complete
+> > the set, perhaps a process_mbind() should be added as well. What do
+> > you think?
+>
+> Is there any real usecase for this interface? How is the caller supposed
+> to make per-range decisions without a very involved coordination with
+> the target process?
 
-The braces were preexisting, but I'll drop them while indenting.
+The use case for a potential pidfd_mbind() is basically a combination
+of what is described for in the process_madvise proposal (
+https://lore.kernel.org/lkml/20200901000633.1920247-1-minchan@kernel.org/
+), and what this proposal describes: system management software acting
+as an orchestrator that has a better overview of the system as a whole
+(NUMA nodes, memory tiering), and has knowledge of the layout of the
+processes involved.
 
-Thanks,
-drew
+pidfd_mbind()  makes sense to me, since the notion of an external
+agent with knowledge of the VM layout is already there with
+process_madvise(). And since set_mempolicy and mbind are closely
+related, it would seem logical to add an mbind variant as well as
+pidfd_set_mempolicy().
 
-> 
-> > +			return (void *)(uintptr_t)(1 + *pos);
-> > +	}
-> > +
-> >  	return NULL;
-> >  }
-> >  
-> > diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> > index 099b6f0d96bd..2ea614e78e28 100644
-> > --- a/arch/x86/kernel/cpu/proc.c
-> > +++ b/arch/x86/kernel/cpu/proc.c
-> > @@ -153,9 +153,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >  
-> >  static void *c_start(struct seq_file *m, loff_t *pos)
-> >  {
-> > -	*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> > -	if ((*pos) < nr_cpu_ids)
-> > -		return &cpu_data(*pos);
-> > +	if (*pos < nr_cpu_ids) {
-> > +		*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> > +		if ((*pos) < nr_cpu_ids)
-> 
-> Here too.
-> 
-> Thanks,
-> Yury
-> 
-> > +			return &cpu_data(*pos);
-> > +	}
-> > +
-> >  	return NULL;
-> >  }
-> >  
-> > >  
-> > > > I suspect that to avoid any automation noise, you should just rebase
-> > > > so that the fixes come first. Otherwise we'll end up wasting a lot of
-> > > > time on the noise.
-> > > > 
-> > > > This is not that different from introducing new buil;d-time warnings:
-> > > > the things they point out need to be fixed before the warning can be
-> > > > integrated, or it causes bisection problems.
-> > > 
-> > > OK, I'll reorder the patches. Thanks for your help.
-> > > 
+Having said that, I'm fine with leaving that discussion for another time.
+
+- Frank
