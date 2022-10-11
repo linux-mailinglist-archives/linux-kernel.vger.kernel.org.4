@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445155FAA8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A2D5FAA93
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiJKCVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 22:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S229768AbiJKCWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 22:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJKCVA (ORCPT
+        with ESMTP id S229729AbiJKCWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 22:21:00 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A005C9C9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:20:58 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id l19so8173886qvu.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:20:58 -0700 (PDT)
+        Mon, 10 Oct 2022 22:22:04 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A2B5C379
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:22:03 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id h10so11940716plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:22:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K3oL+ynrOSKSzgOc50W9n/l8KWPjIlHisTCyClwaTFA=;
-        b=fqZU7JIN8Ua0+47qZpf7b5Iv7LIYXTRKBYv4oSTuR5naMEraG/aP4+/9lpBn24wSDw
-         hPInOT88/NlDFWWgBFf0gaHEGnj3fiWnbCccAveKeuFFaYADHQLlKP6/BNeTLPCeP0in
-         O3ctNKdtH2nM43+yYilixvBcqwS0Gvpb+rbdHStq31to/3xNv/JeNkslTZYLITPf9I2i
-         NChsO7bAz7V+u3MYATkxlVsw19P6e226GelX+MPpRhRp20YFo7px3rnjug6INthHL+nL
-         TKBANoEVGHui+tBg9+kXHzAJnm4+5H+dXW+gIPwgibUiDO19YK8zzfvR9NJjt9YX8mLU
-         NmCw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jsbh45Fv58HEehSJMVvF1reAzOnYH1CPjnbjNiOuTbI=;
+        b=lgOVYuFLApBB99lxB0wJ+xs6iHGx1lEt2NfNrp2YK62xBG7cGjYeVl9kKELJ/qMHMn
+         Zyd1vrv+Pck4AGaEvT974cU36a/3WWkDBHnuCTXvw1bc04EmlKd0Em5eipe+qGAEyUaU
+         LF2Fn5nE/nb7YoHhIKt0V+cWuj0RHTf4QLYA0QG0VPhZnW8IKCAS8UCah3FqahzOxcG7
+         Ul5miU01nXsNlaIoyvq9ItU767ag1L+LNKPvPXixm6iPHOOSv5fl7pBcXW3nZUysG+IZ
+         v5tV7aCmWU34KlM0txj6ud6e/MUyrd0QHdt4fi49yFsR/gC0GEzRYKXyVR47/GJsAc+p
+         cLEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K3oL+ynrOSKSzgOc50W9n/l8KWPjIlHisTCyClwaTFA=;
-        b=JRE7WGOTPWztS5/KEihtKka5efo7V9xCOGruqLEJfz+fhMti/ZMA0vj1r95OmcfqT1
-         XF2wW9CjH6rh2a6G01rWar6w1NQNO728uWBo9fZhALLanyOFTJeqNGWDjU1F2lTa9fRL
-         u2Z0R+m4APFMynqrNZpNfzU/mCf4DDkxLeNX5NWIqI0q2Eyj7oJyVtxUD7AMNJWd4IuE
-         NkxDZKqf8EG0HixRhraqy+ZXmQiUOyXmv1APFhXrGa1T9rxFwyM/U/ca0Xso607Hs1WB
-         VP1zXTnzQreMr8Mxt68q2GDJ8TJmmXYQAeTVk0p3w5E4a8VPol4KgKLm4pCzYmyC+w01
-         vFuQ==
-X-Gm-Message-State: ACrzQf0OgoBocbkqCawq9R+09jns+iY24a9Kn/eSvMlHCRADER4wQnJC
-        aDOcqM4swtVZJG02hxmIletrKQ3I6jPkivIrW5YH7g==
-X-Google-Smtp-Source: AMsMyM6PbsMh8y+8soO6hSNlN7Yyc2jQg8LI939tjIeyc7YZPu33iRasr8hsLGeNcHhE4O8KknfMKQ==
-X-Received: by 2002:a05:6214:5013:b0:4b1:877e:539c with SMTP id jo19-20020a056214501300b004b1877e539cmr17187963qvb.106.1665454857580;
-        Mon, 10 Oct 2022 19:20:57 -0700 (PDT)
-Received: from sladewatkins.net (pool-108-4-135-94.albyny.fios.verizon.net. [108.4.135.94])
-        by smtp.gmail.com with ESMTPSA id h19-20020ac87153000000b00397101ac0f2sm8023634qtp.3.2022.10.10.19.20.56
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jsbh45Fv58HEehSJMVvF1reAzOnYH1CPjnbjNiOuTbI=;
+        b=Wo2hhvo6ZjRynIgdq1ecMhhrWiuVLit/o/Jgjgwi/H5y8Yha9917qyKso5sB8iMLKK
+         vZIdwpr7wbC7K2EBqVzaiUKgjZwP4KI0iI2rUYaTrshw42h9I2JOMwVwFs8Fnw40viQD
+         uD6PxV9leB0nWFyJLBVvbX/iwnUvmELwfZfq8ujSlwHzLgGDRTUhR2vwfdmR9oFF2gtW
+         ZiUmrPo/CEdS1xZOkKFJPAhTazwgbnFKL4uvaUJxUsv6EBwz/rgeweycIUCWPCovpIOs
+         qEKUIa7ekxYPIIoAj+ggqsx8PeMgTK1Kw6adtrIb1R5wke2MI0utKkkFEzvmA6frXdQe
+         9TqA==
+X-Gm-Message-State: ACrzQf2a91LiIX0TBhbNqsdX3WDzveRaZ9gI61jZLPuZQ3mh/c0ZAz10
+        tub8Qxj5p4iRv/j+dePMexpL0l9gJ60=
+X-Google-Smtp-Source: AMsMyM7JW36aWaS0bLlTDqSb2ZhzhL4vqsQD6p3KYfBeOqc7tFwXhZjgSDiBMKko8MCBq+bCt5qKKA==
+X-Received: by 2002:a17:902:f0d4:b0:17f:72bd:74f3 with SMTP id v20-20020a170902f0d400b0017f72bd74f3mr22495074pla.109.1665454923480;
+        Mon, 10 Oct 2022 19:22:03 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l24-20020a17090aaa9800b0020d51aefb82sm94655pjq.19.2022.10.10.19.22.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 19:20:57 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 22:20:55 -0400
-From:   Slade Watkins <srw@sladewatkins.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
-Message-ID: <Y0TTB1jrF+BhN0h0@sladewatkins.net>
-References: <20221010191226.167997210@linuxfoundation.org>
+        Mon, 10 Oct 2022 19:22:03 -0700 (PDT)
+From:   xu.xin.sc@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xu xin <xu.xin16@zte.com.cn>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Xuexin Jiang <jiang.xuexin@zte.com.cn>,
+        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: [PATCH v3 1/5] ksm: abstract the function try_to_get_old_rmap_item
+Date:   Tue, 11 Oct 2022 02:21:50 +0000
+Message-Id: <20221011022150.322212-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221011022006.322158-1-xu.xin16@zte.com.cn>
+References: <20221011022006.322158-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,19 +78,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: xu xin <xu.xin16@zte.com.cn>
 
-On Mon, Oct 10, 2022 at 09:12:52PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
-> Anything received after that time might be too late.
+A new function try_to_get_old_rmap_item is abstracted from
+get_next_rmap_item. This function will be reused by the subsequent
+patches about counting ksm_zero_pages.
 
-5.15.73-rc2 compiled and booted on my x86_64 test system. No errors or regressions.
+The patch improves the readability and reusability of KSM code.
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Cc: Yang Yang <yang.yang29@zte.com.cn>
+---
+ mm/ksm.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-Thanks,
--srw
+diff --git a/mm/ksm.c b/mm/ksm.c
+index c19fcca9bc03..13c60f1071d8 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2187,23 +2187,36 @@ static void cmp_and_merge_page(struct page *page, struct ksm_rmap_item *rmap_ite
+ 	}
+ }
+ 
+-static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+-					    struct ksm_rmap_item **rmap_list,
+-					    unsigned long addr)
++static struct ksm_rmap_item *try_to_get_old_rmap_item(unsigned long addr,
++					 struct ksm_rmap_item **rmap_list)
+ {
+-	struct ksm_rmap_item *rmap_item;
+-
+ 	while (*rmap_list) {
+-		rmap_item = *rmap_list;
++		struct ksm_rmap_item *rmap_item = *rmap_list;
+ 		if ((rmap_item->address & PAGE_MASK) == addr)
+ 			return rmap_item;
+ 		if (rmap_item->address > addr)
+ 			break;
+ 		*rmap_list = rmap_item->rmap_list;
++		/* Running here indicates it's vma has been UNMERGEABLE */
+ 		remove_rmap_item_from_tree(rmap_item);
+ 		free_rmap_item(rmap_item);
+ 	}
+ 
++	return NULL;
++}
++
++static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
++					    struct ksm_rmap_item **rmap_list,
++					    unsigned long addr)
++{
++	struct ksm_rmap_item *rmap_item;
++
++	/* lookup if we have a old rmap_item matching the addr*/
++	rmap_item = try_to_get_old_rmap_item(addr, rmap_list);
++	if (rmap_item)
++		return rmap_item;
++
++	/* Need to allocate a new rmap_item */
+ 	rmap_item = alloc_rmap_item();
+ 	if (rmap_item) {
+ 		/* It has already been zeroed */
+-- 
+2.25.1
+
