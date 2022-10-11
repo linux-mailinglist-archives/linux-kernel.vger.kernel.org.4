@@ -2,83 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E22B5FA989
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFB35FA988
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiJKBAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S229580AbiJKBAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiJKBAW (ORCPT
+        with ESMTP id S229541AbiJKBAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:00:22 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C3356001
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:00:17 -0700 (PDT)
-Received: from [IPV6:2601:646:8600:40c1:5967:deb4:a714:2940] ([IPv6:2601:646:8600:40c1:5967:deb4:a714:2940])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29B0xeJD296140
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 10 Oct 2022 17:59:41 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29B0xeJD296140
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022100601; t=1665449984;
-        bh=jN9W6MCQxKZ7dtCMgey7B5sBRu+MXs6/pqlzU4ZY65Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hPdEbBaRC9i6bfJr2YYORID4OBHx2hy+JXc1qQH3RLE+RGs+zi+fGQBbE9iPFNaCc
-         UrCWdN8A0OsuWmpiApggbrfXX0tI2KPIqj9GMvYauOUAp2k8ToJzsucg142o5yuS3j
-         vXWt45dVjVlaZoH+7KMO60g7aTDqedrjM4A1siG/C7xXZtB1BB0D0IqidoUky6HCbz
-         vual3cOUw+SxzJQh/SgcKc0+aN3sdF4u2VoMHMyeD3HReapf/H83t/UvjzKOW6n16y
-         UO4NadsKn+Z4m93SfrcOCbqtNJbNdwYlFugneHZisOJtDSs810OHy80ZZdUqzHpD3O
-         /PULKqMVubcQA==
-Message-ID: <4714a248-d80e-61fb-15a7-62ab247d2fe7@zytor.com>
-Date:   Mon, 10 Oct 2022 17:59:34 -0700
+        Mon, 10 Oct 2022 21:00:07 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21423E777;
+        Mon, 10 Oct 2022 18:00:05 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id h13so10700460pfr.7;
+        Mon, 10 Oct 2022 18:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m5jdZk8obbSaJk1bH2M6QI2skYoBtwC+QsNgs9uZZ/U=;
+        b=KZjm64gR1mLPKhTTFoCyZX6FYqkbhHDPOjknfMn/jcen7TaHIMPu1csuB5GCshoaAE
+         Q7qxa4j03VfTh34Gw0ZtSQWCmSB7j2dQYbLjckFmNqtaU4MdibACJGsoJXBibrPXOLWa
+         fMIwL1whxssuU9ZFf6lvpHpMayIBdqEfH9988IU2YH/YXOznopTnXjYgz81AErxL3Eat
+         IiNz75Uv+llnla9bytHyMaFx3PN1tqpOaV7xgUvJmoj6XZ+hBIaJnkh6m+eVgTOaxN2X
+         QfxPObY5gYfaDZX8g25KCQemffXaRULGy8dApxfSa1NwIbPZBjE1zikqCRLpAk1IknuT
+         Avcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m5jdZk8obbSaJk1bH2M6QI2skYoBtwC+QsNgs9uZZ/U=;
+        b=RQhRwnYsD/8WPTNuJ6wOV8pDpi7Fdrytz5iassgDPGdDlnS9SQQxlryPFuwzjKCxwM
+         Cf7oYSHpeMc3oJxcZo/PufApIfmqc+oXYKRTJHujeP6sUbulCwMPbPS/SAY7M3rPtpi0
+         UCk+A9mofctzs2rThD0FKLNo60u3CTsFx6v+U4jvldymR9Xm7OzYQ53dMtIOzvE9pYNI
+         zeKfZZGy9tRENVZgdxg4f2bixRpkZ1It62TlUZl9GM4xy2WAOvbPgjp2nD9xV18bi1E7
+         eaVN4OmqN0W5TR3DtBsetEmyedAcjs08gfz078wlQ1J0GVUwN5JuJqJ8sazGlHIJ7Ayw
+         E8Pw==
+X-Gm-Message-State: ACrzQf24ofWti8zXa7ASNjlkrbw9t6uZRPQIuHpKDmH22hJQq2sbV+pT
+        IgoYE90Kr4l8TcW15tscPwNnpA55HJKhDlsdBIx1jJWrhHM=
+X-Google-Smtp-Source: AMsMyM7F5925acIpKQJbsIkmq+QDQhqZOYJ65KSP9J7/49DcWURvouoNunGQc/NwXvEV1XbSYeS98PWnvueYTuYThu4=
+X-Received: by 2002:a05:6a00:1306:b0:555:6d3f:11ed with SMTP id
+ j6-20020a056a00130600b005556d3f11edmr22166973pfu.55.1665450005071; Mon, 10
+ Oct 2022 18:00:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 0/6] Enable LKGS instruction
-Content-Language: en-US
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, peterz@infradead.org
-References: <20221010190159.11920-1-xin3.li@intel.com>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20221010190159.11920-1-xin3.li@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221010070330.159911806@linuxfoundation.org>
+In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Mon, 10 Oct 2022 18:59:53 -0600
+Message-ID: <CAFU3qobC3_LwSXKnaMfmNY=Qce9ozT_hLg1LvSAjjgCKrcoh7Q@mail.gmail.com>
+Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 12:01, Xin Li wrote:
-> LKGS instruction is introduced with Intel FRED (flexible return and event
-> delivery) specification https://cdrdv2.intel.com/v1/dl/getContent/678938.
-> 
-> LKGS is independent of FRED, so we enable it as a standalone CPU feature.
-> 
-> LKGS behaves like the MOV to GS instruction except that it loads the base
-> address into the IA32_KERNEL_GS_BASE MSR instead of the GS segment’s
-> descriptor cache, which is exactly what Linux kernel does to load user level
-> GS base.  Thus, with LKGS, there is no need to SWAPGS away from the kernel
-> GS base.
-> 
-> Changes since V1:
-> * place fixup code into code section "__ex_table" instead of the obsoleted
->    "fixup" section.
-> 
+On Mon, Oct 10, 2022 at 12:31 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.0.1 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.1-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Correction: __ex_table is NOT a code section (scared me there for a 
-second...). With the new fixup handling code EX_TYPE_ZERO_REG takes care 
-of all the work, and there simply is no need for any fixup code at all 
-(the exception fixup is fully data-driven.)
+Hi Greg,
 
-So I would say "use EX_TYPE_ZERO_REG instead of fixup code in the 
-obsolete .fixup code section."
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-	-hpa
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
+
+     Total time: 0.676 [sec]
+
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 8.978 [sec]
+
+       8.978893 usecs/op
+         111372 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan
