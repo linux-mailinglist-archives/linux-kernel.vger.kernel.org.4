@@ -2,99 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C845FB2D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEE75FB2D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJKNER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S229927AbiJKNGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJKNEN (ORCPT
+        with ESMTP id S229739AbiJKNGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:04:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D3692582
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1665493453; x=1697029453;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=8RoWLFSAgy5Tr7o7PC0j+CfMRD/Jv0warDBFvuCp6tM=;
-  b=T+SJB7WVb2iGLMfTJ5GqoNKXJ0wQxYdzEgyUxMEwGJiv1bXkX6UzEVHu
-   Z4sPg0y4QMWbnphwqlot+Wjxvs6BuPDxVVG1s/J76Rqbyi16E68Wj7k6b
-   5k/RCQkw7ueEwxSGrjE47TsZWVViYhoHe91WwnWDzhmb3ToxfctB2A5Fc
-   4JR9oyN1rClNIGQjdyiCDY5S+JHhD7Je5LO71UgYitU7I+jdKPIqr5iI8
-   W4EwUM/qMiI6AIOzDQCYZR56az+ecU0XrkN5NgBiBkyUCwxMq1RoCr2Uo
-   Io85gibeiRKwAQB98KPxYl3pLEUkv9Hk3p0xsgzuLt+OF6O422aKQ5VaD
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="184194289"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Oct 2022 06:04:12 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 11 Oct 2022 06:04:06 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 11 Oct 2022 06:04:05 -0700
-Date:   Tue, 11 Oct 2022 14:03:42 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-CC:     Wenting Zhang <zephray@outlook.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] riscv: always honor the CONFIG_CMDLINE_FORCE when
- parsing dtb
-Message-ID: <Y0VprlqUrSnDPQ77@wendy>
-References: <PSBPR04MB399135DFC54928AB958D0638B1829@PSBPR04MB3991.apcprd04.prod.outlook.com>
- <87bkqjk93q.fsf@smulpajen.i-did-not-set--mail-host-address--so-tickle-me>
+        Tue, 11 Oct 2022 09:06:22 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4667FFAB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:06:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5D6EA336AB;
+        Tue, 11 Oct 2022 13:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665493580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dhKVT3y4ys550oVa9RvQSaLJ4G06zyWYkQxIFiY2ybg=;
+        b=iNXhkieYZBLZIivbHsSoaDDUNjbcq2syJtaei9cy+Y5bdyl/N5AAVLNZt7ZYrkqtU+PQ73
+        fHavMHHICO9pDhg4UWgdToJRtvbHUkcQe87WsyvQginpl84JoaOkej2YLhYxFGTQsRrtwu
+        Wfn0pFg+lOTOiKR8Oj6zZdCm2L/aZfU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665493580;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dhKVT3y4ys550oVa9RvQSaLJ4G06zyWYkQxIFiY2ybg=;
+        b=jhVWBWk9GVYVl2ovdEmn6smcg0vugT13QmKUcTwCY8WUI65igojqLrKvr67T+lnN9FvexK
+        JfK3dG4Fw1WswpBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3DE0413AAC;
+        Tue, 11 Oct 2022 13:06:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hwPIDUxqRWOHYgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 11 Oct 2022 13:06:20 +0000
+Message-ID: <fc9a8b09-4b41-291e-d235-bb71eeb95f3c@suse.de>
+Date:   Tue, 11 Oct 2022 15:06:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87bkqjk93q.fsf@smulpajen.i-did-not-set--mail-host-address--so-tickle-me>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/3] drm/simpledrm: Do not call
+ drm_atomic_add_affected_planes()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20221010170203.274949-1-javierm@redhat.com>
+ <20221010170203.274949-2-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221010170203.274949-2-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------DbrKQvZO7HZ7vN2mcLZ41zKN"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 05:10:33PM +0200, Björn Töpel wrote:
-> Wenting Zhang <zephray@outlook.com> writes:
-> 
-> > When CONFIG_CMDLINE_FORCE is enabled, cmdline provided by
-> > CONFIG_CMDLINE are always used. This allows CONFIG_CMDLINE to be
-> > used regardless of the result of device tree scanning.
-> >
-> > This especially fixes the case where a device tree without the
-> > chosen node is supplied to the kernel. In such cases,
-> > early_init_dt_scan would return true. But inside
-> > early_init_dt_scan_chosen, the cmdline won't be updated as there
-> > is no chosen node in the device tree. As a result, CONFIG_CMDLINE
-> > is not copied into boot_command_line even if CONFIG_CMDLINE_FORCE
-> > is enabled. This commit allows properly update boot_command_line
-> > in this situation.
-> >
-> > Fixes: 8fd6e05c7463 ("arch: riscv: support kernel command line forcing when no DTB passed")
-> > Signed-off-by: Wenting Zhang <zephray@outlook.com>
-> 
-> Reviewed-by: Björn Töpel <bjorn@kernel.org>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------DbrKQvZO7HZ7vN2mcLZ41zKN
+Content-Type: multipart/mixed; boundary="------------O5KuDmcnJzZl1TMmMQ5Ks4gY";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+ dri-devel@lists.freedesktop.org
+Message-ID: <fc9a8b09-4b41-291e-d235-bb71eeb95f3c@suse.de>
+Subject: Re: [PATCH 1/3] drm/simpledrm: Do not call
+ drm_atomic_add_affected_planes()
+References: <20221010170203.274949-1-javierm@redhat.com>
+ <20221010170203.274949-2-javierm@redhat.com>
+In-Reply-To: <20221010170203.274949-2-javierm@redhat.com>
 
-I noticed that the version of this patch that I had left un-archived in
-patchwork was not the correct one. I then realised I gave a "LGTM" type
-thing in reponse to the v1, about the v2 but nothing on v2 itself.
+--------------O5KuDmcnJzZl1TMmMQ5Ks4gY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+SGkNCg0KQW0gMTAuMTAuMjIgdW0gMTk6MDIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IFRoZXJlJ3Mgbm8gbmVlZCB0byBhZGQgcGxhbmVzIHRvIHRoZSBhdG9taWMg
+c3RhdGUuIFJlbW92ZSB0aGUgY2FsbA0KPiB0byBkcm1fYXRvbWljX2FkZF9hZmZlY3RlZF9w
+bGFuZXMoKSBmcm9tIHNpbXBsZWRybS4NCj4gDQo+IE9uIGZ1bGwgbW9kZXNldHMsIHRoZSBE
+Uk0gaGVscGVycyBhbHJlYWR5IGFkZCBhIENSVEMncyBwbGFuZXMgdG8gdGhlDQo+IGF0b21p
+YyBzdGF0ZTsgc2VlIGRybV9hdG9taWNfaGVscGVyX2NoZWNrX21vZGVzZXQoKS4gVGhlcmUn
+cyBubyByZWFzb24NCj4gdG8gY2FsbCBkcm1fYXRvbWljX2FkZF9hZmZlY3RlZF9wbGFuZXMo
+KSB1bmNvbmRpdGlvbmFsbHkgaW4gdGhlIENSVEMncw0KPiBhdG9taWNfY2hlY2soKSBpbiBz
+aW1wbGVkcm0uIEl0J3MgYWxzbyB0b28gbGF0ZSwgYXMgdGhlIGF0b21pY19jaGVjaygpDQo+
+IG9mIHRoZSBhZGRlZCBwbGFuZXMgd2lsbCBub3QgYmUgY2FsbGVkIGJlZm9yZSB0aGUgY29t
+bWl0Lg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1h
+bm5Ac3VzZS5kZT4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFz
+IDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFu
+biA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KVGhlcmUncyBhbHNvIGRybV9hdG9taWNfYWRk
+X2FmZmVjdGVkX3BsYW5lcygpIGluIG1nYWcyMDAuIFNpbmNlIHlvdSdyZSANCmF0IGl0LCBJ
+J2QgYXBwcmVjaWF0ZSBhIHBhdGNoLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC0t
+LQ0KPiANCj4gICBkcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYyB8IDEwICsrLS0t
+LS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9u
+cygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRy
+bS5jIGIvZHJpdmVycy9ncHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMNCj4gaW5kZXggZWNkNDlh
+OGYzMzM0Li5mMDNmMTdmNjJhNTYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS90
+aW55L3NpbXBsZWRybS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRy
+bS5jDQo+IEBAIC01NDksMTcgKzU0OSwxMSBAQCBzdGF0aWMgaW50IHNpbXBsZWRybV9jcnRj
+X2hlbHBlcl9hdG9taWNfY2hlY2soc3RydWN0IGRybV9jcnRjICpjcnRjLA0KPiAgIAkJCQkJ
+ICAgICAgc3RydWN0IGRybV9hdG9taWNfc3RhdGUgKm5ld19zdGF0ZSkNCj4gICB7DQo+ICAg
+CXN0cnVjdCBkcm1fY3J0Y19zdGF0ZSAqbmV3X2NydGNfc3RhdGUgPSBkcm1fYXRvbWljX2dl
+dF9uZXdfY3J0Y19zdGF0ZShuZXdfc3RhdGUsIGNydGMpOw0KPiAtCWludCByZXQ7DQo+ICAg
+DQo+ICAgCWlmICghbmV3X2NydGNfc3RhdGUtPmVuYWJsZSkNCj4gLQkJZ290byBvdXQ7DQo+
+IC0NCj4gLQlyZXQgPSBkcm1fYXRvbWljX2hlbHBlcl9jaGVja19jcnRjX3ByaW1hcnlfcGxh
+bmUobmV3X2NydGNfc3RhdGUpOw0KPiAtCWlmIChyZXQpDQo+IC0JCXJldHVybiByZXQ7DQo+
+ICsJCXJldHVybiAwOw0KPiAgIA0KPiAtb3V0Og0KPiAtCXJldHVybiBkcm1fYXRvbWljX2Fk
+ZF9hZmZlY3RlZF9wbGFuZXMobmV3X3N0YXRlLCBjcnRjKTsNCj4gKwlyZXR1cm4gZHJtX2F0
+b21pY19oZWxwZXJfY2hlY2tfY3J0Y19wcmltYXJ5X3BsYW5lKG5ld19jcnRjX3N0YXRlKTsN
+Cj4gICB9DQo+ICAgDQo+ICAgLyoNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhp
+Y3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBH
+bWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4
+MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Thanks,
-Conor.
+--------------O5KuDmcnJzZl1TMmMQ5Ks4gY--
 
+--------------DbrKQvZO7HZ7vN2mcLZ41zKN
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNFaksFAwAAAAAACgkQlh/E3EQov+D5
+Sw//ZlvO4NXyJxlGciZtDpqY/U6Tn08Eth1/3deTvlsZ36BrwjGrER29kDREu3EIKCeYJ1iFskV7
+olwh/qLoM0BHh7DuVRXiW7fekUlhhvQl0APozRrkJZbC1j9crVqaSIRrA9chpJhXJDr+/DWWjJ05
+CsVfuJzEDkXyiLbhpLBx7lPrI3almakB5ugiuaHmzVGiZdFcIATVJkHQ9bjHTMqC4ic7QO93uDM1
+dyZFTaZLD8QnM29mHbPzxe9B5iQsr264SgP/ZIbEXAiJ/a75VJlQ2qMUENbAeNInsJuuwQdkdnwC
+X49br7DRneHA9NlCQhYT3FL4dd4myoAgXZU0tazvoJGu2ioBs1QwrqfCH55mvI5v5G1GSJwf0hD/
+C44x6yBrOVE7EKFjEjn0QHcpMLma4NzD4TvyOGet62MprDv4Wd4FRTpEJR//yfsdr9pZtHMcYfcw
+in97ri8hY+tMjxPP2GYxiZ7/9oI5W0Nhe4JpFIq58jjYlhnNeIk9/cUuD7W/fJg/K7kLpvwqS/Pt
+a+z50gFxeA88zTb3Ii1bj5kNwgcl63+PmLIWl5hMJCjdvV1f6hX17woT2Fx7l0VX+/cxrNnTFRNJ
+I+DymojyZ5fRC8MdOzaO+1ArpOhrGr0BoXv44fX5GYUk/rjyBtDefic8DrK1+80MNiUB/+6LxbBc
+AYo=
+=A9J/
+-----END PGP SIGNATURE-----
+
+--------------DbrKQvZO7HZ7vN2mcLZ41zKN--
