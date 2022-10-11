@@ -2,87 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2345FBD9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2291C5FBD9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiJKWEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 18:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S229480AbiJKWFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 18:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiJKWEL (ORCPT
+        with ESMTP id S229532AbiJKWFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 18:04:11 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813633428;
-        Tue, 11 Oct 2022 15:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1665525850; x=1697061850;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a37BN1ON5UjiK5YIoCm1CxyvyyATtOfFhqZTLhB5AaI=;
-  b=goqjpjjuqzDjZg+6IAhjKC2KjQ7ni5OcLhmm0e9Zh8YgilimqhxKC70W
-   ohj+VzrlTlK4JkwRqbLfS5947AnctU4ye/xcm0rXJgnh+xqmZMU/NJ211
-   W06eTwNNbqz51z/rFoZe7w8ifnnIIwvwCP4AjyLKJkCIrKKDEAxUk0YBl
-   g=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Oct 2022 15:04:09 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 15:04:09 -0700
+        Tue, 11 Oct 2022 18:05:30 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E041F8;
+        Tue, 11 Oct 2022 15:05:27 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BKNR06016412;
+        Tue, 11 Oct 2022 22:04:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=m2ky4svN6c78eZHfjYuoCzrkPF0YSmn2G2T87NbgUtk=;
+ b=BLaJEDA0hxe19fi8DKBXqVUqLzMf1aj4cQpXn9HuTiwOtfrco/VW7zr+A7NSeYr4/qOG
+ BYwJyXbAod8XTENQHic6rHXEkcA9RGt5pmipTv12acnGs7TDbU4245WYGt5p0K7rIXMC
+ W0CJxQWp2isyss9riOQDncbZoKcvq5pbxr4HNCFqPixOXBKUQX0vkRR7/VYDx5SLlfck
+ /mBVqRM56DY378e9cbgVd8yUNz9MWAS0twgC/l7YbeGhHOro3zejbdKctwP6WMUr41H0
+ mUWyATIS9mWIQVAC+z6sjnKF5xq0yc37DAQug3SSnPiaW8wb7D9poAZ0t1SffpqX9ln2 rw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5e7fgcn5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 22:04:48 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29BM4mu6017012
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 22:04:48 GMT
 Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
- 2022 15:04:09 -0700
-Message-ID: <13eee213-f6c2-d998-ba2e-459509ae7ee7@quicinc.com>
-Date:   Tue, 11 Oct 2022 15:04:08 -0700
+ 2022 15:04:47 -0700
+Message-ID: <b7cca9c7-5170-bf40-c030-d676944b03c6@quicinc.com>
+Date:   Tue, 11 Oct 2022 15:04:47 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
+Subject: Re: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM
  Console Services
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
+To:     Arnd Bergmann <arnd@arndb.de>, Jiri Slaby <jirislaby@kernel.org>,
+        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
         Carl van Schaik <quic_cvanscha@quicinc.com>,
         Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
         Andy Gross <agross@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Jassi Brar" <jassisinghbrar@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sudeep Holla <sudeep.holla@arm.com>,
-        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
+        "Will Deacon" <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
- <20220928195633.2348848-15-quic_eberman@quicinc.com>
- <YzbePxTF8hRbWNRU@kroah.com>
- <14d0ff9f-60f3-71cc-ea42-ceee389298ac@quicinc.com>
- <Yz/YBDqqwBUlswgX@kroah.com>
- <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
- <Y0R/QbysXa6ebNd8@kroah.com>
- <ca42d89e-9e19-0536-0951-2c123d898892@quicinc.com>
- <Y0ULqlIMKTc6gdeV@kroah.com>
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221011000840.289033-1-quic_eberman@quicinc.com>
+ <20221011000840.289033-14-quic_eberman@quicinc.com>
+ <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+ <85ca7eb4-3e0c-4ffb-8bac-a435594ca0f7@app.fastmail.com>
 From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <Y0ULqlIMKTc6gdeV@kroah.com>
+In-Reply-To: <85ca7eb4-3e0c-4ffb-8bac-a435594ca0f7@app.fastmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1oiHcYJc3plJZX0C5nyA_0BPPVmJecTJ
+X-Proofpoint-GUID: 1oiHcYJc3plJZX0C5nyA_0BPPVmJecTJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=997 spamscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210110128
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,42 +104,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 10/10/2022 11:22 PM, Greg Kroah-Hartman wrote:
-> On Mon, Oct 10, 2022 at 01:58:00PM -0700, Elliot Berman wrote:
+On 10/11/2022 4:09 AM, Arnd Bergmann wrote:
+> On Tue, Oct 11, 2022, at 8:02 AM, Jiri Slaby wrote:
+>> On 11. 10. 22, 2:08, Elliot Berman wrote:
+>>> +
+>>> +	/* below are for printk console.
+>>> +	 * gh_rm_console_* calls will sleep and console_write can be called from
+>>> +	 * atomic ctx. Two xmit buffers are used. The active buffer is tracked with
+>>> +	 * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
+>>> +	 * A work is scheduled to flush the bytes. The work will swap the active buffer
+>>> +	 * and write out the other buffer.
+>>> +	 */
 >>
->>
->> On 10/10/2022 1:23 PM, Greg Kroah-Hartman wrote:
->>> On Sun, Oct 09, 2022 at 01:59:21PM -0700, Elliot Berman wrote:
->>>>
->>>>>>> On 10/7/2022 12:40 AM, Greg Kroah-Hartman wrote:
->>>>> On Thu, Oct 06, 2022 at 10:59:51PM -0700, Elliot Berman wrote:
->>>>>>
->>>>>> "GH" is the shorthand we've been using for "Gunyah". I didn't find
->>>>>> documentation for dynamically assigned char devices, but if it exists, I can
->>>>>> add entry for ttyGH.
->>>>>
->>>>> Why use a new name at all?  Why not stick with the existing tty names
->>>>> and device numbers?
->>>>>
->>>>
->>>> I can use hvc framework, although driver-level buffering is needed on
->>>> both the get_chars/put_chars paths because:
->>>
->>> I'm not asking about the framework (although that is a good question,
->>> you need to document why this has to be new.)  I'm asking why pick a new
->>> name?  You will not have a name conflict in your system with this device
->>> with any other tty name right?
->>>
->>
->> That's correct, I didn't see any other instances of "ttyGH" in kernel.
+>> Ugh, why? This is too ugly and unnecessary. What about passing the kfifo
+>> to gh_rm_console_write() instead? You do memcpy() there anyway.
 > 
-> Do you see any instances of ttyS?  Any other existing name?  Why pick a
-> new name at all?
-> 
-> And if you do pick a new name, you need to document it really really
-> well, not bury it downn within the tty driver code.
+> Another problem here is that you really want the console output to be
+> printed from atomic context, otherwise one would never see e.g. the
+> output of a panic() call. Having a deferred write is probably fine for
+> normal tty operations, but you probably want a different device for the
+> console here, e.g. the hvc_dcc driver.
 > 
 
-Seems other drivers are adding a comment in Kconfig help text. I can do 
-the same.
+Yes, that is our perspective on the RM console driver as well. I'll make 
+this more explicit in the Kconfig/commit text. We expect most VMs 
+(especially Linux) to use some other console mechanism provided by their 
+VMM. I'm submitting here because we are presently using RM console on 
+some of our VMs where we have other ways to collects logs on panic. It 
+also makes it easier to implement a simple virtual machine manager that 
+does not want to virtualize a serial device or have a virtio stack.
 
+Thanks,
+Elliot
