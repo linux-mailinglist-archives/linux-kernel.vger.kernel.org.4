@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6775FAD7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920535FAD8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJKHae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 03:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S229798AbiJKHdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 03:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiJKHa0 (ORCPT
+        with ESMTP id S229469AbiJKHdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 03:30:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17753B97A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:30:24 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oi9iB-0005L5-Ui; Tue, 11 Oct 2022 09:30:00 +0200
-Message-ID: <a755902d-f2ef-126a-c7aa-d75b264fa076@pengutronix.de>
-Date:   Tue, 11 Oct 2022 09:29:55 +0200
+        Tue, 11 Oct 2022 03:33:06 -0400
+X-Greylist: delayed 183 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 00:33:05 PDT
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FBB89AEE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=skogtun.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=10ivr//41bZZoeNd/Yii2ybmXkrBrEPl8L1SzuTQVrA=; b=a5n1j8dwxGN4+jJdY8T0DaQ25P
+        8KMBmjOfz92zpQ8D5Oe9q6NRAzbt1mGNiKfIQAjZt/Iew73yszmz2ov5US0qEPi5MaR0KoHaEtKP/
+        0vBPFR6RHa/CC+M4atb7qpy2TRJRdA9WxZSFUriww29ALgHBkMikbhxgSgXvBO6XJvqIr9X5huLAC
+        ZP9mQua9NuyM5BlSwMyJGzIaaLH6VodUv0PmGhMq0IYZHKGN806akd0xPCwis/jpi0R1k5lJ1DWw8
+        au4uD2yARsETS1MIpxPM4RRgpCrlKUaEbV5vK5KeKtEQtXiPfnYmc2vzIx3hUktMe07O987pi78ju
+        6+RLpkkQ==;
+Received: from 236.51-175-223.customer.lyse.net ([51.175.223.236]:60384 helo=[192.168.1.161])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <harald@skogtun.org>)
+        id 1oi9iB-0002Q0-2b; Tue, 11 Oct 2022 09:29:59 +0200
+Message-ID: <0a6bc69d-398c-7883-d186-c0f7c526ceaf@skogtun.org>
+Date:   Tue, 11 Oct 2022 09:29:58 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v16 1/2] fpga: lattice-sysconfig-spi: add Lattice
- sysCONFIG FPGA manager
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        dg@emlix.com, j.zink@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, system@metrotek.ru,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20221010172734.26037-1-i.bornyakov@metrotek.ru>
- <20221010172734.26037-2-i.bornyakov@metrotek.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [RFC PATCH] Remove Intel compiler support
 Content-Language: en-US
-In-Reply-To: <20221010172734.26037-2-i.bornyakov@metrotek.ru>
-Content-Type: text/plain; charset=UTF-8
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221011031843.960217-1-masahiroy@kernel.org>
+From:   Harald Arnesen <harald@skogtun.org>
+In-Reply-To: <20221011031843.960217-1-masahiroy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Ivan,
+Masahiro Yamada [11/10/2022 05.18]:
 
-On 10.10.22 19:27, Ivan Bornyakov wrote:
-> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> slave SPI sysCONFIG interface.
+> include/linux/compiler-intel.h had no update in the past 3 years.
 > 
-> sysCONFIG interface core functionality is separate from both ECP5 and
-> SPI specifics, so support for other FPGAs with different port types can
-> be added in the future.
+> We often forget about the third C compiler to build the kernel.
 > 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> For example, commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
+> only mentioned GCC and Clang.
+> 
+> init/Kconfig defines CC_IS_GCC and CC_IS_CLANG but not CC_IS_ICC,
+> and nobody has reported any issue.
+> 
+> I guess the Intel Compiler support is broken, and nobody is caring
+> about it.
 
-I found a small issue with the probe function, see below. While at it,
-I noted two nitpicks you could address.
+Also, Intel ICC is deprecated:
 
-> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
-> +{
-> +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
-> +	struct spi_device *spi = to_spi_device(priv->dev);
-> +	struct spi_transfer xfer = { 0 };
-
-Nitpick: You want to zero all members. Using {} makes your
-intention clearer even if they are functionally equivalent.
-
-> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
-> +{
-> +	unsigned long timeout;
-> +	int ret;
-> +
-> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
-> +
-> +	while (time_before(jiffies, timeout)) {
-> +		ret = sysconfig_read_busy(priv);
-> +		if (ret <= 0)
-> +			return ret;
-> +
-> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
-> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
-> +	}
-
-Nitpick: I believe you could rewrite that using read_poll_timeout().
-
-> +int sysconfig_probe(struct sysconfig_priv *priv)
-
-[snip]
-
-> +	program = devm_gpiod_get_optional(dev, "program", GPIOD_OUT_LOW);
-> +	if (IS_ERR(program)) {
-> +		ret = PTR_ERR(program);
-> +		dev_err(dev, "Failed to get PROGRAM GPIO: %d\n", ret);
-> +		return ret;
-
-This would print an error message for -EPROBE_DEFER, which just confuses users.
-Please use dev_err_probe instead here and elsewhere in the probe function
-to avoid this.
-
-Cheers,
-Ahmad
-
+$ icc -v
+icc: remark #10441: The Intel(R) C++ Compiler Classic (ICC) is 
+deprecated and will be removed from product release in the second half 
+of 2023. The Intel(R) oneAPI DPC++/C++ Compiler (ICX) is the recommended 
+compiler moving forward. Please transition to use this compiler. Use 
+'-diag-disable=10441' to disable this message.
+icc version 2021.7.0 (gcc version 12.1.0 compatibility)
+$
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Hilsen Harald
