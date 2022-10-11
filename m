@@ -2,244 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E515FB18B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89F15FB18E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiJKLeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S229665AbiJKLfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJKLeC (ORCPT
+        with ESMTP id S229656AbiJKLfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:34:02 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AA079626;
-        Tue, 11 Oct 2022 04:33:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=chentao.kernel@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VRxZPA7_1665488024;
-Received: from localhost(mailfrom:chentao.kernel@linux.alibaba.com fp:SMTPD_---0VRxZPA7_1665488024)
-          by smtp.aliyun-inc.com;
-          Tue, 11 Oct 2022 19:33:56 +0800
-From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, bvanassche@acm.org,
-        axboe@kernel.dk, tytso@mit.edu, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org
-Cc:     cuibixuan@linux.alibaba.com
-Subject: [PATCH -next v2] jbd2: use the correct print format
-Date:   Tue, 11 Oct 2022 19:33:44 +0800
-Message-Id: <1665488024-95172-1-git-send-email-cuibixuan@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 07:35:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F34B3CBC1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665488102;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u1hbqqzbWNT/5E/BpvJ3/Vjrk7gdxHvHj9BLV42QDiA=;
+        b=glq83Z8dhP1uWS8sC4OoBctI+edz3r9r1hZKMukahVlOog5dnhNMH1kg8gnBlWUgf3wCix
+        czR+b+UDIZGDQRNAslSL+TWcCoLHzm7DnARYnNpBg1qh6T3OWUOlFK7AfbyC2xYw3gXQiy
+        mEP5VeGBYwkFE8y2kwwuUOxTS66peJY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-640-0G-1_3rjOwyLLH1yuixRnA-1; Tue, 11 Oct 2022 07:35:01 -0400
+X-MC-Unique: 0G-1_3rjOwyLLH1yuixRnA-1
+Received: by mail-wm1-f72.google.com with SMTP id d5-20020a05600c34c500b003b4fb42ccdeso10449835wmq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:35:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u1hbqqzbWNT/5E/BpvJ3/Vjrk7gdxHvHj9BLV42QDiA=;
+        b=3MD4Jw/2lWvrkdphFyL7Z1Plpd8BmpPgqMqUnSfds1cRs3qSYaKDx5TvD72f8nBK/P
+         VwJR+PGTSCV7l+Ve0qjLwXTvQWaqHax4UUAOcOCiYBpV1VEUEpVKUvZbvNT+6a1vszcB
+         eDkXCAAiGMDZluVpBgtDIsF+nT2vXxJrcRBkLVZxnaDpukz7Asj7eCn2qYr8XvJYWCF3
+         4wI6DEq+LcBCF6cMcDVyTUpw/7o9r2x7DKkoxgZrwvj2AGjWGtczg3fVnhwvet+xGYpp
+         3y2ay8Ldt0xTpAU29j3k8SY35ebJvNWVGKWB/GQM4Ufdcr/9ReWZhKdVjhjAooa2uinI
+         W+3Q==
+X-Gm-Message-State: ACrzQf2ptFGCuj/QARVdMwwXZwlqh+xo4P8/WKlHvJ8wkzmACLX1QhBh
+        p14YQ5o4+G0pZLgkHps9GN3WiDRByAPKSk7rlS1ciUi89HPUfzgy3dQrRVuiOvVtSM7lNn87DOm
+        3tW56uwdTI87LX0FWj7CrJXz/
+X-Received: by 2002:a05:600c:3d05:b0:3b4:9a42:10d0 with SMTP id bh5-20020a05600c3d0500b003b49a4210d0mr16370538wmb.135.1665488100048;
+        Tue, 11 Oct 2022 04:35:00 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4GNttO+v8lYN9WcnBFtOhyzlLUXlKq0mIPF/dQKjXfNyBOISKFL4DjzUtptwimMmIXzNd+LQ==
+X-Received: by 2002:a05:600c:3d05:b0:3b4:9a42:10d0 with SMTP id bh5-20020a05600c3d0500b003b49a4210d0mr16370520wmb.135.1665488099770;
+        Tue, 11 Oct 2022 04:34:59 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-103-235.dyn.eolo.it. [146.241.103.235])
+        by smtp.gmail.com with ESMTPSA id a8-20020a1cf008000000b003a6a3595edasm12193963wmb.27.2022.10.11.04.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 04:34:59 -0700 (PDT)
+Message-ID: <dea1abff6baabfb8a5abc7cf4eb355eb36b0ef8c.camel@redhat.com>
+Subject: Re: [PATCH v1 net 3/3] selftest: Add test for SO_INCOMING_CPU.
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Cc:     Craig Gallek <kraig@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 11 Oct 2022 13:34:58 +0200
+In-Reply-To: <20221010174351.11024-4-kuniyu@amazon.com>
+References: <20221010174351.11024-1-kuniyu@amazon.com>
+         <20221010174351.11024-4-kuniyu@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print format error was found when using ftrace event:
-    <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
-    <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
+On Mon, 2022-10-10 at 10:43 -0700, Kuniyuki Iwashima wrote:
+> Some highly optimised applications use SO_INCOMING_CPU to make them
+> efficient, but they didn't test if it's working correctly by getsockopt()
+> to avoid slowing down.  As a result, no one noticed it had been broken
+> for years, so it's a good time to add a test to catch future regression.
+> 
+> The test does
+> 
+>   1) Create $(nproc) TCP listeners associated with each CPU.
+> 
+>   2) Create 32 child sockets for each listener by calling
+>      sched_setaffinity() for each CPU.
+> 
+>   3) Check if accept()ed sockets' sk_incoming_cpu matches
+>      listener's one.
+> 
+> If we see -EAGAIN, SO_INCOMING_CPU is broken.  However, we might not see
+> any error even if broken; the kernel could miraculously distribute all SYN
+> to correct listeners.  Not to let that happen, we must increase the number
+> of clients and CPUs to some extent, so the test requires $(nproc) >= 2 and
+> creates 64 sockets at least.
+> 
+> Test:
+>   $ nproc
+>   96
+>   $ ./so_incoming_cpu
+> 
+> Before the previous patch:
+> 
+>   # Starting 1 tests from 2 test cases.
+>   #  RUN           so_incoming_cpu.test1 ...
+>   # so_incoming_cpu.c:129:test1:Expected cpu (82) == i (0)
+>   # test1: Test terminated by assertion
+>   #          FAIL  so_incoming_cpu.test1
+>   not ok 1 so_incoming_cpu.test1
+>   # FAILED: 0 / 1 tests passed.
+>   # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+> 
+> After:
+> 
+>   # Starting 1 tests from 2 test cases.
+>   #  RUN           so_incoming_cpu.test1 ...
+>   # so_incoming_cpu.c:137:test1:SO_INCOMING_CPU is very likely to be working correctly with 3072 sockets.
+>   #            OK  so_incoming_cpu.test1
+>   ok 1 so_incoming_cpu.test1
+>   # PASSED: 1 / 1 tests passed.
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> ---
+>  tools/testing/selftests/net/.gitignore        |   1 +
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  tools/testing/selftests/net/so_incoming_cpu.c | 148 ++++++++++++++++++
+>  3 files changed, 150 insertions(+)
+>  create mode 100644 tools/testing/selftests/net/so_incoming_cpu.c
+> 
+> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+> index 3d7adee7a3e6..ff8807cc9c2e 100644
+> --- a/tools/testing/selftests/net/.gitignore
+> +++ b/tools/testing/selftests/net/.gitignore
+> @@ -25,6 +25,7 @@ rxtimestamp
+>  sk_bind_sendto_listen
+>  sk_connect_zero_addr
+>  socket
+> +so_incoming_cpu
+>  so_netns_cookie
+>  so_txtime
+>  stress_reuseport_listen
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 2a6b0bc648c4..ba57e7e7dc86 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -70,6 +70,7 @@ TEST_PROGS += io_uring_zerocopy_tx.sh
+>  TEST_GEN_FILES += bind_bhash
+>  TEST_GEN_PROGS += sk_bind_sendto_listen
+>  TEST_GEN_PROGS += sk_connect_zero_addr
+> +TEST_GEN_PROGS += so_incoming_cpu
+>  
+>  TEST_FILES := settings
+>  
+> diff --git a/tools/testing/selftests/net/so_incoming_cpu.c b/tools/testing/selftests/net/so_incoming_cpu.c
+> new file mode 100644
+> index 000000000000..0ee0f2e393eb
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/so_incoming_cpu.c
+> @@ -0,0 +1,148 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright Amazon.com Inc. or its affiliates. */
+> +#define _GNU_SOURCE
+> +#include <sched.h>
+> +
+> +#include <netinet/in.h>
+> +#include <sys/socket.h>
+> +#include <sys/sysinfo.h>
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +#define CLIENT_PER_SERVER	32 /* More sockets, more reliable */
+> +#define NR_SERVER		self->nproc
+> +#define NR_CLIENT		(CLIENT_PER_SERVER * NR_SERVER)
+> +
+> +FIXTURE(so_incoming_cpu)
+> +{
+> +	int nproc;
+> +	int *servers;
+> +	union {
+> +		struct sockaddr addr;
+> +		struct sockaddr_in in_addr;
+> +	};
+> +	socklen_t addrlen;
+> +};
+> +
+> +FIXTURE_SETUP(so_incoming_cpu)
+> +{
+> +	self->nproc = get_nprocs();
+> +	ASSERT_LE(2, self->nproc);
+> +
+> +	self->servers = malloc(sizeof(int) * NR_SERVER);
+> +	ASSERT_NE(self->servers, NULL);
+> +
+> +	self->in_addr.sin_family = AF_INET;
+> +	self->in_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+> +	self->in_addr.sin_port = htons(0);
+> +	self->addrlen = sizeof(struct sockaddr_in);
+> +}
+> +
+> +FIXTURE_TEARDOWN(so_incoming_cpu)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < NR_SERVER; i++)
+> +		close(self->servers[i]);
+> +
+> +	free(self->servers);
+> +}
+> +
+> +void create_servers(struct __test_metadata *_metadata,
+> +		    FIXTURE_DATA(so_incoming_cpu) *self)
+> +{
+> +	int i, fd, ret;
+> +
+> +	for (i = 0; i < NR_SERVER; i++) {
+> +		fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+> +		ASSERT_NE(fd, -1);
+> +
+> +		ret = setsockopt(fd, SOL_SOCKET, SO_INCOMING_CPU, &i, sizeof(int));
+> +		ASSERT_EQ(ret, 0);
+> +
+> +		ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &(int){1}, sizeof(int));
+> +		ASSERT_EQ(ret, 0);
+> +
+> +		ret = bind(fd, &self->addr, self->addrlen);
+> +		ASSERT_EQ(ret, 0);
+> +
+> +		if (i == 0) {
+> +			ret = getsockname(fd, &self->addr, &self->addrlen);
+> +			ASSERT_EQ(ret, 0);
+> +		}
+> +
+> +		/* We don't use CLIENT_PER_SERVER here not to block
+> +		 * this test at connect() if SO_INCOMING_CPU is broken.
+> +		 */
+> +		ret = listen(fd, NR_CLIENT);
+> +		ASSERT_EQ(ret, 0);
+> +
+> +		self->servers[i] = fd;
+> +	}
+> +}
+> +
+> +void create_clients(struct __test_metadata *_metadata,
+> +		    FIXTURE_DATA(so_incoming_cpu) *self)
+> +{
+> +	cpu_set_t cpu_set;
+> +	int i, j, fd, ret;
+> +
+> +	for (i = 0; i < NR_SERVER; i++) {
+> +		CPU_ZERO(&cpu_set);
+> +
+> +		CPU_SET(i, &cpu_set);
+> +		ASSERT_EQ(CPU_COUNT(&cpu_set), 1);
+> +		ASSERT_NE(CPU_ISSET(i, &cpu_set), 0);
+> +
+> +		/* Make sure SYN will be processed on the i-th CPU
+> +		 * and finally distributed to the i-th listener.
+> +		 */
+> +		sched_setaffinity(0, sizeof(cpu_set), &cpu_set);
+> +		ASSERT_EQ(ret, 0);
+> +
+> +		for (j = 0; j < CLIENT_PER_SERVER; j++) {
+> +			fd  = socket(AF_INET, SOCK_STREAM, 0);
+> +			ASSERT_NE(fd, -1);
+> +
+> +			ret = connect(fd, &self->addr, self->addrlen);
+> +			ASSERT_EQ(ret, 0);
+> +
+> +			close(fd);
+> +		}
+> +	}
+> +}
+> +
+> +void verify_incoming_cpu(struct __test_metadata *_metadata,
+> +			 FIXTURE_DATA(so_incoming_cpu) *self)
+> +{
+> +	int i, j, fd, cpu, ret, total = 0;
+> +	socklen_t len = sizeof(int);
+> +
+> +	for (i = 0; i < NR_SERVER; i++) {
+> +		for (j = 0; j < CLIENT_PER_SERVER; j++) {
+> +			/* If we see -EAGAIN here, SO_INCOMING_CPU is broken */
+> +			fd = accept(self->servers[i], &self->addr, &self->addrlen);
+> +			ASSERT_NE(fd, -1);
+> +
+> +			ret = getsockopt(fd, SOL_SOCKET, SO_INCOMING_CPU, &cpu, &len);
+> +			ASSERT_EQ(ret, 0);
+> +			ASSERT_EQ(cpu, i);
+> +
+> +			close(fd);
+> +			total++;
+> +		}
+> +	}
+> +
+> +	ASSERT_EQ(total, NR_CLIENT);
+> +	TH_LOG("SO_INCOMING_CPU is very likely to be "
+> +	       "working correctly with %d sockets.", total);
+> +}
+> +
+> +TEST_F(so_incoming_cpu, test1)
+> +{
+> +	create_servers(_metadata, self);
+> +	create_clients(_metadata, self);
+> +	verify_incoming_cpu(_metadata, self);
+> +}
 
-Use the correct print format for transaction, head and tid.
+I think it would be nicer if you could add more test-cases, covering
+e.g.:
+- set SO_INCOMING_CPU after SO_REUSE_PORT, 
+- initially including a socket without SO_INCOMING_CPU and the removing
+it from the soreuseport set
 
-Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
-Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
----
-v1->v2: Make all the tid tracing consistent.
+Thanks,
 
- include/trace/events/jbd2.h | 44 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
-
-diff --git a/include/trace/events/jbd2.h b/include/trace/events/jbd2.h
-index 99f783c..8f5ee38 100644
---- a/include/trace/events/jbd2.h
-+++ b/include/trace/events/jbd2.h
-@@ -40,7 +40,7 @@
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
- 		__field(	char,	sync_commit		  )
--		__field(	int,	transaction		  )
-+		__field(	tid_t,	transaction		  )
- 	),
- 
- 	TP_fast_assign(
-@@ -49,7 +49,7 @@
- 		__entry->transaction	= commit_transaction->t_tid;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d",
-+	TP_printk("dev %d,%d transaction %u sync %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		  __entry->transaction, __entry->sync_commit)
- );
-@@ -97,8 +97,8 @@
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
- 		__field(	char,	sync_commit		  )
--		__field(	int,	transaction		  )
--		__field(	int,	head		  	  )
-+		__field(	tid_t,	transaction		  )
-+		__field(	tid_t,	head		  	  )
- 	),
- 
- 	TP_fast_assign(
-@@ -108,7 +108,7 @@
- 		__entry->head		= journal->j_tail_sequence;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d head %d",
-+	TP_printk("dev %d,%d transaction %u sync %d head %u",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		  __entry->transaction, __entry->sync_commit, __entry->head)
- );
-@@ -134,14 +134,14 @@
- );
- 
- DECLARE_EVENT_CLASS(jbd2_handle_start_class,
--	TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
-+	TP_PROTO(dev_t dev, tid_t tid, unsigned int type,
- 		 unsigned int line_no, int requested_blocks),
- 
- 	TP_ARGS(dev, tid, type, line_no, requested_blocks),
- 
- 	TP_STRUCT__entry(
- 		__field(		dev_t,	dev		)
--		__field(	unsigned long,	tid		)
-+		__field(		tid_t,	tid		)
- 		__field(	 unsigned int,	type		)
- 		__field(	 unsigned int,	line_no		)
- 		__field(		  int,	requested_blocks)
-@@ -155,28 +155,28 @@
- 		__entry->requested_blocks = requested_blocks;
- 	),
- 
--	TP_printk("dev %d,%d tid %lu type %u line_no %u "
-+	TP_printk("dev %d,%d tid %u type %u line_no %u "
- 		  "requested_blocks %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->tid,
- 		  __entry->type, __entry->line_no, __entry->requested_blocks)
- );
- 
- DEFINE_EVENT(jbd2_handle_start_class, jbd2_handle_start,
--	TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
-+	TP_PROTO(dev_t dev, tid_t tid, unsigned int type,
- 		 unsigned int line_no, int requested_blocks),
- 
- 	TP_ARGS(dev, tid, type, line_no, requested_blocks)
- );
- 
- DEFINE_EVENT(jbd2_handle_start_class, jbd2_handle_restart,
--	TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
-+	TP_PROTO(dev_t dev, tid_t tid, unsigned int type,
- 		 unsigned int line_no, int requested_blocks),
- 
- 	TP_ARGS(dev, tid, type, line_no, requested_blocks)
- );
- 
- TRACE_EVENT(jbd2_handle_extend,
--	TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
-+	TP_PROTO(dev_t dev, tid_t tid, unsigned int type,
- 		 unsigned int line_no, int buffer_credits,
- 		 int requested_blocks),
- 
-@@ -184,7 +184,7 @@
- 
- 	TP_STRUCT__entry(
- 		__field(		dev_t,	dev		)
--		__field(	unsigned long,	tid		)
-+		__field(		tid_t,	tid		)
- 		__field(	 unsigned int,	type		)
- 		__field(	 unsigned int,	line_no		)
- 		__field(		  int,	buffer_credits  )
-@@ -200,7 +200,7 @@
- 		__entry->requested_blocks = requested_blocks;
- 	),
- 
--	TP_printk("dev %d,%d tid %lu type %u line_no %u "
-+	TP_printk("dev %d,%d tid %u type %u line_no %u "
- 		  "buffer_credits %d requested_blocks %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->tid,
- 		  __entry->type, __entry->line_no, __entry->buffer_credits,
-@@ -208,7 +208,7 @@
- );
- 
- TRACE_EVENT(jbd2_handle_stats,
--	TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
-+	TP_PROTO(dev_t dev, tid_t tid, unsigned int type,
- 		 unsigned int line_no, int interval, int sync,
- 		 int requested_blocks, int dirtied_blocks),
- 
-@@ -217,7 +217,7 @@
- 
- 	TP_STRUCT__entry(
- 		__field(		dev_t,	dev		)
--		__field(	unsigned long,	tid		)
-+		__field(		tid_t,	tid		)
- 		__field(	 unsigned int,	type		)
- 		__field(	 unsigned int,	line_no		)
- 		__field(		  int,	interval	)
-@@ -237,7 +237,7 @@
- 		__entry->dirtied_blocks	  = dirtied_blocks;
- 	),
- 
--	TP_printk("dev %d,%d tid %lu type %u line_no %u interval %d "
-+	TP_printk("dev %d,%d tid %u type %u line_no %u interval %d "
- 		  "sync %d requested_blocks %d dirtied_blocks %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->tid,
- 		  __entry->type, __entry->line_no, __entry->interval,
-@@ -246,14 +246,14 @@
- );
- 
- TRACE_EVENT(jbd2_run_stats,
--	TP_PROTO(dev_t dev, unsigned long tid,
-+	TP_PROTO(dev_t dev, tid_t tid,
- 		 struct transaction_run_stats_s *stats),
- 
- 	TP_ARGS(dev, tid, stats),
- 
- 	TP_STRUCT__entry(
- 		__field(		dev_t,	dev		)
--		__field(	unsigned long,	tid		)
-+		__field(		tid_t,	tid		)
- 		__field(	unsigned long,	wait		)
- 		__field(	unsigned long,	request_delay	)
- 		__field(	unsigned long,	running		)
-@@ -279,7 +279,7 @@
- 		__entry->blocks_logged	= stats->rs_blocks_logged;
- 	),
- 
--	TP_printk("dev %d,%d tid %lu wait %u request_delay %u running %u "
-+	TP_printk("dev %d,%d tid %u wait %u request_delay %u running %u "
- 		  "locked %u flushing %u logging %u handle_count %u "
- 		  "blocks %u blocks_logged %u",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->tid,
-@@ -294,14 +294,14 @@
- );
- 
- TRACE_EVENT(jbd2_checkpoint_stats,
--	TP_PROTO(dev_t dev, unsigned long tid,
-+	TP_PROTO(dev_t dev, tid_t tid,
- 		 struct transaction_chp_stats_s *stats),
- 
- 	TP_ARGS(dev, tid, stats),
- 
- 	TP_STRUCT__entry(
- 		__field(		dev_t,	dev		)
--		__field(	unsigned long,	tid		)
-+		__field(		tid_t,	tid		)
- 		__field(	unsigned long,	chp_time	)
- 		__field(		__u32,	forced_to_close	)
- 		__field(		__u32,	written		)
-@@ -317,7 +317,7 @@
- 		__entry->dropped	= stats->cs_dropped;
- 	),
- 
--	TP_printk("dev %d,%d tid %lu chp_time %u forced_to_close %u "
-+	TP_printk("dev %d,%d tid %u chp_time %u forced_to_close %u "
- 		  "written %u dropped %u",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->tid,
- 		  jiffies_to_msecs(__entry->chp_time),
--- 
-1.8.3.1
+Paolo
 
