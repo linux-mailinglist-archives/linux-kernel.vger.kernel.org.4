@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB205FBBB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0974B5FBBB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJKUBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S229918AbiJKUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiJKUBU (ORCPT
+        with ESMTP id S229790AbiJKUBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:01:20 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC63C9AF96
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:01:18 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id u71so6192852pgd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:01:18 -0700 (PDT)
+        Tue, 11 Oct 2022 16:01:21 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D239A9DE
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:01:20 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id z20so14218211plb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Clkl7sDDQHghO/ypxBC14MAK6bs8T6Bz2Y1WZWOgF70=;
-        b=Kw8L4w5cqV2WKNFJQo0lxvi9sJ0Ov0LxkH3jd+E5PI+N6/35YqCpDSUw88u7kFeZxP
-         xMdnVFHEyvaCNwjVh9Wv4RBSkFn+iWZz4cP8y1Wl1iD4SSFeZv6lTlh3A44ptwCT3/qi
-         uX44dBPu7krn/7J+Xt0H7EEYiZmlMwliaRcEg=
+        bh=rjvqTyZutnL7yMogIWHPivDIHBfuRj4Mu3exlJZLrDI=;
+        b=ZMD/dUnH/4uKkR6xfid/HgrzkMTavww075W/m4W5y1ADAqwTsVI78M1hR9JWqvO5Wt
+         B74srQ1At9WxjeJfaDJJv4m6e0K6uoAVGeqlYu0RnW+KhZF0Mwd4zCUICadYI66ZpXFR
+         YiWMCDqlXoh+rAZb9e/JGXeAzrHGBAhs46mKU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Clkl7sDDQHghO/ypxBC14MAK6bs8T6Bz2Y1WZWOgF70=;
-        b=r2EqEyY/ecDXXwfXqXXc8sc0EwekHMg9DSBYYM0Dmx3tHUE8rsdY/36/cSNj0fudnj
-         8CLJxXJBdPP24S11GqLdMiLv0h+IZQkQFVHR+6s0Pc6/Vgg6p6jyEmKYyJ1hbwuQ04EA
-         IzA5vqOcDWPqovMZ5xBO4d53NhhiTv3FdR4RNyM4lTsqEeNeDGB4bAszqojikTHsZf/3
-         gX9xKB1OX4wHb728mgokiRbJx22Gh7u1CriC8alHsBQv556mByTpIqQETcN2P596vSWf
-         hSpCweZdYCmZAdW3fwMJC5Mv2N0LiZcADShwmt95IG81AkSUyV1brD8U+wHH3x0QOGRd
-         4Y4g==
-X-Gm-Message-State: ACrzQf0nwVkahEJr0NziJh/VAI2XqbBN5HRZvlUgvdlQbeu5lJ/73PDH
-        vgxR8jMeQ1fjygDr0MEDmQxS6Q==
-X-Google-Smtp-Source: AMsMyM4PGptQ/w4q+1kMp053Ezi8lqADgxTiHlKNMDrS/ErIrf1RBw0zNMaOS8r+yEqoJjvlCtymMw==
-X-Received: by 2002:a62:1a8d:0:b0:544:1309:19f3 with SMTP id a135-20020a621a8d000000b00544130919f3mr27063444pfa.37.1665518478315;
-        Tue, 11 Oct 2022 13:01:18 -0700 (PDT)
+        bh=rjvqTyZutnL7yMogIWHPivDIHBfuRj4Mu3exlJZLrDI=;
+        b=kJoLxOGecgKfJ43sgTCMlGzWpXuW94mp6v1LEWkjaZbWvmmtPK0I87DJEhJEPCCDV5
+         ww76bHG8hE2VeDhkAsYtZBbKnQQU4jPMv14iedo6IPgPvwlWyUm4kUYVvG0E4vQywKko
+         cN9kvEl5r+IgNOELg1EotqfrMD9/EQD94lkccUdE6q06ukvaj59whmxEO+8St9/FNRvM
+         V5+uxesRvoMDdtI/0+OAkJPoCkLYPcoTwWTTZIXM56OHdP4UY+lPqkl2bb0TKsUi+6L3
+         IY4dUNAJCu/MXQyvt2QMK3j/2pJHsWHu0uL7a1gwOVzxIsNWmG7GWlFOnux2rVDFG4VW
+         0ucw==
+X-Gm-Message-State: ACrzQf17rK8pB8U2dwXAN7SKLIamHob2UOcNI0uQ/wchJFjkFkPp8Usn
+        lxPUAVNzRdYAHCWy5xLXM4t5VXP+l4uRPQ==
+X-Google-Smtp-Source: AMsMyM5LOvi6jvt4bLvXEvDmmvjTbAhepkZCZD5DLm3PiFDo+zRPB+BkV0ktWjBiyIc3ri/87GcNyg==
+X-Received: by 2002:a17:902:be18:b0:178:b9c9:97b8 with SMTP id r24-20020a170902be1800b00178b9c997b8mr25179917pls.38.1665518479904;
+        Tue, 11 Oct 2022 13:01:19 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b00176b3d7db49sm9137909plg.0.2022.10.11.13.01.16
+        by smtp.gmail.com with ESMTPSA id x188-20020a6263c5000000b0056268979639sm9355112pfb.123.2022.10.11.13.01.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 13:01:16 -0700 (PDT)
+        Tue, 11 Oct 2022 13:01:18 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-hardening@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -56,136 +56,57 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Paramjit Oberoi <pso@chromium.org>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] pstore/ram: Set freed addresses to NULL
-Date:   Tue, 11 Oct 2022 13:01:11 -0700
-Message-Id: <20221011200112.731334-5-keescook@chromium.org>
+Subject: [PATCH 5/5] MAINTAINERS: Update pstore maintainers
+Date:   Tue, 11 Oct 2022 13:01:12 -0700
+Message-Id: <20221011200112.731334-6-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221011200112.731334-1-keescook@chromium.org>
 References: <20221011200112.731334-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3305; h=from:subject; bh=GntXT/nvbdx1dBrVA0MLCZlYHgp6NkAOT9li9W5m9BE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRcuHHZkp4XXEmL/p7hSvwf7bwXmHmVfFKPObqGkd tYzT942JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0XLhwAKCRCJcvTf3G3AJpT8D/ 9GMM6Izv5Sa2SBFTY6sptDGgvibdH7dXmh0r5QTwklo8rwGGkOoarSoIlXQ1rpdx8PZJ/JKCOGeYIs QQtDfPgWa4ZQCiJcpFo0Ty6SUk9jUZ1L0DHicH2EBTbKkkju4KPGytkgOH17KyoHSqYaYkhdRZ7QHK vpKrQcdIZ2OLPwy893b13XSVOqqXfkw2S+DfFGRtwLQVnKesZRjKfHjnL7pMVzsgDTcKW46kd0859e NO4S/2a3ixvtnismX3tVEy394nezRxwL+brVQYSvjjDD6Mby2kyq/fj7BLOr/XB6LVbg/5MTrhYcPf RsISkBZGQYRWo9ECe4MEUze8zO4CgLicVHWZh/hRTT9/ltAmqNHRCZvfLlY+f9hvZoB/s93SN8miWx qoiVhw+iJan/8fPP318+ygy+f38KHNHY7FRp7+OhxXCX3MIRrXw6EE3C4T8Y1Zj+lASWG1hlQPr/uW W6/PjRNQS7aIHkaiccgIx3DP300AyRH7LBWhjo+Ti/b7Wz7Ug/nDHkv3HzdAU66XKg3ChIjd1Wm9CX SgZCWRN4PEl3gLm7NawFQ1mUbrHzLDsqXHK1/O3EFGi9yvVgyk6Ee0njknRv1AztZlf9XBUYbTi2yr 1NXvJ6SySJzAqhQgo59683Ru4xTrdVLE2wymKaKlCOB8bMfg/+SqWnF6Hl+A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1051; h=from:subject; bh=jb7waUPK/Knlq69ss6WwnLXDb9Y+1PWtCy1mjIPpCDU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRcuHvftNYJAD25knIqafGcekDRN9mybmr08F3Mw8 pmRudm2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0XLhwAKCRCJcvTf3G3AJgCQD/ 4iD65olwVNJs1LrfjfXaMurzeDGkwV36aBRIkBTvEMxiNZjaxwJnEisYuTf2g0hMHUSyws3ih2MMy6 fTlwbgpH/Dj8OT/H1r49u0rx1h2gSk9EXS8gFXm1edRMF+5w+xP3bQ1V5I5et6wWki4Cw4OcyyfVws 0NJBYaTvGT4oS4//nxpGOPQtF+9umSEGS9qTAx/cmi7O7iScOPbn5lB5xBKDYkhi3ucBlgRoMGmIM3 U8KuJP04fy6yxgcdzgDyDKnsuPfv7slDYDpGqOuWshF1REbmGfE3z0YIj1d9wGZ7D8vfBT+411+zx6 IwGEmXEEGEbugOJHYd+4k0FGCH+1vZ96SCYR6I13URKeQHE3RHOoFCDLZak4rix9i6v5PjeyDIRzNi aUwcfiASrZIXTgDfLv6uL1RjVU3NO5LYwQHUiPAkqQaLlEKUy4Ipz4U4/NLaVQsmQj8OZGP/vs9AZh Vdvfa0biqliOVqy1gBl2Ai0XczfWtPoPjS7VjwpAl2EoTvAh+7pA2yNVTZZy5hKNRyItnrEh5OMXu7 TEPW32gczyYy4gHW61+HCIjSl1uzImVQwRf5LtzDUTK8/1sgsNNX+e+KDJWj++bbzxBk7A4YJ7uLXO Kc5UPWf3HoqltNfHKZwUngsABuqJmYllqvUYYWVb4OtJFUixA+MIUvgz6idw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For good measure, set all the freed addresses to NULL when managing
-przs.
+Update pstore to better reflect reality of active contributors:
 
-Cc: Anton Vorontsov <anton@enomsg.org>
-Cc: Colin Cross <ccross@android.com>
-Cc: Tony Luck <tony.luck@intel.com>
+- Remove Anton and Colin (thank you for your help through the years!)
+- Move Tony to Reviewer
+- Add Guilherme as Reviewer
+- Add mailing list
+- Upgrade to Supported
+
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/pstore/ram.c          | 13 ++++++++-----
- fs/pstore/ram_core.c     | 11 +++++++++--
- fs/pstore/ram_internal.h |  2 +-
- 3 files changed, 18 insertions(+), 8 deletions(-)
+ MAINTAINERS | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index f5bf360cf905..5da31565f93a 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -453,25 +453,27 @@ static void ramoops_free_przs(struct ramoops_context *cxt)
- 	int i;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9d7f64dc0efe..bb18a6c91c4e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16458,10 +16458,10 @@ F:	net/psample
  
- 	/* Free pmsg PRZ */
--	persistent_ram_free(cxt->mprz);
-+	persistent_ram_free(&cxt->mprz);
- 
- 	/* Free console PRZ */
--	persistent_ram_free(cxt->cprz);
-+	persistent_ram_free(&cxt->cprz);
- 
- 	/* Free dump PRZs */
- 	if (cxt->dprzs) {
- 		for (i = 0; i < cxt->max_dump_cnt; i++)
--			persistent_ram_free(cxt->dprzs[i]);
-+			persistent_ram_free(&cxt->dprzs[i]);
- 
- 		kfree(cxt->dprzs);
-+		cxt->fprzs = NULL;
- 		cxt->max_dump_cnt = 0;
- 	}
- 
- 	/* Free ftrace PRZs */
- 	if (cxt->fprzs) {
- 		for (i = 0; i < cxt->max_ftrace_cnt; i++)
--			persistent_ram_free(cxt->fprzs[i]);
-+			persistent_ram_free(&cxt->fprzs[i]);
- 		kfree(cxt->fprzs);
-+		cxt->fprzs = NULL;
- 		cxt->max_ftrace_cnt = 0;
- 	}
- }
-@@ -555,9 +557,10 @@ static int ramoops_init_przs(const char *name,
- 
- 			while (i > 0) {
- 				i--;
--				persistent_ram_free(prz_ar[i]);
-+				persistent_ram_free(&prz_ar[i]);
- 			}
- 			kfree(prz_ar);
-+			prz_ar = NULL;
- 			goto fail;
- 		}
- 		*paddr += zone_sz;
-diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
-index 9e1047f4316d..97dde525150a 100644
---- a/fs/pstore/ram_core.c
-+++ b/fs/pstore/ram_core.c
-@@ -544,8 +544,14 @@ static int persistent_ram_post_init(struct persistent_ram_zone *prz, u32 sig,
- 	return 0;
- }
- 
--void persistent_ram_free(struct persistent_ram_zone *prz)
-+void persistent_ram_free(struct persistent_ram_zone **_prz)
- {
-+	struct persistent_ram_zone *prz;
-+
-+	if (!_prz)
-+		return;
-+
-+	prz = *_prz;
- 	if (!prz)
- 		return;
- 
-@@ -569,6 +575,7 @@ void persistent_ram_free(struct persistent_ram_zone *prz)
- 	persistent_ram_free_old(prz);
- 	kfree(prz->label);
- 	kfree(prz);
-+	*_prz = NULL;
- }
- 
- struct persistent_ram_zone *persistent_ram_new(phys_addr_t start, size_t size,
-@@ -605,6 +612,6 @@ struct persistent_ram_zone *persistent_ram_new(phys_addr_t start, size_t size,
- 
- 	return prz;
- err:
--	persistent_ram_free(prz);
-+	persistent_ram_free(&prz);
- 	return ERR_PTR(ret);
- }
-diff --git a/fs/pstore/ram_internal.h b/fs/pstore/ram_internal.h
-index 440ee7a35e10..5f694698351f 100644
---- a/fs/pstore/ram_internal.h
-+++ b/fs/pstore/ram_internal.h
-@@ -82,7 +82,7 @@ struct persistent_ram_zone {
- struct persistent_ram_zone *persistent_ram_new(phys_addr_t start, size_t size,
- 			u32 sig, struct persistent_ram_ecc_info *ecc_info,
- 			unsigned int memtype, u32 flags, char *label);
--void persistent_ram_free(struct persistent_ram_zone *prz);
-+void persistent_ram_free(struct persistent_ram_zone **_prz);
- void persistent_ram_zap(struct persistent_ram_zone *prz);
- 
- int persistent_ram_write(struct persistent_ram_zone *prz, const void *s,
+ PSTORE FILESYSTEM
+ M:	Kees Cook <keescook@chromium.org>
+-M:	Anton Vorontsov <anton@enomsg.org>
+-M:	Colin Cross <ccross@android.com>
+-M:	Tony Luck <tony.luck@intel.com>
+-S:	Maintained
++R:	Tony Luck <tony.luck@intel.com>
++R:	Guilherme G. Piccoli <gpiccoli@igalia.com>
++L:	linux-hardening@vger.kernel.org
++S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+ F:	Documentation/admin-guide/ramoops.rst
+ F:	Documentation/admin-guide/pstore-blk.rst
 -- 
 2.34.1
 
