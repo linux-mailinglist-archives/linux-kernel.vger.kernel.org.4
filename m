@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EF25FB9EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD225FB9EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiJKRuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S229799AbiJKRw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiJKRuq (ORCPT
+        with ESMTP id S229484AbiJKRwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:50:46 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE4632B8B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:50:43 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id u21so21185455edi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:50:43 -0700 (PDT)
+        Tue, 11 Oct 2022 13:52:24 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F23DEA3;
+        Tue, 11 Oct 2022 10:52:22 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id 10so13986432pli.0;
+        Tue, 11 Oct 2022 10:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=utPrbE2BVpHRFeW5CkjvteB3YQtVT8Yss/hrJKsa4ds=;
-        b=Fmu1aHk/J7PoRiXS5yduxpI3iTB3YV7jq+GVOm/wWDNsVrlQ90G/SNxQYWauNZMeuA
-         T/Af/8ZIKpE6ZVGaCoxtb59s2n7LA1nff5JG03qdleZIen3RjyaI/Jlk3me7Q77PPCgz
-         OZybzPZJE4jzPUwb0minf6xcziIgd9z7RsneWT/LZiVmDvBlngaHqXZ45DJEvfoyVqP+
-         24+3Ge+3Oo/SgSDH53LA1tHxWC0mJaY3LiL1vpPDYVI6T1BZANYM63bqEp4HBVv6LnCo
-         Ql3Jck8EfDEXuv3N0I6Obgwg2UMzj5whwYoZ5kDqj5cSms0prGmCRlhljdjQI2EB3v0r
-         EC2Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R48OeXZvREqyrXFZCw2bLXmeDWzvQgbf0zkDfFVgRa4=;
+        b=DGGB3olI3Vtino4yAPk/8iMu5UIsbi0qRdeResJvhjNigOcM3LSU9FmKpjG2IsOBVt
+         U+FVrxn8PCXuextjxg5WvesOSjxns08z/kk4pTQj06XL4mC3dq7hcUl0KLAIlkQBSgM2
+         wK5MSgZdadebSZ2zPxkiE9ANAkqAORzUP/LlneUCV+3PuqoVaudhXTgPoBF42eQ1jead
+         aqVQVrpHVD+fD2WWILKWGaI3dzYrzAvrc+SZmeuyyo4AVR1rxOcrIU9nOkNGiuhRdz82
+         OQ+7xBoYVXwHLxC4gPKVVDA98MLwwyolP2SCQ7mHrg7A5VI9PW7vHXH5SrVYD/5SNs30
+         BUSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=utPrbE2BVpHRFeW5CkjvteB3YQtVT8Yss/hrJKsa4ds=;
-        b=XyczNd4SmwAjmIwXrqex7NNtu1Gx4MpsPmbCEYF+mvFrUIme7sy5xawqBANRBBydjR
-         CYTPsgGIp+I9KjInvSGG8bogwIHUrWzQGJ+qBLJ2/aBM769c18Rr533JQRZT2pGTm8VF
-         E9t9MLUPNuTOe9yii/ZSoVwOs5VcfWFOQf+6E0D/txcwzety3EsKfybqI7bKJgrDTLBj
-         gG0YEDEDGSipLUeuqo2Kpm2/bCvRmPJgb+qt82ouGo5uFsNZMWdSLOTLRzbahGBS/FQb
-         3VshV0ffHACA0CFBKbZRYI28uTu89od1lwE3jx6kGn8I9eFawL6jtPn/CkJDgz3oICbQ
-         x8ww==
-X-Gm-Message-State: ACrzQf2hXmsuzTY41WWdM+szLH6qd3bDyYPXuUaFPEN444vpPat2ONE1
-        jGk9qSFgQ52w+svGSZ1bLgsuxO9aIonWFw==
-X-Google-Smtp-Source: AMsMyM4iF7JtNbWsxFqdpKcpXybVYArSNuZeDz7D8SSkLYBl/uMSb4CdgAeYTv4Xbmeaiz/HXACngA==
-X-Received: by 2002:a05:6402:292f:b0:458:e447:5c with SMTP id ee47-20020a056402292f00b00458e447005cmr23149616edb.286.1665510641703;
-        Tue, 11 Oct 2022 10:50:41 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170906318d00b00770812e2394sm28438ejy.160.2022.10.11.10.50.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 10:50:41 -0700 (PDT)
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH] RISC-V: Fix /proc/cpuinfo cpumask warning
-Date:   Tue, 11 Oct 2022 19:50:40 +0200
-Message-Id: <20221011175040.1782772-1-ajones@ventanamicro.com>
-X-Mailer: git-send-email 2.37.3
+        bh=R48OeXZvREqyrXFZCw2bLXmeDWzvQgbf0zkDfFVgRa4=;
+        b=yTTyMOmG9nlKLTIJwUQCeFwsCIrxxi0YMwcqYxlHJ7leCVZZc07ssFgaRiKDuUQHsl
+         vIvIO/Q4A6vPSfe+mDMHurkBiQlHjbe6c1TdCTxOUco0cgsjZ8jHW//+ZPLEiLUgrndv
+         hLTYOI41m13wz+CgKU633Z7EZdc1+D68pBEUXVy5+zz5r7bvDoxYimrVJAux4KrcXqTh
+         5p74fPeX3NG2MbLXEn8yN2jMRTzAqQKqoV7CzASagBgGYmI5G+X/2dtM84Ux3nV6CCVi
+         8rkyTtsYG/9SNCJlCU2XzH/CA9RnSpibIll37/Zq9ZQ/iBisB3q4WVkg+oVtQYF7ce4M
+         QzRw==
+X-Gm-Message-State: ACrzQf2oSWtgCq26QRxmEaTvRMTz6y5PB+gu0/GRr2Lw+vVmUp5UEoRw
+        3OjLQx2ZIV8OsT0i3js7MuAscMDaeukif6SwMGI=
+X-Google-Smtp-Source: AMsMyM6HDFV4MZuxefuWVNV2r7OhU99Lj88ZicMHXMjyIKS4yBGdWae5R3jko9XOT5i/uyrpxT2uZFbScrfTQ+H/JZg=
+X-Received: by 2002:a17:902:6a87:b0:181:c6c6:1d38 with SMTP id
+ n7-20020a1709026a8700b00181c6c61d38mr14778379plk.74.1665510742025; Tue, 11
+ Oct 2022 10:52:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+References: <20221010191226.167997210@linuxfoundation.org>
+In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Tue, 11 Oct 2022 10:52:11 -0700
+Message-ID: <CAJq+SaA3b+CfnzCohKNeQC4ua02vMjxNzFmmtAtSOMHyMcv-WA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Upcoming cpumask changes will start issuing warnings[*] when cpu
-indices equal to nr_cpu_ids are passed to cpumask_next* functions.
-Ensure we don't generate a warning when reading /proc/cpuinfo by
-validating the cpu index before calling cpumask_next().
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-[*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+5.15.73-rc2 compiled and booted on my x86_64 and arm64 test system. No
+errors or regressions.
 
-Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-Cc: Yury Norov <yury.norov@gmail.com>
----
- arch/riscv/kernel/cpu.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 4aa8cd749441..592ff065e09f 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -166,9 +166,12 @@ static void print_mmu(struct seq_file *f)
- 
- static void *c_start(struct seq_file *m, loff_t *pos)
- {
--	*pos = cpumask_next(*pos - 1, cpu_online_mask);
--	if ((*pos) < nr_cpu_ids)
--		return (void *)(uintptr_t)(1 + *pos);
-+	if (*pos < nr_cpu_ids) {
-+		*pos = cpumask_next(*pos - 1, cpu_online_mask);
-+		if (*pos < nr_cpu_ids)
-+			return (void *)(uintptr_t)(1 + *pos);
-+	}
-+
- 	return NULL;
- }
- 
--- 
-2.37.3
-
+Tested-by: Allen Pais  <apais@microsoft.com>
