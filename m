@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D485FAA9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208E55FAA9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJKC1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 22:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S229791AbiJKCaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 22:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiJKC1l (ORCPT
+        with ESMTP id S229454AbiJKCaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 22:27:41 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5350844F2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:27:40 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id t25so673147qkm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:27:40 -0700 (PDT)
+        Mon, 10 Oct 2022 22:30:07 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8483A48E9F;
+        Mon, 10 Oct 2022 19:30:06 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id a17so2709361qtw.10;
+        Mon, 10 Oct 2022 19:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R0kZnhfesPl9qNaPTyscrmeO3Cgv6kK7ijXhflaJOE4=;
-        b=mDm13BocLQVhzw+jM56VKsIkpaU2AlBUCzFy39mjbKP117HakVY163fK/NGsr67ld+
-         e3oe0Ss6GH9wRb2FB/nPlpP8EBPcHQ9n9gzpXcjUbncvagOqaz3LOA7FSeIF1ydDeeVP
-         ekOVnmXv5BXzUwShYLVyA4uC2SO311hJnk6TfpT3H6H3uohDOvANdZYCj1GADvpF+C3/
-         zH5bbdkbrLN/26tUCDyDeoujhXfEUOkxQSrCPfkoy/L/mXElJC/VEXJnRhaqozuwABt2
-         Fbj2i0tbJunPM20svB4PQaHSBUz4Ix72bsLS04tQS4ncWvyXUyUdKlJxacdiYMS19Ayy
-         /1OQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H5bopQBfqDPZFFnIWboUojrulpfKzdRY6HL8GaG6Yds=;
+        b=P1o8xs/F0bTQnTJiyo+2uNIHcOqB+t4v/qJ+Y1p+dBW39cEG1g5McVLF+NOREsv/Ct
+         jRvBz0MzWRzzCUwXmix0XllVvB8ndPlQFuHghAosTVsAZFRECpd13CZrCIrW66ttbE8O
+         82RB8uEA9BGagBLCfk6yY0jBtjwjItN8VMGsjh7UauA50nJGTCfYTHzkGxrV/qAuDByt
+         APoMj1r9wyomy3ulEPft0hLyloGSL/zelHeKXyD+AO/iif66OLO2asFsQmxI8rNIwQBT
+         udphK30lrvc1NLLlWBaH5j4HcSnvFp3YDnuYtJF6O3yNKs2hWvSNhjMDeIdIy7McxVi4
+         r8cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R0kZnhfesPl9qNaPTyscrmeO3Cgv6kK7ijXhflaJOE4=;
-        b=gt9RJypjhRgWEMg08Syh1hbGjkRTCg1Go6T51q8Km43EmS/K4vq3BfqZ0AoZMTGQZZ
-         Jptd/ifErS6wG0NM85mNwuMQWu+xy+L1E77FlpXA9ANWvjdr0WrkUnUjUQWXTT+vObi8
-         4eAoh2Xd2dnUv15klosseow9rCeBfJ0bLJ018r5jRF+qYcVKv9G09r4bQTX7LJqRofZM
-         a8nMSn+sBrAHmIPjOlgzeArQpYPOiezGJNWgwNBew+jZh3l7/KkpXjqiDTdAwvgYofDi
-         NcHxznqvX8IO/kfirfu7/Y7eJ50jRwGscXVRjnt89Qp/Mt9A8AjzNFEaGMjhTGcXR9ej
-         ZYpw==
-X-Gm-Message-State: ACrzQf1aJXXdt4Xxv7uRPwgBYxl8McSU+/1LpJCFgPzipR00eyhLSziA
-        5oD71O+KYhlenldrK+1TF1LlvQ==
-X-Google-Smtp-Source: AMsMyM4Ba/uq7n2O8aHdGu9N/VomhCQ0H8a+eEyaCBPB35dfrS8nWOjaxc/NqUQzmgzxPcfCAsnQ+A==
-X-Received: by 2002:a05:620a:46aa:b0:6ee:80c5:4246 with SMTP id bq42-20020a05620a46aa00b006ee80c54246mr150056qkb.87.1665455259884;
-        Mon, 10 Oct 2022 19:27:39 -0700 (PDT)
-Received: from sladewatkins.net (pool-108-4-135-94.albyny.fios.verizon.net. [108.4.135.94])
-        by smtp.gmail.com with ESMTPSA id fg27-20020a05622a581b00b00399ad646794sm4362034qtb.41.2022.10.10.19.27.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 19:27:39 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 22:27:37 -0400
-From:   Slade Watkins <srw@sladewatkins.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Subject: Re: [PATCH 5.19 00/46] 5.19.15-rc2 review
-Message-ID: <Y0TUmfzCm1mGKeac@sladewatkins.net>
-References: <20221010191212.200768859@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H5bopQBfqDPZFFnIWboUojrulpfKzdRY6HL8GaG6Yds=;
+        b=GFOifh9NMtjTKX+Op34ER1maBqmu+eMILp4EJdy0wO872v6xyeQ77ylZDiJq4jJyNd
+         tGmg2TlO5v9bBcDvveyUoeDewTFPYr0eR+A2AE9AajC7kJGx7NI8sB8+7cABwphWfKm6
+         DAh85mcNamX1EfUvnNOVo52vPDWWxy1Oj8tOYe9M8U+K8VoLheZXprlQEVdq/utE4ejW
+         134XsTx1Z8TClxlJzeuM5+0PcuHdaIXAPpjk8uBn0+EC4FQLWD3SB9pVyaZrOBkBVpbO
+         YJ2+5UBJHQBWAASKJgklzvRe8/lUjLPpTqam3ubkFshUxBXviRdkhUC2dFi2X0JxI5E6
+         s2lw==
+X-Gm-Message-State: ACrzQf2HT405mSdEIcB4SBpz31JSffqIuUmbjLfy67LGz48i7d0m2uGf
+        IUcHsk93IORhssH8SJjkyTseIutfSwhU6Mju1w4=
+X-Google-Smtp-Source: AMsMyM7/cg61IUFDL3Nwh/YHT2gfRHWGh1r1pA2BKHs0R6pK7t2wgEuG2FGcB8bpyS6mmPuyxyyIj9HzBb0cvvhVRUg=
+X-Received: by 2002:a05:622a:551:b0:35d:5237:1781 with SMTP id
+ m17-20020a05622a055100b0035d52371781mr17502311qtx.566.1665455405572; Mon, 10
+ Oct 2022 19:30:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010191212.200768859@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221001144716.3403120-1-void@manifault.com> <20221001144716.3403120-3-void@manifault.com>
+ <CAP01T74TtMARkfYWsYY0+cnsx2w4axB1LtvF-RFMAihW7v=LUw@mail.gmail.com>
+ <YzsBSoGnPEIJADSH@maniforge.dhcp.thefacebook.com> <CAP01T76OR3J_P8YMq4ZgKHBpuZyA0zgsPy+tq9htbX=j6AVyOg@mail.gmail.com>
+ <fb3e81b7-8360-5132-59ac-0e74483eb25f@linux.dev> <CAP01T77tCdKTJo=sByg5GsW1OrQmNXV4fmBDKUVtbnwEaJBpVA@mail.gmail.com>
+ <YztbOo7TgOoN1bVB@maniforge.dhcp.thefacebook.com> <CAP01T76rCLdExKZ0AdP9L6e_g+sj9D7Ec59rr+ddMJ-KU+h8QQ@mail.gmail.com>
+ <YzxM+HSSqIDCPCUf@maniforge.lan>
+In-Reply-To: <YzxM+HSSqIDCPCUf@maniforge.lan>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Tue, 11 Oct 2022 07:59:29 +0530
+Message-ID: <CAP01T76zg0kABh36ekC4FTxDsdiYBaP7agErO=YadfFmaJ1LKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] bpf/selftests: Add selftests for new task kfuncs
+To:     David Vernet <void@manifault.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kernel-team@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, yhs@fb.com,
+        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,18 +75,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 09:12:45PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.15 release.
-> There are 46 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Oct 2022 19:12:02 +0000.
-> Anything received after that time might be too late.
+On Tue, 4 Oct 2022 at 20:40, David Vernet <void@manifault.com> wrote:
+>
+> On Tue, Oct 04, 2022 at 12:22:08AM +0200, Kumar Kartikeya Dwivedi wrote:
+> > > Thanks for providing additional context, Kumar. So what do we want to do
+> > > for this patch set? IMO it doesn't seem useful to restrict
+> > > bpf_kfunc_acquire() to only be callable by non-sleepable programs if our
+> > > goal is to avoid crashes for nested task structs. We could easily
+> > > accidentally crash if e.g. those pointers are NULL, or someone is doing
+> > > something weird like stashing some extra flag bits in unused portions of
+> > > the pointer which are masked out when it's actually dereferenced
+> > > regardless of whether we're in RCU.  Trusting ctx loads sounds like the
+> > > right approach, barring some of the challenges you pointed out such as
+> > > dealing with fexit paths after free where the object may not be valid
+> > > anymore.
+> > >
+> > > In general, it seems like we should maybe decide on what our policy
+> > > should be for kfuncs until we can wire up whatever we need to properly
+> > > trust ctx.
+> >
+> > Well, we could add it now and work towards closing the gaps after
+> > this, especially if bpf_task_acquire is really only useful in
+> > sleepable programs where it works on the tracing args. A lot of other
+> > kfuncs need these fixes as well, so it's a general problem and not
+> > specific to this set. I am not very familiar with your exact use case.
+> > Hopefully when it is fixed this particular case won't really break, if
+> > you only use the tracepoint argument.
+>
+> I'm also interested in using this with struct_ops, not just tracing. I
+> think that struct_ops should be totally fine though, and easier to
+> reason about than tracing as we just have to make sure that a few
+> specific callbacks are always passed a valid, referenced task, rather
+> than e.g. worrying about fexit on __put_task_struct().
+>
+> I'm fine with adding this now and working towards closing the gaps
+> later, though I'd like to hear what Martin, Alexei, and the rest of the
+> BPF maintainers think. I think Martin asked if there was any preliminary
+> work you'd already done that we could try to tie into this patch set,
+> and I'm similarly curious.
+>
 
-5.19.15-rc2 compiled and booted on my x86_64 test system. No errors or regressions.
+It's mostly a few experimental patches in my local tree, so nowhere
+close to completion. Ofcourse doing it properly will be a lot of work,
+but I will be happy to help with reviews if you want to focus on
+pointers loaded from ctx for now and make that part of this set, while
+not permitting any other cases. It should not be very difficult to add
+just that.
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+So you can set KF_TRUSTED_ARGS for your kfunc, then make it work for
+PTR_TO_BTF_ID where it either has PTR_TRUSTED, ref_obj_id > 0, or
+both. Just that PTR_TRUSTED is lost for the destination reg as soon as
+btf_struct_access is used to walk pointers (unlike PTR_UNTRUSTED which
+is inherited). Note that you don't _set_ PTR_UNTRUSTED here for the
+dst_reg.
 
-Thanks,
--srw
+This should enable your immediate use case, while also being useful
+for future work that builds on it. It should also preserve backwards
+compatibility with existing stable helpers. You set PTR_TRUSTED when
+you access ctx of tracing or struct_ops etc. All this will be handled
+in is_valid_access callback/btf_ctx_access and setting the flag in
+bpf_insn_access_aux. Unless I missed some detail/corner case it won't
+be a lot of code.
+
+If that turns out to be too restrictive/coarse for your use case, we
+can just go with this as is for now.
+
+Does that sound good? Any other comments/opinions?
