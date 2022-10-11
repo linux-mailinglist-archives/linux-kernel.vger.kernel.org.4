@@ -2,116 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FED5FB4D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E09B5FB4E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiJKOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S229819AbiJKOrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJKOpw (ORCPT
+        with ESMTP id S229811AbiJKOrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:45:52 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C38F4DB57;
-        Tue, 11 Oct 2022 07:45:50 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e717329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e717:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 95A031EC058A;
-        Tue, 11 Oct 2022 16:45:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665499545;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=CBtcYErXPbo1FB0vxdU7KXTR1am7Ih8oyW4Mdfq5JAk=;
-        b=Kyh4L3Fg9r6gKmPgTWhLfqqp8UCd8dnhwk96AzSfnYL05Kb4QhH0fnj5hp8ZYUOllRgfrS
-        68Mi/2WxsO/OtVvoE/1a7EB6uWm4DHgK6FOF/Ac35m97F+W2F/+whJcTfC/kW8RB6GIbxM
-        5fxN4ufMbgJFfMIrSyPtPNlOxXyAoFA=
-Date:   Tue, 11 Oct 2022 16:45:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Justin He <Justin.He@arm.com>
-Cc:     Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-Message-ID: <Y0WBklS1XpB5as+m@zn.tnic>
-References: <20221010023559.69655-1-justin.he@arm.com>
- <20221010023559.69655-7-justin.he@arm.com>
- <Y0VGkUxpqiIzIFzB@zn.tnic>
- <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
+        Tue, 11 Oct 2022 10:47:41 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED8D95AC6F;
+        Tue, 11 Oct 2022 07:47:40 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 5A59A80F9;
+        Tue, 11 Oct 2022 14:38:52 +0000 (UTC)
+Date:   Tue, 11 Oct 2022 17:47:39 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH 1/4] ARM: dts: omap3-n900: fix LCD reset line polarity
+Message-ID: <Y0WCCw8k+KTuvdWX@atomide.com>
+References: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
+ <Y0UDEtQlN5Y9h7BU@atomide.com>
+ <20221011123726.elsr53ue7nxzhvww@mercury.elektranox.org>
+ <Y0V4cLGbYe4j+ls6@google.com>
+ <Y0V99Agad6Ma+yTC@atomide.com>
+ <Y0V/82JsRVZh6PlL@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y0V/82JsRVZh6PlL@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 02:32:48PM +0000, Justin He wrote:
-> My original purpose is to make it pass the sparse checking.
+* Dmitry Torokhov <dmitry.torokhov@gmail.com> [221011 14:30]:
+> On Tue, Oct 11, 2022 at 05:30:12PM +0300, Tony Lindgren wrote:
+> > * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221011 13:57]:
+> > > Hi Sebastian,
+> > > 
+> > > On Tue, Oct 11, 2022 at 02:37:26PM +0200, Sebastian Reichel wrote:
+> > > > Hi,
+> > > > 
+> > > > On Tue, Oct 11, 2022 at 08:45:54AM +0300, Tony Lindgren wrote:
+> > > > > * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221004 21:26]:
+> > > > > > The LCD driver (panel-sony-acx565akm), when probing, starts with line
+> > > > > > driven low, and then toggles it to high and keeps it there. Also, the
+> > > > > > line is driven low when powering off the device, and ls released when
+> > > > > > powering it back on. This means that the reset line should be described
+> > > > > > as "active low" in DTS. This will be important when the driver is
+> > > > > > converted to gpiod API which respects the polarity declared in DTS.
+> > > > > 
+> > > > > We should ensure these patches get merged together with the driver
+> > > > > change to avoid breaking LCD for booting. Probably no need to have
+> > > > > the driver quirk handling for inverted polartity in this case.
+> > > > > 
+> > > > > It's probably easiest to have an immutable branch for the driver
+> > > > > changes I can base the dts changes on. Or I can ack the dts changes
+> > > > > if they get merged with the driver.
+> > > > 
+> > > > Both drivers are already using gpiod API:
+> > > > 
+> > > > drivers/gpu/drm/panel/panel-sony-acx565akm.c
+> > > > drivers/gpu/drm/panel/panel-dsi-cm.c
+> > > 
+> > > I was looking at
+> > > 
+> > > drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
+> > > drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+> > 
+> > Ah OK that explains :)
+> > 
+> > > which are not using gpiod. Should they be retired?
+> > 
+> > Yes we should just get rid of them with omapdrm working just fine.
+> 
+> Will you be submitting such patches? I'd like to get rid of
+> of_get_named_gpio() and friends if I can...
 
-Then do this pls.
+Adding Tomi to Cc, my guess is he already has such patches and knows
+better which ones can go :)
 
-This is a combined diff - do a second patch which does only remove the
-smp_wmb(). The smp_wmb() there is not needed as the cmpxchg() already
-implies a smp_mb() so there's no need for that separate, explicit one.
+> > > > So this just breaks things.
+> > > 
+> > > I missed the drivers in drivers/gpu/... and I see that they essentially
+> > > abuse gpiod API as gpiod_set_value() operates on logical level
+> > > (active/inactive) and not absolute (high/low). They should either use
+> > > the gpiod_*_raw() variants, or they should be adjusted to do the proper
+> > > thing together with the accompanying DTS change.
+> > > 
+> > > What are your preferences?
+> > 
+> > Seems like high/low at the connected device end is what we should use,
+> > right? Otherwise things will misbehave if the panel is connected to
+> > some other SoC possibly.
+> 
+> It is exactly because of this case the driver should use active/inactive
+> and follow polarity described in DTS. If the driver does:
+> 
+> 	gpiod_set_value_cansleep(d->reset, 1);
+> 
+> then if DTS is saying that the reset line is active low, under the wraps
+> the line will be driven to "0", but if DTS is saying that the line is
+> active high, then the very same call will drive the line to "1".
+> 
+> This allows accommodating different designs without having to change the
+> driver code.
 
-But it would be prudent to have it in a separate patch just in case.
+OK
 
-Thx.
+Thanks,
 
----
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 85acfc589fb7..fd285bf8d114 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -154,7 +154,7 @@ struct ghes_vendor_record_entry {
- static struct gen_pool *ghes_estatus_pool;
- static unsigned long ghes_estatus_pool_size_request;
- 
--static struct ghes_estatus_cache *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
-+static struct ghes_estatus_cache __rcu *ghes_estatus_caches[GHES_ESTATUS_CACHES_SIZE];
- static atomic_t ghes_estatus_cache_alloced;
- 
- static int ghes_panic_timeout __read_mostly = 30;
-@@ -842,9 +842,7 @@ static void ghes_estatus_cache_add(
- 			slot_cache = cache;
- 		}
- 	}
--	/* new_cache must be put into array after its contents are written */
--	smp_wmb();
--	if (slot != -1 && cmpxchg(ghes_estatus_caches + slot,
-+	if (slot != -1 && cmpxchg((struct ghes_estatus_cache ** __force)(ghes_estatus_caches + slot),
- 				  slot_cache, new_cache) == slot_cache) {
- 		if (slot_cache)
- 			call_rcu(&slot_cache->rcu, ghes_estatus_cache_rcu_free);
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Tony
