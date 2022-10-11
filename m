@@ -2,177 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CED5FB44C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7575FB44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJKOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S229546AbiJKOMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJKOJx (ORCPT
+        with ESMTP id S229487AbiJKOMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:09:53 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF1D1263E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 07:09:50 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i4-20020a056e02152400b002fa876e95b3so10991581ilu.17
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 07:09:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8X+ixEZiN3UNQ79UY9WeGzEkjmbCwuYSfjyFL0qZ3zw=;
-        b=12ThT/GDrnWaQNuC+dufmEx53inWl/+KmVVdo2jKTNh6URxM+k/jWSAsxDaONZ2AjH
-         w9B/9yh3u+c5EGyo/ZeQ1oitov5IIxoFUbR1NW83QcdrbIZ2iSinC7bHgN1bp8WaUp/H
-         7zk4+jGB32s7lsvAs3bRRtym8miR9kMD+28WfzbBLhAOIUtyxyzuMjNXtWML7x7Uz0Ls
-         ITZRKXQD+h+IQNXAMXSxx0zFUKz10EWsDhLtV6Ya2zTeG++bZVJ+XGNIPyTyoZSlyAoU
-         0Kq8I7UZQNL1zXQBRt5+8wveJLJ0AD9aW+766OME/4rR3T/UxIZr4MzouhpB89qBwhXc
-         6Jiw==
-X-Gm-Message-State: ACrzQf3iWUNIXUyba/Md61ufhl2zByxClCdXGueYAnzC2il8R7edRIZU
-        mlcfFCFQfOsXTGh+YdIQeaLB9eiBGuZUtxWjpLtDuzTYFL56
-X-Google-Smtp-Source: AMsMyM70023WJs3OnUAmW71n9INcevf8/PNPpjUSbXTLREJxSJ2kp4dXU0d05ylDoJVfjWnqiJWSpofXcj3Ssy+jwkzIAfFSQJ4W
+        Tue, 11 Oct 2022 10:12:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33CD56031
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 07:12:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665497524; x=1697033524;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=wHvZJzHjNi9hVlciw1kFmhJtPDm534jzttxtYYBvNk4=;
+  b=UOtyS99gZ4Hko/T2bLfDwA1mPciLrOKBJ8nvBlVNepll9wsMDdg7wrpF
+   kmwJbEym6PFAYdVHGqZKFXtafcph5wlTh5TiHfaGBxS5/J8q4RE214xKG
+   EaIGrRSiSZs/tesLJxhVdKKMM3pZFFVB0jC2gt6yxu0AscjMTkw30L2Wp
+   KkFvZPE8lFxUTm8WitryuQgpks5hRndk9zMkUrFkQXzbl3aTcNnmJUx7J
+   UL41K2FcLfeuiD6Y2gNXvokWkQ+bMcbGEfSW3ttwNl8da/1ne8deLgXSc
+   zq5I+09mx3nBPAZLplkF39VoaX6fjsXeN1R6NSCV401zyvs6mCbxM7m8Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="366504239"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="366504239"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 07:12:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="659546582"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="659546582"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga001.jf.intel.com with ESMTP; 11 Oct 2022 07:12:03 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 07:12:03 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 11 Oct 2022 07:12:03 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 11 Oct 2022 07:12:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SVeKfoOCfNkId1xCcdZM1UZbQCGYW7T5waliBU6Gw65IgbLtgGn67/R1r2uIBndde9/wfkpWCzEvt07aoHQ20WyUf0Vk62TJE/WWo41HwjGr7dohURhtis6BlLflF2eTJ+L3rSU5mYZBs2nAjCh7DnjermYvThQ4D5nFVBXtKszZjOyPPHiRpAZshqJBqiCMkpHO1BvQDxhLXZ+ZZkT37AUSEzz6I4ls0GJckALHEmcHvpga00D/TaJuxV9sMMS0nt0xZ8EKEkGvauC4l99adD1PZTqfBgRRxuJlHVYaASzn4AT4CohlO5NjBbzJh0FNzk6mKDTDP3Z6pfLWTta08Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UgcOVqVMJEDsByTbv+Yk8Ly8zBOJ3VKtjQV95H8qyUo=;
+ b=RVAmd21Fhk5OHDo0NOWQuViLD1VgWR0n9Uk+V4TAM4ZSpqU1jGMe5lF8fmjYYn0kJ2eXJfkXXEnM8AS2pPo8PzxBazUh5gF5uZUHcxbhNbCUKBD0Sd0GdwEmUeaRK5xycxzsSiNhMzefwrUx0wvjkfVP2bptP5Vjh5Vd8Iy0rnXkWx+JSG2GMdMMfys1eMJMinxHfOi/5dp/Taw/6ra1KubL2tu3cVzrCFNodx0nyVS+zq+Rx6FI5QlBiuyc57gfIfXmO8zSbY6N71HShcRWH/IGU9Nyz22zq3kV6bNjhNfcbMonNlFzucncBfFbNTMcJexlquWN6yISQWJtsQN/Gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by CH0PR11MB5234.namprd11.prod.outlook.com (2603:10b6:610:e1::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Tue, 11 Oct
+ 2022 14:12:00 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::3f8d:1406:50e2:7bcc]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::3f8d:1406:50e2:7bcc%3]) with mapi id 15.20.5709.015; Tue, 11 Oct 2022
+ 14:12:00 +0000
+Date:   Tue, 11 Oct 2022 22:11:43 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Zhang Rui <rui.zhang@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tim.c.chen@intel.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Yu Liao <liaoyu15@huawei.com>
+Subject: Re: [PATCH] x86/tsc: Extend the watchdog check exemption to 4S/8S
+ machine
+Message-ID: <Y0V5n9yZ+gfp2lSh@feng-clx>
+References: <20221009051209.393377-1-feng.tang@intel.com>
+ <Y0LGLGW7RSlklKyl@hirez.programming.kicks-ass.net>
+ <Y0N0ENurfliW315D@feng-clx>
+ <aff10f33-b379-6872-f180-b38f6a0a669a@intel.com>
+ <Y0Ugs/udnBh0Hv3C@hirez.programming.kicks-ass.net>
+ <aa5c745686127c5d1ff2496fcecc3ebf0839443c.camel@intel.com>
+ <Y0V3Snlqvz2+1UUQ@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y0V3Snlqvz2+1UUQ@hirez.programming.kicks-ass.net>
+X-ClientProxiedBy: SG2PR02CA0023.apcprd02.prod.outlook.com
+ (2603:1096:3:17::35) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2d94:b0:6bb:b6cd:bea7 with SMTP id
- k20-20020a0566022d9400b006bbb6cdbea7mr9265709iow.62.1665497389605; Tue, 11
- Oct 2022 07:09:49 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 07:09:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000048284505eac2d444@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in ext4_xattr_set_handle
-From:   syzbot <syzbot+c8fd469c1d2a6c1ea074@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|CH0PR11MB5234:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb6d3c98-d6ac-4377-51e5-08daab92903d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: L+r/l59G2+HhqKcTDaMt17Qq6VQQnxCFC47dtvqwOc04Cfty0C8q7PDISNQ+/xNR7MVjjDVcU+o7R0rCKDC8bNbE5vQCbNafgPcoTFGa7hW5YxhPXLrRVl53sDpJckP1KigGrtyA/mUPfvsV5P6wB/q6aEUsqwpMJukYvxVLD9RhB2qyaC+QwSxUrDAlXBUNQbWqZcfBgsmaZvTDYCF02ja5h7BVecdiOD3KbHJvNvfMVU9BhxxZjoUMQUnRvLKKEkjrCHL9LCQAFvcGaU4HmL7g9/STgaf4lhiIoB09HWlNr2i5ijHHssVCPg24tC98+c9sfdtIjVIQI172rEU34cT0CpIRdS1fHBJkahGk/OnnplZE8hWThu87Y19dgpTLW36IY9Qc5EpaVWg0rtH5/ReWdK7YShJ13RoOiOVkosdQe6jcF8VrP6N9jV4aMA/gtsWst4oZ5tiNux2VyJzfzlB8aff8eG+LCMVV8lz4mhv4Fv8zMUbKXRC+t4yWSquWm0TJH/jWBexUExseQfb+jxBbe29aygzh3xosHpsNRghvsn1IVRxCBdQ0kdptptNlKNi1nwgRxQ+1QkdPLzmW1o4r6LnVwGxvdkPPH2GWjnMj6WPH/yfMBksM6LzYSjWm4UnQKdlKpxqvvYaS0oki3oAJOdKrStDDvkL8e4tlpsEwIAN9B6W9+iRT8OocVo0QoYKSG0uwnAMpZQK8xMwYo0v7UvMklIi4pF//T9jODUV/pAECFxwdOu9i79patx4QY+ndA/vMCpXRgyQLTwpIJA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(396003)(39860400002)(136003)(346002)(366004)(451199015)(478600001)(54906003)(6916009)(6486002)(316002)(5660300002)(66556008)(41300700001)(6506007)(66476007)(66946007)(8676002)(4326008)(8936002)(26005)(44832011)(4744005)(186003)(6666004)(2906002)(83380400001)(33716001)(9686003)(86362001)(6512007)(38100700002)(82960400001)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?57POeR2S5yhsNTSpG4d2hSOqoKDxRGaGEZHy4KxEW23VkAua63uLr4SEeJoC?=
+ =?us-ascii?Q?npxjoWJjO2sDDL9xwgxi4x2rJnqvDkMf8A1FzO3Y16nO3i/XVl8m+/2ogbO/?=
+ =?us-ascii?Q?ZgrgOMsmCXITLE/iTGLAJVHYMrlLZslLyeBG5yBne1daX6k1wTak0b7/GJ0V?=
+ =?us-ascii?Q?ZpFoP0yFwFU4rmknTzq49DmG2iDVvTw2nPUsAylVD6pWP9MxmIWrG8E0R0mc?=
+ =?us-ascii?Q?HXIdTKqv/i9iwv/LjROcbewCRsDQ4TKYFQlnpD/r4uLeqnvM+hsBwuuBze+u?=
+ =?us-ascii?Q?JPaFOjBc+ywGjX8xOX2yoxFuc4FhL0muWYspNztrfZc5ax3/sK726wJZ8wMM?=
+ =?us-ascii?Q?MKDmxfFoUHYSGqLNgVyFifYkMD/Nf7BwryYPoCiRbiE7IfBzoqU5p0gmnrKJ?=
+ =?us-ascii?Q?imbFVEpdwFTcF3MoA+YdgmzEGp0vTE3/76XQviS5V8TkaIxgDxTs6EBioCM1?=
+ =?us-ascii?Q?7ElaKaPMpdRYA932t70S/xauJSJ36CqJDNGjXYYcApqfIKQHGITCfY4gmWbP?=
+ =?us-ascii?Q?3h/sS6PJSQ4CTJxEjd7q+b39X7KaQHsjalQvxCjFmYhmGHoY9M2NhqYjwhdm?=
+ =?us-ascii?Q?6kzXCUbKkgk7Bj3NkeskJ83wfZZujxlcTcK3dm2wWWuL25c8SpB9I70QBNTH?=
+ =?us-ascii?Q?ItWG+hDPLEHQw40Jdms9ZwnRGzI6XTNe6vJTUCnfoGSlgD+fBSvGh7clzzZw?=
+ =?us-ascii?Q?BX5qyJLxldBmfennF9sCpR9F2ixWzusFWRCVqGrHTiKc2dVB4RkERkRXbalH?=
+ =?us-ascii?Q?02QMw/dCKnJB7tsinbd/sdoTsX78WDgF2Rpkbbd4P8DlfN6EZCxMoyFg5jho?=
+ =?us-ascii?Q?dhWLfHerHPzHHGSqKEAblnirguGk4kTEqxS3RaOuPcbyQ98ymV+NPtowCW/s?=
+ =?us-ascii?Q?fPKdfEMnBUXpGv0gQxDR/c7WJv3+C1VcikkUQGXxVOZVcTmcVEvXDiajgTEa?=
+ =?us-ascii?Q?9tJAQUjJxuwMWlbQTc5Jhbi87TJQ+iU0PNugl8+V9Ro12QZmplcjkBRIWRXk?=
+ =?us-ascii?Q?mVdTNWhmivR05F7pO/svPeF9QC39eF26P52Hk5RjHACogS48vUsubiJGB9ww?=
+ =?us-ascii?Q?JwGwWsVd6ILp1c5yJkWVW7Xo0BWxfiE0WeZHqZ+qkSS01+KqzeqlMylbgn5U?=
+ =?us-ascii?Q?FTIbIG+bmwOlJNr+c56/NRYe6qq54/z7iBJVXlcOW8prs7EfeKnxlXsnsSk7?=
+ =?us-ascii?Q?IYcl64Cuio4ktDoKTOhXJvmgUIYXBKYxaz0mNy9AXzWkYK9vaRSzUAFMcCfS?=
+ =?us-ascii?Q?KLfB+MMTbAUeUSrv0RDcIvaK2TguhwFiVCQbT3oNISjSKMFf0gkhB8QAD484?=
+ =?us-ascii?Q?SyRn4EWLSibxMqbKbRDHCuMooOwmsqe+7Gze8iVIygALVRcxXMfsaoM89FHg?=
+ =?us-ascii?Q?kInJRv0Eg2qrfxEE+H5I+SN88lQa3+abFLUIoXsipMAoEsAPcIOMJUU833SX?=
+ =?us-ascii?Q?GzHYSWdl0tn+B2moqzS6UJhrtGLSC26PIdwCuuBmzSeofIkdGyjW92lWQZqh?=
+ =?us-ascii?Q?/3a4fmhqjrG7hVxUshJXEdgxjLVoghw/e1zRSh6Up7F6DjozaWvNNhkybX6I?=
+ =?us-ascii?Q?rQ6afZM9vRM6QZMVZC/hdfxjl2Z/3YD8zF7TxNug?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb6d3c98-d6ac-4377-51e5-08daab92903d
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 14:12:00.1577
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: T9V/1fCuQHpBD35yHyLtGrKE+DpgPC3dxwTtpg8GjPwOX142QirPvBaC3SgdprSWhMqsSlUQuMsplkUiXoJ48g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5234
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Oct 11, 2022 at 04:01:46PM +0200, Peter Zijlstra wrote:
+> On Tue, Oct 11, 2022 at 09:33:26PM +0800, Zhang Rui wrote:
+> 
+> > topology_max_packages() or variable logical_packages can tell the
+> > maximum packages.
+> > But this check_system_tsc_reliable() is done in early boot phase where
+> > we have boot cpu only. And the cpu topology is not built up at this
+> > stage.
+> 
+> Is there a problem with disabling the TSC watchdog later in boot --
+> after SMP bringup for example?
+ 
+Currently the watchdog is disabled inside tsc_init(), right before
+'tsc-early' clocksrouce is registered, otherwise it starts to be
+monitored by 'jiffies' as watchdog. And there has been many cases
+that 'jiffies' watchdog misjudged tsc as 'unstable' in early boot
+phase, including recent Yu Liao's report on a 4 socket Skylake
+server.
 
-syzbot found the following issue on:
-
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=14b0a28a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=c8fd469c1d2a6c1ea074
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c8fd469c1d2a6c1ea074@syzkaller.appspotmail.com
-
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 18006 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:979
- register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1292
- __lock_acquire+0xa8/0x30a4 kernel/locking/lockdep.c:4932
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- down_write+0x5c/0xcc kernel/locking/rwsem.c:1552
- ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
- ext4_xattr_set_handle+0xd0/0x994 fs/ext4/xattr.c:2309
- ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
- ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
- __vfs_setxattr+0x250/0x260 fs/xattr.c:182
- __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
- __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
- vfs_setxattr+0x174/0x280 fs/xattr.c:313
- do_setxattr fs/xattr.c:600 [inline]
- setxattr fs/xattr.c:623 [inline]
- path_setxattr+0x354/0x414 fs/xattr.c:642
- __do_sys_setxattr fs/xattr.c:658 [inline]
- __se_sys_setxattr fs/xattr.c:654 [inline]
- __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:654
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-EXT4-fs error (device loop0): ext4_do_update_inode:5149: inode #2: comm syz-executor.0: corrupted inode contents
-EXT4-fs error (device loop0): ext4_dirty_inode:5966: inode #2: comm syz-executor.0: mark_inode_dirty error
-EXT4-fs error (device loop0): ext4_do_update_inode:5149: inode #2: comm syz-executor.0: corrupted inode contents
-------------[ cut here ]------------
-DEBUG_RWSEMS_WARN_ON(sem->magic != sem): count = 0x1, magic = 0x0, owner = 0xffff0000ebdd3500, curr 0xffff0000ebdd3500, list not empty
-WARNING: CPU: 0 PID: 18006 at kernel/locking/rwsem.c:1347 __up_write+0xf8/0x184 kernel/locking/rwsem.c:1347
-Modules linked in:
-CPU: 0 PID: 18006 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __up_write+0xf8/0x184 kernel/locking/rwsem.c:1347
-lr : __up_write+0xf8/0x184 kernel/locking/rwsem.c:1347
-sp : ffff800013d43870
-x29: ffff800013d43870 x28: ffff0000cab2fee0 x27: ffff0000cab2ff38
-x26: 0000000000000001 x25: 00000000ffffff8b x24: ffff800013d43928
-x23: 0000000072010010 x22: ffff0000cab30190 x21: ffff80000d30c000
-x20: 0000000000000000 x19: ffff0000cab2ff38 x18: 0000000000000212
-x17: ffff80000bffd6bc x16: 000000000000b67e x15: 0000000000000d6b
-x14: 000000000290d4aa x13: 00000000000003e1 x12: 0000000000040000
-x11: 0000000000018154 x10: ffff80001f1f2000 x9 : da54abfe71995e00
-x8 : da54abfe71995e00 x7 : 0000000000000000 x6 : ffff800008161d1c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0001fefbecd0 x1 : 0000000100000000 x0 : 0000000000000086
-Call trace:
- __up_write+0xf8/0x184 kernel/locking/rwsem.c:1347
- up_write+0x38/0x48 kernel/locking/rwsem.c:1605
- ext4_write_unlock_xattr fs/ext4/xattr.h:173 [inline]
- ext4_xattr_set_handle+0x400/0x994 fs/ext4/xattr.c:2431
- ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
- ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
- __vfs_setxattr+0x250/0x260 fs/xattr.c:182
- __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
- __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
- vfs_setxattr+0x174/0x280 fs/xattr.c:313
- do_setxattr fs/xattr.c:600 [inline]
- setxattr fs/xattr.c:623 [inline]
- path_setxattr+0x354/0x414 fs/xattr.c:642
- __do_sys_setxattr fs/xattr.c:658 [inline]
- __se_sys_setxattr fs/xattr.c:654 [inline]
- __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:654
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-irq event stamp: 1127
-hardirqs last  enabled at (1127): [<ffff80000bfb8138>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:84 [inline]
-hardirqs last  enabled at (1127): [<ffff80000bfb8138>] exit_to_kernel_mode+0xe8/0x118 arch/arm64/kernel/entry-common.c:94
-hardirqs last disabled at (1126): [<ffff80000bfc1228>] preempt_schedule_irq+0x80/0x110 kernel/sched/core.c:6807
-softirqs last  enabled at (1098): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1096): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
+Thanks,
+Feng
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
