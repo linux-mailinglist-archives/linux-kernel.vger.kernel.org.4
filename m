@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FE75FB3CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79B25FB3E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJKNvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        id S229436AbiJKNv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJKNvO (ORCPT
+        with ESMTP id S229799AbiJKNvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:51:14 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106274CA39
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:13 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s10so16915566ljp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:12 -0700 (PDT)
+        Tue, 11 Oct 2022 09:51:52 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EAF57BED
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:51 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so6205088pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7C53GQvIdU9/jPt0DvQ7RGs3HsrImwAzRzdet7zBxdk=;
-        b=C0qShA64hgwnpZF9CF9ghDKd7XM5n8nD2Rw0ReoVo0NxmoK/laSJ7KpbN3S9FbmFN+
-         EdfYX8E7FI1st6TpffyR+0GVYXYZTX52j3MuR+fmP4kgU11Mni2rE4G3dCHAv3lvE4rc
-         L0Br4rdWBpTUuKTRZQeNmTPyinSt85eIg/MXT5Rp25H6rWdoFnm2LoFLqVMQoRFkvnPu
-         uAbPwuZytW7ZwGthddtPya0OBD+7GBa9wd2DFnB+ExggZ68JMwtePdByKxBwbjkR3Ihi
-         opIIN8cWm1AkRTRfHdJbRuqjlkAhhdPGD4jQ7YPVV3fj6YuIuVrk9arQ+xdMXdTKM+nx
-         VmTA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3TOgt2vEpRrLSiB3atQwtzFhnMOsulmIzIgqeIq1nk0=;
+        b=XSb6i3VpfNyWAq4vxeUCmNYS7AvXFIp/Ceze2c/cL8iQpUxCtxkVNBw2UldHR/Nb5u
+         kwLcAWt6lHquxP8aj/eUlZ/zDkyYY7dzpIT47x/EVDoBDV4DhMrRDDxtvf2E4YZ29l+G
+         Z5WoPgie9IxJsvL4kWnLCr9FjkgclgRSiHL+bCxKZP+lsYcjiOZihOUdqE0/rm/NBQkI
+         CUx/bD4Un8LxSB+Gkw8W01hphPoidR8cBl3oY/Db4Lwi1K/VTMw8BPWQwP5DNwsI0QMu
+         glgqxbm0xMb8ILcuMHWpQ9sdNmsIN+TIVUkfWvRB0nkIKHOuIhmkZiFKgBY63l9yfDb7
+         ig7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C53GQvIdU9/jPt0DvQ7RGs3HsrImwAzRzdet7zBxdk=;
-        b=ajdedvcOIb9XrRHNLdDntK7chvd9OzNR+mZz9/0UdxJFzarzfXl3dAOoJW42E/wGjs
-         H69W4rTAZXJM84Uch9wzhYQm4g9Bu1NJJuMfG8bmCY4BZJLnuIO+5g+AuF0olndFqFuV
-         NMzqM/X5EKqhcbYBWnOEDFZMn35f4fQz7dBsb6Rbo4XvMhqTAGYbZ/mvQq2+nGPFBzlR
-         3SNA2HvtldWWM3fXjn2pG/fckw3W5eqQQhqseGLurBeSwJ78BuiMCBjMrpsX4yJSFupw
-         rFLPGZ8k2ShOmzr3lCHbABhWfY9Wc1yLyRtgPEh9o28/kfTmKWTFVEkoSiPouDptEvlH
-         rEDQ==
-X-Gm-Message-State: ACrzQf2y2+u2tew+u9ngAcbR8GpbUMlbouRKv+do2icwzN05JhGQlyJu
-        1/O2S+xo3zNBwhvucRazFRj+HBJx3++gcQ==
-X-Google-Smtp-Source: AMsMyM4vEHz4t5t74S777ZaRAebiTFBYZxtJzXJLzjMeSZG0u+PM1IllE4+HMCgb6gcSt/PruJIb1A==
-X-Received: by 2002:a05:651c:210:b0:26f:ab6a:87f5 with SMTP id y16-20020a05651c021000b0026fab6a87f5mr3256979ljn.506.1665496271444;
-        Tue, 11 Oct 2022 06:51:11 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056512108f00b00498fc3d4cfdsm1868925lfg.189.2022.10.11.06.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 06:51:11 -0700 (PDT)
-Message-ID: <c483351b-0728-2084-59f3-ac31b255cce5@linaro.org>
-Date:   Tue, 11 Oct 2022 16:51:10 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3TOgt2vEpRrLSiB3atQwtzFhnMOsulmIzIgqeIq1nk0=;
+        b=un5cEiz73DVvbAoB/F3R6ECapJCaErtd0+bjd3UUYhuz9rdzZIsaawXA9MEkjngGtK
+         0sKa6qDEgtYkvKRN0jprnpU7ocEI+yqXZUPJ5Tpa9xD68JVRqw+2mr4Gdw7HB2CtZAfb
+         S8RK8MtG82PsaKAyJ/SHbt5TDP6/WjeaJzX15z2hraFTgDtIxwFjl3/giHWmk3QVzMBg
+         GtGVJigNfTUGmgOGQyeMZIql5uib29kUOMlQVUZc6w/K3klLTmAq4eMFtDN6f1u+MoAm
+         RFxhj51zfTtfLk6n+rbXK8bUpbL7OsjOMiSH+NHMiS/cDNKUZ/rhcg5UsvDGF242uWaK
+         oWIA==
+X-Gm-Message-State: ACrzQf2V49BQXN88jM5xX+afH3hRgaOKzZ34MqCJiMq8qch5FV70CQry
+        xuPb4tNlUTFYKqz0A5CXYy+dwex2AhNqNZ1cxFPz4g==
+X-Google-Smtp-Source: AMsMyM6ZI1+Czzvdy2KBVZyE7SMw4ytpcTgrfacFlkhl48aF/wAR+uS3VQEg38HqWMe9SsU1lJ1BKumb3Y663OEQai0=
+X-Received: by 2002:a17:90a:7b8c:b0:20b:1f3b:f6fd with SMTP id
+ z12-20020a17090a7b8c00b0020b1f3bf6fdmr26702369pjc.202.1665496310708; Tue, 11
+ Oct 2022 06:51:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 04/13] phy: qcom-qmp-pcie: drop redundant ipq8074 power on
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221011131416.2478-1-johan+linaro@kernel.org>
- <20221011131416.2478-5-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221011131416.2478-5-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221011104935.10980-1-wenchao.chen666@gmail.com>
+In-Reply-To: <20221011104935.10980-1-wenchao.chen666@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 11 Oct 2022 15:51:13 +0200
+Message-ID: <CAPDyKFqG=QV3Oitot=w936wZL-zOE_6qdERxHZOjkTix6m3DLQ@mail.gmail.com>
+Subject: Re: [PATCH V2] mmc: sdhci-sprd: Fix minimum clock limit
+To:     Wenchao Chen <wenchao.chen666@gmail.com>
+Cc:     adrian.hunter@intel.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        megoo.tang@gmail.com, lzx.stg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 16:14, Johan Hovold wrote:
-> The PCS initialisation table for IPQ8074 includes updates of the reset
-> and start-control registers which is already handled explicitly by the
-> driver during power on.
-> 
-> Drop the redundant register write from the IPQ8074 configuration table
-> and along with it the now unused "in-layout" configuration macro and
-> code.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Tue, 11 Oct 2022 at 12:49, Wenchao Chen <wenchao.chen666@gmail.com> wrote:
+>
+> From: Wenchao Chen <wenchao.chen@unisoc.com>
+>
+> v1 -> v2:
+>  - Address Adrian's suggestions
+>
+> Our controller supports 100K. During the test, it was found that mmc_rescan
+> failed to scan the card at 400K, and did not try 300K, 200K, and 100K. After
+> modifying the minimum clock limit to 100K, the card scan was successful
+>
+> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host controller")
+
+Applied for fixes, thanks!
+
+Kind regards
+Uffe
+
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 42 +++++-------------------
->   1 file changed, 9 insertions(+), 33 deletions(-)
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
-
+>  drivers/mmc/host/sdhci-sprd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
+> index 46c55ab4884c..b92a408f138d 100644
+> --- a/drivers/mmc/host/sdhci-sprd.c
+> +++ b/drivers/mmc/host/sdhci-sprd.c
+> @@ -309,7 +309,7 @@ static unsigned int sdhci_sprd_get_max_clock(struct sdhci_host *host)
+>
+>  static unsigned int sdhci_sprd_get_min_clock(struct sdhci_host *host)
+>  {
+> -       return 400000;
+> +       return 100000;
+>  }
+>
+>  static void sdhci_sprd_set_uhs_signaling(struct sdhci_host *host,
+> --
+> 2.17.1
+>
