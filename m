@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EB25FBC16
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F01C5FBC1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJKUdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S229586AbiJKUej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJKUdg (ORCPT
+        with ESMTP id S229716AbiJKUed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:33:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92907B285
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:33:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E2B4612C5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E8D3C433C1;
-        Tue, 11 Oct 2022 20:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665520414;
-        bh=u/ngx5nkN4Heguu0mTv5ntQdOfvx9DRizvMHIBMZFBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HTRD6zMn+QYXURS0Xv4rcmQ9+ca9gGY/ivP4U4j+PLGelg2oB6pXpRpdASuFUUs1N
-         IEdCoKkJyNNKldLLfiV8wN2XZTJLm7QlBASADnaibAtfNPOU1SNDa7+tEQiWTNwWMB
-         ejLR375TzQlXuvEAE0W+SbQ3kZU4hmXGoiMbiYqHNIWTlT1IkQ939fZp8gIubhMJJr
-         lwalcI/94AJXKlgH+e1vCau578ipHzFF1oblY1uZga+Pz6/Q9s+Brm5+30Rwrbgdd2
-         nrRwTH45iigXeo6U/+uRQQN1H9lNxvM5gPg+SqV9ZXWyZTwdcBAATBRZz+yi18r71m
-         C/yl6zIK44Ycg==
-Date:   Tue, 11 Oct 2022 13:33:32 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        Sathvika Vasireddy <sv@linux.ibm.com>, aik@ozlabs.ru,
-        chenzhongjin@huawei.com, christophe.leroy@csgroup.eu,
-        jpoimboe@redhat.com, linux-kernel@vger.kernel.org, mbenes@suse.cz,
-        mingo@redhat.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        peterz@infradead.org, rostedt@goodmis.org
-Subject: Re: [PATCH v4 11/16] objtool: Add --mnop as an option to --mcount
-Message-ID: <20221011203332.zzmv6awd5eiydxgw@treble>
-References: <20221002104240.1316480-1-sv@linux.ibm.com>
- <20221002104240.1316480-12-sv@linux.ibm.com>
- <1665401725.d3dolquorh.naveen@linux.ibm.com>
+        Tue, 11 Oct 2022 16:34:33 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A220F7B2AA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:34:31 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id l5so17139543oif.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K1hrqeMqcrecJQqIBuIb6NTt7na4rSliwCpyxyTURNo=;
+        b=F9vfNa/5kId1sULp3PZu4PxADFGT14i+6QGWtBUyQKpHTSAGfukcnJLFoJXQtCWKY2
+         sSDPkDoVelg36OBhKUAudAFS8CHHmoqXL5hKxUQHG2IM1RosouDh/H8fIuYWf2O0GABz
+         ddGQ8Dug4usa4M21lAZVQsdUldsPZtu5uucNuZ0AcgMhGwLBJ+erqMUKnS9eNyIusjfL
+         udGJq0Ab51nGT1LDe4WM4Np2De/rEiiSKelf6x4PBJ324m5d18jG975MS1b0LQQwORJd
+         EdqJfHV10zNI84hWgHRolGqjht9Q2gjKoY7gGhi6B0bVTbITnUZ8z2ohi2BqtABNfvjX
+         WoXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K1hrqeMqcrecJQqIBuIb6NTt7na4rSliwCpyxyTURNo=;
+        b=3g8qcbQEp8r4AypaJvCbEf3Cdk3qTDVWch5TdXGHNN+vrkRsL6gJO4QGc5AlGYUaBL
+         iEywp612LU/P2j6GAQQFMbeC25OcjWm8XatStqYZTx4aRNyzeiMWGjgTJc9L1fnT19pT
+         eyTnSa5AE4njOyPRH5LcVzOlk9Upr54kT9PXwiC31QBICbGuLHXMAA246vhSRZUz5gKx
+         duOZ076xHk3ifH0sD8O/8bcnrhzgtQiVGxx5mzkDfY7Lr5F99bZKQ7Awt+4GjJfc1wS/
+         X7Zzfe7aBXhISxJwgwMJ58avxZxxjO8HPYs1o2TVEM+1VammkA5iBgUTgNfVB7cJXncY
+         Gxqg==
+X-Gm-Message-State: ACrzQf0jFvyvY1dJ5fJTzGoGonZxVhBS9VPEkmTE/7/gRaaT+9+zq6l2
+        IrVy0zATWfnz8udA7kh3nng+Xh0jfN9yMWHMQrXqow==
+X-Google-Smtp-Source: AMsMyM5NHjnR6NrvSHIvvuxyX4HjfOUVSrI0LRMDkc/nfT9Jbe71lDLRt+qg9RI3Ink6nJAEZ8oq1znmVG566EBTJmg=
+X-Received: by 2002:aca:2806:0:b0:354:82ad:4173 with SMTP id
+ 6-20020aca2806000000b0035482ad4173mr486268oix.66.1665520470751; Tue, 11 Oct
+ 2022 13:34:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1665401725.d3dolquorh.naveen@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221011190613.13008-1-mig@semihalf.com> <20221011190613.13008-2-mig@semihalf.com>
+ <ad015bc9-a6d2-491d-463a-42a6a0afbf75@linaro.org>
+In-Reply-To: <ad015bc9-a6d2-491d-463a-42a6a0afbf75@linaro.org>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Tue, 11 Oct 2022 22:34:20 +0200
+Message-ID: <CAPv3WKcY=erFTBDLP1AhQa0+CP6C8KJinmKFEkR2xh4mHHv_aQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: net: marvell,pp2: convert to json-schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?Q?Micha=C5=82_Grzelak?= <mig@semihalf.com>,
+        devicetree@vger.kernel.org, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,45 +73,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 05:07:46PM +0530, Naveen N. Rao wrote:
-> > +++ b/scripts/Makefile.lib
-> > @@ -234,6 +234,7 @@ objtool_args =								\
-> >  	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)		\
-> >  	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
-> >  	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
-> > +	$(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
-> 
-> This still won't help: for instance, if CONFIG_FTRACE itself is disabled. I
-> think we should make this depend on CONFIG_FTRACE_MCOUNT_USE_OBJTOOL. The
-> below change works for me:
-> 
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 54d2d6451bdacc..fd3f55a1fdb7bb 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -245,8 +245,8 @@ objtool_args =                                                              \
->        $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)        \
->        $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)              \
->        $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
-> -       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
-> -       $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
-> +        $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL),                       \
-> +             $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mcount --mnop, --mcount)) \
->        $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
->        $(if $(CONFIG_RETPOLINE), --retpoline)                          \
->        $(if $(CONFIG_RETHUNK), --rethunk)                              \
+Hi Krzysztof,
 
-This has a new conflict, may need something like:
+Let me chime in.
 
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -256,6 +256,9 @@ objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
- objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
- objtool-args-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
- objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
-+ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
-+objtool-args-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
-+endif
- objtool-args-$(CONFIG_UNWINDER_ORC)			+= --orc
- objtool-args-$(CONFIG_RETPOLINE)			+= --retpoline
- objtool-args-$(CONFIG_RETHUNK)				+= --rethunk
+wt., 11 pa=C5=BA 2022 o 21:50 Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> napisa=C5=82(a):
+>
+> On 11/10/2022 15:06, Micha=C5=82 Grzelak wrote:
+> > Convert the marvell,pp2 bindings from text to proper schema.
+> >
+> > Move 'marvell,system-controller' and 'dma-coherent' properties from
+> > port up to the controller node, to match what is actually done in DT.
+>
+> You need to also mention other changes done during conversion -
+> requiring subnodes to be named "(ethernet-)?ports", deprecating port-id.
+>
+> >
+> > Signed-off-by: Micha=C5=82 Grzelak <mig@semihalf.com>
+> > ---
+> >  .../devicetree/bindings/net/marvell,pp2.yaml  | 286 ++++++++++++++++++
+> >  .../devicetree/bindings/net/marvell-pp2.txt   | 141 ---------
+> >  MAINTAINERS                                   |   2 +-
+> >  3 files changed, 287 insertions(+), 142 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/net/marvell,pp2.y=
+aml
+> >  delete mode 100644 Documentation/devicetree/bindings/net/marvell-pp2.t=
+xt
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/marvell,pp2.yaml b/D=
+ocumentation/devicetree/bindings/net/marvell,pp2.yaml
+> > new file mode 100644
+> > index 000000000000..24c6aeb46814
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> > @@ -0,0 +1,286 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/marvell,pp2.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Marvell CN913X / Marvell Armada 375, 7K, 8K Ethernet Controller
+> > +
+> > +maintainers:
+> > +  - Marcin Wojtas <mw@semihalf.com>
+> > +  - Russell King <linux@armlinux.org>
+> > +
+> > +description: |
+> > +  Marvell Armada 375 Ethernet Controller (PPv2.1)
+> > +  Marvell Armada 7K/8K Ethernet Controller (PPv2.2)
+> > +  Marvell CN913X Ethernet Controller (PPv2.3)
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - marvell,armada-375-pp2
+> > +      - marvell,armada-7k-pp22
+> > +
+> > +  reg:
+> > +    minItems: 3
+> > +    maxItems: 4
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +  clocks:
+> > +    minItems: 2
+> > +    items:
+> > +      - description: main controller clock
+> > +      - description: GOP clock
+> > +      - description: MG clock
+> > +      - description: MG Core clock
+> > +      - description: AXI clock
+> > +
+> > +  clock-names:
+> > +    minItems: 2
+> > +    items:
+> > +      - const: pp_clk
+> > +      - const: gop_clk
+> > +      - const: mg_clk
+> > +      - const: mg_core_clk
+> > +      - const: axi_clk
+> > +
+> > +  dma-coherent: true
+> > +
+> > +  marvell,system-controller:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: a phandle to the system controller.
+> > +
+> > +patternProperties:
+> > +  '^(ethernet-)?port@[0-9]+$':
+> > +    type: object
+> > +    description: subnode for each ethernet port.
+> > +
+> > +    properties:
+> > +      interrupts:
+> > +        minItems: 1
+> > +        maxItems: 10
+> > +        description: interrupt(s) for the port
+> > +
+> > +      interrupt-names:
+> > +        minItems: 1
+> > +        items:
+> > +          - const: hif0
+> > +          - const: hif1
+> > +          - const: hif2
+> > +          - const: hif3
+> > +          - const: hif4
+> > +          - const: hif5
+> > +          - const: hif6
+> > +          - const: hif7
+> > +          - const: hif8
+> > +          - const: link
+> > +
+> > +        description: >
+> > +          if more than a single interrupt for is given, must be the
+> > +          name associated to the interrupts listed. Valid names are:
+> > +          "hifX", with X in [0..8], and "link". The names "tx-cpu0",
+> > +          "tx-cpu1", "tx-cpu2", "tx-cpu3" and "rx-shared" are supporte=
+d
+> > +          for backward compatibility but shouldn't be used for new
+> > +          additions.
+> > +
+> > +      reg:
+> > +        description: ID of the port from the MAC point of view.
+> > +
+> > +      port-id:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+>
+>         deprecated: true
+>
+> > +        description: >
+> > +          ID of the port from the MAC point of view.
+> > +          Legacy binding for backward compatibility.
+> > +
+> > +      phy:
+> > +        $ref: /schemas/types.yaml#/definitions/phandle
+> > +        description: >
+> > +          a phandle to a phy node defining the PHY address
+> > +          (as the reg property, a single integer).
+> > +
+> > +      phy-mode:
+> > +        $ref: ethernet-controller.yaml#/properties/phy-mode
+> > +
+> > +      marvell,loopback:
+> > +        $ref: /schemas/types.yaml#/definitions/flag
+> > +        description: port is loopback mode.
+> > +
+> > +      gop-port-id:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        description: >
+> > +          only for marvell,armada-7k-pp22, ID of the port from the
+> > +          GOP (Group Of Ports) point of view. This ID is used to index=
+ the
+> > +          per-port registers in the second register area.
+> > +
+> > +    required:
+> > +      - interrupts
+> > +      - port-id
+> > +      - phy-mode
+> > +      - reg
+>
+> Keep the same order of items here as in list of properties
+>
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +
+> > +allOf:
+> > +  - $ref: ethernet-controller.yaml#
+>
+> Hmm, are you sure this applies to top-level properties, not to
+> ethernet-port subnodes? Your ports have phy-mode and phy - just like
+> ethernet-controller. If I understand correctly, your Armada Ethernet
+> Controller actually consists of multiple ethernet controllers?
+>
+
+PP2 is a single controller with common HW blocks, such as queue/buffer
+management, parser/classifier, register space, and more. It controls
+up to 3 MAC's (ports) that can be connected to phys, sfp cages, etc.
+The latter cannot exist on their own and IMO the current hierarchy -
+the main controller with subnodes (ports) properly reflects the
+hardware.
+
+Anyway, the ethernet-controller.yaml properties fit to the subnodes.
+Apart from the name. The below is IMO a good description:.
+
+> If so, this should be moved to proper place inside patternProperties.
+> Maybe the subnodes should also be renamed from ports to just "ethernet"
+> (as ethernet-controller.yaml expects), but other schemas do not follow
+> this convention,
+
+ethernet@
+{
+    ethernet-port@0
+    {
+     }
+     ethernet-port@1
+     {
+     }
+}
+
+What do you recommend?
+
+Thanks,
+Marcin
