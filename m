@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805CF5FBE7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FCC5FBE81
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiJKXrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 19:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
+        id S229615AbiJKXr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 19:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiJKXq5 (ORCPT
+        with ESMTP id S229585AbiJKXrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 19:46:57 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7552F1571F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:46:53 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id l6so4574372pgu.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:46:53 -0700 (PDT)
+        Tue, 11 Oct 2022 19:47:24 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2AB12D19
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:47:20 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id o65so12185314iof.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NXIZJTtVhqCpmyGjXMWK48RPmdnN8LgdLSZxMWzlW54=;
-        b=VUROlRoYgzR70sQJFbpLvMSbh8bjmCg+iVdR7RSAsmc2GNvFxI/h4ESUYMGaloqv4Q
-         O2zBYNVG+uyT7271G7zQNxrozKHUA+Tx6kZUdGKtLcddxNVFpHMIrU4ZQZLlv1LNzmXJ
-         kGS4/EsrZ1wV18wXVjE3xThqiLKPUiPWTwBk5lbdzhfwrLp1Cs+L/gaRUtVL0cueFs/F
-         ZX4sTamhLXAzfmNYbWFgQljACZ7/mn/+E5hysHFGLgE0NM7CpdXVZlOLl8SnZTZ8FuRT
-         BghgxbWTKUJLUFAh2DEQqD1nJFvkll5hBCQ/nAYgV5yY+U+N87OhniNTIovWLG766DP3
-         7Ubw==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2up8oYXI/EHVFioKzFzVTYRmRHPm+gCTG27DRC/Ipq8=;
+        b=mssK7G/qevvoEJ2xSlhh0TtPZbnhwd3lNJFYSHTATmi525DN0KYOlqL+rUhyORcKil
+         ljMjVpoWFOgAaO9Cln4LoaGzP0PqPV1+h57QXXHcqsYmR1hph5RXBylRwrwh4tyDaGNN
+         p0qUPEUcBUPkqEuuGVwvNvO9/A8pWY3EO+P1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NXIZJTtVhqCpmyGjXMWK48RPmdnN8LgdLSZxMWzlW54=;
-        b=lUz2ApYJnqtk4UX2rjWGM4YQsYtSNykfvrg6E7MBMN/g06Ym+vI2kR4MKTDDygFUEa
-         rSCbeLZ4fwY5x+4SSmRqFmQ6KyUrfhMB2p/o1yaPy6Rl/f0cx1XpYFQB5kYi86Nviubf
-         uaVL9mvj7R+2yPquIZap6M4KHlrXGlU/fjtDkLMuncYGg2pezdtxnJSf4Ah6CfbuWAD5
-         yhBPUNyPDvLWLt2qBIy5GWraSXYEY3l88AG2uOyayyTpvBR6apgX0YlJXEtPXNg9ebj/
-         d+o4f58xdV94RpxeSlfQ6ga+ENKiXAkgwUCAdeuXxii0Zc1jZWGUuJOBS+IGJgGk8aKp
-         1cEw==
-X-Gm-Message-State: ACrzQf2Ktwxg52Er+iBY8Bwj43nc47tz1yvkvgqoWervIiN5rE241hwV
-        0pOiY2ApcNHFL1/1jI6QSBjI7Q==
-X-Google-Smtp-Source: AMsMyM5Ch+o6zNkMhMyXMxtlm7R5W1U/84gENt06G22RZbktX34GcbWPf0GyyDfHQ3unvKWyC4NbRw==
-X-Received: by 2002:a65:6b8e:0:b0:44f:ec0f:f684 with SMTP id d14-20020a656b8e000000b0044fec0ff684mr22336295pgw.25.1665532012852;
-        Tue, 11 Oct 2022 16:46:52 -0700 (PDT)
-Received: from relinquished.localdomain ([2600:380:8047:f466:3e42:98bc:71a6:f1b7])
-        by smtp.gmail.com with ESMTPSA id r27-20020aa7963b000000b005636d8aa98dsm4543908pfg.141.2022.10.11.16.46.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 16:46:52 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 16:46:49 -0700
-From:   Omar Sandoval <osandov@osandov.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Omar Sandoval <osandov@fb.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>, clm@fb.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.0 33/46] btrfs: get rid of block group caching
- progress logic
-Message-ID: <Y0YAaXPzuSmSKwiG@relinquished.localdomain>
-References: <20221011145015.1622882-1-sashal@kernel.org>
- <20221011145015.1622882-33-sashal@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2up8oYXI/EHVFioKzFzVTYRmRHPm+gCTG27DRC/Ipq8=;
+        b=q8l+ljq+AQpbEE97xofak0fV1PMKw15pQubSff1Ulfx+sIXGkXYfvSztTOieavvBd/
+         L2GrObh9sjSAw7A6JLoSFahuaZZOKLVBGZZGchjrjIgW/NGrCPJnN4DiD10bv1aMGnt4
+         Y/wp3idTDq7p2dfcsy6uhrWsmWEj5PckNkjCu2r07plpx4gvVYYO0+mgpBYWlAIrDQiZ
+         1QizbiwRJNufy9VZQcvGVeC+4Ga5cDLN86adKUxdSdNd3OcNEiiqFFRGrsWVjn92McIe
+         jf8EV3HC+sfkm9JVds+Lrp+oUo9fHdYSpXEqyyqsKw9rQzbxamUjYRM1iWA2VSnusWJN
+         47SQ==
+X-Gm-Message-State: ACrzQf09FYcAjzqcb++Y62PcMqRphCue2S88iG1z3hiyZRJtgXv/xUce
+        xCjiRmCM9qRLIlJZ/3m3fl/x77w9pOOHqDw1CqQoel60gL4=
+X-Google-Smtp-Source: AMsMyM5oGw44fELVGa/Eh4SpTAwjR9/pJGG4KPS3tpx10Ok+SmIeS5mBzpQ72CyRewR56Ba8n8XiTKONUqyX+LaimGU=
+X-Received: by 2002:a6b:3f08:0:b0:6bc:7551:69f6 with SMTP id
+ m8-20020a6b3f08000000b006bc755169f6mr3076585ioa.156.1665532038885; Tue, 11
+ Oct 2022 16:47:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011145015.1622882-33-sashal@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221010223956.1041247-1-frederic@kernel.org> <20221010223956.1041247-3-frederic@kernel.org>
+ <Y0TOSE3ZM/3uHRWX@google.com> <20221011192150.GA1052160@lothringen>
+In-Reply-To: <20221011192150.GA1052160@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 11 Oct 2022 19:47:07 -0400
+Message-ID: <CAEXW_YTk+=SmC77PQASkwcMkmB0fyArJEKfPRVmK5+nS4E3y4A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] rcu/nocb: Spare bypass locking upon normal enqueue
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 10:50:01AM -0400, Sasha Levin wrote:
-> From: Omar Sandoval <osandov@fb.com>
-> 
-> [ Upstream commit 48ff70830bec1ccc714f4e31059df737f17ec909 ]
-> 
-> struct btrfs_caching_ctl::progress and struct
-> btrfs_block_group::last_byte_to_unpin were previously needed to ensure
-> that unpin_extent_range() didn't return a range to the free space cache
-> before the caching thread had a chance to cache that range. However, the
-> commit "btrfs: fix space cache corruption and potential double
-> allocations" made it so that we always synchronously cache the block
-> group at the time that we pin the extent, so this machinery is no longer
-> necessary.
-> 
-> Reviewed-by: Filipe Manana <fdmanana@suse.com>
-> Signed-off-by: Omar Sandoval <osandov@fb.com>
-> Signed-off-by: David Sterba <dsterba@suse.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  fs/btrfs/block-group.c     | 13 ------------
->  fs/btrfs/block-group.h     |  2 --
->  fs/btrfs/extent-tree.c     |  9 ++-------
->  fs/btrfs/free-space-tree.c |  8 --------
->  fs/btrfs/transaction.c     | 41 --------------------------------------
->  fs/btrfs/zoned.c           |  1 -
->  6 files changed, 2 insertions(+), 72 deletions(-)
+On Tue, Oct 11, 2022 at 3:21 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+>
+> On Tue, Oct 11, 2022 at 02:00:40AM +0000, Joel Fernandes wrote:
+> > On Tue, Oct 11, 2022 at 12:39:56AM +0200, Frederic Weisbecker wrote:
+> > > When a callback is to be enqueued to the normal queue and not the bypass
+> > > one, a flush to the bypass queue is always tried anyway. This attempt
+> > > involves locking the bypass lock unconditionally. Although it is
+> > > guaranteed not to be contended at this point, because only call_rcu()
+> > > can lock the bypass lock without holding the nocb lock, it's still not
+> > > free and the operation can easily be spared most of the time by just
+> > > checking if the bypass list is empty. The check is safe as nobody can
+> > > queue nor flush the bypass concurrently.
+> > >
+> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > ---
+> > >  kernel/rcu/tree_nocb.h | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > > index 094fd454b6c3..30c3d473ffd8 100644
+> > > --- a/kernel/rcu/tree_nocb.h
+> > > +++ b/kernel/rcu/tree_nocb.h
+> > > @@ -423,8 +423,10 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > >             if (*was_alldone)
+> > >                     trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+> > >                                         TPS("FirstQ"));
+> > > -           WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
+> > > -           WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
+> > > +           if (rcu_cblist_n_cbs(&rdp->nocb_bypass)) {
+> > > +                   WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
+> > > +                   WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
+> > > +           }
+> > >             return false; // Caller must enqueue the callback.
+> > >     }
+> >
+> > Instead of this, since as you mentioned that the bypass lock is not contended
+> > in this path, isn't it unnecessary to even check or attempt to acquire the
+> > lock in call_rcu() path? So how about something like the following, or would
+> > this not work for some reason?
+>
+> You're right. But it's a bit error prone and it adds quite some code complication
+> just for a gain on a rare event (bypass is supposed to be flushed on rare
+> occasions by the caller).
 
-Hi, Sasha,
-
-This commit is a cleanup. Please drop it from 6.0 and 5.19.
-
-Thanks,
-Omar
+But the "checking of whether to flush" which leads to "acquiring the
+bypass lock first" , is not a rare event as you pointed out (can be
+spared most of the time as you said). The alternative I proposed
+removes the need for the frequent locking (which is another way of
+implementing what you suggested).
