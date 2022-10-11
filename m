@@ -2,174 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF825FB212
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E80D5FB210
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiJKMIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 08:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S229673AbiJKMIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 08:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJKMIp (ORCPT
+        with ESMTP id S229605AbiJKMIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 08:08:45 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64F920F45
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 05:08:42 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id l5so15622380oif.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 05:08:41 -0700 (PDT)
+        Tue, 11 Oct 2022 08:08:22 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28774564DF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 05:08:20 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id z8so3539847qtv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 05:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GX/EVFZiDxV5YSrMfs5F2mJclGh31BfpMrxb1LPPV+Y=;
-        b=3kYvrRBTFFUUgZ0iHmJep7Nu1IpnKtjUnjDZw8fMnomUqEbBMZr5ShjPgJLuX7bLH1
-         vOm16xyYEwloNVbeW5mYjHbRWJFLqled7//HvS6OX0m5+YBRzQ45szPg7fouyGpIMfWF
-         0Yud7NPFgHln2oV6Uw5pMTEEOqI/7x8PKlk9i3jvSjpqIqkm7fLNVqa7roIn37TbZTD3
-         CNVDyQD9WtVzgX3TaxluwqIc0PAPlJybnKOKdY1c6oQUbzpUfnEeDxoQQr9+pHEhdD/w
-         YFVlvdsysBzLT3fgP8lfVhCPHQl0ffjeW2bZtzUsmR+RTNo4SvfGnYHQXxU1QxdGe0HF
-         C17Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d7sQGgcfeLetHsYqqAQzwhlkQO31idzHL2CtdWtj7pI=;
+        b=fFpMQBJU+KIup5rqPl5HSkr/RGGMV7irnqdmJssu6pEBstzv0l8cg2Yyh4W0MSrMjS
+         1UHEW48g9iVzieWXgwHcY2sYLOt8PGh7CZUX15ojxeZ8yjvBxSHv2WSDFYFUduWYP9nw
+         FCg96WFT2ulQ3hmp+VnOAjxmLC62pNPaUoyRZaduPPyWuVZSCJxfQDpFWFu7r13xNirS
+         IKWsSZyCLPIsSGgpTaS94qvR6G4n+kY0wFKw9Gg0jspinDQ/WolzwqymbY8U1sloEBA9
+         A+IPAE5NrQeJUa3snTIDBFMzGx3H7TLwRCa6tpNRmjgaH4XwOlPnKAepUx7845XuTUAP
+         2G7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GX/EVFZiDxV5YSrMfs5F2mJclGh31BfpMrxb1LPPV+Y=;
-        b=0hHGs29BVKya4klQXaJtlbpi3KuBA+0D0HaOSpUMU5t01QJV+LHd1Z3zn7TAYC/oBV
-         f4A7Aconguk2ipBkCfQfKwiimbhII57ZySfa1zjz5u/PMe1lJLv1xrcXyNi4sQypdyEm
-         USZYSVzg3Zc1RNIX4vSEKE3JsIRsx5uYSSIFvIrhheaKgbGNRdriZ8auBK1nnrgi3ElB
-         oBHQS/XGo9E+D3dE/qXxGuqhLM+TaJNkQv3OUHouUJiaW8yAjJ3/fIRnQ7p9aDMHC5hy
-         q8vN40qutRQuHdKLeLjwQfWs5hV+OOrAHHD4qCLPGRiulU6OqgD5AK20uWBeWu1hzOMB
-         3R/A==
-X-Gm-Message-State: ACrzQf1iu1nSjmaiZ+PWWYPb38XiRsX6v5fPH6MKez9sNNa2UhjGhtyM
-        ucoP/KSxM/M56MB9MbpNQ0SxhwXl4EuIPQ==
-X-Google-Smtp-Source: AMsMyM6ircMtQ5ZqI9p9hkbo0tneftBCJsQcBMgW9dQcu7mjSwjajFsAYp0mILRbqgMTmn1Qd1x6WQ==
-X-Received: by 2002:a17:90b:3555:b0:20a:c2d5:d361 with SMTP id lt21-20020a17090b355500b0020ac2d5d361mr27220661pjb.50.1665490110596;
-        Tue, 11 Oct 2022 05:08:30 -0700 (PDT)
-Received: from YGFVJ29LDD.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170903235200b001783f964fe3sm8563372plh.113.2022.10.11.05.08.27
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 11 Oct 2022 05:08:30 -0700 (PDT)
-From:   Chuyi Zhou <zhouchuyi@bytedance.com>
-To:     peterz@infradead.org, vincent.guittot@linaro.org, mingo@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH] sched/core.c: Add min_ratio for cfs bandwidth_control
-Date:   Tue, 11 Oct 2022 20:07:21 +0800
-Message-Id: <20221011120721.46288-1-zhouchuyi@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d7sQGgcfeLetHsYqqAQzwhlkQO31idzHL2CtdWtj7pI=;
+        b=OeWB435GpGwG7mcH/3Qlq7SS+5ayR9NBrLpkpCA+RSqKsJMrzp5phtdwFzTYlLK2ln
+         LIF7Xy0VDWpzEpBkt/8nQtG981gdEwGkTuKP3EyHQLm/n3a29WbkRRSFeN29eRpWrlwV
+         FN8MfbfsODqw1pTIHJFooPkW7/qPUm3y0brkvcZYStCUifHFgpBAXxo8jn0BNCwUxWAb
+         GsAEtNSqNICnJqcxbXADgDuQvfbYyUDobd/P4+apKP3q2BKuvCCJR17xq0X0wiMWSPy1
+         OnNfWHtaAtq+1wVvxMNtpTyh8rA8VqCNaQsPGxUWrsd0u9J2QSsOt/kEd0qx8xUluSSW
+         B32g==
+X-Gm-Message-State: ACrzQf241EOyha5Q4OKsGIYWYI9VIHNz62CzIx1E4ZQuCbTuM5PbVrXy
+        dIn9zwaZQTdfH3IadrDfo/kMnQ==
+X-Google-Smtp-Source: AMsMyM4eGhDDIfVAL6kaolpL8+jGYieCca2y9hJwcftMhjyac5scT6NHJ1gngHvyVO3MwMBzC9Cc2A==
+X-Received: by 2002:ac8:7f93:0:b0:35b:bbdd:5699 with SMTP id z19-20020ac87f93000000b0035bbbdd5699mr18616407qtj.46.1665490099267;
+        Tue, 11 Oct 2022 05:08:19 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id c2-20020ac87dc2000000b0039a8b075248sm3987764qte.14.2022.10.11.05.08.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 05:08:18 -0700 (PDT)
+Message-ID: <e64594f9-e5dc-9a79-8240-fa0e749b9655@linaro.org>
+Date:   Tue, 11 Oct 2022 08:08:16 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 1/8] dt-bindings: ingenic: Add support for the JZ4755 SoC
+Content-Language: en-US
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221009181338.2896660-1-lis8215@gmail.com>
+ <20221009181338.2896660-2-lis8215@gmail.com>
+ <84b6dae0-d503-bbd2-d483-80462917afa4@linaro.org>
+ <CAKNVLfZmjfmKb5ybY8NDhV-bQCQn7o_bSVK=aM4byftasW6dLg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAKNVLfZmjfmKb5ybY8NDhV-bQCQn7o_bSVK=aM4byftasW6dLg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tasks may be throttled when holding locks for a long time by current
-cfs bandwidth control mechanism once users set a too small quota/period
-ratio, which can result whole system get stuck[1].
+On 10/10/2022 16:18, Siarhei Volkau wrote:
+> пн, 10 окт. 2022 г. в 17:55, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org>:
+> 
+>> How do you plan to merge it? Usually these go via subsystem trees...
+> 
+> It's a new case for me, could you explain the problem a bit more?
+> What things should I bother with in the next patchset version?
+> Thanks in advance.
 
-In order to prevent the above situation from happening, this patch adds
-sysctl_sched_cfs_bandwidth_min_ratio in /proc/sys/kernel, which indicates
-the minimum percentage of quota/period users can set. The default value is
-zero and users can set quota and period without triggering this constraint.
+Each binding goes via subsystem maintainer, not via DT bindings tree, so
+keeping all in one patch messes with that.
 
-Link[1]:https://lore.kernel.org/lkml/5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com/T/
-Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
-Suggested-by: Abel Wu <wuyun.abel@bytedance.com>
----
- include/linux/sched/sysctl.h |  4 ++++
- kernel/sched/core.c          | 23 +++++++++++++++++++++++
- kernel/sysctl.c              | 10 ++++++++++
- 3 files changed, 37 insertions(+)
-
-diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-index e650946816d0..375c14f8fca9 100644
---- a/include/linux/sched/sysctl.h
-+++ b/include/linux/sched/sysctl.h
-@@ -21,6 +21,10 @@ enum sched_tunable_scaling {
- 	SCHED_TUNABLESCALING_END,
- };
- 
-+#ifdef CONFIG_CFS_BANDWIDTH
-+extern unsigned int sysctl_sched_cfs_bandwidth_min_ratio;
-+#endif
-+
- #define NUMA_BALANCING_DISABLED		0x0
- #define NUMA_BALANCING_NORMAL		0x1
- #define NUMA_BALANCING_MEMORY_TIERING	0x2
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 60fdc0faf1c9..fc5b6671154d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -10541,6 +10541,12 @@ static u64 cpu_shares_read_u64(struct cgroup_subsys_state *css,
- }
- 
- #ifdef CONFIG_CFS_BANDWIDTH
-+/*
-+ * The minimum of quota/period ratio users can set, default is zero and users can set
-+ * quota and period without triggering this constraint.
-+ */
-+unsigned int sysctl_sched_cfs_bandwidth_min_ratio;
-+
- static DEFINE_MUTEX(cfs_constraints_mutex);
- 
- const u64 max_cfs_quota_period = 1 * NSEC_PER_SEC; /* 1s */
-@@ -10550,6 +10556,20 @@ static const u64 max_cfs_runtime = MAX_BW * NSEC_PER_USEC;
- 
- static int __cfs_schedulable(struct task_group *tg, u64 period, u64 runtime);
- 
-+static int check_cfs_bandwidth_min_ratio(u64 period, u64 quota)
-+{
-+	u64 ratio;
-+
-+	if (!sysctl_sched_cfs_bandwidth_min_ratio)
-+		return 0;
-+
-+	ratio = div64_u64(quota * 100, period);
-+	if (ratio < sysctl_sched_cfs_bandwidth_min_ratio)
-+		return -1;
-+
-+	return 0;
-+}
-+
- static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
- 				u64 burst)
- {
-@@ -10585,6 +10605,9 @@ static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
- 				     burst + quota > max_cfs_runtime))
- 		return -EINVAL;
- 
-+	if (quota != RUNTIME_INF && check_cfs_bandwidth_min_ratio(period, quota))
-+		return -EINVAL;
-+
- 	/*
- 	 * Prevent race between setting of cfs_rq->runtime_enabled and
- 	 * unthrottle_offline_cfs_rqs().
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 205d605cacc5..26f05ec7d9aa 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1642,6 +1642,16 @@ static struct ctl_table kern_table[] = {
- 		.extra2		= SYSCTL_FOUR,
- 	},
- #endif /* CONFIG_NUMA_BALANCING */
-+#ifdef CONFIG_CFS_BANDWIDTH
-+	{
-+		.procname	= "sched_cfs_bandwidth_min_ratio",
-+		.data		= &sysctl_sched_cfs_bandwidth_min_ratio,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+	},
-+#endif /* CONFIG_CFS_BANDWIDTH */
- 	{
- 		.procname	= "panic",
- 		.data		= &panic_timeout,
--- 
-2.20.1
+Best regards,
+Krzysztof
 
