@@ -2,123 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB775FB736
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D815FB707
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiJKPal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
+        id S230395AbiJKP1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiJKPaQ (ORCPT
+        with ESMTP id S230338AbiJKP06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:30:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA06598C97;
-        Tue, 11 Oct 2022 08:20:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED92B113E;
-        Tue, 11 Oct 2022 08:10:36 -0700 (PDT)
-Received: from [10.57.67.43] (unknown [10.57.67.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 206923F792;
-        Tue, 11 Oct 2022 08:10:28 -0700 (PDT)
-Message-ID: <0da5622f-35bb-fbe3-37a4-e5c9e825d9ca@arm.com>
-Date:   Tue, 11 Oct 2022 16:10:27 +0100
+        Tue, 11 Oct 2022 11:26:58 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C67D38DD;
+        Tue, 11 Oct 2022 08:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1665501480; x=1697037480;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2syQHHQ9eJJDt40xrL/6xtSPJwmCYRF97UNEmN5xHqU=;
+  b=YgyuDiBIXoXFzr3si2f6Rh/BQhPtsD130/kM4f9FhzIKOcnOwg3kFora
+   lrSd9p1bgXfmL0vYuxzpatrlFByQGuxB4XwXPDb9AtT/KkHgtnFDxxIh8
+   WGWBw8b+AJVL6ccGJpIZ9VbidIN31pSVbW6FVsHTE6fFXuL7eJdXhEZy/
+   o=;
+X-IronPort-AV: E=Sophos;i="5.95,176,1661817600"; 
+   d="scan'208";a="232394545"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 15:16:39 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id A5B8B8F8B3;
+        Tue, 11 Oct 2022 15:16:37 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 11 Oct 2022 15:16:35 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.161.179) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 11 Oct 2022 15:16:29 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <pabeni@redhat.com>
+CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+        <kraig@google.com>, <kuba@kernel.org>, <kuni1840@gmail.com>,
+        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <martin.lau@kernel.org>, <netdev@vger.kernel.org>,
+        <willemb@google.com>, <yoshfuji@linux-ipv6.org>
+Subject: Re: [PATCH v1 net 1/3] udp: Update reuse->has_conns under reuseport_lock.
+Date:   Tue, 11 Oct 2022 08:16:18 -0700
+Message-ID: <20221011151618.89550-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <468f01fc1dde6cf44fab51653eeb626fc8521db2.camel@redhat.com>
+References: <468f01fc1dde6cf44fab51653eeb626fc8521db2.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH v3 03/13] coresight: stm: Update STM driver to use Trace
- ID API
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
-References: <20220809223401.24599-1-mike.leach@linaro.org>
- <20220809223401.24599-4-mike.leach@linaro.org>
- <65e70db9-9f85-7285-0602-f2d29887550a@arm.com>
- <CAJ9a7Vgz+0xEQO-MvGUzbsr_LBh4pDep7JJtFoA+cAeiAERJFw@mail.gmail.com>
- <55170f1f-99f7-6e25-55d3-5d7247737afc@arm.com>
- <CAJ9a7VgrJ3L6o9e0600G_JL6S_PXLsZcQDLPR_YGpSu4L=pOMg@mail.gmail.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <CAJ9a7VgrJ3L6o9e0600G_JL6S_PXLsZcQDLPR_YGpSu4L=pOMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.179]
+X-ClientProxiedBy: EX13D16UWB004.ant.amazon.com (10.43.161.170) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 12:10, Mike Leach wrote:
-> Hi suzuki,
+From:   Paolo Abeni <pabeni@redhat.com>
+Date:   Tue, 11 Oct 2022 12:50:52 +0200
+> On Mon, 2022-10-10 at 10:43 -0700, Kuniyuki Iwashima wrote:
+> > When we call connect() for a UDP socket in a reuseport group, we have
+> > to update sk->sk_reuseport_cb->has_conns to 1.  Otherwise, the kernel
+> > could select a unconnected socket wrongly for packets sent to the
+> > connected socket.
+> > 
+> > However, the current way to set has_conns is illegal and possible to
+> > trigger that problem.  reuseport_has_conns() changes has_conns under
+> > rcu_read_lock(), which upgrades the RCU reader to the updater.  Then,
+> > it must do the update under the updater's lock, reuseport_lock, but
+> > it doesn't for now.
+> > 
+> > For this reason, there is a race below where we fail to set has_conns
+> > resulting in the wrong socket selection.  To avoid the race, let's split
+> > the reader and updater with proper locking.
+> > 
+> >  cpu1                               cpu2
+> > +----+                             +----+
+> > 
+> > __ip[46]_datagram_connect()        reuseport_grow()
+> > .                                  .
+> > > - reuseport_has_conns(sk, true)   |- more_reuse = __reuseport_alloc(more_socks_size)
+> > >  .                               |
+> > >  |- rcu_read_lock()
+> > >  |- reuse = rcu_dereference(sk->sk_reuseport_cb)
+> > >  |
+> > >  |                               |  /* reuse->has_conns == 0 here */
+> > >  |                               |- more_reuse->has_conns = reuse->has_conns
+> > >  |- reuse->has_conns = 1         |  /* more_reuse->has_conns SHOULD BE 1 HERE */
+> > >  |                               |
+> > >  |                               |- rcu_assign_pointer(reuse->socks[i]->sk_reuseport_cb,
+> > >  |                               |                     more_reuse)
+> > >  `- rcu_read_unlock()            `- kfree_rcu(reuse, rcu)
+> > > 
+> > > - sk->sk_state = TCP_ESTABLISHED
+> > 
+> > Fixes: acdcecc61285 ("udp: correct reuseport selection with connected sockets")
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > ---
+> >  include/net/sock_reuseport.h | 23 +++++++++++++++++------
+> >  net/ipv4/datagram.c          |  2 +-
+> >  net/ipv4/udp.c               |  2 +-
+> >  net/ipv6/datagram.c          |  2 +-
+> >  net/ipv6/udp.c               |  2 +-
+> >  5 files changed, 21 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+> > index 473b0b0fa4ab..fe9779e6d90f 100644
+> > --- a/include/net/sock_reuseport.h
+> > +++ b/include/net/sock_reuseport.h
+> > @@ -43,21 +43,32 @@ struct sock *reuseport_migrate_sock(struct sock *sk,
+> >  extern int reuseport_attach_prog(struct sock *sk, struct bpf_prog *prog);
+> >  extern int reuseport_detach_prog(struct sock *sk);
+> >  
+> > -static inline bool reuseport_has_conns(struct sock *sk, bool set)
+> > +static inline bool reuseport_has_conns(struct sock *sk)
+> >  {
+> >  	struct sock_reuseport *reuse;
+> >  	bool ret = false;
+> >  
+> >  	rcu_read_lock();
+> >  	reuse = rcu_dereference(sk->sk_reuseport_cb);
+> > -	if (reuse) {
+> > -		if (set)
+> > -			reuse->has_conns = 1;
+> > -		ret = reuse->has_conns;
+> > -	}
+> > +	if (reuse && reuse->has_conns)
+> > +		ret = true;
+> >  	rcu_read_unlock();
+> >  
+> >  	return ret;
+> >  }
+> >  
+> > +static inline void reuseport_has_conns_set(struct sock *sk)
+> > +{
+> > +	struct sock_reuseport *reuse;
+> > +
+> > +	if (!rcu_access_pointer(sk->sk_reuseport_cb))
+> > +		return;
+> > +
+> > +	spin_lock(&reuseport_lock);
+> > +	reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
+> > +					  lockdep_is_held(&reuseport_lock));
+> > +	reuse->has_conns = 1;
+> > +	spin_unlock(&reuseport_lock);
+> > +}
 > 
-> On Fri, 7 Oct 2022 at 18:53, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>
->> On 06/10/2022 14:54, Mike Leach wrote:
->>> Hi Suzuki,
->>>
->>> On Mon, 3 Oct 2022 at 10:04, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>>>
->>>> On 09/08/2022 23:33, Mike Leach wrote:
->>>>> Updates the STM driver to use the trace ID allocation API.
->>>>> This uses the _system_id calls to allocate an ID on device poll,
->>>>> and release on device remove.
->>>>>
->>>>> The sysfs access to the STMTRACEIDR register has been changed from RW
->>>>> to RO. Having this value as writable is not appropriate for the new
->>>>> Trace ID scheme - and had potential to cause errors in the previous
->>>>> scheme if values clashed with other sources.
->>>>>
->>>>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
->>>>> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->>
->>>>> @@ -854,7 +830,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
->>>>>
->>>>>     static int stm_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>     {
->>>>> -     int ret;
->>>>> +     int ret, trace_id;
->>>>>         void __iomem *base;
->>>>>         struct device *dev = &adev->dev;
->>>>>         struct coresight_platform_data *pdata = NULL;
->>>>> @@ -938,12 +914,22 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
->>>>>                 goto stm_unregister;
->>>>>         }
->>>>>
->>>>> +     trace_id = coresight_trace_id_get_system_id();
->>>>> +     if (trace_id < 0) {
->>>>
->>>> The above API returns "INVALID_ID" and not a negative error status.
->>>> I think it is better to fix the API to return:
->>>>
->>>>      ret < 0  - If there is any error
->>>>               - Otherwise a positive integer
->>>> And the users should be kept unaware of which ID is valid or invalid.
->>>>
->>>
->>> coresight_trace_id_get_system_id() returns the ID if one can be
->>> allocated or -EINVAL if not.
->>>
->>> Not sure what you are looking at here.
->>
->> Sorry, indeed I was mistaken there. It is the get_cpu_id() which
->> returns the INVALID_ID on failure. Please could we make that
->> consistent with this scheme ? i.e, < 0 on error.
->>
-> 
-> That also returns -EINVAL, as both call the same underlying allocator.
+> Since the above is not super critical, it's probably better move it
+> into  sock_reuseport.c file and export it (to fix the build issue)
 
-You're right, the check in coresight_trace_id_map_get_cpu_id(),
-confused me.
-
-> However happy to add on the comments for the exported functions
-
-Yes, please.
-
-Thanks Mike
-
-Suzuki
+I'll fix the CONFIG_IPV6=m build failure.
+Thank you.
