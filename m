@@ -2,52 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBF35FAA98
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D485FAA9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJKC0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 22:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        id S229729AbiJKC1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 22:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJKC0l (ORCPT
+        with ESMTP id S229526AbiJKC1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 22:26:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85447B1D5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:26:40 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mmfhx2LmVzpVc4;
-        Tue, 11 Oct 2022 10:23:29 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 10:26:38 +0800
-Subject: Re: [PATCH] x86/alternative: fix undefined reference to
- __ibt_endbr_seal[_end]
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221009154532.1100121-1-linmiaohe@huawei.com>
- <Y0K+YbcwyLJg9Iwr@hirez.programming.kicks-ass.net>
- <1ed246ea-2960-4893-f84a-c24b3c3832d7@huawei.com>
- <Y0LIcwJKRDJVOW7o@hirez.programming.kicks-ass.net>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <69523133-ad61-1fcf-e78a-d2017608faff@huawei.com>
-Date:   Tue, 11 Oct 2022 10:26:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 10 Oct 2022 22:27:41 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5350844F2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:27:40 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id t25so673147qkm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sladewatkins.net; s=googled;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R0kZnhfesPl9qNaPTyscrmeO3Cgv6kK7ijXhflaJOE4=;
+        b=mDm13BocLQVhzw+jM56VKsIkpaU2AlBUCzFy39mjbKP117HakVY163fK/NGsr67ld+
+         e3oe0Ss6GH9wRb2FB/nPlpP8EBPcHQ9n9gzpXcjUbncvagOqaz3LOA7FSeIF1ydDeeVP
+         ekOVnmXv5BXzUwShYLVyA4uC2SO311hJnk6TfpT3H6H3uohDOvANdZYCj1GADvpF+C3/
+         zH5bbdkbrLN/26tUCDyDeoujhXfEUOkxQSrCPfkoy/L/mXElJC/VEXJnRhaqozuwABt2
+         Fbj2i0tbJunPM20svB4PQaHSBUz4Ix72bsLS04tQS4ncWvyXUyUdKlJxacdiYMS19Ayy
+         /1OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R0kZnhfesPl9qNaPTyscrmeO3Cgv6kK7ijXhflaJOE4=;
+        b=gt9RJypjhRgWEMg08Syh1hbGjkRTCg1Go6T51q8Km43EmS/K4vq3BfqZ0AoZMTGQZZ
+         Jptd/ifErS6wG0NM85mNwuMQWu+xy+L1E77FlpXA9ANWvjdr0WrkUnUjUQWXTT+vObi8
+         4eAoh2Xd2dnUv15klosseow9rCeBfJ0bLJ018r5jRF+qYcVKv9G09r4bQTX7LJqRofZM
+         a8nMSn+sBrAHmIPjOlgzeArQpYPOiezGJNWgwNBew+jZh3l7/KkpXjqiDTdAwvgYofDi
+         NcHxznqvX8IO/kfirfu7/Y7eJ50jRwGscXVRjnt89Qp/Mt9A8AjzNFEaGMjhTGcXR9ej
+         ZYpw==
+X-Gm-Message-State: ACrzQf1aJXXdt4Xxv7uRPwgBYxl8McSU+/1LpJCFgPzipR00eyhLSziA
+        5oD71O+KYhlenldrK+1TF1LlvQ==
+X-Google-Smtp-Source: AMsMyM4Ba/uq7n2O8aHdGu9N/VomhCQ0H8a+eEyaCBPB35dfrS8nWOjaxc/NqUQzmgzxPcfCAsnQ+A==
+X-Received: by 2002:a05:620a:46aa:b0:6ee:80c5:4246 with SMTP id bq42-20020a05620a46aa00b006ee80c54246mr150056qkb.87.1665455259884;
+        Mon, 10 Oct 2022 19:27:39 -0700 (PDT)
+Received: from sladewatkins.net (pool-108-4-135-94.albyny.fios.verizon.net. [108.4.135.94])
+        by smtp.gmail.com with ESMTPSA id fg27-20020a05622a581b00b00399ad646794sm4362034qtb.41.2022.10.10.19.27.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 19:27:39 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 22:27:37 -0400
+From:   Slade Watkins <srw@sladewatkins.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Subject: Re: [PATCH 5.19 00/46] 5.19.15-rc2 review
+Message-ID: <Y0TUmfzCm1mGKeac@sladewatkins.net>
+References: <20221010191212.200768859@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <Y0LIcwJKRDJVOW7o@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010191212.200768859@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,69 +74,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/9 21:11, Peter Zijlstra wrote:
-> On Sun, Oct 09, 2022 at 08:44:26PM +0800, Miaohe Lin wrote:
->> On 2022/10/9 20:28, Peter Zijlstra wrote:
->>> On Sun, Oct 09, 2022 at 11:45:32PM +0800, Miaohe Lin wrote:
->>>> When I compile the kernel bzImage, there are several compile errors:
->>>>
->>>> ld: arch/x86/kernel/alternative.o: in function
->>>> `alternative_instructions':
->>>> alternative.c:(.init.text+0x15d): undefined reference to
->>>> `__ibt_endbr_seal_end'
->>>> ld: alternative.c:(.init.text+0x164): undefined reference to
->>>> `__ibt_endbr_seal'
->>>>
->>>> It's because __ibt_endbr_seal and __ibt_endbr_seal_end are not optimized
->>>> away when CONFIG_X86_KERNEL_IBT isn't enabled. Remove noinline attribute
->>>> to help gcc optimize them away.
->>>>
->>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>> ---
->>>>  arch/x86/kernel/alternative.c | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
->>>> index 5cadcea035e0..beaf9fc44e2f 100644
->>>> --- a/arch/x86/kernel/alternative.c
->>>> +++ b/arch/x86/kernel/alternative.c
->>>> @@ -624,7 +624,7 @@ void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end)
->>>>  
->>>>  #else
->>>>  
->>>> -void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
->>>> +void __init_or_module apply_ibt_endbr(s32 *start, s32 *end) { }
->>>>  
->>>>  #endif /* CONFIG_X86_KERNEL_IBT */
->>>>  
->>>
->>> None of this makes any sense...
->>
->> This compile error occurs in my env when CONFIG_X86_KERNEL_IBT isn't
->> enabled with gcc version 7.3.0 (GCC).
+On Mon, Oct 10, 2022 at 09:12:45PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.15 release.
+> There are 46 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> *sigh*... geriatric GCC :/
+> Responses should be made by Wed, 12 Oct 2022 19:12:02 +0000.
+> Anything received after that time might be too late.
 
-Yes, a geriatric GCC problem. :(
+5.19.15-rc2 compiled and booted on my x86_64 test system. No errors or regressions.
 
-> 
-> Anyway; perhaps clarify the changelog to state something like:
-> 
-> Due to the explicit 'noinline' GCC-7.3 is not able to optimize away the
-> argument setup of:
-> 
-> 	apply_ibt_endbr(__ibt_endbr_seal, __ibt_enbr_seal_end);
-> 
-> even when X86_KERNEL_IBT=n and the function is an empty stub -- leading
-> to link errors due to missing __ibt_endbr_seal* symbols.
-
-Will do it in v2. Thanks for your suggestion and comment.
+Tested-by: Slade Watkins <srw@sladewatkins.net>
 
 Thanks,
-Miaohe Lin
-
-> 
-> 
-> .
-> 
-
+-srw
