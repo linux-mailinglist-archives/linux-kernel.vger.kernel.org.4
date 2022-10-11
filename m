@@ -2,178 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46B95FB1CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3285FB1CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJKLqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S229598AbiJKLsP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Oct 2022 07:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiJKLqO (ORCPT
+        with ESMTP id S229505AbiJKLsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:46:14 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57919378D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:45:19 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id w18so4320934ejq.11
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/G7Viduy1q12MSxFmqoKNXmv93wLfiRLHtzJhLt738=;
-        b=yozCrNjiHXBa8wGFvIMC8yUJeFiyfDJJMytqgTFNOatnN5tfeB7+lrW/Obhpk+fbca
-         FLsx1YAZDvDDWhH2/bu81YuWQoMz0zSOprAnepYkjNUvPFvW2c3+3qdqSXnVTSWvFoR6
-         WsHzflnqngPInyVThxbVevk+L1wAG+Ly+TyBLaoQmu+DkyImN3IAFypcSFV2bJEt5p2H
-         ugAJJHJXzq49SVnwHHR6QZijFXCLOmlsgzUsekSfAAT8DmAKCbM0gfCxjcNsWYeSktDf
-         w7A3XZ8m6mVPBWEslgzi/zL197/wHrH3FeEvErrP6kHPiIH9z6oymb0mKoZ4H9wYK/Ap
-         /E+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r/G7Viduy1q12MSxFmqoKNXmv93wLfiRLHtzJhLt738=;
-        b=w8o3OZQv+c09v+YMRBrqvEYXDCsu13v0H/o/osOTXW3hnb5DrGvko8dRUwXahy9rTH
-         G8NLVq3Gk4Kk2YqDE8FDcsY9Ii3TuC1RqZkO41vLohD+PKQ61Xhoxr3oJ8uNZsEWL6ff
-         r3wGHIGdYKdHKdnvHRWDulKiDecqpBgjQQEdBBbf85neq5TM4h1nA5Ljd6xQVKrXIMXM
-         XycXzghce/fU+4ZTw4zu7szpUTTZhezCsAt2Pc2GIy14QfCR+IVFN8d5tMSXp0/88PsP
-         GotxeL7z/IuOjxJqzZqzGT4jMhaBxtTmadz1oaNSks2wQ0XNvjF7cBDGvb0HGbvgBNn4
-         ujXw==
-X-Gm-Message-State: ACrzQf25gu7Ek5YSE4T8W6oeRC+BqIBsRv2aNkE3WrODDKZvlK75alFY
-        kuDhl27o6L+lPWn2nKCoXrmyuv8n2JhVjLx8YDbTNw==
-X-Google-Smtp-Source: AMsMyM7f8YXkK4kLNMpvuHUahcCsdDuelOk96lqLJNoKQcJ2UfLuaazXvHiQuFpY5FEph1ouZdNJG2EoDbi078cgpUU=
-X-Received: by 2002:a17:906:fd85:b0:77b:b538:6472 with SMTP id
- xa5-20020a170906fd8500b0077bb5386472mr18273873ejb.48.1665488717399; Tue, 11
- Oct 2022 04:45:17 -0700 (PDT)
+        Tue, 11 Oct 2022 07:48:11 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C93FDE6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:48:10 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-158-Lh8fam-hP0CDpIxos_Mzhw-1; Tue, 11 Oct 2022 12:48:07 +0100
+X-MC-Unique: Lh8fam-hP0CDpIxos_Mzhw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 11 Oct
+ 2022 12:48:05 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Tue, 11 Oct 2022 12:48:05 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Leon Romanovsky' <leon@kernel.org>, Rui Ma <Rui.Ma@amd.com>
+CC:     "helgaas@kernel.org" <helgaas@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "Alexander.Deucher@amd.com" <Alexander.Deucher@amd.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>
+Subject: RE: [PATCH] PCI/IOV: Decrease VF memory BAR size to save host memory
+ occupied by PTEs
+Thread-Topic: [PATCH] PCI/IOV: Decrease VF memory BAR size to save host memory
+ occupied by PTEs
+Thread-Index: AQHY3WXQJdhdERmAOESu97r3UBgaK64JE0ig
+Date:   Tue, 11 Oct 2022 11:48:05 +0000
+Message-ID: <da760d45e4714a289220591a0f2efb97@AcuMS.aculab.com>
+References: <20221011112325.992317-1-Rui.Ma@amd.com> <Y0VVXB0XTobClVJo@unreal>
+In-Reply-To: <Y0VVXB0XTobClVJo@unreal>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20221010191226.167997210@linuxfoundation.org>
-In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Oct 2022 17:15:04 +0530
-Message-ID: <CA+G9fYuZZ3aQsH-cdgW6jrmMPVADYGokp1iz993fJ-rs=W7+OA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 at 00:42, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Leon Romanovsky
+> Sent: 11 October 2022 12:37
+> 
+> On Tue, Oct 11, 2022 at 07:23:25PM +0800, Rui Ma wrote:
+> > In some certain SR-IOV scene, when the device physical space(such as Video
+> > RAM)is fixed, as the number of VFs increases, some device driver may decrease
+> > actual BAR memory space used by each VF. However, the VF BAR memory mapping is
+> > always based on the usual BAR probing algorithm in PCIe spec. So do not map this
+> > unneeded memory can save host memory which occupied by PTEs. Although each PTE
+> > only occupies a few bytes of space on its own, a large number of PTEs can still
+> > take up a lot of space.
+...
+> > +    /*
+> > +     * Some SR-IOV device's BAR map range is larger than they can actually use.
+> > +     * This extra BAR space occupy too much reverse mapping size(physical page
+> > +     * back to the PTEs). So add a divisor shift parameter to resize the request
+> > +     * resource of VF according to num of VFs.
+> > +     */
+> > +	u16 shift = 1;
 
+Why u16??
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> > +		virtfn->resource[i].end = virtfn->resource[i].start + (size >> (shift - 1)) - 1;
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The 'shift - 1' may require a mask.
 
-## Build
-* kernel: 5.15.73-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 197d9e17aabe8a6d8a323d8dd3d08487fd9cb33e
-* git describe: v5.15.72-36-g197d9e17aabe
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.72-36-g197d9e17aabe
+...
+> > +struct virtfn_get_shift_methods {
+> > +	u16 vendor;
+> > +	u16 device;
+> > +	u16 (*get_shift)(struct pci_dev *dev, u16 arg, int arg2);
 
-## No Test Regressions (compared to v5.15.71-71-gc68173b2012b)
+More pointless u16 - they just make the code larger.
 
-## No Metric Regressions (compared to v5.15.71-71-gc68173b2012b)
+...
+> > +static inline u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
+> > +{
+> > +	return (u16)1;
+> 
+> <...>
+> 
+> > +	return (u16)1;
+> 
+> Why do you need these casts? You can omit them.
 
-## No Test Fixes (compared to v5.15.71-71-gc68173b2012b)
+Kill all the u16
 
-## No Metric Fixes (compared to v5.15.71-71-gc68173b2012b)
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-## Test result summary
-total: 105666, pass: 93487, fail: 668, skip: 11215, xfail: 296
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 333 passed, 0 failed
-* arm64: 65 total, 63 passed, 2 failed
-* i386: 55 total, 53 passed, 2 failed
-* mips: 56 total, 56 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 63 total, 63 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 24 total, 24 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 56 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
