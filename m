@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F7F5FB8E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931FF5FB8E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJKRDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
+        id S230009AbiJKRDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiJKRDg (ORCPT
+        with ESMTP id S229436AbiJKRDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:03:36 -0400
-X-Greylist: delayed 615 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 10:03:32 PDT
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E1E8321A;
-        Tue, 11 Oct 2022 10:03:32 -0700 (PDT)
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 29BH3A2a006786;
-        Wed, 12 Oct 2022 02:03:10 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29BH3A2a006786
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665507791;
-        bh=jTdnNEbZqROx00fEcB0iHuyEJaBWdVHynTGvE9aGH6M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HbGHoh0lmJaEk1JQf533TfgIsvb0et8BoUYi915JOHMUOLnOIJRzA3E+s/+Ko+sSa
-         hJmUa7IpjxtMB/QDNCzUrBEgyF3znejZGyIz6HnE8tr/kOII+l68wZsQzYk8AOLZk0
-         Y/Bb6u9ZG6Rv48Eab7A3TlrjKPigGaPsKVU6OpHUIT06Y1t06ToX47JN0HjTPVeVZp
-         6y28ICfE9Ue+TOx/sgRwTyqE1Wj7pkWnfH11muBvGt9Q7XzxBjT7m9uq6HOVLUtGpR
-         kVknkrKILIC9yzYUss4N8gfL25imV3k6zviB0z2byHVZ5WGjK/v6Sl5Nk4vIc+bMY1
-         1VHnJVoZS4VKQ==
-X-Nifty-SrcIP: [209.85.161.52]
-Received: by mail-oo1-f52.google.com with SMTP id h1-20020a4aa741000000b004756c611188so10492193oom.4;
-        Tue, 11 Oct 2022 10:03:10 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2uKUji853loira+n5eutxUaOAoNF8G0hm1Nu3ZzUI6rc7f+wmw
-        U3ys3br/XWHxh+GS9006ZL+GNfZfMKDZ+ayycvY=
-X-Google-Smtp-Source: AMsMyM75hvTFtbuimxDA6m9fRmoFNWKNX/W8y3QilQSqAN5t4L/BrgAgLfccLylWXZqq0BMYs6A2WLP5QpXDJi0kKAA=
-X-Received: by 2002:a05:6830:3115:b0:658:ea61:249c with SMTP id
- b21-20020a056830311500b00658ea61249cmr11488919ots.225.1665507789684; Tue, 11
- Oct 2022 10:03:09 -0700 (PDT)
+        Tue, 11 Oct 2022 13:03:16 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180DF4B0E3;
+        Tue, 11 Oct 2022 10:03:15 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id l4so13780168plb.8;
+        Tue, 11 Oct 2022 10:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5eXkoC9hAZJwJzWJaLG/RPjzvK4h+pLW6Xg5hPVy600=;
+        b=iYIPyuqdrLz2UyjdXFjDeb0hETXTPidp/mChDGbvxDMNB+xoeQAn85ZsTJU1vOtqj7
+         untbFhiQQN4GIcgDGQ/ZuFL8NHS6z/n55L+CRwPjh6z2Bdb4mt9E/SGT6i22HBH6I6ks
+         oIh3/SJCxdGaHZDRoJHGzc7L3PmwIy+tyThiLbvg4XTUZpwd6ANUACtD0VKK8jPAG4Ht
+         r7Rf0pEC+W+a4v3+ufHam17HZyP10NyNrUW7EtGjwjER6ClQ5MEqUFWSNgXpnaJFckqh
+         eywMK3eq+U84OzuWXX8m4PGYzGnCtg83IRdiZjzhuV5vIvzJt6RMeV1++UsC0b14BJlg
+         6Fmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5eXkoC9hAZJwJzWJaLG/RPjzvK4h+pLW6Xg5hPVy600=;
+        b=CdeIcy1VdTuu+RFlzu9423KJ9rRZn8Yt1/aHjUtpgrlElw56iLqO6maXCYr1w5Epkt
+         4JhxdxA/n3Y0zr8A+WYLZb9vDXMUTcA42Q5337XfbuaBQvAMtkaHAXmJK4C49/EXKNjS
+         B8AiL9jquUbOaTHvy6r9lTmaWcGTXWf37YXBfSmtF+p5ESdL99knqQA4d63oZtaAeDKI
+         nfcz++pUD4qI4CzwLWxI1Nn9mf+5KKo3usxoBxsuWkIII4ctVbqMVrIiaDkgFR+rbxHy
+         YX5zO6NLklX7ZoJQmjW+kU4otNmSbeUdD7Ol3XQKjuxEkLeKSJKLZy13Eb+/AsJAb8zS
+         Jahg==
+X-Gm-Message-State: ACrzQf0bAUaBg8CQxa782rI8D+VrwfdBSZ50vxVQDBFHUhbdKUHhP6qV
+        UTlG6RMdlYAKFaR19w4Vrm8=
+X-Google-Smtp-Source: AMsMyM5dqWu7bG5Za91UAlHvYwA0HOoPggytg6ysGIpjemmkJf/l0R6jLjhKUxbWuPsrD93BnEKjfA==
+X-Received: by 2002:a17:903:1c3:b0:177:ef4b:c614 with SMTP id e3-20020a17090301c300b00177ef4bc614mr24860401plh.17.1665507795331;
+        Tue, 11 Oct 2022 10:03:15 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id g2-20020aa79f02000000b0056160437e88sm9353506pfr.20.2022.10.11.10.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 10:03:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 11 Oct 2022 07:03:13 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 3/5] blk-iocost: prevent configuration update
+ concurrent with io throttling
+Message-ID: <Y0Wh0fQBkKlhEiYi@slm.duckdns.org>
+References: <20221011083547.1831389-1-yukuai1@huaweicloud.com>
+ <20221011083547.1831389-4-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-References: <20221011031843.960217-1-masahiroy@kernel.org> <CANiq72k9wAVCbHKVZFE=E3xv+2ZamUMsJ=uV43NxsSUQ4wXGdw@mail.gmail.com>
- <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
-In-Reply-To: <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 12 Oct 2022 02:02:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS3VMaZ2epwRuZt3dKCH434iKmrVnzBNxZ1ktbeTUaWWw@mail.gmail.com>
-Message-ID: <CAK7LNAS3VMaZ2epwRuZt3dKCH434iKmrVnzBNxZ1ktbeTUaWWw@mail.gmail.com>
-Subject: Re: [RFC PATCH] Remove Intel compiler support
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ia64@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Tom Rix <trix@redhat.com>, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011083547.1831389-4-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 1:52 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Tue, Oct 11, 2022 at 8:55 PM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > On Tue, Oct 11, 2022 at 5:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > >  include/linux/compiler-intel.h            |  34 -----
-> > >  include/linux/compiler_types.h            |   2 -
-> >
-> > You can also remove a few lines from `compiler_attributes.h`:
-> >
-> >     * Optional: not supported by icc
-> >
-> > Thanks for this!
-> >
-> > Cheers,
-> > Miguel
->
->
->
-> Thanks.
->
->
-> Maybe, we can drop #if ... #else ... #endif
-> around __assume_aligned(a, ...), but I will leave it to you.
->
->
-> I will just drop the comment lines for now.
-> (Then, you will clean up compiler_attributes.h in the next cycle)
-> Is this your expectation for v2 ?
+On Tue, Oct 11, 2022 at 04:35:45PM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> This won't cause any severe problem currently, however, this doesn't
+> seems appropriate:
+> 
+> 1) 'ioc->params' is read from multiple places without holding
+> 'ioc->lock', unexpected value might be read if writing it concurrently.
+> 
+> 2) If configuration is changed while io is throttling, the functionality
+> might be affected. For example, if module params is updated and cost
+> becomes smaller, waiting for timer that is caculated under old
+> configuration is not appropriate.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Taking a look at the code, there is only one redundant #if.
-So, I will clean up __assume_aligned() in v2.
-
-
-
-
-
-
-
+Thanks.
 
 -- 
-Best Regards
-Masahiro Yamada
+tejun
