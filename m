@@ -2,136 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA31F5FAF23
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB5A5FAF27
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiJKJNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S229757AbiJKJPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJKJNw (ORCPT
+        with ESMTP id S229486AbiJKJO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:13:52 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BC1EE18;
-        Tue, 11 Oct 2022 02:13:50 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aef0e.dynamic.kabel-deutschland.de [95.90.239.14])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EB00C61EA1929;
-        Tue, 11 Oct 2022 11:13:48 +0200 (CEST)
-Message-ID: <e2bf4639-27fb-6a5f-4a71-098ea5f3fe7f@molgen.mpg.de>
-Date:   Tue, 11 Oct 2022 11:13:48 +0200
+        Tue, 11 Oct 2022 05:14:59 -0400
+Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B112B183
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:14:54 -0700 (PDT)
+Received: (qmail 3812 invoked from network); 11 Oct 2022 09:14:33 -0000
+Received: from p200300cf070e3b005801a0fffe58235d.dip0.t-ipconnect.de ([2003:cf:70e:3b00:5801:a0ff:fe58:235d]:45414 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
+        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:14:33 +0200
+From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
+To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        kernel-janitors@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
+Date:   Tue, 11 Oct 2022 11:14:44 +0200
+Message-ID: <2659449.sfTDpz5f83@eto.sf-tec.de>
+In-Reply-To: <20221010230613.1076905-6-Jason@zx2c4.com>
+References: <20221010230613.1076905-1-Jason@zx2c4.com> <20221010230613.1076905-6-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: How to trace serial console init during boot-time?
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <9af98779-6964-e971-41ba-667c9cd34e60@molgen.mpg.de>
- <20221008164326.00b70ee4@rorschach.local.home>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20221008164326.00b70ee4@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart3381436.Qahr9VaOg4"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Steven,
+--nextPart3381436.Qahr9VaOg4
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Rolf Eike Beer <eike-kernel@sf-tec.de>
+Date: Tue, 11 Oct 2022 11:14:44 +0200
+Message-ID: <2659449.sfTDpz5f83@eto.sf-tec.de>
+In-Reply-To: <20221010230613.1076905-6-Jason@zx2c4.com>
+MIME-Version: 1.0
+
+Am Dienstag, 11. Oktober 2022, 01:06:11 CEST schrieb Jason A. Donenfeld:
+> The prandom_u32() function has been a deprecated inline wrapper around
+> get_random_u32() for several releases now, and compiles down to the
+> exact same code. Replace the deprecated wrapper with a direct call to
+> the real function. The same also applies to get_random_int(), which is
+> just a wrapper around get_random_u32(). This was done as a basic find
+> and replace.
+
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c
+> b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c index
+> d0a7465be586..3a7aded30e8e 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c
+> @@ -177,7 +177,7 @@ static int brcmf_pno_set_random(struct brcmf_if *ifp,
+> struct brcmf_pno_info *pi) memcpy(pfn_mac.mac, mac_addr, ETH_ALEN);
+>  	for (i = 0; i < ETH_ALEN; i++) {
+>  		pfn_mac.mac[i] &= mac_mask[i];
+> -		pfn_mac.mac[i] |= get_random_int() & ~(mac_mask[i]);
+> +		pfn_mac.mac[i] |= get_random_u32() & ~(mac_mask[i]);
+>  	}
+>  	/* Clear multi bit */
+>  	pfn_mac.mac[0] &= 0xFE;
+
+mac is defined as u8 mac[ETH_ALEN]; in fwil_types.h.
+
+Eike
+
+P.S.: CC list trimmed because of an unrelated mailer bug
+--nextPart3381436.Qahr9VaOg4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCY0U0BAAKCRBcpIk+abn8
+TnN3AJ9qs8NaSunt7ijB2AR/P9fJUTF1VACfYISp1yW4g9+IC2YL331uQQXDH+I=
+=wPNj
+-----END PGP SIGNATURE-----
+
+--nextPart3381436.Qahr9VaOg4--
 
 
-Thank you very much for the quick reply.
 
-Am 08.10.22 um 22:43 schrieb Steven Rostedt:
-> On Fri, 7 Oct 2022 15:30:56 +0200 Paul Menzel wrote:
-
->> I am trying to do boot-time tracing of `univ8250_console_init()`:
->>
->>       [    0.126636] ftrace: allocating 41793 entries in 164 pages
->>       [    0.132446] ftrace: allocated 164 pages with 3 groups
->>       […]
->>       [    0.167334] calling  con_init+0x0/0x239 @ 0
->>       [    0.170217] Console: colour VGA+ 80x25
->>       [    0.190381] printk: console [tty0] enabled
->>       [    0.190484] initcall con_init+0x0/0x239 returned 0 after 0 usecs
->>       [    0.190487] calling  hvc_console_init+0x0/0x18 @ 0
->>       [    0.190489] initcall hvc_console_init+0x0/0x18 returned 0 after 0 usecs
->>       [    0.190491] calling  univ8250_console_init+0x0/0x2b @ 0
->>       [    1.488645] printk: console [ttyS0] enabled
->>       [    1.492945] initcall univ8250_console_init+0x0/0x2b returned 0 after 0 usecs
->>       […]
->>       [    1.670397] calling  trace_init_perf_perm_irq_work_exit+0x0/0x17 @ 1
->>       [    1.670399] initcall trace_init_perf_perm_irq_work_exit+0x0/0x17 returned 0 after 0 usecs
->>       […]
->>       [    1.673339] calling  trace_init_flags_sys_enter+0x0/0x13 @ 1
->>       [    1.673342] initcall trace_init_flags_sys_enter+0x0/0x13 returned 0 after 0 usecs
->>       [    1.673344] calling  trace_init_flags_sys_exit+0x0/0x13 @ 1
->>       [    1.673346] initcall trace_init_flags_sys_exit+0x0/0x13 returned 0 after 0 usecs
->>       [    1.673348] calling  cpu_stop_init+0x0/0x87 @ 1
->>       [    1.673364] initcall cpu_stop_init+0x0/0x87 returned 0 after 0 usecs
->>       [    1.673366] calling  init_kprobes+0x0/0x149 @ 1
->>       [    1.673495] initcall init_kprobes+0x0/0x149 returned 0 after 0 usecs
->>       [    1.673497] calling  init_events+0x0/0x4d @ 1
->>       [    1.673502] initcall init_events+0x0/0x4d returned 0 after 0 usecs
->>       [    1.673504] calling  init_trace_printk+0x0/0xc @ 1
->>       [    1.673505] initcall init_trace_printk+0x0/0xc returned 0 after 0 usecs
->>       [    1.673507] calling  event_trace_enable_again+0x0/0x23 @ 1
->>       [    1.673508] initcall event_trace_enable_again+0x0/0x23 returned 0 after 0 usecs
->>
->> The function `univ8250_console_init()` is not available in
->> `/sys/kernel/debug/tracing/available_filter_functions`, so I’d like to
->> trace `univ8250_console_setup()`:
->>
->>       initcall_debug log_buf_len=32M trace_buf_size=262144K trace_clock=global trace_options=nooverwrite,funcgraph-abstime,funcgraph-cpu,funcgraph-duration,funcgraph-proc,funcgraph-tail,nofuncgraph-overhead,context-info,graph-time ftrace=function_graph ftrace_graph_max_depth=2 ftrace_graph_filter=univ8250_console_setup tp_printk
->>
->> Unfortunately, `/sys/kernel/debug/tracing/trace` is empty, so I guess
->> the console happens before ftrace is available?
-> 
-> "function" tracing is enabled by then (I just tested it), but
-> "function_graph" is not. Function graph requires trace events enabled,
-> but I could see what happens if I do enabled it ;-)
-> 
->>
->> Is there another way to trace the serial console init, without having to
->> add print statements?
-> 
-> Use "ftrace=function" but then you will get everything. You could add a
-> "set_filter=<func>:traceoff" to set a trigger that would disable
-> tracing, if you can find a function that would be good to stop tracing
-> with.
-
-Thank you. That worked. As I didn’t use a trigger to stop tracing, the 
-resulting trace was over 1 GB in size, but I found what I was looking for.
-
-> Otherwise, I could take a look to see what it takes to get function
-> graph tracing working that early.
-Having earlier tracing is always an improvement, but right now it’s not 
-necessary at least for me anymore.
-
-Thank you again.
-
-
-Kind regards,
-
-Paul
-
-
-PS: With the trace, I started the thread *Do not delay boot when 
-printing log to serial console during startup?* [1].
-
-
-[1]: 
-https://lore.kernel.org/linux-serial/c87cc376-3b0d-8fda-7fc1-555c930faaf1@molgen.mpg.de/
