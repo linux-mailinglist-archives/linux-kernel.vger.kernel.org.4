@@ -2,161 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11245FAF3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6C55FAF3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJKJVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        id S229547AbiJKJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiJKJV0 (ORCPT
+        with ESMTP id S229793AbiJKJVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:21:26 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF3A74BAA;
-        Tue, 11 Oct 2022 02:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665480085; x=1697016085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/iqPBs1hBs9f/qKO6UtSulhE5K4l2ShU4hkvQSIklmM=;
-  b=Ue+w6wSeGkCZQUWbtyTh2nJeb7Rrk3QLEAxMk7fjjnPi3OyyuO8n7GuV
-   7/WwBhll3hzgtBbcvdFEYCm0NM3XEjXBBggd3ML/4Rx/jG4mUraCHirYd
-   dkkMMtT5xbcMGc9t/mTuH/D2JhkWv3M3UKUW3qfF+Q/qkU+Cs5H9FMP0y
-   /rp0OuwrlW07FLvA/jcizPiATh/j1W0/uJWaqqMqFY6kJz6ZnmSjW6dVk
-   31JeMU3RdcvPOTZo6uaZdHkX/5vmbCXcq6n0P6TXgeqiGkz5EgB7T8huw
-   PG5ZW3otHkIENWEAQo9QlU8hr9TADu205N9VnC1UFuYxgjmBEgPJCEaS5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="390762496"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="390762496"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:21:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="577371739"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="577371739"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 11 Oct 2022 02:21:22 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oiBRv-005F1U-2p;
-        Tue, 11 Oct 2022 12:21:19 +0300
-Date:   Tue, 11 Oct 2022 12:21:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Ferry Toth <fntoth@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-Message-ID: <Y0U1j2LXmGLBYLAV@smile.fi.intel.com>
-References: <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
- <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
- <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
- <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
- <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
- <Y0PFZGLaREQUazVP@smile.fi.intel.com>
- <CAHQ1cqG73UAoU=ag9qSuKdp+MzT9gYJcwGv8k8BOa=e8gWwzSg@mail.gmail.com>
+        Tue, 11 Oct 2022 05:21:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD93183207;
+        Tue, 11 Oct 2022 02:21:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83EDB1042;
+        Tue, 11 Oct 2022 02:21:41 -0700 (PDT)
+Received: from [10.163.35.30] (unknown [10.163.35.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 015AF3F766;
+        Tue, 11 Oct 2022 02:21:31 -0700 (PDT)
+Message-ID: <d82de618-9e97-3d5d-f4eb-7710e9094001@arm.com>
+Date:   Tue, 11 Oct 2022 14:51:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHQ1cqG73UAoU=ag9qSuKdp+MzT9gYJcwGv8k8BOa=e8gWwzSg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 4/7] driver/perf/arm_pmu_platform: Add support for BRBE
+ attributes detection
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <20220929075857.158358-1-anshuman.khandual@arm.com>
+ <20220929075857.158358-5-anshuman.khandual@arm.com>
+ <02ce379c-c718-b72d-fc74-cd8c904265fb@arm.com>
+ <bf70b7d6-0564-7ae3-6fe6-24483461839b@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <bf70b7d6-0564-7ae3-6fe6-24483461839b@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 02:40:30PM -0700, Andrey Smirnov wrote:
-> On Mon, Oct 10, 2022 at 12:13 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Sun, Oct 09, 2022 at 10:02:26PM -0700, Andrey Smirnov wrote:
-> > > On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
 
-...
 
-> > > OK, Ferry, I think I'm going to need clarification on specifics on
-> > > your test setup. Can you share your kernel config, maybe your
-> > > "/proc/config.gz", somewhere? When you say you are running vanilla
-> > > Linux, do you mean it or do you mean vanilla tree + some patch delta?
-> > >
-> > > The reason I'm asking is because I'm having a hard time reproducing
-> > > the problem on my end. In fact, when I build v6.0
-> > > (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
-> > >
-> > > git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
-> > >
-> > > I get an infinite loop of reprobing that looks something like (some
-> > > debug tracing, function name + line number, included):
-> >
-> > Yes, this is (one of) known drawback(s) of deferred probe hack. I think
-> > the kernel that Ferry runs has a patch that basically reverts one from
-> > 2014 [1] and allows to have extcon as a module. (1)
-> >
-> > [1]: 58b116bce136 ("drivercore: deferral race condition fix")
-> >
-> > > which renders the system completely unusable, but USB host is
-> > > definitely going to be broken too. Now, ironically, with my patch
-> > > in-place, an attempt to probe extcon that ends up deferring the probe
-> > > happens before the ULPI driver failure (which wasn't failing driver
-> > > probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
-> > > there no "driver binding" event that re-triggers deferred probe
-> > > causing the loop, so the system progresses to a point where extcon is
-> > > available and dwc3 driver eventually loads.
-> > >
-> > > After that, and I don't know if I'm doing the same test, USB host
-> > > seems to work as expected. lsusb works, my USB stick enumerates as
-> > > expected. Switching the USB mux to micro-USB and back shuts the host
-> > > functionality down and brings it up as expected. Now I didn't try to
-> > > load any gadgets to make sure USB gadget works 100%, but since you
-> > > were saying it was USB host that was broken, I wasn't concerned with
-> > > that. Am I doing the right test?
-> >
-> > Hmm... What you described above sounds more like a yet another attempt to
-> > workaround (1). _If_ this is the case, we probably can discuss how to fix
-> > it in generic way (somewhere in dd.c, rather than in the certain driver).
+On 10/10/22 19:47, James Clark wrote:
 > 
-> No, I'm not describing an attempt to fix anything. Just how vanilla
-> v6.0 (where my patch is not reverted) works and where my patch, fixing
-> a logical problem in which extcon was requested too late causing a
-> forced OTG -> "gadget only" switch, also changed the ordering enough
-> to accidentally avoid the loop.
-
-You still refer to a fix, but my question was if it's the same problem or not.
-
-> > That said, the real test case should be performed on top of clean kernel
-> > before judging if it's good or bad.
 > 
-> Given your level of involvemnt with this particular platform and you
-> being the author of
-> https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
-> I assumed/expected you to double check this before sending this revert
-> out. Please do so next time.
+> On 06/10/2022 14:37, James Clark wrote:
+>>
+>>
+>> On 29/09/2022 08:58, Anshuman Khandual wrote:
+>>> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
+>>> driver exported callbacks later. The actual BRBE feature detection will be
+>>> added by the driver itself.
+>>>
+>>> CPU specific BRBE entries, cycle count, format support gets detected during
+>>> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+>>> later helps in operating BRBE during a perf event context.
+>>>
+>>> Cc: Will Deacon <will@kernel.org>
+>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>> Cc: linux-arm-kernel@lists.infradead.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> ---
+>>>  drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
+>>>  1 file changed, 34 insertions(+)
+>>>
+>>> diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+>>> index 933b96e243b8..acdc445081aa 100644
+>>> --- a/drivers/perf/arm_pmu_platform.c
+>>> +++ b/drivers/perf/arm_pmu_platform.c
+>>> @@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
+>>>  	return err;
+>>>  }
+>>>  
+>>> +static void arm_brbe_probe_cpu(void *info)
+>>> +{
+>>> +	struct pmu_hw_events *hw_events;
+>>> +	struct arm_pmu *armpmu = info;
+>>> +
+>>> +	/*
+>>> +	 * Return from here, if BRBE driver has not been
+>>> +	 * implemented for this PMU. This helps prevent
+>>> +	 * kernel crash later when brbe_probe() will be
+>>> +	 * called on the PMU.
+>>> +	 */
+>>> +	if (!armpmu->brbe_probe)
+>>> +		return;
+>>> +
+>>> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
+>>> +	armpmu->brbe_probe(hw_events);
+>>> +}
+>>> +
+>>> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
+>>> +{
+>>> +	int cpu, err = 0;
+>>> +
+>>> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
+>>> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
+>>
+>> Hi Anshuman,
+>>
+>> I have LOCKDEP on and the patchset applied to perf/core (82aad7ff7) on
+>> git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git and I get
+> 
+> Can you confirm if this is currently the correct place to apply this to?
 
-As I said I have not yet restored my testing environment for that platform and
-I relied on the Ferry's report. Taking into account the history of breakages
-that done for Intel Merrifield, in particular by not wide tested patches
-against DWC3 driver, I immediately react with a revert. I agree that I had had
-to think about that ordering issue and a patch on top of it first. I thought
-that Yocto configuration that Ferry is using is clean of custom (controversial)
-patches like that. Now, since you have this platform, you can also help with
-testing the DWC3 on it.
+This series applied on v6.0-rc5 after the perf ABI changes, both in kernel
+and in user space tools.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> I'm only getting 0 length branch stacks now. Seems like it could be
+> something to do with the layout of perf samples because I know that was
+> done in separate commits:
 
+Right, might be.
 
+> 
+>   sudo ./perf record -j any_call -- ls
+>   ./perf report -D | grep "branch stack"
+>   ... branch stack: nr:0
+>   ... branch stack: nr:0
+>   ... branch stack: nr:0
+>   ... branch stack: nr:0
+
+I am planning to respin the series on 6.1-rc1 next week which should solve
+these multiple moving parts problem.
+
+>   ...
+> 
+>> this:
+>>
+>>    armv8-pmu pmu: hw perfevents: no interrupt-affinity property, guessing.
+>>    brbe: implementation found on cpu 0
+>>
+>>    =============================
+>>    [ BUG: Invalid wait context ]
+>>    6.0.0-rc7 #38 Not tainted
+>>    -----------------------------
+>>    kworker/u8:0/9 is trying to lock:
+>>    ffff000800855898 (&port_lock_key){....}-{3:3}, at:
+>> pl011_console_write+0x148/0x240
+>>    other info that might help us debug this:
+>>    context-{2:2}
+>>    5 locks held by kworker/u8:0/9:
+>>     #0: ffff00080032a138 ((wq_completion)eval_map_wq){+.+.}-{0:0}, at:
+>> process_one_work+0x200/0x6b0
+>>     #1: ffff80000807bde0
+>> ((work_completion)(&eval_map_work)){+.+.}-{0:0}, at:
+>> process_one_work+0x200/0x6b0
+>>     #2: ffff80000aa3db70 (trace_event_sem){+.+.}-{4:4}, at:
+>> trace_event_eval_update+0x28/0x420
+>>     #3: ffff80000a9afe58 (console_lock){+.+.}-{0:0}, at:
+>> vprintk_emit+0x130/0x380
+>>     #4: ffff80000a9aff78 (console_owner){-...}-{0:0}, at:
+>> console_emit_next_record.constprop.0+0x128/0x338
+>>    stack backtrace:
+>>    CPU: 0 PID: 9 Comm: kworker/u8:0 Not tainted 6.0.0-rc7 #38
+>>    Hardware name: Foundation-v8A (DT)
+>>    Workqueue: eval_map_wq eval_map_work_func
+>>    Call trace:
+>>     dump_backtrace+0x114/0x120
+>>     show_stack+0x20/0x58
+>>     dump_stack_lvl+0x9c/0xd8
+>>     dump_stack+0x18/0x34
+>>     __lock_acquire+0x17cc/0x1920
+>>     lock_acquire+0x138/0x3b8
+>>     _raw_spin_lock+0x58/0x70
+>>     pl011_console_write+0x148/0x240
+>>     console_emit_next_record.constprop.0+0x194/0x338
+>>     console_unlock+0x18c/0x208
+>>     vprintk_emit+0x24c/0x380
+>>     vprintk_default+0x40/0x50
+>>     vprintk+0xd4/0xf0
+>>     _printk+0x68/0x90
+>>     arm64_pmu_brbe_probe+0x10c/0x128
+>>     armv8pmu_brbe_probe+0x18/0x28
+>>     arm_brbe_probe_cpu+0x44/0x58
+>>     __flush_smp_call_function_queue+0x1d0/0x440
+>>     generic_smp_call_function_single_interrupt+0x20/0x78
+>>     ipi_handler+0x98/0x368
+>>     handle_percpu_devid_irq+0xc0/0x3a8
+>>     generic_handle_domain_irq+0x34/0x50
+>>     gic_handle_irq+0x58/0x138
+>>     call_on_irq_stack+0x2c/0x58
+>>     do_interrupt_handler+0x88/0x90
+>>     el1_interrupt+0x40/0x78
+>>     el1h_64_irq_handler+0x18/0x28
+>>     el1h_64_irq+0x64/0x68
+>>     trace_event_eval_update+0x114/0x420
+>>     eval_map_work_func+0x30/0x40
+>>     process_one_work+0x298/0x6b0
+>>     worker_thread+0x54/0x408
+>>     kthread+0x118/0x128
+>>     ret_from_fork+0x10/0x20
+>>    brbe: implementation found on cpu 1
+>>    brbe: implementation found on cpu 2
+>>    brbe: implementation found on cpu 3
+>>
+>>> +		if (err)
+>>> +			return err;
+>>> +	}
+>>> +	return err;
+>>> +}
+>>> +
+>>>  static void armpmu_free_irqs(struct arm_pmu *armpmu)
+>>>  {
+>>>  	int cpu;
+>>> @@ -229,6 +259,10 @@ int arm_pmu_device_probe(struct platform_device *pdev,
+>>>  	if (ret)
+>>>  		goto out_free_irqs;
+>>>  
+>>> +	ret = armpmu_request_brbe(pmu);
+>>> +	if (ret)
+>>> +		goto out_free_irqs;
+>>> +
+>>>  	ret = armpmu_register(pmu);
+>>>  	if (ret) {
+>>>  		dev_err(dev, "failed to register PMU devices!\n");
