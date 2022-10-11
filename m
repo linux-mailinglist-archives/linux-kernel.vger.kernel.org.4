@@ -2,156 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257705FB2E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC37D5FB2E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiJKNJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S229546AbiJKNKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJKNJQ (ORCPT
+        with ESMTP id S229933AbiJKNKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:09:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2216D7FFAB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:09:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CA7DF20155;
-        Tue, 11 Oct 2022 13:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1665493753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 11 Oct 2022 09:10:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F25E02E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665493805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aVRCc4SS1007RNLbmU/9GhJmW5jB+5FC8+AOsCDQce0=;
-        b=rtOzjKK72O82+tGko5I4jx2aW/y9gLAmJxb0tPqpv8r4YqDqIk2tBNtwdE9ry1nbdyQDw2
-        y4UzELE/6kVoZcvaMzMN80/sy9ymfDtBpstb1dmhyTip/c5X8CgVyymSUi58w/KRHv2aAY
-        TYHpxwi/aocFPiGGLCYjraXqv0s+hiM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1665493753;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aVRCc4SS1007RNLbmU/9GhJmW5jB+5FC8+AOsCDQce0=;
-        b=3B42zoImFJPO/6UYbKurx/wx4F2DGU1+z6g4xYv0W0kD2JWrqejX6KwgKhwblXH4Wux5N7
-        I3rhSPF0vNJJ4lAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9327213AAC;
-        Tue, 11 Oct 2022 13:09:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kCWOIvlqRWPeYwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 11 Oct 2022 13:09:13 +0000
-Message-ID: <b48728b3-96b9-f684-8adb-5b944c4ba759@suse.de>
-Date:   Tue, 11 Oct 2022 15:09:13 +0200
+        bh=thvlIsm/fxiw86jRXsCCSqqflOvpvNicCGXfc4rTb2E=;
+        b=dDBIs7vg1Pvdggf99xdC7gQT78dG+6vvuspwSFSmJ9nERpQP2+1UizjL7p0AjGA9laus2U
+        Fa5X54NHtFkLHUVI0CzyWu1fM/lVfvbgBhUSodiLEGKS7jcB63Q1dJ0IsumbmOFLUgfcyj
+        6nWXrjhnVKmRbKeU+0XAVBxUtHupcRk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-637-nAFt5xn8MF-KCp7zHPA8XQ-1; Tue, 11 Oct 2022 09:10:03 -0400
+X-MC-Unique: nAFt5xn8MF-KCp7zHPA8XQ-1
+Received: by mail-wm1-f71.google.com with SMTP id v191-20020a1cacc8000000b003bdf7b78dccso8440345wme.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:10:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=thvlIsm/fxiw86jRXsCCSqqflOvpvNicCGXfc4rTb2E=;
+        b=NlIbtdz+xjZtq1Fy77pnVih/6MsidM/Ss28mRpmC7kvezzPOkJ/GpWY7bhN5fJV5ZF
+         YFx4hJ/NtqFZyn8TH1uW4UQK08HIEvekOROJ0U0MNeSOTPCzzlO1SPwGnDYmtE4uLGw7
+         2kdhvTdzR1kSVZaMay2M8h6g8NT69fbxWHYpR6RUWw+UMbOwbyX/SxUoWSlOnhXFUC+C
+         gQ4unDwhmw5+jIatrbe2he8uycOTOGvutzy0Nb/0knXR/JJ8WdnwTCUm9iNXePTwu0e6
+         SgDVNLzkJJLDY/Pg0C5W/bKdZ+3XEh1MPoGU6HcJ+SUrfjv/88Vo9Xnk2fEW1N4u/D12
+         /7/w==
+X-Gm-Message-State: ACrzQf18a83bNsMgmw3IUVcP1prtLvoxMKj6Jylk4ffY25dcbyzCGyEP
+        X9LOrE97FcpF1I4Wq1vEsSGEXFSq/hUCUQN8q8u/L4tOn4CxLQtUDf/Oxv9qWVucM4pKlt3/7+1
+        U9S6+DPj7JYcHKdHiv8AMF1TQ
+X-Received: by 2002:a7b:cd14:0:b0:3c6:bf44:770d with SMTP id f20-20020a7bcd14000000b003c6bf44770dmr5254545wmj.35.1665493802684;
+        Tue, 11 Oct 2022 06:10:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5gcbU6PwwqP+FAMtJeHKur4l1vlHgqnaIB/vm2BBuL/XqcMa7ClWWTIgdYKUf/nQrS9V/52w==
+X-Received: by 2002:a7b:cd14:0:b0:3c6:bf44:770d with SMTP id f20-20020a7bcd14000000b003c6bf44770dmr5254528wmj.35.1665493802432;
+        Tue, 11 Oct 2022 06:10:02 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id bj4-20020a0560001e0400b0022e0580b7a9sm4302671wrb.17.2022.10.11.06.10.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 06:10:01 -0700 (PDT)
+Message-ID: <e3e0b130-03b9-0fcc-a42c-2bd7b035c7e4@redhat.com>
+Date:   Tue, 11 Oct 2022 15:09:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 2/3] drm/ssd130x: Do not call
+Subject: Re: [PATCH 1/3] drm/simpledrm: Do not call
  drm_atomic_add_affected_planes()
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
         linux-kernel@vger.kernel.org
 Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
         dri-devel@lists.freedesktop.org
 References: <20221010170203.274949-1-javierm@redhat.com>
- <20221010170203.274949-3-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221010170203.274949-3-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------NXNgIx7VyJdQLP9iQc9UdRpF"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221010170203.274949-2-javierm@redhat.com>
+ <fc9a8b09-4b41-291e-d235-bb71eeb95f3c@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <fc9a8b09-4b41-291e-d235-bb71eeb95f3c@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------NXNgIx7VyJdQLP9iQc9UdRpF
-Content-Type: multipart/mixed; boundary="------------KY5qVJqJXClzdHUkY5KSXhzz";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
- dri-devel@lists.freedesktop.org
-Message-ID: <b48728b3-96b9-f684-8adb-5b944c4ba759@suse.de>
-Subject: Re: [PATCH 2/3] drm/ssd130x: Do not call
- drm_atomic_add_affected_planes()
-References: <20221010170203.274949-1-javierm@redhat.com>
- <20221010170203.274949-3-javierm@redhat.com>
-In-Reply-To: <20221010170203.274949-3-javierm@redhat.com>
+Hello Thomas,
 
---------------KY5qVJqJXClzdHUkY5KSXhzz
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 10/11/22 15:06, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 10.10.22 um 19:02 schrieb Javier Martinez Canillas:
+>> There's no need to add planes to the atomic state. Remove the call
+>> to drm_atomic_add_affected_planes() from simpledrm.
+>>
+>> On full modesets, the DRM helpers already add a CRTC's planes to the
+>> atomic state; see drm_atomic_helper_check_modeset(). There's no reason
+>> to call drm_atomic_add_affected_planes() unconditionally in the CRTC's
+>> atomic_check() in simpledrm. It's also too late, as the atomic_check()
+>> of the added planes will not be called before the commit.
+>>
+>> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>
 
-DQoNCkFtIDEwLjEwLjIyIHVtIDE5OjAyIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGVyZSdzIG5vIG5lZWQgdG8gYWRkIHBsYW5lcyB0byB0aGUgYXRvbWljIHN0
-YXRlLiBSZW1vdmUgdGhlIGNhbGwNCj4gdG8gZHJtX2F0b21pY19hZGRfYWZmZWN0ZWRfcGxh
-bmVzKCkgZnJvbSBzc2QxMzB4Lg0KPiANCj4gT24gZnVsbCBtb2Rlc2V0cywgdGhlIERSTSBo
-ZWxwZXJzIGFscmVhZHkgYWRkIGEgQ1JUQydzIHBsYW5lcyB0byB0aGUNCj4gYXRvbWljIHN0
-YXRlOyBzZWUgZHJtX2F0b21pY19oZWxwZXJfY2hlY2tfbW9kZXNldCgpLiBUaGVyZSdzIG5v
-IHJlYXNvbg0KPiB0byBjYWxsIGRybV9hdG9taWNfYWRkX2FmZmVjdGVkX3BsYW5lcygpIHVu
-Y29uZGl0aW9uYWxseSBpbiB0aGUgQ1JUQydzDQo+IGF0b21pY19jaGVjaygpIGluIHNzZDEz
-MHguIEl0J3MgYWxzbyB0b28gbGF0ZSwgYXMgdGhlIGF0b21pY19jaGVjaygpDQo+IG9mIHRo
-ZSBhZGRlZCBwbGFuZXMgd2lsbCBub3QgYmUgY2FsbGVkIGJlZm9yZSB0aGUgY29tbWl0Lg0K
-PiANCj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3Vz
-ZS5kZT4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZp
-ZXJtQHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
-bW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL3Nv
-bG9tb24vc3NkMTMweC5jIHwgMTAgKystLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAy
-IGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jIGIvZHJpdmVycy9ncHUvZHJtL3NvbG9t
-b24vc3NkMTMweC5jDQo+IGluZGV4IDU3ZTQ4MzU1YzAwOC4uMGQ0YWI2NTIzM2RiIDEwMDY0
-NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gKysrIGIv
-ZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+IEBAIC02NDksMTcgKzY0OSwx
-MSBAQCBzdGF0aWMgaW50IHNzZDEzMHhfY3J0Y19oZWxwZXJfYXRvbWljX2NoZWNrKHN0cnVj
-dCBkcm1fY3J0YyAqY3J0YywNCj4gICAJCQkJCSAgICBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0
-ZSAqbmV3X3N0YXRlKQ0KPiAgIHsNCj4gICAJc3RydWN0IGRybV9jcnRjX3N0YXRlICpuZXdf
-Y3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19jcnRjX3N0YXRlKG5ld19zdGF0ZSwg
-Y3J0Yyk7DQo+IC0JaW50IHJldDsNCj4gICANCj4gICAJaWYgKCFuZXdfY3J0Y19zdGF0ZS0+
-ZW5hYmxlKQ0KPiAtCQlnb3RvIG91dDsNCj4gLQ0KPiAtCXJldCA9IGRybV9hdG9taWNfaGVs
-cGVyX2NoZWNrX2NydGNfcHJpbWFyeV9wbGFuZShuZXdfY3J0Y19zdGF0ZSk7DQo+IC0JaWYg
-KHJldCkNCj4gLQkJcmV0dXJuIHJldDsNCj4gKwkJcmV0dXJuIDA7DQo+ICAgDQo+IC1vdXQ6
-DQo+IC0JcmV0dXJuIGRybV9hdG9taWNfYWRkX2FmZmVjdGVkX3BsYW5lcyhuZXdfc3RhdGUs
-IGNydGMpOw0KPiArCXJldHVybiBkcm1fYXRvbWljX2hlbHBlcl9jaGVja19jcnRjX3ByaW1h
-cnlfcGxhbmUobmV3X2NydGNfc3RhdGUpOw0KPiAgIH0NCj4gICANCj4gICAvKg0KDQotLSAN
-ClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNv
-ZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7D
-vHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0
-c2bDvGhyZXI6IEl2byBUb3Rldg0K
+Thanks.
+ 
+> There's also drm_atomic_add_affected_planes() in mgag200. Since you're 
+> at it, I'd appreciate a patch.
+>
 
---------------KY5qVJqJXClzdHUkY5KSXhzz--
+Sure, I'll include in v2. I noticed that but didn't feel like posting
+a patch because I'm not familiar with that device nor have HW to test.
 
---------------NXNgIx7VyJdQLP9iQc9UdRpF
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+-- 
+Best regards,
 
------BEGIN PGP SIGNATURE-----
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNFavkFAwAAAAAACgkQlh/E3EQov+B1
-9xAAxIWDeHL4WTyY/N4B2/tT8bddpytix2/jul3SMO3gYVxHv527K4Q7pFhvvIoAGucGqEHyE7PX
-dphDX4D9PtuGrd1wseLJdbUZxKOd64WKAnmM2NXPwYNs5X/v2VRDNFM3Zi1MYUEfpgryFO2U6jiu
-5DG8AkWrELFvR9o7xPqDWGUIFlB5W8l+YQhAxTbbkxetV68KqjADjyEeq6tmy36jB3GN6jZpsP7E
-8+dMhIXeDgfGNiDOLMr5gyUNOmqGfmuvwiO2nBaJhFOiKtKPLy0YpZcuvu9o4vXg9Ma7KKzpAQtH
-tF+PldE+4NxQKVUvNTy4g0ei37nXLMznfQ9N+EgVkfcX/99ki+X8yfsCbsLL69licEFg6hMxuYtH
-Elb1VakCfg2DX0JFBs6x8qXueDuSsuGMgNLkIuqr8yFXIDFq+U7/gpoT6RN4aSvYMXGhDQ9AL42S
-VggvdzLwxmifuLaovnnz9st19Tvii53Ti3H/WimRpuHq7DdhvT+vBtCkCktrzpxbyYSocVmGguOE
-GlG2SqJd8IEA6b4YfWPjwXwYaRzRnwshapfl2LTpL5vjIILUbehdVI6X9dBEr3oEAUIJNRE4gyNf
-dSNjnkqd9mA0vR34qI5j9Dv32E7KinRQJsoXR4iagw0KgpCgTwRQhuBEK0ESLecnvIN1bcSFe17+
-CWk=
-=Ms6e
------END PGP SIGNATURE-----
-
---------------NXNgIx7VyJdQLP9iQc9UdRpF--
