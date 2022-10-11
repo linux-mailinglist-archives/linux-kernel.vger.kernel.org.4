@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD225FB9EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F1D5FB9F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJKRw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S229812AbiJKRwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJKRwY (ORCPT
+        with ESMTP id S229825AbiJKRwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:52:24 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F23DEA3;
-        Tue, 11 Oct 2022 10:52:22 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id 10so13986432pli.0;
-        Tue, 11 Oct 2022 10:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R48OeXZvREqyrXFZCw2bLXmeDWzvQgbf0zkDfFVgRa4=;
-        b=DGGB3olI3Vtino4yAPk/8iMu5UIsbi0qRdeResJvhjNigOcM3LSU9FmKpjG2IsOBVt
-         U+FVrxn8PCXuextjxg5WvesOSjxns08z/kk4pTQj06XL4mC3dq7hcUl0KLAIlkQBSgM2
-         wK5MSgZdadebSZ2zPxkiE9ANAkqAORzUP/LlneUCV+3PuqoVaudhXTgPoBF42eQ1jead
-         aqVQVrpHVD+fD2WWILKWGaI3dzYrzAvrc+SZmeuyyo4AVR1rxOcrIU9nOkNGiuhRdz82
-         OQ+7xBoYVXwHLxC4gPKVVDA98MLwwyolP2SCQ7mHrg7A5VI9PW7vHXH5SrVYD/5SNs30
-         BUSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R48OeXZvREqyrXFZCw2bLXmeDWzvQgbf0zkDfFVgRa4=;
-        b=yTTyMOmG9nlKLTIJwUQCeFwsCIrxxi0YMwcqYxlHJ7leCVZZc07ssFgaRiKDuUQHsl
-         vIvIO/Q4A6vPSfe+mDMHurkBiQlHjbe6c1TdCTxOUco0cgsjZ8jHW//+ZPLEiLUgrndv
-         hLTYOI41m13wz+CgKU633Z7EZdc1+D68pBEUXVy5+zz5r7bvDoxYimrVJAux4KrcXqTh
-         5p74fPeX3NG2MbLXEn8yN2jMRTzAqQKqoV7CzASagBgGYmI5G+X/2dtM84Ux3nV6CCVi
-         8rkyTtsYG/9SNCJlCU2XzH/CA9RnSpibIll37/Zq9ZQ/iBisB3q4WVkg+oVtQYF7ce4M
-         QzRw==
-X-Gm-Message-State: ACrzQf2oSWtgCq26QRxmEaTvRMTz6y5PB+gu0/GRr2Lw+vVmUp5UEoRw
-        3OjLQx2ZIV8OsT0i3js7MuAscMDaeukif6SwMGI=
-X-Google-Smtp-Source: AMsMyM6HDFV4MZuxefuWVNV2r7OhU99Lj88ZicMHXMjyIKS4yBGdWae5R3jko9XOT5i/uyrpxT2uZFbScrfTQ+H/JZg=
-X-Received: by 2002:a17:902:6a87:b0:181:c6c6:1d38 with SMTP id
- n7-20020a1709026a8700b00181c6c61d38mr14778379plk.74.1665510742025; Tue, 11
- Oct 2022 10:52:22 -0700 (PDT)
+        Tue, 11 Oct 2022 13:52:35 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D79940037;
+        Tue, 11 Oct 2022 10:52:31 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1665510739tbwjqr9m
+Received: from [192.168.1.231] ( [113.72.146.141])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Oct 2022 01:52:18 +0800 (CST)
+X-QQ-SSF: 0100000000200090B000B00A0000000
+X-QQ-FEAT: eSZ1CZgv+JDpbz+8SZtFjGpBaoHZNJKphrrKecDmH7nFw9yOYamWc6tnUXtiK
+        5hqBaXLrf5CuIHQTdb0xFyaOht6w2j/pHl/eluwYwBsXw/EYe1upcfnk8v/ClL+IhgLqg1D
+        NQWyxjYe2HsuXrYs0WZNLcSpZYVdZC7iJCx0Pruqa/KnemRMSq9WYz9/OtaPqOrh8r+eFrn
+        77a4bV7aFLfWOzNgU3oekYrgRNUegBHk8OhXbHqYfwIPeC6kkc1nuw7f+NPrXtWJIpCEjy+
+        W+lDWWcd1xXRXOz8KqzeDSadVBRMPFcB3o8T9bdwfcYhDvuaEE8pihJHU/taIhOdmcCRC/r
+        CpfCAVlKq4JPAfRbyNoY0rHYmdeAA==
+X-QQ-GoodBg: 0
+Message-ID: <6BB36B91BD2046FD+e637d229-f656-a548-c45a-8d62a0c7928d@linux.starfivetech.com>
+Date:   Wed, 12 Oct 2022 01:52:18 +0800
 MIME-Version: 1.0
-References: <20221010191226.167997210@linuxfoundation.org>
-In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Tue, 11 Oct 2022 10:52:11 -0700
-Message-ID: <CAJq+SaA3b+CfnzCohKNeQC4ua02vMjxNzFmmtAtSOMHyMcv-WA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 17/30] dt-bindings: clock: Add
+ starfive,jh7110-clkgen-sys bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
+ <c99f6552-db04-fe30-ed69-4a08b0af5276@linaro.org>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <c99f6552-db04-fe30-ed69-4a08b0af5276@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On Fri, 30 Sep 2022 12:58:12 +0200, Krzysztof Kozlowski wrote:
+> On 30/09/2022 00:26, Hal Feng wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> > 
+> > Add bindings for the system clock generator on the JH7110
+> > RISC-V SoC by StarFive Technology Ltd.
+> > 
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> 
+> (...)
+> 
+> > +  '#clock-cells':
+> > +    const: 1
+> > +    description:
+> > +      See <dt-bindings/clock/starfive-jh7110-sys.h> for valid indices.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - clocks
+> > +  - clock-names
+> > +  - '#clock-cells'
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    syscrg_clk: clock-controller@13020000 {
+> 
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-5.15.73-rc2 compiled and booted on my x86_64 and arm64 test system. No
-errors or regressions.
+Will rewrite the bindings and test them. Thanks.
 
-Tested-by: Allen Pais  <apais@microsoft.com>
+Best regards,
+Hal
