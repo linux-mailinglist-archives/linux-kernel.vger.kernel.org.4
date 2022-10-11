@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380725FAA8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445155FAA8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 04:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiJKCU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 22:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S229669AbiJKCVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 22:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJKCUX (ORCPT
+        with ESMTP id S229630AbiJKCVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 22:20:23 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271F759248
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:20:22 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id i6so6866933pli.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:20:22 -0700 (PDT)
+        Mon, 10 Oct 2022 22:21:00 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A005C9C9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:20:58 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id l19so8173886qvu.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW7DNlS16RoYLT6uJ2WK221+Zbzraxz3CxrZYCkWg6s=;
-        b=DClq4d3tRxArm/g8fpYhcSWamPmA1Jukadx3EurAVBGfxfRbUXs/RmyhFWErNs6pMW
-         5Lm38IISQuDDp5MoY8VbFJ72OC0EULNkeI9mmbGMrSJjAuAS64vYFDc9bnBnbt92GMBH
-         O7G2jVQPS2LzaJlZD3JGZr4pZrAQkNUtXynlUy3hHoUv4D+dbefZpiMQZ5aoM7hDdcgu
-         nx9a6K3oNW4GnJg7oAmlOscNoQ6Jg8pEmEgALYqLIuEpUvkcgF9R7dv7xzrTDSo9HDs5
-         r1A03KUIC/YFMQ/cHl8c6pQ2LJ35jW8ngd79jB2POGOKwPhZ+UcJMdBuVFeKlUhc2DwU
-         6zLQ==
+        d=sladewatkins.net; s=googled;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K3oL+ynrOSKSzgOc50W9n/l8KWPjIlHisTCyClwaTFA=;
+        b=fqZU7JIN8Ua0+47qZpf7b5Iv7LIYXTRKBYv4oSTuR5naMEraG/aP4+/9lpBn24wSDw
+         hPInOT88/NlDFWWgBFf0gaHEGnj3fiWnbCccAveKeuFFaYADHQLlKP6/BNeTLPCeP0in
+         O3ctNKdtH2nM43+yYilixvBcqwS0Gvpb+rbdHStq31to/3xNv/JeNkslTZYLITPf9I2i
+         NChsO7bAz7V+u3MYATkxlVsw19P6e226GelX+MPpRhRp20YFo7px3rnjug6INthHL+nL
+         TKBANoEVGHui+tBg9+kXHzAJnm4+5H+dXW+gIPwgibUiDO19YK8zzfvR9NJjt9YX8mLU
+         NmCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eW7DNlS16RoYLT6uJ2WK221+Zbzraxz3CxrZYCkWg6s=;
-        b=VsWrFUQ+ZUR1uqelWpzzEYl5UNJSfLRUAkRmPsOSsmDwB5osrShQbxb7LLeSG00Pki
-         DewlXbIMGbZHOiBAWP3Zv5xrriqvE9VbKNr+xH9Glm9PxYpMnN8bjmkJ/5go4ZVchVM9
-         x4uFckEZ9QOS6o1mcOsaOWEdDro2RvWtJulq+FQ9pP8Igqx71nUlj9TQIXhdxATcfwUW
-         9dhmsMgL2IxxTlQiNvS82ICK2V4/5QvNX8ZWQuYH7MtP2DXz4XIC0HAgf6kHwmM3ttl8
-         Z8v8G/C4r8eVqB5OQ1aixSUYCpFaKX6MiOPMgvWJzghviq8z0xliCvz9LEwKM7/kzEK2
-         UVBQ==
-X-Gm-Message-State: ACrzQf2vs88iF0A3UvWcrluLp1yGHAG1LWGIIbxxoma2GU5lsrVS7gWF
-        VJBbiu8ucSWtlQdeUYDccJel3vug0TA=
-X-Google-Smtp-Source: AMsMyM4db7aeAn3whyejbDBpKCgk18j+dGFcSbcbo7dxg9AmV24f3yLdmA1e41g7X7HL5ofBeMQN5w==
-X-Received: by 2002:a17:902:b945:b0:181:c6b6:abc with SMTP id h5-20020a170902b94500b00181c6b60abcmr11342027pls.75.1665454821504;
-        Mon, 10 Oct 2022 19:20:21 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902c41100b0017f8094a52asm7471998plk.29.2022.10.10.19.20.18
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K3oL+ynrOSKSzgOc50W9n/l8KWPjIlHisTCyClwaTFA=;
+        b=JRE7WGOTPWztS5/KEihtKka5efo7V9xCOGruqLEJfz+fhMti/ZMA0vj1r95OmcfqT1
+         XF2wW9CjH6rh2a6G01rWar6w1NQNO728uWBo9fZhALLanyOFTJeqNGWDjU1F2lTa9fRL
+         u2Z0R+m4APFMynqrNZpNfzU/mCf4DDkxLeNX5NWIqI0q2Eyj7oJyVtxUD7AMNJWd4IuE
+         NkxDZKqf8EG0HixRhraqy+ZXmQiUOyXmv1APFhXrGa1T9rxFwyM/U/ca0Xso607Hs1WB
+         VP1zXTnzQreMr8Mxt68q2GDJ8TJmmXYQAeTVk0p3w5E4a8VPol4KgKLm4pCzYmyC+w01
+         vFuQ==
+X-Gm-Message-State: ACrzQf0OgoBocbkqCawq9R+09jns+iY24a9Kn/eSvMlHCRADER4wQnJC
+        aDOcqM4swtVZJG02hxmIletrKQ3I6jPkivIrW5YH7g==
+X-Google-Smtp-Source: AMsMyM6PbsMh8y+8soO6hSNlN7Yyc2jQg8LI939tjIeyc7YZPu33iRasr8hsLGeNcHhE4O8KknfMKQ==
+X-Received: by 2002:a05:6214:5013:b0:4b1:877e:539c with SMTP id jo19-20020a056214501300b004b1877e539cmr17187963qvb.106.1665454857580;
+        Mon, 10 Oct 2022 19:20:57 -0700 (PDT)
+Received: from sladewatkins.net (pool-108-4-135-94.albyny.fios.verizon.net. [108.4.135.94])
+        by smtp.gmail.com with ESMTPSA id h19-20020ac87153000000b00397101ac0f2sm8023634qtp.3.2022.10.10.19.20.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 19:20:20 -0700 (PDT)
-From:   xu.xin.sc@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     ran.xiaokai@zte.com.cn, yang.yang29@zte.com.cn,
-        jiang.xuexin@zte.com.cn, imbrenda@linux.ibm.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>
-Subject: [PATCH v3 0/5] ksm: support tracking KSM-placed zero-pages
-Date:   Tue, 11 Oct 2022 02:20:06 +0000
-Message-Id: <20221011022006.322158-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Oct 2022 19:20:57 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 22:20:55 -0400
+From:   Slade Watkins <srw@sladewatkins.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
+Message-ID: <Y0TTB1jrF+BhN0h0@sladewatkins.net>
+References: <20221010191226.167997210@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,69 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
 
-use_zero_pages is good, not just because of cache colouring as described
-in doc, but also because use_zero_pages can accelerate merging empty pages
-when there are plenty of empty pages (full of zeros) as the time of
-page-by-page comparisons (unstable_tree_search_insert) is saved.
+On Mon, Oct 10, 2022 at 09:12:52PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
+> Anything received after that time might be too late.
 
-But there is something to improve, that is, when enabling use_zero_pages,
-all empty pages will be merged with kernel zero pages instead of with each
-other as use_zero_pages is disabled, and then these zero-pages are no longer
-managed and monitor by KSM, which leads to two issues at least:
+5.15.73-rc2 compiled and booted on my x86_64 test system. No errors or regressions.
 
-1) MADV_UNMERGEABLE and other ways to trigger unsharing will *not*
-   unshare the shared zeropage as placed by KSM (which is against the 
-   MADV_UNMERGEABLE documentation at least); see the link:
-   https://lore.kernel.org/lkml/4a3daba6-18f9-d252-697c-197f65578c44@redhat.com/
+Tested-by: Slade Watkins <srw@sladewatkins.net>
 
-2) we cannot know how many pages are zero pages placed by KSM when
-   enabling use_zero_pages, which leads to KSM not being transparent
-   with all actual merged pages by KSM.
-
-Zero pages may be the most common merged pages in actual environment(not only VM but
-also including other application like containers). Enabling use_zero_pages in the
-environment with plenty of empty pages(full of zeros) will be very useful. Users and
-app developer can also benefit from knowing the proportion of zero pages in all
-merged pages to optimize applications.
-
-With the patch series, we can both unshare zero-pages(KSM-placed) accurately
-and count ksm zero pages with enabling use_zero_pages.
-
----
-v2->v3:
-
-1) Add more descriptive information in cover letter.
-
-2) In [patch 2/5], add more commit log for explaining reasons.
-
-3) In [patch 2/5], fix misuse of break_ksm() in unmerge_ksm_pages():
-   break_ksm(vma, addr, NULL) -> break_ksm(vma, addr, false);
-
----
-v1->v2:
-
-[patch 4/5] fix build warning, mm/ksm.c:550, misleading indentation; statement 
-'rmap_item->mm->ksm_zero_pages_sharing--;' is not part of the previous 'if'.
-
-
-
-*** BLURB HERE ***
-
-xu xin (5):
-  ksm: abstract the function try_to_get_old_rmap_item
-  ksm: support unsharing zero pages placed by KSM
-  ksm: count all zero pages placed by KSM
-  ksm: count zero pages for each process
-  ksm: add zero_pages_sharing documentation
-
- Documentation/admin-guide/mm/ksm.rst |  10 +-
- fs/proc/base.c                       |   1 +
- include/linux/mm_types.h             |   7 +-
- mm/ksm.c                             | 177 +++++++++++++++++++++------
- 4 files changed, 157 insertions(+), 38 deletions(-)
-
--- 
-2.25.1
-
+Thanks,
+-srw
