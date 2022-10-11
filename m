@@ -2,263 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205825FAEC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20C85FAEB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJKIwi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Oct 2022 04:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S229864AbiJKIs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJKIwg (ORCPT
+        with ESMTP id S229468AbiJKIsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:52:36 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446275F116;
-        Tue, 11 Oct 2022 01:52:35 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id r11-20020a4aa2cb000000b004806f49e27eso3501386ool.7;
-        Tue, 11 Oct 2022 01:52:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RG7je/SPkrUeGbyJflxBun3+ZBOYqWehWXWhY9Ywba0=;
-        b=iD1ZS6OfBtk8sON3hsIjwM5uucYcNqhbUYzlsYWMSN052gwEQU+g6IX2cu1rCA4rki
-         LdnfXQvS4Yuh1Dwm8d5fJEHs7cg0LSIH2DWCskY+Al4sUQ23r+Lgx0Qjv+kOIuNkOzj+
-         0Xeie9z6ihm46L/7IbyjfD+zA+7Ggr3UaZ2HzPrz1Z6T4QJ6Ok2oLbMLF56vQUphH2Z3
-         d8fjvst2WC2aluZOCwPT2pau2VT2e74QTP7iJGRAzAkUg5Ixkzsbq9V/0tSEHI1ldlol
-         zLm6izgcvgSyQ36sBjutweV8fpbPZr7KIQeKK616rJ+/Sh7MVS32wYWuqI6rMqa8bdsd
-         zlUg==
-X-Gm-Message-State: ACrzQf2vS9fHJMJukozh8wJPvRG0sGt89aBIKH0qW5Ko1fmMeFkB6ERy
-        L8qNGH5DQQJw5sCTYjvqmiFBA8ZrksGds8eJ
-X-Google-Smtp-Source: AMsMyM7J2caHP7QYUnJnqsFi15536ODGqoMlJSTPiNnqPM9M5dbTNI6xrKViv6uj1K5PJJ/YxCzhGw==
-X-Received: by 2002:a4a:dbcd:0:b0:47f:9f26:3569 with SMTP id t13-20020a4adbcd000000b0047f9f263569mr8747611oou.19.1665478354431;
-        Tue, 11 Oct 2022 01:52:34 -0700 (PDT)
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com. [209.85.161.52])
-        by smtp.gmail.com with ESMTPSA id r21-20020a056870439500b0012796e8033dsm6199722oah.57.2022.10.11.01.52.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:52:34 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id s125-20020a4a5183000000b0047fbaf2fcbcso7454574ooa.11;
-        Tue, 11 Oct 2022 01:52:34 -0700 (PDT)
-X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
- h64-20020a0dde43000000b0034931bde8d5mr20151543ywe.283.1665478004869; Tue, 11
- Oct 2022 01:46:44 -0700 (PDT)
+        Tue, 11 Oct 2022 04:48:54 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F995F7EB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 01:48:52 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1665478106tvcduh6y
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 11 Oct 2022 16:48:25 +0800 (CST)
+X-QQ-SSF: 01400000000000C0I000000A0000000
+X-QQ-FEAT: bYR630AeiPhVrerovAXuKuzOCurcaDdNa5KVrdcyOwvim68yG6/5rL82Hk7Ti
+        F4nFWQYbqv/n2NByPS2SHmEtYnS7P9Realhj5cQWGCp/EdMYbTquaQ+edbUzC9DETP326tG
+        bMuTSp6YWMgoOqosE5khnc3MGXv9jzq0NsnUkv6WhXK8Ea6c1bMIfMl29cDUVojgIzZMDAN
+        DyYxSUgBI815pOxvpKrGTSHVA2bziz2zLzTdbRb7ySu0qAUxlQm99k6sRBHPtwT4gCt4t5z
+        aPdx57RTlRJDcgWbWNH5lWHKQSGR8dnrdKG82qWLOO3NyvtAvVQOzTzncS0F4fLyrHok/Yp
+        t9JeeXdP0R7vqLSyczkz9Oxq18SURNQZfQVuP/IZV1/N/KMvBsDx3euGwocrF6p+TGH0TJI
+        NJgsjiW4pDk=
+X-QQ-GoodBg: 1
+From:   Zhang Xincheng <zhangxincheng@uniontech.com>
+To:     tglx@linutronix.de
+Cc:     maz@kernel.org, wsa+renesas@sang-engineering.com,
+        hdegoede@redhat.com, bigeasy@linutronix.de, mark.rutland@arm.com,
+        michael@walle.cc, linux-kernel@vger.kernel.org,
+        Zhang Xincheng <zhangxincheng@uniontech.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3] interrupt: debug for discovering frequent interrupts
+Date:   Tue, 11 Oct 2022 16:47:59 +0800
+Message-Id: <20221011084759.19197-1-zhangxincheng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-37-andriy.shevchenko@linux.intel.com> <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
-In-Reply-To: <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:46:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 36/36] pinctrl: Clean up headers
-To:     Basavaraj Natikar <bnatikar@amd.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Kent Gibson <warthog618@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 9:31 AM Basavaraj Natikar <bnatikar@amd.com> wrote:
-> On 10/11/2022 1:44 AM, Andy Shevchenko wrote:
-> > There is a few things done:
-> > - include only the headers we are direct user of
-> > - when pointer is in use, provide a forward declaration
-> > - add missed headers
-> > - group generic headers and subsystem headers
-> > - sort each group alphabetically
-> >
-> > While at it, fix some awkward indentations.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/pinctrl/core.c                  | 19 ++++++++-------
-> >  drivers/pinctrl/core.h                  | 12 +++++++++-
-> >  drivers/pinctrl/devicetree.h            |  6 +++++
-> >  drivers/pinctrl/pinconf.h               | 10 ++++++++
-> >  drivers/pinctrl/pinctrl-utils.h         |  5 ++++
-> >  drivers/pinctrl/pinmux.c                | 17 ++++++++------
-> >  drivers/pinctrl/pinmux.h                | 11 +++++++++
-> >  include/linux/pinctrl/consumer.h        | 31 +++++++++++--------------
-> >  include/linux/pinctrl/devinfo.h         |  6 +++--
-> >  include/linux/pinctrl/machine.h         |  8 ++++---
-> >  include/linux/pinctrl/pinconf-generic.h | 23 ++++++++++--------
-> >  include/linux/pinctrl/pinctrl.h         | 18 +++++++-------
-> >  include/linux/pinctrl/pinmux.h          |  5 ++--
-> >  13 files changed, 110 insertions(+), 61 deletions(-)
-> >
-> > diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-> > index 9e57f4c62e60..655f9502e73f 100644
-> > --- a/drivers/pinctrl/core.c
-> > +++ b/drivers/pinctrl/core.c
-> > @@ -12,19 +12,21 @@
-> >   */
-> >  #define pr_fmt(fmt) "pinctrl core: " fmt
-> >
-> > -#include <linux/kernel.h>
-> > -#include <linux/kref.h>
-> > -#include <linux/export.h>
-> > -#include <linux/init.h>
-> > +#include <linux/debugfs.h>
-> >  #include <linux/device.h>
-> > -#include <linux/slab.h>
-> >  #include <linux/err.h>
-> > +#include <linux/export.h>
-> > +#include <linux/init.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/kref.h>
-> >  #include <linux/list.h>
-> > -#include <linux/debugfs.h>
-> >  #include <linux/seq_file.h>
-> > +#include <linux/slab.h>
-> > +
-> >  #include <linux/pinctrl/consumer.h>
-> > -#include <linux/pinctrl/pinctrl.h>
-> > +#include <linux/pinctrl/devinfo.h>
-> >  #include <linux/pinctrl/machine.h>
-> > +#include <linux/pinctrl/pinctrl.h>
-> >
-> >  #ifdef CONFIG_GPIOLIB
-> >  #include "../gpio/gpiolib.h"
-> > @@ -33,9 +35,8 @@
-> >
-> >  #include "core.h"
-> >  #include "devicetree.h"
-> > -#include "pinmux.h"
-> >  #include "pinconf.h"
-> > -
-> > +#include "pinmux.h"
-> >
-> >  static bool pinctrl_dummy_state;
-> >
-> > diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
-> > index 840103c40c14..4d0bdb9fb99b 100644
-> > --- a/drivers/pinctrl/core.h
-> > +++ b/drivers/pinctrl/core.h
-> > @@ -9,12 +9,22 @@
-> >   */
-> >
-> >  #include <linux/kref.h>
-> > +#include <linux/list.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/radix-tree.h>
-> > -#include <linux/pinctrl/pinconf.h>
->
-> Removing pinconf.h from the core.h may cause build failure in other files
-> because where-ever core.h is included to use “struct pinconf_ops”, there
-> is a need to include pinconf.h.
+In some cases, a peripheral's interrupt will be triggered frequently,
+which will keep the CPU processing the interrupt and eventually cause
+the RCU to report rcu_sched self-detected stall on the CPU. This patch
+provides a way to discover and report which outage is causing the problem.
 
-I can confirm adding
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Zhang Xincheng <zhangxincheng@uniontech.com>
+---
+ include/linux/irqdesc.h |   5 ++
+ kernel/irq/Kconfig      |  25 +++++++++
+ kernel/irq/spurious.c   | 121 +++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 144 insertions(+), 7 deletions(-)
 
-    #include <linux/pinctrl/pinconf.h>
+diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+index 1cd4e36890fb..f82b138c68d6 100644
+--- a/include/linux/irqdesc.h
++++ b/include/linux/irqdesc.h
+@@ -102,6 +102,11 @@ struct irq_desc {
+ 	int			parent_irq;
+ 	struct module		*owner;
+ 	const char		*name;
++#ifdef CONFIG_FREQUENT_IRQ_DEBUG
++	bool have_reported;
++	u32 gap_count;
++	u64 gap_time;
++#endif
+ } ____cacheline_internodealigned_in_smp;
+ 
+ #ifdef CONFIG_SPARSE_IRQ
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index db3d174c53d4..0b666ef51a08 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -137,6 +137,31 @@ config GENERIC_IRQ_DEBUGFS
+ 
+ 	  If you don't know what to do here, say N.
+ 
++config FREQUENT_IRQ_DEBUG
++	bool "Support for finding and reporting frequent interrupt"
++	default n
++	help
++
++	  This is a mechanism to detect and report that interrupts
++	  are triggered too frequently.
++
++config COUNT_PER_SECOND
++	int "Interrupt limit per second"
++	depends on FREQUENT_IRQ_DEBUG
++	default "2000"
++	help
++
++	  This is the limit on the number of interrupts triggered per second.
++	  (Max 65535)
++config DURATION_LIMIT
++	int "Duration limit"
++	depends on FREQUENT_IRQ_DEBUG
++	default "30"
++	help
++
++	  The number of interruptions per second exceeds the duration limit of
++	  the limit. (Max 65535)
++
+ endmenu
+ 
+ config GENERIC_IRQ_MULTI_HANDLER
+diff --git a/kernel/irq/spurious.c b/kernel/irq/spurious.c
+index 02b2daf07441..b33751a17260 100644
+--- a/kernel/irq/spurious.c
++++ b/kernel/irq/spurious.c
+@@ -22,6 +22,16 @@ static DEFINE_TIMER(poll_spurious_irq_timer, poll_spurious_irqs);
+ static int irq_poll_cpu;
+ static atomic_t irq_poll_active;
+ 
++#ifdef CONFIG_FREQUENT_IRQ_DEBUG
++#define COUNT_PER_SECOND_MASK	0x0000ffff
++#define DURATION_LIMIT_MASK		0xffff0000
++#define DURATION_LIMIT_COUNT	0x00010000
++#define DURATION_LIMIT_OFFSET	16
++static unsigned int count_per_second = CONFIG_COUNT_PER_SECOND;
++static unsigned int duration_limit = CONFIG_DURATION_LIMIT;
++static bool disable_frequent_irq;
++#endif /* CONFIG_FREQUENT_IRQ_DEBUG */
++
+ /*
+  * We wait here for a poller to finish.
+  *
+@@ -189,18 +199,16 @@ static inline int bad_action_ret(irqreturn_t action_ret)
+  * (The other 100-of-100,000 interrupts may have been a correctly
+  *  functioning device sharing an IRQ with the failing one)
+  */
+-static void __report_bad_irq(struct irq_desc *desc, irqreturn_t action_ret)
++static void __report_bad_irq(struct irq_desc *desc, irqreturn_t action_ret, const char *msg)
+ {
+ 	unsigned int irq = irq_desc_get_irq(desc);
+ 	struct irqaction *action;
+ 	unsigned long flags;
+ 
+ 	if (bad_action_ret(action_ret)) {
+-		printk(KERN_ERR "irq event %d: bogus return value %x\n",
+-				irq, action_ret);
++		printk(msg, irq, action_ret);
+ 	} else {
+-		printk(KERN_ERR "irq %d: nobody cared (try booting with "
+-				"the \"irqpoll\" option)\n", irq);
++		printk(msg, irq);
+ 	}
+ 	dump_stack();
+ 	printk(KERN_ERR "handlers:\n");
+@@ -228,7 +236,7 @@ static void report_bad_irq(struct irq_desc *desc, irqreturn_t action_ret)
+ 
+ 	if (count > 0) {
+ 		count--;
+-		__report_bad_irq(desc, action_ret);
++		__report_bad_irq(desc, action_ret, KERN_ERR "irq event %d: bogus return value %x\n");
+ 	}
+ }
+ 
+@@ -269,6 +277,46 @@ try_misrouted_irq(unsigned int irq, struct irq_desc *desc,
+ 
+ #define SPURIOUS_DEFERRED	0x80000000
+ 
++#ifdef CONFIG_FREQUENT_IRQ_DEBUG
++/*
++ * Some bad hardware will trigger interrupts very frequently, which will
++ * cause the CPU to process hardware interrupts all the time. We found
++ * and reported it, and disabling it is optional.
++ */
++static void report_frequent_irq(struct irq_desc *desc, irqreturn_t action_ret)
++{
++	if (desc->have_reported)
++		return;
++
++	if ((desc->gap_count & DURATION_LIMIT_MASK) == 0)
++		desc->gap_time = get_jiffies_64();
++
++	desc->gap_count++;
++
++	if ((desc->gap_count & COUNT_PER_SECOND_MASK) >= count_per_second) {
++		if ((get_jiffies_64() - desc->gap_time) < HZ) {
++			desc->gap_count += DURATION_LIMIT_COUNT;
++			desc->gap_count &= DURATION_LIMIT_MASK;
++		} else {
++			desc->gap_count = 0;
++		}
++
++		if ((desc->gap_count >> DURATION_LIMIT_OFFSET) >= duration_limit) {
++			__report_bad_irq(desc, action_ret, KERN_ERR "irq %d: triggered too "
++					"frequently\n");
++			desc->have_reported = true;
++			if (disable_frequent_irq)
++				irq_disable(desc);
++		}
++	}
++}
++
++#else
++static void report_frequent_irq(struct irq_desc *desc, irqreturn_t action_ret)
++{
++}
++#endif /* CONFIG_FREQUENT_IRQ_DEBUG */
++
+ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+ {
+ 	unsigned int irq;
+@@ -282,6 +330,8 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+ 		return;
+ 	}
+ 
++	report_frequent_irq(desc, action_ret);
++
+ 	/*
+ 	 * We cannot call note_interrupt from the threaded handler
+ 	 * because we need to look at the compound of all handlers
+@@ -416,7 +466,8 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+ 		/*
+ 		 * The interrupt is stuck
+ 		 */
+-		__report_bad_irq(desc, action_ret);
++		__report_bad_irq(desc, action_ret, KERN_ERR "irq %d: nobody cared (try "
++				"bootingwith the \"irqpoll\" option)\n");
+ 		/*
+ 		 * Now kill the IRQ
+ 		 */
+@@ -476,3 +527,59 @@ static int __init irqpoll_setup(char *str)
+ }
+ 
+ __setup("irqpoll", irqpoll_setup);
++
++#ifdef CONFIG_FREQUENT_IRQ_DEBUG
++int __init count_per_second_setup(char *str)
++{
++	int ret;
++
++	ret = kstrtouint(str, 10, &count_per_second);
++	if (ret)
++		return 0;
++
++	printk(KERN_INFO "Interrupt limit per second: %u\n", count_per_second);
++
++	return 1;
++}
++
++__setup("count_per_second=", count_per_second_setup);
++module_param(count_per_second, uint, 0644);
++MODULE_PARM_DESC(count_per_second, "Interrupt limit per second. (Max 0x65535)");
++
++int __init duration_limit_setup(char *str)
++{
++	int ret;
++
++	ret = kstrtouint(str, 10, &duration_limit);
++	if (ret)
++		return 0;
++
++	printk(KERN_INFO "Duration limit: %u\n", duration_limit);
++
++	return 1;
++}
++
++__setup("duration_limit=", duration_limit_setup);
++module_param(duration_limit, uint, 0644);
++MODULE_PARM_DESC(duration_limit, "The number of interruptions per second exceeds the duration limit of the limit. (Max 65535)");
++
++int __init disable_frequent_irq_setup(char *str)
++{
++	int ret;
++
++	ret = kstrtobool(str, &disable_frequent_irq);
++	if (ret)
++		return 0;
++
++	if (disable_frequent_irq)
++		printk(KERN_INFO "Disable frequent irq'\n");
++	else
++		printk(KERN_INFO "Don't disable frequent irq'\n");
++
++	return 1;
++}
++
++__setup("disable_frequent_irq=", disable_frequent_irq_setup);
++module_param(disable_frequent_irq, bool, 0644);
++MODULE_PARM_DESC(noirqdebug, "Disable frequent irq when true");
++#endif /* CONFIG_FREQUENT_IRQ_DEBUG */
+-- 
+2.20.1
 
-to drivers/pinctrl/renesas/pinctrl-rzn1.c and drivers/pinctrl/pinctrl-single.c
-fixes the issues I was seeing with shmobile_defconfig and (out-of-tree)
-renesas_defconfig.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
