@@ -2,206 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474495FAEBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E6E5FAECC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiJKIvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S229569AbiJKI7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJKIvr (ORCPT
+        with ESMTP id S229461AbiJKI65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:51:47 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55BF5F222;
-        Tue, 11 Oct 2022 01:51:44 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MmqCd72gQz1M8w2;
-        Tue, 11 Oct 2022 16:47:09 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 16:51:43 +0800
-Received: from huawei.com (10.175.104.170) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
- 2022 16:51:42 +0800
-From:   Zhuang Shengen <zhuangshengen@huawei.com>
-To:     <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <arei.gonglei@huawei.com>, <jianjay.zhou@huawei.com>
-Subject: [PATCH v2] iov: support enable pci sriov concurrently
-Date:   Tue, 11 Oct 2022 16:50:18 +0800
-Message-ID: <20221011085018.1505798-1-zhuangshengen@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Tue, 11 Oct 2022 04:58:57 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DABF6D9DB;
+        Tue, 11 Oct 2022 01:58:57 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id x6so12600009pll.11;
+        Tue, 11 Oct 2022 01:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OjYV+PrYo8LJJEiYwJWJq3mQSw4KgyJjKDtp0/rveP0=;
+        b=COjZXJwfy9YvjSkuGjb7HfnBRgZXDUEn+Z8h9VC/15b/Pd7r/84NhzygnF9K1zAaKA
+         9Mv3VZMlpDEfIG6nqqvUF6ugsKGVyP0+9aXrsDByCU3LyeaohKzFQRmyrwAsMuIg6N47
+         /e9vcUhKf+h3RwtPf3KOzygCOurXmLQtYPY/a2Jp6tn7putul1rWe1p4Z+FJ247rMuVt
+         t2sb8CYHj5XeFsBsSWL8qCj6JkSkaWkRXhCU8YN59yDRvjEuU/YF88mV4Hq3drQMZ24p
+         52r1EtQ9nU8ykjGHsXUfMlT97Hii8eDYmLH+mVqWOpv+nKan3SaIE3RMKBnFw8QVK5KJ
+         nyMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OjYV+PrYo8LJJEiYwJWJq3mQSw4KgyJjKDtp0/rveP0=;
+        b=oo5nskpn6xHpM4lUxvECOFyL5eKriV2bCfSo0auKSuxgnJT4lgI/XOukD7nbqD+0xE
+         wkIN4AvKGOI0qFvCjPFkvfAWHk5fMDdxEWmg+4IrJiswFizkkhcGQy6XyIhXF41Bw10x
+         HKESOXffvUTVChOhwm8VpveQr52bWQp0BUpsFuLYX8pnXa7gSara2RlclhHmN9j4btUL
+         +uGDKdnp8hBd1PcAxhLG1fq8h1R7KDDTOh5mClQLTg8hGtuWVZY8mzCnBNd5innC0KVz
+         1H/PaalpT5DAWQYHR4ArkA9rhRwUECbs4q4zQN4WSqbN3e+GR5BAn/o37kf1T2Rc8ieG
+         KL9Q==
+X-Gm-Message-State: ACrzQf14riLRnnnPWLR0+I0ehuJj0K4cCFDrE4SsPc7KJ0cJ8ejVfSS/
+        zD/JpZYrMK3vzeOQLGthbx8=
+X-Google-Smtp-Source: AMsMyM5r/Nk7LLGoiDXUAakqD4KVRpe1Lw4UY9XDSlvogAssyviQn84p+X56kSrtvxclfQOflHiHbw==
+X-Received: by 2002:a17:90b:3c84:b0:20b:8bc5:76c9 with SMTP id pv4-20020a17090b3c8400b0020b8bc576c9mr23453734pjb.171.1665478736617;
+        Tue, 11 Oct 2022 01:58:56 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-84.three.co.id. [180.214.233.84])
+        by smtp.gmail.com with ESMTPSA id h16-20020aa79f50000000b005544229b992sm8385587pfr.22.2022.10.11.01.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 01:58:56 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9D9DB10381D; Tue, 11 Oct 2022 15:58:52 +0700 (WIB)
+Date:   Tue, 11 Oct 2022 15:58:51 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
+Message-ID: <Y0UwSyHLoWZiXIpc@debian.me>
+References: <20221010070330.159911806@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eOkI0fukM6mb1Flo"
+Content-Disposition: inline
+In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable SRIOV concurrently with many different PFs in userspace
-will get warnings below:
-Warning 1:
-sysfs: cannot create duplicate filename
-'/devices/pci0000:30/0000:30:02.0/pci_bus/0000:32'
-Call Trace:
- dump_stack+0x6f/0xab
- sysfs_warn_dup+0x56/0x70
- sysfs_create_dir_ns+0x80/0x90
- kobject_add_internal+0xa0/0x2b0
- kobject_add+0x71/0xd0
- device_add+0x126/0x630
- pci_add_new_bus+0x17c/0x4b0
- pci_iov_add_virtfn+0x336/0x390
- sriov_enable+0x26e/0x450
- virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
-Warning 2:
-proc_dir_entry 'pci/33' already registered
-WARNING: CPU: 71 PID: 893 at fs/proc/generic.c:360
-proc_register+0xf8/0x130
-Call Trace:
- proc_mkdir_data+0x5d/0x80
- pci_proc_attach_device+0xe9/0x120
- pci_bus_add_device+0x33/0x90
- pci_iov_add_virtfn+0x375/0x390
- sriov_enable+0x26e/0x450
- virtio_pci_sriov_configure+0x61/0xc0 [virtio_pci]
 
-The reason is:
-1）different VFs may create the same pci bus number and try to add new bus
-concurrently in virtfn_add_bus.
-2）different VFs may create '/proc/bus/pci/bus_number' directory using the
-same bus number in pci_proc_attach_device concurrently.
+--eOkI0fukM6mb1Flo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Add new lock when creating new bus, hold device_lock when creating
-'/proc/bus/pci/bus_number' directory in pci_proc_attach_device to fix them
+On Mon, Oct 10, 2022 at 09:04:23AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.1 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Signed-off-by: Zhuang Shengen <zhuangshengen@huawei.com>
-Signed-off-by: Jay Zhou <jianjay.zhou@huawei.com>
----
- drivers/pci/iov.c   |  7 ++++++-
- drivers/pci/probe.c | 26 ++++++++++++++++++++++++++
- drivers/pci/proc.c  |  6 +++++-
- include/linux/pci.h |  2 ++
- 4 files changed, 39 insertions(+), 2 deletions(-)
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
 
-diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-index 952217572113..6d113ea64ba8 100644
---- a/drivers/pci/iov.c
-+++ b/drivers/pci/iov.c
-@@ -127,11 +127,16 @@ static struct pci_bus *virtfn_add_bus(struct pci_bus *bus, int busnr)
- 	if (bus->number == busnr)
- 		return bus;
- 
-+	/*
-+	 * vf will find existing bus at most case; if not existing, it should
-+	 * go through slow path to create new bus with locked to support enable SRIOV
-+	 * concurrently with different PFs in userspace.
-+	 */
- 	child = pci_find_bus(pci_domain_nr(bus), busnr);
- 	if (child)
- 		return child;
- 
--	child = pci_add_new_bus(bus, NULL, busnr);
-+	child = pci_add_new_bus_locked(bus, NULL, busnr);
- 	if (!child)
- 		return NULL;
- 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index c5286b027f00..a2baf3fe9e7c 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -25,6 +25,8 @@
- #define CARDBUS_LATENCY_TIMER	176	/* secondary latency timer */
- #define CARDBUS_RESERVE_BUSNR	3
- 
-+static DEFINE_MUTEX(add_bus_mutex);
-+
- static struct resource busn_resource = {
- 	.name	= "PCI busn",
- 	.start	= 0,
-@@ -1170,6 +1172,30 @@ struct pci_bus *pci_add_new_bus(struct pci_bus *parent, struct pci_dev *dev,
- }
- EXPORT_SYMBOL(pci_add_new_bus);
- 
-+struct pci_bus *pci_add_new_bus_locked(struct pci_bus *parent, struct pci_dev *dev,
-+				       int busnr)
-+{
-+	struct pci_bus *child;
-+
-+	mutex_lock(&add_bus_mutex);
-+	child = pci_find_bus(pci_domain_nr(parent), busnr);
-+	if (child) {
-+		mutex_unlock(&add_bus_mutex);
-+		return child;
-+	}
-+
-+	child = pci_alloc_child_bus(parent, dev, busnr);
-+	if (child) {
-+		down_write(&pci_bus_sem);
-+		list_add_tail(&child->node, &parent->children);
-+		up_write(&pci_bus_sem);
-+	}
-+	mutex_unlock(&add_bus_mutex);
-+
-+	return child;
-+}
-+EXPORT_SYMBOL(pci_add_new_bus_locked);
-+
- static void pci_enable_crs(struct pci_dev *pdev)
- {
- 	u16 root_cap = 0;
-diff --git a/drivers/pci/proc.c b/drivers/pci/proc.c
-index f967709082d6..f927263c2fe0 100644
---- a/drivers/pci/proc.c
-+++ b/drivers/pci/proc.c
-@@ -421,6 +421,7 @@ int pci_proc_attach_device(struct pci_dev *dev)
- 	if (!proc_initialized)
- 		return -EACCES;
- 
-+	device_lock(&bus->dev);
- 	if (!bus->procdir) {
- 		if (pci_proc_domain(bus)) {
- 			sprintf(name, "%04x:%02x", pci_domain_nr(bus),
-@@ -429,9 +430,12 @@ int pci_proc_attach_device(struct pci_dev *dev)
- 			sprintf(name, "%02x", bus->number);
- 		}
- 		bus->procdir = proc_mkdir(name, proc_bus_pci_dir);
--		if (!bus->procdir)
-+		if (!bus->procdir) {
-+			device_unlock(&bus->dev);
- 			return -ENOMEM;
-+		}
- 	}
-+	device_unlock(&bus->dev);
- 
- 	sprintf(name, "%02x.%x", PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
- 	e = proc_create_data(name, S_IFREG | S_IRUGO | S_IWUSR, bus->procdir,
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 5da0846aa3c1..bfe2a2e74af6 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1112,6 +1112,8 @@ struct pci_bus *pci_scan_root_bus(struct device *parent, int bus,
- int pci_scan_root_bus_bridge(struct pci_host_bridge *bridge);
- struct pci_bus *pci_add_new_bus(struct pci_bus *parent, struct pci_dev *dev,
- 				int busnr);
-+struct pci_bus *pci_add_new_bus_locked(struct pci_bus *parent, struct pci_dev *dev,
-+				       int busnr);
- struct pci_slot *pci_create_slot(struct pci_bus *parent, int slot_nr,
- 				 const char *name,
- 				 struct hotplug_slot *hotplug);
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-base-commit: 4c86114194e644b6da9107d75910635c9e87179e
--- 
-2.27.0
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--eOkI0fukM6mb1Flo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0UwQgAKCRD2uYlJVVFO
+o8tXAQDsxJe5H07q8u+FaLLXi0bhjYRL5vVpgdpf/GyO/Y/IaAEApGL3byuf6pnD
+UF2w8oOnXjZx4bE6dKDcp/RvU27C8As=
+=+nKW
+-----END PGP SIGNATURE-----
+
+--eOkI0fukM6mb1Flo--
