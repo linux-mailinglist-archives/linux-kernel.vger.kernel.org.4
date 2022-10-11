@@ -2,76 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE2B5FB48C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7418A5FB496
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJKO2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S229594AbiJKOaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJKO2R (ORCPT
+        with ESMTP id S229464AbiJKOaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:28:17 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3AE95ACE;
-        Tue, 11 Oct 2022 07:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665498495; x=1697034495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tDN8pO8vkYfi7aIzDYMNy5iW/C9igDir6WIyp4TE2LA=;
-  b=cotYo2t6Ne9FNYFfNrWKnm4db6LluQCGULKVaJ9ShTzpdpqVMIiHA27E
-   J1TlMTwF7ROnzimPkxnbp7hrNKM9GeI/hC9WSWe7cJT9hQPTnwRFfDYaH
-   QiImui79lUbFjSB5juSO9qSAMd4n3WS7wmxa2l/9VHjk8iEOkMB66I6m6
-   Y3VVr8NnM5VwIB2saL+bcQTAylfEsO528e1LG3ZuHL6/ZEprltnvEOvPe
-   E9EJfLzkMfTJMF7zaEwRnjBhipmhYmNHeaQ0zdW7QmmRV8ZYweK4T1STs
-   s2gB0vUUD+Tm3igz+aqv1g4wd9sSFnIeonhMIJzjx51hs4akTJJUuD731
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="284245094"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="284245094"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 07:28:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="628713444"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="628713444"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Oct 2022 07:28:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oiGEq-005LfS-1Y;
-        Tue, 11 Oct 2022 17:28:08 +0300
-Date:   Tue, 11 Oct 2022 17:28:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
-Message-ID: <Y0V9eJX7a0fe6EfX@smile.fi.intel.com>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
- <Y0SyVwjDl7NGfTPn@sol>
- <CAHp75Vf4oS8g0zxgismtLrzsJ7AE-bdMEq+GAzx2=Mwnhuk3UA@mail.gmail.com>
- <Y0V0IXF3sASTGdMU@smile.fi.intel.com>
- <Y0V57gI75ik4ki3A@sol>
+        Tue, 11 Oct 2022 10:30:16 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E0C9357F8;
+        Tue, 11 Oct 2022 07:30:15 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 49BB080F9;
+        Tue, 11 Oct 2022 14:21:26 +0000 (UTC)
+Date:   Tue, 11 Oct 2022 17:30:12 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] ARM: dts: omap3-n900: fix LCD reset line polarity
+Message-ID: <Y0V99Agad6Ma+yTC@atomide.com>
+References: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
+ <Y0UDEtQlN5Y9h7BU@atomide.com>
+ <20221011123726.elsr53ue7nxzhvww@mercury.elektranox.org>
+ <Y0V4cLGbYe4j+ls6@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0V57gI75ik4ki3A@sol>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+In-Reply-To: <Y0V4cLGbYe4j+ls6@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +44,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 10:13:02PM +0800, Kent Gibson wrote:
-> On Tue, Oct 11, 2022 at 04:48:17PM +0300, Andy Shevchenko wrote:
-> > On Tue, Oct 11, 2022 at 11:05:42AM +0300, Andy Shevchenko wrote:
-> > > On Tue, Oct 11, 2022 at 3:02 AM Kent Gibson <warthog618@gmail.com> wrote:
-> > > > On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
-
-...
-
-> > > > > -#include <linux/gpio.h>
-> > > > >  #include <linux/gpio/driver.h>
-> > > > > +#include <linux/gpio.h>
-> > > > > +#include <linux/hte.h>
-> > > >
-> > > > Ok with the hte re-order.
-> > > >
-> > > > But moving the gpio subsystem header after the gpio/driver is not
-> > > > alphabetical ('.' precedes '/') and it read better and made more sense
-> > > > to me the way it was.
+* Dmitry Torokhov <dmitry.torokhov@gmail.com> [221011 13:57]:
+> Hi Sebastian,
+> 
+> On Tue, Oct 11, 2022 at 02:37:26PM +0200, Sebastian Reichel wrote:
+> > Hi,
+> > 
+> > On Tue, Oct 11, 2022 at 08:45:54AM +0300, Tony Lindgren wrote:
+> > > * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221004 21:26]:
+> > > > The LCD driver (panel-sony-acx565akm), when probing, starts with line
+> > > > driven low, and then toggles it to high and keeps it there. Also, the
+> > > > line is driven low when powering off the device, and ls released when
+> > > > powering it back on. This means that the reset line should be described
+> > > > as "active low" in DTS. This will be important when the driver is
+> > > > converted to gpiod API which respects the polarity declared in DTS.
 > > > 
-> > > I see, I guess this is vim sort vs shell sort. Strange, they should
-> > > follow the locale settings...
+> > > We should ensure these patches get merged together with the driver
+> > > change to avoid breaking LCD for booting. Probably no need to have
+> > > the driver quirk handling for inverted polartity in this case.
+> > > 
+> > > It's probably easiest to have an immutable branch for the driver
+> > > changes I can base the dts changes on. Or I can ack the dts changes
+> > > if they get merged with the driver.
 > > 
-> > I have checked, the shell and vim sort gave the same result as in this patch.
+> > Both drivers are already using gpiod API:
 > > 
+> > drivers/gpu/drm/panel/panel-sony-acx565akm.c
+> > drivers/gpu/drm/panel/panel-dsi-cm.c
 > 
-> The original order (sans hte.h) was done by VSCode Sort Lines Ascending,
-> and that still returns the same result.  That matches what I would
-> expect to see given the content of the text.
+> I was looking at
 > 
-> And for me vim also gives the original order.
+> drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
+> drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+
+Ah OK that explains :)
+
+> which are not using gpiod. Should they be retired?
+
+Yes we should just get rid of them with omapdrm working just fine.
+
+> > So this just breaks things.
 > 
-> Just to confirm - is '.' 0x2e and '/' 0x2f in your universe?
+> I missed the drivers in drivers/gpu/... and I see that they essentially
+> abuse gpiod API as gpiod_set_value() operates on logical level
+> (active/inactive) and not absolute (high/low). They should either use
+> the gpiod_*_raw() variants, or they should be adjusted to do the proper
+> thing together with the accompanying DTS change.
+> 
+> What are your preferences?
 
-$ LC_COLLATE=C sort test1.txt
-#include <linux/gpio.h>
-#include <linux/gpio/driver.h>
+Seems like high/low at the connected device end is what we should use,
+right? Otherwise things will misbehave if the panel is connected to
+some other SoC possibly.
 
-$ LC_COLLATE= sort test1.txt
-#include <linux/gpio/driver.h>
-#include <linux/gpio.h>
+Regards,
 
-I guess this explains the difference. Currently I have en_US.UTF-8.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Tony
