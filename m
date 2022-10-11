@@ -2,104 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66825FA93C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D576A5FA8E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiJKAUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 20:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S229903AbiJKADP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 20:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJKAUA (ORCPT
+        with ESMTP id S229436AbiJKADL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:20:00 -0400
-X-Greylist: delayed 2398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Oct 2022 17:19:56 PDT
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [202.47.80.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A259723385;
-        Mon, 10 Oct 2022 17:19:55 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 424043763266;
-        Tue, 11 Oct 2022 06:01:54 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zKaAc2fXxHm4; Tue, 11 Oct 2022 06:01:53 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 204CF376325D;
-        Tue, 11 Oct 2022 06:01:49 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id 204CF376325D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
-        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1665442909;
-        bh=ojiPJcDR+TIWYTwq3WfgringZ3Cc/DnLcOpy2XzifYo=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=KTWUo8Sx5nHpeKhkHRjXaNuaVr1LcfZuzLmih7Iepi3yA2CuD1DjrJ8PYI4/59cF8
-         27bF8UWyEV8bTDr5vnPGsURYKJJC4uh9KLLhqKyijQGeP64JOAeeJqu4z/DlWON4mz
-         d8GEUR9n9RDWFYzailXjfkBSMytaww9+eCkzrk1c=
-X-Virus-Scanned: amavisd-new at kemenperin.go.id
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id yIk69QrvBgDl; Tue, 11 Oct 2022 06:01:49 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 484203763257;
-        Tue, 11 Oct 2022 06:01:38 +0700 (WIB)
-Date:   Tue, 11 Oct 2022 06:01:38 +0700 (WIB)
-From:   Iccrea Banca SpA Istituto Centrale del Cooperativo 
-        <afriyanto@kemenperin.go.id>
-Reply-To: Iccrea Banca SpA Istituto Centrale del Cooperativo 
-          <ibspaicdc@gmail.com>
-Message-ID: <1909739179.54723.1665442898222.JavaMail.zimbra@kemenperin.go.id>
-Subject: =?utf-8?Q?=C3=9Cberweisung_abgeschlossen_(=E2=82=AC280.000,00_)?=
+        Mon, 10 Oct 2022 20:03:11 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298C480504;
+        Mon, 10 Oct 2022 17:03:11 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id h185so4427201pgc.10;
+        Mon, 10 Oct 2022 17:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l+llQOs1rDUP1s79HRj7eRagiprARX+HG1GAmZurmEA=;
+        b=bFHvYCEQLjSfzroDOuLQ9Iu9SAR9bjDwReNKR9N1SoBlWDmZ+SRcBe52uoZWup5vkr
+         mSOWD5Le1Sj0AS20ah3a5X5YUWs0Khm3JrUy/4ElGslNB2ryYstN+Q7hOBW1z0FDOr5x
+         nnPyXM7UqK7Gs+bel7pTZ2GxXMn6BTKiSVBYKsf2GMunWfpQWiT/aaMLCmvGRZciJCUb
+         S+kdQY8YaWhT/c2wMqcE7cscmzsW4pKvYN/uG5qGcHQyySgn4L9CCMVEBjRbLNX7mfZk
+         K6jw2UrKqcezN517aTlL7K7gOdnTIr32jkOK8kSba7wokCrMsycBHLxRKP9hLtpO10U5
+         Il+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l+llQOs1rDUP1s79HRj7eRagiprARX+HG1GAmZurmEA=;
+        b=7iAKRt3+ayvuOT2Qimdbm6AV9KFab84xyzyK45XsA//aH7oQHDDtTihUm0KH0SGEpK
+         B0tPraQQC8a5uDe/Tp/hiuaRiBPE40RLi0eu3GxG/TrO0lwfdNGJryEieTUeTiWIRKUW
+         seamYAMoHbducEiTxoGqtbv+fdEq+iJzNO+b5g/R4qtn0krG+nOS/Fr5l+x3dpA00AtC
+         G9y4GaumXuYED26ccERnJvHoicyf5JgJTPycYbF4KXweSonCHIFoMwm/mmOzaeE+r41L
+         BTvi9IR4N6U8jotRcYdpgmjTnXPZE/0s77MXK3MvcTlTsEhyRdkXNKAdm9Yuuy12q5UF
+         cJeg==
+X-Gm-Message-State: ACrzQf10VrvybzYijY3/3wUfEsJK844hzl80OWF50FYOfH0jHAOY/9ZX
+        dquFMN8Ro5qYSvXICJcBAEg=
+X-Google-Smtp-Source: AMsMyM5NMWylJqWXpz7AzoIykyglnmxpYJOMlu6VMfUrXLfW/UxOxWJGbMhiaqwjgssb9gzOdne/XQ==
+X-Received: by 2002:a05:6a00:3392:b0:547:f861:1fad with SMTP id cm18-20020a056a00339200b00547f8611fadmr22376236pfb.16.1665446590528;
+        Mon, 10 Oct 2022 17:03:10 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id l76-20020a633e4f000000b00460a5c6304dsm4183661pga.67.2022.10.10.17.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 17:03:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Oct 2022 14:03:08 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, "Christian A . Ehrhardt" <lk@c--e.de>
+Subject: Re: [PATCH v1 1/3] Revert "cgroup: enable cgroup_get_from_file() on
+ cgroup1"
+Message-ID: <Y0SyvJvzFQOhSFsC@slm.duckdns.org>
+References: <20221010235845.3379019-1-yosryahmed@google.com>
+ <20221010235845.3379019-2-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.1.0.89]
-Thread-Index: XUiDgADoxrL1kwFkeUWMbm3LczkhPw==
-Thread-Topic: =?utf-8?Q?=C3=9Cberweisung_abgeschlossen_=28=E2=82=AC280=2E000=2C00?= )
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010235845.3379019-2-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+Already queued the following to cgroup/for-6.1-fixes. Will send it out soon.
 
-=C3=9Cbertragung abgeschlossen!
-Haben Sie die Bankbenachrichtigung =C3=BCber die =C3=9Cberweisung best=C3=
-=A4tigt, die =C3=BCber den Europ=C3=A4ischen Fonds f=C3=BCr humanit=C3=A4re=
- Hilfe auf Ihr Konto gesendet werden soll?
-Ihr Name und Ihre Einzelheiten waren der Betrag der Liste der Empf=C3=A4nge=
-r des Geldbetrags. Wenn Sie Ihre Zahlung noch nicht best=C3=A4tigt haben, b=
-est=C3=A4tigen Sie dies bitte freundlicherweise bei Iccrea Banca S.p.A. Ist=
-ituto Centrale del Credito Cooperativo, Via Lucrezia Romana, 41/47, 00178 R=
-oma RM, Italien.
+Thanks.
 
-E-Mail1: info@iccreabancn.org
-E-Mail2: ibspaicdc@gmail.com
+----- 8< -----
+From 03db7716159477b595e9af01be8003b7e994cc79 Mon Sep 17 00:00:00 2001
+From: Tejun Heo <tj@kernel.org>
+Date: Mon, 10 Oct 2022 11:08:17 -1000
+Subject: [PATCH] Revert "cgroup: enable cgroup_get_from_file() on cgroup1"
 
+This reverts commit f3a2aebdd6fb90e444d595e46de64e822af419da.
 
-Guido Josef
-Tel. +39 03 8829911
-E-Mail:=C2=A0info@iccreabancn.org
-E-Mail:=C2=A0customercare@iccreabancn.org
-E-Mail:=C2=A0ibspaicdc@gmail.com
-Forma giuridica: Societa Per Azioni Con Socio
-Tipo di azienda: Sede Centrale
-P. Iva: 04774801007
+The commit enabled looking up v1 cgroups via cgroup_get_from_file().
+However, there are multiple users, including CLONE_INTO_CGROUP, which have
+been assuming that it would only look up v2 cgroups. Returning v1 cgroups
+breaks them.
+
+Let's revert the commit and retry later with a separate lookup interface
+which allows both v1 and v2.
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Link: http://lkml.kernel.org/r/000000000000385cbf05ea3f1862@google.com
+Cc: Yosry Ahmed <yosryahmed@google.com>
+---
+ kernel/cgroup/cgroup.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index ecf409e3c3a7..6d8a5a40c24d 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -6234,6 +6234,11 @@ static struct cgroup *cgroup_get_from_file(struct file *f)
+ 		return ERR_CAST(css);
+ 
+ 	cgrp = css->cgroup;
++	if (!cgroup_on_dfl(cgrp)) {
++		cgroup_put(cgrp);
++		return ERR_PTR(-EBADF);
++	}
++
+ 	return cgrp;
+ }
+ 
+-- 
+2.37.3
