@@ -2,82 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9028D5FA9E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AA55FAA2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiJKBU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S229902AbiJKBfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJKBUT (ORCPT
+        with ESMTP id S230468AbiJKBeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:20:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4F31F2D0;
-        Mon, 10 Oct 2022 18:20:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15BF7B80EB7;
-        Tue, 11 Oct 2022 01:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F6B6C433D7;
-        Tue, 11 Oct 2022 01:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665451215;
-        bh=dSXhxWOrf2f4b42wi+393TOcx81up8SMo6/uWAF8SeY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Fx6AHLxvMzfKFIH07QfHeOFe+441USDn7fd575YYaBtUh/0Xd71JG0ypRzZSpkBna
-         UdzYRIUd6iq/oaoogPoo1wi7ePSWrFwcyp1yM4KlD/G/Llq54V9bfsZ/+Ycz0h7B2w
-         Nm770QLgzwWbjwj9t+Q+rd/cmghB0+ZwfysGvNvAuinaJXvVkF2HyoEsIMeiTnYrdU
-         ok6nhKIx2SHBqk3F3QsGN+OiyHpWnu21CDuNKmaE9biBvb+wrfmbA6NT4OLCBElG7U
-         gg34WWK2jfg9PzjVQ3nOrhzByBqzaJhas0MbyciVA32AsyQBlytkAIySqxrlDCwBOW
-         J4/vf97H3PmZw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7AC1BE43EFE;
-        Tue, 11 Oct 2022 01:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 10 Oct 2022 21:34:12 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D84A7D799
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:34:10 -0700 (PDT)
+Received: from cp.tophost.it (vm1054.cs12.seeweb.it [217.64.195.253])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 87FDB1F40B;
+        Tue, 11 Oct 2022 03:34:07 +0200 (CEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: prestera: span: do not unbind things things that
- were never bound
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166545121549.22576.14666975915147855361.git-patchwork-notify@kernel.org>
-Date:   Tue, 11 Oct 2022 01:20:15 +0000
-References: <20221006190600.881740-1-maksym.glubokiy@plvision.eu>
-In-Reply-To: <20221006190600.881740-1-maksym.glubokiy@plvision.eu>
-To:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Cc:     tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, serhiy.boiko@plvision.eu,
-        vkochan@marvell.com, vmytnyk@marvell.com, netdev@vger.kernel.org,
+Date:   Tue, 11 Oct 2022 03:20:45 +0200
+From:   konrad.dybcio@somainline.org
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] clk: qcom: dispcc-sm6350: Add CLK_OPS_PARENT_ENABLE to
+ pixel&byte src
+In-Reply-To: <20221011010234.5309BC433C1@smtp.kernel.org>
+References: <20221010155546.73884-1-konrad.dybcio@somainline.org>
+ <20221011010234.5309BC433C1@smtp.kernel.org>
+User-Agent: Roundcube Webmail/1.4.6
+Message-ID: <dc7b1e2cb4c6b59a541505d61970774b@somainline.org>
+X-Sender: konrad.dybcio@somainline.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 2022-10-11 03:02, Stephen Boyd wrote:
+> Quoting Konrad Dybcio (2022-10-10 08:55:46)
+>> Add the CLK_OPS_PARENT_ENABLE flag to pixel and byte clk srcs to
+>> ensure set_rate can succeed.
+>> 
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+> 
+> Any Fixes tag?
+Sorry, I keep forgetting..
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Fixes: 837519775f1d ("clk: qcom: Add display clock controller driver for 
+SM6350")
 
-On Thu,  6 Oct 2022 22:06:00 +0300 you wrote:
-> Fixes: 13defa275eef ("net: marvell: prestera: Add matchall support")
-> Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-> ---
->  drivers/net/ethernet/marvell/prestera/prestera_span.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-
-Here is the summary with links:
-  - [net] net: prestera: span: do not unbind things things that were never bound
-    https://git.kernel.org/netdev/net/c/32391e646a71
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Konrad
