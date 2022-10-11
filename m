@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273A65FAE3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482255FAE3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJKIPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S230078AbiJKIPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiJKIOt (ORCPT
+        with ESMTP id S230099AbiJKIPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:14:49 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54B7D80;
-        Tue, 11 Oct 2022 01:14:36 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id z30so8021757qkz.13;
-        Tue, 11 Oct 2022 01:14:36 -0700 (PDT)
+        Tue, 11 Oct 2022 04:15:05 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32114286E7;
+        Tue, 11 Oct 2022 01:14:45 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id hh9so7796201qtb.13;
+        Tue, 11 Oct 2022 01:14:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yMcWJMFpbTv/M4gUgWn8+tSgvKlzALSNyxl0s8wbjAI=;
-        b=eLAEGHtnwMfaEN5izmfmVr6AF9hKCUaLlYxuup0God7cpi5AaNb/osto+ypATjPcnI
-         28AatMf7yr53sx+U3WLXrqEbw8HcoT0k2NagVTCSAxF47YspUb65DazWDiGWEYhwmjXl
-         A6jS11VX1nIVtgPHIEOcThG4+eVSeG2DCKn+Pw/bDCkAaeEOUkkil50FWF3BVTmLynBm
-         7I7FHqsiG9rsPEPzLu+kSWLsXC5rcnT99xcGLBNrNXhnXLjZQh1hs3YW6UdH1BndVigt
-         /WsGKxbs2UPcQy3VOKEthHZe798kW3spa1FhTyUFCZkWPnMWp988BEFsJNYI7X7cfc8G
-         fxeQ==
-X-Gm-Message-State: ACrzQf2jtSomIcI4XIkmz9lpg/ZKcHBxMCNrZrHP1jh7N+JoN9bRECO6
-        cyKy8FFFqr7z6Ap51stekL1Y9CO0ANFBkg==
-X-Google-Smtp-Source: AMsMyM6cgaLIVsDGSpgxLl9PvMhg+LU4N7r++5FHoRBQd7q6Ldu8zDSMgwEez/tjMWMfJMI+rbhjhQ==
-X-Received: by 2002:a05:620a:688:b0:6ec:5699:1cc5 with SMTP id f8-20020a05620a068800b006ec56991cc5mr7379171qkh.536.1665476049376;
-        Tue, 11 Oct 2022 01:14:09 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a0d9600b006c479acd82fsm12684971qkl.7.2022.10.11.01.14.05
+        bh=UK3dXGDPuN8xcwMtb1yXl5D14DsaayP6a4XmyECWV0o=;
+        b=qgZFm49ArBIMQAAu809aGEjPhS6EVwP6D6/DIZuR6OU5beSEyx0BxIS1TnPA95RDcp
+         FuGKLZYAY87D9krW6gynTCaQQ7GtJRXwCx1ooiRFm8wEWZoWyIEoqDFxPfYmfs5fPpYf
+         PHPk9BtV4Ht01EBO6oDgaLun+xNZjJRjUq6lwpilj6JW8MiUttKaViErNS3ijiR6yLer
+         hvz4U37wkDzpYq1BtOldtvv27UgcOiNPsQub9b0ItBYnPE66gngcFEj0X1BSYueWCd6Z
+         DPJwct+c9fDULORFLqbMBEWzWsYEW6lpeOZE1NRHZ+QdcAIowKySnN4hIqfvJ/USvQDZ
+         majA==
+X-Gm-Message-State: ACrzQf0FuXtcG42ZyNI2JUHArSea1UZiNhEwHjmWjTsD+9cu3QZu+pZP
+        mBw0X4b5g9jToneoKYwFTRFxm79tYZH1hw==
+X-Google-Smtp-Source: AMsMyM4SRsJr/VikcsesFmzNVNy9sgkv6qq+eNfnl9RqNBwLs3yuI2NhbDIwAV5PLj84bs3D7yHvug==
+X-Received: by 2002:a05:622a:1209:b0:35d:29b:8c4c with SMTP id y9-20020a05622a120900b0035d029b8c4cmr17666155qtx.124.1665476073600;
+        Tue, 11 Oct 2022 01:14:33 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id fc8-20020a05622a488800b003938a65479bsm10037276qtb.10.2022.10.11.01.14.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:14:06 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id k3so15574655ybk.9;
-        Tue, 11 Oct 2022 01:14:05 -0700 (PDT)
-X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr21699902ybx.543.1665476045309;
- Tue, 11 Oct 2022 01:14:05 -0700 (PDT)
+        Tue, 11 Oct 2022 01:14:33 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-333a4a5d495so120366137b3.10;
+        Tue, 11 Oct 2022 01:14:32 -0700 (PDT)
+X-Received: by 2002:a81:98d:0:b0:357:2422:13b4 with SMTP id
+ 135-20020a81098d000000b00357242213b4mr20001140ywj.316.1665476072511; Tue, 11
+ Oct 2022 01:14:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221009230044.10961-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221009230044.10961-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221009230044.10961-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221009230044.10961-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 10:13:51 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVJRHHjx2Xx6a0RjeoXuo_b2y+ahG1c5=pOe46Gcs08TQ@mail.gmail.com>
-Message-ID: <CAMuHMdVJRHHjx2Xx6a0RjeoXuo_b2y+ahG1c5=pOe46Gcs08TQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] arm64: dts: renesas: rzg2lc-smarc-som: Drop enabling WDT2
+Date:   Tue, 11 Oct 2022 10:14:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUXvBb_wYhmso_P=RRQv1N2W+oaKC9J=nMVvq0yLLNhzg@mail.gmail.com>
+Message-ID: <CAMuHMdUXvBb_wYhmso_P=RRQv1N2W+oaKC9J=nMVvq0yLLNhzg@mail.gmail.com>
+Subject: Re: [PATCH 3/5] arm64: dts: renesas: r9a07g044: Drop WDT2 node
 To:     Prabhakar <prabhakar.csengg@gmail.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -61,8 +62,8 @@ Cc:     Magnus Damm <magnus.damm@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,7 +75,7 @@ On Mon, Oct 10, 2022 at 1:01 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
 >
 > WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
 > used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> enabling WDT2.
+> WDT2 node from RZ/G2L SoC DTSI.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
