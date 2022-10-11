@@ -2,209 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C035FBCA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 23:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1021A5FBCA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 23:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiJKVHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 17:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S229594AbiJKVIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 17:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJKVHw (ORCPT
+        with ESMTP id S229456AbiJKVIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 17:07:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CAC83045
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665522466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7jGNpzs4w/tQinuiify2q30XV9ycyaHinQp2sXJtMUg=;
-        b=HA/T0avBRJbOzY9EUcDUYnL6rWfiEcNAK8dgvr24nt3B7tpdRrDYPopqpV2cBTxysR7abB
-        a1aEWu8t0dZ2XzbmbuU7wsWAcbgW4QQUDDhBf1y7fLn5pRHsimgdURRGfUnOfos8mManJx
-        WfStcCOROzKKEuFT1YojUVqMSsgORQU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-617-LhbYwjV8PkuNJrlOxvPXeA-1; Tue, 11 Oct 2022 17:07:45 -0400
-X-MC-Unique: LhbYwjV8PkuNJrlOxvPXeA-1
-Received: by mail-wm1-f72.google.com with SMTP id i64-20020a1c3b43000000b003c6d18a7ee5so99581wma.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:07:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7jGNpzs4w/tQinuiify2q30XV9ycyaHinQp2sXJtMUg=;
-        b=5028VjOAy47vJcms27sf3y8RT9VBl1KbICrI4oiTSeRyN+boc3mn2JZy7fhrIMJOxU
-         NcxUAQD91NlB++DQbNBxDiDkDQaEC6b5wmK5I1qevgQ/iV0QMrCSB3zux7cXYjgFijid
-         jdlXgiA1S4r4sB7OW7QAzLp2rg9e8CCvhit91c3ph5Adi7GllaiNmpTtR4A9RFwG8iVy
-         Z++jzNecjCY4M6D0a704BPcdS17HZYwUwSv876AC6TsM5mVxqKxoYHSByxgQbBMLbtlR
-         oK/daYCwvwRLpxDSrjhVVVVr8gXYgaRtG7imKVIaswMIBujmE6IpIqfsvd5+YblMQ3bT
-         1K0A==
-X-Gm-Message-State: ACrzQf0dU28oI5BjQCy2EWT5qoF3Fj9khaxSFVX3FRRcWopl4vHSf4Y3
-        n733j8uUavdGnF9gW6FGaFpvbvyiDqXEeo2bxB5sgYl9pFLbTg5zcjl4/QqNHEIi7QNpce0FHqK
-        2xpmfScrr+cOrl6c/EBZIR1gA
-X-Received: by 2002:a5d:6442:0:b0:22e:2c71:fdac with SMTP id d2-20020a5d6442000000b0022e2c71fdacmr15322418wrw.243.1665522461366;
-        Tue, 11 Oct 2022 14:07:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5hlaRQESxAKcgPId/wDNNbBzvjQNxungfioS7ihICqpzyV8WXhjiMMmv3l/AuMyDpAFEHUTg==
-X-Received: by 2002:a5d:6442:0:b0:22e:2c71:fdac with SMTP id d2-20020a5d6442000000b0022e2c71fdacmr15322405wrw.243.1665522461093;
-        Tue, 11 Oct 2022 14:07:41 -0700 (PDT)
-Received: from redhat.com ([2.55.183.131])
-        by smtp.gmail.com with ESMTPSA id q65-20020a1c4344000000b003a8434530bbsm66705wma.13.2022.10.11.14.07.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 14:07:40 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 17:07:35 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     syzbot <syzbot+51a652e2d24d53e75734@syzkaller.appspotmail.com>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [syzbot] upstream boot error: WARNING in cpumask_next_wrap
-Message-ID: <20221011170435-mutt-send-email-mst@kernel.org>
-References: <0000000000003fac9905eabe4964@google.com>
+        Tue, 11 Oct 2022 17:08:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A063D82D0E;
+        Tue, 11 Oct 2022 14:08:33 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BIv4SX012886;
+        Tue, 11 Oct 2022 21:08:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=s5n7RieS+QX0vyLm4zKb3TDOg7fnrU66Ryn5H6Oe7Bw=;
+ b=Yvsn8wReITDi6XSvyVS+O6S44nuvUnWSReH2uer+q7oj42LYnCEJTcfOJEngsI0iUmoq
+ On9m7Qqu0EYwdCP90GSJKKQ0cjhcLtj7D9wE6dS5ch4FG+lcvrW3y+YjEjOghx3ETz43
+ E4qB0H4zDLuZjOEy8Nrt2o6yfsYOfcic4pp3mJJ1Hz6PPN4w7UZjMnu6OIcXSOiuKbwf
+ TbtuTI93tiTFuw7Tu6s1gpySALbUpAhr8USO23evRigF49ouBHMTyLcCzMoWW9D5ffBj
+ PpVNK11pjRWO0RBrVIaaTvkXziwDk74sK+5vrVYmQIxrlQOX3+mQclD/BKOfDJcbiyOz kg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5e7fg99w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 21:08:26 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29BL8QAX017740
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 21:08:26 GMT
+Received: from [10.110.3.66] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 14:08:25 -0700
+Message-ID: <f3b2cd0e-d7b0-8d3a-1330-9c833321f94a@quicinc.com>
+Date:   Tue, 11 Oct 2022 14:08:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000003fac9905eabe4964@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 07/19] arm64: dts: qcom: qdu1000-idp: Add RPMH regulators
+ nodes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221001030656.29365-1-quic_molvera@quicinc.com>
+ <20221001030656.29365-8-quic_molvera@quicinc.com>
+ <79975718-ab91-f781-d46c-ac274e97a668@linaro.org>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <79975718-ab91-f781-d46c-ac274e97a668@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GikwzQpgEfwbbN1gTaOWDSm-aXb8VdmA
+X-Proofpoint-GUID: GikwzQpgEfwbbN1gTaOWDSm-aXb8VdmA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=961 spamscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210110121
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 01:44:37AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    e2302539dd4f Merge tag 'xtensa-20221010' of https://github..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=105b851a880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1370a7ded58197a2
-> dashboard link: https://syzkaller.appspot.com/bug?extid=51a652e2d24d53e75734
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/f6eb85afda26/disk-e2302539.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/6091bfed3009/vmlinux-e2302539.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+51a652e2d24d53e75734@syzkaller.appspotmail.com
 
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git d5c59b2d8ff42128b3e8af65d08c47550af1e9a4
-
-
-> ACPI: button: Sleep Button [SLPF]
-> ACPI: \_SB_.LNKC: Enabled at IRQ 11
-> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKD: Enabled at IRQ 10
-> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKB: Enabled at IRQ 10
-> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-> N_HDLC line discipline registered with maxframe=4096
-> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-> Non-volatile memory driver v1.3
-> Linux agpgart interface v0.103
-> ACPI: bus type drm_connector registered
-> [drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-> [drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-> Console: switching to colour frame buffer device 128x48
-> platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-> usbcore: registered new interface driver udl
-> brd: module loaded
-> loop: module loaded
-> zram: Added device: zram0
-> null_blk: disk nullb0 created
-> null_blk: module loaded
-> Guest personality initialized and is inactive
-> VMCI host device registered (name=vmci, major=10, minor=120)
-> Initialized host personality
-> usbcore: registered new interface driver rtsx_usb
-> usbcore: registered new interface driver viperboard
-> usbcore: registered new interface driver dln2
-> usbcore: registered new interface driver pn533_usb
-> nfcsim 0.2 initialized
-> usbcore: registered new interface driver port100
-> usbcore: registered new interface driver nfcmrvl
-> Loading iSCSI transport class v2.0-870.
-> scsi host0: Virtio SCSI HBA
-> st: Version 20160209, fixed bufsize 32768, s/g segs 256
-> Rounding down aligned max_sectors from 4294967295 to 4294967288
-> db_root: cannot open: /etc/target
-> slram: not enough parameters.
-> ftl_cs: FTL header not found.
-> wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-> wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-> MACsec IEEE 802.1AE
-> tun: Universal TUN/TAP device driver, 1.6
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x11c/0x1c0 lib/cpumask.c:27
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-10145-ge2302539dd4f #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-> RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
-> RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
-> RIP: 0010:cpumask_next_wrap+0x11c/0x1c0 lib/cpumask.c:27
-> Code: a6 00 00 00 e8 b5 34 62 f7 48 8b 04 24 41 bd ff ff ff ff 45 31 e4 48 b9 00 00 00 00 00 fc ff df e9 39 ff ff ff e8 94 34 62 f7 <0f> 0b e9 59 ff ff ff 48 c7 c1 b8 f2 0c 8e 80 e1 07 80 c1 03 38 c1
-> RSP: 0000:ffffc90000067218 EFLAGS: 00010293
-> RAX: ffffffff8a255bdc RBX: 0000000000000002 RCX: ffff888012278000
-> RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000002
-> RBP: 0000000000000002 R08: ffffffff8a255b2f R09: fffff5200000ce5d
-> R10: fffff5200000ce5d R11: 1ffff9200000ce5c R12: 0000000000000001
-> R13: 0000000000000001 R14: 1ffffffff1c19e57 R15: 0000000000000002
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffff88823ffff000 CR3: 000000000c88e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  virtnet_set_affinity+0x2be/0x6f0 drivers/net/virtio_net.c:2303
->  init_vqs+0x107c/0x11d0 drivers/net/virtio_net.c:3581
->  virtnet_probe+0x198d/0x3120 drivers/net/virtio_net.c:3884
->  virtio_dev_probe+0x8ca/0xb60 drivers/virtio/virtio.c:305
->  call_driver_probe+0x96/0x250
->  really_probe+0x24c/0x9f0 drivers/base/dd.c:639
->  __driver_probe_device+0x1f4/0x3f0 drivers/base/dd.c:778
->  driver_probe_device+0x50/0x240 drivers/base/dd.c:808
->  __driver_attach+0x364/0x5b0 drivers/base/dd.c:1190
->  bus_for_each_dev+0x168/0x1d0 drivers/base/bus.c:301
->  bus_add_driver+0x32f/0x600 drivers/base/bus.c:618
->  driver_register+0x2e9/0x3e0 drivers/base/driver.c:246
->  virtio_net_driver_init+0x8e/0xcb drivers/net/virtio_net.c:4090
->  do_one_initcall+0x1c9/0x400 init/main.c:1295
->  do_initcall_level+0x168/0x218 init/main.c:1368
->  do_initcalls+0x4b/0x8c init/main.c:1384
->  kernel_init_freeable+0x3f1/0x57b init/main.c:1622
->  kernel_init+0x19/0x2b0 init/main.c:1511
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
+On 10/1/2022 2:15 AM, Krzysztof Kozlowski wrote:
+> On 01/10/2022 05:06, Melody Olvera wrote:
+>> Add RPMH regulators for the QDU1000 IDP platform.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 200 +++++++++++++++++++++++
+>>  1 file changed, 200 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+>> index 0ecf9a7c41ec..654b50220c2e 100644
+>> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+>> @@ -5,6 +5,7 @@
+>>  
+>>  /dts-v1/;
+>>  
+>> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>>  #include "qdu1000.dtsi"
+>>  
+>>  / {
+>> @@ -19,6 +20,205 @@ aliases {
+>>  	chosen {
+>>  		stdout-path = "serial0:115200n8";
+>>  	};
+>> +
+>> +	ppvar_sys: ppvar-sys-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "ppvar_sys";
+>> +		regulator-always-on;
+>> +		regulator-boot-on;
+>> +	};
+>> +
+>> +	vph_pwr: vph-pwr-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "vph_pwr";
+>> +		regulator-min-microvolt = <3700000>;
+>> +		regulator-max-microvolt = <3700000>;
+>> +
+>> +		regulator-always-on;
+>> +		regulator-boot-on;
+>> +
+>> +		vin-supply = <&ppvar_sys>;
+>> +	};
+>> +};
+>> +
+>> +&apps_rsc {
+>> +	pm8150-rpmh-regulators {
+> regulators
+Will fix.
+>> +		compatible = "qcom,pm8150-rpmh-regulators";
+>> +		qcom,pmic-id = "a";
+>> +
+> Best regards,
+> Krzysztof
+>
+Thanks,
+Melody
