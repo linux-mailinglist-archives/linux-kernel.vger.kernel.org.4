@@ -2,217 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282F25FAFB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D2F5FAF9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJKJv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S229712AbiJKJsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJKJvz (ORCPT
+        with ESMTP id S229483AbiJKJsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:51:55 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6AC12D11;
-        Tue, 11 Oct 2022 02:51:50 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id p14so8711680pfq.5;
-        Tue, 11 Oct 2022 02:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mCDQTD5Y+nV66C8T+N3XM1jxi8bXdGKiIQYvzLDQz8s=;
-        b=nxdKN0aPRzjLYhg2it7lOi1lDMZfXjvaYXlrrCj0lTvPisF0Xay85zsbSMl4h/T9RE
-         W+nQo++LE1Zg5lo2UAGH6b0D37Z7CKl8cja2Sa/e5G+QyXb7jMhmc50qou5vxEQ1Iq+0
-         NxyNkDohGv9OHwPZyqMyL1qhnOGQycZvlGnaDzUT3xR6/apOtWD3vi4fF4Sokqxe8cTA
-         XZMH00bJgQCiAsPDs6lCn5WmEt9o+ZjfHg+2HJETlCLuxQ9sJkO3lUVYXWrJMbocAotR
-         3pNEIwP1fF9VSSxnU2GVKfhmkvA6p4xRzrGZi3eMveeNU8izynEgllH0NyuUe9yYanq0
-         MYRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCDQTD5Y+nV66C8T+N3XM1jxi8bXdGKiIQYvzLDQz8s=;
-        b=fp73s8BmIgP3iwkaa/X4uCV/MIFs4W6aN6fgZy4vc+nhQEKPO8w3aEGTDYAN6qdo3Z
-         Quz/tR5LcQb4gG/VW2/S8KJAXL/xPW768t8K0LzfM7+EsBHPARGxBYLGYY/GoJznDgR2
-         Ae1ppDWxBUTSL5j+RYP5Ygnhj0W59Kt7ogOeY1yXSnuhon33p2+ZWlZzoU+1FH/GWATh
-         Gt2LNDnkd339ClzdrbBNhNYQfwOteA1gf4iZFCxFVNkx0VQpELvbTyDCBnNIxUUmQjbY
-         NjEgUXPD6Xb60O2WFbdj/aDGdRCTNlZowsIoC8CUC/m4YkoODQEeBnL58yB2ykxPk5Zm
-         yxww==
-X-Gm-Message-State: ACrzQf2oNVetmWYCHcoXoSoY9N/gTwNIhMtAR3aXhEIJnyWFqduuouts
-        k7chTpZeA9j8FJDH9vvJLLs=
-X-Google-Smtp-Source: AMsMyM5wnvFTpjb3HNpa8Hu6dDL/94wrx8LzNTgoXcPZHasHeNQwOesYKfvS02YPwHxJbXSAnnZHmA==
-X-Received: by 2002:a63:6c84:0:b0:43c:700f:6218 with SMTP id h126-20020a636c84000000b0043c700f6218mr20235234pgc.420.1665481909940;
-        Tue, 11 Oct 2022 02:51:49 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-57.three.co.id. [116.206.28.57])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b00178b77b7e71sm8247582plg.188.2022.10.11.02.51.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 02:51:49 -0700 (PDT)
-Message-ID: <2d174fee-bdd1-a304-c66c-09e957120af1@gmail.com>
-Date:   Tue, 11 Oct 2022 16:51:45 +0700
+        Tue, 11 Oct 2022 05:48:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64CE74CCF;
+        Tue, 11 Oct 2022 02:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1665481685; x=1697017685;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X7aXXVOlBHDkw90nWzBrfDp5Pw/UBVwOZTwSGqIfCIg=;
+  b=0e3UWfuIG/JB4Av1WelvWAb9yetgVoyybARnXFP6YSAI/8q73ZcKwL0a
+   0zkgf3CKzRgkAI/mqLdD4E9aFetOZhUCxmgCTjtWvOxDbC1H5Hx7fnYlM
+   BrnvbP51jGfNKr09Lv1KRIAG1B8MnLaUJhcJ+rvGiJqjqjpPLrP/j70wo
+   uFeff7KkwrPVRxRWviMGTTANl/Y7NuP50jxYZgXkZtmAVo/xf8XbtqXnG
+   Q8Ius6eg1oRVtDLL/H/LEutLGYfSb6EI/gypEuts6pBafA1Ax6mcmEpSk
+   Hysjn2aKgeT4WKpKa/Ii279BdjH4maJ99ieuDWQ8nt7KD+M2jy2UeObpg
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="178123604"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Oct 2022 02:48:01 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 11 Oct 2022 02:47:59 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 11 Oct 2022 02:47:58 -0700
+Date:   Tue, 11 Oct 2022 11:52:33 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        "Kent Gibson" <warthog618@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        <linux-gpio@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-actions@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-mediatek@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-omap@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "Broadcom internal kernel review list" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "Andy Shevchenko" <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        "Ludovic Desroches" <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "Andy Gross" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        <soc@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 17/36] pinctrl: ocelot: Add missed header(s)
+Message-ID: <20221011095233.jk2vypndisz2wgn6@soft-dev3-1.localhost>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-18-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH] Documentation: Kunit: Update architecture.rst for minor
- fixes
-Content-Language: en-US
-To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221010171353.1106166-1-sadiyakazi@google.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221010171353.1106166-1-sadiyakazi@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221010201453.77401-18-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 00:13, Sadiya Kazi wrote:
->  The kernel testing library supports KUnit tests written in C using
-> -KUnit. KUnit tests are kernel code. KUnit does several things:
-> +KUnit. KUnit tests are written in the kernel code. KUnit performs the following
-> +tasks:
+The 10/10/2022 23:14, Andy Shevchenko wrote:
+> 
+> Do not imply that some of the generic headers may be always included.
+> Instead, include explicitly what we are direct user of.
+> 
+> While at it, sort headers alphabetically.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+
+Acked-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+
+>  drivers/pinctrl/pinctrl-ocelot.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
+> index 647e91490bac..a9343c242cd5 100644
+> --- a/drivers/pinctrl/pinctrl-ocelot.c
+> +++ b/drivers/pinctrl/pinctrl-ocelot.c
+> @@ -13,15 +13,17 @@
+>  #include <linux/of_device.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+> -#include <linux/pinctrl/pinctrl.h>
+> -#include <linux/pinctrl/pinmux.h>
+> -#include <linux/pinctrl/pinconf.h>
+> -#include <linux/pinctrl/pinconf-generic.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/reset.h>
+>  #include <linux/slab.h>
+> 
+> +#include <linux/pinctrl/consumer.h>
+> +#include <linux/pinctrl/pinconf-generic.h>
+> +#include <linux/pinctrl/pinconf.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +#include <linux/pinctrl/pinmux.h>
+> +
+>  #include "core.h"
+>  #include "pinconf.h"
+>  #include "pinmux.h"
+> --
+> 2.35.1
 > 
 
-What about "The kernel testing library supports KUnit tests, which are
-written in ordinary kernel code."?
-
->  - Organizes tests
->  - Reports test results
-> @@ -22,8 +23,8 @@ KUnit. KUnit tests are kernel code. KUnit does several things:
->  Test Cases
->  ----------
->  
-> -The fundamental unit in KUnit is the test case. The KUnit test cases are
-> -grouped into KUnit suites. A KUnit test case is a function with type
-> +The test case is the fundamental unit in KUnit. KUnit test cases are organised
-> +into suites. A KUnit test case is a function with type
-
-"which is organized into a test suite".
-
->  The KUnit executor can list and run built-in KUnit tests on boot.
->  The Test suites are stored in a linker section
-> -called ``.kunit_test_suites``. For code, see:
-> +called ``.kunit_test_suites``. For code, see the following link:
->  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=v5.15#n945.
-
-Instead of link to torvalds's tree, just say "See ``include/asm-generic/vmlinux.lds.h``
-for the full code".
-
->  On the kernel boot, the KUnit executor uses the start and end addresses
-> -of this section to iterate over and run all tests. For code, see:
-> -https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/kunit/executor.c
-> +of this section to iterate over and run all tests. For code, see the following link:
-> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/kunit/executor.c.
->  
-
-Same reply above.
-
->  In KUnit tests, some error classes do not affect other tests
->  or parts of the kernel, each KUnit case executes in a separate thread
-> -context. For code, see:
-> +context. For code, see the following link:
->  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/kunit/try-catch.c?h=v5.15#n58
->  
-
-Same reply above.
-
->  Assertion Macros
->  ----------------
->  
-> -KUnit tests verify state using expectations/assertions.
-> +KUnit tests verify the state using expectations/assertions.
->  All expectations/assertions are formatted as:
->  ``KUNIT_{EXPECT|ASSERT}_<op>[_MSG](kunit, property[, message])``
->  
->  - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
->    expectation.
->  
-> -	- For an expectation, if the check fails, marks the test as failed
-> +	- For an expectation, if the check fails, it marks the test as failed
->  	  and logs the failure.
->  
->  	- An assertion, on failure, causes the test case to terminate
->  	  immediately.
-
-Better say:
-
-```
-In case of failure, there are differences on testing flow:
-
-   - For expectations, the test is marked as failed and the failure is logged.
-   - On the other hand, failing assertions cause the test case to be
-     immediately terminated.
-```
-
-> -kunit_tool (Command Line Test Harness)
-> +kunit_tool (Command-line Test Harness)
->  ======================================
->  
-> -kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
-> -that can be used to configure, build, exec, parse and run (runs other
-> -commands in order) test results. You can either run KUnit tests using
-> -kunit_tool or can include KUnit in kernel and parse manually.
-> +``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py``. It
-> +is used to configure, build, execute, parse, and run (other commands in order)
-> +test results. You have two options for running KUnit tests: either include KUnit
-> +in the kernel and parse manually, or use the ``kunit_tool``.
->  >  - ``configure`` command generates the kernel ``.config`` from a
->    ``.kunitconfig`` file (and any architecture-specific options).
-> -  For some architectures, additional config options are specified in the
-> -  ``qemu_config`` Python script
-> -  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-> +  The Python script available in ``qemu_configs`` folder
-> +  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
-> +  additional configuration options for specific architectures.
->    It parses both the existing ``.config`` and the ``.kunitconfig`` files
-> -  and ensures that ``.config`` is a superset of ``.kunitconfig``.
-> -  If this is not the case, it will combine the two and run
-> -  ``make olddefconfig`` to regenerate the ``.config`` file. It then
-> -  verifies that ``.config`` is now a superset. This checks if all
-> -  Kconfig dependencies are correctly specified in ``.kunitconfig``.
-> -  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
-> -  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
-> -  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-> +  to ensure that ``.config`` is a superset of ``.kunitconfig``.
-> +  If not, it will combine the two and execute ``make olddefconfig`` to regenerate
-> +  the ``.config`` file. It then checks to see if ``.config`` has become a superset.
-> +  This verifies that all the Kconfig dependencies are correctly specified in the file
-> +  ``.kunitconfig``. The
-> +  ``kunit_config.py`` script contains the code for parsing Kconfigs. The code which
-> +  runs ``make olddefconfig`` is part of the ``kunit_kernel.py`` script. You can
-> +  invoke this command through: ``./tools/testing/kunit/kunit.py config`` and
->    generate a ``.config`` file.
->  - ``build`` runs ``make`` on the kernel tree with required options
->    (depends on the architecture and some options, for example: build_dir)
-> @@ -184,8 +188,8 @@ kunit_tool or can include KUnit in kernel and parse manually.
->    To build a KUnit kernel from the current ``.config``, you can use the
->    ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
->  - ``exec`` command executes kernel results either directly (using
-> -  User-mode Linux configuration), or via an emulator such
-> -  as QEMU. It reads results from the log via standard
-> +  User-mode Linux configuration), or through an emulator such
-> +  as QEMU. It reads results from the log using standard
->    output (stdout), and passes them to ``parse`` to be parsed.
->    If you already have built a kernel with built-in KUnit tests,
->    you can run the kernel and display the test results with the ``exec``
-
-The kunit_tool description above is redundant. Instead, just say "For
-the documentation on using kunit_tool, see
-Documentation/dev-tools/kunit/run_wrapper.rst".
-
-Thanks.
-
 -- 
-An old man doll... just what I always wanted! - Clara
-
+/Horatiu
