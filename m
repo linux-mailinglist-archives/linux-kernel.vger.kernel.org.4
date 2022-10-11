@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F81C5FAA03
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1C05FAA22
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiJKBY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S229827AbiJKBc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJKBY2 (ORCPT
+        with ESMTP id S230226AbiJKBcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:24:28 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593A2855B8;
-        Mon, 10 Oct 2022 18:23:49 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MmdGp3Zg9z1M8h6;
-        Tue, 11 Oct 2022 09:19:14 +0800 (CST)
-Received: from [10.174.178.129] (10.174.178.129) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 09:23:46 +0800
-Subject: Re: [PATCH 3/4] blk-cgroup: Add NULL check of pd_alloc_fn in
- blkcg_activate_policy
-To:     Tejun Heo <tj@kernel.org>
-CC:     <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221010023859.11896-1-shikemeng@huawei.com>
- <20221010023859.11896-4-shikemeng@huawei.com>
- <Y0SAneaJadYJwAkr@slm.duckdns.org>
-From:   Kemeng Shi <shikemeng@huawei.com>
-Message-ID: <c62a8944-093f-8534-106c-51b159696008@huawei.com>
-Date:   Tue, 11 Oct 2022 09:23:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Mon, 10 Oct 2022 21:32:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B13753BA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:32:52 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MmdTF5TSwzmVBP;
+        Tue, 11 Oct 2022 09:28:17 +0800 (CST)
+Received: from huawei.com (10.67.175.88) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
+ 2022 09:32:49 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <keescook@chromium.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <kirill.shutemov@linux.intel.com>,
+        <tony.luck@intel.com>, <masahiroy@kernel.org>,
+        <michael.roth@amd.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+CC:     <lizetao1@huawei.com>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <brijesh.singh@amd.com>,
+        <peterz@infradead.org>, <venu.busireddy@oracle.com>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>
+Subject: [PATCH -next v4 0/2] Remove unused variables in x86/boot
+Date:   Tue, 11 Oct 2022 01:29:02 +0000
+Message-ID: <20221011012904.2330473-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202210090815.526C76396@keescook>
+References: <202210090815.526C76396@keescook>
 MIME-Version: 1.0
-In-Reply-To: <Y0SAneaJadYJwAkr@slm.duckdns.org>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.129]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500016.china.huawei.com (7.221.188.220)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.88]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series removes some unused variables in x86/boot, and add the
+"-Wall" flag to Makefile, which is the old problem of x86 not sharing
+makefiles.
 
+Changes since v3:
+- Re-order the patches, so the fixes for the new warnings are first,
+  and then turn on the compiler flags in a final patch
 
-on 10/11/2022 4:29 AM, Tejun Heo wrote:
-> On Mon, Oct 10, 2022 at 10:38:58AM +0800, Kemeng Shi wrote:
->> Function blkcg_policy_register only make sure pd_alloc_fn and pd_free_fn in
->> pairs, so pd_alloc_fn could be NULL in registered blkcg_policy. Check NULL
->> before use for pd_alloc_fn in blkcg_activate_policy to avoid protential
->> NULL dereference.
->>
->> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
->> ---
->>  block/blk-cgroup.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
->> index 463c568d3e86..fc083c35dc42 100644
->> --- a/block/blk-cgroup.c
->> +++ b/block/blk-cgroup.c
->> @@ -1404,6 +1404,9 @@ int blkcg_activate_policy(struct request_queue *q,
->>  	if (blkcg_policy_enabled(q, pol))
->>  		return 0;
->>  
->> +	if (pol->pd_alloc_fn == NULL)
->> +		return -EINVAL;
-> 
-> This isn't the only place this function is called, so the above won't
-> achieve much. Given that this is rather trivially noticeable and all the
-> current users do implement pd_alloc_fn, I'm not sure we need to update this
-> now.
-Thanks for review. The rest call of this function will always protect by
-blkcg_policy_enabled while policy only can be enabled if new added NULL
-check is passed. So the new added NULL check enough.
+v3 at:
+https://lore.kernel.org/all/20220930032727.3451619-1-lizetao1@huawei.com/
 
-By the way, the policy enable/disable work is direct call to
-__set_bit(pol->plid, q->blkcg_pols) in blkcg_policy_enabled
-and __clear_bit(pol->plid, q->blkcg_pols) in blkcg_deactivate_policy
-which is not intuitive. Is it a good idea to add function
-blkcg_policy_enable and blkcg_policy_disable to improve readability?
+Changes since v2:
+- Add "frame-address" flag and "-std=gnu11" to
+  x86/boot/compressed/Makefile to fix warnings when "-Wall" flag added.
+- Declare the variable "i" within the for loop to reslove unused
+  variable warning.
+- Delete __efi_get_rsdp_addr function when CONFIG_EFI is disabled to
+  resolve unused function warning.
 
-> 
-> Thanks.
-> 
+v2 at:
+https://lore.kernel.org/all/20220927081512.2456624-1-lizetao1@huawei.com/
+
+Changes since v1:
+- Add "-Wall" flag to x86/boot/compressed/Makefile
+- Remove unused variables "et" in efi_get_system_table() and "ret" in
+  efi_get_conf_table()
+- Remove unused variables "ret" in __efi_get_rsdp_addr() and
+  "nr_tables" in efi_get_rsdp_addr()
+
+v1 at:
+https://lore.kernel.org/all/20220923113209.3046960-1-lizetao1@huawei.com/
+
+Li Zetao (2):
+  x86/boot: Remove unused variables
+  x86/boot/compressed: Add "-Wall" flag to Makefile
+
+ arch/x86/boot/compressed/Makefile | 3 ++-
+ arch/x86/boot/compressed/acpi.c   | 7 +++----
+ arch/x86/boot/compressed/efi.c    | 2 --
+ arch/x86/boot/compressed/kaslr.c  | 3 +--
+ arch/x86/boot/compressed/sev.c    | 1 -
+ 5 files changed, 6 insertions(+), 10 deletions(-)
 
 -- 
-Best wishes
-Kemeng Shi
+2.34.1
+
