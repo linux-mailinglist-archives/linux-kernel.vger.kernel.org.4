@@ -2,48 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6C55FAF3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E425FAF3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiJKJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S229580AbiJKJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiJKJVm (ORCPT
+        with ESMTP id S229462AbiJKJXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:21:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD93183207;
-        Tue, 11 Oct 2022 02:21:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83EDB1042;
-        Tue, 11 Oct 2022 02:21:41 -0700 (PDT)
-Received: from [10.163.35.30] (unknown [10.163.35.30])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 015AF3F766;
-        Tue, 11 Oct 2022 02:21:31 -0700 (PDT)
-Message-ID: <d82de618-9e97-3d5d-f4eb-7710e9094001@arm.com>
-Date:   Tue, 11 Oct 2022 14:51:44 +0530
+        Tue, 11 Oct 2022 05:23:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4822F5A825
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665480189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7I7VQ6hVchBULwDy9Ro8vnqtPorb7QB9wWs0IPouq+c=;
+        b=WMZ4JKOCQHRYY3Od1kbz48SYIsQTvtaZItTcw0JTp5Yjp6W1rfMn0WD6J6jQokkbpEjDG0
+        582P6h2SsgqmOlX2YXaoLZ+MKISU0ZhtDS0wDtE7P5ZxrIdy+R7Y7PnRDF2a3j0gIbNjUB
+        2wuoav5WL5modBFF4OfstuM9XpaWwAI=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-401-sns6aqcXNjGim0151BMJ4w-1; Tue, 11 Oct 2022 05:23:08 -0400
+X-MC-Unique: sns6aqcXNjGim0151BMJ4w-1
+Received: by mail-wr1-f69.google.com with SMTP id s30-20020adfa29e000000b002302b9671feso1630957wra.20
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:23:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7I7VQ6hVchBULwDy9Ro8vnqtPorb7QB9wWs0IPouq+c=;
+        b=WlKMvi6NU2HTfnq4cYj3sUqU+zmh8I4WVV8nSK8Or0jXqurj4FNAV6HM2aYovFfmzD
+         LKe7ur1ativ2syAUly4z5Hn40rswAe8HzPMIsl9wghZKBB80LmshuMJzR9yG5pwclY9c
+         /xGGS6oCa5IZ4D37rh99WbEddR0KoKpucYP6Evwpt6ALCqFzZsTztYy4gjX97HKZ7WyI
+         8WP1gjSSb38GXcO8+qBAV8cwb9OxhqXpqxk0XrdvHjlY4zhVnJMDS/YNEYq5n6O/3JKq
+         P4WKCmU7s3QhuzmkEuiP9i6QOf/nJdqSfrssE7jUZJ5AyOKWFxn+0IIgeXGwa5cras7+
+         d2DQ==
+X-Gm-Message-State: ACrzQf0afPcWXStPDCoUO8WfqdwcuuHFjUcYYpIdGnfXYxEmJ56kSJ7R
+        ueb3tu5oLqwxgGGo2+V7klwfqoXSWyZwSENsc/LdN22qi/KqDAcREvY+nKFXFgG0M5nbAtWfJyY
+        ngWwzVIxjwokhGBJyClqPEoMK
+X-Received: by 2002:a05:6000:1d94:b0:22e:34ef:b07f with SMTP id bk20-20020a0560001d9400b0022e34efb07fmr14488959wrb.272.1665480187118;
+        Tue, 11 Oct 2022 02:23:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5/v0oDIPLg4t3JtaZmER6DstrkRy6lzlCDSJhQvysmjbbliEW55qmefKyCt2f67xZNCfvhGA==
+X-Received: by 2002:a05:6000:1d94:b0:22e:34ef:b07f with SMTP id bk20-20020a0560001d9400b0022e34efb07fmr14488943wrb.272.1665480186841;
+        Tue, 11 Oct 2022 02:23:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:6900:f110:6527:aa46:a922? (p200300cbc7096900f1106527aa46a922.dip0.t-ipconnect.de. [2003:cb:c709:6900:f110:6527:aa46:a922])
+        by smtp.gmail.com with ESMTPSA id z17-20020a1c4c11000000b003b7b36dcb8dsm17149070wmf.31.2022.10.11.02.23.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 02:23:06 -0700 (PDT)
+Message-ID: <063efd58-8373-90ea-7c5e-9d0e9161d2ba@redhat.com>
+Date:   Tue, 11 Oct 2022 11:23:05 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3 4/7] driver/perf/arm_pmu_platform: Add support for BRBE
- attributes detection
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: RFC [PATCH v4 2/7] Enable balloon drivers to report inflated
+ memory
 Content-Language: en-US
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-References: <20220929075857.158358-1-anshuman.khandual@arm.com>
- <20220929075857.158358-5-anshuman.khandual@arm.com>
- <02ce379c-c718-b72d-fc74-cd8c904265fb@arm.com>
- <bf70b7d6-0564-7ae3-6fe6-24483461839b@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <bf70b7d6-0564-7ae3-6fe6-24483461839b@arm.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>
+References: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
+ <20221005090158.2801592-3-alexander.atanasov@virtuozzo.com>
+ <88EDC41D-408F-4ADF-A933-0A6F36E5F262@gmail.com>
+ <a8ce5c48-3efc-5ea3-6f5c-53b9e33f65c7@virtuozzo.com>
+ <42C75E59-696B-41D5-BD77-68EFF0B075C6@gmail.com>
+ <d55338c4-d15f-14ec-c057-806a5d5aa618@virtuozzo.com>
+ <71E14334-CA3B-45FB-A854-7A8D6649C798@gmail.com>
+ <b7dd38ba-9ff9-6b4c-2460-d4b1ee3bb3f0@virtuozzo.com>
+ <1118F098-972A-4F58-8EE1-270A06E4F9D1@gmail.com>
+ <7ba328e5-3bc8-cb22-f00c-eddb8aea9a06@virtuozzo.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <7ba328e5-3bc8-cb22-f00c-eddb8aea9a06@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,180 +97,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/10/22 19:47, James Clark wrote:
-> 
-> 
-> On 06/10/2022 14:37, James Clark wrote:
->>
->>
->> On 29/09/2022 08:58, Anshuman Khandual wrote:
->>> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
->>> driver exported callbacks later. The actual BRBE feature detection will be
->>> added by the driver itself.
+>>>> Sounds to me that all you want is some notifier to be called from
+>>>> adjust_managed_page_count(). What am I missing?
 >>>
->>> CPU specific BRBE entries, cycle count, format support gets detected during
->>> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
->>> later helps in operating BRBE during a perf event context.
->>>
->>> Cc: Will Deacon <will@kernel.org>
->>> Cc: Mark Rutland <mark.rutland@arm.com>
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> ---
->>>  drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
->>>  1 file changed, 34 insertions(+)
->>>
->>> diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
->>> index 933b96e243b8..acdc445081aa 100644
->>> --- a/drivers/perf/arm_pmu_platform.c
->>> +++ b/drivers/perf/arm_pmu_platform.c
->>> @@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
->>>  	return err;
->>>  }
->>>  
->>> +static void arm_brbe_probe_cpu(void *info)
->>> +{
->>> +	struct pmu_hw_events *hw_events;
->>> +	struct arm_pmu *armpmu = info;
->>> +
->>> +	/*
->>> +	 * Return from here, if BRBE driver has not been
->>> +	 * implemented for this PMU. This helps prevent
->>> +	 * kernel crash later when brbe_probe() will be
->>> +	 * called on the PMU.
->>> +	 */
->>> +	if (!armpmu->brbe_probe)
->>> +		return;
->>> +
->>> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
->>> +	armpmu->brbe_probe(hw_events);
->>> +}
->>> +
->>> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
->>> +{
->>> +	int cpu, err = 0;
->>> +
->>> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
->>> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
+>>> Notifier will act as an accumulator to report size of change and it will make things easier for the drivers and users wrt locking.
+>>> Notifier is similar to the memory hotplug notifier.
 >>
->> Hi Anshuman,
->>
->> I have LOCKDEP on and the patchset applied to perf/core (82aad7ff7) on
->> git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git and I get
+>> Overall, I am not convinced that there is any value of separating the value
+>> and the notifier. You can batch both or not batch both. In addition, as I
+>> mentioned, having two values seems racy.
 > 
-> Can you confirm if this is currently the correct place to apply this to?
-
-This series applied on v6.0-rc5 after the perf ABI changes, both in kernel
-and in user space tools.
-
-> I'm only getting 0 length branch stacks now. Seems like it could be
-> something to do with the layout of perf samples because I know that was
-> done in separate commits:
-
-Right, might be.
-
+> I have identified two users so far above - may be more to come.
+> One type needs the value to adjust. Also having the value is necessary
+> to report it to users and oom. There are options with callbacks and so
+> on but it will complicate things with no real gain. You are right about
+> the atomicity but i guess if that's a problem for some user it could
+> find a way to ensure it. i am yet to find such place.
 > 
->   sudo ./perf record -j any_call -- ls
->   ./perf report -D | grep "branch stack"
->   ... branch stack: nr:0
->   ... branch stack: nr:0
->   ... branch stack: nr:0
->   ... branch stack: nr:0
 
-I am planning to respin the series on 6.1-rc1 next week which should solve
-these multiple moving parts problem.
+I haven't followed the whole discussion, but I just wanted to raise that 
+having a generic mechanism to notify on such changes could be valuable.
 
->   ...
-> 
->> this:
->>
->>    armv8-pmu pmu: hw perfevents: no interrupt-affinity property, guessing.
->>    brbe: implementation found on cpu 0
->>
->>    =============================
->>    [ BUG: Invalid wait context ]
->>    6.0.0-rc7 #38 Not tainted
->>    -----------------------------
->>    kworker/u8:0/9 is trying to lock:
->>    ffff000800855898 (&port_lock_key){....}-{3:3}, at:
->> pl011_console_write+0x148/0x240
->>    other info that might help us debug this:
->>    context-{2:2}
->>    5 locks held by kworker/u8:0/9:
->>     #0: ffff00080032a138 ((wq_completion)eval_map_wq){+.+.}-{0:0}, at:
->> process_one_work+0x200/0x6b0
->>     #1: ffff80000807bde0
->> ((work_completion)(&eval_map_work)){+.+.}-{0:0}, at:
->> process_one_work+0x200/0x6b0
->>     #2: ffff80000aa3db70 (trace_event_sem){+.+.}-{4:4}, at:
->> trace_event_eval_update+0x28/0x420
->>     #3: ffff80000a9afe58 (console_lock){+.+.}-{0:0}, at:
->> vprintk_emit+0x130/0x380
->>     #4: ffff80000a9aff78 (console_owner){-...}-{0:0}, at:
->> console_emit_next_record.constprop.0+0x128/0x338
->>    stack backtrace:
->>    CPU: 0 PID: 9 Comm: kworker/u8:0 Not tainted 6.0.0-rc7 #38
->>    Hardware name: Foundation-v8A (DT)
->>    Workqueue: eval_map_wq eval_map_work_func
->>    Call trace:
->>     dump_backtrace+0x114/0x120
->>     show_stack+0x20/0x58
->>     dump_stack_lvl+0x9c/0xd8
->>     dump_stack+0x18/0x34
->>     __lock_acquire+0x17cc/0x1920
->>     lock_acquire+0x138/0x3b8
->>     _raw_spin_lock+0x58/0x70
->>     pl011_console_write+0x148/0x240
->>     console_emit_next_record.constprop.0+0x194/0x338
->>     console_unlock+0x18c/0x208
->>     vprintk_emit+0x24c/0x380
->>     vprintk_default+0x40/0x50
->>     vprintk+0xd4/0xf0
->>     _printk+0x68/0x90
->>     arm64_pmu_brbe_probe+0x10c/0x128
->>     armv8pmu_brbe_probe+0x18/0x28
->>     arm_brbe_probe_cpu+0x44/0x58
->>     __flush_smp_call_function_queue+0x1d0/0x440
->>     generic_smp_call_function_single_interrupt+0x20/0x78
->>     ipi_handler+0x98/0x368
->>     handle_percpu_devid_irq+0xc0/0x3a8
->>     generic_handle_domain_irq+0x34/0x50
->>     gic_handle_irq+0x58/0x138
->>     call_on_irq_stack+0x2c/0x58
->>     do_interrupt_handler+0x88/0x90
->>     el1_interrupt+0x40/0x78
->>     el1h_64_irq_handler+0x18/0x28
->>     el1h_64_irq+0x64/0x68
->>     trace_event_eval_update+0x114/0x420
->>     eval_map_work_func+0x30/0x40
->>     process_one_work+0x298/0x6b0
->>     worker_thread+0x54/0x408
->>     kthread+0x118/0x128
->>     ret_from_fork+0x10/0x20
->>    brbe: implementation found on cpu 1
->>    brbe: implementation found on cpu 2
->>    brbe: implementation found on cpu 3
->>
->>> +		if (err)
->>> +			return err;
->>> +	}
->>> +	return err;
->>> +}
->>> +
->>>  static void armpmu_free_irqs(struct arm_pmu *armpmu)
->>>  {
->>>  	int cpu;
->>> @@ -229,6 +259,10 @@ int arm_pmu_device_probe(struct platform_device *pdev,
->>>  	if (ret)
->>>  		goto out_free_irqs;
->>>  
->>> +	ret = armpmu_request_brbe(pmu);
->>> +	if (ret)
->>> +		goto out_free_irqs;
->>> +
->>>  	ret = armpmu_register(pmu);
->>>  	if (ret) {
->>>  		dev_err(dev, "failed to register PMU devices!\n");
+For example, virtio-mem also uses adjust_managed_page_count() and might 
+sometimes not trigger memory hotplug notifiers when adding more memory 
+(essentially, when it fake-adds memory part of an already added Linux 
+memory block).
+
+What might make sense is schedule some kind of deferred notification on 
+adjust_managed_page_count() changes. This way, we could notify without 
+caring about locking and would naturally batch notifications.
+
+adjust_managed_page_count() users would not require changes.
+
+-- 
+Thanks,
+
+David / dhildenb
+
