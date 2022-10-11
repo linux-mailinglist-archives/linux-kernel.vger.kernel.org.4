@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0A55FAB21
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 05:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450635FAB24
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 05:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJKDZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 23:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S229605AbiJKD0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 23:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiJKDZg (ORCPT
+        with ESMTP id S229876AbiJKDZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 23:25:36 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7107A759
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:25:34 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mmgyp22GwzHtrZ;
-        Tue, 11 Oct 2022 11:20:34 +0800 (CST)
+        Mon, 10 Oct 2022 23:25:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A4D7B2BC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:25:40 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mmh1057mnzpVZF;
+        Tue, 11 Oct 2022 11:22:28 +0800 (CST)
 Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 11:25:24 +0800
+ 15.1.2375.31; Tue, 11 Oct 2022 11:25:25 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
  (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
- 2022 11:25:23 +0800
+ 2022 11:25:24 +0800
 From:   Zhihao Cheng <chengzhihao1@huawei.com>
 To:     <richard@nod.at>, <s.hauer@pengutronix.de>,
         <miquel.raynal@bootlin.com>
 CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
-Subject: [PATCH 3/6] ubifs: Add comments and debug info for ubifs_xrename()
-Date:   Tue, 11 Oct 2022 11:47:29 +0800
-Message-ID: <20221011034732.45605-4-chengzhihao1@huawei.com>
+Subject: [PATCH 4/6] ubifs: Fix wrong dirty space budget for dirty inode
+Date:   Tue, 11 Oct 2022 11:47:30 +0800
+Message-ID: <20221011034732.45605-5-chengzhihao1@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221011034732.45605-1-chengzhihao1@huawei.com>
 References: <20221011034732.45605-1-chengzhihao1@huawei.com>
@@ -52,34 +52,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like other operations (eg. ubifs_create, do_rename), add comments
-and debug information for ubifs_xrename().
+Each dirty inode should reserve 'c->bi.inode_budget' bytes in space
+budget calculation. Currently, space budget for dirty inode reports
+more space than what UBIFS actually needs to write.
 
+Fixes: 1e51764a3c2ac0 ("UBIFS: add new flash file system")
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 ---
- fs/ubifs/dir.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ fs/ubifs/budget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-index eeda471f05ee..53c5442f48b7 100644
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1565,6 +1565,15 @@ static int ubifs_xrename(struct inode *old_dir, struct dentry *old_dentry,
+diff --git a/fs/ubifs/budget.c b/fs/ubifs/budget.c
+index e8b9b756f0ac..986e6e4081c7 100644
+--- a/fs/ubifs/budget.c
++++ b/fs/ubifs/budget.c
+@@ -400,7 +400,7 @@ static int calc_dd_growth(const struct ubifs_info *c,
+ 	dd_growth = req->dirtied_page ? c->bi.page_budget : 0;
  
- 	ubifs_assert(c, fst_inode && snd_inode);
- 
-+	/*
-+	 * Budget request settings: changing two direntries, changing the two
-+	 * parent directory inodes.
-+	 */
-+
-+	dbg_gen("dent '%pd' ino %lu in dir ino %lu exchange dent '%pd' ino %lu in dir ino %lu",
-+		old_dentry, fst_inode->i_ino, old_dir->i_ino,
-+		new_dentry, snd_inode->i_ino, new_dir->i_ino);
-+
- 	err = fscrypt_setup_filename(old_dir, &old_dentry->d_name, 0, &fst_nm);
- 	if (err)
- 		return err;
+ 	if (req->dirtied_ino)
+-		dd_growth += c->bi.inode_budget << (req->dirtied_ino - 1);
++		dd_growth += c->bi.inode_budget * req->dirtied_ino;
+ 	if (req->mod_dent)
+ 		dd_growth += c->bi.dent_budget;
+ 	dd_growth += req->dirtied_ino_d;
 -- 
 2.31.1
 
