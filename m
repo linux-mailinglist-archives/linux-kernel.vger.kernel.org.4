@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69F05FBAF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E50C5FBAFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJKTDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S230037AbiJKTEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiJKTDK (ORCPT
+        with ESMTP id S229874AbiJKTEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:03:10 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A7B8A7CC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:02:40 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id k6so13175481vsp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:02:40 -0700 (PDT)
+        Tue, 11 Oct 2022 15:04:43 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A76C0D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:04:37 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id j21so6917137qkk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NXGJe3FJJ+2iFrQ2DFiSfPDKQZ5eJqWY1ug7Ohd2phA=;
-        b=GgvfskVxoI+00fUghW4UvWwn7+YnMWog4YlGHhuxv7ZSX1BRJ2ChLpWlR+iXD0Rakx
-         N8M/qdubWVsmhTBewwpWGFTE2H1fM5m14+/TgIoIUeCw15LtEyLICbp8VkySQqUzlIob
-         pyocpXbMFvSAoj8QGLPw/tEFHl/gnqa5oDe3CrRsybJB256Cw/VVpI5vZcq2AX8D84zg
-         g0SkFQ3SLscdpumiWx+66pDwAC7PrA52mq4kHfdqxqz9Vq4LjyYWSJo3qM49+ojt5T9W
-         1okZ/bH55FCU0VR82F1qmJBLUkI5OCxSFt9rh9mfrMfW9iTs+AXnj7CI3kREKlIlXpZa
-         LBgw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0m4Z+4+FCGc7HbY9Z2fgPJugNdaCKUvzg3JKXxvmUR0=;
+        b=kmc11stgLJRII0cVJ7VL6lBKyUVlUsme3zecN+9lmS4tWdbHIqBEoLgAMOgIM3ThDb
+         xan8zs2Mros1EcZx7aITm69GvwmJYcdGspiCoYu4egt2S6p1fp+Wd3eTDIDfGNjy0weR
+         r0ytWink0vB2nlM2dS1OxuYcpFz4vQZl6tPiBw5rD4YDBYAVHb1Oi5t/dVUogQyJglpo
+         +70IjBD5NjifzF3EmkoyJQqRllyWUm3T8AzaWr2j0iRDO58s+Ag/fPxJcP99uMQH0BNq
+         WAkF+C9PyBJmUJWEZPIIdoexE9dPC3uBOBdfdDfpBVLoXYl1598DZxCDrLrxw7Q4MWCV
+         bmeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NXGJe3FJJ+2iFrQ2DFiSfPDKQZ5eJqWY1ug7Ohd2phA=;
-        b=YbZcD1j800dmOfdWA9ohgNKEgzPb1sW+9KYysYX0OhjQCW2t7Rx/E2dKaun8BIrT1a
-         lWBjf80Zqc8xiihHU88fTLKnE+SDeCykW/sZicqLcKtpG//ey1jK0qqcxrsmBEdVeNzM
-         i/Xb0cbl5gVTGzoGxETzCYaMNRfeglfYrFgFzb2bIcxAcPHX9H0Ub9m5aZTsxIlj59Rp
-         P2gckJakUCF/J4Zgy1apfADSRTZwxzmEZl5Qb9ZLBicG6UvO1exz5nS1Dcyw8YyC4LFf
-         6lOa3sRy7dWslfZoDE7R+50uwIzQmfxSeOwAuiuQAX7ChVk3k9NhFcALv3QxNrN4P0qk
-         C28g==
-X-Gm-Message-State: ACrzQf1e23N0fg+erBwD8/WCaPOvHp1uiBMZ4iRKD9FzIVYwrZBjv0rA
-        VMAslVXOpwh7Fne1IUU6nO+L4Pa0KpEHkLtgJtI=
-X-Google-Smtp-Source: AMsMyM4+8r1kKYkA8gJ2qE+wnsZVTdDxRgijxT2rla8ok/Y+mo12+zuZAU3+0WqpnHAvir0RYZs2aqzDM5uyoMwBprg=
-X-Received: by 2002:a67:e118:0:b0:3a7:6074:dd7e with SMTP id
- d24-20020a67e118000000b003a76074dd7emr8798297vsl.57.1665514958373; Tue, 11
- Oct 2022 12:02:38 -0700 (PDT)
+        bh=0m4Z+4+FCGc7HbY9Z2fgPJugNdaCKUvzg3JKXxvmUR0=;
+        b=REUm66Qpku54UblYHyst8eT/OAt1ac+Rw/1q5xC7BOOeH3ZDisWQpCGQ2hJwxzXmdT
+         hPcj7sEUG9xgRfmDZSkK9tAD0PcTnmAdZD6VyYKAaeWVZ4FTp5Da5/GEIjG5tg02I8SN
+         Lj2Mb3EN2ImR9qONXT9Uqnj9+FbGYldix26eSgyRxDaHxT21h8bC8/4seZSQveXslQJa
+         q2fzGsS20SZlbdcmb2LsiaMXzzg7UREGF/rrEuRTmhgt/OlHdyEQjmSS/9rkgZsXu2Fu
+         3OKSJmns7zurCBj8t02rYDZyOFWe2Ikn+D0si22dTuI+/IgHCi7mwLN7YptI6QDCz9LI
+         q2jw==
+X-Gm-Message-State: ACrzQf1LYs9jrnPPUzOfN5ViN67zEaNHuT08UNW+4faKbSuOeP5UnMKS
+        fSjnmQsOjJatTOc8bN2D6mSemg==
+X-Google-Smtp-Source: AMsMyM6WEyQyDwvOtDQ67NgwureRA5KlNOsRDgSUOCP3t+fLwRsMI8SJqBA7MMDWhdsmqmT3ZYHR4w==
+X-Received: by 2002:a05:620a:2b42:b0:6ed:f368:c717 with SMTP id dp2-20020a05620a2b4200b006edf368c717mr6142164qkb.154.1665515076868;
+        Tue, 11 Oct 2022 12:04:36 -0700 (PDT)
+Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id i14-20020a05620a248e00b006bba46e5eeasm14527185qkn.37.2022.10.11.12.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 12:04:36 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/4] arm64: dts: qcom: sdm630: add UART pin functions
+Date:   Tue, 11 Oct 2022 15:02:28 -0400
+Message-Id: <20221011190231.76784-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221011175031.1782748-1-ajones@ventanamicro.com>
- <Y0WvX9Mp0kuohNdq@zn.tnic> <20221011181715.dpayrpjueha7kxoj@kamzik>
-In-Reply-To: <20221011181715.dpayrpjueha7kxoj@kamzik>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Tue, 11 Oct 2022 12:02:26 -0700
-Message-ID: <CAAH8bW8Gz66aT4bBbxsrM4iYmpx-DDv8j_M48R+WOuSTravSgQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: Fix /proc/cpuinfo cpumask warning
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 11:17 AM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> On Tue, Oct 11, 2022 at 08:01:03PM +0200, Borislav Petkov wrote:
-> > On Tue, Oct 11, 2022 at 07:50:31PM +0200, Andrew Jones wrote:
-> > > Upcoming cpumask changes will start issuing warnings[*] when cpu
-> >
-> > What upcoming changes?
-> >
-> > This needs a concrete pointer to a commit or so.
->
-> Hi Boris,
->
-> Sorry, I should have pointed this out. The upcoming change is
->
-> linux-next/master commit a314123c8bdb ("cpumask: fix checking valid cpu
-> range")
->
-> And also an ongoing discussion here
-> https://lore.kernel.org/lkml/20221011170949.upxk3tcfcwnkytwm@kamzik/
->
-> I'm hoping that Yury will pick these patches up and integrate
-> them at the front of his series when introducing the warnings.
-> I wasn't sure how to call that out other than with the generic
-> "upcoming change".
->
-> >
-> > > indices equal to nr_cpu_ids are passed to cpumask_next* functions.
-> >
-> > How do those indices get passed here? I think you need to explain how
-> > exactly this happens.
+Configure UART1 and UART2 pins to respective functions in default state,
+otherwise the pins might stay as GPIOs.
 
-The cpumask_check() fix is already in master. Because of some mess in
-cpumask, cpumask_check() was broken for quite a long time, and didn't
-bark when passed with an out-of-range CPU.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-I fixed some false-positives and sent those fixes together with a314123c8bdb.
-Now, I expect that people will see warnings generated by correct
-cpumask_check().
-This is actually the first sign.
+---
 
-Andrew, can you please answer Borislav's question:
+Changes since v1:
+1. Add tags.
+---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > How do those indices get passed here? I think you need to explain how
-> > exactly this happens.
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index e119060ac56c..bc7c341e793c 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -723,6 +723,7 @@ tlmm: pinctrl@3100000 {
+ 
+ 			blsp1_uart1_default: blsp1-uart1-default {
+ 				pins = "gpio0", "gpio1", "gpio2", "gpio3";
++				function = "blsp_uart1";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+@@ -735,6 +736,7 @@ blsp1_uart1_sleep: blsp1-uart1-sleep {
+ 
+ 			blsp1_uart2_default: blsp1-uart2-default {
+ 				pins = "gpio4", "gpio5";
++				function = "blsp_uart2";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+-- 
+2.34.1
 
-It might be either an expected behaviour, and then there should be a great
-explanation on how and why things work in the subsystem.
-
-Or it might be an error in the caller. In that case, the caller must be fixed.
-
-Thanks,
-Yury
