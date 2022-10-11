@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262C45FA9FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F81C5FAA03
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiJKBYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S231144AbiJKBY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiJKBYX (ORCPT
+        with ESMTP id S229971AbiJKBY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:24:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7070D85586
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:23:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31754B811C1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 01:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CD814C43142;
-        Tue, 11 Oct 2022 01:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665451423;
-        bh=RI0MtfEk99t7Z1AgVom4PUWvOGqJYU1wJppAPzT45pU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fekLFow9YQ24SsnxL5YNIm6ZwOKWfOcuWjdHrj44b0wZ8H4nUYtvfGPbQFUKcILn7
-         WiZHOT187OnUPuFZ6+2MAPsH9zzKpmpwJVyTWUhcNjgU0hHcmMVVOo8gN/DRTyhDvy
-         EkqWwf53khnu3Qu6zRD+9w5lORyYKoD3+xYv6Jixi4XTZg/j43EpXDtwXaVhfjXGGI
-         0TLTSp7+Sd/qFMs8EuPnqfXfaJ8EiKeEqQtGRrU01jaUXciddGLTkcbsIwt6K6Xafw
-         D5fl0ZueMLigOUwSLC7QzW0HkT47e5hdb9qliygLRX7D33gHPtkCCR+RYq6siFDnF4
-         dgDOnkaAMIzDA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BDF21E2A05F;
-        Tue, 11 Oct 2022 01:23:43 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/mm for 6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <f42d43fd-30b0-e661-4b47-61ab15ef76ab@intel.com>
-References: <f42d43fd-30b0-e661-4b47-61ab15ef76ab@intel.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <f42d43fd-30b0-e661-4b47-61ab15ef76ab@intel.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mm_for_v6.1_rc1
-X-PR-Tracked-Commit-Id: c5129ecc12a3101555d8922b1e0aa90f91247ab6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 70442fc54e6889a2a77f0e9554e8188a1557f00e
-Message-Id: <166545142377.30881.3582945378018188052.pr-tracker-bot@kernel.org>
-Date:   Tue, 11 Oct 2022 01:23:43 +0000
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Oct 2022 21:24:28 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593A2855B8;
+        Mon, 10 Oct 2022 18:23:49 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MmdGp3Zg9z1M8h6;
+        Tue, 11 Oct 2022 09:19:14 +0800 (CST)
+Received: from [10.174.178.129] (10.174.178.129) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 09:23:46 +0800
+Subject: Re: [PATCH 3/4] blk-cgroup: Add NULL check of pd_alloc_fn in
+ blkcg_activate_policy
+To:     Tejun Heo <tj@kernel.org>
+CC:     <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221010023859.11896-1-shikemeng@huawei.com>
+ <20221010023859.11896-4-shikemeng@huawei.com>
+ <Y0SAneaJadYJwAkr@slm.duckdns.org>
+From:   Kemeng Shi <shikemeng@huawei.com>
+Message-ID: <c62a8944-093f-8534-106c-51b159696008@huawei.com>
+Date:   Tue, 11 Oct 2022 09:23:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
+MIME-Version: 1.0
+In-Reply-To: <Y0SAneaJadYJwAkr@slm.duckdns.org>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.129]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 6 Oct 2022 09:23:37 -0700:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mm_for_v6.1_rc1
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/70442fc54e6889a2a77f0e9554e8188a1557f00e
+on 10/11/2022 4:29 AM, Tejun Heo wrote:
+> On Mon, Oct 10, 2022 at 10:38:58AM +0800, Kemeng Shi wrote:
+>> Function blkcg_policy_register only make sure pd_alloc_fn and pd_free_fn in
+>> pairs, so pd_alloc_fn could be NULL in registered blkcg_policy. Check NULL
+>> before use for pd_alloc_fn in blkcg_activate_policy to avoid protential
+>> NULL dereference.
+>>
+>> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+>> ---
+>>  block/blk-cgroup.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+>> index 463c568d3e86..fc083c35dc42 100644
+>> --- a/block/blk-cgroup.c
+>> +++ b/block/blk-cgroup.c
+>> @@ -1404,6 +1404,9 @@ int blkcg_activate_policy(struct request_queue *q,
+>>  	if (blkcg_policy_enabled(q, pol))
+>>  		return 0;
+>>  
+>> +	if (pol->pd_alloc_fn == NULL)
+>> +		return -EINVAL;
+> 
+> This isn't the only place this function is called, so the above won't
+> achieve much. Given that this is rather trivially noticeable and all the
+> current users do implement pd_alloc_fn, I'm not sure we need to update this
+> now.
+Thanks for review. The rest call of this function will always protect by
+blkcg_policy_enabled while policy only can be enabled if new added NULL
+check is passed. So the new added NULL check enough.
 
-Thank you!
+By the way, the policy enable/disable work is direct call to
+__set_bit(pol->plid, q->blkcg_pols) in blkcg_policy_enabled
+and __clear_bit(pol->plid, q->blkcg_pols) in blkcg_deactivate_policy
+which is not intuitive. Is it a good idea to add function
+blkcg_policy_enable and blkcg_policy_disable to improve readability?
+
+> 
+> Thanks.
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best wishes
+Kemeng Shi
