@@ -2,221 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CBF5FAC9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8FC5FAC90
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJKGVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S229732AbiJKGVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJKGVY (ORCPT
+        with ESMTP id S229462AbiJKGUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:21:24 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC3E87F8E;
-        Mon, 10 Oct 2022 23:21:05 -0700 (PDT)
+        Tue, 11 Oct 2022 02:20:54 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2054.outbound.protection.outlook.com [40.107.105.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852BD65D5;
+        Mon, 10 Oct 2022 23:20:51 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=fail;
+ b=dq2BmnmaCKp4/wV07IVLq8YONy0Q1ZGvFxModPbYsQsyLVsV+YYnRK0S11p5v3E4WgQcb+AAe3zbyTYjHNMiaB9QI5L3eaIBr9GodAHRCbHO6Yvnguj1wUoxs/5l2XLBceB5CascMilrhKYONIziu1Mn6YoQdoDvi4UWQgKhkIwGahHGq7pYDioT2i3AMnoPmfzEBR4T0u9D50FMKBPeO1ygogl6tbqL8FBBfMlBAbVptpU1JlZzjGTccmwvMqhZxz51OXtcqom4I3FJ334g7IdHGxIsFMPmi/X4ELsmOAu8283TMqK4bHVl6bONsMFcHobI8yKhPCHCuajP1NiVOA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hun5aseDF5csra66Q6d+Ua4ZUi755X/jHo1VBtzQukw=;
+ b=aRxAwmXXdiGI3r/n3cJrMg7fIH1gTCkY+D7/+QRoosGrMsFEjNzEobDNrI9aiYEQ93ai6Na1OtdEbaMQkA/sUBTtNmkoSv09O3CIN9W34lBLIA9Ys7LHVFGOcNx8uupGSd/iqq7swSKZc3+3h7/X0amuzWT4u4HjuSuuKb1f6wWyTjKYlrgdy3wGcHXl6dMlRTzwduh+oq8Ws+urjt2/Vs0dr5hPHWdq/EnWQ7aZeFGnDUmVw+U7md14eHj/UO/Z17ZYO99bgIE1DfuG5xB+InaEdC/fFtXaqLrjsex83kwhK0gW7OQtqlxnd1dKDDsPWJNnkkveBmDv73EXX5W8SQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 20.93.157.195) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=topicproducts.com; dmarc=none action=none header.from=topic.nl;
+ dkim=none (message not signed); arc=fail (47)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hun5aseDF5csra66Q6d+Ua4ZUi755X/jHo1VBtzQukw=;
+ b=x34CM0R2oZ1oZy//uK+obhfhOlTtTpFiosfsV4kuVWEWEL5U5KwUuuSjrg8VS3Icfi8Us+pFkGdbWIRvHzNKKZre/GYwrr8/DYDTfqNN6jyMyPVACU8hKRS0Y1HSS1a3nui07bDnHegD9rs/Rzdtgefmqio/lgvgWqoR5d6eljUbYg0m787FTAWEKh2sbwRoD7Zt70669Tx0kEdyqvRNB4qB6q1ydp4Ig+z80atpl0lO57rKmLWM975TkIa7GTA8ITFQ1hQ2+JnrVO3vBMG53VELKEFEAgduswdmWEQfDcmwYbyLQhfGvcofK0svnU5iHiSJ/jV8JTdJsFJO1+YjKw==
+Received: from OL1P279CA0040.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:14::9) by
+ DB9PR04MB9233.eurprd04.prod.outlook.com (2603:10a6:10:373::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5709.15; Tue, 11 Oct 2022 06:20:45 +0000
+Received: from HE1EUR01FT031.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:e10:14:cafe::6f) by OL1P279CA0040.outlook.office365.com
+ (2603:10a6:e10:14::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15 via Frontend
+ Transport; Tue, 11 Oct 2022 06:20:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.93.157.195)
+ smtp.mailfrom=topicproducts.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=topic.nl;
+Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
+ designates 20.93.157.195 as permitted sender)
+ receiver=protection.outlook.com; client-ip=20.93.157.195;
+ helo=westeu11-emailsignatures-cloud.codetwo.com; pr=C
+Received: from westeu11-emailsignatures-cloud.codetwo.com (20.93.157.195) by
+ HE1EUR01FT031.mail.protection.outlook.com (10.152.0.177) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5709.10 via Frontend Transport; Tue, 11 Oct 2022 06:20:45 +0000
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (104.47.14.55) by westeu11-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Tue, 11 Oct 2022 06:20:43 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I0TGVM4Vq2ch3ZLWVtqiWuFP7ygzauun4jdR7fgSHswdRE+WkWojIkwTys2Xn05+XmjGLhVM3qzy6lTaqqSl8gfEm/Z/sLn6P5Gz1mCgVCLPJzFS4MC2dFlUrH5fDweYqlc63bPvSRVEtYeXr0MnlOnf0rgKA58TsD+f3y/+2EzPTDwKvezcyEWYfjuXzQYPO2CJXniIH7zqjkxbSgmf151mn5eHtaCAcPSfcAE89mRnZ3Q5U7WxFEHnfIP4l7q74A8uN9VDY4BBMop6tFL8Y7BT39jqFqCeKwwSPOg0SjObzxnCP6eIGOplFzlXQtfJ89KmI7QDDKwqfJb6udkR8g==
+ b=C1bwtk6IUf5+GwVCj+pHvFF97s+1z1YSUNxqlcdbKUM5JNQV9LMPLsF0DzwmAQtJ2IB/mkXJh2uXNgU97ReXtS+4k5FHlqCYU+eCf3i6WnfEbIn9SJZ8A67/uYizMXYHn0KBGmRWZxPaJSme1MuFzeEcvIQRdxdKyaWbopW0v/NSnW0QTbmba96n7Q15fftgvnyx5D6iGTQ+GS/lhZmS8WR4jY5acTsPtcYgg4Vl9gYdGFaJIlWbmI1vVMEoJILNcccXk1QzCFQqqQCLrNrtawqCDP8tdMiUdDkj0IpS37wcVHYp6qkeE72gIfjrGCUHiSgWwDiujp3qnHYTBYQL7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jrYG587qA3RzBMIm00PpvSRmeRdJO+WIRFIP1bkVgqA=;
- b=VEKwdJodisjlXH2OPP/m56zDmgkiCKT/cab4hVOWSr124V3664jVohyWw0ZkmPdu8FyT6inqK5G6MYeitt5MFlbbkCpzcSsPeFvHYIuaO//YsGSAVKNBBR17vVMPoacTy6WLttPvHZyzmHKbHAXYKM1YvqL7gS9Yzu+TtoMab6YXElg1X65uSDnfo9NHqLna/ABDEs9LhmHswx5lBlJDpw0mwU/VHHU9VcfneSAXW2InTrZu8G3RkUH5Lh6Qko2NF6rJQNufVcvUmKzyaM5fr74SrSLP3nhe9zdxqaYWRJqgdHLhUu0zhOkE/icw3PKEEc0HAzALVjVUro8ZgUYYqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jrYG587qA3RzBMIm00PpvSRmeRdJO+WIRFIP1bkVgqA=;
- b=J44zD5qKXjAdjhqeL7kbqR2ITH860g5pUflb0f/mIMx3jtPclufAJAVCrain8N380vgiduXwnFQb8VKbBfm7W3RPRh6KSfoxFIvMjv8wRy0c4TOR0Qfqdj/P1x1Yq1KtJif9f8PQnhPafBIzNQQ5SdYp8X59t/Hw1rnwHyPfroE=
-Received: from BN9PR03CA0073.namprd03.prod.outlook.com (2603:10b6:408:fc::18)
- by DM4PR12MB5088.namprd12.prod.outlook.com (2603:10b6:5:38b::9) with
+ bh=udDMpcrrg+QQjfaXwI6l28dwqw38zCjxyu9uhwY1+kA=;
+ b=SVmv9y5LK+fpTQ6OZQmWS1M9/+6n2qI7qUrVMs59S+lzCHWEYPBudTWHJ8t/IY1CaStiSIHWqfXAVyuIC7YS2sQ0QqVHrUbtkPLUSK36EMzCniUw4UUQVTvFocKvJKqG54LJIu1ebYiYuNmpGUbwi+Uqpw+hFDY+dvjpTXgTivLKgLSz2Q1ioAGPck1naVa7afBC8NjqXdXu9MIdrWTvOyThL9F20t2yUClYAj8nvKNZ7gnbjE7LSDjOJJxx3ACVEO57n9SR5BmFKCQGwjDOdT9bIXgWTeildG4nig5Eq0kTMR+LfLXQmpM7wOum1+yEYllrNfpPQYL8rpoQX3OMJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
+ dkim=pass header.d=topic.nl; arc=none
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=topic.nl;
+Received: from AM0PR04MB6516.eurprd04.prod.outlook.com (2603:10a6:208:174::27)
+ by DU2PR04MB8533.eurprd04.prod.outlook.com (2603:10a6:10:2d4::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Tue, 11 Oct
- 2022 06:21:02 +0000
-Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fc:cafe::7e) by BN9PR03CA0073.outlook.office365.com
- (2603:10b6:408:fc::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21 via Frontend
- Transport; Tue, 11 Oct 2022 06:21:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Tue, 11 Oct 2022 06:21:02 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 11 Oct
- 2022 01:21:01 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 10 Oct
- 2022 23:21:00 -0700
-Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 11 Oct 2022 01:20:58 -0500
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <git@amd.com>, <michal.simek@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: [PATCH v4 5/7] spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI Controller
-Date:   Tue, 11 Oct 2022 11:50:38 +0530
-Message-ID: <20221011062040.12116-6-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
-References: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
+ 2022 06:20:39 +0000
+Received: from AM0PR04MB6516.eurprd04.prod.outlook.com
+ ([fe80::b16d:dd46:e253:7db3]) by AM0PR04MB6516.eurprd04.prod.outlook.com
+ ([fe80::b16d:dd46:e253:7db3%3]) with mapi id 15.20.5709.015; Tue, 11 Oct 2022
+ 06:20:39 +0000
+Message-ID: <f78f1d8a-096b-60ad-e0de-266b63de8ffd@topic.nl>
+Date:   Tue, 11 Oct 2022 08:20:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] leds: pca963x: Add support for PCA962x chips
+Content-Language: en-US
+To:     linux-leds@vger.kernel.org
+CC:     Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        p.meerwald@bct-electronic.com
+References: <20220822061838.8212-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.eea759f5-b343-44ae-b225-1c6c559cf756.15e0f4b6-2201-4a5d-b92c-9ec71e7ae8fa@emailsignatures365.codetwo.com>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.0d2bd5fa-15cc-4b27-b94e-83614f9e5b38.67ffd036-675b-48f2-93d0-58c455654605@emailsignatures365.codetwo.com>
+From:   Mike Looijmans <mike.looijmans@topic.nl>
+Organization: Topic
+In-Reply-To: <20220822061838.8212-1-mike.looijmans@topic.nl>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: AS4P190CA0042.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d1::19) To AM0PR04MB6516.eurprd04.prod.outlook.com
+ (2603:10a6:208:174::27)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|DM4PR12MB5088:EE_
-X-MS-Office365-Filtering-Correlation-Id: b58b4d0e-ea4e-4b9e-18ed-08daab50c53e
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6516:EE_|DU2PR04MB8533:EE_|HE1EUR01FT031:EE_|DB9PR04MB9233:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5f965b4-166d-4b6f-c100-08daab50bb39
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: 9BLNjUUWeBkUgsJPXREVh73igmCiF2oXXBH0DKVQdEeZSADgQfOLFl8w7IQHK5poQVZtTn4RIt9xjy4ZbVRfnM8xEtL7V4/5mZ2pDhe4AgTjFM7h6VrIPQat90mSDC+GKg8rbstb7ZYwO8voTa9ZdQccTgtJL9m/p+3kNAYF5/8/1crDMZklYMjLGEMYBR92bwW5yJ+7uxaRn3S2CiQz95U1/gA/MGycd1kblQq7sUj2L14zy5If77jdvOFnrZYcEtJ3lKdEJZcgkyerFXRNh7JcZNHkYC0/WPnudaxZQNmc9nDRjWkHk2tRf8+uuWHMXDF2nBpbLQlr8k4NrrbtD/AGw5h4sQR95wE3oTDRCzFZ6VesJISBW2GbDzbsS+UAf76U/ML707uCZhdACKzv50wuGlgP4IPgmY8188f4FTuVWGNIDcdg3cYHqwH2B+XX3OYCaTAvteXMbyvdG9ZNTMXSLiuqC6XG4U42dKM/RPJdred5nSIOqffqFo2DkNDkBU0TYwLUjonNx1FmqzrGkMZ2r5QprfaN2c2WI+2qXeCtDRVREeQNS53qwVqstK2OFv2w5+xl6zIZvJPSl8sL3tq2YtCPdr+lD3URB5zn4COYbhRo1SU1c7/uurPKCLg6UbiYnNyECmtdDP2sIo4bVg9EKrvOS3uE36sqPY8pMfe9r/uEZO1WQApDdybJZcL0jGwfYVjpVglVQJUCkZSWQMxkTQcDUk4sl/8TK0jR/eFHuEbpzOV9Bj/S5xBjGPssSFidX2fCNfiK3mRzBzKKKHLWgJTFabyF2C1YuLiRwmvuZOYh27Pq6K+He0JZUqhB
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6516.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(39840400004)(366004)(136003)(451199015)(5660300002)(38350700002)(83170400001)(31686004)(38100700002)(6486002)(478600001)(2906002)(31696002)(6506007)(6916009)(316002)(41300700001)(44832011)(2616005)(36756003)(4326008)(42882007)(83380400001)(66946007)(66476007)(6512007)(186003)(8936002)(36916002)(52116002)(8676002)(26005)(53546011)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8533
+X-CodeTwo-MessageID: 0563cfbb-d5df-4714-8e54-1d268b6c188a.20221011062042@westeu11-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: HE1EUR01FT031.eop-EUR01.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: da4e5d15-54a6-4b83-5f1e-08daab50b75d
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ozzYWG4noA3VRcqmoMPg9i9psKgVVNIDuzaiogcgk8GXXi2san0aUAkGM/hrs9CObR3X8xYtksfLMqCkI2/SxvYMRp9lcwFF/1pg9Jw8QALarLpGXvKc7s3IJY1NSRPqoHoUDO955JIRS+OBrDlR9PGxFsXnyWD7EDqSSP+J+D3PEhLuUMK+EO1f9inKObiuens8FIKvAlMIYbdf7aX+NeAdap9eb76vFQf9so5G6ebD1ZlbWtpSUK/9dQCgZgdoVslJc+allAwVV6RaoTqYS8Ky11QnLRtRft+5GML7ouzsm/okr3/fvwXS2GJsz0wl1Zqd/GZf83TERJ4DXWEo/I/5gkKLHqARuwSJZ3O0GvoCVRVss1QsPM3Cx2FsYr91UqCL5PcHVzYoPcI0To1f31Zo9e2jyBjm9RUinPCLqOmQnHBPRdzY7Icvr7Hgha3kCxn0TUd5wcxXYjDJzlW847+8Bmz2Om0vINZO6mmyaVuoo1sxpR3NDN1BQEzP784V5BOb9G3aG/4s6z5/0dHAo3mUotl6qGoV48Y83I5Gf5RZNpQ9vWvOM239h63FnBl6h/NV/9b/oviSeNftRsowTTNCIjY2EAPRZLv9Y35SaHj0f2XSqMQsHlU6ntvEgl1GpEFXKWNdR1x2bx+cE+E5I1vLmg7j5ZrcDdzlrL3rJep+xKPLJomuiPm9uafTinDxnvln1w4cJKJ6tRpmxJl/doSVc5FV9yXu2p7Zcpwl47Z+zEaTnH6uMx002+iEVwU/ZWocdk1xmjsWwIfhVamt97PrwYKmLV639WsiDlE+AgPfDDErBL3MvNmw7yDcUto4
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(356005)(82740400003)(41300700001)(83380400001)(5660300002)(426003)(8676002)(2616005)(70206006)(4326008)(1076003)(47076005)(70586007)(2906002)(36756003)(26005)(336012)(186003)(8936002)(86362001)(6666004)(36860700001)(40480700001)(82310400005)(478600001)(316002)(40460700003)(81166007)(54906003)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 06:21:02.0636
+X-Microsoft-Antispam-Message-Info: 9Gp93CAhc9Emw18zB/bFmQMWOIv9RZ3BEt+4Frmo3thJQKshRFPP+MPZajMSYhgy3fiALDTzF/lCV3KXu2DNymVzR0dZsFUG9xx/219d0PspC0nZOZQZvqv0vsCUeGi6TLcRdxnb8cDxC9cIzQMe+JFJ2WyUa4HPHu5maiG2nfrZKBjCNnKbv1D4YP8RfxFzC8cccZrKtPNaGWTmvencIvUPUsiRpGt8r7CGtzO8jLf1Um8sTrhzJm+9TDHl9N8PZBju0ZFk2HNZKoGGWLT9goLlUbrzRS0Iy2zWCTx5/H9TooYB5IgkP0WpnPVAotefdhdVNPTsst0pvvLqQu8GrcejD5c99gvoz+1y6/Z4n6niVQFQ6YUgTjjH1TyNcEGLGoXN43Lz7U0i21n9jYAXrUusjU1XaJAHvZf5fjosQjuxwjfgynxPvlHUF0RqTOoM0pHP6cLaWAWoF/8mXL89rhhBCAMmN0BnLr+ovzh3seC9p3h0+43/HaLcVYo2Kavks+xMYxYbyRfCM3NUPqm2I9RL/kAqOic0d+1II3BwTTa0HZXftI04zMNwLUf6+ufs0xsM1RddSggZvt9OoLl5LDAs1eJWXOz7UubxLkAtielkBKwEXhmHTHROt+L8vgL3Oc8G4/sni0++g3SVEPtaditszGfBBkmQCwRmrC37rskjTizksG1tZaUdtnrn/2FiZFpf0cscMJYMHpkfKA4xsatz/Gg7h6mRvY7uz3OoUakBw25UUHc7KxqMlZPhjKntWhvPc23WdKR4uVFjKkzTURciEtTgFmSRkF+PbdWmLuc=
+X-Forefront-Antispam-Report: CIP:20.93.157.195;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu11-emailsignatures-cloud.codetwo.com;PTR:westeu11-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39840400004)(396003)(451199015)(36840700001)(46966006)(26005)(36860700001)(36916002)(6506007)(6512007)(40480700001)(83380400001)(336012)(47076005)(186003)(2616005)(2906002)(5660300002)(42882007)(44832011)(8936002)(82310400005)(6916009)(6486002)(41300700001)(478600001)(4326008)(70206006)(70586007)(8676002)(53546011)(316002)(83170400001)(356005)(31686004)(36756003)(7636003)(7596003)(15974865002)(31696002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: topic.nl
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 06:20:45.1798
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b58b4d0e-ea4e-4b9e-18ed-08daab50c53e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5f965b4-166d-4b6f-c100-08daab50bb39
+X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[20.93.157.195];Helo=[westeu11-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT031.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5088
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9233
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naga Sureshkumar Relli <nagasure@xilinx.com>
+Just a gentle "ping", haven't seen any feedback for quite some time. Any=20
+issues, comments?
 
-GQSPI controller uses the internal clock for loopback mode. The loopback
-mode is used with the high-speed Quad SPI timing mode, where the memory
-interface clock needs to be greater than 40 MHz. Based on the tap delay
-value programmed, the internal clock is delayed and used for capturing
-the data.
-Based upon the frequency of operation set the recommended tap delay
-values in GQSPI driver.
 
-Signed-off-by: Naga Sureshkumar Relli <nagasure@xilinx.com>
-Signed-off-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
----
- drivers/spi/spi-zynqmp-gqspi.c | 50 +++++++++++++++++++++++++++++++---
- 1 file changed, 46 insertions(+), 4 deletions(-)
+Met vriendelijke groet / kind regards,=0A=
+=0A=
+Mike Looijmans=0A=
+System Expert=0A=
+=0A=
+=0A=
+TOPIC Embedded Products B.V.=0A=
+Materiaalweg 4, 5681 RJ Best=0A=
+The Netherlands=0A=
+=0A=
+T: +31 (0) 499 33 69 69=0A=
+E: mike.looijmans@topicproducts.com=0A=
+W: www.topic.nl=0A=
+=0A=
+Please consider the environment before printing this e-mail=0A=
+On 22-08-2022 08:18, Mike Looijmans wrote:
+> The PCA962x family shares the same I2C register layout and functionality.
+> This adds support for the following chips:
+> PCA9623 4-channel
+> PCA9624 8-channel
+> PCA9622 16-channel
+> PCA9626 24-channel
+>
+> Tested only the PCA9624. Other devices based on datasheet information.
+>
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> ---
+>
+>   drivers/leds/Kconfig        |  8 ++++----
+>   drivers/leds/leds-pca963x.c | 36 ++++++++++++++++++++++++++++++++++++
+>   2 files changed, 40 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index 499d0f215a8b..9a99190c13af 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -497,13 +497,13 @@ config LEDS_PCA955X_GPIO
+>  =20
+>  =20
+>   config LEDS_PCA963X
+> -	tristate "LED support for PCA963x I2C chip"
+> +	tristate "LED support for PCA962x and PCA963x I2C chips"
+>   	depends on LEDS_CLASS
+>   	depends on I2C
+>   	help
+> -	  This option enables support for LEDs connected to the PCA963x
+> -	  LED driver chip accessed via the I2C bus. Supported
+> -	  devices include PCA9633 and PCA9634
+> +	  This option enables support for LEDs connected to the PCA96xx
+> +	  LED driver chip accessed via the I2C bus. Supported devices:
+> +	  PCA9622, PCA9623, PCA9624, PCA9626, PCA9633, PCA9634, PCA9635.
+>  =20
+>   config LEDS_WM831X_STATUS
+>   	tristate "LED support for status LEDs on WM831x PMICs"
+> diff --git a/drivers/leds/leds-pca963x.c b/drivers/leds/leds-pca963x.c
+> index 00aecd67e348..4d589624d192 100644
+> --- a/drivers/leds/leds-pca963x.c
+> +++ b/drivers/leds/leds-pca963x.c
+> @@ -48,6 +48,10 @@
+>   #define PCA963X_PWM_BASE	0x02
+>  =20
+>   enum pca963x_type {
+> +	pca9622,
+> +	pca9623,
+> +	pca9624,
+> +	pca9626,
+>   	pca9633,
+>   	pca9634,
+>   	pca9635,
+> @@ -62,6 +66,30 @@ struct pca963x_chipdef {
+>   };
+>  =20
+>   static struct pca963x_chipdef pca963x_chipdefs[] =3D {
+> +	[pca9622] =3D {
+> +		.grppwm		=3D 0x12,
+> +		.grpfreq	=3D 0x13,
+> +		.ledout_base	=3D 0x14,
+> +		.n_leds		=3D 16,
+> +	},
+> +	[pca9623] =3D {
+> +		.grppwm		=3D 0x6,
+> +		.grpfreq	=3D 0x7,
+> +		.ledout_base	=3D 0x8,
+> +		.n_leds		=3D 4,
+> +	},
+> +	[pca9624] =3D {
+> +		.grppwm		=3D 0xa,
+> +		.grpfreq	=3D 0xb,
+> +		.ledout_base	=3D 0xc,
+> +		.n_leds		=3D 8,
+> +	},
+> +	[pca9626] =3D {
+> +		.grppwm		=3D 0x1a,
+> +		.grpfreq	=3D 0x1b,
+> +		.ledout_base	=3D 0x1d,
+> +		.n_leds		=3D 24,
+> +	},
+>   	[pca9633] =3D {
+>   		.grppwm		=3D 0x6,
+>   		.grpfreq	=3D 0x7,
+> @@ -87,6 +115,10 @@ static struct pca963x_chipdef pca963x_chipdefs[] =3D =
+{
+>   #define PCA963X_BLINK_PERIOD_MAX	10667
+>  =20
+>   static const struct i2c_device_id pca963x_id[] =3D {
+> +	{ "pca9622", pca9622 },
+> +	{ "pca9623", pca9623 },
+> +	{ "pca9624", pca9624 },
+> +	{ "pca9626", pca9626 },
+>   	{ "pca9632", pca9633 },
+>   	{ "pca9633", pca9633 },
+>   	{ "pca9634", pca9634 },
+> @@ -363,6 +395,10 @@ static int pca963x_register_leds(struct i2c_client *=
+client,
+>   }
+>  =20
+>   static const struct of_device_id of_pca963x_match[] =3D {
+> +	{ .compatible =3D "nxp,pca9622", },
+> +	{ .compatible =3D "nxp,pca9623", },
+> +	{ .compatible =3D "nxp,pca9624", },
+> +	{ .compatible =3D "nxp,pca9626", },
+>   	{ .compatible =3D "nxp,pca9632", },
+>   	{ .compatible =3D "nxp,pca9633", },
+>   	{ .compatible =3D "nxp,pca9634", },
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index 0fecea338027..c11736d96f33 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -48,6 +48,7 @@
- #define GQSPI_QSPIDMA_DST_I_MASK_OFST	0x00000820
- #define GQSPI_QSPIDMA_DST_ADDR_OFST	0x00000800
- #define GQSPI_QSPIDMA_DST_ADDR_MSB_OFST 0x00000828
-+#define GQSPI_DATA_DLY_ADJ_OFST         0x000001F8
- 
- /* GQSPI register bit masks */
- #define GQSPI_SEL_MASK				0x00000001
-@@ -136,6 +137,16 @@
- 
- #define GQSPI_MAX_NUM_CS	2	/* Maximum number of chip selects */
- 
-+#define GQSPI_USE_DATA_DLY		0x1
-+#define GQSPI_USE_DATA_DLY_SHIFT	31
-+#define GQSPI_DATA_DLY_ADJ_VALUE	0x2
-+#define GQSPI_DATA_DLY_ADJ_SHIFT	28
-+
-+#define GQSPI_FREQ_37_5MHZ	37500000
-+#define GQSPI_FREQ_40MHZ	40000000
-+#define GQSPI_FREQ_100MHZ	100000000
-+#define GQSPI_FREQ_150MHZ	150000000
-+
- #define SPI_AUTOSUSPEND_TIMEOUT		3000
- enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
- 
-@@ -253,6 +264,37 @@ static void zynqmp_gqspi_selectslave(struct zynqmp_qspi *instanceptr,
- 	}
- }
- 
-+/**
-+ * zynqmp_qspi_set_tapdelay:   To configure qspi tap delays
-+ * @xqspi:             Pointer to the zynqmp_qspi structure
-+ * @baudrateval:       Buadrate to configure
-+ */
-+static void zynqmp_qspi_set_tapdelay(struct zynqmp_qspi *xqspi, u32 baudrateval)
-+{
-+	u32 lpbkdlyadj = 0, datadlyadj = 0, clk_rate;
-+	u32 reqhz = 0;
-+
-+	clk_rate = clk_get_rate(xqspi->refclk);
-+	reqhz = (clk_rate / (GQSPI_BAUD_DIV_SHIFT << baudrateval));
-+
-+	if (reqhz <= GQSPI_FREQ_40MHZ) {
-+		zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
-+					      PM_TAPDELAY_BYPASS_ENABLE);
-+	} else if (reqhz <= GQSPI_FREQ_100MHZ) {
-+		zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
-+					      PM_TAPDELAY_BYPASS_ENABLE);
-+		lpbkdlyadj |= (GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
-+		datadlyadj |= ((GQSPI_USE_DATA_DLY <<
-+				GQSPI_USE_DATA_DLY_SHIFT) |
-+			       (GQSPI_DATA_DLY_ADJ_VALUE <<
-+				GQSPI_DATA_DLY_ADJ_SHIFT));
-+	} else if (reqhz <= GQSPI_FREQ_150MHZ) {
-+		lpbkdlyadj |= GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK;
-+	}
-+	zynqmp_gqspi_write(xqspi, GQSPI_LPBK_DLY_ADJ_OFST, lpbkdlyadj);
-+	zynqmp_gqspi_write(xqspi, GQSPI_DATA_DLY_ADJ_OFST, datadlyadj);
-+}
-+
- /**
-  * zynqmp_qspi_init_hw - Initialize the hardware
-  * @xqspi:	Pointer to the zynqmp_qspi structure
-@@ -333,15 +375,14 @@ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
- 
- 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
- 
-+	/* Set the tapdelay for clock frequency */
-+	zynqmp_qspi_set_tapdelay(xqspi, baud_rate_val);
-+
- 	/* Clear the TX and RX FIFO */
- 	zynqmp_gqspi_write(xqspi, GQSPI_FIFO_CTRL_OFST,
- 			   GQSPI_FIFO_CTRL_RST_RX_FIFO_MASK |
- 			   GQSPI_FIFO_CTRL_RST_TX_FIFO_MASK |
- 			   GQSPI_FIFO_CTRL_RST_GEN_FIFO_MASK);
--	/* Set by default to allow for high frequencies */
--	zynqmp_gqspi_write(xqspi, GQSPI_LPBK_DLY_ADJ_OFST,
--			   zynqmp_gqspi_read(xqspi, GQSPI_LPBK_DLY_ADJ_OFST) |
--			   GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
- 	/* Reset thresholds */
- 	zynqmp_gqspi_write(xqspi, GQSPI_TX_THRESHOLD_OFST,
- 			   GQSPI_TX_FIFO_THRESHOLD_RESET_VAL);
-@@ -501,6 +542,7 @@ static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi,
- 		config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
- 		config_reg |= (baud_rate_val << GQSPI_CFG_BAUD_RATE_DIV_SHIFT);
- 		zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
-+		zynqmp_qspi_set_tapdelay(xqspi, baud_rate_val);
- 	}
- 	return 0;
- }
--- 
-2.17.1
+
+--=20
+Mike Looijmans
 
