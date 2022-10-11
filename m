@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF795FBE58
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBE75FBE47
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJKXTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 19:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S229538AbiJKXSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 19:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJKXTB (ORCPT
+        with ESMTP id S229663AbiJKXSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 19:19:01 -0400
+        Tue, 11 Oct 2022 19:18:17 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C975EA59BC;
-        Tue, 11 Oct 2022 16:18:37 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BNIQXS005747;
-        Tue, 11 Oct 2022 18:18:26 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C775244E;
+        Tue, 11 Oct 2022 16:18:14 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BNI3pK005692;
+        Tue, 11 Oct 2022 18:18:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665530306;
-        bh=P1m/db96NUv+Yg/RID1mWoELUsUOMqR0M54jnmoWElo=;
+        s=ti-com-17Q1; t=1665530283;
+        bh=cR268UZvfBM1FlE0yMkmHq1DV0bRnQaCFdVx4NiAZW4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=SSllpkkg9qtDYsVDOiXA6GfVVSytL2EUL7et14uyz3yhecLShYhnOjaGoGm8HyFyD
-         Hc9Pz9SQHteerFajeRgzLQkwxqRn1xAS0OYUVjWelmxnWLCSicbWeRuRyJhrx3cf10
-         dG3CsuMhLJpKyMb76tEf/M4COfuIjtrQVM3YhTB4=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BNIQEa096544
+        b=Ah50Newn2/6TzODu00VwBWZPIwRtC80EfIxafxg1VS9j9fIQzVUSOM0obubjjejSC
+         gqNWnxcOrkmxFg2L15V2WPsDKJ4n9DMUJbRSQk7m/AoIsfVpV1c/SGTEETr1ccR1Xx
+         X/jHs0B6Gvtyx4xksXaWxq1WlvWBwd2qRrYCmZb4=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BNI386029505
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Oct 2022 18:18:26 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 11 Oct 2022 18:18:03 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 11
- Oct 2022 18:18:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2022 18:18:02 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 11 Oct 2022 18:18:01 -0500
+ Frontend Transport; Tue, 11 Oct 2022 18:18:02 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BNI1aA088414;
-        Tue, 11 Oct 2022 18:18:01 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BNI2bQ059088;
+        Tue, 11 Oct 2022 18:18:02 -0500
 From:   Bryan Brattlof <bb@ti.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -54,14 +54,14 @@ CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Bryan Brattlof <bb@ti.com>
-Subject: [PATCH 05/11] dt-bindings: thermal: k3-j72xx: elaborate on binding descriptions
-Date:   Tue, 11 Oct 2022 18:17:21 -0500
-Message-ID: <20221011231727.8090-6-bb@ti.com>
+Subject: [PATCH 06/11] dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
+Date:   Tue, 11 Oct 2022 18:17:22 -0500
+Message-ID: <20221011231727.8090-7-bb@ti.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221011231727.8090-1-bb@ti.com>
 References: <20221011231727.8090-1-bb@ti.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2264; h=from:subject; bh=xzPQXHc0OCTrwaaHBhCklOdKZFKQQ617QSSHOw26KN4=; b=owNCWmg5MUFZJlNZosh7uAAAY//////N9nvz/L2TNv09fJP+bx5/bue7O/u/8m//5/5v/PSwARs2 g7UAaAAAAGgDQABoAAAaZGgGjIAADQ0DTQaBk0aABo9IGRtT1GxT2VEDJk0aGgGIaGho0BkMgGQZGh poNGgADJpowBBhMQaBkBoYgaMg0yaNABg7U0yBpoGhhNAAANGgYmgAyAAA0AGT1B6EeowTI0ZGg0AB kDI0NNDQ09IMGDDw472vWL+jYN/aEBFU7IPcNoBHiI3ogAyRAVlsgEVJQ+pW/Z6IUi1AEnsL+4aL5y 86SWZFReGhzf47Hc9QMrE6IM4Ch0a+vvfYDubVZGDCLUQ3enGCs0GkX6R43SQSBMKXImP41BL76wHs efRJEwKf+Tta7yDzGDTktDchj2IkOHbTpLbfcrXYfFbd4p0dNop1LguDyOhlzcaw8bNFLITelbPMZ9 vIV/ftUnDy6/J5fgh7P0vgLxodev4WXB0ggrfL261MvYThRxniUDHlJ7JTHhDlTh/4DCPDstU4Titx pJsJStc+jUHF89wyJl0b7CZehfVKkpB8FNlsfxIgqzPTilGyTH6+p7tSyXxiKIEij8SW3sBFfixBbk DFDKPJ3HWgAIQSzV7bBmmx/XhCqef7GOaSPYLOqCwjLUJCpGJDkrDCCWAH/F3JFOFCQosh7uA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2213; h=from:subject; bh=392o2SIsDC1TRw+VXUL68Q4QmibPK2Rjnky1U7t/3gE=; b=owNCWmg5MUFZJlNZGbDbUgAAan/////9+uvvzcru7OcZ+4c+2U362e1//9+R93z8/bXO+vewARsw IeoDQAaNNAB6QAaANAAaNNMQDQxDQAaGIDQABoNNNGjE0DTTQeptQ2jUbU/VDoaaZGmjIDJkAAaAZP QhoAZGgaBoaaAGTIxMJ6gaBkNDIwjI9TEGmhkBpoAdNMTQyMjQwgGmgaDJppphNAGhoAYhk0wRoyGB MJhAAAYgMEAAaDQABg8IMdCJgQiNnz8TIkuavngDGMNCq0/DEXAsUAs1sGIyFfRtD4fhmgu8kWYdov xguio2arETPjgAr10QiqFfLxFimu4m2IbQjOBdPkJrQ8HgQDdKsaFLr6aK6k6fIK42nt+5ZhbdbpPb PHBxv4+gng2490wMxfvp8kMwC2PgDLOOYDdACNO16WMsDqgQkb0ixfqOxbAUVe5NlSOBA3oVM8rQpD SruWyBMFTh3wCo3G7B7h1NGjjRInfxIzIeO5oiM1Y1X5aulQEUa38bWZY0+p2J7ADH62BwoxIxU8yf AFbomYriq2fU2XL+Pw0SjsDGcNlKHrW3hK9Y0bKUjUFrALGqUgdCLUImbLJJBHqwIPhmgFN35HEf1y 6cC8hmqpMu9LQxp/uxDDt8g4ycMQBx9cTnUZDkj+C0IR0LGlZn+rT7gAP8XckU4UJAZsNtSA==
 X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -75,61 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Elaborate on the function of this device node as well as some of the
-properties that this node uses.
+Only some of TI's J721E SoCs will need a eFuse register range mapped to
+determine if they're affected by TI's i2128 erratum. All other SoC will
+not need this eFuse range to be mapped to function properly
+
+Update the bindings for the k3_j72xx_bandgap thermal driver so other
+devices will only need to define two register ranges
 
 Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
- .../bindings/thermal/ti,j72xx-thermal.yaml    | 27 ++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ .../bindings/thermal/ti,j72xx-thermal.yaml    | 34 +++++++++++++------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-index c74f124ebfc00..0b6a6fa07a532 100644
+index 0b6a6fa07a532..387628ab35959 100644
 --- a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
 +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-@@ -9,6 +9,24 @@ title: Texas Instruments J72XX VTM (DTS) binding
- maintainers:
-   - Keerthy <j-keerthy@ti.com>
+@@ -33,16 +33,6 @@ properties:
+       - ti,j721e-vtm
+       - ti,j7200-vtm
  
-+description: |
-+  The TI K3 family of SoCs typically have a Voltage & Thermal
-+  Management (VTM) device to control up to 8 temperature diode
-+  sensors to measure silicon junction temperatures from different
-+  hotspots of the chip as well as provide temperature, interrupt
-+  and alerting information.
-+
-+  The VTM device will periodically enable these temperature sensors
-+  to make a temperature measurement and store the reported data
-+  allowing the sensors to stay in a reset state when not in use
-+  to maximize the sensor's life.
-+
-+  This VTM driver will then use the following polynomial equation to
-+  calculate the temperature from the value stored in the VTM device.
-+
-+  Temp = (-9.2627e-12) * x^4 + (6.0373e-08) * x^3 + \
-+         (-1.7058e-04) * x^2 + (3.2512e-01) * x   + (-4.9003e+01)
-+
- properties:
-   compatible:
-     enum:
-@@ -19,9 +37,16 @@ properties:
-     items:
-       - description: VTM cfg1 register space
-       - description: VTM cfg2 register space
--      - description: VTM efuse register space
-+      - description: |
-+          A software trimming method must be applied to some Jacinto
-+          devices to function properly. This eFuse region provides
-+          the information needed for these SoCs to report
-+          temperatures accurately.
- 
+-  reg:
+-    items:
+-      - description: VTM cfg1 register space
+-      - description: VTM cfg2 register space
+-      - description: |
+-          A software trimming method must be applied to some Jacinto
+-          devices to function properly. This eFuse region provides
+-          the information needed for these SoCs to report
+-          temperatures accurately.
+-
    power-domains:
-+    description: |
-+      Should contain the phandle to a power management (PM) domain
-+      node and the device-id of this device.
-     maxItems: 1
- 
+     description: |
+       Should contain the phandle to a power management (PM) domain
+@@ -52,6 +42,30 @@ properties:
    "#thermal-sensor-cells":
+     const: 1
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - ti,j721e-vtm
++then:
++  properties:
++    reg:
++      items:
++        - description: VTM cfg1 register space
++        - description: VTM cfg2 register space
++        - description: |
++            A software trimming method must be applied to some Jacinto
++            devices to function properly. This eFuse region provides
++            the information needed for these SoCs to report
++            temperatures accurately.
++else:
++  properties:
++    reg:
++      items:
++        - description: VTM cfg1 register space
++        - description: VTM cfg2 register space
++
+ required:
+   - compatible
+   - reg
 -- 
 2.38.0
 
