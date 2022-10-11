@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AFF5FBC0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CB95FBC14
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJKU1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S229833AbiJKUdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiJKU1V (ORCPT
+        with ESMTP id S229696AbiJKUdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:27:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70297A765;
-        Tue, 11 Oct 2022 13:27:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49302B8161C;
-        Tue, 11 Oct 2022 20:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2D4C43470;
-        Tue, 11 Oct 2022 20:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665520037;
-        bh=q/KD5DS2KZABpOmhHRh64Qn23gHZS9wNG5vavr9JdEw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UeQJWZRLZgEU4QpeFr8PTC2nWaFG6R+h552XQV9dzEcyqQXkof/8dtonlYizkA/b/
-         hEgZMRYJ1bO5xjEt0V+TuR4dNN9bzvpSPB7+DkX2BqkJr3ZrVxh2XXcZkLsojVw35T
-         2/BKBnarA/6tjEX9Rtjc/ADLymt3jp+krZJU2oFZ3T6ONXz6uSX0TJfoSlxRnx3h15
-         Mbhq/pIQsh4gVYnNhDAwtE2MOTpT1LcQjDE0DaIIhHTpnFb/LC1rNK4J2t1wloqlNl
-         DpqSgGm3wIetPVFJj1WoI0hfWRvRSoBTEjhAVcYr2JLqK17q1yVnqgvB6coBh3h6E4
-         LzyVOWbvlf7TQ==
-Received: by mail-vs1-f51.google.com with SMTP id h3so7699721vsa.4;
-        Tue, 11 Oct 2022 13:27:16 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1h42oPupUCHyFVyL7jG1HcVyLHALhz7W9Ag8N5Nn9ZeAEcqB8d
-        qJrsV5CKB92h7aJEFLO6WHpUIzgaGIF/acgAGg==
-X-Google-Smtp-Source: AMsMyM5y6Ov8cNy9hDEvP/9q2HKaDkW+19lvSfwhHT0x4VJJ5RGH3IgjLi5SnA8timHooXskXro3qlEUTv749b/71gw=
-X-Received: by 2002:a67:c088:0:b0:39b:1bb3:bdd1 with SMTP id
- x8-20020a67c088000000b0039b1bb3bdd1mr11524081vsi.85.1665520035958; Tue, 11
- Oct 2022 13:27:15 -0700 (PDT)
+        Tue, 11 Oct 2022 16:33:05 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02A97754F;
+        Tue, 11 Oct 2022 13:33:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id n12so23312261wrp.10;
+        Tue, 11 Oct 2022 13:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TEfDO7QSA1VFUb1GFHQrZIKppKlP130P/LfPX2c1848=;
+        b=Fv9vlBHbLmlL7TVnbRR+Ibtab+81I978qi0S0OxNcTZoPX1NadHyd5UZ+ZSgCzh86F
+         RYPdPghZ9cxOCpru66PLoZ2d2jlSNYVgwl1Qc3MRJaAmy3FQ3ZtCF2esiA/YqMHsdzzn
+         Zd+BEbF3oOESG3C7tlo3dj8B/hmnGg4YJNZUFnC6BT/IGAbCy6Bc/nCE0VgeBrat5FLh
+         6rbWzO+pGSEh7nRi0w2Fq4dB/ZJpYqO99+Sg0zRE+LQt5GglCiZpjOBq8TIIYS/FvN9m
+         dqvmPuOxfhObIbB+LWN1ySNgqFJUNvkbUpPwH5Q8fgQuHysg9RIkX/ySkQ5LvjsXZqDZ
+         mkOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TEfDO7QSA1VFUb1GFHQrZIKppKlP130P/LfPX2c1848=;
+        b=DZtwAGGhg60cbrI8bUg37JC7o3HKcKh1Cml0knZYQOd6MNa3NwYd/FApSxkwLcZ3hG
+         MyFQ+Wm3S0+hqxlmbx2hWDbvI8g/rCz9Yin2kar8J/DwJDK2rpaMjl7a940aq5hyDJdt
+         5ialFOpFDg3Dsm0gFkgB/PPCXPmcDblKAdvpOgX3qdov1+vEd4fkH6H0B9jFNBxkMV/p
+         XIe1qWhahdTcQdErGsxCtpGky5obpJS2sT31QXqobypLN1SmOkxPONqNjr76bXOz9x9W
+         GU1Qg8cAskEU5Of+0OBAV6tsV3bNsa74yimfAOJQa7zrCk5I43YtiVdXujXLVEUJOktb
+         k8ug==
+X-Gm-Message-State: ACrzQf1AiJAhUnBI+w0jbP/LPwdEkabPzQ1lfA1HKTnB5nabIWUBBEdF
+        /zY77Gqewqfkvrd8Vw4YgtoTLTIrBcA=
+X-Google-Smtp-Source: AMsMyM5GUmB1SbiRoxh3oe/nd/8xd6XNVsEy0/YPik7LBUumeMkmp6gTsUiIW4KqeGUUyP+U2bcbHA==
+X-Received: by 2002:a5d:6741:0:b0:22e:2c5c:d611 with SMTP id l1-20020a5d6741000000b0022e2c5cd611mr16383458wrw.210.1665520379305;
+        Tue, 11 Oct 2022 13:32:59 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003a2f2bb72d5sm28872537wmp.45.2022.10.11.13.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 13:32:58 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 21:32:57 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
+Message-ID: <Y0XS+caa/JtjuyP7@debian>
+References: <20221010191226.167997210@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20221011185525.94210-1-nick.hawkins@hpe.com> <20221011185525.94210-3-nick.hawkins@hpe.com>
-In-Reply-To: <20221011185525.94210-3-nick.hawkins@hpe.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 11 Oct 2022 15:27:06 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+xb2Ltfne4mQMXQAde-eHS7TsO73YZ-vhE7nK1Z_M0gw@mail.gmail.com>
-Message-ID: <CAL_Jsq+xb2Ltfne4mQMXQAde-eHS7TsO73YZ-vhE7nK1Z_M0gw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/5] dt-bindings: soc: hpe: Add hpe,gxp-plreg
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, krzysztof.kozlowski+dt@linaro.org,
-        linux@armlinux.org.uk, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 1:56 PM <nick.hawkins@hpe.com> wrote:
->
-> From: Nick Hawkins <nick.hawkins@hpe.com>
->
-> The hpe,gxp-plreg binding provides access to the board i/o through the
-> Programmable logic interface. The binding provides information to enable
-> use of the same driver across the HPE portfolio.
->
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> ---
->  .../bindings/soc/hpe/hpe,gxp-plreg.yaml       | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-plreg.yaml
->
-> diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-plreg.yaml b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-plreg.yaml
-> new file mode 100644
-> index 000000000000..cdc54e66d9a9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-plreg.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/hpe/hpe,gxp-plreg.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: HPE GXP Programmable Logic Registers Controller
-> +
-> +maintainers:
-> +  - Nick Hawkins <nick.hawkins@hpe.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: hpe,gxp-plreg
-> +      - const: simple-mfd
-> +      - const: syscon
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    cpld@1e789000 {
-> +      compatible = "hpe,gxp-plreg", "simple-mfd", "syscon";
-> +      reg = <0x1e789000 0x1000>;
-> +      fan1 {
-> +        bit = <0x01>;
-> +        inst = <0x27>;
-> +        id = <0x2B>;
+Hi Greg,
 
-These property names are way too generic for device specific
-properties. There is zero description of what the h/w does and any of
-these child nodes to give any advice on direction. However, a node per
-register or register field is generally the wrong direction.
+On Mon, Oct 10, 2022 at 09:12:52PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
+> Anything received after that time might be too late.
 
-Rob
+Build test (gcc version 12.2.1 20220925):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1971
+[2]. https://openqa.qa.codethink.co.uk/tests/1973
+[3]. https://openqa.qa.codethink.co.uk/tests/1979
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
