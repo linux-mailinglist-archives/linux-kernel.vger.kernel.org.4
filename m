@@ -2,166 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA9F5FBF8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9358A5FBF90
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiJLDqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 23:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S229537AbiJLDrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 23:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJLDq0 (ORCPT
+        with ESMTP id S229496AbiJLDr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 23:46:26 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EC7792CC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:46:23 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221012034619epoutp011461ed49ad5cc2c0d7bd5d188172ab55~dNZuDD-xU1984419844epoutp01W
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:46:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221012034619epoutp011461ed49ad5cc2c0d7bd5d188172ab55~dNZuDD-xU1984419844epoutp01W
+        Tue, 11 Oct 2022 23:47:29 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1F2796BA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:47:28 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221012034726epoutp024f11c660113937f8d0d4978c6988b493~dNas9rMtZ1949919499epoutp02f
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:47:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221012034726epoutp024f11c660113937f8d0d4978c6988b493~dNas9rMtZ1949919499epoutp02f
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665546379;
-        bh=9Z/+w+F454z0H7x0XmWxlYencJ1CYBTi6E82IACKXlc=;
+        s=mail20170921; t=1665546446;
+        bh=a0vdFYoSfapPhn0wOLLbypVWbERl2E7gGu0xV0Veo/8=;
         h=From:To:Cc:Subject:Date:References:From;
-        b=mD7LdkPo8qKXm5P7YzrOSpYY0xHfZejYeUoKbv1z7Fn/FNMTgyDqew83J/KzOakWO
-         OxYMO2YbQtAX0BBecfrTjB06San1xxpN8pPHOjX0nt8CvbBJfiYE/P9J/fal2xKoHR
-         MjJtn6zzoEvdpUKau+2hHymgFM0RBtIa2r+/Jsxs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        b=NtXF0NeDIFcUUGxl2G2FqEdVx8K+7+fSVU8pkdaCXR9ENvgUrDGDWXEswtiPs13Pk
+         F7RE6SMs0n0CjDneedA6SWt3Jhi3uyATmmHeHgEgXL4WfHiswrcsNVh9AbqVA54bWy
+         jJseyBeTutaceZ1BX2KunGGMUg6u59H30Lru4Ybs=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221012034618epcas5p1a27ca887871381c60ecbad50866ea445~dNZtZCbiH0912109121epcas5p1Z;
-        Wed, 12 Oct 2022 03:46:18 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4MnJTz0sMpz4x9Q1; Wed, 12 Oct
-        2022 03:46:15 +0000 (GMT)
+        20221012034725epcas5p1e9ecd07b3fe2d1222a12f907f30e1c26~dNasBYKhP0055500555epcas5p1M;
+        Wed, 12 Oct 2022 03:47:25 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MnJWG3v6Zz4x9Q0; Wed, 12 Oct
+        2022 03:47:22 +0000 (GMT)
 Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        50.8B.39477.68836436; Wed, 12 Oct 2022 12:46:15 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221011120147epcas5p45049f7c0428a799c005b6ab77b428128~dAhCDyTuS1761517615epcas5p4P;
-        Tue, 11 Oct 2022 12:01:47 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221011120147epsmtrp222a75feb8614315677f467942b54324c~dAhCC9G1R2226422264epsmtrp2c;
-        Tue, 11 Oct 2022 12:01:47 +0000 (GMT)
-X-AuditID: b6c32a4a-259fb70000019a35-4d-634638862f05
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        56.32.18644.A2B55436; Tue, 11 Oct 2022 21:01:47 +0900 (KST)
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E0.62.56352.AC836436; Wed, 12 Oct 2022 12:47:22 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221011125138epcas5p21b0a93e3bde26c3377e3fa7f34d86933~dBMkFxV8S3211732117epcas5p2D;
+        Tue, 11 Oct 2022 12:51:38 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221011125138epsmtrp1db6a44e521f61c05f6e70a5c3716ff8e~dBMkEjaCP2654526545epsmtrp1-;
+        Tue, 11 Oct 2022 12:51:38 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-d6-634638ca48d7
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F5.0D.14392.AD665436; Tue, 11 Oct 2022 21:51:38 +0900 (KST)
 Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221011120144epsmtip2ff82626fc431fb636abb0859cf6df5f6~dAg-kpFeb1451514515epsmtip2X;
-        Tue, 11 Oct 2022 12:01:44 +0000 (GMT)
-From:   Vivek Yadav <vivek.2311@samsung.com>
-To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, pankaj.dubey@samsung.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vivek Yadav <vivek.2311@samsung.com>
-Subject: [PATCH] can: mcan: Add support for handling dlec error on CAN FD
- format frame
-Date:   Tue, 11 Oct 2022 17:05:12 +0530
-Message-Id: <20221011113512.13756-1-vivek.2311@samsung.com>
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221011125135epsmtip1dd029d2e4ca18021177e1357e793ef95~dBMg8WcKV2675426754epsmtip1I;
+        Tue, 11 Oct 2022 12:51:35 +0000 (GMT)
+From:   aakarsh jain <aakarsh.jain@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, smitha.t@samsung.com, aakarsh.jain@samsung.com
+Subject: [Patch v3 00/15] Add MFC v12 support.
+Date:   Tue, 11 Oct 2022 17:55:01 +0530
+Message-Id: <20221011122516.32135-1-aakarsh.jain@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGKsWRmVeSWpSXmKPExsWy7bCmum67hVuyQXMXs8Wc8y0sFk+PPWK3
-        uLCtj9Vi1fepzBaXd81hs1i/aAqLxbEFYhbfTr9htFi09Qu7xawLO1gtfi08zGKx9N5OVgce
-        jy0rbzJ5LNhU6vHx0m1Gj02rOtk8+v8aeLzfd5XNo2/LKkaPz5vkAjiism0yUhNTUosUUvOS
-        81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgG5VUihLzCkFCgUkFhcr6dvZ
-        FOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRn3HikXHCBt+LZrJes
-        DYwTuLsYOTkkBEwkZryczNzFyMUhJLCbUeLD3efsEM4nRolDkzdBOZ8ZJd78fcUG07Lh0g6o
-        ll2MEkc7lkM5rUwSC5tmsoJUsQloSTzuXMACkhARWMUocWn1LaB2Dg5mgWqJA0f4QGqEBSIk
-        1h4+yAISZhFQldjzKwEkzCtgLbFw0jFWiGXyEqs3HACbLyHwkl3i1/YVTBAJF4kd6y5DFQlL
-        vDq+hR3ClpL4/G4v1KXJEjv+dULVZEgsmLiHEcK2lzhwZQ4LxDmaEut36UOEZSWmnloHNp5Z
-        gE+i9/cTqFW8EjvmwdgqEi8+T2AFaQVZ1XtOGCLsIXFs1SlmEFtIIFaiq2sH4wRG2VkICxYw
-        Mq5ilEwtKM5NTy02LTDKSy2HR1Nyfu4mRnAC1PLawfjwwQe9Q4xMHIyHGCU4mJVEeBnnOyUL
-        8aYkVlalFuXHF5XmpBYfYjQFhthEZinR5HxgCs4riTc0sTQwMTMzM7E0NjNUEuddPEMrWUgg
-        PbEkNTs1tSC1CKaPiYNTqoFpS8fSmdJOzC9vTz10f85OL41NDelvPC/aXv9gWBXW5jj95+Tt
-        Qb+Osk+f186/687W4xc3cZ9leSSQsOAZw9WtMf/TorcXb+xMbeSQd2t9ybPUNu7Srk0H2nTP
-        hC+qTLFoi934sPy30dY3az+83Zukw7ZovZTb9wtOjTvul91mdXxiyLn4yMpDWTvOJjabph2R
-        fuR/LXpb1FLOQ6oX/Hy4vDc9s0id3DDlTsSfZTXHJpfmGXMtY6/bXPt/3coTIh0C/+0Mf1h+
-        +nXrT+/Z1eInnq9kS1vxZ5rRkQyDcof5/y+fmd//puCI8XX53R+C3GavC7FnKn3+RNj4q8fK
-        6R2FiXLz8p9xO8tLJh/OnainuUaJpTgj0VCLuag4EQAeAIvPCQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMLMWRmVeSWpSXmKPExsWy7bCSvK52tGuywesXTBZzzrewWDw99ojd
-        4sK2PlaLVd+nMltc3jWHzWL9oiksFscWiFl8O/2G0WLR1i/sFrMu7GC1+LXwMIvF0ns7WR14
-        PLasvMnksWBTqcfHS7cZPTat6mTz6P9r4PF+31U2j74tqxg9Pm+SC+CI4rJJSc3JLEst0rdL
-        4Mq48Ui54AJvxbNZL1kbGCdwdzFyckgImEhsuLSDuYuRi0NIYAejxOIZO1khElISU868ZIGw
-        hSVW/nvODlHUzCTRefAAWIJNQEvicecCFpCEiMAWRomDixYzgiSYBeol3p25yQ5iCwuESUxd
-        3A+0goODRUBVYs+vBJAwr4C1xMJJx6CWyUus3nCAeQIjzwJGhlWMkqkFxbnpucWGBUZ5qeV6
-        xYm5xaV56XrJ+bmbGMHhqKW1g3HPqg96hxiZOBgPMUpwMCuJ8DLOd0oW4k1JrKxKLcqPLyrN
-        SS0+xCjNwaIkznuh62S8kEB6YklqdmpqQWoRTJaJg1Oqganw7EOTU+XJ12+ovezy4VvUzs5s
-        c2Eb14makl0cKc+fKB36zTu3PPL2579x09d8Fz4xq9Rin8955Y25+bUXyi/aT02afbNMtHrP
-        Vu+3MnUxGTq23+4u9bNrezvP8NSr+xaxtRu0rvIGMjy6V1t8/OW+gq6jbVbZzxbMXzJP8rrJ
-        woVdjWVm+Rd/X3ueoPVdblrtjpLs9eL51j0zxJc0X/3JV2UneEkmXMDx/7kLElfae87G97of
-        W+18x3bGMq+SG5VvpY/+2L6z9epEI0aezEeXXROPe3lEb3a7Uj7X7fS9dPYFV1w1BIIPTtjL
-        Z6N5I3pOUvPupz65QstkZx9Y+uC7yeaH6me2XJQ8lNb5yCtFiaU4I9FQi7moOBEAmP1kRrYC
-        AAA=
-X-CMS-MailID: 20221011120147epcas5p45049f7c0428a799c005b6ab77b428128
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTe0zTVxTHub9f+2s11v14jUsVVxoVwYCUlxcFJZOYX5ApBAduhLGm/CgN
+        pe3aAsMsKjCYIoM90IyHMCmdCQ+LQEvBAh10ISFuEUZAU7sxOoU69hI1BghbS2H773PO+Z77
+        PTn3XjbuNU1w2RKZmlbKhFI+sZ1hGAsOCp1AJ0Xho1++jh4b65lortlAIM2rBQz9rFlmoNFe
+        PQv1TTfi6Na4mYlaLD8wUf+38wx0Z9FZnay3MdBCy22AHA0/EajHPsNEvzzNQD8ONhGoulvP
+        RF0WGwtpZycx9E3PGoZa9c9ZqGLIwkI2kwGgjystWAKkOps7AWW0tQFqtu0ZTg002FiUxuTA
+        qJ72KwT1aMZEUL1tF6mK71YYVE1fO6DWy26wqCrLLEEt9+yhJl4ss1J2vpsfl0cLc2glj5aJ
+        5DkSmTiefyot+0R2dEy4IFQQiw7zeTJhAR3PT0xOCT0pkTrXwOcVCaWFzlSKUKXiHzoWp5QX
+        qmlenlyljufTihypIkoRphIWqApl4jAZrT4iCA+PiHYK38/PG1i8jCtMvh8uzv4DLoEhzyqw
+        jQ3JKFh2c5moAtvZXuRdAO+slG8GzwB8qf0EcwcvAXzwZz/YahnpGgfuwhCAMxNW3B1UYFD3
+        2xOWS0WQoXBEayZc7EOWAmi/rHaJcLKcAW33VjdE3mQYLK2rY7qYQe6D66tXNyw4ZDx8aLFj
+        brs3YEe3ecMBkktsWLNYuzlHImz9vmmTveHT8T6Wm7nQUVu5ySJob3XgbpZCnamO4ebj0Dzd
+        5GS2c6JgqBs85E4HwGsTtzd8cXIn/HT1180ZONDYvMX7YdOjV0w374ZjHVrgOgaSFNQvSlxp
+        LzIL1k49BJ+BgIb/Db4GoB340wpVgZhWRSsiZXTxfzclkhf0gI3nHXLKCObn/gobBRgbjALI
+        xvk+HNDypsiLkyMsOU8r5dnKQimtGgXRzpV9jnN9RXLn/5CpswVRseFRMTExUbGRMQK+H0fz
+        VYjIixQL1XQ+TSto5VYfxt7GvYQF5R61D3twOc2S5zXWysZlD0+6G+5Q6PqqHRcOp5p2JGMX
+        Mw5YZ66+lkHWW7Vha/cDi4Lfjrww1pm8agmO86H+SBy632F9R3euM9A0YsrMitwvCoy9lXSe
+        Tvecv3K3PmmQV13ZXnygSLH7QZbpml+Q3VDt5/FY3KuXT5XMRfTnln/kmMpL1fg2puUsaX83
+        Z2omD9oYTzrSu9hLe7LfOnfQHJB71t9w5npp2rGErMZyyuJ/VjT8QaY1ITXCWIZM3pmxL0Ik
+        eNsck3ui9T0WFxNc3/v3FwunV3ZVn15dzw04k75rr3mYd0TMG9DdC50vxsrFN+TkoH/SWrfh
+        6AQqOc5nqPKEghBcqRL+CxGtuLFnBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJTvdWmmuywZd9MhZPd8xktXgwbxub
+        xeIfz5ks7i/+zGJxaPNWdostV2YzWyw/foDVYv6Rc6wW2w8+YrHY+AIoe3HmXRaL5/PXMVq8
+        nHWPzWLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4u6e
+        bYwWLW1HmBwkPNbMW8PosePuEkaP60s+MXvsnHWX3WPxnpdMHptWdbJ53Lm2h81j85J6j9aj
+        v1g8+rasYvT41zSX3aPryHU2j8+b5DxOff3MHsAXxWWTkpqTWZZapG+XwJWx80UHc8Ee0YoX
+        1/8zNjDuFexi5OSQEDCR2L/2OGMXIxeHkMBuRonvK24wQiRkJP63HWOHsIUlVv57zg5R1Mwk
+        cXrWTxaQBJuArsT+pQfYQBIiAq2MEtdXdjKBOMwCs1kkfkw6wApSJSygJ9E4ZQqYzSKgKvHv
+        dzfYCl4BW4mbRx4zQayQl1i94QDzBEaeBYwMqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLz
+        czcxgmNJS3MH4/ZVH/QOMTJxMB5ilOBgVhLhZZzvlCzEm5JYWZValB9fVJqTWnyIUZqDRUmc
+        90LXyXghgfTEktTs1NSC1CKYLBMHp1QDUzjz1KzlGQ0z7G+f1+C2iVq91GTFtR1M3FLtgQnf
+        M80nZS1eyPvrx1eVpTu/Wq9Nr1HfPrEuLP6m2Dzze9Vv2zUnHFA7VfWr6+2NIyaaV29OiDb/
+        HLGIR7uXv/TvhcJGW+MDoWe2bJvp91f6g+rqWoG0jRx/6o3eeN0TOJG14kmP8LPrr5Z5JEle
+        iuJ4z3Gb4WdCgvbXi9zmaRp3+eptD516+r1nZmB56dKrwicWNzlIe65Ozmrcwn/8kvri+mbm
+        Nzyzbyma6dmU1KlbMP2r8vg5/doOR5lNM/Xk2kV8Dj9wzdX4ZD9t464crdDJ7pln89edLv/X
+        0GbvJf9mFod32uRlrjOTrq4qDEooEzgsoMRSnJFoqMVcVJwIADrzEMIUAwAA
+X-CMS-MailID: 20221011125138epcas5p21b0a93e3bde26c3377e3fa7f34d86933
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221011120147epcas5p45049f7c0428a799c005b6ab77b428128
-References: <CGME20221011120147epcas5p45049f7c0428a799c005b6ab77b428128@epcas5p4.samsung.com>
+X-CMS-RootMailID: 20221011125138epcas5p21b0a93e3bde26c3377e3fa7f34d86933
+References: <CGME20221011125138epcas5p21b0a93e3bde26c3377e3fa7f34d86933@epcas5p2.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a frame in CAN FD format has reached the data phase, the next
-CAN event (error or valid frame) will be shown in DLEC.
+This patch series adds MFC v12 support. MFC v12 is used in
+Tesla FSD SoC.
 
-Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-determine the type of last error that occurred in the data phase
-of a CAN FD frame and handle the bus errors.
+This adds support for following:
 
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
----
- drivers/net/can/m_can/m_can.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+* Add support for VP9 encoder
+* Add support for YV12 and I420 format (3-plane)
+* Add support for Rate Control, UHD and DMABUF for encoder
+* Add support for DPB buffers allocation based on MFC requirement
+* Update Documentation for control id definitions
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 4709c012b1dc..c070580d35fb 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -156,6 +156,7 @@ enum m_can_reg {
- #define PSR_EW		BIT(6)
- #define PSR_EP		BIT(5)
- #define PSR_LEC_MASK	GENMASK(2, 0)
-+#define PSR_DLEC_SHIFT  8
- 
- /* Interrupt Register (IR) */
- #define IR_ALL_INT	0xffffffff
-@@ -870,6 +871,7 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	int work_done = 0;
-+	int dpsr = 0;
- 
- 	if (irqstatus & IR_RF0L)
- 		work_done += m_can_handle_lost_msg(dev);
-@@ -884,6 +886,15 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- 	    m_can_is_protocol_err(irqstatus))
- 		work_done += m_can_handle_protocol_error(dev, irqstatus);
- 
-+	if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
-+		dpsr  = psr >> PSR_DLEC_SHIFT;
-+		if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-+		    is_lec_err(dpsr)) {
-+			netdev_dbg(dev, "Data phase error detected\n");
-+			work_done += m_can_handle_lec_err(dev, dpsr & LEC_UNUSED);
-+		}
-+	}
-+
- 	/* other unproccessed error interrupts */
- 	m_can_handle_other_err(dev, irqstatus);
- 
+Changes since v2:
+ - Addressed review comments by Rob Herring.
+ - Addressed review comments by Krzysztof Kozlowski.
+ - Addressed review comments by Andi Shyti.
+
+Smitha T Murthy (15):
+  dt-bindings: media: s5p-mfc: Add new DT schema for MFC
+  dt-bindings: media: s5p-mfc: Add mfcv12 variant
+  media: s5p-mfc: Rename IS_MFCV10 macro
+  media: s5p-mfc: Add initial support for MFCv12
+  Documention: v4l: Documentation for VP9 CIDs.
+  media: v4l2: Add v4l2 control IDs for VP9 encoder.
+  media: s5p-mfc: Add support for VP9 encoder.
+  media: s5p-mfc: Add YV12 and I420 multiplanar format support
+  media: s5p-mfc: Add support for rate controls in MFCv12
+  media: s5p-mfc: Add support for UHD encoding.
+  media: s5p-mfc: Add support for DMABUF for encoder
+  media: s5p-mfc: Set context for valid case before calling try_run
+  media: s5p-mfc: Load firmware for each run in MFCv12.
+  media: s5p-mfc: DPB Count Independent of VIDIOC_REQBUF
+  arm64: dts: fsd: Add MFC related DT enteries
+
+ .../devicetree/bindings/media/s5p-mfc.txt     |  75 ---------
+ .../bindings/media/samsung,s5p-mfc.yaml       | 164 ++++++++++++++++++
+ .../media/v4l/ext-ctrls-codec.rst             | 167 +++++++
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  21 +
+ .../platform/samsung/s5p-mfc/regs-mfc-v12.h   |  60 +++
+ .../platform/samsung/s5p-mfc/regs-mfc-v7.h    |   1 +
+ .../platform/samsung/s5p-mfc/regs-mfc-v8.h    |   3 +
+ .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  36 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c |   3 +
+ .../platform/samsung/s5p-mfc/s5p_mfc_common.h |  56 ++-
+ .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |   9 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_dec.c    |  51 ++-
+ .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 410 +++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr.h    |  16 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c |  12 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 435 ++++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |   7 +-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  44 ++
+ include/uapi/linux/v4l2-controls.h            |  33 ++
+ 19 files changed, 1349 insertions(+), 203 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+ create mode 100644 drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
+
 -- 
 2.17.1
 
