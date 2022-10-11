@@ -2,370 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BC75FB9E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC385FB9E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJKRsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S229941AbiJKRsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJKRsT (ORCPT
+        with ESMTP id S229885AbiJKRsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:48:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A1F4B0D8;
-        Tue, 11 Oct 2022 10:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QbyueNdz5ktWQYiaJAogjVJuk6d8QvogUuT/OZRZF9s=; b=AdLJrb9YQoNNqypB1pE3YR8rtD
-        9iS0hNVGDPx3KjuabbQSU51og2f+tO/fzvGiuBqhItXPE8o/qgGJs6LxK8xI7VftAelUcsNqAYIiw
-        aJ3flIKx9pbK1Oj9nwWxzU9qrhDUvi3lNxAAQ0Z6RqJ1jt3jH4hZGcKxzCqbGK51s0EVqowKZB0eH
-        aTpJZHDK/66lByhl+c2doIpJSMlL/vNbichcV9oF5I6PyjmcmBYhnQJqgRXf9qyGWuZo0Ai7y5QJ2
-        5cewfu0+17fSYzqlfx8Rnf5k9n6qp0qgk8zTVhExZHjKy3TF0KhwXYT9rpQlwkQfeb3RXMHgUEcj/
-        wNZBm4uQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oiJM6-002dEO-R7; Tue, 11 Oct 2022 17:47:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0188E30015F;
-        Tue, 11 Oct 2022 19:47:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D94412B123E21; Tue, 11 Oct 2022 19:47:48 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 19:47:48 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Message-ID: <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
- <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
- <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
- <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
+        Tue, 11 Oct 2022 13:48:35 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54BC4BD38;
+        Tue, 11 Oct 2022 10:48:34 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso16786273fac.6;
+        Tue, 11 Oct 2022 10:48:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XFEDgKRLNBXIcQQzG3utcKdq1fAEvCe7vcubsOS0pX8=;
+        b=YeRbJuyKX79RudwGWkXmF9v5+N5e6njLqeM6LPkjH8f1GAZTQ+sVieYvFgaIKZWfQX
+         otTQBmV4YoIfIZBrVXVWmR45kI4yhZlLglyi+LbGdH8uns77RocP+D1SJ3PnJWHKPvZr
+         6ksx+8ZJ+a/IT0Aundc029cPjjJQdmzF/SB1mJTxzV6YQqqD/0vzwJkbVgw0KyTZybZk
+         UV40jbdxkW+myg8YS8VAgwQily4tUmL9+3XJi+p0rBl9rTjAfOHCCr7UpI88f8U5KJFP
+         ia2hZW3dqXvet83z9gC6oj6M7PxgXmJRVM0ZjuaFAnbQvpMI9yEoVErzAkhQBfMW1RVZ
+         7adA==
+X-Gm-Message-State: ACrzQf1E8zYXRTwkzXYqoKcdU4LGyaFKKt6/7wP71bfL961oPwYpQF7K
+        XKv47prgad3ua1D6vgSUlk+tbJzArRFpMKUCoRE=
+X-Google-Smtp-Source: AMsMyM66bgb9X76VWSKpfpzMqYCIBKG1unh2EwtVeopVQm7t7fTpcpWmVH3/lff8MkTOECp7z/au55vCQzqoKcWTBsQ=
+X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
+ q44-20020a05687082ac00b00133034b6f10mr203116oae.218.1665510513845; Tue, 11
+ Oct 2022 10:48:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926144948.223641-1-james.clark@arm.com> <20220926144948.223641-2-james.clark@arm.com>
+ <d18181a2-ce9c-5d7f-17ca-43154fc6470f@arm.com>
+In-Reply-To: <d18181a2-ce9c-5d7f-17ca-43154fc6470f@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 11 Oct 2022 10:48:22 -0700
+Message-ID: <CAM9d7ci3+gq6avXuhBsPH_v8PQDFJY=4JFOG9_BQ7xvEFazZTw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] perf test: Fix attr tests for PERF_FORMAT_LOST
+To:     James Clark <james.clark@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 04:02:56PM +0200, Peter Zijlstra wrote:
-> On Tue, Oct 11, 2022 at 06:49:55PM +0530, Ravi Bangoria wrote:
-> > On 11-Oct-22 4:59 PM, Peter Zijlstra wrote:
-> > > On Sat, Oct 08, 2022 at 11:54:24AM +0530, Ravi Bangoria wrote:
-> > > 
-> > >> +static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
-> > >> +					  struct perf_event_context *next_ctx)
-> > >> +{
-> > >> +	struct perf_event_pmu_context *prev_epc, *next_epc;
-> > >> +
-> > >> +	if (!prev_ctx->nr_task_data)
-> > >> +		return;
-> > >> +
-> > >> +	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
-> > >> +				    struct perf_event_pmu_context,
-> > >> +				    pmu_ctx_entry);
-> > >> +	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
-> > >> +				    struct perf_event_pmu_context,
-> > >> +				    pmu_ctx_entry);
-> > >> +
-> > >> +	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
-> > >> +	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
-> > >> +
-> > >> +		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
-> > >> +
-> > >> +		/*
-> > >> +		 * PMU specific parts of task perf context can require
-> > >> +		 * additional synchronization. As an example of such
-> > >> +		 * synchronization see implementation details of Intel
-> > >> +		 * LBR call stack data profiling;
-> > >> +		 */
-> > >> +		if (prev_epc->pmu->swap_task_ctx)
-> > >> +			prev_epc->pmu->swap_task_ctx(prev_epc, next_epc);
-> > >> +		else
-> > >> +			swap(prev_epc->task_ctx_data, next_epc->task_ctx_data);
-> > > 
-> > > Did I forget to advance the iterators here?
-> > 
-> > Yeah. Seems so. I overlooked it too.
-> 
-> OK; so I'm not slowly going crazy staring at this code ;-) Let me go add
-> it now then. :-)
-> 
-> But first I gotta taxi the kids around for a bit, bbl.
+Hi James,
 
-OK, so I've been going over the perf_event_pmu_context life-time thing
-as well, there were a bunch of XXXs there and I'm not sure Im happy with
-things, but I'd also forgotten most of it.
+On Tue, Oct 11, 2022 at 6:00 AM James Clark <james.clark@arm.com> wrote:
+>
+>
+>
+> On 26/09/2022 15:49, James Clark wrote:
+> > Since PERF_FORMAT_LOST was added, the default read format has that bit
+> > set, so add it to the tests. When running on an older kernel the tests
+> > will still fail because Perf will not set that bit.
+> >
+> > This fixes the following failure:
+> >
+> >   expected read_format=0|4, got 20
+> >   FAILED './tests/attr/test-record-C0' - match failure
+> >
+> > Fixes: 85b425f31c88 ("perf record: Set PERF_FORMAT_LOST by default")
+> > Signed-off-by: James Clark <james.clark@arm.com>
+> > ---
+> >  tools/perf/tests/attr/base-record                | 2 +-
+> >  tools/perf/tests/attr/system-wide-dummy          | 2 +-
+> >  tools/perf/tests/attr/test-record-group          | 4 ++--
+> >  tools/perf/tests/attr/test-record-group-sampling | 6 +++---
+> >  tools/perf/tests/attr/test-record-group1         | 4 ++--
+> >  tools/perf/tests/attr/test-record-group2         | 4 ++--
+> >  6 files changed, 11 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/base-record
+> > index 8c10955eff93..9758e22daf9c 100644
+> > --- a/tools/perf/tests/attr/base-record
+> > +++ b/tools/perf/tests/attr/base-record
+> > @@ -9,7 +9,7 @@ size=128
+> >  config=0
+> >  sample_period=*
+> >  sample_type=263
+> > -read_format=0|4
+> > +read_format=0|20
+>
+> Hi Namhyung,
+>
+> Did you manage to take a look at this review? Are you ok with it being
+> 0|20 or should I change it to 0|4|20?
 
-Ideally epc works like it's a regular member of ctx -- locking wise that
-is, but I'm not sure we can make that stick -- see the ctx->mutex issues
-we have with put_ctx().
+I'm sorry I missed this.  It'd be nice if it can succeed on old kernels too.
+Please go with 0|4|20 and the like.
 
-As such, I'm going to have to re-audit all the epc usage to see if
-pure ctx->lock is sufficient.
+Thanks,
+Namhyung
 
-I did do make epc RCU freed, because pretty much everything is and that
-was easy enough to make happen -- it means we don't need to worry about
-that.
 
-But I'm going cross-eyes from staring at this all day, so more tomorrow.
-The below is what I currently have.
-
----
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -833,13 +833,13 @@ struct perf_event {
-  *           `--------[1:n]---------'     `-[n:1]-> pmu <-[1:n]-'
-  *
-  *
-- * XXX destroy epc when empty
-- *   refcount, !rcu
-+ * epc lifetime is refcount based and RCU freed (similar to perf_event_context).
-+ * epc locking is as if it were a member of perf_event_context; specifically:
-  *
-- * XXX epc locking
-+ *   modification, both: ctx->mutex && ctx->lock
-+ *   reading, either: ctx->mutex || ctx->lock
-  *
-- *   event->pmu_ctx            ctx->mutex && inactive
-- *   ctx->pmu_ctx_list         ctx->mutex && ctx->lock
-+ * XXX except this isn't true ... see put_pmu_ctx().
-  *
-  */
- struct perf_event_pmu_context {
-@@ -857,6 +857,7 @@ struct perf_event_pmu_context {
- 	unsigned int			nr_events;
- 
- 	atomic_t			refcount; /* event <-> epc */
-+	struct rcu_head			rcu_head;
- 
- 	void				*task_ctx_data; /* pmu specific data */
- 	/*
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -1727,6 +1727,10 @@ perf_event_groups_next(struct perf_event
- 	return NULL;
- }
- 
-+#define perf_event_groups_for_cpu_pmu(event, groups, cpu, pmu)		\
-+	for (event = perf_event_groups_first(groups, cpu, pmu, NULL);	\
-+	     event; event = perf_event_groups_next(event, pmu))
-+
- /*
-  * Iterate through the whole groups tree.
-  */
-@@ -3366,6 +3370,14 @@ static void perf_event_sync_stat(struct
- 	}
- }
- 
-+#define list_for_each_entry_double(pos1, pos2, head1, head2, member)	\
-+	for (pos1 = list_first_entry(head1, typeof(*pos1), member),	\
-+	     pos2 = list_first_entry(head2, typeof(*pos2), member);	\
-+	     !list_entry_is_head(pos1, head1, member) &&		\
-+	     !list_entry_is_head(pos2, head2, member);			\
-+	     pos1 = list_next_entry(pos1, member),			\
-+	     pos2 = list_next_entry(pos2, member))
-+
- static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
- 					  struct perf_event_context *next_ctx)
- {
-@@ -3374,16 +3386,9 @@ static void perf_event_swap_task_ctx_dat
- 	if (!prev_ctx->nr_task_data)
- 		return;
- 
--	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
--				    struct perf_event_pmu_context,
--				    pmu_ctx_entry);
--	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
--				    struct perf_event_pmu_context,
--				    pmu_ctx_entry);
--
--	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
--	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
--
-+	list_for_each_entry_double(prev_epc, next_epc,
-+				   &prev_ctx->pmu_ctx_list, &next_ctx->pmu_ctx_list,
-+				   pmu_ctx_entry) {
- 		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
- 
- 		/*
-@@ -3706,7 +3711,6 @@ static noinline int visit_groups_merge(s
- 		perf_assert_pmu_disabled((*evt)->pmu_ctx->pmu);
- 	}
- 
--
- 	min_heapify_all(&event_heap, &perf_min_heap);
- 
- 	while (event_heap.nr) {
-@@ -3845,7 +3849,6 @@ ctx_sched_in(struct perf_event_context *
- 		/* start ctx time */
- 		__update_context_time(ctx, false);
- 		perf_cgroup_set_timestamp(cpuctx);
--		// XXX ctx->task =? task
- 		/*
- 		 * CPU-release for the below ->is_active store,
- 		 * see __load_acquire() in perf_event_time_now()
-@@ -4815,6 +4818,15 @@ find_get_pmu_context(struct pmu *pmu, st
- 
- 	__perf_init_event_pmu_context(new, pmu);
- 
-+	/*
-+	 * XXX
-+	 *
-+	 * lockdep_assert_held(&ctx->mutex);
-+	 *
-+	 * can't because perf_event_init_task() doesn't actually hold the
-+	 * child_ctx->mutex.
-+	 */
-+
- 	raw_spin_lock_irq(&ctx->lock);
- 	list_for_each_entry(epc, &ctx->pmu_ctx_list, pmu_ctx_entry) {
- 		if (epc->pmu == pmu) {
-@@ -4849,6 +4861,14 @@ static void get_pmu_ctx(struct perf_even
- 	WARN_ON_ONCE(!atomic_inc_not_zero(&epc->refcount));
- }
- 
-+static void free_epc_rcu(struct rcu_head *head)
-+{
-+	struct perf_event_pmu_context *epc = container_of(head, typeof(*epc), rcu_head);
-+
-+	kfree(epc->task_ctx_data);
-+	kfree(epc);
-+}
-+
- static void put_pmu_ctx(struct perf_event_pmu_context *epc)
- {
- 	unsigned long flags;
-@@ -4859,7 +4879,14 @@ static void put_pmu_ctx(struct perf_even
- 	if (epc->ctx) {
- 		struct perf_event_context *ctx = epc->ctx;
- 
--		// XXX ctx->mutex
-+		/*
-+		 * XXX
-+		 *
-+		 * lockdep_assert_held(&ctx->mutex);
-+		 *
-+		 * can't because of the call-site in _free_event()/put_event()
-+		 * which isn't always called under ctx->mutex.
-+		 */
- 
- 		WARN_ON_ONCE(list_empty(&epc->pmu_ctx_entry));
- 		raw_spin_lock_irqsave(&ctx->lock, flags);
-@@ -4874,17 +4901,15 @@ static void put_pmu_ctx(struct perf_even
- 	if (epc->embedded)
- 		return;
- 
--	kfree(epc->task_ctx_data);
--	kfree(epc);
-+	call_rcu(&epc->rcu_head, free_epc_rcu);
- }
- 
- static void perf_event_free_filter(struct perf_event *event);
- 
- static void free_event_rcu(struct rcu_head *head)
- {
--	struct perf_event *event;
-+	struct perf_event *event = container_of(head, typeof(*event), rcu_head);
- 
--	event = container_of(head, struct perf_event, rcu_head);
- 	if (event->ns)
- 		put_pid_ns(event->ns);
- 	perf_event_free_filter(event);
-@@ -12643,13 +12668,6 @@ perf_event_create_kernel_counter(struct
- 		goto err_alloc;
- 	}
- 
--	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
--	if (IS_ERR(pmu_ctx)) {
--		err = PTR_ERR(pmu_ctx);
--		goto err_ctx;
--	}
--	event->pmu_ctx = pmu_ctx;
--
- 	WARN_ON_ONCE(ctx->parent_ctx);
- 	mutex_lock(&ctx->mutex);
- 	if (ctx->task == TASK_TOMBSTONE) {
-@@ -12657,6 +12675,13 @@ perf_event_create_kernel_counter(struct
- 		goto err_unlock;
- 	}
- 
-+	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
-+	if (IS_ERR(pmu_ctx)) {
-+		err = PTR_ERR(pmu_ctx);
-+		goto err_unlock;
-+	}
-+	event->pmu_ctx = pmu_ctx;
-+
- 	if (!task) {
- 		/*
- 		 * Check if the @cpu we're creating an event for is online.
-@@ -12668,13 +12693,13 @@ perf_event_create_kernel_counter(struct
- 			container_of(ctx, struct perf_cpu_context, ctx);
- 		if (!cpuctx->online) {
- 			err = -ENODEV;
--			goto err_unlock;
-+			goto err_pmu_ctx;
- 		}
- 	}
- 
- 	if (!exclusive_event_installable(event, ctx)) {
- 		err = -EBUSY;
--		goto err_unlock;
-+		goto err_pmu_ctx;
- 	}
- 
- 	perf_install_in_context(ctx, event, event->cpu);
-@@ -12683,9 +12708,10 @@ perf_event_create_kernel_counter(struct
- 
- 	return event;
- 
-+err_pmu_ctx:
-+	put_pmu_ctx(pmu_ctx);
- err_unlock:
- 	mutex_unlock(&ctx->mutex);
--err_ctx:
- 	perf_unpin_context(ctx);
- 	put_ctx(ctx);
- err_alloc:
-@@ -12702,9 +12728,7 @@ static void __perf_pmu_remove(struct per
- {
- 	struct perf_event *event, *sibling;
- 
--	for (event = perf_event_groups_first(groups, cpu, pmu, NULL);
--	     event; event = perf_event_groups_next(event, pmu)) {
--
-+	perf_event_groups_for_cpu_pmu(event, groups, cpu, pmu) {
- 		perf_remove_from_context(event, 0);
- 		unaccount_event_cpu(event, cpu);
- 		put_pmu_ctx(event->pmu_ctx);
-@@ -12998,7 +13022,7 @@ void perf_event_free_task(struct task_st
- 	struct perf_event_context *ctx;
- 	struct perf_event *event, *tmp;
- 
--	ctx = rcu_dereference(task->perf_event_ctxp);
-+	ctx = rcu_access_pointer(task->perf_event_ctxp);
- 	if (!ctx)
- 		return;
- 
+>
+> >  disabled=1
+> >  inherit=1
+> >  pinned=0
+> > diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/attr/system-wide-dummy
+> > index 86a15dd359d9..0df8a997fe51 100644
+> > --- a/tools/perf/tests/attr/system-wide-dummy
+> > +++ b/tools/perf/tests/attr/system-wide-dummy
+> > @@ -11,7 +11,7 @@ size=128
+> >  config=9
+> >  sample_period=4000
+> >  sample_type=455
+> > -read_format=4
+> > +read_format=20
+> >  # Event will be enabled right away.
+> >  disabled=0
+> >  inherit=1
+> > diff --git a/tools/perf/tests/attr/test-record-group b/tools/perf/tests/attr/test-record-group
+> > index 14ee60fd3f41..09aa40af841c 100644
+> > --- a/tools/perf/tests/attr/test-record-group
+> > +++ b/tools/perf/tests/attr/test-record-group
+> > @@ -7,14 +7,14 @@ ret     = 1
+> >  fd=1
+> >  group_fd=-1
+> >  sample_type=327
+> > -read_format=4
+> > +read_format=20
+> >
+> >  [event-2:base-record]
+> >  fd=2
+> >  group_fd=1
+> >  config=1
+> >  sample_type=327
+> > -read_format=4
+> > +read_format=20
+> >  mmap=0
+> >  comm=0
+> >  task=0
+> > diff --git a/tools/perf/tests/attr/test-record-group-sampling b/tools/perf/tests/attr/test-record-group-sampling
+> > index 300b9f7e6d69..3ad68c3405c8 100644
+> > --- a/tools/perf/tests/attr/test-record-group-sampling
+> > +++ b/tools/perf/tests/attr/test-record-group-sampling
+> > @@ -7,7 +7,7 @@ ret     = 1
+> >  fd=1
+> >  group_fd=-1
+> >  sample_type=343
+> > -read_format=12
+> > +read_format=28
+> >  inherit=0
+> >
+> >  [event-2:base-record]
+> > @@ -21,8 +21,8 @@ config=3
+> >  # default | PERF_SAMPLE_READ
+> >  sample_type=343
+> >
+> > -# PERF_FORMAT_ID | PERF_FORMAT_GROUP
+> > -read_format=12
+> > +# PERF_FORMAT_ID | PERF_FORMAT_GROUP  | PERF_FORMAT_LOST
+> > +read_format=28
+> >  task=0
+> >  mmap=0
+> >  comm=0
+> > diff --git a/tools/perf/tests/attr/test-record-group1 b/tools/perf/tests/attr/test-record-group1
+> > index 3ffe246e0228..53e1ba38febc 100644
+> > --- a/tools/perf/tests/attr/test-record-group1
+> > +++ b/tools/perf/tests/attr/test-record-group1
+> > @@ -7,7 +7,7 @@ ret     = 1
+> >  fd=1
+> >  group_fd=-1
+> >  sample_type=327
+> > -read_format=4
+> > +read_format=20
+> >
+> >  [event-2:base-record]
+> >  fd=2
+> > @@ -15,7 +15,7 @@ group_fd=1
+> >  type=0
+> >  config=1
+> >  sample_type=327
+> > -read_format=4
+> > +read_format=20
+> >  mmap=0
+> >  comm=0
+> >  task=0
+> > diff --git a/tools/perf/tests/attr/test-record-group2 b/tools/perf/tests/attr/test-record-group2
+> > index 6b9f8d182ce1..ca21b5ce71aa 100644
+> > --- a/tools/perf/tests/attr/test-record-group2
+> > +++ b/tools/perf/tests/attr/test-record-group2
+> > @@ -9,7 +9,7 @@ group_fd=-1
+> >  config=0|1
+> >  sample_period=1234000
+> >  sample_type=87
+> > -read_format=12
+> > +read_format=28
+> >  inherit=0
+> >  freq=0
+> >
+> > @@ -19,7 +19,7 @@ group_fd=1
+> >  config=0|1
+> >  sample_period=6789000
+> >  sample_type=87
+> > -read_format=12
+> > +read_format=28
+> >  disabled=0
+> >  inherit=0
+> >  mmap=0
