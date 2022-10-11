@@ -2,205 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A315FB803
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5425FB806
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiJKQLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 12:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S229717AbiJKQMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 12:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiJKQLR (ORCPT
+        with ESMTP id S229635AbiJKQMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 12:11:17 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7FBA47C;
-        Tue, 11 Oct 2022 09:11:12 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id e62so17027707yba.6;
-        Tue, 11 Oct 2022 09:11:12 -0700 (PDT)
+        Tue, 11 Oct 2022 12:12:14 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8343F4B4A7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:12:13 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id 13so32502963ejn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vx/i4FLHOiBcikAiz6lqx8qMyGl3xkt/GHSt8Bt/HGc=;
-        b=coynS7KDkLZtM73+brpkJwrc2Gva+Eqcb/OYXg1s7sbirsQT3iUoZt2Z/8Ytc0ZnTm
-         9bRkY2UXJ3vGiUX/Ywwm5/3uK9hS13ykS+XYPLdqeVJ0IKnHNrJm4aV/GpSrC+14Z8uf
-         vTjvJY9sB20dWEMsB7TveF4nYYO8xWtHHnSF4AxxluCb3KHeY+xnxf2cFoNeJml1eLcu
-         j7bNNFXs6IlcrkiS1cdckyAQn6vguIdDtekuvw8/kvy9d9EZAaL7dgbu2jNQv2e9g95A
-         YzQ89L1eVzxdNA0AEmZkf/cGjLRfx3J622/+Jup2IKGjhYJi00WICSEoMe9UDOPpn4lW
-         umlg==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PnLUoFaU3blZOlls16zN1BYDLl6R08N8OQkYfhpp1PQ=;
+        b=C0S97wP61qMnHd5sJB8dTaMCofVkvWwpNFKzyBLfHfHg69DtfnQKBUje86/cdY7ndH
+         QJyVaozB2wOLzNa6bNcYv75uDXRT+qKu/n21yhSRgVEjyVsNVA8rhq/4MI+foJOIfp20
+         G+GgnnRGahMDmiXIwMT6kMrQI1oXZAyoKa+lpr8xhuVdVEaOpnvQuFkrleWctaliD3LB
+         NfEEDoInfqmEHnaAWV5GKhaUgG/27daamnXauCiGMf7gmteWQddeRkEDJ2MDdAxgTsRS
+         9GwDGScv9aoLFq0E42LVTakeoiuLbO9bdi4EPtN1bMm9pmCt0gHNe6+f/D/FFAYGYZyz
+         4bXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vx/i4FLHOiBcikAiz6lqx8qMyGl3xkt/GHSt8Bt/HGc=;
-        b=paRIwAq0mRzcdIQovmrRyjO9JOA0wHr33EZhAewFTm4eWOf+U0/l7IG95PURloL+XJ
-         ZSyBZ+MjAI+5k9BcIncCuEloNrYCjF0nAEVHbhtY/CTBXycruu/JL2Id+AHL2Zq36/I1
-         SNYBcoOx/hQcUBaDJyboNmTPaEc+mYPgYLVfjSm+yqsXl2q+S7kHfsz1TasQ58UVfn8L
-         nQVrqNnZoeKgoV3bn2rt50bCVSlbNhgMcUp0YtJuzpy9zlfoGXy3olVyzgcrm0Jz83Wv
-         lZ/oqiknejmgBJQRlHe7xCqLBgUnT8rNVDjMGJv+HiP4RR4tdRlbj7p0rBJK9sgn3BrO
-         Q0og==
-X-Gm-Message-State: ACrzQf2EE3Gdb8AL3O1XTnCU5c9pQn0iJ1KBIhk5pYBJVOh0yGiv84YS
-        Mu57bjBJI4z73SHydUZGVJoVmxytUfCKj5MhNTxegtNyL+k=
-X-Google-Smtp-Source: AMsMyM5fNSUzBEHycwQI5TfHiowXIh/3AO2kHM+sV2vQkDppfu0eXQgf9ZOtb40G9XbPbjrpP7yei5trSoP1ahno2PU=
-X-Received: by 2002:a05:6902:1146:b0:6bd:f92b:b014 with SMTP id
- p6-20020a056902114600b006bdf92bb014mr24330713ybu.175.1665504671479; Tue, 11
- Oct 2022 09:11:11 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PnLUoFaU3blZOlls16zN1BYDLl6R08N8OQkYfhpp1PQ=;
+        b=mnrXgun5XfFXVboqJCI6yjyFwzlHbqGrliGfp0blSilWJqGv8wyr7nObHIwaOBicX2
+         JHPoZXMzDQK8eRAtB01CMtrTS7xiXn5OvgalShzWXkmxg3TMogfxyXcvvSQsg8HiKiB9
+         CvS/XDwujjqHP3zR9LugDB1tmxHHNFUS9MEU3QFLTFfetjHJzjqPTRh9f9V90Fl/u2lE
+         7sjcXOEAKfOdl3Qs/NzdtWQOULXlTlBCsC3PZFJFCZSXURejCBpCRlNKAGovm3f1Rqb1
+         eczs75kLbr/uwcg5K7pEgWKqhaUWE1lOSuMQUZnCsea51AbdsdKGswgcDcUpSp69yHzJ
+         p0+Q==
+X-Gm-Message-State: ACrzQf2K/N/x3dzLcWgaHOMb6+AsyWvwIt60wDNB5tnndsfEbpK2A4PW
+        lUGBCfpo1aPovngxGLxzkots5QU6g6FAfUKfFKJAiA==
+X-Google-Smtp-Source: AMsMyM4z1eWSzZfxemacavXkYNnL4SVMx+5pP//9GryCIP9fr9/JFumBzMpiwxabLn0BH0YEyTwSbbBltx3ZQVlCMNY=
+X-Received: by 2002:a17:907:a068:b0:78d:cbcf:f7bc with SMTP id
+ ia8-20020a170907a06800b0078dcbcff7bcmr5857263ejc.519.1665504732114; Tue, 11
+ Oct 2022 09:12:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKXUXMzmfeF9K4SkUcR2i6T+ZqEXvwod4hOzCPfQowMJULy7eg@mail.gmail.com>
- <20221011155051.qgwfbbeeshvoaotj@revolver>
-In-Reply-To: <20221011155051.qgwfbbeeshvoaotj@revolver>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 11 Oct 2022 18:11:00 +0200
-Message-ID: <CAKXUXMxzsmQO=trGzA7DJVpLw6HTaRMrcYeyTfqeX-3r0-KaJw@mail.gmail.com>
-Subject: Re: Observed recent memory leak in __anon_vma_prepare
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        Matthew Wilcox <willy@infradead.org>
+References: <20221011104739.53262-1-Naresh.Solanki@9elements.com>
+ <20221011104739.53262-2-Naresh.Solanki@9elements.com> <d2c83c4f-653c-438e-a91a-d17b846dec5b@roeck-us.net>
+In-Reply-To: <d2c83c4f-653c-438e-a91a-d17b846dec5b@roeck-us.net>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Tue, 11 Oct 2022 21:42:01 +0530
+Message-ID: <CABqG17hBJBU2rZSq4qy6Fn=pDH9ezwL=Fjh5vhj_G0cge-07mQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 5:51 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+Hi Guenter,
+
+fan-common is intended for fan properties. i.e., those derived from
+fan datasheets.
+For min-rpm, some fans have minimum non zero rpm like 1900rpm below which
+the fan cannot run.
+
+But not sure what the best approach is but for chip specific setting
+it should be in
+chip specific DT schema. Suggestion?
+
+Regards,
+Naresh Solanki
+
+
+
+9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+Email:  naresh.solanki@9elements.com
+Mobile:  +91 9538631477
+
+Sitz der Gesellschaft: Bochum
+Handelsregister: Amtsgericht Bochum, HRB 17519
+Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
+
+Datenschutzhinweise nach Art. 13 DSGVO
+
+On Tue, 11 Oct 2022 at 20:30, Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> * Lukas Bulwahn <lukas.bulwahn@gmail.com> [221011 12:35]:
-> > Dear Liam, dear Matthew, dear all,
+> On 10/11/22 03:47, Naresh Solanki wrote:
+> > Add common fan properties bindings to a schema.
 > >
-> > The reproducer for the 'memory leak in __anon_vma_prepare' bug (see
-> > https://elisa-builder-00.iol.unh.edu/syzkaller-next/report?id=3113810b9abd3dfeb581759df93d3171d1a90f18)
-> > is reproducible, it is triggering the memory leak on the current
-> > mainline (commit 60bb8154d1d7), and it was not triggering on v6.0. My
-> > build config is a x86_64 defconfig.
+> > Bindings for fan controllers can reference the common schema for the
+> > fan
 > >
-> > My git bisection showed that:
+> > child nodes:
 > >
-> > 524e00b36e8c547f5582eef3fb645a8d9fc5e3df is the first bad commit
-> > commit 524e00b36e8c547f5582eef3fb645a8d9fc5e3df
-> > Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> > Date:   Tue Sep 6 19:48:48 2022 +0000
+> >    patternProperties:
+> >      "^fan@[0-2]":
+> >        type: object
+> >        allOf:
+> >          - $ref: fan-common.yaml#
 > >
-> > The git bisect log is below, note that the commits 7fdbd37da5c6,
-> > d0cf3dd47f0d and 0c563f148043 are marked good in the git bisect as
-> > they caused bugs "BUG: Bad rss-counter state mm: ... type:MM_ANONPAGES
-> > val:2". This bug report might have overshadowed the actual issue, and
-> > hence the bug might have been introduced earlier, but was only visible
-> > once the Bad rss-counter state bug disappeared.
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ---
+> >   .../devicetree/bindings/hwmon/fan-common.yaml | 80 ++++++++++++++++++=
++
+> >   1 file changed, 80 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common=
+.yaml
 > >
-> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/=
+Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > new file mode 100644
+> > index 000000000000..abc8375da646
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> > @@ -0,0 +1,80 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Common fan properties
+> > +
+> > +maintainers:
+> > +  - Naresh Solanki <naresh.solanki@9elements.com>
+> > +
+> > +properties:
+> > +  max-rpm:
+> > +    description:
+> > +      Max RPM supported by fan
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pulse-per-revolution:
+> > +    description:
+> > +      The number of pulse from fan sensor per revolution.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  target-rpm:
+> > +    description:
+> > +      Target RPM the fan should be configured during driver probe.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwm-frequency:
+> > +    description:
+> > +      PWM frequency for fan.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +
+> > +  pwm-polarity-inverse:
+> > +    description:
+> > +      PWM polarity for fan.
+> > +    type: boolean
+> > +
+> > +  label:
+> > +    description:
+> > +      Optional fan label
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +
 >
-> ...
+> Same question as before:
 >
-> > # first bad commit: [524e00b36e8c547f5582eef3fb645a8d9fc5e3df] mm:
-> > remove rb tree.
-> >
-> >
-> > If there is more information needed or other bisection to be done,
-> > please let me know.
+> How are additional common bindings, such as min-rpm or fan-divider
+> (also sometimes called fan-prescale) supposed to be handled ?
+> As additions to this schema, or individually in each driver needing/
+> using them ?
 >
->
-> Lukas,
->
-> Thanks for the report.  I am trying to reproduce this issue and have not
-> been able to trigger a memory leak.  So far I have built using the
-> defconfig from arch/x86/configs/x86_64_defconfig and run the C code from
-> the end of your report above.  It also produces some output that is not
-> captured in your report.  Are you sure it's the defconfig being used?
->
-> ------
-> # ./repro
-> write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such
-> file or directory
-> write to /proc/sys/net/core/bpf_jit_kallsyms failed: No such file or
-> directory
-> write to /proc/sys/net/core/bpf_jit_harden failed: No such file or
-> directory
-> write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such
-> file or directory
-> ------
->
-> Note your output does not mention softlockup or hung_task issues.  This
-> is on 6.0.0-rc3-00207-g524e00b36e8c.  It is also worth noting that the
-> resulting kernel does not have /sys/kernel/debug/kmemleak.
->
-> I have also tested your reproducer with my own config which does have
-> the kmemleak debug file, but it did not trigger a memory leak either.  I
-> suspect I am missing a config option?  Are you using gcc or clang?
->
-
-Liam,
-
-This is how I am building the kernel:
-
-make O=$BUILD defconfig && make O=$BUILD kvm_guest.config && \
-./scripts/kconfig/merge_config.sh -O $BUILD -r $BUILD/.config
-kernel/configs/syzkaller-recommended.config && \
-make O=$BUILD -j`nproc`
-
-My syzkaller-recommended.config is:
-
-CONFIG_KCOV=y
-CONFIG_KCOV_INSTRUMENT_ALL=y
-CONFIG_KCOV_ENABLE_COMPARISONS=y
-CONFIG_DEBUG_FS=y
-CONFIG_DEBUG_KMEMLEAK=y
-CONFIG_DEBUG_INFO=y
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-CONFIG_KALLSYMS=y
-CONFIG_KALLSYMS_ALL=y
-CONFIG_CONFIGFS_FS=y
-CONFIG_SECURITYFS=y
-# CONFIG_RANDOMIZE_BASE is not set
-CONFIG_KASAN=y
-CONFIG_KASAN_INLINE=y
-CONFIG_FAULT_INJECTION=y
-CONFIG_FAULT_INJECTION_DEBUG_FS=y
-CONFIG_FAULT_INJECTION_USERCOPY=y
-CONFIG_FAILSLAB=y
-CONFIG_FAIL_PAGE_ALLOC=y
-CONFIG_FAIL_MAKE_REQUEST=y
-CONFIG_FAIL_IO_TIMEOUT=y
-CONFIG_FAIL_FUTEX=y
-CONFIG_LOCKDEP=y
-CONFIG_PROVE_LOCKING=y
-CONFIG_DEBUG_ATOMIC_SLEEP=y
-CONFIG_PROVE_RCU=y
-CONFIG_DEBUG_VM=y
-CONFIG_FORTIFY_SOURCE=y
-CONFIG_HARDENED_USERCOPY=y
-CONFIG_LOCKUP_DETECTOR=y
-CONFIG_SOFTLOCKUP_DETECTOR=y
-CONFIG_HARDLOCKUP_DETECTOR=y
-CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
-CONFIG_DETECT_HUNG_TASK=y
-CONFIG_WQ_WATCHDOG=y
-CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=140
-CONFIG_RCU_CPU_STALL_TIMEOUT=100
-
-
-So, it is "defconfig" + syzkaller debug features; sorry for being a
-bit too brief in my first report.
-
-The gcc version is:
-gcc (Debian 8.3.0-6) 8.3.0
-Copyright (C) 2018 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-
-But I doubt that the gcc version is really relevant.
-
-I am running this in a pretty simple qemu instance. I can provide more
-information on my qemu setup if needed.
-
-Lukas
+> Thanks,
+> Guenter
