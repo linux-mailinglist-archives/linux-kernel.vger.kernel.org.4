@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01715FAD11
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E7B5FAD14
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJKGwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S229896AbiJKGyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiJKGws (ORCPT
+        with ESMTP id S229589AbiJKGyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:52:48 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A963280F5E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:52:46 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 204so12681768pfx.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:52:46 -0700 (PDT)
+        Tue, 11 Oct 2022 02:54:04 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F22A80BD8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:54:03 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id i7-20020a17090a65c700b0020ad9666a86so15145036pjs.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:54:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IhQCr2/mj1To+oAjfcYwW5DtgdU/tRz+Z1vgx/smBpw=;
-        b=EIoaKf6Yioci3SpU35lj7pBWNJWY29BnptxpIevAzLWRb0fMQXSAVg9RZeBejpc3b/
-         K6wswV5lkxcUX4noYIDUBvyRvXOK6DPTR/4tj1vT3l3HGO5FM2HjorhVjmt6xdSWwky9
-         uMqRZskWt17tEX3HrKN2vJQhvQ2SrbWzknXc0=
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sga1zyvqspSHTBK1MtPA6ZPMPuSJOrHoE2GS0bxhLWQ=;
+        b=VnQ6xnBuVEotqAa9gM/q37YrprAvxlQ0OjmdCa7vk6kGUznFNA5OL0YLN7d6hfFkaB
+         kL/CR2JMoYASUIJad8x0f8//OEqqeBw+MXO2dGrHo9C1IjySxeBaCzQae+duEHbZ5VGh
+         o5DIeJPzmQ7h0KMT4bBpaRS7P1qRUkw1h5ra4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IhQCr2/mj1To+oAjfcYwW5DtgdU/tRz+Z1vgx/smBpw=;
-        b=zg/IwBXFw8nlt8ZesDfrLrsQdf1jvM5Lyh83bAADSYQeRKfJaIP/5+zpvvT1Bml92v
-         de8iZUaJV4DbZv1SJRsiz/kW2PXkxqG8EOnxxAc/sDqzhG1DQTKbwAEPg8uqdTHIBby4
-         FHDCGM2Lc7R6wT9aJk3vbb0VQRQ+TJKD1fQiaCtryYAyZwFjTofRwmmppGdLPfFjRs8X
-         nQr7vSHCkiuvJYPpwH5Zp1GNM/6ajWqroBChEA5eZLt1p9qe7YabzxHKIfX2xDHMhEH/
-         2YFr/GaNExORr0V67k2WhXeG48vVcloM7bx8rGqXqBYXLBiqY6Ykcs5hbHx6cYsJ7HJE
-         6VBg==
-X-Gm-Message-State: ACrzQf3YxrrJpF2LMKyhYWYw7ykgklCp/un7YHAuhRiYTKFtgUTHj7JG
-        qNVj9A9L461YhZLCj2mKX5t+0A==
-X-Google-Smtp-Source: AMsMyM6Kqhfv3NRPyt5rnHl2Q1aXOBuD+1vkAjs24JUi0+hR4+9li1k2ug5+2Md9Hy66LdAUpxUW6w==
-X-Received: by 2002:a05:6a00:e1b:b0:537:7c74:c405 with SMTP id bq27-20020a056a000e1b00b005377c74c405mr23253507pfb.43.1665471166164;
-        Mon, 10 Oct 2022 23:52:46 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sga1zyvqspSHTBK1MtPA6ZPMPuSJOrHoE2GS0bxhLWQ=;
+        b=CKB575xk1yVOhiOhLR346e7qJ1AG003CPwrQKyVpXiBFfF4QpxggGt+Npy/Ki1SWlf
+         f5YD2l1/ASE87jz+QQbJIqLwvFsbhemLDdJBm+aXGpgjZbWyTvfbTRK5ZfnToH4YVLIb
+         GtPESVtNzKvWvoPg1X5EnA/5UO3jDhaeCOov+pXkR3ATHOusIRfuTutxOLftUwCw07/K
+         ZLrRU9Kip6nTx+LMCyrD9BmVcPJ2/0ZECzL1+mEzhelAy5dQyJIZlkggOGsu/wgWjHnX
+         ulOX5wZtaK18C81zDIkAn8qb2CYdIexdKJa34AUCseg7tWTXRKMLmK5BDwcL55LUhDeb
+         B97g==
+X-Gm-Message-State: ACrzQf3ijf2t7usnMi5CvrdGqxBkBEfZWcCiHhV10GRjOvN7J/1UOyOx
+        Tt1nMKlZuAlHeeOTJeU66+9xKQ==
+X-Google-Smtp-Source: AMsMyM6NBkHG6BwYBxJhQvcR1RK23iSxIGICYMdvhAsd+Dr1M6D4z3tY2Fra1/RXzh/3MrvXzjBv5w==
+X-Received: by 2002:a17:90a:c984:b0:20a:ac88:d39d with SMTP id w4-20020a17090ac98400b0020aac88d39dmr35350554pjt.13.1665471242729;
+        Mon, 10 Oct 2022 23:54:02 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n12-20020a170902e54c00b0017ca9f4d22fsm7812359plf.209.2022.10.10.23.52.45
+        by smtp.gmail.com with ESMTPSA id h62-20020a628341000000b0056286c552ecsm8048364pfe.184.2022.10.10.23.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 23:52:45 -0700 (PDT)
+        Mon, 10 Oct 2022 23:54:02 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 23:54:01 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] NFS: Avoid memcpy() run-time warning for struct sockaddr overflows
-Date:   Mon, 10 Oct 2022 23:52:43 -0700
-Message-Id: <20221011065243.583650-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     lkp@lists.01.org, lkp@intel.com, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: Re: [fortify] 54d9469bc5:
+ WARNING:at_fs/nfs/namespace.c:#nfs_d_automount
+Message-ID: <202210102352.B80BC62@keescook>
+References: <202210110948.26b43120-yujie.liu@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3123; h=from:subject; bh=jFWeG4mKZjaCTmVttsBT+shSjRAcSAR+gkBCMpwmSmY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRRK7yqXTcuhapb8wt0RJRmg09UAG/TKO7oglxRdW fUaVX0eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0USuwAKCRCJcvTf3G3AJvslD/ 9rMzqrDJsGp2lh6GKEvBs28bCjDeXE2T7Cxi/kcY7Ig0nB2jUPlBR154A5lHiv13nNOwzwYRI8KyzS EY4dr1JmOCtv+YV8friFXHDCl/XZH/sgm5ZORmxYe6eOhEtirlIUrtNX6L2H7OQaEZNJaxs95oTIcn YbVhs1hld/dcMc59jYatSH3UvFuxEtJuyYnSRrOShtEswSY7LN0JOlH4A/obtgk/TMuUAaPoSz5AGp 1eKqmPrd+J5xsxjSBgtpMai2oXbOCNGPKl32MVK4dtw+6q/TrOQefDa2Vuzyjiw/jQKyUPXCjkIaku uo+eA0VlKL38fsrRvDCWq/cnmMPLEhrhnre7qxrUPdXACIy/wmnDK/k0fyv89RZsJDM9mUris0UeQh 2K4j8XalOzH/JRH1fCx18YAEmk1S++Np4r+JZcljnvMTZxMQlbeBkGsC15XIbrnBKZHPn/zG/HVW6n ze9+P+Cw8kHf70qSXdAhM05uuXIPOCA1sWdgyj+dPDBO+e9y83MomkH2GLt+5M8fXvH2R52BwsRVyt Rf4KB0xdwYx411OgsdlBB7xBIHvxsZu7ifi9sism/ahCDpaE+IKFQofw2dadbmqQWO3hQU+oBCktaV uyC7fxejf/vGiBTuy7wdoKunj/0T2Z3k1r/qZvsT7MupKRZ3/hClJhm5HQFQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210110948.26b43120-yujie.liu@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -70,77 +70,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'nfs_server' and 'mount_server' structures include a union of
-'struct sockaddr' (with the older 16 bytes max address size) and
-'struct sockaddr_storage' which is large enough to hold all the supported
-sa_family types (128 bytes max size). The runtime memcpy() buffer overflow
-checker is seeing attempts to write beyond the 16 bytes as an overflow,
-but the actual expected size is that of 'struct sockaddr_storage'. Adjust
-the pointers to the correct union member. Avoids this false positive
-run-time warning under CONFIG_FORTIFY_SOURCE:
+On Tue, Oct 11, 2022 at 11:45:56AM +0800, kernel test robot wrote:
+> FYI, we noticed the following commit (built with gcc-11):
+> 
+> commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 ("fortify: Add run-time WARN for cross-field memcpy()")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> [...]
+> [   57.256986][ T4357] memcpy: detected field-spanning write (size 28) of single field "&ctx->nfs_server.address" at fs/nfs/namespace.c:178 (size 16)
 
-  memcpy: detected field-spanning write (size 28) of single field "&ctx->nfs_server.address" at fs/nfs/namespace.c:178 (size 16)
+Thanks for the report! I've sent a patch for this now:
+https://lore.kernel.org/lkml/20221011065243.583650-1-keescook@chromium.org/
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/all/202210110948.26b43120-yujie.liu@intel.com
-Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc: Anna Schumaker <anna@kernel.org>
-Cc: linux-nfs@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/nfs/fs_context.c | 2 +-
- fs/nfs/namespace.c  | 2 +-
- fs/nfs/super.c      | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
-index 4da701fd1424..bffa31bb35b9 100644
---- a/fs/nfs/fs_context.c
-+++ b/fs/nfs/fs_context.c
-@@ -1540,7 +1540,7 @@ static int nfs_init_fs_context(struct fs_context *fc)
- 		ctx->version		= nfss->nfs_client->rpc_ops->version;
- 		ctx->minorversion	= nfss->nfs_client->cl_minorversion;
- 
--		memcpy(&ctx->nfs_server.address, &nfss->nfs_client->cl_addr,
-+		memcpy(&ctx->nfs_server._address, &nfss->nfs_client->cl_addr,
- 			ctx->nfs_server.addrlen);
- 
- 		if (fc->net_ns != net) {
-diff --git a/fs/nfs/namespace.c b/fs/nfs/namespace.c
-index 3295af4110f1..2f336ace7555 100644
---- a/fs/nfs/namespace.c
-+++ b/fs/nfs/namespace.c
-@@ -175,7 +175,7 @@ struct vfsmount *nfs_d_automount(struct path *path)
- 	}
- 
- 	/* for submounts we want the same server; referrals will reassign */
--	memcpy(&ctx->nfs_server.address, &client->cl_addr, client->cl_addrlen);
-+	memcpy(&ctx->nfs_server._address, &client->cl_addr, client->cl_addrlen);
- 	ctx->nfs_server.addrlen	= client->cl_addrlen;
- 	ctx->nfs_server.port	= server->port;
- 
-diff --git a/fs/nfs/super.c b/fs/nfs/super.c
-index 82944e14fcea..8ea7dfdea427 100644
---- a/fs/nfs/super.c
-+++ b/fs/nfs/super.c
-@@ -823,7 +823,7 @@ static int nfs_request_mount(struct fs_context *fc,
- 	struct nfs_fs_context *ctx = nfs_fc2context(fc);
- 	struct nfs_mount_request request = {
- 		.sap		= (struct sockaddr *)
--						&ctx->mount_server.address,
-+						&ctx->mount_server._address,
- 		.dirpath	= ctx->nfs_server.export_path,
- 		.protocol	= ctx->mount_server.protocol,
- 		.fh		= root_fh,
-@@ -854,7 +854,7 @@ static int nfs_request_mount(struct fs_context *fc,
- 	 * Construct the mount server's address.
- 	 */
- 	if (ctx->mount_server.address.sa_family == AF_UNSPEC) {
--		memcpy(request.sap, &ctx->nfs_server.address,
-+		memcpy(request.sap, &ctx->nfs_server._address,
- 		       ctx->nfs_server.addrlen);
- 		ctx->mount_server.addrlen = ctx->nfs_server.addrlen;
- 	}
 -- 
-2.34.1
-
+Kees Cook
