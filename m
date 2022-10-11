@@ -2,146 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3935FACD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C7A5FACDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiJKGck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S229851AbiJKGda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJKGch (ORCPT
+        with ESMTP id S229470AbiJKGd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:32:37 -0400
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E38FA88DCF
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:32:34 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowACXQEn3DUVjuM4qBA--.32718S2;
-        Tue, 11 Oct 2022 14:32:24 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     christophe.leroy@csgroup.eu, qiang.zhao@nxp.com, leoyang.li@nxp.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] soc: fsl: qe: Add check for ioremap
-Date:   Tue, 11 Oct 2022 14:32:22 +0800
-Message-Id: <20221011063222.43572-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Oct 2022 02:33:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFF8895D7;
+        Mon, 10 Oct 2022 23:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1665469999;
+        bh=qn+SZdvakhDX1IBq2SStvMbRkm9jyeNIq89B5EkZINQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Qrvbdd5MLjS2vF+q4GFW614cQwWh+zX+iSrEMmKSzsUnmwGTmccPV33XdzkF1Jn2M
+         zbDeVjN5fWT0p5dXCMNDK6ygTJPzVJRpzWWFmP0NpoFnp5DqAcjS54wUt1mwDKnP8x
+         +SFMwyIPrAh8vwoQG8LVC626yvXgbBTztofqFGBw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.132.182]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7zFj-1pDTJd3p9H-0153g3; Tue, 11
+ Oct 2022 08:33:18 +0200
+Message-ID: <cbb04b94-2345-08f8-5d6f-92d20d623055@gmx.de>
+Date:   Tue, 11 Oct 2022 08:33:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACXQEn3DUVjuM4qBA--.32718S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFW5KFWDuF1UJr48WFW7Jwb_yoW8tF1fpa
-        yDJFy5Ary5KFyxuan7Jwn5XF15ua4Ik3s3G3yvg3srCwnIq34DGrsaqFyj9FsxKrWFkryr
-        JF43J3Wa93WUtFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Cc:     linux-parisc@vger.kernel.org
+References: <20221010230613.1076905-1-Jason@zx2c4.com>
+ <20221010230613.1076905-6-Jason@zx2c4.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221010230613.1076905-6-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bZRZq51oYUetpQVixIHO78+7hcEbZZf3a3uefb9sg9ZNAQ+z+aC
+ cMV2LduzVBBzAvGLRRrqtBXTaqR8uQZwj9H3YH2EwuknXU0HN68djFYMFUbcOQnjt87SClx
+ gcc3+H419EljfqPD7pe7alfoe84wKqsnvRmGf7pcubVHNUnJZEN9JbuDb8xElJHOvQKktue
+ sj6psqp4yTu0Jdig3Dpeg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:60IcFl1Ya0E=:qvqV+3vVDd1+fCPWc7aCAv
+ teiJ0KCNsMG6ZQ+DqT/nssQMPoHAPkcqJCUghFzh80t+0z34ddc6NLYboCaur1hA4uy3ejpqv
+ LWq4sUAa3E5rc0hG5+KyWYmOhPk8Ml7fnkYi+elMjrryTKrpYMCHin1dV10hAqd3jqnWCnvuw
+ 8AQSpmt+eY7ZfEjRvSdsZzXbPE8V9MK7b11FQ98iZjKa7kQlD32v2wnDEnypSo3KPg//q7sbZ
+ +i9JNkZVqoIgUUVzBx85B1+JFs/gMqzb0bKT4t2fl8GB7J8LHiZshGw/wIcv/1qk/4F8syFwB
+ Vs31e+do0gA8lNZIPBj2F+cPPqLTguMhB92yyIhnhk7yD2wwNXIC3dyhEoLGo3KSMvf7KW8zH
+ v6LcPwspqwe21DtxlUDZKxwSR0dQ/BSFZOPWtsi+YGZojxpwwiqXF+GKwhb2tSWhX4Izz93b1
+ f8nRkem65F3dWRuUkPthEXAiPNZLMzGytCt2BgzomFBfg7vc1BcxoCBNkddpq3FFeB89TCl22
+ Mox+dGPGDK6PkT69tVrX7Qee1efAJ6qtHdlmockqp6RPpRpGAlhd//JyjagEe/CC2fm6Ib/Ix
+ oTsaAhGDwbjy8ANk0SXmRzenM6KPBFjnrhyZkd7rFK+zcJtOnJdqbL8DVF9UVEtmxq6o7GDlI
+ nu1HGDAEyCfLUfcNVepPIf0unyWJsoBFFew8odEePYocxrkaXtbKe0I3u6eoeuHpG0TfdUkPd
+ 3FEDot55aPURyxPzYxLUStH9mjRgBNlIS21vth68ODQBKmLcb4cqslGHQkSR6lbxWd8O0jYjB
+ SbTb6kOCvvDvoZYAaOU4nPdDD7zsAtxYaeF7hyNzBXMtLZAtxhR1FKiQAZmYtoOTwAq7bNEM9
+ Im0N+ZJ02smPhk0yuHrn21XjIxLkN7wjtTCf99fFcj2nek34zTKuqTd4VqzA3xcmuksXd8wRb
+ FKe1PD7w3lsE8zWIylE3iLH7WY4eGwlR3dJ2AyPzyEjxbLrWlxIDZrMxk8BILOH+8KuvgQbcv
+ xcVDjI3+7AJYrZNKZxzkodiDYHJGHC2IxgjptflS9aJsEmPAaYS6iaHL0SLLBf+L1mCmJ+M6N
+ j5MEZc5PynnY9h/jF3zX6BNTVdHV1BYoWVS5Xmfx8x7dRSN4Xw2DOot6+9QvXD8+siO3lJkM2
+ aaLEHov6WM99Qeg69JUMj8eGxzKadRKLC6DHwPJqKAgoXqiCUPU2+k27HiMxcAbKUkSjDBn//
+ C/R1AnM/r0NMm+yYL8QNfa0CR1Evq4uej5XSd8cSYFNmzg4+Jk3OwcDPJqPN8VD7mzEjHl6NR
+ AF4pQRjwkZjr7hufbhJNZPMBxttePaaE4YgTer2JfTj6LO+LEFQ/Bx8tl26ov4F1Ix+ZV87gV
+ oOx/8HeYWp1/Y511RK+9A1GTs7Hh+ixtdBld6mPeMWT6h3q1qMCpYnh9H2WrsEIZHvyGDyUTj
+ RLufKFU7kydWAPlg57SrhRqrsddQpf+jJOGPhcv3lt5kxYZB5A/ubxHCBoqcPk5vbiww5nlkJ
+ +YPBf+SzeXXqcYo21GJu5FiO9OpY93lA9YCnvr/DOdoWI
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As ioremap can return NULL pointer, it should
-be better to check the return value return error
-if fails.
-Moreover, the return value of qe_reset should be
-checked by cascade.
+On 10/11/22 01:06, Jason A. Donenfeld wrote:
+> The prandom_u32() function has been a deprecated inline wrapper around
+> get_random_u32() for several releases now, and compiles down to the
+> exact same code. Replace the deprecated wrapper with a direct call to
+> the real function. The same also applies to get_random_int(), which is
+> just a wrapper around get_random_u32(). This was done as a basic find
+> and replace.
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Yury Norov <yury.norov@gmail.com>
+> Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> # for sch_cake
+> Acked-by: Chuck Lever <chuck.lever@oracle.com> # for nfsd
+> Reviewed-by: Jan Kara <jack@suse.cz> # for ext4
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> # for thunde=
+rbolt
+> Acked-by: Darrick J. Wong <djwong@kernel.org> # for xfs
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Fixes: 68f047e3d62e ("fsl/qe: add rx_sync and tx_sync for TDM mode")
-Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Acked-by: Helge Deller <deller@gmx.de> # for parisc
 
-v1 -> v2:
 
-1. Change the position of the check for ioremap.
-2. Simplify the check for qe_reset.
-3. Remove the 'extern' keyword.
----
- drivers/soc/fsl/qe/qe.c | 12 ++++++++----
- include/soc/fsl/qe/qe.h |  4 ++--
- 2 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
-index b3c226eb5292..33f76cc5872e 100644
---- a/drivers/soc/fsl/qe/qe.c
-+++ b/drivers/soc/fsl/qe/qe.c
-@@ -83,11 +83,14 @@ static phys_addr_t get_qe_base(void)
- 	return qebase;
- }
- 
--void qe_reset(void)
-+int qe_reset(void)
- {
- 	if (qe_immr == NULL)
- 		qe_immr = ioremap(get_qe_base(), QE_IMMAP_SIZE);
- 
-+	if (qe_immr == NULL)
-+		return -ENOMEM;
-+
- 	qe_snums_init();
- 
- 	qe_issue_cmd(QE_RESET, QE_CR_SUBBLOCK_INVALID,
-@@ -98,6 +101,8 @@ void qe_reset(void)
- 
- 	if (qe_sdma_init())
- 		panic("sdma init failed!");
-+
-+	return 0;
- }
- 
- int qe_issue_cmd(u32 cmd, u32 device, u8 mcn_protocol, u32 cmd_input)
-@@ -644,9 +649,8 @@ static int __init qe_init(void)
- 	np = of_find_compatible_node(NULL, NULL, "fsl,qe");
- 	if (!np)
- 		return -ENODEV;
--	qe_reset();
- 	of_node_put(np);
--	return 0;
-+	return qe_reset();
- }
- subsys_initcall(qe_init);
- 
-@@ -654,7 +658,7 @@ subsys_initcall(qe_init);
- static int qe_resume(struct platform_device *ofdev)
- {
- 	if (!qe_alive_during_sleep())
--		qe_reset();
-+		return qe_reset();
- 	return 0;
- }
- 
-diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
-index b02e9fe69146..f6653f4b41df 100644
---- a/include/soc/fsl/qe/qe.h
-+++ b/include/soc/fsl/qe/qe.h
-@@ -84,9 +84,9 @@ extern spinlock_t cmxgcr_lock;
- 
- /* Export QE common operations */
- #ifdef CONFIG_QUICC_ENGINE
--extern void qe_reset(void);
-+int qe_reset(void);
- #else
--static inline void qe_reset(void) {}
-+static inline int qe_reset(void) {}
- #endif
- 
- int cpm_muram_init(void);
--- 
-2.25.1
+>   arch/parisc/kernel/process.c                   |  2 +-
+>   arch/parisc/kernel/sys_parisc.c                |  4 ++--
 
