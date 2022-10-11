@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02245FADD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0555FADD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiJKHwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 03:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S229796AbiJKHw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 03:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJKHvt (ORCPT
+        with ESMTP id S230017AbiJKHww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 03:51:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8C1A8997C;
-        Tue, 11 Oct 2022 00:51:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE40B106F;
-        Tue, 11 Oct 2022 00:51:52 -0700 (PDT)
-Received: from [10.57.1.254] (unknown [10.57.1.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 356923F766;
-        Tue, 11 Oct 2022 00:51:45 -0700 (PDT)
-Message-ID: <32ee5e63-5b0c-3869-c196-265444d008e9@arm.com>
-Date:   Tue, 11 Oct 2022 08:51:43 +0100
+        Tue, 11 Oct 2022 03:52:52 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4853F89CE9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=p5u8i9zTRRNLIolI+IkATTCyNCue1jMsbdlNvIHMfHI=; b=QPLMYOZHba/KAgbawU8wrdm/AD
+        O1ktBHTcIQfeEjGrxJXTCCOfz8l8br0GrJoaDKB+HmmyCPlKfgfG9Xc800t3yGMGJKzY/TabYG7WU
+        vxVLmSStNRZVCDIzqtauielfoZaSa3OpOAbYE0yhgaMulUgbvkaKPWSiMjRnSDDl/upQWs96hL6Ta
+        0LmopxOhLK6NyCvfrZs7GJwnulX9PAXJrUNVFaZjY6NAsTy+ZtUGXGr2TWVAJfE+lcOSDlk0fv/MG
+        I7orGrqq16AMGwKKExeR9P8cBIZrlJc0YF5fXSYOPQYupOxavRAR5aqbu/GzjiAdaq9sTCQKMbFUu
+        Be9Q+o+Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oiA3o-002WRT-A8; Tue, 11 Oct 2022 07:52:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 98BDB300445;
+        Tue, 11 Oct 2022 09:52:19 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7B96320D7E1AB; Tue, 11 Oct 2022 09:52:19 +0200 (CEST)
+Date:   Tue, 11 Oct 2022 09:52:19 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        tim.c.chen@intel.com, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Yu Liao <liaoyu15@huawei.com>
+Subject: Re: [PATCH] x86/tsc: Extend the watchdog check exemption to 4S/8S
+ machine
+Message-ID: <Y0Ugs/udnBh0Hv3C@hirez.programming.kicks-ass.net>
+References: <20221009051209.393377-1-feng.tang@intel.com>
+ <Y0LGLGW7RSlklKyl@hirez.programming.kicks-ass.net>
+ <Y0N0ENurfliW315D@feng-clx>
+ <aff10f33-b379-6872-f180-b38f6a0a669a@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/governors: Fix cooling device setting cooling
- state failure
-Content-Language: en-US
-To:     Qibo Huang <huangqibo.tech@gmail.com>
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, rafael@kernel.org
-References: <20221010144341.16738-1-huangqibo.tech@gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221010144341.16738-1-huangqibo.tech@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aff10f33-b379-6872-f180-b38f6a0a669a@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qibo,
-
-Thank you for using IPA and sending a patch. Unfortunately,
-this code cannot be added into the governor.
-
-On 10/10/22 15:43, Qibo Huang wrote:
-> Because the __thermal_cdev_update function traverses the
-> cooling_device->thermal_instances list to obtain the maximum
-> target state, and then the cooling device sets the maximum
-> cooling state. However, the power_actor_set_power function
-> only updates the target value of thermal_zone->thermal_instances
-> to the target state, and does not update the target value of
-> cooling_device->thermal_instances, resulting in the target
-> being 0 all the time.
+On Mon, Oct 10, 2022 at 07:23:10AM -0700, Dave Hansen wrote:
+> On 10/9/22 18:23, Feng Tang wrote:
+> >>> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> >>> index cafacb2e58cc..b4ea79cb1d1a 100644
+> >>> --- a/arch/x86/kernel/tsc.c
+> >>> +++ b/arch/x86/kernel/tsc.c
+> >>> @@ -1217,7 +1217,7 @@ static void __init check_system_tsc_reliable(void)
+> >>>  	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+> >>>  	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+> >>>  	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
+> >>> -	    nr_online_nodes <= 2)
+> >>> +	    nr_online_nodes <= 8)
+> >> So you're saying all 8 socket systems since Broadwell (?) are TSC
+> >> sync'ed ?
+> > No, I didn't mean that. I haven't got chance to any 8 sockets
+> > machine, and I got a report last month that on one 8S machine,
+> > the TSC was judged 'unstable' by HPET as watchdog.
 > 
-> Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
-> ---
->   drivers/thermal/gov_power_allocator.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> That's not a great check.  Think about numa=fake=4U, for instance.  Or a
+> single-socket system with persistent memory and high bandwidth memory.
 > 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index 2d1aeaba38a8..8a6a08906dd4 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -293,6 +293,7 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
->   		      struct thermal_instance *instance, u32 power)
->   {
->   	unsigned long state;
-> +	struct thermal_instance *cdev_instance;
->   	int ret;
->   
->   	ret = cdev->ops->power2state(cdev, power, &state);
-> @@ -300,6 +301,10 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
->   		return ret;
->   
->   	instance->target = clamp_val(state, instance->lower, instance->upper);
+> Basically 'nr_online_nodes' is a software construct.  It's going to be
+> really hard to infer anything from it about what the _hardware_ is.
 
-For our 'instance', which IPA was given be the framework, we set the new
-'target' value above.
+We have both c->phys_proc_id and c->logical_proc_id along with
+logical_packages.
 
-> +	list_for_each_entry(cdev_instance, &cdev->thermal_instances, cdev_node) {
-> +		if (cdev_instance->tz->id == instance->tz->id)
-> +			cdev_instance->target = state;
+I'm thinking you want something like max(c->phys_proc_id) <= 4. Because
+even if you only populate 4 sockets of an 8 socket server you're up a
+creek without no paddles.
 
-This is not the approach for the governor of a single thermal zone.
-Please check the implementation of the function below
-__thermal_cdev_update()
-You will see there the 'voting' code. This belongs to the framework
-code.
-
-> +	}
->   	mutex_lock(&cdev->lock);
->   	__thermal_cdev_update(cdev);
-
-This is the place where the right 'targe't is picked for cooling device
-from different thermal zones (and maybe governors). When a new target
-value is higher than other target values, the framework would throttle
-the device. Then other thermal framework are kicked to make this change
-propagated correctly.
-
-Also important, please see that this work is done under the
-cdev->lock. Not every code is safe to run, because e.g. this
-list cdev->thermal_instances might change in the meantime.
-
->   	mutex_unlock(&cdev->lock);
-
-Regards,
-Lukasz
+But it all comes down to how much drugs the firmware teams have had :/
+It is entirely possible to enumerate with phys_proc_id==42 on a 2 socket
+system.
