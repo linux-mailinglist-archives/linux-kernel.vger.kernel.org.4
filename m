@@ -2,156 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F085FB0D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09105FB0DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiJKK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S229499AbiJKLAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJKK5h (ORCPT
+        with ESMTP id S229495AbiJKLAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:57:37 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0093A5282B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:57:35 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id s3-20020a5eaa03000000b006bbdfc81c6fso4781204ioe.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:57:35 -0700 (PDT)
+        Tue, 11 Oct 2022 07:00:35 -0400
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27BC2CDD7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:00:33 -0700 (PDT)
+Received: by mail-pf1-f199.google.com with SMTP id 7-20020a056a00070700b0056264748f0fso7200489pfl.21
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:00:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M0qC+2Zxh/yll07tUtKXw60gt0zrPPh5YTAAcg0A6gA=;
-        b=SWCw3QKjQifO1sc0n2GZgCxdxVcA3M3VN0yR2CnrcKrBGIQZpjYkUeClrQ+L4WWhn9
-         sny6Sqx9opDbWa6Tzyvbmbp/VYENUSzNb70xCIfE+tBHF9J8hJSk7cIQBZrZtvoSTQf4
-         9ulpIqjZUMPGydD5Ph67iiD2CVAy7LGuMAZLH8PrpuEBH1Zw1xpfipswtbbwwzds3P3m
-         cAIz7gCeu/NlxdlrfLAZ83c2WDKneG8Feunqtdb8vvBOzXGJHEygVr2JGc6/CnNsRZMd
-         jItpwWjmux9LA4FQZ1GD2qAHcdxf0G3fSnXOF97+k+jpquEixWVGJSNvwdQFzbxEw6cw
-         26yg==
-X-Gm-Message-State: ACrzQf1j2V8xYjsu/y84mvLrT8yTvQZ2+2XYs6/8PHX+ReM4fiOolVlf
-        R++N51pR7gsS1n6PF/nCsi39viGMWmKc3RBgdFMj/+DOf00E
-X-Google-Smtp-Source: AMsMyM42XSbaOltlhhS5aYpEKY/4hYmilYM9l0wRq1Hdq9TYyjcJLDCDQhQo+n2bNip7YPZhTvTuv9As8zlR3YkeIiWMFHlpc9DN
+        bh=8OBupGJfUlsBck0WLDpt6ifV+vV4bqTkfborNc+/nxg=;
+        b=L7n1L8HR7ErQItp0o3Id7bGd6WOvPTMSi0ecujffrhn6Qos/7BIbtKtGmdM4SRuwKP
+         cZW1Qmu8b++7AOT12O06TWbKbfqOwMxDjur2kiUq2HoA7Ur3k3k+EY8b1psdcvfPwmCf
+         nRbBwS90p6Fw0uqCACcony5DLn0iQwmWSZH7lqkcar+4VmSRj+PX0sOK/R7zVWLT6a4I
+         NPPgWJ997Cl5oOAqk86yy/nrLi0Los4NEPiFXoxbxDw2I4ASoqs4yR69d3v7naWDvSJz
+         +1I1uEt4P5n8yhKcpWKEmTzHh4q2UD/tq2cGxlj2Z/N6+RPgUy7NCDaQbgfIA9x1PvEh
+         7Cdg==
+X-Gm-Message-State: ACrzQf2ZK0gUsUwn0kpH5D7r7dfk3nLIirrRgDzL5wjWtTJZOmA0PLx5
+        7zZZtEyblKgdtMD8E9hPxh0PWBhc83kQcg91bRA7kRk1uck5
+X-Google-Smtp-Source: AMsMyM6YbkfQy8kTEuw8w5ynkeuzS7bIkOFds9eGDyJisa4KJPH+sLLWrI4SlRZgcLJBOEm+m4raf163uo4w8S5Vju/W0NGFmWNY
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:ef0:b0:2f9:4403:8d28 with SMTP id
- j16-20020a056e020ef000b002f944038d28mr11317784ilk.193.1665485855384; Tue, 11
- Oct 2022 03:57:35 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 03:57:35 -0700
-In-Reply-To: <000000000000c2ac0405eaa934f3@google.com>
+X-Received: by 2002:a05:6602:26d4:b0:6a3:f88e:4852 with SMTP id
+ g20-20020a05660226d400b006a3f88e4852mr10343152ioo.55.1665486023284; Tue, 11
+ Oct 2022 04:00:23 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 04:00:23 -0700
+In-Reply-To: <4449089.LvFx2qVVIh@mypc>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c9e8a305eac02404@google.com>
-Subject: Re: [syzbot] general protection fault in __d_add
-From:   syzbot <syzbot+a8f26a403c169b7593fe@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Message-ID: <000000000000cbe1c005eac02e1a@google.com>
+Subject: Re: [syzbot] memory leak in __get_metapage
+From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hello,
 
-HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=140066b2880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=a8f26a403c169b7593fe
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1269583a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d7c1a4880000
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+memory leak in __get_metapage
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1dad1b149d9c/mount_0.gz
+BUG: memory leak
+unreferenced object 0xffff888115b53800 (size 128):
+  comm "syz-executor.0", pid 4198, jiffies 4294944352 (age 13.760s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f373>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c4f24e>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c4f24e>] __get_metapage+0x3ae/0xae0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c37cc2>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c396b4>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c396b4>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c3b4df>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c4c1da>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c2e937>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f0df3>] vfs_mkdir+0x223/0x340 fs/namei.c:4035
+    [<ffffffff815f9d65>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4060
+    [<ffffffff815f9ed9>] __do_sys_mkdir fs/namei.c:4080 [inline]
+    [<ffffffff815f9ed9>] __se_sys_mkdir fs/namei.c:4078 [inline]
+    [<ffffffff815f9ed9>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4078
+    [<ffffffff845fee85>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845fee85>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a8f26a403c169b7593fe@syzkaller.appspotmail.com
+BUG: memory leak
+unreferenced object 0xffff888115b53880 (size 128):
+  comm "syz-executor.0", pid 4198, jiffies 4294944352 (age 13.760s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f373>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c4f24e>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c4f24e>] __get_metapage+0x3ae/0xae0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c37cc2>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c396b4>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c396b4>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c3b4df>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c4c1da>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c2e937>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f0df3>] vfs_mkdir+0x223/0x340 fs/namei.c:4035
+    [<ffffffff815f9d65>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4060
+    [<ffffffff815f9ed9>] __do_sys_mkdir fs/namei.c:4080 [inline]
+    [<ffffffff815f9ed9>] __se_sys_mkdir fs/namei.c:4078 [inline]
+    [<ffffffff815f9ed9>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4078
+    [<ffffffff845fee85>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845fee85>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-loop0: detected capacity change from 0 to 4096
-ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
-ntfs3: loop0: Mark volume as dirty due to NTFS errors
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 3606 Comm: syz-executor276 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:d_flags_for_inode fs/dcache.c:1980 [inline]
-RIP: 0010:__d_add+0x5ce/0x800 fs/dcache.c:2796
-Code: 00 fc ff df 80 3c 08 00 74 08 48 89 df e8 ea c0 ea ff 48 8b 1b 48 83 c3 08 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 48 89 df e8 c4 c0 ea ff 48 83 3b 00 0f 85 b7 01
-RSP: 0018:ffffc90003cff870 EFLAGS: 00010202
-RAX: 0000000000000001 RBX: 0000000000000008 RCX: dffffc0000000000
-RDX: ffff88801c181d80 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff8880741270f2 R08: ffffffff81ef2679 R09: ffff888075bba128
-R10: ffffed100eb77427 R11: 1ffff1100eb77425 R12: 0000000000000008
-R13: 1ffff1100e824e1e R14: ffff888075bba000 R15: 0000000000000000
-FS:  0000555557353300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff1887b000 CR3: 00000000730e1000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- d_splice_alias+0x122/0x3b0 fs/dcache.c:3191
- lookup_open fs/namei.c:3391 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x10e6/0x2df0 fs/namei.c:3688
- do_filp_open+0x264/0x4f0 fs/namei.c:3718
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_open fs/open.c:1334 [inline]
- __se_sys_open fs/open.c:1330 [inline]
- __x64_sys_open+0x221/0x270 fs/open.c:1330
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f651e934f79
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff1887a418 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f651e934f79
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000080
-RBP: 00007f651e8f4740 R08: 00005555573532c0 R09: 0000000000000000
-R10: 00007fff1887a2e0 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 0000000000000000 R14: 00030030454c4946 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:d_flags_for_inode fs/dcache.c:1980 [inline]
-RIP: 0010:__d_add+0x5ce/0x800 fs/dcache.c:2796
-Code: 00 fc ff df 80 3c 08 00 74 08 48 89 df e8 ea c0 ea ff 48 8b 1b 48 83 c3 08 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 48 89 df e8 c4 c0 ea ff 48 83 3b 00 0f 85 b7 01
-RSP: 0018:ffffc90003cff870 EFLAGS: 00010202
-RAX: 0000000000000001 RBX: 0000000000000008 RCX: dffffc0000000000
-RDX: ffff88801c181d80 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff8880741270f2 R08: ffffffff81ef2679 R09: ffff888075bba128
-R10: ffffed100eb77427 R11: 1ffff1100eb77425 R12: 0000000000000008
-R13: 1ffff1100e824e1e R14: ffff888075bba000 R15: 0000000000000000
-FS:  0000555557353300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff1887b000 CR3: 00000000730e1000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 4 bytes skipped:
-   0:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1)
-   4:	74 08                	je     0xe
-   6:	48 89 df             	mov    %rbx,%rdi
-   9:	e8 ea c0 ea ff       	callq  0xffeac0f8
-   e:	48 8b 1b             	mov    (%rbx),%rbx
-  11:	48 83 c3 08          	add    $0x8,%rbx
-  15:	48 89 d8             	mov    %rbx,%rax
-  18:	48 c1 e8 03          	shr    $0x3,%rax
-  1c:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  23:	fc ff df
-* 26:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
-  2a:	74 08                	je     0x34
-  2c:	48 89 df             	mov    %rbx,%rdi
-  2f:	e8 c4 c0 ea ff       	callq  0xffeac0f8
-  34:	48 83 3b 00          	cmpq   $0x0,(%rbx)
-  38:	0f                   	.byte 0xf
-  39:	85                   	.byte 0x85
-  3a:	b7 01                	mov    $0x1,%bh
+BUG: memory leak
+unreferenced object 0xffff888115b53900 (size 128):
+  comm "syz-executor.0", pid 4198, jiffies 4294944352 (age 13.760s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f373>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c4f24e>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c4f24e>] __get_metapage+0x3ae/0xae0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c37cc2>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c396b4>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c396b4>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c3b4df>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c4c1da>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c2e937>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f0df3>] vfs_mkdir+0x223/0x340 fs/namei.c:4035
+    [<ffffffff815f9d65>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4060
+    [<ffffffff815f9ed9>] __do_sys_mkdir fs/namei.c:4080 [inline]
+    [<ffffffff815f9ed9>] __se_sys_mkdir fs/namei.c:4078 [inline]
+    [<ffffffff815f9ed9>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4078
+    [<ffffffff845fee85>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845fee85>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+BUG: memory leak
+unreferenced object 0xffff888116622700 (size 128):
+  comm "syz-executor.0", pid 4739, jiffies 4294944954 (age 7.740s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f373>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c4f24e>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c4f24e>] __get_metapage+0x3ae/0xae0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c37cc2>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c396b4>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c396b4>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c3b4df>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c4c1da>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c2e937>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f0df3>] vfs_mkdir+0x223/0x340 fs/namei.c:4035
+    [<ffffffff815f9d65>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4060
+    [<ffffffff815f9ed9>] __do_sys_mkdir fs/namei.c:4080 [inline]
+    [<ffffffff815f9ed9>] __se_sys_mkdir fs/namei.c:4078 [inline]
+    [<ffffffff815f9ed9>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4078
+    [<ffffffff845fee85>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff845fee85>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+
+
+Tested on:
+
+commit:         60bb8154 Merge tag 'xfs-6.1-for-linus' of git://git.ke..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git --
+console output: https://syzkaller.appspot.com/x/log.txt?x=171a96dc880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=589d84e4754dd2fa
+dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1095fc78880000
 
