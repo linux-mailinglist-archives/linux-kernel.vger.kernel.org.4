@@ -2,145 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6255FAD4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01725FAD52
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJKHRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 03:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S229912AbiJKHUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 03:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJKHRx (ORCPT
+        with ESMTP id S229446AbiJKHUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 03:17:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D8B844E8;
-        Tue, 11 Oct 2022 00:17:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF686112B;
-        Tue, 11 Oct 2022 07:17:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0AF5C433D6;
-        Tue, 11 Oct 2022 07:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665472671;
-        bh=NtJ7v6/G5QEm210bmOM52lM9FGXyvCrH5npEMhuG5dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pZspTNQUzoy4rlvEmPdqABsDYMXx//z2uDjqx8J9ToecczBNWoAdoBSRSmnd3neig
-         e613vwQsA5jex30GWEuIxAO5X5weH2GoJ0gzVhD5XhLyA6BIPlArOquIJu0mUibf10
-         Gfai9jHxLkER3HNDkwsiRyfGUWQ4RgwnskrrF80tAlWdAqdO3LBbhxhQWcYU/WAMxG
-         SmoZr6rHHnXAXAteB40ug7blDmk9V2RBdB71rKX2sOwmJ4IITPMqlWSV8dj68hRlo+
-         k/nYLjgTrKkLbRNjO5JTIMEgDvjt19r6nryXjo1MArjYHDM0zpH3dFuMqojJtUNaXJ
-         Ortwe82NIAAkA==
-Date:   Tue, 11 Oct 2022 10:17:46 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Rohit Nair <rohit.sajan.kumar@oracle.com>
-Cc:     jgg@ziepe.ca, saeedm@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, manjunath.b.patil@oracle.com,
-        rama.nichanamatlu@oracle.com,
-        Michael Guralnik <michaelgur@nvidia.com>
-Subject: Re: [PATCH 1/1] IB/mlx5: Add a signature check to received EQEs and
- CQEs
-Message-ID: <Y0UYml07lb1I38MQ@unreal>
-References: <20221005174521.63619-1-rohit.sajan.kumar@oracle.com>
+        Tue, 11 Oct 2022 03:20:01 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE651AF3C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:20:00 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id u21so18807346edi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=alaMRFyTqgWPSUYwvVsV66h29Ch4dJMbSbv8FxTJjaA=;
+        b=bkE8MOcfXqF5ZXU3ub0tTJyX9Oh+0UBLtCHv3tBLdtXqlRc2YXsxFznTqRCgdOrPkY
+         cXJ+zNb/4EbEwRih5hzPht0wW/RPwKVKig9a5kk5IPsVNHvX1kMj/b8NyvnT6xeRFdEl
+         UW9FuAXNj4FbIvHMTJ0zymQbyVZ8yFj/IojpJmHw5hGp2NSuyfg2UP1vx7jca6Gq2apH
+         UV9WiGVC8GPTY1iKRHn5Tc76rJ4bY07OImHid2+MohiyGeEjhCFC6yl0uMtBO0rPPKU1
+         V16tbXYnTDiUt1R89HIiXNflPAkpcANC5bPCnr5qjgnMdXmOnvFVeEBk5qED3zDmjcuG
+         SJSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=alaMRFyTqgWPSUYwvVsV66h29Ch4dJMbSbv8FxTJjaA=;
+        b=sHW8wn4slZIdwj7wcemE/YZODkNBU3Egeq2z8djWVcMFIfj191GjPEsx07QgEpRXGC
+         tvxQOraYvXTxKR45XOxnSoXkVX32kdwVu4IE5Zcq5GagqdZuWgJtJQfGZxC3MG/J6MRc
+         QkY2PYcP7MOZsLsGoKDLs6X52rjG7gLWiOZ/Pti3pb989kiuL2P8/MZ2hVxy8pXcRydR
+         JLYzMzuVZgxezH983HpDdbjh755BsT6PVQIDKkHUxANdwoa7rVxVaCkQV8TjZmWjZDAK
+         LV8oOGr/Qx5XsJ5bgc6s9dO4fLtoRLuW9C0tCztZZZXyMTYnJY3skplOoS25uZg+IbW/
+         ehzw==
+X-Gm-Message-State: ACrzQf3CMuVrWdIUER9erk81qnxzgvnwzsckoqdzyoVS1xFUzfw98MTX
+        KtVMjwuZ7K1mUBaxNBBrYrEyN7AfsBX24SEmWPXZ7w==
+X-Google-Smtp-Source: AMsMyM6ng/DQEStWl0sVu7PZ9rayjv3N7kALGp5vzQ5bTLIjhkEvP6vOacybQL5Z2v6RtytTK3Y7aTxqmzxJ8y9QQ3o=
+X-Received: by 2002:a05:6402:448:b0:45c:8de5:4fc with SMTP id
+ p8-20020a056402044800b0045c8de504fcmr203354edw.133.1665472798912; Tue, 11 Oct
+ 2022 00:19:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005174521.63619-1-rohit.sajan.kumar@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927120857.639461-1-max.kellermann@ionos.com>
+ <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com> <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
+ <75e7f676-8c85-af0a-97b2-43664f60c811@redhat.com> <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
+ <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com>
+In-Reply-To: <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Tue, 11 Oct 2022 09:19:48 +0200
+Message-ID: <CAKPOu+_4CLD2qJsUhhe4K0QqrC9mLmargEimibvVXdAHq6RCUw@mail.gmail.com>
+Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
+        ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to ping anyone, the patch is registered in patchworks
-https://patchwork.kernel.org/project/linux-rdma/patch/20221005174521.63619-1-rohit.sajan.kumar@oracle.com/
-and we will get to it.
+On Mon, Oct 10, 2022 at 4:03 AM Xiubo Li <xiubli@redhat.com> wrote:
+> No, it don't have to. This could work simply as the snaprealm hierarchy
+> thing in kceph.
+>
+> Only the up top directory need to record the ACL and all the descendants
+> will point and use it if they don't have their own ACLs.
 
-You sent the patch during merge window, no wonder that none looked on it.
+Not knowing much about Ceph internals, I don't quite understand this
+idea. Until somebody implements that, I'll keep my patch in our Linux
+kernel fork.
+My patch is a very simple and robust fix for our problem (it's already
+in production use). It's okay for me if it doesn't get merged into
+mainline, but at least I wanted to share it.
 
-On Wed, Oct 05, 2022 at 10:45:20AM -0700, Rohit Nair wrote:
-> As PRM defines, the bytewise XOR of the EQE and the EQE index should be
-> 0xff. Otherwise, we can assume we have a corrupt EQE. The same is
-> applicable to CQE as well.
+> For multiple clients case I think the cephfs capabilities [3] could
+> guarantee the consistency of this.
 
-I didn't find anything like this in my version of PRM.
+I don't understand - capabilities are client-specific, not
+user-specific. My problem is a user-specific one.
 
-> 
-> Adding a check to verify the EQE and CQE is valid in that aspect and if
-> not, dump the CQE and EQE to dmesg to be inspected.
+> While for the single client case if
+> before the user could update its ACL just after creating it someone else
+> has changed it or messed it up, then won't the existing ACLs have the
+> same issue ?
 
-While it is nice to see prints in dmesg, you need to explain why other
-mechanisms (reporters, mlx5 events, e.t.c) are not enough.
+You mean ACLs for "real" files/directories? Sure, some care needs to
+be taken, e.g. create directories with mode 700 and chmod after
+setting the ACL, and using O_TMPFILE for files and linking them to a
+directory only after updating the ACL.
 
-> 
-> This patch does not introduce any significant performance degradations
-> and has been tested using qperf.
+The difference to snapdir is that the snapdir doesn't actually exist
+anywhere; it is synthesized by the client only on the first acess, and
+may be discarded any time by the shrinker, and the next access creates
+a new one with default permissions. All those snapdir inodes are local
+to the client, and each client has its own private set of permissions
+for it.
 
-What does it mean? You made changes in kernel verbs flow, they are not
-executed through qperf.
+Even if you'd take care for updating the snapdir permissions after
+creating a directory, that would only be visible on that one client,
+and may be reverted at any arbitrary point in time, and there's
+nothing you can do about it. That's two unsolvable problems (no client
+synchronization of snapdir permissions, and no persistence).
 
-> 
-> Suggested-by: Michael Guralnik <michaelgur@nvidia.com>
-> Signed-off-by: Rohit Nair <rohit.sajan.kumar@oracle.com>
-> ---
->  drivers/infiniband/hw/mlx5/cq.c              | 40 ++++++++++++++++++++++++++++
->  drivers/net/ethernet/mellanox/mlx5/core/eq.c | 39 +++++++++++++++++++++++++++
->  2 files changed, 79 insertions(+)
-> 
-> diff --git a/drivers/infiniband/hw/mlx5/cq.c b/drivers/infiniband/hw/mlx5/cq.c
-> index be189e0..2a6d722 100644
-> --- a/drivers/infiniband/hw/mlx5/cq.c
-> +++ b/drivers/infiniband/hw/mlx5/cq.c
-> @@ -441,6 +441,44 @@ static void mlx5_ib_poll_sw_comp(struct mlx5_ib_cq *cq, int num_entries,
->  	}
->  }
->  
-> +static void verify_cqe(struct mlx5_cqe64 *cqe64, struct mlx5_ib_cq *cq)
-> +{
-> +	int i = 0;
-> +	u64 temp_xor = 0;
-> +	struct mlx5_ib_dev *dev = to_mdev(cq->ibcq.device);
-> +
-> +	u32 cons_index = cq->mcq.cons_index;
-> +	u64 *eight_byte_raw_cqe = (u64 *)cqe64;
-> +	u8 *temp_bytewise_xor = (u8 *)(&temp_xor);
-> +	u8 cqe_bytewise_xor = (cons_index & 0xff) ^
-> +				((cons_index & 0xff00) >> 8) ^
-> +				((cons_index & 0xff0000) >> 16);
-> +
-> +	for (i = 0; i < sizeof(struct mlx5_cqe64); i += 8) {
-> +		temp_xor ^= *eight_byte_raw_cqe;
-> +		eight_byte_raw_cqe++;
-> +	}
-> +
-> +	for (i = 0; i < (sizeof(u64)); i++) {
-> +		cqe_bytewise_xor ^= *temp_bytewise_xor;
-> +		temp_bytewise_xor++;
-> +	}
-> +
-> +	if (cqe_bytewise_xor == 0xff)
-> +		return;
-> +
-> +	dev_err(&dev->mdev->pdev->dev,
-> +		"Faulty CQE - checksum failure: cqe=0x%x cqn=0x%x cqe_bytewise_xor=0x%x\n",
-> +		cq->ibcq.cqe, cq->mcq.cqn, cqe_bytewise_xor);
-> +	dev_err(&dev->mdev->pdev->dev,
-> +		"cons_index=%u arm_sn=%u irqn=%u cqe_size=0x%x\n",
-> +		cq->mcq.cons_index, cq->mcq.arm_sn, cq->mcq.irqn, cq->mcq.cqe_sz);
-
-mlx5_err ... and not dev_err ...
-
-> +
-> +	print_hex_dump(KERN_WARNING, "", DUMP_PREFIX_OFFSET,
-> +		       16, 1, cqe64, sizeof(*cqe64), false);
-> +	BUG();
-
-No BUG() in new code.
-
-Thanks
+Max
