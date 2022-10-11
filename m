@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64D55FAB9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 06:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D505FAB9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 06:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJKEVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 00:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S229499AbiJKEXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 00:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJKEVc (ORCPT
+        with ESMTP id S229490AbiJKEXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 00:21:32 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B387EFD0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 21:21:30 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29B4L1Ve321458
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 10 Oct 2022 21:21:01 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29B4L1Ve321458
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022100601; t=1665462062;
-        bh=a3OMU9lJ42ZHrJIUvjnlMOAcxBXBlLJbaIsAmYxBCJQ=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=n/Gbhd19mfq6n9xRqjydqU9iwtV7vqprX6YqmAKWCY8MdLIafbOxXdzuz1j6cHT+g
-         wMoc2zJ1tmjs0bvba3Ja/Jmb9A6WmAhvgKOE7O8HKFuR+wlhYBP00NIAoadSSXFf8y
-         yU663ty8rSvS/BhujlWzLEY/GuJNR+0pXK/n27uD5jtWqKyi1MS/dB7au99hhxB/Hm
-         +BJPTlb3Fka1AjipeRb6DrHlDfXysIXmOp8+RNi/tjEO6VlgKcroPWohE+UHI2ZmPU
-         oXhBew7793kbIohQpKWdxU0+zv76ubAWYlkM0N2BoqGUwz4G0Dv2N7BpUZgxAgSp0i
-         DxacqnCtyuSgg==
-Date:   Mon, 10 Oct 2022 21:20:58 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Brian Gerst <brgerst@gmail.com>, Xin Li <xin3.li@intel.com>
-CC:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_6/6=5D_x86/gsseg=3A_use_the_LKGS_?= =?US-ASCII?Q?instruction_if_available_for_load=5Fgs=5Findex=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAMzpN2hKr-=9sP=_VjGdsJDX5Pzdr9WAsSs77s_5yPJeqi728g@mail.gmail.com>
-References: <20221010190159.11920-1-xin3.li@intel.com> <20221010190159.11920-7-xin3.li@intel.com> <CAMzpN2hKr-=9sP=_VjGdsJDX5Pzdr9WAsSs77s_5yPJeqi728g@mail.gmail.com>
-Message-ID: <0BA29DAE-370F-4D57-8187-D87863AB1B16@zytor.com>
+        Tue, 11 Oct 2022 00:23:51 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50C883234;
+        Mon, 10 Oct 2022 21:23:50 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c24so12135259plo.3;
+        Mon, 10 Oct 2022 21:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Eyr8e/bNMyuqL3yqFtqkos4M3HzoUVoIvBsWgwqsAc=;
+        b=YXgpgFUww7vIPWHeJH86CukufIg9n8YvneTe1X3Ge5HJaxpo4keCvFAlb+QO82gmA6
+         mE1oXZqTIzNjXK9mpYmjoWMRtqqHnEz0PD2zT50M4q3Q95sY59B3VmY3Jp+n4f9JoDXH
+         HT1QZOiZNXqNM68hVjX1bsStHrAGvkb2vrsHuOM4gs3jJ+oZ9i8NzyuhZnFac0ZiiN6b
+         CE5g6bLSRbVotATSrmGKTSuHm5Y7bqnEDVSc0wmNWNTW0mDUs639SZtATAacyWdCtnxG
+         EFa46C6wpXeAb3NIG08Rha0827y22SRwzbOegnEtNRLMlDc4qIeSEHOO+oBHNbVAdlPx
+         kN9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Eyr8e/bNMyuqL3yqFtqkos4M3HzoUVoIvBsWgwqsAc=;
+        b=W0+YOEo7/rRo9w86w610V5xE0uWZVDEBTpqcKMoY8eLyDdSzTMwp+Q6i+x9URH5dyz
+         sieg/kdyBjAxJaUAqdyim1wGHhhTPWUx5d3IcBfrj15E78sgjCJezrlVFu8AC1z+ztWU
+         dCJggaL3E3GTQeYK4EDhC5eMLp4HCh1KWhky2bsmTUcwr3vCKSkqpBhcKJWZwogADx3a
+         c+RjMpU1itMBUX3/zhA0pGms8mae1ud/b6Nb4aErW/phfexxIezt2wugQySdrJbYLw7R
+         9rl6DOsFybzuzVxBo1vnW7w/mjVH2jzPBYLgLHswqRNvWaEKpCE5ci5pyi81W2rNouXY
+         ENzA==
+X-Gm-Message-State: ACrzQf3PpitzWBgvvTa2HGF3ydVwFv4K4cZEsEuoGYBB1xfSJa+n9b6I
+        0Nur6ugwE73DSnMW/opHBiA=
+X-Google-Smtp-Source: AMsMyM5BwKTQ86DAJajJhFVB4ry+GjmWdGEUx832Opx9iANGN1zvht/raQOSv1Rvv/kjxQanYMzqIw==
+X-Received: by 2002:a17:902:7c8c:b0:17f:7565:4a2d with SMTP id y12-20020a1709027c8c00b0017f75654a2dmr22830636pll.65.1665462230114;
+        Mon, 10 Oct 2022 21:23:50 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-65.three.co.id. [180.214.233.65])
+        by smtp.gmail.com with ESMTPSA id h3-20020a170902f7c300b0017691eb7e17sm7444027plw.239.2022.10.10.21.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 21:23:49 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 876F41039C3; Tue, 11 Oct 2022 11:23:45 +0700 (WIB)
+Date:   Tue, 11 Oct 2022 11:23:45 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.15 00/37] 5.15.73-rc1 review
+Message-ID: <Y0Tv0S3zfZlEtii2@debian.me>
+References: <20221010070331.211113813@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="C+/FlmvC08YWdift"
+Content-Disposition: inline
+In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 10, 2022 8:51:33 PM PDT, Brian Gerst <brgerst@gmail=2Ecom> wrote=
-:
->On Mon, Oct 10, 2022 at 3:46 PM Xin Li <xin3=2Eli@intel=2Ecom> wrote:
->>
->> From: "H=2E Peter Anvin (Intel)" <hpa@zytor=2Ecom>
->>
->> The LKGS instruction atomically loads a segment descriptor into the
->> %gs descriptor registers, *except* that %gs=2Ebase is unchanged, and th=
-e
->> base is instead loaded into MSR_IA32_KERNEL_GS_BASE, which is exactly
->> what we want this function to do=2E
->>
->> Signed-off-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead=2Eorg>
->> Signed-off-by: Xin Li <xin3=2Eli@intel=2Ecom>
->> link: https://lkml=2Eorg/lkml/2022/10/7/352
->> link: https://lkml=2Eorg/lkml/2022/10/7/373
->> ---
->>  arch/x86/include/asm/gsseg=2Eh | 27 ++++++++++++++++++++++++++-
->>  1 file changed, 26 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/include/asm/gsseg=2Eh b/arch/x86/include/asm/gsse=
-g=2Eh
->> index 5e3b56a17098=2E=2E4aaef7a1d68f 100644
->> --- a/arch/x86/include/asm/gsseg=2Eh
->> +++ b/arch/x86/include/asm/gsseg=2Eh
->> @@ -3,15 +3,40 @@
->>  #define _ASM_X86_GSSEG_H
->>
->>  #include <linux/types=2Eh>
->> +
->> +#include <asm/asm=2Eh>
->> +#include <asm/cpufeature=2Eh>
->> +#include <asm/alternative=2Eh>
->>  #include <asm/processor=2Eh>
->> +#include <asm/nops=2Eh>
->>
->>  #ifdef CONFIG_X86_64
->>
->>  extern asmlinkage void asm_load_gs_index(u16 selector);
->>
->> +/* Replace with "lkgs %di" once binutils support LKGS instruction */
->> +#define LKGS_DI _ASM_BYTES(0xf2,0x0f,0x00,0xf7)
->> +
->>  static inline void native_load_gs_index(unsigned int selector)
->>  {
->> -       asm_load_gs_index(selector);
->> +       u16 sel =3D selector;
->> +
->> +       /*
->> +        * Note: the fixup is used for the LKGS instruction, but
->> +        * it needs to be attached to the primary instruction sequence
->> +        * as it isn't something that gets patched=2E
->> +        *
->> +        * %rax is provided to the assembly routine as a scratch
->> +        * register=2E
->> +        */
->> +       asm_inline volatile("1:\n"
->> +                           ALTERNATIVE("call asm_load_gs_index\n",
->> +                                       _ASM_BYTES(0x3e) LKGS_DI,
->> +                                       X86_FEATURE_LKGS)
->> +                           _ASM_EXTABLE_TYPE_REG(1b, 1b, EX_TYPE_ZERO_=
-REG, %k[sel])
->> +                           : ASM_CALL_CONSTRAINT
->> +                           : [sel] "D" (sel)
->
->DI needs to be marked as input and output (+D), since the exception
->handler modifies it=2E
->
->> +                           : "memory", _ASM_AX);
->
->_ASM_AX is only needed for code that is used by both 32 and 64-bit=2E
->Since this is 64-bit only, "rax" would be appropriate=2E
->
->--
->Brian Gerst
 
-The practice seems to have been to prefer the macros for consistency=2E
+--C+/FlmvC08YWdift
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Oct 10, 2022 at 09:05:19AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--C+/FlmvC08YWdift
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0TvygAKCRD2uYlJVVFO
+owyOAQCakgrPYkzs6vatPpW3s6nvPuKiWhhePgOhHayr1YnDFgD/eqFllqCzt6Nh
+gUn2MSGT48x5lr09q8J+dAu64TWccwM=
+=dAvE
+-----END PGP SIGNATURE-----
+
+--C+/FlmvC08YWdift--
