@@ -2,176 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4370A5FB290
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172745FB295
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiJKMkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 08:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
+        id S229769AbiJKMmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 08:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiJKMka (ORCPT
+        with ESMTP id S229548AbiJKMmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 08:40:30 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E812661;
-        Tue, 11 Oct 2022 05:40:29 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BCeCFA110994;
-        Tue, 11 Oct 2022 07:40:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665492012;
-        bh=tUmc3Z2gbFC5iJS3cRvN7b8XBwMTR68vu9QqBE9JhyU=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=wZB23PlwnzNSjFZw4oBh36lhRLWPg2FvHqBwbG3QYdQ74xJItLEns6ZdxmH1gHgXt
-         xinUq3BFMS7RLL+vT9cDHNoI6v7lHsXEF7iKmceUH7W+RnuV9bKh4iMa6Bfcv6u35G
-         yChn5xf4PIGJoEWn75G46tESzHr22yUk3YAx3MgY=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BCeCKN120737
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Oct 2022 07:40:12 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 11
- Oct 2022 07:40:12 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 11 Oct 2022 07:40:12 -0500
-Received: from [172.24.147.145] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BCe89E026172;
-        Tue, 11 Oct 2022 07:40:09 -0500
-Subject: Re: [PATCH v3 3/5] PCI: endpoint: Use a separate lock for protecting
- epc->pci_epf list
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <kishon@kernel.org>, <lpieralisi@kernel.org>, <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <vidyas@nvidia.com>,
-        <vigneshr@ti.com>
-References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
- <20221006134927.41437-4-manivannan.sadhasivam@linaro.org>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <5d041111-6ebc-4ac6-5693-443535545510@ti.com>
-Date:   Tue, 11 Oct 2022 18:10:08 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 11 Oct 2022 08:42:23 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5457B80EB5;
+        Tue, 11 Oct 2022 05:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=KY83JvYoAV0pgz0kphFBxmsHspJ7rho//mBc72ItZhQ=; b=XVEEKAgezBOmP2SSc/BgX+GBjC
+        IpZAfSTDQZOUzL9WlKfOlZSGDzfE4oI2KfySNqY+IXafimfiHInNXkoVd8U+xjbnrh3wOE8+7PBq4
+        Nuh2QXEnvFtLgOSZ0PfDcuz/vI7vGYrNbcqioZUV+tWmBXH67fTUBKTky2xFSzPRrxzM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oiEZd-001iED-79; Tue, 11 Oct 2022 14:41:29 +0200
+Date:   Tue, 11 Oct 2022 14:41:29 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Soha Jin <soha@lohu.info>
+Cc:     'Giuseppe Cavallaro' <peppe.cavallaro@st.com>,
+        'Alexandre Torgue' <alexandre.torgue@foss.st.com>,
+        'Jose Abreu' <joabreu@synopsys.com>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        'Eric Dumazet' <edumazet@google.com>,
+        'Jakub Kicinski' <kuba@kernel.org>,
+        'Paolo Abeni' <pabeni@redhat.com>,
+        'Yangyu Chen' <cyy@cyyself.name>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] net: stmmac: use fwnode instead of of to configure
+ driver
+Message-ID: <Y0VkeSxv9IkJPHJj@lunn.ch>
+References: <20221009162247.1336-1-soha@lohu.info>
+ <20221009162247.1336-2-soha@lohu.info>
+ <Y0SCuaVpAnbpMk72@lunn.ch>
+ <9A100E763AFC9404+3a9901d8dd1f$56f01950$04d04bf0$@lohu.info>
 MIME-Version: 1.0
-In-Reply-To: <20221006134927.41437-4-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9A100E763AFC9404+3a9901d8dd1f$56f01950$04d04bf0$@lohu.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 11, 2022 at 11:12:45AM +0800, Soha Jin wrote:
+> Hi Andrew,
+> 
+> > From: Andrew Lunn <andrew@lunn.ch>
+> > Sent: Tuesday, October 11, 2022 4:38 AM
+> > 
+> > None of these are documented as being valid in ACPI. Do you need to ensure
+> > they only come from DT, or you document them for ACPI, and get the ACPI
+> > maintainers to ACK that they are O.K.
+> 
+> There is _DSD object in ACPI which is used to define Device Specific Data,
+> and provide additional properties and information to the driver. With
+> specific UUID listed in _DSD, a package can be used like Device Tree (a
+> string key associated with a value), and this is also the object
+> fwnode_property_* will parse with.
+> 
+> I have tested some of properties with a device describing stmmac device in
+> ACPI, and it works. These properties should be the configuration to the
+> driver, and is not related to the way configuring it. Moreover, these are
+> described in _DSD and not a part of ACPI standard, there seems no need to
+> ask ACPI maintainers.
+> 
+> Also, as described in Documentation/firmware-guide/acpi/enumeration.rst,
+> there is a Device Tree Namespace Link HID (PRP0001) in kernel. PRP0001 can
+> be used to describe a Device Tree in ACPI's _DSD object, and it just put DT
+> properties in a _DSD package with the specific UUID I said above. But to
+> utilize this feature, the driver seems need to use fwnode APIs.
 
+The problem i see with ACPI is that everybody does it differently.
+Each driver defines its own set of properties, which are different to
+every other driver. You end up with snowflakes, each driver is unique,
+making it harder to understand, you cannot transfer knowledge from one
+driver to another. This is fine in the closed sources world of binary
+blob drivers, you don't get to see other drivers that much. But for
+Linux, everything is open, and we want you to look at other drivers,
+copy the good ideas from other driver, make drivers look similar, so
+they are easy to maintain. So ACPI snowflakes are bad.
 
-On 06/10/22 7:19 pm, Manivannan Sadhasivam wrote:
-> The EPC controller maintains a list of EPF drivers added to it. For
-> protecting this list against the concurrent accesses, the epc->lock
-> (used for protecting epc_ops) has been used so far. Since there were
-> no users trying to use epc_ops and modify the pci_epf list simultaneously,
-> this was not an issue.
-> 
-> But with the addition of callback mechanism for passing the events, this
-> will be a problem. Because the pci_epf list needs to be iterated first
-> for getting hold of the EPF driver and then the relevant event specific
-> callback needs to be called for the driver.
-> 
-> If the same epc->lock is used, then it will result in a deadlock scenario.
-> 
-> For instance,
-> 
-> ...
-> 	mutex_lock(&epc->lock);
-> 	list_for_each_entry(epf, &epc->pci_epf, list) {
-> 		epf->event_ops->core_init(epf);
-> 		|
-> 		|-> pci_epc_set_bar();
-> 			|
-> 			|-> mutex_lock(&epc->lock) # DEADLOCK
-> ...
-> 
-> So to fix this issue, use a separate lock called "list_lock" for
-> protecting the pci_epf list against the concurrent accesses. This lock
-> will also be used by the callback mechanism.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+DT on the other hand, through DT maintainers and general good
+practices, splits its properties into driver unique and generic
+properties. If there is a generic property for what you want to
+express, you us it. Otherwise, you define a vendor property. If you
+see the same vendor property a few times, you add a generic property,
+since it is a concept which is shared by a number of drivers.  DT
+documents all its properties.
 
-Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
-> ---
->   drivers/pci/endpoint/pci-epc-core.c | 9 +++++----
->   include/linux/pci-epc.h             | 2 ++
->   2 files changed, 7 insertions(+), 4 deletions(-)
+The other problem is that people just seem to think they can stuff DT
+properties into ACPI and call it done. But ACPI is not DT. DT has a
+lot of history, things done wrong initially, and then corrected. We
+don't want to just copy this history into ACPI. We want a clean
+design, throwing away the history of things done wrongly. So i don't
+expect ACPI to have any backwards compatibility hacks.
+
+As you say, the ACPI standard says nothing about networking, or MDIO
+busses, or PHYs. Which means we the Linux community can defines how
+ACPI is used within networking, and we can say snowflakes are not
+wanted. We can follow the good practices of DT, and document
+everything.
+
+So, please read
+Documentation/firmware-guide/acpi/dsd/phy.rst. Anything generic to do
+with PHYs, MDIO, etc should be documented in there. And your driver
+should not handle any generic properties which are not listed in
+there. Note that document says nothing about backwards compatibility.
+
+Please add an
+Documentation/firmware-guide/acpi/dsd/ethernet-controller.rst for all
+the generic properties to do with the MAC driver, similar to the DT
+document ethernet-controller.rst.
+
+I would also suggest you add a document specific to this MAC driver,
+documenting properties specific to it. Any DT properties which are
+listed as deprecated, i don't expect to be seen implemented in ACPI.
+The reset GPIO is a good example of this. Look at its horrible
+history, how it is totally messed up in DT. Don't copy that mess into
+ACPI.
+
 > 
-> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-> index 3bc9273d0a08..6cce430d431b 100644
-> --- a/drivers/pci/endpoint/pci-epc-core.c
-> +++ b/drivers/pci/endpoint/pci-epc-core.c
-> @@ -613,7 +613,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
->   	if (type == SECONDARY_INTERFACE && epf->sec_epc)
->   		return -EBUSY;
->   
-> -	mutex_lock(&epc->lock);
-> +	mutex_lock(&epc->list_lock);
->   	func_no = find_first_zero_bit(&epc->function_num_map,
->   				      BITS_PER_LONG);
->   	if (func_no >= BITS_PER_LONG) {
-> @@ -640,7 +640,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
->   
->   	list_add_tail(list, &epc->pci_epf);
->   ret:
-> -	mutex_unlock(&epc->lock);
-> +	mutex_unlock(&epc->list_lock);
->   
->   	return ret;
->   }
-> @@ -672,11 +672,11 @@ void pci_epc_remove_epf(struct pci_epc *epc, struct pci_epf *epf,
->   		list = &epf->sec_epc_list;
->   	}
->   
-> -	mutex_lock(&epc->lock);
-> +	mutex_lock(&epc->list_lock);
->   	clear_bit(func_no, &epc->function_num_map);
->   	list_del(list);
->   	epf->epc = NULL;
-> -	mutex_unlock(&epc->lock);
-> +	mutex_unlock(&epc->list_lock);
->   }
->   EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
->   
-> @@ -773,6 +773,7 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
->   	}
->   
->   	mutex_init(&epc->lock);
-> +	mutex_init(&epc->list_lock);
->   	INIT_LIST_HEAD(&epc->pci_epf);
->   	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
->   
-> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-> index a48778e1a4ee..fe729dfe509b 100644
-> --- a/include/linux/pci-epc.h
-> +++ b/include/linux/pci-epc.h
-> @@ -122,6 +122,7 @@ struct pci_epc_mem {
->    * struct pci_epc - represents the PCI EPC device
->    * @dev: PCI EPC device
->    * @pci_epf: list of endpoint functions present in this EPC device
-> + * list_lock: Mutex for protecting pci_epf list
->    * @ops: function pointers for performing endpoint operations
->    * @windows: array of address space of the endpoint controller
->    * @mem: first window of the endpoint controller, which corresponds to
-> @@ -139,6 +140,7 @@ struct pci_epc_mem {
->   struct pci_epc {
->   	struct device			dev;
->   	struct list_head		pci_epf;
-> +	struct mutex			list_lock;
->   	const struct pci_epc_ops	*ops;
->   	struct pci_epc_mem		**windows;
->   	struct pci_epc_mem		*mem;
+> > Backward compatibility only applies to DT. Anybody using ACPI should not
+> > expect any backwards compatibility, they should be documented mandatory
+> > properties right from the beginning.
 > 
+> Just do not want to mix the use of OF and fwnode APIs, I simply changed all
+> OF property APIs with fwnode APIs. If you really think the backward
+> compatibility should not exist in ACPI, I will change these compatible
+> codes back to OF APIs.
+
+Because ACPI is not DT, sometimes you do need to handle them
+differently. If you have the exact same property in DT and ACPI, you
+are just stuffing DT into ACPI, yes, you can use the fwnode APIs. But
+when ACPI and DT differ, you need to use the lower level APIs to deal
+with these differences.
+
+     Andrew
