@@ -2,297 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4192E5FAC09
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776EB5FAC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiJKGCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S229644AbiJKGCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiJKGCe (ORCPT
+        with ESMTP id S229604AbiJKGCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:02:34 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C7C7C19D;
-        Mon, 10 Oct 2022 23:02:32 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 14:02:23 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665468150;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HMw2Iw480ZzNMI8qHj9tphsVypzxrxUENeARfx54heE=;
-        b=D68WcEu96WOq73rUBq+DkYE1WALGmrTZe0RQFRNFGE8Dfk19QInDc8MVghZcT0Fa+rR2ig
-        J1gDzl3Log//48IwQU6TWq8EX1FkzniZhynErLSZjn/a4KM/jfIaf5XpwcjGCSLCJyLASP
-        Nf+f8G3kq6yD80kqUFk+5bsoWOdcmZQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Wu XiangCheng <wu.xiangcheng@linux.dev>
-To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
-Cc:     Jonathan Corbet <corbet@lwn.net>, chenhuacai@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] docs/zh_CN: Rewrite the Chinese translation front page
-Message-ID: <440d7cb3c9f1526ed7c2996aa88ba2bc7fdc018c.1665467392.git.bobwxc@email.cn>
-References: <cover.1665467392.git.bobwxc@email.cn>
+        Tue, 11 Oct 2022 02:02:40 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F0F12AC4;
+        Mon, 10 Oct 2022 23:02:39 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id j16so19917418wrh.5;
+        Mon, 10 Oct 2022 23:02:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8oFuI+x6kR8yEhpzpaADt1Pt7upeF77ruYQZxt6LGM=;
+        b=6HkKNojXYtDVHoByywH04JDUfFVo5QPO0PUy131tG9teDGsE/cbCHoI0Z2uferbl6S
+         793dnBhsRzrBzi3GRIgge9ftXjeCGFvhA1dGnR0k71DfKD8g79rO2In0ZcVdDQUonHr5
+         0CtGpLq2H0gGwKod8D+qjWOB4KMbQadRf96xIJXuMHgTXtdsYm3+9GfpwbRra3jNcgUr
+         BNjfc9OixWyMDzErcKuGbAbi/uGFHkMRIqhyppAapMEjWiFtTEoT1HveiKf/B2mRCUIS
+         EmhUhshyB0dFcZUicKj+TzIFNkF5Nu2PNASutI0JeGS1ZpPKed0mWUzsU75SEgaw3IOg
+         tCnA==
+X-Gm-Message-State: ACrzQf1pvLkw+ztQ8K5wHKCsFNeaR7MpErv4eTCxZsHwBIpYpDkX0sVG
+        0kZCFmYdGuF7oSGRnlYW9gk=
+X-Google-Smtp-Source: AMsMyM4sYzCnoUZrJDLxBsXARmm93ntdlJ2SebeXIof0NbiX8qLQAqnVIyPhGzeKtYhnMsGgI4eyNg==
+X-Received: by 2002:a05:6000:1843:b0:22e:77b0:2e5 with SMTP id c3-20020a056000184300b0022e77b002e5mr13577737wri.215.1665468157864;
+        Mon, 10 Oct 2022 23:02:37 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id u10-20020a5d434a000000b00228de351fc0sm10564262wrr.38.2022.10.10.23.02.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 23:02:37 -0700 (PDT)
+Message-ID: <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+Date:   Tue, 11 Oct 2022 08:02:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1665467392.git.bobwxc@email.cn>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM
+ Console Services
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221011000840.289033-1-quic_eberman@quicinc.com>
+ <20221011000840.289033-14-quic_eberman@quicinc.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221011000840.289033-14-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wu XiangCheng <bobwxc@email.cn>
+On 11. 10. 22, 2:08, Elliot Berman wrote:
+> Gunyah provides a console for each VM using the VM console resource
+> manager APIs. This driver allows console data from other
+> VMs to be accessed via a TTY device and exports a console device to dump
+> Linux's own logs to our console.
+...
+> +struct rm_cons_drv_data {
+> +	struct tty_driver *tty_driver;
+> +	struct device *dev;
+> +
+> +	spinlock_t ports_lock;
+> +	struct rm_cons_port *ports[RM_CONS_TTY_ADAPATERS];
+> +
+> +	struct notifier_block rm_cons_notif;
+> +	struct console console;
+> +
+> +	/* below are for printk console.
+> +	 * gh_rm_console_* calls will sleep and console_write can be called from
+> +	 * atomic ctx. Two xmit buffers are used. The active buffer is tracked with
+> +	 * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
+> +	 * A work is scheduled to flush the bytes. The work will swap the active buffer
+> +	 * and write out the other buffer.
+> +	 */
 
-update to commit 0c7b4366f1ab ("docs: Rewrite the front page")
+Ugh, why? This is too ugly and unnecessary. What about passing the kfifo 
+to gh_rm_console_write() instead? You do memcpy() there anyway.
 
-Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
----
- Documentation/translations/zh_CN/index.rst | 169 +++++++--------------
- 1 file changed, 51 insertions(+), 118 deletions(-)
+> +	char *co_xmit_buf[2];
+> +	int co_xmit_idx;
+> +	unsigned int co_xmit_count;
+> +	spinlock_t co_xmit_lock;
+> +	struct work_struct co_flush_work;
+> +};
+> +
+> +static int rm_cons_notif_handler(struct notifier_block *nb, unsigned long cmd, void *data)
+> +{
+> +	int count, i;
+> +	struct rm_cons_port *rm_port = NULL;
+> +	struct tty_port *tty_port = NULL;
+> +	struct rm_cons_drv_data *cons_data =
+> +		container_of(nb, struct rm_cons_drv_data, rm_cons_notif);
+> +	const struct gh_rm_notification *notif = data;
+> +	struct gh_rm_notif_vm_console_chars const * const msg = notif->buff;
 
-diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-index 2fc60e60feb4..7be728bed46d 100644
---- a/Documentation/translations/zh_CN/index.rst
-+++ b/Documentation/translations/zh_CN/index.rst
-@@ -26,165 +26,98 @@
- 顺便说下，中文文档也需要遵守内核编码风格，风格中中文和英文的主要不同就是中文
- 的字符标点占用两个英文字符宽度， 所以，当英文要求不要超过每行100个字符时，
- 中文就不要超过50个字符。另外，也要注意'-'，'=' 等符号与相关标题的对齐。在将
--补丁提交到社区之前，一定要进行必要的checkpatch.pl检查和编译测试。
-+补丁提交到社区之前，一定要进行必要的 ``checkpatch.pl`` 检查和编译测试。
- 
--许可证文档
------------
--
--下面的文档介绍了Linux内核源代码的许可证（GPLv2）、如何在源代码树中正确标记
--单个文件的许可证、以及指向完整许可证文本的链接。
-+与Linux 内核社区一起工作
-+------------------------
- 
--* Documentation/translations/zh_CN/process/license-rules.rst
--
--用户文档
----------
--
--下面的手册是为内核用户编写的——即那些试图让它在给定系统上以最佳方式工作的
--用户。
-+与内核开发社区进行协作并将工作推向上游的基本指南。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   admin-guide/index
--
--TODOList:
--
--* kbuild/index
-+   process/development-process
-+   process/submitting-patches
-+   行为准则 <process/code-of-conduct>
-+   maintainer/index
-+   完整开发流程文档 <process/index>
- 
--固件相关文档
--------------
-+内部API文档
-+-----------
- 
--下列文档描述了内核需要的平台固件相关信息。
-+开发人员使用的内核内部交互接口手册。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   devicetree/index
-+   core-api/index
-+   driver-api/index
-+   内核中的锁 <locking/index>
- 
- TODOList:
- 
--* firmware-guide/index
--
--应用程序开发人员文档
----------------------
--
--用户空间API手册涵盖了描述应用程序开发人员可见内核接口方面的文档。
--
--TODOlist:
--
--* userspace-api/index
-+* subsystem-apis
- 
--内核开发简介
--------------
-+开发工具和流程
-+--------------
- 
--这些手册包含有关如何开发内核的整体信息。内核社区非常庞大，一年下来有数千名
--开发人员做出贡献。与任何大型社区一样，知道如何完成任务将使得更改合并的过程
--变得更加容易。
-+为所有内核开发人员提供有用信息的各种其他手册。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   process/index
--   dev-tools/index
-+   process/license-rules
-    doc-guide/index
-+   dev-tools/index
-+   dev-tools/testing-overview
-    kernel-hacking/index
--   maintainer/index
- 
- TODOList:
- 
- * trace/index
- * fault-injection/index
- * livepatch/index
--* rust/index
- 
--内核API文档
-------------
-+面向用户的文档
-+--------------
- 
--以下手册从内核开发人员的角度详细介绍了特定的内核子系统是如何工作的。这里的
--大部分信息都是直接从内核源代码获取的，并根据需要添加补充材料（或者至少是在
--我们设法添加的时候——可能不是所有的都是有需要的）。
-+下列手册针对
-+希望内核在给定系统上以最佳方式工作的*用户*，
-+和查找内核用户空间API信息的程序开发人员。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   core-api/index
--   driver-api/index
--   locking/index
--   accounting/index
--   cpu-freq/index
--   iio/index
--   infiniband/index
--   power/index
--   virt/index
--   sound/index
--   filesystems/index
--   scheduler/index
--   mm/index
--   peci/index
--   PCI/index
-+   admin-guide/index
-+   admin-guide/reporting-issues.rst
- 
- TODOList:
- 
--* block/index
--* cdrom/index
--* ide/index
--* fb/index
--* fpga/index
--* hid/index
--* i2c/index
--* isdn/index
--* leds/index
--* netlabel/index
--* networking/index
--* pcmcia/index
--* target/index
--* timers/index
--* spi/index
--* w1/index
--* watchdog/index
--* input/index
--* hwmon/index
--* gpu/index
--* security/index
--* crypto/index
--* bpf/index
--* usb/index
--* scsi/index
--* misc-devices/index
--* mhi/index
--
--体系结构无关文档
------------------
--
--TODOList:
-+* 内核构建系统 <kbuild/index>
-+* 用户空间工具 <tools/index>
-+* userspace-api/index
- 
--* asm-annotations
-+固件相关文档
-+------------
- 
--特定体系结构文档
------------------
-+下列文档描述了内核需要的平台固件相关信息。
- 
- .. toctree::
-    :maxdepth: 2
- 
--   mips/index
--   arm64/index
--   riscv/index
--   openrisc/index
--   parisc/index
--   loongarch/index
-+   devicetree/index
- 
- TODOList:
- 
--* arm/index
--* ia64/index
--* m68k/index
--* nios2/index
--* powerpc/index
--* s390/index
--* sh/index
--* sparc/index
--* x86/index
--* xtensa/index
-+* firmware-guide/index
-+
-+体系结构文档
-+------------
-+
-+.. toctree::
-+   :maxdepth: 2
-+
-+   arch
- 
- 其他文档
- --------
-@@ -195,9 +128,9 @@ TODOList:
- TODOList:
- 
- * staging/index
--* watch_queue
- 
--目录和表格
-+
-+索引和表格
- ----------
- 
- * :ref:`genindex`
--- 
-2.30.2
-
+So you did not comment on/address all my notes?
 
 -- 
-Wu XiangCheng	0x32684A40BCA7AEA7
+js
 
