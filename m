@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7E15FB1DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14775FB1E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiJKLzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S229619AbiJKL5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJKLzv (ORCPT
+        with ESMTP id S229475AbiJKL5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:55:51 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183C87F26F;
-        Tue, 11 Oct 2022 04:55:51 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id d14so7018718ilf.2;
-        Tue, 11 Oct 2022 04:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X9ELJWsFEOA9ZjR8vqRc+1/Kb4xOZiuQUQY31p1h+Q8=;
-        b=DZszs+gH1es+xg6y+a7l0fAdLt1s52gSgAZiIDQumcRtKI4eEhlGm+9JR8DSEWZR7t
-         I8sigBB0KtgDK6bFwuAQbJ6nT2M0FgHcR93WYRgrV9HcCYk4FmCdYeksFA4Q/AoLgGt+
-         3C4/KXreibaj3FvFT4nynzieUW3Hsuk7PVMTZRA/3WrfBnlKy+KUYHcIOaoIgq21QAqF
-         Gp45E8UcByMRn8YstbmTXUQ/c19HZIhtTlxc1jD9CxuyPT7l37ZuBk14F6ZOm3pM/oOt
-         kh3DASTrFByWwriz90Cvt3/a38lVOCpTXRcI4McEVEutLlAVrRouROph3+xL2iHzkU4w
-         wf1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X9ELJWsFEOA9ZjR8vqRc+1/Kb4xOZiuQUQY31p1h+Q8=;
-        b=6gkVtOts6FCpKNKjm9yq+zdRp9YIYULMaQWpcjEJ7TFpfKCID685kEyJZ4mb5oTjyB
-         g7a12GF1xombz1cEnHLe4cu+jnD0H2h+D0iTZkn8NzWCZHu16pB3A6zmw2bK5L2aP1xR
-         HQCw2HCv+4M985PUuVxtYpzpmDpz5uCbC51mIGejlT4bjvCYFczZgyrBpkIa3iIBK6p/
-         +wCWP98tVSmimSlD8qQcdZRNkOdimbKEv6582hjwM1rkMcJtdJ9eHu4rRzVzCRSUdUCz
-         dI0XnlwD8Ga0a+FV2TGS32VET7kcTd7h72Rw7TsjeLECz8lnFq5FBjsUsqYsOL6ftAmA
-         aLUw==
-X-Gm-Message-State: ACrzQf1XC+yN3OhWeF3tVhzCwFr0ISRYZ9ICDIcjVlZvhY7E5iHbz4Wk
-        H2F/083EN5uIX37YlyPFoSWPr/GSWxa8V/aDPpo=
-X-Google-Smtp-Source: AMsMyM5+gu5fEJL3u/z9fh5zuGtorQ255IKQ4OfCeJYH5cGS9UtuhnZ0j68AmjbTrs1kGnaP/bv1mWaQfSHEJHHX7Pc=
-X-Received: by 2002:a05:6e02:b2d:b0:2f9:e735:a010 with SMTP id
- e13-20020a056e020b2d00b002f9e735a010mr11659127ilu.151.1665489350477; Tue, 11
- Oct 2022 04:55:50 -0700 (PDT)
+        Tue, 11 Oct 2022 07:57:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A77F26F;
+        Tue, 11 Oct 2022 04:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665489439; x=1697025439;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XzJyJLhn3OWIM+SDzpoP33h7icTAUN97RR03Oxsgpeo=;
+  b=L+Np3Qi7RoB0r7xMZZ0OmhXBJ4m7wr0VBvEyUnReDUSsRauWLhus6I1v
+   TwGaOIvoH3wFeK67bVI2EKUlrOtd3Vy0mKDTV7PcXW4pzDiLJFAmTlZNb
+   0Rx5PdRITNcoQzwR4blkBF+/rwHteqDEE4/+fFCEjaWf7hqGkstYxDWKz
+   SkzbXFv7N35RDCGC6gWTwZ0851tgL2bS8gIiehWCdQn23vz/qIMzE0JI/
+   rY8WA7Jf47VcDTWQvTI93wJmRTRoWTMSGj+aatUfw8c9zYnLbKMfNcQNH
+   zg3dlQ/pDlwc4s5gOx29bUzh4zjlBbUygx0Xn0CsjUww9JwwXw5JXc0iV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284864448"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="284864448"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 04:57:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="751708546"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="751708546"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.213.187.182]) ([10.213.187.182])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 04:57:12 -0700
+Message-ID: <c65f10bd-e486-42d7-b221-dd763623775d@linux.intel.com>
+Date:   Tue, 11 Oct 2022 07:57:11 -0400
 MIME-Version: 1.0
-References: <20221011031843.960217-1-masahiroy@kernel.org>
-In-Reply-To: <20221011031843.960217-1-masahiroy@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 11 Oct 2022 13:55:39 +0200
-Message-ID: <CANiq72k9wAVCbHKVZFE=E3xv+2ZamUMsJ=uV43NxsSUQ4wXGdw@mail.gmail.com>
-Subject: Re: [RFC PATCH] Remove Intel compiler support
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ia64@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Tom Rix <trix@redhat.com>, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC/PATCHSET 00/19] perf stat: Cleanup counter aggregation (v1)
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+References: <20221010053600.272854-1-namhyung@kernel.org>
+ <ebc8e57e-1584-5f47-48d8-3bc38497799b@linux.intel.com>
+ <CAM9d7chavgTHwFdU4m=GRx9kwSX1Pi8w58rgQc4nP_X-bpnbUQ@mail.gmail.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <CAM9d7chavgTHwFdU4m=GRx9kwSX1Pi8w58rgQc4nP_X-bpnbUQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 5:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+
+>> My main concern would be subtle regressions since there are so many
+>> different combinations and way to travel through the code, and a lot of
+>> things are not covered by unit tests. When I worked on the code it was
+>> difficult to keep it all working. I assume you have some way to
+>> enumerate them all and tested that the output is identical?
+> Right, that's my concern too.
 >
->  include/linux/compiler-intel.h            |  34 -----
->  include/linux/compiler_types.h            |   2 -
+> I have tested many combinations manually and checked if they
+> produced similar results.
 
-You can also remove a few lines from `compiler_attributes.h`:
+I had a script to test many combinations, but had to check the output 
+manually
 
-    * Optional: not supported by icc
 
-Thanks for this!
+> But the problem is that I cannot test
+> all hardwares and more importantly it's hard to check
+> programmatically if the output is the same or not.
 
-Cheers,
-Miguel
+Can use "dummy" or some software event (e.g. a probe on some syscall) to 
+get stable numbers. I don't think we need to cover all hardware for the 
+output options, the different events should be similar, but need some 
+coverage for the different aggregation. Or we could add some more tool 
+events just for testing purposes, that would allow covering different 
+core scopes etc. and would easily allow generating known counts.
+
+-Andi
+
+
