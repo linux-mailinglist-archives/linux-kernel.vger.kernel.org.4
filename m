@@ -2,206 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E78C5FB6B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492E75FB71D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiJKPN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S229813AbiJKP2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbiJKPMn (ORCPT
+        with ESMTP id S230489AbiJKP2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:12:43 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AB81837C;
-        Tue, 11 Oct 2022 08:04:44 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id f23so13448128plr.6;
-        Tue, 11 Oct 2022 08:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=C10Q4XJneMGMJhEDiSg76fw0Q/8SVw0hSNkjyfh8gjo=;
-        b=FDv6Sw3QbdaR48PUvn5ClpNnOsnr5JzTdCyRcqrWQWRZvFio7oJJL9BLmZPGTkT+ZZ
-         vBuRDVfMqkr64IeGa++mXyWZLV+qzSOjzoMgiMbsO55dLceB2MJBg8YYCsC2Z+p50xW8
-         OcfnQOihOoT5lqhBf2ZJhxtbfbAK45nuIH0syzzKspdlG23b7aDnqdXV+pEMFd6A68pZ
-         BmFtbIr2b/CZp1atvdih85yI90FwYLqtMfh2Toojd9gkFSu/C1RCqTQmOMvv9McHwU8Z
-         aEA64oenBtMJ9PmQVCIXlm9ZplnOPy/iye4/ynqZuXH1i62Lfa5gVrQbfsx39Al9pLOU
-         sk6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C10Q4XJneMGMJhEDiSg76fw0Q/8SVw0hSNkjyfh8gjo=;
-        b=U3JbilSW2xhA2dTHNnBeT3bDiOS6Fz/Y8Rr4bKHuz6BaE53h3zuyCiNUZSw2hT/RBE
-         issHXXrHmpOUJjxRMhSw9vrzmWYaS77JIOy/ip3j3KogiNtcSGhbP4a5hxD1fs+73Xcb
-         ai4ZB24e0D8ogY4SjG4dUReeZrj/kVugzEoqHrZPo0GMn0L26mqEtUduLmkXDXvCX2bl
-         YRath0mwh9NTkMzMkFGQA0+dMo8S4o7uwEOYYR5VdVW7LisHgyLQYQ1SCfq5iKGboUbl
-         XFo2Ab7nHkqCEQr7TTdOKnavfZVQ/0gQ6R+xvCbx8JYvV6VkXWHNTW4USmp5uO5U69pg
-         ZrBA==
-X-Gm-Message-State: ACrzQf2gg+uEaMEe+nM3q49g4BsJnaZ25YezD8YuSsTBGKvZFFVAZh3D
-        +534U8JvHl/P0p4UsIRFVw==
-X-Google-Smtp-Source: AMsMyM6tSYy8+lK7jPryvatWeeUC+1QTtXbegtQtSZVaFdwGDpyDNqGt3xzPA7lkfvJSmEXk7a8QgQ==
-X-Received: by 2002:a17:90b:4a4b:b0:20c:705a:9899 with SMTP id lb11-20020a17090b4a4b00b0020c705a9899mr21809607pjb.133.1665500505006;
-        Tue, 11 Oct 2022 08:01:45 -0700 (PDT)
-Received: from localhost.localdomain ([106.104.115.142])
-        by smtp.gmail.com with ESMTPSA id b5-20020a1709027e0500b001754064ac31sm8746695plm.280.2022.10.11.08.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 08:01:44 -0700 (PDT)
-From:   chengwei <foxfly.lai.tw@gmail.com>
-X-Google-Original-From: chengwei <larry.lai@yunjingtech.com>
-To:     pavel@ucw.cz, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        GaryWang@aaeon.com.tw, musa.lin@yunjingtech.com,
-        jack.chang@yunjingtech.com, chengwei <larry.lai@yunjingtech.com>
-Subject: [PATCH v3 2/2] leds: Add support for UP board CPLD onboard LEDS
-Date:   Tue, 11 Oct 2022 23:01:00 +0800
-Message-Id: <20221011150100.10195-3-larry.lai@yunjingtech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221011150100.10195-1-larry.lai@yunjingtech.com>
-References: <20221011150100.10195-1-larry.lai@yunjingtech.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 11:28:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED75AC6A
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:18:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D5BE21E25;
+        Tue, 11 Oct 2022 15:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665500520; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tIObQI87ODYfkOTzFVXmAYrM/0zLsZEeiDdeh3vdD0s=;
+        b=e2GiKmmEOkLY+IrQG88WkAHke4BuJQw/Pp+O5SIQZidz/v9ATf7nW2bHCpzr/gZCYwWSCZ
+        8GE0tvxMxi2G5DPS/UwgN429NaVvUErmZVyYiNtBS46M/qzJO8I+iyiumoWGaSslUdXBsO
+        WnNsVzhKC500m/ua9l8Ig3xPT93DfI8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665500520;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tIObQI87ODYfkOTzFVXmAYrM/0zLsZEeiDdeh3vdD0s=;
+        b=2Rxq21b9+jjedRE+5e5G4D5FnvCgENcP36GpwsAT4K6vXhPZYlDfbAdzehDfkA2990Dy7H
+        6oreAn6VJPppxkAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41DF5139ED;
+        Tue, 11 Oct 2022 15:02:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bEtNCmiFRWNgSgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 11 Oct 2022 15:02:00 +0000
+Message-ID: <3326af6f-5ca5-e349-1641-5987e6800fea@suse.de>
+Date:   Tue, 11 Oct 2022 17:01:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 3/3] drm/crtc-helper: Add a drm_crtc_helper_atomic_check()
+ helper
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20221010170203.274949-1-javierm@redhat.com>
+ <20221010170203.274949-4-javierm@redhat.com>
+ <f6a49350-74d0-4923-7c80-8e6233dc135b@suse.de>
+ <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------VWTHTjX9hU0euSeG9r6eO66P"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The UP boards come with a few FPGA-controlled onboard LEDs:
-* UP Board: yellow, green, red
-* UP Squared: blue, yellow, green, red
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------VWTHTjX9hU0euSeG9r6eO66P
+Content-Type: multipart/mixed; boundary="------------bEkoHkR43JVEIQDmPkD0Euw2";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+Message-ID: <3326af6f-5ca5-e349-1641-5987e6800fea@suse.de>
+Subject: Re: [PATCH 3/3] drm/crtc-helper: Add a drm_crtc_helper_atomic_check()
+ helper
+References: <20221010170203.274949-1-javierm@redhat.com>
+ <20221010170203.274949-4-javierm@redhat.com>
+ <f6a49350-74d0-4923-7c80-8e6233dc135b@suse.de>
+ <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
+In-Reply-To: <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
 
-this patch depends on patch "mfd: Add support for UP board CPLD/FPGA"
+--------------bEkoHkR43JVEIQDmPkD0Euw2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Signed-off-by: chengwei <larry.lai@yunjingtech.com>
----
- drivers/leds/Kconfig        | 11 ++++++
- drivers/leds/Makefile       |  1 +
- drivers/leds/leds-upboard.c | 78 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 90 insertions(+)
- create mode 100644 drivers/leds/leds-upboard.c
+SGkNCg0KQW0gMTEuMTAuMjIgdW0gMTU6MjYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IE9uIDEwLzExLzIyIDE1OjIxLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToN
+Cj4+IEhpDQo+Pg0KPj4gQW0gMTAuMTAuMjIgdW0gMTk6MDIgc2NocmllYiBKYXZpZXIgTWFy
+dGluZXogQ2FuaWxsYXM6DQo+Pj4gUHJvdmlkZXMgYSBkZWZhdWx0IENSVEMgc3RhdGUgY2hl
+Y2sgaGFuZGxlciBmb3IgQ1JUQ3MgdGhhdCBvbmx5IGhhdmUgb25lDQo+Pj4gcHJpbWFyeSBw
+bGFuZSBhdHRhY2hlZC4NCj4+Pg0KPj4+IFRoZXJlIGFyZSBzb21lIGRyaXZlcnMgdGhhdCBk
+dXBsaWNhdGUgdGhpcyBsb2dpYyBpbiB0aGVpciBoZWxwZXJzLCBzdWNoIGFzDQo+Pj4gc2lt
+cGxlZHJtIGFuZCBzc2QxMzB4LiBGYWN0b3Igb3V0IHRoaXMgY29tbW9uIGNvZGUgaW50byBh
+IENSVEMgaGVscGVyIGFuZA0KPj4+IG1ha2UgZHJpdmVycyB1c2UgaXQuDQo+Pj4NCj4+PiBT
+aWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0
+LmNvbT4NCj4+DQo+PiBSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
+YW5uQHN1c2UuZGU+DQo+Pg0KPj4gVGhlcmUgcmVhbGx5IGlzbid0IG11Y2ggaGVyZSBmb3Ig
+bm93LiBJIHN1c3BlY3QgdGhhdCB0aGVyZSBhcmUgbW9yZQ0KPj4gZHJpdmVycyB0aGF0IGNv
+dWxkIHVzZSB0aGlzIGhlbHBlci4gSWYgeW91IG1lcmdlIHRoaXMgYmVmb3JlIG9mZHJtLCBJ
+J2xsDQo+PiByZWJhc2Ugb2Zkcm0gb24gdG9wLg0KPj4NCj4gDQo+IFN1cmUuIEkgcHJvYmFi
+bHkgd29uJ3QgcG9zdCBhIHYyIHVudGlsIHRvbW9ycm93IGFuZCBJIGJlbGlldmUgb2Zkcm0g
+aXMNCj4gcmVhZHkgdG8gYmUgbWVyZ2VkLCBzbyBJJ2xsIGp1c3QgcmViYXNlIHRoaXMgc2Vy
+aWVzIG9uIHRvcCBvZiB0aGF0IG9uY2UNCj4ganVzdCBwdXNoIGl0Lg0KDQpJIGp1c3QgcmVh
+bGl6ZWQgdGhhdCB0aGlzIGZ1bmN0aW9uIGluIG9mZHJtIGhhcyBhZGRpdGlvbmFsIGNvZGUg
+Zm9yIA0KY29sb3IgbWFuYWdlbWVudC4gVGhlcmUgd29uJ3QgYmUgYW55dGhpbmcgdG8gY29u
+dmVydC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4+IFBsZWFzZSBhbHNvIHNl
+ZSBteSBjb21tZW50IGJlbG93Lg0KPj4NCj4+DQo+IA0KPiBbLi4uXQ0KPiANCj4+PiArLyoq
+DQo+Pj4gKyAqIGRybV9jcnRjX2hlbHBlcl9hdG9taWNfY2hlY2soKSAtIEhlbHBlciB0byBj
+aGVjayBDUlRDIGF0b21pYy1zdGF0ZQ0KPj4+ICsgKiBAY3J0YzogQ1JUQyB0byBjaGVjaw0K
+Pj4+ICsgKiBAc3RhdGU6IGF0b21pYyBzdGF0ZSBvYmplY3QNCj4+PiArICoNCj4+PiArICog
+UHJvdmlkZXMgYSBkZWZhdWx0IENSVEMtc3RhdGUgY2hlY2sgaGFuZGxlciBmb3IgQ1JUQ3Mg
+dGhhdCBvbmx5IGhhdmUNCj4+PiArICogb25lIHByaW1hcnkgcGxhbmUgYXR0YWNoZWQgdG8g
+aXQuDQo+Pj4gKyAqDQo+Pj4gKyAqIFRoaXMgaXMgb2Z0ZW4gdGhlIGNhc2UgZm9yIHRoZSBD
+UlRDIG9mIHNpbXBsZSBmcmFtZWJ1ZmZlcnMuDQo+Pg0KPj4gSSdkIGFkZCBhIHJlZmVyZW5j
+ZSB0byBkcm1fcGxhbmVfaGVscGVyX2F0b21pY19jaGVjaygpIHRvIHRoaXMNCj4+IHBhcmFn
+cmFwaC4gTGlrZQ0KPj4NCj4+ICAgICBTZWUgZHJtX3BsYW5lX2hlbHBlcl9hdG9taWNfY2hl
+Y2soKSBmb3IgdGhlIHJlc3BlY3RpdmUgcGxhbmUgaGVscGVycy4NCj4+DQo+PiBBbmQgYWxz
+byByZWZlcmVuY2UgYmFjayBmcm9tIHRoZSBwbGFuZS1jaGVjayBoZWxwZXIgdG8gdGhlIENS
+VEMtY2hlY2sNCj4+IGhlbHBlci4NCj4+DQo+IA0KPiBHb29kIGlkZWEsIEknbGwgZG8gdGhh
+dC4gVGhhbmtzIGZvciB5b3VyIHJldmlldy4NCj4gICANCj4+IEJlc3QgcmVnYXJkcw0KPj4g
+VGhvbWFzDQo+Pg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJp
+dmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpN
+YXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFH
+IE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index 499d0f215a8b..ae35a4c7e1e6 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -872,6 +872,17 @@ source "drivers/leds/flash/Kconfig"
- comment "RGB LED drivers"
- source "drivers/leds/rgb/Kconfig"
- 
-+config LEDS_UPBOARD
-+	tristate "LED support for the UP board"
-+	depends on LEDS_CLASS
-+	depends on MFD_UPBOARD_FPGA
-+	depends on X86
-+	help
-+	  This option enables support for the UP board LEDs.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called leds-upboard.
-+
- comment "LED Triggers"
- source "drivers/leds/trigger/Kconfig"
- 
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index 4fd2f92cd198..e72956645646 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -83,6 +83,7 @@ obj-$(CONFIG_LEDS_TI_LMU_COMMON)	+= leds-ti-lmu-common.o
- obj-$(CONFIG_LEDS_TLC591XX)		+= leds-tlc591xx.o
- obj-$(CONFIG_LEDS_TPS6105X)		+= leds-tps6105x.o
- obj-$(CONFIG_LEDS_TURRIS_OMNIA)		+= leds-turris-omnia.o
-+obj-$(CONFIG_LEDS_UPBOARD)		+= leds-upboard.o
- obj-$(CONFIG_LEDS_WM831X_STATUS)	+= leds-wm831x-status.o
- obj-$(CONFIG_LEDS_WM8350)		+= leds-wm8350.o
- obj-$(CONFIG_LEDS_WRAP)			+= leds-wrap.o
-diff --git a/drivers/leds/leds-upboard.c b/drivers/leds/leds-upboard.c
-new file mode 100644
-index 000000000000..214325442f3b
---- /dev/null
-+++ b/drivers/leds/leds-upboard.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * UP Board FPGA-based LED driver
-+ *
-+ * Copyright (c) 2017, Emutex Ltd. All rights reserved.
-+ *
-+ * Author: Javier Arteaga <javier@emutex.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/leds.h>
-+#include <linux/mfd/upboard-fpga.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+struct upboard_led {
-+	struct led_classdev cdev;
-+	struct regmap_field *field;
-+};
-+
-+static enum led_brightness upboard_led_brightness_get(struct led_classdev *cdev)
-+{
-+	struct upboard_led *led = container_of(cdev, struct upboard_led, cdev);
-+	int brightness = 0;
-+
-+	regmap_field_read(led->field, &brightness);
-+
-+	return brightness;
-+};
-+
-+static void upboard_led_brightness_set(struct led_classdev *cdev, enum led_brightness brightness)
-+{
-+	struct upboard_led *led = container_of(cdev, struct upboard_led, cdev);
-+
-+	regmap_field_write(led->field, brightness != LED_OFF);
-+};
-+
-+static int __init upboard_led_probe(struct platform_device *pdev)
-+{
-+	struct upboard_fpga * const up_fpga = dev_get_drvdata(pdev->dev.parent);
-+	struct reg_field fldconf = {
-+		.reg = UPFPGA_REG_FUNC_EN0,
-+	};
-+	struct upboard_led_data * const pdata = pdev->dev.platform_data;
-+	struct upboard_led *led;
-+
-+	led = devm_kzalloc(&pdev->dev, sizeof(*led), GFP_KERNEL);
-+	if (!led)
-+		return -ENOMEM;
-+
-+	fldconf.lsb = pdata->bit;
-+	fldconf.msb = pdata->bit;
-+	led->field = devm_regmap_field_alloc(&pdev->dev, up_fpga->regmap, fldconf);
-+	if (IS_ERR(led->field))
-+		return PTR_ERR(led->field);
-+
-+	led->cdev.brightness_get = upboard_led_brightness_get;
-+	led->cdev.brightness_set = upboard_led_brightness_set;
-+	led->cdev.name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "upboard:%s:",
-+					pdata->colour);
-+	if (!led->cdev.name)
-+		return -ENOMEM;
-+
-+	return devm_led_classdev_register(&pdev->dev, &led->cdev);
-+};
-+
-+static struct platform_driver upboard_led_driver = {
-+	.driver = {
-+		.name = "upboard-led",
-+	},
-+};
-+module_platform_driver_probe(upboard_led_driver, upboard_led_probe);
-+
-+MODULE_AUTHOR("Javier Arteaga <javier@emutex.com>");
-+MODULE_DESCRIPTION("UP Board LED driver");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:upboard-led");
--- 
-2.17.1
+--------------bEkoHkR43JVEIQDmPkD0Euw2--
 
+--------------VWTHTjX9hU0euSeG9r6eO66P
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNFhWcFAwAAAAAACgkQlh/E3EQov+A+
+wBAAqA9rOyoFJtmzOcmcD35zAmPQean1vkqoTj/jIfvP9D0mtDFOyPZsJkiEtJ+7epuug0uQ4BJd
+QE9X/InfoXJn9IrU0fQWc2qW6cHrLjMPTPvgfKrGPLy6L+B1UqSBbZV54bTWVAaNG0flr+tyAB9I
+c2sw1rQ8Yp7E1yW+/rK8Lj80l2mJVHWryyN7R+7Hc5sOlce142ZNJ60JdESN7HyCOrTe92az2ciU
+JvMpDl7jvU2mIAAQb9Q8w2K/W9p6x+dDbO3FYHlYOioWqL468PgowK5EGiR+eSUVCdzXA78ptWv3
+Oy0j7xhJExA9H94t8f19PZtx4bJSxUlZ3pg7hmM2G0ovRsnY8x7jpl1B0+KS/xStRLHsZxEccrlM
+FGMEvPTXlJBwZmBWR6HoUwIMlDTeVWK7tXifcw3HP6M0Sg33B9VWOJJLm5Qb0M0i2UrBYzYu2RcA
+F0V/2kvc91GKR9rrjpDMoQ3EoRjM1zG2u5UOrj5Qs4NbQOZE4Pk0uasnLyCqNkahYzCfLLJX68LS
+UUIUvg+rh8M2Pi1qxxgNYujWSvoReIVrrChyBpFv+I5i4ovKj9ccM/mxRF8F9VaB4jMYELJIAJWx
+aT157+TzdBmWepmZubM7U3Jm1sVWZVdI1+tAT41U79KCd9p8/WISwoFvKDH3EGaDEVfmxYdv/buy
+hlw=
+=nRdf
+-----END PGP SIGNATURE-----
+
+--------------VWTHTjX9hU0euSeG9r6eO66P--
