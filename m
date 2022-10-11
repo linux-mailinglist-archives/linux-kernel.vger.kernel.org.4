@@ -2,280 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D025FBE62
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F177A5FBE6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiJKXUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 19:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S229527AbiJKXZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 19:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiJKXUA (ORCPT
+        with ESMTP id S229492AbiJKXY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 19:20:00 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3520BA50F7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:19:15 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oiOWK-0003i7-V7; Wed, 12 Oct 2022 01:18:45 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Conor.Dooley@microchip.com, samuel@sholland.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v6 2/2] drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
-Date:   Wed, 12 Oct 2022 01:18:41 +0200
-Message-Id: <20221011231841.2951264-3-heiko@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221011231841.2951264-1-heiko@sntech.de>
-References: <20221011231841.2951264-1-heiko@sntech.de>
+        Tue, 11 Oct 2022 19:24:58 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565A925585
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:24:54 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-112-GnkBwVzXNmW87uuPT0Ma2A-1; Wed, 12 Oct 2022 00:24:51 +0100
+X-MC-Unique: GnkBwVzXNmW87uuPT0Ma2A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 12 Oct
+ 2022 00:24:51 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Wed, 12 Oct 2022 00:24:51 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>
+CC:     "Jason A. Donenfeld" <zx2c4@kernel.org>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [crng-random:jd/get_random_u32_below 23/23]
+ include/linux/random.h:64:69: sparse: sparse: cast truncates bits from
+ constant value (1f4 becomes f4)
+Thread-Topic: [crng-random:jd/get_random_u32_below 23/23]
+ include/linux/random.h:64:69: sparse: sparse: cast truncates bits from
+ constant value (1f4 becomes f4)
+Thread-Index: AQHY3DtVD69rv9eDCUyAI1FFBLG+sa4H2CJggAABJoCAAfu+QA==
+Date:   Tue, 11 Oct 2022 23:24:50 +0000
+Message-ID: <4bbbde65cef74a579de34a75e6dba0a3@AcuMS.aculab.com>
+References: <202210100722.Wc2gmfS6-lkp@intel.com>
+ <a473cc4da4874235b2b98fd1a57e782e@AcuMS.aculab.com>
+ <Y0RcL2j98CatloRr@zx2c4.com>
+In-Reply-To: <Y0RcL2j98CatloRr@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the T-HEAD C9XX cores being designed before or during the ratification
-to the SSCOFPMF extension, it implements functionality very similar but
-not equal to it.
-
-It implements overflow handling and also some privilege-mode filtering.
-While SSCOFPMF supports this for all modes, the C9XX only implements the
-filtering for M-mode and S-mode but not user-mode.
-
-So add some adaptions to allow the C9XX to still handle
-its PMU through the regular SBI PMU interface instead of defining new
-interfaces or drivers.
-
-To work properly, this requires a matching change in SBI, though the actual
-interface between kernel and SBI does not change.
-
-The main differences are a the overflow CSR and irq number.
-
-As the reading of the overflow-csr is in the hot-path during irq handling,
-use an errata and alternatives to not introduce new conditionals there.
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- arch/riscv/Kconfig.erratas           | 13 +++++++++++
- arch/riscv/errata/thead/errata.c     | 19 ++++++++++++++++
- arch/riscv/include/asm/errata_list.h | 16 ++++++++++++-
- drivers/perf/riscv_pmu_sbi.c         | 34 ++++++++++++++++++++--------
- 4 files changed, 71 insertions(+), 11 deletions(-)
-
-diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-index f3623df23b5f..69621ae6d647 100644
---- a/arch/riscv/Kconfig.erratas
-+++ b/arch/riscv/Kconfig.erratas
-@@ -66,4 +66,17 @@ config ERRATA_THEAD_CMO
- 
- 	  If you don't know what to do here, say "Y".
- 
-+config ERRATA_THEAD_PMU
-+	bool "Apply T-Head PMU errata"
-+	depends on ERRATA_THEAD && RISCV_PMU_SBI
-+	default y
-+	help
-+	  The T-Head C9xx cores implement a PMU overflow extension very
-+	  similar to the core SSCOFPMF extension.
-+
-+	  This will apply the overflow errata to handle the non-standard
-+	  behaviour via the regular SBI PMU driver and interface.
-+
-+	  If you don't know what to do here, say "Y".
-+
- endmenu # "CPU errata selection"
-diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-index 21546937db39..fac5742d1c1e 100644
---- a/arch/riscv/errata/thead/errata.c
-+++ b/arch/riscv/errata/thead/errata.c
-@@ -47,6 +47,22 @@ static bool errata_probe_cmo(unsigned int stage,
- 	return true;
- }
- 
-+static bool errata_probe_pmu(unsigned int stage,
-+			     unsigned long arch_id, unsigned long impid)
-+{
-+	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_PMU))
-+		return false;
-+
-+	/* target-c9xx cores report arch_id and impid as 0 */
-+	if (arch_id != 0 || impid != 0)
-+		return false;
-+
-+	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-+		return false;
-+
-+	return true;
-+}
-+
- static u32 thead_errata_probe(unsigned int stage,
- 			      unsigned long archid, unsigned long impid)
- {
-@@ -58,6 +74,9 @@ static u32 thead_errata_probe(unsigned int stage,
- 	if (errata_probe_cmo(stage, archid, impid))
- 		cpu_req_errata |= BIT(ERRATA_THEAD_CMO);
- 
-+	if (errata_probe_pmu(stage, archid, impid))
-+		cpu_req_errata |= BIT(ERRATA_THEAD_PMU);
-+
- 	return cpu_req_errata;
- }
- 
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 19a771085781..4180312d2a70 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -6,6 +6,7 @@
- #define ASM_ERRATA_LIST_H
- 
- #include <asm/alternative.h>
-+#include <asm/csr.h>
- #include <asm/vendorid_list.h>
- 
- #ifdef CONFIG_ERRATA_SIFIVE
-@@ -17,7 +18,8 @@
- #ifdef CONFIG_ERRATA_THEAD
- #define	ERRATA_THEAD_PBMT 0
- #define	ERRATA_THEAD_CMO 1
--#define	ERRATA_THEAD_NUMBER 2
-+#define	ERRATA_THEAD_PMU 2
-+#define	ERRATA_THEAD_NUMBER 3
- #endif
- 
- #define	CPUFEATURE_SVPBMT 0
-@@ -142,6 +144,18 @@ asm volatile(ALTERNATIVE_2(						\
- 	    "r"((unsigned long)(_start) + (_size))			\
- 	: "a0")
- 
-+#define THEAD_C9XX_RV_IRQ_PMU			17
-+#define THEAD_C9XX_CSR_SCOUNTEROF		0x5c5
-+
-+#define ALT_SBI_PMU_OVERFLOW(__ovl)					\
-+asm volatile(ALTERNATIVE(						\
-+	"csrr %0, " __stringify(CSR_SSCOUNTOVF),			\
-+	"csrr %0, " __stringify(THEAD_C9XX_CSR_SCOUNTEROF),		\
-+		THEAD_VENDOR_ID, ERRATA_THEAD_PMU,			\
-+		CONFIG_ERRATA_THEAD_PMU)				\
-+	: "=r" (__ovl) :						\
-+	: "memory")
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 8de4ca2fef21..a77fef6dc35f 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -19,6 +19,7 @@
- #include <linux/of.h>
- #include <linux/cpu_pm.h>
- 
-+#include <asm/errata_list.h>
- #include <asm/sbi.h>
- #include <asm/hwcap.h>
- 
-@@ -46,6 +47,8 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
-  * per_cpu in case of harts with different pmu counters
-  */
- static union sbi_pmu_ctr_info *pmu_ctr_list;
-+static bool riscv_pmu_use_irq;
-+static unsigned int riscv_pmu_irq_num;
- static unsigned int riscv_pmu_irq;
- 
- struct sbi_pmu_event_data {
-@@ -575,7 +578,7 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
- 	fidx = find_first_bit(cpu_hw_evt->used_hw_ctrs, RISCV_MAX_COUNTERS);
- 	event = cpu_hw_evt->events[fidx];
- 	if (!event) {
--		csr_clear(CSR_SIP, SIP_LCOFIP);
-+		csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
- 		return IRQ_NONE;
- 	}
- 
-@@ -583,13 +586,13 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
- 	pmu_sbi_stop_hw_ctrs(pmu);
- 
- 	/* Overflow status register should only be read after counter are stopped */
--	overflow = csr_read(CSR_SSCOUNTOVF);
-+	ALT_SBI_PMU_OVERFLOW(overflow);
- 
- 	/*
- 	 * Overflow interrupt pending bit should only be cleared after stopping
- 	 * all the counters to avoid any race condition.
- 	 */
--	csr_clear(CSR_SIP, SIP_LCOFIP);
-+	csr_clear(CSR_SIP, BIT(riscv_pmu_irq_num));
- 
- 	/* No overflow bit is set */
- 	if (!overflow)
-@@ -651,10 +654,10 @@ static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
- 	/* Stop all the counters so that they can be enabled from perf */
- 	pmu_sbi_stop_all(pmu);
- 
--	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
-+	if (riscv_pmu_use_irq) {
- 		cpu_hw_evt->irq = riscv_pmu_irq;
--		csr_clear(CSR_IP, BIT(RV_IRQ_PMU));
--		csr_set(CSR_IE, BIT(RV_IRQ_PMU));
-+		csr_clear(CSR_IP, BIT(riscv_pmu_irq_num));
-+		csr_set(CSR_IE, BIT(riscv_pmu_irq_num));
- 		enable_percpu_irq(riscv_pmu_irq, IRQ_TYPE_NONE);
- 	}
- 
-@@ -663,9 +666,9 @@ static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
- 
- static int pmu_sbi_dying_cpu(unsigned int cpu, struct hlist_node *node)
- {
--	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
-+	if (riscv_pmu_use_irq) {
- 		disable_percpu_irq(riscv_pmu_irq);
--		csr_clear(CSR_IE, BIT(RV_IRQ_PMU));
-+		csr_clear(CSR_IE, BIT(riscv_pmu_irq_num));
- 	}
- 
- 	/* Disable all counters access for user mode now */
-@@ -681,7 +684,18 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
- 	struct device_node *cpu, *child;
- 	struct irq_domain *domain = NULL;
- 
--	if (!riscv_isa_extension_available(NULL, SSCOFPMF))
-+	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
-+		riscv_pmu_irq_num = RV_IRQ_PMU;
-+		riscv_pmu_use_irq = true;
-+	} else if (IS_ENABLED(CONFIG_ERRATA_THEAD_PMU) &&
-+		   riscv_cached_mvendorid(0) == THEAD_VENDOR_ID &&
-+		   riscv_cached_marchid(0) == 0 &&
-+		   riscv_cached_mimpid(0) == 0) {
-+		riscv_pmu_irq_num = THEAD_C9XX_RV_IRQ_PMU;
-+		riscv_pmu_use_irq = true;
-+	}
-+
-+	if (!riscv_pmu_use_irq)
- 		return -EOPNOTSUPP;
- 
- 	for_each_of_cpu_node(cpu) {
-@@ -703,7 +717,7 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
- 		return -ENODEV;
- 	}
- 
--	riscv_pmu_irq = irq_create_mapping(domain, RV_IRQ_PMU);
-+	riscv_pmu_irq = irq_create_mapping(domain, riscv_pmu_irq_num);
- 	if (!riscv_pmu_irq) {
- 		pr_err("Failed to map PMU interrupt for node\n");
- 		return -ENODEV;
--- 
-2.35.1
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDEwIE9jdG9iZXIgMjAyMiAxODo1NA0K
+PiANCj4gT24gTW9uLCBPY3QgMTAsIDIwMjIgYXQgMDU6MTg6NDBQTSArMDAwMCwgRGF2aWQgTGFp
+Z2h0IHdyb3RlOg0KPiA+IEZyb206IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0K
+PiA+ID4gU2VudDogMTAgT2N0b2JlciAyMDIyIDAwOjMyDQo+ID4gPiBUbzogSmFzb24gQS4gRG9u
+ZW5mZWxkIDx6eDJjNEBrZXJuZWwub3JnPg0KPiA+IC4uLg0KPiA+DQo+ID4gSSdtIG1pc3Npbmcg
+dGhlIG1haW4gbWFpbGluZyBsaXN0IGVtYWlsIGZvciB0aGlzIGNoYW5nZS4NCj4gPiBJJ20gZ3Vl
+c3NpbmcgdGhlIG5vbi1pbmxpbmVkIGNvZGUgZm9yIG5vbi1jb25zdGFudCBjZWlsDQo+ID4gaXMg
+c2ltaWxhci4NCj4gDQo+IEl0J3MgcGFydCBvZiBhIGRldmVsb3BtZW50IHRyZWUgSSBhbHJlYWR5
+IGxpbmtlZCB5b3UgdG8uIEl0J3Mgbm90IGRvbmUNCj4geWV0LiBUaGlzIGFsZXJ0IGlzIGp1c3Qg
+YWJvdXQgbmVlZGluZyBhIF9fZm9yY2UuDQoNCkkga2VlcCB0aGlua2luZyBhYm91dCB0aGlzIG9u
+ZS4NCnNwYXJzZSBpcyBiZWluZyBzdHVwaWQgYmVjYXVzZSBpdCBpcyBsb29raW5nIGF0IGNvZGUg
+dGhhdCBjYWRlIGJlIHJlYWNoZWQuDQonY2VpbCcgbXVzdCBiZSA1MDAgc28gdGhlIHRlc3QgYXQg
+bGluZSA2MiBpcyBmYWxzZS4NCkJ1dCB3aGF0IGlzIHRoZSBjYXN0IGZvcj8NCkxpbmUgNjQgaXMg
+b25seSBleGVjdXRlZCB3aGVuIGNlaWwgaXMgPD0gMjU2IGFuZCB0aGUgY29uZGl0aW9uDQpvbmx5
+IG1hdHRlcnMgd2hlbiBjZWlsIDw9IDI1NSAtIHNvIHRoZSBjYXN0IGNhbm5vdCBiZSBuZWVkZWQu
+DQoNCkkgdGhpbmsgeW91IG1pZ2h0IGJlIHRyeWluZyB0byBkbyA4LWJpdCBhcml0aG1ldGljIC0g
+YnV0IHlvdQ0Kc2hvdWxkIGtub3cgaXQgZ2V0cyBwcm9tb3RlZCB0byAnaW50JyAoYW5kIHRoZW4g
+dG8gdW5zaWduZWQgaW50KS4NCldoYXQgbWlnaHQgZG8gd2hhdCB5b3UgaW50ZW5kZWQgaXMgKHU4
+KX5jZWlsICUgY2VpbC4NCkJ1dCB0aGF0IGlzIHRoZSBzYW1lIGFzICgweGZmIC0gY2VpbCkgJSBj
+ZWlsLg0KV2hpY2ggaXMgdGhlIHNhbWUgYXMgMHhmZiAlIGNlaWwuDQoNCkEgcXVpY2sgY2hlY2sg
+d2l0aCBjZWlsID09IDUgZ2l2ZXMgdGhlIHdyb25nIGFuc3dlcg0KYXMgYWxsIHZhbHVlcyBnZXQg
+YWNjZXB0ZWQgLSBhbmQgb25lIG5lZWQgdG8gYmUgZXhjbHVkZWQuDQpTbyB5b3UgZWl0aGVyIG5l
+ZWQgKG11bHQgJiAweGZmKSA+IDB4ZmYgJSBjZWlsDQpvciAobXVsdCAmIDB4ZmYpID49IDB4MTAw
+ICUgY2VpbC4NClRoZSBsYXR0ZXIgdmVyc2lvbiBpcyBhbHNvIHJpZ2h0IGZvciBwb3dlcnMgb2Yg
+Mg0KZXhjZXB0IHRoYXQgdGhlIGNvbXBpbGVyIHdvbid0IGxpa2UgdGhlIHh4eCA+IDB1IHRlc3QN
+CmJlY2F1c2UgaXQgaXMgYWx3YXlzIHRydWUuDQoNCglEYXZpZA0KDQo+IA0KPiA+DQo+ID4gPiB2
+aW0gKzY0IGluY2x1ZGUvbGludXgvcmFuZG9tLmgNCj4gPiA+DQo+ID4gPiAgICAgNTMNCj4gPiA+
+ICAgICA1NAl1MzIgX19nZXRfcmFuZG9tX3UzMl9iZWxvdyh1MzIgY2VpbCk7DQo+ID4gPiAgICAg
+NTUJLyogUmV0dXJucyBhIHJhbmRvbSBpbnRlZ2VyIGluIHRoZSBpbnRlcnZhbCBbMCwgY2VpbCks
+IHdpdGggdW5pZm9ybSBkaXN0cmlidXRpb24uICovDQo+ID4gPiAgICAgNTYJc3RhdGljIGlubGlu
+ZSB1MzIgZ2V0X3JhbmRvbV91MzJfYmVsb3codTMyIGNlaWwpDQo+ID4gPiAgICAgNTcJew0KPiA+
+ID4gICAgIDU4CQlpZiAoIV9fYnVpbHRpbl9jb25zdGFudF9wKGNlaWwpKQ0KPiA+ID4gICAgIDU5
+CQkJcmV0dXJuIF9fZ2V0X3JhbmRvbV91MzJfYmVsb3coY2VpbCk7DQo+ID4gPiAgICAgNjANCj4g
+PiA+ICAgICA2MQkJZm9yICg7Oykgew0KPiA+ID4gICAgIDYyCQkJaWYgKGNlaWwgPD0gMVUgPDwg
+OCkgew0KPiA+ID4gICAgIDYzCQkJCXUzMiBtdWx0ID0gY2VpbCAqIGdldF9yYW5kb21fdTgoKTsN
+Cj4gPiA+ICAgPiA2NAkJCQlpZiAoaXNfcG93ZXJfb2ZfMihjZWlsKSB8fCAodTgpbXVsdCA+PSAt
+KHU4KWNlaWwgJSBjZWlsKQ0KPiA+ID4gICAgIDY1CQkJCQlyZXR1cm4gbXVsdCA+PiA4Ow0KPiA+
+DQo+ID4gSWYgeW91IGFyZSBnb2luZyB0byBjaGVjayBpc19wb3dlcl9vZl8yKCkgdGhlbiB5b3Ug
+bWlnaHQgYXMgd2VsbCBkbzoNCj4gPiAJCXUzMiB2YWwgPSBnZXRfcmFuZG9tX3U4KCk7DQo+ID4g
+CQlpZiAoaXNfcG93ZXJfb2ZfMihjZWlsKSkNCj4gPiAJCQlyZXR1cm4gY2VpbCA9PSAweDEwMCA/
+IHZhbCA6IHZhbCAmIChjZWlsIC0gMSk7DQo+ID4gRXhjZXB0IHRoYXQgeW91IGRvbid0IHdhbnQg
+dG8gbG9vcCBvbiB6ZXJvIC0gc28gIShjZWlsICYgKGNlaWwgLSAxKSkNCj4gDQo+IEkgdGhvdWdo
+dCBJIG9wdGVkIG91dCBvZiB0aGUgTGFpZ2h0IGRyaXZlLWJ5cz8NCj4gDQo+IEVpdGhlciB3YXks
+IEkgZG9uJ3QgdW5kZXJzdGFuZCB5b3VyIGNvbW1lbnRzIG9yIGhvdyB0aGV5IHBlcnRhaW4gdG8g
+dGhlDQo+IGN1cnJlbnQgY29kZSBpbiB0aGF0IHVuZmluaXNoZWQgZGV2ZWxvcG1lbnQgYnJhbmNo
+LiBQbGVhc2UganVzdCBzZW5kDQo+IHJlYWwgcGF0Y2hlcy4NCj4gDQo+IEphc29uDQoNCi0NClJl
+Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
+b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
+Cg==
 
