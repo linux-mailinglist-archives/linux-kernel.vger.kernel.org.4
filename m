@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C437B5FBB98
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBD15FBB9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJKTxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S229704AbiJKTyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiJKTxl (ORCPT
+        with ESMTP id S229693AbiJKTyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:53:41 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9727D7BE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:53:40 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c20so4636517plc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:53:40 -0700 (PDT)
+        Tue, 11 Oct 2022 15:54:16 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141DF7B786
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:54:14 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id de14so9644823qvb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DhlMOfPBdi/CsWsdnaMLzdq//FOZZc6tM8Yhst23qAw=;
-        b=C74IZkU1+jAVMUbnoGaRvOY7sEMO90MLdqDnWdkCWMz+9uJUmGC54r5aogn7gustEJ
-         NUT9LGUBlKvqGxhkCb2fhBcHJ+RopOoW+WGwCwqBO58ANWo474enoaJs+mCaCc1PvWEO
-         3mr/8neCIz0RuDiDApHrM53UWqUAP0Xtp0aTZzw5ZpxrNo7SH/qiYb8hjohj0p9poY0Q
-         2wRm5LUWsZtelulLw/VpEuPzX6a7lK1Lq6gyPkMeZSlTTfJdjULHqVoeB6bqZle6sdyg
-         1GAXwgG45SfOwGsPo9N9CL4KtmqKt/Ar/3b5MNW/IMnHlGxrVQ81fxjLw4oD5tdkzj6J
-         52AA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sslcfDW3BZnjxJOzXU+bZ3YMR6XY0q1cZ2iVJRTDRVk=;
+        b=dPaAEuVDxDtXPEwzGLqsjaNTL+1KZKNie24yZ9SYlP5pHpnEXEvsgcLHNzjx/cQ1cn
+         6q0zdfPrqGPUsI7EWFYgWRHumPQJQMxR5RLsiugtjXHZ+MAOxmk2o1I0AYaGdJjyFx08
+         MxIItMJgpAHn9nPRJLRvMwo24tD/Yk96G9BxbP+2wyO3HI0DvRC+ocimKJ8u7Z3QNMSp
+         0n23oak/JydBhAzXRluJC0/Z9MJIIKF+NSMKzEXIsGjmFa92c0Gu76VaZWl3xfIoDwbp
+         Zc8tdUf95yxil6z5MXUkplWBCZxd7GhOHSVgxGXcyKRvRWU/lLifQ7xmLC3/KC9NMtky
+         T7Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DhlMOfPBdi/CsWsdnaMLzdq//FOZZc6tM8Yhst23qAw=;
-        b=AEcP58yip4mkbZHPqGYZa/NmTyLdQxR3XuKCNJECn7tEkN4LeWRhMXsqmecECUIJDZ
-         +na9Bja6T0Wmato+voJhqj1A2bPPzb55s1Lsmnf8Y9BBcvHfRMicltB+72H9ZltMDBvJ
-         B+pN+yEAZFTVvW3AMdgFpL8f3lAufm8Oa58wN5bR5EhrDV1F67/3vJ/sT4RE90SOP4Zg
-         +MJPHiS/attY1RM4jxt4oCO5FsA44gJp1SmZouvx95D/vQPO0GTJwDruRVDxalXoeJnw
-         MpiqMOmiXJBh4ZihFw/46HnUtu9+1DH1R0JBV0684rq+YY9AsgH2mWgI5r0fJtWWtdOD
-         CLjQ==
-X-Gm-Message-State: ACrzQf3E2T3qJfuWwIQ70ZFLx7vHblOoA1TVTnpA3WyEHLeGuBtsWwKj
-        zsqc4mMGwvIwYCyGHKGRCInqHKimCtHxXQ==
-X-Google-Smtp-Source: AMsMyM5mDG37X/LUkK2IJv0l3Ao0MyE1gBDWewqQmfyvUQqBeSdGUycE1fnfGPaslQRj09zOXZ1H8w==
-X-Received: by 2002:a17:90b:1b08:b0:20d:7bbf:4701 with SMTP id nu8-20020a17090b1b0800b0020d7bbf4701mr881615pjb.87.1665518019533;
-        Tue, 11 Oct 2022 12:53:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x6-20020a628606000000b005629b6a8b53sm9744924pfd.15.2022.10.11.12.53.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 12:53:39 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 19:53:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH v5 03/30] KVM: x86: Move check_processor_compatibility
- from init ops to runtime ops
-Message-ID: <Y0XJvx7aISd+fZDq@google.com>
-References: <cover.1663869838.git.isaku.yamahata@intel.com>
- <82455a41cd39decdd1eb8765c37278aa78a3a72e.1663869838.git.isaku.yamahata@intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sslcfDW3BZnjxJOzXU+bZ3YMR6XY0q1cZ2iVJRTDRVk=;
+        b=Vz77d1MzvQDRHZ2soUZEac9hysy+W98SSHZcxdHLoB6oell02gVnC3bHFcnr0uepL4
+         pOLY5UyMNF4GkVK4ZLgI9oD7YyjTcX85wgPqvzSkJeE4EIafHrHMHSEI2HBshVB5YSGn
+         4R1zpg9ue6M1Hhy5DvZUa9kIs/5TGw88qbUhyIRuq2IhSLfk6J8z+zBqp6CB2a45JAmt
+         4HEVd8/i7s+wgmYYwbH1tG/fSUg5cwTGMg1o2iJ8OvPmzDBpzQSD+xwdSc7xzTxbhWLM
+         2HGpgxvR9xvyT9CcGfUvK6779pw2a6rJgHuQYbwuDD6zUCzLN5o3NPMVUvujlNPZSwt6
+         58fQ==
+X-Gm-Message-State: ACrzQf2tRtttq27Qy1qHBmeJRTvxgnDtgc6+YRtw5MweU7jvlBDNkLyS
+        nhTYHvLO5qx4ZfvKkqNLLI4j1Q==
+X-Google-Smtp-Source: AMsMyM5+aTQaWcFsQOU25ufUA3VeLfaxfhjr2Z6/mP3HOZlDLnAlkvbygkKOM06/oyBcHYBG0jAYEA==
+X-Received: by 2002:a05:6214:5cc5:b0:4b3:e05a:bbb9 with SMTP id lk5-20020a0562145cc500b004b3e05abbb9mr14260326qvb.42.1665518053305;
+        Tue, 11 Oct 2022 12:54:13 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id h10-20020a05620a284a00b006b9c9b7db8bsm13663527qkp.82.2022.10.11.12.54.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 12:54:12 -0700 (PDT)
+Message-ID: <157f3d65-3cd1-043a-165d-a27b7d34ee65@linaro.org>
+Date:   Tue, 11 Oct 2022 15:54:11 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82455a41cd39decdd1eb8765c37278aa78a3a72e.1663869838.git.isaku.yamahata@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 4/5] ARM: multi_v7_defconfig: Enable GXP SPI and PLREG
+ Drivers
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221011185525.94210-1-nick.hawkins@hpe.com>
+ <20221011185525.94210-5-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221011185525.94210-5-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, isaku.yamahata@intel.com wrote:
-> From: Chao Gao <chao.gao@intel.com>
+On 11/10/2022 14:55, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> so that KVM can do compatibility checks on hotplugged CPUs. Drop __init
-> from check_processor_compatibility() and its callees.
+> Adding support for the GXP SPI and PLREG Drivers.
+
+This we see in the diff. You must explain why. Why are you doing it? Why
+do we want it in the kernel?
+
 > 
-> use a static_call() to invoke .check_processor_compatibility.
-> 
-> Opportunistically rename {svm,vmx}_check_processor_compat to conform
-> to the naming convention of fields of kvm_x86_ops.
-> 
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> Link: https://lore.kernel.org/r/20220216031528.92558-2-chao.gao@intel.com
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Reviewed-by: Yuan Yao <yuan.yao@intel.com>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 > ---
->  arch/x86/include/asm/kvm-x86-ops.h |  1 +
->  arch/x86/include/asm/kvm_host.h    |  2 +-
->  arch/x86/kvm/svm/svm.c             |  4 ++--
->  arch/x86/kvm/vmx/vmx.c             | 14 +++++++-------
->  arch/x86/kvm/x86.c                 |  3 +--
->  5 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 51f777071584..3bc45932e2d1 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -129,6 +129,7 @@ KVM_X86_OP(msr_filter_changed)
->  KVM_X86_OP(complete_emulated_msr)
->  KVM_X86_OP(vcpu_deliver_sipi_vector)
->  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
-> +KVM_X86_OP(check_processor_compatibility)
+>  arch/arm/configs/multi_v7_defconfig | 2 ++
 
-Nit I missed in all previous versions: please add this new entry above "hardware_enable"
-so as to keep the order similar to the order in struct kvm_x86_ops.  E.g.
 
-KVM_X86_OP(check_processor_compatibility)
-KVM_X86_OP(hardware_enable)
-...
+Best regards,
+Krzysztof
+
