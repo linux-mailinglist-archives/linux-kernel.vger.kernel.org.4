@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CB95FBC14
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EB25FBC16
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiJKUdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S229663AbiJKUdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJKUdF (ORCPT
+        with ESMTP id S229454AbiJKUdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:33:05 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02A97754F;
-        Tue, 11 Oct 2022 13:33:00 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id n12so23312261wrp.10;
-        Tue, 11 Oct 2022 13:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TEfDO7QSA1VFUb1GFHQrZIKppKlP130P/LfPX2c1848=;
-        b=Fv9vlBHbLmlL7TVnbRR+Ibtab+81I978qi0S0OxNcTZoPX1NadHyd5UZ+ZSgCzh86F
-         RYPdPghZ9cxOCpru66PLoZ2d2jlSNYVgwl1Qc3MRJaAmy3FQ3ZtCF2esiA/YqMHsdzzn
-         Zd+BEbF3oOESG3C7tlo3dj8B/hmnGg4YJNZUFnC6BT/IGAbCy6Bc/nCE0VgeBrat5FLh
-         6rbWzO+pGSEh7nRi0w2Fq4dB/ZJpYqO99+Sg0zRE+LQt5GglCiZpjOBq8TIIYS/FvN9m
-         dqvmPuOxfhObIbB+LWN1ySNgqFJUNvkbUpPwH5Q8fgQuHysg9RIkX/ySkQ5LvjsXZqDZ
-         mkOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TEfDO7QSA1VFUb1GFHQrZIKppKlP130P/LfPX2c1848=;
-        b=DZtwAGGhg60cbrI8bUg37JC7o3HKcKh1Cml0knZYQOd6MNa3NwYd/FApSxkwLcZ3hG
-         MyFQ+Wm3S0+hqxlmbx2hWDbvI8g/rCz9Yin2kar8J/DwJDK2rpaMjl7a940aq5hyDJdt
-         5ialFOpFDg3Dsm0gFkgB/PPCXPmcDblKAdvpOgX3qdov1+vEd4fkH6H0B9jFNBxkMV/p
-         XIe1qWhahdTcQdErGsxCtpGky5obpJS2sT31QXqobypLN1SmOkxPONqNjr76bXOz9x9W
-         GU1Qg8cAskEU5Of+0OBAV6tsV3bNsa74yimfAOJQa7zrCk5I43YtiVdXujXLVEUJOktb
-         k8ug==
-X-Gm-Message-State: ACrzQf1AiJAhUnBI+w0jbP/LPwdEkabPzQ1lfA1HKTnB5nabIWUBBEdF
-        /zY77Gqewqfkvrd8Vw4YgtoTLTIrBcA=
-X-Google-Smtp-Source: AMsMyM5GUmB1SbiRoxh3oe/nd/8xd6XNVsEy0/YPik7LBUumeMkmp6gTsUiIW4KqeGUUyP+U2bcbHA==
-X-Received: by 2002:a5d:6741:0:b0:22e:2c5c:d611 with SMTP id l1-20020a5d6741000000b0022e2c5cd611mr16383458wrw.210.1665520379305;
-        Tue, 11 Oct 2022 13:32:59 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c0a0a00b003a2f2bb72d5sm28872537wmp.45.2022.10.11.13.32.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 13:32:58 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 21:32:57 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
-Message-ID: <Y0XS+caa/JtjuyP7@debian>
-References: <20221010191226.167997210@linuxfoundation.org>
+        Tue, 11 Oct 2022 16:33:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92907B285
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:33:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E2B4612C5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E8D3C433C1;
+        Tue, 11 Oct 2022 20:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665520414;
+        bh=u/ngx5nkN4Heguu0mTv5ntQdOfvx9DRizvMHIBMZFBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HTRD6zMn+QYXURS0Xv4rcmQ9+ca9gGY/ivP4U4j+PLGelg2oB6pXpRpdASuFUUs1N
+         IEdCoKkJyNNKldLLfiV8wN2XZTJLm7QlBASADnaibAtfNPOU1SNDa7+tEQiWTNwWMB
+         ejLR375TzQlXuvEAE0W+SbQ3kZU4hmXGoiMbiYqHNIWTlT1IkQ939fZp8gIubhMJJr
+         lwalcI/94AJXKlgH+e1vCau578ipHzFF1oblY1uZga+Pz6/Q9s+Brm5+30Rwrbgdd2
+         nrRwTH45iigXeo6U/+uRQQN1H9lNxvM5gPg+SqV9ZXWyZTwdcBAATBRZz+yi18r71m
+         C/yl6zIK44Ycg==
+Date:   Tue, 11 Oct 2022 13:33:32 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        Sathvika Vasireddy <sv@linux.ibm.com>, aik@ozlabs.ru,
+        chenzhongjin@huawei.com, christophe.leroy@csgroup.eu,
+        jpoimboe@redhat.com, linux-kernel@vger.kernel.org, mbenes@suse.cz,
+        mingo@redhat.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        peterz@infradead.org, rostedt@goodmis.org
+Subject: Re: [PATCH v4 11/16] objtool: Add --mnop as an option to --mcount
+Message-ID: <20221011203332.zzmv6awd5eiydxgw@treble>
+References: <20221002104240.1316480-1-sv@linux.ibm.com>
+ <20221002104240.1316480-12-sv@linux.ibm.com>
+ <1665401725.d3dolquorh.naveen@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1665401725.d3dolquorh.naveen@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Oct 10, 2022 at 09:12:52PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Oct 10, 2022 at 05:07:46PM +0530, Naveen N. Rao wrote:
+> > +++ b/scripts/Makefile.lib
+> > @@ -234,6 +234,7 @@ objtool_args =								\
+> >  	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)		\
+> >  	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
+> >  	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+> > +	$(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
 > 
-> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
-> Anything received after that time might be too late.
+> This still won't help: for instance, if CONFIG_FTRACE itself is disabled. I
+> think we should make this depend on CONFIG_FTRACE_MCOUNT_USE_OBJTOOL. The
+> below change works for me:
+> 
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 54d2d6451bdacc..fd3f55a1fdb7bb 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -245,8 +245,8 @@ objtool_args =                                                              \
+>        $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)        \
+>        $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)              \
+>        $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
+> -       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+> -       $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
+> +        $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL),                       \
+> +             $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mcount --mnop, --mcount)) \
+>        $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
+>        $(if $(CONFIG_RETPOLINE), --retpoline)                          \
+>        $(if $(CONFIG_RETHUNK), --rethunk)                              \
 
-Build test (gcc version 12.2.1 20220925):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+This has a new conflict, may need something like:
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1971
-[2]. https://openqa.qa.codethink.co.uk/tests/1973
-[3]. https://openqa.qa.codethink.co.uk/tests/1979
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -256,6 +256,9 @@ objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
+ objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
+ objtool-args-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
+ objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
++ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
++objtool-args-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
++endif
+ objtool-args-$(CONFIG_UNWINDER_ORC)			+= --orc
+ objtool-args-$(CONFIG_RETPOLINE)			+= --retpoline
+ objtool-args-$(CONFIG_RETHUNK)				+= --rethunk
