@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375EE5FBA04
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386915FBA08
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiJKSBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S229662AbiJKSBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJKSBL (ORCPT
+        with ESMTP id S229453AbiJKSB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:01:11 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A01D66A55
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:01:09 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e717329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e717:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 98E0F1EC058A;
-        Tue, 11 Oct 2022 20:01:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665511263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HZS9EJvQC7rg+a+Dg8MMaINTPkLRymTnxYCRJJMt6iU=;
-        b=Nvc/2GAWwla6FW2VdLZBz133Dad+XTT47gWCAehWBdSlki+9R1gd8SV9IC8uPtlPbu77gl
-        4qanZUPHn/cTC5D0rLsTkUQ+Pu1QVKwybJM96EKwzsUDy7aLdedOaoDIBCykjfkcjFCjNg
-        1QpgbWLFYQrX+S7ZT0SExPmUPjBU6oI=
-Date:   Tue, 11 Oct 2022 20:01:03 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH] x86: Fix /proc/cpuinfo cpumask warning
-Message-ID: <Y0WvX9Mp0kuohNdq@zn.tnic>
-References: <20221011175031.1782748-1-ajones@ventanamicro.com>
+        Tue, 11 Oct 2022 14:01:29 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DAC6B67F;
+        Tue, 11 Oct 2022 11:01:27 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1665511278t5i75y1k
+Received: from [192.168.1.231] ( [113.72.146.141])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Oct 2022 02:01:16 +0800 (CST)
+X-QQ-SSF: 0100000000200090B000B00A0000000
+X-QQ-FEAT: Xz3VOcA7Mr1IeMy5YkFr3EQysBY1c40hmsRb8FmCb9HYXwFMzxuV3pNPfW+Oo
+        Yy88ZEliVWGfuHpA9UsW0WR3SsrAgYJ/mLN08uP1rAii9nv3hF0/fAVMKfE3oSRBi5IuKh1
+        U6iVYMZ3Oc63DZX1BtdGiS6TE0gZ/iCK7uw8lKbdAavr8+ly9R+pW+ggB1N5PXseqyAuvtP
+        CQ5imFaDSqNGkNvpJomvgk7Yuz920GfcMiAaVEb9dS2p81f/c1PCl1SnWT6u2mFa2/jR0OI
+        ZLu6IQl++hK59OYWwKDqXiBU88HgVfhBH1w3vnz3X3JsZGmpxtML80nMfBf8/QW6eFJzT60
+        IDiKhi5WSKdJtJ5KxPm5ABHVKtfOqPAfUvAblZJzbb5ix17+Uo=
+X-QQ-GoodBg: 0
+Message-ID: <950768A5571BD396+4cf106df-5127-4646-5879-a516a002760c@linux.starfivetech.com>
+Date:   Wed, 12 Oct 2022 02:01:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221011175031.1782748-1-ajones@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 20/30] dt-bindings: clock: Add
+ starfive,jh7110-clkgen-aon bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930055632.5136-1-hal.feng@linux.starfivetech.com>
+ <ff493398-7786-db0d-ae94-b52207e2a56c@linaro.org>
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <ff493398-7786-db0d-ae94-b52207e2a56c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 07:50:31PM +0200, Andrew Jones wrote:
-> Upcoming cpumask changes will start issuing warnings[*] when cpu
-
-What upcoming changes?
-
-This needs a concrete pointer to a commit or so.
-
-> indices equal to nr_cpu_ids are passed to cpumask_next* functions.
-
-How do those indices get passed here? I think you need to explain how
-exactly this happens.
-
-> Ensure we don't generate a warning when reading /proc/cpuinfo by
-
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
-
-> validating the cpu index before calling cpumask_next().
-
-s/cpu/CPU/g
-
-> [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+On Fri, 30 Sep 2022 12:59:01 +0200, Krzysztof Kozlowski wrote:
+> On 30/09/2022 07:56, Hal Feng wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> > 
+> > Add bindings for the always-on clock generator on the JH7110
+> > RISC-V SoC by StarFive Technology Ltd.
+> > 
 > 
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> Cc: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/x86/kernel/cpu/proc.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> (...)
 > 
-> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> index 099b6f0d96bd..584ae6cb5b87 100644
-> --- a/arch/x86/kernel/cpu/proc.c
-> +++ b/arch/x86/kernel/cpu/proc.c
-> @@ -153,9 +153,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->  
->  static void *c_start(struct seq_file *m, loff_t *pos)
->  {
-> -	*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> -	if ((*pos) < nr_cpu_ids)
-> -		return &cpu_data(*pos);
-> +	if (*pos < nr_cpu_ids) {
-> +		*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> +		if (*pos < nr_cpu_ids)
-> +			return &cpu_data(*pos);
-> +	}
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/starfive-jh7110-sys.h>
+> > +
+> > +    aoncrg: clock-controller@17000000 {
+> 
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Will rewrite the bindings and test them. Thanks.
 
-Simpler: on function entry:
+Best regards,
+Hal
 
-	if (*pos >= nr_cpu_ids)
-		return NULL;
-
-	 /* the rest remains unchanged */
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
