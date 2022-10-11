@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D299C5FBE34
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C9B5FBE3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJKXNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 19:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S229681AbiJKXST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 19:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJKXNg (ORCPT
+        with ESMTP id S229641AbiJKXSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 19:13:36 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76F59E0EC;
-        Tue, 11 Oct 2022 16:13:28 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 706FF84DB7;
-        Wed, 12 Oct 2022 01:13:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665530005;
-        bh=l+dlg0AQEU9Qd30nOIVb+gtSSQPQJSUwCrZ7VHzam6Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nWBnCuXLlXu1DwS9AKbkWVVkSy39PRAiDXtGzcpF+x0Eh86mx3PtUAv6byce79P3f
-         w7bq5RVntAuB4Ibz/XaX0qH9Akm6ik0oNcM7uqrS+fn2YraUhxppHZVcfYYLxx/5jR
-         321TvSd7YMwGZgYGrLM2uC8KdqmUZbapiXdxYdeGDg1PrNSaAPoex0jANd4Njdrc03
-         Ihr6cxz84jF1AAFtheiautbmTFgpSKB2cSV6yWb1DgPJDl6UP0G8BR5VF4SDPcBU6I
-         8Dh+K4ddBuHabP4XpxPReqYIxoX3YT8fdyuTXzMxCVgad0IBX6rMkhET7BbUpXmhW7
-         JvkK9ToBKfdjA==
-Message-ID: <ec599991-44da-7b83-9374-d0043b32f053@denx.de>
-Date:   Wed, 12 Oct 2022 01:13:23 +0200
+        Tue, 11 Oct 2022 19:18:15 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51BF5F22F;
+        Tue, 11 Oct 2022 16:18:11 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BNHsbr005669;
+        Tue, 11 Oct 2022 18:17:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1665530274;
+        bh=A8dS9/Ug1cxgweRrfQs+7nxXXnAB6NP6Uhn428JWf0U=;
+        h=From:To:CC:Subject:Date;
+        b=wPD1redbeblidZdiMkLeNBH5lqfxqwu9uBFfR2sQT4YQ8StA6hqv8xKY22HAMPBLq
+         ZqXiVZGKfHq4zTXkwxE5Fv30qJqC72+RjrK0B++s4ddTstSt+s9FbGxB6j/L5wCRWP
+         NKGMBYdHWHqt6CVBORgZXhaH+drqExcKqyxy8A/M=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BNHsRo081639
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Oct 2022 18:17:54 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 11
+ Oct 2022 18:17:54 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 11 Oct 2022 18:17:54 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BNHslx058885;
+        Tue, 11 Oct 2022 18:17:54 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Keerthy <j-keerthy@ti.com>,
+        Linux Thermal <linux-pm@vger.kernel.org>,
+        Linux Device Tree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bryan Brattlof <bb@ti.com>
+Subject: [PATCH 00/11] enable VTM node of all TI's K3 SoCs
+Date:   Tue, 11 Oct 2022 18:17:16 -0500
+Message-ID: <20221011231727.8090-1-bb@ti.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
-To:     Tim Harvey <tharvey@gateworks.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
-        abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        Markus.Niebel@ew.tq-group.com, aford173@gmail.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
- <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
-Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2575; h=from:subject; bh=3qkE5Yuh4qE7h4E5kCAmjX6jv14KmSHohX8Sh9DTsNo=; b=owNCWmg5MUFZJlNZqREc9AAAZn////7v+3+v/tK7Jf/YWs3+uvf7f/Yu2/Z3f+tp73f+3/ewARrR SGQA0ABo0aA0Bo00aAZNABo0AaAADEAGhoBoDRoyaNDTIyaaGmmTamE0D0Ah2oaBk0GjJoDQGIaaaD Q00AANBpoBkyaaAMgBkMg0AaaMg00A00000aA0aA0NoiGh6mjQNNGQ00DQNBoyNDENDTI00BoAAaaA ABoyYEaYjQ0AAAGmRoDTTATQAAFy+U7xgUgEcGfTNUHIR4MtmY8AS7n8RAulfDdYLsCZSXaiwxm7L+ AIHbkFPJoupgngscwUoiTS9pRIieUMStdhOS7CNPXSDAMhTibYs/orsErOoLA/7hxCMEsc67k3f5uA iW1z7mBNjQ31WTd5y5Hr9Q5GeLYOK1XFuZL4HSEqixkNN+sErR2Y/DV+Zg88waTIc+sh0k4Xj2yLLV DXFogMCm/4FkzhvvBXFh/se10ZUiwTVVCkOq0F+oSjm2p2vtKPlTJBYNa5Ol6kXyWRKgFPmXPr2Si9 0yX0OzSgZuEZmAFIgWUlClyrccq1WsXxS0LM/0GLnmTGAXFjYkfonUBBkH/SbydKGdwazd20J0RgDI I0PHAM9UpKl8v8QRQW8bAOc1t/ViPm9w8wpP7lMNwXBfRYuIls5QswCCyqwIAI3rXBkQA3zhjj/F3J FOFCQqREc9A=
+X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,86 +73,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 22:10, Tim Harvey wrote:
-> On Fri, Jul 8, 2022 at 1:57 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->>
->> From: Peng Fan <peng.fan@nxp.com>
->>
->> V4:
->>   Because the header is not included when adding NoC node, the fsl,imx8mp.h
->>   needs be included in this patchset. So include it in patch 6
->>
->> V3:
->>   Move adding NoC node patch to i.MX8MP ICC driver patchset
->>   Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
->>
->> V2:
->>   Use a low bandwidth value instead INT_MAX
->>   Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
->>   Add A-b tag from DT maintainer
->>
->> i.MX8MP NoC settings is invalid after related power domain up. So
->> need to set valid values after power domain up.
->>
->> This patchset is to bind interconnect for each entry in blk ctrl.
->>
->> This patchset is not include DVFS DDRC feature.
->>
->> Peng Fan (7):
->>    dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
->>      ctrl
->>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
->>      ctrl
->>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
->>      ctrl
->>    soc: imx: add icc paths for i.MX8MP media blk ctrl
->>    soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
->>    arm64: dts: imx8mp: add interconnects for media blk ctrl
->>    arm64: dts: imx8mp: add interconnect for hsio blk ctrl
->>
->>   .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
->>   .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
->>   .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
->>   arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
->>   drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
->>   drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
->>   6 files changed, 125 insertions(+)
->>
->> --
->> 2.25.1
->>
-> 
-> Hi Peng,
-> 
-> I built origin/master from commit 041bc24d867a today for an imx8mp
-> board and am running into errors that appear to be introduced by this
-> series:
-> [   15.177372] platform 381f0040.usb-phy: deferred probe pending
-> [   15.183155] platform 382f0040.usb-phy: deferred probe pending
-> [   15.188928] platform 33800000.pcie: deferred probe pending
-> [   15.194439] platform 32ec0000.blk-ctrl: deferred probe pending
-> [   15.200287] platform 38330000.blk-ctrl: deferred probe pending
-> [   15.206129] platform 32f10000.blk-ctrl: deferred probe pending
-> [   15.211974] platform 32f10100.usb: deferred probe pending
-> [   15.217382] platform 32f10108.usb: deferred probe pending
-> [   15.222791] platform cpufreq-dt: deferred probe pending
-> # cat /sys/kernel/debug/devices_deferred
-> 381f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
-> 382f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
-> 33800000.pcie   platform: supplier 32f10000.blk-ctrl not ready
-> 32ec0000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
-> 38330000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
-> 32f10000.blk-ctrl       imx8mp-blk-ctrl: failed to get noc entries
-> 32f10100.usb    platform: supplier 32f10000.blk-ctrl not ready
-> 32f10108.usb    platform: supplier 32f10000.blk-ctrl not ready
-> cpufreq-dt
-> 
-> Is there a driver I'm perhaps missing that is needed now or are there
-> some patches that come from a different unmerged tree needed?
+Hello Everyone!
 
-Do you have these enabled ?
+This series enables the VTM nodes for all of Texas Instruments K3 SoCs
 
-CONFIG_INTERCONNECT_IMX8MM=y
-CONFIG_INTERCONNECT_IMX8MN=y
-CONFIG_INTERCONNECT_IMX8MQ=y
-CONFIG_INTERCONNECT_IMX8MP=y
+Most of this series updates the k3_j72xx_bandgap driver to conditionally 
+map an eFuse region used by the j721e to work around an issue in its VTM 
+implementation and allows us to save the SPARE_FUSE region on other SoCs
+
+We can then update the device tree bindings for the driver and finally 
+define the VTM nodes for each device.
+
+Thanks for reviewing!
+~Bryan
+
+
+Bryan Brattlof (11):
+  thermal: k3_j72xx_bandgap: simplify k3_thermal_get_temp() function
+  thermal: k3_j72xx_bandgap: use bool for i2128 erratum flag
+  thermal: k3_j72xx_bandgap: remove fuse_base from structure
+  thermal: k3_j72xx_bandgap: map fuse_base only for erratum workaround
+  dt-bindings: thermal: k3-j72xx: elaborate on binding descriptions
+  dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
+  arm64: dts: ti: k3-am64-main: add VTM node
+  arm64: dts: ti: k3-am62-wakeup: add VTM node
+  arm64: dts: ti: k3-j721e-mcu-wakeup: add VTM node
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: add VTM node
+  arm64: dts: ti: k3-j7200-mcu-wakeup: add VTM node
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  51 ++++++++-
+ arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi   |  33 ++++++
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi    |   8 ++
+ arch/arm64/boot/dts/ti/k3-am62.dtsi           |   7 +-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi      |   8 ++
+ arch/arm64/boot/dts/ti/k3-am64-thermal.dtsi   |  33 ++++++
+ arch/arm64/boot/dts/ti/k3-am64.dtsi           |   4 +
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   8 ++
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  47 ++++++++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   3 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 ++
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  75 +++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   3 +
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |   8 ++
+ arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi | 103 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2.dtsi         |   3 +
+ drivers/thermal/k3_j72xx_bandgap.c            |  65 +++++------
+ 17 files changed, 430 insertions(+), 38 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am64-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi
+
+-- 
+2.38.0
+
