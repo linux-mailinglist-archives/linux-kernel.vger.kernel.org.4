@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CEF5FB6A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C905FB6E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiJKPKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S230046AbiJKPWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiJKPJk (ORCPT
+        with ESMTP id S229739AbiJKPWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:09:40 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2360A2528D;
-        Tue, 11 Oct 2022 08:02:31 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id b2so13424524plc.7;
-        Tue, 11 Oct 2022 08:02:30 -0700 (PDT)
+        Tue, 11 Oct 2022 11:22:22 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640A411B2D2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:13:57 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q9so13044972pgq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=J58wtPKoWhhaA5HR2/A5/Snd3JbQWbOxXugYX0Yrkus=;
-        b=l2kDm1d5C+6w79CMamPFVSXLWU+u3lZP28PE4ZBP+EaXZFbRIIXZhcyNo66pLwPKft
-         aTREuXv6yt4x6mKXRgOAp7L+9CB8NqSgiFGgWboA+4A+vYElSpvj+Btd0OHQjidWa5Xh
-         FRjfbX1w9zMgSV79JEFygWvL/c6nbcFPfD2dkNT/kC9M+qrtzXPuejDAvxCaevucfDpt
-         pCwB4OttpOg++4xe1g2+X4xJef+sn+Wy3+7dZ8taqVgADnPVoRQRDjWt/lwymztNmNYb
-         rPlaFKc0q8ykYS5FSo/3yk3agTBm/S4xi95Krah/7ou6tEGfYTz8wrgGhZ/9PRTgwZ8O
-         Bkjw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RH61kT+wk9qQeQtr18nkFVkMNvE3Of5ZE74j8i5uZRs=;
+        b=Ki0hHaBDFFTECeeqlzDtdZe6tS6GMZY9Bc7S4GEXjc+wCZxXXIYfBdFIzSDaVSVOZP
+         fEMqnDG0mnTQ3Cje3CjeBFwS7I89p5EIzaTk7pQ8q1VxuiI8LM39M39JtVB02rk6OMU8
+         xGURux2nB/GPD0IZTAsB3XB8HNojtqGdhZMyS1PmjfPqtTTLnG1iSDNdiYWX2Ibj1JN4
+         m3GP6lgA7JJbSpIPCA/pPQBa2rK/kWIgm8RyNjNZrrE3Fyf+x/HA7grU46ow4PJTqaIy
+         Y6CNi9nF+Eaas25QNYhRnjgolTXLV/3EmvYHQHoOLMtRrXRoI7f802PN7eMEIs6sXQUZ
+         JlYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J58wtPKoWhhaA5HR2/A5/Snd3JbQWbOxXugYX0Yrkus=;
-        b=d+0ucnJK+4oLJN40nGsdCaq3fliZ1Djvo9UzOLuBtCM/ZCU3XVSWE1/TSPfo7gyMhv
-         5DGMPvY5PVI1FoDM1TNpKpG/ojlI2g89emLypqEXVLj1hpR7BW+D7NKAaHLspuRjDL5Y
-         NhJ+LEiKU56vakGx5g5y9rjBmJqSB08J4gdRy/PEACZRlFRbe9YA147T7Znu4V1hhaCf
-         I5cQFJHZpfMomIUHczvPDGhGBF2oOWTs/lef2vEklcgpKpOD9jYWCUTPusR1zK4QZXxV
-         rfVNGiAgqXxw/UPchDZE9AubWJjdxn94MxBo/9La6FyOriJyDlZcwlc4DwClxPCnPstk
-         ymZw==
-X-Gm-Message-State: ACrzQf2nSxyfYx4h+7rmkTu0tBIqDKLZe/EOCe1WCZy1h5AzqQtrR7vt
-        hd6jc7rbOVT8plFrFKF/sPE=
-X-Google-Smtp-Source: AMsMyM5qZZ/DWXkAlKV1evxqgrdOqTdqSxuntEeQ3MsKRc32T4AXPkF0NKdX9gEAwr4TG+TSSx3YAg==
-X-Received: by 2002:a17:902:6bc5:b0:183:4bef:1b20 with SMTP id m5-20020a1709026bc500b001834bef1b20mr6361211plt.158.1665500418359;
-        Tue, 11 Oct 2022 08:00:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w21-20020a634755000000b0045751ef6423sm7952052pgk.87.2022.10.11.08.00.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 08:00:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2c83c4f-653c-438e-a91a-d17b846dec5b@roeck-us.net>
-Date:   Tue, 11 Oct 2022 08:00:15 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RH61kT+wk9qQeQtr18nkFVkMNvE3Of5ZE74j8i5uZRs=;
+        b=Hr/o+vnLd3A3Rumr3stLTtLuSUuo9V7k+GbgGNLsHsJqbPHbvraenZcxHUDA4Abcse
+         GMIdzVnfpErbDRcf8UpUMqbKLXUXPjE/Q/Qu9VMm+JfOC/9Y6FXU3xzg4AMwlkgarmqb
+         5cg3mjMtY8ZunIs/lzZ6kmOp34L74ZBsyV8rok2kLgriYA89v4va890RChAkMhfbKyvm
+         yWnUDv3w2agP1pzvw17ULBeATwoy3Q65RwqpDUz3F7QT077FuwUEwhDsfbdrQ7CiLZpq
+         CPUQ4X1NhPSTCrr/ApY56bCEf0BghJAiR/E4A9togXufFvu4ZBtEwzafzOEY6289WrhY
+         XGPw==
+X-Gm-Message-State: ACrzQf0AQASxnWe+DpfDX5Mdq+n1GWt4I3MZwVEnI4zy8XrshTjBL3fH
+        uN8D1xLMt6rVN/oy1vDn/wK8UCi7ARQ9odu9LBAVMGermC4=
+X-Google-Smtp-Source: AMsMyM6iTtWLyusY/a5TirRFeV1JoXX8/sks6yxB6jKrPb/dHt/Lb1+3MkUlRnpHpeISKdaY441CpJqpPrUQnucOcZw=
+X-Received: by 2002:a1f:26d8:0:b0:39e:e116:59b8 with SMTP id
+ m207-20020a1f26d8000000b0039ee11659b8mr12168746vkm.36.1665500432252; Tue, 11
+ Oct 2022 08:00:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221011104739.53262-1-Naresh.Solanki@9elements.com>
- <20221011104739.53262-2-Naresh.Solanki@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221011104739.53262-2-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
+ <MW3PR12MB45531D396A2010666F3E238F955F9@MW3PR12MB4553.namprd12.prod.outlook.com>
+In-Reply-To: <MW3PR12MB45531D396A2010666F3E238F955F9@MW3PR12MB4553.namprd12.prod.outlook.com>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Tue, 11 Oct 2022 08:00:20 -0700
+Message-ID: <CABPqkBS_=V4D-3wRvucEBZqEsT6VppYutg8ExQoLpKjbzKvZoA@mail.gmail.com>
+Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
+To:     "Moger, Babu" <Babu.Moger@amd.com>
+Cc:     Peter Newman <peternewman@google.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,81 +75,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 03:47, Naresh Solanki wrote:
-> Add common fan properties bindings to a schema.
-> 
-> Bindings for fan controllers can reference the common schema for the
-> fan
-> 
-> child nodes:
-> 
->    patternProperties:
->      "^fan@[0-2]":
->        type: object
->        allOf:
->          - $ref: fan-common.yaml#
-> 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->   .../devicetree/bindings/hwmon/fan-common.yaml | 80 +++++++++++++++++++
->   1 file changed, 80 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> new file mode 100644
-> index 000000000000..abc8375da646
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common fan properties
-> +
-> +maintainers:
-> +  - Naresh Solanki <naresh.solanki@9elements.com>
-> +
-> +properties:
-> +  max-rpm:
-> +    description:
-> +      Max RPM supported by fan
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pulse-per-revolution:
-> +    description:
-> +      The number of pulse from fan sensor per revolution.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  target-rpm:
-> +    description:
-> +      Target RPM the fan should be configured during driver probe.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pwm-frequency:
-> +    description:
-> +      PWM frequency for fan.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pwm-polarity-inverse:
-> +    description:
-> +      PWM polarity for fan.
-> +    type: boolean
-> +
-> +  label:
-> +    description:
-> +      Optional fan label
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +
+On Fri, Oct 7, 2022 at 10:57 AM Moger, Babu <Babu.Moger@amd.com> wrote:
+>
+> [AMD Official Use Only - General]
+>
+> Hi Peter,
+>
+> > -----Original Message-----
+> > From: Peter Newman <peternewman@google.com>
+> > Sent: Friday, October 7, 2022 5:40 AM
+> > To: Reinette Chatre <reinette.chatre@intel.com>; Fenghua Yu
+> > <fenghua.yu@intel.com>
+> > Cc: Stephane Eranian <eranian@google.com>; linux-kernel@vger.kernel.org=
+;
+> > Thomas Gleixner <tglx@linutronix.de>; James Morse
+> > <james.morse@arm.com>; Moger, Babu <Babu.Moger@amd.com>
+> > Subject: [RFD] resctrl: reassigning a running container's CTRL_MON grou=
+p
+> >
+> > Hi Reinette, Fenghua,
+> >
+> > I'd like to talk about the tasks file interface in CTRL_MON and MON gro=
+ups.
+> >
+> > For some background, we are using the memory-bandwidth monitoring and
+> > allocation features of resctrl to maintain QoS on external memory bandw=
+idth
+> > for latency-sensitive containers to help enable batch containers to use=
+ up
+> > leftover CPU/memory resources on a machine.  We also monitor the extern=
+al
+> > memory bandwidth usage of all hosted containers to identify ones which =
+are
+> > misusing their latency-sensitive CoS assignment and downgrade them to t=
+he
+> > batch CoS.
+> >
+> > The trouble is, container manager developers working with the tasks int=
+erface
+> > have complained that it's not usable for them because it takes many (or=
+ an
+> > unbounded number of) passes to move all tasks from a container over, as=
+ the
+> > list is always changing.
+> >
+> > Our solution for them is to remove the need for moving tasks between
+> > CTRL_MON groups. Because we are mainly using MB throttling to implement
+> > QoS, we only need two classes of service. Therefore we've modified resc=
+trl to
+> > reuse existing CLOSIDs for CTRL_MON groups with identical configuration=
+s,
+> > allowing us to create a CTRL_MON group for every container. Instead of
+> > moving the tasks over, we only need to update their CTRL_MON group's
+> > schemata. Another benefit for us is that we do not need to also move al=
+l of the
+> > tasks over to a new monitoring group in the batch CTRL_MON group, and t=
+he
+> > usage counts remain intact.
+> >
+> > The CLOSID management rules would roughly be:
+> >
+> >  1. If an update would cause a CTRL_MON group's config to match that of
+> >     an existing group, the CTRL_MON group's CLOSID should change to tha=
+t
+> >     of the existing group, where the definition of "match" is: all
+> >     control values match in all domains for all resources, as well as
+> >     the cpu masks matching.
+> >
+> >  2. If an update to a CTRL_MON group sharing a CLOSID with another grou=
+p
+> >     causes that group to no longer match any others, a new CLOSID must
+> >     be allocated.
+> >
+> >  3. An update to a CTRL_MON group using a non-shared CLOSID which
+> >     continues to not match any others follows the current resctrl
+> >     behavior.
+> >
+> > Before I prepare any patches for review, I'm interested in any comments=
+ or
+> > suggestions on the use case and solution.
+> >
+> > Are there simpler strategies for reassigning a running container's task=
+s to a
+> > different CTRL_MON group that we should be considering first?
+> >
+> > Any concerns about the CLOSID-reusing behavior? The hope is existing us=
+ers
+> > who aren't creating identically-configured CTRL_MON groups would be
+> > minimally impacted. Would it help if the proposed behavior were opt-in =
+at
+> > mount-time?
+>
+> I am still trying to understand. I would think when creating a new group,=
+ the new CLOS id will be used. Basically, it will remain as default behavio=
+r.  You probably don=E2=80=99t need to create two identical group during th=
+e group creation.
+> New behavior of changing the CLOS id will happen when the "match check" i=
+s triggered. How is the match check is triggered? Is it triggered by user?
 
-Same question as before:
+The matching check is triggered when the schemata is changed for any
+resctrl group.
 
-How are additional common bindings, such as min-rpm or fan-divider
-(also sometimes called fan-prescale) supposed to be handled ?
-As additions to this schema, or individually in each driver needing/
-using them ?
-
-Thanks,
-Guenter
+> Thanks
+> Babu
+>
+>
