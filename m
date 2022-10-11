@@ -2,128 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64BB5FB198
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBC85FB19A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiJKLgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S229896AbiJKLhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiJKLgu (ORCPT
+        with ESMTP id S229605AbiJKLhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:36:50 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B627B28E;
-        Tue, 11 Oct 2022 04:36:49 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id B265C1C0025; Tue, 11 Oct 2022 13:36:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1665488206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yxy+ic3V+nB+6LJCyMa/op1PaWUXm936BcV18CjdBEg=;
-        b=nFuquqLsOw/5lZzuX/B3bVKse0l4ZnzsAu36xhrAioiDW1ahFiFv4Wb2ewguXJgE88I22F
-        wDlLvckguA5/6C5wtNhkfGGYRCZHqqAPM6+M+DgTazicv1OAcMsgQSUMiqBir7p0cPX0+P
-        my776H1Urab2P6YlsSm+TY/QrkJ/tYo=
-Date:   Tue, 11 Oct 2022 13:36:46 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9 4/4] thermal: intel_powerclamp: Use get_cpu()
- instead of smp_processor_id() to avoid crash
-Message-ID: <20221011113646.GA12080@duo.ucw.cz>
-References: <20221009205508.1204042-1-sashal@kernel.org>
- <20221009205508.1204042-4-sashal@kernel.org>
+        Tue, 11 Oct 2022 07:37:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739448BBA0;
+        Tue, 11 Oct 2022 04:37:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 334A1B815A3;
+        Tue, 11 Oct 2022 11:37:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A46AC433D6;
+        Tue, 11 Oct 2022 11:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665488224;
+        bh=VBtQaFtLWaxwSn/lcpWL94iaXvTdhOab5SQsLixxk9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KaROchQDKpCahPMWqO+eopdtyan7mm+dbkBPB5l2if8DaPLob/aj9jSWqjWhbmWel
+         0cLUBswn7tVbDESaRQPPTtKY7coU7EE9AIso+URqj1b3CeHMh2ExoxaxraV605P7M2
+         VUOTbvXvwDYXo5SMxAZ3F4zgl+yRfQu/QmVP9EPF3QRaZklQK92Sd7YuFYW9UlMh4F
+         xedSgfcslKvsENLyPBI7Ey9TmpRsuwqkiKySO9eAKFhV/h2jUjfEgTwdHHQgoeyhSa
+         FVuGBhBUSNgUiF8DGNrB/cRfk8ZuXz19YhYvYWXr5LaESA4Oy4CxiQhNppzwOWMkjF
+         oJty89eqUOERw==
+Date:   Tue, 11 Oct 2022 14:37:00 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Rui Ma <Rui.Ma@amd.com>
+Cc:     helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Alexander.Deucher@amd.com,
+        bhelgaas@google.com
+Subject: Re: [PATCH] PCI/IOV: Decrease VF memory BAR size to save host memory
+ occupied by PTEs
+Message-ID: <Y0VVXB0XTobClVJo@unreal>
+References: <20221011112325.992317-1-Rui.Ma@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="MGYHOYXEY6WxJCY8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221009205508.1204042-4-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221011112325.992317-1-Rui.Ma@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 11, 2022 at 07:23:25PM +0800, Rui Ma wrote:
+> In some certain SR-IOV scene, when the device physical space(such as Video
+> RAM)is fixed, as the number of VFs increases, some device driver may decrease
+> actual BAR memory space used by each VF. However, the VF BAR memory mapping is
+> always based on the usual BAR probing algorithm in PCIe spec. So do not map this
+> unneeded memory can save host memory which occupied by PTEs. Although each PTE
+> only occupies a few bytes of space on its own, a large number of PTEs can still
+> take up a lot of space.
+> 
+> Signed-off-by: Rui Ma <Rui.Ma@amd.com>
+> ---
+>  drivers/pci/iov.c    | 14 ++++++++++++--
+>  drivers/pci/pci.h    | 15 +++++++++++++++
+>  drivers/pci/quirks.c | 37 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 64 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
+> index 952217572113..92a69e51d85c 100644
+> --- a/drivers/pci/iov.c
+> +++ b/drivers/pci/iov.c
+> @@ -296,6 +296,14 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
+>  	struct pci_sriov *iov = dev->sriov;
+>  	struct pci_bus *bus;
+>  
+> +    /*
+> +     * Some SR-IOV device's BAR map range is larger than they can actually use.
+> +     * This extra BAR space occupy too much reverse mapping size(physical page
+> +     * back to the PTEs). So add a divisor shift parameter to resize the request
+> +     * resource of VF according to num of VFs.
+> +     */
+> +	u16 shift = 1;
+> +
+>  	bus = virtfn_add_bus(dev->bus, pci_iov_virtfn_bus(dev, id));
+>  	if (!bus)
+>  		goto failed;
+> @@ -328,8 +336,10 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
+>  		virtfn->resource[i].name = pci_name(virtfn);
+>  		virtfn->resource[i].flags = res->flags;
+>  		size = pci_iov_resource_size(dev, i + PCI_IOV_RESOURCES);
+> +		shift = 1;
+> +		shift = virtfn_get_shift(dev, iov->num_VFs, i);
+>  		virtfn->resource[i].start = res->start + size * id;
+> -		virtfn->resource[i].end = virtfn->resource[i].start + size - 1;
+> +		virtfn->resource[i].end = virtfn->resource[i].start + (size >> (shift - 1)) - 1;
+>  		rc = request_resource(res, &virtfn->resource[i]);
+>  		BUG_ON(rc);
+>  	}
+> @@ -680,12 +690,12 @@ static int sriov_enable(struct pci_dev *dev, int nr_virtfn)
+>  	msleep(100);
+>  	pci_cfg_access_unlock(dev);
+>  
+> +	iov->num_VFs = nr_virtfn;
+>  	rc = sriov_add_vfs(dev, initial);
+>  	if (rc)
+>  		goto err_pcibios;
+>  
+>  	kobject_uevent(&dev->dev.kobj, KOBJ_CHANGE);
+> -	iov->num_VFs = nr_virtfn;
+>  
+>  	return 0;
+>  
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 3d60cabde1a1..befc67a280eb 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -603,6 +603,21 @@ static inline int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
+>  }
+>  #endif
+>  
+> +struct virtfn_get_shift_methods {
+> +	u16 vendor;
+> +	u16 device;
+> +	u16 (*get_shift)(struct pci_dev *dev, u16 arg, int arg2);
+> +};
+> +
+> +#ifdef CONFIG_PCI_QUIRKS
+> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2);
+> +#else
+> +static inline u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
+> +{
+> +	return (u16)1;
 
---MGYHOYXEY6WxJCY8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+<...>
 
-Hi!
+> +	return (u16)1;
 
-> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->=20
-> [ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
->=20
-> When CPU 0 is offline and intel_powerclamp is used to inject
-> idle, it generates kernel BUG:
->=20
-> BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
-> caller is debug_smp_processor_id+0x17/0x20
-> CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0x49/0x63
-> dump_stack+0x10/0x16
-> check_preemption_disabled+0xdd/0xe0
-> debug_smp_processor_id+0x17/0x20
-> powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
-> ...
-> ...
->=20
-> Here CPU 0 is the control CPU by default and changed to the current CPU,
-> if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
-> hence the above warning.
->=20
-> Use get_cpu() instead of smp_processor_id() to avoid this BUG.
+Why do you need these casts? You can omit them.
 
-This has exactly the same problem as smp_processor_id(), you just
-worked around the warning. If it is okay that control_cpu contains
-stale value, could we have a comment explaining why?
+Thanks
 
-Thanks,
-								Pavel
-							=09
-> +++ b/drivers/thermal/intel_powerclamp.c
-> @@ -519,8 +519,10 @@ static int start_power_clamp(void)
-> =20
->  	/* prefer BSP */
->  	control_cpu =3D 0;
-> -	if (!cpu_online(control_cpu))
-> -		control_cpu =3D smp_processor_id();
-> +	if (!cpu_online(control_cpu)) {
-> +		control_cpu =3D get_cpu();
-> +		put_cpu();
-> +	}
-> =20
->  	clamping =3D true;
->  	schedule_delayed_work(&poll_pkg_cstate_work, 0);
-> --=20
-> 2.35.1
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---MGYHOYXEY6WxJCY8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY0VVTgAKCRAw5/Bqldv6
-8m6WAKCKlzktekbyNr+tfsTO8t12rs87hACfX2jyIOacdHmc5UBLOJycqjXZ2Xs=
-=FoLS
------END PGP SIGNATURE-----
-
---MGYHOYXEY6WxJCY8--
+> +}
+> +
+>  static void quirk_dma_func0_alias(struct pci_dev *dev)
+>  {
+>  	if (PCI_FUNC(dev->devfn) != 0)
+> -- 
+> 2.25.1
+> 
