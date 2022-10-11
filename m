@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C215FAA57
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FEE5FAA5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiJKBvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
+        id S229665AbiJKBwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJKBvn (ORCPT
+        with ESMTP id S229623AbiJKBwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:51:43 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008667A75B;
-        Mon, 10 Oct 2022 18:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Vcn6Emy3G7xg1a8DUuh3MW2BLhxYU6+5G9TxFvJ9h7A=; b=ewhcvp6ZoKnszAUdfECoXEFPLh
-        na/To6yfAcjk1h9gccU3cn5tJzFqcL6j9sMOTkc686iCUirnyhvsjaB/PM4gt/qpKFydHZ5Vzo3n1
-        RUPo5GAPrwSMZHXBlnsPS/9CDqXWzSpbcjrIru3ET1S7JsPCw9AEn/oWyZSDHeA5be04=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oi4Qa-001g1Q-6M; Tue, 11 Oct 2022 03:51:28 +0200
-Date:   Tue, 11 Oct 2022 03:51:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Furkan Kardame <f.kardame@manjaro.org>
-Cc:     pgwipeout@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: add support for Motorcomm yt8531C phy
-Message-ID: <Y0TMIMPJbOETFQ3f@lunn.ch>
-References: <20221009192405.97118-1-f.kardame@manjaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009192405.97118-1-f.kardame@manjaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Oct 2022 21:52:14 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352687A75B;
+        Mon, 10 Oct 2022 18:52:13 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-132af5e5543so14340299fac.8;
+        Mon, 10 Oct 2022 18:52:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gq410igO39M0BJxeIyPF6hfpJsIwNwEM8SdNrsIFsmk=;
+        b=2SqVRZTxaIpvcaZOOSnFxw+TrMM+vMp/jX2EOFS1k2ANvlWgd8qxhdEgVXN7Map1w2
+         ZKmlCQ23FONYdYc/lykM8ZhIpe6gNzOTQ7KA00u1+L7Fcnm644vvu8QLwFeB8AzQswCV
+         meIc6P3utjWJF4Nvqud3zjHxKn6iZoAMZXIyujxp/di7uql/0mKsvUpxaOmHAZ85gAdd
+         CMsnYBR6X02gWVCZRGissdkEaOY9zWSXP7f6fiJLV/N9sSh4JLnroYNDIYKmkJfg1Yts
+         7KDqyXQXb5ck+CbQ7hVqBhpq6P4Gfob0NTFN5qZPRexwbU9A9uq0+mkW9nHseqJsLh4A
+         v48Q==
+X-Gm-Message-State: ACrzQf02a2AprC9axRQaDitFRLy2H9KODvN0taB2VQ3Kzziu+XwICPrl
+        kU6EYCmIuBqgMiPYrIjB6g==
+X-Google-Smtp-Source: AMsMyM4fRMe2BihsOa+5T3mi/tfE98R09b32rSZsgQe6r+HdvrMdQVa+aFGGh5w8lnw8hT+j7zFptQ==
+X-Received: by 2002:a05:6870:1716:b0:135:7980:9b73 with SMTP id h22-20020a056870171600b0013579809b73mr10359763oae.99.1665453132378;
+        Mon, 10 Oct 2022 18:52:12 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z6-20020aca6706000000b00353fe4fb4casm4934301oix.48.2022.10.10.18.52.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 18:52:11 -0700 (PDT)
+Received: (nullmailer pid 1703336 invoked by uid 1000);
+        Tue, 11 Oct 2022 01:52:12 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>
+In-Reply-To: <20221010203046.3673663-3-Naresh.Solanki@9elements.com>
+References: <20221010203046.3673663-1-Naresh.Solanki@9elements.com> <20221010203046.3673663-3-Naresh.Solanki@9elements.com>
+Message-Id: <166545307592.1702161.8054686650835218810.robh@kernel.org>
+Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add binding for max6639
+Date:   Mon, 10 Oct 2022 20:52:12 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#define YT8531_RGMII_CONFIG1	0xa003
-> +
-> +/* TX Gig-E Delay is bits 3:0, default 0x1
-> + * TX Fast-E Delay is bits 7:4, default 0xf
-> + * RX Delay is bits 13:10, default 0x0
-> + * Delay = 150ps * N
-> + * On = 2000ps, off = 50ps
-> + */
-> +#define YT8531_DELAY_GE_TX_EN	(0xd << 0)
-> +#define YT8531_DELAY_GE_TX_DIS	(0x0 << 0)
+On Mon, 10 Oct 2022 22:30:45 +0200, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> Add Devicetree binding documentation for Maxim MAX6639 temperature
+> monitor with PWM fan-speed controller.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../bindings/hwmon/maxim,max6639.yaml         | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> 
 
-The comments above and the value here don't correspond.  These seem to
-be enable/disable, which is usually a single bit. Here you have 3 bits
-set? And what about the default 0x1?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-0xd is 13. 13*150 = 1950, which is about 2000ps?
+yamllint warnings/errors:
 
-So YT8531_DELAY_GE_TX_EN is not really enable, it is
-YT8531_DELAY_GE_TX_1950_PS, and YT8531_DELAY_GE_TX_DIS should be
-YT8531_DELAY_GE_TX_0_PS.
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/hwmon/fan-common.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.example.dtb: max6639@10: fan@0: False schema does not allow {'reg': [[0]], 'pulses-per-revolution': [[2]], 'max-rpm': [[4000]], 'pwm-frequency': [[25000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.example.dtb: max6639@10: fan@1: False schema does not allow {'reg': [[1]], 'pulses-per-revolution': [[2]], 'max-rpm': [[32000]], 'pwm-frequency': [[25000]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
 
-> +#define YT8531_DELAY_FE_TX_EN	(0xd << 4)
-> +#define YT8531_DELAY_FE_TX_DIS	(0x0 << 4)
+doc reference errors (make refcheckdocs):
 
-Default is 0xf?
+See https://patchwork.ozlabs.org/patch/
 
-> +#define YT8531_DELAY_RX_EN	(0xd << 10)
-> +#define YT8531_DELAY_RX_DIS	(0x0 << 10)
-> +#define YT8531_DELAY_MASK	(GENMASK(13, 10) | GENMASK(7, 0))
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Please rework these.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> +	ret = __phy_write(phydev, YT8511_PAGE, YT8531_CLKCFG_125M);
-> +	if (ret < 0)
-> +		goto err_restore_page;
+pip3 install dtschema --upgrade
 
-This if statement is pointless.
+Please check and re-submit.
 
-> +
-> +err_restore_page:
-> +	return phy_restore_page(phydev, oldpage, ret);
-> +}
-> +
