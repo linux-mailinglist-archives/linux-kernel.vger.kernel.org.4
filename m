@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840345FBC32
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA0B5FBC34
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJKUgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        id S229491AbiJKUgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiJKUf6 (ORCPT
+        with ESMTP id S230025AbiJKUgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:35:58 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28669DF97;
-        Tue, 11 Oct 2022 13:35:51 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b4so23371734wrs.1;
-        Tue, 11 Oct 2022 13:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yM7le9rhqxSXpgbFxwaPbQQ1TFrB7VRUEQW1kSUpXmU=;
-        b=T+d2Slk5PbXg8XMD5Lg1iNy0E+lWg7JGmKWaDHQORIt/6M9zo1p/sCf1uf2Jd1E74Y
-         tOxGSAmxiV6L3AvtJ/c/Otf0aQPYrejk48fs+4Rni8rhb0zkKiqqcJfcq/Pvkjw36MQV
-         F2ZifXwkXJ2isQuYUrCbUtV8EE6TDU/1QIWGHJPZ7F7S/5X3V2GD2dqZqB+ddJtvYxdd
-         bLNkjJHfb4lq/fJPnOZDIv5M9M6eeUjsKxXtJWYurwVYxTqT6a0zcOxz357Gqd2/CgUZ
-         4DAE8dGdTnWWxjX9KaYw1GnvWH+JRg6USOzhRa17JrXses9NYUlwz2YH7BsdeOCViRnf
-         pOhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yM7le9rhqxSXpgbFxwaPbQQ1TFrB7VRUEQW1kSUpXmU=;
-        b=pYXrEeYP0HLQjsmYx5W4N8ELlc1jJvCzsJLU8spiQ8dE4Dh2Yc/siL+oPL7wii6eq3
-         1DotPh8PvEo5EJBJEyTUeWYo2NyqOpOAmmnd16NX5/V2KffVE/17pLHmrAausdOq/8MY
-         kHsbJMws5yD/TuXqiIXsv9hxWtuEf1KSLZwgzsR97/QhWrA3K8QGe8ZABUNnoa3bpKJJ
-         xnReqLFh3lZlmGWQ0U/zHwdByxXzkF2ElowpKHJV1VHjUJNK0ebDZopaCxdZeco5A4bn
-         uPJa1LAmxAItUh64r+u6gcnpqHX9PdkMqM66ZDor3QArioig7NGfrtystT0TrzK26umy
-         ieSg==
-X-Gm-Message-State: ACrzQf19G62ObIrFJt2aZGK330oghkXn/yy6V15yyd9feSlaCjbiHhLX
-        TWKIWWzYBDoAAEC2O9zp4F0=
-X-Google-Smtp-Source: AMsMyM6sizIYtV1Qi03T5A5crlK+OcFeVVmzMXvjlAtziQBR7R5nRi8mpVjFGnhcOD/o19ihGzv9uQ==
-X-Received: by 2002:a5d:59a4:0:b0:230:eaa4:88d7 with SMTP id p4-20020a5d59a4000000b00230eaa488d7mr6513585wrr.35.1665520549917;
-        Tue, 11 Oct 2022 13:35:49 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c001100b003c6bbe910fdsm23178wmc.9.2022.10.11.13.35.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 13:35:49 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 21:35:47 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
-Message-ID: <Y0XTo4tY61WmnidK@debian>
-References: <20221010070330.159911806@linuxfoundation.org>
+        Tue, 11 Oct 2022 16:36:13 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB7D1B78D;
+        Tue, 11 Oct 2022 13:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WYpblXeqgH5l2vWWxUISGGhQDP6GQt/mv4HUK04XBbI=; b=cupYyh77e5T5swv28go4kCSCgP
+        T5HLCgrdjFI60AWfds81KGnNRDQqFq3C1fdcppz03j0bhBlpzN+nCqvkYkeZ55aq+4J6yA5C6vMl2
+        QMGViALEpTagxueG3YqQ/ay8MBLOSIHFaPp5bOVrkntXMrglnCzsMp1QGTYOFk6jjSBqshbaJAuju
+        NU1/GP1iEtG2w3Ph/u/zp75JsmqYf8jgWObvfSXNyVsBsMmUutK1yx56Jpj6asRzkd+OHZvstC022
+        q8GijfJy/49vozwhX47VX/N8+j4tFX31syZxTEsoSNVN0fJ8NFOcEX4viiCuPZC0uqVOkfHlpVPDX
+        Wje3RaOA==;
+Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oiLys-00HOn1-BD; Tue, 11 Oct 2022 22:36:02 +0200
+Message-ID: <b06cdd10-3372-0613-6719-21c2fc664d05@igalia.com>
+Date:   Tue, 11 Oct 2022 17:35:48 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 5/5] MAINTAINERS: Update pstore maintainers
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
+Cc:     Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Paramjit Oberoi <pso@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+References: <20221011200112.731334-1-keescook@chromium.org>
+ <20221011200112.731334-6-keescook@chromium.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221011200112.731334-6-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Oct 10, 2022 at 09:04:23AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.1 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 11/10/2022 17:01, Kees Cook wrote:
+> Update pstore to better reflect reality of active contributors:
 > 
-> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
-> Anything received after that time might be too late.
+> - Remove Anton and Colin (thank you for your help through the years!)
+> - Move Tony to Reviewer
+> - Add Guilherme as Reviewer
+> - Add mailing list
+> - Upgrade to Supported
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  MAINTAINERS | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9d7f64dc0efe..bb18a6c91c4e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16458,10 +16458,10 @@ F:	net/psample
+>  
+>  PSTORE FILESYSTEM
+>  M:	Kees Cook <keescook@chromium.org>
+> -M:	Anton Vorontsov <anton@enomsg.org>
+> -M:	Colin Cross <ccross@android.com>
+> -M:	Tony Luck <tony.luck@intel.com>
+> -S:	Maintained
+> +R:	Tony Luck <tony.luck@intel.com>
+> +R:	Guilherme G. Piccoli <gpiccoli@igalia.com>
+> +L:	linux-hardening@vger.kernel.org
+> +S:	Supported
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+>  F:	Documentation/admin-guide/ramoops.rst
+>  F:	Documentation/admin-guide/pstore-blk.rst
 
-Build test (gcc version 12.2.1 20220925):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
+Thanks Kees!
+Acked-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Just curious, why linux-hardening was the picked list?
+Cheers,
 
--- 
-Regards
-Sudip
+
+Guilherme
