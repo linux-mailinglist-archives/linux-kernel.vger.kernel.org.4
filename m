@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1931E5FAFBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56DC5FAFC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJKJzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
+        id S229757AbiJKJ41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiJKJzI (ORCPT
+        with ESMTP id S229698AbiJKJ4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:55:08 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2990E1F9EB;
-        Tue, 11 Oct 2022 02:55:07 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C395E6602356;
-        Tue, 11 Oct 2022 10:55:05 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665482106;
-        bh=zzsgbQRjWMGmMw0Zwxx8nmOt4OzG96FB3zeBCswPAU4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k9zNn0cDHZf9/3U+Osh0Wvyqrhe8wq3LHEF3HdzAY7N9+4zdFxmEGc1vmnlERpLdf
-         g8x9lJlZ4yVJcvwx4Fgu1D66k5OWszccrggKryMmRQM2Fy881D1W9kjjF0SWfVaN5l
-         b3v+66UkaoYsfjPUA8SMyqcg42ciZsz4psVPIE+LdLIaCq1Q1rYNAqfafZpmnCAppl
-         gfNFppESg0v303wVuW3pCSN2oPkeXJ1kbX7344XWajKv5um+sNacVl1dKoylCcbQHE
-         gOxFWrtXQtH79STLYUc3x81qx3wXz89fxc/AiUUwEFr2AeXjtxD2URCtn7jYRgTsFP
-         POsLfOvUJ5eew==
-Message-ID: <54d3b706-6f5b-d5ec-82ca-45b9f4995d13@collabora.com>
-Date:   Tue, 11 Oct 2022 11:55:03 +0200
+        Tue, 11 Oct 2022 05:56:24 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6771D564E0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:56:21 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m15so19296999edb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=al5nlRBkZUaeArvYaMOYERw5P26ERZ12iQU+5SXRj+8=;
+        b=C+5zZRDMfeUNOFNEK0ikcwEBMR1f91BJd4fWIoJoc2y31eypKG1SNrIOarQt6dSLYF
+         8SU8KiWpfC4pp2eNaSdaK72nHeLy/1NBe2iZTFjqFXaeDGBlvDF//gRZQkzIGZwm7jC9
+         xrgY4vvwu1GeoFPXn8MuA4QHRDt4HkY39PEcfHb515xV8v0/n8QltH+fe2UzpzOQC+0t
+         V20oBnO4E6vmzecBR+OgTg0BUxNRhUkjXWTLuI68OtjKITl32F4EKbzPHmEApFu3PGaf
+         sfKs7H2cCL7ZHaSYzvjXSi4+F8EmrE1EJd8C0zz05qwsmyLu7Rny5AabGwGqiRYVkvP+
+         WB8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=al5nlRBkZUaeArvYaMOYERw5P26ERZ12iQU+5SXRj+8=;
+        b=dw79p73Ic0TOJYo3z3x1Q0VHAMUkRLny5/ALGRQmiEV4ztP+xSjrpYcz+2UqwP+156
+         YOGMFQqiUnjPE58AVvQQ9QpaIHEsZVtCIMZG5L860BXfx3TN9DJpR6URg9g7PQ+qIgLT
+         LtzvvyQYowxBTxfo05vUweyX6x+F/z3QPPRkLOv2haJ5A6qxCKYXDdv24p+FRS7tTOif
+         EohiI7kQ41GxlfNgngjYRkFkKR+hRrixbLpN+weGraH6Ul49hkAUNNLZmEr9s8CTmOZh
+         U2AvAksX7PeUQz3Y3O/CbLEhc6Llh/+MrNTLOckqxzg0FJDIOeYd69aizDj1e90zluQI
+         JIDw==
+X-Gm-Message-State: ACrzQf0ZbWqtjFmhSmH5aaP5/g75NXj5wocd4XwCUZgWDvk8Ke9/E1pz
+        qpX3Jbe//hKx5ZFNarHztHuWYtvBmcoh0ogJZjOf1A==
+X-Google-Smtp-Source: AMsMyM77oqtzxqjs6qGlzaM86MzIf7sIxR+36RH2i2KB52JOqb9/AgKiHyqA/trDZkU/nfjyoelR9hGJoJYTMIIkRtw=
+X-Received: by 2002:a05:6402:448:b0:45c:8de5:4fc with SMTP id
+ p8-20020a056402044800b0045c8de504fcmr709316edw.133.1665482179950; Tue, 11 Oct
+ 2022 02:56:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 2/3] iommu/mediatek: add support for 6-bit encoded port
- IDs
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Will Deacon <will@kernel.org>, Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-mediatek@lists.infradead.org
-References: <20221001-iommu-support-v3-0-c7b3059b0d16@baylibre.com>
- <20221001-iommu-support-v3-2-c7b3059b0d16@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221001-iommu-support-v3-2-c7b3059b0d16@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927120857.639461-1-max.kellermann@ionos.com>
+ <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com> <Y0U3UAjugtpOlJqn@suse.de>
+In-Reply-To: <Y0U3UAjugtpOlJqn@suse.de>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Tue, 11 Oct 2022 11:56:09 +0200
+Message-ID: <CAKPOu+9Koyj5fKqdd=QjcSgCesMoW+7FN2a=dwEH+c_mDgNo8g@mail.gmail.com>
+Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
+To:     =?UTF-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+Cc:     Xiubo Li <xiubli@redhat.com>, idryomov@gmail.com,
+        jlayton@kernel.org, ceph-devel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/10/22 14:54, Alexandre Mergnat ha scritto:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> Until now the port ID was always encoded as a 5-bit data. On MT8365,
-> the port ID is encoded as a 6-bit data. This requires to add extra
-> macro F_MMU_INT_ID_LARB_ID_EXT, and F_MMU_INT_ID_PORT_ID_EXT in order
-> to support 6-bit encoded port IDs.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   drivers/iommu/mtk_iommu.c | 17 +++++++++++++++--
->   1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 5a4e00e4bbbc..35e9731c3441 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -108,8 +108,12 @@
->   #define F_MMU_INT_ID_SUB_COMM_ID(a)		(((a) >> 7) & 0x3)
->   #define F_MMU_INT_ID_COMM_ID_EXT(a)		(((a) >> 10) & 0x7)
->   #define F_MMU_INT_ID_SUB_COMM_ID_EXT(a)		(((a) >> 7) & 0x7)
-> +/* Macro for 5 bits lenght port ID field (default) */
+On Tue, Oct 11, 2022 at 11:27 AM Lu=C3=ADs Henriques <lhenriques@suse.de> w=
+rote:
+> I'm not really sure where (or how) exactly this feature should be
+> implemented, but I agree with Xiubo that this approach doesn't look
+> correct.  This would be yet another hack that can be easily circumvented
+> on the client side.  If this feature is really required, the restriction
+> should be imposed on the MDS side.
 
-Typo: s/lenght/length/g
+I think this is the wrong way to look at this problem. This is like
+saying the client can circumvent file permissions by pretending to be
+the owning uid.
 
->   #define F_MMU_INT_ID_LARB_ID(a)			(((a) >> 7) & 0x7)
->   #define F_MMU_INT_ID_PORT_ID(a)			(((a) >> 2) & 0x1f)
-> +/* Macro for 6 bits lenght port ID field */
+This isn't about restricting a client to see/create/delete snapshots;
+we need to agree that this is about clients which already have the
+permission to do this. This is about restricting which users (uids) on
+a client will be allowed to do that. The server cannot possibly
+implement this restriction; all it can do is give kind hints to the
+client, like it currently does with regular file permissions. But it's
+up to the client's kernel (the cephfs driver and the VFS) to enforce
+those per-uid permissions.
 
-Same here.
+This approach is already implemented in cephfs currently. All my patch
+does is allow overriding the mode mask, instead of inheriting the
+parent's mode mask. So if you say "this approach doesn't look
+correct", then you're actually saying that cephfs which is shipped in
+Linux mainline kernels isn't correct. That is certainly a reasonable
+opinion, but it's not about my patch.
 
-After fixing that:
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> (However, IMHO the feature looks odd from the beginning: a user that owns
+> a directory and has 'rw' access to it but can't run a simple 'mkdir' is
+> probably breaking standards compliance even more.)
 
+There is "prior art" for that: read-only mounts and immutable files.
+On both, you can have the "w" permission bit but cannot actually
+write.
 
+Max
