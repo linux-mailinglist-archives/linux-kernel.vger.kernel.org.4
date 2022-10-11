@@ -2,206 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0313F5FBE05
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6ED5FBE09
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 01:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiJKW7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 18:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S229586AbiJKXB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 19:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJKW73 (ORCPT
+        with ESMTP id S229548AbiJKXB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 18:59:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB8992593;
-        Tue, 11 Oct 2022 15:59:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 387E1B8160D;
-        Tue, 11 Oct 2022 22:59:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F37C433D6;
-        Tue, 11 Oct 2022 22:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665529164;
-        bh=uLhjiSU6dHOtAMnX7fEozmgHIL3cBmodbbEpRxHuGto=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tRTCxhmrMRcfoNQQDoVD4+mN2LX8IwtFR7oZeWKKS8Tc25Djoy+7v1RXW3PEDIPdP
-         RZlqnqX3LN4w7+QKAEo7Ueqz3LcCsGjTs8iXdatSn66hytIcLgxnwnUsGwz83zb9QT
-         HneEkgnp/65S/TuJc1r5TyoGhaiOXvnJJwHr8y/Nw+pFKUhzRrLesMYcLM08fDyrid
-         aEgcGrIVaXXKNRuZr3Ze50CN1FT76SmqYrPOsflkz68JrxmM02SztuyMdkIG74bdsN
-         y1qVH7XZgqjSVhKw6qf73ubtLAGsz0Qh+dMpqPpEdRiaiPtdriSxJl4MoaOnZyay2F
-         x8aCqukoe/lrA==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-man@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: [man-pages PATCH v4] statx.2, open.2: document STATX_DIOALIGN
-Date:   Tue, 11 Oct 2022 15:59:14 -0700
-Message-Id: <20221011225914.216344-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        Tue, 11 Oct 2022 19:01:26 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49C35E676
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:01:24 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-132fb4fd495so17664958fac.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 16:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1NmhxoB5FfeDLQSOCmHfU2Us6Bf0La5Ymj1Q8d1Ci+Y=;
+        b=hikWRSPJtZ8VgEI+7O08taRL31Iuz4MeLJoGC3SNfDE8lzz9/5U7qHVs0JOqSwbb74
+         0/9FAAHaNLYp5fTy5fJXOEHD9Y4+gV7fZJayd+8eWkvHpXfuesOZLzAGCl6qRvZSh4UX
+         uA1Je/OFgiw1jMkUxkNeSEBzVsFkooPN4sh6UjJ9eIZgZjzFnzqvnYnquwhMF9jbxQPz
+         I918R1C3D5WxRB4js8CSyu1tUmt2YIhawgGfzgViQdnxCvYO66g2GwZ+O3a7M3kx87eP
+         8i28++Kyxuu7LjUOM8ibFEfJXcltBbgLpRWOpOKU42ZjZ/Odl8fQTmMGv+ZkjX8pwkWV
+         DnpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1NmhxoB5FfeDLQSOCmHfU2Us6Bf0La5Ymj1Q8d1Ci+Y=;
+        b=BiouVKkDK7ctOpn4Xh8j3qwxpqwQueiaEfMqUSWOKdwqgpFoppUsG0sSDriz9LpnpM
+         YVjaWYDDTIxOF/+bhoWBZBQoKQwA2o2O81KaOfJYuB8H4KGbWvmvZS1VUA3d+dChxsMi
+         2egZ7w9hmiMJ71A4BvYDZZ413lMSumbItcuXO3Fs3MWaXlMqV6/OJZ+3ljOlsZWy7jRu
+         wrYt0vgx8hVwoNuqyudOFS16VOIiTbOl76Els/JaQ0rGBgzCYMXmKA3pNUrspeWlcSmy
+         X/dj4MOhMx9XHh4BlRLYCx3XvmT9wZKvWshmeJqoSNpj/ma2ocXqOSkuvDtd3B4SjY1c
+         95lg==
+X-Gm-Message-State: ACrzQf3MJh/7vWYFAKLRxrjfsyds9GbQdUR+E1YsZSyPHoZZOUUpfsW2
+        nYhtk3z7hH7CBXmzaaaBifoVjbgGc/8TlFHiqwZLIQ==
+X-Google-Smtp-Source: AMsMyM5N0L4L3FOVl+mGmuvzLjnRyLQ9Hgcq2jpnXWweheGK6eoLgzIp/P4hGoetZKJhy7Ds098DMbaUVMNhz/RjXvM=
+X-Received: by 2002:a05:6870:c082:b0:12b:542c:71cf with SMTP id
+ c2-20020a056870c08200b0012b542c71cfmr848222oad.45.1665529283863; Tue, 11 Oct
+ 2022 16:01:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221011190613.13008-1-mig@semihalf.com> <20221011190613.13008-2-mig@semihalf.com>
+ <ad015bc9-a6d2-491d-463a-42a6a0afbf75@linaro.org> <CAPv3WKcY=erFTBDLP1AhQa0+CP6C8KJinmKFEkR2xh4mHHv_aQ@mail.gmail.com>
+In-Reply-To: <CAPv3WKcY=erFTBDLP1AhQa0+CP6C8KJinmKFEkR2xh4mHHv_aQ@mail.gmail.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Wed, 12 Oct 2022 01:01:13 +0200
+Message-ID: <CAPv3WKdon28ntGQ=xbmL+CEFQ7=xzOQOcV9qN_8MOt-uiLHoXg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: net: marvell,pp2: convert to json-schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?Q?Micha=C5=82_Grzelak?= <mig@semihalf.com>,
+        devicetree@vger.kernel.org, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+wt., 11 pa=C5=BA 2022 o 22:34 Marcin Wojtas <mw@semihalf.com> napisa=C5=82(=
+a):
+>
+> Hi Krzysztof,
+>
+> Let me chime in.
+>
+> wt., 11 pa=C5=BA 2022 o 21:50 Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> napisa=C5=82(a):
+> >
+> > On 11/10/2022 15:06, Micha=C5=82 Grzelak wrote:
+> > > Convert the marvell,pp2 bindings from text to proper schema.
+> > >
+> > > Move 'marvell,system-controller' and 'dma-coherent' properties from
+> > > port up to the controller node, to match what is actually done in DT.
+> >
+> > You need to also mention other changes done during conversion -
+> > requiring subnodes to be named "(ethernet-)?ports", deprecating port-id=
+.
+> >
+> > >
+> > > Signed-off-by: Micha=C5=82 Grzelak <mig@semihalf.com>
+> > > ---
+> > >  .../devicetree/bindings/net/marvell,pp2.yaml  | 286 ++++++++++++++++=
+++
+> > >  .../devicetree/bindings/net/marvell-pp2.txt   | 141 ---------
+> > >  MAINTAINERS                                   |   2 +-
+> > >  3 files changed, 287 insertions(+), 142 deletions(-)
+> > >  create mode 100644 Documentation/devicetree/bindings/net/marvell,pp2=
+.yaml
+> > >  delete mode 100644 Documentation/devicetree/bindings/net/marvell-pp2=
+.txt
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/net/marvell,pp2.yaml b=
+/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> > > new file mode 100644
+> > > index 000000000000..24c6aeb46814
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> > > @@ -0,0 +1,286 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/net/marvell,pp2.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Marvell CN913X / Marvell Armada 375, 7K, 8K Ethernet Controll=
+er
+> > > +
+> > > +maintainers:
+> > > +  - Marcin Wojtas <mw@semihalf.com>
+> > > +  - Russell King <linux@armlinux.org>
+> > > +
+> > > +description: |
+> > > +  Marvell Armada 375 Ethernet Controller (PPv2.1)
+> > > +  Marvell Armada 7K/8K Ethernet Controller (PPv2.2)
+> > > +  Marvell CN913X Ethernet Controller (PPv2.3)
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - marvell,armada-375-pp2
+> > > +      - marvell,armada-7k-pp22
+> > > +
+> > > +  reg:
+> > > +    minItems: 3
+> > > +    maxItems: 4
+> > > +
+> > > +  "#address-cells":
+> > > +    const: 1
+> > > +
+> > > +  "#size-cells":
+> > > +    const: 0
+> > > +
+> > > +  clocks:
+> > > +    minItems: 2
+> > > +    items:
+> > > +      - description: main controller clock
+> > > +      - description: GOP clock
+> > > +      - description: MG clock
+> > > +      - description: MG Core clock
+> > > +      - description: AXI clock
+> > > +
+> > > +  clock-names:
+> > > +    minItems: 2
+> > > +    items:
+> > > +      - const: pp_clk
+> > > +      - const: gop_clk
+> > > +      - const: mg_clk
+> > > +      - const: mg_core_clk
+> > > +      - const: axi_clk
+> > > +
+> > > +  dma-coherent: true
+> > > +
+> > > +  marvell,system-controller:
+> > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > +    description: a phandle to the system controller.
+> > > +
+> > > +patternProperties:
+> > > +  '^(ethernet-)?port@[0-9]+$':
+> > > +    type: object
+> > > +    description: subnode for each ethernet port.
+> > > +
+> > > +    properties:
+> > > +      interrupts:
+> > > +        minItems: 1
+> > > +        maxItems: 10
+> > > +        description: interrupt(s) for the port
+> > > +
+> > > +      interrupt-names:
+> > > +        minItems: 1
+> > > +        items:
+> > > +          - const: hif0
+> > > +          - const: hif1
+> > > +          - const: hif2
+> > > +          - const: hif3
+> > > +          - const: hif4
+> > > +          - const: hif5
+> > > +          - const: hif6
+> > > +          - const: hif7
+> > > +          - const: hif8
+> > > +          - const: link
+> > > +
+> > > +        description: >
+> > > +          if more than a single interrupt for is given, must be the
+> > > +          name associated to the interrupts listed. Valid names are:
+> > > +          "hifX", with X in [0..8], and "link". The names "tx-cpu0",
+> > > +          "tx-cpu1", "tx-cpu2", "tx-cpu3" and "rx-shared" are suppor=
+ted
+> > > +          for backward compatibility but shouldn't be used for new
+> > > +          additions.
+> > > +
+> > > +      reg:
+> > > +        description: ID of the port from the MAC point of view.
+> > > +
+> > > +      port-id:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> >
+> >         deprecated: true
+> >
+> > > +        description: >
+> > > +          ID of the port from the MAC point of view.
+> > > +          Legacy binding for backward compatibility.
+> > > +
+> > > +      phy:
+> > > +        $ref: /schemas/types.yaml#/definitions/phandle
+> > > +        description: >
+> > > +          a phandle to a phy node defining the PHY address
+> > > +          (as the reg property, a single integer).
+> > > +
+> > > +      phy-mode:
+> > > +        $ref: ethernet-controller.yaml#/properties/phy-mode
+> > > +
+> > > +      marvell,loopback:
+> > > +        $ref: /schemas/types.yaml#/definitions/flag
+> > > +        description: port is loopback mode.
+> > > +
+> > > +      gop-port-id:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        description: >
+> > > +          only for marvell,armada-7k-pp22, ID of the port from the
+> > > +          GOP (Group Of Ports) point of view. This ID is used to ind=
+ex the
+> > > +          per-port registers in the second register area.
+> > > +
+> > > +    required:
+> > > +      - interrupts
+> > > +      - port-id
+> > > +      - phy-mode
+> > > +      - reg
+> >
+> > Keep the same order of items here as in list of properties
+> >
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - clocks
+> > > +  - clock-names
+> > > +
+> > > +allOf:
+> > > +  - $ref: ethernet-controller.yaml#
+> >
+> > Hmm, are you sure this applies to top-level properties, not to
+> > ethernet-port subnodes? Your ports have phy-mode and phy - just like
+> > ethernet-controller. If I understand correctly, your Armada Ethernet
+> > Controller actually consists of multiple ethernet controllers?
+> >
+>
+> PP2 is a single controller with common HW blocks, such as queue/buffer
+> management, parser/classifier, register space, and more. It controls
+> up to 3 MAC's (ports) that can be connected to phys, sfp cages, etc.
+> The latter cannot exist on their own and IMO the current hierarchy -
+> the main controller with subnodes (ports) properly reflects the
+> hardware.
+>
+> Anyway, the ethernet-controller.yaml properties fit to the subnodes.
+> Apart from the name. The below is IMO a good description:.
+>
+> > If so, this should be moved to proper place inside patternProperties.
+> > Maybe the subnodes should also be renamed from ports to just "ethernet"
+> > (as ethernet-controller.yaml expects), but other schemas do not follow
+> > this convention,
+>
+> ethernet@
+> {
+>     ethernet-port@0
+>     {
+>      }
+>      ethernet-port@1
+>      {
+>      }
+> }
+>
+> What do you recommend?
+>
 
-Document the STATX_DIOALIGN support for statx()
-(https://git.kernel.org/linus/725737e7c21d2d25).
+I moved the ethernet-controller.yaml reference to under the subnode
+(this allowed me to remove phy and phy-mode description)) and it
+doesn't complain about the node naming. Please let me know if below
+would be acceptable.
 
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
+--- a/Documentation/devicetree/bindings/net/marvell,pp2.yaml
++++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+@@ -61,7 +61,11 @@ patternProperties:
+     type: object
+     description: subnode for each ethernet port.
 
-v4: formatting tweaks, as suggested by Alejandro
-
-v3: updated mentions of Linux version, fixed some punctuation, and added
-    a Reviewed-by
-
-v2: rebased onto man-pages master branch, mentioned xfs, and updated
-    link to patchset
-
- man2/open.2  | 52 +++++++++++++++++++++++++++++++++++++++++-----------
- man2/statx.2 | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+), 11 deletions(-)
-
-diff --git a/man2/open.2 b/man2/open.2
-index 57beb324a..8e4a063b4 100644
---- a/man2/open.2
-+++ b/man2/open.2
-@@ -1732,21 +1732,51 @@ of user-space buffers and the file offset of I/Os.
- In Linux alignment
- restrictions vary by filesystem and kernel version and might be
- absent entirely.
--However there is currently no filesystem\-independent
--interface for an application to discover these restrictions for a given
--file or filesystem.
--Some filesystems provide their own interfaces
--for doing so, for example the
-+The handling of misaligned
-+.B O_DIRECT
-+I/Os also varies;
-+they can either fail with
-+.B EINVAL
-+or fall back to buffered I/O.
-+.PP
-+Since Linux 6.1,
-+.B O_DIRECT
-+support and alignment restrictions for a file can be queried using
-+.BR statx (2),
-+using the
-+.B STATX_DIOALIGN
-+flag.
-+Support for
-+.B STATX_DIOALIGN
-+varies by filesystem;
-+see
-+.BR statx (2).
-+.PP
-+Some filesystems provide their own interfaces for querying
-+.B O_DIRECT
-+alignment restrictions,
-+for example the
- .B XFS_IOC_DIOINFO
- operation in
- .BR xfsctl (3).
-+.B STATX_DIOALIGN
-+should be used instead when it is available.
- .PP
--Under Linux 2.4, transfer sizes, the alignment of the user buffer,
--and the file offset must all be multiples of the logical block size
--of the filesystem.
--Since Linux 2.6.0, alignment to the logical block size of the
--underlying storage (typically 512 bytes) suffices.
--The logical block size can be determined using the
-+If none of the above is available,
-+then direct I/O support and alignment restrictions
-+can only be assumed from known characteristics of the filesystem,
-+the individual file,
-+the underlying storage device(s),
-+and the kernel version.
-+In Linux 2.4,
-+most block device based filesystems require that
-+the file offset and the length and memory address of all I/O segments
-+be multiples of the filesystem block size
-+(typically 4096 bytes).
-+In Linux 2.6.0,
-+this was relaxed to the logical block size of the block device
-+(typically 512 bytes).
-+A block device's logical block size can be determined using the
- .BR ioctl (2)
- .B BLKSSZGET
- operation or from the shell using the command:
-diff --git a/man2/statx.2 b/man2/statx.2
-index 2a85be7c0..84c35bdf3 100644
---- a/man2/statx.2
-+++ b/man2/statx.2
-@@ -61,7 +61,12 @@ struct statx {
-        containing the filesystem where the file resides */
-     __u32 stx_dev_major;   /* Major ID */
-     __u32 stx_dev_minor;   /* Minor ID */
++    allOf:
++      - $ref: ethernet-controller.yaml#
 +
-     __u64 stx_mnt_id;      /* Mount ID */
-+
-+    /* Direct I/O alignment restrictions */
-+    __u32 stx_dio_mem_align;
-+    __u32 stx_dio_offset_align;
- };
- .EE
- .in
-@@ -247,6 +252,8 @@ STATX_BTIME	Want stx_btime
- STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
- 	It is deprecated and should not be used.
- STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
-+STATX_DIOALIGN	Want stx_dio_mem_align and stx_dio_offset_align
-+	(since Linux 6.1; support varies by filesystem)
- .TE
- .in
- .PP
-@@ -407,6 +414,30 @@ This is the same number reported by
- .BR name_to_handle_at (2)
- and corresponds to the number in the first field in one of the records in
- .IR /proc/self/mountinfo .
-+.TP
-+.I stx_dio_mem_align
-+The alignment (in bytes) required for user memory buffers for direct I/O
-+.RB ( O_DIRECT )
-+on this file,
-+or 0 if direct I/O is not supported on this file.
-+.IP
-+.B STATX_DIOALIGN
-+.RI ( stx_dio_mem_align
-+and
-+.IR stx_dio_offset_align )
-+is supported on block devices since Linux 6.1.
-+The support on regular files varies by filesystem;
-+it is supported by ext4, f2fs, and xfs since Linux 6.1.
-+.TP
-+.I stx_dio_offset_align
-+The alignment (in bytes) required for file offsets and I/O segment lengths
-+for direct I/O
-+.BR "" ( O_DIRECT )
-+on this file,
-+or 0 if direct I/O is not supported on this file.
-+This will only be nonzero if
-+.I stx_dio_mem_align
-+is nonzero, and vice versa.
- .PP
- For further information on the above fields, see
- .BR inode (7).
+     properties:
+       interrupts:
+         minItems: 1
+         maxItems: 10
+@@ -95,19 +99,11 @@ patternProperties:
 
-base-commit: ab47278f252262dd9bd90f3386ffd7d8700fa25a
--- 
-2.37.3
+       port-id:
+         $ref: /schemas/types.yaml#/definitions/uint32
++        deprecated: true
+         description: >
+           ID of the port from the MAC point of view.
+           Legacy binding for backward compatibility.
 
+-      phy:
+-        $ref: /schemas/types.yaml#/definitions/phandle
+-        description: >
+-          a phandle to a phy node defining the PHY address
+-          (as the reg property, a single integer).
+-
+-      phy-mode:
+-        $ref: ethernet-controller.yaml#/properties/phy-mode
+-
+       marvell,loopback:
+         $ref: /schemas/types.yaml#/definitions/flag
+         description: port is loopback mode.
+@@ -132,7 +128,6 @@ required:
+   - clock-names
+
+ allOf:
+-  - $ref: ethernet-controller.yaml#
+   - if:
+
+Best regards,
+Marcin
