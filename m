@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA0E5FBA18
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA7F5FBA20
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiJKSF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        id S229628AbiJKSHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJKSFG (ORCPT
+        with ESMTP id S229698AbiJKSHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:05:06 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1CBFE6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:04:45 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id r17so33141803eja.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:04:45 -0700 (PDT)
+        Tue, 11 Oct 2022 14:07:38 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55B2D75E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:07:35 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-360871745b0so74722637b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ETa5U6KaROJwkg59mQUai3oA9ltBPunhs0v0qUZxk8I=;
-        b=dqGJODTRAdmT8j3Vpo4S9bC4XSgILD+3IpfmMRQNm1gJjsS6OqjV8MnUkRP+qcnx3n
-         Pr75Ta5VAVHZffbnZHS4aK1lCnkw/XahdQt30Ac7t8AoU2NaH/hOE6V2+h+hWRRGvveR
-         6G/vqe0ouAkngeA2cSM4afQyWtgSJv/mLMbTHviJDU6SNlsSXRoT/4N1vFnd4fZR+gJv
-         /n7vg8IjOu6kTZBMBI3cQBIAcGBDTVHcCuli+BKYnlZnZFDedHLVBrKCD04J1ZEqhYYu
-         chqun1uQJHve0E9qiHhYEfSSGzKNGAfccmwwyd+AUpz13TPBBwALt42K2giSsDWEyvyp
-         OjtQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b7nMl+IIoVXIZCC/DKHT3CXI2Xf2HP4geGz0+dJZi9s=;
+        b=FG0qA4ikAjxVKa3sHpnmD3r0ovEhAB/bTmLX8VaAqEoTpZLQ8gI6+KCa2X7rXzcUx3
+         rJST5MEvmq0VI70J8hjHeW0BnsDmXHjn1DU19Jfy8L1wC2sLYsljtxyV47EilRh2TLtC
+         9cB+K0rCTEfq02tPXJzGGRr2QF9LJd3mCke8WtuRcb9fZqpXu9hc5PKyEH03JR7y3FCa
+         fR9MC0LDUvDah73tE2PvE3mCpnHEUVEXCgJH/S+cEMd13lcLv9SWquKndDYNyeOjDrAV
+         6YYxGSJpZ+hIfCaCTY2Nyncsf03owIdhplfLFZJjPMseBggOY0NJfZkPV3LWUppYNKkJ
+         0fRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ETa5U6KaROJwkg59mQUai3oA9ltBPunhs0v0qUZxk8I=;
-        b=T+BSeolKrokrBzvw2hBUrCDed6JhOH7N23zHVmcAKI30IERsZubxq7R5jbDxn7pI2e
-         3BXCqkh2KwwMHy/9FMCOw6ExSTkvUZMeXjzpGCA0UCiN0jQ7T1yXufGwOI0qWDdnqo98
-         Qt3Be+JfDVWZJoec5qHJZMDHtY7fTwdgfAA6sC54obILHh1USyTONEKRLJRUO7tkNqRT
-         EbSCok6zyUV3P7XqTCS/NTGrjotS9GssHQyZEr+Nzi4+ejwNOpmv0w7q4/l73DZJSHHH
-         WdlMuTu0z6zGjhge+0FQw7642aNuJ7Ou0veimp7OKHuEyxqByDCmU+N8nrQB73vjvoFs
-         zCWA==
-X-Gm-Message-State: ACrzQf1ttQVZLNCPalbE3OHuqJSGNPUtrSPgYOuDt6cXaCspVYSZaLVY
-        B3eC94zmddYd2tLXTgUeXBjBMg==
-X-Google-Smtp-Source: AMsMyM7UrKWs6iLL7RoQLqvH3qbD5dRbe4B9w+o648Kf3nU4zEo5wnYTzuW6AUC1beHNqj7NCpk+Pw==
-X-Received: by 2002:a17:906:8461:b0:78d:dd76:5695 with SMTP id hx1-20020a170906846100b0078ddd765695mr3314638ejc.583.1665511483750;
-        Tue, 11 Oct 2022 11:04:43 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id la6-20020a170907780600b007030c97ae62sm28932ejc.191.2022.10.11.11.04.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 11:04:43 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 20:04:42 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, lkp@lists.01.org,
-        lkp@intel.com, Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [oliver.sang@intel.com: [cpumask] b9a7ecc71f:
- WARNING:at_include/linux/cpumask.h:#__is_kernel_percpu_address]
-Message-ID: <20221011180442.cwjtcvjioias3qt6@kamzik>
-References: <YzeclACdH9JmaRza@yury-laptop>
- <CAHk-=wiK5wyj58x3uvt+otsO9=79N13OO6Nf57DFVYO=QX==ig@mail.gmail.com>
- <Yzh19JhBMzkMr4+L@yury-laptop>
- <20221011170949.upxk3tcfcwnkytwm@kamzik>
- <Y0Wk0WD6CL4aFEIi@yury-laptop>
- <Y0Wmj+XnyD/c6XM3@yury-laptop>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7nMl+IIoVXIZCC/DKHT3CXI2Xf2HP4geGz0+dJZi9s=;
+        b=P0apyP3Z53UCOsfLKEOuC4moXHID+bIj+gDrCsKfK5l7cMNDmJRLWYzN9F/aBCQ2Gj
+         uDAu85nkMM7O5EYSsk7S+2le43SzZftaD1pjvt8EeW+NULVLvAvOTfRwZVgtM4ppRkgO
+         MWCRQKseITheEYVS1DFt4UQacDCIMvWKBSNftsTv3jwSbhCfVaYDzdS616zIIeOCRB/Y
+         4WPC1rbsp+9rO8+o5morcqpdgwDD3LBfsEsn8b9twti0017+5esZw04pVn5MZtWspmgP
+         UxS+4IsPooxZ5vjQaEStmdmKyVjg0q+tqSx+WEXIwL3oN+vII4K86W1wOMI4lFT6H707
+         BS/A==
+X-Gm-Message-State: ACrzQf1FpxpbwP5i9JCKG7Tiltai/mgITYyAb3TaIaXeRXkQEsWerGBW
+        J6RzwV9b3RMcpN7XRNdgy+jIpqGH8L5u9QnK014=
+X-Google-Smtp-Source: AMsMyM6OCvagOVxxxTEsfErq9xBhIJJgtNqp5+7CYXRzAiyXlU45PahqHzXqTx5VO8MUR+9wqIhH0LJTIZYEhX9SSJw=
+X-Received: by 2002:a81:6907:0:b0:34a:51ce:3b38 with SMTP id
+ e7-20020a816907000000b0034a51ce3b38mr23284332ywc.151.1665511654327; Tue, 11
+ Oct 2022 11:07:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0Wmj+XnyD/c6XM3@yury-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:1749:b0:3c5:f473:56e4 with HTTP; Tue, 11 Oct 2022
+ 11:07:33 -0700 (PDT)
+Reply-To: illuminatiinitiationcenter56@gmail.com
+From:   Garry Lee <johnalinda8@gmail.com>
+Date:   Tue, 11 Oct 2022 21:07:33 +0300
+Message-ID: <CA+Dt0k_wprVPDRPoDepuruBYd2vtSZ60hGqdrTRy=NsRMSYouA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        UNDISC_FREEM,UPPERCASE_75_100 autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [illuminatiinitiationcenter56[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [johnalinda8[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [johnalinda8[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 10:23:27AM -0700, Yury Norov wrote:
-> On Tue, Oct 11, 2022 at 10:16:03AM -0700, Yury Norov wrote:
-> > > Hi Yury,
-> > > 
-> > > I just wanted to report that the warning fires when doing
-> > > 'cat /proc/cpuinfo' on at least x86 and riscv. I don't think
-> > > those are false positives. I'm guessing a patch should be
-> > > something like the following diff. If you haven't already
-> > > addressed this and I'm not off in left field, then I guess
-> > > we should integrate it into your series.
-> > > 
-> > > Thanks,
-> > > drew
-> >  
-> > Hi Andrew,
-> > 
-> > Can you please send it as a patch with a description?
-> 
-> Also, can you describe why we'd silence the warning this way?
-> If the cpu number greater than nr_cpu_ids comes from upper layer,
-> we quite probably should investigate what happens there...
-
-Darn, I fired off the patches before reading this. I didn't try to
-completely digest seq_read_iter(), but on a quick look I think the
-reason is that it implements something like
-
-  p = start();
-  while (1) {
-     p = next();
-     if (!p)
-         break;
-     show();
-  }
-  stop();
-
-where cpuinfo's operators are
-
- start()
- {
-    *pos = cpumask_next(*pos - 1, cpu_online_mask);
-    if (*pos < nr_cpu_ids)
-        return ...;
-    return NULL;
- }
-
- next()
- {
-   (*pos)++;
-   return start(..., pos);
- }
-
-So the justification for the patches the way I've written them is
-that I think we just need to return NULL from start / next when
-we've gone too far, before we first warn and then return NULL.
-
-Thanks,
-drew
+-- 
+DO YOU WANT TO BE RICH AND FAMOUS? JOIN THE GREAT ILLUMINATI ORDER OF
+RICHES, POWER/FAME  NOW AND ACHIEVE ALL YOUR DREAMS? IF YES EMAIL US :
+MAIL: illuminatiinitiationcenter56@gmail.com
+YOUR FULL NAME:
+PHONE NUMBER :
+COUNTRY :
+GENDER:
