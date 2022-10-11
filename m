@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277185FBAE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287FA5FBAE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiJKTBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S229659AbiJKTBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJKTBC (ORCPT
+        with ESMTP id S229456AbiJKTBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:01:02 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A388844E1;
+        Tue, 11 Oct 2022 15:01:03 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C0C82D35;
         Tue, 11 Oct 2022 12:00:58 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id B6B9D845;
-        Tue, 11 Oct 2022 19:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B6B9D845
+        by ms.lwn.net (Postfix) with ESMTPA id 226DB993;
+        Tue, 11 Oct 2022 19:00:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 226DB993
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665514858; bh=RQjiDw6MALWVNaPpx7GNcchSIXCX/ensCVvHPIlQ7jM=;
+        t=1665514858; bh=HMKtofhzkC0BbHU/AlRiFnMQhJNC5T93PGks81TP6Ho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QLjUrv2P4sOQpSCifH8LOLPv1gnfW8VvZRl+pZYD327yMNUvF/gO7ZtphJGq3N9DB
-         2wnHhz8nWbOSogiNqIMq6atANuPDKcg1/Byc4j8DCWI0ioIQ5KuEF/5yqnomzK21Us
-         cGujxMxou1a7U5JjxkbmnaTHlhHNhu/zTukqOoeCXzbOnp2wbW93e+3ZWqrf/3HX3A
-         chfxoz1XX2uAbCDR6iSE7RpuxOit11oEMzkLYPHsySmqt1YQrG669JidGdDXT6AsEb
-         HyC4vGh4zCtBMsCo8gbwz0c6xBrzr1dU2GxdCptTXV9bfLgSdUgM8yfjKsnD44gYVG
-         U/oH9D7z2B2FA==
+        b=gZKU2oRQgeOpyosrSMLURM/RecqDGoGEyb42A45zag0mSZRQVWxwvLVAJ13FxIrFz
+         hRrQsinG5uh4xTEG9nEXdI+TPRTGrzUUwkpPItMIZOXCsGfVQIWeTfufbqjGqUuEIj
+         l6vpGqYZXftiuDKAc9ZAuDSG8EqTjYYVN+IzgLvSFQ1abd3ScsNALOpcckwVYeSQhs
+         qYp/6VkioMtSBU13zPthYHz1i+zrWHI95x8QNWJFAQQb/WmgrUGb//7kcphUT8GrAF
+         m5Xtyqy4p2ISQVRj5bbRL35BTVQZOk4kFN4hCP/rlipRggGW1vpHyqohWDLrH0hwvj
+         Xc0hQnkU8GPXQ==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH v2 2/6] docs: tweak some Alabaster style parameters
-Date:   Tue, 11 Oct 2022 13:00:43 -0600
-Message-Id: <20221011190047.749145-3-corbet@lwn.net>
+Subject: [PATCH v2 3/6] docs: update sphinx.rst to reflect the default theme change
+Date:   Tue, 11 Oct 2022 13:00:44 -0600
+Message-Id: <20221011190047.749145-4-corbet@lwn.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221011190047.749145-1-corbet@lwn.net>
 References: <20221011190047.749145-1-corbet@lwn.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is just the beginning: tighten up the layout a bit to improve the
-information density in the browser.  Also reconfigure the page width in
-terms of character units (em) rather than pixels, making it more
-display-independent.  To that end, add a custom.css file to
-tweak Alabaster CSS settings.
+We don't default to Read The Docs anymore; update the docs to match.
 
 Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 ---
- Documentation/conf.py                  |  3 +++
- Documentation/sphinx-static/custom.css | 14 ++++++++++++++
- 2 files changed, 17 insertions(+)
- create mode 100644 Documentation/sphinx-static/custom.css
+ Documentation/doc-guide/sphinx.rst | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index 629f4afeb0eb..1dbf3d6a55de 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -345,6 +345,9 @@ if  html_theme == 'classic':
- else:
-     html_theme_options = {
-         'description': get_cline_version(),
-+        'font_size': '10pt',
-+        'page_width': '65em',
-+        'sidebar_width': '15em',
-     }
+diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+index 1228b85f6f77..d71e0beb11f3 100644
+--- a/Documentation/doc-guide/sphinx.rst
++++ b/Documentation/doc-guide/sphinx.rst
+@@ -130,11 +130,9 @@ section of ``make help``. The generated documentation is placed in
+ format-specific subdirectories under ``Documentation/output``.
  
- sys.stderr.write("Using %s theme\n" % html_theme)
-diff --git a/Documentation/sphinx-static/custom.css b/Documentation/sphinx-static/custom.css
-new file mode 100644
-index 000000000000..6b0e554cea0a
---- /dev/null
-+++ b/Documentation/sphinx-static/custom.css
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * CSS tweaks for the Alabaster theme
-+ */
-+
-+/* Shrink the headers a bit */
-+div.body h1 { font-size: 180%; }
-+div.body h2 { font-size: 150%; }
-+div.body h3 { font-size: 130%; }
-+
-+/* Tighten up the layout slightly */
-+div.body { padding: 0 15px 0 10px; }
-+div.document { margin: 20px 10px 0 10px; }
-+div.sphinxsidebarwrapper { padding: 1em 0.4em; }
+ To generate documentation, Sphinx (``sphinx-build``) must obviously be
+-installed. For prettier HTML output, the Read the Docs Sphinx theme
+-(``sphinx_rtd_theme``) is used if available. For PDF output you'll also need
+-``XeLaTeX`` and ``convert(1)`` from ImageMagick
+-(https://www.imagemagick.org).\ [#ink]_
+-All of these are widely available and packaged in distributions.
++installed.  For PDF output you'll also need ``XeLaTeX`` and ``convert(1)``
++from ImageMagick (https://www.imagemagick.org).\ [#ink]_ All of these are
++widely available and packaged in distributions.
+ 
+ To pass extra options to Sphinx, you can use the ``SPHINXOPTS`` make
+ variable. For example, use ``make SPHINXOPTS=-v htmldocs`` to get more verbose
+@@ -143,12 +141,8 @@ output.
+ It is also possible to pass an extra DOCS_CSS overlay file, in order to customize
+ the html layout, by using the ``DOCS_CSS`` make variable.
+ 
+-By default, the build will try to use the Read the Docs sphinx theme:
+-
+-    https://github.com/readthedocs/sphinx_rtd_theme
+-
+-If the theme is not available, it will fall-back to the classic one.
+-
++By default, the "Alabaster" theme is used to build the HTML documentation;
++this theme is bundled with Sphinx and need not be installed separately.
+ The Sphinx theme can be overridden by using the ``DOCS_THEME`` make variable.
+ 
+ There is another make variable ``SPHINXDIRS``, which is useful when test
 -- 
 2.37.2
 
