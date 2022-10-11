@@ -2,112 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515495FB40F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6519D5FB411
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiJKODi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S229783AbiJKOEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJKODc (ORCPT
+        with ESMTP id S229470AbiJKOEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:03:32 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B946FA14;
-        Tue, 11 Oct 2022 07:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=D73BjQfIrSTnj6EqtQCxORHOxjQyNOc/wJqBUfiO9Q8=; b=SABjHiClB4JQLpcyV5/NJW5d3o
-        7qiqIFwxs3yuoRYvHYEUmakkgOL5QJruLYYiLrB8KNBxvc9M0m1MoPYCe3IOz0IAw0eNWihsAXV/P
-        5Y+f4dExVkJIGRYxLQbJ5kAOwfVu5T6Pm67GO++RvcH0pmN82akGPlefH2VZrln++lzM7rjbIHmLX
-        OGbnU3htHC2Rq9KOnboXIhUwg0DEfnfpXfP1N++I2+o6Ukub7Ckdu6lBrxmW1FB4Cb9KB7FurUxMk
-        eNByW8y5b+lmZE8M/V8PaAIkYFv7qB7CIAzpDcxJNW9ZAkwV7KHd56f56h5fcbaZVr9iX5gjnz055
-        cLqo9vfg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oiFqT-002aUL-ES; Tue, 11 Oct 2022 14:02:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 557723000E3;
-        Tue, 11 Oct 2022 16:02:56 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 449D529AC89DB; Tue, 11 Oct 2022 16:02:56 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 16:02:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Message-ID: <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
- <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
- <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
+        Tue, 11 Oct 2022 10:04:09 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117CB8F263
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 07:04:08 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id f37so21231930lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 07:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=miXLZk8v5YqNNtiDLYh+RE8Lp+zqisULlUcCYgeHoAE=;
+        b=VCTokd2xjoi7u4WGZYNZlVC3KvGj/Zwa3YIctwlsTfta5SBxhK8l1EBxyOSAHZbYqv
+         /0Qr3SMo1BiLWJ5q1EWD/DOmKxe6otD2Q46i3M+BrNWNEm7jOpf0GH4CdPD+Se98xXmJ
+         Fdk4PAyxKXgHXouIdi+m6U6o7dIhjSuTNcV6aHEyG/f9Xl22sGl5qMdhDrduIFxfTe9P
+         B6g21isG/BFzLjKezb4vh5bD6ZT4zAwb1/L1wUTMU7jU6brqIvcQT6f88X6doY2liHG3
+         8c96nICAbtsvRN2JowboqAXiIqylWZaSwBOYora7geeMWtOIvpqAkLfsOTDJAKNr5+B3
+         LKJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=miXLZk8v5YqNNtiDLYh+RE8Lp+zqisULlUcCYgeHoAE=;
+        b=oXn7lyzuEFb79RFESaIrENglNv0wXFy9HmKv9SNn+oxDdylZ1jaIVEOrPeyLX236NV
+         xbQgwUd3F6SxMzMQH0RP8dnOGR+1iDZnyAqMSs8pwm5Yx1sJ9D/OcaZDNlwWG8hN1M3f
+         sxZaR28NlMTbW4jfznQzIkpW/UApwcULTzX0LhN89XsrQcMPOOECtRjR8IEGWOqocwhF
+         XkH65BqOo1TX0VAO2+/gG/Zs50tUg27t5LPdeZo2FgObQxOljFKyiRQGci9tW3p+j523
+         I1wzf06gyrkL0yMKUYeq+H7kevlXNSysJyPrdxnNDpr1awRXZsrmk2bLIwJXO7SxRV66
+         tbjg==
+X-Gm-Message-State: ACrzQf0JYgd8KSu23qB29T7EDBsBjrTUrrJSlW39JR2NdMkO+LkEvGMt
+        4bhC6PurxU5l4nbBk3HqI7SRow==
+X-Google-Smtp-Source: AMsMyM5ltcAwdQHcdi8OnPxvv/cRJbPc0SAmnFJd7Ua6IjdfR1eSgoyRab2DlhLFc9bI4SQhvQwW3w==
+X-Received: by 2002:ac2:4c18:0:b0:4a2:6dbd:97d7 with SMTP id t24-20020ac24c18000000b004a26dbd97d7mr8327795lfq.144.1665497045747;
+        Tue, 11 Oct 2022 07:04:05 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c14-20020a19760e000000b004a031805c8bsm1872414lff.106.2022.10.11.07.04.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 07:04:05 -0700 (PDT)
+Message-ID: <ebe1e26a-7335-29ac-4990-6b8fdb02ba7c@linaro.org>
+Date:   Tue, 11 Oct 2022 17:04:04 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 08/13] phy: qcom-qmp-pcie: drop power-down delay config
+Content-Language: en-GB
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221011131416.2478-1-johan+linaro@kernel.org>
+ <20221011131416.2478-9-johan+linaro@kernel.org>
+ <66261491-530d-c368-6cc8-daeef74fcbda@linaro.org>
+ <Y0V1TIBySTPhYqX/@hovoldconsulting.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <Y0V1TIBySTPhYqX/@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 06:49:55PM +0530, Ravi Bangoria wrote:
-> On 11-Oct-22 4:59 PM, Peter Zijlstra wrote:
-> > On Sat, Oct 08, 2022 at 11:54:24AM +0530, Ravi Bangoria wrote:
-> > 
-> >> +static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
-> >> +					  struct perf_event_context *next_ctx)
-> >> +{
-> >> +	struct perf_event_pmu_context *prev_epc, *next_epc;
-> >> +
-> >> +	if (!prev_ctx->nr_task_data)
-> >> +		return;
-> >> +
-> >> +	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
-> >> +				    struct perf_event_pmu_context,
-> >> +				    pmu_ctx_entry);
-> >> +	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
-> >> +				    struct perf_event_pmu_context,
-> >> +				    pmu_ctx_entry);
-> >> +
-> >> +	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
-> >> +	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
-> >> +
-> >> +		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
-> >> +
-> >> +		/*
-> >> +		 * PMU specific parts of task perf context can require
-> >> +		 * additional synchronization. As an example of such
-> >> +		 * synchronization see implementation details of Intel
-> >> +		 * LBR call stack data profiling;
-> >> +		 */
-> >> +		if (prev_epc->pmu->swap_task_ctx)
-> >> +			prev_epc->pmu->swap_task_ctx(prev_epc, next_epc);
-> >> +		else
-> >> +			swap(prev_epc->task_ctx_data, next_epc->task_ctx_data);
-> > 
-> > Did I forget to advance the iterators here?
+On 11/10/2022 16:53, Johan Hovold wrote:
+> On Tue, Oct 11, 2022 at 04:46:53PM +0300, Dmitry Baryshkov wrote:
+>> On 11/10/2022 16:14, Johan Hovold wrote:
+>>> The power-down delay was included in the first version of the QMP driver
+>>> as an optional delay after powering on the PHY (using
+>>> POWER_DOWN_CONTROL) and just before starting it. Later changes modified
+>>> this sequence by powering on before initialising the PHY, but the
+>>> optional delay stayed where it was (i.e. before starting the PHY).
+>>>
+>>> The vendor driver does not use a delay before starting the PHY and this
+>>> is likely not needed on any platform unless there is a corresponding
+>>> delay in the vendor kernel init sequence tables (i.e. in devicetree).
+>>>
+>>> Let's keep the delay for now, but drop the redundant delay period
+>>> configuration while increasing the unnecessarily low timer slack
+>>> somewhat.
+>>
+>> Actually, the vendor driver does this 995..1005 sleep. But contrary to
+>> our driver it does that after programming whole PHY init sequence, which
+>> includes SW_RESET / START_CTL, but before programming the pipe clocks.
 > 
-> Yeah. Seems so. I overlooked it too.
+> Right, it does it after starting the PHY which means that you don't have
+> to poll for as long for the PHY status.
+> 
+> It's a different delay entirely.
 
-OK; so I'm not slowly going crazy staring at this code ;-) Let me go add
-it now then. :-)
+No-no-no. The 995-1005 delay was added guess for which SoC? For ipq8074, 
+where the config tables contain the ugly CFG_L writes for SW_RESET / 
+START_CTRL. So, it is the same delay, but added by somebody who didn't 
+care enough. The original 10-11 delay is a completely different story, 
+you are correct here.
 
-But first I gotta taxi the kids around for a bit, bbl.
+Thus, I'd say, the PCIe delay should be moved after the registers 
+programming.
+
+> 
+>> I think we can either drop this delay completely, or move it before
+>> read_poll_timeout().
+> 
+> It definitely shouldn't be used for any new platforms, but I opted for
+> the conservative route of keeping it in case some of the older platforms
+> actually do need it.
+> 
+> My bet is that this is all copy-paste cruft that could be removed, but
+> I'd rather do that as a separate follow-on change. Perhaps after testing
+> some more SoC after removing the delay.
+> 
+> SC8280XP certainly doesn't need it.
+
+I think in our case this delay just falls into status polling. We'd 
+probably need it, if we'd add the noretain handling.
+
+> 
+> Johan
+
+-- 
+With best wishes
+Dmitry
+
