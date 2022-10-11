@@ -2,92 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1E45FB85E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835EC5FB855
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJKQjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 12:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229721AbiJKQiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 12:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiJKQjQ (ORCPT
+        with ESMTP id S229508AbiJKQiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 12:39:16 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EF3A222E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:39:12 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id m6so3739444qkm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:39:12 -0700 (PDT)
+        Tue, 11 Oct 2022 12:38:18 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F4A0337
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:38:16 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c24so13739347plo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JuWUVhopp7w1rlsLDhtgvEXeVzs7gJGXSD5NcebEbwg=;
-        b=kS5ZhxV6jSkJw+pv31j1/TIl9ctrk5SG7GZG7tHexzmdIbG4Y5E/x0HBeOfkAYRWJr
-         QpUPUoAt7MShByXTfaa6aAGrby1OAHj0g9VSiH9RrxmicpnA5/x0O4AiWViUzzs2/eSD
-         OyppQqSuuw+uA9Guk6FWu6vgUBRSi/i1nfMWRPhbotuKBMhT2CMcNyo0gDlugcfvQnik
-         Kl4G4bLxtyqoCj/dTmMtzxZYNfF89sHzY5U5RGvItswyeDwl0FKpGnagtj29Z3SE2ziE
-         TfBCU/QPNySh2jOLNx+lecvU/nCDGhtW4E73VOVXgAZrGlz6UEZcsUSS4X7OIKpw2/vI
-         Rgdg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pJIEIqUm9cUj1SmYNhJXGpR39cH9SzoM6WilMBeHUU=;
+        b=RI4IIQSaXvRAb3D7QnzzQgHHdlPdXjhRr76L6bS2fFS2B2K0X0E2GmmJxgwx/qLV3l
+         yAYEdEGcpr+zjx1++mP03jsZr9PabHIvXRlMg7Bq5mh0PEqRzXt+hxsXKh6bH7ySHKEU
+         GW5JFVv57eZRspJ2mU2BPpnuIaaEEy3NZsLp4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuWUVhopp7w1rlsLDhtgvEXeVzs7gJGXSD5NcebEbwg=;
-        b=tgu9jSI/n6oKBvwZG+J6J+UbFasrXdpSmLN+rcH6CWVk4iLfiPPTbPcCfEhG3rAZNt
-         vRdDBwzWrEXxODA9vy7esD3Jm2g1dodD5f6Xva3Xkk1pHa8U/Q2McR3hBKVJt/7ARxYj
-         TQq7iiVIUnY8xFToQ9g+LwYeBRzMh1OJ4XTA0y4DY9qEAbv87EiLjxZVoDiCBwFhjZq1
-         +DPWEapVf6xY16K+5FHqzbVU1bpqz3nfEwIvd4b/vijCkVI2DsKYOwvKpI6hY4sP6ENW
-         9x+o8u9qfLHOhkkZZz3Z5a8UUOdZ0rNeakgt6UlA1MopWYvtVjMV+eigIoj1SbnJM0KT
-         5qMg==
-X-Gm-Message-State: ACrzQf0MJml32zAsoyRfTSpp1Ta6Tjv6HTvPKU1BDXUpUOrGY+az1UI0
-        upWvc9K7khv/NtgX81Wn/frcbg==
-X-Google-Smtp-Source: AMsMyM5eUUP9Kn/jICoQTvLX+b7FO0kcDg58IhSnVXtMaIvOXcEvxcseytcthL1bRFp7xH7pzdc5tA==
-X-Received: by 2002:a05:620a:10a1:b0:6ed:3b23:6991 with SMTP id h1-20020a05620a10a100b006ed3b236991mr6643163qkk.683.1665506351271;
-        Tue, 11 Oct 2022 09:39:11 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id x8-20020a05620a258800b006ce0733caebsm13275988qko.14.2022.10.11.09.39.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 09:39:10 -0700 (PDT)
-Message-ID: <d1226efc-ccd1-38ce-77f5-53e2dc30f51f@linaro.org>
-Date:   Tue, 11 Oct 2022 12:36:58 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+pJIEIqUm9cUj1SmYNhJXGpR39cH9SzoM6WilMBeHUU=;
+        b=RI40yiCUTPtQWJQwbjNKMOVXL/xhoqGSr4XxbSb9qDFFya5aNZ+T4zNyA8JOF+LHiv
+         OAtlLZuK8KL3mOh9qGbrINucNDQiyA4357E8uXUzWytOAMWIePtOxkfe4KblDfcEVT5R
+         mFuGe6exT1NiJ18geRMFCDwwpIXsBl8Yt6oiVcnB4WF23O8Ob3KwDF/Ea6PBZWl7uQey
+         8JWitCfKK4s8sOSnDXucTEZX8MIIDmp0GQHhfFSn6E0mCb6EmA9iTHfyOc+3VbS/4++n
+         Yjt9tHRV8JGp0Ge3cutPz9VKsS+MLtpUd2ZGqpeQ8v4BdEGXIvnA6KuARrTZ1kFCK5p3
+         NzmA==
+X-Gm-Message-State: ACrzQf1bObjNQDUXudqTv9Vf157MOT0b4ikuMkoQO3le0svp977L9wvB
+        lxqKGmp6OQ/QmcPjaRbpri8HTQ==
+X-Google-Smtp-Source: AMsMyM6B0D0fQ6NLX5y+52iwlwAK3HZGC+HhYAnBPVJ76NqrBUDrJeJIbYTwa3ClTfrHZ7hH8lrL/Q==
+X-Received: by 2002:a17:902:b94c:b0:178:336f:13d6 with SMTP id h12-20020a170902b94c00b00178336f13d6mr26369645pls.64.1665506296312;
+        Tue, 11 Oct 2022 09:38:16 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b0016d72804664sm8881631plg.205.2022.10.11.09.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 09:38:15 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 09:38:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     kernel test robot <yujie.liu@intel.com>,
+        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] NFS: Avoid memcpy() run-time warning for struct sockaddr
+ overflows
+Message-ID: <202210110934.AA4F52C77@keescook>
+References: <20221011065243.583650-1-keescook@chromium.org>
+ <Y0WK3MZvxpoXS24n@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH] dt-bindings: clock: Convert pwm-clock to DT schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221011162919.3025038-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221011162919.3025038-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0WK3MZvxpoXS24n@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 12:29, Rob Herring wrote:
-> Convert the pwm-clock binding to DT schema format. A straight-forward
-> conversion.
+On Tue, Oct 11, 2022 at 10:25:16AM -0500, Gustavo A. R. Silva wrote:
+> On Mon, Oct 10, 2022 at 11:52:43PM -0700, Kees Cook wrote:
+> > The 'nfs_server' and 'mount_server' structures include a union of
+> > 'struct sockaddr' (with the older 16 bytes max address size) and
+> > 'struct sockaddr_storage' which is large enough to hold all the supported
+> > sa_family types (128 bytes max size). The runtime memcpy() buffer overflow
+> > checker is seeing attempts to write beyond the 16 bytes as an overflow,
+> > but the actual expected size is that of 'struct sockaddr_storage'. Adjust
+> > the pointers to the correct union member. Avoids this false positive
+> > run-time warning under CONFIG_FORTIFY_SOURCE:
+> > 
+> >   memcpy: detected field-spanning write (size 28) of single field "&ctx->nfs_server.address" at fs/nfs/namespace.c:178 (size 16)
+> > 
+> > Reported-by: kernel test robot <yujie.liu@intel.com>
+> > Link: https://lore.kernel.org/all/202210110948.26b43120-yujie.liu@intel.com
+> > Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+> > Cc: Anna Schumaker <anna@kernel.org>
+> > Cc: linux-nfs@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
+Thanks!
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >  fs/nfs/fs_context.c | 2 +-
+> >  fs/nfs/namespace.c  | 2 +-
+> >  fs/nfs/super.c      | 4 ++--
+> >  3 files changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
+> > index 4da701fd1424..bffa31bb35b9 100644
+> > --- a/fs/nfs/fs_context.c
+> > +++ b/fs/nfs/fs_context.c
+> > @@ -1540,7 +1540,7 @@ static int nfs_init_fs_context(struct fs_context *fc)
+> >  		ctx->version		= nfss->nfs_client->rpc_ops->version;
+> >  		ctx->minorversion	= nfss->nfs_client->cl_minorversion;
+> >  
+> > -		memcpy(&ctx->nfs_server.address, &nfss->nfs_client->cl_addr,
+> > +		memcpy(&ctx->nfs_server._address, &nfss->nfs_client->cl_addr,
+> >  			ctx->nfs_server.addrlen);
 
-Best regards,
-Krzysztof
+So, I spent a bunch more time looking at the plumbing of struct sockaddr
+vs struct sockaddr_storage. In NFS, everything I could find is actually
+already backed by a full sockaddr_storage, so I think a more complete
+fix here would actually be to update all the internals to pass
+sockaddr_storage instead of sockaddr. The interfaces to other things
+(e.g. rpc) can cast back to sockaddr for now. It is a pretty reasonable
+cleanup, IMO.
 
+I'll send a follow-up that makes this change on top of this patch,
+though they could be squashed if that was desired.
+
+-- 
+Kees Cook
