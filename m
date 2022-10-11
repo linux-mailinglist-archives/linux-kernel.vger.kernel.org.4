@@ -2,160 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DFE5FBA97
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55FD5FBA99
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJKSk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S229825AbiJKSl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiJKSkw (ORCPT
+        with ESMTP id S229799AbiJKSlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:40:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2EE7CB67;
-        Tue, 11 Oct 2022 11:40:50 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BBeKYZ030456;
-        Tue, 11 Oct 2022 18:40:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=h1BvboPV+q0O/fs3qxdcsJfGYHdo3ib28v+3LY8CB1k=;
- b=JL5G78K3BcH4pq2z2MiK+KQ0tT7p1lAGpPEIkl3QFQJuEnd+BXe/srHQ394xZmr0K+5p
- IIcEYR1vANcO5xzA3TVeL5uVUzcBOB6/yCzYvcsglKS9Sat/jn+uCOs/HSBAjj7HJ2vG
- qDrYNJy6hsVCP6aq/XCPcGxcAzisvYxL11zf4vB5pvFYAPqv5po8RijuStA1Zjs+fxk+
- ObNEDMLsw6hyzef/y3Z4RBq96noQBPdtAtbRff+c5OHwwY/qSiBG9fL/V6WGraVfWNkR
- mTFusYn7drSOxdfa4libsT5eEdrAmDi4ZGpDUJ/ZS1mFb1ni03oqkmC0EO/QbLDrY5ga Zg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rwxuv48-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 18:40:47 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29BIekZU032317
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 18:40:47 GMT
-Received: from [10.110.3.66] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
- 2022 11:40:46 -0700
-Message-ID: <401219d2-43f1-5816-54c2-80be8a4afb1c@quicinc.com>
-Date:   Tue, 11 Oct 2022 11:40:46 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 03/19] arm64: dts: qcom: qdru1000: Add tlmm nodes
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 11 Oct 2022 14:41:24 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A277CAA2;
+        Tue, 11 Oct 2022 11:41:23 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-12c8312131fso16975807fac.4;
+        Tue, 11 Oct 2022 11:41:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4JAJVk0JnsSinL2EcEIankDF1nDr2CRkvvuRQlFNUCo=;
+        b=tIVwN7GsywVN+eRcBJrK2VFN5O+JS5uHMmEVeEBnKcu4W3ovR5K9tqAaDKz1PtiL8w
+         byUm6W3Ox2nGXY+75CT7aJXWxsTNgXYNd6xu5uVgAOHhe0ACDCw4r7VZQ1mnYKx8eJC+
+         yCaeLlwTQxZ8+Rlkz5PRNJ5nduwBLb9sWZnVW+vffs94wGtECmfo+7VyUdjNybzzwm97
+         gAPKk2a2fR4XTWlK4xspKgJvOZeS2C8GNknVo9s7U8FYKOhJncXyFetF+9MXaDzpJFdt
+         iN589XtWZogNqX3AlUrwGN4xKiNnjvQDhZ8jdst1RpIoLrFRtCqP2vTQo/brfpov3W++
+         Tb9A==
+X-Gm-Message-State: ACrzQf0ddeVRUu5D9aNNQFKimvkQ50+mcmDqIrG6C3cSqZFzCvPuaqPN
+        wYi6265byuCPQE8rx6QVLA==
+X-Google-Smtp-Source: AMsMyM6NnHYJgkyLWS5L0o44ZzcDSOea6RklSLt6jGqdzkkxoYu8wriiAf7by2811mt0dFqqdYz6Yg==
+X-Received: by 2002:a05:6870:424d:b0:132:5c64:dd5a with SMTP id v13-20020a056870424d00b001325c64dd5amr344320oac.128.1665513683076;
+        Tue, 11 Oct 2022 11:41:23 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e22-20020a056820061600b00480816a5b8csm117789oow.18.2022.10.11.11.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 11:41:22 -0700 (PDT)
+Received: (nullmailer pid 3755271 invoked by uid 1000);
+        Tue, 11 Oct 2022 18:41:24 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221001030656.29365-1-quic_molvera@quicinc.com>
- <20221001030656.29365-4-quic_molvera@quicinc.com>
- <CAA8EJpp2h3j9cPLPzCzgnYm07D5PPZg3H5_LkcXizhXt9ekkiQ@mail.gmail.com>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <CAA8EJpp2h3j9cPLPzCzgnYm07D5PPZg3H5_LkcXizhXt9ekkiQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: i3X1gpRH1cqkzW_EGShuDoN16EMgwD3H
-X-Proofpoint-GUID: i3X1gpRH1cqkzW_EGShuDoN16EMgwD3H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 spamscore=0 clxscore=1015 malwarescore=0
- adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 phishscore=0
- mlxlogscore=819 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210110108
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: dt-bindings: Convert dmic-codec to DT schema
+Date:   Tue, 11 Oct 2022 13:41:19 -0500
+Message-Id: <20221011184119.3754096-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert the dmic-codec binding to DT schema format.
 
+The '#sound-dai-cells' and 'sound-name-prefix' properties were not
+documented, but are in use, so add them.
 
-On 10/1/2022 12:26 AM, Dmitry Baryshkov wrote:
-> On Sat, 1 Oct 2022 at 06:09, Melody Olvera <quic_molvera@quicinc.com> wrote:
->> Add tlmm node for the QDU1000 and QRU1000 SoCs and the uart pin
->> configuration.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  arch/arm64/boot/dts/qcom/qdru1000.dtsi | 30 ++++++++++++++++++++++++++
->>  1 file changed, 30 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/qdru1000.dtsi b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
->> index 3610f94bef35..39b9a00d3ad8 100644
->> --- a/arch/arm64/boot/dts/qcom/qdru1000.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
->> @@ -235,6 +235,8 @@ uart7: serial@99c000 {
->>                                 reg = <0x0 0x99c000 0x0 0x4000>;
->>                                 clock-names = "se";
->>                                 clocks = <&gcc GCC_QUPV3_WRAP0_S7_CLK>;
->> +                               pinctrl-names = "default";
->> +                               pinctrl-0 = <&qup_uart7_default>;
->>                                 interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
->>                                 #address-cells = <1>;
->>                                 #size-cells = <0>;
->> @@ -248,6 +250,34 @@ tcsr_mutex: hwlock@1f40000 {
->>                         #hwlock-cells = <1>;
->>                 };
->>
->> +               tlmm: pinctrl@f000000 {
->> +                       compatible = "qcom,qdu1000-tlmm", "qcom,qru1000-tlmm";
->> +                       reg = <0x0 0xf000000 0x0 0x1000000>;
->> +                       interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->> +                       gpio-controller;
->> +                       #gpio-cells = <2>;
->> +                       interrupt-controller;
->> +                       #interrupt-cells = <2>;
->> +                       gpio-ranges = <&tlmm 0 0 151>;
->> +                       wakeup-parent = <&pdc>;
->> +
->> +                       qup_uart7_default: qup-uart7-default {
->> +                               tx {
->> +                                       pins = "gpio134";
->> +                                       function = "qup0_se7_l2";
-> This looks strange. Usually we'd have a single 'qup7' function here.
-> I'd go back to the interconnect driver. Maybe the functions are not
-> correctly defined there.
-Yeah; will correct. Pinctrl driver was not in line with upstream standards.
->
->> +                                       drive-strength = <2>;
->> +                                       bias-disable;
-> 'drive-strength' and 'bias-disable' are to be patched in in the board dts file.
-Really? Looking at sm8450.dtsi and sm8350.dtsi I see them defined in the dtsi file instead of the
-dts file. Is this new?
->
->> +                               };
->> +
->> +                               rx {
->> +                                       pins = "gpio135";
->> +                                       function = "qup0_se7_l3";
->> +                                       drive-strength = <2>;
->> +                                       bias-disable;
->> +                               };
->> +                       };
->> +               };
->> +
->>                 pdc: interrupt-controller@b220000 {
->>                         compatible = "qcom,pdc";
->>                         reg = <0x0 0xb220000 0x0 0x30000>, <0x0 0x174000f0 0x0 0x64>;
->> --
->> 2.37.3
->>
->
-Thanks,
-Melody
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/sound/dmic-codec.yaml | 55 +++++++++++++++++++
+ .../devicetree/bindings/sound/dmic.txt        | 22 --------
+ 2 files changed, 55 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/dmic-codec.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/dmic.txt
+
+diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+new file mode 100644
+index 000000000000..767152fa99cc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/dmic-codec.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic PDM Digital microphone (DMIC) codec
++
++maintainers:
++  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
++
++allOf:
++  - $ref: name-prefix.yaml#
++
++properties:
++  compatible:
++    const: dmic-codec
++
++  '#sound-dai-cells':
++    const: 0
++
++  dmicen-gpios:
++    description: GPIO specifier for DMIC to control start and stop
++    maxItems: 1
++
++  num-channels:
++    description: Number of microphones on this DAI
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 8
++    default: 8
++
++  modeswitch-delay-ms:
++    description: Delay (in ms) to complete DMIC mode switch
++
++  wakeup-delay-ms:
++    description: Delay (in ms) after enabling the DMIC
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio.h>
++
++    dmic {
++        compatible = "dmic-codec";
++        dmicen-gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
++        num-channels = <1>;
++        wakeup-delay-ms <50>;
++        modeswitch-delay-ms <35>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/sound/dmic.txt b/Documentation/devicetree/bindings/sound/dmic.txt
+deleted file mode 100644
+index 32e871037269..000000000000
+--- a/Documentation/devicetree/bindings/sound/dmic.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Device-Tree bindings for Digital microphone (DMIC) codec
+-
+-This device support generic PDM digital microphone.
+-
+-Required properties:
+-	- compatible: should be "dmic-codec".
+-
+-Optional properties:
+-	- dmicen-gpios: GPIO specifier for dmic to control start and stop
+-	- num-channels: Number of microphones on this DAI
+-	- wakeup-delay-ms: Delay (in ms) after enabling the DMIC
+-	- modeswitch-delay-ms: Delay (in ms) to complete DMIC mode switch
+-
+-Example node:
+-
+-	dmic_codec: dmic@0 {
+-		compatible = "dmic-codec";
+-		dmicen-gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
+-		num-channels = <1>;
+-		wakeup-delay-ms <50>;
+-		modeswitch-delay-ms <35>;
+-	};
+-- 
+2.35.1
+
