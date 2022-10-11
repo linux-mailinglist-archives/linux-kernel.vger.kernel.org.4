@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438FC5FA91D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FDA5FA922
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiJKAK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 20:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        id S230405AbiJKALD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 20:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJKAKA (ORCPT
+        with ESMTP id S230173AbiJKAKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:10:00 -0400
+        Mon, 10 Oct 2022 20:10:02 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCF31834A;
-        Mon, 10 Oct 2022 17:09:44 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29B02acQ031330;
-        Tue, 11 Oct 2022 00:09:31 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5788F193DF;
+        Mon, 10 Oct 2022 17:09:46 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AMp3ZQ020824;
+        Tue, 11 Oct 2022 00:09:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=4du6J6uH6CXmzBBodOef6TTxa3ya1AMlco9t1wxgDvM=;
- b=BigI5qEQUYsVICn+ExowI4gObT5WrJD7PG5ADB7l1DdIHlqehT/3t8hAAhqyLfKJb+Jy
- dH7EKSq99/PJztgZ650xgTPaYqZtzKYbHJtSPqJrQ+Kv+2G+CIOzXuq0WIKvvdTIXsbW
- LG9ZZ+yV8Nft+hWv5DLRk6ACwaZJDeV5FeMFopgatd33Tpwjg2Gb+K/HlyPXrCUK9Mbw
- PDYdsNQ+pUqXyFTHwZJF9mLpP1ZDjyVeEIuzETiAFAXalvTdvT7NazaRhk4IxKLG4EK+
- iaVNaeF98wiAua3ETBOb1uO86dK7gf8zHssW2tmW8kThqNaApl/7jxLcghegf/Lk9E5I qg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rx5rhkj-1
+ bh=XFAz8+Jl6XNJGFSbiHb9TYEp8cP07MIlPe92gO674AY=;
+ b=mYYR63Mu4Pkw9kPS5z4z8+CV3vrOB51Jz8qVJjA48DXbilezCNijtHC/ueI13oPm6o+o
+ ZKnii5tRv0z5Gv/N/2LYcl4IrhLtfICiy+iEe5gZyjyBj8+zyLTCPtDj37RAc1myngZy
+ cRf8cgQPgCyk5vqMAsCXwp/TBnt08ueihcRmsuPo9PeNxpclbs93zZl77dMTJ7tRj039
+ 3KZu7buNjSncWs1hdEwm9Gg4ureqY3kutXMkFGiUJvD3Vy5GOET6ZoREP0xuOwTNUUoF
+ bZHBDElGFdLAD4LtcpVEC4rV+3SicXjvNaKVaFh5ZtC5KPQOhUAPj+9JmJx3wOWxo17F lg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rxa0hmj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 00:09:31 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29B09Ue0005744
+        Tue, 11 Oct 2022 00:09:32 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29B09V46012990
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 00:09:30 GMT
+        Tue, 11 Oct 2022 00:09:31 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 10 Oct 2022 17:09:29 -0700
+ 15.2.986.29; Mon, 10 Oct 2022 17:09:30 -0700
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
 CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
@@ -64,9 +65,9 @@ CC:     Elliot Berman <quic_eberman@quicinc.com>,
         "Arnd Bergmann" <arnd@arndb.de>, <devicetree@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 12/13] gunyah: rsc_mgr: Add subdevices bus
-Date:   Mon, 10 Oct 2022 17:08:39 -0700
-Message-ID: <20221011000840.289033-13-quic_eberman@quicinc.com>
+Subject: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM Console Services
+Date:   Mon, 10 Oct 2022 17:08:40 -0700
+Message-ID: <20221011000840.289033-14-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221011000840.289033-1-quic_eberman@quicinc.com>
 References: <20221011000840.289033-1-quic_eberman@quicinc.com>
@@ -78,16 +79,16 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YG76mkgYcD3kj6ZeEOm5xfD_rgR8_rpC
-X-Proofpoint-ORIG-GUID: YG76mkgYcD3kj6ZeEOm5xfD_rgR8_rpC
+X-Proofpoint-ORIG-GUID: 5aFaaY3klHeFhllOpVENG9ztcqJCdnva
+X-Proofpoint-GUID: 5aFaaY3klHeFhllOpVENG9ztcqJCdnva
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-10-10_12,2022-10-10_02,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 mlxscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- malwarescore=0 adultscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100143
+ suspectscore=0 spamscore=0 mlxscore=0 clxscore=1015 adultscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210100143
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -97,319 +98,507 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gunyah Resource Manager exposes an interface which should occupy a few
-devices on Linux:
- - a remote procedure call framework to talk to RM
- - a console device for VMs to interact with each other
- - a virtual machine manager to launch VMs, share memory with them,
-   schedule runtime for those VMs, and handle certain faults.
-
-Create a virtual device bus for the console and VM Manager functions.
+Gunyah provides a console for each VM using the VM console resource
+manager APIs. This driver allows console data from other
+VMs to be accessed via a TTY device and exports a console device to dump
+Linux's own logs to our console.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/virt/gunyah/Makefile      |  2 +-
- drivers/virt/gunyah/rsc_mgr.c     | 45 ++++++++++++++++-
- drivers/virt/gunyah/rsc_mgr.h     | 10 ++++
- drivers/virt/gunyah/rsc_mgr_bus.c | 84 +++++++++++++++++++++++++++++++
- include/linux/gunyah_rsc_mgr.h    | 20 ++++++++
- include/linux/mod_devicetable.h   |  8 +++
- scripts/mod/devicetable-offsets.c |  3 ++
- scripts/mod/file2alias.c          | 10 ++++
- 8 files changed, 180 insertions(+), 2 deletions(-)
- create mode 100644 drivers/virt/gunyah/rsc_mgr_bus.c
+ MAINTAINERS                  |   1 +
+ drivers/tty/Kconfig          |   8 +
+ drivers/tty/Makefile         |   1 +
+ drivers/tty/gunyah_console.c | 439 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 449 insertions(+)
+ create mode 100644 drivers/tty/gunyah_console.c
 
-diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-index 5eb6ad3c45ba..c376f403e712 100644
---- a/drivers/virt/gunyah/Makefile
-+++ b/drivers/virt/gunyah/Makefile
-@@ -1,5 +1,5 @@
- gunyah-y += gunyah.o
- obj-$(CONFIG_GUNYAH) += gunyah.o
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8a3d79b56698..e85140fa0dfe 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8889,6 +8889,7 @@ F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+ F:	Documentation/virt/gunyah/
+ F:	arch/arm64/gunyah/
+ F:	drivers/mailbox/gunyah-msgq.c
++F:	drivers/tty/gunyah_tty.c
+ F:	drivers/virt/gunyah/
+ F:	include/asm-generic/gunyah.h
+ F:	include/linux/gunyah*.h
+diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
+index cc30ff93e2e4..ff86e977f9ac 100644
+--- a/drivers/tty/Kconfig
++++ b/drivers/tty/Kconfig
+@@ -380,6 +380,14 @@ config RPMSG_TTY
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called rpmsg_tty.
  
--gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
-+gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o rsc_mgr_bus.o
- obj-$(CONFIG_GUNYAH_RESORUCE_MANAGER) += gunyah_rsc_mgr.o
-diff --git a/drivers/virt/gunyah/rsc_mgr.c b/drivers/virt/gunyah/rsc_mgr.c
-index 0e2f04984ada..cdf96cb29c23 100644
---- a/drivers/virt/gunyah/rsc_mgr.c
-+++ b/drivers/virt/gunyah/rsc_mgr.c
-@@ -98,6 +98,8 @@ struct gh_rsc_mgr {
- 	struct mutex send_lock;
++config GUNYAH_CONSOLE
++	tristate "Gunyah Consoles"
++	depends on GUNYAH
++	help
++	  This enables support for console output using Gunyah's Resource Manager RPC.
++	  This is normally used when a secondary VM which does not have exclusive access
++	  to a real or virtualized serial device and virtio-console is unavailable.
++
+ endif # TTY
  
- 	struct work_struct recv_work;
-+
-+	struct gh_rm_device console_dev, vm_mgr_dev;
- };
+ source "drivers/tty/serdev/Kconfig"
+diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
+index 07aca5184a55..134b7321c630 100644
+--- a/drivers/tty/Makefile
++++ b/drivers/tty/Makefile
+@@ -27,5 +27,6 @@ obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
+ obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) += mips_ejtag_fdc.o
+ obj-$(CONFIG_VCC)		+= vcc.o
+ obj-$(CONFIG_RPMSG_TTY)		+= rpmsg_tty.o
++obj-$(CONFIG_GUNYAH_CONSOLE)	+= gunyah_console.o
  
- static struct gh_rsc_mgr *__rsc_mgr;
-@@ -566,13 +568,30 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
- 
- 	__rsc_mgr = rsc_mgr;
- 
-+	ret = gh_rm_device_add(&rsc_mgr->console_dev, &pdev->dev, GH_RM_DEVICE_CONSOLE);
-+	if (ret)
-+		goto err_msgq;
-+
-+	ret = gh_rm_device_add(&rsc_mgr->vm_mgr_dev, &pdev->dev, GH_RM_DEVICE_VM_MGR);
-+	if (ret)
-+		goto err_console_remove;
-+
- 	return 0;
-+
-+err_console_remove:
-+	gh_rm_device_delete(&rsc_mgr->console_dev);
-+err_msgq:
-+	gunyah_msgq_remove(&rsc_mgr->msgq);
-+	return ret;
- }
- 
- static int gh_rm_drv_remove(struct platform_device *pdev)
- {
- 	struct gh_rsc_mgr *rsc_mgr = platform_get_drvdata(pdev);
- 
-+	gh_rm_device_delete(&rsc_mgr->vm_mgr_dev);
-+	gh_rm_device_delete(&rsc_mgr->console_dev);
-+
- 	__rsc_mgr = NULL;
- 
- 	mbox_free_channel(gunyah_msgq_chan(&rsc_mgr->msgq));
-@@ -595,7 +614,31 @@ static struct platform_driver gh_rm_driver = {
- 		.of_match_table = gh_rm_of_match,
- 	},
- };
--module_platform_driver(gh_rsc_mgr_driver);
-+
-+static int __init gh_rm_init(void)
-+{
-+	int ret;
-+
-+	ret = gh_rm_bus_register();
-+	if (ret) {
-+		pr_err("Failed to register gh_rm_bus: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = platform_driver_register(&gh_rm_driver);
-+	if (ret)
-+		gh_rm_bus_unregister();
-+
-+	return ret;
-+}
-+subsys_initcall(gh_rm_init);
-+
-+static void __exit gh_rm_exit(void)
-+{
-+	platform_driver_unregister(&gh_rm_driver);
-+	gh_rm_bus_unregister();
-+}
-+module_exit(gh_rm_exit);
- 
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Gunyah Resource Manager Driver");
-diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
-index 4620ac648bcf..a511858a456d 100644
---- a/drivers/virt/gunyah/rsc_mgr.h
-+++ b/drivers/virt/gunyah/rsc_mgr.h
-@@ -53,4 +53,14 @@ struct gh_vm_console_write_req {
- int gh_rm_call(u32 message_id, void *req_buff, size_t req_buff_size,
- 		void **resp_buf, size_t *resp_buff_size);
- 
-+struct gh_rm_device {
-+	struct device dev;
-+	const char *name;
-+};
-+
-+int gh_rm_bus_register(void);
-+void gh_rm_bus_unregister(void);
-+int gh_rm_device_add(struct gh_rm_device *ghrm_dev, struct device *parent, const char *name);
-+void gh_rm_device_delete(struct gh_rm_device *ghrm_dev);
-+
- #endif
-diff --git a/drivers/virt/gunyah/rsc_mgr_bus.c b/drivers/virt/gunyah/rsc_mgr_bus.c
+ obj-y += ipwireless/
+diff --git a/drivers/tty/gunyah_console.c b/drivers/tty/gunyah_console.c
 new file mode 100644
-index 000000000000..dfd466c775f4
+index 000000000000..71d9f22c2a43
 --- /dev/null
-+++ b/drivers/virt/gunyah/rsc_mgr_bus.c
-@@ -0,0 +1,84 @@
++++ b/drivers/tty/gunyah_console.c
+@@ -0,0 +1,439 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#define pr_fmt(fmt) "gh_rsc_mgr: " fmt
-+
-+#include <linux/device.h>
++#include <linux/console.h>
++#include <linux/kfifo.h>
++#include <linux/kref.h>
 +#include <linux/gunyah_rsc_mgr.h>
-+#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++#include <linux/tty.h>
++#include <linux/tty_flip.h>
++#include <linux/workqueue.h>
 +
-+#include "rsc_mgr.h"
++/*
++ * The Linux TTY code requires us to know ahead of time how many ports we might
++ * need. Each port here corresponds to a VM. 16 seems like a reasonable number
++ * of ports for systems that are running Gunyah and using the console interface.
++ */
++#define RM_CONS_TTY_ADAPATERS		(16)
 +
-+#define to_gh_rm_device(dev)	container_of(dev, struct gh_rm_device, dev)
-+#define to_gh_rm_driver(drv)	container_of(drv, struct gh_rm_driver, drv)
-+
-+static int gh_rm_bus_match(struct device *dev, struct device_driver *drv)
-+{
-+	struct gh_rm_device *ghrm_dev = to_gh_rm_device(dev);
-+	struct gh_rm_driver *ghrm_drv = to_gh_rm_driver(drv);
-+
-+	// Multiple id_table entries not needed
-+	return !strncmp(ghrm_dev->name, ghrm_drv->id_table->name, GUNYAH_RSC_MGR_NAME_SIZE);
-+}
-+
-+static int gh_rm_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
-+{
-+	struct gh_rm_device *ghrm_dev = to_gh_rm_device(dev);
-+
-+	return add_uevent_var(env, "MODALIAS=%s%s", GUNYAH_RSC_MGR_PREFIX, ghrm_dev->name);
-+}
-+
-+static struct bus_type gh_rm_bus = {
-+	.name = "gh_rsc_mgr",
-+	.match = gh_rm_bus_match,
-+	.uevent = gh_rm_bus_uevent,
++struct rm_cons_port {
++	struct tty_port port;
++	u16 vmid;
++	unsigned int index;
 +};
 +
-+int gh_rm_bus_register(void)
-+{
-+	return bus_register(&gh_rm_bus);
-+}
++struct rm_cons_drv_data {
++	struct tty_driver *tty_driver;
++	struct device *dev;
 +
-+void gh_rm_bus_unregister(void)
-+{
-+	bus_unregister(&gh_rm_bus);
-+}
++	spinlock_t ports_lock;
++	struct rm_cons_port *ports[RM_CONS_TTY_ADAPATERS];
 +
-+int gh_rm_device_add(struct gh_rm_device *ghrm_dev, struct device *parent, const char *name)
-+{
-+	ghrm_dev->dev.bus = &gh_rm_bus;
-+	ghrm_dev->dev.parent = parent;
-+	ghrm_dev->name = name;
++	struct notifier_block rm_cons_notif;
++	struct console console;
 +
-+	device_initialize(&ghrm_dev->dev);
-+
-+	dev_set_name(&ghrm_dev->dev, "%s.%s", dev_name(parent), name);
-+	return device_add(&ghrm_dev->dev);
-+}
-+
-+void gh_rm_device_delete(struct gh_rm_device *ghrm_dev)
-+{
-+	device_del(&ghrm_dev->dev);
-+}
-+
-+int __gh_rm_driver_register(struct gh_rm_driver *ghrm_drv, struct module *owner,
-+				const char *modname)
-+{
-+	if (WARN_ON(!ghrm_drv->drv.probe) || WARN_ON(!ghrm_drv->id_table))
-+		return -EINVAL;
-+
-+	ghrm_drv->drv.bus = &gh_rm_bus;
-+	ghrm_drv->drv.owner = owner;
-+	ghrm_drv->drv.mod_name = modname;
-+
-+	return driver_register(&ghrm_drv->drv);
-+}
-+EXPORT_SYMBOL_GPL(__gh_rm_driver_register);
-+
-+void gh_rm_driver_unregister(struct gh_rm_driver *ghrm_drv)
-+{
-+	driver_unregister(&ghrm_drv->drv);
-+}
-+EXPORT_SYMBOL_GPL(gh_rm_driver_unregister);
-diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
-index 2a1a51299247..7aea3344d655 100644
---- a/include/linux/gunyah_rsc_mgr.h
-+++ b/include/linux/gunyah_rsc_mgr.h
-@@ -9,6 +9,8 @@
- #include <linux/list.h>
- #include <linux/notifier.h>
- #include <linux/gunyah.h>
-+#include <linux/device.h>
-+#include <linux/mod_devicetable.h>
- 
- #define GH_VMID_INVAL	U16_MAX
- 
-@@ -41,4 +43,22 @@ int gh_rm_console_close(u16 vmid);
- int gh_rm_console_write(u16 vmid, const char *buf, size_t size);
- int gh_rm_console_flush(u16 vmid);
- 
-+#define GH_RM_DEVICE_CONSOLE		"console"
-+#define GH_RM_DEVICE_VM_MGR		"vm_mgr"
-+
-+struct gh_rm_driver {
-+	const struct gunyah_rsc_mgr_device_id *id_table;
-+	struct device_driver drv;
++	/* below are for printk console.
++	 * gh_rm_console_* calls will sleep and console_write can be called from
++	 * atomic ctx. Two xmit buffers are used. The active buffer is tracked with
++	 * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
++	 * A work is scheduled to flush the bytes. The work will swap the active buffer
++	 * and write out the other buffer.
++	 */
++	char *co_xmit_buf[2];
++	int co_xmit_idx;
++	unsigned int co_xmit_count;
++	spinlock_t co_xmit_lock;
++	struct work_struct co_flush_work;
 +};
 +
-+int __gh_rm_driver_register(struct gh_rm_driver *ghrm_drv, struct module *owner,
-+				const char *modname);
-+#define gh_rm_driver_register(ghrm_drv) \
-+	__gh_rm_driver_register(ghrm_drv, THIS_MODULE, KBUILD_MODNAME)
-+
-+void gh_rm_driver_unregister(struct gh_rm_driver *ghrm_drv);
-+
-+#define module_gh_rm_driver(ghrm_drv) \
-+	module_driver(ghrm_drv, gh_rm_driver_register, gh_rm_driver_unregister)
-+
- #endif
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index 549590e9c644..c4dc0ee6ae00 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -911,4 +911,12 @@ struct ishtp_device_id {
- 	kernel_ulong_t driver_data;
- };
- 
-+#define GUNYAH_RSC_MGR_NAME_SIZE 32
-+#define GUNYAH_RSC_MGR_PREFIX "gh_rsc_mgr:"
-+
-+struct gunyah_rsc_mgr_device_id {
-+	const char name[GUNYAH_RSC_MGR_NAME_SIZE];
-+	kernel_ulong_t driver_data;
-+};
-+
- #endif /* LINUX_MOD_DEVICETABLE_H */
-diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
-index c0d3bcb99138..7b6944ed9336 100644
---- a/scripts/mod/devicetable-offsets.c
-+++ b/scripts/mod/devicetable-offsets.c
-@@ -262,5 +262,8 @@ int main(void)
- 	DEVID(ishtp_device_id);
- 	DEVID_FIELD(ishtp_device_id, guid);
- 
-+	DEVID(gunyah_rsc_mgr_device_id);
-+	DEVID_FIELD(gunyah_rsc_mgr_device_id, name);
-+
- 	return 0;
- }
-diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-index 80d973144fde..a02b9e8e02a8 100644
---- a/scripts/mod/file2alias.c
-+++ b/scripts/mod/file2alias.c
-@@ -1452,6 +1452,15 @@ static int do_dfl_entry(const char *filename, void *symval, char *alias)
- 	return 1;
- }
- 
-+/* Looks like: gh_rsc_mgr:S */
-+static int do_gunyah_rsc_mgr_entry(const char *filename, void *symval, char *alias)
++static int rm_cons_notif_handler(struct notifier_block *nb, unsigned long cmd, void *data)
 +{
-+	DEF_FIELD_ADDR(symval, gunyah_rsc_mgr_device_id, name);
-+	sprintf(alias, GUNYAH_RSC_MGR_PREFIX "%s", *name);
++	int count, i;
++	struct rm_cons_port *rm_port = NULL;
++	struct tty_port *tty_port = NULL;
++	struct rm_cons_drv_data *cons_data =
++		container_of(nb, struct rm_cons_drv_data, rm_cons_notif);
++	const struct gh_rm_notification *notif = data;
++	struct gh_rm_notif_vm_console_chars const * const msg = notif->buff;
 +
-+	return 1;
++	if (cmd != GH_RM_NOTIF_VM_CONSOLE_CHARS ||
++		notif->size < sizeof(*msg))
++		return NOTIFY_DONE;
++
++	spin_lock(&cons_data->ports_lock);
++	for (i = 0; i < RM_CONS_TTY_ADAPATERS; i++) {
++		if (!cons_data->ports[i])
++			continue;
++		if (cons_data->ports[i]->vmid == msg->vmid) {
++			rm_port = cons_data->ports[i];
++			break;
++		}
++	}
++	if (rm_port)
++		tty_port = tty_port_get(&rm_port->port);
++	spin_unlock(&cons_data->ports_lock);
++
++	if (!rm_port)
++		dev_warn(cons_data->dev, "Received unexpected console characters for VMID %u\n",
++			msg->vmid);
++	if (!tty_port)
++		return NOTIFY_DONE;
++
++	count = tty_buffer_request_room(tty_port, msg->num_bytes);
++	tty_insert_flip_string(tty_port, msg->bytes, count);
++	tty_flip_buffer_push(tty_port);
++
++	tty_port_put(tty_port);
++	return NOTIFY_OK;
 +}
 +
- /* Does namelen bytes of name exactly match the symbol? */
- static bool sym_is(const char *name, unsigned namelen, const char *symbol)
- {
-@@ -1531,6 +1540,7 @@ static const struct devtable devtable[] = {
- 	{"ssam", SIZE_ssam_device_id, do_ssam_entry},
- 	{"dfl", SIZE_dfl_device_id, do_dfl_entry},
- 	{"ishtp", SIZE_ishtp_device_id, do_ishtp_entry},
-+	{"gh_rsc_mgr", SIZE_gunyah_rsc_mgr_device_id, do_gunyah_rsc_mgr_entry},
- };
- 
- /* Create MODULE_ALIAS() statements.
++static int rm_cons_tty_open(struct tty_struct *tty, struct file *filp)
++{
++	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
++
++	return tty_port_open(&rm_port->port, tty, filp);
++}
++
++static void rm_cons_tty_close(struct tty_struct *tty, struct file *filp)
++{
++	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
++
++	tty_port_close(&rm_port->port, tty, filp);
++}
++
++static int rm_cons_tty_write(struct tty_struct *tty, const unsigned char *buf, int count)
++{
++	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
++	int ret;
++
++	if (!count)
++		return 0;
++
++	ret = gh_rm_console_write(rm_port->vmid, buf, count);
++	if (ret)
++		return -EAGAIN;
++	return count;
++}
++
++static void rm_cons_tty_flush_chars(struct tty_struct *tty)
++{
++	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
++
++	gh_rm_console_flush(rm_port->vmid);
++}
++
++static unsigned int rm_cons_mgr_tty_write_room(struct tty_struct *tty)
++{
++	return GH_RM_CONSOLE_WRITE_CHARS;
++}
++
++static const struct tty_operations rm_cons_tty_ops = {
++	.open = rm_cons_tty_open,
++	.close = rm_cons_tty_close,
++	.write = rm_cons_tty_write,
++	.flush_chars = rm_cons_tty_flush_chars,
++	.write_room = rm_cons_mgr_tty_write_room,
++};
++
++static int rm_cons_port_activate(struct tty_port *port, struct tty_struct *tty)
++{
++	struct rm_cons_port *rm_port = container_of(port, struct rm_cons_port, port);
++
++	return gh_rm_console_open(rm_port->vmid);
++}
++
++static void rm_cons_port_shutdown(struct tty_port *port)
++{
++	struct rm_cons_port *rm_port = container_of(port, struct rm_cons_port, port);
++	int ret;
++
++	ret = gh_rm_console_close(rm_port->vmid);
++	if (ret)
++		dev_err(port->tty->dev, "Failed to close ttyGH%d: %d\n", rm_port->index, ret);
++}
++
++static void rm_cons_port_destruct(struct tty_port *port)
++{
++	struct rm_cons_port *rm_port = container_of(port, struct rm_cons_port, port);
++	struct rm_cons_drv_data *cons_data = dev_get_drvdata(port->tty->dev);
++
++	spin_lock(&cons_data->ports_lock);
++	cons_data->ports[rm_port->index] = NULL;
++	spin_unlock(&cons_data->ports_lock);
++	kfree(rm_port);
++}
++
++static const struct tty_port_operations rm_cons_port_ops = {
++	.activate = rm_cons_port_activate,
++	.shutdown = rm_cons_port_shutdown,
++	.destruct = rm_cons_port_destruct,
++};
++
++static void rm_cons_console_flush_work(struct work_struct *ws)
++{
++	struct rm_cons_drv_data *cons_data =
++		container_of(ws, struct rm_cons_drv_data, co_flush_work);
++	struct console *co = &cons_data->console;
++	struct rm_cons_port *rm_port = co->data;
++	unsigned long flags;
++	size_t size;
++	int ret, old_buf = cons_data->co_xmit_idx;
++
++	spin_lock_irqsave(&cons_data->co_xmit_lock, flags);
++	cons_data->co_xmit_idx = 1 - old_buf;
++	size = cons_data->co_xmit_count;
++	cons_data->co_xmit_count = 0;
++	spin_unlock_irqrestore(&cons_data->co_xmit_lock, flags);
++
++	do {
++		ret = gh_rm_console_write(rm_port->vmid, cons_data->co_xmit_buf[old_buf], size);
++	} while (ret && ret != -ENOMEM);
++
++	gh_rm_console_flush(rm_port->vmid);
++}
++
++static void rm_cons_console_write(struct console *co, const char *buf, unsigned count)
++{
++	struct rm_cons_drv_data *cons_data = container_of(co, struct rm_cons_drv_data, console);
++	unsigned long flags;
++
++	spin_lock_irqsave(&cons_data->co_xmit_lock, flags);
++	count = min(count, (unsigned)(PAGE_SIZE - cons_data->co_xmit_count));
++	memcpy(&cons_data->co_xmit_buf[cons_data->co_xmit_idx][cons_data->co_xmit_count], buf,
++		count);
++	cons_data->co_xmit_count += count;
++	spin_unlock_irqrestore(&cons_data->co_xmit_lock, flags);
++
++	schedule_work(&cons_data->co_flush_work);
++}
++
++static struct tty_driver *rm_cons_console_device(struct console *co, int *index)
++{
++	struct rm_cons_drv_data *cons_data = container_of(co, struct rm_cons_drv_data, console);
++	struct rm_cons_port *rm_port = co->data;
++
++	*index = rm_port->index;
++	return cons_data->tty_driver;
++}
++
++static int rm_cons_console_setup(struct console *co, char *unused)
++{
++	struct rm_cons_drv_data *cons_data = container_of(co, struct rm_cons_drv_data, console);
++	struct rm_cons_port *rm_port = co->data;
++	int ret;
++
++	if (!tty_port_get(&rm_port->port))
++		return -ENODEV;
++
++	cons_data->co_xmit_buf[0] = (unsigned char *)get_zeroed_page(GFP_KERNEL);
++	if (!cons_data->co_xmit_buf[0])
++		goto err;
++	cons_data->co_xmit_buf[1] = (unsigned char *)get_zeroed_page(GFP_KERNEL);
++	if (!cons_data->co_xmit_buf[1])
++		goto err;
++
++	mutex_lock(&rm_port->port.mutex);
++	if (!tty_port_initialized(&rm_port->port)) {
++		ret = gh_rm_console_open(rm_port->vmid);
++		if (ret) {
++			dev_err(rm_port->port.tty->dev, "Failed to open %s%d: %d\n",
++				co->name, rm_port->index, ret);
++			goto err;
++		}
++		tty_port_set_initialized(&rm_port->port, true);
++	}
++	rm_port->port.console = true;
++	mutex_unlock(&rm_port->port.mutex);
++
++	return 0;
++err:
++	if (cons_data->co_xmit_buf[1])
++		free_page((unsigned long)cons_data->co_xmit_buf[1]);
++	if (cons_data->co_xmit_buf[0])
++		free_page((unsigned long)cons_data->co_xmit_buf[0]);
++	mutex_unlock(&rm_port->port.mutex);
++	tty_port_put(&rm_port->port);
++	return ret;
++}
++
++static int rm_cons_console_exit(struct console *co)
++{
++	struct rm_cons_port *rm_port = co->data;
++	int ret;
++
++	mutex_lock(&rm_port->port.mutex);
++	rm_port->port.console = false;
++
++	if (!tty_port_active(&rm_port->port)) {
++		ret = gh_rm_console_close(rm_port->vmid);
++		if (ret)
++			dev_err(rm_port->port.tty->dev, "Failed to close %s%d: %d\n",
++				co->name, rm_port->index, ret);
++		tty_port_set_initialized(&rm_port->port, false);
++	}
++
++	mutex_unlock(&rm_port->port.mutex);
++	tty_port_put(&rm_port->port);
++
++	return 0;
++}
++
++static struct rm_cons_port *rm_cons_port_create(struct rm_cons_drv_data *cons_data, u16 vmid)
++{
++	struct rm_cons_port *rm_port;
++	struct device *ttydev;
++	unsigned int index;
++	int ret;
++
++	rm_port = kzalloc(sizeof(*rm_port), GFP_KERNEL);
++	if (!rm_port)
++		return ERR_PTR(-ENOMEM);
++	rm_port->vmid = vmid;
++	tty_port_init(&rm_port->port);
++	rm_port->port.ops = &rm_cons_port_ops;
++
++	spin_lock(&cons_data->ports_lock);
++	for (index = 0; index < RM_CONS_TTY_ADAPATERS; index++) {
++		if (!cons_data->ports[index]) {
++			cons_data->ports[index] = rm_port;
++			rm_port->index = index;
++			break;
++		}
++	}
++	spin_unlock(&cons_data->ports_lock);
++	if (index >= RM_CONS_TTY_ADAPATERS) {
++		ret = -ENOSPC;
++		goto err_put_port;
++	}
++
++	ttydev = tty_port_register_device_attr(&rm_port->port, cons_data->tty_driver, index,
++					      cons_data->dev, rm_port, NULL);
++	if (IS_ERR(ttydev)) {
++		ret = PTR_ERR(ttydev);
++		goto err_put_port;
++	}
++
++	return rm_port;
++err_put_port:
++	tty_port_put(&rm_port->port);
++	return ERR_PTR(ret);
++}
++
++static int rm_cons_console_probe(struct device *dev)
++{
++	struct rm_cons_drv_data *cons_data;
++	struct rm_cons_port *rm_port;
++	int ret;
++	u16 vmid;
++
++	cons_data = devm_kzalloc(dev, sizeof(*cons_data), GFP_KERNEL);
++	if (!cons_data)
++		return -ENOMEM;
++	dev_set_drvdata(dev, cons_data);
++	cons_data->dev = dev;
++
++	cons_data->tty_driver = tty_alloc_driver(RM_CONS_TTY_ADAPATERS,
++						 TTY_DRIVER_REAL_RAW | TTY_DRIVER_DYNAMIC_DEV |
++						 TTY_DRIVER_RESET_TERMIOS);
++	if (IS_ERR(cons_data->tty_driver))
++		return PTR_ERR(cons_data->tty_driver);
++
++	cons_data->tty_driver->driver_name = KBUILD_MODNAME;
++	cons_data->tty_driver->name = "ttyGH";
++	cons_data->tty_driver->type = TTY_DRIVER_TYPE_SYSTEM;
++	cons_data->tty_driver->subtype = SYSTEM_TYPE_TTY;
++	cons_data->tty_driver->init_termios = tty_std_termios;
++	tty_set_operations(cons_data->tty_driver, &rm_cons_tty_ops);
++
++	ret = tty_register_driver(cons_data->tty_driver);
++	if (ret) {
++		dev_err(dev, "Could not register tty driver: %d\n", ret);
++		goto err_put_tty;
++	}
++
++	spin_lock_init(&cons_data->ports_lock);
++
++	cons_data->rm_cons_notif.notifier_call = rm_cons_notif_handler;
++	ret = gh_rm_register_notifier(&cons_data->rm_cons_notif);
++	if (ret) {
++		dev_err(dev, "Could not register for resource manager notifications: %d\n", ret);
++		goto err_put_tty;
++	}
++
++	spin_lock_init(&cons_data->co_xmit_lock);
++	INIT_WORK(&cons_data->co_flush_work, rm_cons_console_flush_work);
++
++	rm_port = rm_cons_port_create(cons_data, GH_VMID_SELF);
++	if (IS_ERR(rm_port)) {
++		ret = PTR_ERR(rm_port);
++		dev_err(dev, "Could not create own console: %d\n", ret);
++		goto err_unreg_notif;
++	}
++
++	rm_port->port.console = 1;
++	strncpy(cons_data->console.name, "ttyGH", sizeof(cons_data->console.name));
++	cons_data->console.write = rm_cons_console_write;
++	cons_data->console.device = rm_cons_console_device;
++	cons_data->console.setup = rm_cons_console_setup;
++	cons_data->console.exit = rm_cons_console_exit;
++	cons_data->console.index = rm_port->index;
++	cons_data->console.data = rm_port;
++	register_console(&cons_data->console);
++
++	ret = gh_rm_get_vmid(&vmid);
++	if (!ret) {
++		rm_port = rm_cons_port_create(cons_data, vmid);
++		if (IS_ERR(rm_port))
++			dev_warn(dev, "Could not create loopback console: %ld\n", PTR_ERR(rm_port));
++	} else {
++		dev_warn(dev, "Failed to get this VM's VMID: %d. Not creating loop-back console\n",
++			 ret);
++	}
++
++	return 0;
++err_unreg_notif:
++	gh_rm_unregister_notifier(&cons_data->rm_cons_notif);
++err_put_tty:
++	tty_driver_kref_put(cons_data->tty_driver);
++	return ret;
++}
++
++static int rm_cons_console_remove(struct device *dev)
++{
++	struct rm_cons_drv_data *cons_data = dev_get_drvdata(dev);
++
++	unregister_console(&cons_data->console);
++	if (cons_data->co_xmit_buf[1])
++		free_page((unsigned long)cons_data->co_xmit_buf[1]);
++	if (cons_data->co_xmit_buf[0])
++		free_page((unsigned long)cons_data->co_xmit_buf[0]);
++	gh_rm_unregister_notifier(&cons_data->rm_cons_notif);
++	tty_unregister_driver(cons_data->tty_driver);
++	tty_driver_kref_put(cons_data->tty_driver);
++
++	return 0;
++}
++
++static struct gunyah_rm_cons_device_id rm_cons_console_ids[] = {
++	{ .name = GH_RM_DEVICE_CONSOLE },
++	{}
++};
++MODULE_DEVICE_TABLE(gunyah_rsc_mgr, rm_cons_console_ids);
++
++static struct gh_rm_driver rm_cons_console_drv = {
++	.drv = {
++		.name = KBUILD_MODNAME,
++		.probe = rm_cons_console_probe,
++		.remove = rm_cons_console_remove,
++	},
++	.id_table = rm_cons_console_ids,
++};
++module_gh_rm_driver(rm_cons_console_drv);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Gunyah Console");
 -- 
 2.25.1
 
