@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381D95FAF5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B4C5FAF67
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJKJbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S229757AbiJKJfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiJKJbI (ORCPT
+        with ESMTP id S229722AbiJKJfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:31:08 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28688186F2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:31:02 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id n12so20634653wrp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v5ymJ3fw0fv1V9p0VTDFDOtHXr8KzREKrs2F+r+ez6k=;
-        b=dBXChz0+CbfhV4rRHl/Psu/i3ZCFZFSNicjw08/5xLYflUCIR9xG47+wVLeGC3w7Cq
-         LYoB64ncsMp6YivMLmEwwNOHYhrAVSgJXvDqBDuBnnlgxWLbuBIvVyUIdwwn+m0NFY3N
-         VCAIgjReMIMoubH1QWli7ODAc76uaPCe6EDnU+GRgTdWjw0WPSWXnvsAiptOFo/8ol3v
-         u3it42e9IzTBO1IMRg3uAn73LcQlZVv5L2lIRIdxqZKQYlqqhkLGDS4GQZj1fwQkA2X7
-         7eFr5j8T4k/Q1iwHDGGKlvdXwIWy9OOC7MJcTUMAcmeARYSCLhXYf0RK28lSkylZVi8h
-         lgHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5ymJ3fw0fv1V9p0VTDFDOtHXr8KzREKrs2F+r+ez6k=;
-        b=T0nQhBwkT4zISzCgRfch/KcdmR4tKus9fWdD1FJjDR8XRQmvgCaHVDW/D2aoIyZSPZ
-         ifi758rQRfL+JSuYAfYNBEw/+a8sK22J6E6Oyqs5wf9w09DchBjcsYRt96IVFQJGi0/7
-         Pko/OX5MAIswD5OgehbF48gdy3kvwlib8kuKqC0Q7wAlltXfer55EeOjtxufvY/xaBkV
-         cURtHtYKXWrmyaCMEjA0wSCI4+HOoP8H4K8MWZfHI5ln43eKl9U2gCwNTCAKp6u+zwcN
-         rs6hWAs9LBOZ6uXulV4LCmlDJrq2zYf/XrM4DP7VJYOZYYYrVkd9HCs3wN3z02bdoCIn
-         Dipw==
-X-Gm-Message-State: ACrzQf3oCmvjLa+oJTN3DLCMccMzdh5t5ucg2dvNsWARNXB9Ghd41Rpw
-        IT487kFARxWy1pkCYeEx5JH5yw==
-X-Google-Smtp-Source: AMsMyM7EhdgMIUJ+Lnz1ixYjljGlwW0w51lXQIMByy+9RG0YV/WE9uusWVlxHHuorrU1+egDfdI99w==
-X-Received: by 2002:a5d:5950:0:b0:22d:d0b5:a9b2 with SMTP id e16-20020a5d5950000000b0022dd0b5a9b2mr14645205wri.452.1665480660520;
-        Tue, 11 Oct 2022 02:31:00 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id w9-20020a1cf609000000b003b332a7b898sm12000596wmc.45.2022.10.11.02.30.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 02:30:59 -0700 (PDT)
-Message-ID: <972ba839-2fd3-2b45-3477-0c7e3d32f149@baylibre.com>
-Date:   Tue, 11 Oct 2022 11:30:58 +0200
+        Tue, 11 Oct 2022 05:35:11 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043321EED1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:35:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MmrGv4NDMz4x1F;
+        Tue, 11 Oct 2022 20:35:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1665480908;
+        bh=YwJdh7W1HQe11kjs4IuDI2P8WyC3aa+tzh5fvsTHBJg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QHRdOdpL55OfQgDe93lCrQyGdvlBgT1zOJ+wbYonQwr6f9VPaZsete2c9ULsliKFp
+         FCANFGKxDQTOO7TkS0Ew3NvBKyuahu5JOKM5Bda91bIip7yJMQ0cdwh6BcNeaatTSC
+         fP4ZiAzrO42/pDcYy6YI1lBNJ3jYHp39RWNnySCJJVt1NhR7c5Dbh2n8dIm0y5ODD9
+         OSY3WSr8PUyYWq3OdPl898wN9myovqaCvteeXbn3myg7KKeChqmht1X9TI3tf2ZZId
+         TsC2PZMEDn0V213B1icKeK+SIF+KbO22/yUVkJsxwSubd/DFaEmW/zn5h+apxJYTjy
+         WkXYYSnW4UVqg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andrew Donnellan <ajd@linux.ibm.com>, rmclure@linux.ibm.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
+        christophe.leroy@csgroup.eu, cuigaosheng1@huawei.com,
+        david@redhat.com, farosas@linux.ibm.com, geoff@infradead.org,
+        gustavoars@kernel.org, haren@linux.ibm.com, hbathini@linux.ibm.com,
+        joel@jms.id.au, lihuafei1@huawei.com, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, linuxppc-dev@lists.ozlabs.org,
+        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
+        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
+        pali@kernel.org, paul@paul-moore.com, ruscur@russell.cc,
+        windhl@126.com, wsa+renesas@sang-engineering.com,
+        ye.xingchen@zte.com.cn, yuanjilin@cdjrlc.com,
+        zhengyongjun3@huawei.com
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
+In-Reply-To: <Y0TbfObFu2YRDm0I@zx2c4.com>
+References: <87edvhntv0.fsf@mpe.ellerman.id.au> <Y0RxpSFyn9m68zIb@zx2c4.com>
+ <Y0R6fcvgGA858TQA@zx2c4.com> <Y0ScAhqysKK6Hrks@zx2c4.com>
+ <d402a6a0a11d84906ecba3909f4c8f880298dc0f.camel@linux.ibm.com>
+ <Y0S1DxwKCm0aVQjT@zx2c4.com> <877d17nngr.fsf@mpe.ellerman.id.au>
+ <Y0TbfObFu2YRDm0I@zx2c4.com>
+Date:   Tue, 11 Oct 2022 20:34:56 +1100
+Message-ID: <871qreog8v.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-To:     krzysztof.kozlowski@linaro.org
-Cc:     amergnat@baylibre.com, broonie@kernel.org, chen.zhong@mediatek.com,
-        devicetree@vger.kernel.org, dmitry.torokhov@gmail.com,
-        fparent@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org, robh@kernel.org
-References: <cdb4e9f7-c7b3-3a1f-bf61-e42bdb021570@linaro.org>
-Subject: Re: [PATCH v2 3/5] dt-bindings: regulator: Add binding schema for
- mt6357 regulators
-Content-Language: en-US
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <cdb4e9f7-c7b3-3a1f-bf61-e42bdb021570@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,25 +67,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+> On Tue, Oct 11, 2022 at 12:44:20PM +1100, Michael Ellerman wrote:
+>> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+>> > Hi Andrew,
+>> >
+>> > On Tue, Oct 11, 2022 at 11:00:15AM +1100, Andrew Donnellan wrote:
+>> >> Thanks for bisecting, this is interesting! Could you provide your
+>> >> .config and the environment you're running in? Your reproducer doesn't
+>> >> seem to trigger it on my baremetal POWER8 pseries_le_defconfig.
+>> >
+>> > Sure.
+>> >
+>> > .config: https://xn--4db.cc/NemFt2Vs (change CONFIG_INITRAMFS_SOURCE)
+>> > Toolchain: https://download.wireguard.com/qemu-test/toolchains/20211123/powerpc-linux-musl-cross.tgz
+>> >
+>> > You can also just run:
+>> >
+>> >   ARCH=powerpc make -C tools/testing/selftests/wireguard/qemu -j$(nproc)
+>> >
+>> > And that'll assemble the whole thing.
+>> 
+>> I tried that :)
+>> 
+>> What host OS are you running that on?
+>> 
+>> I get:
+>> 
+>>   mkdir -p /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc
+>>   powerpc-linux-musl-gcc -o /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc/init -O3 -pipe  -std=gnu11 init.c
+>>   /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc/powerpc-linux-musl-cross/bin/../lib/gcc/powerpc-linux-musl/11.2.1/../../../../powerpc-linux-musl/bin/ld: cannot find Scrt1.o: No such file or directory
+>>   /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc/powerpc-linux-musl-cross/bin/../lib/gcc/powerpc-linux-musl/11.2.1/../../../../powerpc-linux-musl/bin/ld: cannot find crti.o: No such file or directory
+>>   /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc/powerpc-linux-musl-cross/bin/../lib/gcc/powerpc-linux-musl/11.2.1/../../../../powerpc-linux-musl/bin/ld: cannot find crtbeginS.o: No such file or directory
+>>   /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc/powerpc-linux-musl-cross/bin/../lib/gcc/powerpc-linux-musl/11.2.1/../../../../powerpc-linux-musl/bin/ld: cannot find -lgcc
+>>   /scratch/michael/linus/tools/testing/selftests/wireguard/qemu/build/powerpc/powerpc-linux-musl-cross/bin/../lib/gcc/powerpc-linux-musl/11.2.1/../../../../powerpc-linux-musl/bin/ld: cannot find -lgcc
+>>   collect2: error: ld returned 1 exit status
+>
+> Here's what happened:
+>
+> - You started the thing and the kernel compile complained about an
+>   unclean tree.
+> - You ran mrproper.
+> - You tried to run the thing again.
+>
+> amirite?
 
-Thanks for your review !
+I think so yeah. I tried it on 3 different machines so I'm not sure
+exactly what I did where, but I definitely ran mrproper on one of them.
 
- >> +
- >> +    properties:
- >> +      regulator-name:
- >> +        pattern: "^v(core|modem|pa|proc|s1)$"
- >
- > Why enforcing particular name of the regulator?
+> If so, what happened is that mrproper deleted the .o files from the
+> toolchain. Solution:
+>
+>   ARCH=powerpc make -C tools/testing/selftests/wireguard/qemu -j$(nproc) clean
+>   ARCH=powerpc make -C tools/testing/selftests/wireguard/qemu -j$(nproc)
+>
+> Let me know how that goes.
 
-The regulator names are forced to match with the datasheet names.
+Yep that works thanks.
 
-I think it's a good practice to increase visibility between HW & SW.
+And I see the iperf failure. Though I still can't see what the bug is,
+but hopefully if I stare at it longer I'll work it out.
 
-Also, that keep consistency with other Mediatek PMIC schema.
-
-
-Best regards,
-
-Alexandre
-
+cheers
