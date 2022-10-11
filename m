@@ -2,202 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA685FBBA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31985FBBA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiJKT5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S229832AbiJKT6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJKT5p (ORCPT
+        with ESMTP id S229607AbiJKT6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:57:45 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930DE74BA3;
-        Tue, 11 Oct 2022 12:57:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id d6so22709356lfs.10;
-        Tue, 11 Oct 2022 12:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bJCp8XmgPB/HD8nVBMtLsLp57IPP1Zwda7nt1SFsRpc=;
-        b=GNbjgTiIYzhxjJrb9sh6I4lvuddpUQolwhkM8WO39goeks3aMP7w5oxnBQ/ZZc/VFB
-         SmEj92bUxRNt2+9Zi//hvaPYifKERTxc5LnSlblIOHND3o4qPrJnGgLudbaaHZMBOF0e
-         X+vOUSg2GRra3SDwP7PE2vhHE38nGfQogrTea4ME57NQLaL4PVyevboH6K3NSmahvKk2
-         iml7ZqPYvfJY85N3hOrFswQrkmZZ0oJ2/ooy5zNCtM9DKG2ZDzS11RY5miUYFMBL/02S
-         DVPL+AgmkVuhBnuHhlrv0EofzNCHMfbugEBD1iobzYVQRWYlRa5J4f/7TH8fc5irTdRK
-         7oHA==
+        Tue, 11 Oct 2022 15:58:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4995797EF2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665518293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nW4Tem6gjDlyI55SAwvtu6ESz8FR9RsyePOG8cHS2ck=;
+        b=Ki+XbOdtf2t/LBjdeAJNm5Sclzfl7rO1BjRuCOwt3Qrk/rOmknAL+DXfJOqHo+6eYKB9jP
+        6uGkMRvS/MoPT4zHoTDnQUYpQvH77ScV8wOjd/RDaQ6s0/ONwTH5dSYZDJwaXqHIfpsZ7I
+        Atpy2ea/ZUKlCa0EVWaFTCV7Vu8Ljm8=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-113-9Md6r8G1Pq2sarmailt6kA-1; Tue, 11 Oct 2022 15:58:12 -0400
+X-MC-Unique: 9Md6r8G1Pq2sarmailt6kA-1
+Received: by mail-qv1-f70.google.com with SMTP id cy11-20020a05621418cb00b004b17b3cf429so8525311qvb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:58:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bJCp8XmgPB/HD8nVBMtLsLp57IPP1Zwda7nt1SFsRpc=;
-        b=Z3o8XSBu0BV6v2hkkXrYx38+0jXjo3214Mh0+CoRWEmd7hs1d4325W26aJrQ/sQ32Q
-         G+iYY7R1I7Hyl/fe9dsx+FSiusQR4w2o2T7MNErFQEOGDB6QppXCd7gg2WI8FFkIINhQ
-         BdSD4mgCVj9iSWAWiUep0dgkMHkbwvSGtX+/ogsLa2cBgRWrr/LBJqVUGpPjgiXfLH3C
-         h1sqZqzK13ByjbXNVf0qQo8oW3LQDUlDDWbwwK0mjgviojfiG0JCVqe04P23Au3Wltvw
-         +4Kjgd8YnzIGhrptC60+ye5aZ23PBvP0jaWxH9tPSqlAoqE9BD1xs3vnTrjpLZbx0dFz
-         nCHA==
-X-Gm-Message-State: ACrzQf2ROvzGpgOiPlESZS05/IY9t8R7rr0VxqzM68Z7SDJTNIFYyS5y
-        NDogQzbaMv2+53/ETT/21xklWHnAp9R2TP98puE=
-X-Google-Smtp-Source: AMsMyM4gwYjWPx7kVxsO+jKjYRYVCZsolNGnbZhuZPi+IwG/XzTJJHDicmYQQXgB3R9wJJd3gPlELIxKageMdm/7Qb8=
-X-Received: by 2002:a05:6512:483:b0:4a2:6905:dfae with SMTP id
- v3-20020a056512048300b004a26905dfaemr9480322lfq.57.1665518261842; Tue, 11 Oct
- 2022 12:57:41 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nW4Tem6gjDlyI55SAwvtu6ESz8FR9RsyePOG8cHS2ck=;
+        b=1XtRUiJ+RQrH1bSySjLrYthmPt6qi8MEha6r6TImaU4S0p11fLua0UXMduS2RKvZuT
+         MrQbw1nfmlw/hMUDCPF2fuUQ137EQzqvvuhpE9a9OXYyqttX+hDkptxVJQPzRBtql7ID
+         dI4KQWo4XP0s5ZkaEHEf8j98csWRhBkBECqbHUAwyCkvPpticDoZ3N7ztPJXDXo09QVa
+         l6eNu5+mP7JX0N5n7e60CiDh+chVE+66J0gbhtICBoV+dY42OztvEzN4PqdrzHVq96fG
+         OyEfGgApQVP8D59ZiFjsQDzMrB/vyDAKEBVymaAlezRwgwrzusTVz8p5OLrw6A+Oa2n5
+         QMbg==
+X-Gm-Message-State: ACrzQf0focSGxlo5dOq0Y5RoeckzJoBKGZZXCktr9h4K63IJ/sIhPwF0
+        jCx1uI6qQAYZEQ1PfcpLkU4TFu/2ZY6pTJR4O8Jhnkjk+fvXYHj3XWQgyVmNdiVoFs7jAd91FeV
+        MMKL33vwcqjWC93WmlFkmvhmT
+X-Received: by 2002:a05:622a:488:b0:38f:9e9f:e7b7 with SMTP id p8-20020a05622a048800b0038f9e9fe7b7mr20902569qtx.212.1665518291947;
+        Tue, 11 Oct 2022 12:58:11 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7mQvmLS4z3S3ameJmrhZO1RKNCxdtRNzX6xV5FGmZxATHaHR21SAyjqAS7KGxUgld/hg7iLw==
+X-Received: by 2002:a05:622a:488:b0:38f:9e9f:e7b7 with SMTP id p8-20020a05622a048800b0038f9e9fe7b7mr20902555qtx.212.1665518291701;
+        Tue, 11 Oct 2022 12:58:11 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id az31-20020a05620a171f00b006ce9e880c6fsm13648837qkb.111.2022.10.11.12.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 12:58:10 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>, peterx@redhat.com,
+        John Hubbard <jhubbard@nvidia.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH v4 0/4] kvm/mm: Allow GUP to respond to non fatal signals
+Date:   Tue, 11 Oct 2022 15:58:05 -0400
+Message-Id: <20221011195809.557016-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220811094542.268519-1-mst@redhat.com> <794b9160-9647-7157-c84f-e278a375716e@opensynergy.com>
-In-Reply-To: <794b9160-9647-7157-c84f-e278a375716e@opensynergy.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 11 Oct 2022 12:57:30 -0700
-Message-ID: <CABBYNZJ9cj2RuJSyKcfV33N4kn1aqNQdJLFj8T5PEeJpGtRxWw@mail.gmail.com>
-Subject: Re: [PATCH v3 resend] Bluetooth: virtio_bt: fix device removal
-To:     Igor Skalkin <igor.skalkin@opensynergy.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+v4:
+- Split patch 2+3 into three patches [Sean]
 
-On Tue, Oct 11, 2022 at 5:18 AM Igor Skalkin
-<igor.skalkin@opensynergy.com> wrote:
->
-> Tested, works fine in our projects.
->
-> Tested-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
->
-> On 10/10/22 19:14, Michael S. Tsirkin wrote:
-> > Device removal is clearly out of virtio spec: it attempts to remove
-> > unused buffers from a VQ before invoking device reset. To fix, make
-> > open/close NOPs and do all cleanup/setup in probe/remove.
-> >
-> > NB: This is a hacky way to handle this - virtbt_{open,close} as NOP is
-> > not really what a driver is supposed to be doing. These are transport
-> > enable/disable callbacks from the BT core towards the driver. It maps t=
-o
-> > a device being enabled/disabled by something like bluetoothd for
-> > example. So if disabled, users expect that no resources/queues are in
-> > use.  It does work with all other transports like USB, SDIO, UART etc.
-> > There should be no buffer used if the device is powered off. We also
-> > don=E2=80=99t have any USB URBs in-flight if the transport is not activ=
-e.
-> >
-> > The way to implement a proper fix would be using vq reset if supported,
-> > or even using a full device reset.
-> >
-> > The cost of the hack is a single skb wasted on an unused bt device.
-> >
-> > NB2: with this fix in place driver still suffers from a race condition
-> > if an interrupt triggers while device is being reset.  To fix, in the
-> > virtbt_close() callback we should deactivate all interrupts.  To be
-> > fixed.
-> >
-> > squashed fixup: bluetooth: virtio_bt: fix an error code in probe()
-> >
-> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> > Message-Id: <20220811080943.198245-1-mst@redhat.com>
+rfc: https://lore.kernel.org/r/20220617014147.7299-1-peterx@redhat.com
+v1:  https://lore.kernel.org/r/20220622213656.81546-1-peterx@redhat.com
+v2:  https://lore.kernel.org/r/20220721000318.93522-1-peterx@redhat.com
+v3:  https://lore.kernel.org/r/20220817003614.58900-1-peterx@redhat.com
 
-Ive pushed this one.
+One issue was reported that libvirt won't be able to stop the virtual
+machine using QMP command "stop" during a paused postcopy migration [1].
 
-> > ---
-> >
-> > resending due to v3 having been dropped
-> > changes from v2:
-> >       tkeaked commit log to make lines shorter
-> > changes from v1:
-> >       fixed error handling
-> >
-> >   drivers/bluetooth/virtio_bt.c | 19 +++++++++++++++++--
-> >   1 file changed, 17 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/bluetooth/virtio_bt.c b/drivers/bluetooth/virtio_b=
-t.c
-> > index 67c21263f9e0..f6d699fed139 100644
-> > --- a/drivers/bluetooth/virtio_bt.c
-> > +++ b/drivers/bluetooth/virtio_bt.c
-> > @@ -50,8 +50,11 @@ static int virtbt_add_inbuf(struct virtio_bluetooth =
-*vbt)
-> >
-> >   static int virtbt_open(struct hci_dev *hdev)
-> >   {
-> > -     struct virtio_bluetooth *vbt =3D hci_get_drvdata(hdev);
-> > +     return 0;
-> > +}
-> >
-> > +static int virtbt_open_vdev(struct virtio_bluetooth *vbt)
-> > +{
-> >       if (virtbt_add_inbuf(vbt) < 0)
-> >               return -EIO;
-> >
-> > @@ -61,7 +64,11 @@ static int virtbt_open(struct hci_dev *hdev)
-> >
-> >   static int virtbt_close(struct hci_dev *hdev)
-> >   {
-> > -     struct virtio_bluetooth *vbt =3D hci_get_drvdata(hdev);
-> > +     return 0;
-> > +}
-> > +
-> > +static int virtbt_close_vdev(struct virtio_bluetooth *vbt)
-> > +{
-> >       int i;
-> >
-> >       cancel_work_sync(&vbt->rx);
-> > @@ -354,8 +361,15 @@ static int virtbt_probe(struct virtio_device *vdev=
-)
-> >               goto failed;
-> >       }
-> >
-> > +     virtio_device_ready(vdev);
-> > +     err =3D virtbt_open_vdev(vbt);
-> > +     if (err)
-> > +             goto open_failed;
-> > +
-> >       return 0;
-> >
-> > +open_failed:
-> > +     hci_free_dev(hdev);
-> >   failed:
-> >       vdev->config->del_vqs(vdev);
-> >       return err;
-> > @@ -368,6 +382,7 @@ static void virtbt_remove(struct virtio_device *vde=
-v)
-> >
-> >       hci_unregister_dev(hdev);
-> >       virtio_reset_device(vdev);
-> > +     virtbt_close_vdev(vbt);
-> >
-> >       hci_free_dev(hdev);
-> >       vbt->hdev =3D NULL;
->
-> Please mind our privacy notice<https://www.opensynergy.com/datenschutzerk=
-laerung/privacy-notice-for-business-partners-pursuant-to-article-13-of-the-=
-general-data-protection-regulation-gdpr/> pursuant to Art. 13 GDPR. // Unse=
-re Hinweise zum Datenschutz gem. Art. 13 DSGVO finden Sie hier.<https://www=
-.opensynergy.com/de/datenschutzerklaerung/datenschutzhinweise-fuer-geschaef=
-tspartner-gem-art-13-dsgvo/>
+It won't work because "stop the VM" operation requires the hypervisor to
+kick all the vcpu threads out using SIG_IPI in QEMU (which is translated to
+a SIGUSR1).  However since during a paused postcopy, the vcpu threads are
+hang death at handle_userfault() so there're simply not responding to the
+kicks.  Further, the "stop" command will further hang the QMP channel.
 
+The mm has facility to process generic signal (FAULT_FLAG_INTERRUPTIBLE),
+however it's only used in the PF handlers only, not in GUP. Unluckily, KVM
+is a heavy GUP user on guest page faults.  It means we won't be able to
+interrupt a long page fault for KVM fetching guest pages with what we have
+right now.
 
+I think it's reasonable for GUP to only listen to fatal signals, as most of
+the GUP users are not really ready to handle such case.  But actually KVM
+is not such an user, and KVM actually has rich infrastructure to handle
+even generic signals, and properly deliver the signal to the userspace.
+Then the page fault can be retried in the next KVM_RUN.
 
---=20
-Luiz Augusto von Dentz
+This patchset added FOLL_INTERRUPTIBLE to enable FAULT_FLAG_INTERRUPTIBLE,
+and let KVM be the first one to use it.  KVM and mm/gup can always be able
+to respond to fatal signals, but not non-fatal ones until this patchset.
+
+One thing to mention is that this is not allowing all KVM paths to be able
+to respond to non fatal signals, but only on x86 slow page faults.  In the
+future when more code is ready for handling signal interruptions, we can
+explore possibility to have more gup callers using FOLL_INTERRUPTIBLE.
+
+Tests
+=====
+
+I created a postcopy environment, pause the migration by shutting down the
+network to emulate a network failure (so the handle_userfault() will stuck
+for a long time), then I tried three things:
+
+  (1) Sending QMP command "stop" to QEMU monitor,
+  (2) Hitting Ctrl-C from QEMU cmdline,
+  (3) GDB attach to the dest QEMU process.
+
+Before this patchset, all three use case hang.  After the patchset, all
+work just like when there's not network failure at all.
+
+Please have a look, thanks.
+
+[1] https://gitlab.com/qemu-project/qemu/-/issues/1052
+
+Peter Xu (4):
+  mm/gup: Add FOLL_INTERRUPTIBLE
+  kvm: Add KVM_PFN_ERR_SIGPENDING
+  kvm: Add interruptible flag to __gfn_to_pfn_memslot()
+  kvm: x86: Allow to respond to generic signals during slow PF
+
+ arch/arm64/kvm/mmu.c                   |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c    |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c |  2 +-
+ arch/x86/kvm/mmu/mmu.c                 | 18 ++++++++++----
+ include/linux/kvm_host.h               | 14 +++++++++--
+ include/linux/mm.h                     |  1 +
+ mm/gup.c                               | 33 ++++++++++++++++++++++----
+ mm/hugetlb.c                           |  5 +++-
+ virt/kvm/kvm_main.c                    | 30 ++++++++++++++---------
+ virt/kvm/kvm_mm.h                      |  4 ++--
+ virt/kvm/pfncache.c                    |  2 +-
+ 11 files changed, 85 insertions(+), 28 deletions(-)
+
+-- 
+2.37.3
+
