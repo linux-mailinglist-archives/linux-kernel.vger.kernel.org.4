@@ -1,57 +1,58 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CE75FAB56
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 05:43:48 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 94AF05FAB55
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 05:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJKDni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 23:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S229993AbiJKDne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 23:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJKDnQ (ORCPT
+        with ESMTP id S229696AbiJKDnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Oct 2022 23:43:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4C37F138;
-        Mon, 10 Oct 2022 20:43:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADE87C754
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:43:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E26610A2;
-        Tue, 11 Oct 2022 03:43:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D69DC43140;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F2161093
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 46139C433D6;
         Tue, 11 Oct 2022 03:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665459794;
-        bh=l0uMiKxbh2cBe9j9ye2ttSVW7T5Xp18cA/LM7MxTh0k=;
+        bh=V0Gw5eFHwWhdruihaitv8HhwZs38DRG6OiqYy/mi/y8=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=saCRDHPvxhl+SIAcYE2Ao3R0dDTJ9DxwqVdPNO8ucBMzKWRJT6UwGCS5RkfEvYhqx
-         F8azxWXiqkvfA9nI7H7Dw4qAbR1nDXjSC86Q0pzEvsKcZI3sU4hl47DQ6P+vWfb3cT
-         /Z2xuBLh/5Lhkl3MHxm5VvTgxICl22vglvoUjc/6Aa/OyWn3z9oCuXdIDMAyrIFqRK
-         LlGyopFZISyrhE7T5C2gS2dXL0tvDbk7ivvqzGupZ4JWSnXtcsDRkyEAAIpaBDEQTg
-         GIn+XI9s8iJnU3mHOayVRVfcD2myEy6wD8pGPsCwAZ21diu4VSMQCp3RS6b76spvBL
-         xeiQzPgaUKA1w==
+        b=BuU7y0qhw5XwCtOFBiZDqVfxsJ0Jcvrr0Sfx5B1i3tQbbj5JLrYCkaoKvvKuOeTpA
+         HImopIM49h8rYpzB3xkFz7WC95Q4fBGqdqtXuzKQl6e4ExnGKw+Chxxjaa2ClD1XUh
+         VwDL89Ae+AiQbJnmSwKGsOqSOdzoyIVKPMgy2oqltoHye5pHA8sOkzJGyqNDjt8quI
+         PZYj28ha1tDCnwDz/WmP2eqlAobT5Q02FpagTi6zvx7gUR8rsdFz42NW2+On9NHBbR
+         hyrhutSpKPAMT13+yjqLvfCOntcZNFpKyiHFxhrx49XOwEYWXMtESW7two82X42FEI
+         j56YkQEI6dsIg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5A177E29F34;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3090AE270E4;
         Tue, 11 Oct 2022 03:43:14 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
+Subject: Re: [f2fs-dev] [GIT PULL] f2fs update for 6.1-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5muHt_9eBuE7GOHNvV+9zHH8X=+sVmK3Qj1R8uEWNydn_Q@mail.gmail.com>
-References: <CAH2r5muHt_9eBuE7GOHNvV+9zHH8X=+sVmK3Qj1R8uEWNydn_Q@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5muHt_9eBuE7GOHNvV+9zHH8X=+sVmK3Qj1R8uEWNydn_Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc-smb3-client-fixes-part1
-X-PR-Tracked-Commit-Id: 958553d13478ad0e35fa09fecad3ce73277ccaf5
+In-Reply-To: <Y0RV6kXCyXtqYuS4@google.com>
+References: <Y0RV6kXCyXtqYuS4@google.com>
+X-PR-Tracked-List-Id: <linux-f2fs-devel.lists.sourceforge.net>
+X-PR-Tracked-Message-Id: <Y0RV6kXCyXtqYuS4@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-6.1-rc1
+X-PR-Tracked-Commit-Id: b4dac1203f39821c6119033cdeebcea83cf45786
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ac1e8c6c95bf805c699656046aef0a05205edfbd
-Message-Id: <166545979436.4678.13983540243723521763.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 5d170fe435e54cafa599a21521ea65fe9535f537
+Message-Id: <166545979419.4678.7423127526476737144.pr-tracker-bot@kernel.org>
 Date:   Tue, 11 Oct 2022 03:43:14 +0000
-To:     Steve French <smfrench@gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 9 Oct 2022 00:50:33 -0500:
+The pull request you sent on Mon, 10 Oct 2022 10:27:06 -0700:
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc-smb3-client-fixes-part1
+> git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-6.1-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ac1e8c6c95bf805c699656046aef0a05205edfbd
+https://git.kernel.org/torvalds/c/5d170fe435e54cafa599a21521ea65fe9535f537
 
 Thank you!
 
