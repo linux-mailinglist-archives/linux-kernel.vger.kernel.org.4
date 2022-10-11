@@ -2,128 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387695FAFB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BB15FAFB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJKJxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S229682AbiJKJx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJKJw7 (ORCPT
+        with ESMTP id S229446AbiJKJxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:52:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A648F13F90;
-        Tue, 11 Oct 2022 02:52:58 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C122A6602343;
-        Tue, 11 Oct 2022 10:52:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665481976;
-        bh=2HHv5N/MSAggEBwsg7Pu4p7erSqosVMsiDYpnlW1NDY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LkLEA8zbHkZDcirGS61AtjoJsjZYT+XDGl+PKSQVmffxeh2apTrT4SWNL44Tg0s7T
-         GPSnyi4Thfe2dwoKh6Fg35xyoqypg0mXcQq5cy59797VzeQmE77PaMsTODys7qZF5p
-         yf2drXYpM2Q3E489fj92oc6l271UmgtkWxZHdW6/M7ReX+s5g8tvrs5/6SGzwNjJBc
-         lKNM5J6jVE+zpkNEUB0D8Ipug8gV6nQ6mW9zaVT3124Rhb6mLExpg9h7Uh+a7S+uVA
-         qiyCK5Izx0w0sPNO8Hd+X6VLABm4UOeWUCZ9oUvJ2296nAm1pqHx9Lv4A8gvDFDXnT
-         Eq36C/yZflL/w==
-Message-ID: <68ab0f05-e74a-e091-0109-09b57b90c652@collabora.com>
-Date:   Tue, 11 Oct 2022 11:52:53 +0200
+        Tue, 11 Oct 2022 05:53:24 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEA819283;
+        Tue, 11 Oct 2022 02:53:23 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g27so19317823edf.11;
+        Tue, 11 Oct 2022 02:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ELjS81PwjqQiyf5mGAwEzkT1W0HRDMv+5erRjZ7RuLQ=;
+        b=kIoTTB8ZNwOG9w6qq0ZIJ0LPuQeliEpZIELLknmgoAK4NaByX3aFSepOvud7Q5KiAY
+         93axr1cusG2EFrbH6k1HkgTYoUmZNLGtCrFS08prJJhOxO9jKojNStBQqQHz1+Q0rFo9
+         hIvxktGgEh6Qnm3kHRLZPpsM2+Bmqik8qRHoggJ/5XIg+IoUisP4T2oW4mli2CLR4xUD
+         Fs0feCX8LbDNbTxsEY38eB7AfBd/udLGb9DrT74MkcfT1Wj91Jly7MpPYqPfXz22sBKV
+         29htuS//FwNAPt/MVo9ytxr7wduHqbLKI5HsEBsXhJozcwzvFAFY2Ae7cGLQaSYTuOsl
+         zlgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ELjS81PwjqQiyf5mGAwEzkT1W0HRDMv+5erRjZ7RuLQ=;
+        b=T4NAcyufzZ3p0CAXiMHHYyehWl7V/9HDQly+/eX/zCiSQR7SWwJM4OLmr02ASBh22q
+         PPSzsQ2vhRis8+ZNsfkSvwuJMBnnofzen0jzaYC32J5ejhvq7VDIAJwlS4EWGYHxp35O
+         kbApgHXWxZAdFWVWCTbfEdLxFvmLWVHr9Or1ts/c0fdJ0pWlZ/LuqqOIgAn7mXL/iKGQ
+         7Im0kicZ7cgC44Vxd807etQONEWm5xn1VQ5zF3p80OFihiv0Kv8/mvdKCEYUr6SsLXY6
+         RHsmuNpktnGSJ27kEeEMK126wRUz/6cUtyQM0R7pzixL3QAIUqkyeiJMchkGc+Yr9bI2
+         UPvA==
+X-Gm-Message-State: ACrzQf17iqlekbmgCudCyrJqWxsFqJoeU+9hY5xBhC5wCuYH6c01a8Kp
+        e3s+quDnRc7XxADMnt/6BmFIfAMrMG216w==
+X-Google-Smtp-Source: AMsMyM6se43QQMI0lPdusx+BG1o2fymug7qixH9tmxIgEZRUkwg6mZBuwa2NlJ8ZfTHPQSGc6orvMA==
+X-Received: by 2002:a05:6402:1bd0:b0:458:f170:fa74 with SMTP id ch16-20020a0564021bd000b00458f170fa74mr22233281edb.382.1665482001479;
+        Tue, 11 Oct 2022 02:53:21 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id bt6-20020a0564020a4600b00458dda85495sm8903646edb.0.2022.10.11.02.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 02:53:20 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 12:53:18 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <20221011095318.mqbrk3jrfioiql4x@skbuf>
+References: <YzzLCYHmTcrHbZcH@colin-ia-desktop>
+ <455e31be-dc87-39b3-c7fe-22384959c556@linaro.org>
+ <Yz2mSOXf68S16Xg/@colin-ia-desktop>
+ <28b4d9f9-f41a-deca-aa61-26fb65dcc873@linaro.org>
+ <20221008000014.vs2m3vei5la2r2nd@skbuf>
+ <c9ce1d83-d1ca-4640-bba2-724e18e6e56b@linaro.org>
+ <20221010130707.6z63hsl43ipd5run@skbuf>
+ <d27d7740-bf35-b8d4-d68c-bb133513fa19@linaro.org>
+ <20221010174856.nd3n4soxk7zbmcm7@skbuf>
+ <Y0RoraHpuPbN5O4C@COLIN-DESKTOP1.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v14 3/3] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, pavel@ucw.cz,
-        matthias.bgg@gmail.com, jic23@kernel.org, lars@metafoo.de,
-        andriy.shevchenko@linux.intel.com
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, szunichen@gmail.com
-References: <cover.1665488982.git.chiaen_wu@richtek.com>
- <657f73ae257925ebc68dc825998384ad79d31e1f.1665488982.git.chiaen_wu@richtek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <657f73ae257925ebc68dc825998384ad79d31e1f.1665488982.git.chiaen_wu@richtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0RoraHpuPbN5O4C@COLIN-DESKTOP1.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/10/22 06:05, ChiaEn Wu ha scritto:
-> From: Alice Chen <alice_chen@richtek.com>
+On Mon, Oct 10, 2022 at 11:47:09AM -0700, Colin Foster wrote:
+> Thank you for laying this path out for me. Hopefully when I go
+> heads-down to implement this there won't be any gotchas. It seems pretty
+> straightforward.
 > 
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
+> Maybe my only question would be where to send these patches. If these
+> can all go through net-next it seems like there'd be no issue when step
+> 8 (add 7512 documentation) comes along with this current patch set.
 > 
-> Add support for the MT6370 Flash LED driver. Flash LED in MT6370
-> has 2 channels and support torch/strobe mode.
-> 
-> Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
-> 
-> v14
-> - Remove unused 'depend on OF' in Kconfig
-> ---
->   drivers/leds/flash/Kconfig             |  14 +
->   drivers/leds/flash/Makefile            |   1 +
->   drivers/leds/flash/leds-mt6370-flash.c | 631 +++++++++++++++++++++++++++++++++
->   3 files changed, 646 insertions(+)
->   create mode 100644 drivers/leds/flash/leds-mt6370-flash.c
-> 
-> diff --git a/drivers/leds/flash/Kconfig b/drivers/leds/flash/Kconfig
-> index d3eb689..0dd955c 100644
-> --- a/drivers/leds/flash/Kconfig
-> +++ b/drivers/leds/flash/Kconfig
-> @@ -61,6 +61,20 @@ config LEDS_MT6360
->   	  Independent current sources supply for each flash LED support torch
->   	  and strobe mode.
->   
-> +config LEDS_MT6370_FLASH
-> +	tristate "Flash LED Support for MediaTek MT6370 PMIC"
-> +	depends on LEDS_CLASS
-> +	depends on LEDS_CLASS_FLASH || !LEDS_CLASS_FLASH
+> Otherwise this sounds good. I'll switch to getting a patch set of steps
+> 1-7 as you suggest.
 
-This dependency makes no sense, as the options in the Kconfig you're putting
-this into gets parsed only `if LEDS_CLASS_FLASH`.
-Please remove that.
-
-> +	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
-
-Well, if it depends on that being either y, m or n, it means that it does
-not depend on that at all. Remove.
-
-After which,
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> +	depends on MFD_MT6370
-> +	help
-> +	  Support 2 channels and torch/strobe mode.
-> +	  Say Y here to enable support for
-> +	  MT6370_FLASH_LED device.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called "leds-mt6370-flash".
-> +
->   config LEDS_RT4505
->   	tristate "LED support for RT4505 flashlight controller"
->   	depends on I2C && OF
-
+I have some doubts whether it would be good to also merge net/dsa/mscc,ocelot.yaml
+(i.e. the NXP variants) into net/mscc,vsc7514-switch.yaml. A few "if" statements
+on compatible string which decide the format of "reg" and of "reg-names" should cover
+the differences. Not sure how the end result will look like.
