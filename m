@@ -2,326 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A915FAEE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C48A5FAEFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiJKJEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S229886AbiJKJF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiJKJDy (ORCPT
+        with ESMTP id S229835AbiJKJFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:03:54 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0F7C325;
-        Tue, 11 Oct 2022 02:03:42 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aef0e.dynamic.kabel-deutschland.de [95.90.239.14])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 38BC661EA192D;
-        Tue, 11 Oct 2022 11:03:40 +0200 (CEST)
-Message-ID: <c87cc376-3b0d-8fda-7fc1-555c930faaf1@molgen.mpg.de>
-Date:   Tue, 11 Oct 2022 11:03:39 +0200
+        Tue, 11 Oct 2022 05:05:18 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0EF57273;
+        Tue, 11 Oct 2022 02:05:15 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29B5tpq8002064;
+        Tue, 11 Oct 2022 04:04:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=uC/3T3eGWGFOEE1PbRSfClhA+s+YXINyGNLQ2E3nzRI=;
+ b=Eqt0HEjl4HUC1I5SG11ICumXSv1k9d5cWofmQzkWUH2trm3jUTD+u/G2Apo/fsSb/cSG
+ Tng23BiSSDN5jFWaZNgOaFOOIIzazw5pNqpYPCUWag8OwtSdpHakIct1ESArNLkNJ0of
+ Xm5zmUclf5hNi4T1CjfgYghZ79wqGh6Q7V9aNUCOOZ+X3gbAOEXOSz7QEPMb4ZPkmawG
+ ctBvlVxGU+zctoeD/CUTZvVxJkjdIdwzEZOQtwPdzz7ArdID4uqQQpbxPU6f79jyQETN
+ 2nTesBLmGIsh9NM22V7r9Ury3vf5q8z4vtAkbXqpCUc0MtSOWoMivhnQjDryye4ogbNk mg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3k36m1u4wn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 04:04:01 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Tue, 11 Oct
+ 2022 04:03:59 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.12 via Frontend Transport; Tue, 11 Oct 2022 04:03:59 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 53567356B;
+        Tue, 11 Oct 2022 09:03:59 +0000 (UTC)
+Date:   Tue, 11 Oct 2022 09:03:59 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        <linux-gpio@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-actions@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-mediatek@lists.infradead.org>, <linux-mips@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-omap@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        <soc@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 13/36] pinctrl: lochnagar: Add missed header(s)
+Message-ID: <20221011090359.GE92394@ediswmail.ad.cirrus.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-14-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Do not delay boot when printing log to serial console during startup?
-To:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221010201453.77401-14-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: Q0XwLx7qaYTbXGAyatd6dgbnlBdk8dwU
+X-Proofpoint-ORIG-GUID: Q0XwLx7qaYTbXGAyatd6dgbnlBdk8dwU
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+On Mon, Oct 10, 2022 at 11:14:29PM +0300, Andy Shevchenko wrote:
+> Do not imply that some of the generic headers may be always included.
+> Instead, include explicitly what we are direct user of.
+> 
+> While at it, sort headers alphabetically.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-We boot our systems generally with the serial console enabled 
-`console=ttyS0,115200n8`, and noticed that initializing the console 
-takes at least one second.
-
-     $ dmesg | grep -e 'DMI:' -e 'printk: console'
-     [    0.000000] DMI: Dell Inc. PowerEdge R7525/05Y13N, BIOS 2.7.3 
-03/30/2022
-     [    2.691432] printk: console [tty0] enabled
-     [    5.414384] printk: console [ttyS0] enabled
-
-     $ dmesg | grep -e 'DMI:' -e 'printk:'
-     [    0.000000] DMI: Dell Inc. Precision Tower 3620/0MWYPT, BIOS 
-2.22.0 07/13/2022
-     [    0.146953] printk: console [tty0] enabled
-     [    1.374382] printk: console [ttyS0] enabled
-
-     $ dmesg | grep -e 'DMI:' -e 'printk: console'
-     [    0.000000] DMI: Dell Inc. PowerEdge R7425/08V001, BIOS 1.6.7 
-10/29/2018
-     [    1.589543] printk: console [tty0] enabled
-     [    3.057770] printk: console [ttyS0] enabled
-
-     $ dmesg | grep -e 'DMI:' -e 'printk: console'
-     [    0.000000] DMI: HPE ProLiant DL385 Gen10 Plus/ProLiant DL385 
-Gen10 Plus, BIOS A42 12/03/2021
-     [    5.171202] printk: console [tty0] enabled
-     [    8.066602] printk: console [ttyS0] enabled
-
-`initcall_debug` shows:
-
-     [    0.190491] calling  univ8250_console_init+0x0/0x2b @ 0
-     [    1.488645] printk: console [ttyS0] enabled
-     [    1.492945] initcall univ8250_console_init+0x0/0x2b returned 0 
-after 0 usecs
-
-(Note, that the “after time” by initcall does not match the timestamp at 
-the beginning.)
-
-Tracing with the trace *function* (`ftrace=function`) shows:
-
-           <idle>-0       [000] ...2.     0.213187: 
-univ8250_console_init <-console_init
-           <idle>-0       [000] ...2.     0.213187: 
-serial8250_isa_init_ports <-univ8250_console_init
-           <idle>-0       [000] ...2.     0.213187: serial8250_init_port 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213187: init_timer_key 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213187: 
-serial8250_set_defaults <-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: serial8250_init_port 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: init_timer_key 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: 
-serial8250_set_defaults <-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: serial8250_init_port 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: init_timer_key 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: 
-serial8250_set_defaults <-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: serial8250_init_port 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: init_timer_key 
-<-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213188: 
-serial8250_set_defaults <-serial8250_isa_init_ports
-           <idle>-0       [000] ...2.     0.213189: register_console 
-<-univ8250_console_init
-           <idle>-0       [000] ...2.     0.213189: 
-try_enable_preferred_console <-register_console
-           <idle>-0       [000] ...2.     0.213189: 
-univ8250_console_match <-try_enable_preferred_console
-           <idle>-0       [000] ...2.     0.213189: 
-univ8250_console_setup <-try_enable_preferred_console
-           <idle>-0       [000] ...2.     0.213189: 
-serial8250_console_setup <-univ8250_console_setup
-           <idle>-0       [000] ...2.     0.213189: uart_parse_options 
-<-serial8250_console_setup
-           <idle>-0       [000] ...2.     0.213190: uart_set_options 
-<-serial8250_console_setup
-           <idle>-0       [000] ...2.     0.213190: 
-tty_termios_encode_baud_rate <-uart_set_options
-           <idle>-0       [000] ...2.     0.213190: 
-serial8250_set_termios <-uart_set_options
-           <idle>-0       [000] ...2.     0.213191: 
-serial8250_do_set_termios <-uart_set_options
-           <idle>-0       [000] ...2.     0.213191: tty_get_char_size 
-<-serial8250_do_set_termios
-           <idle>-0       [000] ...2.     0.213191: uart_get_baud_rate 
-<-serial8250_do_set_termios
-           <idle>-0       [000] ...2.     0.213191: 
-tty_termios_baud_rate <-uart_get_baud_rate
-           <idle>-0       [000] ...2.     0.213191: 
-serial8250_get_divisor <-serial8250_do_set_termios
-           <idle>-0       [000] ...2.     0.213191: uart_get_divisor 
-<-serial8250_get_divisor
-           <idle>-0       [000] ...2.     0.213191: 
-_raw_spin_lock_irqsave <-serial8250_do_set_termios
-           <idle>-0       [000] d..2.     0.213192: preempt_count_add 
-<-_raw_spin_lock_irqsave
-           <idle>-0       [000] d..3.     0.213192: uart_update_timeout 
-<-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213192: tty_get_frame_size 
-<-uart_update_timeout
-           <idle>-0       [000] d..3.     0.213192: io_serial_out 
-<-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213195: 
-serial8250_do_set_divisor <-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213195: io_serial_out 
-<-serial8250_do_set_divisor
-           <idle>-0       [000] d..3.     0.213198: 
-default_serial_dl_write <-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213198: io_serial_out 
-<-default_serial_dl_write
-           <idle>-0       [000] d..3.     0.213201: io_serial_out 
-<-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213204: io_serial_out 
-<-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213207: io_serial_out 
-<-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213210: 
-serial8250_do_set_mctrl <-serial8250_do_set_termios
-           <idle>-0       [000] d..3.     0.213210: io_serial_out 
-<-serial8250_do_set_mctrl
-           <idle>-0       [000] d..3.     0.213213: 
-_raw_spin_unlock_irqrestore <-serial8250_do_set_termios
-           <idle>-0       [000] ...3.     0.213213: preempt_count_sub 
-<-_raw_spin_unlock_irqrestore
-           <idle>-0       [000] ...2.     0.213213: 
-tty_termios_baud_rate <-serial8250_do_set_termios
-           <idle>-0       [000] ...2.     0.213214: 
-tty_termios_encode_baud_rate <-serial8250_do_set_termios
-           <idle>-0       [000] ...2.     0.213214: console_lock 
-<-register_console
-           <idle>-0       [000] ...2.     0.213214: __cond_resched 
-<-console_lock
-           <idle>-0       [000] ...2.     0.213214: down <-console_lock
-           <idle>-0       [000] ...2.     0.213214: __cond_resched <-down
-           <idle>-0       [000] ...2.     0.213214: 
-_raw_spin_lock_irqsave <-down
-           <idle>-0       [000] d..2.     0.213214: preempt_count_add 
-<-_raw_spin_lock_irqsave
-           <idle>-0       [000] d..3.     0.213214: 
-_raw_spin_unlock_irqrestore <-console_lock
-           <idle>-0       [000] ...3.     0.213214: preempt_count_sub 
-<-_raw_spin_unlock_irqrestore
-           <idle>-0       [000] ...2.     0.213214: mutex_lock 
-<-register_console
-           <idle>-0       [000] ...2.     0.213215: __cond_resched 
-<-mutex_lock
-           <idle>-0       [000] ...2.     0.213215: mutex_unlock 
-<-register_console
-           <idle>-0       [000] ...2.     0.213215: console_unlock 
-<-register_console
-           <idle>-0       [000] ...2.     0.213215: 
-console_emit_next_record.constprop.0 <-console_unlock
-           <idle>-0       [000] ...2.     0.213215: prb_read_valid 
-<-console_emit_next_record.constprop.0
-           <idle>-0       [000] ...2.     0.213215: _prb_read_valid 
-<-prb_read_valid
-           <idle>-0       [000] ...2.     0.213215: 
-desc_read_finalized_seq <-_prb_read_valid
-           <idle>-0       [000] ...2.     0.213215: 
-console_emit_next_record.constprop.0 <-console_unlock
-           <idle>-0       [000] ...2.     0.213215: prb_read_valid 
-<-console_emit_next_record.constprop.0
-           <idle>-0       [000] ...2.     0.213215: _prb_read_valid 
-<-prb_read_valid
-           <idle>-0       [000] ...2.     0.213215: 
-desc_read_finalized_seq <-_prb_read_valid
-           <idle>-0       [000] ...2.     0.213216: get_data 
-<-_prb_read_valid
-           <idle>-0       [000] ...2.     0.213216: 
-desc_read_finalized_seq <-_prb_read_valid
-           <idle>-0       [000] ...2.     0.213216: record_print_text 
-<-console_emit_next_record.constprop.0
-           <idle>-0       [000] ...2.     0.213216: info_print_prefix 
-<-record_print_text
-           <idle>-0       [000] d..2.     0.213216: __printk_safe_enter 
-<-console_emit_next_record.constprop.0
-           <idle>-0       [000] d..2.     0.213216: _raw_spin_lock 
-<-console_emit_next_record.constprop.0
-           <idle>-0       [000] d..2.     0.213216: preempt_count_add 
-<-_raw_spin_lock
-           <idle>-0       [000] d..3.     0.213216: _raw_spin_unlock 
-<-console_emit_next_record.constprop.0
-           <idle>-0       [000] d..3.     0.213217: preempt_count_sub 
-<-_raw_spin_unlock
-           <idle>-0       [000] d..2.     0.213217: 
-univ8250_console_write <-console_emit_next_record.constprop.0
-           <idle>-0       [000] d..2.     0.213217: 
-serial8250_console_write <-console_emit_next_record.constprop.0
-           <idle>-0       [000] d..2.     0.213217: 
-_raw_spin_lock_irqsave <-serial8250_console_write
-           <idle>-0       [000] d..2.     0.213217: preempt_count_add 
-<-_raw_spin_lock_irqsave
-           <idle>-0       [000] d..3.     0.213217: io_serial_in 
-<-serial8250_console_write
-           <idle>-0       [000] d..3.     0.213220: io_serial_out 
-<-serial8250_console_write
-           <idle>-0       [000] d..3.     0.213223: uart_console_write 
-<-serial8250_console_write
-           <idle>-0       [000] d..3.     0.213223: 
-serial8250_console_putchar <-uart_console_write
-           <idle>-0       [000] d..3.     0.213223: wait_for_xmitr 
-<-serial8250_console_putchar
-           <idle>-0       [000] d..3.     0.213223: io_serial_in 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213226: io_serial_out 
-<-uart_console_write
-           <idle>-0       [000] d..3.     0.213229: 
-serial8250_console_putchar <-uart_console_write
-           <idle>-0       [000] d..3.     0.213229: wait_for_xmitr 
-<-serial8250_console_putchar
-           <idle>-0       [000] d..3.     0.213229: io_serial_in 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213232: __const_udelay 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213232: delay_tsc 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213233: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213233: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213233: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213233: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213233: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213233: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213233: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213233: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213233: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213233: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213234: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213234: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213234: io_serial_in 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213237: __const_udelay 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213237: delay_tsc 
-<-wait_for_xmitr
-           <idle>-0       [000] d..3.     0.213237: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213237: preempt_count_sub 
-<-delay_tsc
-           <idle>-0       [000] d..3.     0.213237: preempt_count_add 
-<-delay_tsc
-           <idle>-0       [000] d..4.     0.213237: preempt_count_sub 
-<-delay_tsc
-
-So it looks to me like, that the already recorded messages are printed 
-out over the serial console first, before it continues. The 
-documentation of `register_console()` in `kernel/printk/printk.c` 
-confirms that:
-
->  * The console driver calls this routine during kernel initialization
->  * to register the console printing procedure with printk() and to
->  * print any messages that were printed by the kernel before the
->  * console driver was initialized.
-
-Is there an option to enable the serial console but send the messages to 
-it asynchronously so it does not hold up the boot?
-
-
-Kind regards,
-
-Paul
+Thanks,
+Charles
