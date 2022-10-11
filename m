@@ -2,302 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08D75FAE88
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2645FAE1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJKIgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S229848AbiJKILV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJKIg2 (ORCPT
+        with ESMTP id S229849AbiJKILM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:36:28 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5290C7C1D1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 01:36:25 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221011083623epoutp04b6a6d6cf5a4629c05c1eac7dfc7c2ac0~c9tsaLCkY0323403234epoutp04H
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:36:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221011083623epoutp04b6a6d6cf5a4629c05c1eac7dfc7c2ac0~c9tsaLCkY0323403234epoutp04H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665477383;
-        bh=FxZXstTVZ5WaTjdioUsVMZPbOQeROiPSyOQt/DfZdv8=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=SIz/meJUFEWMM0BcMJYJEPbCbwmQ0okZdO1bnMXGCu6YP8ZVl4N1AgQfZDyLSnT7D
-         nQ2Ff0aAnWn0bNjU8BAxO4btv3ulTozoBtP2wHZR7zBkCaUuBGGF2NM+V6qtUIs3Jz
-         j5UoYbU49/pX9fY6AIrwDjerNpw4aHs577B4CSg4=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221011083622epcas5p4e996b9f6b75ef2964e05103d05af125a~c9tsA5eQv2460424604epcas5p4u;
-        Tue, 11 Oct 2022 08:36:22 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Mmpz62zbGz4x9QD; Tue, 11 Oct
-        2022 08:36:18 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        21.EB.56352.10B25436; Tue, 11 Oct 2022 17:36:17 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8~c9ojJxzKa1037710377epcas5p3a;
-        Tue, 11 Oct 2022 08:30:29 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221011083029epsmtrp2411e00dc67fc3e40435558623e0b20f2~c9ojIu3Vd2657426574epsmtrp2k;
-        Tue, 11 Oct 2022 08:30:29 +0000 (GMT)
-X-AuditID: b6c32a4b-383ff7000001dc20-63-63452b015241
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4A.65.14392.5A925436; Tue, 11 Oct 2022 17:30:29 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221011083027epsmtip2865ea2df94a67adf242ff7248b00e225~c9ohnPhEK1555815558epsmtip2s;
-        Tue, 11 Oct 2022 08:30:27 +0000 (GMT)
-From:   Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alim.akhtar@samsung.com, chanho61.park@samsung.com,
-        linus.walleij@linaro.org, pankaj.dubey@samsung.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Subject: [PATCH V2] arm64: dts: fix drive strength macros as per FSD HW UM
-Date:   Tue, 11 Oct 2022 13:33:59 +0530
-Message-Id: <20221011080359.76220-1-p.rajanbabu@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRmVeSWpSXmKPExsWy7bCmhi6jtmuyweUnXBYP5m1js7i8X9ti
-        /pFzrBZ9Lx4yW0z5s5zJ4vKuOWwWM87vY7I4ujHYYtHWL+wWrXuPsDtweWxa1cnmcefaHjaP
-        vi2rGD0+b5ILYInKtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLx
-        CdB1y8wBOkdJoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BSoFecmFtcmpeul5da
-        YmVoYGBkClSYkJ1xePF15oJOg4p5/e/ZGxh3qncxcnJICJhIzF54ihHEFhLYzSjx5VFCFyMX
-        kP2JUeLQn7nsEM43RomHpz+ywHSsnzaVFaJjL6PEyk0REEWtTBKrHi8EK2ITMJVYNaeRFSQh
-        IrCUUeL/p0WMIA6zwBRGia3bbgA5HBzCAl4S5yepgjSwCKhKbNn5mw3E5hWwkfjV1s4EsU1e
-        YvWGA8wgvRICu9gl7s24D3WGi8SuqS+hbGGJV8e3sEPYUhKf3+1lg7DzJaZ9bIayKyTaPm6A
-        GmovceDKHBaQG5gFNCXW79KHCMtKTD21DqyEWYBPovf3E6hyXokd82BsVYn1yzcxQtjSEvuu
-        7wV7RULAQ+LfxEBIoMRKbH66kX0Co+wshAULGBlXMUqmFhTnpqcWmxYY56WWw+MpOT93EyM4
-        kWl572B89OCD3iFGJg7GQ4wSHMxKIryM852ShXhTEiurUovy44tKc1KLDzGaAoNsIrOUaHI+
-        MJXmlcQbmlgamJiZmZlYGpsZKonzLp6hlSwkkJ5YkpqdmlqQWgTTx8TBKdXAxBT19cKcR0sy
-        p6TuqE6QePVZ8t5R0Y8N8TWTlm2MrLNX32E83f3U0QOnY08cjLqs4lwcztHMlLu+Zo9RTLro
-        zg7rlBkLeKeq/uC10HlyyIr3y+GLysl33x1oVT2m79u74P/HxiUz+e79Ebzj98rneGlYdpPU
-        IevqLfdPGP7RYWVQNl70MSfL0E6+Z0JEq9ArxU4ev1j70C/ujw0ZX900Dua+JW33Z0qt+P+u
-        UCmBaZ63vv28r2Ti4DorOV756PtOlcgXvxNkLjIbb//rwJnpOV8shTFOfOsLZ162HR+eXp61
-        9b7W6xmWun2v54VtvupWI52gLfB/YSdb8ZKOmsnfd56z/Jpy0nyt4spFT+/9V2Ipzkg01GIu
-        Kk4EAFXFL/DtAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjluLIzCtJLcpLzFFi42LZdlhJXneppmuyQfNaOYsH87axWVzer20x
-        /8g5Vou+Fw+ZLab8Wc5kcXnXHDaLGef3MVkc3RhssWjrF3aL1r1H2B24PDat6mTzuHNtD5tH
-        35ZVjB6fN8kFsERx2aSk5mSWpRbp2yVwZRxefJ25oNOgYl7/e/YGxp3qXYycHBICJhLrp01l
-        BbGFBHYzSmw9XAkRl5aY3r+HDcIWllj57zl7FyMXUE0zk8S0tmnMIAk2AVOJVXMaWUESIgKr
-        GSU+97eDdTALTGOU2DW1vouRg0NYwEvi/CRVkDCLgKrElp2/wUp4BWwkfrW1M0EskJdYveEA
-        8wRGngWMDKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYKDSktzB+P2VR/0DjEycTAe
-        YpTgYFYS4WWc75QsxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwT
-        B6dUA9OKlSL60+Is/+92FOnrnNb7Yb++ZbFNJs/XI5wlAr/UwirWhv9zD/qzgncHv9CpFY75
-        UxYoXIuP8tVaajmhu+lXRo3069OcH2vO1yxLKnWeaXsi///ev7NL5dO5fMzv6DJNva4xrf/L
-        tqR/fTYbS4xWtu0/FSlzRuI742wBHiE/Pt/7f6K7DYwfBXLnakbucrFdl5ufrrBf7sJshuw6
-        FsvmW2t5cwSr8rd32Bw15eLgfVBZUOMW8vLsnJn/X9z48v/JL8eVM3MT3ovfjJ8fkaBQIF3y
-        SDNo0bGVhWcX7Y4sr/wr+mrih/UR1+6JLJ3//xGPf0pRftN0vYSmae/sDiRuMfzuoaattKzy
-        UxfXFCWW4oxEQy3mouJEADYl5sSZAgAA
-X-CMS-MailID: 20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8
-References: <CGME20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 04:11:12 -0400
+X-Greylist: delayed 305 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 01:11:07 PDT
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28E6855BF
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 01:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1665475866;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  references:references;
+        bh=TEVqN7LH5UNHe+CL3lJ7h6goGAQTlF7P4mM/r9FqHy8=;
+        b=K45jJeuB7gYd6SgRdRhUoIrPktyE1WojCeZSmv4CDNZoroiagCdWUclz8eUrjhF9eLTJTW
+        t3b3w1r0CHnQnaqIIxjvQZx4GW/mnOXt6YfDY6u777S7G6vFxf7h9/CL20qHBHQAyzOkGS
+        nsIrqbV99trd/J9fOhx4yunMWUouoIIQ4TXzpTDiLs7v12WXyleLFZGVtY1G2Fng3XyHv6
+        OugWVOVXGt1u99K9oOaUN8YXDPkYgISzYLbT3Piq1PZBV7EFv8NqQJj3q/f2FIKN6bkVpA
+        m/z6mMw8qkhDHjNCEg3i2RttzvU67MuoxXw3JK6Hfj3euTC6rhgzq5bz0Ll5eg==
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-508-0RkaduPiN-OaT9ZSNzJ_DA-1; Tue, 11 Oct 2022 04:04:20 -0400
+X-MC-Unique: 0RkaduPiN-OaT9ZSNzJ_DA-1
+Received: from SA1PR19MB4909.namprd19.prod.outlook.com (2603:10b6:806:1a7::17)
+ by SJ0PR19MB4810.namprd19.prod.outlook.com (2603:10b6:a03:2ed::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Tue, 11 Oct
+ 2022 08:04:17 +0000
+Received: from SA1PR19MB4909.namprd19.prod.outlook.com
+ ([fe80::9e9f:b560:8eab:cb1]) by SA1PR19MB4909.namprd19.prod.outlook.com
+ ([fe80::9e9f:b560:8eab:cb1%6]) with mapi id 15.20.5709.021; Tue, 11 Oct 2022
+ 08:04:17 +0000
+From:   Yi xin Zhu <yzhu@maxlinear.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
+Subject: Re: [PATCH v3 0/4] Modify MxL's CGU clk driver to make it secure boot
+ compatible
+Thread-Topic: [PATCH v3 0/4] Modify MxL's CGU clk driver to make it secure
+ boot compatible
+Thread-Index: AQHY2J37XmJGGcOb7UuL1GQdLj72uQ==
+Date:   Tue, 11 Oct 2022 08:04:17 +0000
+Message-ID: <SA1PR19MB4909F6711D45ADCCA6360A4FC2239@SA1PR19MB4909.namprd19.prod.outlook.com>
+References: <cover.1664958833.git.rtanwar@maxlinear.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR19MB4909:EE_|SJ0PR19MB4810:EE_
+x-ms-office365-filtering-correlation-id: 43838cda-c651-4895-8eb1-08daab5f31e5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: BK6Q5jWcXHe/GVFIzyafAQjbgO03gGlNN7dHNjroaUH/5DsoGHS5HuabprW2Rsfu6iSTK2uxZGJxvVvIAEsEJcPQENCf5sCwa4OqMQxavuynennN3MVleT8Bg+5MDnetXsiYqJVxiz0EbFOPim3yDSLSmIoQ7PIiA6eQoBkDDM7dUWTZggIPXMBOMR1Mae2+3F1zoaIzTVk9comVFRLKXOyodrDmhuYuKh4zla7KOtNqCkt74CWxxsCIE6afSE/9X7kwG0CxJlCLSDokSRMvgqqAaM8S2S6X3bCmLmggo7UgayLCRZ6Y5nIE78WQUAzMBH+Wdo/BZ2I+pDJOAp3vsy5A1fEF2Wx8TcMYDmbq8egiXQBkqNmAmNovWMad9abFn/xu3Y3GnI6PhqI9BE8jBd9LU1lpWZ41XesX/26G7wpasSUmK5/wjyxMu6QjFgU5v8ifEeCyJwYT0l4jERxwEZvBt1tnJoyBjC+zgbMh21bVIgweeiQQ0EIGE28TPFDKUt/+XcKBQObDpGl0xAKUt9yyDLERvF4IWtrQ+0JD+8YYHyvALyIDqQdlw3oSqQO2+HkI6H0gkwHKONuTJztn4Bh04wrHlsDZHHqY2LTffXWP1ve61VkgatTyboRyNo6SabGlQkLN73Roiu9DvvnSeqT4f6exSacMSe86/5LnGHGRw1pJPC9Ds8I8uUkYSK0lHaXhBwP6AjC940S4QGHpINecyTopAuHwpEy6zkJwHJF22lgNdr1o10jc5NycH9W11TDvAgGZRH14tipxHEgIrg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR19MB4909.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(396003)(39850400004)(376002)(451199015)(86362001)(38070700005)(33656002)(122000001)(38100700002)(26005)(9686003)(2906002)(83380400001)(52536014)(5660300002)(7696005)(107886003)(186003)(6506007)(53546011)(66556008)(110136005)(64756008)(4326008)(91956017)(76116006)(66946007)(55016003)(316002)(41300700001)(66476007)(8676002)(66446008)(54906003)(8936002)(478600001)(71200400001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dTICZ1mr8QALAGUNwluuymfmTtNk0Quq2xLej6cN7KN8lcydY8PatOoObMq7?=
+ =?us-ascii?Q?jknD/PcHEOJ3aWy2iZvwYQhQI2FMNhPKfW5D6DUvB6vNEK3hEJ9mCHN5CLOK?=
+ =?us-ascii?Q?TGa2tMkCqzjgosMhTAIk1YLWhffXL123HReKyxsWshOnPyZ0dt3K1N2oSyte?=
+ =?us-ascii?Q?2Mwjqxw1r6k+AOIFJJo9sGup9HWyqP/i1TnCGVnCUFYaRtSk/7zxvW+3Z6NW?=
+ =?us-ascii?Q?S2NcKF0a3BdlvSqM1/LdaweAXjpso3X4b5Nij7MxBiVe95N2nWrZNPSrV6fL?=
+ =?us-ascii?Q?bPo8hdNGmCqUlg9TJMj+e/GpVteKDKbYOUeuq+fU2bH38MNN+N33VSTz7liC?=
+ =?us-ascii?Q?WyU7msD803jjIP2qd4dQCvcusVOFsses2Bc5yx7AZyTrFAEECS2wXtR7gCzw?=
+ =?us-ascii?Q?J7g/LPAG0oSAZuzdrLmAEAit/xPjPWxZG2GjDyWI0A/7PkceFQvxq3zyfKYV?=
+ =?us-ascii?Q?WhfVP19YtWNW9s9xi3TC4fNFUK41b+ZWBaq4fj8+cNS/gjrRwEWF2ArovNyz?=
+ =?us-ascii?Q?KNSeMUlsTTS8XXPaIjxndniUqmsfT5pzMxQplq1oooj9+JmJZ0rcNRuio8n7?=
+ =?us-ascii?Q?OJIK3H0k2mDvJAFfV2vvuZCsUKy6dI1juDiKt4yNY7+7Y25Hz3HVt+yPz8/C?=
+ =?us-ascii?Q?R3N1pMRDMIwI+AA83U6u5khsDIPgFEXF9oNgey4jjd9bKCTMF22bPyeyp/sZ?=
+ =?us-ascii?Q?Pp8mdsSCaWSLQ49lB7qwFo3pZTmk/jR5XS/Z/b/zK6pRy1dUQ2iwtlvXBz33?=
+ =?us-ascii?Q?W5bzLng8Sx5hF6/G+akiBIsCMAkzhxGrzH2As1vlO4OwmfMQId2m8YzrMpFO?=
+ =?us-ascii?Q?KWR7ajpg4IrYWsd/ohU15vkk8nUy5o8Kgo1pYjevIRMLhY+b33hdVQEQoRGI?=
+ =?us-ascii?Q?X3z2fmfe6MimpLE7Uso7OLni6LnowaZrUajQJGenDX/lGkqG8wkZFG8Giknj?=
+ =?us-ascii?Q?GqU+gUA0892i3CXduZHX9YspWFX4a4PC5TerubJlt54t/S7CDaNh7Z0IRb2i?=
+ =?us-ascii?Q?jzKMoAyaOvmVp0KDYqCCqrMSTzlGP71YkJPF7x3M+bbv8qQrLcGWUslY1tk/?=
+ =?us-ascii?Q?V4VuedSFM2VuBIc+5ZNWDg/pKjc7VmWMD65t1AgfKVQTfqWNcWBXUYDzFxE3?=
+ =?us-ascii?Q?Rl+HFUTW7xZ6szgFVrCrahXLf5ImVvTR9z5hMAJkRBZgXe8OI5lqw2hsuGRg?=
+ =?us-ascii?Q?3JEwBOf5rmvftWO10zpa8fkCO+3tk3FYBYdu7VlDY1qN9qcXAw/8+qKlZCNq?=
+ =?us-ascii?Q?lBQO+gTgIvthI3eYVMPtNy1n3jucfCb7Q7wWKRFAenC7TYQga4FouWqQurCa?=
+ =?us-ascii?Q?DaPNhTC4v/4mszwo9S7/jqoSy2fyNu6Bt8ooJfnNnUVbfcExGoJcNUre7qL+?=
+ =?us-ascii?Q?kr9zsrfaxTAi+nIo3SLv0cdq1J6Zm2K1htHihs0JWqH/zGUgrQwdKudyj4so?=
+ =?us-ascii?Q?0+FoE2fTKr0e4gu8u+QS/X6UdSRrsHBor4SGnsV7Qv+Sam8LoZpgPgvv1uLS?=
+ =?us-ascii?Q?VpwcQ2+kahyai4aXteVbX92KziKtJkYSfv+U5WpRsyjz+utPgPMpUsQ1kZUr?=
+ =?us-ascii?Q?UNS//0mrNJG3pdWE6GYQHv/XfPVLsCAZVUc1Ob/f0BthWScIW9EAy0HpaQPV?=
+ =?us-ascii?Q?4g=3D=3D?=
+MIME-Version: 1.0
+X-OriginatorOrg: maxlinear.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR19MB4909.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43838cda-c651-4895-8eb1-08daab5f31e5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2022 08:04:17.3093
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: dac28005-13e0-41b8-8280-7663835f2b1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W6GOXZoht4FFkq/1X+A4IqxTJBR/MmaISY3TW6b12VI64H61JV+Cbo7rdy+3uv9fVzt7hj+aW6ky1AWdyd+Xog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR19MB4810
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Language: en-US
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drive strength macros defined for FSD platform is not reflecting actual
-name and values as per HW UM. FSD SoC pinctrl has following four levels of
-drive-strength and their corresponding values:
-Level-1 <-> 0
-Level-2 <-> 1
-Level-4 <-> 2
-Level-6 <-> 3
-
-The commit 684dac402f21 ("arm64: dts: fsd: Add initial pinctrl support")
-used drive strength macros defined for Exynos4 SoC family. For some IPs
-the macros values of Exynos4 matched and worked well, but Exynos4 SoC
-family drive-strength (names and values) is not exactly matching with
-FSD SoC.
-
-Fix the drive strength macros to reflect actual names and values given
-in FSD HW UM. This also ensures that the existing peripherals in device
-tree file is using correct drive strength MACROs to function as
-expected.
-
-Fixes: 684dac402f21 ("arm64: dts: fsd: Add initial pinctrl support")
-Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
----
- arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 34 +++++++++++-----------
- arch/arm64/boot/dts/tesla/fsd-pinctrl.h    |  6 ++--
- 2 files changed, 20 insertions(+), 20 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-index d0abb9aa0e9e..e3852c946352 100644
---- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-@@ -55,14 +55,14 @@
- 		samsung,pins = "gpf5-0";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	ufs_refclk_out: ufs-refclk-out-pins {
- 		samsung,pins = "gpf5-1";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- };
- 
-@@ -239,105 +239,105 @@
- 		samsung,pins = "gpb6-1";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	pwm1_out: pwm1-out-pins {
- 		samsung,pins = "gpb6-5";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c0_bus: hs-i2c0-bus-pins {
- 		samsung,pins = "gpb0-0", "gpb0-1";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c1_bus: hs-i2c1-bus-pins {
- 		samsung,pins = "gpb0-2", "gpb0-3";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c2_bus: hs-i2c2-bus-pins {
- 		samsung,pins = "gpb0-4", "gpb0-5";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c3_bus: hs-i2c3-bus-pins {
- 		samsung,pins = "gpb0-6", "gpb0-7";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c4_bus: hs-i2c4-bus-pins {
- 		samsung,pins = "gpb1-0", "gpb1-1";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c5_bus: hs-i2c5-bus-pins {
- 		samsung,pins = "gpb1-2", "gpb1-3";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c6_bus: hs-i2c6-bus-pins {
- 		samsung,pins = "gpb1-4", "gpb1-5";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	hs_i2c7_bus: hs-i2c7-bus-pins {
- 		samsung,pins = "gpb1-6", "gpb1-7";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	uart0_data: uart0-data-pins {
- 		samsung,pins = "gpb7-0", "gpb7-1";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	uart1_data: uart1-data-pins {
- 		samsung,pins = "gpb7-4", "gpb7-5";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	spi0_bus: spi0-bus-pins {
- 		samsung,pins = "gpb4-0", "gpb4-2", "gpb4-3";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	spi1_bus: spi1-bus-pins {
- 		samsung,pins = "gpb4-4", "gpb4-6", "gpb4-7";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- 
- 	spi2_bus: spi2-bus-pins {
- 		samsung,pins = "gpb5-0", "gpb5-2", "gpb5-3";
- 		samsung,pin-function = <FSD_PIN_FUNC_2>;
- 		samsung,pin-pud = <FSD_PIN_PULL_UP>;
--		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
- 	};
- };
- 
-diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.h b/arch/arm64/boot/dts/tesla/fsd-pinctrl.h
-index 6ffbda362493..c397d02208a0 100644
---- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.h
-+++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.h
-@@ -16,9 +16,9 @@
- #define FSD_PIN_PULL_UP			3
- 
- #define FSD_PIN_DRV_LV1			0
--#define FSD_PIN_DRV_LV2			2
--#define FSD_PIN_DRV_LV3			1
--#define FSD_PIN_DRV_LV4			3
-+#define FSD_PIN_DRV_LV2			1
-+#define FSD_PIN_DRV_LV4			2
-+#define FSD_PIN_DRV_LV6			3
- 
- #define FSD_PIN_FUNC_INPUT		0
- #define FSD_PIN_FUNC_OUTPUT		1
--- 
-2.17.1
+On 5/10/2022 5:36 pm, Rahul Tanwar wrote:=0A> MxL's CGU driver was found to=
+ be lacking below required features. Add these=0A> required lacking feature=
+s:=0A>=0A> 1. Since it is a core driver, it has to conform to secure boot &=
+ secure=0A>    access architecture. In order for the register accesses to b=
+e secure=0A>    access compliant, it needs regmap support as per our securi=
+ty architecture.=0A>    Hence, replace direct read/writel with regmap based=
+ IO. Also remove=0A>    redundant spinlocks from the driver as they are no =
+longer necessary=0A>    because regmap uses its own lock.=0A>=0A> 2. In MxL=
+'s LGM SoC, gate clocks can be controlled either from CGU clk driver=0A>   =
+ i.e. this driver or directly from power management driver/daemon. It is=0A=
+>    dependent on the power policy/profile requirements of the end product.=
+=0A>=0A>    To support such use cases, provide option to override gate clks=
+ enable/disable=0A>    by adding a flag GATE_CLK_HW which controls if these=
+ gate clks are controlled=0A>    by HW i.e. this driver or overridden in or=
+der to allow it to be controlled=0A>    by power profiles instead.=0A>=0A> =
+3. Fix a bug related to missing flags in one 'dcl' clk entry.=0A>=0A> This =
+patch series is based on below git tree (linux-v6.0-rc1):=0A> git://git.ker=
+nel.org/pub/scm/linux/kernel/git/clk/linux.git=0A>=0A>=0A> Rahul Tanwar (4)=
+:=0A>   clk: mxl: Switch from direct readl/writel based IO to regmap based =
+IO=0A>   clk: mxl: Remove redundant spinlocks=0A>   clk: mxl: Add option to=
+ override gate clks enable/disable=0A>   clk: mxl: Fix a clk entry by addin=
+g relevant flags=0A>=0A>  drivers/clk/x86/Kconfig       |   5 +-=0A>  drive=
+rs/clk/x86/clk-cgu-pll.c |  23 ++-----=0A>  drivers/clk/x86/clk-cgu.c     |=
+ 122 +++++++++++-----------------------=0A>  drivers/clk/x86/clk-cgu.h     =
+|  46 ++++++-------=0A>  drivers/clk/x86/clk-lgm.c     |  18 +++--=0A>  5 f=
+iles changed, 82 insertions(+), 132 deletions(-)=0A>=0AReviewed-by: Yi xin =
+Zhu <yzhu@maxlinear.com> for entire series.=0A=0A
 
