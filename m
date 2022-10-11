@@ -2,158 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DFB5FBA2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EA55FBA30
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiJKSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S230136AbiJKSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJKSRT (ORCPT
+        with ESMTP id S229794AbiJKSUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:17:19 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEB5F012
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:17:18 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id r17so33209623eja.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s61i+pH9FZB5bmErB62bJ6mkpIWasrC0YJTzljapRO0=;
-        b=Xim7TYvCya4GVHh39kMEmXRdXmFH/PR994kU/2snslQ6CKiKjnm84UmFO3P3+sYmaO
-         vRV+rIhg6nb959wZXfzeHAfUgIME0yMc/0X8r+Jym1knbtCtlDKF2q37ZqWx3zHRB+e4
-         qjxPkDUoZLI+9wqn7QzzlJj9TCG9ZrQGyxTjcKi5H386CXM3a+SHqsAWr/71HIpbFbaN
-         pZMd6RoHJamw478D93N2pXiLctNOcaW5QYXNrTZRW3tPiD1nEjr0/mKO3vP8/NLJ5x4U
-         haxoVML4Zc3nUXZ27QIrhYOOhg9aBmS1hr83y70hfE3hW8p+n090VkHUA/aDSaX5D1KF
-         seCw==
+        Tue, 11 Oct 2022 14:20:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2A940BFB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665512446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/OTQRN3juAPW8yoc48eb9FvOlYwsRSyxzmGbpR/0Igk=;
+        b=MfsPePtvtZoPY5Ojs5hsZM+R+2D+T8BmA1FadvgH1wewtR+tMIH3/gvCSnLyQfitMPUY9d
+        7NsKkEpddn6/h9kXw2d9P2s+lHaBTKIM4O8x7xlPD5SzWJImKb9JLBth/IrAF4AOUtYIYT
+        i316zcgAJsYZqD+XVHexu7uIq1jlIpw=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-CDNdcKfdMhawgBDy1pViZw-1; Tue, 11 Oct 2022 14:20:44 -0400
+X-MC-Unique: CDNdcKfdMhawgBDy1pViZw-1
+Received: by mail-oi1-f199.google.com with SMTP id o12-20020a056808124c00b00353f308fb4bso8326565oiv.22
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:20:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s61i+pH9FZB5bmErB62bJ6mkpIWasrC0YJTzljapRO0=;
-        b=CHPaFDUVoy4n0VbkB3YuzwjP4MTxW6eEkjz+Dphn0fwdtH41fCbOok4qLlRY2mVFnF
-         SmtMCb6VTTE3wxtW0E1PWTN14gDod0NP0+YxYOc1SQMxnuTzcN9L4gOHmHKGcCvYmGa9
-         w/o0vWCdO8RKZ7I3eFxak+II3jH3vRTUy95yapt5AD30Qj2SkqTRiXA4rHVavrqJ+H2c
-         qIEtVfKQa9h8X0knWzR03fjvQBnWm/gE6/TctjosfIVOeiwnDii5jcI2fV5sXE63bR6s
-         UkMC4see8V5hY7UxgOYpCajWO6ZReGO56p9Ri6fjeZIl6jQMs9xIGwnGieUahDPkrNpu
-         hJ3Q==
-X-Gm-Message-State: ACrzQf0HcfAGSmqr084M/U4pUsAT+YqCs5/afX4l4JvqRlEhZAHTlaLD
-        A7lcx7xAIDesFC1NLBR7y0E/Tj7xcRVv/g==
-X-Google-Smtp-Source: AMsMyM6QeD0epfM203Pe/bLJJa6W/QhR+KGtuNfJJkrmmA+3VHA67IIHvGa9wwgyrAz6zmtP58PZ9w==
-X-Received: by 2002:a17:907:2d8b:b0:781:c864:fffd with SMTP id gt11-20020a1709072d8b00b00781c864fffdmr19090020ejc.681.1665512237210;
-        Tue, 11 Oct 2022 11:17:17 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id b17-20020a50b411000000b00454546561cfsm9618273edh.82.2022.10.11.11.17.16
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/OTQRN3juAPW8yoc48eb9FvOlYwsRSyxzmGbpR/0Igk=;
+        b=feGjaOmSOOSrs3aixEuQCpQvwTYxxQju6jQdnhfQqXvjMt7pGmVwNrBld3ckOH4++d
+         su0IFOav5ko2mbijOMknf3kgVB19HFl9vEW7yAfYeq7LQjRQdykVpjZ2UukeXmZsfM4x
+         ITsoR5U+GSmDunqf6RQ1D3zzJGEAU7Bz4hAcotCN4Q5E2jpqVYCYpOmWcYih5GHTzc7O
+         WwenuHzKL+Ce8IXl8jsOC1iFR+cs4TS8gN4WrVnXk5gbjzum3FkffJ/gSy5i3F0JzJIf
+         R4odNzrV++TXIfloCHZ1ZxM+CDtAuWzocaye8FW1SCGpib9em6UeXSbI2WOPjZjQnUQb
+         wTyA==
+X-Gm-Message-State: ACrzQf0f7FFH18HRpFGUPgSCMwdxILtqI9F527b5i6sP+pEdAJ5ecGdt
+        fyhmpLBTXOk/mqHkVsTgtK6utA7lkAYxV1c89o7qrbECH5jSY4tGyZS1t0CMAuz3Q1ere0MGS8X
+        9cu1lG0zO0ptRhPBbJkFhI9bO
+X-Received: by 2002:a05:6870:15d4:b0:12b:8d8d:1001 with SMTP id k20-20020a05687015d400b0012b8d8d1001mr284818oad.137.1665512443596;
+        Tue, 11 Oct 2022 11:20:43 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4YkT+TbXMLE0XB+SAOjd79C2564H5qmOYCwIn4lHaeaWlTipoc33/Rvo3NUpdBjRdA4Em3Qw==
+X-Received: by 2002:a05:6870:15d4:b0:12b:8d8d:1001 with SMTP id k20-20020a05687015d400b0012b8d8d1001mr284809oad.137.1665512443355;
+        Tue, 11 Oct 2022 11:20:43 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a801:9473:d360:c737:7c9c:d52b? ([2804:1b3:a801:9473:d360:c737:7c9c:d52b])
+        by smtp.gmail.com with ESMTPSA id k16-20020a0568080e9000b003549db40f38sm1878229oil.46.2022.10.11.11.20.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 11:17:16 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 20:17:15 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH] x86: Fix /proc/cpuinfo cpumask warning
-Message-ID: <20221011181715.dpayrpjueha7kxoj@kamzik>
-References: <20221011175031.1782748-1-ajones@ventanamicro.com>
- <Y0WvX9Mp0kuohNdq@zn.tnic>
+        Tue, 11 Oct 2022 11:20:42 -0700 (PDT)
+Message-ID: <3d6d47035f8897542a4786eef5a6b8885f4caaf0.camel@redhat.com>
+Subject: Re: [PATCH v1 1/1] crypto/pcrypt: Do not use isolated CPUs for
+ callback
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 11 Oct 2022 15:20:39 -0300
+In-Reply-To: <b23b08274ccff99fb341ea272e968f72c2e289ce.camel@redhat.com>
+References: <20221004062536.280712-1-leobras@redhat.com>
+         <Yz1/TVUV+KnLvodg@fuller.cnet>
+         <b23b08274ccff99fb341ea272e968f72c2e289ce.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0WvX9Mp0kuohNdq@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 08:01:03PM +0200, Borislav Petkov wrote:
-> On Tue, Oct 11, 2022 at 07:50:31PM +0200, Andrew Jones wrote:
-> > Upcoming cpumask changes will start issuing warnings[*] when cpu
-> 
-> What upcoming changes?
-> 
-> This needs a concrete pointer to a commit or so.
+On Fri, 2022-10-07 at 18:42 -0300, Leonardo Br=C3=A1s wrote:
+> On Wed, 2022-10-05 at 09:57 -0300, Marcelo Tosatti wrote:
+> > On Tue, Oct 04, 2022 at 03:25:37AM -0300, Leonardo Bras wrote:
+> > > Currently pcrypt_aead_init_tfm() will pick callback cpus (ctx->cb_cpu=
+)
+> > > from any online cpus. Later padata_reorder() will queue_work_on() the
+> > > chosen cb_cpu.
+> > >=20
+> > > This is undesired if the chosen cb_cpu is listed as isolated (i.e. us=
+ing
+> > > isolcpus=3D... kernel parameter), since the work queued will interfer=
+e with
+> > > the workload on the isolated cpu.
+> > >=20
+> > > Make sure isolated cpus are not used for pcrypt.
+> > >=20
+> > > Signed-off-by: Leonardo Bras <leobras@redhat.com>
+> > > ---
+> > >  crypto/pcrypt.c | 10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/crypto/pcrypt.c b/crypto/pcrypt.c
+> > > index 9d10b846ccf73..9017d08c91a8d 100644
+> > > --- a/crypto/pcrypt.c
+> > > +++ b/crypto/pcrypt.c
+> > > @@ -16,6 +16,7 @@
+> > >  #include <linux/kobject.h>
+> > >  #include <linux/cpu.h>
+> > >  #include <crypto/pcrypt.h>
+> > > +#include <linux/sched/isolation.h>
+> > > =20
+> > >  static struct padata_instance *pencrypt;
+> > >  static struct padata_instance *pdecrypt;
+> > > @@ -175,13 +176,16 @@ static int pcrypt_aead_init_tfm(struct crypto_a=
+ead *tfm)
+> > >  	struct pcrypt_instance_ctx *ictx =3D aead_instance_ctx(inst);
+> > >  	struct pcrypt_aead_ctx *ctx =3D crypto_aead_ctx(tfm);
+> > >  	struct crypto_aead *cipher;
+> > > +	struct cpumask non_isolated;
+> > > +
+> > > +	cpumask_and(&non_isolated, cpu_online_mask, housekeeping_cpumask(HK=
+_TYPE_DOMAIN));
+> >=20
+> > Since certain systems do not use isolcpus=3Ddomain, so please use a fla=
+g
+> > that is setup by nohz_full=3D, for example HK_FLAG_MISC:
+> >=20
+> > static int __init housekeeping_nohz_full_setup(char *str)
+> > {
+> >         unsigned long flags;
+> >=20
+> >         flags =3D HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_R=
+CU |
+> >                 HK_FLAG_MISC | HK_FLAG_KTHREAD;
+> >=20
+> >         return housekeeping_setup(str, flags);
+> > }
+> > __setup("nohz_full=3D", housekeeping_nohz_full_setup);
+>=20
+> Oh, sure.=C2=A0
+> Since we are talking about WorkQueues, I think it makes sense to pick
+> HK_FLAG_WQ.=20
+>=20
+> >=20
+> > Also, shouldnt you use cpumask_t ?/
+>=20
+> Yeah, I think so.=C2=A0
+> I was quick to choose the 'struct cpumask' because all functions would op=
+erate
+> in this variable type, but yeah, I think it makes sense to have this vari=
+able
+> being opaque here.
 
-Hi Boris,
+In fact, it seems neither 'struct cpumask' nor 'cpumask_t' are recommended =
+to be
+used allocated in the stack, due to the large size it can get (up to 1kB).=
+=C2=A0
 
-Sorry, I should have pointed this out. The upcoming change is
+At include/linux/cpumask.h we have:
+'cpumask_var_t: struct cpumask for stack usage'
+which should work better at least for init functions like this.
 
-linux-next/master commit a314123c8bdb ("cpumask: fix checking valid cpu
-range")
+In other cases, I see 'static cpumask_t' being used to avoid the allocation
+overhead, but it's probably due to the functions being called in very speci=
+fic
+scenarios. It could mean trouble if multiple cpus try to use it at once.
 
-And also an ongoing discussion here
-https://lore.kernel.org/lkml/20221011170949.upxk3tcfcwnkytwm@kamzik/
+What do you recommend on it?
 
-I'm hoping that Yury will pick these patches up and integrate
-them at the front of his series when introducing the warnings.
-I wasn't sure how to call that out other than with the generic
-"upcoming change".
+Best regards,
+Leo
 
-> 
-> > indices equal to nr_cpu_ids are passed to cpumask_next* functions.
-> 
-> How do those indices get passed here? I think you need to explain how
-> exactly this happens.
+>=20
+> >=20
+> > Looks good otherwise.
+> >=20
+> > Thanks!
+>=20
+> Thank you for reviewing!=20
+>=20
+> Leo
+>=20
+> >=20
+> >=20
+> > > =20
+> > >  	cpu_index =3D (unsigned int)atomic_inc_return(&ictx->tfm_count) %
+> > > -		    cpumask_weight(cpu_online_mask);
+> > > +		    cpumask_weight(&non_isolated);
+> > > =20
+> > > -	ctx->cb_cpu =3D cpumask_first(cpu_online_mask);
+> > > +	ctx->cb_cpu =3D cpumask_first(&non_isolated);
+> > >  	for (cpu =3D 0; cpu < cpu_index; cpu++)
+> > > -		ctx->cb_cpu =3D cpumask_next(ctx->cb_cpu, cpu_online_mask);
+> > > +		ctx->cb_cpu =3D cpumask_next(ctx->cb_cpu, &non_isolated);
+> > > =20
+> > >  	cipher =3D crypto_spawn_aead(&ictx->spawn);
+> > > =20
+> > > --=20
+> > > 2.37.3
+> > >=20
+> > >=20
+> >=20
+>=20
 
-I took a stab at explaining it in the discussion thread[1] just now and I
-can bring that explanation into the commit message for v2.
-
-[1] https://lore.kernel.org/lkml/20221011180442.cwjtcvjioias3qt6@kamzik/
-
-> 
-> > Ensure we don't generate a warning when reading /proc/cpuinfo by
-> 
-> Please use passive voice in your commit message: no "we" or "I", etc,
-> and describe your changes in imperative mood.
-
-I'll change to "Ensure no warning is generated ..."
-
-> 
-> > validating the cpu index before calling cpumask_next().
-> 
-> s/cpu/CPU/g
-> 
-> > [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
-> > 
-> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> > Cc: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  arch/x86/kernel/cpu/proc.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> > index 099b6f0d96bd..584ae6cb5b87 100644
-> > --- a/arch/x86/kernel/cpu/proc.c
-> > +++ b/arch/x86/kernel/cpu/proc.c
-> > @@ -153,9 +153,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >  
-> >  static void *c_start(struct seq_file *m, loff_t *pos)
-> >  {
-> > -	*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> > -	if ((*pos) < nr_cpu_ids)
-> > -		return &cpu_data(*pos);
-> > +	if (*pos < nr_cpu_ids) {
-> > +		*pos = cpumask_next(*pos - 1, cpu_online_mask);
-> > +		if (*pos < nr_cpu_ids)
-> > +			return &cpu_data(*pos);
-> > +	}
-> 
-> Simpler: on function entry:
-> 
-> 	if (*pos >= nr_cpu_ids)
-> 		return NULL;
-> 
-> 	 /* the rest remains unchanged */
-
-Will do for v2.
-
-Thanks,
-drew
