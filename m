@@ -2,164 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A02B5FB753
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8E65FB7A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiJKPcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S231201AbiJKPq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiJKPcX (ORCPT
+        with ESMTP id S229915AbiJKPqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:32:23 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD01AF1A;
-        Tue, 11 Oct 2022 08:22:06 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id g9so9119812qvo.12;
-        Tue, 11 Oct 2022 08:22:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eI8/iw+T1k5N6jTBGY7530xalCx4rWDXOfzjPqNDZzg=;
-        b=Nr9QxCkoICr7BtlS0Gt/g+A7oLmJ8tr7qXzbpgzsR+GWCDIWTjXNGbVUStTqnKSdMK
-         c76ZVkqAybMG144Wgda4hBgdA0wtOwgNvbswR0Gwts/klfV/N43dd/yuDv6MohYXFGcu
-         SrNfMbyQkyHxyDHV/+ZhA4t7r8vqFXRxlZPVflqX7lTkLIWktf4qAUYDY8wSKfy8GT3B
-         WZDG4MmFxKRwvMn/9WIyH3nEFMUedU7V8HjAiUXRktK7URJsEFIfOC38DnnsdLqniTDv
-         YVmpf8E7cX1+Gj1qCchL9XbRL5/IWU8W9HqCDZuGjEdVwPcwu0xGXWr+xWkA2lzEBZGj
-         C2EQ==
-X-Gm-Message-State: ACrzQf2kybYEaszmYbrUKaXQSLqqJ8IAbxdmo+PdbW/ZtlQayez/bUnq
-        7glLsHmWPEI5jSYgdR2wvHI=
-X-Google-Smtp-Source: AMsMyM4cPPBmEDDnA7fXR4IV3z0CAsMC55le7Y0+H6N3EiDni7okWR3i4nvBAH9zIe8uIFJesZd9/g==
-X-Received: by 2002:a05:6214:3006:b0:499:1f87:dac9 with SMTP id ke6-20020a056214300600b004991f87dac9mr19719270qvb.0.1665501679626;
-        Tue, 11 Oct 2022 08:21:19 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::3552])
-        by smtp.gmail.com with ESMTPSA id j15-20020ac8550f000000b0039a17374294sm4859147qtq.78.2022.10.11.08.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 08:21:19 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 10:21:16 -0500
-From:   David Vernet <void@manifault.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, kernel-team@fb.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yhs@fb.com, song@kernel.org,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org
-Subject: Re: [PATCH v2] selftests/bpf: Update map_kptr examples to reflect
- real use-cases
-Message-ID: <Y0WJ7FNlYIsWbTjP@maniforge.dhcp.thefacebook.com>
-References: <20221002171012.3529521-1-void@manifault.com>
- <CAP01T76SFT7TM02RaR9CMtBww34swXZotS2FkGKVBE6+o5XqBw@mail.gmail.com>
- <YzrpI4PWxDaejZ6d@maniforge.dhcp.thefacebook.com>
- <CAP01T74bA2-qf3-yTkqd01k-Ft-7LJBGnuc9yOWkZK_ZmydqLw@mail.gmail.com>
- <YzxRa6dBz6z/85ZV@maniforge.lan>
- <CAP01T77QYNc6BJP+OtVV3YQGgS06ZeWTUBdq3sp2FhKmeoo6-A@mail.gmail.com>
+        Tue, 11 Oct 2022 11:46:33 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A64F19A;
+        Tue, 11 Oct 2022 08:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1665502628; x=1697038628;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wkAoM2wYpiQ2JTIInD4+UYAkgTXVdTACo/bxysxP4Aw=;
+  b=chDSVPmgFLqhVQAcKfL5tXYM60Q2MG1x10qfc1Jspzq7+KBvoXzrNUIH
+   Mx1soApFJAs/6Bc8V26NaFDuZY2GABncjafwk0X6ey6QPWtq5P3H6haPK
+   7jQwvr/Q2rmTuzgcC+3L831tfyu8Vq2y+53AoF5soNr23E2kRiXPbqpfC
+   w=;
+X-IronPort-AV: E=Sophos;i="5.95,176,1661817600"; 
+   d="scan'208";a="139076135"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-9a235a16.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 15:21:43 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-9a235a16.us-east-1.amazon.com (Postfix) with ESMTPS id E742A80380;
+        Tue, 11 Oct 2022 15:21:38 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 11 Oct 2022 15:21:36 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.214) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 11 Oct 2022 15:21:29 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <pabeni@redhat.com>
+CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+        <kraig@google.com>, <kuba@kernel.org>, <kuni1840@gmail.com>,
+        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <martin.lau@kernel.org>, <netdev@vger.kernel.org>,
+        <willemb@google.com>, <yoshfuji@linux-ipv6.org>
+Subject: Re: [PATCH v1 net 3/3] selftest: Add test for SO_INCOMING_CPU.
+Date:   Tue, 11 Oct 2022 08:21:19 -0700
+Message-ID: <20221011152119.89895-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <dea1abff6baabfb8a5abc7cf4eb355eb36b0ef8c.camel@redhat.com>
+References: <dea1abff6baabfb8a5abc7cf4eb355eb36b0ef8c.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T77QYNc6BJP+OtVV3YQGgS06ZeWTUBdq3sp2FhKmeoo6-A@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.214]
+X-ClientProxiedBy: EX13D30UWC002.ant.amazon.com (10.43.162.235) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 08:10:26AM +0530, Kumar Kartikeya Dwivedi wrote:
-
-[...]
-
-> > > > > Also, even if you made it work, wouldn't you have the warning once you
-> > > > > run more selftests using prog_test_run, if you just set the  destroyed
-> > > > > bit on each test run?
-> > > >
-> > > > If we want to update the test to have the refcount drop to 0, we would
-> > > > probably have to instead use dynamically allocated objects. At that
-> > > > point, we'd probably just crash instead of seeing a warning if we
-> > > > accidentally let a caller invoke acquire or release after the object had
-> > > > been destroyed. Maybe the better thing to do here is to just warn
-> > > > unconditionally in the destructor rather than setting a flag? What we
-> > > > really want to ensure is that the final refcount that's "owned" by the
-> > > > main kernel is never dropped.
-> > >
-> > > I think the refcount_t API already warns if underflow happens.
-> >
-> > Right, a warning would probably show up if we did a release that caused
-> > an underflow, but it would not for an acquire after the refcount dropped
-> > to 0.
-> >
+From:   Paolo Abeni <pabeni@redhat.com>
+Date:   Tue, 11 Oct 2022 13:34:58 +0200
+> On Mon, 2022-10-10 at 10:43 -0700, Kuniyuki Iwashima wrote:
+> > Some highly optimised applications use SO_INCOMING_CPU to make them
+> > efficient, but they didn't test if it's working correctly by getsockopt()
+> > to avoid slowing down.  As a result, no one noticed it had been broken
+> > for years, so it's a good time to add a test to catch future regression.
+> > 
+> > The test does
+> > 
+> >   1) Create $(nproc) TCP listeners associated with each CPU.
+> > 
+> >   2) Create 32 child sockets for each listener by calling
+> >      sched_setaffinity() for each CPU.
+> > 
+> >   3) Check if accept()ed sockets' sk_incoming_cpu matches
+> >      listener's one.
+> > 
+> > If we see -EAGAIN, SO_INCOMING_CPU is broken.  However, we might not see
+> > any error even if broken; the kernel could miraculously distribute all SYN
+> > to correct listeners.  Not to let that happen, we must increase the number
+> > of clients and CPUs to some extent, so the test requires $(nproc) >= 2 and
+> > creates 64 sockets at least.
+> > 
+> > Test:
+> >   $ nproc
+> >   96
+> >   $ ./so_incoming_cpu
+> > 
+> > Before the previous patch:
+> > 
+> >   # Starting 1 tests from 2 test cases.
+> >   #  RUN           so_incoming_cpu.test1 ...
+> >   # so_incoming_cpu.c:129:test1:Expected cpu (82) == i (0)
+> >   # test1: Test terminated by assertion
+> >   #          FAIL  so_incoming_cpu.test1
+> >   not ok 1 so_incoming_cpu.test1
+> >   # FAILED: 0 / 1 tests passed.
+> >   # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+> > 
+> > After:
+> > 
+> >   # Starting 1 tests from 2 test cases.
+> >   #  RUN           so_incoming_cpu.test1 ...
+> >   # so_incoming_cpu.c:137:test1:SO_INCOMING_CPU is very likely to be working correctly with 3072 sockets.
+> >   #            OK  so_incoming_cpu.test1
+> >   ok 1 so_incoming_cpu.test1
+> >   # PASSED: 1 / 1 tests passed.
+> >   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > 
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > ---
+> >  tools/testing/selftests/net/.gitignore        |   1 +
+> >  tools/testing/selftests/net/Makefile          |   1 +
+> >  tools/testing/selftests/net/so_incoming_cpu.c | 148 ++++++++++++++++++
+> >  3 files changed, 150 insertions(+)
+> >  create mode 100644 tools/testing/selftests/net/so_incoming_cpu.c
+> > 
+> > diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+> > index 3d7adee7a3e6..ff8807cc9c2e 100644
+> > --- a/tools/testing/selftests/net/.gitignore
+> > +++ b/tools/testing/selftests/net/.gitignore
+> > @@ -25,6 +25,7 @@ rxtimestamp
+> >  sk_bind_sendto_listen
+> >  sk_connect_zero_addr
+> >  socket
+> > +so_incoming_cpu
+> >  so_netns_cookie
+> >  so_txtime
+> >  stress_reuseport_listen
+> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> > index 2a6b0bc648c4..ba57e7e7dc86 100644
+> > --- a/tools/testing/selftests/net/Makefile
+> > +++ b/tools/testing/selftests/net/Makefile
+> > @@ -70,6 +70,7 @@ TEST_PROGS += io_uring_zerocopy_tx.sh
+> >  TEST_GEN_FILES += bind_bhash
+> >  TEST_GEN_PROGS += sk_bind_sendto_listen
+> >  TEST_GEN_PROGS += sk_connect_zero_addr
+> > +TEST_GEN_PROGS += so_incoming_cpu
+> >  
+> >  TEST_FILES := settings
+> >  
+> > diff --git a/tools/testing/selftests/net/so_incoming_cpu.c b/tools/testing/selftests/net/so_incoming_cpu.c
+> > new file mode 100644
+> > index 000000000000..0ee0f2e393eb
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/net/so_incoming_cpu.c
+> > @@ -0,0 +1,148 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Copyright Amazon.com Inc. or its affiliates. */
+> > +#define _GNU_SOURCE
+> > +#include <sched.h>
+> > +
+> > +#include <netinet/in.h>
+> > +#include <sys/socket.h>
+> > +#include <sys/sysinfo.h>
+> > +
+> > +#include "../kselftest_harness.h"
+> > +
+> > +#define CLIENT_PER_SERVER	32 /* More sockets, more reliable */
+> > +#define NR_SERVER		self->nproc
+> > +#define NR_CLIENT		(CLIENT_PER_SERVER * NR_SERVER)
+> > +
+> > +FIXTURE(so_incoming_cpu)
+> > +{
+> > +	int nproc;
+> > +	int *servers;
+> > +	union {
+> > +		struct sockaddr addr;
+> > +		struct sockaddr_in in_addr;
+> > +	};
+> > +	socklen_t addrlen;
+> > +};
+> > +
+> > +FIXTURE_SETUP(so_incoming_cpu)
+> > +{
+> > +	self->nproc = get_nprocs();
+> > +	ASSERT_LE(2, self->nproc);
+> > +
+> > +	self->servers = malloc(sizeof(int) * NR_SERVER);
+> > +	ASSERT_NE(self->servers, NULL);
+> > +
+> > +	self->in_addr.sin_family = AF_INET;
+> > +	self->in_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+> > +	self->in_addr.sin_port = htons(0);
+> > +	self->addrlen = sizeof(struct sockaddr_in);
+> > +}
+> > +
+> > +FIXTURE_TEARDOWN(so_incoming_cpu)
+> > +{
+> > +	int i;
+> > +
+> > +	for (i = 0; i < NR_SERVER; i++)
+> > +		close(self->servers[i]);
+> > +
+> > +	free(self->servers);
+> > +}
+> > +
+> > +void create_servers(struct __test_metadata *_metadata,
+> > +		    FIXTURE_DATA(so_incoming_cpu) *self)
+> > +{
+> > +	int i, fd, ret;
+> > +
+> > +	for (i = 0; i < NR_SERVER; i++) {
+> > +		fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+> > +		ASSERT_NE(fd, -1);
+> > +
+> > +		ret = setsockopt(fd, SOL_SOCKET, SO_INCOMING_CPU, &i, sizeof(int));
+> > +		ASSERT_EQ(ret, 0);
+> > +
+> > +		ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &(int){1}, sizeof(int));
+> > +		ASSERT_EQ(ret, 0);
+> > +
+> > +		ret = bind(fd, &self->addr, self->addrlen);
+> > +		ASSERT_EQ(ret, 0);
+> > +
+> > +		if (i == 0) {
+> > +			ret = getsockname(fd, &self->addr, &self->addrlen);
+> > +			ASSERT_EQ(ret, 0);
+> > +		}
+> > +
+> > +		/* We don't use CLIENT_PER_SERVER here not to block
+> > +		 * this test at connect() if SO_INCOMING_CPU is broken.
+> > +		 */
+> > +		ret = listen(fd, NR_CLIENT);
+> > +		ASSERT_EQ(ret, 0);
+> > +
+> > +		self->servers[i] = fd;
+> > +	}
+> > +}
+> > +
+> > +void create_clients(struct __test_metadata *_metadata,
+> > +		    FIXTURE_DATA(so_incoming_cpu) *self)
+> > +{
+> > +	cpu_set_t cpu_set;
+> > +	int i, j, fd, ret;
+> > +
+> > +	for (i = 0; i < NR_SERVER; i++) {
+> > +		CPU_ZERO(&cpu_set);
+> > +
+> > +		CPU_SET(i, &cpu_set);
+> > +		ASSERT_EQ(CPU_COUNT(&cpu_set), 1);
+> > +		ASSERT_NE(CPU_ISSET(i, &cpu_set), 0);
+> > +
+> > +		/* Make sure SYN will be processed on the i-th CPU
+> > +		 * and finally distributed to the i-th listener.
+> > +		 */
+> > +		sched_setaffinity(0, sizeof(cpu_set), &cpu_set);
+> > +		ASSERT_EQ(ret, 0);
+> > +
+> > +		for (j = 0; j < CLIENT_PER_SERVER; j++) {
+> > +			fd  = socket(AF_INET, SOCK_STREAM, 0);
+> > +			ASSERT_NE(fd, -1);
+> > +
+> > +			ret = connect(fd, &self->addr, self->addrlen);
+> > +			ASSERT_EQ(ret, 0);
+> > +
+> > +			close(fd);
+> > +		}
+> > +	}
+> > +}
+> > +
+> > +void verify_incoming_cpu(struct __test_metadata *_metadata,
+> > +			 FIXTURE_DATA(so_incoming_cpu) *self)
+> > +{
+> > +	int i, j, fd, cpu, ret, total = 0;
+> > +	socklen_t len = sizeof(int);
+> > +
+> > +	for (i = 0; i < NR_SERVER; i++) {
+> > +		for (j = 0; j < CLIENT_PER_SERVER; j++) {
+> > +			/* If we see -EAGAIN here, SO_INCOMING_CPU is broken */
+> > +			fd = accept(self->servers[i], &self->addr, &self->addrlen);
+> > +			ASSERT_NE(fd, -1);
+> > +
+> > +			ret = getsockopt(fd, SOL_SOCKET, SO_INCOMING_CPU, &cpu, &len);
+> > +			ASSERT_EQ(ret, 0);
+> > +			ASSERT_EQ(cpu, i);
+> > +
+> > +			close(fd);
+> > +			total++;
+> > +		}
+> > +	}
+> > +
+> > +	ASSERT_EQ(total, NR_CLIENT);
+> > +	TH_LOG("SO_INCOMING_CPU is very likely to be "
+> > +	       "working correctly with %d sockets.", total);
+> > +}
+> > +
+> > +TEST_F(so_incoming_cpu, test1)
+> > +{
+> > +	create_servers(_metadata, self);
+> > +	create_clients(_metadata, self);
+> > +	verify_incoming_cpu(_metadata, self);
+> > +}
 > 
-> It should, see REFCOUNT_ADD_UAF in include/linux/refcount.h.
+> I think it would be nicer if you could add more test-cases, covering
+> e.g.:
+> - set SO_INCOMING_CPU after SO_REUSE_PORT, 
+> - initially including a socket without SO_INCOMING_CPU and the removing
+> it from the soreuseport set
 
-Ahh, right you are, fair enough and thanks for hand holding and pointing
-me directly at the relevant code. I now agree that the warns on the
-destroyed field are just redundant.
+I agree that, actually I did the tests with python :)
+I'll add the cases in the next spin.
 
-> > > To be clear, I don't mind if you want to improve this, it's certainly
-> > > a mess right now. Tests can't even run in parallel easily because it's
-> > > global. Testing like an actually allocated object might be a good way
-> > > to simulate a real scenario. And I totally agree that having a real
-> > > example is useful to people who want to add support for more kptrs.
-> >
-> > Ok, let me update the tests to do two things then:
-> >
-> > 1. Add a new test kfunc called bpf_kfunc_call_test_alloc() which returns
-> >    a dynamically allocated instance of a prog_test_ref_kfunc *. This is
-> >    similar in intention to bpf_xdp_ct_alloc().
-> > 2. Update bpf_kfunc_call_test_acquire() and
-> >    bpf_kfunc_call_test_release() to take a trusted pointer to that
-> >    allocated prog_test_ref_kfunc *.
-> 
-> This should work, but you would have to go through a lot of tests,
-> sadly I assumed it is global in a lot of places to make testing easier
-> (e.g. observing count after releasing by doing p->next, which gave me
-> a PTR_TO_BTF_ID that is preserved after release).
-> Some other way would have to be found to do the same thing.
-
-Hmmm, ok, let me spend a bit of time trying to make all of this dynamic.
-If it becomes clear that it's too much of a PITA, I might just drop the
-patch; especially considering that your __rcu kptr work will address
-what I was really initially trying to fix (which is that the kptr_get
-pattern used in the test would likely be racy for a real kfunc). Or if
-we want to, we could keep what it has now, but I could just update
-delayed_destroy_test_ref_struct() to do nothing other than
-WARN_ON_ONCE() and remove the extra warns for
-prog_test_struct.destroyed. We can make a final call when I send out v3.
-
-> > 3. Keep the other changes which e.g. use RCU in
-> >    bpf_kfunc_call_test_kptr_get() to synchronize on getting the kptr.
-> >    Once the __rcu kptr variant is landed we can get rid of
-> >    bpf_kfunc_call_test_kptr_get() and make bpf_kfunc_call_test_acquire()
-> >    require an __rcu pointer.
-> >
-> 
-> In the case of RCU I don't plan on passing the rcu pointer to acquire
-> functions, but rather kptr_get stops taking pointer to pointer. I.e.
-> in your point 3, kptr_get does what you want _acquire to do. It takes
-> an rcu protected pointer to an object and safely increments its count.
-
-Oh, ok. So the idea is that the acquire function takes a normal trusted
-pointer, and kptr_get takes an RCU protected kptr (so it would still
-have to do refcount_inc_not_zero()). Makes sense.
-
-> > Continuing on point (3) above, we should _probably_ also have an example
-> > for an object that isn't RCU-protected? I imagine that we don't want to
-> > get rid of KF_KPTR_GET entirely once we have __rcu pointers because some
-> > kptr_get() implementations may synchronize in other ways, such as with
-> > spinlocks or whatever. Let's leave this until after __rcu lands though.
-> >
-> 
-> I think it's unlikely kptr_get can work without it, spinlocks may be
-> required internally (e.g. to inspect the object key/generation in
-> SLAB_TYPESAFE_BY_RCU case without races) but that goes on top of RCU
-> protection. But yes, it depends, maybe it will work for some special
-> cases. Though I don't think it's worth adding an example for the
-> uncommon case.
-
-Yeah, let's leave it off for now until we have a concrete use case in
-the kernel that we want to mirror in a testcase.
+Thank you.
