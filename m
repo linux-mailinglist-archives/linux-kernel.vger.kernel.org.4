@@ -2,202 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339E25FB476
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE2B5FB48C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJKOWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        id S229739AbiJKO2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiJKOWJ (ORCPT
+        with ESMTP id S229514AbiJKO2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:22:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293E91D67E;
-        Tue, 11 Oct 2022 07:22:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A59FC6119E;
-        Tue, 11 Oct 2022 14:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE813C433D6;
-        Tue, 11 Oct 2022 14:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665498127;
-        bh=UnTADQlb1c9sMBi6JfkWaS5g/Z+SghRtz6zwEjj/c/c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MGtgzeVxQqEOw4QNbLspA4olIz6C7JwyqfbtZxRJG0BUivMG16gJ62068dBmONy06
-         xjPvGfwZzKd7CZSQiTMwGdaxoVjWfnViwMCrzKYDxqIOJ6SdcQtb7dlT2TLcDvKBuw
-         sdk7vi8CEpz6qoQUHjH94ASMTO2htEn4G9bNy84g=
-Date:   Tue, 11 Oct 2022 16:22:50 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
-        f.fainelli@gmail.com
-Subject: Re: [PATCH v6] MIPS: Expose prid and globalnumber to sysfs
-Message-ID: <Y0V8OlvdqADjCS9I@kroah.com>
-References: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
+        Tue, 11 Oct 2022 10:28:17 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3AE95ACE;
+        Tue, 11 Oct 2022 07:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665498495; x=1697034495;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tDN8pO8vkYfi7aIzDYMNy5iW/C9igDir6WIyp4TE2LA=;
+  b=cotYo2t6Ne9FNYFfNrWKnm4db6LluQCGULKVaJ9ShTzpdpqVMIiHA27E
+   J1TlMTwF7ROnzimPkxnbp7hrNKM9GeI/hC9WSWe7cJT9hQPTnwRFfDYaH
+   QiImui79lUbFjSB5juSO9qSAMd4n3WS7wmxa2l/9VHjk8iEOkMB66I6m6
+   Y3VVr8NnM5VwIB2saL+bcQTAylfEsO528e1LG3ZuHL6/ZEprltnvEOvPe
+   E9EJfLzkMfTJMF7zaEwRnjBhipmhYmNHeaQ0zdW7QmmRV8ZYweK4T1STs
+   s2gB0vUUD+Tm3igz+aqv1g4wd9sSFnIeonhMIJzjx51hs4akTJJUuD731
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="284245094"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="284245094"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 07:28:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="628713444"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="628713444"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Oct 2022 07:28:10 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oiGEq-005LfS-1Y;
+        Tue, 11 Oct 2022 17:28:08 +0300
+Date:   Tue, 11 Oct 2022 17:28:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
+Message-ID: <Y0V9eJX7a0fe6EfX@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+ <Y0SyVwjDl7NGfTPn@sol>
+ <CAHp75Vf4oS8g0zxgismtLrzsJ7AE-bdMEq+GAzx2=Mwnhuk3UA@mail.gmail.com>
+ <Y0V0IXF3sASTGdMU@smile.fi.intel.com>
+ <Y0V57gI75ik4ki3A@sol>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y0V57gI75ik4ki3A@sol>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:09:51PM +0100, Jiaxun Yang wrote:
-> Some application would like to know precise model and rev of processor
-> to do errata workaround or optimization.
-> 
-> Expose them in sysfs as:
-> /sys/devices/system/cpu/cpuX/regs/identification/prid
-> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> 
-> Reusing AArch64 CPU registers directory.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> v2: Drop static qualifier for kobj (gregkh)
-> v3: Use kzalloc to allocate struct cpuregs.
->     note: When Greg mentioned about static I was thinking about
->     static qualifier of percpu variable. After reading documents
->     again it turns out kobjs should be allocated at runtime. Arm64's
->     cpuinfo kobj is also on a percpu variable... I guess that was a
->     intentional use?
-> v4: Properly handle err of kobj creation. (gregkh)
-> v5: Drop invalid kfree
-> v6: Correct offline routine, use kobject_put
-> ---
->  .../ABI/testing/sysfs-devices-system-cpu      |  9 ++
->  arch/mips/kernel/topology.c                   | 97 +++++++++++++++++++
->  2 files changed, 106 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> index 5bf61881f012..9dea45ad5a22 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> @@ -512,6 +512,15 @@ Description:	information about CPUs heterogeneity.
->  
->  		cpu_capacity: capacity of cpuX.
->  
-> +What:		/sys/devices/system/cpu/cpuX/regs/identification/prid
-> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-> +Date:		October 2022
-> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
-> +Description:	MIPS CPU registers
-> +
-> +		'identification' directory exposes the Processor ID and Global Number
-> +		registers for identifying model and revision of the CPU.
-> +
->  What:		/sys/devices/system/cpu/vulnerabilities
->  		/sys/devices/system/cpu/vulnerabilities/meltdown
->  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
-> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
-> index 9429d85a4703..85588ffd6bac 100644
-> --- a/arch/mips/kernel/topology.c
-> +++ b/arch/mips/kernel/topology.c
-> @@ -5,6 +5,8 @@
->  #include <linux/node.h>
->  #include <linux/nodemask.h>
->  #include <linux/percpu.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/smp.h>
->  
->  static DEFINE_PER_CPU(struct cpu, cpu_devices);
->  
-> @@ -26,3 +28,98 @@ static int __init topology_init(void)
->  }
->  
->  subsys_initcall(topology_init);
-> +
-> +static struct kobj_type cpuregs_kobj_type = {
-> +	.sysfs_ops = &kobj_sysfs_ops,
-> +};
-> +
-> +struct cpureg {
-> +	struct kobject kobj;
-> +	struct cpuinfo_mips *info;
-> +};
-> +static DEFINE_PER_CPU(struct cpureg *, cpuregs);
-> +
-> +#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
-> +#define CPUREGS_ATTR_RO(_name, _field)						\
-> +	static ssize_t _name##_show(struct kobject *kobj,			\
-> +			struct kobj_attribute *attr, char *buf)			\
-> +	{									\
-> +		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
-> +										\
-> +		return sysfs_emit(buf, "0x%08x\n", info->_field);	\
-> +	}									\
-> +	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
-> +
-> +CPUREGS_ATTR_RO(prid, processor_id);
-> +CPUREGS_ATTR_RO(globalnumber, globalnumber);
-> +
-> +static struct attribute *cpuregs_id_attrs[] = {
-> +	&cpuregs_attr_prid.attr,
-> +	&cpuregs_attr_globalnumber.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group cpuregs_attr_group = {
-> +	.attrs = cpuregs_id_attrs,
-> +	.name = "identification"
-> +};
-> +
-> +static int cpuregs_cpu_online(unsigned int cpu)
-> +{
-> +	int rc;
-> +	struct device *dev;
-> +	struct cpureg *reg;
-> +
-> +	dev = get_cpu_device(cpu);
-> +	if (!dev) {
-> +		rc = -ENODEV;
-> +		goto out;
-> +	}
-> +	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
-> +	if (!reg) {
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +	reg->info = &cpu_data[cpu];
-> +
-> +	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
-> +					&dev->kobj, "regs");
-> +	if (rc)
-> +		goto out_kobj;
-> +	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
-> +	if (rc)
-> +		goto out_kobj;
-> +
-> +	return 0;
-> +out_kobj:
-> +	kobject_put(&reg->kobj);
-> +out:
-> +	return rc;
-> +}
-> +
-> +static int cpuregs_cpu_offline(unsigned int cpu)
-> +{
-> +	struct cpureg *reg = per_cpu(cpuregs, cpu);
-> +
-> +	if (!reg)
-> +		return -ENODEV;
-> +	sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
-> +	kobject_put(&reg->kobj);
+On Tue, Oct 11, 2022 at 10:13:02PM +0800, Kent Gibson wrote:
+> On Tue, Oct 11, 2022 at 04:48:17PM +0300, Andy Shevchenko wrote:
+> > On Tue, Oct 11, 2022 at 11:05:42AM +0300, Andy Shevchenko wrote:
+> > > On Tue, Oct 11, 2022 at 3:02 AM Kent Gibson <warthog618@gmail.com> wrote:
+> > > > On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
 
-You did not test this code :(
+...
 
-Please do so, and also exercise the cpu-remove path and fix up all the
-errors that happen there.
+> > > > > -#include <linux/gpio.h>
+> > > > >  #include <linux/gpio/driver.h>
+> > > > > +#include <linux/gpio.h>
+> > > > > +#include <linux/hte.h>
+> > > >
+> > > > Ok with the hte re-order.
+> > > >
+> > > > But moving the gpio subsystem header after the gpio/driver is not
+> > > > alphabetical ('.' precedes '/') and it read better and made more sense
+> > > > to me the way it was.
+> > > 
+> > > I see, I guess this is vim sort vs shell sort. Strange, they should
+> > > follow the locale settings...
+> > 
+> > I have checked, the shell and vim sort gave the same result as in this patch.
+> > 
+> 
+> The original order (sans hte.h) was done by VSCode Sort Lines Ascending,
+> and that still returns the same result.  That matches what I would
+> expect to see given the content of the text.
+> 
+> And for me vim also gives the original order.
+> 
+> Just to confirm - is '.' 0x2e and '/' 0x2f in your universe?
 
-thanks,
+$ LC_COLLATE=C sort test1.txt
+#include <linux/gpio.h>
+#include <linux/gpio/driver.h>
 
-greg k-h
+$ LC_COLLATE= sort test1.txt
+#include <linux/gpio/driver.h>
+#include <linux/gpio.h>
+
+I guess this explains the difference. Currently I have en_US.UTF-8.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
