@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79B25FB3E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB0D5FB3D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiJKNv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
+        id S229517AbiJKNvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJKNvw (ORCPT
+        with ESMTP id S229452AbiJKNvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:51:52 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EAF57BED
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:51 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so6205088pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:51 -0700 (PDT)
+        Tue, 11 Oct 2022 09:51:36 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A7276777
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:33 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d6so21167059lfs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:51:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3TOgt2vEpRrLSiB3atQwtzFhnMOsulmIzIgqeIq1nk0=;
-        b=XSb6i3VpfNyWAq4vxeUCmNYS7AvXFIp/Ceze2c/cL8iQpUxCtxkVNBw2UldHR/Nb5u
-         kwLcAWt6lHquxP8aj/eUlZ/zDkyYY7dzpIT47x/EVDoBDV4DhMrRDDxtvf2E4YZ29l+G
-         Z5WoPgie9IxJsvL4kWnLCr9FjkgclgRSiHL+bCxKZP+lsYcjiOZihOUdqE0/rm/NBQkI
-         CUx/bD4Un8LxSB+Gkw8W01hphPoidR8cBl3oY/Db4Lwi1K/VTMw8BPWQwP5DNwsI0QMu
-         glgqxbm0xMb8ILcuMHWpQ9sdNmsIN+TIVUkfWvRB0nkIKHOuIhmkZiFKgBY63l9yfDb7
-         ig7Q==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o7V++WRSPzaIDtGPEYYIIiLOO8ku68lRU6L7fLLgI3Q=;
+        b=Sea8heNcir0vp/8tNk/nbJMEcljg/b+OQ4OrKIO9cgl39teEP2kb1+RAz/zlL6XlBg
+         yVJYQJJv7wixN4//iWeHIS3sfH7V17twJU32hAZKOXAOZ8lFw/GuiOud8Jh/gRkWYH8U
+         ix5GPIGkdPYflocYiLcDn9NvqEK0IvEIBwJ2QlCDQGuKezyn6U2xOAIDS2uhZSof9wii
+         M5iI5N24h9SXbpk37JtIrRJT1T3VMTs/ljewXxDWzy/U5aTnbWksLqoQNdk4G+FcQVqH
+         LXAyXLS67zNhWp82cPngvQShSVjlDWDgBwfW/jRS6ljlsXtpNTnVUpoFRbDw7qO/R1tE
+         RhwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3TOgt2vEpRrLSiB3atQwtzFhnMOsulmIzIgqeIq1nk0=;
-        b=un5cEiz73DVvbAoB/F3R6ECapJCaErtd0+bjd3UUYhuz9rdzZIsaawXA9MEkjngGtK
-         0sKa6qDEgtYkvKRN0jprnpU7ocEI+yqXZUPJ5Tpa9xD68JVRqw+2mr4Gdw7HB2CtZAfb
-         S8RK8MtG82PsaKAyJ/SHbt5TDP6/WjeaJzX15z2hraFTgDtIxwFjl3/giHWmk3QVzMBg
-         GtGVJigNfTUGmgOGQyeMZIql5uib29kUOMlQVUZc6w/K3klLTmAq4eMFtDN6f1u+MoAm
-         RFxhj51zfTtfLk6n+rbXK8bUpbL7OsjOMiSH+NHMiS/cDNKUZ/rhcg5UsvDGF242uWaK
-         oWIA==
-X-Gm-Message-State: ACrzQf2V49BQXN88jM5xX+afH3hRgaOKzZ34MqCJiMq8qch5FV70CQry
-        xuPb4tNlUTFYKqz0A5CXYy+dwex2AhNqNZ1cxFPz4g==
-X-Google-Smtp-Source: AMsMyM6ZI1+Czzvdy2KBVZyE7SMw4ytpcTgrfacFlkhl48aF/wAR+uS3VQEg38HqWMe9SsU1lJ1BKumb3Y663OEQai0=
-X-Received: by 2002:a17:90a:7b8c:b0:20b:1f3b:f6fd with SMTP id
- z12-20020a17090a7b8c00b0020b1f3bf6fdmr26702369pjc.202.1665496310708; Tue, 11
- Oct 2022 06:51:50 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7V++WRSPzaIDtGPEYYIIiLOO8ku68lRU6L7fLLgI3Q=;
+        b=z3V5Ta2fFHDBaIKH/amVuwtoM0ZyAuPoQTfMttNB6uuro+MMVaWt36vFGmQZXlwERl
+         AY+MN2CJoSIyaraYfzGlpOTOTH+mxGmwPP9GE8eTAww+nq3VRT0AcKKjU1/5QvMd2sDj
+         jrL0biuQiQwAByd0nhJzfi+EdolUce4Awt3oSdKyQFUshSzjetNHN5wo2vGyzU9tnvrH
+         IsGQKk5fKvjFc3MY9fhE4U1enWiZjkQF/r/dI5p/qYr/LSyIg3osRf2ojPaUEYXSM4Mx
+         cQrJ3r0sl4JV+Lk0nI74eWw2v3JFtoCjRMvKE7Mlv1GhXCLujdIUkKKRA0bqDydGunDv
+         P/dA==
+X-Gm-Message-State: ACrzQf3ZnDwXHdnxfqE7EcEwyK12D+CdOPPhsQkPUZ48ZEbx+VYPOuet
+        iTVERKcwWgX7+9DGA2DiQHKoEA==
+X-Google-Smtp-Source: AMsMyM5+Em2WuyFeI+AHDoe3/21E5mF1yAld+l6gsPiQ+mJCtYUt2LN74Yv02SdFHeaJYgXN8CPMIw==
+X-Received: by 2002:a05:6512:3989:b0:4a2:7d73:495a with SMTP id j9-20020a056512398900b004a27d73495amr8616989lfu.492.1665496292251;
+        Tue, 11 Oct 2022 06:51:32 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id z2-20020a05651c022200b0026dde66326dsm2097544ljn.109.2022.10.11.06.51.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 06:51:31 -0700 (PDT)
+Message-ID: <d6a6c8f9-9404-62c6-e7c9-77c21084c2fb@linaro.org>
+Date:   Tue, 11 Oct 2022 16:51:31 +0300
 MIME-Version: 1.0
-References: <20221011104935.10980-1-wenchao.chen666@gmail.com>
-In-Reply-To: <20221011104935.10980-1-wenchao.chen666@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 11 Oct 2022 15:51:13 +0200
-Message-ID: <CAPDyKFqG=QV3Oitot=w936wZL-zOE_6qdERxHZOjkTix6m3DLQ@mail.gmail.com>
-Subject: Re: [PATCH V2] mmc: sdhci-sprd: Fix minimum clock limit
-To:     Wenchao Chen <wenchao.chen666@gmail.com>
-Cc:     adrian.hunter@intel.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        megoo.tang@gmail.com, lzx.stg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 03/13] phy: qcom-qmp-combo: drop unused in-layout
+ configuration
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221011131416.2478-1-johan+linaro@kernel.org>
+ <20221011131416.2478-4-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221011131416.2478-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,43 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 at 12:49, Wenchao Chen <wenchao.chen666@gmail.com> wrote:
->
-> From: Wenchao Chen <wenchao.chen@unisoc.com>
->
-> v1 -> v2:
->  - Address Adrian's suggestions
->
-> Our controller supports 100K. During the test, it was found that mmc_rescan
-> failed to scan the card at 400K, and did not try 300K, 200K, and 100K. After
-> modifying the minimum clock limit to 100K, the card scan was successful
->
-> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-> Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host controller")
-
-Applied for fixes, thanks!
-
-Kind regards
-Uffe
-
+On 11/10/2022 16:14, Johan Hovold wrote:
+> The QMP combo PHY driver does not use the "in-layout" configuration
+> macro to configure registers that are typically accessed using
+> "regs_layout" arrays (e.g. QPHY_START_CTRL) so drop this unused
+> feature.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  drivers/mmc/host/sdhci-sprd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
-> index 46c55ab4884c..b92a408f138d 100644
-> --- a/drivers/mmc/host/sdhci-sprd.c
-> +++ b/drivers/mmc/host/sdhci-sprd.c
-> @@ -309,7 +309,7 @@ static unsigned int sdhci_sprd_get_max_clock(struct sdhci_host *host)
->
->  static unsigned int sdhci_sprd_get_min_clock(struct sdhci_host *host)
->  {
-> -       return 400000;
-> +       return 100000;
->  }
->
->  static void sdhci_sprd_set_uhs_signaling(struct sdhci_host *host,
-> --
-> 2.17.1
->
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 54 ++++++-----------------
+>   1 file changed, 14 insertions(+), 40 deletions(-)
+> 
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+-- 
+With best wishes
+Dmitry
+
