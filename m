@@ -2,289 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76705FB718
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A470B5FB729
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJKP2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S229716AbiJKP3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbiJKP1s (ORCPT
+        with ESMTP id S231848AbiJKP2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:27:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312CAAC386;
-        Tue, 11 Oct 2022 08:18:31 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BF7Kbb024309;
-        Tue, 11 Oct 2022 15:17:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=aX4BDwGXtmjSFLoZblRZbyxfJQsKH9xJCvc0H0bEub0=;
- b=MHmO7yDiT5ElVYY2nc3w3My0jxZiHWk8QnObkUx+I/Sjnw2Sy0N1v3WFsLgUSNVZ70+v
- jqObBpKCSmf61KfBDB0J38BZ0Xh02dl3Gvs9YShxCTe6C5ssVtMEas2dTYQW6i85y4MG
- 2bTmkttfWp7MJ+8J14zhCEv8ywzk/G82SmMPreK/LHtipe0xWU2lsYdrwShNzaiQ+Edv
- cR2EiaqfBOeouQa+X+truvMW1taOIQrVnXRaYvza/wKehEOfbLG5HpRSPX0/mCSAWyJC
- 87/GkUT1XGQGPGkvkLu9uiIcSyCge3u7/nnhwDi8AlBBnB1i6a2INpnvCEET3eSxvN8Y 8Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k58t1n6d9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 15:17:01 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29BF7qtn027496;
-        Tue, 11 Oct 2022 15:17:01 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k58t1n6c3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 15:17:01 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29BF6QRj015220;
-        Tue, 11 Oct 2022 15:16:58 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3k30fjcnx1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 15:16:58 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29BFGt1Z32768272
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Oct 2022 15:16:55 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 899DFA405C;
-        Tue, 11 Oct 2022 15:16:55 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CBACA405B;
-        Tue, 11 Oct 2022 15:16:55 +0000 (GMT)
-Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Oct 2022 15:16:54 +0000 (GMT)
-Message-ID: <b6ac5c44917390b9a5cc7ebb87a089568279c459.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 09/11] s390: mm: Convert to GENERIC_IOREMAP
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        christophe.leroy@csgroup.eu, David.Laight@ACULAB.COM,
-        shorne@gmail.com, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Date:   Tue, 11 Oct 2022 17:16:54 +0200
-In-Reply-To: <20221009103114.149036-10-bhe@redhat.com>
-References: <20221009103114.149036-1-bhe@redhat.com>
-         <20221009103114.149036-10-bhe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+        Tue, 11 Oct 2022 11:28:43 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A9D10326B;
+        Tue, 11 Oct 2022 08:19:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2D2A55801D6;
+        Tue, 11 Oct 2022 11:18:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 11 Oct 2022 11:18:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665501514; x=1665505114; bh=IYkyi6bmsK
+        t19Dqbw/69YsSocwZmqtEOH4a98ozex4I=; b=dZTgeZnKBYo3dq0eZF2BIVbtIJ
+        QjpA/XJTZeNs/dEPnxZxhaU9AYifrGwG/fVAnCqUQhH4kyHqs7848VlCExTOgiA2
+        V+TDb+DNdTrbgWIbuiemWyR4WMeQriYxfuy97Uws9tOXNHM9YBZq82fMz58GjcX+
+        L6YoHte1fy4W0GObeYZYjrWuMkS+7Y9VjOtl1UFiOBWWTWVTQK9EnlRtZge5k/3D
+        LKUtZkTwtRGPUmHAHtIZUpm5gKBJvaYTnj7z9URcXh+cXLYNMf5FeLT2e6xdihX3
+        yQrWKb1ibHleWOcczhATRwGRbkZlorA3UrbeeVgG6MFJhq5KajBtoOi2fFGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665501514; x=1665505114; bh=IYkyi6bmsKt19Dqbw/69YsSocwZm
+        qtEOH4a98ozex4I=; b=f5ZKyRO/Mr2PDSwAokn+Kk/z0W/LrmXWcHvrVgRmRplW
+        otVNmjWJv03Y6Mbrt78ke8l9N3pNzQbGK2svUN7Pp5du9VDiFm/rBlP6cU5f6ihw
+        LsqTLxbWSGYFOftFrHXGw6PqWLjX74I7vLiVggzWvs2bRGsxUoaEtYwxO5oa1uby
+        KyqB5GQHRHTRoeMcit0NOqxuAb9+1pOdpj3Znl0UrHPdDUMV5KSP0JEn9ZzJwR6L
+        3PyyVPWRImGVH8TBCRzQYHWBtGvj7QTp5ajCTFORQJGn0ZUgsbckcPTVk7/q59lU
+        B1kQsCvgveSOJCWQJHTu+GbomebJAQtKb4xXXFz8mg==
+X-ME-Sender: <xms:R4lFYyFYm92oWILoBssqVAoPMy4tWk48CZIE6TR_vaQPs1CqdRG8mQ>
+    <xme:R4lFYzVItBA-DAn63dTIQl7cCKIxpb1tZc34n6Kmcpl-GLNg_CNOjnLugOP5L492E
+    4U3xc8VqVDUIeJFGRw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnheptdetfeekudeigeegheeujeeuhedtteffheelteegveevudfgvdekkeffleef
+    gffgnecuffhomhgrihhnpehinhhtvghlrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:SIlFY8K03pMcjyawGrEJIRBx34B-CHkEjEOuYR82HSCCURrq2tGc5Q>
+    <xmx:SIlFY8Gu9C94SxV0lUnvLI7D22uAHB1_EgmpxmHPvNlatfFI2LtX-Q>
+    <xmx:SIlFY4WSX_Ti2r75YrxaCxFGKQOJmk0ejX6NWQLvW-aAM3Qo8C0osw>
+    <xmx:SYlFYzY_hrXArQ2t--cmSPcS-aA04jQH5ODj_3YvuTJfROPRsaV_hkagJew>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E3E67B60086; Tue, 11 Oct 2022 11:18:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YJnXTHy0uGOqENjmA5h8EJhYAqEww7ZR
-X-Proofpoint-GUID: 4GiiOhBtnJ99UoJEwGzWIrV6d3svBqhI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210110086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <08db7754-ecd8-4425-875b-4f2b44497f6b@app.fastmail.com>
+In-Reply-To: <20221011031843.960217-1-masahiroy@kernel.org>
+References: <20221011031843.960217-1-masahiroy@kernel.org>
+Date:   Tue, 11 Oct 2022 17:18:10 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-ia64@vger.kernel.org,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Miguel Ojeda" <ojeda@kernel.org>, "Len Brown" <lenb@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Terrell" <terrelln@fb.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Robert Moore" <robert.moore@intel.com>,
+        "Tom Rix" <trix@redhat.com>, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [RFC PATCH] Remove Intel compiler support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-10-09 at 18:31 +0800, Baoquan He wrote:
-> By taking GENERIC_IOREMAP method, the generic ioremap_prot() and
-> iounmap() are visible and available to arch. Arch only needs to
-> provide implementation of arch_ioremap() or arch_iounmap() if there's
-> arch specific handling needed in its ioremap() or iounmap(). This
-> change will simplify implementation by removing duplicated codes with
-> generic ioremap() and iounmap(), and has the equivalent functioality
-> as before.
-> 
-> For s390, add hooks arch_ioremap() and arch_iounmap() for s390's special
-> operation when ioremap() and iounmap(), then ioremap_[wc|wt]() are
-> converted to use ioremap_prot() from GENERIC_IOREMAP.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
+On Tue, Oct 11, 2022, at 5:18 AM, Masahiro Yamada wrote:
+> include/linux/compiler-intel.h had no update in the past 3 years.
+>
+> We often forget about the third C compiler to build the kernel.
+>
+> For example, commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
+> only mentioned GCC and Clang.
+>
+> init/Kconfig defines CC_IS_GCC and CC_IS_CLANG but not CC_IS_ICC,
+> and nobody has reported any issue.
+>
+> I guess the Intel Compiler support is broken, and nobody is caring
+> about it.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
-> v2->v3:
-> - Add code comment inside arch_ioremap() to help uderstand the
->   obsucre code. Christoph suggested this, Niklas provided the
->   paragraph of text.
-> 
->  arch/s390/Kconfig          |  1 +
->  arch/s390/include/asm/io.h | 25 +++++++++------
->  arch/s390/pci/pci.c        | 65 ++++++++------------------------------
->  3 files changed, 30 insertions(+), 61 deletions(-)
-> 
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index 318fce77601d..c59e1b25f59d 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -135,6 +135,7 @@ config S390
->  	select GENERIC_SMP_IDLE_THREAD
->  	select GENERIC_TIME_VSYSCALL
->  	select GENERIC_VDSO_TIME_NS
-> +	select GENERIC_IOREMAP
+>
+> I am sending this to Linus and the x86 maintainers with RFC.
+> If somebody is still using ICC, please speak up!
 
-I think you should add the "if PCI" from the diff in your last mail to
-this patch.
-
->  	select HAVE_ALIGNED_STRUCT_PAGE if SLUB
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_JUMP_LABEL
-> diff --git a/arch/s390/include/asm/io.h b/arch/s390/include/asm/io.h
-> index e3882b012bfa..db201563baa6 100644
-> --- a/arch/s390/include/asm/io.h
-> +++ b/arch/s390/include/asm/io.h
-> @@ -22,11 +22,22 @@ void unxlate_dev_mem_ptr(phys_addr_t phys, void *addr);
->  
->  #define IO_SPACE_LIMIT 0
->  
-> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
-> -void __iomem *ioremap(phys_addr_t addr, size_t size);
-> -void __iomem *ioremap_wc(phys_addr_t addr, size_t size);
-> -void __iomem *ioremap_wt(phys_addr_t addr, size_t size);
-> -void iounmap(volatile void __iomem *addr);
-> +/*
-> + * I/O memory mapping functions.
-> + */
-> +void __iomem *
-> +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val);
-> +#define arch_ioremap arch_ioremap
-> +
-> +bool arch_iounmap(void __iomem *addr);
-> +#define arch_iounmap arch_iounmap
-> +
-> +#define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL)
-> +
-> +#define ioremap_wc(addr, size)  \
-> +	ioremap_prot((addr), (size), pgprot_val(pgprot_writecombine(PAGE_KERNEL)))
-> +#define ioremap_wt(addr, size)  \
-> +	ioremap_prot((addr), (size), pgprot_val(pgprot_writethrough(PAGE_KERNEL)))
->  
->  static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
->  {
-> @@ -51,10 +62,6 @@ static inline void ioport_unmap(void __iomem *p)
->  #define pci_iomap_wc pci_iomap_wc
->  #define pci_iomap_wc_range pci_iomap_wc_range
->  
-> -#define ioremap ioremap
-> -#define ioremap_wt ioremap_wt
-> -#define ioremap_wc ioremap_wc
-> -
->  #define memcpy_fromio(dst, src, count)	zpci_memcpy_fromio(dst, src, count)
->  #define memcpy_toio(dst, src, count)	zpci_memcpy_toio(dst, src, count)
->  #define memset_io(dst, val, count)	zpci_memset_io(dst, val, count)
-> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> index 73cdc5539384..3c00dc7d79bc 100644
-> --- a/arch/s390/pci/pci.c
-> +++ b/arch/s390/pci/pci.c
-> @@ -244,64 +244,25 @@ void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
->         zpci_memcpy_toio(to, from, count);
->  }
->  
-> -static void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot)
-> +void __iomem *
-> +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
->  {
-> -	unsigned long offset, vaddr;
-> -	struct vm_struct *area;
-> -	phys_addr_t last_addr;
-> -
-> -	last_addr = addr + size - 1;
-> -	if (!size || last_addr < addr)
-> -		return NULL;
-> -
-> +	/*
-> +	 * When PCI MIO instructions are unavailable the "physical" address
-> +	 * encodes a hint for accessing the PCI memory space it represents.
-> +	 * Just pass it unchanged such that ioread/iowrite can decode it.
-> +	 */
->  	if (!static_branch_unlikely(&have_mio))
-> -		return (void __iomem *) addr;
-> -
-> -	offset = addr & ~PAGE_MASK;
-> -	addr &= PAGE_MASK;
-> -	size = PAGE_ALIGN(size + offset);
-> -	area = get_vm_area(size, VM_IOREMAP);
-> -	if (!area)
-> -		return NULL;
-> -
-> -	vaddr = (unsigned long) area->addr;
-> -	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
-> -		free_vm_area(area);
-> -		return NULL;
-> -	}
-> -	return (void __iomem *) ((unsigned long) area->addr + offset);
-> +		return (void __iomem *) *paddr;
-
-nit: no space after the cast
-
-> +	return NULL;
->  }
->  
-> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
-> +bool arch_iounmap(void __iomem *addr)
->  {
-> -	return __ioremap(addr, size, __pgprot(prot));
-> -}
-> -EXPORT_SYMBOL(ioremap_prot);
-> -
-> -void __iomem *ioremap(phys_addr_t addr, size_t size)
-> -{
-> -	return __ioremap(addr, size, PAGE_KERNEL);
-> -}
-> -EXPORT_SYMBOL(ioremap);
-> -
-> -void __iomem *ioremap_wc(phys_addr_t addr, size_t size)
-> -{
-> -	return __ioremap(addr, size, pgprot_writecombine(PAGE_KERNEL));
-> -}
-> -EXPORT_SYMBOL(ioremap_wc);
-> -
-> -void __iomem *ioremap_wt(phys_addr_t addr, size_t size)
-> -{
-> -	return __ioremap(addr, size, pgprot_writethrough(PAGE_KERNEL));
-> -}
-> -EXPORT_SYMBOL(ioremap_wt);
-> -
-> -void iounmap(volatile void __iomem *addr)
-> -{
-> -	if (static_branch_likely(&have_mio))
-> -		vunmap((__force void *) ((unsigned long) addr & PAGE_MASK));
-> +	if (!static_branch_likely(&have_mio))
-> +		return false;
-> +	return true;
->  }
-> -EXPORT_SYMBOL(iounmap);
->  
->  /* Create a virtual mapping cookie for a PCI BAR */
->  static void __iomem *pci_iomap_range_fh(struct pci_dev *pdev, int bar,
-
-Gave this a round of testing on s390 with both the MIO and non-MIO
-cases. I also see you addressed my previous comments and it looks good
-to me. As you showed in the other mail the compile error is a pre
-existing problem so shouldn't influence this change. So assuming you
-add the "if PCI" and the nit above you can add my:
-
-Tested-by: Niklas
-Schnelle <schnelle@linux.ibm.com>
-Reviewed-by: Niklas Schnelle
-<schnelle@linux.ibm.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
 
+I had the same thought a while back and tried to show that it as
+already broken, but I never managed to actually download the compiler
+at the time.
+
+It appears that in the meantime, Intel have completely dropped their
+old codebase and moved to using LLVM[1], so my guess is that with the
+current releases it will behave the same as clang. It might help
+to verify that this is indeed the case if you want to add that
+to the changelog text.
+
+     Arnd
+
+[1] https://www.intel.com/content/www/us/en/developer/articles/technical/adoption-of-llvm-complete-icx.html
