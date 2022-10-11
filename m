@@ -2,119 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1425FBB5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8DB5FBB63
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiJKT3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S229557AbiJKTgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiJKT3L (ORCPT
+        with ESMTP id S229484AbiJKTgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:29:11 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB857915E2;
-        Tue, 11 Oct 2022 12:29:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1197E1F889;
-        Tue, 11 Oct 2022 19:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665516549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nEMUDkYRdfE4vY5mjXK1cb1A3J1MmMksjA+ax0To5uY=;
-        b=DDbvC0NQr4SrpJ4gKZjfv1Ri2c5ylwKBQAvdqzYhtAGEl6S4BUR9V7YCc2JNaHMuke8yva
-        XslR/rbpoZxGKLhSJJ716TTWzhjSVro49rieJx22SEd+uV+Dz9rq5jVrl1p15ls6BuVHoD
-        tYD9YFVmz88Lhtejb5/pR7WGaHHqNSo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 167F4139ED;
-        Tue, 11 Oct 2022 19:29:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zgCVLgPERWNzSAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 11 Oct 2022 19:29:07 +0000
-Date:   Tue, 11 Oct 2022 21:29:05 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Frank van der Linden <fvdl@google.com>
-Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
-Subject: Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-Message-ID: <Y0XEAUD9Ujcu/j8y@dhcp22.suse.cz>
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
- <CAPTztWYTGOb8ZQzfgThqJn+fyi4ZB8=JQQZi5_rUoDhdftKtvg@mail.gmail.com>
- <Y0WE/lEiNvl2ljo1@dhcp22.suse.cz>
- <CAPTztWZZOxtzdEm=wbOiL_VDPJuCaW0XVCvsdRpCHE+ph+5eZQ@mail.gmail.com>
+        Tue, 11 Oct 2022 15:36:46 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3E7814E9;
+        Tue, 11 Oct 2022 12:36:45 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s10so18140912ljp.5;
+        Tue, 11 Oct 2022 12:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a2I8otcqoVQjYNYDGvUGwP30DEIINxDXT7uwZdeQKk4=;
+        b=G0YZBqSE4a25/7HFxTyY8WwaSIiyWXVquLoPlSW1ihrLHtaugKwH2KKJe52cuc65qX
+         cWXSLB0Z7+WBc5HXK9bmf0iIu5QhYschPBpxuVctJVGaLtGONk3y3GYx0kiLNFhe6SMc
+         nO9NkMlEqqLnU9rI3MHwXNDbnf2ckgvdkOo8XaoNNFilWfxNhvL8dOYkHqfA0woVF+wS
+         DbfWJQzdpHQV9XKG1rx3sMExPF0dUOAMsgzmknNLXG3+rpv2D8GUL4PADNkrMeRHSdxF
+         0v8dz6d6gUVNOo2EbQGHFT2cvy5CAoORdS8oyPvU+8eLiOojqeFNubdtL98GQ4QCGr4g
+         b27Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a2I8otcqoVQjYNYDGvUGwP30DEIINxDXT7uwZdeQKk4=;
+        b=3GNXKmALqUNS68H4q3894kGLwuCorVAhqBPiDcjMux76S8TU5EvM+ltIQQAboqC1+M
+         s+7D27guuASFs9p/zEeUvd+q3r3gDSHy1+6H2c4TmiWkDdZ0ZVwAa+Cpuo8eSiC1tsuj
+         LJqLSAX02PxSLhT4xf1KTUY2YwmtpD9Zu0ZXcED2aSKo1kNP2r1US0QdlBOrrRyzB9M8
+         pzn3QmsFVPZR3rirbXPLaN2NhCRqyMBU+CFcXoI1tetni2w9ybEyIrAitmdEvMbXv5VG
+         VinAtc40bimKtzik2hTCEKy8Lb0FN5ySInVuEPYewh99aAwRV8Lb0rPe33hUVM2doZRB
+         l+/g==
+X-Gm-Message-State: ACrzQf2GNi2F1ShY/sNh6j/sbwHu77caTj5LPoqYGYFEks1mnsOjRO7e
+        fUnXFJ81bsCYLskAGEMfu5t+YwmjTf9cAQHgk80=
+X-Google-Smtp-Source: AMsMyM5b7urvgo9/FMLZjMUFRHPKwO378LHKodF07M2AdfyYAEK8otuHL0M+ndeDz/CFje5d3dtAItLadbKKDUHiYzA=
+X-Received: by 2002:a2e:9d81:0:b0:266:a1d7:74b4 with SMTP id
+ c1-20020a2e9d81000000b00266a1d774b4mr9013743ljj.423.1665517003260; Tue, 11
+ Oct 2022 12:36:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPTztWZZOxtzdEm=wbOiL_VDPJuCaW0XVCvsdRpCHE+ph+5eZQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
+ <20220807185846-mutt-send-email-mst@kernel.org> <02222fcb-eaba-617a-c51c-f939678e3d74@opensynergy.com>
+ <20221007090223-mutt-send-email-mst@kernel.org> <CABBYNZKfLOxrTAVLRSH+hOwaB5RYkGdjbtfabufUcgR3oy897A@mail.gmail.com>
+ <d41ec1d3-e262-3be6-17f2-a9495c55b868@opensynergy.com>
+In-Reply-To: <d41ec1d3-e262-3be6-17f2-a9495c55b868@opensynergy.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Tue, 11 Oct 2022 12:36:31 -0700
+Message-ID: <CABBYNZKH2njHBdHWjxQhoiUbVPR-bYAFYJHFYO28YhLayrAVoQ@mail.gmail.com>
+Subject: Re: [PATCH] virtio_bt: Fix alignment in configuration struct
+To:     Igor Skalkin <igor.skalkin@opensynergy.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-bluetooth@vger.kernel.org, mgo@opensynergy.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 11-10-22 10:22:23, Frank van der Linden wrote:
-> On Tue, Oct 11, 2022 at 8:00 AM Michal Hocko <mhocko@suse.com> wrote:
+Hi Igor,
+
+On Tue, Oct 11, 2022 at 5:23 AM Igor Skalkin
+<igor.skalkin@opensynergy.com> wrote:
+>
+> Hi Luiz,
+>
+> Current version of this patch is wrong [q]changing uapi like this can't
+> be done, will break userspace[/q], next version is in process, will be
+> sent in few days.
+
+Thanks for the update, I will wait for the next version then.
+
+> Best regards,
+> Igor
+> On 10/7/22 21:33, Luiz Augusto von Dentz wrote:
+> > Hi Michael,
 > >
-> > On Mon 10-10-22 09:22:13, Frank van der Linden wrote:
-> > > For consistency with process_madvise(), I would suggest calling it
-> > > process_set_mempolicy.
+> > On Fri, Oct 7, 2022 at 6:03 AM Michael S. Tsirkin <mst@redhat.com> wrot=
+e:
+> >>
+> >> On Mon, Aug 08, 2022 at 02:04:43PM +0200, Igor Skalkin wrote:
+> >>> On 8/8/22 01:00, Michael S. Tsirkin wrote:
+> >>>
+> >>>      On Mon, Aug 08, 2022 at 12:11:52AM +0200, Igor Skalkin wrote:
+> >>>
+> >>>          According to specification [1], "For the device-specific con=
+figuration
+> >>>          space, the driver MUST use 8 bit wide accesses for 8 bit wid=
+e fields,
+> >>>          16 bit wide and aligned accesses for 16 bit wide fields and =
+32 bit wide
+> >>>          and aligned accesses for 32 and 64 bit wide fields.".
+> >>>
+> >>>          Current version of the configuration structure:
+> >>>
+> >>>              struct virtio_bt_config {
+> >>>                  __u8  type;
+> >>>                  __u16 vendor;
+> >>>                  __u16 msft_opcode;
+> >>>              } __attribute__((packed));
+> >>>
+> >>>          has both 16bit fields non-aligned.
+> >>>
+> >>>          This commit fixes it.
+> >>>
+> >>>          [1] https://ddec1-0-en-ctp.trendmicro.com:443/wis/clicktime/=
+v1/query?url=3Dhttps%3a%2f%2fdocs.oasis%2dopen.org%2fvirtio%2fvirtio%2fv1.1=
+%2fvirtio%2dv1.1.pdf&umid=3Db1110db2-819d-4f27-b35e-18ac23ce0ab4&auth=3D53c=
+7c7de28b92dfd96e93d9dd61a23e634d2fbec-2c53002097633a932e7d67b899e6bf6999cdc=
+899
+> >>>
+> >>>          Signed-off-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
+> >>>
+> >>>      This is all true enough, but the problem is
+> >>>      1. changing uapi like this can't be done, will break userspace
+> >>>      2. the driver has more issues and no one seems to want to
+> >>>         maintain it.
+> >>>      I posted a patch "Bluetooth: virtio_bt: mark broken" and intend
+> >>>      to merge it for this release.
+> >>>
+> >>> This is very sad. We already use this driver in our projects.
+> >>
+> >> Ping. If we still have no maintainer I'm marking it broken, users
+> >> should at least be warned.
 > >
-> > This operation has per-thread rather than per-process semantic so I do
-> > not think your proposed naming is better.
-> 
-> True. I suppose you could argue that it should have been
-> pidfd_madvise() then for consistency, but that ship has sailed.
-
-madvise commands have per mm semantic. It is set_mempolicy which is
-kinda special and it allows to have per task_struct semantic even when
-the actual allocation is in the same address space. To be honest I am
-not really sure why that is this way because threads aim to share memory
-so why should they have different memory policies?
-
-I suspect that the original thinking was that some portions that are
-private to the process want to have different affinities (e.g. stacks
-and dedicated per cpu heap arenas). E.g. worker pools which want to be
-per-cpu local with their own allocations but operate on shared data that
-requires different policies.
-
-> > > Other than that, this makes sense. To complete
-> > > the set, perhaps a process_mbind() should be added as well. What do
-> > > you think?
+> > Please resend.
 > >
-> > Is there any real usecase for this interface? How is the caller supposed
-> > to make per-range decisions without a very involved coordination with
-> > the target process?
-> 
-> The use case for a potential pidfd_mbind() is basically a combination
-> of what is described for in the process_madvise proposal (
-> https://lore.kernel.org/lkml/20200901000633.1920247-1-minchan@kernel.org/
-> ), and what this proposal describes: system management software acting
-> as an orchestrator that has a better overview of the system as a whole
-> (NUMA nodes, memory tiering), and has knowledge of the layout of the
-> processes involved.
+> >>
+> >>> Our virtio bluetooth device has two backends - HCI_USER socket backen=
+d for one
+> >>> platform and uart backend for the other, and works well (after applyi=
+ng your
+> >>> "[PATCH] Bluetooth: virtio_bt: fix device remove") patch, so this "de=
+vice
+> >>> removal" problem can probably be considered solved .
+> >>> We could help with the rest of the problems you listed that can be so=
+lved
+> >>> (specification, QEMU support).
+> >>> And the only problem that is difficult to solve (because of the need =
+to change
+> >>> UAPI header files) is just this one with unaligned configuration fiel=
+ds.
+> >>> At the moment, it does not reproduce, because without VIRTIO_BT_F_VND=
+_HCI
+> >>> (Indicates vendor command support) feature negotiated, the driver doe=
+s not
+> >>> read the non-aligned configuration fields.
+> >>>
+> >>> So, what would you advise us to do? Continuing to use the "marked bro=
+ken"
+> >>> driver, start writing a specification for a new from scratch, better =
+one?
+> >>> Or is there any way to bring this one back to life?
+> >>>
+> >>>
+> >>>
+> >>>          ---
+> >>>           include/uapi/linux/virtio_bt.h | 2 +-
+> >>>           1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>>          diff --git a/include/uapi/linux/virtio_bt.h b/include/uapi/l=
+inux/virtio_bt.h
+> >>>          index a7bd48daa9a9..adc03709cc4f 100644
+> >>>          --- a/include/uapi/linux/virtio_bt.h
+> >>>          +++ b/include/uapi/linux/virtio_bt.h
+> >>>          @@ -23,9 +23,9 @@ enum virtio_bt_config_vendor {
+> >>>           };
+> >>>
+> >>>           struct virtio_bt_config {
+> >>>          -       __u8  type;
+> >>>                  __u16 vendor;
+> >>>                  __u16 msft_opcode;
+> >>>          +       __u8  type;
+> >>>           } __attribute__((packed));
+> >>>
+> >>>           #endif /* _UAPI_LINUX_VIRTIO_BT_H */
+> >>>          --
+> >>>          2.34.1
+> >>>
+> >>> --
+> >>>
+> >>> Best regards,
+> >>>
+> >>> Igor Skalkin
+> >>> Software Engineer
+> >>>
+> >>> OpenSynergy GmbH
+> >>> Rotherstr. 20, 10245 Berlin
+> >>>
+> >>> igor.skalkin@opensynergy.com
+> >>> www.opensynergy.com
+> >>>
+> >>> registered: Amtsgericht Charlottenburg, HRB 108616B
+> >>> General Management: Rolf Morich, Stefaan Sonck Thiebaut
+> >>>
+> >>>
+> >>> Please mind our privacy notice pursuant to Art. 13 GDPR. // Unsere Hi=
+nweise zum
+> >>> Datenschutz gem. Art. 13 DSGVO finden Sie hier.
+> >>
+> >
+> >
+>
+> Please mind our privacy notice<https://www.opensynergy.com/datenschutzerk=
+laerung/privacy-notice-for-business-partners-pursuant-to-article-13-of-the-=
+general-data-protection-regulation-gdpr/> pursuant to Art. 13 GDPR. // Unse=
+re Hinweise zum Datenschutz gem. Art. 13 DSGVO finden Sie hier.<https://www=
+.opensynergy.com/de/datenschutzerklaerung/datenschutzhinweise-fuer-geschaef=
+tspartner-gem-art-13-dsgvo/>
 
-Well, per address range operation is a completely different beast I
-would say. External tool would need to a) understand what that range is
-used for (e.g. stack/heap ranges, mmaped shared files like libraries or
-private mappings) and b) by in sync with memory layout modifications
-done by applications (e.g. that an mmap has been issued to back malloc
-request). Quite a lot of understanding about the specific process. I
-would say that with that intimate knowledge it is quite better to be
-part of the process and do those changes from within of the process
-itself.
--- 
-Michal Hocko
-SUSE Labs
+
+
+--=20
+Luiz Augusto von Dentz
