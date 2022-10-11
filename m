@@ -2,194 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09D75FB07D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF445FB083
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJKKdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S229786AbiJKKeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiJKKcv (ORCPT
+        with ESMTP id S229560AbiJKKeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:32:51 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F527F0AE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:32:50 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id g15-20020a6be60f000000b006bc6bc8715aso1447302ioh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:32:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MdMDpSpbJKTXlHS2J7C7gfIldmhpb1GFucBqg1aULWs=;
-        b=WHF+L344rz7E0DiQCV2o2vr7Oj92drLyOrNAisr/p1tVluoGRtdISfPpETc/C2HmDb
-         N1O6Ix/HDhtU3tcD1UO8rIo1AEEVMWioRbBFUtArdfYUXrjT4gVVr1JWzuncMNm9Qnk6
-         peoOwAWjwDbIJ9NzbH3+QOvyhsJhxRfOnwgDV3OmygpLV4bhKRaeE2vyubj+FeKaPAlh
-         EvJAzC+Bvep17IW9Cn+ZsJ/8v1NygInqGrjd0PRx43IwWmQXC/N7gfnHnbMc76l8XWmM
-         rrjPVWmJxNSl/AethG+JWkUp6UW9WRGUfrMw+F783e3eHcGKXNwSDKj9623f3aL4K+tt
-         WbKQ==
-X-Gm-Message-State: ACrzQf0aX5Z+ah6kGz79T/tB4iihGRT+iq38bweDQr5Hc9rQqB33y43t
-        wPhd+UAlTOks4ngaMgqcrnm66T4PTCNUxyDCsT9Xm65eBqxr
-X-Google-Smtp-Source: AMsMyM7tl3JX9Jyp+MS6PcL7aE2pB0UVSmVUwyZx1DO2dygX5MspS3Mi9vYCshggZPAUfOjhcWIkLvk4nWWNdK2TVW0zVeLzZNzp
+        Tue, 11 Oct 2022 06:34:05 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FF27F0BC;
+        Tue, 11 Oct 2022 03:34:02 -0700 (PDT)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 90A981EC058B;
+        Tue, 11 Oct 2022 12:33:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665484437;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MEGhEG08A2CxT7tMyUIVoUadHr6tAgVCQe8u5A1hQr0=;
+        b=Z/M98r/jxCFrLRfrwDFZPVZUbFoMAPE4b74V7KSqmfwU0rOFZY+3TKqnT0qKEPXrEbx4hj
+        KF2fVoSdLJbZdsUqYeF4T/7FtVrqNpK5Qtl2zUwi3eYwMksfA98QrjoviS6XbtlSuuASuL
+        KJTat5juyOomeL6c+2058UvqZZcH748=
+Date:   Tue, 11 Oct 2022 12:33:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jia He <justin.he@arm.com>
+Cc:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
+Message-ID: <Y0VGkUxpqiIzIFzB@zn.tnic>
+References: <20221010023559.69655-1-justin.he@arm.com>
+ <20221010023559.69655-7-justin.he@arm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1509:b0:363:dcaa:38d5 with SMTP id
- b9-20020a056638150900b00363dcaa38d5mr142518jat.315.1665484369426; Tue, 11 Oct
- 2022 03:32:49 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 03:32:49 -0700
-In-Reply-To: <2867034.e9J7NaK4W3@mypc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000037fe6c05eabfcc1b@google.com>
-Subject: Re: [syzbot] memory leak in __get_metapage
-From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221010023559.69655-7-justin.he@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Tuesday, October 4, 2022 10:49:42 AM CEST syzbot wrote:
->> Hello,
->> 
->> syzbot found the following issue on:
->> 
->> HEAD commit:    4fe89d07dcc2 Linux 6.0
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=169a7924880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
->> dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils 
-> for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bdd7ec880000
->> 
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/651a252f7035/
-> disk-4fe89d07.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/776feb8e0e5b/
-> vmlinux-4fe89d07.xz
->> 
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com
->> 
->> BUG: memory leak
->> unreferenced object 0xffff888114339e80 (size 128):
->>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> BUG: memory leak
->> unreferenced object 0xffff888114339e00 (size 128):
->>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> BUG: memory leak
->> unreferenced object 0xffff888114339d80 (size 128):
->>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> BUG: memory leak
->> unreferenced object 0xffff8881142f0300 (size 128):
->>   comm "syz-executor.0", pid 3676, jiffies 4295017533 (age 7.330s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->
-> #syz test git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
+On Mon, Oct 10, 2022 at 02:35:58AM +0000, Jia He wrote:
+> ghes_estatus_caches should be add rcu annotation to avoid sparse warnings.
+>    drivers/acpi/apei/ghes.c:733:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>    drivers/acpi/apei/ghes.c:733:25: sparse:    struct ghes_estatus_cache [noderef] __rcu *
+>    drivers/acpi/apei/ghes.c:733:25: sparse:    struct ghes_estatus_cache *
+>    drivers/acpi/apei/ghes.c:813:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>    drivers/acpi/apei/ghes.c:813:25: sparse:    struct ghes_estatus_cache [noderef] __rcu *
+>    drivers/acpi/apei/ghes.c:813:25: sparse:    struct ghes_estatus_cache *
+> 
+> unrcu_pointer is to strip the __rcu in cmpxchg.
 
-want 2 args (repo, branch), got 3
+Is this only to shut up sparse or actually fixing anything?
 
-> Linux 6.0
->
->
->
->
-> -- 
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/2867034.e9J7NaK4W3%40mypc.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
