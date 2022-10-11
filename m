@@ -2,117 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFB35FA988
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C735FA98D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiJKBAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S229587AbiJKBC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJKBAH (ORCPT
+        with ESMTP id S229477AbiJKBC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:00:07 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21423E777;
-        Mon, 10 Oct 2022 18:00:05 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id h13so10700460pfr.7;
-        Mon, 10 Oct 2022 18:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m5jdZk8obbSaJk1bH2M6QI2skYoBtwC+QsNgs9uZZ/U=;
-        b=KZjm64gR1mLPKhTTFoCyZX6FYqkbhHDPOjknfMn/jcen7TaHIMPu1csuB5GCshoaAE
-         Q7qxa4j03VfTh34Gw0ZtSQWCmSB7j2dQYbLjckFmNqtaU4MdibACJGsoJXBibrPXOLWa
-         fMIwL1whxssuU9ZFf6lvpHpMayIBdqEfH9988IU2YH/YXOznopTnXjYgz81AErxL3Eat
-         IiNz75Uv+llnla9bytHyMaFx3PN1tqpOaV7xgUvJmoj6XZ+hBIaJnkh6m+eVgTOaxN2X
-         QfxPObY5gYfaDZX8g25KCQemffXaRULGy8dApxfSa1NwIbPZBjE1zikqCRLpAk1IknuT
-         Avcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m5jdZk8obbSaJk1bH2M6QI2skYoBtwC+QsNgs9uZZ/U=;
-        b=RQhRwnYsD/8WPTNuJ6wOV8pDpi7Fdrytz5iassgDPGdDlnS9SQQxlryPFuwzjKCxwM
-         Cf7oYSHpeMc3oJxcZo/PufApIfmqc+oXYKRTJHujeP6sUbulCwMPbPS/SAY7M3rPtpi0
-         UCk+A9mofctzs2rThD0FKLNo60u3CTsFx6v+U4jvldymR9Xm7OzYQ53dMtIOzvE9pYNI
-         zeKfZZGy9tRENVZgdxg4f2bixRpkZ1It62TlUZl9GM4xy2WAOvbPgjp2nD9xV18bi1E7
-         eaVN4OmqN0W5TR3DtBsetEmyedAcjs08gfz078wlQ1J0GVUwN5JuJqJ8sazGlHIJ7Ayw
-         E8Pw==
-X-Gm-Message-State: ACrzQf24ofWti8zXa7ASNjlkrbw9t6uZRPQIuHpKDmH22hJQq2sbV+pT
-        IgoYE90Kr4l8TcW15tscPwNnpA55HJKhDlsdBIx1jJWrhHM=
-X-Google-Smtp-Source: AMsMyM7F5925acIpKQJbsIkmq+QDQhqZOYJ65KSP9J7/49DcWURvouoNunGQc/NwXvEV1XbSYeS98PWnvueYTuYThu4=
-X-Received: by 2002:a05:6a00:1306:b0:555:6d3f:11ed with SMTP id
- j6-20020a056a00130600b005556d3f11edmr22166973pfu.55.1665450005071; Mon, 10
- Oct 2022 18:00:05 -0700 (PDT)
+        Mon, 10 Oct 2022 21:02:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344F77A510
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=PrM3oxAWY+DvolGk6EOkPHlLnCs6oAe+5MGgAOsFI0I=; b=L60wNARaHBVJoHySPpUIA9/43p
+        WNHDesmbjQqzQEDl9lwVgBWssR7YxiaLIfTI0iefK4DS1tVKn7dHkfCtltQmxIwoeWgEQL5vAVXoY
+        /3X1QuVv9+jrpkuX1JOe7x9kuyFOzE+t726C8n22z7Jz0vuznMSTUaOoDvChEAhw6bQBmC8DcDAnZ
+        BNnp2/7FVFPk7kKF5O3VZzucZJRJUgs8OgEuv8D54dot6nPIHjswwBE3IH3cye2O9N+OlcNablsMI
+        cw+c0G2XrEo6Gp7mD6RNmq5ZLOq0CHyI5EvuV+2MP/x6NKTACxq+/HM4O+LXj9mp+VaV56qYEK8M1
+        sHUu2JCQ==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oi3f4-004bAy-CP; Tue, 11 Oct 2022 01:02:23 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v2] ASoC: wm8731: fix build when I2C is not enabled
+Date:   Mon, 10 Oct 2022 18:02:13 -0700
+Message-Id: <20221011010213.4096-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20221010070330.159911806@linuxfoundation.org>
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Mon, 10 Oct 2022 18:59:53 -0600
-Message-ID: <CAFU3qobC3_LwSXKnaMfmNY=Qce9ozT_hLg1LvSAjjgCKrcoh7Q@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 12:31 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.1 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.1-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Building wm8731-i2c.c has a kconfig warning and build errors when
+I2C is not enabled, so prevent that kconfig-uration.
 
-Hi Greg,
+WARNING: unmet direct dependencies detected for SND_SOC_WM8731_I2C
+  Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && I2C [=n]
+  Selected by [m]:
+  - SND_SOC_DB1200 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_SOC_AU1XPSC [=m]
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+and subsequent build errors:
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+../sound/soc/codecs/wm8731-i2c.c:64:1: warning: data definition has no type or storage class
+   64 | module_i2c_driver(wm8731_i2c_driver);
+../sound/soc/codecs/wm8731-i2c.c:64:1: error: type defaults to 'int' in declaration of 'module_i2c_driver' [-Werror=implicit-int]
+../sound/soc/codecs/wm8731-i2c.c:64:1: warning: parameter names (without types) in function declaration
+../sound/soc/codecs/wm8731-i2c.c:55:26: warning: 'wm8731_i2c_driver' defined but not used [-Wunused-variable]
+   55 | static struct i2c_driver wm8731_i2c_driver = {
 
-     Total time: 0.676 [sec]
+Fixes: 9dc15f81baf2 ("ASoC: wm8731: Factor out the I2C and SPI bus code into separate modules")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: alsa-devel@alsa-project.org
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+---
+v2: add Takashi's email address
 
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
+ sound/soc/au1x/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-     Total time: 8.978 [sec]
-
-       8.978893 usecs/op
-         111372 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+diff sound/soc/au1x/Kconfig sound/soc/au1x/Kconfig
+--- a/sound/soc/au1x/Kconfig
++++ b/sound/soc/au1x/Kconfig
+@@ -54,6 +54,7 @@ config SND_SOC_DB1000
+ config SND_SOC_DB1200
+ 	tristate "DB1200/DB1300/DB1550 Audio support"
+ 	depends on SND_SOC_AU1XPSC
++	depends on I2C
+ 	select SND_SOC_AU1XPSC_AC97
+ 	select SND_SOC_AC97_CODEC
+ 	select SND_SOC_WM9712
