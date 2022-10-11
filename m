@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B4E5FBDF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741715FBDF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiJKWtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 18:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
+        id S229542AbiJKWtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 18:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiJKWtO (ORCPT
+        with ESMTP id S229534AbiJKWtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 18:49:14 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D258F97A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:14 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-134072c15c1so14436737fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:14 -0700 (PDT)
+        Tue, 11 Oct 2022 18:49:43 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DF92DD7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:42 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z197so7173961iof.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Br1aOdu+0HvIKGR71tLPfM2hoANr+BgT3DPpmcCrU0=;
-        b=QJenybZKtzWXRYI7zhSXlqbKHYaFpIo3Ip7jklH2D7OU6phpfAPRNV7sMlgQHnLMWT
-         7Fth5BsJnV0dezNYthINb3VWqV7Inc1OFa0neLlJec+Phvcjs/HL2jJT9gsJ8ceJrRA4
-         usze5nCYoBA0RYcpzcejAuUZKz0RXSSEbTgUY=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
+        b=GEoUpWzyQJ1EOpEsREXd5rTYPMHiuAtqAlmA0RR0NMubUUPrnJ4/XkiOaDGQLJrOu8
+         FuvNQm2L8j7Lcya9lRWWV+Bs+fCZTboDyWd/H71oavlGvovpnNwepb9T5Az1cjsOxmCl
+         4b2f9h3cdBvjSOva+H1+oKdfmwZwoIgQAI7hpsGP2hm01xv2Xp8lTmeJCXfCQ5qwmpwv
+         lWiZ4lphzHITpaEyXvNgHDhDJlBIWdgrhKw8Ds6IFnbhypMaypZ7MsrGhvMuq/Ti5DjW
+         S0Yzrpr+ovSetT0en3/fIhcod5jPEX/deYIEdxuJTAvTGY7URssjTt7/yAtymbdJDmD5
+         au4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Br1aOdu+0HvIKGR71tLPfM2hoANr+BgT3DPpmcCrU0=;
-        b=MMXcbPVImU1OtOF0g6Dcq0wV+b032DX9JdKeINKIyYnsSbTG/dc1Nv2asM9229MhKd
-         VUbohimQqisU0tQYUSaxVZtnG8dDZ9Hx9Y62Djg/Sw1pVrfDBvWycpKw+RNMO+3W3gSi
-         HSxA+j3oI8MLdIvUeBEk2fKxBi3YH+T+742UViOf/BnTTxP4NYuJCk8SSBetYjMdUJBX
-         nULD46gtRAOQ94bISdhb97FCex+AxTiJIpd/1elmOYhtLPUAH0TLM3HolP2KeXcHhVSB
-         x423XCuvfbRGsMSmYZy8Fw23HNOYOmGX3ZPbCqd79kiJMnSta+pSdJvmPHgAj4V5vDl7
-         t/Xw==
-X-Gm-Message-State: ACrzQf2LQjBpvm/Y1DSKMhjjE224Nn+rHezhs7j5SjuW4o8GulZFaRIm
-        XIRXakWtAt816jJHk9Lzed1hOJ8a/DKkbg==
-X-Google-Smtp-Source: AMsMyM5cnDayj9jBr7xiEXRkxtUr0YjZ9xBL5nvun6bzyk0V04ogaVkN+aofWF/QVLstf4M0kdT6jA==
-X-Received: by 2002:a05:6871:7a7:b0:125:5c0d:de5d with SMTP id o39-20020a05687107a700b001255c0dde5dmr833666oap.297.1665528552815;
-        Tue, 11 Oct 2022 15:49:12 -0700 (PDT)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com. [209.85.161.42])
-        by smtp.gmail.com with ESMTPSA id i26-20020a056808055a00b00350a8b0637asm4108170oig.47.2022.10.11.15.49.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 15:49:12 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id x6-20020a4ac586000000b0047f8cc6dbe4so11085391oop.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:11 -0700 (PDT)
-X-Received: by 2002:a4a:4e41:0:b0:480:8a3c:a797 with SMTP id
- r62-20020a4a4e41000000b004808a3ca797mr1313796ooa.71.1665528551551; Tue, 11
- Oct 2022 15:49:11 -0700 (PDT)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
+        b=bMHy9kZGauhsuCNWhFmIxxilMN4RKirQ5yCva7+/L7ZpCY+tv00k+/xHkY/3RLrJpA
+         q8Hma5j8+0QZRwGvPOYQquKjBuXgWdX1oqq7F+rxO4OBSFaJ63qr5GRwlf8wodkR0bln
+         tOR2bRUa5lBoRa9fk/Ln14vJDLrBgj2NGtGWUWIJotEuuvsyU9QXLBXj1PVbpP5AoN31
+         196uPiOSMuqC72JUBctMerGH2YIHGs1Sjl4T+dqTXBWfvUI+PoX9elF4VgDktxgIDpaQ
+         MUn9vEf6mmVleWgaZ+S1tFVba7Hb/YQfwbL02n0DmovlUT4RiwTc/z8yZYDlQ17CYX53
+         e5Tw==
+X-Gm-Message-State: ACrzQf2rDGrwpKt6jcrAU9SpdtBMcO5mve1ICYIbUJ1ha+3aOQ9FulA0
+        mqVRQhbHQ53Iyjeeg+5GHvwcLHvrXr1IxtIndI8=
+X-Google-Smtp-Source: AMsMyM7lj2VaHp6DpaLYCPCiyTlfN8Mg/6zisqjcfW7o7ASVVQ4oZXaJvGu9y1QaAD+MjDAzjEMpD4rowwV/MJw0dKE=
+X-Received: by 2002:a05:6638:2641:b0:363:a80a:644f with SMTP id
+ n1-20020a056638264100b00363a80a644fmr9546775jat.205.1665528581803; Tue, 11
+ Oct 2022 15:49:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221011132256.333-1-dsterba@suse.com>
-In-Reply-To: <20221011132256.333-1-dsterba@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 11 Oct 2022 15:48:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiB9sHzsNcCRRkgeyXLu09hV-FgRLwvFHoA_uCpZRJJwA@mail.gmail.com>
-Message-ID: <CAHk-=wiB9sHzsNcCRRkgeyXLu09hV-FgRLwvFHoA_uCpZRJJwA@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: update btrfs website links and files
-To:     David Sterba <dsterba@suse.com>
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Received: by 2002:a4f:f154:0:0:0:0:0 with HTTP; Tue, 11 Oct 2022 15:49:41
+ -0700 (PDT)
+Reply-To: mmrstephen16@gmail.com
+From:   "Mr. Stephen Melvin" <mr.bruceross22@gmail.com>
+Date:   Tue, 11 Oct 2022 15:49:41 -0700
+Message-ID: <CAKeG-00cDdf1Sks1M9piNQsn=prK3xGE-zsZwdw+ZV8SH52BRw@mail.gmail.com>
+Subject: Reply and let me know if you received this email.!!!
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d43 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5028]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mmrstephen16[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mr.bruceross22[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mr.bruceross22[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 6:23 AM David Sterba <dsterba@suse.com> wrote:
->
-> We have the new documentation hosted on Read The Docs and content is
-> migrated there from the wiki. Also update http to https and add the
-> tracepoint definition header.
+Hello Dear, How are you today and your family? Want to believe you are
+all doing great.
 
-Hmm. Did you intend for me to apply this as a patch?
+Please reply to me as fast as possible. I have important information for you.
 
-Since you normally just send pull requests, I'm a bit confused.
-
-Is this a "it's outside the btrfs subdirectory, so I'm sending this as
-a patch"? Except I've seen you send stuff that has changes to mm/ for
-new exports etc, and in fact to MAINTAINERS too.
-
-Or is this just an informational "let Linus know about this patch" email?
-
-Anyway, if you actually want me to apply a patch directly because of
-some "I'm not going to send this as a pull request because there is
-nothing else pending" kind of issue or other reason, please do state
-that explicitly in the email.
-
-Because as it is now, as explained above, I'm not sure why this patch
-was sent to me.
-
-               Linus
+Kind Regards,
+Mr. Stephen Melvin.
