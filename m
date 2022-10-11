@@ -2,222 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4485FAFD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A825FAFEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiJKJ7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S229820AbiJKKA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiJKJ7g (ORCPT
+        with ESMTP id S229599AbiJKKAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:59:36 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4670278BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:59:33 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n7so12771255plp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1fXIF1ijmUUQRNRT6RqsO+cCak4LIbfujlHnLa3spbE=;
-        b=TOU4554m4mknJa8WO5FSKYj1BXHhRBxih0kfHM5fKTH8ifPjvdf58jUWMz0uYZbsOi
-         b/g06HHxN8XKncuX9uoCTh6FwSUsSaLTXJZ4gEth1RQEdjPo2tQtQmwHqlPjW1tTr/da
-         VyX96sSoSCz9yMGN5ljUdZFYUWj2EJ/dOmbEAKWdOb/BsJ7/7IWoMeQM8II/OkEUmoXF
-         E772xvdESGaeOKYbIzlMTwzLtnFqB6gjV8ay25u8DItdEs6jBUDhwOYbyWOjlgfsqmpe
-         QeC0kI5Qvv0ZodMxrb8IceSlZ/quXEVMZVKAXOYud+EcV1QbOU97s+dIVgARGzsrJfU/
-         WNSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1fXIF1ijmUUQRNRT6RqsO+cCak4LIbfujlHnLa3spbE=;
-        b=AGXSLCybai12xUoszQKE50kVmGw5xAX8KQULjMV33JZLI1lPAeQhtFwNNX2o+KPIV1
-         Xx56PKhuSq2tv3fvbh8fr8zTkwMnetN61aqYCs0gy/lrSb8Vc3sNt9+q3oSKAdRH6/6F
-         f7cpvblpgxLXk/MT7tUhIv20wKmeKH0KV5Xbs+BoJGFY2/LFS4tjz2PyGWkx5z2vl31f
-         LbnWuhi5+G1g2YptKGVwnGp+Jkf8ymFn/MyQGtAV5oLaAD25adBt+/vv9jmcz6rovUto
-         yMXH96xXXOihNTz+zO21rCgfAF59q1pNhR/lEWs9q5ojQs709bWBHWumuERw+oRwX5Mk
-         U6oA==
-X-Gm-Message-State: ACrzQf3cSXoX3vpDl+ETBHdbYV3JVKztGcjhBw77RhjZPritgzxD1lxk
-        Y81KZ1kWRFMC7ABB27uD2M8goc4i6A94+pGZ9/Ublg==
-X-Google-Smtp-Source: AMsMyM4rzQOVkVBtuVL7hnZkW9ofbYaogPcAQggjCSqL7tNLB01YTOQhg6IvJt6qfr6wbifv3YiXITiyFfiePq0Z374=
-X-Received: by 2002:a17:90a:7b8c:b0:20b:1f3b:f6fd with SMTP id
- z12-20020a17090a7b8c00b0020b1f3bf6fdmr25515588pjc.202.1665482372756; Tue, 11
- Oct 2022 02:59:32 -0700 (PDT)
+        Tue, 11 Oct 2022 06:00:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC3C3343A;
+        Tue, 11 Oct 2022 03:00:17 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29B9tIKb006463;
+        Tue, 11 Oct 2022 09:59:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=rsi++8Kv70P/yyaG5N63ukoqzzaV32xXultfsAN+sgY=;
+ b=b9WrKX6EJhkwDas+5wQJeAb2oflElkQO3Ljn8q8IiYGku406jhrTUM1QFFSYZPFNdFKo
+ QHKpdpz+dy38RreLu0fUmM6qnpOScfAfMCKM/XDDc0eenMPRVJyB1RlO6H/T2c9TEfEu
+ hK0orCiQnVvs2Xeg2cLtK5eQXHPw0hzLK43X6e9sknHM/b0YWS55t+kKmywfWSvUyDye
+ YNyh/te56N5fSc0tbPKKLOp4apFrXLDvZpYTL9AYNeZvLOaJgu6ULqrutiVzLDgBe4AG
+ VodfO95fsMEXeDJoBpykCHBGmpu4cocaq5++1kXg6MVP2WJiWMl8qYN+9OSEl3yDnTVx SA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k569g03km-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 09:59:09 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29B9tmI8010269;
+        Tue, 11 Oct 2022 09:59:08 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k569g03hx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 09:59:08 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29B9oZnZ003829;
+        Tue, 11 Oct 2022 09:59:05 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9c3hv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 09:59:05 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29B9sJie47120848
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Oct 2022 09:54:19 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10739A405B;
+        Tue, 11 Oct 2022 09:59:02 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30E5BA4054;
+        Tue, 11 Oct 2022 09:59:00 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.239])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 11 Oct 2022 09:59:00 +0000 (GMT)
+Date:   Tue, 11 Oct 2022 11:58:59 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Jan Kara <jack@suse.cz>, "Darrick J . Wong" <djwong@kernel.org>
+Subject: Re: [PATCH v6 1/7] treewide: use prandom_u32_max() when possible,
+ part 1
+Message-ID: <Y0U+Y+VBqefDAZRG@osiris>
+References: <20221010230613.1076905-1-Jason@zx2c4.com>
+ <20221010230613.1076905-2-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <Yz6zfrVq9cP/wrJb@orome> <20221006130622.22900-1-pshete@nvidia.com>
- <20221006130622.22900-2-pshete@nvidia.com>
-In-Reply-To: <20221006130622.22900-2-pshete@nvidia.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 11 Oct 2022 11:58:56 +0200
-Message-ID: <CAPDyKFr_Yi2EgrBUzsORnM4mOkf25WR8+7_dfF2h4XzRDPm9-w@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] mmc: sdhci-tegra: Add support to program MC stream ID
-To:     Prathamesh Shete <pshete@nvidia.com>
-Cc:     adrian.hunter@intel.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, p.zabel@pengutronix.de,
-        linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, anrao@nvidia.com,
-        smangipudi@nvidia.com, kyarlagadda@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221010230613.1076905-2-Jason@zx2c4.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: e2CZuGMXbt8P1Ahw-KHczcjQF2nFCX-z
+X-Proofpoint-ORIG-GUID: wAGriSa-6j8SChamwbK6r6GTq7mVMlOg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-11_03,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ malwarescore=0 clxscore=1011 mlxscore=0 spamscore=0 mlxlogscore=427
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210110053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 at 15:07, Prathamesh Shete <pshete@nvidia.com> wrote:
->
-> SMMU clients are supposed to program stream ID from
-> their respective address spaces instead of MC override.
-> Define NVQUIRK_PROGRAM_STREAMID and use it to program
-> SMMU stream ID from the SDMMC client address space.
->
-> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
+On Mon, Oct 10, 2022 at 05:06:07PM -0600, Jason A. Donenfeld wrote:
+> Rather than incurring a division or requesting too many random bytes for
+> the given range, use the prandom_u32_max() function, which only takes
+> the minimum required bytes from the RNG and avoids divisions. This was
+...
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Yury Norov <yury.norov@gmail.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> Reviewed-by: Jan Kara <jack@suse.cz> # for ext4 and sbitmap
+> Reviewed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com> # for drbd
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # for mmc
+> Acked-by: Darrick J. Wong <djwong@kernel.org> # for xfs
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  drivers/mmc/host/sdhci-tegra.c | 53 ++++++++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index a6c5bbae77b4..e88294a6912d 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -25,6 +25,10 @@
->  #include <linux/mmc/slot-gpio.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/ktime.h>
-> +#ifdef CONFIG_IOMMU_API
-> +#include <linux/iommu.h>
-> +#include <linux/bitops.h>
-> +#endif
->
->  #include <soc/tegra/common.h>
->
-> @@ -94,6 +98,8 @@
->  #define SDHCI_TEGRA_AUTO_CAL_STATUS                    0x1ec
->  #define SDHCI_TEGRA_AUTO_CAL_ACTIVE                    BIT(31)
->
-> +#define SDHCI_TEGRA_CIF2AXI_CTRL_0                     0x1fc
-> +
->  #define NVQUIRK_FORCE_SDHCI_SPEC_200                   BIT(0)
->  #define NVQUIRK_ENABLE_BLOCK_GAP_DET                   BIT(1)
->  #define NVQUIRK_ENABLE_SDHCI_SPEC_300                  BIT(2)
-> @@ -121,6 +127,7 @@
->  #define NVQUIRK_HAS_TMCLK                              BIT(10)
->
->  #define NVQUIRK_HAS_ANDROID_GPT_SECTOR                 BIT(11)
-> +#define NVQUIRK_PROGRAM_STREAMID                       BIT(12)
->
->  /* SDMMC CQE Base Address for Tegra Host Ver 4.1 and Higher */
->  #define SDHCI_TEGRA_CQE_BASE_ADDR                      0xF000
-> @@ -177,6 +184,9 @@ struct sdhci_tegra {
->         bool enable_hwcq;
->         unsigned long curr_clk_rate;
->         u8 tuned_tap_delay;
-> +#ifdef CONFIG_IOMMU_API
+>  arch/s390/kernel/process.c                    |  2 +-
+>  arch/s390/kernel/vdso.c                       |  2 +-
 
-I would rather avoid these kinds of "#ifdef" micro optimizations.
-Please just add the streamid without the #ifdef.
-
-> +       u32 streamid;
-> +#endif
->  };
->
->  static u16 tegra_sdhci_readw(struct sdhci_host *host, int reg)
-> @@ -1564,6 +1574,7 @@ static const struct sdhci_tegra_soc_data soc_data_tegra234 = {
->                     NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
->                     NVQUIRK_ENABLE_SDR50 |
->                     NVQUIRK_ENABLE_SDR104 |
-> +                   NVQUIRK_PROGRAM_STREAMID |
->                     NVQUIRK_HAS_TMCLK,
->         .min_tap_delay = 95,
->         .max_tap_delay = 111,
-> @@ -1775,6 +1786,25 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->         if (rc)
->                 goto err_add_host;
->
-> +       /* Program MC streamID for DMA transfers */
-> +#ifdef CONFIG_IOMMU_API
-
-Again, please drop the #ifdefs here.
-
-We already have stub functions for dev_iommu_fwspec_get() in case
-CONFIG_IOMMU_API is unset.
-
-> +       if (soc_data->nvquirks & NVQUIRK_PROGRAM_STREAMID) {
-> +               struct iommu_fwspec *fwspec;
-> +
-> +               fwspec = dev_iommu_fwspec_get(&pdev->dev);
-> +               if (fwspec == NULL) {
-> +                       dev_warn(mmc_dev(host->mmc),
-> +                               "iommu fwspec is NULL, continue without stream ID\n");
-> +               } else {
-> +                       tegra_host->streamid = fwspec->ids[0] & 0xff;
-> +                       tegra_sdhci_writel(host, tegra_host->streamid |
-> +                                               FIELD_PREP(GENMASK(15, 8),
-> +                                               tegra_host->streamid),
-> +                                               SDHCI_TEGRA_CIF2AXI_CTRL_0);
-> +               }
-> +       }
-> +#endif
-> +
->         return 0;
->
->  err_add_host:
-> @@ -1861,6 +1891,10 @@ static int sdhci_tegra_suspend(struct device *dev)
->  static int sdhci_tegra_resume(struct device *dev)
->  {
->         struct sdhci_host *host = dev_get_drvdata(dev);
-> +#ifdef CONFIG_IOMMU_API
-
-Ditto.
-
-> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +       struct sdhci_tegra *tegra_host = sdhci_pltfm_priv(pltfm_host);
-> +#endif
->         int ret;
->
->         ret = mmc_gpio_set_cd_wake(host->mmc, false);
-> @@ -1871,6 +1905,25 @@ static int sdhci_tegra_resume(struct device *dev)
->         if (ret)
->                 return ret;
->
-> +       /* Re-program MC streamID for DMA transfers */
-> +#ifdef CONFIG_IOMMU_API
-
-Ditto.
-
-> +       if (tegra_host->soc_data->nvquirks & NVQUIRK_PROGRAM_STREAMID) {
-> +               struct iommu_fwspec *fwspec;
-> +
-> +               fwspec = dev_iommu_fwspec_get(dev);
-> +               if (fwspec == NULL) {
-> +                       dev_warn(mmc_dev(host->mmc),
-> +                               "iommu fwspec is NULL, continue without stream ID\n");
-> +               } else {
-> +                       tegra_host->streamid = fwspec->ids[0] & 0xff;
-> +                       tegra_sdhci_writel(host, tegra_host->streamid |
-> +                                               FIELD_PREP(GENMASK(15, 8),
-> +                                               tegra_host->streamid),
-> +                                               SDHCI_TEGRA_CIF2AXI_CTRL_0);
-> +               }
-> +       }
-> +#endif
-> +
->         ret = sdhci_resume_host(host);
->         if (ret)
->                 goto disable_clk;
-> --
-> 2.17.1
->
-
-Kind regards
-Uffe
+For s390:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
