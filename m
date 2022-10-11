@@ -2,142 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D06E5FAB99
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 06:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64D55FAB9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 06:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJKETP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 00:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S229517AbiJKEVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 00:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJKETO (ORCPT
+        with ESMTP id S229477AbiJKEVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 00:19:14 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278273C2C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 21:19:13 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so14560117fac.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 21:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vwFKSGNDkHGgFwaYbMK1edZVlCyT6HU0qnyYOuABxaM=;
-        b=Jqt2I71DlapaGAjgnNF3xp4Lgh40cOMsOegOkwJMCNbZ+SnQUXVpJ+NEbgRdGQdONf
-         i6Bh4T8Zsx3ocMc0GueMXXsU7CfQOQ0U85CyjStKryqM9wib++tpE/9JT9tNREScH/rU
-         PwKw9Ty6xXUBEZs+W4lzLlNFRzB/LCCHR9pL4/+8tzRAxpqWDPDvFTmkH/ZUVNNN8Ryl
-         Ns0sKi6V4f6BI043y3vSx+L6VVjHlh9yex1mGM1imui0m1tCSmIamTijmMryroUAQZBQ
-         5ZabdREaJ1y3bfMnr9EZSJS7Qwf9i2ths2W0+G26NeDHoQtI9K11Ar44HCTaYKyLFSY0
-         7bAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vwFKSGNDkHGgFwaYbMK1edZVlCyT6HU0qnyYOuABxaM=;
-        b=pMuan/wyLQsclI3E6kDitYnEYwsgYNaL+CRcAHDlIY/w4mjorXHNvfxYvW2I/dKjZI
-         wyPMFsVDnoews2R4qvchiJYT4C4V7mbyKhQjUIg3AWrR9O2RnkfpHT8S1xVlNR9z59Tc
-         L8birr/lHxduziml53iE907bhDe1Le9lSkdvtHghBfaljAMNDUDTYl9H8cROwatVFSVv
-         ccvWcvikKrjmOoCGHS1oa17wlSx7e33E0gWyBVPwFTQFWK78cenUOmovVUtGGzmn+V1z
-         aP0CoJX9INv3Aji+0F5IF6bAJI469S3RZ0JP29ChuS+rksgedH5nUE95diJ7Dsw75+0n
-         IrvA==
-X-Gm-Message-State: ACrzQf1/7LEHRHxgg08d6mV54+gdgiFgNBQvL85Xb6b6UIRG2RjCgp8B
-        tTucMU/zfVRmR7fjyvSTuE7i3Sadx9o5ng==
-X-Google-Smtp-Source: AMsMyM5mJXEZy8ZKbImI4UALR0tPYRNr5onG8MB6Iv5tXfSNOBm8mhW8mlQs854WcEn7/qDCB3I2HA==
-X-Received: by 2002:a05:6870:42c5:b0:136:4add:e0e7 with SMTP id z5-20020a05687042c500b001364adde0e7mr6625934oah.240.1665461952607;
-        Mon, 10 Oct 2022 21:19:12 -0700 (PDT)
-Received: from sophie ([206.217.205.57])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056830315500b006619701dc1csm2283429ots.54.2022.10.10.21.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 21:19:12 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 23:19:10 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] memblock tests: add range tests for
- memblock_alloc_exact_nid_raw
-Message-ID: <20221011041910.GA7782@sophie>
-References: <cover.1664753534.git.remckee0@gmail.com>
- <c73a6fd7fc3fa4529a6e444b9602d9c63ded91fd.1664753534.git.remckee0@gmail.com>
- <b44eee1a-0d61-f5bb-7b0c-a01f13a0b297@redhat.com>
+        Tue, 11 Oct 2022 00:21:32 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B387EFD0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 21:21:30 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29B4L1Ve321458
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 10 Oct 2022 21:21:01 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29B4L1Ve321458
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022100601; t=1665462062;
+        bh=a3OMU9lJ42ZHrJIUvjnlMOAcxBXBlLJbaIsAmYxBCJQ=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=n/Gbhd19mfq6n9xRqjydqU9iwtV7vqprX6YqmAKWCY8MdLIafbOxXdzuz1j6cHT+g
+         wMoc2zJ1tmjs0bvba3Ja/Jmb9A6WmAhvgKOE7O8HKFuR+wlhYBP00NIAoadSSXFf8y
+         yU663ty8rSvS/BhujlWzLEY/GuJNR+0pXK/n27uD5jtWqKyi1MS/dB7au99hhxB/Hm
+         +BJPTlb3Fka1AjipeRb6DrHlDfXysIXmOp8+RNi/tjEO6VlgKcroPWohE+UHI2ZmPU
+         oXhBew7793kbIohQpKWdxU0+zv76ubAWYlkM0N2BoqGUwz4G0Dv2N7BpUZgxAgSp0i
+         DxacqnCtyuSgg==
+Date:   Mon, 10 Oct 2022 21:20:58 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Brian Gerst <brgerst@gmail.com>, Xin Li <xin3.li@intel.com>
+CC:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        peterz@infradead.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_6/6=5D_x86/gsseg=3A_use_the_LKGS_?= =?US-ASCII?Q?instruction_if_available_for_load=5Fgs=5Findex=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAMzpN2hKr-=9sP=_VjGdsJDX5Pzdr9WAsSs77s_5yPJeqi728g@mail.gmail.com>
+References: <20221010190159.11920-1-xin3.li@intel.com> <20221010190159.11920-7-xin3.li@intel.com> <CAMzpN2hKr-=9sP=_VjGdsJDX5Pzdr9WAsSs77s_5yPJeqi728g@mail.gmail.com>
+Message-ID: <0BA29DAE-370F-4D57-8187-D87863AB1B16@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b44eee1a-0d61-f5bb-7b0c-a01f13a0b297@redhat.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 01:16:03PM +0200, David Hildenbrand wrote:
-> On 03.10.22 01:41, Rebecca Mckeever wrote:
-> > Add tests for memblock_alloc_exact_nid_raw() that are very similar to
-> > the range tests for memblock_alloc_try_nid_raw().
-> > 
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >   tools/testing/memblock/Makefile               |    2 +-
-> >   tools/testing/memblock/main.c                 |    2 +
-> >   .../memblock/tests/alloc_exact_nid_api.c      | 1208 +++++++++++++++++
-> >   .../memblock/tests/alloc_exact_nid_api.h      |    9 +
-> >   4 files changed, 1220 insertions(+), 1 deletion(-)
-> >   create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.c
-> >   create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.h
-> > 
-> > diff --git a/tools/testing/memblock/Makefile b/tools/testing/memblock/Makefile
-> > index 246f7ac8489b..2310ac4d080e 100644
-> > --- a/tools/testing/memblock/Makefile
-> > +++ b/tools/testing/memblock/Makefile
-> > @@ -7,7 +7,7 @@ CFLAGS += -I. -I../../include -Wall -O2 -fsanitize=address \
-> >   LDFLAGS += -fsanitize=address -fsanitize=undefined
-> >   TARGETS = main
-> >   TEST_OFILES = tests/alloc_nid_api.o tests/alloc_helpers_api.o tests/alloc_api.o \
-> > -		  tests/basic_api.o tests/common.o
-> > +		  tests/basic_api.o tests/common.o tests/alloc_exact_nid_api.o
-> >   DEP_OFILES = memblock.o lib/slab.o mmzone.o slab.o
-> >   OFILES = main.o $(DEP_OFILES) $(TEST_OFILES)
-> >   EXTR_SRC = ../../../mm/memblock.c
-> > diff --git a/tools/testing/memblock/main.c b/tools/testing/memblock/main.c
-> > index 4ca1024342b1..278f9dec5008 100644
-> > --- a/tools/testing/memblock/main.c
-> > +++ b/tools/testing/memblock/main.c
-> > @@ -3,6 +3,7 @@
-> >   #include "tests/alloc_api.h"
-> >   #include "tests/alloc_helpers_api.h"
-> >   #include "tests/alloc_nid_api.h"
-> > +#include "tests/alloc_exact_nid_api.h"
-> >   #include "tests/common.h"
-> >   int main(int argc, char **argv)
-> > @@ -12,6 +13,7 @@ int main(int argc, char **argv)
-> >   	memblock_alloc_checks();
-> >   	memblock_alloc_helpers_checks();
-> >   	memblock_alloc_nid_checks();
-> > +	memblock_alloc_exact_nid_checks();
-> >   	return 0;
-> >   }
-> 
-> 
-> memblock_alloc_exact_nid_raw(NUMA_NO_NODE) behaves exactly the way
-> memblock_alloc_try_nid_raw(NUMA_NO_NODE) behaves -- which is essentially
-> memblock_alloc_raw().
-> 
-> So do we really need a separate set of tests for these?
-> 
-Instead of a separate set of tests, I could add a flag for
-memblock_alloc_exact_nid_raw() to test_flags so that the range tests in
-alloc_nid_api.c could be run with that flag. Do you think I should do
-that, or omit tests for memblock_alloc_exact_nid_raw(NUMA_NO_NODE)
-altogether?
+On October 10, 2022 8:51:33 PM PDT, Brian Gerst <brgerst@gmail=2Ecom> wrote=
+:
+>On Mon, Oct 10, 2022 at 3:46 PM Xin Li <xin3=2Eli@intel=2Ecom> wrote:
+>>
+>> From: "H=2E Peter Anvin (Intel)" <hpa@zytor=2Ecom>
+>>
+>> The LKGS instruction atomically loads a segment descriptor into the
+>> %gs descriptor registers, *except* that %gs=2Ebase is unchanged, and th=
+e
+>> base is instead loaded into MSR_IA32_KERNEL_GS_BASE, which is exactly
+>> what we want this function to do=2E
+>>
+>> Signed-off-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead=2Eorg>
+>> Signed-off-by: Xin Li <xin3=2Eli@intel=2Ecom>
+>> link: https://lkml=2Eorg/lkml/2022/10/7/352
+>> link: https://lkml=2Eorg/lkml/2022/10/7/373
+>> ---
+>>  arch/x86/include/asm/gsseg=2Eh | 27 ++++++++++++++++++++++++++-
+>>  1 file changed, 26 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/gsseg=2Eh b/arch/x86/include/asm/gsse=
+g=2Eh
+>> index 5e3b56a17098=2E=2E4aaef7a1d68f 100644
+>> --- a/arch/x86/include/asm/gsseg=2Eh
+>> +++ b/arch/x86/include/asm/gsseg=2Eh
+>> @@ -3,15 +3,40 @@
+>>  #define _ASM_X86_GSSEG_H
+>>
+>>  #include <linux/types=2Eh>
+>> +
+>> +#include <asm/asm=2Eh>
+>> +#include <asm/cpufeature=2Eh>
+>> +#include <asm/alternative=2Eh>
+>>  #include <asm/processor=2Eh>
+>> +#include <asm/nops=2Eh>
+>>
+>>  #ifdef CONFIG_X86_64
+>>
+>>  extern asmlinkage void asm_load_gs_index(u16 selector);
+>>
+>> +/* Replace with "lkgs %di" once binutils support LKGS instruction */
+>> +#define LKGS_DI _ASM_BYTES(0xf2,0x0f,0x00,0xf7)
+>> +
+>>  static inline void native_load_gs_index(unsigned int selector)
+>>  {
+>> -       asm_load_gs_index(selector);
+>> +       u16 sel =3D selector;
+>> +
+>> +       /*
+>> +        * Note: the fixup is used for the LKGS instruction, but
+>> +        * it needs to be attached to the primary instruction sequence
+>> +        * as it isn't something that gets patched=2E
+>> +        *
+>> +        * %rax is provided to the assembly routine as a scratch
+>> +        * register=2E
+>> +        */
+>> +       asm_inline volatile("1:\n"
+>> +                           ALTERNATIVE("call asm_load_gs_index\n",
+>> +                                       _ASM_BYTES(0x3e) LKGS_DI,
+>> +                                       X86_FEATURE_LKGS)
+>> +                           _ASM_EXTABLE_TYPE_REG(1b, 1b, EX_TYPE_ZERO_=
+REG, %k[sel])
+>> +                           : ASM_CALL_CONSTRAINT
+>> +                           : [sel] "D" (sel)
+>
+>DI needs to be marked as input and output (+D), since the exception
+>handler modifies it=2E
+>
+>> +                           : "memory", _ASM_AX);
+>
+>_ASM_AX is only needed for code that is used by both 32 and 64-bit=2E
+>Since this is 64-bit only, "rax" would be appropriate=2E
+>
+>--
+>Brian Gerst
 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
-Thanks,
-Rebecca
+The practice seems to have been to prefer the macros for consistency=2E
