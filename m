@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BF95FBA85
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7415FBA8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJKSiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S229766AbiJKSjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiJKSiS (ORCPT
+        with ESMTP id S229495AbiJKSjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:38:18 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BAA62AA2;
-        Tue, 11 Oct 2022 11:38:16 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id o65so11591632iof.4;
-        Tue, 11 Oct 2022 11:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yzz7HPfd9lZbybLpIqjBSIyTMfCLBxbv1l1ZEl4GhoA=;
-        b=Qk8QJCIatrsXIrxE/1a4v6fwYn2G9ANRwZ/uX2kjiTr0NSt5poOiPAzTxoj7e31W5K
-         IxvyMMHhBnGzATsf2wbexpgSf4zz/Wkt0/SEY0PEw2afmrFu0B1UJxD0pEVx8Wy1mHPg
-         lH6Z4XxiwccfnyyEQJYRweI8lQYUEA8DQOpmcsouqwJl7HmSm8uLgjV2FkkljSHscw3T
-         fn6teUcifNDJ7ie9w8jtZ6nqiygnDbEYlU4dNv2o/pTOmZrXH2975YeOdjVmaMZTzrGk
-         yL0XXjeYRtGF47M/8oNKAqys/gANbdBwVKroEMOaKef47BWqV1hbWsW2s9G/kDLIEWE1
-         8dIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yzz7HPfd9lZbybLpIqjBSIyTMfCLBxbv1l1ZEl4GhoA=;
-        b=RBUWEPJncbllp7NdDpzODxwZqNzMpxDciKKcx7eos4OP5dPuvpp3X5NA/jX7pmjz7n
-         tVIQInk9i9OvSUsIoMBWOaGOBshwucSjuxwPhv1zuxGJvvtT9kn2g+SNqiCZuXkoDj+t
-         kFclitraEDBTW8llh3vGyauda/5yiM4L+P+xB+pUYPglMdSVCXYzGlmBf4nt1aIr/Ifb
-         rX+apHaSi7CQ8uYRcHA28oiA62vXfaohXSAx4Eyqm5wzhiS0byPogHKwOuEFPt5SxIHV
-         xUHoPP1zLMSVdxqsDv25/mgMxdFAUmFCeiPLSsOugiHn9u+92y1YeU4zQGSaqWp4GHM8
-         53yQ==
-X-Gm-Message-State: ACrzQf0s2nQOBM6TRf3yrsUjfR5DwUfWM+dhWzAb/7ALLwfDdY3rqcYC
-        HZ+foYn2JZt6o+j7/Wf6UlgeWJBsNZNgAhlyKws=
-X-Google-Smtp-Source: AMsMyM6K6r8LdVzpVWYq8QtcvBsfHdBteWilO2KZnECnX0n0rcAd1mM+RWpr1skNfc7yA9u6pPfyByjCewD57Mlv1r4=
-X-Received: by 2002:a05:6638:2494:b0:363:db4f:c870 with SMTP id
- x20-20020a056638249400b00363db4fc870mr1579414jat.65.1665513494686; Tue, 11
- Oct 2022 11:38:14 -0700 (PDT)
+        Tue, 11 Oct 2022 14:39:11 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 11:39:10 PDT
+Received: from mailfilter02-out41.webhostingserver.nl (mailfilter02-out41.webhostingserver.nl [141.138.168.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF4D5F224
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:39:10 -0700 (PDT)
+X-Halon-ID: d82bad68-4993-11ed-be53-001a4a4cb922
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
+        id d82bad68-4993-11ed-be53-001a4a4cb922;
+        Tue, 11 Oct 2022 20:38:05 +0200 (CEST)
+Received: from 2a02-a466-68ed-1-d9fe-da5d-3465-7be0.fixed6.kpn.net ([2a02:a466:68ed:1:d9fe:da5d:3465:7be0])
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <fntoth@gmail.com>)
+        id 1oiK8j-004rfb-0w;
+        Tue, 11 Oct 2022 20:38:05 +0200
+Message-ID: <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com>
+Date:   Tue, 11 Oct 2022 20:38:04 +0200
 MIME-Version: 1.0
-References: <20221009181338.2896660-1-lis8215@gmail.com> <20221009181338.2896660-8-lis8215@gmail.com>
- <Y0R+q7BdxtFqeiT1@kroah.com>
-In-Reply-To: <Y0R+q7BdxtFqeiT1@kroah.com>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Tue, 11 Oct 2022 21:38:03 +0300
-Message-ID: <CAKNVLfaNJjdVCeVCrOOw5xjsJ=gzJ2uFxAjgMA9tWHE=qFEECA@mail.gmail.com>
-Subject: Re: [PATCH 7/8] serial: 8250/ingenic: Add support for the
- JZ4750/JZ4755 SoCs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
+ <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+ <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,21 +72,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 23:20, Greg Kroah-=
-Hartman <gregkh@linuxfoundation.org>:
-> What does "clkdiv" mean here?
+Hi,
 
-That means a clock divisor between the input oscillator and UART
-peripheral clock source. Most Ingenic SoCs don't have that divisor,
-so 1 is always in effect for them.
-However, the JZ4750 and JZ4755 have switchable /2 clock divisor.
+Op 10-10-2022 om 23:35 schreef Andrey Smirnov:
+> On Mon, Oct 10, 2022 at 1:52 PM Ferry Toth <fntoth@gmail.com> wrote:
+>>
+>> Hi
+>>
+>> Op 10-10-2022 om 13:04 schreef Ferry Toth:
+>>> Hi
+>>>
+>>> On 10-10-2022 07:02, Andrey Smirnov wrote:
+>>>> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+>>>>>
+>>>>> On 07-10-2022 04:11, Thinh Nguyen wrote:
+>>>>>> On Thu, Oct 06, 2022, Ferry Toth wrote:
+>>>>>>> Hi
+>>>>>>>
+>>>>>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
+>>>>>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
+>>>>>>>>> Hi,
+>>>>>>>>>
+>>>>>>>>>         Thanks!
+>>>>>>>>>
+>>>>>>>>>         Does the failure only happen the first time host is
+>>>>>>>>> initialized? Or can
+>>>>>>>>>         it recover after switching to device then back to host mode?
+>>>>>>>>>
+>>>>>>>>> I can switch back and forth and device mode works each time,
+>>>>>>>>> host mode remains
+>>>>>>>>> dead.
+>>>>>>>> Ok.
+>>>>>>>>
+>>>>>>>>>         Probably the failure happens if some step(s) in
+>>>>>>>>> dwc3_core_init() hasn't
+>>>>>>>>>         completed.
+>>>>>>>>>
+>>>>>>>>>         tusb1210 is a phy driver right? The issue is probably
+>>>>>>>>> because we didn't
+>>>>>>>>>         initialize the phy yet. So, I suspect placing
+>>>>>>>>> dwc3_get_extcon() after
+>>>>>>>>>         initializing the phy will probably solve the dependency
+>>>>>>>>> problem.
+>>>>>>>>>
+>>>>>>>>>         You can try something for yourself or I can provide
+>>>>>>>>> something to test
+>>>>>>>>>         later if you don't mind (maybe next week if it's ok).
+>>>>>>>>>
+>>>>>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon()
+>>>>>>>>> until after
+>>>>>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU
+>>>>>>>>> initially
+>>>>>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode()
+>>>>>>>>> but only for
+>>>>>>>>> case USB_DR_MODE_OTG. So with this change order of events is
+>>>>>>>>> more or less
+>>>>>>>>> unchanged" solves the issue.
+>>>>>>>>>
+>>>>>>>> I saw the experiment you did from the link you provided. We want
+>>>>>>>> to also
+>>>>>>>> confirm exactly which step in dwc3_core_init() was needed.
+>>>>>>> Ok. I first tried the code move suggested by Andrey (didn't work).
+>>>>>>> Then
+>>>>>>> after reading the actual code I moved a bit further.
+>>>>>>>
+>>>>>>> This move was on top of -rc6 without any reverts. I did not make
+>>>>>>> additional
+>>>>>>> changes to dwc3_core_init()
+>>>>>>>
+>>>>>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+>>>>>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+>>>>>>>
+>>>>>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. -
+>>>>>>> dwc3_core_init - ..
+>>>>>>> - dwc3_core_init_mode (no change)
+>>>>>>>
+>>>>>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. -
+>>>>>>> dwc3_get_extcon -
+>>>>>>> dwc3_core_init_mode (works)
+>>>>>>>
+>>>>>>> .. are what I believe for this issue irrelevant calls to
+>>>>>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
+>>>>>>>
+>>>>>> Right. Thanks for narrowing it down. There are still many steps in
+>>>>>> dwc3_core_init(). We have some suspicion, but we still haven't
+>>>>>> confirmed
+>>>>>> the exact cause of the failure. We can write a proper patch once we
+>>>>>> know
+>>>>>> the reason.
+>>>>> If you would like me to test your suspicion, just tell me what to do
+>>>>> :-)
+>>>>
+>>>> OK, Ferry, I think I'm going to need clarification on specifics on
+>>>> your test setup. Can you share your kernel config, maybe your
+>>>> "/proc/config.gz", somewhere? When you say you are running vanilla
+>>>> Linux, do you mean it or do you mean vanilla tree + some patch delta?
+>>>
+>>> For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
+>>>
+>>> https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
+>>>
+>>>
+>>> There are 2 patches referred in #67 and #68. One is related to the
+>>> infinite loop. The other is I believe also needed to get dwc3 to work.
+>>>
+>>> All the kernel config are applied as .cfg.
+>>>
+>>> Patches and cfs's here:
+>>>
+>>> https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+>>>
+>>
+>> Updated Yocto recipe for v6.0 here:
+>>
+>> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb
+>>
+>> #75-#77 are the 2 reverts from Andy, + one SOF revert (not related to
+>> this thread).
+> 
+> Please drop all of this
+> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb#L69-L77
+> and re do the testing. Assuming things are still broken, that's how
+> you want to do the bisecting.
 
-> If you only have 1 or 2 as an option
+I removed 4 patches:
+0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+0044-REVERTME-usb-dwc3-gadget-skip-endpoints-ep-18-in-out.patch
+0001-Revert-USB-fixup-for-merge-issue-with-usb-dwc3-Don-t.patch
+0001-Revert-usb-dwc3-Don-t-switch-OTG-peripheral-if-extco.patch
 
-Yes, it is.
+and indeed as you expect kernel boots (no infinite loop). However dwc3 
+host mode is not working as in your case, device mode works fine (Yocto 
+configures a set of gadgets for me).
 
-> just have 2 functions instead please.
+Just to be sure if I could have bisected without 0043a I added back the 
+2 0001-Revert* and indeed I run into the infinite loop with the console 
+spitting out continuous:
+debugfs: Directory 'dwc3.0.auto' with parent 'ulpi' already present!
+tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
 
-Got it, will do that.
+so yes it seems either 0043b or your patch "usb: dwc3: Don't switch OTG 
+-> peripheral if extcon is present" is needed to boot (break the 
+infinite loop). But your patch is in my case not sufficient to make host 
+mode work.
 
-Thank you.
+As I understand it depends a bit on the timing, I might have a different 
+initrd (built by Yocto vs. Buildroot). F.i. I see I have 
+extcon-intel-mrfld in initrd and dwc3 / phy-tusb1210 built-in.
+
