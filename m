@@ -2,162 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492E75FB71D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5235FB6FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiJKP2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S229851AbiJKP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiJKP2I (ORCPT
+        with ESMTP id S230151AbiJKPZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:28:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED75AC6A
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:18:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D5BE21E25;
-        Tue, 11 Oct 2022 15:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1665500520; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 11 Oct 2022 11:25:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6777BDFB58
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665501360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=tIObQI87ODYfkOTzFVXmAYrM/0zLsZEeiDdeh3vdD0s=;
-        b=e2GiKmmEOkLY+IrQG88WkAHke4BuJQw/Pp+O5SIQZidz/v9ATf7nW2bHCpzr/gZCYwWSCZ
-        8GE0tvxMxi2G5DPS/UwgN429NaVvUErmZVyYiNtBS46M/qzJO8I+iyiumoWGaSslUdXBsO
-        WnNsVzhKC500m/ua9l8Ig3xPT93DfI8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1665500520;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tIObQI87ODYfkOTzFVXmAYrM/0zLsZEeiDdeh3vdD0s=;
-        b=2Rxq21b9+jjedRE+5e5G4D5FnvCgENcP36GpwsAT4K6vXhPZYlDfbAdzehDfkA2990Dy7H
-        6oreAn6VJPppxkAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41DF5139ED;
-        Tue, 11 Oct 2022 15:02:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bEtNCmiFRWNgSgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 11 Oct 2022 15:02:00 +0000
-Message-ID: <3326af6f-5ca5-e349-1641-5987e6800fea@suse.de>
-Date:   Tue, 11 Oct 2022 17:01:59 +0200
+        bh=ti1NCFCTzr5YPwBHvg45c+mfaiUwrR60uA7ep6lLZuA=;
+        b=JnAa2pRMUWiD+yAQqwCL4lttSiTDCC/zzFMxQQISZdtquT+8TRHzAk5S5SKjxCICg+Mh4t
+        hg6wMmryiw6K+1mfzC8DCdZovsQ9T0rrA54tQnPNf4gKbvKpxqabtJHOky0ZA/92GD0ib/
+        iF0BkXKAghlvEz4gET9tZbArhIAAo4s=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-178-LEgfpuoqOnGTTIg9qfqDcA-1; Tue, 11 Oct 2022 11:02:10 -0400
+X-MC-Unique: LEgfpuoqOnGTTIg9qfqDcA-1
+Received: by mail-wm1-f72.google.com with SMTP id l1-20020a7bc341000000b003bfe1273d6cso3824568wmj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:02:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ti1NCFCTzr5YPwBHvg45c+mfaiUwrR60uA7ep6lLZuA=;
+        b=jSuAr9YMLXrjqozDStjj3rt+i0GOZPTHvOtnT3Rg88wBpttvnsJdlUjYQfC/Hhs4li
+         23L4861EcsC74gKkHeMik4iUU6AChbqXkYM1rQlUOjcLNlS1TzKiHSEG7kQd8qhwovr3
+         BcxArOsqt0F1eQNsKO0pOtcx49i4lzgrHAvUiVgVOOxO28QmR8BI4pHOBz33Fr5r8noV
+         sNtPJXf6DsSGqRJsrx1eQjkdzT2UwFLOrsR4OWXf18DJUuZ95lBlnsZvlATYgdlRLFT/
+         UhfUyLRVUCbhrFjSQv/fejWZLOReJK/Tj0ll10ry0TeshBR0m0wR3bKUl5X2g8kAQ5Zx
+         HKwQ==
+X-Gm-Message-State: ACrzQf1h/ZKDlI9dljCZfiuFwPESlqQpAgEX5OOpMDHZMtIslc6hFTqO
+        vqDh6h+kNJ7CFR7trx9ooVuJ5y2OUwAqzTB7cZRHBbmTUrYUXnI2l/iH3VhXI5iHVcg1z54xSSS
+        bo5OKQ//6ZLHHUw7D7DgkNc48
+X-Received: by 2002:a5d:59a3:0:b0:22e:4b62:7ceb with SMTP id p3-20020a5d59a3000000b0022e4b627cebmr15699181wrr.90.1665500528705;
+        Tue, 11 Oct 2022 08:02:08 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7srUgXRaEVg4Pb59BUs0ShAt8e40s56KQw2lU0G4VdN3sOMR/0VHio2//G+OqnLs1Wx3l7Vw==
+X-Received: by 2002:a5d:59a3:0:b0:22e:4b62:7ceb with SMTP id p3-20020a5d59a3000000b0022e4b627cebmr15699160wrr.90.1665500528495;
+        Tue, 11 Oct 2022 08:02:08 -0700 (PDT)
+Received: from vschneid.remote.csb ([104.132.153.106])
+        by smtp.gmail.com with ESMTPSA id bh11-20020a05600c3d0b00b003b49ab8ff53sm13552403wmb.8.2022.10.11.08.02.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 08:02:07 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH 4/5] irq_work: Trace calls to arch_irq_work_raise()
+In-Reply-To: <20221008153442.159b2f2d@rorschach.local.home>
+References: <20221007154145.1877054-1-vschneid@redhat.com>
+ <20221007154533.1878285-4-vschneid@redhat.com>
+ <20221008153442.159b2f2d@rorschach.local.home>
+Date:   Tue, 11 Oct 2022 16:02:06 +0100
+Message-ID: <xhsmhlepmflox.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 3/3] drm/crtc-helper: Add a drm_crtc_helper_atomic_check()
- helper
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-References: <20221010170203.274949-1-javierm@redhat.com>
- <20221010170203.274949-4-javierm@redhat.com>
- <f6a49350-74d0-4923-7c80-8e6233dc135b@suse.de>
- <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------VWTHTjX9hU0euSeG9r6eO66P"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------VWTHTjX9hU0euSeG9r6eO66P
-Content-Type: multipart/mixed; boundary="------------bEkoHkR43JVEIQDmPkD0Euw2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-Message-ID: <3326af6f-5ca5-e349-1641-5987e6800fea@suse.de>
-Subject: Re: [PATCH 3/3] drm/crtc-helper: Add a drm_crtc_helper_atomic_check()
- helper
-References: <20221010170203.274949-1-javierm@redhat.com>
- <20221010170203.274949-4-javierm@redhat.com>
- <f6a49350-74d0-4923-7c80-8e6233dc135b@suse.de>
- <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
-In-Reply-To: <bbbd1ebb-f0cc-91d6-2959-28919a2e8893@redhat.com>
+On 08/10/22 15:34, Steven Rostedt wrote:
+> On Fri,  7 Oct 2022 16:45:32 +0100
+> Valentin Schneider <vschneid@redhat.com> wrote:
+>>  }
+>>  
+>> +static inline void irq_work_raise(void)
+>> +{
+>> +	if (arch_irq_work_has_interrupt())
+>> +		trace_ipi_send_cpu(_RET_IP_, smp_processor_id());
+>
+> To save on the branch, let's make the above:
+>
+> 	if (trace_ipi_send_cpu_enabled() && arch_irq_work_has_interrupt())
+>
+> As the "trace_*_enabled()" is a static branch that will make it a nop
+> when the tracepoint is not enabled.
+>
 
---------------bEkoHkR43JVEIQDmPkD0Euw2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Makes sense, thanks for the suggestion.
 
-SGkNCg0KQW0gMTEuMTAuMjIgdW0gMTU6MjYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IE9uIDEwLzExLzIyIDE1OjIxLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToN
-Cj4+IEhpDQo+Pg0KPj4gQW0gMTAuMTAuMjIgdW0gMTk6MDIgc2NocmllYiBKYXZpZXIgTWFy
-dGluZXogQ2FuaWxsYXM6DQo+Pj4gUHJvdmlkZXMgYSBkZWZhdWx0IENSVEMgc3RhdGUgY2hl
-Y2sgaGFuZGxlciBmb3IgQ1JUQ3MgdGhhdCBvbmx5IGhhdmUgb25lDQo+Pj4gcHJpbWFyeSBw
-bGFuZSBhdHRhY2hlZC4NCj4+Pg0KPj4+IFRoZXJlIGFyZSBzb21lIGRyaXZlcnMgdGhhdCBk
-dXBsaWNhdGUgdGhpcyBsb2dpYyBpbiB0aGVpciBoZWxwZXJzLCBzdWNoIGFzDQo+Pj4gc2lt
-cGxlZHJtIGFuZCBzc2QxMzB4LiBGYWN0b3Igb3V0IHRoaXMgY29tbW9uIGNvZGUgaW50byBh
-IENSVEMgaGVscGVyIGFuZA0KPj4+IG1ha2UgZHJpdmVycyB1c2UgaXQuDQo+Pj4NCj4+PiBT
-aWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0
-LmNvbT4NCj4+DQo+PiBSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
-YW5uQHN1c2UuZGU+DQo+Pg0KPj4gVGhlcmUgcmVhbGx5IGlzbid0IG11Y2ggaGVyZSBmb3Ig
-bm93LiBJIHN1c3BlY3QgdGhhdCB0aGVyZSBhcmUgbW9yZQ0KPj4gZHJpdmVycyB0aGF0IGNv
-dWxkIHVzZSB0aGlzIGhlbHBlci4gSWYgeW91IG1lcmdlIHRoaXMgYmVmb3JlIG9mZHJtLCBJ
-J2xsDQo+PiByZWJhc2Ugb2Zkcm0gb24gdG9wLg0KPj4NCj4gDQo+IFN1cmUuIEkgcHJvYmFi
-bHkgd29uJ3QgcG9zdCBhIHYyIHVudGlsIHRvbW9ycm93IGFuZCBJIGJlbGlldmUgb2Zkcm0g
-aXMNCj4gcmVhZHkgdG8gYmUgbWVyZ2VkLCBzbyBJJ2xsIGp1c3QgcmViYXNlIHRoaXMgc2Vy
-aWVzIG9uIHRvcCBvZiB0aGF0IG9uY2UNCj4ganVzdCBwdXNoIGl0Lg0KDQpJIGp1c3QgcmVh
-bGl6ZWQgdGhhdCB0aGlzIGZ1bmN0aW9uIGluIG9mZHJtIGhhcyBhZGRpdGlvbmFsIGNvZGUg
-Zm9yIA0KY29sb3IgbWFuYWdlbWVudC4gVGhlcmUgd29uJ3QgYmUgYW55dGhpbmcgdG8gY29u
-dmVydC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4+IFBsZWFzZSBhbHNvIHNl
-ZSBteSBjb21tZW50IGJlbG93Lg0KPj4NCj4+DQo+IA0KPiBbLi4uXQ0KPiANCj4+PiArLyoq
-DQo+Pj4gKyAqIGRybV9jcnRjX2hlbHBlcl9hdG9taWNfY2hlY2soKSAtIEhlbHBlciB0byBj
-aGVjayBDUlRDIGF0b21pYy1zdGF0ZQ0KPj4+ICsgKiBAY3J0YzogQ1JUQyB0byBjaGVjaw0K
-Pj4+ICsgKiBAc3RhdGU6IGF0b21pYyBzdGF0ZSBvYmplY3QNCj4+PiArICoNCj4+PiArICog
-UHJvdmlkZXMgYSBkZWZhdWx0IENSVEMtc3RhdGUgY2hlY2sgaGFuZGxlciBmb3IgQ1JUQ3Mg
-dGhhdCBvbmx5IGhhdmUNCj4+PiArICogb25lIHByaW1hcnkgcGxhbmUgYXR0YWNoZWQgdG8g
-aXQuDQo+Pj4gKyAqDQo+Pj4gKyAqIFRoaXMgaXMgb2Z0ZW4gdGhlIGNhc2UgZm9yIHRoZSBD
-UlRDIG9mIHNpbXBsZSBmcmFtZWJ1ZmZlcnMuDQo+Pg0KPj4gSSdkIGFkZCBhIHJlZmVyZW5j
-ZSB0byBkcm1fcGxhbmVfaGVscGVyX2F0b21pY19jaGVjaygpIHRvIHRoaXMNCj4+IHBhcmFn
-cmFwaC4gTGlrZQ0KPj4NCj4+ICAgICBTZWUgZHJtX3BsYW5lX2hlbHBlcl9hdG9taWNfY2hl
-Y2soKSBmb3IgdGhlIHJlc3BlY3RpdmUgcGxhbmUgaGVscGVycy4NCj4+DQo+PiBBbmQgYWxz
-byByZWZlcmVuY2UgYmFjayBmcm9tIHRoZSBwbGFuZS1jaGVjayBoZWxwZXIgdG8gdGhlIENS
-VEMtY2hlY2sNCj4+IGhlbHBlci4NCj4+DQo+IA0KPiBHb29kIGlkZWEsIEknbGwgZG8gdGhh
-dC4gVGhhbmtzIGZvciB5b3VyIHJldmlldy4NCj4gICANCj4+IEJlc3QgcmVnYXJkcw0KPj4g
-VGhvbWFzDQo+Pg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJp
-dmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpN
-YXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFH
-IE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+> -- Steve
+>
+>
+>> +
+>> +	arch_irq_work_raise();
+>> +}
+>> +
+>>  /* Enqueue on current CPU, work must already be claimed and preempt disabled */
 
---------------bEkoHkR43JVEIQDmPkD0Euw2--
-
---------------VWTHTjX9hU0euSeG9r6eO66P
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNFhWcFAwAAAAAACgkQlh/E3EQov+A+
-wBAAqA9rOyoFJtmzOcmcD35zAmPQean1vkqoTj/jIfvP9D0mtDFOyPZsJkiEtJ+7epuug0uQ4BJd
-QE9X/InfoXJn9IrU0fQWc2qW6cHrLjMPTPvgfKrGPLy6L+B1UqSBbZV54bTWVAaNG0flr+tyAB9I
-c2sw1rQ8Yp7E1yW+/rK8Lj80l2mJVHWryyN7R+7Hc5sOlce142ZNJ60JdESN7HyCOrTe92az2ciU
-JvMpDl7jvU2mIAAQb9Q8w2K/W9p6x+dDbO3FYHlYOioWqL468PgowK5EGiR+eSUVCdzXA78ptWv3
-Oy0j7xhJExA9H94t8f19PZtx4bJSxUlZ3pg7hmM2G0ovRsnY8x7jpl1B0+KS/xStRLHsZxEccrlM
-FGMEvPTXlJBwZmBWR6HoUwIMlDTeVWK7tXifcw3HP6M0Sg33B9VWOJJLm5Qb0M0i2UrBYzYu2RcA
-F0V/2kvc91GKR9rrjpDMoQ3EoRjM1zG2u5UOrj5Qs4NbQOZE4Pk0uasnLyCqNkahYzCfLLJX68LS
-UUIUvg+rh8M2Pi1qxxgNYujWSvoReIVrrChyBpFv+I5i4ovKj9ccM/mxRF8F9VaB4jMYELJIAJWx
-aT157+TzdBmWepmZubM7U3Jm1sVWZVdI1+tAT41U79KCd9p8/WISwoFvKDH3EGaDEVfmxYdv/buy
-hlw=
-=nRdf
------END PGP SIGNATURE-----
-
---------------VWTHTjX9hU0euSeG9r6eO66P--
