@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC725FAE54
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA9A5FAE57
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiJKIYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S229965AbiJKIYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJKIYn (ORCPT
+        with ESMTP id S229791AbiJKIYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:24:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC075BA1;
-        Tue, 11 Oct 2022 01:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UykTJ7aWjC0CKU4x9PgcpHxD5DYk8iJQd5iBQkWjMTk=; b=c+MzSjAxmmB0/S1jD//ocqinK1
-        RiN3+LuJMBRcdZ+TdbDvXcKuRj61y8IbMoawQiCVBzoXh39LlkTu/Eb6E5dQJ5270kWTAoXpDuyMV
-        /AJS63N2Q9nsseYasm6d032m92km9XGf3N6Ppy9tk0jOzcNMUb4PJbfb7jtujUSVU4L66j13bvLCm
-        numbJxW7IuXv7ZaSLs05jFNnW4GzUO4HoGIZfNGrV62c9FRBbO3VIMhzWs7DKjigg10ixHZjAVMbo
-        dDa6hF/vuC6WqgWVP+hxoMsLbiDOtL/WmPHzqQ3C0+K3/oZwt3Xuue7AsC8POttpNdjDnKIHJbBM6
-        y2ePx0dQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oiAYy-004o4V-Kq; Tue, 11 Oct 2022 08:24:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3DBBC3001CB;
-        Tue, 11 Oct 2022 10:24:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2082B20E1D7E5; Tue, 11 Oct 2022 10:24:27 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 10:24:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] MM updates for 6.1-rc1
-Message-ID: <Y0UoO2+NsJjbZtaf@hirez.programming.kicks-ass.net>
-References: <20221008132113.919b9b894426297de78ac00f@linux-foundation.org>
- <CAHk-=wigZoriP8ZB+V87Jf+EQV=ka6DQe_HCAQmh3Dmus2FFhw@mail.gmail.com>
+        Tue, 11 Oct 2022 04:24:44 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0763E60F7;
+        Tue, 11 Oct 2022 01:24:42 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id 8so584488qka.1;
+        Tue, 11 Oct 2022 01:24:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Uw1cmORZocU1edVD2sftuYrS4ha7u4YJ60SusOC6Dc=;
+        b=vDkOTkHg0qh4Ng1sqSh3spPu10yn4FybOGJMPwUTbFnwg0RMOk/sAc0dxCzhHosAmV
+         b32YGM/z7GrkgPf7quNfmJx/dqk41XxrAvJMeAsQudWhAaQiC71ln3ylZUiNNZIzS0iI
+         LN6jCZIhZK1+CuoTB0n1c/NASC5oYOt+ra0JBSHC3K5HWfw7SeY8g6EeTw7GfPfQJk60
+         FS2kFdXXPpK5S1z8ihGXxtZbDPaogx9eH3X9Ai1ADn3uwk+sxMczVg0628X4xubUHz6o
+         KAc81hLo6Bbx2QYYDBERNBbohUg5o11d0edZ2xmCnulY/Zwxd/UFUeOFK/sxqR4eUvjC
+         zkzQ==
+X-Gm-Message-State: ACrzQf0N0urGKPyGUwOI+SxeEFFucP93mY+09H+6FCXIZuNwDD5G7opw
+        gpT0g483XHB6kJjhNOpUEb/+DVa1GhY4Mg==
+X-Google-Smtp-Source: AMsMyM6bcN+VVUQk8YbXTPCPnDt1Son9fMHty9psTCgkWOIBikSnc2ppECydu7n1gnQnAKdze6K0NA==
+X-Received: by 2002:a05:620a:2892:b0:6cf:60a0:84ec with SMTP id j18-20020a05620a289200b006cf60a084ecmr15066142qkp.574.1665476681344;
+        Tue, 11 Oct 2022 01:24:41 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id t24-20020a37ea18000000b006e42a8e9f9bsm12316713qkj.121.2022.10.11.01.24.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 01:24:41 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 81so15629451ybf.7;
+        Tue, 11 Oct 2022 01:24:40 -0700 (PDT)
+X-Received: by 2002:a25:3a02:0:b0:6bb:fce3:7b06 with SMTP id
+ h2-20020a253a02000000b006bbfce37b06mr22250962yba.89.1665476680562; Tue, 11
+ Oct 2022 01:24:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wigZoriP8ZB+V87Jf+EQV=ka6DQe_HCAQmh3Dmus2FFhw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221009231253.15592-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221009231253.15592-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Oct 2022 10:24:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVUaMo5wEJweOqPRQ_a6Ojy0suLBjCWX38LXACUHnt7vA@mail.gmail.com>
+Message-ID: <CAMuHMdVUaMo5wEJweOqPRQ_a6Ojy0suLBjCWX38LXACUHnt7vA@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: r9a07g043: Drop WDT2 clock and reset entry
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 06:20:00PM -0700, Linus Torvalds wrote:
-> The other thing I notice from just doing a build is that I now get
-> 
->    vmlinux.o: warning: objtool: kasan_report+0x12: call to
-> stackleak_track_stack() with UACCESS enabled
+On Mon, Oct 10, 2022 at 1:13 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
+> used from CA55 CPU would result in an unexpected behaviour. Hence drop
+> WDT2 clock and reset entries.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-So kasan_report() is already marked as being special; and it does the
-mandatory user_access_save() / user_access_restore() things to fix it
-up.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk-for-v6.2.
 
-But it looks like kasan code itself is now getting instrumented by the
-stackleak stuff and that inserts a call outside of the
-user_access_save()/restore() thing, and *that* is getting flagged.
+Gr{oetje,eeting}s,
 
-Looking at mm/kasan/Makefile it disables a lot of the instrumentation,
-but perhaps not enough?
+                        Geert
 
-I've not yet tried to reproduce, I'm taking this is allyesconfig or
-something glorious like that? LLVM-15 ?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
