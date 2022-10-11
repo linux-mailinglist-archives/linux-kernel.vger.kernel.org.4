@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC1C5FAE22
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B10D5FAE29
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJKINM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S229950AbiJKINs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJKINH (ORCPT
+        with ESMTP id S230026AbiJKIN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 04:13:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D4A3EA49;
-        Tue, 11 Oct 2022 01:13:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BD73B80AAE;
-        Tue, 11 Oct 2022 08:13:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46790C433C1;
-        Tue, 11 Oct 2022 08:13:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665475982;
-        bh=hdV/HagkJ26SOAJFvJzmaF51kGu9RxKTWkSj9OFXJ9o=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=BipUaM7W4M0iTTaKjf/MvpWknYY7hihA0mTYx0uxRN29Mp/M0UejN70x+4LkrhLXJ
-         WQUxO/lGsuQo/76gHn00sLWGFuLu/rtVqVdR/7q0w2YaxYfswVpqDcGaDn35fapdCc
-         qI821XfCJXBwFnBC/ITOR9oWR6J3enqSOEZ4Oh+M2SdRxte0MXHeQXXyH89XVXnb5J
-         WQtykTZ9/dMOg/MQNmq/wefEGYBki3JTAorcRujJGa5p+FBO8oVSFUO2aPidwQ0cr1
-         HLz53LFGilK3SEzRKmNIeSP0mFQvy+BqPSaimShSBPYpL2PPOQMUjKR40F3dX+4VoO
-         7sQdaiWbLjD3A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
-Subject: Re: drivers/net/wireless/ath/ath11k/mac.c:2238:29: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0
-References: <CA+G9fYsZ_qypa=jHY_dJ=tqX4515+qrV9n2SWXVDHve826nF7Q@mail.gmail.com>
-        <87ilkrpqka.fsf@kernel.org>
-        <158e9f4f-9929-4244-b040-78f2e54bc028@app.fastmail.com>
-Date:   Tue, 11 Oct 2022 11:12:56 +0300
-In-Reply-To: <158e9f4f-9929-4244-b040-78f2e54bc028@app.fastmail.com> (Arnd
-        Bergmann's message of "Mon, 10 Oct 2022 19:52:09 +0200")
-Message-ID: <87tu4aok1j.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 11 Oct 2022 04:13:29 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3169A8A7DD;
+        Tue, 11 Oct 2022 01:13:21 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id f14so8515462qvo.3;
+        Tue, 11 Oct 2022 01:13:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LKbR4ieBilmLGumj/2iq1uroTruyZ95k0gYzbSgzxdk=;
+        b=2Xh0hyudz2rxgfWocD5aJG6piaLuAd4X3fMH0IBZc+5avQCLLD20B+4TYi9cl8WTYf
+         +0DI+5JA54+dc92q9ghQajXHyvzbl8rwEe76+9FhSYZPB4PHeggPA2/uGfnXdXtMGSoB
+         Ui3bpw35AMsAupwsZB4z96T5Pe0sLRXVFiZzFsprm9ipgNNGwWoaf3Ol7ATC8hkLzG2D
+         igQMQtvKfbbadiJAaxhX03LDiv3341Xhab+CTUBNDy014hNUdkYCT8tEz3hHRxmY9sJu
+         PvulQw0KL3dd2HTNlNslnxfME8aRly16f6+n6GKpTWW9uTTJ1kCd4mM6aQK+wXfqXMad
+         oIAQ==
+X-Gm-Message-State: ACrzQf20VTt6fMO149VHxGBbN5zSEsNZYED1d/SB9edLmOVxCJGitzSL
+        facCOUWuf6lWti1r8Mo72t/2/BFBjuqQOw==
+X-Google-Smtp-Source: AMsMyM7zPNXnmRs8NYV1E3TeSajHDW08Hlher0ba1rh+yReBxXNzmneAQoYvABbuaFVQTx08dS/qwQ==
+X-Received: by 2002:ad4:5bcc:0:b0:4b4:5029:8dd5 with SMTP id t12-20020ad45bcc000000b004b450298dd5mr1201731qvt.80.1665476000065;
+        Tue, 11 Oct 2022 01:13:20 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id r22-20020ae9d616000000b006ed30a8fb21sm4459671qkk.76.2022.10.11.01.13.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 01:13:19 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id b145so15663660yba.0;
+        Tue, 11 Oct 2022 01:13:18 -0700 (PDT)
+X-Received: by 2002:a5b:506:0:b0:6af:ffac:4459 with SMTP id
+ o6-20020a5b0506000000b006afffac4459mr20208800ybp.365.1665475998283; Tue, 11
+ Oct 2022 01:13:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221009230044.10961-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y0PBdDtFzcsmbtMv@shikoro> <CA+V-a8sOxyQj8J06kqnRN5G=L6KPdusJ-qLWntVa8kgFBh-MEQ@mail.gmail.com>
+ <CAMuHMdXoDmwNnYNt6mVnHNYoNQY5fN207iyR_TopOsux6RKhnA@mail.gmail.com> <CA+V-a8sN6twzEHmMcK9Cnnjciqz0O2tDYEhDVz0QEMCrqHQLNA@mail.gmail.com>
+In-Reply-To: <CA+V-a8sN6twzEHmMcK9Cnnjciqz0O2tDYEhDVz0QEMCrqHQLNA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Oct 2022 10:13:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWqm36JWKExZHZMKTQ6Bu6oFPMWux99JrO6wepBXGgYqA@mail.gmail.com>
+Message-ID: <CAMuHMdWqm36JWKExZHZMKTQ6Bu6oFPMWux99JrO6wepBXGgYqA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] arm64: dts: renesas: rzg2l-smarc-som: Drop enabling WDT2
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
-
-> On Mon, Oct 10, 2022, at 6:54 PM, Kalle Valo wrote:
->> Naresh Kamboju <naresh.kamboju@linaro.org> writes:
+On Tue, Oct 11, 2022 at 9:51 AM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Tue, Oct 11, 2022 at 8:39 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Mon, Oct 10, 2022 at 10:01 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Mon, Oct 10, 2022 at 7:53 AM Wolfram Sang <wsa@kernel.org> wrote:
+> > > > On Mon, Oct 10, 2022 at 12:00:40AM +0100, Prabhakar wrote:
+> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > >
+> > > > > WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
+> > > > > used from CA55 CPU would result in an unexpected behaviour. Hence drop
+> > > > > enabling WDT2.
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > > >
+> > > > I'd squash patches 1+2, but that's minor.
+> > > >
+> > > OK, I'll wait for Geert before sending a v2.
+> >
+> > I'd even squash the whole series into a single patch
+> > "arm64: dts: renesas: rzg2l: Drop WDT2 node".
+> >
+> OK.
 >
->>>
->>> Build log: https://builds.tuxbuild.com/2F4W7nZHNx3T88RB0gaCZ9hBX6c/
->>
->> Thanks, I was able to reproduce it now and submitted a patch:
->>
->> https://patchwork.kernel.org/project/linux-wireless/patch/20221010160638.20152-1-kvalo@kernel.org/
->>
->> But it's strange that nobody else (myself included) didn't see this
->> earlier. Nor later for that matter, this is the only report I got about
->> this. Arnd, any ideas what could cause this only to happen on GCC 11?
->>
->> -- 
->> https://patchwork.kernel.org/project/linux-wireless/list/
->>
->> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
->
-> No idea here, though I have not tried to reproduce it. This looks
-> like a false positive to me, which might be the result of some
-> missed optimization in the compiler when building with certain
-> options. I see in the .config that KASAN is enabled, and this sometimes
-> causes odd behavior like this. If it does not happen without KASAN,
-> maybe report it as a bug against the compiler.
+> > If that would be the only change for v2, I can take care of that while
+> > applying.
+> >
+> Thanks for taking care of it.
 
-You guessed correctly, disabling KASAN makes the warning go away. So no
-point of reporting this to GCC, thanks for the help!
+OK.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.2.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
