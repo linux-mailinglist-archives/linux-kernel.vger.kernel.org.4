@@ -2,122 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66565FAF88
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5815FAF91
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 11:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiJKJjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 05:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S229598AbiJKJog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 05:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJKJjl (ORCPT
+        with ESMTP id S229494AbiJKJob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 05:39:41 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB6FD48;
-        Tue, 11 Oct 2022 02:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1665481171;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=J8kcX+8LtEukoC4B1GeHkHmsTDqtm+m/Kn2u/N8i2bw=;
-    b=sPXhS+iFXOWYip5w4nkcUSkJiZqYFUhrS3Pua6NlIsgjZ2wKRlpr+/i7NUMJyCVoOf
-    alY8c0Zu1ZvNxkcfEkHJvsNHrg1Xn6CA66tg5+r3WVq2inwOFrHo3uVqMgqjWBqQ7hUN
-    ck8nen0t6xk0grf1NBLCBATow2t2K8XPkefpAfEt2pJIALeIVI6Q3TaELkj9LYOifNke
-    29ZO6ggqhPBGynJ7shmCwg9IJAB/xfugzHZTqlrR0IPPqnWebmzm0qqnjLK+SIlW1rdq
-    tdJMYY0/IfVSsOqJ6GyYlapacfrOsImy6nUD/EhedTsBByfICQMLdWkBs9jZq7FUSYcG
-    ecGg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSeBwhhSxarlUcu05JyILymw8y23V5/v2HsOC"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.33.110]
-    by smtp.strato.de (RZmta 48.2.0 DYNA|AUTH)
-    with ESMTPSA id zad98cy9B9dT58G
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 11 Oct 2022 11:39:29 +0200 (CEST)
-Message-ID: <bdd72ef290b3c9d5492255358686a39a7aa3cde6.camel@iokpp.de>
-Subject: Re: [PATCH v2 1/2] scsi: ufs: core: Remove unnecessary if statement
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     daejun7.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 11 Oct 2022 11:39:27 +0200
-In-Reply-To: <20221011022153epcms2p1fcbf889099bd74279ed0d9b51ff26c1b@epcms2p1>
-References: <20221010092937.520013-2-beanhuo@iokpp.de>
-         <20221010092937.520013-1-beanhuo@iokpp.de>
-         <CGME20221010093042epcas2p2462d3c50d81d613574332e3f39d971e1@epcms2p1>
-         <20221011022153epcms2p1fcbf889099bd74279ed0d9b51ff26c1b@epcms2p1>
-Organization: IOKPP
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 11 Oct 2022 05:44:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE56B20350
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 02:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665481470; x=1697017470;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=43Y3aTBatW23+1sm5ZYUL27IXnFExy5x1qIelf/9F/A=;
+  b=Aw8A8drs1hvkeeCySeHra4heriMeDjtswYghHlKnRYd43rnlclEZY45F
+   tMZt2PbCPY5fb4xmHFC4h+6fntAAaEzOVYIV2FBDl1E6K5YaPEF+Jagxp
+   Yfm6WvQBgKGpDzRUGJpe9Avy+g4u+PeicTDAifHJHilL/h6e48IAD4QTP
+   vGBt3xm7LGq5PJnm9hQiuQOh+uoRZUBt2DSzdc647qxD02CK7adTXWrZX
+   pbbJkXtUn93CHTbQgQX8eEmca1h1JOFfPrZcrbUykowc9u06FUloTVmB/
+   Xx4oVkvDxaXYsnjo7zhfExa6R8yep6CxHBR5Z18D0jFqGIY442UbLgMP9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="302069807"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="302069807"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:44:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="730914797"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="730914797"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Oct 2022 02:44:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oiBoJ-005FXx-2C;
+        Tue, 11 Oct 2022 12:44:27 +0300
+Date:   Tue, 11 Oct 2022 12:44:27 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     arnd@arndb.de, lee@kernel.org, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org
+Subject: Re: [PATCH] Revert "mfd: syscon: Remove repetition of the
+ regmap_get_val_endian()"
+Message-ID: <Y0U6+2PfMrt9mI+L@smile.fi.intel.com>
+References: <Y0GZwkDwnak2ReTt@zx2c4.com>
+ <20221008154700.404837-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221008154700.404837-1-Jason@zx2c4.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-11 at 11:21 +0900, Daejun Park wrote:
-> Hi Bean=C2=A0Huo,
->=20
-> I think ufs_is_valid_unit_desc_lun() is also used for
-> wb_buf_alloc_units_show() in ufs-sysfs.c.
-> So just removing this if-checkup=C2=A0will make different result when
-> check lun value.
->=20
+On Sat, Oct 08, 2022 at 09:47:00AM -0600, Jason A. Donenfeld wrote:
+> This reverts commit 72a95859728a7866522e6633818bebc1c2519b17. It broke
+> reboots on big-endian MIPS and MIPS64 malta QEMU instances, which use
+> the syscon driver. Little-endian is not effected, which means likely
+> it's important to handle regmap_get_val_endian() in this function after
+> all.
 
-Hi Daejun,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks for your review on the patch. Yes, I understood what you mean.
-But I don't think that's the problem. Without this patch, access on
-sysfs node "wb_shared_alloc_units" would get "invalid argument", while
-with this patch sysfs would return 00. According to the UFS
-specification:
+as per discussion and analysis that shows that syscon needs that code because
+it calls regmap_init_mmio() with dev == NULL.
 
-"If this value is =E2=80=980=E2=80=99, then the WriteBooster is not support=
-ed for this
-LU. The Logical unit among LU0 ~ LU7 can be configured for WriteBooster
-Buffer. Otherwise, whole WriteBooster Buffer configuration in this
-device is invalid."
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Fixes: 72a95859728a ("mfd: syscon: Remove repetition of the regmap_get_val_endian()")
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/mfd/syscon.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+> index 9489e80e905a..bdb2ce7ff03b 100644
+> --- a/drivers/mfd/syscon.c
+> +++ b/drivers/mfd/syscon.c
+> @@ -66,6 +66,14 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+>  		goto err_map;
+>  	}
+>  
+> +	/* Parse the device's DT node for an endianness specification */
+> +	if (of_property_read_bool(np, "big-endian"))
+> +		syscon_config.val_format_endian = REGMAP_ENDIAN_BIG;
+> +	else if (of_property_read_bool(np, "little-endian"))
+> +		syscon_config.val_format_endian = REGMAP_ENDIAN_LITTLE;
+> +	else if (of_property_read_bool(np, "native-endian"))
+> +		syscon_config.val_format_endian = REGMAP_ENDIAN_NATIVE;
+> +
+>  	/*
+>  	 * search for reg-io-width property in DT. If it is not provided,
+>  	 * default to 4 bytes. regmap_init_mmio will return an error if values
+> -- 
+> 2.37.3
+> 
+> 
 
-Per my understanding,  with this patch,  there is still no miss-
-explanation of this sysfs node. The key purpose of this patch is to
-remove any nonsense logical during the booting stage.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-please have a think my comments. thanks.
-
-
-Kind regards,
-Bean
-
-
-> Thanks,
-> Daejun
->=20
-> > From:=C2=A0Bean=C2=A0Huo=C2=A0<beanhuo@micron.com>
-> >=20
-> > LUs=C2=A0with=C2=A0WB=C2=A0potential=C2=A0support=C2=A0are=C2=A0properl=
-y=C2=A0checked=C2=A0in=C2=A0ufshcd_wb_pro
-> > be()
-> > before=C2=A0calling=C2=A0ufshcd_read_unit_desc_param(),=C2=A0so=C2=A0re=
-move=C2=A0this=C2=A0unnece
-> > ssary
-> > if-
-> > checkup=C2=A0in=C2=A0ufs_is_valid_unit_desc_lun()=C2=A0to=C2=A0match=C2=
-=A0its=C2=A0function=C2=A0defin
-> > ition.
 
