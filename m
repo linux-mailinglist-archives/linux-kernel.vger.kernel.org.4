@@ -2,187 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A962D5FBB29
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0840A5FBB2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJKTJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S229761AbiJKTKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiJKTJD (ORCPT
+        with ESMTP id S229755AbiJKTJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:09:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCF590804
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665515338; x=1697051338;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=74VBaFRNxWzHwyfX80LAQvS03+nwOQ9rO48H+Xs9II8=;
-  b=dwgi5LUh5zpINVimrjD5nf4TcIN+aRCMaAcutBBiEfsklM9CwDBtWjrc
-   SYElvsaOrl5ZUQEgYZ084PJbuFlL9MOkvR+6ldR0qR1TX1N2kVb+SVd5R
-   CvVnSHtc5NkGS1xS866eEVo9vdCVnSj/dsboGkLNjZnI4jEdm/h8tn+DP
-   ug47gO5BdWxeEn++1jjGYr34oSVvArLAZYfVmF3rzjOFtgpZWK7wou7kS
-   EOTP2/BW7hPyYxPpwpzI5rf9fzS8lLbfJxedAfAjBj0LM/1tysZjPKsv0
-   WXcZfHCS9zNqBjjUBYh87W8uizaNR7z8eqZ2t1gWSOD8G9mGmtqTDKotk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="304589445"
-X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
-   d="scan'208";a="304589445"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 12:08:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="751848700"
-X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
-   d="scan'208";a="751848700"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP; 11 Oct 2022 12:08:57 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 12:08:57 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 12:08:56 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 11 Oct 2022 12:08:56 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 11 Oct 2022 12:08:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PyAdHE44dGu5D5Ns8b3tcqjbsW/gSfAVNCP9DecIhCdSIQTDcVT+2S3yGPBdCZIr07amjEO5wioqxrebe8ojZfoxgxkqMOXDjc1lJGFizvul1kQgP4DX03ZhJahxYnvBhvZeH830qKqRKO+rfbQTOZVtn6RSGiXAOpgFZZY3OzIUO2CeWUwYpaFuQiym0JHnDPZXkfjwS7BFTocE6rEFLfJ1z+4f/vLAuwdkkBJ0XsdKHwoxenGg/pHc1LJYw3RBlLj92GS7JdUssX0o0VUT19E1wzboQ7ZRunwkVMpCTwHxmn2WAHneQMBNTpTgLk/Bmc4JtWx+su0qcRxL/Lz2QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=74VBaFRNxWzHwyfX80LAQvS03+nwOQ9rO48H+Xs9II8=;
- b=iDm07naOaR3xR2w/yymF9KplDyXGzvcgcJRU2Cb/fSMPSn4koN0ArsIOkg3I8v2/qEwkJ5/dqNldMaC3B52W7cx3TxfZ/f1b0Tck9AuS+/exDpaTlZqs1zXkBdAV3yvhPU+fV0i94GHITKC+hPCEuVFYLzl+spGJ1qhsYQ/oJPKmbEwPgSe3YTrSC4s1pQOZIBxUL0jFpbhelqDUxQbjwWHxspvjiaZzi+BVvAjmWpZZWjYOCjHYacMKrWTYVlBmrywPwO4VIiAOZK1qgGG1pKOAEi1qevD/QbfxmInq7bT+ArLSUA/exA22dBnMqlBjIUn3tTgAN6eqdSSMyAZx5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by DM4PR11MB6432.namprd11.prod.outlook.com (2603:10b6:8:ba::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.20; Tue, 11 Oct 2022 19:08:51 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60%5]) with mapi id 15.20.5612.022; Tue, 11 Oct 2022
- 19:08:51 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Daniel Verkamp <dverkamp@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-Subject: RE: [PATCH] x86: also disable FSRM if ERMS is disabled
-Thread-Topic: [PATCH] x86: also disable FSRM if ERMS is disabled
-Thread-Index: AQHYzufCn81lK4uiX0SZXRx4bJPwP63s3TMAgABn1ICAAAdlgIAWBXKAgAXZaICAAF59YIAADP+AgAATsSA=
-Date:   Tue, 11 Oct 2022 19:08:51 +0000
-Message-ID: <SJ1PR11MB608345C36F1D52B8185E46E1FC239@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20220923005827.1533380-1-dverkamp@chromium.org>
- <Yy2U2BW6Tx0imGpK@zn.tnic>
- <CABVzXAk9AXj2Ns7YAh7cCA38t2sGxOEYLv-EfLCoFHr-SUQ2Mw@mail.gmail.com>
- <Yy3yJfz213Lqo4KC@zn.tnic>
- <CABVzXAkO4pU+gpUcWOEWDw+W4id=1WEOgeP5+3tBG_LR6=oa=g@mail.gmail.com>
- <Y0VTS9qTF/GaMihP@zn.tnic>
- <SJ1PR11MB6083203F6D6EFF8E562A2593FC239@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y0WtdarNtdIXCuhC@zn.tnic>
-In-Reply-To: <Y0WtdarNtdIXCuhC@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|DM4PR11MB6432:EE_
-x-ms-office365-filtering-correlation-id: be3a1c71-643f-4a1e-0bb8-08daabbc08be
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: of+jKBrSTRqwZp0Hk3Q5Kz272yxQkNvCTEvUAiAfnPByaxmSSK4lPws9IrrgYFwvNXydjaD0cB98qXTToNa3EKJVEWFRfjStHZyTzBBfrN9i2CpMaOwxkq/Q8ZZ3Y4hNcrp48R8l5CGiSCWsIn84jjEbCgzlBnMSSR4bSZBIzaR8dtQ1NvV2MNGL6gaTUiPy3vj+EihVdtGVPOileZffrFTiwSj3A0wL1jxaLn0Eou53l5CsMn8fYeliZm24tKcZb19Tfr8cBwCvhxanFtviewk1XhT3vB2JuS6kMn6hEL1XLEDdHVdFwdadlle5oN0W46+2fMct8UKaDPTI6ZuXvA8JSWFBw8WJh8AzZXUrCuLPBQKj9aRgd7VquQZG1H/gXm2wOHmzXGwoiBQZ+/NMf84HKdgZGfovs7kFRoRMP3wwkx9u66zPFaxVrv5xAW9Fhvf7Pgb+7FAV/PJTBmn3Ibz8nk2wFJTmQoSkkwm/KIxbkXAn+cwTCpUiY/U5Q0795hFAvgMGTcwM2lvUNex4YWs9TRymIMOefEeGGmY6fNQEkJNmJ2uu13bMF3HxWdJy5q5QXUlvFUbSgvBYrgOAAld8hBWJZ8JsENIR//oaGw6rrnDZ6YW9DeyJnaG8QGfX+PRkPvGaRBaufS8nIZzkaJkqNs1qk/7N47e62/nyBamlFjWVHYNcUHs8TVK7zQaze9sRWqmX3PUYBHtZfAeoLwGsot5LyY8ZLb5+E/jkn7huI7rSRiJ6cLXEhtx0Hg7VMSm2yrd87CK5Llije1bA0w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(366004)(376002)(396003)(136003)(451199015)(6506007)(9686003)(316002)(71200400001)(55016003)(6916009)(7696005)(41300700001)(5660300002)(52536014)(26005)(82960400001)(38100700002)(86362001)(8936002)(478600001)(33656002)(2906002)(4744005)(186003)(54906003)(38070700005)(4326008)(64756008)(76116006)(122000001)(66946007)(8676002)(66446008)(66476007)(66556008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?amRmL0RXanVETkNrZ1NJRXN4ZmxXQ1RiQXZTWk85WUE3eHZ0QksyVkZ0SDNS?=
- =?utf-8?B?TWduN0pOb2psMSs3TXoxMzZOZlRtS0ljNHk2Ly9XckNVdE54M3hxWEZVdzdu?=
- =?utf-8?B?bVBQSXowS2g0WXZnQkFXQldZZmFZRDdxTXZxQ0F6am1JY1RzOFFtb0NUUmZH?=
- =?utf-8?B?NFZFUldkT1hwS0lkaWJGTnpmNVVadjVFd0t0dkVCWlMyUnBBSHdqdEk5cWRO?=
- =?utf-8?B?eHN3aVRiUzNwYk1mbys4TDdjWlhicmRtM1ZlVDN5SHR1dmJ3bVFWOFc5RndN?=
- =?utf-8?B?Tys5RjNnVzRIa3dtSkVBa0src2pkcENRSUVvTkwvR1VjcmxrSlk1eUptdkdr?=
- =?utf-8?B?TysybmNScmE3Q0VjZzRQYzdYVEpmQmh1ZFRKSnRZV2JvY0F5YzhIYVluTGQv?=
- =?utf-8?B?aHdwZFhEQ2JpTXNmeVAwaEk0d1JNWit4ZDc5Sk00YnJoZk8ydnJqeEhhd1Fv?=
- =?utf-8?B?Y252WXJ4Vkp4eDlxeTFOK3MraFNaZU1BajIxZ3dRdVB1RnNaOTFuQ1cyWnY4?=
- =?utf-8?B?U2xKRVNRSXh6SU44U3IrUXhMMU44cDBzNXlzWUFFaHRMalVpNVArNE00d1d6?=
- =?utf-8?B?OTNOamlwcVNaNGs5RURMc1hFYVR5MVhYeTZBQUJTMkl0U09XU2diUzREWjdh?=
- =?utf-8?B?Sng3WmdlR1BRU2pnZ0NRemN5QTZjbzZ2SmVXV1p3NTFjcjI1OHBaUnpsQW5X?=
- =?utf-8?B?b00wdmR4SHQ0c0NRcHJlV2tXei9BSU8xUkdvK3lwOVFieUMzUmJEL3BJL1hP?=
- =?utf-8?B?YWY5SGtsTWRpbzZhUkRXcG9sNjlrWitnbURlTDNwSDNWaG1mbzM4Q1FZa1ZX?=
- =?utf-8?B?WHh4U0poakI5NXpJL3VENDRNUmk0bmQ3OGNkZUZDWWxGRTJuaWF6ZU9rMVU2?=
- =?utf-8?B?d0lSeUdlMVQzbGgvU0p1akw3bmxKeDBmSEtHREV3ZS82VXpUK2F5N0h1TjVV?=
- =?utf-8?B?ZmNDd2grbk04Vjh1b3Vyc09ZcmVJVENiOE52ZkxhQ3Z0Q3RnOHBqaFdiNWVB?=
- =?utf-8?B?aTdwLzJhZlNGQjZpeTRYVk1udGFsWEs5MTVzUXdVeUJmWGhOOGRaUFk5aU12?=
- =?utf-8?B?TEFMM3MyWUUzVDNxcmhBTFRXQjNoSXJjOVVGRTI4V1FPTHlWVmJ1U09yblJM?=
- =?utf-8?B?R3EzRGNDU3NxQVFGTFk5RVN6U0s2NC9uVVhKSHhaOTduYlVyK3hpMURHU1ZW?=
- =?utf-8?B?NWNGQWJHVDlpTmZ5aHhBV2lnTHl1YnBQaUZZdkZVTmlSQXRkbzRuampPN0hq?=
- =?utf-8?B?QnZUVm9PSGwvc3NLMFRSWUg1dHcrdTNIU0pNMC9VWk5ualpqSHJVMG5iZnky?=
- =?utf-8?B?dFBXS05zQlp4UWxZOHowRmxkWXhtdjF5ZWlxa2JXYmhBankvTG8rQ2dzRVVT?=
- =?utf-8?B?YVdlMVNKWEVKWC9leGJ1am00b1VIYTRkSE93clZmT1ZZQXBEV2doTVRXblZz?=
- =?utf-8?B?UjdTZDU4eHg5WHdDWkliOWd5NDZaSzhUQ3FNc0d2WENBc1pNZkxqcW5JNmwy?=
- =?utf-8?B?bm4vWk5CcFdqMlNsUjE5dXAveEduazlLWkZMenlGV2pCcC9wOFFjWE5sMEtw?=
- =?utf-8?B?OGdlaUZkcjF3d0lVMFUxaFRERTRZRVlhanprMFNhZWJMeUREbHBCNnF0WVBQ?=
- =?utf-8?B?SVBZQ3FzSHdjUU4vbk13d0V6R2tJOGFaN0tVSzU1cFZCWUpOUXgvUW4wNHRJ?=
- =?utf-8?B?L1BnR3BZRGo1RGFqclZWRVMyMjNpRHhIcXR3UHRqYU1UMjRiTlJJcWhCSzdB?=
- =?utf-8?B?U2FnUkxLSDJjTUh2MmNZVVlvdGRQalU3b04rTnIrM0VZMGZ4U2pLTmYwMzBq?=
- =?utf-8?B?ZnBLRnRPWm9pay9TY2x0ODcxUExpaEtadmE3SHdMVGg1L2Q2UytVY2I3eWh1?=
- =?utf-8?B?eGJIMjhlMmRKQVBSSjI4WEsrSEFOZkdzamxhMUhBTE1YNU4zTlEwaDFvc3g0?=
- =?utf-8?B?TXBJUTBjT29iZE5PZWdnOVdVYWdOeldMTFZ3TlpRcXI1V2tVdXVXNUk2T2Fv?=
- =?utf-8?B?SnIyQTAzenVMS3JyMzRaS0tmczBpWWlxN3diSEJmYlJQRHpaZTdWZGdUTVJz?=
- =?utf-8?B?S0JmOGtwWkVFcU4yTGlSMzZWelROa0VNTktnNjFvNVJnT2ZEWWd5MG16Z280?=
- =?utf-8?Q?QnDI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 11 Oct 2022 15:09:42 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6ED94127
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:09:26 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c20so4528051plc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=20Kp1jeeHpGBum4Su4jfbPvVo7l5z9I8ZNUwYhcjAtE=;
+        b=XxejvEzDPs7vSeKjrPhYc5Pxq32CeMTWb/w3ombhmCcQ+JNFI7ggIIV8Z+UzpJfdps
+         B2Z2AcWMnObXOvuR3vMEDYAIeGDXW6/2FAww0TKsA4uMR1o/fzuiR5WSHRslv1V/AyyK
+         Vsvc5jVht5MxMistIx77XQkhhYVCQVk3XKte/IftuvvP995QLooWRVoE8C4kt7Lb1Lfh
+         BPaOccQjSBW3P9LkcC3K/RsSg9pfuQgwpi+rX+5t+Az/xERoY2vG2Irh4TyMHuvXGQzz
+         sySvMFYqRj4qfhhoLf0lHR+msUCCwhx2MbbQvHY2mMUwfqXeK+BJJ/SOId8dKSg46YOr
+         sx3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20Kp1jeeHpGBum4Su4jfbPvVo7l5z9I8ZNUwYhcjAtE=;
+        b=vpmY7hwhrpgGbP/H9cLCxFld6sxmwFKmS9u/s+33+U0a2AuYMu1wpJpZansh4GVyZU
+         IOsM+JCmyl68cH4AUsWknZUDUdrObdKriS6hnf6MYLgeZDPtsroo56ZLCMwALjBXrGQ+
+         2EqJDpYAIdcMiuej+N0nYsvlnblAeTCgPqU50lGIJlN26jpGwSRup2J3SDijD9fLV8Jq
+         0u+lSdGPb7MIVq2qwzeXis6g6iE5n8qwvjkX0J3CGlsr/aGQIP0w7MvWYH96NqH9Mbzl
+         cCcgjCtxA2pkVn5id+p/LsAl7hdZ0NSpxy+5DsiHniDKojwJ2+nq3qJ1XqXeYRErkoIb
+         +r/Q==
+X-Gm-Message-State: ACrzQf0OvHV2q1jCNpxJU8mi3BmXveXskjuZLwWxBAbOxpCW+kNWzBf4
+        weKk+il9C8B06Zugygqs+tVZMA==
+X-Google-Smtp-Source: AMsMyM78d3ySAgRa29zSbaUnARlPvkLOOwFA6nco4mi3nMGfCYfx2ftw9Xx1mbYh1ZPcBrNXdGAzQA==
+X-Received: by 2002:a17:902:7290:b0:17f:d04b:bf57 with SMTP id d16-20020a170902729000b0017fd04bbf57mr24405317pll.147.1665515365613;
+        Tue, 11 Oct 2022 12:09:25 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b00179c99eb815sm9003192plp.33.2022.10.11.12.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 12:09:25 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 19:09:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] KVM: x86/pmu: Add PEBS support for SPR and future
+ non-hybird models
+Message-ID: <Y0W/YR6gXhunJYry@google.com>
+References: <20220922051929.89484-1-likexu@tencent.com>
+ <20220922051929.89484-2-likexu@tencent.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be3a1c71-643f-4a1e-0bb8-08daabbc08be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2022 19:08:51.4595
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OJR6Eg33eoIZhr9sBCV04UkECMR8caN74Py1FJiZiEGFGaPLpkxVoE1TSTkgGZbMJRM2vHTDIA4gO4craBT+bQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6432
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922051929.89484-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBJZiBzb21ldGhpbmcgY2xlYXJzIE1TUl9JQTMyX01JU0NfRU5BQkxFX0ZBU1RfU1RSSU5HX0JJ
-VCBhbmQgd2UgZ28gYW5kDQo+IGNsZWFyIG91ciBmZWF0dXJlIGZsYWdzIGFuZCBsdXNlcnNwYWNl
-IHN0aWxsIHF1ZXJpZXMgQ1BVSUQgdGhlbiBvaCB3ZWxsLA0KPiBpdCdsbCBiZSBmdW4uIEl0IGFs
-bCBkZXBlbmRzIG9uIHdoeSBzb21ldGhpbmcgaGFzIGNsZWFyZWQgdGhlbSB0aG8uIEl0DQo+IGNv
-dWxkIGJlIHNvbWUgcGVyZm9ybWFuY2UgdGhpbmcgb3Igc29tZXRoaW5nIGEgbG90IG1vcmUgZnVu
-a3kuIEkgZ3Vlc3MNCj4gaWYgc3R1ZmYgc3RhcnRzIGV4cGxvZGluZyBsZWZ0IGFuZCByaWdodCwg
-dGhlcmUgd2lsbCBzb29uIGJlIGEgbWljcm9jb2RlDQo+IHBhdGNoIGFmdGVyIHRoYXQuIDotKQ0K
-DQpZZXMuIEVSTVMgQ1BVSUQgYml0IHdhcyB0aGUgZWFybHkgaW5kaWNhdG9yIHRvIHMvdyB0aGF0
-IFJFUCBNT1ZTIHdvdWxkDQpkbyBzb21lIGZhbmN5IHNwZWVkdXBzIGlmIGNlcnRhaW4gY29uZGl0
-aW9ucyBhYm91dCBzb3VyY2UsIGRlc3RpbmF0aW9uIGFuZA0KY291bnQgYXJlIGFsbCBtZXQuIEEg
-aGludCB0byBzL3cgdG8gZGVjaWRlIHdoaWNoIG1lbWNweSgpIHJvdXRpbmUgdG8gdXNlLg0KDQpG
-U1JNIGlzIGEgaGludCB0aGF0IHRoZSBieXRlIGNvdW50IHJlc3RyaWN0aW9uIGhhZCBwcmV0dHkg
-bXVjaCBiZWVuIHJlbW92ZWQNCnNvIHMvdyBjYW4gdXNlIFJFUCBNT1ZTIGluIGV2ZW4gbW9yZSBw
-bGFjZXMuDQoNCkkgZG9uJ3QgdGhpbmsgSW50ZWwgd2lsbCBkZWxpYmVyYXRlbHkgcmVsZWFzZSBh
-IENQVSB0aGF0IGhhcyBGU1JNPTEsIEVSTVM9MC4NCg0KLVRvbnkNCg==
+Kind of a nit, but I would prefer a shortlog that talks about the pdit/pdir
+stuff and not a "enable PEBS" bucket.
+
+On Thu, Sep 22, 2022, Like Xu wrote:
+> @@ -140,6 +149,16 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
+>  	__kvm_perf_overflow(pmc, true);
+>  }
+>  
+> +static bool need_max_precise(struct kvm_pmc *pmc)
+> +{
+> +	if (pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu))
+> +		return true;
+> +	if (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu))
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+>  static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>  				  u64 config, bool exclude_user,
+>  				  bool exclude_kernel, bool intr)
+> @@ -181,11 +200,11 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>  		 * the accuracy of the PEBS profiling result, because the "event IP"
+>  		 * in the PEBS record is calibrated on the guest side.
+>  		 *
+> -		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
+> +		 * On Icelake everything is fine. Other hardware (TNT+) that
+>  		 * could possibly care here is unsupported and needs changes.
+
+This part of the comment is still somewhat stale, and for me at least it's not at
+all helpful.  
+
+>  		 */
+>  		attr.precise_ip = 1;
+> -		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
+> +		if (need_max_precise(pmc))
+>  			attr.precise_ip = 3;
+
+What about writing this as:
+
+		attr.precise_ip = pmc_get_pebs_precision(pmc);
+
+(or whatever name is appropriate for "pebs_precision").
+
+Then in the helper, add comments to explaint the magic numbers and the interaction
+with PDIST and PDIR.  Bonus points if #defines for the the magic numbers can be
+added somewher
+
+				 *  0 - SAMPLE_IP can have arbitrary skid
+				 *  1 - SAMPLE_IP must have constant skid
+				 *  2 - SAMPLE_IP requested to have 0 skid
+				 *  3 - SAMPLE_IP must have 0 skid
+
+static u64 pmc_get_pebs_precision(struct kvm_pmc *pmc)
+{
+	/* Comment that explains why PDIST/PDIR require 0 skid? */
+	if ((pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu)) ||
+	    (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu)))
+		return 3;
+
+	/* Comment about constant skid? */
+	return 1;
+}
+
+
+>  	}
+>  
+> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> index c5e5dfef69c7..4dc4bbe18821 100644
+> --- a/arch/x86/kvm/vmx/capabilities.h
+> +++ b/arch/x86/kvm/vmx/capabilities.h
+> @@ -398,7 +398,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
+>  
+>  static inline bool vmx_pebs_supported(void)
+>  {
+> -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
+> +	return boot_cpu_has(X86_FEATURE_PEBS) &&
+> +		!boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
+
+This belongs in a separate patch, and it should be ordered before patch 1 so that
+there's no window where KVM can see pebs_ept==1 on a hybrid CPU.
+
+Actually, shouldn't everything in this patch land before core enabling?
+
+> +		kvm_pmu_cap.pebs_ept;
+
+Please align indentation:
+
+	return boot_cpu_has(X86_FEATURE_PEBS) &&
+	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
+	       kvm_pmu_cap.pebs_ept;
