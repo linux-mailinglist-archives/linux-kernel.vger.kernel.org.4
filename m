@@ -2,64 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0845FAD90
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F435FAD92
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJKHdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 03:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S229755AbiJKHeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 03:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJKHdn (ORCPT
+        with ESMTP id S229825AbiJKHeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 03:33:43 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDAE895F2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:33:39 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id a5so2970134qkl.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:33:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=erh3u1DJISbHThgy03uL8WLaTCJNrKHHYJpWRqThcUo=;
-        b=M5fYR8O4Qr/QRtEnMRht0DPNbiBhYDyQB2tQNS5m5SZ1AXH63f//jHTqiDOH7kAdRa
-         WsU8j90MZGPd3PcxzXrsC/oJQpCVWrnInB/38EMu2tQCeeHvs8UlQ+KWgnFc4U+5F2Z8
-         4osWC9CeDmfLD1J5wHyNvhjjmfXwWr62zrmPU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=erh3u1DJISbHThgy03uL8WLaTCJNrKHHYJpWRqThcUo=;
-        b=BO+0KBEFkFEb2EiINMBFtD0j2PnMRogBw8oz2TFIGDbTYrYeG13Lc4lsfY+jWo2uc8
-         F8dHuDmJ8B4/U1KiZNRVN/enqjSzhnxRSXOK+AN7SMhf3G+gOmVmuzvUpNkT3E3Flci2
-         iNXGqiuSNFh9CTgZtCmLMpItnoZ5BjVj1MfJ5NF8hYMBY2F+oL1MRTDLIpW5JZ3SntT6
-         WdPFSVjTlMBlLalv4Clvmq0TtuiOy8JfBP1OIu6IfThr0Ao3mN12LZqJDPp6GxR7/6/i
-         XGMO+/FbFoZitgqfDSxfgM6KzeUI1B6EfahE5R8BLj/s99YvaYbyQsV6cIrQPs2an/7e
-         z7qg==
-X-Gm-Message-State: ACrzQf0nJgyjxb3OUjL1kMVXT8kOSPvjAGajdkW/wgx/jFMHuKea75Hp
-        Ql+kJo8VG02u22c6+BdJiMQoSt4FLFeLGQ==
-X-Google-Smtp-Source: AMsMyM6QwP+8ifGWb/6yVoty4btHjpReWMfdt6vD7H23S3oC4jCC95gfD6Rii7WDUWVmFw481ZXh8g==
-X-Received: by 2002:a05:620a:1aa9:b0:6e7:2d75:1d00 with SMTP id bl41-20020a05620a1aa900b006e72d751d00mr15592372qkb.575.1665473618594;
-        Tue, 11 Oct 2022 00:33:38 -0700 (PDT)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id u1-20020a05620a0c4100b006cfc4744589sm12616106qki.128.2022.10.11.00.33.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 00:33:38 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
+        Tue, 11 Oct 2022 03:34:03 -0400
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E576E89AF8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1665473639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  references:references;
+        bh=z/mwqS1MoxoBP3x8iPrtpxDYB/qR+eamgCZm0YWR5FE=;
+        b=dcsL0mon03YgJkmTZs/+xyH4Y95brBLYSViGZbn1GF+nlk6jfe1bdq0la7sOR08rCqTDjE
+        raD4YNU55WKaxfpPbCBZuRVTfKLS30xXzeqzsjxgdGMv0KacDqYbLrBGvr96UpSod5Lc5P
+        8Qcrmg4/gisrsaTzRs440LoOwby0YmKWdvuayD57YnriJvCZiOTpEHirJ3nd7opv8moHSC
+        IztFL0pKJuvzGwcO+KkmZDMH8D6cwE/1GUgRAVBzez38cUZDeyiEFBcR2AH3/m7gnCFi8Y
+        wLIAiKWb+ASW+4DkBpvoaEF37Qfj/ftb2ztfz4cIa/036+hWBCJFRrfWR1JQFA==
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-399-bd3nhTolOdCmM8T0XJ2KYg-2; Tue, 11 Oct 2022 03:33:58 -0400
+X-MC-Unique: bd3nhTolOdCmM8T0XJ2KYg-2
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com (2603:10b6:208:18a::19)
+ by DM4PR19MB6176.namprd19.prod.outlook.com (2603:10b6:8:b0::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.40; Tue, 11 Oct
+ 2022 07:33:57 +0000
+Received: from MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::4d61:1edd:74f5:342c]) by MN2PR19MB3693.namprd19.prod.outlook.com
+ ([fe80::4d61:1edd:74f5:342c%6]) with mapi id 15.20.5709.015; Tue, 11 Oct 2022
+ 07:33:57 +0000
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>
+CC:     linux-lgm-soc <linux-lgm-soc@maxlinear.com>,
+        Yi xin Zhu <yzhu@maxlinear.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND v2 3/5] clk: mxl: Avoid disabling gate clocks from
+ clk driver
+Thread-Topic: [PATCH RESEND v2 3/5] clk: mxl: Avoid disabling gate clocks from
+ clk driver
+Thread-Index: AQHYzkwFrQSJjUImDUOzXbBrfYxegA==
+Date:   Tue, 11 Oct 2022 07:33:56 +0000
+Message-ID: <MN2PR19MB369398DE5E919BBFB38D7EAEB1239@MN2PR19MB3693.namprd19.prod.outlook.com>
+References: <cover.1663827071.git.rtanwar@maxlinear.com>
+ <5a88bd5a9e93cc6e794080e5cac821ae0c27ec56.1663827071.git.rtanwar@maxlinear.com>
+ <20220929001745.A4F9FC433B5@smtp.kernel.org>
+ <MN2PR19MB3693EEC08EAC5370F1D195FBB1579@MN2PR19MB3693.namprd19.prod.outlook.com>
+ <20220930010123.38984C4347C@smtp.kernel.org>
+ <MN2PR19MB369301BFE8DFB56C348CD6C0B15D9@MN2PR19MB3693.namprd19.prod.outlook.com>
+ <20221005202037.E7B43C433C1@smtp.kernel.org>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR19MB3693:EE_|DM4PR19MB6176:EE_
+x-ms-office365-filtering-correlation-id: 8fcda426-b700-4ae3-fd8e-08daab5af4dd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: ULGFG7xjkib1EvXm7H9OFr5ngIke8r4chkk6S6zdF7bdaad4nfcwLkpk5FZw+yZituI9kthtCBIOpeo81hXwALUwn0j+3Culg/iL9Vt7DyL3UCDlaCCJ3gR6XA8mq/Td29P+IebR7naS8s+eprY4AWFRQEburdMSsW8zwmMOp/nuQ1ybCwXir1IRl6C49FsWqkLcuAcy93OtylOMUENHBWFhISFToE1GBkPJb7L7g1u8cOkG8cLS3+W5tah/5Rh0DBwudjL087/BivhERf+H7lno8Jw5JHGFga0RaYB2QVBOBdLl3otGiZoDUIJ2CIHOKFj/RMRW3Hvy2dX70dokiSCgg51ElRTWRuJEhqeiqyZdXLUSbGW4HBmnlFPkZWQU3oZCVsAuqkAqovA5CRmhqn/67GHDlWeNOT515l5smBtSJydXuQFYbSbdXK4Qi+GizuykCAa4xN9AUl7ihQjIXomMb7QWGfEtZYhk/es80Gr71iOePMQ39UcgqDChruGS1Dcb2I5qVVHy2qt0wVek61ondwMjvof/gTJDr8G4KcqDL/l6aRDwqylgCGhrI2W2bRaRHejwcluE/3bLGLcyVU+9v+1bAqKjIcfaWzBJNgQT6/HgG3P8bAdpPxs1pzaMRNOUpzp2ZXhGL1ibS6eRnXEsMHjKXTx6pSEr/bUp2tiSegD7fAqNQLZxDKQYHAqjcLNQxrzO6+8sphTPOPD08jzIOfkIbIZYtvYSnF3gRAOuiNvehooLVMum0sqcKOBapMKLdly2KHoXVHaaEE74Qw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR19MB3693.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(366004)(136003)(39850400004)(451199015)(66946007)(66476007)(9686003)(66556008)(7696005)(54906003)(55016003)(110136005)(64756008)(8676002)(2906002)(478600001)(52536014)(8936002)(38100700002)(4326008)(5660300002)(66446008)(71200400001)(53546011)(6506007)(33656002)(26005)(122000001)(86362001)(41300700001)(38070700005)(83380400001)(91956017)(66899015)(316002)(186003)(76116006);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mxiZqd7sLe5Uvk4JRSv4lnlGp/EJUWpp5nXONLwohUTGz6t5sQF1LWYKfhUO?=
+ =?us-ascii?Q?bFgqY+tG8nHa3yTFHqXqm3cEWbZ+hUSA+Ze6avuzgTEEW2iEGvSM2jLDmhVI?=
+ =?us-ascii?Q?d+qo2zg+wqfOiZpQsZ3cfbIMn+zE/UQWm0wfFb3PpwTZt+uvwokH5bEoTVbg?=
+ =?us-ascii?Q?8ZUhavvTJQO/9wcLcygg5ae9cTsIaFDaLX2kKrWPob8Zvp608TrTfqr8WPiv?=
+ =?us-ascii?Q?RQYoz95Px4Pif4JMPUTgTlTematZOliq2Aph4nyoKZ4qQUWo5MWOMMBGA91h?=
+ =?us-ascii?Q?ik/+MBusQh9XXwsM+6Hkc94RBS1B2t3QL0hncWhOONp4RI/43cNdTYUBc0Rz?=
+ =?us-ascii?Q?qJJ1lpfExBqycofoG0FWlAUD9nqpL/5toc/G/LVd+SEmcPgtKAMxvsbLap6f?=
+ =?us-ascii?Q?MXxNYYV62bOZFKB3ZRzOFcV/GbPF+d8PUUO366eJjtHhxhPXYlwBi6+4NgBD?=
+ =?us-ascii?Q?dMjYoHDi9etQ40nH0FmM8yq5I1jb2L85szZ8Gia9xm1NQ7reivxZ93/k8OS/?=
+ =?us-ascii?Q?4u0a7fGb89Chn3zC6DdZ6gwvd8UBKReHiWwOakJWJ6sZRWF1ew+3UEZd/VLt?=
+ =?us-ascii?Q?hA3+OxR8caSbc3u9LHIDX7P0P8muIRHzDrXUl6dzXXbC+T/lv+pHkPIV42+L?=
+ =?us-ascii?Q?uAxZ+Au3ZFAHz3oecQTTGDrU5VM6sXzRB9VlnIriF0K+CCU1exPRdm9hEsKl?=
+ =?us-ascii?Q?C8rtz+Qvgeqcg3YknHVV9vBSpifaWijri19uLgOiXsHdcDopFRL0lZnl/k2E?=
+ =?us-ascii?Q?ob2DZ0t41/mGYhk+GkDhrf0Wpk4o0GAIeLvSN5OVktzfOlAFOQOqv03DxLxV?=
+ =?us-ascii?Q?xZIlyo0/vQMU/CJEKwxR80f6Q2CT6Q1bna5tOGuZKScRUG9Rh3ht6GI0eEfY?=
+ =?us-ascii?Q?IDkWZQUh5mP8aygqtnwo5TqE8IkBfoXpO0wkMS9jAHmqY5RFHAg4AwDoPJUt?=
+ =?us-ascii?Q?nA+qGo9DAogNucyvOoDlmPtq8erlWS2o54CcdnLHuFxEwm9Xo5cN4V7efoA1?=
+ =?us-ascii?Q?AsKJWf5YBwOACtDNPWT/zFvszO8u3EJbsHZPOQ1vH2vn66peRu0kHdvHY3HP?=
+ =?us-ascii?Q?YD0Sby4oZsJk4CvhY/Q9albcqQHnS7F1zzgTSc6kD2rgyIsYiwzFVbdNkakB?=
+ =?us-ascii?Q?wjNhpIcGhyzbTSu59IZPXoZHvFAfpSQCOXvSUdCk+Ebq+t/s5oSixxqiegLq?=
+ =?us-ascii?Q?fMe4n23fIfiIQhTX5VzAvvrQHdMFmvumqmcJ0qSHVbxxbT8e3nB4uNSPUbRS?=
+ =?us-ascii?Q?46CG5xWwUqSM6NL4gaGScqidXlQHQGMx2YfZ87E1mwpopC2bPjl3Flr3nOyg?=
+ =?us-ascii?Q?Kxk30RYSjFhdpK8QW+rwP3I36j2HIKF8PBa68M4KVdTDwvOTAJLyx8zreTvC?=
+ =?us-ascii?Q?5TXB5whemfPth6Cx4cn5NJJ01jhx8ATp84Ha1KiUZ4qw6Ox2X0vormaiBnxH?=
+ =?us-ascii?Q?NlM6FqisOGltHP0hIe4w/FoGsckD6NUrGy7HhzDwvX8I9JeSAONWCqH4wZe2?=
+ =?us-ascii?Q?1kJezMwKGon4SXHBd6hioy24MSIzUieC/xX71P8Ex3ZlnFjDMiHMe4GPpe37?=
+ =?us-ascii?Q?trTxn7YHR9aWxBIwCwl92SCQUGoLBjmbgxhR2d6jpBueShtl87H3FkQDTRq2?=
+ =?us-ascii?Q?0Q=3D=3D?=
+MIME-Version: 1.0
+X-OriginatorOrg: maxlinear.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR19MB3693.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8fcda426-b700-4ae3-fd8e-08daab5af4dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2022 07:33:56.9473
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: dac28005-13e0-41b8-8280-7663835f2b1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: E0i93SnVyYzG0nFcJxddPCaw8iMiJ5KrIgCSeRUShHjjxbGrMVUS5SNxeO0EIeFJ3pE2pwz+CCnfTBq7BjiBEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR19MB6176
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Language: en-US
+Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 1/2] rcu: Fix missing nocb gp wake on rcu_barrier()
-Date:   Tue, 11 Oct 2022 03:33:37 -0400
-Message-Id: <73CCC477-83F0-45BD-B484-973F94C71C7F@joelfernandes.org>
-References: <20221011072517.GB4221@paulmck-ThinkPad-P17-Gen-1>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-In-Reply-To: <20221011072517.GB4221@paulmck-ThinkPad-P17-Gen-1>
-To:     paulmck@kernel.org
-X-Mailer: iPhone Mail (19G82)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,141 +128,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Stephen,=0A=0AOn 6/10/2022 4:20 am, Stephen Boyd wrote:=0A> This email w=
+as sent from outside of MaxLinear.=0A>=20=0A>=20=0A> Quoting Rahul Tanwar (=
+2022-10-05 02:36:00)=0A>>>>=0A>>>=0A>>> Why is the clk driver probing on th=
+e new SoCs? Is it providing=0A>>> something? Can we detect that the power m=
+anagement IP exists and not=0A>>> register these clks?=0A>>>=0A>>=0A>> We d=
+iscussed in the team about not registering gate clks at all as you=0A>> men=
+tioned. But if we do that, all peripheral drivers that use these clks=0A>> =
+would need modifications so their probe does not fail due to failure=0A>> r=
+eturns of clk related standard calls for e.g devm_clk_get(),=0A>> clk_prepa=
+re_enable(). These are standard calls in probe for all the=0A>> drivers and=
+ a lot of them use gate clks. So this would need a lot of=0A>> changes with=
+ possibility of breaking working functionalities.=0A>=20=0A> Why? We can ha=
+ve clk_get() return NULL when these clks can't be used.=0A> This is how we =
+implement "dummy" clks on systems where the clk provider=0A> can provide th=
+e clk but there's nothing to do for the clk operations.=0A> The clk API tre=
+ats NULL as a valid clk but bails out early when calling=0A> any consumer A=
+PIs.=0A>=20=0A=0A=0AI agree that what you are suggesting is the ideal way t=
+o handle such=0Aclks. If i understand you correctly, you are suggesting bel=
+ow (please=0Acorrect me if i am mistaken):=0A=0A1. Disable/remove such cloc=
+ks from corresponding driver's devicetree=0Anodes. This will make devm_clk_=
+get() or clk_get() return failure.=0A=0A2. Modify all drivers which use suc=
+h clks=0A=0Afrom:=0A=0A     clk =3D devm_clk_get(...);=0A     if (IS_ERR(cl=
+k))=0A         return -ERROR;=0A     clk_prepare_enable(clk);=0A     clk_ge=
+t/set_rate();=0A     ...=0A=0Ato:=0A     clk =3D devm_clk_get(...);=0A     =
+if (!(IS_ERR(clk)) {=0A         clk_prepare_enable(clk);=0A         clk_get=
+/set_rate();=0A         ...=0A     } else {=0A        // print error info -=
+ do nothing, no clk_ops calls=0A     }=0A=0ABut the problem that we have is=
+ that 80% of the clks that we use fall=0Aunder this category (around 65 clk=
+s). And if we follow this approach,=0Athen we will have to make above chang=
+es in all of the drivers which use=0Athese clks & retest them again. That s=
+eems like a overhaul. We already=0Akeep a internal driver flag in each clk =
+entry data structure and we=0Aalready use it in the driver for other types =
+of clks for e.g MUX_CLKs.=0ASo using the internal flag to handle this becom=
+es a preferable &=0Aexisting driver design aligned approach for us.=0A=0ATh=
+anks,=0ARahul=0A=0A=0A>>=0A>> Also, i incorrectly mentioned about the reaso=
+n being backward=0A>> compatibility with older SoCs. Main reason is to supp=
+ort different power=0A>> profiles use cases as per end product requirements=
+ some of which might=0A>> control it from clk framework i.e. this driver. W=
+e keep a internal=0A>> driver flag just for this purpose to provide this fl=
+exibility depending=0A>> on the use case which is what we have used here.=
+=0A>>=0A>> I am sending v3 with more clear & correct description about it t=
+o=0A>> justify the need for these changes.=0A>>=0A>=20=0A> Ok=0A>=20=0A>=20=
+=0A=0A
 
-
-> On Oct 11, 2022, at 3:25 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
->=20
-> =EF=BB=BFOn Tue, Oct 11, 2022 at 02:01:23AM +0000, Joel Fernandes wrote:
->>> On Tue, Oct 11, 2022 at 12:39:55AM +0200, Frederic Weisbecker wrote:
->>> Upon entraining a callback to a NOCB CPU, no further wake up is
->>> issued on the corresponding nocb_gp kthread. As a result, the callback
->>> and all the subsequent ones on that CPU may be ignored, at least until
->>> an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging=
-
->>> to the same group enqueues a callback on an empty queue.
->>>=20
->>> Here is a possible bad scenario:
->>>=20
->>> 1) CPU 0 is NOCB unlike all other CPUs.
->>> 2) CPU 0 queues a callback
->>> 2) The grace period related to that callback elapses
->>> 3) The callback is moved to the done list (but is not invoked yet),
->>>   there are no more pending callbacks for CPU 0
->>> 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
->>> 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
->>> 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
->>>   callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
->>>=20
->>> Make sure the necessary wake up is produced whenever necessary.
->>>=20
->>> Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>> Fixes: 5d6742b37727 ("rcu/nocb: Use rcu_segcblist for no-CBs CPUs")
->>> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
->>=20
->> Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>=20
->> And if Paul is taking this, I'll rebase and drop this patch from the lazy=
-
->> series.
->=20
-> Joel, could you please incorporate this into your series?  My internet
-> access is likely to be a bit iffy over the next few days.  Likely no
-> problem for email and the occasional test-systme access, but best not
-> to take it for granted.  ;-)
-
-Sure, I=E2=80=99ll do that. Thanks.
-
-Fingers crossed on the internet ;-)
-
-Thanks,
-
- - Joel
-
-
->=20
->                            Thanx, Paul
->=20
->> thanks,
->>=20
->> - Joel
->>=20
->>=20
->>> ---
->>> kernel/rcu/tree.c      | 6 ++++++
->>> kernel/rcu/tree.h      | 1 +
->>> kernel/rcu/tree_nocb.h | 5 +++++
->>> 3 files changed, 12 insertions(+)
->>>=20
->>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
->>> index 96d678c9cfb6..025f59f6f97f 100644
->>> --- a/kernel/rcu/tree.c
->>> +++ b/kernel/rcu/tree.c
->>> @@ -3914,6 +3914,8 @@ static void rcu_barrier_entrain(struct rcu_data *r=
-dp)
->>> {
->>>    unsigned long gseq =3D READ_ONCE(rcu_state.barrier_sequence);
->>>    unsigned long lseq =3D READ_ONCE(rdp->barrier_seq_snap);
->>> +    bool wake_nocb =3D false;
->>> +    bool was_alldone =3D false;
->>>=20
->>>    lockdep_assert_held(&rcu_state.barrier_lock);
->>>    if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) !=
-=3D rcu_seq_ctr(gseq))
->>> @@ -3922,6 +3924,7 @@ static void rcu_barrier_entrain(struct rcu_data *r=
-dp)
->>>    rdp->barrier_head.func =3D rcu_barrier_callback;
->>>    debug_rcu_head_queue(&rdp->barrier_head);
->>>    rcu_nocb_lock(rdp);
->>> +    was_alldone =3D rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cb=
-s(&rdp->cblist);
->>>    WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
->>>    if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
->>>        atomic_inc(&rcu_state.barrier_cpu_count);
->>> @@ -3929,7 +3932,10 @@ static void rcu_barrier_entrain(struct rcu_data *=
-rdp)
->>>        debug_rcu_head_unqueue(&rdp->barrier_head);
->>>        rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
->>>    }
->>> +    wake_nocb =3D was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
->>>    rcu_nocb_unlock(rdp);
->>> +    if (wake_nocb)
->>> +        wake_nocb_gp(rdp, false);
->>>    smp_store_release(&rdp->barrier_seq_snap, gseq);
->>> }
->>>=20
->>> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
->>> index d4a97e40ea9c..925dd98f8b23 100644
->>> --- a/kernel/rcu/tree.h
->>> +++ b/kernel/rcu/tree.h
->>> @@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rd=
-p);
->>> static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
->>> static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
->>> static void rcu_init_one_nocb(struct rcu_node *rnp);
->>> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
->>> static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *=
-rhp,
->>>                  unsigned long j);
->>> static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *r=
-hp,
->>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
->>> index f77a6d7e1356..094fd454b6c3 100644
->>> --- a/kernel/rcu/tree_nocb.h
->>> +++ b/kernel/rcu/tree_nocb.h
->>> @@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rn=
-p)
->>> {
->>> }
->>>=20
->>> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
->>> +{
->>> +    return false;
->>> +}
->>> +
->>> static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *=
-rhp,
->>>                  unsigned long j)
->>> {
->>> --=20
->>> 2.25.1
->>>=20
