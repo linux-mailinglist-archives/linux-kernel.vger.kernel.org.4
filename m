@@ -2,110 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765B65FB89C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9E25FB89A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJKQx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 12:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S229480AbiJKQxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 12:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJKQxV (ORCPT
+        with ESMTP id S229468AbiJKQxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 12:53:21 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFE5A59AF;
-        Tue, 11 Oct 2022 09:53:17 -0700 (PDT)
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 29BGr4dR018005;
-        Wed, 12 Oct 2022 01:53:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 29BGr4dR018005
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665507185;
-        bh=f8HvnuVAteWRI5ncBuuE0MgQLi5Hb1h+j3HTVM2jcno=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qf8UL9ba1bhUo0chFLLB20TY56gnxZVwRMDNLwKGRx5d8SBtKu723evzOB1ogKA54
-         MCsmRZgqE4FtDWOTviTId/6CU4JJl6ENThC45ijm8cy2RogCD8v/PNpFzNx8mG0L46
-         lbWzNeelzbfNAeKbEolTII7gQdBVawu/+xMtL7vigjAu3XPZuYYt8oKFhswWK0KHuf
-         Oj4P8BZdP81GOX1vLa71zZGvb0tPxgRmpUjfFUFiw/3/alI+bKqPBzB445m2aCCmcG
-         9a/5PQ/3ElYCrySigHsvHQXx/Bd6aVLDUpIUNVxigUVZAjtkb2P8w20bSID/79Iug6
-         WELXf5efwYahA==
-X-Nifty-SrcIP: [209.85.167.171]
-Received: by mail-oi1-f171.google.com with SMTP id n130so274293oia.6;
-        Tue, 11 Oct 2022 09:53:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf05KPYxF2ZFLO+7/vXdPJGt7WbcqduTYG4emOtYEqmH+qKG/uVK
-        gQ0cuCSbEdN/3TM+1yNWywFkjV+/8HdwXB8x5YQ=
-X-Google-Smtp-Source: AMsMyM60Tso+KMnUhy3DtJsunnEn/q5/4uBQ3277fO82D6ZNQB96rIUQqv8lGiPwNNRorBX3UApuHH5XmivLJygZy+I=
-X-Received: by 2002:aca:bbd4:0:b0:353:f167:6fd3 with SMTP id
- l203-20020acabbd4000000b00353f1676fd3mr945oif.287.1665507183814; Tue, 11 Oct
- 2022 09:53:03 -0700 (PDT)
+        Tue, 11 Oct 2022 12:53:12 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F0195AC8;
+        Tue, 11 Oct 2022 09:53:11 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id m6so3767217qkm.4;
+        Tue, 11 Oct 2022 09:53:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XpdgEuSb3F1ygoCxUKvxfcNnEzF8vOEvho0w1ANF7Ik=;
+        b=p7jASqBKRU3iRdJlIT9TJZPazJ47R/+3MZc4UBPb3oYDllUx3xRuSLoTYEhB6IbdsE
+         2w5O0irK0hUVW8iSseKvF+3Y1Q6oxjskfdQ6CsDHlW6LEnn+E1bbQLrLDUUiMoWHSSLM
+         4R70E/52Rw70hqdcrjdojUDBjbnWkfIH//ZP8DDhlJY4Hp3/C985ImMCS9pHUrtqTX02
+         JGWLYaY790ClEyqDmjpFOUjoz51gM+h5n2LcxLBcONt9lejOL6aT6DC+a620/eN2HQy4
+         hUN0GMhWW3iQ3i5owV2ThqBIxJjQ9Csn5Zd7am+9zYq8R0yMETtEG8keT/InmVlcC+Ct
+         sKQA==
+X-Gm-Message-State: ACrzQf1PLPXIzrM3bx0bh/bvVjtab+CSPI4nBTE7fubl8+ICl07Q7Ycu
+        EqaGBY3u6SZGGeQMHsbI6HFCXvONqqk5qA==
+X-Google-Smtp-Source: AMsMyM6W5ZsZscEIHpfeWQe6aRYyPjgBKGlNrH/yKL2kGAqnpTFDuHrByFdg8NJ8ekAF3lc0X9JV1g==
+X-Received: by 2002:ae9:e107:0:b0:6ed:638:930 with SMTP id g7-20020ae9e107000000b006ed06380930mr7354159qkm.211.1665507189867;
+        Tue, 11 Oct 2022 09:53:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::3552])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05622a11c100b0035d55c66a69sm11188715qtk.76.2022.10.11.09.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 09:53:09 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, sdf@google.com,
+        song@kernel.org, yhs@fb.com, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Alphabetize DENYLISTs
+Date:   Tue, 11 Oct 2022 11:52:55 -0500
+Message-Id: <20221011165255.774014-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221011031843.960217-1-masahiroy@kernel.org> <CANiq72k9wAVCbHKVZFE=E3xv+2ZamUMsJ=uV43NxsSUQ4wXGdw@mail.gmail.com>
-In-Reply-To: <CANiq72k9wAVCbHKVZFE=E3xv+2ZamUMsJ=uV43NxsSUQ4wXGdw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 12 Oct 2022 01:52:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
-Message-ID: <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] Remove Intel compiler support
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ia64@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Tom Rix <trix@redhat.com>, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 8:55 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Tue, Oct 11, 2022 at 5:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> >  include/linux/compiler-intel.h            |  34 -----
-> >  include/linux/compiler_types.h            |   2 -
->
-> You can also remove a few lines from `compiler_attributes.h`:
->
->     * Optional: not supported by icc
->
-> Thanks for this!
->
-> Cheers,
-> Miguel
+The DENYLIST and DENYLIST.s390x files are used to specify testcases
+which should not be run on CI. Currently, testcases are appended to the
+end of these files as needed. This can make it a pain to resolve merge
+conflicts. This patch alphabetizes the DENYLIST files to ease this
+burden.
 
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ tools/testing/selftests/bpf/DENYLIST       |  2 +-
+ tools/testing/selftests/bpf/DENYLIST.s390x | 40 +++++++++++-----------
+ 2 files changed, 21 insertions(+), 21 deletions(-)
 
-
-Thanks.
-
-
-Maybe, we can drop #if ... #else ... #endif
-around __assume_aligned(a, ...), but I will leave it to you.
-
-
-I will just drop the comment lines for now.
-(Then, you will clean up compiler_attributes.h in the next cycle)
-Is this your expectation for v2 ?
-
-
-
-
+diff --git a/tools/testing/selftests/bpf/DENYLIST b/tools/testing/selftests/bpf/DENYLIST
+index 939de574fc7f..5a07ecacd7b0 100644
+--- a/tools/testing/selftests/bpf/DENYLIST
++++ b/tools/testing/selftests/bpf/DENYLIST
+@@ -1,6 +1,6 @@
+ # TEMPORARY
+ get_stack_raw_tp    # spams with kernel warnings until next bpf -> bpf-next merge
+-stacktrace_build_id_nmi
+ stacktrace_build_id
++stacktrace_build_id_nmi
+ task_fd_query_rawtp
+ varlen
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index beef1232a47a..19d6f534e5be 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -1,13 +1,17 @@
+ # TEMPORARY
+ atomics                                  # attach(add): actual -524 <= expected 0                                      (trampoline)
+-bpf_iter_setsockopt                      # JIT does not support calling kernel function                                (kfunc)
+ bloom_filter_map                         # failed to find kernel BTF type ID of '__x64_sys_getpgid': -3                (?)
+-bpf_tcp_ca                               # JIT does not support calling kernel function                                (kfunc)
++bpf_cookie                               # failed to open_and_load program: -524 (trampoline)
++bpf_iter_setsockopt                      # JIT does not support calling kernel function                                (kfunc)
+ bpf_loop                                 # attaches to __x64_sys_nanosleep
+ bpf_mod_race                             # BPF trampoline
+ bpf_nf                                   # JIT does not support calling kernel function
++bpf_tcp_ca                               # JIT does not support calling kernel function                                (kfunc)
++cb_refs                                  # expected error message unexpected error: -524                               (trampoline)
++cgroup_hierarchical_stats                # JIT does not support calling kernel function                                (kfunc)
+ core_read_macros                         # unknown func bpf_probe_read#4                                               (overlapping)
+ d_path                                   # failed to auto-attach program 'prog_stat': -524                             (trampoline)
++deny_namespace                           # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
+ dummy_st_ops                             # test_run unexpected error: -524 (errno 524)                                 (trampoline)
+ fentry_fexit                             # fentry attach failed: -524                                                  (trampoline)
+ fentry_test                              # fentry_first_attach unexpected error: -524                                  (trampoline)
+@@ -18,19 +22,28 @@ fexit_test                               # fexit_first_attach unexpected error:
+ get_func_args_test	                 # trampoline
+ get_func_ip_test                         # get_func_ip_test__attach unexpected error: -524                             (trampoline)
+ get_stack_raw_tp                         # user_stack corrupted user stack                                             (no backchain userspace)
++htab_update                              # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
+ kfree_skb                                # attach fentry unexpected error: -524                                        (trampoline)
+ kfunc_call                               # 'bpf_prog_active': not found in kernel BTF                                  (?)
++kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
++kprobe_multi_test                        # relies on fentry
+ ksyms_module                             # test_ksyms_module__open_and_load unexpected error: -9                       (?)
+ ksyms_module_libbpf                      # JIT does not support calling kernel function                                (kfunc)
+ ksyms_module_lskel                       # test_ksyms_module_lskel__open_and_load unexpected error: -9                 (?)
++libbpf_get_fd_by_id_opts                 # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
++lookup_key                               # JIT does not support calling kernel function                                (kfunc)
++lru_bug                                  # prog 'printk': failed to auto-attach: -524
++map_kptr                                 # failed to open_and_load program: -524 (trampoline)
+ modify_return                            # modify_return attach failed: -524                                           (trampoline)
+ module_attach                            # skel_attach skeleton attach failed: -524                                    (trampoline)
+ mptcp
+-kprobe_multi_test                        # relies on fentry
+ netcnt                                   # failed to load BPF skeleton 'netcnt_prog': -7                               (?)
+ probe_user                               # check_kprobe_res wrong kprobe res from probe read                           (?)
+ recursion                                # skel_attach unexpected error: -524                                          (trampoline)
+ ringbuf                                  # skel_load skeleton load failed                                              (?)
++select_reuseport                         # intermittently fails on new s390x setup
++send_signal                              # intermittently fails to receive signal
++setget_sockopt                           # attach unexpected error: -524                                               (trampoline)
+ sk_assign                                # Can't read on server: Invalid argument                                      (?)
+ sk_lookup                                # endianness problem
+ sk_storage_tracing                       # test_sk_storage_tracing__attach unexpected error: -524                      (trampoline)
+@@ -52,28 +65,15 @@ timer_mim                                # failed to auto-attach program 'test1'
+ trace_ext                                # failed to auto-attach program 'test_pkt_md_access_new': -524                (trampoline)
+ trace_printk                             # trace_printk__load unexpected error: -2 (errno 2)                           (?)
+ trace_vprintk                            # trace_vprintk__open_and_load unexpected error: -9                           (?)
++tracing_struct                           # failed to auto-attach: -524                                                 (trampoline)
+ trampoline_count                         # prog 'prog1': failed to attach: ERROR: strerror_r(-524)=22                  (trampoline)
++unpriv_bpf_disabled                      # fentry
++user_ringbuf                             # failed to find kernel BTF type ID of '__s390x_sys_prctl': -3                (?)
+ verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
++verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
+ vmlinux                                  # failed to auto-attach program 'handle__fentry': -524                        (trampoline)
+ xdp_adjust_tail                          # case-128 err 0 errno 28 retval 1 size 128 expect-size 3520                  (?)
+ xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
+ xdp_bpf2bpf                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
+-map_kptr                                 # failed to open_and_load program: -524 (trampoline)
+-bpf_cookie                               # failed to open_and_load program: -524 (trampoline)
+ xdp_do_redirect                          # prog_run_max_size unexpected error: -22 (errno 22)
+-send_signal                              # intermittently fails to receive signal
+-select_reuseport                         # intermittently fails on new s390x setup
+ xdp_synproxy                             # JIT does not support calling kernel function                                (kfunc)
+-unpriv_bpf_disabled                      # fentry
+-lru_bug                                  # prog 'printk': failed to auto-attach: -524
+-setget_sockopt                           # attach unexpected error: -524                                               (trampoline)
+-cb_refs                                  # expected error message unexpected error: -524                               (trampoline)
+-cgroup_hierarchical_stats                # JIT does not support calling kernel function                                (kfunc)
+-htab_update                              # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
+-tracing_struct                           # failed to auto-attach: -524                                                 (trampoline)
+-user_ringbuf                             # failed to find kernel BTF type ID of '__s390x_sys_prctl': -3                (?)
+-lookup_key                               # JIT does not support calling kernel function                                (kfunc)
+-verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
+-kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
+-deny_namespace                           # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
+-libbpf_get_fd_by_id_opts                 # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
 -- 
-Best Regards
-Masahiro Yamada
+2.38.0
+
