@@ -2,138 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4BE5FB2A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E8A5FB2A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiJKMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 08:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S229827AbiJKMrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 08:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJKMrW (ORCPT
+        with ESMTP id S229546AbiJKMq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 08:47:22 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F76915E8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 05:47:20 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-352e29ff8c2so132543337b3.21
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 05:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JZgfsSGBJAIpwrM+kN5gILalFFiDKNqq+i+h/f0T+1w=;
-        b=Lhj7yGBgLSbssGDsd2KUsMVfq/iXui4imvLqgRv+9ymf7fd0W+VDlTKnh0f+tpRRXB
-         /Br17OtlaZyA2gyUxT98PtVyrIAuDpC/pXipYVvOV8y+f8H4vW+MajDUU3phx5GVqniT
-         HPzXIHjVgZ7zojUrVGN8Zida1RvUp9HXnw3R3Rm90a+ZGX1tkwsB9j+AqH0+BXbiF72l
-         HQEjtC130tULmZYTQtzesNR494kbdH2bqCeNOTyjf3JroTg4WaW38z8ocmG0723+8zRd
-         am3phKQ78ruIuH5HZIEE2opGxyuYN7Xbsf+A6j9hntbwWKvWdfuFZxjWS4penwRx6jCJ
-         mWEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JZgfsSGBJAIpwrM+kN5gILalFFiDKNqq+i+h/f0T+1w=;
-        b=XxPDarEvGYM+KWeRNTSj3vRpX3L4fHR8ACju3VQ5IEWHb8aB4OJUFI6UdK3uUqbvdG
-         pdHUWlWV4ePvC+xnQBuSSk8HrOjzhRT2jQG7Y97oETliCc9/8bp1aLQlQl7dFG/d+cNa
-         K9RjhirluTmS05GoF/Le+AApw3hpOddVR6D9s+1B+UyRlOoA0+/iA+/efMW52P8kGcLA
-         Q8uQLlA3F0Z0BXtbGs2dFSXTS6S0ox7SdGlAQ9EcJBSz6LXnL8BN/ax0m+ogU6w9Of/D
-         N0ztAOtlcsdcsZGzAdh5RA6Mu5kTzSHrS276SuTC5/4ia0LiL9PN0M2NCtrTkK1utm6q
-         ogEA==
-X-Gm-Message-State: ACrzQf2WCMSv1en4ZFqyvCCVucAVuctn3Erk9B3ElkCiGNF0QAHAz5tX
-        PDFq9vJe3x/xjzk57fDnC0CfGRHt+g==
-X-Google-Smtp-Source: AMsMyM7mLP7qxYhVaFvAfaOOBR4Ia7Pa0IN/qv4FwNg3SacUjhfZkgOXsyXoCAhZIp/qsLi2hi3T37gusQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:3abd:8519:48e1:da82])
- (user=elver job=sendgmr) by 2002:a25:6dc3:0:b0:6c0:7938:5b3f with SMTP id
- i186-20020a256dc3000000b006c079385b3fmr13344582ybc.625.1665492440186; Tue, 11
- Oct 2022 05:47:20 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 14:45:35 +0200
+        Tue, 11 Oct 2022 08:46:57 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58E93CBC5;
+        Tue, 11 Oct 2022 05:46:55 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 419A25801D6;
+        Tue, 11 Oct 2022 08:46:55 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 11 Oct 2022 08:46:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665492415; x=1665496015; bh=KeTUBIcKTF
+        qBNdPoZmaI0adYgj0Mb+XfDZHZQqTacys=; b=wkfAs5UQIghk/i14T5tUOMaejV
+        yDpMyNaz6jJGUqRraFageD0jyfJmFzSQtbScn21qS7LFSOimE1dpakf6GQCz3c5e
+        PRFxvjnBD7q6pj2iyiTShDHuCqTUJdIu41YFtyxOtUrkRRI8R6IKj8SIw0y94VAm
+        +IRYS7iCAMHVv6KtIbqi+dgPq8FFZAGh+1b8Es1DEc+Zm4n9lNRxgZp8wXgmx34J
+        hzj9pJ4ze6vu1tht9F++K3AaYvnXJqEa4oJLVi7mNqHE2m/caWczjBYkfUUoT6fD
+        YO5EgVI4Sz2046fE5fky24hdQ2JnhHzHroi6iZEH7iflDLd5i6qqgR0oYebg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665492415; x=1665496015; bh=KeTUBIcKTFqBNdPoZmaI0adYgj0M
+        b+XfDZHZQqTacys=; b=aqWTZMM4a78aJ/gDgm0SO0iC8yhUP2RlYwvPKLJg9ucB
+        Yw1gl5jSaLJBOgqtYpXsjlaefnPgTxDGaDPzjJYgkOJz0hSkfcj5qHsO32PGrbrk
+        n0oMcurKtqS4jHiY4+XOScYJLc0lmoNTAtfWZ6IDmt01+ldKv9bfTM1u0CGe7Cu/
+        1RzoSmWdDnLfsEfY3/u9lRMfSNoV4b590P0zynLs3C8T3B+SAnBk+v6b9Y1CtWvJ
+        p1Q6VMRkdwPADqGmaKs/sstUN3pomSMbuj3LtB7V81KDqrwhgycp7rd3SlVuDwa6
+        +w4jswG5qo0oNHjLAzu2myHlJ5VV3s0Tr6qzuRF29A==
+X-ME-Sender: <xms:vWVFY4TuUsocUbtpC5rYDetWax-0Lbob7188NzkpaXnltWlynGg1LA>
+    <xme:vWVFY1xCQEkJ1Gtba1a6PIH-wGDU0YBLFNMn_3vnYQaqxQ481CTVG_M9oaicrqdE3
+    rRgA3eFAJNkMLZS8cM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedghedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhephfegteejueeugedtteefueejjefgveekteevvdelfeeftdelkeetffehvefg
+    fffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhlvhhmrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
+    uggsrdguvg
+X-ME-Proxy: <xmx:vWVFY11BK9hLqBNvqqlQxl6DG--Mau6RkqbAQ3bLNJWWgs-grw8WQQ>
+    <xmx:vWVFY8DOwxO5sihG0RMGIDK7mmrxVWRZUaq2yGUZYomaLJQa31-4eg>
+    <xmx:vWVFYxhMY6vSQlKAcsH_FeSUQwwcmvUQ3gHho6L9wnF-M4upulb8-w>
+    <xmx:vmVFY2YUFVZkrVOZEC-fBdFiErc8LaMQL8xffU0TFLQb-q0B2PNnFw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B792EB60086; Tue, 11 Oct 2022 08:46:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221011124534.84907-1-elver@google.com>
-Subject: [PATCH] selftests/perf_events: Add a SIGTRAP stress test with disables
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-Id: <c8f87abd-9d66-40cf-bcea-e2b1388d3030@app.fastmail.com>
+In-Reply-To: <CAKwvOdmWvDBw9MnO==dZ8i=gqbVPSUuiuRtwKmWuV8uXzJYNww@mail.gmail.com>
+References: <20190307090146.1874906-1-arnd@arndb.de>
+ <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+ <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+ <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
+ <CAKwvOdmNiSok3sAMJs2PQLs0yVzOfMTaQTWjyW8q2oc3VF60sw@mail.gmail.com>
+ <CAKwvOdmWvDBw9MnO==dZ8i=gqbVPSUuiuRtwKmWuV8uXzJYNww@mail.gmail.com>
+Date:   Tue, 11 Oct 2022 14:46:33 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nick Desaulniers" <ndesaulniers@google.com>
+Cc:     "Kees Cook" <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "Paul Kirth" <paulkirth@google.com>
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a SIGTRAP stress test that exercises repeatedly enabling/disabling
-an event while it concurrently keeps firing.
+On Mon, Oct 10, 2022, at 8:40 PM, Nick Desaulniers wrote:
+> On Fri, Oct 7, 2022 at 3:54 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> $ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make -j128 defconfig fs/select.o
+> $ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
+> grep do_select
+>     1a48: 2e fb ff 97  bl 0x700 <do_select>
+>
+> Same for 32b ARM.
+> arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110
+>
+> $ CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm make -j128 defconfig fs/select.o
+> $ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
+> grep do_select
+>     1620: 07 fc ff eb  bl #-4068 <do_select>
+>
+> Is there a set of configs or different compiler version for which
+> that's not the case? Perhaps. But it doesn't look like marking
+> do_select noinline_for_stack changes the default behavior for GCC
+> builds, which is good.
 
-Link: https://lore.kernel.org/all/Y0E3uG7jOywn7vy3@elver.google.com/
-Signed-off-by: Marco Elver <elver@google.com>
----
- .../selftests/perf_events/sigtrap_threads.c   | 35 +++++++++++++++++--
- 1 file changed, 32 insertions(+), 3 deletions(-)
+I checked all arm32 defconfigs, and all supported gcc versions for arm32,
+they all behave the same.
 
-diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
-index 6d849dc2bee0..d1d8483ac628 100644
---- a/tools/testing/selftests/perf_events/sigtrap_threads.c
-+++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
-@@ -62,6 +62,8 @@ static struct perf_event_attr make_event_attr(bool enabled, volatile void *addr,
- 		.remove_on_exec = 1, /* Required by sigtrap. */
- 		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
- 		.sig_data	= TEST_SIG_DATA(addr, id),
-+		.exclude_kernel = 1, /* To allow */
-+		.exclude_hv     = 1, /* running as !root */
- 	};
- 	return attr;
- }
-@@ -93,9 +95,13 @@ static void *test_thread(void *arg)
- 
- 	__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
- 	iter = ctx.iterate_on; /* read */
--	for (i = 0; i < iter - 1; i++) {
--		__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
--		ctx.iterate_on = iter; /* idempotent write */
-+	if (iter >= 0) {
-+		for (i = 0; i < iter - 1; i++) {
-+			__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
-+			ctx.iterate_on = iter; /* idempotent write */
-+		}
-+	} else {
-+		while (ctx.iterate_on);
- 	}
- 
- 	return NULL;
-@@ -208,4 +214,27 @@ TEST_F(sigtrap_threads, signal_stress)
- 	EXPECT_EQ(ctx.first_siginfo.si_perf_data, TEST_SIG_DATA(&ctx.iterate_on, 0));
- }
- 
-+TEST_F(sigtrap_threads, signal_stress_with_disable)
-+{
-+	const int target_count = NUM_THREADS * 3000;
-+	int i;
-+
-+	ctx.iterate_on = -1;
-+
-+	EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_ENABLE, 0), 0);
-+	pthread_barrier_wait(&self->barrier);
-+	while (__atomic_load_n(&ctx.signal_count, __ATOMIC_RELAXED) < target_count) {
-+		EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_DISABLE, 0), 0);
-+		EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_ENABLE, 0), 0);
-+	}
-+	ctx.iterate_on = 0;
-+	for (i = 0; i < NUM_THREADS; i++)
-+		ASSERT_EQ(pthread_join(self->threads[i], NULL), 0);
-+	EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_DISABLE, 0), 0);
-+
-+	EXPECT_EQ(ctx.first_siginfo.si_addr, &ctx.iterate_on);
-+	EXPECT_EQ(ctx.first_siginfo.si_perf_type, PERF_TYPE_BREAKPOINT);
-+	EXPECT_EQ(ctx.first_siginfo.si_perf_data, TEST_SIG_DATA(&ctx.iterate_on, 0));
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+> So it looks like it's just clang being aggressive with inlining since
+> it doesn't have -fconserve-stack.  I think
+> https://lore.kernel.org/lkml/20221007201140.1744961-1-ndesaulniers@google.com/
+> is still on the right track, though I'd remove the 32b only guard for
+> v2.
 
+I think it's again the difference between top-down and bottom-up inlining.
+
+> Paul also mentioned that -finline-max-stacksize is a thing, at least 
+> for clang.
+> https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-finline-max-stacksize
+> Though this only landed recently
+> https://reviews.llvm.org/rG8564e2fea559 and wont ship until clang-16.
+> That feels like a large hammer for core_sys_select/do_select; I think
+> we can use a fine scalpel.  But it might be interesting to use that
+> with KASAN.
+
+
+It's an interesting question whether it would help or hurt with
+KASAN_STACK: Normally the idea is that KASAN_STACK intentionally
+makes stack slots inside of a function non-overlapping, similar
+to the use-after-scope sanitizer that we no longer use because
+it caused too many stack overflows. Making it inline less should
+help reduce the actual stack consumption (not just the reported
+usage) because it makes called functions reuse the same stack slots,
+but it also makes KASAN_STACK less effective because of the same
+thing.
+
+If -finline-max-stacksize is the equivalent of gcc's
+-fconserve-stack, we could of course just always enable that.
+
+    Arnd
