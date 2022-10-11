@@ -2,68 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF5F5FB342
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9095E5FB34B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiJKNVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S230139AbiJKNVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiJKNVH (ORCPT
+        with ESMTP id S229772AbiJKNVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:21:07 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37E93FEE4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:20:02 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id b4so21598876wrs.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvSlLe858PoYsneJVvkvxYmTO/MSQp1hV+RsXdWck/A=;
-        b=y1iSNzXKyjal5MgagjxAqeM0ji/Iie4A+NxTZ1jW8IOEiPkbiiEnReIoSfRFtYsmYf
-         KF/4ZgDpBtSKthGVwuL0r9y5nesTrFJHm3MkiGwsVnHtXd7FkFyiCNGJF08PqUb4JgW3
-         VxE1/AETFIXKbRY02zrXK7X3Ma+OSMtAYeurIhvDd2dZdWZjfZbx1qLwMCATlrlMk3o5
-         CGRVmwpyrDp+EI3CTYmOHo6lnigK6Ppq34uuVRVigFVUFXBa234zF04V1Du6wvhq/BRI
-         xso2JPtZPiSXV2cIl1+qAFiQGQ0wzUzDzCLeuftuxCpwK8OxQdxjzNMn/veo3/qiav6d
-         KoeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvSlLe858PoYsneJVvkvxYmTO/MSQp1hV+RsXdWck/A=;
-        b=bXAprV5p5Ct8cAD98dspt4749GB9CbPCADpQsiSPHFfKLyISTH3Q6lLe8MkIBUUsAB
-         p/JfNjyuQgzlrgqHeV3ZWKuAkm6ZEPFRhBzvq0g2oRiMLfwdEWHoovze+PE9eTFqofYH
-         YF8nBJyOjI9va95gK/+aOFukYdPwURJnzV0hkh5nQfAUGIII4Ab30agJnBP0bYuihPuq
-         5Q+SsJ5Tdlgf9E/hSQQfCXnOzoaVR4itVc6Qlnz829m1ehdAGPZOF3Io14/vEKzl77Oe
-         BHWTveJsnbJ2i3kXKz9UHHgRQwAahv6psH1/mDyTorqfC9+8Qn6WkAYz1NdAf9lYyO83
-         bEqA==
-X-Gm-Message-State: ACrzQf1sZLQSlBtj+P62Wofuwlqi6/zuO/Mz9geMufFKbee1JDaeKRRK
-        +rPdwUwybUnNSumJ6Eg/AqneZQ==
-X-Google-Smtp-Source: AMsMyM5qzQvUbe8DAK27GyEUlQTMd87aS9E+IBE7m/ZvINPReW/3uEaVLa9sCtITzv+GhHc3Sc+bHg==
-X-Received: by 2002:a5d:47c5:0:b0:22e:6941:81eb with SMTP id o5-20020a5d47c5000000b0022e694181ebmr14827916wrc.408.1665494384571;
-        Tue, 11 Oct 2022 06:19:44 -0700 (PDT)
-Received: from localhost ([82.66.159.240])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d604d000000b0022ae4f8395dsm11138386wrt.96.2022.10.11.06.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 06:19:43 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Eirin Nya <nyanpasu256@gmail.com>, linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] Input: Fix incorrectly halved touchpad range on
- ELAN v3 touchpads
-In-Reply-To: <e4438675-d7f6-02f1-79c0-aa9917db8997@gmail.com>
-References: <20220929082119.22112-1-nyanpasu256@gmail.com>
- <20220929082119.22112-4-nyanpasu256@gmail.com>
- <87czb37mpb.fsf@mkorpershoek-xps-13-9370.home>
- <e4438675-d7f6-02f1-79c0-aa9917db8997@gmail.com>
-Date:   Tue, 11 Oct 2022 15:19:42 +0200
-Message-ID: <87fsfu33bl.fsf@baylibre.com>
+        Tue, 11 Oct 2022 09:21:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2071.outbound.protection.outlook.com [40.107.92.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6518A1FC;
+        Tue, 11 Oct 2022 06:20:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IyIyC/uOAiiQbkW/N+mdeuaVRqHV03N/oaIAOXP5NKwzROLfSJcDC6z5LIpYPpzoJu7Up3F3erDNtlCduMf1i1AlHUVQ/sptvfJaBF5YPHUhjOv9OeQASnnCMO9feRX6Pu8Odq3NDP5mNBzfgraI+So8WxqiLvpFRiK/nHd9g2Kif4DQo0eNuPhw8v7o+B6mnxZcYTPcFSCYShjTeXZLoou1N7jw6CKKmmw+M0HVU9VvWqKojX5z9c8ABSy4d9RFQkmFpxglGJkpqHD02tr4ADnVBO2nz/5O85yaoSkbPjQA4RQnmY/+7G7ktjpuXaoI/R0YEhmTPRXlhHyIJJMKtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6uDDdNQRtnMiVbMZUpFcACT7p0EQtw8QygLM3CiGSHU=;
+ b=BOZB9Q3P98a9jsACFoEBrhC8puJ/hsnraykiRuXlHGBKJsUQaJxoae1yUrSKSFTuy4FTJFCWjT44Qmc3VBwUv2pSPPdpt0wv6Qf4fQs1xgyMtzfSLBNimj/1Jaq1xbjcsNPYa2l2URAL7yUqL2ryQvQM4Z4P4ZCvM276I9gaVKA5ckgcHYpZ3w4L16cCEoH9AZ2nHPZJ3WH2bqYSJ8ThIvufyvOnMsV19DEOq6DlwCGZ5iI5h3ugauXWptZFPawzg1SYMs2XowfkSR+ZviMgY0JCUj4Qcw3Wd0xAp2LmbiPEJtEW1iEcUuPHDDaCoWtl3k2lKy+JaBx7D9KYTQ0SfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6uDDdNQRtnMiVbMZUpFcACT7p0EQtw8QygLM3CiGSHU=;
+ b=5u5ytv2wCKtiQryLNQqnMos9yuuWMlqhLiPs14NXXXzcSbSPf+gRrw5eoLfDWPKu178/+f4V8RwbXhz1xqvFDmobziWuu0a9ABvkrAxu9WN9OIcKRXmsO+p2W/C0HHNTIhOX/m7rZqxBe+tTAQRYMvPrnTCxuLdR1VV8rSwIsJ4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by MW4PR12MB7381.namprd12.prod.outlook.com (2603:10b6:303:219::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Tue, 11 Oct
+ 2022 13:20:14 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::4a1c:7d22:b1b:1adc]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::4a1c:7d22:b1b:1adc%6]) with mapi id 15.20.5676.032; Tue, 11 Oct 2022
+ 13:20:14 +0000
+Message-ID: <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
+Date:   Tue, 11 Oct 2022 18:49:55 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] perf: Rewrite core context handling
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        will@kernel.org, robh@kernel.org, mingo@redhat.com,
+        catalin.marinas@arm.com, ndesaulniers@google.com,
+        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20221008062424.313-1-ravi.bangoria@amd.com>
+ <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0122.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:96::8) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|MW4PR12MB7381:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0644ac64-882f-4178-1562-08daab8b5530
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jdZcImlqCz211+QqByTyCGKEgiEv3uJqubagbVoOcBwcsJMtRFt4T9/qCieOtNvfPUiC8VE2LALhXDcjOBaOFxxrX//Snx/SpuyZhdQArK/MyBcfSF/j77hsctwlEez46JhGDMKvGf/ZTYcj6mpYUwCFOx1xJKoA5LLMSiqhObR4Ez16+RLynFTIDQ5ElfttW2TVmcay1nAil5CH+FLy1BQ2wbDS2q4e7MLCg/t9NzIXp/gziZPPSS2JCK9kS2Tk3/aO+G3NJsvC68ENmeGHhR00LnGBiSfW3u+IZNCeeaw0EcFXHTzzoa7HymGb+buGEU6PV9BrQAL+Vexf2Mrg0LkkkpwryII/Czc2uF9UeozPI/P7uL7/G+YBsUZDrZHaiiX0YFQa8k5w3mSkKoR8UodbpNdJ9CDABYw1lQRlBloBQ7kRe6c7BTTUf/oeB4ADgYMGGdwX6RfevNabOXrRnD0yPIjT4cbUsgfrDn9vRX+/GX/OcS/oSoPmPDaiGjza3xscgvUryu8gNWBwmXl55mPIgAghou4vH2XW3FJyakM5ncLtUQrxVh27Lxja08nenzMjOtplcGFJViUDivr8KKI/q8AfRNeP50Gg5uyi6qnck9BWHpZhXB5pg/lEc/u0jpOfPWMlogsZ4rdS4BqZTJzQA791HPMdfaV8eNG9LglRWANIrWe2uqUu8aJFhHUmNhQbkz3fkHJz9mcDmNfC08EnPtHYrheuV0fL4egCYahvOyGBK0Rgkd86VWp430OweVlnugi9tc/aK6leoZKbliX3FxUgf6rvf59JhaPNbe8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(366004)(136003)(396003)(451199015)(31686004)(36756003)(6666004)(6506007)(26005)(6512007)(2616005)(186003)(53546011)(6486002)(478600001)(2906002)(44832011)(38100700002)(4326008)(41300700001)(31696002)(6916009)(86362001)(66946007)(66476007)(66556008)(7416002)(8676002)(8936002)(5660300002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QkRlTlFhRlFtQjlWcHB3MDlEZ0RSRFZ4dUFYVVNWU0pzLzgyZTJ0a0RVYXFu?=
+ =?utf-8?B?L3haUUlORlVlYllFYnRya0FpMXcxNUFLQzBheUVhV0Y1Y1lGLyt2TjZrKzBm?=
+ =?utf-8?B?MEJTcnNWMy91Z0twMWZnbnQ4bGJlbTFZV2FRbStaRGpLc1hPVm9JS0k0bGpW?=
+ =?utf-8?B?ZlNWd1orcUNhRFZJMXB2a25iWElsZHRnTmZ2Y0lENWFMbkpYWlBFRTA1UTV0?=
+ =?utf-8?B?QUdadjFmTm1HeTgzUE5sWDVZZW83RHpUT20xY2Z5Mk5La2VteEhZMEYyVGZj?=
+ =?utf-8?B?QVhFbTlybW5nRXQ1QXBpMzNqOTYvRm9kbEFiazNHVlppRlNLblZGbTl5RzA3?=
+ =?utf-8?B?T3BvdjhtbVhhbDIrL1RGVFVaOUZybVM0V3VrN1JKRHAzR2trT1VLaWFDczd1?=
+ =?utf-8?B?ZUlZcE0vZENHWm9LZUtMOHBydHQ3azdOZm9Td0R1WUNMMVJVcEs4SytqMzZB?=
+ =?utf-8?B?Mmx1T29IVUJ5RVpLTXA4bXN3aG80YlRrM0duYWRCeCt6U21saEh1MmdGcDFQ?=
+ =?utf-8?B?OHJZVmlWZ0cyNGpyaGdQUWE5ZmFJYk9iT2dxbDBjb1Q5Vmp4djdxeHBZUFpM?=
+ =?utf-8?B?bWVvdE9FK2NoZ0R4VlRNdDRMUDc2REhmc3RPR0pWWVVkSU1PQ2NISWJwZ28w?=
+ =?utf-8?B?ZUNhWUxidWpGQVBCRlM4Z1Ywb0ViQUFOU0tvcHNSYTZRVXBiT3htQjB1OGI5?=
+ =?utf-8?B?UFlYWUdldXBjdVVMNHpjSFVaOUQzcnFZSDlQUXZZUnhtNGtKdmdmWmYxUG5u?=
+ =?utf-8?B?VndHdHl4Q2RTS0M1VTJGdkdhQ1NvZ3lLWjMwTTFWM1FtWFlpWlhDZ1RBN2pH?=
+ =?utf-8?B?N0lJMDcxeWh2SGkreGtGQSt4emJZNzNYczZ1RWxJVUpaTzM1NUl0Wkc4STVE?=
+ =?utf-8?B?Ulc4ajlZRzdYL2tWVHV6RFYwR0tRRHpvamhZVnFqdzU5aloxWHhLSzVwODg5?=
+ =?utf-8?B?YjVUMDZ6Tkc3OWtZeG9GZVZLVjl3cVZ6dXRpU244d2FkVGZyMWJxVDB0RWpN?=
+ =?utf-8?B?d3loWndqU1ZlUFNlUy9CTnF3SmhqYzhxVUZEbHFhTDRWVVd2NHcvNGpiTnpY?=
+ =?utf-8?B?KzROa1ZWV2xnK0I3bzZSSzVWRmRycEUxbFFqSyt6L2dUQmdWMTFGQTAwSnZu?=
+ =?utf-8?B?U09BYWtLSVJxcHhWVnM5Sjd0aFQ0UjJqOFVueHRvUGdDMnp2eEoyK2FHQUtL?=
+ =?utf-8?B?Z0FzWTU2UEp1QStIb0kzNkhzUXZ6YjhWOTRiNnI0Njg1RTZiVlR5UnJ6cXpl?=
+ =?utf-8?B?VHJ1bDZNNkZjK3RxRGl3TzRVYXBsZE81UVJMYVh6QW9qWEdUbTJtajcreXJI?=
+ =?utf-8?B?bGFQMm5ZOXlSV2gzNXJmdlNJcGd0YnJUM0o0M2l0UG5uamtBMytpdWVSSkNo?=
+ =?utf-8?B?ZXJkZit4L3dSb2ZZYzdvSXM3b3BEVVRpWXlRbFBScGhVWEhOSFBydXd3OTdp?=
+ =?utf-8?B?TjdqMWR1OVRCY3c2S3JCMHF4ZlFjRHYvdXJzWEVRYkMwL0RYTFBQblhLczNv?=
+ =?utf-8?B?QXF0Y1QvZ3lydmsrMVdQKzJOZ3Z0VnhhMUg2enlVNzJXRnZsSG1oNmdVRjlx?=
+ =?utf-8?B?Q0U2TXRHdElHNzJPWHI0VXE2YzhYdVAwR091c01qR3pMc0YvKzVPTkU1cW1z?=
+ =?utf-8?B?TzJJSXFTZXkxeW1COUZPNjNrMHc4cS9sVGVjY000ay9McWd2eUVmWGU1Z0xt?=
+ =?utf-8?B?RGZCY2FMeU9QNlZFU3k3VXhSQlRETTc3QkpvdnhxY3Z2Y0RaZXdKalpkTWY3?=
+ =?utf-8?B?aVY0UzdYMkFvdlZQa0pXWkpZM21vcHR5eHFvODRTcUlRMDBQRU5rYk5JMDFY?=
+ =?utf-8?B?eWhuK2cxV0tUMnhKdWVHb1hKc21QOEFpRXRBQ3pjRmhlM1c0bnE2NWtUNk03?=
+ =?utf-8?B?VWxDWlhRMmk3RDcxWkFOQ3JIUVdKeUNhTW1TK1ZxUyswbU15cFQ1aFlZbjFI?=
+ =?utf-8?B?aGVMOGVBcDlSOStYeityTmlKMFk2SEQ4N2Qzc0NyM3doSlllbDc3QUdxVXVr?=
+ =?utf-8?B?T3NqQktmNFpiNEsrSDNwVmYxUVpobVR1Rk9CaGlzUkI4dTVhTkx1ZXE1blNt?=
+ =?utf-8?B?a0owTHhabDNNb2ZSWXBsL3RJTi81d3plOUFQcDladFRZZXY4K29PYTU3VUlK?=
+ =?utf-8?Q?Ya8tjN8RI7HBLbsMjTJB7vsBg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0644ac64-882f-4178-1562-08daab8b5530
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 13:20:14.7020
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 633TzDeNA+t7Oo8jETcdVLvVZ3APB2kjakF0s3ssc1IGMgxziBLNTWsl9E+isqFoWH/FB8weL8TwUKpWXiZMRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7381
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +134,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eirin,
+On 11-Oct-22 4:59 PM, Peter Zijlstra wrote:
+> On Sat, Oct 08, 2022 at 11:54:24AM +0530, Ravi Bangoria wrote:
+> 
+>> +static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
+>> +					  struct perf_event_context *next_ctx)
+>> +{
+>> +	struct perf_event_pmu_context *prev_epc, *next_epc;
+>> +
+>> +	if (!prev_ctx->nr_task_data)
+>> +		return;
+>> +
+>> +	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
+>> +				    struct perf_event_pmu_context,
+>> +				    pmu_ctx_entry);
+>> +	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
+>> +				    struct perf_event_pmu_context,
+>> +				    pmu_ctx_entry);
+>> +
+>> +	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
+>> +	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
+>> +
+>> +		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
+>> +
+>> +		/*
+>> +		 * PMU specific parts of task perf context can require
+>> +		 * additional synchronization. As an example of such
+>> +		 * synchronization see implementation details of Intel
+>> +		 * LBR call stack data profiling;
+>> +		 */
+>> +		if (prev_epc->pmu->swap_task_ctx)
+>> +			prev_epc->pmu->swap_task_ctx(prev_epc, next_epc);
+>> +		else
+>> +			swap(prev_epc->task_ctx_data, next_epc->task_ctx_data);
+> 
+> Did I forget to advance the iterators here?
 
-On Sat, Oct 08, 2022 at 03:38, Eirin Nya <nyanpasu256@gmail.com> wrote:
+Yeah. Seems so. I overlooked it too.
 
-> On 10/7/22 6:35 AM, Mattijs Korpershoek wrote:
->> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
->> 
->> ps: please consider using the proper subject line for input subsystem if
->> you need to send again.
->> 
->> It should be "Input: elantech - Remove redundant field elantech_data::width
-> On 10/7/22 7:06 AM, Mattijs Korpershoek wrote:
->> This seems like a candidate patch for stable kernels as well.
->> 
->> Maybe consider adding the following in the commit message footer:
->> Fixes: 28f49616113f ("Input: elantech - add v3 hardware support")
->> 
->> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
->
-> Should I submit a v2 where I change the subject line for all commits
-> and add a Fixes: tag to patch 3/3 (or 0/3, not sure), but not change
-> the code? Sorry, I'm new to kernel development.
-
-No worries. It's not a very newcomer friendly process. I'm not that
-experienced myself but i'll try to help you.
-
-No need to just re-submit a v2 for changing the subject line.
-If you do have to send a v2, however, please keep in mind to do the change.
-
-For the Fixes: tag itself, I think it should only be applied on patch
-[3/3] since that's the one "actually doing the fix"
-
-The stable maintainers will detect a Fixes: tag and will eventually pick
-this up once it lands in linus' tree.
+Thanks,
+Ravi
