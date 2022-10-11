@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19885FB2BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770455FB2BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJKM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 08:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S229598AbiJKM6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 08:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJKM5L (ORCPT
+        with ESMTP id S229829AbiJKM6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 08:57:11 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC4C923CC;
-        Tue, 11 Oct 2022 05:57:08 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MmwlD5NT7z6HJ9X;
-        Tue, 11 Oct 2022 20:56:24 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 14:57:06 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
- 2022 13:57:05 +0100
-Date:   Tue, 11 Oct 2022 13:57:02 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC V2 PATCH 05/11] cxl/mem: Trace General Media Event Record
-Message-ID: <20221011135702.00006f74@huawei.com>
-In-Reply-To: <20221010224131.1866246-6-ira.weiny@intel.com>
-References: <20221010224131.1866246-1-ira.weiny@intel.com>
-        <20221010224131.1866246-6-ira.weiny@intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 11 Oct 2022 08:58:00 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCFD915FB;
+        Tue, 11 Oct 2022 05:57:58 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BCvf5l074097;
+        Tue, 11 Oct 2022 07:57:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1665493061;
+        bh=4QaEQ1R82eVCDdFcuqQYOfjMLD/kzAy79NfsUuxoHeY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=KD2ZPsLvWvuHgclLcmIDfEiwu3a1Nrl4hvNBdYT57yFX8wAnWHuT809lB34khCUdv
+         vIXA7iyi1IFL9VngsZvv1+L8cxCA4MxVkY/HVzvGLDsaujfl+4/0WbPj7mbAtsOyGL
+         IWZE+YkBDM0jrz0GKDS22Ikg7rj+0aNWdbRO9EI0=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BCvfBR034977
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Oct 2022 07:57:41 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 11
+ Oct 2022 07:57:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 11 Oct 2022 07:57:41 -0500
+Received: from [172.24.147.145] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BCvbBO019814;
+        Tue, 11 Oct 2022 07:57:38 -0500
+Subject: Re: [PATCH v3 4/5] PCI: endpoint: Use callback mechanism for passing
+ events from EPC to EPF
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <kishon@kernel.org>, <lpieralisi@kernel.org>, <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <vidyas@nvidia.com>,
+        <vigneshr@ti.com>
+References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+ <20221006134927.41437-5-manivannan.sadhasivam@linaro.org>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <b6001af6-4c41-a678-b3cb-4c1d874425bf@ti.com>
+Date:   Tue, 11 Oct 2022 18:27:37 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+In-Reply-To: <20221006134927.41437-5-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,144 +70,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 15:41:25 -0700
-ira.weiny@intel.com wrote:
+Hi Mani,
 
-> From: Ira Weiny <ira.weiny@intel.com>
+On 06/10/22 7:19 pm, Manivannan Sadhasivam wrote:
+> Instead of using the notifiers for passing the events from EPC to EPF,
+> let's introduce a callback based mechanism where the EPF drivers can
+> populate relevant callbacks for EPC events they want to subscribe.
 > 
-> CXL rev 3.0 section 8.2.9.2.1.1 defines the General Media Event Record.
+> The use of notifiers in kernel is not recommended if there is a real link
+> between the sender and receiver, like in this case. Also, the existing
+> atomic notifier forces the notification functions to be in atomic context
+> while the caller may be in non-atomic context. For instance, the two
+> in-kernel users of the notifiers, pcie-qcom and pcie-tegra194, both are
+> calling the notifier functions in non-atomic context (from threaded IRQ
+> handlers). This creates a sleeping in atomic context issue with the
+> existing EPF_TEST driver that calls the EPC APIs that may sleep.
 > 
-> Determine if the event read is a general media record and if so trace
-> the record.
+> For all these reasons, let's get rid of the notifier chains and use the
+> simple callback mechanism for signalling the events from EPC to EPF
+> drivers. This preserves the context of the caller and avoids the latency
+> of going through a separate interface for triggering the notifications.
 > 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
-I'll review the rest of these with the assumption that the question
-of reserved bytes in tracepoints will get resolved before these go in.
-
-One minor comment on a comment inline.  Other than those lgtm
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+> As a first step of the transition, the core_init() callback is introduced
+> in this commit, that'll replace the existing CORE_INIT notifier used for
+> signalling the init complete event from EPC.
 > 
+> During the occurrence of the event, EPC will go over the list of EPF
+> drivers attached to it and will call the core_init() callback if available.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
-> Changes from RFC:
-> 	Add reserved byte array
-> 	Use common CXL event header record macros
-> 	Jonathan
-> 		Use unaligned_le{24,16} for unaligned fields
-> 		Don't use the inverse of phy addr mask
-> 	Dave Jiang
-> 		s/cxl_gen_media_event/general_media
-> 		s/cxl_evt_gen_media/cxl_event_gen_media
-> ---
->  drivers/cxl/core/mbox.c    |  30 ++++++++++-
->  drivers/cxl/cxlmem.h       |  20 +++++++
->  include/trace/events/cxl.h | 108 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 156 insertions(+), 2 deletions(-)
+>   drivers/pci/endpoint/functions/pci-epf-test.c | 13 ++++++-------
+>   drivers/pci/endpoint/pci-epc-core.c           | 11 ++++++++++-
+>   include/linux/pci-epf.h                       | 11 ++++++++++-
+>   3 files changed, 26 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index bc4e42b3e01b..1097250c115a 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -712,6 +712,32 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_enumerate_cmds, CXL);
->  
-> +/*
-> + * General Media Event Record
-> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
-> + */
-> +static const uuid_t gen_media_event_uuid =
-> +	UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
-> +		  0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6);
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+> index a6f906a96669..868de17e1ad2 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+> @@ -826,20 +826,17 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
+>   	return 0;
+>   }
+>   
+> +static const struct pci_epc_event_ops pci_epf_test_event_ops = {
+> +	.core_init = pci_epf_test_core_init,
+> +};
 > +
-> +static void cxl_trace_event_record(const char *dev_name,
-> +				   enum cxl_event_log_type type,
-> +				   struct cxl_get_event_payload *payload)
-> +{
-> +	uuid_t *id = &payload->record.hdr.id;
+>   static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
+>   				 void *data)
+>   {
+>   	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
+>   	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+> -	int ret;
+>   
+>   	switch (val) {
+> -	case CORE_INIT:
+> -		ret = pci_epf_test_core_init(epf);
+> -		if (ret)
+> -			return NOTIFY_BAD;
+> -		break;
+> -
+>   	case LINK_UP:
+>   		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
+>   				   msecs_to_jiffies(1));
+> @@ -1010,6 +1007,8 @@ static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_i
+>   
+>   	INIT_DELAYED_WORK(&epf_test->cmd_handler, pci_epf_test_cmd_handler);
+>   
+> +	epf->event_ops = &pci_epf_test_event_ops;
+
+Doesn't this ignore epc_features input from the controller driver?
 > +
-> +	if (uuid_equal(id, &gen_media_event_uuid)) {
-> +		struct cxl_event_gen_media *rec =
-> +				(struct cxl_event_gen_media *)&payload->record;
+>   	epf_set_drvdata(epf, epf_test);
+>   	return 0;
+>   }
+> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> index 6cce430d431b..ba54f17ae06f 100644
+> --- a/drivers/pci/endpoint/pci-epc-core.c
+> +++ b/drivers/pci/endpoint/pci-epc-core.c
+> @@ -707,10 +707,19 @@ EXPORT_SYMBOL_GPL(pci_epc_linkup);
+>    */
+>   void pci_epc_init_notify(struct pci_epc *epc)
+>   {
+> +	struct pci_epf *epf;
 > +
-> +		trace_general_media(dev_name, type, rec);
-> +		return;
-> +	}
-> +
-> +	/* For unknown record types print just the header */
-> +	trace_generic_event(dev_name, type, &payload->record);
+>   	if (!epc || IS_ERR(epc))
+>   		return;
+>   
+> -	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
+> +	mutex_lock(&epc->list_lock);
+> +	list_for_each_entry(epf, &epc->pci_epf, list) {
+> +		mutex_lock(&epf->lock);
+> +		if (epf->event_ops->core_init)
 
-Looks like it prints the whole thing now...
+This would result in abort if the endpoint function driver is not bound 
+to endpoint device and the notify is called.
 
+This would also require all function drivers to have event_ops 
+populated. IOW this could break pci-epf-ntb.c.
 
-> +}
-> +
-
-
-> diff --git a/include/trace/events/cxl.h b/include/trace/events/cxl.h
-> index 318ba5fe046e..82a8d3b750a2 100644
-> --- a/include/trace/events/cxl.h
-> +++ b/include/trace/events/cxl.h
-> @@ -122,6 +122,114 @@ TRACE_EVENT(generic_event,
-
-
-> +#define CXL_GMER_VALID_CHANNEL				BIT(0)
-> +#define CXL_GMER_VALID_RANK				BIT(1)
-> +#define CXL_GMER_VALID_DEVICE				BIT(2)
-> +#define CXL_GMER_VALID_COMPONENT			BIT(3)
-> +#define show_valid_flags(flags)	__print_flags(flags, "|",		   \
-> +	{ CXL_GMER_VALID_CHANNEL,			"CHANNEL"	}, \
-> +	{ CXL_GMER_VALID_RANK,				"RANK"		}, \
-> +	{ CXL_GMER_VALID_DEVICE,			"DEVICE"	}, \
-> +	{ CXL_GMER_VALID_COMPONENT,			"COMPONENT"	}  \
-> +)
-
-I'd still rather we only had the TP_printk only print those parts that are valid
-rather than the mess of having to go check the validity bit before deciding whether
-to take notice of the field.  But meh, not that important given thats
-not the main intended way to consume this data.
-
-
-> +
-> +TRACE_EVENT(general_media,
-> +
-> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-> +		 struct cxl_event_gen_media *rec),
-> +
-> +	TP_ARGS(dev_name, log, rec),
-> +
-> +	TP_STRUCT__entry(
-> +		CXL_EVT_TP_entry
-> +		/* General Media */
-> +		__field(u64, phys_addr)
-> +		__field(u8, descriptor)
-> +		__field(u8, type)
-> +		__field(u8, transaction_type)
-> +		__field(u8, channel)
-> +		__field(u32, device)
-> +		__array(u8, comp_id, CXL_EVENT_GEN_MED_COMP_ID_SIZE)
-> +		__array(u8, reserved, CXL_EVENT_GEN_MED_RES_SIZE)
-> +		__field(u16, validity_flags)
-> +		__field(u8, rank) /* Out of order to pack trace record */
-> +	),
-> +
-> +	TP_fast_assign(
-> +		CXL_EVT_TP_fast_assign(dev_name, log, rec->hdr);
-> +
-> +		/* General Media */
-> +		__entry->phys_addr = le64_to_cpu(rec->phys_addr);
-> +		__entry->descriptor = rec->descriptor;
-> +		__entry->type = rec->type;
-> +		__entry->transaction_type = rec->transaction_type;
-> +		__entry->channel = rec->channel;
-> +		__entry->rank = rec->rank;
-> +		__entry->device = get_unaligned_le24(rec->device);
-> +		memcpy(__entry->comp_id, &rec->component_id,
-> +			CXL_EVENT_GEN_MED_COMP_ID_SIZE);
-> +		memcpy(__entry->reserved, &rec->reserved,
-> +			CXL_EVENT_GEN_MED_RES_SIZE);
-> +		__entry->validity_flags = get_unaligned_le16(&rec->validity_flags);
-> +	),
-
+Thanks,
+Kishon
