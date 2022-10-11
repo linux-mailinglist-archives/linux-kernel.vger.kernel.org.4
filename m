@@ -2,104 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D2E5FBA88
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DFE5FBA97
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJKSip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S229824AbiJKSk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiJKSik (ORCPT
+        with ESMTP id S229675AbiJKSkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:38:40 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266AA57E22
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:38:39 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q9so13520675pgq.8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J0agk2sWS+Mi5h9dV51Nsg3RqUCciA5PQ2AzXKmTmwY=;
-        b=UX8F1Qqg05k15VubNsjsrQCFZOGSL2y0dqQMfjdUJ5WFjv7HnAp/smRP0rDpDY/GqW
-         fnYLtcH++lhV99URB/TalAcFo2q6HMMdYZGREMDhZNOvhA/QPEBRnQs+Bnof/+pmxavj
-         6uvlK8Gru67aKDmcnOimQXP1r58Bv9pxtA0rCC8CMz7qI/BAEokgOuCfUQ+0dpN3Of1a
-         2nprNkxXV92wa6SSDIht/xWKrLQZxHP+VSz8WCcYaFn3i6Rp9XKUjpoAS6zunbwGuJgq
-         w0vrv8lb9f0sl5MQ0gFE8NIOOvntLUnS4sAWwTf8riT2L3jLRU1bv6JlpJQfM0CtCsoW
-         yJaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0agk2sWS+Mi5h9dV51Nsg3RqUCciA5PQ2AzXKmTmwY=;
-        b=G8FxGYDzA6FrrZmJSvGiYPQ66VpgcmYEOp/6JU1lnDGbFLK+XfqrUxInQHkfMvHHar
-         yj828SPW7Ec2dfi/aTUulzACfFUVwGf9k5tcdJ/lzk7w1GugGx7ZL2yb79rx1BjqfjEG
-         sCcqQjtP6QJYgOFP68ShveUv4XfP6M/QnEFop4Q6qre/z8RZv030wujFm3yZ8IUKUbBH
-         kPLf2jfz25iEFJtP6Rw0lDdkwXy/78nSonhrHD1KNrKo1L5A05UzlGPfqb6Fztbs806J
-         Ikh+Ml4F6etWbyWiBThcFiB0Qn0Zx8um8UUFgxyHm0UsFwZtttk9g27dNJnyI4twZZZi
-         lasQ==
-X-Gm-Message-State: ACrzQf07vE3+X7mxGIDFuUnt29Eqhu3+DqYV7Ga9pD2iJcb9hMDrrZiK
-        2vdc+WQjQxMHwepYptQ6lGQXPw==
-X-Google-Smtp-Source: AMsMyM7hgCm3o1frXwV8MfCXr7f55woi1BDbvv8MgkVy9eZI9ul9Q/2X5LsWM8EICdoc/uDAmwo6pQ==
-X-Received: by 2002:aa7:9107:0:b0:553:92a4:d930 with SMTP id 7-20020aa79107000000b0055392a4d930mr26239125pfh.72.1665513518634;
-        Tue, 11 Oct 2022 11:38:38 -0700 (PDT)
-Received: from ?IPV6:2601:1c0:4c81:c480:feaa:14ff:fe3a:b225? ([2601:1c0:4c81:c480:feaa:14ff:fe3a:b225])
-        by smtp.gmail.com with ESMTPSA id c195-20020a621ccc000000b00541c68a0689sm9343155pfc.7.2022.10.11.11.38.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 11:38:38 -0700 (PDT)
-Message-ID: <e1e227a4-4f71-3a01-2bd1-beaf6c52e02a@linaro.org>
-Date:   Tue, 11 Oct 2022 11:38:37 -0700
+        Tue, 11 Oct 2022 14:40:52 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2EE7CB67;
+        Tue, 11 Oct 2022 11:40:50 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BBeKYZ030456;
+        Tue, 11 Oct 2022 18:40:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=h1BvboPV+q0O/fs3qxdcsJfGYHdo3ib28v+3LY8CB1k=;
+ b=JL5G78K3BcH4pq2z2MiK+KQ0tT7p1lAGpPEIkl3QFQJuEnd+BXe/srHQ394xZmr0K+5p
+ IIcEYR1vANcO5xzA3TVeL5uVUzcBOB6/yCzYvcsglKS9Sat/jn+uCOs/HSBAjj7HJ2vG
+ qDrYNJy6hsVCP6aq/XCPcGxcAzisvYxL11zf4vB5pvFYAPqv5po8RijuStA1Zjs+fxk+
+ ObNEDMLsw6hyzef/y3Z4RBq96noQBPdtAtbRff+c5OHwwY/qSiBG9fL/V6WGraVfWNkR
+ mTFusYn7drSOxdfa4libsT5eEdrAmDi4ZGpDUJ/ZS1mFb1ni03oqkmC0EO/QbLDrY5ga Zg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rwxuv48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 18:40:47 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29BIekZU032317
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 18:40:47 GMT
+Received: from [10.110.3.66] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 11:40:46 -0700
+Message-ID: <401219d2-43f1-5816-54c2-80be8a4afb1c@quicinc.com>
+Date:   Tue, 11 Oct 2022 11:40:46 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] ext4: Add extend check to prevent BUG() in ext4_es_end
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 03/19] arm64: dts: qcom: qdru1000: Add tlmm nodes
 Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+a22dc4b0744ac658ed9b@syzkaller.appspotmail.com
-References: <20220930202536.697396-1-tadeusz.struk@linaro.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <20220930202536.697396-1-tadeusz.struk@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221001030656.29365-1-quic_molvera@quicinc.com>
+ <20221001030656.29365-4-quic_molvera@quicinc.com>
+ <CAA8EJpp2h3j9cPLPzCzgnYm07D5PPZg3H5_LkcXizhXt9ekkiQ@mail.gmail.com>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <CAA8EJpp2h3j9cPLPzCzgnYm07D5PPZg3H5_LkcXizhXt9ekkiQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: i3X1gpRH1cqkzW_EGShuDoN16EMgwD3H
+X-Proofpoint-GUID: i3X1gpRH1cqkzW_EGShuDoN16EMgwD3H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 clxscore=1015 malwarescore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ mlxlogscore=819 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210110108
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 13:25, Tadeusz Struk wrote:
-> Syzbot reported an issue with ext4 extents. The reproducer creates
-> a corrupted ext4 fs image in memory, and mounts it as a loop device.
-> It invokes the ext4_cache_extents() and ext4_find_extent(), which
-> eventually triggers a BUG() in ext4_es_end() causing a kernel crash.
-> It triggers on mainline, and every kernel version back to v4.14.
-> Add a call ext4_ext_check_inode() in ext4_find_extent() to prevent
-> the crash.
-> 
-> To: "Theodore Ts'o"<tytso@mit.edu>
-> Cc: "Andreas Dilger"<adilger.kernel@dilger.ca>
-> Cc:<linux-ext4@vger.kernel.org>
-> Cc:<linux-kernel@vger.kernel.org>
-> Cc:<stable@vger.kernel.org>
-> 
-> Link:https://syzkaller.appspot.com/bug?id=641e7a4b900015c5d7a729d6cc1fba7a928a88f9
-> Reported-by:syzbot+a22dc4b0744ac658ed9b@syzkaller.appspotmail.com
-> Signed-off-by: Tadeusz Struk<tadeusz.struk@linaro.org>
 
-Hi,
-Any comments/feedback on this one?
 
--- 
+On 10/1/2022 12:26 AM, Dmitry Baryshkov wrote:
+> On Sat, 1 Oct 2022 at 06:09, Melody Olvera <quic_molvera@quicinc.com> wrote:
+>> Add tlmm node for the QDU1000 and QRU1000 SoCs and the uart pin
+>> configuration.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>  arch/arm64/boot/dts/qcom/qdru1000.dtsi | 30 ++++++++++++++++++++++++++
+>>  1 file changed, 30 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/qdru1000.dtsi b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
+>> index 3610f94bef35..39b9a00d3ad8 100644
+>> --- a/arch/arm64/boot/dts/qcom/qdru1000.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/qdru1000.dtsi
+>> @@ -235,6 +235,8 @@ uart7: serial@99c000 {
+>>                                 reg = <0x0 0x99c000 0x0 0x4000>;
+>>                                 clock-names = "se";
+>>                                 clocks = <&gcc GCC_QUPV3_WRAP0_S7_CLK>;
+>> +                               pinctrl-names = "default";
+>> +                               pinctrl-0 = <&qup_uart7_default>;
+>>                                 interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
+>>                                 #address-cells = <1>;
+>>                                 #size-cells = <0>;
+>> @@ -248,6 +250,34 @@ tcsr_mutex: hwlock@1f40000 {
+>>                         #hwlock-cells = <1>;
+>>                 };
+>>
+>> +               tlmm: pinctrl@f000000 {
+>> +                       compatible = "qcom,qdu1000-tlmm", "qcom,qru1000-tlmm";
+>> +                       reg = <0x0 0xf000000 0x0 0x1000000>;
+>> +                       interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>> +                       gpio-controller;
+>> +                       #gpio-cells = <2>;
+>> +                       interrupt-controller;
+>> +                       #interrupt-cells = <2>;
+>> +                       gpio-ranges = <&tlmm 0 0 151>;
+>> +                       wakeup-parent = <&pdc>;
+>> +
+>> +                       qup_uart7_default: qup-uart7-default {
+>> +                               tx {
+>> +                                       pins = "gpio134";
+>> +                                       function = "qup0_se7_l2";
+> This looks strange. Usually we'd have a single 'qup7' function here.
+> I'd go back to the interconnect driver. Maybe the functions are not
+> correctly defined there.
+Yeah; will correct. Pinctrl driver was not in line with upstream standards.
+>
+>> +                                       drive-strength = <2>;
+>> +                                       bias-disable;
+> 'drive-strength' and 'bias-disable' are to be patched in in the board dts file.
+Really? Looking at sm8450.dtsi and sm8350.dtsi I see them defined in the dtsi file instead of the
+dts file. Is this new?
+>
+>> +                               };
+>> +
+>> +                               rx {
+>> +                                       pins = "gpio135";
+>> +                                       function = "qup0_se7_l3";
+>> +                                       drive-strength = <2>;
+>> +                                       bias-disable;
+>> +                               };
+>> +                       };
+>> +               };
+>> +
+>>                 pdc: interrupt-controller@b220000 {
+>>                         compatible = "qcom,pdc";
+>>                         reg = <0x0 0xb220000 0x0 0x30000>, <0x0 0x174000f0 0x0 0x64>;
+>> --
+>> 2.37.3
+>>
+>
 Thanks,
-Tadeusz
-
+Melody
