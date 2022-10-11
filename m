@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55FD5FBA99
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2B35FBA9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiJKSl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S229841AbiJKSmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJKSlY (ORCPT
+        with ESMTP id S229495AbiJKSmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:41:24 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A277CAA2;
-        Tue, 11 Oct 2022 11:41:23 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-12c8312131fso16975807fac.4;
-        Tue, 11 Oct 2022 11:41:23 -0700 (PDT)
+        Tue, 11 Oct 2022 14:42:16 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A8B7F099;
+        Tue, 11 Oct 2022 11:42:14 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id a5so4056087qkl.6;
+        Tue, 11 Oct 2022 11:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aCgtbYVIAJSnrwzgTT+6krzz0XBjwFu3ksGJ8+hLnEE=;
+        b=Rm4CGbFE3txxRA0rtW140MY/jxMXN8PWhRUtqQuR9VE6t7HjRP9Dc7F/iYdGlcAf0a
+         Rj4IRjrrXfbpSpzAV0eYz3Cy0HWt+WqZnKRrQk7JuoU3msofuKT1YB9otMM5sSJpePMv
+         rr8nWw5WL6qlGv7HiA1aQRKvkJMSwCxh4mafcIW1755EWN3SGhhKQzVpvcMpFe1rWTYr
+         3nN6GqobP9rbHy5PU2fV2wHujPUpq+DP6e6m278aBkNsx/1ax+ttz0bp8ayfNNZJJomB
+         CcJ7fRkOV9BcQ9L6UAWF3BP71hmqSr28PfFKJbq0JIyd3GIHGIsOgtrKEwOhSMuWcnl4
+         QAEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4JAJVk0JnsSinL2EcEIankDF1nDr2CRkvvuRQlFNUCo=;
-        b=tIVwN7GsywVN+eRcBJrK2VFN5O+JS5uHMmEVeEBnKcu4W3ovR5K9tqAaDKz1PtiL8w
-         byUm6W3Ox2nGXY+75CT7aJXWxsTNgXYNd6xu5uVgAOHhe0ACDCw4r7VZQ1mnYKx8eJC+
-         yCaeLlwTQxZ8+Rlkz5PRNJ5nduwBLb9sWZnVW+vffs94wGtECmfo+7VyUdjNybzzwm97
-         gAPKk2a2fR4XTWlK4xspKgJvOZeS2C8GNknVo9s7U8FYKOhJncXyFetF+9MXaDzpJFdt
-         iN589XtWZogNqX3AlUrwGN4xKiNnjvQDhZ8jdst1RpIoLrFRtCqP2vTQo/brfpov3W++
-         Tb9A==
-X-Gm-Message-State: ACrzQf0ddeVRUu5D9aNNQFKimvkQ50+mcmDqIrG6C3cSqZFzCvPuaqPN
-        wYi6265byuCPQE8rx6QVLA==
-X-Google-Smtp-Source: AMsMyM6NnHYJgkyLWS5L0o44ZzcDSOea6RklSLt6jGqdzkkxoYu8wriiAf7by2811mt0dFqqdYz6Yg==
-X-Received: by 2002:a05:6870:424d:b0:132:5c64:dd5a with SMTP id v13-20020a056870424d00b001325c64dd5amr344320oac.128.1665513683076;
-        Tue, 11 Oct 2022 11:41:23 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e22-20020a056820061600b00480816a5b8csm117789oow.18.2022.10.11.11.41.22
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aCgtbYVIAJSnrwzgTT+6krzz0XBjwFu3ksGJ8+hLnEE=;
+        b=VUWFLoGW6mTdkNcwU7A3GlkHwemJFDL5DGGk1NPtcSSQweD8bjwGgflbGSfHza83Kr
+         hLNy4jynWE9sQI2eMIHEotuxS7zIDdJ0AI7uft3X+CatSY44bp+/NCeJCamdPll1TyWB
+         b/t7cZPbz1tyYIWBEtrTLlZS170NCANFM0G2TepDMbjCRcijw6RSLt9vw7leX40s3hOy
+         NDN10R+HVsweCchj4mTysYpc1CWO44axX2b6GK47vh6mTa0dmEF/KHmafHu5OCQI+akt
+         43wjbS1mP59/G1H1aZl7t8WcfiuyxlB0CTIWB+tX7kwHKbZGpU0sH8LF8RQsj+xU46jq
+         vUtQ==
+X-Gm-Message-State: ACrzQf0YRel2i4dJclgmxENlPsV7o6qRPtUXk9V8sAqLzZfoo4ubJU9s
+        M4LAJZf4G4HCzQGmqOzq6IPu/8HGWhI=
+X-Google-Smtp-Source: AMsMyM5PyxifjOpoUnhn3I10E/aoZtelQgb0QdNMyGnmAmwcZMOII5hKwxP6W5VdQCeRu6TYR/b3HA==
+X-Received: by 2002:a05:620a:1505:b0:6e9:168f:76a5 with SMTP id i5-20020a05620a150500b006e9168f76a5mr8897130qkk.142.1665513733642;
+        Tue, 11 Oct 2022 11:42:13 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id fc8-20020a05622a488800b003938a65479bsm10961732qtb.10.2022.10.11.11.42.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 11:41:22 -0700 (PDT)
-Received: (nullmailer pid 3755271 invoked by uid 1000);
-        Tue, 11 Oct 2022 18:41:24 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: dt-bindings: Convert dmic-codec to DT schema
-Date:   Tue, 11 Oct 2022 13:41:19 -0500
-Message-Id: <20221011184119.3754096-1-robh@kernel.org>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Tue, 11 Oct 2022 11:42:13 -0700 (PDT)
+From:   Jim Quinlan <jim2101024@gmail.com>
+To:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
+        james.quinlan@broadcom.com
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list),
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE), Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 0/5] PCI: brcmstb: Add Multi-MSI and some improvements
+Date:   Tue, 11 Oct 2022 14:42:05 -0400
+Message-Id: <20221011184211.18128-1-jim2101024@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,108 +76,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the dmic-codec binding to DT schema format.
 
-The '#sound-dai-cells' and 'sound-name-prefix' properties were not
-documented, but are in use, so add them.
+v2 -- Commit "PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits"
+      - s/read compeletion boudnary/Read Completion Boundary/ (Bjorn)
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/sound/dmic-codec.yaml | 55 +++++++++++++++++++
- .../devicetree/bindings/sound/dmic.txt        | 22 --------
- 2 files changed, 55 insertions(+), 22 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/dmic-codec.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/dmic.txt
+v1 -- original
 
-diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
-new file mode 100644
-index 000000000000..767152fa99cc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/dmic-codec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Generic PDM Digital microphone (DMIC) codec
-+
-+maintainers:
-+  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
-+
-+allOf:
-+  - $ref: name-prefix.yaml#
-+
-+properties:
-+  compatible:
-+    const: dmic-codec
-+
-+  '#sound-dai-cells':
-+    const: 0
-+
-+  dmicen-gpios:
-+    description: GPIO specifier for DMIC to control start and stop
-+    maxItems: 1
-+
-+  num-channels:
-+    description: Number of microphones on this DAI
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 1
-+    maximum: 8
-+    default: 8
-+
-+  modeswitch-delay-ms:
-+    description: Delay (in ms) to complete DMIC mode switch
-+
-+  wakeup-delay-ms:
-+    description: Delay (in ms) after enabling the DMIC
-+
-+required:
-+  - compatible
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio.h>
-+
-+    dmic {
-+        compatible = "dmic-codec";
-+        dmicen-gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
-+        num-channels = <1>;
-+        wakeup-delay-ms <50>;
-+        modeswitch-delay-ms <35>;
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/sound/dmic.txt b/Documentation/devicetree/bindings/sound/dmic.txt
-deleted file mode 100644
-index 32e871037269..000000000000
---- a/Documentation/devicetree/bindings/sound/dmic.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Device-Tree bindings for Digital microphone (DMIC) codec
--
--This device support generic PDM digital microphone.
--
--Required properties:
--	- compatible: should be "dmic-codec".
--
--Optional properties:
--	- dmicen-gpios: GPIO specifier for dmic to control start and stop
--	- num-channels: Number of microphones on this DAI
--	- wakeup-delay-ms: Delay (in ms) after enabling the DMIC
--	- modeswitch-delay-ms: Delay (in ms) to complete DMIC mode switch
--
--Example node:
--
--	dmic_codec: dmic@0 {
--		compatible = "dmic-codec";
--		dmicen-gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
--		num-channels = <1>;
--		wakeup-delay-ms <50>;
--		modeswitch-delay-ms <35>;
--	};
+Jim Quinlan (5):
+  PCI: brcmstb: Enable Multi-MSI
+  PCI: brcmstb: Wait for 100ms following PERST# deassert
+  PCI: brcmstb: Replace status loops with read_poll_timeout_atomic()
+  PCI: brcmstb: Functions needlessly specified as "inline"
+  PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
+
+ drivers/pci/controller/pcie-brcmstb.c | 85 +++++++++++++++------------
+ 1 file changed, 48 insertions(+), 37 deletions(-)
+
+
+base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
 -- 
-2.35.1
+2.17.1
 
