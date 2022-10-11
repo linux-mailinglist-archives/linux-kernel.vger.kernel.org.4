@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28DF5FAC9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CBF5FAC9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJKGVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S229872AbiJKGVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiJKGVW (ORCPT
+        with ESMTP id S229755AbiJKGVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:21:22 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C8A876B3;
-        Mon, 10 Oct 2022 23:21:04 -0700 (PDT)
+        Tue, 11 Oct 2022 02:21:24 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2040.outbound.protection.outlook.com [40.107.94.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC3E87F8E;
+        Mon, 10 Oct 2022 23:21:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DPWqnwUtYiL7HXS7UU7VE6oqF3i2wfA6rncxSpGH6mTLAy0n1rAlDJ+00tP+p+EyIv1RfeLLLryJCaEBxM48HLR3GaMWnSYZmFHCG5yhA2v/0MXrfcsbUEkXSUrswytAW6Bvy9az7UTLhWaxEE4nnriAi6w2Cf9Qfci1GAsnTLCOYkqi9ZkTP6MyRM4qFOMHOBjHnSwg8cUhmxHbiDSiXMMLwLG4Ue3IW+eBYI6pO4TKfQ5QFRCJjHsItWHq+UES07cQwjVy4QQXPtUbpBPjwhxVsv+CFGm1Gp5GVlE74Uotob0ItctrL9cIpTl7X9ITtt7SsQ0pgG/2l48MLpU0OQ==
+ b=I0TGVM4Vq2ch3ZLWVtqiWuFP7ygzauun4jdR7fgSHswdRE+WkWojIkwTys2Xn05+XmjGLhVM3qzy6lTaqqSl8gfEm/Z/sLn6P5Gz1mCgVCLPJzFS4MC2dFlUrH5fDweYqlc63bPvSRVEtYeXr0MnlOnf0rgKA58TsD+f3y/+2EzPTDwKvezcyEWYfjuXzQYPO2CJXniIH7zqjkxbSgmf151mn5eHtaCAcPSfcAE89mRnZ3Q5U7WxFEHnfIP4l7q74A8uN9VDY4BBMop6tFL8Y7BT39jqFqCeKwwSPOg0SjObzxnCP6eIGOplFzlXQtfJ89KmI7QDDKwqfJb6udkR8g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VMc8HZagvV5BKBmHkLKqcigmRmskfGEWRymqfceml5I=;
- b=ELCxZ/Rk/jripih8TWCAEmPAeeyNSHpMxswGL8CaQMy5ZjiXTtbQ4eJE91B4CvKt/bydNer8unt0syfB2OFjhiB7LICh28avIEimJ8zYHnYc1o1N/DwwCWFIYAgTIKsXRMYGv6UzjvDdK/UITlcj83yC5fJ3FxifsVC85/pBvPWljXmlv2CKM30gCplPsPBCrp2G/dM7LLbq9d/Rt6bWlcHguYVh3FS50IfBLyFToh8jkIYkRf6r8qicxFCAC1b9x/fbk0nBmYwoH7klRk4qw90ODtFY/S5PHOlakJvT1ZMB190U8WXn0SEP50hSNwHU4Ex7lh9TnUpq2WRMlpeeOQ==
+ bh=jrYG587qA3RzBMIm00PpvSRmeRdJO+WIRFIP1bkVgqA=;
+ b=VEKwdJodisjlXH2OPP/m56zDmgkiCKT/cab4hVOWSr124V3664jVohyWw0ZkmPdu8FyT6inqK5G6MYeitt5MFlbbkCpzcSsPeFvHYIuaO//YsGSAVKNBBR17vVMPoacTy6WLttPvHZyzmHKbHAXYKM1YvqL7gS9Yzu+TtoMab6YXElg1X65uSDnfo9NHqLna/ABDEs9LhmHswx5lBlJDpw0mwU/VHHU9VcfneSAXW2InTrZu8G3RkUH5Lh6Qko2NF6rJQNufVcvUmKzyaM5fr74SrSLP3nhe9zdxqaYWRJqgdHLhUu0zhOkE/icw3PKEEc0HAzALVjVUro8ZgUYYqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VMc8HZagvV5BKBmHkLKqcigmRmskfGEWRymqfceml5I=;
- b=K7HxOlgaQMZTYdM0wRJ+ts3DisgNWr6XkKQXVqWZYO6WqEVczmB/PcYtFRAtq2mc42do9G13sN++gmv6VRJ3gv2FvloRtuIMgRHp9cFEIzXSwU7OAVtirX8HEeMvlH4AFjH1j0ZW8rbA3YonpZ1jfdtRTRd8LFNiviPssS7lKvY=
-Received: from BN9PR03CA0405.namprd03.prod.outlook.com (2603:10b6:408:111::20)
- by MN0PR12MB6125.namprd12.prod.outlook.com (2603:10b6:208:3c7::15) with
+ bh=jrYG587qA3RzBMIm00PpvSRmeRdJO+WIRFIP1bkVgqA=;
+ b=J44zD5qKXjAdjhqeL7kbqR2ITH860g5pUflb0f/mIMx3jtPclufAJAVCrain8N380vgiduXwnFQb8VKbBfm7W3RPRh6KSfoxFIvMjv8wRy0c4TOR0Qfqdj/P1x1Yq1KtJif9f8PQnhPafBIzNQQ5SdYp8X59t/Hw1rnwHyPfroE=
+Received: from BN9PR03CA0073.namprd03.prod.outlook.com (2603:10b6:408:fc::18)
+ by DM4PR12MB5088.namprd12.prod.outlook.com (2603:10b6:5:38b::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Tue, 11 Oct
- 2022 06:21:01 +0000
-Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:111:cafe::98) by BN9PR03CA0405.outlook.office365.com
- (2603:10b6:408:111::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15 via Frontend
- Transport; Tue, 11 Oct 2022 06:21:01 +0000
+ 2022 06:21:02 +0000
+Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fc:cafe::7e) by BN9PR03CA0073.outlook.office365.com
+ (2603:10b6:408:fc::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21 via Frontend
+ Transport; Tue, 11 Oct 2022 06:21:02 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Tue, 11 Oct 2022 06:21:01 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.5709.10 via Frontend Transport; Tue, 11 Oct 2022 06:21:02 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 11 Oct
- 2022 01:20:58 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 11 Oct
- 2022 01:20:57 -0500
+ 2022 01:21:01 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 10 Oct
+ 2022 23:21:00 -0700
 Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 11 Oct 2022 01:20:54 -0500
+ Transport; Tue, 11 Oct 2022 01:20:58 -0500
 From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>
 CC:     <git@amd.com>, <michal.simek@amd.com>, <linux-spi@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        "Amit Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>
-Subject: [PATCH v4 4/7] firmware: xilinx: Add qspi firmware interface
-Date:   Tue, 11 Oct 2022 11:50:37 +0530
-Message-ID: <20221011062040.12116-5-amit.kumar-mahapatra@amd.com>
+        Naga Sureshkumar Relli <nagasure@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Subject: [PATCH v4 5/7] spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI Controller
+Date:   Tue, 11 Oct 2022 11:50:38 +0530
+Message-ID: <20221011062040.12116-6-amit.kumar-mahapatra@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
 References: <20221011062040.12116-1-amit.kumar-mahapatra@amd.com>
@@ -79,23 +79,23 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT004:EE_|MN0PR12MB6125:EE_
-X-MS-Office365-Filtering-Correlation-Id: bae8acac-95ca-499a-e0c5-08daab50c4a3
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|DM4PR12MB5088:EE_
+X-MS-Office365-Filtering-Correlation-Id: b58b4d0e-ea4e-4b9e-18ed-08daab50c53e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M0UaVTOv2gxwu710w0aYpFeGQyNxPWupR4H8IeobZFXosBAxJ++Q0BT83wyLaFynyfGVoccYG0m5yaq3XC5FRSPz1tou8VDrmtT7o/L7T25hH8kVVaIbFfniFknpJzLqa4Vq3dtczi8q1jPiv0+579zdOC4p/2COxvAQliXbyHUuwrq2Hw55RrenMiun4eqnQC9kK3aYSKAfZxlyQzc9FD/R6tjUymF6SPHAYgCaJnZEl0IuwZkYh6cDIow+wnzAm4kvuy0AbRxcWhILbb46k3usB3N/JrdyLylVUNDqijIwhya+H4VV9kMzFtRjLNYVeTwyW4HjlC7zO0BymasYujwt9konc1a5Sf1yxS1xbuMeHVLZnEn4yehU/REPkhvEptX9VuVOOuxqY2LzjTSZJyZ8tfG7uyi4qInW7MPBxOKR+ILO8Xo4pCptVB4p2U/jx2Q6VHK8cCpZICYr7U09lzufC5dxz7Bja3IMKdngI7IGgFKJggznvdEyQwH7L/N/gmCQIEipW7QfHlpQ8490ZGzvL4O7i5UeGJe8vtXQ4dfBEqZcZOftcepUPGm6Ds9m08LbD3jDtgLXzQivltYVE9ZXnv5lf/1vVK5VOxp28MiXh2yGMqmyTq0z9qdTaJ9ucuw6MAp4MOJBdVYxkT1j1IX82LKMvpkyI0X1OObPKKrhP62AoaIP8HnONEQWkcwhap6PgtGJt3scS6mTDI+iY683vtdN58lCjETwqnYFqnIVF3yYEWkM3T7Y2Y5jv3sOJNaxh0AKdHmHy/qYuxKobqeAdlm6M5GWlscMykbpq+f8bUaLsS91xZLIqkqtE3sb
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(82740400003)(81166007)(356005)(36756003)(86362001)(2906002)(5660300002)(83380400001)(186003)(47076005)(426003)(40480700001)(336012)(2616005)(1076003)(36860700001)(26005)(6666004)(4326008)(8676002)(70586007)(70206006)(54906003)(110136005)(41300700001)(40460700003)(82310400005)(316002)(8936002)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ozzYWG4noA3VRcqmoMPg9i9psKgVVNIDuzaiogcgk8GXXi2san0aUAkGM/hrs9CObR3X8xYtksfLMqCkI2/SxvYMRp9lcwFF/1pg9Jw8QALarLpGXvKc7s3IJY1NSRPqoHoUDO955JIRS+OBrDlR9PGxFsXnyWD7EDqSSP+J+D3PEhLuUMK+EO1f9inKObiuens8FIKvAlMIYbdf7aX+NeAdap9eb76vFQf9so5G6ebD1ZlbWtpSUK/9dQCgZgdoVslJc+allAwVV6RaoTqYS8Ky11QnLRtRft+5GML7ouzsm/okr3/fvwXS2GJsz0wl1Zqd/GZf83TERJ4DXWEo/I/5gkKLHqARuwSJZ3O0GvoCVRVss1QsPM3Cx2FsYr91UqCL5PcHVzYoPcI0To1f31Zo9e2jyBjm9RUinPCLqOmQnHBPRdzY7Icvr7Hgha3kCxn0TUd5wcxXYjDJzlW847+8Bmz2Om0vINZO6mmyaVuoo1sxpR3NDN1BQEzP784V5BOb9G3aG/4s6z5/0dHAo3mUotl6qGoV48Y83I5Gf5RZNpQ9vWvOM239h63FnBl6h/NV/9b/oviSeNftRsowTTNCIjY2EAPRZLv9Y35SaHj0f2XSqMQsHlU6ntvEgl1GpEFXKWNdR1x2bx+cE+E5I1vLmg7j5ZrcDdzlrL3rJep+xKPLJomuiPm9uafTinDxnvln1w4cJKJ6tRpmxJl/doSVc5FV9yXu2p7Zcpwl47Z+zEaTnH6uMx002+iEVwU/ZWocdk1xmjsWwIfhVamt97PrwYKmLV639WsiDlE+AgPfDDErBL3MvNmw7yDcUto4
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(356005)(82740400003)(41300700001)(83380400001)(5660300002)(426003)(8676002)(2616005)(70206006)(4326008)(1076003)(47076005)(70586007)(2906002)(36756003)(26005)(336012)(186003)(8936002)(86362001)(6666004)(36860700001)(40480700001)(82310400005)(478600001)(316002)(40460700003)(81166007)(54906003)(110136005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 06:21:01.0841
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 06:21:02.0636
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bae8acac-95ca-499a-e0c5-08daab50c4a3
+X-MS-Exchange-CrossTenant-Network-Message-Id: b58b4d0e-ea4e-4b9e-18ed-08daab50c53e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6125
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5088
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -106,87 +106,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajan Vaja <rajan.vaja@xilinx.com>
+From: Naga Sureshkumar Relli <nagasure@xilinx.com>
 
-Add support for QSPI ioctl functions and enums.
+GQSPI controller uses the internal clock for loopback mode. The loopback
+mode is used with the high-speed Quad SPI timing mode, where the memory
+interface clock needs to be greater than 40 MHz. Based on the tap delay
+value programmed, the internal clock is delayed and used for capturing
+the data.
+Based upon the frequency of operation set the recommended tap delay
+values in GQSPI driver.
 
-Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
+Signed-off-by: Naga Sureshkumar Relli <nagasure@xilinx.com>
 Signed-off-by: Michal Simek <michal.simek@amd.com>
 Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 ---
- drivers/firmware/xilinx/zynqmp.c     |  7 +++++++
- include/linux/firmware/xlnx-zynqmp.h | 19 +++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ drivers/spi/spi-zynqmp-gqspi.c | 50 +++++++++++++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-index d1f652802181..5d709faf9fe2 100644
---- a/drivers/firmware/xilinx/zynqmp.c
-+++ b/drivers/firmware/xilinx/zynqmp.c
-@@ -843,6 +843,13 @@ int zynqmp_pm_read_pggs(u32 index, u32 *value)
- }
- EXPORT_SYMBOL_GPL(zynqmp_pm_read_pggs);
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index 0fecea338027..c11736d96f33 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -48,6 +48,7 @@
+ #define GQSPI_QSPIDMA_DST_I_MASK_OFST	0x00000820
+ #define GQSPI_QSPIDMA_DST_ADDR_OFST	0x00000800
+ #define GQSPI_QSPIDMA_DST_ADDR_MSB_OFST 0x00000828
++#define GQSPI_DATA_DLY_ADJ_OFST         0x000001F8
  
-+int zynqmp_pm_set_tapdelay_bypass(u32 index, u32 value)
+ /* GQSPI register bit masks */
+ #define GQSPI_SEL_MASK				0x00000001
+@@ -136,6 +137,16 @@
+ 
+ #define GQSPI_MAX_NUM_CS	2	/* Maximum number of chip selects */
+ 
++#define GQSPI_USE_DATA_DLY		0x1
++#define GQSPI_USE_DATA_DLY_SHIFT	31
++#define GQSPI_DATA_DLY_ADJ_VALUE	0x2
++#define GQSPI_DATA_DLY_ADJ_SHIFT	28
++
++#define GQSPI_FREQ_37_5MHZ	37500000
++#define GQSPI_FREQ_40MHZ	40000000
++#define GQSPI_FREQ_100MHZ	100000000
++#define GQSPI_FREQ_150MHZ	150000000
++
+ #define SPI_AUTOSUSPEND_TIMEOUT		3000
+ enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
+ 
+@@ -253,6 +264,37 @@ static void zynqmp_gqspi_selectslave(struct zynqmp_qspi *instanceptr,
+ 	}
+ }
+ 
++/**
++ * zynqmp_qspi_set_tapdelay:   To configure qspi tap delays
++ * @xqspi:             Pointer to the zynqmp_qspi structure
++ * @baudrateval:       Buadrate to configure
++ */
++static void zynqmp_qspi_set_tapdelay(struct zynqmp_qspi *xqspi, u32 baudrateval)
 +{
-+	return zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_SET_TAPDELAY_BYPASS,
-+				   index, value, NULL);
++	u32 lpbkdlyadj = 0, datadlyadj = 0, clk_rate;
++	u32 reqhz = 0;
++
++	clk_rate = clk_get_rate(xqspi->refclk);
++	reqhz = (clk_rate / (GQSPI_BAUD_DIV_SHIFT << baudrateval));
++
++	if (reqhz <= GQSPI_FREQ_40MHZ) {
++		zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
++					      PM_TAPDELAY_BYPASS_ENABLE);
++	} else if (reqhz <= GQSPI_FREQ_100MHZ) {
++		zynqmp_pm_set_tapdelay_bypass(PM_TAPDELAY_QSPI,
++					      PM_TAPDELAY_BYPASS_ENABLE);
++		lpbkdlyadj |= (GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
++		datadlyadj |= ((GQSPI_USE_DATA_DLY <<
++				GQSPI_USE_DATA_DLY_SHIFT) |
++			       (GQSPI_DATA_DLY_ADJ_VALUE <<
++				GQSPI_DATA_DLY_ADJ_SHIFT));
++	} else if (reqhz <= GQSPI_FREQ_150MHZ) {
++		lpbkdlyadj |= GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK;
++	}
++	zynqmp_gqspi_write(xqspi, GQSPI_LPBK_DLY_ADJ_OFST, lpbkdlyadj);
++	zynqmp_gqspi_write(xqspi, GQSPI_DATA_DLY_ADJ_OFST, datadlyadj);
 +}
-+EXPORT_SYMBOL_GPL(zynqmp_pm_set_tapdelay_bypass);
 +
  /**
-  * zynqmp_pm_set_boot_health_status() - PM API for setting healthy boot status
-  * @value:	Status value to be written
-diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-index 9f50dacbf7d6..0a84b04af26e 100644
---- a/include/linux/firmware/xlnx-zynqmp.h
-+++ b/include/linux/firmware/xlnx-zynqmp.h
-@@ -135,6 +135,7 @@ enum pm_ret_status {
- };
+  * zynqmp_qspi_init_hw - Initialize the hardware
+  * @xqspi:	Pointer to the zynqmp_qspi structure
+@@ -333,15 +375,14 @@ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
  
- enum pm_ioctl_id {
-+	IOCTL_SET_TAPDELAY_BYPASS = 4,
- 	IOCTL_SD_DLL_RESET = 6,
- 	IOCTL_SET_SD_TAPDELAY = 7,
- 	IOCTL_SET_PLL_FRAC_MODE = 8,
-@@ -386,6 +387,18 @@ enum zynqmp_pm_shutdown_subtype {
- 	ZYNQMP_PM_SHUTDOWN_SUBTYPE_SYSTEM = 2,
- };
+ 	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
  
-+enum tap_delay_signal_type {
-+	PM_TAPDELAY_NAND_DQS_IN = 0,
-+	PM_TAPDELAY_NAND_DQS_OUT = 1,
-+	PM_TAPDELAY_QSPI = 2,
-+	PM_TAPDELAY_MAX = 3,
-+};
++	/* Set the tapdelay for clock frequency */
++	zynqmp_qspi_set_tapdelay(xqspi, baud_rate_val);
 +
-+enum tap_delay_bypass_ctrl {
-+	PM_TAPDELAY_BYPASS_DISABLE = 0,
-+	PM_TAPDELAY_BYPASS_ENABLE = 1,
-+};
-+
- enum ospi_mux_select_type {
- 	PM_OSPI_MUX_SEL_DMA = 0,
- 	PM_OSPI_MUX_SEL_LINEAR = 1,
-@@ -457,6 +470,7 @@ int zynqmp_pm_write_ggs(u32 index, u32 value);
- int zynqmp_pm_read_ggs(u32 index, u32 *value);
- int zynqmp_pm_write_pggs(u32 index, u32 value);
- int zynqmp_pm_read_pggs(u32 index, u32 *value);
-+int zynqmp_pm_set_tapdelay_bypass(u32 index, u32 value);
- int zynqmp_pm_system_shutdown(const u32 type, const u32 subtype);
- int zynqmp_pm_set_boot_health_status(u32 value);
- int zynqmp_pm_pinctrl_request(const u32 pin);
-@@ -666,6 +680,11 @@ static inline int zynqmp_pm_read_pggs(u32 index, u32 *value)
- 	return -ENODEV;
+ 	/* Clear the TX and RX FIFO */
+ 	zynqmp_gqspi_write(xqspi, GQSPI_FIFO_CTRL_OFST,
+ 			   GQSPI_FIFO_CTRL_RST_RX_FIFO_MASK |
+ 			   GQSPI_FIFO_CTRL_RST_TX_FIFO_MASK |
+ 			   GQSPI_FIFO_CTRL_RST_GEN_FIFO_MASK);
+-	/* Set by default to allow for high frequencies */
+-	zynqmp_gqspi_write(xqspi, GQSPI_LPBK_DLY_ADJ_OFST,
+-			   zynqmp_gqspi_read(xqspi, GQSPI_LPBK_DLY_ADJ_OFST) |
+-			   GQSPI_LPBK_DLY_ADJ_USE_LPBK_MASK);
+ 	/* Reset thresholds */
+ 	zynqmp_gqspi_write(xqspi, GQSPI_TX_THRESHOLD_OFST,
+ 			   GQSPI_TX_FIFO_THRESHOLD_RESET_VAL);
+@@ -501,6 +542,7 @@ static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi,
+ 		config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
+ 		config_reg |= (baud_rate_val << GQSPI_CFG_BAUD_RATE_DIV_SHIFT);
+ 		zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
++		zynqmp_qspi_set_tapdelay(xqspi, baud_rate_val);
+ 	}
+ 	return 0;
  }
- 
-+static inline int zynqmp_pm_set_tapdelay_bypass(u32 index, u32 value)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int zynqmp_pm_system_shutdown(const u32 type, const u32 subtype)
- {
- 	return -ENODEV;
 -- 
 2.17.1
 
