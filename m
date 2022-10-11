@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542905FAD9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572605FADA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 09:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJKHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 03:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S229997AbiJKHjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 03:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiJKHjd (ORCPT
+        with ESMTP id S229483AbiJKHjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 03:39:33 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3067D7B9;
-        Tue, 11 Oct 2022 00:39:32 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id bb5so2439604qtb.11;
-        Tue, 11 Oct 2022 00:39:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KX79hRYrJFKUEMZlOxyb11gwPJYvnPLuU5eWyjSCPsM=;
-        b=iUmEpr4cnrDOUmpD1MvHl1hzNd4cGo8gCqad96cHA0rvmPi9nMsFl2XOfXNT+t9E9R
-         ijLHg1UQILfxC0V0mw4qrLiH687VBQrBok2FabgpmVnGCs9lK/uMtzheCnYGrs4jJhRQ
-         8ODkEf7cguelCrYZv4bhmb7RCXrgBELAzNTh/ywGQ2Q7Pk92efdxmiUZ7/2wDV0oWVrH
-         4HvP5kKwJDBHF0Ui89HDuDQYs+BBO09TDHcuRHAjY+6xh6Ng5HswWsbTC/izNtkv1y/a
-         fwT6hksfCeq6X0eWZELVia7N2bAiDW7sNiMRpswXLGBKnG/lJB+tOB2qKbO020eQroeu
-         erLA==
-X-Gm-Message-State: ACrzQf0R+qxtjYmqS50oJ0p1N26pr8sgxL3matQN2WkTjE9EfELWGKOh
-        uNhIv2N+vV1VvJBoRcfWFPZt6+rXJls+iA==
-X-Google-Smtp-Source: AMsMyM5oM3GeSE8hQAS110nTE6Y0Et2EwFt5jCwZUwlFMLyxHCmhPFN1L6tsyktSS1nkJPJXvEktEA==
-X-Received: by 2002:a05:622a:130a:b0:35b:b454:8644 with SMTP id v10-20020a05622a130a00b0035bb4548644mr18143695qtk.624.1665473971001;
-        Tue, 11 Oct 2022 00:39:31 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id u21-20020ac87515000000b00391d15f13f9sm10009487qtq.11.2022.10.11.00.39.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 00:39:28 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id y205so15498733yby.13;
-        Tue, 11 Oct 2022 00:39:25 -0700 (PDT)
-X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr21604885ybx.543.1665473965578;
- Tue, 11 Oct 2022 00:39:25 -0700 (PDT)
+        Tue, 11 Oct 2022 03:39:40 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B361B0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 00:39:35 -0700 (PDT)
+Received: from p5b127dea.dip0.t-ipconnect.de ([91.18.125.234] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oi9r9-0007Gg-5z; Tue, 11 Oct 2022 09:39:15 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Samuel Holland <samuel@sholland.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Jisheng Zhang <jszhang@kernel.org>
+Subject: Re: [PATCH v2] riscv: jump_label: mark arguments as const to satisfy asm constraints
+Date:   Tue, 11 Oct 2022 09:39:14 +0200
+Message-ID: <2905332.q0ZmV6gNhb@phil>
+In-Reply-To: <20221008145437.491-1-jszhang@kernel.org>
+References: <20221008145437.491-1-jszhang@kernel.org>
 MIME-Version: 1.0
-References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221009230044.10961-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y0PBdDtFzcsmbtMv@shikoro> <CA+V-a8sOxyQj8J06kqnRN5G=L6KPdusJ-qLWntVa8kgFBh-MEQ@mail.gmail.com>
-In-Reply-To: <CA+V-a8sOxyQj8J06kqnRN5G=L6KPdusJ-qLWntVa8kgFBh-MEQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 11 Oct 2022 09:39:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXoDmwNnYNt6mVnHNYoNQY5fN207iyR_TopOsux6RKhnA@mail.gmail.com>
-Message-ID: <CAMuHMdXoDmwNnYNt6mVnHNYoNQY5fN207iyR_TopOsux6RKhnA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] arm64: dts: renesas: rzg2l-smarc-som: Drop enabling WDT2
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Am Samstag, 8. Oktober 2022, 16:54:37 CEST schrieb Jisheng Zhang:
+> Samuel reported that the static branch usage in cpu_relax() breaks
+> building with CONFIG_CC_OPTIMIZE_FOR_SIZE:
+> 
+> In file included from <command-line>:
+> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
+> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0
+> probably does not match constraints
+>   285 | #define asm_volatile_goto(x...) asm goto(x)
+>       |                                 ^~~
+> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
+> 'asm_volatile_goto'
+>    41 |         asm_volatile_goto(
+>       |         ^~~~~~~~~~~~~~~~~
+> ././include/linux/compiler_types.h:285:33: error: impossible constraint
+> in 'asm'
+>   285 | #define asm_volatile_goto(x...) asm goto(x)
+>       |                                 ^~~
+> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
+> 'asm_volatile_goto'
+>    41 |         asm_volatile_goto(
+>       |         ^~~~~~~~~~~~~~~~~
+> make[1]: *** [scripts/Makefile.build:249:
+> arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
+> 
+> Maybe "-Os" prevents GCC from detecting that the key/branch arguments
+> can be treated as constants and used as immediate operands. Inspired
+> by x86's commit 864b435514b2("x86/jump_label: Mark arguments as const to
+> satisfy asm constraints"), and as pointed out by Steven: "The "i"
+> constraint needs to be a constant.", let's do similar modifications to
+> riscv.
+> 
+> Tested by CC_OPTIMIZE_FOR_SIZE + gcc and CC_OPTIMIZE_FOR_SIZE + clang.
+> 
+> Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+> Link: https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
+> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
+> Reported-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-On Mon, Oct 10, 2022 at 10:01 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Mon, Oct 10, 2022 at 7:53 AM Wolfram Sang <wsa@kernel.org> wrote:
-> > On Mon, Oct 10, 2022 at 12:00:40AM +0100, Prabhakar wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
-> > > used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> > > enabling WDT2.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> >
-> > I'd squash patches 1+2, but that's minor.
-> >
-> OK, I'll wait for Geert before sending a v2.
+I ran into the same build-issue when enabling CC_OPTIMIZE_FOR_SIZE
+and this patch fixes it, so
 
-I'd even squash the whole series into a single patch
-"arm64: dts: renesas: rzg2l: Drop WDT2 node".
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 
-If that would be the only change for v2, I can take care of that while
-applying.
 
-Gr{oetje,eeting}s,
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
