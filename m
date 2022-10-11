@@ -2,176 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07FB5FB901
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5045FB904
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiJKROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S230034AbiJKRO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiJKROK (ORCPT
+        with ESMTP id S229976AbiJKROW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:14:10 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2ECAA35D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:14:08 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 1C1D4240107
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 19:14:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1665508447; bh=IJDuhM6ycXMNiopSGZ9ArNUqlqTG10DcMSCuyC1WOd4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EPC9wY551FVW4/pHk6EXOvlxOVU/oxkDCWzVgzq7kc76RH0NywtEvhMyx0xGdO96o
-         2oY2ni7KU7p5K1wIw80ryTdITbg8FKwvWSSFRkG+WoRLKJbxBjsVBXy//nNfprzqfl
-         reIxEAD7KvDJ578dT5dQO2cKm9f1OoV3yRyXlRj7WdIbPgclZqdjVJI8K3dWO104ON
-         q6kw2kxpaXFBtRvqjthE2XHOwxRxesf8/wFCMVBOxSPU0ljQ9EIxRjSz1AwLTARxLF
-         HJR1DQHk/nmYXTdvCLA+8wflUJWFyYpHQoJFjgWqcMWGjxlnBWrsGXNYtHlunnIDt0
-         g7wD0Jn5tRsig==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Mn2SS4wwYz6tq1;
-        Tue, 11 Oct 2022 19:14:00 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 17:13:57 +0000
-From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        sdf@google.com, song@kernel.org, yhs@fb.com, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/bpf: Alphabetize DENYLISTs
-Message-ID: <20221011171357.dqecmkyjinxy2m7u@muellerd-fedora-MJ0AC3F3>
-References: <20221011165255.774014-1-void@manifault.com>
+        Tue, 11 Oct 2022 13:14:22 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253BAA350
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:14:20 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id d142so5404539iof.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pDLbMMyVql0t8YQHrpoFb/mrSX/wy9E8ZPnLS8f6/sg=;
+        b=QXHxzennHT0jWhFoHwN6F4UG3DVi7ZCQCmnNa4hVa1YpzqTEJ2H2thcKZZtDII+5Ri
+         Ln3OIwIuzi7P85Z7IaTZwJXP6TiBkUHXzZ+er3QEjKMDrkQdf9n/lAbe7xuOVqvm4bZL
+         IxZZXf4C3hBQzqz76jjrQR75Ds7/2VEhAhUVA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pDLbMMyVql0t8YQHrpoFb/mrSX/wy9E8ZPnLS8f6/sg=;
+        b=1qf7ThbBDKPDcd60VeszJJ8HFokYt7dXrwUDzi+zqMc5meOeLBDoHnKe4zXs2cULS/
+         wn5voqUC+D+uHblMdEZ1Nqot8CcXksQDkzywVgJD9a00kD5eyYWbh7ayEHMMVBhOpccr
+         GYFvW8exgieyDm0KCKHu8qgqkjA9dsea2r/8lgzrgNvxrk1XAMnOev4tuXe+tBF/FwzT
+         pnoArE/sV4xjMIHs6wZDBMsZbmJFQD0tCz3TeTKp08YQpLULSNdiFgTByoRPimAidaA/
+         rs0e3zwvlIGKq0mjU0aHPNUmbeXOWr9XAJ7vvOyIgMs8Xagssb+bUIe9l+dYzf42/IRj
+         wh0A==
+X-Gm-Message-State: ACrzQf08+uUqrnpye87NkdrLo2TOtyX2lclFHFg4Bk8mWbUQoT9XqwSB
+        kr3BizfZMP8Vh5YIebhVTIHGmw==
+X-Google-Smtp-Source: AMsMyM4/OpJoLj6r1F+/wC8QgtHX8DjKlVz9AT1JvWxmVE0aHwN3eNgc+aaDUSRj2vDk34JD7p5pdQ==
+X-Received: by 2002:a05:6638:4782:b0:363:c5a0:2aec with SMTP id cq2-20020a056638478200b00363c5a02aecmr4483441jab.242.1665508459629;
+        Tue, 11 Oct 2022 10:14:19 -0700 (PDT)
+Received: from shuah-tx13.internal ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g18-20020a056e02131200b002eb3b43cd63sm5088215ilr.18.2022.10.11.10.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 10:14:19 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     gregkh@linuxfoundation.org, corbet@lwn.net
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, conduct@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jlee@linuxfoundation.org, stable@vger.kernel.org
+Subject: [PATCH] docs: update mediator contact information in CoC doc
+Date:   Tue, 11 Oct 2022 11:14:17 -0600
+Message-Id: <20221011171417.34286-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221011165255.774014-1-void@manifault.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 11:52:55AM -0500, David Vernet wrote:
-> The DENYLIST and DENYLIST.s390x files are used to specify testcases
-> which should not be run on CI. Currently, testcases are appended to the
-> end of these files as needed. This can make it a pain to resolve merge
-> conflicts. This patch alphabetizes the DENYLIST files to ease this
-> burden.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
->  tools/testing/selftests/bpf/DENYLIST       |  2 +-
->  tools/testing/selftests/bpf/DENYLIST.s390x | 40 +++++++++++-----------
->  2 files changed, 21 insertions(+), 21 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/DENYLIST b/tools/testing/selftests/bpf/DENYLIST
-> index 939de574fc7f..5a07ecacd7b0 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST
-> +++ b/tools/testing/selftests/bpf/DENYLIST
-> @@ -1,6 +1,6 @@
->  # TEMPORARY
->  get_stack_raw_tp    # spams with kernel warnings until next bpf -> bpf-next merge
-> -stacktrace_build_id_nmi
->  stacktrace_build_id
-> +stacktrace_build_id_nmi
->  task_fd_query_rawtp
->  varlen
-> diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-> index beef1232a47a..19d6f534e5be 100644
-> --- a/tools/testing/selftests/bpf/DENYLIST.s390x
-> +++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-> @@ -1,13 +1,17 @@
->  # TEMPORARY
->  atomics                                  # attach(add): actual -524 <= expected 0                                      (trampoline)
-> -bpf_iter_setsockopt                      # JIT does not support calling kernel function                                (kfunc)
->  bloom_filter_map                         # failed to find kernel BTF type ID of '__x64_sys_getpgid': -3                (?)
-> -bpf_tcp_ca                               # JIT does not support calling kernel function                                (kfunc)
-> +bpf_cookie                               # failed to open_and_load program: -524 (trampoline)
-> +bpf_iter_setsockopt                      # JIT does not support calling kernel function                                (kfunc)
->  bpf_loop                                 # attaches to __x64_sys_nanosleep
->  bpf_mod_race                             # BPF trampoline
->  bpf_nf                                   # JIT does not support calling kernel function
-> +bpf_tcp_ca                               # JIT does not support calling kernel function                                (kfunc)
-> +cb_refs                                  # expected error message unexpected error: -524                               (trampoline)
-> +cgroup_hierarchical_stats                # JIT does not support calling kernel function                                (kfunc)
->  core_read_macros                         # unknown func bpf_probe_read#4                                               (overlapping)
->  d_path                                   # failed to auto-attach program 'prog_stat': -524                             (trampoline)
-> +deny_namespace                           # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
->  dummy_st_ops                             # test_run unexpected error: -524 (errno 524)                                 (trampoline)
->  fentry_fexit                             # fentry attach failed: -524                                                  (trampoline)
->  fentry_test                              # fentry_first_attach unexpected error: -524                                  (trampoline)
-> @@ -18,19 +22,28 @@ fexit_test                               # fexit_first_attach unexpected error:
->  get_func_args_test	                 # trampoline
->  get_func_ip_test                         # get_func_ip_test__attach unexpected error: -524                             (trampoline)
->  get_stack_raw_tp                         # user_stack corrupted user stack                                             (no backchain userspace)
-> +htab_update                              # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
->  kfree_skb                                # attach fentry unexpected error: -524                                        (trampoline)
->  kfunc_call                               # 'bpf_prog_active': not found in kernel BTF                                  (?)
-> +kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
-> +kprobe_multi_test                        # relies on fentry
->  ksyms_module                             # test_ksyms_module__open_and_load unexpected error: -9                       (?)
->  ksyms_module_libbpf                      # JIT does not support calling kernel function                                (kfunc)
->  ksyms_module_lskel                       # test_ksyms_module_lskel__open_and_load unexpected error: -9                 (?)
-> +libbpf_get_fd_by_id_opts                 # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
-> +lookup_key                               # JIT does not support calling kernel function                                (kfunc)
-> +lru_bug                                  # prog 'printk': failed to auto-attach: -524
-> +map_kptr                                 # failed to open_and_load program: -524 (trampoline)
->  modify_return                            # modify_return attach failed: -524                                           (trampoline)
->  module_attach                            # skel_attach skeleton attach failed: -524                                    (trampoline)
->  mptcp
-> -kprobe_multi_test                        # relies on fentry
->  netcnt                                   # failed to load BPF skeleton 'netcnt_prog': -7                               (?)
->  probe_user                               # check_kprobe_res wrong kprobe res from probe read                           (?)
->  recursion                                # skel_attach unexpected error: -524                                          (trampoline)
->  ringbuf                                  # skel_load skeleton load failed                                              (?)
-> +select_reuseport                         # intermittently fails on new s390x setup
-> +send_signal                              # intermittently fails to receive signal
-> +setget_sockopt                           # attach unexpected error: -524                                               (trampoline)
->  sk_assign                                # Can't read on server: Invalid argument                                      (?)
->  sk_lookup                                # endianness problem
->  sk_storage_tracing                       # test_sk_storage_tracing__attach unexpected error: -524                      (trampoline)
-> @@ -52,28 +65,15 @@ timer_mim                                # failed to auto-attach program 'test1'
->  trace_ext                                # failed to auto-attach program 'test_pkt_md_access_new': -524                (trampoline)
->  trace_printk                             # trace_printk__load unexpected error: -2 (errno 2)                           (?)
->  trace_vprintk                            # trace_vprintk__open_and_load unexpected error: -9                           (?)
-> +tracing_struct                           # failed to auto-attach: -524                                                 (trampoline)
->  trampoline_count                         # prog 'prog1': failed to attach: ERROR: strerror_r(-524)=22                  (trampoline)
-> +unpriv_bpf_disabled                      # fentry
-> +user_ringbuf                             # failed to find kernel BTF type ID of '__s390x_sys_prctl': -3                (?)
->  verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
-> +verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
->  vmlinux                                  # failed to auto-attach program 'handle__fentry': -524                        (trampoline)
->  xdp_adjust_tail                          # case-128 err 0 errno 28 retval 1 size 128 expect-size 3520                  (?)
->  xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
->  xdp_bpf2bpf                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
-> -map_kptr                                 # failed to open_and_load program: -524 (trampoline)
-> -bpf_cookie                               # failed to open_and_load program: -524 (trampoline)
->  xdp_do_redirect                          # prog_run_max_size unexpected error: -22 (errno 22)
-> -send_signal                              # intermittently fails to receive signal
-> -select_reuseport                         # intermittently fails on new s390x setup
->  xdp_synproxy                             # JIT does not support calling kernel function                                (kfunc)
-> -unpriv_bpf_disabled                      # fentry
-> -lru_bug                                  # prog 'printk': failed to auto-attach: -524
-> -setget_sockopt                           # attach unexpected error: -524                                               (trampoline)
-> -cb_refs                                  # expected error message unexpected error: -524                               (trampoline)
-> -cgroup_hierarchical_stats                # JIT does not support calling kernel function                                (kfunc)
-> -htab_update                              # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
-> -tracing_struct                           # failed to auto-attach: -524                                                 (trampoline)
-> -user_ringbuf                             # failed to find kernel BTF type ID of '__s390x_sys_prctl': -3                (?)
-> -lookup_key                               # JIT does not support calling kernel function                                (kfunc)
-> -verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
-> -kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
-> -deny_namespace                           # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
-> -libbpf_get_fd_by_id_opts                 # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
-> -- 
-> 2.38.0
+Update mediator contact information in CoC interpretation document.
 
-Looks good to me, thanks! Not sure if we should add a comment indicating lexical
-ordering or solely watch out for that through review.
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ Documentation/process/code-of-conduct-interpretation.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Daniel Müller <deso@posteo.net>
+diff --git a/Documentation/process/code-of-conduct-interpretation.rst b/Documentation/process/code-of-conduct-interpretation.rst
+index 4f8a06b00f60..43da2cc2e3b9 100644
+--- a/Documentation/process/code-of-conduct-interpretation.rst
++++ b/Documentation/process/code-of-conduct-interpretation.rst
+@@ -51,7 +51,7 @@ the Technical Advisory Board (TAB) or other maintainers if you're
+ uncertain how to handle situations that come up.  It will not be
+ considered a violation report unless you want it to be.  If you are
+ uncertain about approaching the TAB or any other maintainers, please
+-reach out to our conflict mediator, Joanna Lee <joanna.lee@gesmer.com>.
++reach out to our conflict mediator, Joanna Lee <jlee@linuxfoundation.org>.
+ 
+ In the end, "be kind to each other" is really what the end goal is for
+ everybody.  We know everyone is human and we all fail at times, but the
+-- 
+2.34.1
+
