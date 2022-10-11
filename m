@@ -2,83 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA675FBCA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 23:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7075FBCB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 23:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiJKVJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 17:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S229563AbiJKVM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 17:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJKVJO (ORCPT
+        with ESMTP id S229456AbiJKVM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 17:09:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE55D82D0E;
-        Tue, 11 Oct 2022 14:09:13 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BHRt91022976;
-        Tue, 11 Oct 2022 21:09:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4TvZPf6k88ue2C+96q4x+1wNgC7chOfsmMecVzr037k=;
- b=XmkkTl7Mh9cbuOdNCmihHp/YlqFiWqIMr7zrygXyIavCZxFsY5015gZ6ByCEAX5wo+dl
- 8/1+GeipOUeRkceob3DtPhGOev61rXYEu1nfLfs2ljuMV6Q76JgRB+N/74SXrReqlisd
- aXdSZs+jdxv6GRyVm5Z8/ch1/dW9GcZdyMmvw/OlexEilrdAT6GNXYOyv29anmIYMvcK
- rJcMJvpoEZIzP4VoX0RoM1Q3FuGGBE7Zow8L7Fq1QfLAgNTxQ8NDUjkixu+f4GSquJpz
- d5f3dA8iDexIu5GR9jTpwmPboHqSp7Xy+uA5OsImbkG+QNpHOSGiUxp98M4Kdbq4+pMO pA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rx1c6e9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 21:09:10 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29BL8egc011161
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 21:08:40 GMT
-Received: from [10.110.3.66] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
- 2022 14:08:40 -0700
-Message-ID: <fd331b99-7e27-d562-26a7-b3c7ae07a5c6@quicinc.com>
-Date:   Tue, 11 Oct 2022 14:08:39 -0700
+        Tue, 11 Oct 2022 17:12:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF3A94138
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=/djM76MRiCbUIKCBwzx7wvQO5cksVCd7mpwx6kJlST0=; b=FyMTy9incW2L7Dxwo/cvQPK8FK
+        B7hsEkS/HD+pLeQD1HhNF1byvbC6/CK16wLXMQddYOP2igZwUDih3oKqpENTy8gkw8RISDdXL8Zdk
+        uFUMaEzIe5rYm8hMM+L6ojqeBuDleOPdGAlUvnQYDsXw6FmApDb8Hdv6dNKwvVj6PAH9G2DVj+s9y
+        5qRD1xiCilWu1lyVseFz/QD0zOvl3oCg2S0Z5zkIZCQO53juk4jBQrRQW+t1JurzeJjJM1Xfycl3t
+        9wAwkOAegXPTnVnnZ5css1E4ECW1CRxEk/iiGT7p7fr9BQCszTuxnagfajYTSV0m19vcRbZGMxJPE
+        v72VitMw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oiMY3-005s9f-IH; Tue, 11 Oct 2022 21:12:23 +0000
+Message-ID: <d486802c-2431-0818-aef0-c6915d0c35b9@infradead.org>
+Date:   Tue, 11 Oct 2022 14:12:21 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 08/19] arm64: dts: qcom: qru1000-idp: Add RPMH regulators
- nodes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: Possibility to disable icotl TIOCSTI
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221001030656.29365-1-quic_molvera@quicinc.com>
- <20221001030656.29365-9-quic_molvera@quicinc.com>
- <85d9efd8-41b2-f726-feb7-d934bde2c66a@linaro.org>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <85d9efd8-41b2-f726-feb7-d934bde2c66a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Simon Brand <simon.brand@postadigitale.de>,
+        linux-kernel@vger.kernel.org
+References: <Yz8jDbLap91dRVyH@hostpad>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Yz8jDbLap91dRVyH@hostpad>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: G0bLb1txylOrEUajbl4i4dqkrZKdnxTJ
-X-Proofpoint-GUID: G0bLb1txylOrEUajbl4i4dqkrZKdnxTJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 mlxlogscore=939 clxscore=1015 impostorscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210110122
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,59 +53,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 10/1/2022 2:15 AM, Krzysztof Kozlowski wrote:
-> On 01/10/2022 05:06, Melody Olvera wrote:
->> Add RPMH regulators for the QRU1000 IDP platform.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  arch/arm64/boot/dts/qcom/qru1000-idp.dts | 200 +++++++++++++++++++++++
->>  1 file changed, 200 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/qru1000-idp.dts b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> index ddb4ea17f7d2..8d27923dc470 100644
->> --- a/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> +++ b/arch/arm64/boot/dts/qcom/qru1000-idp.dts
->> @@ -5,6 +5,7 @@
->>  
->>  /dts-v1/;
->>  
->> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->>  #include "qru1000.dtsi"
->>  
->>  / {
->> @@ -19,6 +20,205 @@ aliases {
->>  	chosen {
->>  		stdout-path = "serial0:115200n8";
->>  	};
->> +
->> +	ppvar_sys: ppvar-sys-regulator {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "ppvar_sys";
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +	};
->> +
->> +	vph_pwr: vph-pwr-regulator {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "vph_pwr";
->> +		regulator-min-microvolt = <3700000>;
->> +		regulator-max-microvolt = <3700000>;
->> +
->> +		regulator-always-on;
->> +		regulator-boot-on;
->> +
->> +		vin-supply = <&ppvar_sys>;
->> +	};
->> +};
->> +
->> +&apps_rsc {
->> +	pm8150-rpmh-regulators {
-> regulators
-Will Fix.
->
-> Best regards,
-> Krzysztof
->
-Thanks,
-Melody
+On 10/6/22 11:48, Simon Brand wrote:
+> Hello,
+> 
+> in the past there have been attempts to restrict the TIOCSTI ioctl. [0, 1]
+> None of them are present in the current kernel.
+> Since those tries there have been some security issues (sandbox
+> escapes in flatpak (CVE-2019-10063) [2] and snap (CVE 2019-7303) [3],
+> runuser [4], su [5]).
+> 
+> I ask to merge the patches from linux-hardening [6, 7] so users can
+> opt out of this behavior. These patches provide the
+> `SECURITY_TIOCSTI_RESTRICT` Kconfig (default no) and a
+> `tiocsti_restrict` sysctl.
+
+Please send to the hardening mailing list and/or hardening maintainer.
+
+> Escapes can be reproduced easiliy (on archlinux) via a python script:
+> ```
+> import fcntl
+> import termios
+> with open("/dev/tty", "w") as fd:
+>     for c in "id\n":
+>         fcntl.ioctl(fd, termios.TIOCSTI, c)
+> ```
+> Now run as root:
+> # su user
+> $ python3 /path/to/script.py ; exit
+> uid=0(root) ...
+> 
+> At least to me, this result was not expected.
+> 
+> I asked it before on kernelnewbies mailing list. [8]
+> Please set me in CC, because I have not subscribed to this list.
+> 
+> Best and thank you,
+> Simon
+> 
+> [0] https://lkml.kernel.org/lkml/CAG48ez1NBnrsPnHN6D9nbOJP6+Q6zEV9vfx9q7ME4Eti-vRmhQ@mail.gmail.com/T/
+> [1] https://lkml.kernel.org/lkml/20170420174100.GA16822@mail.hallyn.com/T/
+> [2] https://github.com/flatpak/flatpak/issues/2782
+> [3] https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/SnapIoctlTIOCSTI
+> [4] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815922
+> [5] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=628843
+> [6] https://github.com/anthraxx/linux-hardened/commit/d0e49deb1a39dc64e7c7db3340579
+> [7] https://github.com/anthraxx/linux-hardened/commit/ea8f20602a993c90125bf08da3989
+> [8] https://www.spinics.net/lists/newbies/msg64019.html
+
+-- 
+~Randy
