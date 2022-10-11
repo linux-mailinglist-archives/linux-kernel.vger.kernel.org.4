@@ -2,125 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36495FB7C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7018B5FB7CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 17:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiJKPxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 11:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S229774AbiJKP4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 11:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiJKPwy (ORCPT
+        with ESMTP id S229599AbiJKPz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:52:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E41D0C6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665503493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 11 Oct 2022 11:55:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DA12A964;
+        Tue, 11 Oct 2022 08:55:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A4C9A21AA7;
+        Tue, 11 Oct 2022 15:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665503754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KeMqmm6RZi8nEiwf9Am5Lyu5xHfrJbfXudXrmpg8EVU=;
-        b=HvTzOzSSc2ZWQvodjD0CSkJYwP9cm1bQEs0CdHDVI6uBaMweR0gGNCC7fNTgwBBwC6Yc9z
-        XoAAyTekc6QGpdFDQTOwx+wihjDNQKy+yKV35DgBP+LebkC6cbEc0dnuDCz/bb2DTXkBwr
-        7MPv9tccWrSdYvFWcxjl2tJk/AV01Qc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-304-4AWxnL_hM_KSqEyq14Hs5w-1; Tue, 11 Oct 2022 11:51:32 -0400
-X-MC-Unique: 4AWxnL_hM_KSqEyq14Hs5w-1
-Received: by mail-wm1-f70.google.com with SMTP id k2-20020a05600c1c8200b003c3dd3aa638so6159325wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 08:51:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KeMqmm6RZi8nEiwf9Am5Lyu5xHfrJbfXudXrmpg8EVU=;
-        b=KkPm5LXV7fgWVY0+UAkudrwAk68ffw7K8cKwozOud0OZikhu3KQS2nj893iOwI8Wsr
-         GUu9Z/bBwlsbjkB/TZyr7/X0iVHr013JEfc6N7jc+krnUTjs3y6DnTXJBT/88GX2fIjT
-         dqTobFkfvyHunUl4GkLAcZsDEM0rog7SIIsLgUUa0FLc5sA+0T1tBD/hHxcHQiv6t2oG
-         UADvwrnuPZcXh+WVLqo65DYYh+FiGYpoV/SBMVFR3uJCC8+jlsixc2zXK7hsv8AmyQ1V
-         1Xq3XoE5GuqAG/y/iv9WXhJgS+R1fzStsuG5uRIn/ze2aPmp8cDLktdfZ0HOPj27nlTc
-         BUlQ==
-X-Gm-Message-State: ACrzQf3KxMzNxFwsl0mlgOLCJ538Fc5ahjprYc4duDYWuqOMA0tfGxLe
-        aVPptaYwSa5NMl117Gt9oXJFrrXTtt7QG2qkSO4Hx/sYfUXhkoKhnZzlzO3L+cBujDrh9TQoWX3
-        9TXi3IFlGXCgt+3lTfcZv8i4=
-X-Received: by 2002:adf:dec3:0:b0:22e:6efe:7861 with SMTP id i3-20020adfdec3000000b0022e6efe7861mr15840534wrn.454.1665503490701;
-        Tue, 11 Oct 2022 08:51:30 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5sB9t5u06LkupTlbVy8ECDTcOLBS1O5d6P3Qmwe1/vtkKfuRgNig3wn4YTbJ9AGejvjbghHQ==
-X-Received: by 2002:adf:dec3:0:b0:22e:6efe:7861 with SMTP id i3-20020adfdec3000000b0022e6efe7861mr15840520wrn.454.1665503490490;
-        Tue, 11 Oct 2022 08:51:30 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id az29-20020a05600c601d00b003c6b70a4d69sm5485564wmb.42.2022.10.11.08.51.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 08:51:29 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 16:51:28 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Unloaded tainted modules list with tcrypt
-Message-ID: <20221011155128.k27rsgevfwyawvbh@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <MW5PR84MB1842AE1F86F2B66A5D57DAA5AB209@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
- <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+        bh=Gm0QjSMWCseYoG5vLxYn8KbJ5E5y4wXVnEpylDF8jUo=;
+        b=aKzJhFc9JzWNPbv8vleZLOE/50ez1MY9kmlEATqqkKCS+iumxVF9XH0DfDfv2sopyIl1Is
+        oSp/Lp5bpLDEx9AtJXAidk4M4oQleA0IRTyDuXcsfnpjoe+O00XA5slRLzr/oehWJjIRW/
+        tpat2HRwBWzOTV1mHogoRIpTyUEDn3s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665503754;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gm0QjSMWCseYoG5vLxYn8KbJ5E5y4wXVnEpylDF8jUo=;
+        b=53EHu0LSbAllgDDElnQ8Te1DzABX71i/CybeyiOpZM++ShYOFaqvDoBJm5E+6PRnbpNOz/
+        NhIGRx7YTVkxxxBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3733E13AAC;
+        Tue, 11 Oct 2022 15:55:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 81pHCgqSRWNHYwAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Tue, 11 Oct 2022 15:55:54 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 5022c03e;
+        Tue, 11 Oct 2022 15:56:50 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] ext4: fix a NULL pointer when validating an inode bitmap
+Date:   Tue, 11 Oct 2022 16:56:24 +0100
+Message-Id: <20221011155623.14840-1-lhenriques@suse.de>
+In-Reply-To: <20221010142035.2051-1-lhenriques@suse.de>
+References: <20221010142035.2051-1-lhenriques@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-10-11 00:09 +0000, Elliott, Robert (Servers) wrote:
-> Changing to == seems to work well - that shows incremented counts
-> rather than new entries:
-> Unloaded tainted modules: tcrypt():40 padlock_aes():1 isst_if_mbox_msr():56 pcc_cpufreq():56 acpi_cpufreq():112
+It's possible to hit a NULL pointer exception while accessing the
+sb->s_group_info in ext4_validate_inode_bitmap(), when calling
+ext4_get_group_info().
 
-Hi Elliott,
+ EXT4-fs (loop0): warning: mounting unchecked fs, running e2fsck is recommended
+ EXT4-fs error (device loop0): ext4_clear_blocks:866: inode #32: comm mount: attempt to clear invalid blocks 16777450 len 1
+ EXT4-fs error (device loop0): ext4_free_branches:1012: inode #32: comm mount: invalid indirect mapped block 1258291200 (level 1)
+ EXT4-fs error (device loop0): ext4_free_branches:1012: inode #32: comm mount: invalid indirect mapped block 7379847 (level 2)
+ BUG: kernel NULL pointer dereference, address: 0000000000000000
+ ...
+ RIP: 0010:ext4_read_inode_bitmap+0x21b/0x5a0
+ ...
+ Call Trace:
+  <TASK>
+  ext4_free_inode+0x172/0x5c0
+  ext4_evict_inode+0x4a5/0x730
+  evict+0xc1/0x1c0
+  ext4_setup_system_zone+0x2ea/0x380
+  ext4_fill_super+0x249f/0x3910
+  ? ext4_reconfigure+0x880/0x880
+  ? snprintf+0x49/0x60
+  ? ext4_reconfigure+0x880/0x880
+  get_tree_bdev+0x169/0x260
+  vfs_get_tree+0x16/0x70
+  path_mount+0x77d/0xa30
+  __x64_sys_mount+0x101/0x140
+  do_syscall_64+0x3c/0x80
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Please note, any module that does not carry a taint should _not_
-be on the aforementioned list. See the following which is already
-in Linus' tree:
+This issue can be fixed by returning NULL in ext4_get_group_info() when
+->s_group_info is NULL.  This also requires checking the return code from
+ext4_get_group_info() when appropriate.
 
-commit 47cc75aa92837a9d3f15157d6272ff285585d75d
-Author: Aaron Tomlin <atomlin@redhat.com>
-Date:   Fri Oct 7 14:38:12 2022 +0100
+While there, also ensure the right error code (-EFSCORRUPTED) is propagated
+to user-space.  EUCLEAN is more informative than ENOMEM.
 
-    module: tracking: Keep a record of tainted unloaded modules only
-    
-    This ensures that no module record/or entry is added to the
-    unloaded_tainted_modules list if it does not carry a taint.
-    
-    Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
-    Fixes: 99bd9956551b ("module: Introduce module unload taint tracking")
-    Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-    Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+CC: stable@vger.kernel.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216541
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216539
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
 
-diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-index a139e63b6f20..26d812e07615 100644
---- a/kernel/module/tracking.c
-+++ b/kernel/module/tracking.c
-@@ -22,6 +22,9 @@ int try_add_tainted_module(struct module *mod)
+* Changes since v1:
+
+I found out another bugzilla with the same issue (#216539), but on a
+different place.  The pattern was the same: a call to
+ext4_get_group_info() followed by a EXT4_MB_GRP_*_CORRUPT check.  I've
+grep'ed the code and added the same check in (hopefully) all of them.
+
+ fs/ext4/balloc.c   |  2 +-
+ fs/ext4/ext4.h     | 17 ++++++++++-------
+ fs/ext4/ialloc.c   |  6 +++---
+ fs/ext4/indirect.c | 14 ++++++++++++--
+ fs/ext4/mballoc.c  |  9 +++++----
+ 5 files changed, 31 insertions(+), 17 deletions(-)
+
+diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
+index 8ff4b9192a9f..1af1fc8b1891 100644
+--- a/fs/ext4/balloc.c
++++ b/fs/ext4/balloc.c
+@@ -377,7 +377,7 @@ static int ext4_validate_block_bitmap(struct super_block *sb,
  
- 	module_assert_mutex_or_preempt();
+ 	if (buffer_verified(bh))
+ 		return 0;
+-	if (EXT4_MB_GRP_BBITMAP_CORRUPT(grp))
++	if (!grp || EXT4_MB_GRP_BBITMAP_CORRUPT(grp))
+ 		return -EFSCORRUPTED;
  
-+	if (!mod->taints)
-+		goto out;
+ 	ext4_lock_group(sb, block_group);
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index e5f2f5ca5120..1c8b5876a28a 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -3324,13 +3324,16 @@ static inline
+ struct ext4_group_info *ext4_get_group_info(struct super_block *sb,
+ 					    ext4_group_t group)
+ {
+-	 struct ext4_group_info **grp_info;
+-	 long indexv, indexh;
+-	 BUG_ON(group >= EXT4_SB(sb)->s_groups_count);
+-	 indexv = group >> (EXT4_DESC_PER_BLOCK_BITS(sb));
+-	 indexh = group & ((EXT4_DESC_PER_BLOCK(sb)) - 1);
+-	 grp_info = sbi_array_rcu_deref(EXT4_SB(sb), s_group_info, indexv);
+-	 return grp_info[indexh];
++	struct ext4_group_info **grp_info;
++	long indexv, indexh;
 +
- 	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
- 				lockdep_is_held(&module_mutex)) {
- 		if (!strcmp(mod_taint->name, mod->name) &&
-
-
--- 
-Aaron Tomlin
-
++	BUG_ON(group >= EXT4_SB(sb)->s_groups_count);
++	if (!EXT4_SB(sb)->s_group_info)
++		return NULL;
++	indexv = group >> (EXT4_DESC_PER_BLOCK_BITS(sb));
++	indexh = group & ((EXT4_DESC_PER_BLOCK(sb)) - 1);
++	grp_info = sbi_array_rcu_deref(EXT4_SB(sb), s_group_info, indexv);
++	return grp_info[indexh];
+ }
+ 
+ /*
+diff --git a/fs/ext4/ialloc.c b/fs/ext4/ialloc.c
+index 208b87ce8858..079b9c3af327 100644
+--- a/fs/ext4/ialloc.c
++++ b/fs/ext4/ialloc.c
+@@ -91,7 +91,7 @@ static int ext4_validate_inode_bitmap(struct super_block *sb,
+ 
+ 	if (buffer_verified(bh))
+ 		return 0;
+-	if (EXT4_MB_GRP_IBITMAP_CORRUPT(grp))
++	if (!grp || EXT4_MB_GRP_IBITMAP_CORRUPT(grp))
+ 		return -EFSCORRUPTED;
+ 
+ 	ext4_lock_group(sb, block_group);
+@@ -293,7 +293,7 @@ void ext4_free_inode(handle_t *handle, struct inode *inode)
+ 	}
+ 	if (!(sbi->s_mount_state & EXT4_FC_REPLAY)) {
+ 		grp = ext4_get_group_info(sb, block_group);
+-		if (unlikely(EXT4_MB_GRP_IBITMAP_CORRUPT(grp))) {
++		if (unlikely(!grp || EXT4_MB_GRP_IBITMAP_CORRUPT(grp))) {
+ 			fatal = -EFSCORRUPTED;
+ 			goto error_return;
+ 		}
+@@ -1048,7 +1048,7 @@ struct inode *__ext4_new_inode(struct user_namespace *mnt_userns,
+ 			 * Skip groups with already-known suspicious inode
+ 			 * tables
+ 			 */
+-			if (EXT4_MB_GRP_IBITMAP_CORRUPT(grp))
++			if (!grp || EXT4_MB_GRP_IBITMAP_CORRUPT(grp))
+ 				goto next_group;
+ 		}
+ 
+diff --git a/fs/ext4/indirect.c b/fs/ext4/indirect.c
+index 860fc5119009..e5ac5c2363df 100644
+--- a/fs/ext4/indirect.c
++++ b/fs/ext4/indirect.c
+@@ -148,6 +148,7 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
+ 	struct super_block *sb = inode->i_sb;
+ 	Indirect *p = chain;
+ 	struct buffer_head *bh;
++	unsigned int key;
+ 	int ret = -EIO;
+ 
+ 	*err = 0;
+@@ -156,9 +157,18 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
+ 	if (!p->key)
+ 		goto no_block;
+ 	while (--depth) {
+-		bh = sb_getblk(sb, le32_to_cpu(p->key));
++		key = le32_to_cpu(p->key);
++		bh = sb_getblk(sb, key);
+ 		if (unlikely(!bh)) {
+-			ret = -ENOMEM;
++			/*
++			 * sb_getblk() masks different errors by always
++			 * returning NULL.  Let's distinguish at least the case
++			 * where the block is out of range.
++			 */
++			if (key > ext4_blocks_count(EXT4_SB(sb)->s_es))
++				ret = -EFSCORRUPTED;
++			else
++				ret = -ENOMEM;
+ 			goto failure;
+ 		}
+ 
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index 9dad93059945..577e4d7415c3 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -2386,7 +2386,7 @@ static bool ext4_mb_good_group(struct ext4_allocation_context *ac,
+ 
+ 	BUG_ON(cr < 0 || cr >= 4);
+ 
+-	if (unlikely(EXT4_MB_GRP_BBITMAP_CORRUPT(grp)))
++	if (unlikely(!grp || EXT4_MB_GRP_BBITMAP_CORRUPT(grp)))
+ 		return false;
+ 
+ 	free = grp->bb_free;
+@@ -2466,7 +2466,7 @@ static int ext4_mb_good_group_nolock(struct ext4_allocation_context *ac,
+ 		goto out;
+ 	if (cr <= 2 && free < ac->ac_g_ex.fe_len)
+ 		goto out;
+-	if (unlikely(EXT4_MB_GRP_BBITMAP_CORRUPT(grp)))
++	if (unlikely(!grp || EXT4_MB_GRP_BBITMAP_CORRUPT(grp)))
+ 		goto out;
+ 	if (should_lock) {
+ 		__acquire(ext4_group_lock_ptr(sb, group));
+@@ -5895,6 +5895,7 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+ 	ext4_grpblk_t bit;
+ 	struct buffer_head *gd_bh;
+ 	ext4_group_t block_group;
++	struct ext4_group_info *grp_info;
+ 	struct ext4_sb_info *sbi;
+ 	struct ext4_buddy e4b;
+ 	unsigned int count_clusters;
+@@ -5916,8 +5917,8 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+ 	overflow = 0;
+ 	ext4_get_group_no_and_offset(sb, block, &block_group, &bit);
+ 
+-	if (unlikely(EXT4_MB_GRP_BBITMAP_CORRUPT(
+-			ext4_get_group_info(sb, block_group))))
++	grp_info = ext4_get_group_info(sb, block_group);
++	if (unlikely(!grp_info || EXT4_MB_GRP_BBITMAP_CORRUPT(grp_info)))
+ 		return;
+ 
+ 	/*
