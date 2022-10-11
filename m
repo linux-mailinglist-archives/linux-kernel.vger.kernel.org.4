@@ -2,92 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC085FBB0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3E65FBB10
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJKTGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S229978AbiJKTG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiJKTF5 (ORCPT
+        with ESMTP id S229771AbiJKTGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:05:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E97B85D;
-        Tue, 11 Oct 2022 12:05:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17A49B8166B;
-        Tue, 11 Oct 2022 19:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8853AC433D6;
-        Tue, 11 Oct 2022 19:05:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665515150;
-        bh=ODHx9TW1R0DNxJe9ifRLST7AHBUBOdF+OZpirGF8FL0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aMz05sO0s6UGqiZQacsgQpXGjClkqOx8sQLzSH3vIt49HhKC0i+B+Z+4fssQXq0b4
-         00S+4RQjeiJYsw2p688732UayPfQukF1wcY46jNLHsREM9avaAnXOxyaD8cUVUxrGR
-         pptN0uVjoEk1KWLe0gJtb8kqhJrus0Rg/OTAMbUBKvMryLX6ETM3ee+aFDnaZefZ+c
-         bcXRZ9NJIQxvaXjmH76ymH3ACT8kvTZqc5T+k5OpW1pw5M+wcfSg0XjgSAIOrivKnU
-         qbk51fk74ONUwne1ShIFKrTSYjA5P+N6AdE4HsyYmKxy4hk7vyMXTCYcoYAn3QGr3A
-         SDqYwfsIBnN5w==
-Date:   Tue, 11 Oct 2022 12:05:48 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kasan: disable stackleak plugin in report code
-Message-ID: <20221011190548.blixlqj6dripitaf@treble>
-References: <20221008132113.919b9b894426297de78ac00f@linux-foundation.org>
- <CAHk-=wigZoriP8ZB+V87Jf+EQV=ka6DQe_HCAQmh3Dmus2FFhw@mail.gmail.com>
- <Y0UoO2+NsJjbZtaf@hirez.programming.kicks-ass.net>
- <20221011184444.npthr2pmzqb32x6z@treble>
- <20221011185907.s3kakdlrxcqr6boh@treble>
+        Tue, 11 Oct 2022 15:06:12 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC9B175B6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1665515168; x=1697051168;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ILP6lC9qOdbFL3ALxKp8xEJRrZpkoLP2MTnKGw5NKRM=;
+  b=Zci6mc5XvCwaS3ETvZGJbDpurlytsgOlxG9h00gbuZGPYKE11fAg5fQn
+   0HEPypUDbXpwpZ1uVYNismW79f47Rg70FBbMpdKgvC1Ml4cg2I2LNoaiJ
+   Whpf9WRg+nAVy/rs3fF63pvvvpe5A2Ast08FunDxWqZeNc7iqCHKeuPpU
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Oct 2022 12:06:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 12:06:07 -0700
+Received: from hu-gurus-sd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 11 Oct 2022 12:06:06 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        John Moon <quic_johmoo@quicinc.com>, <llvm@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: [PATCH 1/1] scripts/clang-tools: Convert clang-tidy args to list
+Date:   Tue, 11 Oct 2022 12:06:00 -0700
+Message-ID: <a10e25f13205cb96e1ad63f1b1371a76f37af549.1665515051.git.quic_gurus@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221011185907.s3kakdlrxcqr6boh@treble>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kasan_report() has a uaccess critical section which can't have any
-instrumentation calls in the middle.  Disable the stackleak plugin for
-the report code.
+Convert list of clang-tidy arguments to a list for ease of adding to
+them and extending them as required.
 
-Fixes the following warning:
-
-  vmlinux.o: warning: objtool: kasan_report+0x12: call to stackleak_track_stack() with UACCESS enabled
-
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- mm/kasan/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/clang-tools/run-clang-tools.py | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/mm/kasan/Makefile b/mm/kasan/Makefile
-index d4837bff3b60..da2976365197 100644
---- a/mm/kasan/Makefile
-+++ b/mm/kasan/Makefile
-@@ -27,7 +27,7 @@ CFLAGS_common.o := $(CC_FLAGS_KASAN_RUNTIME)
- CFLAGS_generic.o := $(CC_FLAGS_KASAN_RUNTIME)
- CFLAGS_init.o := $(CC_FLAGS_KASAN_RUNTIME)
- CFLAGS_quarantine.o := $(CC_FLAGS_KASAN_RUNTIME)
--CFLAGS_report.o := $(CC_FLAGS_KASAN_RUNTIME)
-+CFLAGS_report.o := $(CC_FLAGS_KASAN_RUNTIME) $(DISABLE_STACKLEAK_PLUGIN)
- CFLAGS_report_generic.o := $(CC_FLAGS_KASAN_RUNTIME)
- CFLAGS_report_hw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
- CFLAGS_report_sw_tags.o := $(CC_FLAGS_KASAN_RUNTIME)
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index bb78c9b..56f2ec8 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -45,13 +45,14 @@ def init(l, a):
+ 
+ def run_analysis(entry):
+     # Disable all checks, then re-enable the ones we want
+-    checks = "-checks=-*,"
++    checks = []
++    checks.append("-checks=-*")
+     if args.type == "clang-tidy":
+-        checks += "linuxkernel-*"
++        checks.append("linuxkernel-*")
+     else:
+-        checks += "clang-analyzer-*"
+-        checks += ",-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling"
+-    p = subprocess.run(["clang-tidy", "-p", args.path, checks, entry["file"]],
++        checks.append("clang-analyzer-*")
++        checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling")
++    p = subprocess.run(["clang-tidy", "-p", args.path, ",".join(checks), entry["file"]],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        cwd=entry["directory"])
 -- 
-2.37.3
+2.7.4
 
