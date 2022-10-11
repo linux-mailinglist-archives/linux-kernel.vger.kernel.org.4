@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7418A5FB496
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B652B5FB49A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJKOaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S229734AbiJKObF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJKOaQ (ORCPT
+        with ESMTP id S229464AbiJKObA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:30:16 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E0C9357F8;
-        Tue, 11 Oct 2022 07:30:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 49BB080F9;
-        Tue, 11 Oct 2022 14:21:26 +0000 (UTC)
-Date:   Tue, 11 Oct 2022 17:30:12 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] ARM: dts: omap3-n900: fix LCD reset line polarity
-Message-ID: <Y0V99Agad6Ma+yTC@atomide.com>
-References: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
- <Y0UDEtQlN5Y9h7BU@atomide.com>
- <20221011123726.elsr53ue7nxzhvww@mercury.elektranox.org>
- <Y0V4cLGbYe4j+ls6@google.com>
+        Tue, 11 Oct 2022 10:31:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8CB62929
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 07:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665498657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4/tx5Hg2EBXygF2G8xfjAkH7UAOIXn21J5RskYrkmds=;
+        b=OsVCvCDw7SlsXQpLxEG3pciT3m1hOPS4l8PRDTCXiIoIBXHiV52OBYPR5ZhpyxyMFT6sZR
+        QNW2AFSUB1+jv6S4tj7q748aGLVDHowW+a7lcc+gKpyRwcxlUUkojlNH4Q0OUhYEaBPZzE
+        UUA19GcwUnWb4vDFru06/x39e8Z959M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-275-SvpcsVCvNv6sGp-hOHfwnQ-1; Tue, 11 Oct 2022 10:30:55 -0400
+X-MC-Unique: SvpcsVCvNv6sGp-hOHfwnQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0657B382ECCD;
+        Tue, 11 Oct 2022 14:30:55 +0000 (UTC)
+Received: from llong.com (unknown [10.22.17.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EA0040E9920;
+        Tue, 11 Oct 2022 14:30:54 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Tejun Heo <tj@kernel.org>,
+        Chris Down <chris@chrisdown.name>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] mm/memcontrol: Don't increase effective low/min if no protection needed
+Date:   Tue, 11 Oct 2022 10:30:15 -0400
+Message-Id: <20221011143015.1152968-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0V4cLGbYe4j+ls6@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Dmitry Torokhov <dmitry.torokhov@gmail.com> [221011 13:57]:
-> Hi Sebastian,
-> 
-> On Tue, Oct 11, 2022 at 02:37:26PM +0200, Sebastian Reichel wrote:
-> > Hi,
-> > 
-> > On Tue, Oct 11, 2022 at 08:45:54AM +0300, Tony Lindgren wrote:
-> > > * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221004 21:26]:
-> > > > The LCD driver (panel-sony-acx565akm), when probing, starts with line
-> > > > driven low, and then toggles it to high and keeps it there. Also, the
-> > > > line is driven low when powering off the device, and ls released when
-> > > > powering it back on. This means that the reset line should be described
-> > > > as "active low" in DTS. This will be important when the driver is
-> > > > converted to gpiod API which respects the polarity declared in DTS.
-> > > 
-> > > We should ensure these patches get merged together with the driver
-> > > change to avoid breaking LCD for booting. Probably no need to have
-> > > the driver quirk handling for inverted polartity in this case.
-> > > 
-> > > It's probably easiest to have an immutable branch for the driver
-> > > changes I can base the dts changes on. Or I can ack the dts changes
-> > > if they get merged with the driver.
-> > 
-> > Both drivers are already using gpiod API:
-> > 
-> > drivers/gpu/drm/panel/panel-sony-acx565akm.c
-> > drivers/gpu/drm/panel/panel-dsi-cm.c
-> 
-> I was looking at
-> 
-> drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-> drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+Since commit bc50bcc6e00b ("mm: memcontrol: clean up and document
+effective low/min calculations"), the effective low/min protections can
+be non-zero even if the corresponding memory.low/min values are 0. That
+can surprise users to see MEMCG_LOW events even when the memory.low
+value is not set. One example is the LTP's memcontrol04 test which fails
+because it detects some MEMCG_LOW events for a cgroup with a memory.min
+value of 0.
 
-Ah OK that explains :)
+Fix this by updating effective_protection() to not returning a non-zero
+low/min protection values if the corresponding memory.low/min values
+or those of its parent are 0.
 
-> which are not using gpiod. Should they be retired?
+Fixes: bc50bcc6e00b ("mm: memcontrol: clean up and document effective low/min calculations")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ mm/memcontrol.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Yes we should just get rid of them with omapdrm working just fine.
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index b69979c9ced5..893d4d5e518a 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6660,6 +6660,9 @@ static unsigned long effective_protection(unsigned long usage,
+ 	unsigned long protected;
+ 	unsigned long ep;
+ 
++	if (!setting || !parent_effective)
++		return 0UL;	/* No protection is needed */
++
+ 	protected = min(usage, setting);
+ 	/*
+ 	 * If all cgroups at this level combined claim and use more
+-- 
+2.31.1
 
-> > So this just breaks things.
-> 
-> I missed the drivers in drivers/gpu/... and I see that they essentially
-> abuse gpiod API as gpiod_set_value() operates on logical level
-> (active/inactive) and not absolute (high/low). They should either use
-> the gpiod_*_raw() variants, or they should be adjusted to do the proper
-> thing together with the accompanying DTS change.
-> 
-> What are your preferences?
-
-Seems like high/low at the connected device end is what we should use,
-right? Otherwise things will misbehave if the panel is connected to
-some other SoC possibly.
-
-Regards,
-
-Tony
