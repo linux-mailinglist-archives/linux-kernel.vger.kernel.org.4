@@ -2,81 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8B55FBC87
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A8B5FBC8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiJKU4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S229526AbiJKU6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJKU4s (ORCPT
+        with ESMTP id S229502AbiJKU6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:56:48 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93E158DEB
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:56:47 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e717329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e717:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 30ACE1EC0622;
-        Tue, 11 Oct 2022 22:56:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665521802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8I3JB5GZnhoZdp+LTW+Z0phiPDvz7bvBCW4sFoywZeQ=;
-        b=jf9d4VRUZtL4qIkgQU5isa7Onc+EerT1jFatqI0DsL453pymgvgPQ+MyXA2GNKzPN9UH19
-        dS7zxVkTGCsNyiVff88rEUV05Z0aTZH8e6dN5GPQ+W2NH8t0E8sFcbJW4Kg/6WnkPeM5Tr
-        CguDX3b+sE9vQ0fjmNydSphEg2UC6p8=
-Date:   Tue, 11 Oct 2022 22:56:37 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Daniel Verkamp <dverkamp@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH] x86: also disable FSRM if ERMS is disabled
-Message-ID: <Y0XYhftUTqd2BDHn@zn.tnic>
-References: <20220923005827.1533380-1-dverkamp@chromium.org>
- <Yy2U2BW6Tx0imGpK@zn.tnic>
- <CABVzXAk9AXj2Ns7YAh7cCA38t2sGxOEYLv-EfLCoFHr-SUQ2Mw@mail.gmail.com>
- <Yy3yJfz213Lqo4KC@zn.tnic>
- <CABVzXAkO4pU+gpUcWOEWDw+W4id=1WEOgeP5+3tBG_LR6=oa=g@mail.gmail.com>
- <Y0VTS9qTF/GaMihP@zn.tnic>
- <SJ1PR11MB6083203F6D6EFF8E562A2593FC239@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y0WtdarNtdIXCuhC@zn.tnic>
- <SJ1PR11MB608345C36F1D52B8185E46E1FC239@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        Tue, 11 Oct 2022 16:58:33 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235C9F759
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:58:31 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id h10so9740059qvq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 13:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+mAHY6RXJ0nyPOXmiZe+CE8JvmNJU/Rv6H1VrtQQpaY=;
+        b=YzVPehwVEYa5twQoFeGI45fkEkYXwVmX6VSDI0sLF59itZz8N5lt3HukThIAub9Uoi
+         glaQr5ZUPcuGqfw2a/oa4HBN2ljScw/Z98y50iXxUCiEdBgP+iI9IJJTHgc86J4ZDQMQ
+         HHrJFkORoOrxtskJlxsCq4vkzSowgZdLgtzajS8JQtVwNVi47qEOlmIlkK3uzVrc0WS8
+         2yTJy6sBlmE9wkuaA1BXPCrIWbEdZVSGNQ0OAugke5lBvhZinLvcIjhPk1HfKvezcKhs
+         yk5kp14weVRyUipL/d8iCq/xURXsrJF1gKkSE/e6jsAW+tI0QeFvaz7NPkZ1E2ZRlJk2
+         wBrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+mAHY6RXJ0nyPOXmiZe+CE8JvmNJU/Rv6H1VrtQQpaY=;
+        b=m8m+kJRxBphvfAAogDPPtvH/bxQD5sE9r4QUTQj29NI9iWdMhdu/R/ZfzBIlAsMmS+
+         XLrdgX22ig11uL51xuZFwSTAKeHc2lbcCZ3Eenm4EmI9ClGb1EdZbNIzZ5Za361fLsU3
+         PESVeiGbB76b6t+VAS4dyP0NEgIihhGZ9RLuhakLft7ruHhJ9cQr4foaJrTMS+jrEHok
+         QaRYzEGpmxeWFt+S20lzlygvxz6F8a7m8mC1q7KF3KUHMMviFkh0Geq8dnrcwrldb7y2
+         o36ZYRwXzbHqtC8VBXtlBafxZ6E4KbFMxWJ11hc8TQ8z5cOYP+3WIQtNfKzjeY1MMK9o
+         hZ0A==
+X-Gm-Message-State: ACrzQf1Jsl0KO21G10U0Dv2eKg+DSh4IETP8FvsBxXm73d6yBYBVh7E3
+        Gq2/tgqS4SFjyN8ZxiG+39RB3w==
+X-Google-Smtp-Source: AMsMyM5WexhRoKAuqE1aNkWUn9DwGaVN5NqqdcUsKdNKxRxdcaFeCrG0LLK5l0onZLNKntt2qlysKQ==
+X-Received: by 2002:ad4:5ba1:0:b0:4b1:9a15:4766 with SMTP id 1-20020ad45ba1000000b004b19a154766mr20628926qvq.6.1665521910121;
+        Tue, 11 Oct 2022 13:58:30 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id r4-20020a05622a034400b00398a7c860c2sm7680696qtw.4.2022.10.11.13.58.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 13:58:29 -0700 (PDT)
+Message-ID: <fa7c6054-7076-299d-ed0f-9e4fc0ffc194@linaro.org>
+Date:   Tue, 11 Oct 2022 16:58:28 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB608345C36F1D52B8185E46E1FC239@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V2] arm64: dts: fix drive strength macros as per FSD HW UM
+Content-Language: en-US
+To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alim.akhtar@samsung.com, chanho61.park@samsung.com,
+        linus.walleij@linaro.org, pankaj.dubey@samsung.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <CGME20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8@epcas5p3.samsung.com>
+ <20221011080359.76220-1-p.rajanbabu@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221011080359.76220-1-p.rajanbabu@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 07:08:51PM +0000, Luck, Tony wrote:
-> I don't think Intel will deliberately release a CPU that has FSRM=1, ERMS=0.
+On 11/10/2022 04:03, Padmanabhan Rajanbabu wrote:
+> Drive strength macros defined for FSD platform is not reflecting actual
+> name and values as per HW UM. FSD SoC pinctrl has following four levels of
 
-Sure, but I don't mean that. Rather: if for some reason the kernel or
-BIOS is supposed to fix an erratum related to those enhanced REP moving
-routines and goes and clears the MSR bit.
+s/name/names/
 
-That won't help because userspace will still use them since the CPUID
-flags remain set.
+> drive-strength and their corresponding values:
+> Level-1 <-> 0
+> Level-2 <-> 1
+> Level-4 <-> 2
+> Level-6 <-> 3
+> 
+> The commit 684dac402f21 ("arm64: dts: fsd: Add initial pinctrl support")
+> used drive strength macros defined for Exynos4 SoC family. For some IPs
+> the macros values of Exynos4 matched and worked well, but Exynos4 SoC
+> family drive-strength (names and values) is not exactly matching with
+> FSD SoC.
+> 
+> Fix the drive strength macros to reflect actual names and values given
+> in FSD HW UM. This also ensures that the existing peripherals in device
+> tree file is using correct drive strength MACROs to function as
+> expected.
+> 
+> Fixes: 684dac402f21 ("arm64: dts: fsd: Add initial pinctrl support")
+> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> ---
 
-I guess such a case is probably not going to happen in real life but if
-it happened, that bit clearing is kinda useless.
+Rest of commit msg looks ok.
 
-I'd say.
+>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 34 +++++++++++-----------
+>  arch/arm64/boot/dts/tesla/fsd-pinctrl.h    |  6 ++--
+>  2 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> index d0abb9aa0e9e..e3852c946352 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> @@ -55,14 +55,14 @@
+>  		samsung,pins = "gpf5-0";
+>  		samsung,pin-function = <FSD_PIN_FUNC_2>;
+>  		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
+> -		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
+> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+>  	};
+>  
+>  	ufs_refclk_out: ufs-refclk-out-pins {
+>  		samsung,pins = "gpf5-1";
+>  		samsung,pin-function = <FSD_PIN_FUNC_2>;
+>  		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
+> -		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
+> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+>  	};
+>  };
+>  
+> @@ -239,105 +239,105 @@
+>  		samsung,pins = "gpb6-1";
+>  		samsung,pin-function = <FSD_PIN_FUNC_2>;
+>  		samsung,pin-pud = <FSD_PIN_PULL_UP>;
+> -		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
+> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+>  	};
+>  
+>  	pwm1_out: pwm1-out-pins {
+>  		samsung,pins = "gpb6-5";
+>  		samsung,pin-function = <FSD_PIN_FUNC_2>;
+>  		samsung,pin-pud = <FSD_PIN_PULL_UP>;
+> -		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
+> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+>  	};
+>  
+>  	hs_i2c0_bus: hs-i2c0-bus-pins {
+>  		samsung,pins = "gpb0-0", "gpb0-1";
+>  		samsung,pin-function = <FSD_PIN_FUNC_2>;
+>  		samsung,pin-pud = <FSD_PIN_PULL_UP>;
+> -		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
+> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
 
--- 
-Regards/Gruss,
-    Boris.
+You are now changing both the value for register and the meaning (name).
+Your commit msg indicated that the names are not correct, not the
+values. Based on the commit msg, I expect the DTBs are the same. Are
+they? If not, it these are two different commits with their own
+explanations/reasoning.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Best regards,
+Krzysztof
+
