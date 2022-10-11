@@ -2,114 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF3B5FA8D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540215FA8E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbiJKAAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 20:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S229902AbiJKACH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 20:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiJKAAl (ORCPT
+        with ESMTP id S229699AbiJKACC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:00:41 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEA67268C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:00:40 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id h2-20020a056602154200b006bb5f8574afso8233509iow.13
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:00:40 -0700 (PDT)
+        Mon, 10 Oct 2022 20:02:02 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE4678585;
+        Mon, 10 Oct 2022 17:02:01 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 67so12017200pfz.12;
+        Mon, 10 Oct 2022 17:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HDvDPLCLAPPvF5TVvL+FWbJtEqmbYVODvwDkJg3SqIo=;
+        b=BMj8f33/fyuY4YUgfzIsC8MB079NtlG/lc5y1lSPpCGAsz+jvSYZCTpuRzKVZGf2GY
+         nZi6ZRgOudbzROz6pHhHElsWmoKQQy847SVQHPP6Lzs+V2eA/brEnXLuDstKnq7MW7Ih
+         TzHZfV7XKs3PD0GAaAkJAXCvXBlxf5lB+KS3lhnFICm9Tq4yaQhhQQax921FRXOWW/if
+         /toe/pDvQON4HdgY5CGmbYgif/tTyjDjkjRdKQFAulnURnCwp8NMFdEBa3NYmPI0A+fB
+         fhamlfjudZxMTaB+1mSMxDuObe1ocZe7cQbErJKQBTAEur2a0QkUbRoT5VJEglEdMX1y
+         d2HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QbvS0X3m3SbRe3ACMhfuRQZ14nncl70F/pfj7aK5Oak=;
-        b=JRBxa6F0CWuOcInU3Lk1JS/w33cSFizdepHYuKKDvf0AtaQsdCE65F93eOD600d+V+
-         zpV64XRA5re5AVgjHHnqZFeboUHWepbAAOwursxyLC12//o4/DO8Pfh8G7l5BNsrNwoE
-         chNWkGdKMTQHb4oH4h0D/AR/GyeV1Sa1P8TmCCHepn7iTanIhBj4mU47L55tkZB8SANX
-         gY4Z/HgUiFzqSqHxhNIXygIMCNL2l6l0L7C+qRl17KiU3bbVyuPmF7W9KyPmgme1GYM/
-         0JGd+Q1Ud4PDHtSFCN9fOz+EOW8Tv1red+J5wMbikggrvG34pb8aEAJY9d2uY5EgRoEp
-         7EbQ==
-X-Gm-Message-State: ACrzQf1+X6D6YBqgJszY/ejMKj9W3Ckfx+ZDZ/WwaA4Prgl3snmixl/+
-        oopVcJEMliLUttsYSsmCw55PkuRVrFOdtQegrR2KqgsSRQLl
-X-Google-Smtp-Source: AMsMyM533gTkDEzvWDwybUS2DzbBpkMuCqS+TnEE3zECelkRknEw6C/GiR4OfzEHlyIKR+x0t5QPt09RpeVgRk8VK6zs4fUBILab
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HDvDPLCLAPPvF5TVvL+FWbJtEqmbYVODvwDkJg3SqIo=;
+        b=NuI07QtXdjFYbAa1yhmBPqDGF+I+kOJfrpHyTxYbftMqE8a7rvr2AseEQRCVnLOZIl
+         zxNqx28qdEYcDRg9buY5tOp6KfkFH334CHpsDfGSgxswtRg9CBzk8HMGUXvE+26LLOGC
+         Fu6hABTE4MMU7l4OR5hFUE3bgV/urZTATqe4erQQWmIxhRqz3Fxz9xyZfFGXaUUjkAHx
+         s8qVza7KzYSIohxmhW0z4DVrMEr99EXT3zur0OIFMBYLft11KdLmLlbofEXNYARigMt/
+         qkuzpf/yhwC9zXQxTboKroV50fjIwKyrxTlS9VSa0kI/X+MBR4ZfxBxnYf7etvyv/pnG
+         u9DQ==
+X-Gm-Message-State: ACrzQf0IFsQ+hyNaioHQbGQA7RKVXQ/ys6ACwenVUDaI4yLv0ojP6Vc5
+        tpfqQuyOdM2neciYtshI6WQ=
+X-Google-Smtp-Source: AMsMyM7Y6pAnL5W1EJS9G7oSUu8S6FVrr9k2c5r6QKOELR9o0pNGH3yk7s3YJUqb5vMyZxDtzUjxCg==
+X-Received: by 2002:a63:4949:0:b0:442:b733:2fae with SMTP id y9-20020a634949000000b00442b7332faemr18227721pgk.424.1665446520354;
+        Mon, 10 Oct 2022 17:02:00 -0700 (PDT)
+Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
+        by smtp.gmail.com with ESMTPSA id v29-20020aa799dd000000b0056258a3606csm7454081pfi.215.2022.10.10.17.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 17:01:59 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 08:01:27 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
+Message-ID: <Y0SyVwjDl7NGfTPn@sol>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id
- u3-20020a056638304300b00341d8a473e8mr11553257jak.239.1665446440106; Mon, 10
- Oct 2022 17:00:40 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 17:00:40 -0700
-In-Reply-To: <00000000000093079705ea9aada2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007482b905eab6f749@google.com>
-Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in dbFindCtl
-From:   syzbot <syzbot+7edb85bc97be9f350d90@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
+> Do not imply that some of the generic headers may be always included.
+> Instead, include explicitly what we are direct user of.
+> 
+> While at it, sort headers alphabetically.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpiolib-cdev.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+> index f8041d4898d1..60a60e2d60c5 100644
+> --- a/drivers/gpio/gpiolib-cdev.c
+> +++ b/drivers/gpio/gpiolib-cdev.c
+> @@ -10,8 +10,9 @@
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/file.h>
+> -#include <linux/gpio.h>
+>  #include <linux/gpio/driver.h>
+> +#include <linux/gpio.h>
+> +#include <linux/hte.h>
 
-HEAD commit:    4899a36f91a9 Merge tag 'powerpc-6.1-1' of git://git.kernel..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12ead462880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2021a61197ebe02
-dashboard link: https://syzkaller.appspot.com/bug?extid=7edb85bc97be9f350d90
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1404403a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10789852880000
+Ok with the hte re-order.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1a98722ff83f/disk-4899a36f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7a31d6690395/vmlinux-4899a36f.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/6fb347a504fa/mount_0.gz
+But moving the gpio subsystem header after the gpio/driver is not
+alphabetical ('.' precedes '/') and it read better and made more sense
+to me the way it was.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7edb85bc97be9f350d90@syzkaller.appspotmail.com
+>  #include <linux/interrupt.h>
+>  #include <linux/irqreturn.h>
+>  #include <linux/kernel.h>
+> @@ -20,11 +21,12 @@
+>  #include <linux/mutex.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/poll.h>
+> +#include <linux/seq_file.h>
 
-loop0: detected capacity change from 0 to 32768
-================================================================================
-UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:1671:12
-shift exponent 1834973817 is too large for 64-bit type 'long long int'
-CPU: 0 PID: 3603 Comm: syz-executor644 Not tainted 6.0.0-syzkaller-09413-g4899a36f91a9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
- dbFindCtl.cold+0x52/0x57 fs/jfs/jfs_dmap.c:1671
- dbAllocAny+0xa4/0x1a0 fs/jfs/jfs_dmap.c:1502
- dbAlloc+0x46d/0xa70 fs/jfs/jfs_dmap.c:859
- diNewExt+0x724/0x1a10 fs/jfs/jfs_imap.c:2251
- diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
- diAllocAG+0x15f1/0x2200 fs/jfs/jfs_imap.c:1662
- diAlloc+0x82d/0x1730 fs/jfs/jfs_imap.c:1583
- ialloc+0x89/0xaa0 fs/jfs/jfs_inode.c:56
- jfs_mkdir+0x1f0/0xab0 fs/jfs/namei.c:225
- vfs_mkdir+0x489/0x740 fs/namei.c:4013
- do_mkdirat+0x28c/0x310 fs/namei.c:4038
- __do_sys_mkdir fs/namei.c:4058 [inline]
- __se_sys_mkdir fs/namei.c:4056 [inline]
- __x64_sys_mkdir+0xf2/0x140 fs/namei.c:4056
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc402fc5c29
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc056f56d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc402fc5c29
-RDX: 00007fc402f84123 RSI: 0000000000000000 RDI: 00000000200052c0
-RBP: 00007fc402f853f0 R08: 0000555555d8a2c0 R09: 0000000000000000
-R10: 00007ffc056f55a0 R11: 0000000000000246 R12: 00000000f8008000
-R13: 0000000000000000 R14: 00080000000000f4 R15: 0000000000000000
- </TASK>
-================================================================================
+I wasn't aware that we use anything from seq_file.
+What am I missing?
 
+Cheers,
+Kent.
+
+>  #include <linux/spinlock.h>
+>  #include <linux/timekeeping.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/workqueue.h>
+> -#include <linux/hte.h>
+> +
+>  #include <uapi/linux/gpio.h>
+>  
+>  #include "gpiolib.h"
+> -- 
+> 2.35.1
+> 
