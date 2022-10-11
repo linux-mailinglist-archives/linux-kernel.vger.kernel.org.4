@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720815FACCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8B45FACD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiJKGaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S229817AbiJKGa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJKGaH (ORCPT
+        with ESMTP id S229477AbiJKGaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:30:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431963DF1A;
-        Mon, 10 Oct 2022 23:30:05 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mmm3h2RndzHtf8;
-        Tue, 11 Oct 2022 14:25:04 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 14:30:02 +0800
-Message-ID: <5311e154-c2d4-91a5-ccb8-f5adede579ed@huawei.com>
-Date:   Tue, 11 Oct 2022 14:30:01 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf v3 0/6] Fix bugs found by ASAN when running selftests
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-References: <20221010142553.776550-1-xukuohai@huawei.com>
- <CAEf4Bzbt1_J=bzsSmO-xX=Ubi9UeGj8swQT7c1pZt_ay1npZhw@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CAEf4Bzbt1_J=bzsSmO-xX=Ubi9UeGj8swQT7c1pZt_ay1npZhw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 11 Oct 2022 02:30:52 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F13DFACF;
+        Mon, 10 Oct 2022 23:30:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id i7-20020a17090a65c700b0020ad9666a86so15100223pjs.0;
+        Mon, 10 Oct 2022 23:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q6UtDTfgFsScPFwM9ThkOEZaeBo79ZpfsnwoNicUbs0=;
+        b=MZwiGYYcJBV3L+vUZdlbsY47foIqgnLFMYz0M7jMl31jIxPRcmfqP1fcdDY7dlEx4p
+         6gydKHnNfK4FaNOlzu0VJ24kAW4Jj9bAD+h+/UupOmCwKykyC2Bxq5+JI+fr8CTwyI8g
+         9tjlCR/t+uFD7TTsEklgqOxvjny8gP/B5yxFIMO5uD+5JOZkM6hnAqHhzYuDAGcbcUyc
+         zo9dFFkSpW238SzUmcfu2bnjZkPiL8PIZReNHw6pYjxyE+/Dj4cgs7FzzSGF8uOvhG8l
+         nZ0AJ4JqA0akcjZnK9NHEgvQDp81BaiJc+wiYUN3DCnqdPgAxYBAIerlvfWyBeASVwv6
+         Pxog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q6UtDTfgFsScPFwM9ThkOEZaeBo79ZpfsnwoNicUbs0=;
+        b=4PoCmcKrvMqtNp9Yj1YwmmPLqGOwFhk2bziQztIEKvMYXwfI9t87w4FRTq6vLsrcI5
+         aX6KeVMzve659LbmGsAGaSoZq6wGDvO0TjMqDiN5Y3QQPCwJLIIA8ZKdVrqGr2sdKrpG
+         /xNrp+ESoJJSc4uaVttzDC5hTvtll2WR/5NDBcK4G1Ax/tqqUS4pQkA+rcDkOs8DN+z7
+         CANG+eR9zYa6+cdcZV5Gu9uYUkT1YCgugzb9Ib21kLsfrin0gyPLPEDTK4d1W1N5rhs9
+         91Ua5kLza92hkXEUKka16wOwZ/u8eJW8PmUc494NuRxOE1KkESicHfItUfDNBtZ8W1HP
+         gMEQ==
+X-Gm-Message-State: ACrzQf1p/RW6/nSpRjkl0uIVAMhZOFKfZZr96NUJDpouOspMmPKsNzZa
+        q8JP/UYRMuU1wucc4SMCssc=
+X-Google-Smtp-Source: AMsMyM6UPGGuYpMTkXQsECnqXsylOwk/pfeTfcQnyjHJYCdIzecHGfTkWhwpYa7XQm2Sfl4U9oxRXg==
+X-Received: by 2002:a17:902:f647:b0:183:cb8d:40a0 with SMTP id m7-20020a170902f64700b00183cb8d40a0mr1075546plg.18.1665469850890;
+        Mon, 10 Oct 2022 23:30:50 -0700 (PDT)
+Received: from xm06403pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id i16-20020a17090332d000b00174c235e1fdsm4096307plr.199.2022.10.10.23.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 23:30:50 -0700 (PDT)
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        megoo.tang@gmail.com, lzx.stg@gmail.com
+Subject: [PATCH] mmc: sdhci-sprd: Fix minimum clock limit
+Date:   Tue, 11 Oct 2022 14:30:43 +0800
+Message-Id: <20221011063043.11074-1-wenchao.chen666@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 9:37 AM, Andrii Nakryiko wrote:
-> On Mon, Oct 10, 2022 at 7:08 AM Xu Kuohai <xukuohai@huawei.com> wrote:
->>
-> 
-> Thanks for the fixes! I left a few comments in a few patches, please
-> address those. But also
-> please provide a commit message, even if a single line one. Kernel
-> style dictates that the commit message shouldn't be empty.
-> 
+From: Wenchao Chen <wenchao.chen@unisoc.com>
 
-Will do, thanks
+The minimum clock supported by SPRD Host is 100000.
 
-> And I think none of these fixes are critical enough to go to bpf tree,
-> please target bpf-next for next revision. Thanks.
-> 
+Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+---
+ drivers/mmc/host/sdhci-sprd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ok, will target to bpf-next branch, targeting bpf tree just because
-Documentation/bpf/bpf_devel_QA.rst says bpf-next is for features
-
-> 
->> v3:
->> - Fix error failure of case test_xdp_adjust_tail_grow exposed by this series
->>
->> v2: https://lore.kernel.org/bpf/20221010070454.577433-1-xukuohai@huaweicloud.com
->> - Rebase and fix conflict
->>
->> v1: https://lore.kernel.org/bpf/20221009131830.395569-1-xukuohai@huaweicloud.com
->>
->> Xu Kuohai (6):
->>    libbpf: Fix use-after-free in btf_dump_name_dups
->>    libbpf: Fix memory leak in parse_usdt_arg()
->>    selftests/bpf: Fix memory leak caused by not destroying skeleton
->>    selftest/bpf: Fix memory leak in kprobe_multi_test
->>    selftests/bpf: Fix error failure of case test_xdp_adjust_tail_grow
->>    selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
->>
->>   tools/lib/bpf/btf_dump.c                      | 47 +++++++++++----
->>   tools/lib/bpf/usdt.c                          | 59 +++++++++++--------
->>   .../bpf/prog_tests/kprobe_multi_test.c        | 17 +++---
->>   .../selftests/bpf/prog_tests/map_kptr.c       |  3 +-
->>   .../selftests/bpf/prog_tests/tracing_struct.c |  3 +-
->>   .../bpf/prog_tests/xdp_adjust_tail.c          |  7 ++-
->>   6 files changed, 86 insertions(+), 50 deletions(-)
->>
->> --
->> 2.30.2
->>
-> .
+diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
+index 46c55ab4884c..b92a408f138d 100644
+--- a/drivers/mmc/host/sdhci-sprd.c
++++ b/drivers/mmc/host/sdhci-sprd.c
+@@ -309,7 +309,7 @@ static unsigned int sdhci_sprd_get_max_clock(struct sdhci_host *host)
+ 
+ static unsigned int sdhci_sprd_get_min_clock(struct sdhci_host *host)
+ {
+-	return 400000;
++	return 100000;
+ }
+ 
+ static void sdhci_sprd_set_uhs_signaling(struct sdhci_host *host,
+-- 
+2.17.1
 
