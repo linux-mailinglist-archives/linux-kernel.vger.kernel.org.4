@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A105FBBEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E31D5FBBF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 22:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiJKUQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 16:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229954AbiJKURg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 16:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJKUQ1 (ORCPT
+        with ESMTP id S229874AbiJKUR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 16:16:27 -0400
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93B81D313;
-        Tue, 11 Oct 2022 13:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1665519384; i=@motorola.com;
-        bh=LvpIoHarulDOtJ2juM4grLAbVlSPFXJgCsOsi75DjF4=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:Content-Transfer-Encoding:In-Reply-To;
-        b=d/mi4skmkhP30RaX0UO+SartcV3V69BxactEkl1bmwN4n214Z7Lqc3AlbXIR2HXTG
-         OVw1IgGNXza+Q3HKyLkcvLbCfVOFdzmB6TQBshcXrz6fDS2mcgstQ0/T/R89zSVsIa
-         RBhGWIfyMIkRedNxD61bl6T1PUIhSdqeERZkkrTzPRX8zfubka/XHUedvuskHZl6q2
-         7m6IrhxpaIOx1C9NP2Zjb+Bl8LVLGlBzz6Q0gV6diFCL86Ppz4MoSJocvDKrV9GlfF
-         3KdaNAFm2tr4Uk1QO8r1nLCFDtAvbwiEQSWwdUlEKpOhelmeRAvjDfTDTUpV0+4SdO
-         kN1WddvfW/E7w==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAKsWRWlGSWpSXmKPExsWS8eKJmK74edd
-  kg+nrFSyOtT1ht3hyoJ3RonfZHjaL5sXr2Sw6Jy5ht1jYtoTF4vKuOWwWi5a1MlucmBxr8eNP
-  H7PFqgUH2B24PWZ3zGT12LSqk81j/9w17B6L+yazevT/NfDYsv8zo8fnTXIB7FGsmXlJ+RUJr
-  BldjzpZCxYYVExp+8fSwLhXtYuRi0NIYCqTxI32O+wQzlImiecHJwA5HBwsAqoSl+b5dTFycr
-  AJqEkseL2KGcQWEdCSOPblK1g9s0AHs8Sie42sIAlhAUuJeb8+sYHYvALKEtfe3GUBsYUEkiR
-  6T9xkhYgLSpyc+QQsziygI7Fz6x02kF3MAtISy/9xQITlJZq3zmYGCXMKmEhcus02gZFvFpLm
-  WUiaZyE0z0LSvICRZRWjVVJRZnpGSW5iZo6uoYGBrqGhia6ZJRDpJVbpJuqVFuumJhaX6BrpJ
-  ZYX66UWF+sVV+Ym56To5aWWbGIERlBKkavrDsa1q37qHWKU5GBSEuVV6XFNFuJLyk+pzEgszo
-  gvKs1JLT7EKMPBoSTBO+ssUE6wKDU9tSItMwcYzTBpCQ4eJRHe95uB0rzFBYm5xZnpEKlTjJY
-  cf7f+3s/MMXX2PyDZub/rALMQS15+XqqUOG8AyDwBkIaM0jy4cbCEc4lRVkqYl5GBgUGIpyC1
-  KDezBFX+FaM4B6OSMG/IGaApPJl5JXBbXwEdxAR00MmrTiAHlSQipKQamARWmkq8nnn2xuuGi
-  2dcWaq1bfs0MudEHH+8p1N8U+MSP8MZfX1Mmv1990XcjYP5A57yKHF8Ce85nbNfQTCUtyPAlb
-  G8/nyns0db5/UDl27Erni/89S1H7MVI6RsqrdmNGa0anaJqDDyn9rte7ZaaPGJlRLrDhcfYpr
-  9lselYGqr9rVLyTsYes6JHQ1azZLB+fP90Zw1zHHu1a31U/hUTXfseiLy7alkmuYdrZ5mLWNN
-  A26Rp9ttl05KuOrIdn9G6pYdDT6Sd/MWnhF5GXPSTzXk41u34E0s99/IvyqqZ7jgGq5lyycp8
-  0hor9Kvyv7d2xN6d3glfRBY2id7PviX7bqDMhu+Bi9f3ZhVnBCgxFKckWioxVxUnAgAiZr5hr
-  MDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-18.tower-635.messagelabs.com!1665519383!41889!1
-X-Originating-IP: [104.232.228.22]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 27661 invoked from network); 11 Oct 2022 20:16:23 -0000
-Received: from unknown (HELO va32lpfpp02.lenovo.com) (104.232.228.22)
-  by server-18.tower-635.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 11 Oct 2022 20:16:23 -0000
-Received: from ilclmmrp02.lenovo.com (ilclmmrp02.mot.com [100.65.83.26])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp02.lenovo.com (Postfix) with ESMTPS id 4Mn6Vv117Cz50GH4;
-        Tue, 11 Oct 2022 20:16:23 +0000 (UTC)
-Received: from p1g3 (unknown [100.64.172.121])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by ilclmmrp02.lenovo.com (Postfix) with ESMTPSA id 4Mn6Vt6rN3zbxPg;
-        Tue, 11 Oct 2022 20:16:22 +0000 (UTC)
-Date:   Tue, 11 Oct 2022 15:16:04 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org,
-        Daniel Scally <dan.scally@ideasonboard.com>,
+        Tue, 11 Oct 2022 16:17:29 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75E89C7F8;
+        Tue, 11 Oct 2022 13:17:27 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z97so21744069ede.8;
+        Tue, 11 Oct 2022 13:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/dVWmSEpPkjHTh+w4m1dqtY30GxJiF4wnPh/0dTOSI8=;
+        b=CcWVueIiWsiL0nvXq9hB6HFgq+6S2DciP2Q07yMmF3g65kqHaEyf0TPST2Yk1NOeHe
+         KFUP9UA5lCaqXmF+YYbvaemwVKqEeSIb3/NmmPvcUHgb5uaK080W3UWZqzqJrulm7Ps6
+         ctuUDCwKIm6qNn598scLuCId7ZuqTqzSHI1Eyw1XWTMSN4CISKhEVoRRLKfmhaKpK1sT
+         g6qHuiIWzJG8ZNmT0Xt7swGES4Gf4KPFrHTqQzqLJ12As4fUCqJotKEcYxDBbJf6sH4G
+         YmXsa9ahXMx8JKJ3NiS44yTqBOcikg7dEBVecopRdOswsmqe8mojVuyniOUG+5zQFU5N
+         Dm7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/dVWmSEpPkjHTh+w4m1dqtY30GxJiF4wnPh/0dTOSI8=;
+        b=zTLx774PYgrMU8j+3pz1c/5Qh2EZG4w+9RLDmwRQ3rPKHtdJX6SGhbW2W5JGtvUaYH
+         Pihz//iCwYqw9ijPD8QDMWM3BLCDykhIuvbQuqIVNMbnd617Kis2PI1jSw5sj5YkzGKa
+         QiPEflQWZiZEoxMjsTLXTsNxFL0nP/82TQZEqNimUHaHnJtMZlnkfJfRqJDF5Bq49anJ
+         udthT8iv5P4eRyznvdrgJJY2vpTCUuio6DZpom/AzeCbCTS9/xd6SDhxtzz5cKQZLsVj
+         L5sReJJDBhticbcEbEEd+p8OK0Wnrd45vDzaNWOVWZE3N+27pSqvmeQvjVZFNIYrLhFB
+         qRIw==
+X-Gm-Message-State: ACrzQf1ju4gx5gpNQKDk6N9kPfby/phsYvPb3lTbNtGqv85D35MX65MI
+        5/NcazN6OIlBm1x83wpMxJ9RbDm7HKyQPZ4ZDco=
+X-Google-Smtp-Source: AMsMyM7dGtOnFAokHqWsD18wriuFb8mrEQbssNxJ8Xd0gQnNQYXjRVeBfWQIkEz+mDeNl9mfvdnZjClH/ODrHSp/7Kc=
+X-Received: by 2002:a05:6402:909:b0:435:a8b:5232 with SMTP id
+ g9-20020a056402090900b004350a8b5232mr24380112edz.240.1665519446051; Tue, 11
+ Oct 2022 13:17:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com> <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com> <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com> <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <Y0PFZGLaREQUazVP@smile.fi.intel.com> <CAHQ1cqG73UAoU=ag9qSuKdp+MzT9gYJcwGv8k8BOa=e8gWwzSg@mail.gmail.com>
+ <Y0U1j2LXmGLBYLAV@smile.fi.intel.com>
+In-Reply-To: <Y0U1j2LXmGLBYLAV@smile.fi.intel.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Tue, 11 Oct 2022 13:17:13 -0700
+Message-ID: <CAHQ1cqHOZr1fBzz=jXTudhw11K-uu4NK9acmeY_URwVxO7MJ7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] uvc gadget performance issues
-Message-ID: <Y0XPBAn12Cr2KHU4@p1g3>
-References: <20221011183437.298437-1-w36195@motorola.com>
- <20221011194808.GH27626@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221011194808.GH27626@pengutronix.de>
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,130 +79,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On Tue, Oct 11, 2022 at 2:21 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Oct 10, 2022 at 02:40:30PM -0700, Andrey Smirnov wrote:
+> > On Mon, Oct 10, 2022 at 12:13 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Sun, Oct 09, 2022 at 10:02:26PM -0700, Andrey Smirnov wrote:
+> > > > On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> ...
+>
+> > > > OK, Ferry, I think I'm going to need clarification on specifics on
+> > > > your test setup. Can you share your kernel config, maybe your
+> > > > "/proc/config.gz", somewhere? When you say you are running vanilla
+> > > > Linux, do you mean it or do you mean vanilla tree + some patch delta?
+> > > >
+> > > > The reason I'm asking is because I'm having a hard time reproducing
+> > > > the problem on my end. In fact, when I build v6.0
+> > > > (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
+> > > >
+> > > > git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
+> > > >
+> > > > I get an infinite loop of reprobing that looks something like (some
+> > > > debug tracing, function name + line number, included):
+> > >
+> > > Yes, this is (one of) known drawback(s) of deferred probe hack. I think
+> > > the kernel that Ferry runs has a patch that basically reverts one from
+> > > 2014 [1] and allows to have extcon as a module. (1)
+> > >
+> > > [1]: 58b116bce136 ("drivercore: deferral race condition fix")
+> > >
+> > > > which renders the system completely unusable, but USB host is
+> > > > definitely going to be broken too. Now, ironically, with my patch
+> > > > in-place, an attempt to probe extcon that ends up deferring the probe
+> > > > happens before the ULPI driver failure (which wasn't failing driver
+> > > > probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
+> > > > there no "driver binding" event that re-triggers deferred probe
+> > > > causing the loop, so the system progresses to a point where extcon is
+> > > > available and dwc3 driver eventually loads.
+> > > >
+> > > > After that, and I don't know if I'm doing the same test, USB host
+> > > > seems to work as expected. lsusb works, my USB stick enumerates as
+> > > > expected. Switching the USB mux to micro-USB and back shuts the host
+> > > > functionality down and brings it up as expected. Now I didn't try to
+> > > > load any gadgets to make sure USB gadget works 100%, but since you
+> > > > were saying it was USB host that was broken, I wasn't concerned with
+> > > > that. Am I doing the right test?
+> > >
+> > > Hmm... What you described above sounds more like a yet another attempt to
+> > > workaround (1). _If_ this is the case, we probably can discuss how to fix
+> > > it in generic way (somewhere in dd.c, rather than in the certain driver).
+> >
+> > No, I'm not describing an attempt to fix anything. Just how vanilla
+> > v6.0 (where my patch is not reverted) works and where my patch, fixing
+> > a logical problem in which extcon was requested too late causing a
+> > forced OTG -> "gadget only" switch, also changed the ordering enough
+> > to accidentally avoid the loop.
+>
+> You still refer to a fix, but my question was if it's the same problem or not.
+>
 
-Appreciate the support!
+No, it's not the same problem.
 
-On Tue, Oct 11, 2022 at 09:48:08PM +0200, Michael Grzeschik wrote:
-> Hi Dan!
-> 
-> Thanks for the patches.
-> 
-> On Tue, Oct 11, 2022 at 01:34:32PM -0500, Dan Vacura wrote:
-> > Hello uvc gadget developers,
-> > 
-> > Please find my V2 series with added patches to disable these performance
-> > features at the userspace level for devices that don't work well with
-> > the UDC hw, i.e. dwc3 in this case. Also included are updates to
-> > comments for the v1 patch.
-> > 
-> > Original note:
-> > 
-> > I'm working on a 5.15.41 based kernel on a qcom chipset with the dwc3
-> > controller and I'm encountering two problems related to the recent performance
-> > improvement changes:
-> > 
-> > https://patchwork.kernel.org/project/linux-usb/patch/20210628155311.16762-5-m.grzeschik@pengutronix.de/  and
-> > https://patchwork.kernel.org/project/linux-usb/patch/20210628155311.16762-6-m.grzeschik@pengutronix.de/
-> > 
-> > If I revert these two changes, then I have much improved stability and a
-> > transmission problem I'm seeing is gone. Has there been any success from
-> > others on 5.15 with this uvc improvement and any recommendations for my
-> > current problems?  Those being:
-> > 
-> > 1) a smmu panic, snippet here: 
-> > 
-> >    <3>[  718.314900][  T803] arm-smmu 15000000.apps-smmu: Unhandled arm-smmu context fault from a600000.dwc3!
-> >    <3>[  718.314994][  T803] arm-smmu 15000000.apps-smmu: FAR    = 0x00000000efe60800
-> >    <3>[  718.315023][  T803] arm-smmu 15000000.apps-smmu: PAR    = 0x0000000000000000
-> >    <3>[  718.315048][  T803] arm-smmu 15000000.apps-smmu: FSR    = 0x40000402 [TF R SS ]
-> >    <3>[  718.315074][  T803] arm-smmu 15000000.apps-smmu: FSYNR0    = 0x5f0003
-> >    <3>[  718.315096][  T803] arm-smmu 15000000.apps-smmu: FSYNR1    = 0xaa02
-> >    <3>[  718.315117][  T803] arm-smmu 15000000.apps-smmu: context bank#    = 0x1b
-> >    <3>[  718.315141][  T803] arm-smmu 15000000.apps-smmu: TTBR0  = 0x001b0000c2a92000
-> >    <3>[  718.315165][  T803] arm-smmu 15000000.apps-smmu: TTBR1  = 0x001b000000000000
-> >    <3>[  718.315192][  T803] arm-smmu 15000000.apps-smmu: SCTLR  = 0x0a5f00e7 ACTLR  = 0x00000003
-> >    <3>[  718.315245][  T803] arm-smmu 15000000.apps-smmu: CBAR  = 0x0001f300
-> >    <3>[  718.315274][  T803] arm-smmu 15000000.apps-smmu: MAIR0   = 0xf404ff44 MAIR1   = 0x0000efe4
-> >    <3>[  718.315297][  T803] arm-smmu 15000000.apps-smmu: SID = 0x40
-> >    <3>[  718.315318][  T803] arm-smmu 15000000.apps-smmu: Client info: BID=0x5, PID=0xa, MID=0x2
-> >    <3>[  718.315377][  T803] arm-smmu 15000000.apps-smmu: soft iova-to-phys=0x0000000000000000
-> > 
-> >    I can reduce this panic with the proposed patch, but it still happens until I
-> >    disable the "req->no_interrupt = 1" logic.
-> 
-> This actually smells very much like an race between hardware and
-> software, that is probably working on the same memory. I would guess
-> that the hardware in the non interrupt case is currently processing
-> queued memory, while at the same time the software stack will update
-> that same memory with new data.
-> 
-> In my opinion this should be fixed, rather then making the interrupt
-> load optional. Also we could discuss if an option to adjust the load
-> adds some extra value, but out of this issue scope you describe here.
+> > > That said, the real test case should be performed on top of clean kernel
+> > > before judging if it's good or bad.
+> >
+> > Given your level of involvemnt with this particular platform and you
+> > being the author of
+> > https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+> > I assumed/expected you to double check this before sending this revert
+> > out. Please do so next time.
+>
+> As I said I have not yet restored my testing environment for that platform and
+> I relied on the Ferry's report. Taking into account the history of breakages
+> that done for Intel Merrifield, in particular by not wide tested patches
+> against DWC3 driver, I immediately react with a revert.
 
-Yes, I agree this should be fixed and it could just be an issue with the
-dwc3 driver. I'd need help on this as an understanding of what the hw is
-doing is needed to timely rootcause the issue.
-
-As for giving the option to reduce the load to userspace, I thought it'd
-be helpful for others since it seems this is the only gadget driver that
-uses this option and the amount that is hardcoded may be desired to be
-adjusted, like in my case to always interrupt. Although, if the bug
-didn't exist, I'd be fine with the existing hardcode.
-
-As for reproducing, did you try this with the sg functionality disabled?
-The crash seems to occur sooner in that setup.
-
-> 
-> Also, is this issue also being more likely to happen when streaming YUYV?
-> 
-> > 2) The frame is not fully transmitted in dwc3 with sg support enabled.
-> > 
-> >    There seems to be a mapping limit I'm seeing where only the roughly first
-> >    70% of the total frame is sent. Interestingly, if I allocate a larger
-> >    size for the buffer upfront, in uvc_queue_setup(), like sizes[0] =
-> >    video->imagesize * 3. Then the issue rarely happens. For example, when I
-> >    do YUYV I see green, uninitialized data, at the bottom part of the
-> >    frame. If I do MJPG with smaller filled sizes, the transmission is fine.
-> > 
-> >    +-------------------------+
-> >    |                         |
-> >    |                         |
-> >    |                         |
-> >    |      Good data          |
-> >    |                         |
-> >    |                         |
-> >    |                         |
-> >    +-------------------------+
-> >    |xxxxxxxxxxxxxxxxxxxxxxxxx|
-> >    |xxxx  Bad data  xxxxxxxxx|
-> >    |xxxxxxxxxxxxxxxxxxxxxxxxx|
-> >    +-------------------------+
-> > 
-> 
-> I did not stream with YUYV for some time. I will do that and try to
-> reproduce the issues you describe.
-> 
-> I also have an patch in the queue that will limit the sg support for
-> devices with speed > HIGH_SPEED. Because of the overhead of the limited
-> transfer payload of 1024*3 Bytes, it is possible that a simple memcpy
-> will actually be fast enough. But for that patch I still have to make
-> proper measurements. Btw. which USB speed are you transferring with?
-
-This happens with both super speed and high speed setups. Another
-developer also mentioned problems with sg support and had to disable it
-https://lore.kernel.org/linux-usb/0de496bf-fbc6-a2a1-a967-9a0580a7b1eb@ideasonboard.com/T/#mf06aa48ec53ed4c174601f03f397bd296f09efe5
-but didn't have problems with dwc2.
-
-> 
-> Regards,
-> Michael
-> 
-> -- 
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
-
+That's what I'm asking you not to do next time. If you don't have time
+to restore your testing env or double check Ferry's work, please live
+with a revert in your local tree until you do. My time is as valuable
+as yours and this revert required much more investigation before it
+was submitted. You lived with
+https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+since 5.10, which apparently was needed to either boot or have dwc3,
+so I don't think there is any real urgency.
