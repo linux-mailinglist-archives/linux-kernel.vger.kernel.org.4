@@ -2,107 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B713C5FB0CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F085FB0D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiJKKxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S229863AbiJKK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJKKx3 (ORCPT
+        with ESMTP id S229613AbiJKK5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:53:29 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5751E37184;
-        Tue, 11 Oct 2022 03:53:27 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id B498C2B066B9;
-        Tue, 11 Oct 2022 06:53:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 11 Oct 2022 06:53:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665485605; x=1665489205; bh=5bI3YI3TxD
-        wB3OBrM9zXo72ykVPw/KrTh1LKAdTEzQI=; b=wvKNwKMxqrtAUNztuQlpfH9rp1
-        brYdNWsHKjW5fJGmq9KxBMWNgghy92WBf4MC7Df/2iyjxjmhvBS9lfU/852FLQBp
-        cwYxE7DKRf1odZT1cYvYmIOjaFXYHx1v9iQfOZ1r45PpQULyQ73bENRT2VQaF14n
-        YlSUTQWrnjdvMW5/vOFs1RpnahKqADuw8MKEfsOS7DOCiPl8jJUcMj54k+6YL/cP
-        Tldi28IarLCcK31EyloZYKNFdkDjGMo5sgbySgmeTpy7U14eqb6cErLRRWgnPBRL
-        5JF2BDvJFdUGJNEaZehLDR7ifkamlAlDo52ovoiZk8a6s4AnrGC4lGLa7D/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665485605; x=1665489205; bh=5bI3YI3TxDwB3OBrM9zXo72ykVPw
-        /KrTh1LKAdTEzQI=; b=QiyfXg4wplRnzHFR+cKAh/LuF+QhtxgGfaKaoB9f8dyO
-        41zuh4OCh3LAMg4AEswO0xUhCGhmzHV8pNpkmkRBcuTeFDIeiBfw464gNOdcqn4I
-        fFFPIYbZCGph4Y1DbFmnVdv7soycxHa2mLCXm1LiV2NLX5Ofs0QiFuHBNtEOyXcM
-        uSFkq7zJo2eoNmSWveue5aUznNqZ04sn7yu2lATDofJ0jSGdfILE6BQEBY2e32qg
-        H0XRSS/QYLFzQYuA4wig9W2u4LP2bAW4VtELDlZbNut75XPUyRQ5DeCUiiHM2elL
-        vp6jgsEcas+IeiCGy2bMpewivf1Zqz3ZMcf30umdXg==
-X-ME-Sender: <xms:JEtFY32lcooBYztdni67Wwmf0LubIg_dQcMQkf3jQrxQ-oDXKtPCUw>
-    <xme:JEtFY2HgsDD9Sbsgfw-Jy2gu8rI3E0Sl9eGDOrmslweQR1ZqSxMeUEs_-Yh-k0Swd
-    mPXzYddL1kPBGVBsoI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JEtFY34Hs5N1C3qu7St5NaZMRwdLH8GqRYGVSNCkcjMa44U90zOy6Q>
-    <xmx:JEtFY83QAC37vCJ0ovUwIfvJSa_Vo9YEENl-M-JBNfvib88fBVKhGQ>
-    <xmx:JEtFY6HZMGQ9A2HNXL7dS-yvA5FZgAEJlvb5J-il0U7Y-PCW9C3p5A>
-    <xmx:JUtFY9C-zwgQtavNsqAMd3xx1ciDw6jSZur_Rm2SJnHJdxi7sCsWrmxdE6s>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B75D1B60086; Tue, 11 Oct 2022 06:53:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <e21a4eab-fe4f-4028-a22e-d60a6feb4dac@app.fastmail.com>
-In-Reply-To: <87tu4aok1j.fsf@kernel.org>
-References: <CA+G9fYsZ_qypa=jHY_dJ=tqX4515+qrV9n2SWXVDHve826nF7Q@mail.gmail.com>
- <87ilkrpqka.fsf@kernel.org>
- <158e9f4f-9929-4244-b040-78f2e54bc028@app.fastmail.com>
- <87tu4aok1j.fsf@kernel.org>
-Date:   Tue, 11 Oct 2022 12:53:04 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
-Subject: Re: drivers/net/wireless/ath/ath11k/mac.c:2238:29: warning:
- 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 06:57:37 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0093A5282B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:57:35 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id s3-20020a5eaa03000000b006bbdfc81c6fso4781204ioe.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:57:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M0qC+2Zxh/yll07tUtKXw60gt0zrPPh5YTAAcg0A6gA=;
+        b=SWCw3QKjQifO1sc0n2GZgCxdxVcA3M3VN0yR2CnrcKrBGIQZpjYkUeClrQ+L4WWhn9
+         sny6Sqx9opDbWa6Tzyvbmbp/VYENUSzNb70xCIfE+tBHF9J8hJSk7cIQBZrZtvoSTQf4
+         9ulpIqjZUMPGydD5Ph67iiD2CVAy7LGuMAZLH8PrpuEBH1Zw1xpfipswtbbwwzds3P3m
+         cAIz7gCeu/NlxdlrfLAZ83c2WDKneG8Feunqtdb8vvBOzXGJHEygVr2JGc6/CnNsRZMd
+         jItpwWjmux9LA4FQZ1GD2qAHcdxf0G3fSnXOF97+k+jpquEixWVGJSNvwdQFzbxEw6cw
+         26yg==
+X-Gm-Message-State: ACrzQf1j2V8xYjsu/y84mvLrT8yTvQZ2+2XYs6/8PHX+ReM4fiOolVlf
+        R++N51pR7gsS1n6PF/nCsi39viGMWmKc3RBgdFMj/+DOf00E
+X-Google-Smtp-Source: AMsMyM42XSbaOltlhhS5aYpEKY/4hYmilYM9l0wRq1Hdq9TYyjcJLDCDQhQo+n2bNip7YPZhTvTuv9As8zlR3YkeIiWMFHlpc9DN
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:ef0:b0:2f9:4403:8d28 with SMTP id
+ j16-20020a056e020ef000b002f944038d28mr11317784ilk.193.1665485855384; Tue, 11
+ Oct 2022 03:57:35 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 03:57:35 -0700
+In-Reply-To: <000000000000c2ac0405eaa934f3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9e8a305eac02404@google.com>
+Subject: Re: [syzbot] general protection fault in __d_add
+From:   syzbot <syzbot+a8f26a403c169b7593fe@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022, at 10:12 AM, Kalle Valo wrote:
-> "Arnd Bergmann" <arnd@arndb.de> writes:
+syzbot has found a reproducer for the following issue on:
 
->
-> You guessed correctly, disabling KASAN makes the warning go away. So no
-> point of reporting this to GCC, thanks for the help!
+HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=140066b2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=a8f26a403c169b7593fe
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1269583a880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d7c1a4880000
 
-What I meant was that if the problem is specific to KASAN, it might
-be nice to report it in the gcc bug tracker with the KASAN component,
-ideally with some kind of minimized test case or at least preprocessed
-source.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/1dad1b149d9c/mount_0.gz
 
-   Arnd
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a8f26a403c169b7593fe@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 4096
+ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
+ntfs3: loop0: Mark volume as dirty due to NTFS errors
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 3606 Comm: syz-executor276 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:d_flags_for_inode fs/dcache.c:1980 [inline]
+RIP: 0010:__d_add+0x5ce/0x800 fs/dcache.c:2796
+Code: 00 fc ff df 80 3c 08 00 74 08 48 89 df e8 ea c0 ea ff 48 8b 1b 48 83 c3 08 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 48 89 df e8 c4 c0 ea ff 48 83 3b 00 0f 85 b7 01
+RSP: 0018:ffffc90003cff870 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: 0000000000000008 RCX: dffffc0000000000
+RDX: ffff88801c181d80 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff8880741270f2 R08: ffffffff81ef2679 R09: ffff888075bba128
+R10: ffffed100eb77427 R11: 1ffff1100eb77425 R12: 0000000000000008
+R13: 1ffff1100e824e1e R14: ffff888075bba000 R15: 0000000000000000
+FS:  0000555557353300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff1887b000 CR3: 00000000730e1000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ d_splice_alias+0x122/0x3b0 fs/dcache.c:3191
+ lookup_open fs/namei.c:3391 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x10e6/0x2df0 fs/namei.c:3688
+ do_filp_open+0x264/0x4f0 fs/namei.c:3718
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f651e934f79
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff1887a418 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f651e934f79
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000080
+RBP: 00007f651e8f4740 R08: 00005555573532c0 R09: 0000000000000000
+R10: 00007fff1887a2e0 R11: 0000000000000246 R12: 00000000ffffffff
+R13: 0000000000000000 R14: 00030030454c4946 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:d_flags_for_inode fs/dcache.c:1980 [inline]
+RIP: 0010:__d_add+0x5ce/0x800 fs/dcache.c:2796
+Code: 00 fc ff df 80 3c 08 00 74 08 48 89 df e8 ea c0 ea ff 48 8b 1b 48 83 c3 08 48 89 d8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 48 89 df e8 c4 c0 ea ff 48 83 3b 00 0f 85 b7 01
+RSP: 0018:ffffc90003cff870 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: 0000000000000008 RCX: dffffc0000000000
+RDX: ffff88801c181d80 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff8880741270f2 R08: ffffffff81ef2679 R09: ffff888075bba128
+R10: ffffed100eb77427 R11: 1ffff1100eb77425 R12: 0000000000000008
+R13: 1ffff1100e824e1e R14: ffff888075bba000 R15: 0000000000000000
+FS:  0000555557353300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff1887b000 CR3: 00000000730e1000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 4 bytes skipped:
+   0:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1)
+   4:	74 08                	je     0xe
+   6:	48 89 df             	mov    %rbx,%rdi
+   9:	e8 ea c0 ea ff       	callq  0xffeac0f8
+   e:	48 8b 1b             	mov    (%rbx),%rbx
+  11:	48 83 c3 08          	add    $0x8,%rbx
+  15:	48 89 d8             	mov    %rbx,%rax
+  18:	48 c1 e8 03          	shr    $0x3,%rax
+  1c:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  23:	fc ff df
+* 26:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
+  2a:	74 08                	je     0x34
+  2c:	48 89 df             	mov    %rbx,%rdi
+  2f:	e8 c4 c0 ea ff       	callq  0xffeac0f8
+  34:	48 83 3b 00          	cmpq   $0x0,(%rbx)
+  38:	0f                   	.byte 0xf
+  39:	85                   	.byte 0x85
+  3a:	b7 01                	mov    $0x1,%bh
+
