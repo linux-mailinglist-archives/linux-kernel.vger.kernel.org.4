@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4733D5FBCB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 23:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC315FBCBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 23:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJKVPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 17:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S229626AbiJKVUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 17:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJKVPw (ORCPT
+        with ESMTP id S229619AbiJKVUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 17:15:52 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB175BE2F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:15:51 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso162478pjk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:15:51 -0700 (PDT)
+        Tue, 11 Oct 2022 17:20:49 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA4F4DB51
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:20:48 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so157470pjf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 14:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gib0D3vn7iV7gqguQs5TQEHyewiBRG4GFbEpfMrpB/A=;
-        b=eYOV8ko8c6DZ3A9ZdE3Ma+3KmlyiN6cbiSKUtmhaPcm8bfzitRg2oQ1cPYkUbZy642
-         IxLvRST2IqwuhIYNLPYkCEjfcAJsPH68jP5zPFL16RX7V7v4j5PI+Ph6/iYldjYKceu5
-         fFpjETMd59+CUTVJ8tkgVvJR6eTuB5t+izPA/KDK9h6OY+XhmFZuIEfl2w1ZATkTBRfs
-         yxzFq+9w4w1raqTU8fcgRa+lcoIpQ9Bu5oAx+MMCtN0vk25Z8Bhz6gJ1t7gBYF+W8Tzu
-         kRHBm4EnUwbQ7tlez0gy++QgAWw/nVMWHCOUJFqad38QM/u6cKum6pRFV68lFqar/qGG
-         U3aA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WgKkXYOMpCrMy4stl7yeasfMAP3tPEChdLdz+nfSz+g=;
+        b=e7f0yiOYbezNSkTNIEoVtuBP1LqxZJUf06lQKR+Gg2OETyyzvMPBeG7crV0ApfGoVG
+         pxeRq7bFSAc6QZys2PFlgo3JwLP4qFg6wL+rIhkrFlGeWjzBog9GeIZxMWMDn5EGQgwA
+         6Aji4jvhyVHM+W6d/wTExejDjWSeUUAMvZBLajYRIxzCEOhkjHP2imp28QiciDAJhZWZ
+         D/1iVuXo1n11Yxq+Pc263W48g3DSGVV/hyxKeS77gFU/z8Og+K9sW8sh3yMZGOIrquqn
+         5/PsfBb8OYDLn+ULkfQoyedzn/COY/PlsoKD852dTf41bLV0Rvm2r8YDlxt0Rtjny200
+         KSVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gib0D3vn7iV7gqguQs5TQEHyewiBRG4GFbEpfMrpB/A=;
-        b=hfN5HcEZkLiNAxLF8Q1UrMm7w5hAJDOqgfw/fEqEOV9qMNn2xsvHdyPcLh9qHYY5yR
-         CX+gUCLj9S4xs1sTUOdYmXPs8WvfKKpglQreWYTtLf/feM1u55zo19QjkD/2oGDmMFfm
-         oKeP0W9mKAkK++Xp9n2/07nFeMB2fZDsJsf9Tv8V+dJX0GotJAQDzTLlCJacBF4MWeLK
-         cz5+nt9D+r8Y7P7ctOoGprCbiIyD6BJhMN1tML/JK+REYoH95tDYFWUGIM+e325FpkmQ
-         firKzyBO500OQuOAngNrF0y4QrEv151PvmBI/BxrPbg3ok0UUcVFZt6/n2cJh3pRwwYs
-         cWyA==
-X-Gm-Message-State: ACrzQf1Stfp8m6ZfPButvjJ0fsxfWz5i+xyAOFbAGGVHND+99byqMScB
-        xz+kwsYPFc6Sa14TQXb0kjwZkjOtpvjkIMMFdyROMA==
-X-Google-Smtp-Source: AMsMyM5cyH0QdUroNV1X808aq9m/XnJUr8P0b5DSxK+VseOwU2ix4qzVSDBVNwtrzK9gp+4pocYmWLvFo2eZsCMYKPw=
-X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
- t24-20020a170902b21800b00184710c8c52mr33869plr.95.1665522950969; Tue, 11 Oct
- 2022 14:15:50 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WgKkXYOMpCrMy4stl7yeasfMAP3tPEChdLdz+nfSz+g=;
+        b=sc3GRzvS76YBEVfJUNQ77Bvn/RiU7e9pJBsOrd8Wl8I7FEB0ljybpWXG3TQdvGSMU6
+         Q5mBkhh9dIypT68zgl2826u6bioXwduTTFeXHCiyCi92K21bUoes6Ib84dAKca7/qx5G
+         wkfhd0Cd3LRvckF37ddTgoMNMX70XUp5/zwLD+RA4v/1PgmhH6ZdNFMH5mv83dW1adOa
+         UI/ewH1TvaaguBbUopfcSGa6gL8tT2Ax33j0wFyFoI8kIL49qSTts5Jc8rm/dMIXw64R
+         hvF4uWMjCI+bC2hMOuJMY4QedFdGuxNmn1uQuPfC4pwCUuNb743NqkhfAODEsCXGffkQ
+         xvQw==
+X-Gm-Message-State: ACrzQf3lbbsvjYdB079jB/38WCLEpJjW4m4S8zDVqkkcSuWMXEkfLhy3
+        sACJteoGQLbwA/MPkEXNLWJeA/nglU5RXuCmSfScZA==
+X-Google-Smtp-Source: AMsMyM5xX8RO3BVs4HCpiG+YHspj5urAByZdNn8HlAXCzE14gu+lYDGjvRN/JBlys28c8wxmYAcROtb1Il3prA2XiUg=
+X-Received: by 2002:a17:90b:33c3:b0:20a:ebc3:6514 with SMTP id
+ lk3-20020a17090b33c300b0020aebc36514mr1231094pjb.147.1665523247523; Tue, 11
+ Oct 2022 14:20:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <202210090815.526C76396@keescook> <20221011012904.2330473-1-lizetao1@huawei.com>
- <20221011012904.2330473-2-lizetao1@huawei.com>
-In-Reply-To: <20221011012904.2330473-2-lizetao1@huawei.com>
+ <20221011012904.2330473-3-lizetao1@huawei.com>
+In-Reply-To: <20221011012904.2330473-3-lizetao1@huawei.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 11 Oct 2022 14:15:39 -0700
-Message-ID: <CAKwvOdkj7PxeYT__ctaOX1wgf=PcoR-+H_VTBovwoyN+tQh_OQ@mail.gmail.com>
-Subject: Re: [PATCH -next v4 1/2] x86/boot: Remove unused variables
+Date:   Tue, 11 Oct 2022 14:20:36 -0700
+Message-ID: <CAKwvOdmK6Niv3x-K0__5fqJ+N27wiQaB0v7kS-iAAJfBXGk7XA@mail.gmail.com>
+Subject: Re: [PATCH -next v4 2/2] x86/boot/compressed: Add "-Wall" flag to Makefile
 To:     Li Zetao <lizetao1@huawei.com>
 Cc:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,7 +64,6 @@ Cc:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
         venu.busireddy@oracle.com, linux-kernel@vger.kernel.org,
         akpm@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -79,129 +77,147 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Oct 10, 2022 at 6:32 PM Li Zetao <lizetao1@huawei.com> wrote:
 >
-> Gcc report warning as follows:
+> Compressed/Makefile does not have "-Wall" flag, this is the old problem of
+> x86 not sharing makefiles. Fix by adding "-Wall" flag to Makefile. But when
+> "-Wall" flag added to Makefile, a few extra warnings were found.
 >
-> arch/x86/boot/compressed/efi.c: In function =E2=80=98efi_get_system_table=
-=E2=80=99:
-> arch/x86/boot/compressed/efi.c:62:23: warning: unused variable =E2=80=98e=
-t=E2=80=99
->   [-Wunused-variable]
+> 1.
+> In file included from arch/x86/boot/compressed/misc.c:15:
+>   In file included from arch/x86/boot/compressed/misc.h:24:
+>   In file included from ./include/linux/elf.h:6:
+>   In file included from ./arch/x86/include/asm/elf.h:8:
+>   In file included from ./include/linux/thread_info.h:60:
+>   ./arch/x86/include/asm/thread_info.h:175:13: warning: calling
+>   "__builtin_frame_address" with a nonzero argument is unsafe
+>   [-Wframe-address]
+>     oldframe = __builtin_frame_address(1);
+>                ^~~~~~~~~~~~~~~~~~~~~~~~~~
 >
-> arch/x86/boot/compressed/efi.c: In function =E2=80=98efi_get_conf_table=
-=E2=80=99:
-> arch/x86/boot/compressed/efi.c:134:13: warning: unused variable
->   =E2=80=98ret=E2=80=99 [-Wunused-variable]
+> ./arch/x86/include/asm/thread_info.h:177:11: warning: calling
+>   "__builtin_frame_address" with a nonzero argument is unsafe
+>   [-Wframe-address]
+>     frame = __builtin_frame_address(2);
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~
 >
-> arch/x86/boot/compressed/acpi.c: In function =E2=80=98__efi_get_rsdp_addr=
-=E2=80=99:
-> arch/x86/boot/compressed/acpi.c:27:13: warning: unused variable
->   =E2=80=98ret=E2=80=99 [-Wunused-variable]
+> This warning is disabled in the main Makefile for this reason so we
+> should just be able to disable it, adding "frame-address" flag to
+> Makefile.
 >
-> arch/x86/boot/compressed/acpi.c: In function =E2=80=98efi_get_rsdp_addr=
-=E2=80=99:
-> arch/x86/boot/compressed/acpi.c:55:22: warning: unused variable
->   =E2=80=98nr_tables=E2=80=99 [-Wunused-variable]
+> 2.
+> arch/x86/boot/compressed/kaslr.c:627:6: warning: unused variable
+>   "i" [-Wunused-variable]
+>     int i;
+>         ^
 >
-> arch/x86/boot/compressed/sev.c: In function =E2=80=98enforce_vmpl0=E2=80=
-=99:
-> arch/x86/boot/compressed/sev.c:256:13: error: unused variable =E2=80=98er=
-r=E2=80=99
->   [-Werror=3Dunused-variable]
+> This happens when CONFIG_MEMORY_HOTREMOVE or CONFIG_ACPI are "n".
+> Fix by adding "-std=gnu11" flag to Makefile, and we should put
+> the variable "i" within the for loop.
 >
-> Fix these warnings by removing unused variables.
+> 3.
+> arch/x86/boot/compressed/acpi.c:23:1: warning: unused function
+>   "__efi_get_rsdp_addr" [-Wunused-function]
 >
-> Fixes: 58f3e6b71f42 ("x86/compressed/acpi: Move EFI system table lookup t=
-o helper")
-> Fixes: 61c14ceda840 ("x86/compressed/acpi: Move EFI config table lookup t=
-o helper")
-> Fixes: dee602dd5d14 ("x86/compressed/acpi: Move EFI vendor table lookup t=
-o helper")
-> Fixes: f9d230e893e8 ("x86/boot: Correct RSDP parsing with 32-bit EFI")
-> Fixes: 81cc3df9a90e ("x86/sev: Check the VMPL level")
+> This happens when CONFIG_EFI is disabled for the reason that
+> function "__efi_get_rsdp_addr" is only called in efi_get_rsdp_addr
+> when CONFIG_EFI enable. So function "__efi_get_rsdp_addr" should
+> not be defined when CONFIG_EFI is disabled.
+>
 > Signed-off-by: Li Zetao <lizetao1@huawei.com>
 
-Thanks for the patch!
+I gave this a quick spin with clang to ensure that I didn't observe
+new warnings produced via -Wall:
+
+$ make LLVM=1 -j128 -s defconfig all
+$ make LLVM=1 ARCH=i386 -j128 -s defconfig all
+
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
-> v1 -> v2: Remove unused variables "et" in efi_get_system_table(), "ret" i=
-n
-> efi_get_conf_table(), "ret" in __efi_get_rsdp_addr() and  "nr_tables" in
-> efi_get_rsdp_addr()
-> v2 -> v3: None
-> v3 -> v4: Put this patch in front
+> v1 -> v2: Patch is new
+> v2 -> v3: Resolve extra warnings after "-Wall" flag added
+> v3 -> v4: Put this patch at the end
 >
->  arch/x86/boot/compressed/acpi.c | 2 --
->  arch/x86/boot/compressed/efi.c  | 2 --
->  arch/x86/boot/compressed/sev.c  | 1 -
->  3 files changed, 5 deletions(-)
+>  arch/x86/boot/compressed/Makefile | 3 ++-
+>  arch/x86/boot/compressed/acpi.c   | 5 +++--
+>  arch/x86/boot/compressed/kaslr.c  | 3 +--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 >
-> diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/a=
-cpi.c
-> index 9caf89063e77..21febd9f21ab 100644
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 3a261abb6d15..8918a8306dff 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -35,7 +35,7 @@ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
+>  # be valid.
+>  KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
+>  KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
+> -KBUILD_CFLAGS += -Wundef
+> +KBUILD_CFLAGS += -Wundef -Wall -std=gnu11
+>  KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+>  cflags-$(CONFIG_X86_32) := -march=i386
+>  cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
+> @@ -44,6 +44,7 @@ KBUILD_CFLAGS += -mno-mmx -mno-sse
+>  KBUILD_CFLAGS += -ffreestanding -fshort-wchar
+>  KBUILD_CFLAGS += -fno-stack-protector
+>  KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
+> +KBUILD_CFLAGS += $(call cc-disable-warning, frame-address)
+>  KBUILD_CFLAGS += $(call cc-disable-warning, gnu)
+>  KBUILD_CFLAGS += -Wno-pointer-sign
+>  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+> diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
+> index 21febd9f21ab..c062a8230e9c 100644
 > --- a/arch/x86/boot/compressed/acpi.c
 > +++ b/arch/x86/boot/compressed/acpi.c
-> @@ -24,7 +24,6 @@ __efi_get_rsdp_addr(unsigned long cfg_tbl_pa, unsigned =
-int cfg_tbl_len)
+> @@ -19,10 +19,10 @@
+>   */
+>  struct mem_vector immovable_mem[MAX_NUMNODES*2];
+>
+> +#ifdef CONFIG_EFI
+>  static acpi_physical_address
+>  __efi_get_rsdp_addr(unsigned long cfg_tbl_pa, unsigned int cfg_tbl_len)
 >  {
->  #ifdef CONFIG_EFI
+> -#ifdef CONFIG_EFI
 >         unsigned long rsdp_addr;
-> -       int ret;
 >
 >         /*
->          * Search EFI system tables for RSDP. Preferred is ACPI_20_TABLE_=
-GUID to
-> @@ -52,7 +51,6 @@ static acpi_physical_address efi_get_rsdp_addr(void)
->         unsigned long cfg_tbl_pa =3D 0;
->         unsigned int cfg_tbl_len;
->         unsigned long systab_pa;
-> -       unsigned int nr_tables;
->         enum efi_type et;
->         int ret;
+> @@ -41,9 +41,10 @@ __efi_get_rsdp_addr(unsigned long cfg_tbl_pa, unsigned int cfg_tbl_len)
+>                 return (acpi_physical_address)rsdp_addr;
 >
-> diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/ef=
-i.c
-> index 6edd034b0b30..6ffd22710ed2 100644
-> --- a/arch/x86/boot/compressed/efi.c
-> +++ b/arch/x86/boot/compressed/efi.c
-> @@ -59,7 +59,6 @@ unsigned long efi_get_system_table(struct boot_params *=
-bp)
+>         debug_putstr("Error getting RSDP address.\n");
+> -#endif
+> +
+>         return 0;
+>  }
+> +#endif
+>
+>  static acpi_physical_address efi_get_rsdp_addr(void)
 >  {
->         unsigned long sys_tbl_pa;
->         struct efi_info *ei;
-> -       enum efi_type et;
->
->         /* Get systab from boot params. */
->         ei =3D &bp->efi_info;
-> @@ -131,7 +130,6 @@ int efi_get_conf_table(struct boot_params *bp, unsign=
-ed long *cfg_tbl_pa,
+> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+> index e476bcbd9b42..4abc9c42cf4d 100644
+> --- a/arch/x86/boot/compressed/kaslr.c
+> +++ b/arch/x86/boot/compressed/kaslr.c
+> @@ -625,7 +625,6 @@ static bool process_mem_region(struct mem_vector *region,
+>                                unsigned long minimum,
+>                                unsigned long image_size)
 >  {
->         unsigned long sys_tbl_pa;
->         enum efi_type et;
-> -       int ret;
->
->         if (!cfg_tbl_pa || !cfg_tbl_len)
->                 return -EINVAL;
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/se=
-v.c
-> index c93930d5ccbd..b9451761a69a 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -253,7 +253,6 @@ void do_boot_stage2_vc(struct pt_regs *regs, unsigned=
- long exit_code)
->  static void enforce_vmpl0(void)
->  {
->         u64 attrs;
-> -       int err;
->
+> -       int i;
 >         /*
->          * RMPADJUST modifies RMP permissions of a lesser-privileged (num=
-erically
+>          * If no immovable memory found, or MEMORY_HOTREMOVE disabled,
+>          * use @region directly.
+> @@ -645,7 +644,7 @@ static bool process_mem_region(struct mem_vector *region,
+>          * If immovable memory found, filter the intersection between
+>          * immovable memory and @region.
+>          */
+> -       for (i = 0; i < num_immovable_mem; i++) {
+> +       for (int i = 0; i < num_immovable_mem; i++) {
+>                 u64 start, end, entry_end, region_end;
+>                 struct mem_vector entry;
+>
 > --
 > 2.34.1
 >
 
 
---=20
+-- 
 Thanks,
 ~Nick Desaulniers
