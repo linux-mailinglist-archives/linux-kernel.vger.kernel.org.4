@@ -2,153 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9585FAD0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01715FAD11
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJKGwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
+        id S229868AbiJKGwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJKGwg (ORCPT
+        with ESMTP id S229499AbiJKGws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:52:36 -0400
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A75D7C77A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:52:34 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowAAnLraqEkVjHF8rBA--.18271S2;
-        Tue, 11 Oct 2022 14:52:28 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     christophe.leroy@csgroup.eu, qiang.zhao@nxp.com, leoyang.li@nxp.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] soc: fsl: qe: Add check for ioremap
-Date:   Tue, 11 Oct 2022 14:52:25 +0800
-Message-Id: <20221011065225.16602-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Oct 2022 02:52:48 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A963280F5E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:52:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 204so12681768pfx.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 23:52:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IhQCr2/mj1To+oAjfcYwW5DtgdU/tRz+Z1vgx/smBpw=;
+        b=EIoaKf6Yioci3SpU35lj7pBWNJWY29BnptxpIevAzLWRb0fMQXSAVg9RZeBejpc3b/
+         K6wswV5lkxcUX4noYIDUBvyRvXOK6DPTR/4tj1vT3l3HGO5FM2HjorhVjmt6xdSWwky9
+         uMqRZskWt17tEX3HrKN2vJQhvQ2SrbWzknXc0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IhQCr2/mj1To+oAjfcYwW5DtgdU/tRz+Z1vgx/smBpw=;
+        b=zg/IwBXFw8nlt8ZesDfrLrsQdf1jvM5Lyh83bAADSYQeRKfJaIP/5+zpvvT1Bml92v
+         de8iZUaJV4DbZv1SJRsiz/kW2PXkxqG8EOnxxAc/sDqzhG1DQTKbwAEPg8uqdTHIBby4
+         FHDCGM2Lc7R6wT9aJk3vbb0VQRQ+TJKD1fQiaCtryYAyZwFjTofRwmmppGdLPfFjRs8X
+         nQr7vSHCkiuvJYPpwH5Zp1GNM/6ajWqroBChEA5eZLt1p9qe7YabzxHKIfX2xDHMhEH/
+         2YFr/GaNExORr0V67k2WhXeG48vVcloM7bx8rGqXqBYXLBiqY6Ykcs5hbHx6cYsJ7HJE
+         6VBg==
+X-Gm-Message-State: ACrzQf3YxrrJpF2LMKyhYWYw7ykgklCp/un7YHAuhRiYTKFtgUTHj7JG
+        qNVj9A9L461YhZLCj2mKX5t+0A==
+X-Google-Smtp-Source: AMsMyM6Kqhfv3NRPyt5rnHl2Q1aXOBuD+1vkAjs24JUi0+hR4+9li1k2ug5+2Md9Hy66LdAUpxUW6w==
+X-Received: by 2002:a05:6a00:e1b:b0:537:7c74:c405 with SMTP id bq27-20020a056a000e1b00b005377c74c405mr23253507pfb.43.1665471166164;
+        Mon, 10 Oct 2022 23:52:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902e54c00b0017ca9f4d22fsm7812359plf.209.2022.10.10.23.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 23:52:45 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <yujie.liu@intel.com>,
+        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] NFS: Avoid memcpy() run-time warning for struct sockaddr overflows
+Date:   Mon, 10 Oct 2022 23:52:43 -0700
+Message-Id: <20221011065243.583650-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3123; h=from:subject; bh=jFWeG4mKZjaCTmVttsBT+shSjRAcSAR+gkBCMpwmSmY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRRK7yqXTcuhapb8wt0RJRmg09UAG/TKO7oglxRdW fUaVX0eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0USuwAKCRCJcvTf3G3AJvslD/ 9rMzqrDJsGp2lh6GKEvBs28bCjDeXE2T7Cxi/kcY7Ig0nB2jUPlBR154A5lHiv13nNOwzwYRI8KyzS EY4dr1JmOCtv+YV8friFXHDCl/XZH/sgm5ZORmxYe6eOhEtirlIUrtNX6L2H7OQaEZNJaxs95oTIcn YbVhs1hld/dcMc59jYatSH3UvFuxEtJuyYnSRrOShtEswSY7LN0JOlH4A/obtgk/TMuUAaPoSz5AGp 1eKqmPrd+J5xsxjSBgtpMai2oXbOCNGPKl32MVK4dtw+6q/TrOQefDa2Vuzyjiw/jQKyUPXCjkIaku uo+eA0VlKL38fsrRvDCWq/cnmMPLEhrhnre7qxrUPdXACIy/wmnDK/k0fyv89RZsJDM9mUris0UeQh 2K4j8XalOzH/JRH1fCx18YAEmk1S++Np4r+JZcljnvMTZxMQlbeBkGsC15XIbrnBKZHPn/zG/HVW6n ze9+P+Cw8kHf70qSXdAhM05uuXIPOCA1sWdgyj+dPDBO+e9y83MomkH2GLt+5M8fXvH2R52BwsRVyt Rf4KB0xdwYx411OgsdlBB7xBIHvxsZu7ifi9sism/ahCDpaE+IKFQofw2dadbmqQWO3hQU+oBCktaV uyC7fxejf/vGiBTuy7wdoKunj/0T2Z3k1r/qZvsT7MupKRZ3/hClJhm5HQFQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAnLraqEkVjHF8rBA--.18271S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFW5KFWDuF1UJr48WFW7Jwb_yoW8KrW3p3
-        yDJFyUAFy5Kryxua97Jwn5XF15uayIka4fGrWvg3srCwnxX34DGrsaqFyjqFsxKrWFkr1f
-        JF43JF1a93WUtFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUEAp5UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As ioremap can return NULL pointer, it should
-be better to check the return value return error
-if fails.
-Moreover, the return value of qe_reset should be
-checked by cascade.
+The 'nfs_server' and 'mount_server' structures include a union of
+'struct sockaddr' (with the older 16 bytes max address size) and
+'struct sockaddr_storage' which is large enough to hold all the supported
+sa_family types (128 bytes max size). The runtime memcpy() buffer overflow
+checker is seeing attempts to write beyond the 16 bytes as an overflow,
+but the actual expected size is that of 'struct sockaddr_storage'. Adjust
+the pointers to the correct union member. Avoids this false positive
+run-time warning under CONFIG_FORTIFY_SOURCE:
 
-Fixes: 68f047e3d62e ("fsl/qe: add rx_sync and tx_sync for TDM mode")
-Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+  memcpy: detected field-spanning write (size 28) of single field "&ctx->nfs_server.address" at fs/nfs/namespace.c:178 (size 16)
+
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/all/202210110948.26b43120-yujie.liu@intel.com
+Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc: Anna Schumaker <anna@kernel.org>
+Cc: linux-nfs@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-Changelog:
+ fs/nfs/fs_context.c | 2 +-
+ fs/nfs/namespace.c  | 2 +-
+ fs/nfs/super.c      | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-v2 -> v3:
-
-1. Add return statement of qe_reset when CONFIG_QUICC_ENGINE is not selected.
-
-v1 -> v2:
-
-1. Change the position of the check for ioremap.
-2. Simplify the check for qe_reset.
-3. Remove the 'extern' keyword.
----
- drivers/soc/fsl/qe/qe.c | 12 ++++++++----
- include/soc/fsl/qe/qe.h |  7 +++++--
- 2 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
-index b3c226eb5292..33f76cc5872e 100644
---- a/drivers/soc/fsl/qe/qe.c
-+++ b/drivers/soc/fsl/qe/qe.c
-@@ -83,11 +83,14 @@ static phys_addr_t get_qe_base(void)
- 	return qebase;
- }
+diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
+index 4da701fd1424..bffa31bb35b9 100644
+--- a/fs/nfs/fs_context.c
++++ b/fs/nfs/fs_context.c
+@@ -1540,7 +1540,7 @@ static int nfs_init_fs_context(struct fs_context *fc)
+ 		ctx->version		= nfss->nfs_client->rpc_ops->version;
+ 		ctx->minorversion	= nfss->nfs_client->cl_minorversion;
  
--void qe_reset(void)
-+int qe_reset(void)
- {
- 	if (qe_immr == NULL)
- 		qe_immr = ioremap(get_qe_base(), QE_IMMAP_SIZE);
+-		memcpy(&ctx->nfs_server.address, &nfss->nfs_client->cl_addr,
++		memcpy(&ctx->nfs_server._address, &nfss->nfs_client->cl_addr,
+ 			ctx->nfs_server.addrlen);
  
-+	if (qe_immr == NULL)
-+		return -ENOMEM;
-+
- 	qe_snums_init();
+ 		if (fc->net_ns != net) {
+diff --git a/fs/nfs/namespace.c b/fs/nfs/namespace.c
+index 3295af4110f1..2f336ace7555 100644
+--- a/fs/nfs/namespace.c
++++ b/fs/nfs/namespace.c
+@@ -175,7 +175,7 @@ struct vfsmount *nfs_d_automount(struct path *path)
+ 	}
  
- 	qe_issue_cmd(QE_RESET, QE_CR_SUBBLOCK_INVALID,
-@@ -98,6 +101,8 @@ void qe_reset(void)
+ 	/* for submounts we want the same server; referrals will reassign */
+-	memcpy(&ctx->nfs_server.address, &client->cl_addr, client->cl_addrlen);
++	memcpy(&ctx->nfs_server._address, &client->cl_addr, client->cl_addrlen);
+ 	ctx->nfs_server.addrlen	= client->cl_addrlen;
+ 	ctx->nfs_server.port	= server->port;
  
- 	if (qe_sdma_init())
- 		panic("sdma init failed!");
-+
-+	return 0;
- }
- 
- int qe_issue_cmd(u32 cmd, u32 device, u8 mcn_protocol, u32 cmd_input)
-@@ -644,9 +649,8 @@ static int __init qe_init(void)
- 	np = of_find_compatible_node(NULL, NULL, "fsl,qe");
- 	if (!np)
- 		return -ENODEV;
--	qe_reset();
- 	of_node_put(np);
--	return 0;
-+	return qe_reset();
- }
- subsys_initcall(qe_init);
- 
-@@ -654,7 +658,7 @@ subsys_initcall(qe_init);
- static int qe_resume(struct platform_device *ofdev)
- {
- 	if (!qe_alive_during_sleep())
--		qe_reset();
-+		return qe_reset();
- 	return 0;
- }
- 
-diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
-index b02e9fe69146..0714b0ba7f49 100644
---- a/include/soc/fsl/qe/qe.h
-+++ b/include/soc/fsl/qe/qe.h
-@@ -84,9 +84,12 @@ extern spinlock_t cmxgcr_lock;
- 
- /* Export QE common operations */
- #ifdef CONFIG_QUICC_ENGINE
--extern void qe_reset(void);
-+int qe_reset(void);
- #else
--static inline void qe_reset(void) {}
-+static inline int qe_reset(void)
-+{
-+	return 0;
-+}
- #endif
- 
- int cpm_muram_init(void);
+diff --git a/fs/nfs/super.c b/fs/nfs/super.c
+index 82944e14fcea..8ea7dfdea427 100644
+--- a/fs/nfs/super.c
++++ b/fs/nfs/super.c
+@@ -823,7 +823,7 @@ static int nfs_request_mount(struct fs_context *fc,
+ 	struct nfs_fs_context *ctx = nfs_fc2context(fc);
+ 	struct nfs_mount_request request = {
+ 		.sap		= (struct sockaddr *)
+-						&ctx->mount_server.address,
++						&ctx->mount_server._address,
+ 		.dirpath	= ctx->nfs_server.export_path,
+ 		.protocol	= ctx->mount_server.protocol,
+ 		.fh		= root_fh,
+@@ -854,7 +854,7 @@ static int nfs_request_mount(struct fs_context *fc,
+ 	 * Construct the mount server's address.
+ 	 */
+ 	if (ctx->mount_server.address.sa_family == AF_UNSPEC) {
+-		memcpy(request.sap, &ctx->nfs_server.address,
++		memcpy(request.sap, &ctx->nfs_server._address,
+ 		       ctx->nfs_server.addrlen);
+ 		ctx->mount_server.addrlen = ctx->nfs_server.addrlen;
+ 	}
 -- 
-2.25.1
+2.34.1
 
