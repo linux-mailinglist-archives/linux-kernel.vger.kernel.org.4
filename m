@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1A25FB376
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D945FB387
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJKNdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S229800AbiJKNin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJKNde (ORCPT
+        with ESMTP id S229574AbiJKNil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:33:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7BE13D5C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665495213; x=1697031213;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/yu3qmwE7z5AN29MTBxAK8Vxbr09w0Sogy4HqWwAnwo=;
-  b=myL05Rmj1SQrqUZX6gqNU4wK8nVs7pQP1u2S4isNGMVtu8RjUompvHXM
-   8nN1K6HVP0wIreT1jUzOHtyGRTJ/54uhdsS3z6Tj+EEdiz/iF7YUmZjl2
-   BiVPAkqBXQ6fdOxa+tEmdj/yRIVFPc1JPce2oIncnbzFv3l1Msx/OUxff
-   mIa4biFH4H+QebZ5WyBxcfyLtOvBK9k+Bpm07Y2luPiDCnN8iNMwHH1BH
-   FVBt3cKAJR8EbyitI0/Cuaq1BjDeJNZ604q2iUxtMwFs1sRDZAXhxn7DL
-   +A/ijA/+qK3DEPSpP6laAWidLyuSM3oUKBJGAmL5g0fU7E1+4+rkQSQ6k
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="305557097"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="305557097"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 06:33:33 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="657351677"
-X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="657351677"
-Received: from cdai2-mobl.ccr.corp.intel.com ([10.254.213.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 06:33:29 -0700
-Message-ID: <aa5c745686127c5d1ff2496fcecc3ebf0839443c.camel@intel.com>
-Subject: Re: [PATCH] x86/tsc: Extend the watchdog check exemption to 4S/8S
- machine
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tim.c.chen@intel.com,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Yu Liao <liaoyu15@huawei.com>
-Date:   Tue, 11 Oct 2022 21:33:26 +0800
-In-Reply-To: <Y0Ugs/udnBh0Hv3C@hirez.programming.kicks-ass.net>
-References: <20221009051209.393377-1-feng.tang@intel.com>
-         <Y0LGLGW7RSlklKyl@hirez.programming.kicks-ass.net>
-         <Y0N0ENurfliW315D@feng-clx>
-         <aff10f33-b379-6872-f180-b38f6a0a669a@intel.com>
-         <Y0Ugs/udnBh0Hv3C@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 11 Oct 2022 09:38:41 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77615AC70;
+        Tue, 11 Oct 2022 06:38:35 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id f140so13558899pfa.1;
+        Tue, 11 Oct 2022 06:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bzzPUzUPLy0h+4fYu8F878Wbdxnodxshq8BiiqN94SI=;
+        b=j+OKWawPNOYLcaoUHOwfp/7w50cmIfVKS3ortzGoErB9yh9hYO9dveKWZNq8ZANlcY
+         WfA8yt8VFRA5hPyeSo4+hkUT5LR2tFj8UEVgC1fqYlSn/jeGibnQfOghFnktYkNyyTcH
+         OnRk2LvUoflAUsZfpNT/3HnasIU1V0fIU58Ggp6pXrs/EFitWqk8ZVLPITgq/zTbNq02
+         QC1QzEecGLaCRBtjdbw44W9tQPdoT8EAOHUxm3R4lfHCsQ60PEuabqyTTWI9IZk2b2B4
+         tBq3WNHslX0zzcHfudqSQScRMIXPhRu+OCw19as4+kY+7SgUOVt67ZnklZ9b2ri/N89Q
+         Mb2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bzzPUzUPLy0h+4fYu8F878Wbdxnodxshq8BiiqN94SI=;
+        b=sJ5KCQyAQYvR+5iZlTuKGmdf7+YxAyzWNV4kWCfU/+vb3yIsPRjTS5rx+G0h0Kwt1S
+         0EaiCFH6v5SSY2FMtnk+mlydmNGhD9ysoriOJpuHUIYoTEbiWOaMfcwAoDhBuZzvpjkB
+         L+dMA7PX9zvEJS+HFhBvlnyzhgxYLjVn6MiZ8feVgkJfBzjqJmguX3Jy29dD1yZW8DS3
+         t8771rj0fSQOsPmPsC3vdeJTDXajrcVdMxFiVCG1Y1HbyNmJacemD7Nrog67bvzoXVa6
+         PDVCJHUrrEybTK6xuBxQgGij+SW7eqwNkMeTL1t2cjvStv3eAfrpJvmuaebZq3TpOeOy
+         KzGQ==
+X-Gm-Message-State: ACrzQf1sVxFyJM/YPm/g5BB9V597bY7/nHc/+sD3wE8nhn+EpLlVIAPz
+        8CGpRuVcXxSubSGGm+U7c3M=
+X-Google-Smtp-Source: AMsMyM5TUij05cN2J0JPTX7D3irn7Y28ZuTNVrFNg+gezWu7sg90bbaSvJoIjlSgCBtj7mQwnitvtA==
+X-Received: by 2002:a63:3104:0:b0:459:a367:95ad with SMTP id x4-20020a633104000000b00459a36795admr21666533pgx.112.1665495515411;
+        Tue, 11 Oct 2022 06:38:35 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.236])
+        by smtp.gmail.com with ESMTPSA id f11-20020aa7968b000000b0053e93aa8fb9sm8984951pfk.71.2022.10.11.06.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 06:38:34 -0700 (PDT)
+From:   Qibo Huang <huangqibo.tech@gmail.com>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Qibo Huang <huangqibo.tech@gmail.com>
+Subject: [PATCH 2/2] thermal/governors: Fix cooling device setting cooling state failure
+Date:   Tue, 11 Oct 2022 21:38:22 +0800
+Message-Id: <20221011133822.20213-1-huangqibo.tech@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-11 at 09:52 +0200, Peter Zijlstra wrote:
-> On Mon, Oct 10, 2022 at 07:23:10AM -0700, Dave Hansen wrote:
-> > On 10/9/22 18:23, Feng Tang wrote:
-> > > > > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> > > > > index cafacb2e58cc..b4ea79cb1d1a 100644
-> > > > > --- a/arch/x86/kernel/tsc.c
-> > > > > +++ b/arch/x86/kernel/tsc.c
-> > > > > @@ -1217,7 +1217,7 @@ static void __init
-> > > > > check_system_tsc_reliable(void)
-> > > > >  	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
-> > > > >  	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
-> > > > >  	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
-> > > > > -	    nr_online_nodes <= 2)
-> > > > > +	    nr_online_nodes <= 8)
-> > > > So you're saying all 8 socket systems since Broadwell (?) are
-> > > > TSC
-> > > > sync'ed ?
-> > > No, I didn't mean that. I haven't got chance to any 8 sockets
-> > > machine, and I got a report last month that on one 8S machine,
-> > > the TSC was judged 'unstable' by HPET as watchdog.
-> > 
-> > That's not a great check.  Think about numa=fake=4U, for
-> > instance.  Or a
-> > single-socket system with persistent memory and high bandwidth
-> > memory.
-> > 
-> > Basically 'nr_online_nodes' is a software construct.  It's going to
-> > be
-> > really hard to infer anything from it about what the _hardware_ is.
-> 
-> We have both c->phys_proc_id and c->logical_proc_id along with
-> logical_packages.
-> 
-> I'm thinking you want something like max(c->phys_proc_id) <= 4.
-> Because
-> even if you only populate 4 sockets of an 8 socket server you're up a
-> creek without no paddles.
-> 
-> But it all comes down to how much drugs the firmware teams have had
-> :/
-> It is entirely possible to enumerate with phys_proc_id==42 on a 2
-> socket
-> system.
+Because the __thermal_cdev_update function traverses the
+cooling_device->thermal_instances list to obtain the maximum
+target state, and then the cooling device sets the maximum
+cooling state. However, the power_actor_set_power function
+only updates the target value of thermal_zone->thermal_instances
+to the target state, and does not update the target value of
+cooling_device->thermal_instances, resulting in the target
+being 0 all the time.
 
-topology_max_packages() or variable logical_packages can tell the
-maximum packages.
-But this check_system_tsc_reliable() is done in early boot phase where
-we have boot cpu only. And the cpu topology is not built up at this
-stage.
+Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
+---
+ drivers/thermal/gov_power_allocator.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-thanks,
-rui
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 2d1aeaba38a8..1db697d93fa2 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -293,6 +293,7 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
+ 		      struct thermal_instance *instance, u32 power)
+ {
+ 	unsigned long state;
++	struct thermal_instance *cdev_instance;
+ 	int ret;
+ 
+ 	ret = cdev->ops->power2state(cdev, power, &state);
+@@ -300,6 +301,11 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
+ 		return ret;
+ 
+ 	instance->target = clamp_val(state, instance->lower, instance->upper);
++	list_for_each_entry(cdev_instance, &cdev->thermal_instances, cdev_node){
++		if(cdev_instance->tz->id == instance->tz->id){
++			cdev_instance->target = state;
++		}
++	}
+ 	mutex_lock(&cdev->lock);
+ 	__thermal_cdev_update(cdev);
+ 	mutex_unlock(&cdev->lock);
+-- 
+2.37.1
 
