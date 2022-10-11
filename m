@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0695FAE36
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCC15FAE30
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 10:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiJKIOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 04:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S230061AbiJKIOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 04:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiJKINj (ORCPT
+        with ESMTP id S230084AbiJKINj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Oct 2022 04:13:39 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA196857D4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2F48A1E2;
         Tue, 11 Oct 2022 01:13:37 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MmpQh2mFkzl5rR;
-        Tue, 11 Oct 2022 16:11:40 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MmpQJ40rBzKGH3;
+        Tue, 11 Oct 2022 16:11:20 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgA3N8msJUVjAYFiAA--.27549S8;
+        by APP4 (Coremail) with SMTP id gCh0CgA3N8msJUVjAYFiAA--.27549S9;
         Tue, 11 Oct 2022 16:13:36 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     tj@kernel.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH -next 4/5] blk-iocost: bypass if only one cgroup issues io
-Date:   Tue, 11 Oct 2022 16:35:46 +0800
-Message-Id: <20221011083547.1831389-5-yukuai1@huaweicloud.com>
+Subject: [PATCH -next 5/5] blk-iocost: read 'ioc->params' inside 'ioc->lock' in ioc_timer_fn()
+Date:   Tue, 11 Oct 2022 16:35:47 +0800
+Message-Id: <20221011083547.1831389-6-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221011083547.1831389-1-yukuai1@huaweicloud.com>
 References: <20221011083547.1831389-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgA3N8msJUVjAYFiAA--.27549S8
-X-Coremail-Antispam: 1UD129KBjvdXoWrKry8Kryfur47Ww1DAw4fKrg_yoWDJwb_Aa
-        4rK3sxW34rZ3WSka4q9Fs0qrWFgws0vr4Duayxtry7JF18XFnFkanrKr18Ar43CFW5WFZ5
-        CFsrXry2yr4xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: gCh0CgA3N8msJUVjAYFiAA--.27549S9
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw1rJrykKw1xZF1ktrWxCrg_yoWkKFc_ur
+        9Yq34vgryxGasxWFs09an0vw42qws5tr43KF15WFW7Z3WDJFsayw1xGr97Cr47ua47Wa45
+        GayDWrZxJrWkWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbTkFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
         IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
@@ -62,33 +62,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-In this special case, there is no need to throttle io.
+'ioc->params' is updated in ioc_refresh_params(), which is proteced by
+'ioc->lock', however, ioc_timer_fn() read params outside the lock.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/blk-iocost.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ block/blk-iocost.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 5acc5f13bbd6..32e7e416d67c 100644
+index 32e7e416d67c..acb10ba49da9 100644
 --- a/block/blk-iocost.c
 +++ b/block/blk-iocost.c
-@@ -2564,8 +2564,13 @@ static void ioc_rqos_throttle(struct rq_qos *rqos, struct bio *bio)
- 	bool use_debt, ioc_locked;
- 	unsigned long flags;
+@@ -2203,8 +2203,8 @@ static void ioc_timer_fn(struct timer_list *timer)
+ 	LIST_HEAD(surpluses);
+ 	int nr_debtors, nr_shortages = 0, nr_lagging = 0;
+ 	u64 usage_us_sum = 0;
+-	u32 ppm_rthr = MILLION - ioc->params.qos[QOS_RPPM];
+-	u32 ppm_wthr = MILLION - ioc->params.qos[QOS_WPPM];
++	u32 ppm_rthr;
++	u32 ppm_wthr;
+ 	u32 missed_ppm[2], rq_wait_pct;
+ 	u64 period_vtime;
+ 	int prev_busy_level;
+@@ -2215,6 +2215,8 @@ static void ioc_timer_fn(struct timer_list *timer)
+ 	/* take care of active iocgs */
+ 	spin_lock_irq(&ioc->lock);
  
--	/* bypass IOs if disabled, still initializing, or for root cgroup */
--	if (!ioc->enabled || !iocg || !iocg->level)
-+	/*
-+	 * bypass IOs if disabled, still initializing, for root cgroup,
-+	 * or the cgroup is the only cgroup with io.
-+	 */
-+	if (!ioc->enabled || !iocg || !iocg->level ||
-+	    (iocg->hweight_inuse == WEIGHT_ONE &&
-+	     atomic_read(&ioc->hweight_gen) == iocg->hweight_gen))
- 		return;
++	ppm_rthr = MILLION - ioc->params.qos[QOS_RPPM];
++	ppm_wthr = MILLION - ioc->params.qos[QOS_WPPM];
+ 	ioc_now(ioc, &now);
  
- 	/* calculate the absolute vtime cost */
+ 	period_vtime = now.vnow - ioc->period_at_vtime;
 -- 
 2.31.1
 
