@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9175FBF9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7865FBFA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJLDsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 23:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229757AbiJLDtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 23:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJLDsC (ORCPT
+        with ESMTP id S229698AbiJLDsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 23:48:02 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887BCA50EC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:47:49 -0700 (PDT)
+        Tue, 11 Oct 2022 23:48:18 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF6DA98E2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:47:55 -0700 (PDT)
 Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221012034747epoutp036765a8dd4cb71ed81c7b133b2ed0c018~dNbASpwnR2833228332epoutp03r
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:47:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221012034747epoutp036765a8dd4cb71ed81c7b133b2ed0c018~dNbASpwnR2833228332epoutp03r
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221012034753epoutp04e5276dd382c2b5b185871186dd697d22~dNbFfpr6U0566605666epoutp04q
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:47:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221012034753epoutp04e5276dd382c2b5b185871186dd697d22~dNbFfpr6U0566605666epoutp04q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665546467;
-        bh=Vod73UxxDDF6/1UwF8ErhkgY2evirPrqZuccBO7Gzrk=;
+        s=mail20170921; t=1665546473;
+        bh=NO3l/8N67+LRHCcmkiDY0z0XWJK5GVH8GrsUrIeLNuc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mm/eoJEIKmcqRMtgebNJW+2q29aAosovxIZAur/f+Bcd8RmSl+xuoXts5mWzDsm81
-         RWostWLGmQZ7n2rJBSrjj8xTHSWZveu9HJzzyEGVBHq/w4AGM3makZ24aYCxJYv40z
-         KDk/KpG7AzfMCyojcQTCn4222BOyC1YPwcxEPduw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20221012034746epcas5p30913758ec6eaddf9e3a10c840b1243e3~dNa-b1Lw61683016830epcas5p3G;
-        Wed, 12 Oct 2022 03:47:46 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MnJWg3QcBz4x9Ps; Wed, 12 Oct
-        2022 03:47:43 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        23.2E.26992.FD836436; Wed, 12 Oct 2022 12:47:43 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        b=ub1RPf+SUFdKJNnc1OwHA0PUF5mOvLP4u9JXQrPSR7ReNgBylux/w3i3iTb7lLWck
+         AZW+8DNn1vW2iSZWgRqGeKJQwTf2X6iYh/dZMjz2N/m0r7QX+uiUzk6tKfFTJnT35n
+         3lB+QFBm1dt/MJ9ICqUvDR2ndAVr8Fn3DGnG5PVo=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221012034751epcas5p211d6de964178e3112a95ea5b67f6fb95~dNbEZyFE00049100491epcas5p2O;
+        Wed, 12 Oct 2022 03:47:51 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4MnJWm3C2xz4x9Pr; Wed, 12 Oct
+        2022 03:47:48 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        30.FB.39477.4E836436; Wed, 12 Oct 2022 12:47:48 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221011125155epcas5p1e47309b4dd767e81817c316aa0e8b7ca~dBMz2YuYK3098030980epcas5p1J;
-        Tue, 11 Oct 2022 12:51:55 +0000 (GMT)
+        20221011125158epcas5p14f2b333fdb1eed793e9fbf85409f5a36~dBM3BCsZi0252702527epcas5p1F;
+        Tue, 11 Oct 2022 12:51:58 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221011125155epsmtrp206f24d925e521a9ae8ce504b08b9f26b~dBMz1OKAT1820318203epsmtrp2_;
-        Tue, 11 Oct 2022 12:51:55 +0000 (GMT)
-X-AuditID: b6c32a49-0c7ff70000016970-48-634638df547a
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221011125158epsmtrp18a6384d603d8c9f5358d089b53f80480~dBM2-4SZh2654526545epsmtrp1F;
+        Tue, 11 Oct 2022 12:51:58 +0000 (GMT)
+X-AuditID: b6c32a4a-007ff70000019a35-74-634638e44bc9
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CD.0D.14392.BE665436; Tue, 11 Oct 2022 21:51:55 +0900 (KST)
+        5F.0D.14392.EE665436; Tue, 11 Oct 2022 21:51:58 +0900 (KST)
 Received: from cheetah.sa.corp.samsungelectronics.net (unknown
         [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221011125152epsmtip11fb87b5cc95cb155429249f50976d5a8~dBMwvzaTN2178621786epsmtip1s;
-        Tue, 11 Oct 2022 12:51:52 +0000 (GMT)
+        20221011125155epsmtip19b75ee41d1f37c2f515ed8cc37e90ea4~dBMz5fms02178321783epsmtip15;
+        Tue, 11 Oct 2022 12:51:55 +0000 (GMT)
 From:   aakarsh jain <aakarsh.jain@samsung.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,61 +64,61 @@ Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
         andi@etezian.org, alim.akhtar@samsung.com,
         aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
         linux-fsd@tesla.com, smitha.t@samsung.com, aakarsh.jain@samsung.com
-Subject: [Patch v3 05/15] Documention: v4l: Documentation for VP9 CIDs.
-Date:   Tue, 11 Oct 2022 17:55:06 +0530
-Message-Id: <20221011122516.32135-6-aakarsh.jain@samsung.com>
+Subject: [Patch v3 06/15] media: v4l2: Add v4l2 control IDs for VP9 encoder.
+Date:   Tue, 11 Oct 2022 17:55:07 +0530
+Message-Id: <20221011122516.32135-7-aakarsh.jain@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221011122516.32135-1-aakarsh.jain@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTe1BUVRzHO/fevXdhBucGKEcmcOdO2kCw7sbDAwky5NgtGaGpsGya9bbc
-        AWRf7C5mlAkqlgQqFcUriJc0IA+Xh5tC8ViglApEIdSFVWwAZzJlIwGh2uVC/ff5/c73+/vO
-        /M45YtzdRnqLkzVGXq/hVAzpSrT1+PkFTqBdStlSxXr0m7lQhGylbSSqnJ/C0ESlnUDdza0U
-        arlWjKOa/k4RKrP8LEIXuu4Q6Py043So0EqgqbIGgGaKxklkmhwRodv39qLhiyUkymlqFaF6
-        i5VC1aNDGDprWsJQReufFMrqsFDI2t4G0PETFiwKsudKzwHWbK0C7GjVLM5+W2Sl2Mr2GYw1
-        1Z4k2Vsj7STbXHWEzepdJNhTLbWA/fvoVxSbbRklWbvJl708Z6fi1u1L2Z7Ecwm8XsJrlNqE
-        ZE1iBLP7VcULipBQmTxQHoa2MRINp+YjmJ0xcYG7klWONTCSg5wqzdGK4wwGZmvkdr02zchL
-        krQGYwTD6xJUumCd1MCpDWmaRKmGN4bLZbLnQhzC/SlJOZcGSV2f7NAf5XmiDPDFM9nARQzp
-        YPhRZiHIBq5id/oSgMWmWUooZgFsHZrDhOIvAOfsudiaZTpnGRcOOgA8lveAEIosDNY115BO
-        FUkHwu+rO1fYk84EcPJjo1OE08cIaB147AgRiz3oF6GtOMqpIejN8Lv82yttNzoCPi5YDdsE
-        65o6cSe70JHwYXUf6RwD6U9c4ELHTUIQ7YSPzs6uGjzgvf4WSmBvaL/fQQqshJMVM7jAKtjY
-        /vmqdwfsvFZCOHNx2g82XtwqtH1g/uWGlZE4vQ7mPr67Ot4NmkvXeAssuTUvEvgp2FNXDQRm
-        4dxC7eqC8gBcyhmnzgDfov8jvgagFmzkdQZ1Im8I0ck1/Lv/3ZpSqzaBlafu/5IZWG0PpN0A
-        E4NuAMU44+kGyqKV7m4J3HvpvF6r0KepeEM3CHHsLw/3Xq/UOv6KxqiQB4fJgkNDQ4PDgkLl
-        jJdbZYG/0p1O5Ix8Cs/reP2aDxO7eGdgMTpZbt4Vz83aD96xfjhWr3AxVrwWTsX+4jXx6YHU
-        TJj8SNJvebMxoPcEpk0fON97/X6JcWxCGoX8Div+aao/ojKVD/gpbF3ZrtZkRUABtxxwKLqq
-        3LRINC88nZFactBu6Yre4Mkh23x8bu3rg2MbcZFPfOZPWza8X12+/Fnql9L9HgE1YaPbyq05
-        0TXRC+jZH3tm9lwxvTw8G/EEf+r3N76Jf7hoDpq8I9/r02L3LR1siv3V3AdGvLxGp2J+uC6B
-        Qfvgslr6/FvdZ65q9FFqVz42rOHt3VVp0ydPux7IV+2JVOpv3jh69cl02SubwjOHGX6cO35D
-        1H7h7o4plj0cZeIYwpDEyf1xvYH7F9GaDFdzBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsWy7bCSnO7rNNdkg6U/JCye7pjJavFg3jY2
-        i8U/njNZ3F/8mcXi0Oat7BZbrsxmtlh+/ACrxfwj51gtth98xGKx8QVQ9uLMuywWz+evY7R4
-        Oesem8Wmx9dYLR6+Cre4vGsOm0XPhq2sFmuP3GW3WHr9IpPFsk1/mCwWbf3CbtG69wi7xd09
-        2xgtWtqOMDlIeKyZt4bRY8fdJYwe15d8YvbYOesuu8fiPS+ZPDat6mTzuHNtD5vH5iX1Hq1H
-        f7F49G1Zxejxr2kuu0fXketsHp83yXmc+vqZPYAvissmJTUnsyy1SN8ugSujZ/cFtoJjBhXv
-        F05kbWCcpt7FyMkhIWAi8aLnL3MXIxeHkMBuRolnfbtZIRIyEv/bjrFD2MISK/89Z4coamaS
-        6LuwGqyITUBXYv/SA2wgCRGBVkaJ6ys7mUAcZoHZLBI/Jh0AquLgEBZwl3gw2wGkgUVAVWLf
-        1IfsIGFeAVuJ3zOYIBbIS6zecIAZxOYUsJP4uPQYG4gtBFTS+H4q0wRGvgWMDKsYJVMLinPT
-        c4sNCwzzUsv1ihNzi0vz0vWS83M3MYLjTktzB+P2VR/0DjEycTAeYpTgYFYS4WWc75QsxJuS
-        WFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA5NLnII2p8v1+2u9
-        V5y/3GMT53Hm1G3/gLO/jMTvPbcM2H7Qe8MZ7qOiYjsF2HfWh5Ys8+uN0pl4Z/lTqbjG55v+
-        7onelGnksnae+KLv068I3F55tr+Yn9N/1Z2cLy9z19QnXD/49rv1O8NTbQl3Hny0elZ0K3JG
-        UFVFoUmG4eZVV3ZyyR31dJCWPvqu4crdaCGpwyFpGzwz3HW7vXJL235WL+2PN0hyPzld4KvO
-        XpNOmwbXO41xXKUbhHXuidXebAqvj55woWCVrgvD3dAbs+ccmbB5fvJX7TfzQnpevP6WZ8Yz
-        6doRn+9X5vbOyDv/34ExcurMe0lntsqu3v52Z/jJNYkrQwzK2FI3hL24q/xCiaU4I9FQi7mo
-        OBEAiDX9ZSoDAAA=
-X-CMS-MailID: 20221011125155epcas5p1e47309b4dd767e81817c316aa0e8b7ca
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf0xTVxTHva+vr4VQ91JgXmAINOwHXUAqpbsslOk05IlKiFtiGFFWy0uL
+        9Ff6Wsc02VCGdo3o3GQOZIAUZBQELT9EVgYURCELCZPRxFFWBMS66Rg/NjfQjVLc/vuce77n
+        3nO+914ui+8mQrm5GgOt18hUAsIfb++LEcZOo1R5fOe1YDTTUcpG7op2AlmezGLoZ8sCjhwt
+        bRzUOnqRhepu9bBRZf8wG13vvYejaw9WsyOlLhzNVjYB5CmbIJBtaoyNJh/uR3c6ywl0+mob
+        G13pd3FQrXMEQ5dtKxiqblvkoKKufg5y2dsB+uRkP7YNUo0VjYDqcNUAylkzz6JulLk4lMXu
+        wSib9VOCGh+zE1RLzcdU0c2/cepMqxVQz058zaHM/U6CWrBtpoaWFjgZG9/LS1bSshxaH0lr
+        5NqcXI1CKtj9TvaO7ERJvChWlITeEERqZGpaKti5JyM2NVe1aoMg8ohMZVxdypAxjGBLSrJe
+        azTQkUotY5AKaF2OSifWxTEyNWPUKOI0tOFNUXz81sRV4ft5yjOFjO6CJP/0wmO8AHRtMQM/
+        LiTFcOpGN2YG/lw++S2Alj9PAF8wD+DlwlHCF/wB4ODMMtsMuGsl8wXroi4A21wP1oMiDN4t
+        nsS8+xJkLOyu7SG8HEQeB3DKZPCKWGQhDl3fL3O8iUByD/xl4ibuZZx8GTa769cKeKQUPip1
+        s30NRsCGqz0sL/uRKfD32oG1liB5yg86L7YQPtFOWFzm4fg4ED681brOodBz9uQ6y+FUtYfl
+        YxVstp/HffwW7Bktx72jscgY2Ny5bkw4LBlqWhuGRW6ExcvTmG+dBzsqnvMrsHz8yXqfL8G+
+        hlrgYwpWlVRyfK6cA7DeYSM+A5vL/j+iCgArCKF1jFpBM4m6rRr6g/9uTa5V28DaUxemdYBJ
+        91ycA2Bc4ACQyxIE8UDl23I+L0f24VFar83WG1U04wCJqwaeY4UGy7Wrf0VjyBaJk+LFEolE
+        nJQgEQk28SxfCeV8UiEz0Hk0raP1z+swrl9oAXZppTJC+uLtdIfVeKnPVBC2nfvb/btzE+Ek
+        M7i39+ipNEnmAYtJJ82xfRG1Ia8l2l7TOJcdQN654txRtKsqIHgo4nF347Fji0ZVfqas5MAS
+        5PTWk3U/JYxJ8duvZ5k7kXyaHzic5cYTY4WZPebmmX2K0tm4qPwvD9U1NcUvOrPHe19IENbs
+        imk4WO9RjvzIC03rDL6XHtt+vEoezW2MPG/6aCBhe4Dh/sqzduyHtqzdik1/DRbLZ5WkPeA1
+        8aPPnw5905pqDgkMS/5VY30anfldYUh6tend4aiUw5QnM2ze32FS9x4O36/e9+oFZnTbzKG9
+        A0GFKUcOnrXyN1xXL/2TK8AZpUwkZOkZ2b/rjBvMcwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsWy7bCSnO67NNdkg3f9BhZPd8xktXgwbxub
+        xeIfz5ks7i/+zGJxaPNWdostV2YzWyw/foDVYv6Rc6wW2w8+YrHY+AIoe3HmXRaL5/PXMVq8
+        nHWPzWLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4u6e
+        bYwWLW1HmBwkPNbMW8PosePuEkaP60s+MXvsnHWX3WPxnpdMHptWdbJ53Lm2h81j85J6j9aj
+        v1g8+rasYvT41zSX3aPryHU2j8+b5DxOff3MHsAXxWWTkpqTWZZapG+XwJXR11xcMN2soufz
+        O5YGxr36XYwcHBICJhKfGhi7GLk4hAR2M0qcmPOFtYuREyguI/G/7Rg7hC0ssfLfc3aIomYm
+        iQfXvjOCJNgEdCX2Lz3ABpIQEWhllLi+spMJxGEWmM0i8WPSAbBRwgI+Eq/vHWUBsVkEVCXW
+        P1jJBmLzCthKvJ35AGqdvMTqDQeYQWxOATuJj0uPgdUIAdU0vp/KNIGRbwEjwypGydSC4tz0
+        3GLDAsO81HK94sTc4tK8dL3k/NxNjOC409Lcwbh91Qe9Q4xMHIyHGCU4mJVEeBnnOyUL8aYk
+        VlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwLT0s7c0X443p1DQ
+        CYvk7zwLRQ+9duJvSMzdP6cio1Ruw51PL1XWc6fWToz5wHpwouGUiRetDlz+Jv9B1Oh+QV7o
+        myvWHxM2tUSmJ5wrOzzv9CR74frXt2WEmlVmppcadXHn9u9qC73NIr5aveFQ68fNttIJy5YE
+        C7N8Un73MPxyGdcmabd6JimGclmPc+VSW2SNp9r47WQrrGi5t3C74ou9YlKvTbpSPy52XVhq
+        vmWCcuQCQWPteSyaKxvVYqWOmz2RCfvAU/1a9EJ2Np/Y5jqxZWXFOwIOtJfcfRiedc5384NT
+        68trvrX1sLSYaE9aVHdu/stZ6ZeuLL4SnbXjpvQlBdX3GSGvf+RH/wr/rcRSnJFoqMVcVJwI
+        ABJtdGYqAwAA
+X-CMS-MailID: 20221011125158epcas5p14f2b333fdb1eed793e9fbf85409f5a36
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221011125155epcas5p1e47309b4dd767e81817c316aa0e8b7ca
+X-CMS-RootMailID: 20221011125158epcas5p14f2b333fdb1eed793e9fbf85409f5a36
 References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
-        <CGME20221011125155epcas5p1e47309b4dd767e81817c316aa0e8b7ca@epcas5p1.samsung.com>
+        <CGME20221011125158epcas5p14f2b333fdb1eed793e9fbf85409f5a36@epcas5p1.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -127,200 +127,143 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Smitha T Murthy <smitha.t@samsung.com>
 
-Adds V4l2 controls for VP9 encoder documention.
+Add V4l2 controls for VP9 encoder
 
 Cc: linux-fsd@tesla.com
 Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
 Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
 ---
- .../media/v4l/ext-ctrls-codec.rst             | 167 ++++++++++++++++++
- 1 file changed, 167 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c | 44 +++++++++++++++++++++++
+ include/uapi/linux/v4l2-controls.h        | 33 +++++++++++++++++
+ 2 files changed, 77 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 2a165ae063fb..2277d83a7cf0 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2187,6 +2187,16 @@ enum v4l2_mpeg_video_vp8_profile -
-     * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_3``
-       - Profile 3
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index e22921e7ea61..2d92e93158bd 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -577,6 +577,21 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		"Cyclic",
+ 		NULL,
+ 	};
++	static const char * const vp9_golden_framesel[] = {
++		"Use previous",
++		"Use refresh period",
++		NULL,
++	};
++	static const char * const vp9_ref_num_for_pframes[] = {
++		"1",
++		"2",
++		NULL,
++	};
++	static const char * const vp9_max_partition_depth[] = {
++	"No CU partition depth",
++	"Allow 1 CU partition depth",
++	NULL,
++	};
  
-+VP9 Control Reference
-+---------------------
-+
-+The VP9 controls include controls for encoding parameters of VP9 video
-+codec.
-+
-+.. _vp9-control-id:
-+
-+VP9 Control IDs
-+
- .. _v4l2-mpeg-video-vp9-profile:
+ 	switch (id) {
+ 	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
+@@ -708,6 +723,12 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		return hevc_decode_mode;
+ 	case V4L2_CID_STATELESS_HEVC_START_CODE:
+ 		return hevc_start_code;
++	case V4L2_CID_CODEC_VP9_GOLDEN_FRAMESEL:
++		return vp9_golden_framesel;
++	case V4L2_CID_CODEC_VP9_REF_NUMBER_FOR_PFRAMES:
++		return vp9_ref_num_for_pframes;
++	case V4L2_CID_CODEC_VP9_MAX_PARTITION_DEPTH:
++		return vp9_max_partition_depth;
+ 	case V4L2_CID_CAMERA_ORIENTATION:
+ 		return camera_orientation;
+ 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
+@@ -950,6 +971,26 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_VP8_PROFILE:			return "VP8 Profile";
+ 	case V4L2_CID_MPEG_VIDEO_VP9_PROFILE:			return "VP9 Profile";
+ 	case V4L2_CID_MPEG_VIDEO_VP9_LEVEL:			return "VP9 Level";
++	case V4L2_CID_CODEC_VP9_I_FRAME_QP:		return "VP9 I Frame QP Value";
++	case V4L2_CID_CODEC_VP9_P_FRAME_QP:		return "VP9 P Frame QP Value";
++	case V4L2_CID_CODEC_VP9_MAX_QP:			return "VP9 Frame QP MAX Value";
++	case V4L2_CID_CODEC_VP9_MIN_QP:			return "VP9 Frame QP MIN Value";
++	case V4L2_CID_CODEC_VP9_RC_FRAME_RATE:		return "VP9 Frame Rate";
++	case V4L2_CID_CODEC_VP9_GOLDEN_FRAMESEL:	return "VP9 Indication of Golden Frame";
++	case V4L2_CID_CODEC_VP9_GF_REFRESH_PERIOD:	return "VP9 Golden Frame Refresh Period";
++	case V4L2_CID_CODEC_VP9_HIERARCHY_QP_ENABLE:	return "VP9 Hierarchical QP Enable";
++	case V4L2_CID_CODEC_VP9_REF_NUMBER_FOR_PFRAMES:	return "VP9 Number of Reference Pictures";
++	case V4L2_CID_CODEC_VP9_HIERARCHICAL_CODING_LAYER:return "VP9 Num of Hierarchical Layers";
++	case V4L2_CID_CODEC_VP9_MAX_PARTITION_DEPTH:	return "VP9 Maximum Coding Unit Depth";
++	case V4L2_CID_CODEC_VP9_DISABLE_INTRA_PU_SPLIT:	return "VP9 Disable Intra PU Split";
++	case V4L2_CID_CODEC_VP9_HIERARCHY_RC_ENABLE:	return "VP9 Hierarchical BitRate Enable";
++	case V4L2_CID_CODEC_VP9_HIER_CODING_L0_BR:	return "VP9 Hierarchical Layer 0 BitRate";
++	case V4L2_CID_CODEC_VP9_HIER_CODING_L1_BR:	return "VP9 Hierarchical Layer 1 BitRate";
++	case V4L2_CID_CODEC_VP9_HIER_CODING_L2_BR:	return "VP9 Hierarchical Layer 2 BitRate";
++	case V4L2_CID_CODEC_VP9_HIER_CODING_L0_QP:	return "VP9 Layer0 QP Value";
++	case V4L2_CID_CODEC_VP9_HIER_CODING_L1_QP:	return "VP9 Layer1 QP Value";
++	case V4L2_CID_CODEC_VP9_HIER_CODING_L2_QP:	return "VP9 Layer2 QP Value";
++	case V4L2_CID_CODEC_VP9_DISABLE_IVF_HEADER:	return "VP9 IVF header generation";
  
- ``V4L2_CID_MPEG_VIDEO_VP9_PROFILE``
-@@ -2253,6 +2263,163 @@ enum v4l2_mpeg_video_vp9_level -
-     * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_2``
-       - Level 6.2
+ 	/* HEVC controls */
+ 	case V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP:		return "HEVC I-Frame QP Value";
+@@ -1366,6 +1407,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_MPEG_VIDEO_HEVC_LOOP_FILTER_MODE:
+ 	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:
+ 	case V4L2_CID_STATELESS_HEVC_START_CODE:
++	case V4L2_CID_CODEC_VP9_GOLDEN_FRAMESEL:
++	case V4L2_CID_CODEC_VP9_REF_NUMBER_FOR_PFRAMES:
++	case V4L2_CID_CODEC_VP9_MAX_PARTITION_DEPTH:
+ 	case V4L2_CID_STATELESS_H264_DECODE_MODE:
+ 	case V4L2_CID_STATELESS_H264_START_CODE:
+ 	case V4L2_CID_CAMERA_ORIENTATION:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index b5e7d082b8ad..a60b60bc4ad4 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -722,6 +722,38 @@ enum v4l2_mpeg_video_vp9_level {
+ 	V4L2_MPEG_VIDEO_VP9_LEVEL_6_1	= 12,
+ 	V4L2_MPEG_VIDEO_VP9_LEVEL_6_2	= 13,
+ };
++#define V4L2_CID_CODEC_VP9_RC_FRAME_RATE	(V4L2_CID_CODEC_BASE+514)
++#define V4L2_CID_CODEC_VP9_MIN_QP		(V4L2_CID_CODEC_BASE+515)
++#define V4L2_CID_CODEC_VP9_MAX_QP		(V4L2_CID_CODEC_BASE+516)
++#define V4L2_CID_CODEC_VP9_I_FRAME_QP	(V4L2_CID_CODEC_BASE+517)
++#define V4L2_CID_CODEC_VP9_P_FRAME_QP	(V4L2_CID_CODEC_BASE+518)
++#define V4L2_CID_CODEC_VP9_GOLDEN_FRAMESEL	(V4L2_CID_CODEC_BASE+519)
++enum v4l2_mpeg_vp9_golden_framesel {
++	V4L2_CID_CODEC_VP9_GOLDEN_FRAME_USE_PREV           = 0,
++	V4L2_CID_CODEC_VP9_GOLDEN_FRAME_USE_REF_PERIOD     = 1,
++};
++#define V4L2_CID_CODEC_VP9_GF_REFRESH_PERIOD (V4L2_CID_CODEC_BASE+520)
++#define V4L2_CID_CODEC_VP9_HIERARCHY_QP_ENABLE (V4L2_CID_CODEC_BASE+521)
++#define V4L2_CID_CODEC_VP9_REF_NUMBER_FOR_PFRAMES (V4L2_CID_CODEC_BASE+522)
++enum v4l2_mpeg_vp9_ref_num_for_pframes {
++	V4L2_CID_CODEC_VP9_1_REF_PFRAME     = 0,
++	V4L2_CID_CODEC_VP9_2_REF_PFRAME     = 1,
++};
++#define V4L2_CID_CODEC_VP9_HIERARCHICAL_CODING_LAYER (V4L2_CID_CODEC_BASE+523)
++#define V4L2_CID_CODEC_VP9_HIER_CODING_L0_BR	(V4L2_CID_CODEC_BASE+524)
++#define V4L2_CID_CODEC_VP9_HIER_CODING_L1_BR	(V4L2_CID_CODEC_BASE+525)
++#define V4L2_CID_CODEC_VP9_HIER_CODING_L2_BR	(V4L2_CID_CODEC_BASE+526)
++#define V4L2_CID_CODEC_VP9_HIER_CODING_L0_QP	(V4L2_CID_CODEC_BASE+527)
++#define V4L2_CID_CODEC_VP9_HIER_CODING_L1_QP	(V4L2_CID_CODEC_BASE+528)
++#define V4L2_CID_CODEC_VP9_HIER_CODING_L2_QP	(V4L2_CID_CODEC_BASE+529)
++#define V4L2_CID_CODEC_VP9_MAX_PARTITION_DEPTH	(V4L2_CID_CODEC_BASE+530)
++enum v4l2_mpeg_vp9_num_partitions {
++	V4L2_CID_CODEC_VP9_0_PARTITION     = 0,
++	V4L2_CID_CODEC_VP9_1_PARTITION	= 1,
++};
++#define V4L2_CID_CODEC_VP9_DISABLE_INTRA_PU_SPLIT	(V4L2_CID_CODEC_BASE+531)
++#define V4L2_CID_CODEC_VP9_DISABLE_IVF_HEADER	(V4L2_CID_CODEC_BASE+532)
++#define V4L2_CID_CODEC_VP9_HIERARCHY_RC_ENABLE	(V4L2_CID_CODEC_BASE+533)
  
-+``V4L2_CID_CODEC_VP9_I_FRAME_QP``
-+    Quantization parameter for an I frame for VP9. Valid range: from 1 to 255.
-+
-+``V4L2_CID_CODEC_VP9_P_FRAME_QP``
-+    Quantization parameter for an P frame for VP9. Valid range: from 1 to 255.
-+
-+``V4L2_CID_CODEC_VP9_MAX_QP``
-+    Maximum quantization parameter for VP9. Valid range: from 1 to 255.
-+    Recommended range for MFC is from 230 to 255.
-+
-+``V4L2_CID_CODEC_VP9_MIN_QP``
-+    Minimum quantization parameter for VP9. Valid range: from 1 to 255.
-+    Recommended range for MFC is from 1 to 24.
-+
-+``V4L2_CID_CODEC_VP9_RC_FRAME_RATE``
-+    Indicates the number of evenly spaced subintervals, called ticks, within
-+    one second. This is a 16 bit unsigned integer and has a maximum value up to
-+    0xffff and a minimum value of 1.
-+
-+``V4L2_CID_CODEC_VP9_GF_REFRESH_PERIOD``
-+    Indicates the refresh period of the golden frame for VP9 encoder.
-+
-+.. _v4l2-vp9-golden-frame-sel:
-+
-+``V4L2_CID_CODEC_VP9_GOLDEN_FRAMESEL``
-+    (enum)
-+
-+enum v4l2_mpeg_vp9_golden_framesel -
-+    Selects the golden frame for encoding. Valid when NUM_OF_REF is 2.
-+    Possible values are:
-+
-+.. raw:: latex
-+
-+    \footnotesize
-+
-+.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_CID_CODEC_VP9_GOLDEN_FRAME_USE_PREV``
-+      - Use the (n-2)th frame as a golden frame, current frame index being
-+        'n'.
-+    * - ``V4L2_CID_CODEC_VP9_GOLDEN_FRAME_USE_REF_PERIOD``
-+      - Use the previous specific frame indicated by
-+        ``V4L2_CID_CODEC_VP9_GF_REFRESH_PERIOD`` as a
-+        golden frame.
-+
-+.. raw:: latex
-+
-+    \normalsize
-+
-+
-+``V4L2_CID_CODEC_VP9_HIERARCHY_QP_ENABLE``
-+    Allows host to specify the quantization parameter values for each
-+    temporal layer through HIERARCHICAL_QP_LAYER. This is valid only
-+    if HIERARCHICAL_CODING_LAYER is greater than 1. Setting the control
-+    value to 1 enables setting of the QP values for the layers.
-+
-+.. _v4l2-vp9-ref-number-of-pframes:
-+
-+``V4L2_CID_CODEC_VP9_REF_NUMBER_FOR_PFRAMES``
-+    (enum)
-+
-+enum v4l2_mpeg_vp9_ref_num_for_pframes -
-+    Number of reference pictures for encoding P frames.
-+
-+.. raw:: latex
-+
-+    \footnotesize
-+
-+.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_CID_CODEC_VP9_1_REF_PFRAME``
-+      - Indicates one reference frame, last encoded frame will be searched.
-+    * - ``V4L2_CID_CODEC_VP9_GOLDEN_FRAME_USE_REF_PERIOD``
-+      - Indicates 2 reference frames, last encoded frame and golden frame
-+        will be searched.
-+
-+.. raw:: latex
-+
-+    \normalsize
-+
-+
-+``V4L2_CID_CODEC_VP9_HIERARCHICAL_CODING_LAYER``
-+    Indicates the number of hierarchial coding layer.
-+    In normal encoding (non-hierarchial coding), it should be zero.
-+    VP9 has upto 3 layer of encoder.
-+
-+``V4L2_CID_CODEC_VP9_HIERARCHY_RC_ENABLE``
-+    Indicates enabling of bit rate for hierarchical coding layers VP9 encoder.
-+
-+``V4L2_CID_CODEC_VP9_HIER_CODING_L0_BR``
-+    Indicates bit rate for hierarchical coding layer 0 for VP9 encoder.
-+
-+``V4L2_CID_CODEC_VP9_HIER_CODING_L1_BR``
-+    Indicates bit rate for hierarchical coding layer 1 for VP9 encoder.
-+
-+``V4L2_CID_CODEC_VP9_HIER_CODING_L2_BR``
-+    Indicates bit rate for hierarchical coding layer 2 for VP9 encoder.
-+
-+``V4L2_CID_CODEC_VP9_HIER_CODING_L0_QP``
-+    Indicates quantization parameter for hierarchical coding layer 0.
-+    Valid range: [V4L2_CID_CODEC_VP9_MIN_QP,
-+    V4L2_CID_CODEC_VP9_MAX_QP].
-+
-+``V4L2_CID_CODEC_VP9_HIER_CODING_L1_QP``
-+    Indicates quantization parameter for hierarchical coding layer 1.
-+    Valid range: [V4L2_CID_CODEC_VP9_MIN_QP,
-+    V4L2_CID_CODEC_VP9_MAX_QP].
-+
-+``V4L2_CID_CODEC_VP9_HIER_CODING_L2_QP``
-+    Indicates quantization parameter for hierarchical coding layer 2.
-+    Valid range: [V4L2_CID_CODEC_VP9_MIN_QP,
-+    V4L2_CID_CODEC_VP9_MAX_QP].
-+
-+.. _v4l2-vp9-max-partition-depth:
-+
-+``V4L2_CID_CODEC_VP9_MAX_PARTITION_DEPTH``
-+    (enum)
-+
-+enum v4l2_mpeg_vp9_num_partitions -
-+    Indicate maximum coding unit depth.
-+
-+.. raw:: latex
-+
-+    \footnotesize
-+
-+.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_CID_CODEC_VP9_0_PARTITION``
-+      - No coding unit partition depth.
-+    * - ``V4L2_CID_CODEC_VP9_1_PARTITION``
-+      - Allows one coding unit partition depth.
-+
-+.. raw:: latex
-+
-+    \normalsize
-+
-+
-+``V4L2_CID_CODEC_VP9_DISABLE_INTRA_PU_SPLIT``
-+    Zero indicates enable intra NxN PU split.
-+    One indicates disable intra NxN PU split.
-+
-+``V4L2_CID_CODEC_VP9_DISABLE_IVF_HEADER``
-+    Indicates IVF header generation. Zero indicates enable IVF format.
-+    One indicates disable IVF format.
-+
+ /* CIDs for HEVC encoding. */
  
- High Efficiency Video Coding (HEVC/H.265) Control Reference
- ===========================================================
+@@ -832,6 +864,7 @@ enum v4l2_mpeg_video_frame_skip_mode {
+ #define V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY		(V4L2_CID_CODEC_BASE + 653)
+ #define V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE	(V4L2_CID_CODEC_BASE + 654)
+ 
++
+ /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
+ #define V4L2_CID_CODEC_CX2341X_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1000)
+ #define V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER_MODE		(V4L2_CID_CODEC_CX2341X_BASE+0)
 -- 
 2.17.1
 
