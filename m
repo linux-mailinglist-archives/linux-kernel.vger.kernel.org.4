@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA025FB305
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F475FB2F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiJKNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S229976AbiJKNO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiJKNOx (ORCPT
+        with ESMTP id S229599AbiJKNOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:14:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B5D12091;
-        Tue, 11 Oct 2022 06:14:50 -0700 (PDT)
+        Tue, 11 Oct 2022 09:14:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC51BCE2D;
+        Tue, 11 Oct 2022 06:14:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1B5DB815BD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1795B6114E;
         Tue, 11 Oct 2022 13:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6440AC43470;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F10DC433D6;
         Tue, 11 Oct 2022 13:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665494087;
-        bh=3ANqnrUqd9JGLqg1o0XGG2RFcR2wkphMXAousQI0Guc=;
+        bh=IW9lw1kUhSb+unO9M7xVYw4heSHkYim78HGQ0xSwVAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/wOWr7M5vA2Y/G/CZhOvdAaM0bQzQv7kOnoKEeE3T//EizEkPdEZcWU2on9qj8a+
-         iJ99RGOcaE3hFHSOxwhk8UPtIo+AyqKmRhYR8dRKEf2Vo52zzU9XUNbU5luV6o32cU
-         1FOfGaHwtKMw/gVdWDhVBPfwIgB0NlCuDPGggL2+j59KipE2vbVkQyQ4S86aJtYW33
-         PDPgPvAQmri+XuZfoS6cG4NEgMzyH0rIyC6cNu6NiD4PDLtASi2nC5nTfgAf/8vDsy
-         ZNqyMAkPjhk0rXl0DIo+APIcyxvbbT4HdAF9T3gUn0zGYCuZ2rmnn6v8ztemvjNFlm
-         z9NKChyMm6SLQ==
+        b=miAB6rBRRDVUP8Y2EG566VoTyi4dNst61Gwcav9la5dOj21cMy8MSc+nevaXLGIir
+         Z54Wz34iPbyt1hCqqm8wsEHI9hrEKsW2Ryq8SqwQRrXJbAZSAB+QFh+qDZw6KqnRy9
+         E9wcHpEvlfTSrOQbmFuNZVuRWqoHA3MI7yOu/dW1kmSaz/h2VWBfoFfj97UqxhfzQf
+         9r2rATaNmVMaScyuwsyDIwLr68Iv0q7qB089WwtAUaa9mSjWsHP+ePHiHB7r0uJ3Fi
+         Z9opcy+kRQtB0vYyMAwjFlyTaBdR0M7HuacehFlYwPGR/93F0Yo/ymkn9esmPYomXl
+         CI0uGTbwdtcQw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oiF5i-0000ed-7k; Tue, 11 Oct 2022 15:14:38 +0200
+        id 1oiF5i-0000ef-A9; Tue, 11 Oct 2022 15:14:38 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 01/13] phy: qcom-qmp: drop regulator error message
-Date:   Tue, 11 Oct 2022 15:14:04 +0200
-Message-Id: <20221011131416.2478-2-johan+linaro@kernel.org>
+Subject: [PATCH 02/13] phy: qcom-qmp: drop superfluous comments
+Date:   Tue, 11 Oct 2022 15:14:05 +0200
+Message-Id: <20221011131416.2478-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221011131416.2478-1-johan+linaro@kernel.org>
 References: <20221011131416.2478-1-johan+linaro@kernel.org>
@@ -62,88 +62,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Regulator core already logs an error message in case requesting a
-regulator fails so drop the mostly redundant error message from probe.
+Drop some unnecessary or incorrect comments.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c        | 3 +--
- drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 3 +--
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c         | 3 +--
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c          | 3 +--
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c          | 3 +--
- 5 files changed, 5 insertions(+), 10 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c        | 4 ----
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 3 ---
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c         | 3 ---
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c          | 3 ---
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c          | 5 -----
+ 5 files changed, 18 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 7b434e2ee640..998c8f80ccd8 100644
+index 998c8f80ccd8..3889dcf73c59 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2816,8 +2816,7 @@ static int qmp_combo_probe(struct platform_device *pdev)
+@@ -1949,7 +1949,6 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
+ 		return 0;
+ 	}
  
- 	ret = qmp_combo_vreg_init(dev, cfg);
- 	if (ret)
--		return dev_err_probe(dev, ret,
--				     "failed to get regulator supplies\n");
-+		return ret;
+-	/* turn on regulator supplies */
+ 	ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+ 	if (ret) {
+ 		dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
+@@ -2779,7 +2778,6 @@ static int qmp_combo_probe(struct platform_device *pdev)
+ 	qmp->dev = dev;
+ 	dev_set_drvdata(dev, qmp);
  
- 	num = of_get_available_child_count(dev->of_node);
- 	/* do we have a rogue child node ? */
+-	/* Get the specific init parameters of QMP phy */
+ 	combo_cfg = of_device_get_match_data(dev);
+ 	if (!combo_cfg)
+ 		return -EINVAL;
+@@ -2787,7 +2785,6 @@ static int qmp_combo_probe(struct platform_device *pdev)
+ 	usb_cfg = combo_cfg->usb_cfg;
+ 	cfg = usb_cfg; /* Setup clks and regulators */
+ 
+-	/* per PHY serdes; usually located at base address */
+ 	usb_serdes = serdes = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(serdes))
+ 		return PTR_ERR(serdes);
+@@ -2796,7 +2793,6 @@ static int qmp_combo_probe(struct platform_device *pdev)
+ 	if (IS_ERR(qmp->dp_com))
+ 		return PTR_ERR(qmp->dp_com);
+ 
+-	/* Only two serdes for combo PHY */
+ 	dp_serdes = devm_platform_ioremap_resource(pdev, 2);
+ 	if (IS_ERR(dp_serdes))
+ 		return PTR_ERR(dp_serdes);
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-index 5fdd85a1dc3e..45c0e2958bf6 100644
+index 45c0e2958bf6..8b74948eb467 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-@@ -869,8 +869,7 @@ static int qmp_pcie_msm8996_probe(struct platform_device *pdev)
+@@ -420,7 +420,6 @@ static int qmp_pcie_msm8996_com_init(struct qmp_phy *qphy)
+ 		return 0;
+ 	}
  
- 	ret = qmp_pcie_msm8996_vreg_init(dev, cfg);
- 	if (ret)
--		return dev_err_probe(dev, ret,
--				     "failed to get regulator supplies\n");
-+		return ret;
+-	/* turn on regulator supplies */
+ 	ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+ 	if (ret) {
+ 		dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
+@@ -845,12 +844,10 @@ static int qmp_pcie_msm8996_probe(struct platform_device *pdev)
+ 	qmp->dev = dev;
+ 	dev_set_drvdata(dev, qmp);
  
- 	num = of_get_available_child_count(dev->of_node);
- 	/* do we have a rogue child node ? */
+-	/* Get the specific init parameters of QMP phy */
+ 	cfg = of_device_get_match_data(dev);
+ 	if (!cfg)
+ 		return -EINVAL;
+ 
+-	/* per PHY serdes; usually located at base address */
+ 	serdes = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(serdes))
+ 		return PTR_ERR(serdes);
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 30838ae8f027..dc7f8ba413b9 100644
+index dc7f8ba413b9..de04d8dd5350 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -2445,8 +2445,7 @@ static int qmp_pcie_probe(struct platform_device *pdev)
+@@ -1978,7 +1978,6 @@ static int qmp_pcie_init(struct phy *phy)
+ 	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 	int ret;
  
- 	ret = qmp_pcie_vreg_init(dev, cfg);
- 	if (ret)
--		return dev_err_probe(dev, ret,
--				     "failed to get regulator supplies\n");
-+		return ret;
+-	/* turn on regulator supplies */
+ 	ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+ 	if (ret) {
+ 		dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
+@@ -2425,12 +2424,10 @@ static int qmp_pcie_probe(struct platform_device *pdev)
+ 	qmp->dev = dev;
+ 	dev_set_drvdata(dev, qmp);
  
- 	num = of_get_available_child_count(dev->of_node);
- 	/* do we have a rogue child node ? */
+-	/* Get the specific init parameters of QMP phy */
+ 	cfg = of_device_get_match_data(dev);
+ 	if (!cfg)
+ 		return -EINVAL;
+ 
+-	/* per PHY serdes; usually located at base address */
+ 	serdes = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(serdes))
+ 		return PTR_ERR(serdes);
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index e28c45ab74ea..566365fbfe1a 100644
+index 566365fbfe1a..ab69f648ee38 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -1210,8 +1210,7 @@ static int qmp_ufs_probe(struct platform_device *pdev)
+@@ -849,7 +849,6 @@ static int qmp_ufs_com_init(struct qmp_phy *qphy)
+ 	void __iomem *pcs = qphy->pcs;
+ 	int ret;
  
- 	ret = qmp_ufs_vreg_init(dev, cfg);
- 	if (ret)
--		return dev_err_probe(dev, ret,
--				     "failed to get regulator supplies\n");
-+		return ret;
+-	/* turn on regulator supplies */
+ 	ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+ 	if (ret) {
+ 		dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
+@@ -1194,12 +1193,10 @@ static int qmp_ufs_probe(struct platform_device *pdev)
+ 	qmp->dev = dev;
+ 	dev_set_drvdata(dev, qmp);
  
- 	num = of_get_available_child_count(dev->of_node);
- 	/* do we have a rogue child node ? */
+-	/* Get the specific init parameters of QMP phy */
+ 	cfg = of_device_get_match_data(dev);
+ 	if (!cfg)
+ 		return -EINVAL;
+ 
+-	/* per PHY serdes; usually located at base address */
+ 	serdes = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(serdes))
+ 		return PTR_ERR(serdes);
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index b0b13fb6cb59..a0b97fd5d0a5 100644
+index a0b97fd5d0a5..2c5e4041bcf9 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2746,8 +2746,7 @@ static int qmp_usb_probe(struct platform_device *pdev)
+@@ -2120,7 +2120,6 @@ static int qmp_usb_init(struct phy *phy)
+ 	void __iomem *dp_com = qmp->dp_com;
+ 	int ret;
  
- 	ret = qmp_usb_vreg_init(dev, cfg);
- 	if (ret)
--		return dev_err_probe(dev, ret,
--				     "failed to get regulator supplies\n");
-+		return ret;
+-	/* turn on regulator supplies */
+ 	ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+ 	if (ret) {
+ 		dev_err(qmp->dev, "failed to enable regulators, err=%d\n", ret);
+@@ -2229,7 +2228,6 @@ static int qmp_usb_power_on(struct phy *phy)
+ 					cfg->rx_tbl, cfg->rx_tbl_num, 2);
+ 	}
  
- 	num = of_get_available_child_count(dev->of_node);
- 	/* do we have a rogue child node ? */
+-	/* Configure link rate, swing, etc. */
+ 	qmp_usb_configure(pcs, cfg->regs, cfg->pcs_tbl, cfg->pcs_tbl_num);
+ 
+ 	if (cfg->has_pwrdn_delay)
+@@ -2719,17 +2717,14 @@ static int qmp_usb_probe(struct platform_device *pdev)
+ 	qmp->dev = dev;
+ 	dev_set_drvdata(dev, qmp);
+ 
+-	/* Get the specific init parameters of QMP phy */
+ 	cfg = of_device_get_match_data(dev);
+ 	if (!cfg)
+ 		return -EINVAL;
+ 
+-	/* per PHY serdes; usually located at base address */
+ 	serdes = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(serdes))
+ 		return PTR_ERR(serdes);
+ 
+-	/* per PHY dp_com; if PHY has dp_com control block */
+ 	if (cfg->has_phy_dp_com_ctrl) {
+ 		qmp->dp_com = devm_platform_ioremap_resource(pdev, 1);
+ 		if (IS_ERR(qmp->dp_com))
 -- 
 2.35.1
 
