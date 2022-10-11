@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7245FB174
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545105FB185
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJKLaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
+        id S229880AbiJKLcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiJKLaG (ORCPT
+        with ESMTP id S229480AbiJKLcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:30:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DCB33877;
-        Tue, 11 Oct 2022 04:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0RPB2UDDdxR9Nzxfl8rEmcnylTIR/tDD2ldWTb0Kmvs=; b=hziRi25xfV1WtaQCf+wZ+lUUHW
-        HCP8gOpLFD3xVbSNywDC0dzI9vamllBUAtUzbavKasldT7wmhJtBf/HBcE+cvwiMautCbRRvCknpA
-        LJ5olLBWSkSJaIqdyw1e3wEtHzzkbmVcGBytLgKUKiuFQSZ6zFEp8XrohwUgfx8WDNZG5VDqzaczJ
-        bO1n+ye2iJGY0mYVurlcly1f5rpOyZGp0N9F5sZS96kx3ZLBx+4H2D1SLnekULz22/MyDlTfNxkj9
-        RdU20AeHKx/+CREAHI02Py8DKasBTEjGrmtum7gcM2uFkyw6vqHY+c+BXCKcV8Hy0pnH42P/ISrAM
-        R99LFxAw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oiDS9-004uvD-72; Tue, 11 Oct 2022 11:29:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D56913000E3;
-        Tue, 11 Oct 2022 13:29:35 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BAF812997FB9A; Tue, 11 Oct 2022 13:29:35 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 13:29:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Message-ID: <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
+        Tue, 11 Oct 2022 07:32:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625CC792F0;
+        Tue, 11 Oct 2022 04:32:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F25286116E;
+        Tue, 11 Oct 2022 11:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5D68C433D6;
+        Tue, 11 Oct 2022 11:32:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665487966;
+        bh=jHgoGNfFEdR7bro3G8Yqq60c89YmeHBo+XU9xLDk1Oo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jSVTiJlvgviGVCw4g9OOdnxgur5AcWPQASdUprUwzeJ/B1P4wUd42ZDjTN2PKDGLE
+         OF/1XVdIncabHlKvNjyuHeyyDc2gasbCJz5e7dfMpRJ+V6EgJdeO7/G6aN0q7kos7U
+         kd7/7dmqHeOpqC91D2GImHhq00l9fr3C70tpctnR3f3/9LFfy2K0cMn51+D6bQpdex
+         clXG+JX9nkrmViM683CPYRYooG0nIrz3pd3jVOrzyt2RCqU+w8Zh0Y9dvqEpxzOtuF
+         yEmCiQCfIXsOqng4xTCEz8bJrbclHL/2BHl6IiXOa9QRxRFGa9zfZiWn66Im1FGLuj
+         HfEz6mzaB3AYQ==
+Date:   Tue, 11 Oct 2022 14:32:42 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Divya Koppera <Divya.Koppera@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [RESEND PATCH net] net: phy: micrel: Fixes FIELD_GET assertion
+Message-ID: <Y0VUWvJgBXVADpYD@unreal>
+References: <20221011095437.12580-1-Divya.Koppera@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221008062424.313-1-ravi.bangoria@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221011095437.12580-1-Divya.Koppera@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 11:54:24AM +0530, Ravi Bangoria wrote:
+On Tue, Oct 11, 2022 at 03:24:37PM +0530, Divya Koppera wrote:
+> FIELD_GET() must only be used with a mask that is a compile-time
+> constant. Mark the functions as __always_inline to avoid the problem.
+> 
+> Fixes: 21b688dabecb6a ("net: phy: micrel: Cable Diag feature for lan8814 phy")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+> ---
+>  drivers/net/phy/micrel.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+> index 3757e069c486..54a17b576eac 100644
+> --- a/drivers/net/phy/micrel.c
+> +++ b/drivers/net/phy/micrel.c
+> @@ -1838,7 +1838,7 @@ static int ksz886x_cable_test_start(struct phy_device *phydev)
+>  	return phy_clear_bits(phydev, MII_BMCR, BMCR_ANENABLE | BMCR_SPEED100);
+>  }
+>  
+> -static int ksz886x_cable_test_result_trans(u16 status, u16 mask)
+> +static __always_inline int ksz886x_cable_test_result_trans(u16 status, u16 mask)
 
-> +static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
-> +					  struct perf_event_context *next_ctx)
-> +{
-> +	struct perf_event_pmu_context *prev_epc, *next_epc;
-> +
-> +	if (!prev_ctx->nr_task_data)
-> +		return;
-> +
-> +	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
-> +				    struct perf_event_pmu_context,
-> +				    pmu_ctx_entry);
-> +	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
-> +				    struct perf_event_pmu_context,
-> +				    pmu_ctx_entry);
-> +
-> +	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
-> +	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
-> +
-> +		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
-> +
-> +		/*
-> +		 * PMU specific parts of task perf context can require
-> +		 * additional synchronization. As an example of such
-> +		 * synchronization see implementation details of Intel
-> +		 * LBR call stack data profiling;
-> +		 */
-> +		if (prev_epc->pmu->swap_task_ctx)
-> +			prev_epc->pmu->swap_task_ctx(prev_epc, next_epc);
-> +		else
-> +			swap(prev_epc->task_ctx_data, next_epc->task_ctx_data);
+I don't think that this is valid workaround. You are adding inline
+function to C-files.
 
-Did I forget to advance the iterators here?
+Please find another solution. For example, adding new field_get function
+to bitfield.h that accepts dynamic fields.
 
-> +	}
-> +}
-
+Thanks
