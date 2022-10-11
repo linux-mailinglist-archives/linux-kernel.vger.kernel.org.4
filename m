@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBD15FBB9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E6B5FBB9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiJKTyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S229629AbiJKT4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiJKTyQ (ORCPT
+        with ESMTP id S229560AbiJKTz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:54:16 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141DF7B786
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:54:14 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id de14so9644823qvb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:54:14 -0700 (PDT)
+        Tue, 11 Oct 2022 15:55:56 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D61177EB1;
+        Tue, 11 Oct 2022 12:55:53 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c24so14209208pls.9;
+        Tue, 11 Oct 2022 12:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sslcfDW3BZnjxJOzXU+bZ3YMR6XY0q1cZ2iVJRTDRVk=;
-        b=dPaAEuVDxDtXPEwzGLqsjaNTL+1KZKNie24yZ9SYlP5pHpnEXEvsgcLHNzjx/cQ1cn
-         6q0zdfPrqGPUsI7EWFYgWRHumPQJQMxR5RLsiugtjXHZ+MAOxmk2o1I0AYaGdJjyFx08
-         MxIItMJgpAHn9nPRJLRvMwo24tD/Yk96G9BxbP+2wyO3HI0DvRC+ocimKJ8u7Z3QNMSp
-         0n23oak/JydBhAzXRluJC0/Z9MJIIKF+NSMKzEXIsGjmFa92c0Gu76VaZWl3xfIoDwbp
-         Zc8tdUf95yxil6z5MXUkplWBCZxd7GhOHSVgxGXcyKRvRWU/lLifQ7xmLC3/KC9NMtky
-         T7Pw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iyHcM7UXo6+KI6U5ZBV2AMB4YpVhQ1f2WHVW8eRrXJQ=;
+        b=dQbN/0BkKXoVBGYIoreyCOPFY9ii0ukdeu4JwTY8nEz9R0ae/ZfRcOD0wosr1JlFzr
+         O5xsqJa6jHA8dowpEIJH6wYTzaF+VBPpn6BwljyzhpT47hB/Avc4jVIclH1HHnL7LLLW
+         T3eJtlZDQE3eLrp5ndQzsX4qz584t7py4BC6wjUTrwr4GVriqxI8CSmEDPo2chgZaDWe
+         2fkpC7YXn+4upKWjjFzVXn8w8Qd3foAsotDbIAlWNk0PXmTHz+N0tVitBoNExtUHphFd
+         XwrPNyM5F0zUFLv1OBLApmgAz8g6t2H1zxWwOWbpPIxHWJGLeLKvLa0FhYMQZKlJzTKa
+         oMYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sslcfDW3BZnjxJOzXU+bZ3YMR6XY0q1cZ2iVJRTDRVk=;
-        b=Vz77d1MzvQDRHZ2soUZEac9hysy+W98SSHZcxdHLoB6oell02gVnC3bHFcnr0uepL4
-         pOLY5UyMNF4GkVK4ZLgI9oD7YyjTcX85wgPqvzSkJeE4EIafHrHMHSEI2HBshVB5YSGn
-         4R1zpg9ue6M1Hhy5DvZUa9kIs/5TGw88qbUhyIRuq2IhSLfk6J8z+zBqp6CB2a45JAmt
-         4HEVd8/i7s+wgmYYwbH1tG/fSUg5cwTGMg1o2iJ8OvPmzDBpzQSD+xwdSc7xzTxbhWLM
-         2HGpgxvR9xvyT9CcGfUvK6779pw2a6rJgHuQYbwuDD6zUCzLN5o3NPMVUvujlNPZSwt6
-         58fQ==
-X-Gm-Message-State: ACrzQf2tRtttq27Qy1qHBmeJRTvxgnDtgc6+YRtw5MweU7jvlBDNkLyS
-        nhTYHvLO5qx4ZfvKkqNLLI4j1Q==
-X-Google-Smtp-Source: AMsMyM5+aTQaWcFsQOU25ufUA3VeLfaxfhjr2Z6/mP3HOZlDLnAlkvbygkKOM06/oyBcHYBG0jAYEA==
-X-Received: by 2002:a05:6214:5cc5:b0:4b3:e05a:bbb9 with SMTP id lk5-20020a0562145cc500b004b3e05abbb9mr14260326qvb.42.1665518053305;
-        Tue, 11 Oct 2022 12:54:13 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05620a284a00b006b9c9b7db8bsm13663527qkp.82.2022.10.11.12.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 12:54:12 -0700 (PDT)
-Message-ID: <157f3d65-3cd1-043a-165d-a27b7d34ee65@linaro.org>
-Date:   Tue, 11 Oct 2022 15:54:11 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iyHcM7UXo6+KI6U5ZBV2AMB4YpVhQ1f2WHVW8eRrXJQ=;
+        b=1jSwu5HX+udYaDTS5DaXfS4m8X54XY/2u48yYVPiPWmVdWlZf8yRkX17qNIUFpeKjD
+         TpNw6nAZO5Ciey/iQdX06EErHGg+3NgmMXfUDgb5A8GuP/EnP6954g79x0YLI4uimo5/
+         8Sj0ccOp+It4ZSrj2gTtNEmIfHEM7MnMSnyjIriM0kzLLrHNY/KRbdsyRdeW4QrnR4cG
+         M/pSSSqNdXbiD1P58ayThwR5acEOcKaRo0z+EKef08cGlXzMmbsLyimkf9vwBeVSS5Fi
+         Edtf7wCOKznXORUGPvoEEH2H/G51wXoRntXHhNl0RyOM/Z4W2c5F5RuiwbHBBHNecVsJ
+         VyjA==
+X-Gm-Message-State: ACrzQf1ZTXEpzHXRYB6xGO0WCaauacZR3aslv13AAOvNEpIzCAMR3ZKO
+        hRRifuzGdHfcrTuS0bJ9RePCNy/Yx/A5pA==
+X-Google-Smtp-Source: AMsMyM7LLekdikl1aZ5jBm10cgtOnnqRWxrMBOTuawgR59wT7LObyxPXHsnADegCTlpdIJZLxFd9OA==
+X-Received: by 2002:a17:90b:1bd0:b0:205:ed0c:7e84 with SMTP id oa16-20020a17090b1bd000b00205ed0c7e84mr921987pjb.234.1665518152627;
+        Tue, 11 Oct 2022 12:55:52 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id lt23-20020a17090b355700b0020a9f7405aesm7070046pjb.13.2022.10.11.12.55.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 12:55:52 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 08:55:46 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [next] dlm: replace one-element array with fixed size
+ array
+Message-ID: <Y0XKQnaufTfi5OzY@mail.google.com>
+References: <Y0XAxX4g/9N6qdnD@mail.google.com>
+ <Y0XDAtQ4eYTgwIgM@work>
+ <Y0XD9tTd0ahj2jRZ@mail.google.com>
+ <Y0XGBKtNOXIz+1T6@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 4/5] ARM: multi_v7_defconfig: Enable GXP SPI and PLREG
- Drivers
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20221011185525.94210-1-nick.hawkins@hpe.com>
- <20221011185525.94210-5-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221011185525.94210-5-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0XGBKtNOXIz+1T6@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 14:55, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+On Tue, Oct 11, 2022 at 02:37:40PM -0500, Gustavo A. R. Silva wrote:
+> On Wed, Oct 12, 2022 at 08:28:54AM +1300, Paulo Miguel Almeida wrote:
+> > > 
+> > I didn't add v3 here because the the patch got changed from 'replacing
+> > [1]-array with flex-array' to 'replacing [1]-array to fixed-size array'.
 > 
-> Adding support for the GXP SPI and PLREG Drivers.
-
-This we see in the diff. You must explain why. Why are you doing it? Why
-do we want it in the kernel?
-
+> The issue remains the same, and there have been comments and feedback on
+> previous patches. So, yep, v3 seems appropiate for this patch. :)
 > 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> ---
->  arch/arm/configs/multi_v7_defconfig | 2 ++
+> > 
+> > Let me know if you still want me to send it as v3 instead.
+> 
+> I think next one would be v4.
+> 
+> Also, when versioning patches it is also necessary to include a version
+> change log.
+> 
+Fair enough. Will send a v4
 
-
-Best regards,
-Krzysztof
-
+Paulo A.
