@@ -2,168 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0840A5FBB2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37485FBB2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 21:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJKTKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 15:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S229671AbiJKTMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 15:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJKTJm (ORCPT
+        with ESMTP id S229557AbiJKTMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 15:09:42 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6ED94127
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:09:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c20so4528051plc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=20Kp1jeeHpGBum4Su4jfbPvVo7l5z9I8ZNUwYhcjAtE=;
-        b=XxejvEzDPs7vSeKjrPhYc5Pxq32CeMTWb/w3ombhmCcQ+JNFI7ggIIV8Z+UzpJfdps
-         B2Z2AcWMnObXOvuR3vMEDYAIeGDXW6/2FAww0TKsA4uMR1o/fzuiR5WSHRslv1V/AyyK
-         Vsvc5jVht5MxMistIx77XQkhhYVCQVk3XKte/IftuvvP995QLooWRVoE8C4kt7Lb1Lfh
-         BPaOccQjSBW3P9LkcC3K/RsSg9pfuQgwpi+rX+5t+Az/xERoY2vG2Irh4TyMHuvXGQzz
-         sySvMFYqRj4qfhhoLf0lHR+msUCCwhx2MbbQvHY2mMUwfqXeK+BJJ/SOId8dKSg46YOr
-         sx3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=20Kp1jeeHpGBum4Su4jfbPvVo7l5z9I8ZNUwYhcjAtE=;
-        b=vpmY7hwhrpgGbP/H9cLCxFld6sxmwFKmS9u/s+33+U0a2AuYMu1wpJpZansh4GVyZU
-         IOsM+JCmyl68cH4AUsWknZUDUdrObdKriS6hnf6MYLgeZDPtsroo56ZLCMwALjBXrGQ+
-         2EqJDpYAIdcMiuej+N0nYsvlnblAeTCgPqU50lGIJlN26jpGwSRup2J3SDijD9fLV8Jq
-         0u+lSdGPb7MIVq2qwzeXis6g6iE5n8qwvjkX0J3CGlsr/aGQIP0w7MvWYH96NqH9Mbzl
-         cCcgjCtxA2pkVn5id+p/LsAl7hdZ0NSpxy+5DsiHniDKojwJ2+nq3qJ1XqXeYRErkoIb
-         +r/Q==
-X-Gm-Message-State: ACrzQf0OvHV2q1jCNpxJU8mi3BmXveXskjuZLwWxBAbOxpCW+kNWzBf4
-        weKk+il9C8B06Zugygqs+tVZMA==
-X-Google-Smtp-Source: AMsMyM78d3ySAgRa29zSbaUnARlPvkLOOwFA6nco4mi3nMGfCYfx2ftw9Xx1mbYh1ZPcBrNXdGAzQA==
-X-Received: by 2002:a17:902:7290:b0:17f:d04b:bf57 with SMTP id d16-20020a170902729000b0017fd04bbf57mr24405317pll.147.1665515365613;
-        Tue, 11 Oct 2022 12:09:25 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b00179c99eb815sm9003192plp.33.2022.10.11.12.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 12:09:25 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 19:09:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Tue, 11 Oct 2022 15:12:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5833C38478
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 12:12:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B2C7CCE17F8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 19:12:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886E1C433C1;
+        Tue, 11 Oct 2022 19:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665515525;
+        bh=Z274Y55fxl3ROLH7kNnUBLHGgVMegcngw5GKYKX5RFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LTzJKMTBkVOb0LyiFYAXUmupa/oDlihFElTSf/sEko+55LLXjrpw6jeqifcPcwdgH
+         c60tbV68fcWGFqtcQTV1UW4x+ncz2+zY12coVvclNoYLT3jG0ouCi7aMr7d9LPE9ar
+         wNF3jEwq5Fe5mqEJNQOgEBxR/0woO5vyEbE3imUK44gqoQIryURrq70v5ZqGeK3GXw
+         PW9w/HtQHrq9k7c6vlb8dFDQFdD9dD1Sq97KdG8mgOw3DGL73rgc8YQ30N5coeeIUL
+         k4ypNyK4oY72wQzvnq0PNBNpMd4MRi05iyUyxc+jcLwMdxlhe/VYy/ojI8pZJtwfqO
+         kzqyF0D4nsjdA==
+Date:   Tue, 11 Oct 2022 21:12:03 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] KVM: x86/pmu: Add PEBS support for SPR and future
- non-hybird models
-Message-ID: <Y0W/YR6gXhunJYry@google.com>
-References: <20220922051929.89484-1-likexu@tencent.com>
- <20220922051929.89484-2-likexu@tencent.com>
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Marco Elver <elver@google.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        kernel test robot <lkp@intel.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 00/20] rcu/context-tracking: Merge RCU eqs-dynticks
+ counter to context tracking v5
+Message-ID: <20221011191203.GA1051279@lothringen>
+References: <20220628131619.2109651-1-frederic@kernel.org>
+ <43a38198-d80f-2135-646c-db7e7990a401@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922051929.89484-2-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <43a38198-d80f-2135-646c-db7e7990a401@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kind of a nit, but I would prefer a shortlog that talks about the pdit/pdir
-stuff and not a "enable PEBS" bucket.
+On Tue, Oct 11, 2022 at 07:37:48PM +0800, Xiongfeng Wang wrote:
+> Hi, Frederic
+> 
+> Thanks for push RCU dynticks counters to upstream. It is very useful. After it
+> is done, do we have plan to revive the sys-idle feature and use it to shutdown
+> the tick on the last housekeeping when the whole system is idle. I'm very glad
+> to help test it if you have some demo patches on your personal repo.
 
-On Thu, Sep 22, 2022, Like Xu wrote:
-> @@ -140,6 +149,16 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
->  	__kvm_perf_overflow(pmc, true);
->  }
->  
-> +static bool need_max_precise(struct kvm_pmc *pmc)
-> +{
-> +	if (pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu))
-> +		return true;
-> +	if (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu))
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
->  				  u64 config, bool exclude_user,
->  				  bool exclude_kernel, bool intr)
-> @@ -181,11 +200,11 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
->  		 * the accuracy of the PEBS profiling result, because the "event IP"
->  		 * in the PEBS record is calibrated on the guest side.
->  		 *
-> -		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
-> +		 * On Icelake everything is fine. Other hardware (TNT+) that
->  		 * could possibly care here is unsupported and needs changes.
+There is no plan yet but some other people seem to be interested. Would you
+like to try to revive it yourself? Otherwise I may do it someday but I 
+have quite some work to complete first (ie: making CPU isolation tunable through
+cpusets).
 
-This part of the comment is still somewhat stale, and for me at least it's not at
-all helpful.  
-
->  		 */
->  		attr.precise_ip = 1;
-> -		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
-> +		if (need_max_precise(pmc))
->  			attr.precise_ip = 3;
-
-What about writing this as:
-
-		attr.precise_ip = pmc_get_pebs_precision(pmc);
-
-(or whatever name is appropriate for "pebs_precision").
-
-Then in the helper, add comments to explaint the magic numbers and the interaction
-with PDIST and PDIR.  Bonus points if #defines for the the magic numbers can be
-added somewher
-
-				 *  0 - SAMPLE_IP can have arbitrary skid
-				 *  1 - SAMPLE_IP must have constant skid
-				 *  2 - SAMPLE_IP requested to have 0 skid
-				 *  3 - SAMPLE_IP must have 0 skid
-
-static u64 pmc_get_pebs_precision(struct kvm_pmc *pmc)
-{
-	/* Comment that explains why PDIST/PDIR require 0 skid? */
-	if ((pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu)) ||
-	    (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu)))
-		return 3;
-
-	/* Comment about constant skid? */
-	return 1;
-}
-
-
->  	}
->  
-> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-> index c5e5dfef69c7..4dc4bbe18821 100644
-> --- a/arch/x86/kvm/vmx/capabilities.h
-> +++ b/arch/x86/kvm/vmx/capabilities.h
-> @@ -398,7 +398,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
->  
->  static inline bool vmx_pebs_supported(void)
->  {
-> -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
-> +	return boot_cpu_has(X86_FEATURE_PEBS) &&
-> +		!boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-
-This belongs in a separate patch, and it should be ordered before patch 1 so that
-there's no window where KVM can see pebs_ept==1 on a hybrid CPU.
-
-Actually, shouldn't everything in this patch land before core enabling?
-
-> +		kvm_pmu_cap.pebs_ept;
-
-Please align indentation:
-
-	return boot_cpu_has(X86_FEATURE_PEBS) &&
-	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-	       kvm_pmu_cap.pebs_ept;
+Thanks.
