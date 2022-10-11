@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798665FBACF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAB75FBADE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiJKS4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S229818AbiJKS7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJKS42 (ORCPT
+        with ESMTP id S229757AbiJKS73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:56:28 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577BC7DF51;
-        Tue, 11 Oct 2022 11:56:26 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BHIPkW006181;
-        Tue, 11 Oct 2022 18:56:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=YpWs8mo9IaR2bHU46VUy4drcw7S0/CT/ZY7oZR3/e7Q=;
- b=Baf7FjeH6BoVVBAHqIYTUSgdvpmgpcVD0qB2YokZf6fPdCBbMDNk5nHxUYD/bkrGcSRU
- bdgsSVv2QLy5YzvYBgiOUJCT8AbtJ4ioHxgW3cx2xADmDXac7GuTc8uJ634DmhwUb9KV
- vewHiQjB85WpMgr8XrfaPbMqy1Jz6ghofsVyM60hnDL3eKlZ7GdImJSrYeIko154RM6P
- +5pegoAauOoaPCxJQXkRLacg5NcgzDMW2wMBQv8DZmqOLuw0qPeqwJVbEa6kUwlIfyyz
- ox2zQ8k3z44KlGForbn0c4aCbrpgp8fO0YrbUjuudrwa5KQldNeIWgsRbXWmAV17D653 aA== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3k5crx8s45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 18:56:03 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id A814EB2;
-        Tue, 11 Oct 2022 18:56:02 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 47772808C39;
-        Tue, 11 Oct 2022 18:56:02 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 5/5] MAINTAINERS: Add HPE SOC Drivers
-Date:   Tue, 11 Oct 2022 13:55:25 -0500
-Message-Id: <20221011185525.94210-6-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221011185525.94210-1-nick.hawkins@hpe.com>
-References: <20221011185525.94210-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: Ug0QAypPg7DRInl5t9n3GuFupI7PfR3A
-X-Proofpoint-GUID: Ug0QAypPg7DRInl5t9n3GuFupI7PfR3A
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- clxscore=1015 suspectscore=0 malwarescore=0 spamscore=0 phishscore=0
- mlxlogscore=882 priorityscore=1501 mlxscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210110110
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 14:59:29 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923F188DC2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:59:27 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d13so2785204qko.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0wCN5RZ+L8i/oN57QmIvmcE2DqsyjZQyxM8LL5Wvecw=;
+        b=OYOpwA00168+Sn1npw1oL58Fo+MJaQyLFCqVdGdf7vXkNFi5pgDHeSYPE265v1fk3U
+         43cUJtNVbasO+3J8ihdCrso3YZH+bnE97UgGQ+WJjjFdrITLESiIYyCVUuLH9IWdZQyJ
+         +koIQr96yAJFGMwL99V3TmFC//4vyOQcXDoWqPklpIRVAivPFyT0IWAX2HdH7Zc6CUxz
+         Cgf+zeA+6PeM8xj8bzTnIfnfvQ5a/QDGI4MxHIHPX97wz0remhhzrHMohvtAIPfLo4ET
+         j0Gw2MOzKHFNiqpXycHEwEKkAuyJd9GrUdzArT3sOGgiq2ihXRyAoBwf0EeXn6kcEfT4
+         9IzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0wCN5RZ+L8i/oN57QmIvmcE2DqsyjZQyxM8LL5Wvecw=;
+        b=zSo1Kx1vKUlZpz4VLbTFltMGm+0LT9yKBpQ1LqGXj0CJz2QSZUMK8uGUZr3xPO3jTC
+         Mdpc07Yurl4fei/AdOEVxY92Q1Udc3AUln1CQw1Yo40tBP3PIyhuLRaW0k+rldkf5hKH
+         nZnlqwdWx/g9a+cHW5U+NSAy8AXLlji0/RryWIsITnS6GqK3sYrCG2wR8EOflRwDElXX
+         xyvWltHBNPnKBmp7iUBgQZ/MyjVD3hnvjqg5t/Crhv8xlXYKilyE2cVvKkIO16iuiRAg
+         /CHqCHGAnqyQx6gQBrOut4nnR6R22oOLkZl7wM+BILXPqe1zVUsijksPL7K4m5trvsyL
+         6SNA==
+X-Gm-Message-State: ACrzQf2rDJIrH/JZswVt9A3iwxVy6UrViB3WvYmkB6TiAdZMZDUAQHYw
+        dXdFyu4WaX6De9qvdXuUVV07Mg==
+X-Google-Smtp-Source: AMsMyM6Bn+yZ7GM457z+pCMlyEfivAVrDfm1n7o3H+EW0SKcPQs+s0LIDrkPQj1pe2vx0w6xMzD1bw==
+X-Received: by 2002:a05:620a:6017:b0:6ce:3c51:66b9 with SMTP id dw23-20020a05620a601700b006ce3c5166b9mr18110981qkb.605.1665514766652;
+        Tue, 11 Oct 2022 11:59:26 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id c2-20020ac87dc2000000b0039a8b075248sm4688296qte.14.2022.10.11.11.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 11:59:25 -0700 (PDT)
+Message-ID: <ddb4566f-b420-6ee8-b3f5-3eeb83ad2d8b@linaro.org>
+Date:   Tue, 11 Oct 2022 14:57:13 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 03/19] arm64: dts: qcom: qdru1000: Add tlmm nodes
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221001030656.29365-1-quic_molvera@quicinc.com>
+ <20221001030656.29365-4-quic_molvera@quicinc.com>
+ <ad743621-8e2d-23f9-8c44-53f6681aa134@linaro.org>
+ <7674b756-75d5-6ca3-d4fe-c54bd92a3fd7@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7674b756-75d5-6ca3-d4fe-c54bd92a3fd7@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On 11/10/2022 14:48, Melody Olvera wrote:
+> 
+> 
+> On 10/1/2022 2:14 AM, Krzysztof Kozlowski wrote:
+>> On 01/10/2022 05:06, Melody Olvera wrote:
+>>> Add tlmm node for the QDU1000 and QRU1000 SoCs and the uart pin
+>>> configuration.
+>> The patchset should be squashed with previous. There is no point in
+>> bringing support piece by piece. You can bring support in steps if you
+>> submissions are separate in time. But if you have everything ready -
+>> your patch must be complete and bisectable.
+> To be clear, does it make more sense to submit the base dt first, then submit each
+> driver with all the dt changes as one patchset?
 
-Add the HPE GXP SOC Include files, yaml files, and driver files.
+No, because you have DTS ready. There is no incremental work here.
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 56ff555ed5a4..17e8eeaa8178 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2178,14 +2178,17 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/soc/hpe/hpe,gxp-plreg.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/soc/hpe/*
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
-+F:	include/linux/soc/hpe/*
- 
- ARM/IGEP MACHINE SUPPORT
- M:	Enric Balletbo i Serra <eballetbo@gmail.com>
--- 
-2.17.1
+Best regards,
+Krzysztof
 
