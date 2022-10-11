@@ -2,188 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EB65FB19E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B342B5FB1A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiJKLh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S229892AbiJKLmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiJKLhx (ORCPT
+        with ESMTP id S229902AbiJKLm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:37:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AC97B78E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:37:51 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MmtvJ1b4bzlVtp;
-        Tue, 11 Oct 2022 19:33:16 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 11 Oct 2022 19:37:49 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
- 2022 19:37:48 +0800
-Subject: Re: [PATCH 00/20] rcu/context-tracking: Merge RCU eqs-dynticks
- counter to context tracking v5
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Marco Elver" <elver@google.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        "kernel test robot" <lkp@intel.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-References: <20220628131619.2109651-1-frederic@kernel.org>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <43a38198-d80f-2135-646c-db7e7990a401@huawei.com>
-Date:   Tue, 11 Oct 2022 19:37:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 11 Oct 2022 07:42:27 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F62886F91
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:42:26 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id nb11so30782544ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6W/H/BEABkNYv8rSt4AC2s3ra8YDJ2D0/Peqdd/kpw=;
+        b=tout3259Te4xgphAbpEW/BHh68jKCYczko+1Lmq077QJf/uiNQEs73j9d2PFtuJXnA
+         sv1/u2f+9EPbRgNd7ExREjK4uHxaGZdbGa6k7q9ojc0rA6VVe2aKb7S7I+lj0oYNUl6n
+         g8peSY2vkdZ1Xjx+PpQYDqJmqi7+PpMy/skMNtw6nxcBQNNcGL9M6uHZq7tpVEYPgJl3
+         AaspPCMqyRBmI1dyRMoTDJJk6ZezEOr2h6kt6F2THnP75hluPusvkJbJbL6DILTsczKH
+         Sn+MhrQnN6bB+HWJDpWBodXw2crm46HIyyVIm7C1IVmsLRKRXxGMJ7fkogG6vOl8FeuH
+         JNbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w6W/H/BEABkNYv8rSt4AC2s3ra8YDJ2D0/Peqdd/kpw=;
+        b=cvxfemZ7kuQDq5W5zcnYHoZBkaeozuW4n+Y25Oz12g0/IV9k3TyA+uLg+PK8l3PvS2
+         Wg89UZbkaK6iJH4qlXDK33IF6yIBZZ0kLHklDqV/CoidlPJdLii497CkdPoi7F+FZ5eP
+         p2YM8GOI4XaYrfxfrUolrzuUqImtYip5yjvxvoBXvsIMr9LFQsfqKLoEv4pD1JzdptMq
+         4sXIidd0Kgi6C5rqHgk4YlS83v0OOzvY6d215w7op45JZ/iCzFWSHe3BkqrkpCeUbiwv
+         5KdeXZpjkD0EIEm4do4ZeYIvvfmKQyzH9f6csnqde5SG/FQyhkVplww3olj6Wb6L5NfM
+         rKZw==
+X-Gm-Message-State: ACrzQf0HY++oSBjDLqsrxuSyHbmGaOTcp10UcYfDI41xNQMYdTZ8ykCt
+        CA0u6fcam925/fweTf02ZYo2taNXLEYVQ4uIxJLgKA==
+X-Google-Smtp-Source: AMsMyM5+L/seIZvVl5ev76Qq+5th/iy/XuP9Q5UXT8jXzRUd6JA+CHoJRAvuhhecHqQrQiZEPZngKWL+4XN9ON3guDA=
+X-Received: by 2002:a17:906:fe46:b0:73d:939a:ec99 with SMTP id
+ wz6-20020a170906fe4600b0073d939aec99mr18894342ejb.169.1665488544466; Tue, 11
+ Oct 2022 04:42:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220628131619.2109651-1-frederic@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221010191212.200768859@linuxfoundation.org>
+In-Reply-To: <20221010191212.200768859@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 11 Oct 2022 17:12:12 +0530
+Message-ID: <CA+G9fYt87e4-5fYtVa--q9Motx8NkovDsur8x7KZ-HFpG5MYLg@mail.gmail.com>
+Subject: Re: [PATCH 5.19 00/46] 5.19.15-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Frederic
+On Tue, 11 Oct 2022 at 00:42, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.15 release.
+> There are 46 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Oct 2022 19:12:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.15-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks for push RCU dynticks counters to upstream. It is very useful. After it
-is done, do we have plan to revive the sys-idle feature and use it to shutdown
-the tick on the last housekeeping when the whole system is idle. I'm very glad
-to help test it if you have some demo patches on your personal repo.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks,
-Xiongfeng
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-On 2022/6/28 21:15, Frederic Weisbecker wrote:
-> This is the same as rcu:ctxt.2022.06.21a (no rebase) with minimal changes
-> on the following patches:
-> 
-> * [06/20] fix missing function renames on xtensa (thanks Max Filippov, SOB added)
-> * [09/20] fix missing Kconfig renames on xtensa (thanks Max Filippov, SOB added)
->           and also on loongarch.
-> * [18/20] remove unecessary and buggy notrace from rcu_preempt_deferred_qs(). It's called
->           after intrumentation_begin() in EQS functions.
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> 	rcu/ctxt.2022.06.27
-> 
-> HEAD: cb0045adde39bba5ffc620a184b1685a869569d8
-> 
-> Thanks,
-> 	Frederic
-> ---
-> 
-> Frederic Weisbecker (19):
->       context_tracking: Remove unused context_tracking_in_user()
->       context_tracking: Add a note about noinstr VS unsafe context tracking functions
->       context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
->       context_tracking: Rename context_tracking_user_enter/exit() to user_enter/exit_callable()
->       context_tracking: Rename context_tracking_enter/exit() to ct_user_enter/exit()
->       context_tracking: Rename context_tracking_cpu_set() to ct_cpu_track_user()
->       context_tracking: Split user tracking Kconfig
->       context_tracking: Take idle eqs entrypoints over RCU
->       context_tracking: Take IRQ eqs entrypoints over RCU
->       context_tracking: Take NMI eqs entrypoints over RCU
->       rcu/context-tracking: Remove rcu_irq_enter/exit()
->       rcu/context_tracking: Move dynticks counter to context tracking
->       rcu/context_tracking: Move dynticks_nesting to context tracking
->       rcu/context_tracking: Move dynticks_nmi_nesting to context tracking
->       rcu/context-tracking: Move deferred nocb resched to context tracking
->       rcu/context-tracking: Move RCU-dynticks internal functions to context_tracking
->       rcu/context-tracking: Remove unused and/or unecessary middle functions
->       context_tracking: Convert state to atomic_t
->       MAINTAINERS: Add Paul as context tracking maintainer
-> 
-> Paul E. McKenney (1):
->       context_tracking: Use arch_atomic_read() in __ct_state for KASAN
-> 
-> 
->  .../RCU/Design/Requirements/Requirements.rst       |  10 +-
->  Documentation/RCU/stallwarn.rst                    |   6 +-
->  .../time/context-tracking/arch-support.txt         |   6 +-
->  MAINTAINERS                                        |   1 +
->  arch/Kconfig                                       |   8 +-
->  arch/arm/Kconfig                                   |   2 +-
->  arch/arm/kernel/entry-common.S                     |   4 +-
->  arch/arm/kernel/entry-header.S                     |  12 +-
->  arch/arm/mach-imx/cpuidle-imx6q.c                  |   5 +-
->  arch/arm64/Kconfig                                 |   2 +-
->  arch/arm64/kernel/entry-common.c                   |  14 +-
->  arch/csky/Kconfig                                  |   2 +-
->  arch/csky/kernel/entry.S                           |   8 +-
->  arch/loongarch/Kconfig                             |   2 +-
->  arch/mips/Kconfig                                  |   2 +-
->  arch/powerpc/Kconfig                               |   2 +-
->  arch/powerpc/include/asm/context_tracking.h        |   2 +-
->  arch/riscv/Kconfig                                 |   2 +-
->  arch/riscv/kernel/entry.S                          |  12 +-
->  arch/sparc/Kconfig                                 |   2 +-
->  arch/sparc/kernel/rtrap_64.S                       |   2 +-
->  arch/x86/Kconfig                                   |   4 +-
->  arch/x86/mm/fault.c                                |   2 +-
->  arch/xtensa/Kconfig                                |   2 +-
->  arch/xtensa/kernel/entry.S                         |   8 +-
->  drivers/acpi/processor_idle.c                      |   5 +-
->  drivers/cpuidle/cpuidle-psci.c                     |   8 +-
->  drivers/cpuidle/cpuidle-riscv-sbi.c                |   8 +-
->  drivers/cpuidle/cpuidle.c                          |   9 +-
->  include/linux/context_tracking.h                   |  95 ++--
->  include/linux/context_tracking_irq.h               |  21 +
->  include/linux/context_tracking_state.h             | 113 +++-
->  include/linux/entry-common.h                       |  10 +-
->  include/linux/hardirq.h                            |  12 +-
->  include/linux/rcupdate.h                           |  17 +-
->  include/linux/rcutiny.h                            |   6 -
->  include/linux/rcutree.h                            |   9 +-
->  include/linux/tracepoint.h                         |   4 +-
->  init/Kconfig                                       |   4 +-
->  kernel/cfi.c                                       |   4 +-
->  kernel/context_tracking.c                          | 617 +++++++++++++++++++--
->  kernel/cpu_pm.c                                    |   8 +-
->  kernel/entry/common.c                              |  16 +-
->  kernel/extable.c                                   |   4 +-
->  kernel/locking/lockdep.c                           |   2 +-
->  kernel/rcu/Kconfig                                 |   2 +
->  kernel/rcu/rcu.h                                   |   4 -
->  kernel/rcu/tree.c                                  | 476 +---------------
->  kernel/rcu/tree.h                                  |   8 -
->  kernel/rcu/tree_exp.h                              |   2 +-
->  kernel/rcu/tree_plugin.h                           |  38 +-
->  kernel/rcu/tree_stall.h                            |   8 +-
->  kernel/rcu/update.c                                |   2 +-
->  kernel/sched/core.c                                |   2 +-
->  kernel/sched/idle.c                                |  10 +-
->  kernel/sched/sched.h                               |   1 +
->  kernel/softirq.c                                   |   4 +-
->  kernel/time/Kconfig                                |  37 +-
->  kernel/time/tick-sched.c                           |   2 +-
->  kernel/trace/trace.c                               |   8 +-
->  60 files changed, 934 insertions(+), 764 deletions(-)
-> .
-> 
+## Build
+* kernel: 5.19.15-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: 08ca61ba8d0a5e6dcc1bfc3b6deba6acfb199598
+* git describe: v5.19.14-47-g08ca61ba8d0a
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.14-47-g08ca61ba8d0a
+
+## No Test Regressions (compared to v5.19.12-110-g30c780ac0f9f)
+
+## No Metric Regressions (compared to v5.19.12-110-g30c780ac0f9f)
+
+## No Test Fixes (compared to v5.19.12-110-g30c780ac0f9f)
+
+## No Metric Fixes (compared to v5.19.12-110-g30c780ac0f9f)
+
+## Test result summary
+total: 110080, pass: 98721, fail: 747, skip: 10334, xfail: 278
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 69 total, 63 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
