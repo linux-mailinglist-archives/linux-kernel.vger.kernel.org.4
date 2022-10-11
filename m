@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7635FB472
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339E25FB476
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 16:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJKOVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 10:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S229484AbiJKOWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 10:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiJKOVT (ORCPT
+        with ESMTP id S229538AbiJKOWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:21:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE33C923F1;
-        Tue, 11 Oct 2022 07:21:17 -0700 (PDT)
+        Tue, 11 Oct 2022 10:22:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293E91D67E;
+        Tue, 11 Oct 2022 07:22:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B162B81620;
-        Tue, 11 Oct 2022 14:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D325C433C1;
-        Tue, 11 Oct 2022 14:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665498075;
-        bh=Uw7HGYkOrkomzkADPrKZvJ35Fxs2ojCfT+PTAwSqXuY=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A59FC6119E;
+        Tue, 11 Oct 2022 14:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE813C433D6;
+        Tue, 11 Oct 2022 14:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665498127;
+        bh=UnTADQlb1c9sMBi6JfkWaS5g/Z+SghRtz6zwEjj/c/c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mXw0FpxB4UieVbku/lpyTy/KLulq2zn7OdKkkDbIqhlaBUfMOICqQtkUy2WaV3pnB
-         R5Sad5dbAuJqxuYSPmJpGTAw8gBbKprAvZvD0+vNgyK/+s/+EiGEF8j26JCQJLuC84
-         wRtkN5HUG+/HvqeXpIvgyFivtfVLmob5XMHcX84FbcAvUXTeHmoI71zKPs1bgrBaP5
-         +uKPbVjaXQeHfy+7gg5HK7G09v4QoOVojw8KkOvrNvsZzwhFqNVAucLxQMNpjxIaX5
-         H9vSrqiLYLB2TFIE26Nnr2C7XVw86oR6Sne5qJvfMSdnDzIljXX6arjq4985gIxmoA
-         tAaw/shN0yYNg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oiG82-0003Cu-6d; Tue, 11 Oct 2022 16:21:06 +0200
-Date:   Tue, 11 Oct 2022 16:21:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/13] phy: qcom-qmp-combo: drop sc8280xp power-down delay
-Message-ID: <Y0V70n11uaztrYHo@hovoldconsulting.com>
-References: <20221011131416.2478-1-johan+linaro@kernel.org>
- <20221011131416.2478-11-johan+linaro@kernel.org>
- <ce6370f9-962c-905b-5188-a9b6ff9e2fd3@linaro.org>
+        b=MGtgzeVxQqEOw4QNbLspA4olIz6C7JwyqfbtZxRJG0BUivMG16gJ62068dBmONy06
+         xjPvGfwZzKd7CZSQiTMwGdaxoVjWfnViwMCrzKYDxqIOJ6SdcQtb7dlT2TLcDvKBuw
+         sdk7vi8CEpz6qoQUHjH94ASMTO2htEn4G9bNy84g=
+Date:   Tue, 11 Oct 2022 16:22:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH v6] MIPS: Expose prid and globalnumber to sysfs
+Message-ID: <Y0V8OlvdqADjCS9I@kroah.com>
+References: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ce6370f9-962c-905b-5188-a9b6ff9e2fd3@linaro.org>
+In-Reply-To: <20221011110951.93404-1-jiaxun.yang@flygoat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,26 +51,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 05:07:16PM +0300, Dmitry Baryshkov wrote:
-> On 11/10/2022 16:14, Johan Hovold wrote:
-> > The SC8280XP combo PHY does not need a delay before starting the USB PHY
-> > (which is what the has_pwrdn_delay config option really controls) so
-> > drop the unnecessary delay.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ----
-> >   1 file changed, 4 deletions(-)
+On Tue, Oct 11, 2022 at 12:09:51PM +0100, Jiaxun Yang wrote:
+> Some application would like to know precise model and rev of processor
+> to do errata workaround or optimization.
 > 
-> Just an obvious question: 'does not need a delay' comes from your 
-> experience or from some vendor flag (in ACPI/DT/kernel/wherever)?
+> Expose them in sysfs as:
+> /sys/devices/system/cpu/cpuX/regs/identification/prid
+> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+> 
+> Reusing AArch64 CPU registers directory.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Drop static qualifier for kobj (gregkh)
+> v3: Use kzalloc to allocate struct cpuregs.
+>     note: When Greg mentioned about static I was thinking about
+>     static qualifier of percpu variable. After reading documents
+>     again it turns out kobjs should be allocated at runtime. Arm64's
+>     cpuinfo kobj is also on a percpu variable... I guess that was a
+>     intentional use?
+> v4: Properly handle err of kobj creation. (gregkh)
+> v5: Drop invalid kfree
+> v6: Correct offline routine, use kobject_put
+> ---
+>  .../ABI/testing/sysfs-devices-system-cpu      |  9 ++
+>  arch/mips/kernel/topology.c                   | 97 +++++++++++++++++++
+>  2 files changed, 106 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> index 5bf61881f012..9dea45ad5a22 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> @@ -512,6 +512,15 @@ Description:	information about CPUs heterogeneity.
+>  
+>  		cpu_capacity: capacity of cpuX.
+>  
+> +What:		/sys/devices/system/cpu/cpuX/regs/identification/prid
+> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+> +Date:		October 2022
+> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
+> +Description:	MIPS CPU registers
+> +
+> +		'identification' directory exposes the Processor ID and Global Number
+> +		registers for identifying model and revision of the CPU.
+> +
+>  What:		/sys/devices/system/cpu/vulnerabilities
+>  		/sys/devices/system/cpu/vulnerabilities/meltdown
+>  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
+> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+> index 9429d85a4703..85588ffd6bac 100644
+> --- a/arch/mips/kernel/topology.c
+> +++ b/arch/mips/kernel/topology.c
+> @@ -5,6 +5,8 @@
+>  #include <linux/node.h>
+>  #include <linux/nodemask.h>
+>  #include <linux/percpu.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/smp.h>
+>  
+>  static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>  
+> @@ -26,3 +28,98 @@ static int __init topology_init(void)
+>  }
+>  
+>  subsys_initcall(topology_init);
+> +
+> +static struct kobj_type cpuregs_kobj_type = {
+> +	.sysfs_ops = &kobj_sysfs_ops,
+> +};
+> +
+> +struct cpureg {
+> +	struct kobject kobj;
+> +	struct cpuinfo_mips *info;
+> +};
+> +static DEFINE_PER_CPU(struct cpureg *, cpuregs);
+> +
+> +#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
+> +#define CPUREGS_ATTR_RO(_name, _field)						\
+> +	static ssize_t _name##_show(struct kobject *kobj,			\
+> +			struct kobj_attribute *attr, char *buf)			\
+> +	{									\
+> +		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
+> +										\
+> +		return sysfs_emit(buf, "0x%08x\n", info->_field);	\
+> +	}									\
+> +	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
+> +
+> +CPUREGS_ATTR_RO(prid, processor_id);
+> +CPUREGS_ATTR_RO(globalnumber, globalnumber);
+> +
+> +static struct attribute *cpuregs_id_attrs[] = {
+> +	&cpuregs_attr_prid.attr,
+> +	&cpuregs_attr_globalnumber.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group cpuregs_attr_group = {
+> +	.attrs = cpuregs_id_attrs,
+> +	.name = "identification"
+> +};
+> +
+> +static int cpuregs_cpu_online(unsigned int cpu)
+> +{
+> +	int rc;
+> +	struct device *dev;
+> +	struct cpureg *reg;
+> +
+> +	dev = get_cpu_device(cpu);
+> +	if (!dev) {
+> +		rc = -ENODEV;
+> +		goto out;
+> +	}
+> +	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
+> +	if (!reg) {
+> +		rc = -ENOMEM;
+> +		goto out;
+> +	}
+> +	reg->info = &cpu_data[cpu];
+> +
+> +	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
+> +					&dev->kobj, "regs");
+> +	if (rc)
+> +		goto out_kobj;
+> +	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
+> +	if (rc)
+> +		goto out_kobj;
+> +
+> +	return 0;
+> +out_kobj:
+> +	kobject_put(&reg->kobj);
+> +out:
+> +	return rc;
+> +}
+> +
+> +static int cpuregs_cpu_offline(unsigned int cpu)
+> +{
+> +	struct cpureg *reg = per_cpu(cpuregs, cpu);
+> +
+> +	if (!reg)
+> +		return -ENODEV;
+> +	sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
+> +	kobject_put(&reg->kobj);
 
-There's no corresponding delay in the vendor driver; the delay as it
-is used in the driver (before starting the PHY) makes no sense and
-shouldn't be used for new platforms; and I've verified that it isn't
-needed on SC8280XP.
+You did not test this code :(
 
-I'm confident that this was just another case of copy-pasting. And the
-buck stops here (with SC8280XP). ;)
+Please do so, and also exercise the cpu-remove path and fix up all the
+errors that happen there.
 
-Johan
+thanks,
+
+greg k-h
