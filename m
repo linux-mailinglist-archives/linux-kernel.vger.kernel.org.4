@@ -2,103 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE7F5FB28D
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4370A5FB290
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 14:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJKMj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 08:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
+        id S229825AbiJKMkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 08:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJKMjt (ORCPT
+        with ESMTP id S229703AbiJKMka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 08:39:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D772A14D0F;
-        Tue, 11 Oct 2022 05:39:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72F7061184;
-        Tue, 11 Oct 2022 12:39:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5397AC433D6;
-        Tue, 11 Oct 2022 12:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665491987;
-        bh=kunzchOrNhxJ4TlX1sA1be9vS/JGs0Lekk2gqipkh8Y=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jW6jtcsL5GXOGod6XfiNRBewRwunQAWa38fQIEmsdAz7o3RJ82VNKWvN+uvZqJ5bn
-         SJ7rX5AGavoVzTI/PcoW4V9Xaeacosk2vmhIgKbBIrDhewNRtxjqh1DeMLI/BXJ6kD
-         LJvgXBB7Vg5ucZevccOuIKKLm0F8hVZSCTgKIDkJoIeh/w5xxbq8s89Ck9zO30vUXC
-         Uy5ui+/BgBsaKXiLgcqCfLh3s4sxuUKtHsi7jyu4MhYH6fWtD4E57TeoyM+C6lUVhw
-         zT/7k9+a3eUPRb91/lZDYp8/Z5IF+MDqpCgWILW8SVBoYgsTgTY3C26/qzRQhCVky1
-         WbCf0qEEbwHTg==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Liu Shixin <liushixin2@huawei.com>,
-        Conor Dooley <conor@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Liu Shixin <liushixin2@huawei.com>
-Subject: Re: [PATCH v2 0/2] riscv: Support HAVE_ARCH_HUGE_VMAP and
- HAVE_ARCH_HUGE_VMALLOC
-In-Reply-To: <20221008140506.1066805-1-liushixin2@huawei.com>
-References: <20221008140506.1066805-1-liushixin2@huawei.com>
-Date:   Tue, 11 Oct 2022 14:39:44 +0200
-Message-ID: <87tu4ah6un.fsf@smulpajen.i-did-not-set--mail-host-address--so-tickle-me>
+        Tue, 11 Oct 2022 08:40:30 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E812661;
+        Tue, 11 Oct 2022 05:40:29 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BCeCFA110994;
+        Tue, 11 Oct 2022 07:40:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1665492012;
+        bh=tUmc3Z2gbFC5iJS3cRvN7b8XBwMTR68vu9QqBE9JhyU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=wZB23PlwnzNSjFZw4oBh36lhRLWPg2FvHqBwbG3QYdQ74xJItLEns6ZdxmH1gHgXt
+         xinUq3BFMS7RLL+vT9cDHNoI6v7lHsXEF7iKmceUH7W+RnuV9bKh4iMa6Bfcv6u35G
+         yChn5xf4PIGJoEWn75G46tESzHr22yUk3YAx3MgY=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BCeCKN120737
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Oct 2022 07:40:12 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 11
+ Oct 2022 07:40:12 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 11 Oct 2022 07:40:12 -0500
+Received: from [172.24.147.145] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BCe89E026172;
+        Tue, 11 Oct 2022 07:40:09 -0500
+Subject: Re: [PATCH v3 3/5] PCI: endpoint: Use a separate lock for protecting
+ epc->pci_epf list
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <kishon@kernel.org>, <lpieralisi@kernel.org>, <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <vidyas@nvidia.com>,
+        <vigneshr@ti.com>
+References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+ <20221006134927.41437-4-manivannan.sadhasivam@linaro.org>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <5d041111-6ebc-4ac6-5693-443535545510@ti.com>
+Date:   Tue, 11 Oct 2022 18:10:08 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221006134927.41437-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liu Shixin <liushixin2@huawei.com> writes:
-
-> Since riscv64 has already support SATP_MODE_57 by default, it is time to
-> support more hugepage-related features. These two patches will enable
-> HAVE_ARCH_HUGE_VMAP and HAVE_ARCH_HUGE_VMALLOC.
->
-
-Just a note; The HP support does not require sv57. Pmd/Mega- and
-pud/gigapages work for sv39 and sv48 as well.
-
-> v1->v2: Fix the build error reported by kernel-test.
->
-> Liu Shixin (2):
->   riscv: Enable HAVE_ARCH_HUGE_VMAP for 64BIT
->   riscv: Enable HAVE_ARCH_HUGE_VMALLOC for 64BIT
->
->  .../features/vm/huge-vmap/arch-support.txt    |  2 +-
->  arch/riscv/Kconfig                            |  2 +
->  arch/riscv/include/asm/vmalloc.h              | 18 ++++
->  arch/riscv/mm/Makefile                        |  1 +
->  arch/riscv/mm/pgtable.c                       | 83 +++++++++++++++++++
->  5 files changed, 105 insertions(+), 1 deletion(-)
->  create mode 100644 arch/riscv/mm/pgtable.c
->
-
-I've taken this series for a spin, and tested huge pud pages via
-ioremap(), and huge pmd pages via vmalloc_huge() on qemu for sv39, sv48,
-and sv57.
-
-Patch 2 have a spelling error in the commit message: "enbale" vs
-"enable".
-
-Fix up the spelling error in patch 2, and after that feel free to add
-for the whole series:
-
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
-Tested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
 
-Nice work!
-Bj=C3=B6rn
+On 06/10/22 7:19 pm, Manivannan Sadhasivam wrote:
+> The EPC controller maintains a list of EPF drivers added to it. For
+> protecting this list against the concurrent accesses, the epc->lock
+> (used for protecting epc_ops) has been used so far. Since there were
+> no users trying to use epc_ops and modify the pci_epf list simultaneously,
+> this was not an issue.
+> 
+> But with the addition of callback mechanism for passing the events, this
+> will be a problem. Because the pci_epf list needs to be iterated first
+> for getting hold of the EPF driver and then the relevant event specific
+> callback needs to be called for the driver.
+> 
+> If the same epc->lock is used, then it will result in a deadlock scenario.
+> 
+> For instance,
+> 
+> ...
+> 	mutex_lock(&epc->lock);
+> 	list_for_each_entry(epf, &epc->pci_epf, list) {
+> 		epf->event_ops->core_init(epf);
+> 		|
+> 		|-> pci_epc_set_bar();
+> 			|
+> 			|-> mutex_lock(&epc->lock) # DEADLOCK
+> ...
+> 
+> So to fix this issue, use a separate lock called "list_lock" for
+> protecting the pci_epf list against the concurrent accesses. This lock
+> will also be used by the callback mechanism.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
+Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+> ---
+>   drivers/pci/endpoint/pci-epc-core.c | 9 +++++----
+>   include/linux/pci-epc.h             | 2 ++
+>   2 files changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> index 3bc9273d0a08..6cce430d431b 100644
+> --- a/drivers/pci/endpoint/pci-epc-core.c
+> +++ b/drivers/pci/endpoint/pci-epc-core.c
+> @@ -613,7 +613,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
+>   	if (type == SECONDARY_INTERFACE && epf->sec_epc)
+>   		return -EBUSY;
+>   
+> -	mutex_lock(&epc->lock);
+> +	mutex_lock(&epc->list_lock);
+>   	func_no = find_first_zero_bit(&epc->function_num_map,
+>   				      BITS_PER_LONG);
+>   	if (func_no >= BITS_PER_LONG) {
+> @@ -640,7 +640,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
+>   
+>   	list_add_tail(list, &epc->pci_epf);
+>   ret:
+> -	mutex_unlock(&epc->lock);
+> +	mutex_unlock(&epc->list_lock);
+>   
+>   	return ret;
+>   }
+> @@ -672,11 +672,11 @@ void pci_epc_remove_epf(struct pci_epc *epc, struct pci_epf *epf,
+>   		list = &epf->sec_epc_list;
+>   	}
+>   
+> -	mutex_lock(&epc->lock);
+> +	mutex_lock(&epc->list_lock);
+>   	clear_bit(func_no, &epc->function_num_map);
+>   	list_del(list);
+>   	epf->epc = NULL;
+> -	mutex_unlock(&epc->lock);
+> +	mutex_unlock(&epc->list_lock);
+>   }
+>   EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
+>   
+> @@ -773,6 +773,7 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
+>   	}
+>   
+>   	mutex_init(&epc->lock);
+> +	mutex_init(&epc->list_lock);
+>   	INIT_LIST_HEAD(&epc->pci_epf);
+>   	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
+>   
+> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+> index a48778e1a4ee..fe729dfe509b 100644
+> --- a/include/linux/pci-epc.h
+> +++ b/include/linux/pci-epc.h
+> @@ -122,6 +122,7 @@ struct pci_epc_mem {
+>    * struct pci_epc - represents the PCI EPC device
+>    * @dev: PCI EPC device
+>    * @pci_epf: list of endpoint functions present in this EPC device
+> + * list_lock: Mutex for protecting pci_epf list
+>    * @ops: function pointers for performing endpoint operations
+>    * @windows: array of address space of the endpoint controller
+>    * @mem: first window of the endpoint controller, which corresponds to
+> @@ -139,6 +140,7 @@ struct pci_epc_mem {
+>   struct pci_epc {
+>   	struct device			dev;
+>   	struct list_head		pci_epf;
+> +	struct mutex			list_lock;
+>   	const struct pci_epc_ops	*ops;
+>   	struct pci_epc_mem		**windows;
+>   	struct pci_epc_mem		*mem;
+> 
