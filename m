@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332835FB88C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3295FB88E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJKQvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 12:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S229716AbiJKQvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 12:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiJKQv2 (ORCPT
+        with ESMTP id S229532AbiJKQvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 12:51:28 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F69E42E6B;
-        Tue, 11 Oct 2022 09:51:27 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id fw14so12986927pjb.3;
-        Tue, 11 Oct 2022 09:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ADBsxLunge1AhqEpSVfGO0kFOloOABIAiXPDugpYJZk=;
-        b=XEG0+rifCJBs/VBmh3mu4URmwTT/ffH/L1xVT0nYnfMdL2BvMHjdfRoyoRBRnB7RZ4
-         5BnpGQywEA/92cRoaZCZncGb9B0QnB/wtC85n5uLMYxEC2+B9ny+fQ+JvyO5w2UxNfCH
-         yITSzjKTNhmdMRklBn3mf5s0m4hr1EL3TNjovWH297zbwGFOtErDgOjzLqcvo7XqrWVR
-         1mO90RNcL8plTUjxhbMb4SdUv9U9lJtg/TjZ7eNkJa273jilFF44fYe48Pjeo5VzTGyc
-         EZjN7POAOMZAZ5DLeCfJJOR/UzUhHIqwSLGknhAXyfBZJngu4vROfvegVQdXt5YpVyEJ
-         tW7w==
+        Tue, 11 Oct 2022 12:51:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25F695AC8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665507110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=28aJ5XW2Re+JDVuFK2sayuEhZGIwLwkMzVSZJ8TTZjc=;
+        b=DARXEa/2swtQTc/PlGoIKCVUAcwh6oPz91DQnIOhuiFgsRdm3bJeEtwKtLpQDy+5tUC06X
+        su3ul1Uu3WMk4J6iKZzMJw3a0ZDRGhdw6RZi9b9LEXpEvKkmDhA6VyrxeyHpyki4BVE4Gk
+        0UlPcVyPJZtLFPhN8QTv7/NNyziTIyA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-505-KEfYzlm5MXWfTFPpCyqUkQ-1; Tue, 11 Oct 2022 12:51:49 -0400
+X-MC-Unique: KEfYzlm5MXWfTFPpCyqUkQ-1
+Received: by mail-wr1-f72.google.com with SMTP id m20-20020adfa3d4000000b0022e2fa93dd1so4043829wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 09:51:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ADBsxLunge1AhqEpSVfGO0kFOloOABIAiXPDugpYJZk=;
-        b=IckhE8arIfxb/rsxzErOp/d/yT+aYSokU0T+6ZQfyAx9j6WOJWPgi+YoRGpa9/SHhV
-         Kl5hXBjcQBg1BjaEEaZmxUhHVfhhKvM6QjtnwE5AQ9Sh4hy9LJvgN0ku4S6KT+r8wPY1
-         srAKBSWzxrV7KTAsYFeZPhQQkeJB3KjEJiLfw/iUiHDLurkjqlPuy9MO5zXVAjwyUGWL
-         S2OZDIamsXI+ukOcMUZ060V4ONIzpQuL7LFMM616iRF9ioNk8gJOiqKAgZK03ZIGKU2w
-         Mi8rdF4t8KnG24e/kKkkD5SXdgvCAHosD3PLuxNdwivZHtiO5vLy3i/kT8RWDnNKdXca
-         +lAw==
-X-Gm-Message-State: ACrzQf1WcEzNotTUG/lQw0zvC1Kf7pkiVoSo8/uIRdU7KulmkSW2qSdO
-        LukeZr7WVIqvT2BJcV32vww=
-X-Google-Smtp-Source: AMsMyM6W8eb/DSuoEh6zU2DVMjdqlJELxsWR2bijzEn10WkihTKRUct+5nu9+A4xGvYgzeX9gphkkg==
-X-Received: by 2002:a17:902:724b:b0:183:16f:fae4 with SMTP id c11-20020a170902724b00b00183016ffae4mr8300979pll.88.1665507087030;
-        Tue, 11 Oct 2022 09:51:27 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b00176b3d7db49sm8978933plg.0.2022.10.11.09.51.26
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=28aJ5XW2Re+JDVuFK2sayuEhZGIwLwkMzVSZJ8TTZjc=;
+        b=xtvAkN8599Ak7kTY2suiWWiwl4Ia8nXznV0vW9zq8D4h4yl7HWTvlYVrtkvdQVAfBt
+         h0R9VEZB0dPm7qcsOeuSaRwpFrYtNn3F/w7b9h/LpSMoJTRGl8kJWZ20/DrJf9qx4H4v
+         1gDzdG4zGwsoQyye+G2yDYy89LPl0Y3INgjUwimvPDFxnjZX8/1TKelu9R0pDrxrVla/
+         JHivtL3ta8aKumsFV/SrfCIjEIduMHHKXIKELeqXAEis8RDtYylIceypBPUIZ+b4durE
+         YaYfzhPqjAJ1O66gyVcsj31lDjQDxOBn4n0zmJtRrHqdo5V5OSYIenZ8lpHuCGb4T6vR
+         3tuw==
+X-Gm-Message-State: ACrzQf0IotTn3/nfpkGcXzvlPdVlZYEdMWL7BvsWzSTxHYt1+fcJt9Uc
+        1cKKXLyiOYICWTbBUv+ahliUbZcQCkN/K5DM+pxSUVcUmDcNrhAeJK12Cr0P0F6cVg2JjqX31yS
+        xE9xIv4kt1fdeZH1OlOc83fCelTrt0TIapvaBnIJI+XYdusU0MTn/0YWVvUusxNCwyUEcnQxrlX
+        4=
+X-Received: by 2002:a05:600c:2d45:b0:3c6:cc57:be72 with SMTP id a5-20020a05600c2d4500b003c6cc57be72mr13597wmg.23.1665507107643;
+        Tue, 11 Oct 2022 09:51:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4soStj05RwBkvP59zpMQ8XQ7hR8mRKFb7xVCVqVnBDoqcV30KHZ3UzBCRMhxLqCL6OIXZOOg==
+X-Received: by 2002:a05:600c:2d45:b0:3c6:cc57:be72 with SMTP id a5-20020a05600c2d4500b003c6cc57be72mr13570wmg.23.1665507107176;
+        Tue, 11 Oct 2022 09:51:47 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c19-20020a05600c0a5300b003c6c76b43a1sm2025629wmq.13.2022.10.11.09.51.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 09:51:26 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 11 Oct 2022 06:51:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Support cgroup1 in get from fd/file interfaces
-Message-ID: <Y0WfDQ95i9lFJKUz@slm.duckdns.org>
-References: <20221011003359.3475263-1-yosryahmed@google.com>
+        Tue, 11 Oct 2022 09:51:45 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/4] Add a drm_crtc_helper_atomic_check() helper
+Date:   Tue, 11 Oct 2022 18:51:32 +0200
+Message-Id: <20221011165136.469750-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011003359.3475263-1-yosryahmed@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:33:57AM +0000, Yosry Ahmed wrote:
-> commit f3a2aebdd6fb ("cgroup: enable cgroup_get_from_file() on cgroup1")
-> enabled using cgroup_get_from_file() and cgroup_get_from_fd() on
-> cgroup1, to enable bpf cgroup_iter to attach to cgroup1.
-> 
-> Apparently, other callers depended on these functions only supporting
-> cgroup2, so f3a2aebdd6 was reverted. Instead, add new separate interfaces
-> that support both cgroup1 and cgroup2 and use them in bpf cgroup_iter.
+Add a helper function and make drivers that have the same logic in their
+struct drm_crtc_helper_funcs .atomic_check handler to use this instead.
 
-Applied to cgroup/for-6.1-fixes.
+Patch #1, #2 and #3 are just cleanups for the mgag200, simpledrm and
+ssd130x drivers respectively. Finally patch #4 converts the last two
+drivers to use a helper instead of open coding it the same logic.
 
-Thanks.
+The changes are inspired by a patch from Thomas Zimmermann for the ast
+DRM driver:
+
+https://patchwork.kernel.org/project/dri-devel/patch/20221010103625.19958-4-tzimmermann@suse.de/
+
+This is a v2 that addresses issues pointed out also by Thomas in v1:
+
+https://lists.freedesktop.org/archives/dri-devel/2022-October/375363.html
+
+Best regards,
+Javier
+
+Changes in v2:
+- Reference drm_plane_helper_atomic_check() from drm_crtc_atomic_check()
+  kernel doc comments and viceversa (Thomas Zimmermann).
+
+Javier Martinez Canillas (4):
+  drm/mgag200: Do not call drm_atomic_add_affected_planes()
+  drm/simpledrm: Do not call drm_atomic_add_affected_planes()
+  drm/ssd130x: Do not call drm_atomic_add_affected_planes()
+  drm/crtc-helper: Add a drm_crtc_helper_atomic_check() helper
+
+ drivers/gpu/drm/drm_crtc_helper.c      | 26 ++++++++++++++++++++++++++
+ drivers/gpu/drm/drm_plane_helper.c     |  4 +++-
+ drivers/gpu/drm/mgag200/mgag200_mode.c |  2 +-
+ drivers/gpu/drm/solomon/ssd130x.c      | 20 ++------------------
+ drivers/gpu/drm/tiny/simpledrm.c       | 20 ++------------------
+ include/drm/drm_crtc_helper.h          |  2 ++
+ 6 files changed, 36 insertions(+), 38 deletions(-)
 
 -- 
-tejun
+2.37.3
+
