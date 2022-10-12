@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21635FC90A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609FB5FC907
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiJLQUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S229615AbiJLQUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiJLQUd (ORCPT
+        with ESMTP id S229573AbiJLQT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:20:33 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D281027FED;
-        Wed, 12 Oct 2022 09:20:32 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id u15so13698993oie.2;
-        Wed, 12 Oct 2022 09:20:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tAIs7AwhS/GOOfzZdFmQPH0C0QhvdyIwmaA0cNPLVEA=;
-        b=udPPao2DTT4urstb9istE7eGq5u0GpRDQ5jxFZvsKoJ06yWA/A/7nUKxXZmIvp9u7w
-         4LPFGcQB+1r52zOqG6szZ/zfB9POqjWH3wtk2nL5cXNOTwuvOb6FH55OZG8cwC7YJoXq
-         E6lKU5Mc4/p8G5cIDiAmoqFnaX4KNgYcnsK679nxg2DVHkBcvtGxqo9nfuptqGED3Plb
-         B4cgSm1NkKiBo8l5mHoV1h2JqxS6OGu5pwI9kfuglGvssiOzJGaML5IqXgvtPrO9m2sW
-         7Ch14QMFEtVdQwFfAMbVSznrtasylGGcacm5WBu8Hrc+TLOXwhOQk6HKPff/I+hYouq+
-         htvw==
-X-Gm-Message-State: ACrzQf29T+YoNtxcIs//aaibqbaPHRVeCavYjtZXSs8JaTQmHnUiM5Ll
-        NnKEaVE0HrWS7sfIgB+FyLYSJr7Cfxvk1ED0IMQE/KeM
-X-Google-Smtp-Source: AMsMyM6zcRK5WW66x5f3Qi5yVUogVRAUQtGeAnSwRuKvDsW1ndU5IBxvURGWsqOiTKi4c4hsFeqCWCx7336ysKMWVY0=
-X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
- q44-20020a05687082ac00b00133034b6f10mr2977935oae.218.1665591621232; Wed, 12
- Oct 2022 09:20:21 -0700 (PDT)
+        Wed, 12 Oct 2022 12:19:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A791C41D;
+        Wed, 12 Oct 2022 09:19:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAA73B81A61;
+        Wed, 12 Oct 2022 16:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E16CCC433D6;
+        Wed, 12 Oct 2022 16:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665591591;
+        bh=TEDjogBy+ecqduxNWQvtcOqrUZbEXN3M1edKYOv2Kik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJc+dkG+SDhZ587/nB8yJgEeqLGk6vg6xMvfXgkcwSttnuYcdtUYvKQKGHMFZgGWO
+         OXu5gGm6v3E+Aax24MEzRf58atn8s77BkPUZrhukOLvM80T8F5NmdBeQqjRmJRNYKr
+         lbMVJynC/ibSUrrK4PjJP74170sW9LGV/uP8Lnd4=
+Date:   Wed, 12 Oct 2022 18:20:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: imx: Add missing .thaw_noirq hook
+Message-ID: <Y0bpU51o88u6iH0R@kroah.com>
+References: <20221012121353.2346280-1-shawn.guo@linaro.org>
 MIME-Version: 1.0
-References: <20221012082259.22394-1-adrian.hunter@intel.com> <20221012082259.22394-2-adrian.hunter@intel.com>
-In-Reply-To: <20221012082259.22394-2-adrian.hunter@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 12 Oct 2022 09:20:10 -0700
-Message-ID: <CAM9d7ciW1wF7YGszv4KQ_KRUhCeBVynQsuRi2+NoRAYgy3xsRw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf intel-pt: Fix segfault in intel_pt_print_info()
- with uClibc
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012121353.2346280-1-shawn.guo@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+On Wed, Oct 12, 2022 at 08:13:53PM +0800, Shawn Guo wrote:
+> The following warning is seen with non-console UART instance when
+> system hibernates.
+> 
+> [   37.371969] ------------[ cut here ]------------
+> [   37.376599] uart3_root_clk already disabled
+> [   37.380810] WARNING: CPU: 0 PID: 296 at drivers/clk/clk.c:952 clk_core_disable+0xa4/0xb0
+> ...
+> [   37.506986] Call trace:
+> [   37.509432]  clk_core_disable+0xa4/0xb0
+> [   37.513270]  clk_disable+0x34/0x50
+> [   37.516672]  imx_uart_thaw+0x38/0x5c
+> [   37.520250]  platform_pm_thaw+0x30/0x6c
+> [   37.524089]  dpm_run_callback.constprop.0+0x3c/0xd4
+> [   37.528972]  device_resume+0x7c/0x160
+> [   37.532633]  dpm_resume+0xe8/0x230
+> [   37.536036]  hibernation_snapshot+0x288/0x430
+> [   37.540397]  hibernate+0x10c/0x2e0
+> [   37.543798]  state_store+0xc4/0xd0
+> [   37.547203]  kobj_attr_store+0x1c/0x30
+> [   37.550953]  sysfs_kf_write+0x48/0x60
+> [   37.554619]  kernfs_fop_write_iter+0x118/0x1ac
+> [   37.559063]  new_sync_write+0xe8/0x184
+> [   37.562812]  vfs_write+0x230/0x290
+> [   37.566214]  ksys_write+0x68/0xf4
+> [   37.569529]  __arm64_sys_write+0x20/0x2c
+> [   37.573452]  invoke_syscall.constprop.0+0x50/0xf0
+> [   37.578156]  do_el0_svc+0x11c/0x150
+> [   37.581648]  el0_svc+0x30/0x140
+> [   37.584792]  el0t_64_sync_handler+0xe8/0xf0
+> [   37.588976]  el0t_64_sync+0x1a0/0x1a4
+> [   37.592639] ---[ end trace 56e22eec54676d75 ]---
+> 
+> On hibernating, pm core calls into related hooks in sequence like:
+> 
+>     .freeze
+>     .freeze_noirq
+>     .thaw_noirq
+>     .thaw
+> 
+> With .thaw_noirq hook being absent, the clock will be disabled in a
+> unbalanced call which results the warning above.
+> 
+>     imx_uart_freeze()
+>         clk_prepare_enable()
+>     imx_uart_suspend_noirq()
+>         clk_disable()
+>     imx_uart_thaw
+>         clk_disable_unprepare()
+> 
+> Adding the missing .thaw_noirq hook as imx_uart_resume_noirq() will have
+> the call sequence corrected as below and thus fix the warning.
+> 
+>     imx_uart_freeze()
+>         clk_prepare_enable()
+>     imx_uart_suspend_noirq()
+>         clk_disable()
+>     imx_uart_resume_noirq()
+>         clk_enable()
+>     imx_uart_thaw
+>         clk_disable_unprepare()
+> 
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 
-On Wed, Oct 12, 2022 at 1:23 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> uClibc segfaulted because NULL was passed as the format to fprintf().
+What commit id does this fix, and does it need to go to older/stable
+kernels?
 
-Sounds like glibc has a NULL check in fprintf().
+thanks,
 
->
-> That happened because one of the format strings was missing and
-> intel_pt_print_info() didn't check that before calling fprintf().
->
-> Add the missing format string, and check format is not NULL before calling
-> fprintf().
->
-> Fixes: 11fa7cb86b56 ("perf tools: Pass Intel PT information for decoding MTC and CYC")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
-
-
-> ---
->  tools/perf/util/intel-pt.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-> index b34cb3dec1aa..e3548ddef254 100644
-> --- a/tools/perf/util/intel-pt.c
-> +++ b/tools/perf/util/intel-pt.c
-> @@ -4046,6 +4046,7 @@ static const char * const intel_pt_info_fmts[] = {
->         [INTEL_PT_SNAPSHOT_MODE]        = "  Snapshot mode       %"PRId64"\n",
->         [INTEL_PT_PER_CPU_MMAPS]        = "  Per-cpu maps        %"PRId64"\n",
->         [INTEL_PT_MTC_BIT]              = "  MTC bit             %#"PRIx64"\n",
-> +       [INTEL_PT_MTC_FREQ_BITS]        = "  MTC freq bits       %#"PRIx64"\n",
->         [INTEL_PT_TSC_CTC_N]            = "  TSC:CTC numerator   %"PRIu64"\n",
->         [INTEL_PT_TSC_CTC_D]            = "  TSC:CTC denominator %"PRIu64"\n",
->         [INTEL_PT_CYC_BIT]              = "  CYC bit             %#"PRIx64"\n",
-> @@ -4060,8 +4061,12 @@ static void intel_pt_print_info(__u64 *arr, int start, int finish)
->         if (!dump_trace)
->                 return;
->
-> -       for (i = start; i <= finish; i++)
-> -               fprintf(stdout, intel_pt_info_fmts[i], arr[i]);
-> +       for (i = start; i <= finish; i++) {
-> +               const char *fmt = intel_pt_info_fmts[i];
-> +
-> +               if (fmt)
-> +                       fprintf(stdout, fmt, arr[i]);
-> +       }
->  }
->
->  static void intel_pt_print_info_str(const char *name, const char *str)
-> --
-> 2.25.1
->
+greg k-h
