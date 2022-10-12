@@ -2,140 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491055FCA5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6BD5FCA5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJLSQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S229777AbiJLSR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJLSQn (ORCPT
+        with ESMTP id S229754AbiJLSRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:16:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA5F17A94;
-        Wed, 12 Oct 2022 11:16:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB08461596;
-        Wed, 12 Oct 2022 18:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3302C433D6;
-        Wed, 12 Oct 2022 18:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665598601;
-        bh=njqsGfY/Ky3JVGMiS1t2SsK1cQbO3ajg+b5VYn5YLhg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JAxG+GqtIRT+kWAS9WEr6WzSOwCaFxCxO7b05swAq0QvhU1Ot2RXPgVPxgPnAboc6
-         b0oiKsHhiPjh/TsvTlUUoVLosVFwEkvurobiMs+nBfYi3xKCsoqs6V9SlHl7NZ0RN0
-         /0sRjojU9BR42RRTMrf3b2YRriB/u+zRMrkicOJp7BV1pLnHYAzGJnCdNiklM/Axgq
-         JwWi5mGYGznLJemfk1nWyD8ZWMO9AmeaxplqCAcIH8YSfMss0HDfgmOUEW0Mb0pzWQ
-         DekmCLsJzMrLi4rI3Rd/p792Cm8jPIUyLxrALVTz7jA/RmiARn4HASy/PYuJ0hs56m
-         0WIlUaN1DadkQ==
-Date:   Wed, 12 Oct 2022 19:16:36 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] riscv: dts: sifive unleashed: Add PWM controlled LEDs
-Message-ID: <Y0cEhK+oDPpLiaFJ@spud>
-References: <20221012110928.352910-1-emil.renner.berthing@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012110928.352910-1-emil.renner.berthing@canonical.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 14:17:22 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40D64D174
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:08 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id g15-20020a25af8f000000b006bcad4bf46aso16756583ybh.19
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8z/N7rajPM5bDbkRc7ux+RB4h16QzYAJS8fnP1UPndE=;
+        b=M/huj/nHRTShArCrudhJ7iG+SfM8N0CLPP7gdjYfeC3hoJLIqKIua/Mtb9p984G0jg
+         kXvLGi1REkmVhvv+KDBdFg3pz7ILz+gWJkrCVS8Umc8koGm8s7jodek4b84Xa6qBVhXf
+         d7rIf7DKQnCcvym1eIgAypVrehMRrMzoLAZgUzHfblBX3ZF3r8Do2tnaclV8zanwV5Az
+         voFmthDUQHR1wv42I9Mc1soUJW6UrrPU+reuMjZVDu7AUC3yENb1SXXxISreFD87AiBA
+         PisiXE9tfW7yPL86qpYBltsKCPseYrKbTXEgSM1BxTQ4HwheT5jc+zl7kSxEy93UjsLk
+         zpBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8z/N7rajPM5bDbkRc7ux+RB4h16QzYAJS8fnP1UPndE=;
+        b=YUOoR7lpBO28zzGhlFtpUoKexxCZhmkcIAp/UqueUUNTRdYcFlOOjWSOaTb7Gq5703
+         IdYsTPlfjy1Hk31UQanEiQITFc/ecGEAbyZNsRHrPXx+Q9I5bymL1bIHEhMbPa9AyaPt
+         szya5syfdnikv9O5549HuiwMifh0fK/5YxpadgTrEjl3/wByBXvG1pu7+BV9eRJZ8dOb
+         E2XlbTAcQb549qR3h0H6o9VMY8AG/y6HQyyyV6rm1sCoDPPnjQzBHavXHN38zgKTahu+
+         YyJCblmTIxSl9OESwZLucUuI4yCALmQta2xnptPNBWcbp3qJReX10i4F02hofivef20O
+         NWbQ==
+X-Gm-Message-State: ACrzQf1gDjWNcm20YmG0hT13aoJwgeHeM4N0DeE/RYLC7oU+Cc6WtyE9
+        4ToboFwPtlgdRk25vENmxVb3q4RhXus=
+X-Google-Smtp-Source: AMsMyM7PHmAGWW8xmkb9zmUhh7qx+uzrZL2OJC5GLZzb/QSCLd/oiR+K3itria64T/zEE3HJaSwPk38Uo0c=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a5b:443:0:b0:6bc:e3d1:8990 with SMTP id
+ s3-20020a5b0443000000b006bce3d18990mr30993521ybp.191.1665598627584; Wed, 12
+ Oct 2022 11:17:07 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 12 Oct 2022 18:16:51 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20221012181702.3663607-1-seanjc@google.com>
+Subject: [PATCH v4 00/11] KVM: x86/mmu: Make tdp_mmu a read-only parameter
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 01:09:28PM +0200, Emil Renner Berthing wrote:
-> This adds the 4 PWM controlled green LEDs to the HiFive Unleashed device
-> tree. The schematic doesn't specify any special function for the LEDs,
-> so they're added here without any default triggers and named d1, d2, d3
-> and d4 just like in the schematic.
-> 
-> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-> ---
-> 
-> Yes this board is old, but I'm trying to get rid of custom riscv patches in
-> the Ubuntu kernel.
+This is a variation of David's series to change tdp_mmu to a RO param[*].
+The key difference is that instead of moving the TDP MMU page fault handler
+to its own function, use static branches to make TDP MMU page faults (and
+a few other paths) effectively branch free.
 
-Old maybe, but some of us still have them ;)
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I'm not dead set against having a dedicated TDP MMU page fault handler, but
+IMO it's not really better once the TDP MMU vs. shadow MMU is reduced to a
+static branch, just different.  The read vs. write mmu_lock is the most
+visible ugliness, and that can be buried in helpers if we really want to
+make the page fault handler easier on the eyes, e.g.
 
-Twiddled the sysfs knobs a bit too so:
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+	direct_page_fault_mmu_lock(vcpu);
 
-> 
->  .../boot/dts/sifive/hifive-unleashed-a00.dts  | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
-> index ced0d4e47938..900a50526d77 100644
-> --- a/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
-> +++ b/arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts
-> @@ -3,6 +3,8 @@
->  
->  #include "fu540-c000.dtsi"
->  #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pwm/pwm.h>
->  
->  /* Clock frequency (in Hz) of the PCB crystal for rtcclk */
->  #define RTCCLK_FREQ		1000000
-> @@ -42,6 +44,42 @@ gpio-restart {
->  		compatible = "gpio-restart";
->  		gpios = <&gpio 10 GPIO_ACTIVE_LOW>;
->  	};
-> +
-> +	led-controller {
-> +		compatible = "pwm-leds";
-> +
-> +		led-d1 {
-> +			pwms = <&pwm0 0 7812500 PWM_POLARITY_INVERTED>;
-> +			active-low;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			max-brightness = <255>;
-> +			label = "d1";
-> +		};
-> +
-> +		led-d2 {
-> +			pwms = <&pwm0 1 7812500 PWM_POLARITY_INVERTED>;
-> +			active-low;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			max-brightness = <255>;
-> +			label = "d2";
-> +		};
-> +
-> +		led-d3 {
-> +			pwms = <&pwm0 2 7812500 PWM_POLARITY_INVERTED>;
-> +			active-low;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			max-brightness = <255>;
-> +			label = "d3";
-> +		};
-> +
-> +		led-d4 {
-> +			pwms = <&pwm0 3 7812500 PWM_POLARITY_INVERTED>;
-> +			active-low;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			max-brightness = <255>;
-> +			label = "d4";
-> +		};
-> +	};
->  };
->  
->  &uart0 {
-> -- 
-> 2.37.2
-> 
+	if (is_page_fault_stale(vcpu, fault))
+		goto out_unlock;
+
+	if (is_tdp_mmu_enabled()) {
+		r = kvm_tdp_mmu_map(vcpu, fault);
+	} else {
+		r = make_mmu_pages_available(vcpu);
+		if (r)
+			goto out_unlock;
+
+		r = __direct_map(vcpu, fault);
+	}
+
+out_unlock:
+	direct_page_fault_mmu_unlock(vcpu);
+
+v4:
+  - Keep is_tdp_mmu_page() in patch 1.
+  - Collect reviews. [Isaku]
+  - Skip "make MMU pages available" for root allocations.
+  - Rework "is TDP MMU" checks to take advantage of read-only param.
+  - Use a static key to track TDP MMU enabling.
+
+[*] https://lkml.kernel.org/r/20220921173546.2674386-1-dmatlack@google.com
+
+David Matlack (7):
+  KVM: x86/mmu: Change tdp_mmu to a read-only parameter
+  KVM: x86/mmu: Move TDP MMU VM init/uninit behind tdp_mmu_enabled
+  KVM: x86/mmu: Grab mmu_invalidate_seq in kvm_faultin_pfn()
+  KVM: x86/mmu: Handle error PFNs in kvm_faultin_pfn()
+  KVM: x86/mmu: Avoid memslot lookup during KVM_PFN_ERR_HWPOISON
+    handling
+  KVM: x86/mmu: Handle no-slot faults in kvm_faultin_pfn()
+  KVM: x86/mmu: Stop needlessly making MMU pages available for TDP MMU
+
+Sean Christopherson (4):
+  KVM: x86/mmu: Pivot on "TDP MMU enabled" when handling direct page
+    faults
+  KVM: x86/mmu: Pivot on "TDP MMU enabled" to check if active MMU is TDP
+    MMU
+  KVM: x86/mmu: Replace open coded usage of tdp_mmu_page with
+    is_tdp_mmu_page()
+  KVM: x86/mmu: Use static key/branches for checking if TDP MMU is
+    enabled
+
+ arch/x86/include/asm/kvm_host.h |   9 --
+ arch/x86/kvm/mmu.h              |  14 ++-
+ arch/x86/kvm/mmu/mmu.c          | 212 ++++++++++++++++++++------------
+ arch/x86/kvm/mmu/mmu_internal.h |   1 +
+ arch/x86/kvm/mmu/paging_tmpl.h  |  12 +-
+ arch/x86/kvm/mmu/tdp_mmu.c      |  13 +-
+ arch/x86/kvm/mmu/tdp_mmu.h      |  25 +---
+ 7 files changed, 149 insertions(+), 137 deletions(-)
+
+
+base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
