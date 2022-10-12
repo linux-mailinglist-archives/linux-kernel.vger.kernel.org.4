@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2805FC0F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B83F5FC0F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJLGxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S229527AbiJLGyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJLGxJ (ORCPT
+        with ESMTP id S229490AbiJLGyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:53:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1DA025C;
-        Tue, 11 Oct 2022 23:53:08 -0700 (PDT)
+        Wed, 12 Oct 2022 02:54:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7E8DCA;
+        Tue, 11 Oct 2022 23:54:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D6E5B81981;
-        Wed, 12 Oct 2022 06:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64741C433D6;
-        Wed, 12 Oct 2022 06:53:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE15C6143F;
+        Wed, 12 Oct 2022 06:54:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20C0C433C1;
+        Wed, 12 Oct 2022 06:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665557585;
-        bh=kfeTdt8LgFzpRd1qO+A5KoG7Tuot/w4Ck8QJHAn273s=;
+        s=korg; t=1665557678;
+        bh=07544IyluCqQFbZ6NhjfAsCj/GMjAj2uXv4G4GnQgo0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=x0HW7/m2tSyoFLA3qql8FIicJScZBTHHWTk/xt1rAnuVz2+u+RtSLbMkWsaDyeE+T
-         WqbtrwvSDbljxNm4Fd1SpdW1W8xvlJbPyt5En0oXTZChaUVbkQuGYXErqZoxq+cMyV
-         DbRERVUUjp7aDrTCOQWdVwBJzW2605lWG9H+qxLE=
-Date:   Wed, 12 Oct 2022 08:53:49 +0200
+        b=jHaasYph0Rv0oQDVh9RCvdB7C3uVY/726M2EM4fiJ8JofAJG2WY1pX+OXcP45+Bs7
+         QcHzyj5wQFv4So6S8rBhGsnuNJ3WUpZ4/1REKgJzwr2OvO2FDhoZdfskZTTSV0qYvH
+         rokhHfhx0M5Zh3WF1J38E/Dn0BxrB5P63++JeybU=
+Date:   Wed, 12 Oct 2022 08:55:22 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jiri Slaby <jirislaby@kernel.org>,
         Bjorn Andersson <quic_bjorande@quicinc.com>,
         Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
@@ -52,26 +52,20 @@ Cc:     Jiri Slaby <jirislaby@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM
  Console Services
-Message-ID: <Y0ZkfT8gSSbKQSI4@kroah.com>
-References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
- <20220928195633.2348848-15-quic_eberman@quicinc.com>
- <YzbePxTF8hRbWNRU@kroah.com>
- <14d0ff9f-60f3-71cc-ea42-ceee389298ac@quicinc.com>
- <Yz/YBDqqwBUlswgX@kroah.com>
- <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
- <Y0R/QbysXa6ebNd8@kroah.com>
- <ca42d89e-9e19-0536-0951-2c123d898892@quicinc.com>
- <Y0ULqlIMKTc6gdeV@kroah.com>
- <13eee213-f6c2-d998-ba2e-459509ae7ee7@quicinc.com>
+Message-ID: <Y0Zk2hN4uEbxCp56@kroah.com>
+References: <20221011000840.289033-1-quic_eberman@quicinc.com>
+ <20221011000840.289033-14-quic_eberman@quicinc.com>
+ <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+ <85ca7eb4-3e0c-4ffb-8bac-a435594ca0f7@app.fastmail.com>
+ <b7cca9c7-5170-bf40-c030-d676944b03c6@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <13eee213-f6c2-d998-ba2e-459509ae7ee7@quicinc.com>
+In-Reply-To: <b7cca9c7-5170-bf40-c030-d676944b03c6@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,47 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 03:04:08PM -0700, Elliot Berman wrote:
+On Tue, Oct 11, 2022 at 03:04:47PM -0700, Elliot Berman wrote:
 > 
 > 
-> On 10/10/2022 11:22 PM, Greg Kroah-Hartman wrote:
-> > On Mon, Oct 10, 2022 at 01:58:00PM -0700, Elliot Berman wrote:
+> On 10/11/2022 4:09 AM, Arnd Bergmann wrote:
+> > On Tue, Oct 11, 2022, at 8:02 AM, Jiri Slaby wrote:
+> > > On 11. 10. 22, 2:08, Elliot Berman wrote:
+> > > > +
+> > > > +	/* below are for printk console.
+> > > > +	 * gh_rm_console_* calls will sleep and console_write can be called from
+> > > > +	 * atomic ctx. Two xmit buffers are used. The active buffer is tracked with
+> > > > +	 * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
+> > > > +	 * A work is scheduled to flush the bytes. The work will swap the active buffer
+> > > > +	 * and write out the other buffer.
+> > > > +	 */
 > > > 
-> > > 
-> > > On 10/10/2022 1:23 PM, Greg Kroah-Hartman wrote:
-> > > > On Sun, Oct 09, 2022 at 01:59:21PM -0700, Elliot Berman wrote:
-> > > > > 
-> > > > > > > > On 10/7/2022 12:40 AM, Greg Kroah-Hartman wrote:
-> > > > > > On Thu, Oct 06, 2022 at 10:59:51PM -0700, Elliot Berman wrote:
-> > > > > > > 
-> > > > > > > "GH" is the shorthand we've been using for "Gunyah". I didn't find
-> > > > > > > documentation for dynamically assigned char devices, but if it exists, I can
-> > > > > > > add entry for ttyGH.
-> > > > > > 
-> > > > > > Why use a new name at all?  Why not stick with the existing tty names
-> > > > > > and device numbers?
-> > > > > > 
-> > > > > 
-> > > > > I can use hvc framework, although driver-level buffering is needed on
-> > > > > both the get_chars/put_chars paths because:
-> > > > 
-> > > > I'm not asking about the framework (although that is a good question,
-> > > > you need to document why this has to be new.)  I'm asking why pick a new
-> > > > name?  You will not have a name conflict in your system with this device
-> > > > with any other tty name right?
-> > > > 
-> > > 
-> > > That's correct, I didn't see any other instances of "ttyGH" in kernel.
+> > > Ugh, why? This is too ugly and unnecessary. What about passing the kfifo
+> > > to gh_rm_console_write() instead? You do memcpy() there anyway.
 > > 
-> > Do you see any instances of ttyS?  Any other existing name?  Why pick a
-> > new name at all?
-> > 
-> > And if you do pick a new name, you need to document it really really
-> > well, not bury it downn within the tty driver code.
+> > Another problem here is that you really want the console output to be
+> > printed from atomic context, otherwise one would never see e.g. the
+> > output of a panic() call. Having a deferred write is probably fine for
+> > normal tty operations, but you probably want a different device for the
+> > console here, e.g. the hvc_dcc driver.
 > > 
 > 
-> Seems other drivers are adding a comment in Kconfig help text. I can do the
-> same.
+> Yes, that is our perspective on the RM console driver as well. I'll make
+> this more explicit in the Kconfig/commit text. We expect most VMs
+> (especially Linux) to use some other console mechanism provided by their
+> VMM. I'm submitting here because we are presently using RM console on some
+> of our VMs where we have other ways to collects logs on panic. It also makes
+> it easier to implement a simple virtual machine manager that does not want
+> to virtualize a serial device or have a virtio stack.
 
-If you really want this, yes.  But again, you have not justified a whole
-new name yet...
+The whole goal of virtio was so that we would not have all of these
+random custom drivers for new hypervisors all over the place, requiring
+custom userspace interaction with them.
+
+Please use virtio, that's what it is there for, don't create a new
+console device if you do not have to.
+
+greg k-h
