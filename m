@@ -2,148 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E8D5FC426
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 13:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A715FC431
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 13:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiJLLLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 07:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
+        id S229625AbiJLLM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 07:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJLLLQ (ORCPT
+        with ESMTP id S229703AbiJLLMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 07:11:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968059AFEC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 04:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665573074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8YiAlVcyacuAF1cXPKHrDiH+rQYQoNsO4NEHWDYYi14=;
-        b=iDIJ8YJ7dFjXb2rzD86PK0sSXWE5o+yyGWbgK1DjTyFZ0efUFxwFHVKz8UGuyLEBCkwFl7
-        +d3RimS8s9MPiH0k6PRjiTrDzuo1DsRkD9xY01+ZeO+U1HKW4dQf0Uhlon5kBjzgT8iIfT
-        zPWZJQWhakUsBq5rMgd29tNz/jRHf0Y=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-14-MMcOlC2hPQaQWUkvsw8oIw-1; Wed, 12 Oct 2022 07:11:13 -0400
-X-MC-Unique: MMcOlC2hPQaQWUkvsw8oIw-1
-Received: by mail-wm1-f69.google.com with SMTP id c130-20020a1c3588000000b003b56be513e1so9853544wma.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 04:11:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8YiAlVcyacuAF1cXPKHrDiH+rQYQoNsO4NEHWDYYi14=;
-        b=htMSCzd8IgNhmI/C+N2LIicmoUUh1/f+gJXDLP/tGFDRPJ76xm2E1wGcmebsM1VNwr
-         gS4EgIa87cXKKURI3vDP9fBYGBt9b7aWMIpuEvsRhxNhArqqbRmLSp+7LPWV8YoYB3zU
-         72Nq13Y3jU5k4V3Bq6GzLp6etDzM936Ye1+gCYIeR4hu6+opZhIezUix4rDBM87dBPo/
-         eDKO8J0a8OF8sOTv1/zs2n8tRhlPAr2YZt5maINEzJatdwbM8fS6UXH0fuy0e/ATjv6P
-         4uCdIlq/uMmeKgXpNdPaZq/nVfQLxx4pky8YGv/fv7KdcJc7OuRGk+W+33gieJ6JYl7k
-         miQQ==
-X-Gm-Message-State: ACrzQf24jLzp4WrlGoXJD9b5/7pvC4UXeCXhYSIgDLsjZG3DEnVBltJF
-        Yo9/mp2rQYongnMtiRWST14DL2h9uimnVcldQl8v/yrT10jAkMr4zEeabJkl0u0wROmQPRsMyER
-        meTGMV59iHGesYDkh8kH5HPUK
-X-Received: by 2002:a5d:4581:0:b0:228:a8e5:253c with SMTP id p1-20020a5d4581000000b00228a8e5253cmr16709128wrq.506.1665573072676;
-        Wed, 12 Oct 2022 04:11:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4M2UeBQqsLu/YgEb0FS7XO2FtVoGI+qgl10zlKDVC740GbGZGoVVc16JkgQ8fSzCwcytvnSw==
-X-Received: by 2002:a5d:4581:0:b0:228:a8e5:253c with SMTP id p1-20020a5d4581000000b00228a8e5253cmr16709111wrq.506.1665573072445;
-        Wed, 12 Oct 2022 04:11:12 -0700 (PDT)
-Received: from redhat.com ([2.54.162.123])
-        by smtp.gmail.com with ESMTPSA id y8-20020a05600c364800b003c6bd91caa5sm1493777wmq.17.2022.10.12.04.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 04:11:11 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 07:11:08 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alvaro.karsz@solid-run.com, angus.chen@jaguarmicro.com,
-        gavinl@nvidia.com, jasowang@redhat.com, lingshan.zhu@intel.com,
-        wangdeming@inspur.com, xiujianfeng@huawei.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [GIT PULL] virtio: fixes, features
-Message-ID: <20221012070532-mutt-send-email-mst@kernel.org>
-References: <20221010132030-mutt-send-email-mst@kernel.org>
- <87r0zdmujf.fsf@mpe.ellerman.id.au>
+        Wed, 12 Oct 2022 07:12:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393CC148A;
+        Wed, 12 Oct 2022 04:12:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4E7614AC;
+        Wed, 12 Oct 2022 11:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66033C433D6;
+        Wed, 12 Oct 2022 11:12:17 +0000 (UTC)
+Date:   Wed, 12 Oct 2022 07:12:16 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: fix dynamic_events dependency check
+Message-ID: <20221012071216.1a74cc21@rorschach.local.home>
+In-Reply-To: <20221010074207.714077-1-svens@linux.ibm.com>
+References: <20221010074207.714077-1-svens@linux.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r0zdmujf.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 05:21:24PM +1100, Michael Ellerman wrote:
-> "Michael S. Tsirkin" <mst@redhat.com> writes:
-> > The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
-> >
-> >   Linux 6.0 (2022-10-02 14:09:07 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-> >
-> > for you to fetch changes up to 71491c54eafa318fdd24a1f26a1c82b28e1ac21d:
-> >
-> >   virtio_pci: don't try to use intxif pin is zero (2022-10-07 20:00:44 -0400)
-> >
-> > ----------------------------------------------------------------
-> > virtio: fixes, features
-> >
-> > 9k mtu perf improvements
-> > vdpa feature provisioning
-> > virtio blk SECURE ERASE support
-> >
-> > Fixes, cleanups all over the place.
-> >
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> >
-> > ----------------------------------------------------------------
-> > Alvaro Karsz (1):
-> >       virtio_blk: add SECURE ERASE command support
-> >
-> > Angus Chen (1):
-> >       virtio_pci: don't try to use intxif pin is zero
-> 
-> This commit breaks virtio_pci for me on powerpc, when running as a qemu
-> guest.
-> 
-> vp_find_vqs() bails out because pci_dev->pin == 0.
-> 
-> But pci_dev->irq is populated correctly, so vp_find_vqs_intx() would
-> succeed if we called it - which is what the code used to do.
-> 
-> I think this happens because pci_dev->pin is not populated in
-> pci_assign_irq().
-> 
-> I would absolutely believe this is bug in our PCI code, but I think it
-> may also affect other platforms that use of_irq_parse_and_map_pci().
-> 
-> cheers
+On Mon, 10 Oct 2022 09:42:07 +0200
+Sven Schnelle <svens@linux.ibm.com> wrote:
 
-How about fixing this in of_irq_parse_and_map_pci then?
-Something like the below maybe?
+> commit 95c104c378dc ("tracing: Auto generate event name when creating a
+> group of events") changed the syntax in the ftrace README file which is
+> used by the selftests to check what features are support. Adjust the
+> string to make test_duplicates.tc and trigger-synthetic-eprobe.tc work
+> again.
+> 
+> Fixes: 95c104c378dc ("tracing: Auto generate event name when creating a group of events")
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 196834ed44fe..504c4d75c83f 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -446,6 +446,8 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
- 	if (pin == 0)
- 		return -ENODEV;
- 
-+	pdev->pin = pin;
-+
- 	/* Local interrupt-map in the device node? Use it! */
- 	if (of_get_property(dn, "interrupt-map", NULL)) {
- 		pin = pci_swizzle_interrupt_pin(pdev, pin);
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+> ---
+>  .../testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc | 2 +-
+>  .../test.d/trigger/inter-event/trigger-synthetic-eprobe.tc      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> index db522577ff78..d3a79da215c8 100644
+> --- a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: Generic dynamic event - check if duplicate events are caught
+> -# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
+> +# requires: dynamic_events "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
+>  
+>  echo 0 > events/enable
+>  
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> index 914fe2e5d030..6461c375694f 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger eprobe on synthetic event
+> -# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
+> +# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
+>  
+>  echo 0 > events/enable
+>  
 
