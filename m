@@ -2,153 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C3F5FC3C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 12:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781415FC3CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 12:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiJLKcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 06:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        id S229492AbiJLKcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 06:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJLKcV (ORCPT
+        with ESMTP id S229764AbiJLKc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 06:32:21 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D941004B;
-        Wed, 12 Oct 2022 03:32:20 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 18:32:10 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665570738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MQ9rZIoWXU894RalXxEe5qRg+Q/4BMs+ckCLyACwqOc=;
-        b=HhLjQvNj0O28zE8xYD2rlR8EMG26cveb3UZCdyMn2TUuJojfWGYnfO806MEf+FjRjUglys
-        WeN/vhNZ0kWD/NVrrU0UXnr964IBJb/PrNKY66NzhiNwLsTOZ6Vx7Jkzo9cmGMt8xbihJm
-        74CTovCE836uptkvtyihc3PpQAN7Ox4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     leonro@nvidia.com, caihuoqing <caihuoqing@baidu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qiao Ma <mqaio@linux.alibaba.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: hinic: Update the range of MTU from 256 to 9600
-Message-ID: <20221012103210.GA3055@chq-T47>
-References: <20221012082945.10353-1-cai.huoqing@linux.dev>
- <15f63fd8-0f0e-26bc-c74e-fc7666c6ff88@huawei.com>
+        Wed, 12 Oct 2022 06:32:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D381BCBBD;
+        Wed, 12 Oct 2022 03:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665570746; x=1697106746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gIRW35VesBaPkKZ4V6yQETWvChLvCII/4YASkT5hPzY=;
+  b=H7zMwA9DlD2P08FBPq1ExdA8JZtz5byZnSTi/KyLu7Zyi6Byx/fQA/2u
+   bQBVZ8psvJY+U8aQcVgqsdho8BKoB08LQdHQL7WqvxK8ctuMGpelcLKxv
+   tD8PMrg2h1GwpJlEwTVxxfeylVkZvnECwvoIsLeHTG998mkqUa/u87l8X
+   Hzs/2BoQcWGuGy7BLDdGp3bO8obVznRCb+FpxtWZViLwu3RiR88KEJy6/
+   PzCsFCSj0ZGAvVxM1Wir+/A7BvIQoa8g0p0RmV6qBV5DaEczjyl/2g2pF
+   mN8CfFxOMKM8a0G9aXMN2cKKpcKYE4BhEyG8chTktIafKYUF5tQym14d6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="285139353"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="285139353"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 03:32:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="626719241"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="626719241"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 12 Oct 2022 03:32:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oiZ2E-005mdu-0l;
+        Wed, 12 Oct 2022 13:32:22 +0300
+Date:   Wed, 12 Oct 2022 13:32:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Message-ID: <Y0aXtWnlvpkJlxEP@smile.fi.intel.com>
+References: <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <Y0PFZGLaREQUazVP@smile.fi.intel.com>
+ <CAHQ1cqG73UAoU=ag9qSuKdp+MzT9gYJcwGv8k8BOa=e8gWwzSg@mail.gmail.com>
+ <Y0U1j2LXmGLBYLAV@smile.fi.intel.com>
+ <CAHQ1cqHOZr1fBzz=jXTudhw11K-uu4NK9acmeY_URwVxO7MJ7Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <15f63fd8-0f0e-26bc-c74e-fc7666c6ff88@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHQ1cqHOZr1fBzz=jXTudhw11K-uu4NK9acmeY_URwVxO7MJ7Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12 10月 22 17:25:21, shaozhengchao wrote:
-> 
-> 
-> On 2022/10/12 16:29, Cai Huoqing wrote:
-> > From: caihuoqing <caihuoqing@baidu.com>
-> > 
-> > Hinic hardware only support MTU from 256 to 9600, so set
-> > the max_mtu and min_mtu.
-> > 
-> > And not need to add the validity judgment when set mtu,
-> > because the judgment is made in net/core: dev_validate_mtu
-> > 
-> > Signed-off-by: caihuoqing <caihuoqing@baidu.com>
-> > ---
-> >   drivers/net/ethernet/huawei/hinic/hinic_dev.h  |  3 +++
-> >   drivers/net/ethernet/huawei/hinic/hinic_main.c |  3 ++-
-> >   drivers/net/ethernet/huawei/hinic/hinic_port.c | 17 +----------------
-> >   3 files changed, 6 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/huawei/hinic/hinic_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
-> > index a4fbf44f944c..2bbc94c0a9c1 100644
-> > --- a/drivers/net/ethernet/huawei/hinic/hinic_dev.h
-> > +++ b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
-> > @@ -22,6 +22,9 @@
-> >   #define LP_PKT_CNT		64
-> > +#define HINIC_MAX_MTU_SIZE		9600
-Hi Shao, thanks for your reply.
+On Tue, Oct 11, 2022 at 01:17:13PM -0700, Andrey Smirnov wrote:
+> On Tue, Oct 11, 2022 at 2:21 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Mon, Oct 10, 2022 at 02:40:30PM -0700, Andrey Smirnov wrote:
+> > > On Mon, Oct 10, 2022 at 12:13 AM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > On Sun, Oct 09, 2022 at 10:02:26PM -0700, Andrey Smirnov wrote:
+> > > > > On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
 
-I will change it in patch v2, like
-"#define HINIC_MAX_MTU_SIZE (HINIC_MAX_JUMBO_FRAME_SIZE - ETH_HLEN - ETH_FCS_LEN)"
-to compatible the old firmware (maybe some old cards).
-> > +#define HINIC_MIN_MTU_SIZE		256
-> > +
-> >   enum hinic_flags {
-> >   	HINIC_LINK_UP = BIT(0),
-> >   	HINIC_INTF_UP = BIT(1),
-> > diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> > index c23ee2ddbce3..41e52f775aae 100644
-> > --- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> > +++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-> > @@ -1189,7 +1189,8 @@ static int nic_dev_init(struct pci_dev *pdev)
-> >   	else
-> >   		netdev->netdev_ops = &hinicvf_netdev_ops;
-> > -	netdev->max_mtu = ETH_MAX_MTU;
-> > +	netdev->max_mtu = HINIC_MAX_MTU_SIZE;
-> > +	netdev->min_mtu = HINIC_MIN_MTU_SIZE;
-> >   	nic_dev = netdev_priv(netdev);
-> >   	nic_dev->netdev = netdev;
-> > diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
-> > index 28ae6f1201a8..0a39c3dffa9a 100644
-> > --- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
-> > +++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
-> > @@ -17,9 +17,6 @@
-> >   #include "hinic_port.h"
-> >   #include "hinic_dev.h"
-> > -#define HINIC_MIN_MTU_SIZE              256
-> > -#define HINIC_MAX_JUMBO_FRAME_SIZE      15872
-> > -
-> >   enum mac_op {
-> >   	MAC_DEL,
-> >   	MAC_SET,
-> > @@ -147,24 +144,12 @@ int hinic_port_get_mac(struct hinic_dev *nic_dev, u8 *addr)
-> >    **/
-> >   int hinic_port_set_mtu(struct hinic_dev *nic_dev, int new_mtu)
-> >   {
-> > -	struct net_device *netdev = nic_dev->netdev;
-> >   	struct hinic_hwdev *hwdev = nic_dev->hwdev;
-> >   	struct hinic_port_mtu_cmd port_mtu_cmd;
-> >   	struct hinic_hwif *hwif = hwdev->hwif;
-> >   	u16 out_size = sizeof(port_mtu_cmd);
-> >   	struct pci_dev *pdev = hwif->pdev;
-> > -	int err, max_frame;
-> > -
-> > -	if (new_mtu < HINIC_MIN_MTU_SIZE) {
-> > -		netif_err(nic_dev, drv, netdev, "mtu < MIN MTU size");
-> > -		return -EINVAL;
-> > -	}
-> > -
-> > -	max_frame = new_mtu + ETH_HLEN + ETH_FCS_LEN;
-> > -	if (max_frame > HINIC_MAX_JUMBO_FRAME_SIZE) {
-> > -		netif_err(nic_dev, drv, netdev, "mtu > MAX MTU size");
-> > -		return -EINVAL;
-> > -	}
-> > +	int err;
-> >   	port_mtu_cmd.func_idx = HINIC_HWIF_FUNC_IDX(hwif);
-> >   	port_mtu_cmd.mtu = new_mtu;
+...
+
+> > > > > OK, Ferry, I think I'm going to need clarification on specifics on
+> > > > > your test setup. Can you share your kernel config, maybe your
+> > > > > "/proc/config.gz", somewhere? When you say you are running vanilla
+> > > > > Linux, do you mean it or do you mean vanilla tree + some patch delta?
+> > > > >
+> > > > > The reason I'm asking is because I'm having a hard time reproducing
+> > > > > the problem on my end. In fact, when I build v6.0
+> > > > > (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
+> > > > >
+> > > > > git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
+> > > > >
+> > > > > I get an infinite loop of reprobing that looks something like (some
+> > > > > debug tracing, function name + line number, included):
+> > > >
+> > > > Yes, this is (one of) known drawback(s) of deferred probe hack. I think
+> > > > the kernel that Ferry runs has a patch that basically reverts one from
+> > > > 2014 [1] and allows to have extcon as a module. (1)
+> > > >
+> > > > [1]: 58b116bce136 ("drivercore: deferral race condition fix")
+> > > >
+> > > > > which renders the system completely unusable, but USB host is
+> > > > > definitely going to be broken too. Now, ironically, with my patch
+> > > > > in-place, an attempt to probe extcon that ends up deferring the probe
+> > > > > happens before the ULPI driver failure (which wasn't failing driver
+> > > > > probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
+> > > > > there no "driver binding" event that re-triggers deferred probe
+> > > > > causing the loop, so the system progresses to a point where extcon is
+> > > > > available and dwc3 driver eventually loads.
+> > > > >
+> > > > > After that, and I don't know if I'm doing the same test, USB host
+> > > > > seems to work as expected. lsusb works, my USB stick enumerates as
+> > > > > expected. Switching the USB mux to micro-USB and back shuts the host
+> > > > > functionality down and brings it up as expected. Now I didn't try to
+> > > > > load any gadgets to make sure USB gadget works 100%, but since you
+> > > > > were saying it was USB host that was broken, I wasn't concerned with
+> > > > > that. Am I doing the right test?
+> > > >
+> > > > Hmm... What you described above sounds more like a yet another attempt to
+> > > > workaround (1). _If_ this is the case, we probably can discuss how to fix
+> > > > it in generic way (somewhere in dd.c, rather than in the certain driver).
+> > >
+> > > No, I'm not describing an attempt to fix anything. Just how vanilla
+> > > v6.0 (where my patch is not reverted) works and where my patch, fixing
+> > > a logical problem in which extcon was requested too late causing a
+> > > forced OTG -> "gadget only" switch, also changed the ordering enough
+> > > to accidentally avoid the loop.
+> >
+> > You still refer to a fix, but my question was if it's the same problem or not.
+> >
 > 
-> Hi Cai:
-> 	You cannot change the maximum supported jumbo frame size.
-> Because as far as I know, this is not compatible with the older
-> firmware version. If you change the maximum MTU, the maximum length
-> of packets received by the port will be affected with older fw. So
-> donot change it.
+> No, it's not the same problem.
 > 
-> Zhengchao Shao
+> > > > That said, the real test case should be performed on top of clean kernel
+> > > > before judging if it's good or bad.
+> > >
+> > > Given your level of involvemnt with this particular platform and you
+> > > being the author of
+> > > https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+> > > I assumed/expected you to double check this before sending this revert
+> > > out. Please do so next time.
+> >
+> > As I said I have not yet restored my testing environment for that platform and
+> > I relied on the Ferry's report. Taking into account the history of breakages
+> > that done for Intel Merrifield, in particular by not wide tested patches
+> > against DWC3 driver, I immediately react with a revert.
+> 
+> That's what I'm asking you not to do next time. If you don't have time
+> to restore your testing env or double check Ferry's work, please live
+> with a revert in your local tree until you do.
+
+I trust Ferry's tests as mine and repeating again, we have a bad history
+when people so value their time that breaks our platform, so please test
+your changes in the future that it makes no regressions.
+
+If you want to have a proof that your patches are broken, then I will
+prioritize this. We now have a full release cycle time for that.
+
+> My time is as valuable
+> as yours and this revert required much more investigation before it
+> was submitted. You lived with
+> https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+> since 5.10, which apparently was needed to either boot or have dwc3,
+> so I don't think there is any real urgency.
+
+It is in my tree only for the purpose of "don't forget that issue".
+I think you can work around it by built-in extcon driver.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
