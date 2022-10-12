@@ -2,86 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A0B5FCAF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CF25FCAF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiJLSsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S229932AbiJLSvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiJLSsc (ORCPT
+        with ESMTP id S229918AbiJLSu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:48:32 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E6FC4C12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:48:31 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id j188so13041367oih.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ESROyxdmNaMCuLAvwDxLztz/p3doaWu/k516wwQHrw=;
-        b=TxUslp/5MFOT246DWlq1s20VNKGGSSTTxByLdcsEMJmdAKLTiDSE0c2Hq5L+HVw4JY
-         W5kDSqOsorAPAC0AWFewpZG+wc6mkemgAROu3M43P7g+Nr+xOV2FWfEaSoXlwIz/0n0U
-         SxfcCTSnFEGvvBl9RwIWsBnbuy5EkfYyyf6ds=
+        Wed, 12 Oct 2022 14:50:57 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73B1F88D1;
+        Wed, 12 Oct 2022 11:50:52 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id g11so6137147qts.1;
+        Wed, 12 Oct 2022 11:50:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8ESROyxdmNaMCuLAvwDxLztz/p3doaWu/k516wwQHrw=;
-        b=HBUGcA9zWN6QzBIzZhDe47n/ljAChDdLlWCfVrX/eZ+88vtrERdf+oAgeOVZ88+8gV
-         IglLutm0uLFnlQ/EgzH1K/nSSr31rEO5mfVdzox9DhOPdqRsC0oe+4h6TwR5bu5HYyoV
-         G4JkoEVKUISp9yNR25YZNAmkKbp7ky3sJXnVPP4UfrjxGbA2WBUtj8/c1dtLhbAgy8S1
-         ChOCoYCKx+q6ah74xQfm4FvZFqBaAIc0gs0+ELPIxZuMT1L5YtulfTLhBsoNzoS9k46r
-         sDXTW6oN86h0Rn+usxIVXXUzgTloGrKe5bFxjkLoSJIpc2byc642ca0GE6Wt6TyvpT6r
-         mbqw==
-X-Gm-Message-State: ACrzQf3v7Sb/R8TnK/Ve7d4+iVLOZCNyseoCLDBq8BkiYmn1sEYTGktR
-        XMXKrbFAZr4Ebd+C0Susii1RnXhEMESm/Q==
-X-Google-Smtp-Source: AMsMyM7Meb1e9mDw4XmnmUzGLAdZVqeHzpUxA6/IaEP2PbDgWStr4JpWAvDyluxCcSWZtTbbu/3DZw==
-X-Received: by 2002:a05:6808:158e:b0:354:b227:90e2 with SMTP id t14-20020a056808158e00b00354b22790e2mr2810241oiw.169.1665600510276;
-        Wed, 12 Oct 2022 11:48:30 -0700 (PDT)
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com. [209.85.161.52])
-        by smtp.gmail.com with ESMTPSA id cm21-20020a056830651500b00660d73c8bdesm7770382otb.50.2022.10.12.11.48.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 11:48:27 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so12725168ooo.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:48:27 -0700 (PDT)
-X-Received: by 2002:a4a:4e41:0:b0:480:8a3c:a797 with SMTP id
- r62-20020a4a4e41000000b004808a3ca797mr2985303ooa.71.1665600507237; Wed, 12
- Oct 2022 11:48:27 -0700 (PDT)
+        bh=FGZHFunaDCc4OmApV98nqeiEP+JU02Ta3xWx4ULymgA=;
+        b=fnQbzrzhi5d+kND+Yz1eGXTAaDVNTvq1VsupKGLqFCBLT07S3F6wnIsAdxCcO971qX
+         VJKkDeGrzyd3x2E6v+NadhcdaEcBEpdFgu55UvCCvgHXsf3wjWRqwh1jKH/ojRuwNQkM
+         zrpd46cmKgweC6J2mhseMDXRQst+PXTBnyfkx0s48GSO0wKZxDe+5YnsLu2c9Rh7iHkM
+         hQZ3ya6v1STxkkW8UPDni0YqNAqeAoMABTw83Ojq0Qzfx04KhK4fC/avhLDzvZdORYus
+         eWoepyGfYSQC0z05IfJuL+YRDzzCLiJ0F4x8r4mZK3Z8euXPqdw80BMRyNEjk0tPeOny
+         a/sQ==
+X-Gm-Message-State: ACrzQf1COa9UGftuCLpThyofBKmxy6gVtO1Hdyom3yBKRXyegyDV8aJ6
+        3Kh2itK4SWAekWirbjlUodsqCveHtYavnEWwEh4=
+X-Google-Smtp-Source: AMsMyM7JTxLnzULH6yBwgyKywXyHU+882Dhvq06cPGoYXBylZ7IQtwakuvguFyvm8dQXs5WngC6brB8ahrAHTtxzkaI=
+X-Received: by 2002:a05:622a:413:b0:39c:c23f:2388 with SMTP id
+ n19-20020a05622a041300b0039cc23f2388mr3103964qtx.605.1665600651111; Wed, 12
+ Oct 2022 11:50:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221012181841.333325-1-masahiroy@kernel.org>
-In-Reply-To: <20221012181841.333325-1-masahiroy@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 12 Oct 2022 11:48:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whTCVWhFz1MK22hq9WNEmhKy2kpNerA3fyyBYzP7z8XWg@mail.gmail.com>
-Message-ID: <CAHk-=whTCVWhFz1MK22hq9WNEmhKy2kpNerA3fyyBYzP7z8XWg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: raise minimum supported version of
- binutils to 2.25
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+In-Reply-To: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Oct 2022 20:50:39 +0200
+Message-ID: <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
 >
-> Bump the binutils version to 2.25, which was released one year before
-> GCC 5.1.
+> Hi,
+>
+> At the moment, all the available idle governors operate mainly based on their own past performance
 
-Ack, sounds sane.
+Not true, at least for the menu and teo governors that use the
+information on the distribution of CPU wakeups that is available to
+them and try to predict the next idle duration with the help of it.
+This has a little to do with their performance.
 
-               Linus
+> without taking into account any scheduling information. Especially on interactive systems, this
+> results in them frequently selecting a deeper idle state and then waking up before its target
+> residency is hit, thus leading to increased wakeup latency and lower performance with no power
+> saving. For 'menu' while web browsing on Android for instance, those types of wakeups ('too deep')
+> account for over 24% of all wakeups.
+
+How is this measured?
+
+> At the same time, on some platforms C0 can be power efficient enough to warrant wanting to prefer
+> it over C1.
+
+Well, energy-efficiency is relative, so strictly speaking it is
+invalid to say "power efficient enough".
+
+Also, as far as idle CPUs are concerned, we are talking about the
+situation in which no useful work is done at all, so the state drawing
+less power is always more energy-efficient than the one drawing more
+power.
+
+You may argue that predicting idle durations that are too long too
+often leads to both excessive task wakeup latency and excessive energy
+usage at the same time, but this may very well mean that the target
+residency value for C1 is too low.
+
+> Sleeps that happened in C0 while they could have used C1 ('too shallow') only save
+> less power than they otherwise could have. Too deep sleeps, on the other hand, harm performance
+> and nullify the potential power saving from using C1 in the first place. While taking this into
+> account, it is clear that on balance it is preferable for an idle governor to have more too shallow
+> sleeps instead of more too deep sleeps on those kinds of platforms.
+
+True.
+
+> Currently the best available governor under this metric is TEO which on average results in less than
+> half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
+> increased performance in the process.
+
+Well, good to hear that, but some numbers in support of that claim
+would be nice to have too.
+
+> This proposed optional extension to TEO would specifically tune it for minimising too deep
+> sleeps and minimising latency to achieve better performance. To this end, before selecting the next
+> idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
+> CPU is being utilized.
+
+Which has no bearing on what the CPU idle time governors have to do
+which is (1) to predict the next idle duration as precisely as
+reasonably possible and (2) to minimise the cost in terms of task
+wakeup latencies associated with using deep idle states.
+
+The avg_util value tells us nothing about how much the CPU is going to
+be idle this time and it also tells us nothing about the
+latency-sensitivity of the workload.
+
+Yes, it tells us how much idle time there was on the given CPU in the
+past, on the average, but there is zero information about the
+distribution of that idle time in it.
+
+So in the first place please tell me why it fundamentally makes sense
+to use avg_util in CPU idle time management at all.
