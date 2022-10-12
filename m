@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29785FCA72
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58615FCA80
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJLSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S229741AbiJLSUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiJLSRj (ORCPT
+        with ESMTP id S229930AbiJLSUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:17:39 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05240FE92B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:27 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id h11-20020a170902f54b00b001780f0f7ea7so12189008plf.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=JdxEzOf9q3jZxRIV3R0387viDqqF4uKKm+TfA/ON3Oc=;
-        b=mjDpSoePv7poy+PxVm7eiwY47bJwFz/gpt0nUUv0PO3BzPC/Ttl5kJNv/EhwE5Br5+
-         bUMnLKeE3xFl6B7J99VsEUlfYUgeZWSmS2rlVTiGepzXgRNWLhF9uimu9rChtT9FEumR
-         3ALWn4Qa6kpNgLaSsK0ryJOF2xk0gxWiZ28fX+CwlhTyTWr7fBrI4ltb+fCBAo24SHXZ
-         hRrGqpTktRlB7L9lkNDoFLp0U5Ay41OcozgoxbnB6yMaR71c3HIOQmbvwzVvx6WzU85U
-         Gni28BZphgiauWAj3isz0DK3rKUVLchYmMcdMej9pt35495AhP7HxjdtpmyNyFDN2JQe
-         wJbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JdxEzOf9q3jZxRIV3R0387viDqqF4uKKm+TfA/ON3Oc=;
-        b=jzSdJNC+hoMKdItyH7uOQmk8O/m+QkePe8oTLMkXERJ13gRK2xGO0wBxK/qr9XCrlD
-         kTH1Pv6XlsRURhTLCctmfDHANZQZT7uN/s7eyRbNdVer4gueaWTBbo0nwHt4thP7lIfY
-         SeoB3WpFipvwEv5CDxctD5QdA2oR/qTaMcci94EP8goiH6Zx5uCYLpl+CZKk2wJNCc8y
-         nTzojr/1LafZakVEo0Hg4A6O12M9gF+sq7ENjw4MrbvjTTlDpSHVfeGXkm76vTg5tcH8
-         yv7xJe51nUscwhqQL650pMDzeva4vJfxlZoDiI5Fl9sX21q6W24lCuU7mAXQA3qUgjrz
-         TGgw==
-X-Gm-Message-State: ACrzQf2TAx1AdL2hix+J59ukUK0CuVakBBZci3aAZrSzjd17dj5Zs9CG
-        +06r63xEqrrmusk31U42tGx3UuaBDgk=
-X-Google-Smtp-Source: AMsMyM5/uWnwIatGAE/VXqmY8wTRmoVUxQ1aOTxsVOaXPyrDvX9WcpjiI+C70U/g26pFUrSK8I2l6Dbui38=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:9f97:b0:183:ee9e:59ef with SMTP id
- g23-20020a1709029f9700b00183ee9e59efmr8652275plq.38.1665598646155; Wed, 12
- Oct 2022 11:17:26 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 12 Oct 2022 18:17:02 +0000
-In-Reply-To: <20221012181702.3663607-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221012181702.3663607-1-seanjc@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221012181702.3663607-12-seanjc@google.com>
-Subject: [PATCH v4 11/11] KVM: x86/mmu: Stop needlessly making MMU pages
- available for TDP MMU
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 14:20:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E10B87E;
+        Wed, 12 Oct 2022 11:20:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAA9CB81B9D;
+        Wed, 12 Oct 2022 18:19:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA2CC433D6;
+        Wed, 12 Oct 2022 18:19:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665598768;
+        bh=rToApNuA9+wNI2zgDEyjUglKN9v6Lh64lTtKi6m3TBE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m5lve6/xhs0u5xfmUGO8yjhbagSproghDuqCmE6x4APlXjShXuGUjC4D3YV0L0Xpy
+         YP3Ygi958GeULJj/IB9g8XywkM4E85+aCDHOr9R12JlI6r7SKdnL5CYQBKtTMVaOZ6
+         6VrBaw313J7VlbYOHO8U8Alr7AKOFJ5d6v6YpbVuvnqFPcYu2jt8oUX2DZTU2gCo+Y
+         /JNHuQwWPKMbU0IcADcoFClgcakPTKgN0bp98BJ3uQ3bNGKZMfyIn3m2RbHHO+MDiy
+         ycmw7euW9RLg59UDKovqZl/YncFRbnyQG7lifNICYIwSCEDMeBNnvOVCbALKCR0JCG
+         KTKfRJbcchVjQ==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH] Documentation: raise minimum supported version of binutils to 2.25
+Date:   Thu, 13 Oct 2022 03:18:41 +0900
+Message-Id: <20221012181841.333325-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+Binutils 2.23 was released in 2012. Almost 10 years old.
 
-Stop calling make_mmu_pages_available() when handling TDP MMU faults and
-when allocating TDP MMU roots.  The TDP MMU does not participate in the
-"available MMU pages" tracking and limiting so calling this function is
-unnecessary work when handling TDP MMU faults.
+We already require GCC 5.1, released in 2015.
 
-Signed-off-by: David Matlack <dmatlack@google.com>
-[sean: apply to root allocation too]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Bump the binutils version to 2.25, which was released one year before
+GCC 5.1.
+
+With this applied, some subsystems can start to clean up code.
+Examples:
+  arch/arm/Kconfig.assembler
+  arch/mips/vdso/Kconfig
+  arch/powerpc/Makefile
+  arch/x86/Kconfig.assembler
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- arch/x86/kvm/mmu/mmu.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index a5ba7b41263d..0fcf4560f4d8 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3569,9 +3569,12 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
- 	int r;
+ Documentation/process/changes.rst | 4 ++--
+ scripts/min-tool-version.sh       | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index 9844ca3a71a6..ef540865ad22 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -35,7 +35,7 @@ Rust (optional)        1.62.0           rustc --version
+ bindgen (optional)     0.56.0           bindgen --version
+ GNU make               3.82             make --version
+ bash                   4.2              bash --version
+-binutils               2.23             ld -v
++binutils               2.25             ld -v
+ flex                   2.5.35           flex --version
+ bison                  2.0              bison --version
+ pahole                 1.16             pahole --version
+@@ -119,7 +119,7 @@ Bash 4.2 or newer is needed.
+ Binutils
+ --------
  
- 	write_lock(&vcpu->kvm->mmu_lock);
--	r = make_mmu_pages_available(vcpu);
--	if (r < 0)
--		goto out_unlock;
-+
-+	if (!is_tdp_mmu_enabled()) {
-+		r = make_mmu_pages_available(vcpu);
-+		if (r < 0)
-+			goto out_unlock;
-+	}
+-Binutils 2.23 or newer is needed to build the kernel.
++Binutils 2.25 or newer is needed to build the kernel.
  
- 	if (is_tdp_mmu_enabled()) {
- 		root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu);
-@@ -4289,14 +4292,15 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
- 	if (is_page_fault_stale(vcpu, fault))
- 		goto out_unlock;
+ pkg-config
+ ----------
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index 8766e248ffbb..4e5b45d9b526 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -14,7 +14,7 @@ fi
  
--	r = make_mmu_pages_available(vcpu);
--	if (r)
--		goto out_unlock;
--
--	if (is_tdp_mmu_enabled())
-+	if (is_tdp_mmu_enabled()) {
- 		r = kvm_tdp_mmu_map(vcpu, fault);
--	else
-+	} else {
-+		r = make_mmu_pages_available(vcpu);
-+		if (r)
-+			goto out_unlock;
-+
- 		r = __direct_map(vcpu, fault);
-+	}
- 
- out_unlock:
- 	if (is_tdp_mmu_enabled())
+ case "$1" in
+ binutils)
+-	echo 2.23.0
++	echo 2.25.0
+ 	;;
+ gcc)
+ 	echo 5.1.0
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.34.1
 
