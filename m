@@ -2,532 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19B25FCE37
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BB55FCE3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiJLWM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S230003AbiJLWOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiJLWMA (ORCPT
+        with ESMTP id S229745AbiJLWOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:12:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D579FDE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:11:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFE0E61631
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:11:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B779C433D6;
-        Wed, 12 Oct 2022 22:11:24 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 18:11:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [GIT PULL] tracing: Fixes for 6.1
-Message-ID: <20221012181123.7a510a66@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Oct 2022 18:14:14 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB66E124;
+        Wed, 12 Oct 2022 15:14:12 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id x18so227802ljm.1;
+        Wed, 12 Oct 2022 15:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aK4BhJufIcl423HeoNB4VLvw9adw2JaRkVkLBj+d2C4=;
+        b=AYj/1yqvrQgRPumulzE3dGXIr8voDz+UZOMRhSYvehrkFud1rxULN/tyzcrmBVQSnJ
+         ebZxijMrCrNHiPTyTQfJG35Ha9VI+Y5IPrjoipMqdnC9Qti4mmN3drC64LZKZv+sGWj0
+         SD2qujioEhEM3U6Ouxhsp0ihFN6xdkvdOjzeagyj1B6OaVZdik2K4rYqKmBXmRElrb+y
+         Kl5Eb7o3dFVn5h+vV5kiJL/T6N8YjWzTQA6Rton5jl8lItnQgCrEV/BS2FLGsozt3uvk
+         HTqKbZxWS07vG5UK5hyd9RGdF43fScuLp2pA24vgquD9vIJ1GkqbGaQdHYyuetHj8pt/
+         RBuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aK4BhJufIcl423HeoNB4VLvw9adw2JaRkVkLBj+d2C4=;
+        b=Tk87s2rAfbp7xxHRJEMSJYyDi6oqHsG7wE059Y4EOPQROWYOtzGIbeXW7MX3KmQL5t
+         jsxpZYBlvRLl8981L9uSFO0GY05adO5HAcQooNbiwOUJ5nbXKM6H1sjIBvH/2KruH1dM
+         WUTIWwoowIhVo0sD4MVZr52QUBr7YAVbszTrv2R5mvhNk8Xktry7w2oYrQaoQ97vA/Xd
+         oogTc/DfuHSRKY3xv9bKp55k3Ig5jYSz6LMsSeMx+/5HELOW/VQQm4OcIMKcgwfqG5kC
+         wNfAKGQ7k7+M8yQI9QAeUT9jkTJMqGw8SyCibgyzldJSIESLTP2KsrtalaMH3KglYc0M
+         YOCg==
+X-Gm-Message-State: ACrzQf1Y6woiqrKtvbBcyOhCnVVr878CQ8ktgzEyrAc+WkGntxNyvVNm
+        2MVe+opXDRpulR4+VfvP/KGxYF+6/iOiVkdYfgo=
+X-Google-Smtp-Source: AMsMyM6pOYEkJC1EEW1vxn/yg7LVH4JNi21glC1C+HGyG1/NV4u3jH4ObB+1OtD5ZrZ+gIQCvpwTjcUx7fv+cXrjdhk=
+X-Received: by 2002:a2e:5d1:0:b0:26e:1d6:eb2f with SMTP id 200-20020a2e05d1000000b0026e01d6eb2fmr12030057ljf.194.1665612850930;
+ Wed, 12 Oct 2022 15:14:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com> <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com> <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <Y0PFZGLaREQUazVP@smile.fi.intel.com> <CAHQ1cqG73UAoU=ag9qSuKdp+MzT9gYJcwGv8k8BOa=e8gWwzSg@mail.gmail.com>
+ <Y0U1j2LXmGLBYLAV@smile.fi.intel.com> <CAHQ1cqHOZr1fBzz=jXTudhw11K-uu4NK9acmeY_URwVxO7MJ7Q@mail.gmail.com>
+ <Y0aXtWnlvpkJlxEP@smile.fi.intel.com>
+In-Reply-To: <Y0aXtWnlvpkJlxEP@smile.fi.intel.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Wed, 12 Oct 2022 15:13:58 -0700
+Message-ID: <CAHQ1cqETufvnUWCACHNjGcPYd8tUKs36qnNQzypJwf4v05XYgA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 12, 2022 at 3:32 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Tue, Oct 11, 2022 at 01:17:13PM -0700, Andrey Smirnov wrote:
+> > On Tue, Oct 11, 2022 at 2:21 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Mon, Oct 10, 2022 at 02:40:30PM -0700, Andrey Smirnov wrote:
+> > > > On Mon, Oct 10, 2022 at 12:13 AM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > On Sun, Oct 09, 2022 at 10:02:26PM -0700, Andrey Smirnov wrote:
+> > > > > > On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> ...
+>
+> > > > > > OK, Ferry, I think I'm going to need clarification on specifics on
+> > > > > > your test setup. Can you share your kernel config, maybe your
+> > > > > > "/proc/config.gz", somewhere? When you say you are running vanilla
+> > > > > > Linux, do you mean it or do you mean vanilla tree + some patch delta?
+> > > > > >
+> > > > > > The reason I'm asking is because I'm having a hard time reproducing
+> > > > > > the problem on my end. In fact, when I build v6.0
+> > > > > > (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
+> > > > > >
+> > > > > > git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
+> > > > > >
+> > > > > > I get an infinite loop of reprobing that looks something like (some
+> > > > > > debug tracing, function name + line number, included):
+> > > > >
+> > > > > Yes, this is (one of) known drawback(s) of deferred probe hack. I think
+> > > > > the kernel that Ferry runs has a patch that basically reverts one from
+> > > > > 2014 [1] and allows to have extcon as a module. (1)
+> > > > >
+> > > > > [1]: 58b116bce136 ("drivercore: deferral race condition fix")
+> > > > >
+> > > > > > which renders the system completely unusable, but USB host is
+> > > > > > definitely going to be broken too. Now, ironically, with my patch
+> > > > > > in-place, an attempt to probe extcon that ends up deferring the probe
+> > > > > > happens before the ULPI driver failure (which wasn't failing driver
+> > > > > > probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
+> > > > > > there no "driver binding" event that re-triggers deferred probe
+> > > > > > causing the loop, so the system progresses to a point where extcon is
+> > > > > > available and dwc3 driver eventually loads.
+> > > > > >
+> > > > > > After that, and I don't know if I'm doing the same test, USB host
+> > > > > > seems to work as expected. lsusb works, my USB stick enumerates as
+> > > > > > expected. Switching the USB mux to micro-USB and back shuts the host
+> > > > > > functionality down and brings it up as expected. Now I didn't try to
+> > > > > > load any gadgets to make sure USB gadget works 100%, but since you
+> > > > > > were saying it was USB host that was broken, I wasn't concerned with
+> > > > > > that. Am I doing the right test?
+> > > > >
+> > > > > Hmm... What you described above sounds more like a yet another attempt to
+> > > > > workaround (1). _If_ this is the case, we probably can discuss how to fix
+> > > > > it in generic way (somewhere in dd.c, rather than in the certain driver).
+> > > >
+> > > > No, I'm not describing an attempt to fix anything. Just how vanilla
+> > > > v6.0 (where my patch is not reverted) works and where my patch, fixing
+> > > > a logical problem in which extcon was requested too late causing a
+> > > > forced OTG -> "gadget only" switch, also changed the ordering enough
+> > > > to accidentally avoid the loop.
+> > >
+> > > You still refer to a fix, but my question was if it's the same problem or not.
+> > >
+> >
+> > No, it's not the same problem.
+> >
+> > > > > That said, the real test case should be performed on top of clean kernel
+> > > > > before judging if it's good or bad.
+> > > >
+> > > > Given your level of involvemnt with this particular platform and you
+> > > > being the author of
+> > > > https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+> > > > I assumed/expected you to double check this before sending this revert
+> > > > out. Please do so next time.
+> > >
+> > > As I said I have not yet restored my testing environment for that platform and
+> > > I relied on the Ferry's report. Taking into account the history of breakages
+> > > that done for Intel Merrifield, in particular by not wide tested patches
+> > > against DWC3 driver, I immediately react with a revert.
+> >
+> > That's what I'm asking you not to do next time. If you don't have time
+> > to restore your testing env or double check Ferry's work, please live
+> > with a revert in your local tree until you do.
+>
+> I trust Ferry's tests as mine and repeating again, we have a bad history
+> when people so value their time that breaks our platform,
 
-Linus,
+This is not a good excuse to jump the gun and send a revert without
+double checking. Some regressions will always be unavoidable.
 
-Of course after my pull request is accepted for the merge window, I
-discover a nasty bug in the code (and I added a couple of small fixes
-as well)
+> so please test
+> your changes in the future that it makes no regressions.
+>
 
-Tracing fixes for 6.1:
+This is, in a nutshell, asking me to prove a negative. That's not a
+feasible request. To add insult to injury, you are talking about a
+platform way past EOL that's out of stock in every major store and
+it's by sheer luck that I was able to get the last kit on eBay.
+Downstream will always be the ultimate test for regressions given the
+sheer number of permutations. A CI/CD rig that would allow developers
+to make a regression test run, would make this a much more reasonable
+request, without it, end-user(s) is the only "test bed" there is.
 
-- Found that the synthetic events were using strlen/strscpy() on values
-  that could have come from userspace, and that is bad.
-  Consolidate the string logic of kprobe and eprobe and extend it to
-  the synthetic events to safely process string addresses.
+> If you want to have a proof that your patches are broken, then I will
+> prioritize this. We now have a full release cycle time for that.
+>
 
-- Clean up content of text dump in ftrace_bug() where the output does not
-  make char reads into signed and sign extending the byte output.
+You prioritizing this now saves me nothing, whereas you prioritizing
+this before submitting reverts would've saved me time. That's the
+point I'm trying to convey.
 
-- Fix some kernel docs in the ring buffer code.
-
-
-Please pull the latest trace-v6.1-1 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.1-1
-
-Tag SHA1: fd385f94a89bf0296a7bfebecb02bcc46594111c
-Head SHA1: 0934ae9977c27133449b6dd8c6213970e7eece38
-
-
-Jiapeng Chong (1):
-      ring-buffer: Fix kernel-doc
-
-Steven Rostedt (Google) (3):
-      tracing: Move duplicate code of trace_kprobe/eprobe.c into header
-      tracing: Add "(fault)" name injection to kernel probes
-      tracing: Fix reading strings from synthetic events
-
-Zheng Yejian (1):
-      ftrace: Fix char print issue in print_ip_ins()
-
-----
- kernel/trace/ftrace.c             |   5 +-
- kernel/trace/ring_buffer.c        |   6 +-
- kernel/trace/trace_eprobe.c       |  60 ++------------------
- kernel/trace/trace_events_synth.c |  23 ++++++--
- kernel/trace/trace_kprobe.c       |  60 ++------------------
- kernel/trace/trace_probe_kernel.h | 115 ++++++++++++++++++++++++++++++++++++++
- 6 files changed, 146 insertions(+), 123 deletions(-)
- create mode 100644 kernel/trace/trace_probe_kernel.h
----------------------------
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 83362a155791..75c16215d065 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2028,7 +2028,6 @@ static int ftrace_hash_ipmodify_update(struct ftrace_ops *ops,
- static void print_ip_ins(const char *fmt, const unsigned char *p)
- {
- 	char ins[MCOUNT_INSN_SIZE];
--	int i;
- 
- 	if (copy_from_kernel_nofault(ins, p, MCOUNT_INSN_SIZE)) {
- 		printk(KERN_CONT "%s[FAULT] %px\n", fmt, p);
-@@ -2036,9 +2035,7 @@ static void print_ip_ins(const char *fmt, const unsigned char *p)
- 	}
- 
- 	printk(KERN_CONT "%s", fmt);
--
--	for (i = 0; i < MCOUNT_INSN_SIZE; i++)
--		printk(KERN_CONT "%s%02x", i ? ":" : "", ins[i]);
-+	pr_cont("%*phC", MCOUNT_INSN_SIZE, ins);
- }
- 
- enum ftrace_bug_type ftrace_bug_type;
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index c3f354cfc5ba..199759c73519 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -885,7 +885,7 @@ size_t ring_buffer_nr_pages(struct trace_buffer *buffer, int cpu)
- }
- 
- /**
-- * ring_buffer_nr_pages_dirty - get the number of used pages in the ring buffer
-+ * ring_buffer_nr_dirty_pages - get the number of used pages in the ring buffer
-  * @buffer: The ring_buffer to get the number of pages from
-  * @cpu: The cpu of the ring_buffer to get the number of pages from
-  *
-@@ -5305,7 +5305,7 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
- EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
- 
- /**
-- * ring_buffer_reset_cpu - reset a ring buffer per CPU buffer
-+ * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
-  * @buffer: The ring buffer to reset a per cpu buffer of
-  * @cpu: The CPU buffer to be reset
-  */
-@@ -5375,7 +5375,7 @@ void ring_buffer_reset(struct trace_buffer *buffer)
- EXPORT_SYMBOL_GPL(ring_buffer_reset);
- 
- /**
-- * rind_buffer_empty - is the ring buffer empty?
-+ * ring_buffer_empty - is the ring buffer empty?
-  * @buffer: The ring buffer to test
-  */
- bool ring_buffer_empty(struct trace_buffer *buffer)
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index c08bde9871ec..5dd0617e5df6 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -16,6 +16,7 @@
- #include "trace_dynevent.h"
- #include "trace_probe.h"
- #include "trace_probe_tmpl.h"
-+#include "trace_probe_kernel.h"
- 
- #define EPROBE_EVENT_SYSTEM "eprobes"
- 
-@@ -456,29 +457,14 @@ NOKPROBE_SYMBOL(process_fetch_insn)
- static nokprobe_inline int
- fetch_store_strlen_user(unsigned long addr)
- {
--	const void __user *uaddr =  (__force const void __user *)addr;
--
--	return strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
-+	return kern_fetch_store_strlen_user(addr);
- }
- 
- /* Return the length of string -- including null terminal byte */
- static nokprobe_inline int
- fetch_store_strlen(unsigned long addr)
- {
--	int ret, len = 0;
--	u8 c;
--
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if (addr < TASK_SIZE)
--		return fetch_store_strlen_user(addr);
--#endif
--
--	do {
--		ret = copy_from_kernel_nofault(&c, (u8 *)addr + len, 1);
--		len++;
--	} while (c && ret == 0 && len < MAX_STRING_SIZE);
--
--	return (ret < 0) ? ret : len;
-+	return kern_fetch_store_strlen(addr);
- }
- 
- /*
-@@ -488,21 +474,7 @@ fetch_store_strlen(unsigned long addr)
- static nokprobe_inline int
- fetch_store_string_user(unsigned long addr, void *dest, void *base)
- {
--	const void __user *uaddr =  (__force const void __user *)addr;
--	int maxlen = get_loc_len(*(u32 *)dest);
--	void *__dest;
--	long ret;
--
--	if (unlikely(!maxlen))
--		return -ENOMEM;
--
--	__dest = get_loc_data(dest, base);
--
--	ret = strncpy_from_user_nofault(__dest, uaddr, maxlen);
--	if (ret >= 0)
--		*(u32 *)dest = make_data_loc(ret, __dest - base);
--
--	return ret;
-+	return kern_fetch_store_string_user(addr, dest, base);
- }
- 
- /*
-@@ -512,29 +484,7 @@ fetch_store_string_user(unsigned long addr, void *dest, void *base)
- static nokprobe_inline int
- fetch_store_string(unsigned long addr, void *dest, void *base)
- {
--	int maxlen = get_loc_len(*(u32 *)dest);
--	void *__dest;
--	long ret;
--
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)addr < TASK_SIZE)
--		return fetch_store_string_user(addr, dest, base);
--#endif
--
--	if (unlikely(!maxlen))
--		return -ENOMEM;
--
--	__dest = get_loc_data(dest, base);
--
--	/*
--	 * Try to get string again, since the string can be changed while
--	 * probing.
--	 */
--	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
--	if (ret >= 0)
--		*(u32 *)dest = make_data_loc(ret, __dest - base);
--
--	return ret;
-+	return kern_fetch_store_string(addr, dest, base);
- }
- 
- static nokprobe_inline int
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 5e8c07aef071..e310052dc83c 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -17,6 +17,8 @@
- /* for gfp flag names */
- #include <linux/trace_events.h>
- #include <trace/events/mmflags.h>
-+#include "trace_probe.h"
-+#include "trace_probe_kernel.h"
- 
- #include "trace_synth.h"
- 
-@@ -409,6 +411,7 @@ static unsigned int trace_string(struct synth_trace_event *entry,
- {
- 	unsigned int len = 0;
- 	char *str_field;
-+	int ret;
- 
- 	if (is_dynamic) {
- 		u32 data_offset;
-@@ -417,19 +420,27 @@ static unsigned int trace_string(struct synth_trace_event *entry,
- 		data_offset += event->n_u64 * sizeof(u64);
- 		data_offset += data_size;
- 
--		str_field = (char *)entry + data_offset;
--
--		len = strlen(str_val) + 1;
--		strscpy(str_field, str_val, len);
-+		len = kern_fetch_store_strlen((unsigned long)str_val);
- 
- 		data_offset |= len << 16;
- 		*(u32 *)&entry->fields[*n_u64] = data_offset;
- 
-+		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
-+
- 		(*n_u64)++;
- 	} else {
- 		str_field = (char *)&entry->fields[*n_u64];
- 
--		strscpy(str_field, str_val, STR_VAR_LEN_MAX);
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+		if ((unsigned long)str_val < TASK_SIZE)
-+			ret = strncpy_from_user_nofault(str_field, str_val, STR_VAR_LEN_MAX);
-+		else
-+#endif
-+			ret = strncpy_from_kernel_nofault(str_field, str_val, STR_VAR_LEN_MAX);
-+
-+		if (ret < 0)
-+			strcpy(str_field, FAULT_STRING);
-+
- 		(*n_u64) += STR_VAR_LEN_MAX / sizeof(u64);
- 	}
- 
-@@ -462,7 +473,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
- 		val_idx = var_ref_idx[field_pos];
- 		str_val = (char *)(long)var_ref_vals[val_idx];
- 
--		len = strlen(str_val) + 1;
-+		len = kern_fetch_store_strlen((unsigned long)str_val);
- 
- 		fields_size += len;
- 	}
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 23f7f0ec4f4c..5a75b039e586 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -20,6 +20,7 @@
- #include "trace_kprobe_selftest.h"
- #include "trace_probe.h"
- #include "trace_probe_tmpl.h"
-+#include "trace_probe_kernel.h"
- 
- #define KPROBE_EVENT_SYSTEM "kprobes"
- #define KRETPROBE_MAXACTIVE_MAX 4096
-@@ -1223,29 +1224,14 @@ static const struct file_operations kprobe_profile_ops = {
- static nokprobe_inline int
- fetch_store_strlen_user(unsigned long addr)
- {
--	const void __user *uaddr =  (__force const void __user *)addr;
--
--	return strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
-+	return kern_fetch_store_strlen_user(addr);
- }
- 
- /* Return the length of string -- including null terminal byte */
- static nokprobe_inline int
- fetch_store_strlen(unsigned long addr)
- {
--	int ret, len = 0;
--	u8 c;
--
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if (addr < TASK_SIZE)
--		return fetch_store_strlen_user(addr);
--#endif
--
--	do {
--		ret = copy_from_kernel_nofault(&c, (u8 *)addr + len, 1);
--		len++;
--	} while (c && ret == 0 && len < MAX_STRING_SIZE);
--
--	return (ret < 0) ? ret : len;
-+	return kern_fetch_store_strlen(addr);
- }
- 
- /*
-@@ -1255,21 +1241,7 @@ fetch_store_strlen(unsigned long addr)
- static nokprobe_inline int
- fetch_store_string_user(unsigned long addr, void *dest, void *base)
- {
--	const void __user *uaddr =  (__force const void __user *)addr;
--	int maxlen = get_loc_len(*(u32 *)dest);
--	void *__dest;
--	long ret;
--
--	if (unlikely(!maxlen))
--		return -ENOMEM;
--
--	__dest = get_loc_data(dest, base);
--
--	ret = strncpy_from_user_nofault(__dest, uaddr, maxlen);
--	if (ret >= 0)
--		*(u32 *)dest = make_data_loc(ret, __dest - base);
--
--	return ret;
-+	return kern_fetch_store_string_user(addr, dest, base);
- }
- 
- /*
-@@ -1279,29 +1251,7 @@ fetch_store_string_user(unsigned long addr, void *dest, void *base)
- static nokprobe_inline int
- fetch_store_string(unsigned long addr, void *dest, void *base)
- {
--	int maxlen = get_loc_len(*(u32 *)dest);
--	void *__dest;
--	long ret;
--
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)addr < TASK_SIZE)
--		return fetch_store_string_user(addr, dest, base);
--#endif
--
--	if (unlikely(!maxlen))
--		return -ENOMEM;
--
--	__dest = get_loc_data(dest, base);
--
--	/*
--	 * Try to get string again, since the string can be changed while
--	 * probing.
--	 */
--	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
--	if (ret >= 0)
--		*(u32 *)dest = make_data_loc(ret, __dest - base);
--
--	return ret;
-+	return kern_fetch_store_string(addr, dest, base);
- }
- 
- static nokprobe_inline int
-diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-new file mode 100644
-index 000000000000..77dbd9ff9782
---- /dev/null
-+++ b/kernel/trace/trace_probe_kernel.h
-@@ -0,0 +1,115 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __TRACE_PROBE_KERNEL_H_
-+#define __TRACE_PROBE_KERNEL_H_
-+
-+#define FAULT_STRING "(fault)"
-+
-+/*
-+ * This depends on trace_probe.h, but can not include it due to
-+ * the way trace_probe_tmpl.h is used by trace_kprobe.c and trace_eprobe.c.
-+ * Which means that any other user must include trace_probe.h before including
-+ * this file.
-+ */
-+/* Return the length of string -- including null terminal byte */
-+static nokprobe_inline int
-+kern_fetch_store_strlen_user(unsigned long addr)
-+{
-+	const void __user *uaddr =  (__force const void __user *)addr;
-+	int ret;
-+
-+	ret = strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
-+	/*
-+	 * strnlen_user_nofault returns zero on fault, insert the
-+	 * FAULT_STRING when that occurs.
-+	 */
-+	if (ret <= 0)
-+		return strlen(FAULT_STRING) + 1;
-+	return ret;
-+}
-+
-+/* Return the length of string -- including null terminal byte */
-+static nokprobe_inline int
-+kern_fetch_store_strlen(unsigned long addr)
-+{
-+	int ret, len = 0;
-+	u8 c;
-+
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	if (addr < TASK_SIZE)
-+		return kern_fetch_store_strlen_user(addr);
-+#endif
-+
-+	do {
-+		ret = copy_from_kernel_nofault(&c, (u8 *)addr + len, 1);
-+		len++;
-+	} while (c && ret == 0 && len < MAX_STRING_SIZE);
-+
-+	/* For faults, return enough to hold the FAULT_STRING */
-+	return (ret < 0) ? strlen(FAULT_STRING) + 1 : len;
-+}
-+
-+static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void *base, int len)
-+{
-+	if (ret >= 0) {
-+		*(u32 *)dest = make_data_loc(ret, __dest - base);
-+	} else {
-+		strscpy(__dest, FAULT_STRING, len);
-+		ret = strlen(__dest) + 1;
-+	}
-+}
-+
-+/*
-+ * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-+ * with max length and relative data location.
-+ */
-+static nokprobe_inline int
-+kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-+{
-+	const void __user *uaddr =  (__force const void __user *)addr;
-+	int maxlen = get_loc_len(*(u32 *)dest);
-+	void *__dest;
-+	long ret;
-+
-+	if (unlikely(!maxlen))
-+		return -ENOMEM;
-+
-+	__dest = get_loc_data(dest, base);
-+
-+	ret = strncpy_from_user_nofault(__dest, uaddr, maxlen);
-+	set_data_loc(ret, dest, __dest, base, maxlen);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-+ * length and relative data location.
-+ */
-+static nokprobe_inline int
-+kern_fetch_store_string(unsigned long addr, void *dest, void *base)
-+{
-+	int maxlen = get_loc_len(*(u32 *)dest);
-+	void *__dest;
-+	long ret;
-+
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	if ((unsigned long)addr < TASK_SIZE)
-+		return kern_fetch_store_string_user(addr, dest, base);
-+#endif
-+
-+	if (unlikely(!maxlen))
-+		return -ENOMEM;
-+
-+	__dest = get_loc_data(dest, base);
-+
-+	/*
-+	 * Try to get string again, since the string can be changed while
-+	 * probing.
-+	 */
-+	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
-+	set_data_loc(ret, dest, __dest, base, maxlen);
-+
-+	return ret;
-+}
-+
-+#endif /* __TRACE_PROBE_KERNEL_H_ */
+> > My time is as valuable
+> > as yours and this revert required much more investigation before it
+> > was submitted. You lived with
+> > https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+> > since 5.10, which apparently was needed to either boot or have dwc3,
+> > so I don't think there is any real urgency.
+>
+> It is in my tree only for the purpose of "don't forget that issue".
+> I think you can work around it by built-in extcon driver.
+>
