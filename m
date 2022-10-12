@@ -2,163 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F325FC66C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22D35FC66B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiJLN26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229977AbiJLN2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiJLN2x (ORCPT
+        with ESMTP id S229639AbiJLN2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:28:53 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F340FCE99B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1665581328; x=1697117328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zLOMPQX/UZ2BIcOn/66Oe03IRbrUXRGhlWZylqU+JUI=;
-  b=ioJbApTeaFfBm5pm0/wfyuY1SCMuV0luW09mCyFK8ad87AMFVnvk/ZUV
-   uctVD954f9bZZDnRId7q7Pz6ZzlDtNA+G0Lqwc1C+xHOW+bCsy5I4kPVq
-   rOzNdEJKhkq6d3rHXVwTYT1UxKeT+heHnieVmU9juvIfu86PqAwn9hqS5
-   gGJ3gAJp7gSg8+1E811QL80SjsSbT+/vuo2GpZbFTGb4RW95Lsm5niTZa
-   6ieRCdvtIanXz42ZLbSk8jvYoTEjcQKi02vXKPh8TFdqNd0CwXE5CFOag
-   fdGLUdoORL2uDW0VSqFLuAIi6JWuGPUf6VoayIUuPiIev3CPqg0PtJ4i6
-   w==;
-X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
-   d="scan'208";a="178371523"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Oct 2022 06:28:46 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 12 Oct 2022 06:28:41 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Wed, 12 Oct 2022 06:28:38 -0700
-Date:   Wed, 12 Oct 2022 14:28:16 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-        Samuel Holland <samuel@sholland.org>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH v2] riscv: jump_label: mark arguments as const to satisfy
- asm constraints
-Message-ID: <Y0bA8HUL9eC3Dp8C@wendy>
-References: <20221008145437.491-1-jszhang@kernel.org>
+        Wed, 12 Oct 2022 09:28:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86189ABF0F;
+        Wed, 12 Oct 2022 06:28:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnYPq2t9xz4x1G;
+        Thu, 13 Oct 2022 00:28:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1665581313;
+        bh=9E6D8SfUt/XvbCtYk6H79eLF5Z0a8VLBf3dbm5xgnlU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=RHHgYvEMnEbCBFnzD18P+zJmb66XY27lFmS0KJ8KUqFVam8bV7++FxLIykwgZpM/S
+         FiBTpasGKgc4Upb01vtGUerSG6up/lXQMe090W03pZ1gmjOVpSYg2vuz0r9lwE9EaH
+         nPqvbKpIktgReSHQQVIIsx9vuUd7T26IIBp7sx/Ug4gb5mLGMBkdlSvT2E6Zimumhr
+         VWasrOgScYJaSBz9IGFstoG13WLv+UD/l0Kp0YJkmY1BMAl37gPZRm+rB1wtZyzYYe
+         21IqN5MPO+DWz2YaSMuMqRd9RzsPAA+tPSMk6qmHZOV7hS2uVpYymn6LQtqiBePpA4
+         tf35f+0SCmUZg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alvaro.karsz@solid-run.com, angus.chen@jaguarmicro.com,
+        gavinl@nvidia.com, jasowang@redhat.com, lingshan.zhu@intel.com,
+        wangdeming@inspur.com, xiujianfeng@huawei.com,
+        linuxppc-dev@lists.ozlabs.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [GIT PULL] virtio: fixes, features
+In-Reply-To: <20221012070532-mutt-send-email-mst@kernel.org>
+References: <20221010132030-mutt-send-email-mst@kernel.org>
+ <87r0zdmujf.fsf@mpe.ellerman.id.au>
+ <20221012070532-mutt-send-email-mst@kernel.org>
+Date:   Thu, 13 Oct 2022 00:28:25 +1100
+Message-ID: <87mta1marq.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221008145437.491-1-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Jisheng,
-LKP reported an error that seems to only have gone to myself & Samuel,
-but the branch it's complaining about is your v1:
-https://lore.kernel.org/lkml/202210122123.Cc4FPShJ-lkp@intel.com/
+[ Cc += Bjorn & linux-pci ]
 
-Any idea what the story is here?
+"Michael S. Tsirkin" <mst@redhat.com> writes:
+> On Wed, Oct 12, 2022 at 05:21:24PM +1100, Michael Ellerman wrote:
+>> "Michael S. Tsirkin" <mst@redhat.com> writes:
+...
+>> > ----------------------------------------------------------------
+>> > virtio: fixes, features
+>> >
+>> > 9k mtu perf improvements
+>> > vdpa feature provisioning
+>> > virtio blk SECURE ERASE support
+>> >
+>> > Fixes, cleanups all over the place.
+>> >
+>> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>> >
+>> > ----------------------------------------------------------------
+>> > Alvaro Karsz (1):
+>> >       virtio_blk: add SECURE ERASE command support
+>> >
+>> > Angus Chen (1):
+>> >       virtio_pci: don't try to use intxif pin is zero
+>> 
+>> This commit breaks virtio_pci for me on powerpc, when running as a qemu
+>> guest.
+>> 
+>> vp_find_vqs() bails out because pci_dev->pin == 0.
+>> 
+>> But pci_dev->irq is populated correctly, so vp_find_vqs_intx() would
+>> succeed if we called it - which is what the code used to do.
+>> 
+>> I think this happens because pci_dev->pin is not populated in
+>> pci_assign_irq().
+>> 
+>> I would absolutely believe this is bug in our PCI code, but I think it
+>> may also affect other platforms that use of_irq_parse_and_map_pci().
+>
+> How about fixing this in of_irq_parse_and_map_pci then?
+> Something like the below maybe?
+> 
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index 196834ed44fe..504c4d75c83f 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -446,6 +446,8 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
+>  	if (pin == 0)
+>  		return -ENODEV;
+>  
+> +	pdev->pin = pin;
+> +
+>  	/* Local interrupt-map in the device node? Use it! */
+>  	if (of_get_property(dn, "interrupt-map", NULL)) {
+>  		pin = pci_swizzle_interrupt_pin(pdev, pin);
 
-Thanks,
-Conor.
+That doesn't fix it in all cases, because there's an early return if
+there's a struct device_node associated with the pci_dev, before we even
+read the pin.
 
-On Sat, Oct 08, 2022 at 10:54:37PM +0800, Jisheng Zhang wrote:
-> Samuel reported that the static branch usage in cpu_relax() breaks
-> building with CONFIG_CC_OPTIMIZE_FOR_SIZE:
-> 
-> In file included from <command-line>:
-> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
-> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0
-> probably does not match constraints
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
-> 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:285:33: error: impossible constraint
-> in 'asm'
->   285 | #define asm_volatile_goto(x...) asm goto(x)
->       |                                 ^~~
-> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
-> 'asm_volatile_goto'
->    41 |         asm_volatile_goto(
->       |         ^~~~~~~~~~~~~~~~~
-> make[1]: *** [scripts/Makefile.build:249:
-> arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
-> 
-> Maybe "-Os" prevents GCC from detecting that the key/branch arguments
-> can be treated as constants and used as immediate operands. Inspired
-> by x86's commit 864b435514b2("x86/jump_label: Mark arguments as const to
-> satisfy asm constraints"), and as pointed out by Steven: "The "i"
-> constraint needs to be a constant.", let's do similar modifications to
-> riscv.
-> 
-> Tested by CC_OPTIMIZE_FOR_SIZE + gcc and CC_OPTIMIZE_FOR_SIZE + clang.
-> 
-> Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
-> Link: https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
-> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
-> Reported-by: Samuel Holland <samuel@sholland.org>
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
-> 
-> since v1:
->  - add Reported-by, Reviewed-by, Fixes and Link tag
-> 
->  arch/riscv/include/asm/jump_label.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-> index 38af2ec7b9bf..6d58bbb5da46 100644
-> --- a/arch/riscv/include/asm/jump_label.h
-> +++ b/arch/riscv/include/asm/jump_label.h
-> @@ -14,8 +14,8 @@
->  
->  #define JUMP_LABEL_NOP_SIZE 4
->  
-> -static __always_inline bool arch_static_branch(struct static_key *key,
-> -					       bool branch)
-> +static __always_inline bool arch_static_branch(struct static_key * const key,
-> +					       const bool branch)
->  {
->  	asm_volatile_goto(
->  		"	.option push				\n\t"
-> @@ -35,8 +35,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
->  	return true;
->  }
->  
-> -static __always_inline bool arch_static_branch_jump(struct static_key *key,
-> -						    bool branch)
-> +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
-> +						    const bool branch)
->  {
->  	asm_volatile_goto(
->  		"	.option push				\n\t"
-> -- 
-> 2.37.2
-> 
+Also the pci_dev is const, and removing the const would propagate to a
+few other places.
+
+The other obvious place to fix it would be in pci_assign_irq(), as
+below. That fixes this bug for me, but is otherwise very lightly tested.
+
+cheers
+
+
+diff --git a/drivers/pci/setup-irq.c b/drivers/pci/setup-irq.c
+index cc7d26b015f3..0135413b33af 100644
+--- a/drivers/pci/setup-irq.c
++++ b/drivers/pci/setup-irq.c
+@@ -22,6 +22,15 @@ void pci_assign_irq(struct pci_dev *dev)
+ 	int irq = 0;
+ 	struct pci_host_bridge *hbrg = pci_find_host_bridge(dev->bus);
+ 
++	/* Make sure dev->pin is populated */
++	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &pin);
++
++	/* Cope with illegal. */
++	if (pin > 4)
++		pin = 1;
++
++	dev->pin = pin;
++
+ 	if (!(hbrg->map_irq)) {
+ 		pci_dbg(dev, "runtime IRQ mapping not provided by arch\n");
+ 		return;
+@@ -34,11 +43,6 @@ void pci_assign_irq(struct pci_dev *dev)
+ 	 * time the interrupt line passes through a PCI-PCI bridge we must
+ 	 * apply the swizzle function.
+ 	 */
+-	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &pin);
+-	/* Cope with illegal. */
+-	if (pin > 4)
+-		pin = 1;
+-
+ 	if (pin) {
+ 		/* Follow the chain of bridges, swizzling as we go. */
+ 		if (hbrg->swizzle_irq)
