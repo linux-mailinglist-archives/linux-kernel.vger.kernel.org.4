@@ -2,134 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A215FC955
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FF05FC8D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiJLQaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S229650AbiJLQCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJLQ3o (ORCPT
+        with ESMTP id S229547AbiJLQCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:29:44 -0400
-X-Greylist: delayed 2404 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 09:29:37 PDT
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AB3DFF;
-        Wed, 12 Oct 2022 09:29:37 -0700 (PDT)
-Received: from martin by viti.kaiser.cx with local (Exim 4.89)
-        (envelope-from <martin@viti.kaiser.cx>)
-        id 1oidz2-000187-AD; Wed, 12 Oct 2022 17:49:24 +0200
-Date:   Wed, 12 Oct 2022 17:49:24 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: imx: Add missing .thaw_noirq hook
-Message-ID: <20221012154924.x4rjav563efhsnep@viti.kaiser.cx>
-References: <20221012121353.2346280-1-shawn.guo@linaro.org>
+        Wed, 12 Oct 2022 12:02:49 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B47D7E00;
+        Wed, 12 Oct 2022 09:02:48 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id n74so20508478yba.11;
+        Wed, 12 Oct 2022 09:02:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=asbHjkVq5tGvEOMEjV9ZiHWtFmPxbiR4kRuKse54pkE=;
+        b=GJCkUj45ysR5PWKAoFVSiykTGzMPnLo7iIm8PQBiKkSGIpAoY8z3lLZ7VqcT3Q/4DE
+         Rx9e1c8nASOlA9vhaSUFnpuZofVkB2rBNxaVDUcpzQNGm8zaVuok6R2L6NcyptC+Rw5C
+         l0QW3g+F2e5dCyMe48zNt+Nh5FbWtFm6V/rpC0yAQ0EOJzdcKsaCprhr8gXxNr6354pX
+         r3TLirMhw4R95vm9CbnKmFlb9j+kN9yYSyg9FkMRxEn7oJdM+JeAQIDm0VeNmHAzgUOJ
+         2xpKoUhiDEa4OSXc6UKNG1SijFamYZcMSdml0A15iuQ9r55XPMHGV+URaTpuRm8k0vEf
+         Kt8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=asbHjkVq5tGvEOMEjV9ZiHWtFmPxbiR4kRuKse54pkE=;
+        b=FpO+jX+eU8Ndk1ngoJ7SitzACLrUsC0Zp4c9XgCHV+ScnbmtsFf6d/2/0hXz0+aC7g
+         tmD91nkJzGnUid2hw5kJP1zQIhgkYg412A6G85pmyw5Sqa4+lilnnQALYeBssvbA8OhS
+         WBnuAamsvZR1wiqQM5ByCEHU3MNFH8UE0OdKol+ufFE7FhScm7VkLOAyPBvmEbJGkwhw
+         pUZkpGzNy3oE1KK0pSJ0GfzDTe3YvI8A1tGda0icH+2BIBVw4qOJM0IjCH660U1az7A4
+         MiJL6m/sNwoU6hK2mT2BnEw0A+sNjhDTlL7L/rmvm/yaAoD0WqAJMG9Gk03VBjpjyq4Q
+         qxXQ==
+X-Gm-Message-State: ACrzQf1kofJmkBHsmnmBz96mzJzAemwwEvV8hvo6X5XN677L7gDqfckS
+        uWGQ6I0hxu155Pj5r9Xx/Tv0I6IZiQzOnNayGFE=
+X-Google-Smtp-Source: AMsMyM47Z2EbVh2iAoH30O/3krbN+Ms479nxBxsgawEUtxRwaa8PQ5hRU6FGwSZQr1W5HWSzIoghIof7HdTQwu72lcQ=
+X-Received: by 2002:a05:6902:150b:b0:6bf:4752:eeb1 with SMTP id
+ q11-20020a056902150b00b006bf4752eeb1mr25996044ybu.323.1665590567936; Wed, 12
+ Oct 2022 09:02:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012121353.2346280-1-shawn.guo@linaro.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
-Sender: Martin Kaiser <martin@viti.kaiser.cx>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221011215634.478330-1-vishal.moola@gmail.com>
+ <20221011215634.478330-2-vishal.moola@gmail.com> <Y0YiEon0G3b/00dG@casper.infradead.org>
+In-Reply-To: <Y0YiEon0G3b/00dG@casper.infradead.org>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Wed, 12 Oct 2022 09:02:36 -0700
+Message-ID: <CAOzc2pyZ9qHzEmNzYXjUu93wRpmW4af_e0eG=_AvNMzjU_V=CA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] filemap: find_lock_entries() now updates start offset
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hughd@google.com,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thus wrote Shawn Guo (shawn.guo@linaro.org):
+On Tue, Oct 11, 2022 at 7:10 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Oct 11, 2022 at 02:56:31PM -0700, Vishal Moola (Oracle) wrote:
+> > @@ -2116,7 +2118,16 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
+> >               folio_put(folio);
+> >       }
+> >       rcu_read_unlock();
+> > +     nr = folio_batch_count(fbatch);
+> > +
+> > +     if (nr) {
+> > +             folio = fbatch->folios[nr - 1];
+> > +             nr = folio_nr_pages(folio);
+> >
+> > +             if (folio_test_hugetlb(folio))
+> > +                     nr = 1;
+> > +             *start = folio->index + nr;
+> > +     }
+>
+> Hmm ... this is going to go wrong if the folio is actually a shadow
+> entry, isn't it?
 
-> The following warning is seen with non-console UART instance when
-> system hibernates.
+You're right! I missed that.
 
-> [   37.371969] ------------[ cut here ]------------
-> [   37.376599] uart3_root_clk already disabled
-> [   37.380810] WARNING: CPU: 0 PID: 296 at drivers/clk/clk.c:952 clk_core_disable+0xa4/0xb0
-> ...
-> [   37.506986] Call trace:
-> [   37.509432]  clk_core_disable+0xa4/0xb0
-> [   37.513270]  clk_disable+0x34/0x50
-> [   37.516672]  imx_uart_thaw+0x38/0x5c
-> [   37.520250]  platform_pm_thaw+0x30/0x6c
-> [   37.524089]  dpm_run_callback.constprop.0+0x3c/0xd4
-> [   37.528972]  device_resume+0x7c/0x160
-> [   37.532633]  dpm_resume+0xe8/0x230
-> [   37.536036]  hibernation_snapshot+0x288/0x430
-> [   37.540397]  hibernate+0x10c/0x2e0
-> [   37.543798]  state_store+0xc4/0xd0
-> [   37.547203]  kobj_attr_store+0x1c/0x30
-> [   37.550953]  sysfs_kf_write+0x48/0x60
-> [   37.554619]  kernfs_fop_write_iter+0x118/0x1ac
-> [   37.559063]  new_sync_write+0xe8/0x184
-> [   37.562812]  vfs_write+0x230/0x290
-> [   37.566214]  ksys_write+0x68/0xf4
-> [   37.569529]  __arm64_sys_write+0x20/0x2c
-> [   37.573452]  invoke_syscall.constprop.0+0x50/0xf0
-> [   37.578156]  do_el0_svc+0x11c/0x150
-> [   37.581648]  el0_svc+0x30/0x140
-> [   37.584792]  el0t_64_sync_handler+0xe8/0xf0
-> [   37.588976]  el0t_64_sync+0x1a0/0x1a4
-> [   37.592639] ---[ end trace 56e22eec54676d75 ]---
+> > +++ b/mm/shmem.c
+> > @@ -922,21 +922,18 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
+> >
+> >       folio_batch_init(&fbatch);
+> >       index = start;
+> > -     while (index < end && find_lock_entries(mapping, index, end - 1,
+> > +     while (index < end && find_lock_entries(mapping, &index, end - 1,
+> >                       &fbatch, indices)) {
+> >               for (i = 0; i < folio_batch_count(&fbatch); i++) {
+> >                       folio = fbatch.folios[i];
+> >
+> > -                     index = indices[i];
+> > -
+> >                       if (xa_is_value(folio)) {
+> >                               if (unfalloc)
+> >                                       continue;
+> >                               nr_swaps_freed += !shmem_free_swap(mapping,
+> > -                                                             index, folio);
+> > +                                                     folio->index, folio);
+>
+> We know this is a value entry, so we definitely can't look at
+> folio->index.  This should probably be:
+>
+> +                                                       indices[i], folio);
+>
+> > @@ -510,20 +509,18 @@ unsigned long invalidate_mapping_pagevec(struct address_space *mapping,
+> >       int i;
+> >
+> >       folio_batch_init(&fbatch);
+> > -     while (find_lock_entries(mapping, index, end, &fbatch, indices)) {
+> > +     while (find_lock_entries(mapping, &index, end, &fbatch, indices)) {
+> >               for (i = 0; i < folio_batch_count(&fbatch); i++) {
+> >                       struct folio *folio = fbatch.folios[i];
+> >
+> >                       /* We rely upon deletion not changing folio->index */
+> > -                     index = indices[i];
+> >
+> >                       if (xa_is_value(folio)) {
+> >                               count += invalidate_exceptional_entry(mapping,
+> > -                                                                   index,
+> > -                                                                   folio);
+> > +                                                               folio->index,
+> > +                                                               folio);
+>
+> Same here.  I'd fix the indent while you're at it to get more on that
+> second line and not need a third line.
+>
 
-> On hibernating, pm core calls into related hooks in sequence like:
-
->     .freeze
->     .freeze_noirq
->     .thaw_noirq
->     .thaw
-
-> With .thaw_noirq hook being absent, the clock will be disabled in a
-> unbalanced call which results the warning above.
-
->     imx_uart_freeze()
->         clk_prepare_enable()
->     imx_uart_suspend_noirq()
->         clk_disable()
->     imx_uart_thaw
->         clk_disable_unprepare()
-
-> Adding the missing .thaw_noirq hook as imx_uart_resume_noirq() will have
-> the call sequence corrected as below and thus fix the warning.
-
->     imx_uart_freeze()
->         clk_prepare_enable()
->     imx_uart_suspend_noirq()
->         clk_disable()
->     imx_uart_resume_noirq()
->         clk_enable()
->     imx_uart_thaw
->         clk_disable_unprepare()
-
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
->  drivers/tty/serial/imx.c | 1 +
->  1 file changed, 1 insertion(+)
-
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index 590a25369531..e5163c2c4169 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -2603,6 +2603,7 @@ static const struct dev_pm_ops imx_uart_pm_ops = {
->  	.suspend_noirq = imx_uart_suspend_noirq,
->  	.resume_noirq = imx_uart_resume_noirq,
->  	.freeze_noirq = imx_uart_suspend_noirq,
-> +	.thaw_noirq = imx_uart_resume_noirq,
->  	.restore_noirq = imx_uart_resume_noirq,
->  	.suspend = imx_uart_suspend,
->  	.resume = imx_uart_resume,
-> -- 
-> 2.25.1
-
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
-
-Thanks,
-
-   Martin
+Turns out I had misunderstood what a value entry was. I now understand
+why we do in fact need the indices array. I'll fix the first 2 patches and
+drop the last 2.
