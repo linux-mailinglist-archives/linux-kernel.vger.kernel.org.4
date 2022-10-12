@@ -2,63 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D6D5FC772
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725D25FC775
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJLOek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S229780AbiJLOev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiJLOeg (ORCPT
+        with ESMTP id S229748AbiJLOeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:34:36 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F9A2BA;
-        Wed, 12 Oct 2022 07:34:35 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id bk15so26497355wrb.13;
-        Wed, 12 Oct 2022 07:34:35 -0700 (PDT)
+        Wed, 12 Oct 2022 10:34:46 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914C7FAEE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:34:43 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id a18so7640556qko.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OMsZ+7M+Sgc7E+9hQ4WNx9YG06bm1iwnnpkAazR85FQ=;
+        b=v+NlSdt1xz25Z4nh5paIkrUedP3AyaVTV5F6ByBfEKCbp5uDnrvLuQZTADrqMTFH+K
+         ouXHzKcWPMhLSawAypW1+Si9D2IHWmm79RcK7w+e2WCcvYrmY2Wank2V9xT5QwYLNuCi
+         UJrq5X2oq1EwOmFPEFOQgQpuNvhENP8V7laGYPp26huydnOjvTg1QGKo57j4dzfkZUq7
+         5hdsfIUDrPJuzIGg+TwXGqJ76kCLaG0t8tKmt0rlMxoLzOpCorV3GzAnYzlloBHKR5bi
+         /anuljnptXX786g8htuf7LyNLu3PnQO92CVhapnNS6rguqUFk5tcihj0Cu7/HwYGvZ52
+         cDAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tor9Al5zKFy4H384gqWBoxXv/hFxksivsNXjuDpRGaw=;
-        b=LsbsHdymJCHIUtf60MxaFEX1GSTr4ush2srZ/CG9mouefD1Nf+tTZQTX0aNsy7FeqY
-         XtqhwA1xqSGsW275W/C8v8Tg8SwMa1oBvz4sspcAD06ec/HcbHeUfCLvDBe7zyGeI8Mf
-         9oRWM2jYZf6FuLuld2k1khEj0sPdCvZvHoVOOo1DWfyGSe/9Sd+tjCKzTPpgQlep1weH
-         sxVGzpbSs6v+9s9xfxowxwJ3XfRjgBm7RAPj1nOw4J4V06d+mREK8Q3EVaNjmBBs1Sw/
-         uKRU62EDduTOcrJYHvd7dF9jfMUMSe9NVL2ImHiS7qsG7bRHQ11JgpruoTYQYHsbrsv3
-         Ebrg==
-X-Gm-Message-State: ACrzQf0zueQ8ADethoUhXArzYKEuhbkfnuy/lb98YZKfjJ1A1UmfzBvP
-        raWjbeWXzEvoRLohATwJEiW9EYUJ+Os8WiR5ZKw=
-X-Google-Smtp-Source: AMsMyM5q7nOEeGxpb90r8BpgH/goefH7ZF9xFGoX3X6IYwsHHjbU0d+LCLtmUkdkv+x2O6are+Nhuj0nkQQUrEbM4n4=
-X-Received: by 2002:a05:6000:801:b0:230:45ad:fba6 with SMTP id
- bt1-20020a056000080100b0023045adfba6mr11248444wrb.514.1665585274073; Wed, 12
- Oct 2022 07:34:34 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMsZ+7M+Sgc7E+9hQ4WNx9YG06bm1iwnnpkAazR85FQ=;
+        b=RmdbTw5oHP5E4rkb8WtuO1L/rD7VkmnbzX92TmPtk+fJSqRwcE16NnqQuWq+tjVx2L
+         K1x65zOv9P0eaM5Ah9z4w/1l5ZyMFPgO12wsVDOn7CoZ86JryhzmXFOYeA3aSfTuirUO
+         oLLz1WMHfbWq5Y4Pc+5iEfPQSMwArMENpdRxxwIOCznWQhzU1EsZFDiSqXAW+9tp7ZXT
+         gHwBvIdpGyz5TmspKdSsKn+Rs5VcSAYgtvgGLq6whCf/qhGwQ6Y7cc7Rq90dWgbhMDMy
+         0W5thvvCpYTay0+aPXTGauzYJWNHxafrTbvskbUON4u31IzNhcwTpui59GTb/qAmp9F2
+         FAgQ==
+X-Gm-Message-State: ACrzQf0gwGjs/C+Wm8aMhz96uSRQw6rWcNoykCZAeKiLFPFalQLaMGBJ
+        Mns6JK/+zTsBUFWSAUpyc6nPTw==
+X-Google-Smtp-Source: AMsMyM4qzU6utKFRylYq2Fgww+YpmjOTOpohktT/qqMwnS8qvd0pIyK0JpDzT1OKiy9dH2IYptnjgw==
+X-Received: by 2002:a37:5a04:0:b0:6e0:a338:5f12 with SMTP id o4-20020a375a04000000b006e0a3385f12mr20382231qkb.420.1665585282401;
+        Wed, 12 Oct 2022 07:34:42 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id e124-20020a37b582000000b006ceb933a9fesm15796606qkf.81.2022.10.12.07.34.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 07:34:41 -0700 (PDT)
+Message-ID: <881e19a9-2e16-7661-0efd-cae7ef1067e7@linaro.org>
+Date:   Wed, 12 Oct 2022 10:34:40 -0400
 MIME-Version: 1.0
-References: <20221012142733.32420-1-quic_youghand@quicinc.com>
-In-Reply-To: <20221012142733.32420-1-quic_youghand@quicinc.com>
-From:   Adrian Chadd <adrian@freebsd.org>
-Date:   Wed, 12 Oct 2022 07:34:22 -0700
-Message-ID: <CAJ-VmomqwxD4wnuz3GJDaXUV71s_4aexY+3xYcDhXSKgo-9Zng@mail.gmail.com>
-Subject: Re: [PATCH v2] wifi: ath10k: Delay the unmapping of the buffer
-To:     Youghandhar Chintala <quic_youghand@quicinc.com>
-Cc:     ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 1/3] dt-bindings: net: marvell,pp2: convert to
+ json-schema
+Content-Language: en-US
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>,
+        devicetree@vger.kernel.org, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@semihalf.com
+References: <20221011190613.13008-1-mig@semihalf.com>
+ <20221011190613.13008-2-mig@semihalf.com>
+ <ad015bc9-a6d2-491d-463a-42a6a0afbf75@linaro.org>
+ <CAPv3WKcY=erFTBDLP1AhQa0+CP6C8KJinmKFEkR2xh4mHHv_aQ@mail.gmail.com>
+ <CAPv3WKdon28ntGQ=xbmL+CEFQ7=xzOQOcV9qN_8MOt-uiLHoXg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAPv3WKdon28ntGQ=xbmL+CEFQ7=xzOQOcV9qN_8MOt-uiLHoXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Surely this should be a firmware fix/patch?
+On 11/10/2022 19:01, Marcin Wojtas wrote:
+,
+>>
+>> ethernet@
+>> {
+>>     ethernet-port@0
+>>     {
+>>      }
+>>      ethernet-port@1
+>>      {
+>>      }
+>> }
+>>
+>> What do you recommend?
+>>
+> 
+> I moved the ethernet-controller.yaml reference to under the subnode
+> (this allowed me to remove phy and phy-mode description)) and it
+> doesn't complain about the node naming. Please let me know if below
+> would be acceptable.
+> 
+> --- a/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> +++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
+> @@ -61,7 +61,11 @@ patternProperties:
+>      type: object
+>      description: subnode for each ethernet port.
+> 
+> +    allOf:
 
+Skip the allOf, just $ref is enough.
 
+> +      - $ref: ethernet-controller.yaml#
+> +
+>      properties:
+>        interrupts:
+>          minItems: 1
+>          maxItems: 10
+> @@ -95,19 +99,11 @@ patternProperties:
+> 
+>        port-id:
+>          $ref: /schemas/types.yaml#/definitions/uint32
+> +        deprecated: true
+>          description: >
+>            ID of the port from the MAC point of view.
+>            Legacy binding for backward compatibility.
+> 
+> -      phy:
+> -        $ref: /schemas/types.yaml#/definitions/phandle
+> -        description: >
+> -          a phandle to a phy node defining the PHY address
+> -          (as the reg property, a single integer).
+> -
+> -      phy-mode:
+> -        $ref: ethernet-controller.yaml#/properties/phy-mode
+> -
+>        marvell,loopback:
+>          $ref: /schemas/types.yaml#/definitions/flag
+>          description: port is loopback mode.
+> @@ -132,7 +128,6 @@ required:
+>    - clock-names
+> 
+>  allOf:
+> -  - $ref: ethernet-controller.yaml#
+>    - if:
+> 
 
--adrian
+Yes, except:
+
+1. top-level (so with no indentation) unevaluatedProperties: false
+should be now additionalProperties: false.
+2. You need unevaluatedProperties here:
+
++    type: object
++    description: subnode for each ethernet port.
++    $ref: ethernet-controller.yaml#
++    unevaluatedProperties: false
+
+Best regards,
+Krzysztof
+
