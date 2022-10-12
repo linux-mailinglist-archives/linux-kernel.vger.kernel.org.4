@@ -2,136 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94F55FC6EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35BB5FC6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiJLOCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S230046AbiJLOD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJLOCC (ORCPT
+        with ESMTP id S229999AbiJLODn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:02:02 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D4C7078
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:01:59 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:3da6:62e6:8ab0:ff90])
-        by andre.telenet-ops.be with bizsmtp
-        id X21x2800432x5mf0121xPs; Wed, 12 Oct 2022 16:01:57 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oicJ2-001OYA-MM; Wed, 12 Oct 2022 16:01:56 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oicJ2-00C327-A3; Wed, 12 Oct 2022 16:01:56 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 2/2] memory: renesas-rpc-if: Add support for R-Car Gen4
-Date:   Wed, 12 Oct 2022 16:01:52 +0200
-Message-Id: <4d0824bf5ed0fb95c51cd36f9a3f0f562b1a6bf8.1665583089.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1665583089.git.geert+renesas@glider.be>
-References: <cover.1665583089.git.geert+renesas@glider.be>
+        Wed, 12 Oct 2022 10:03:43 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1986DC8237
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:03:41 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id z6-20020a6be206000000b006bbebf8f872so6818029ioc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:03:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LWdHKT9leiqvoEOdN/2hOOqnqF5BTDepurZraEYGZ/E=;
+        b=SGPItzGJbh1kJ5afshc+e0DhG9+WXprg20TllBWajLK8IXIiwajPcnTG164I6X19CH
+         ztcqYW8+xSkybkUzB0NMIGT91T6kv1mFABdGfWfWfLdb9PBAUxfiKe4XfLR3+Srahmco
+         lrcQXfRqeEOFPfdRe4zCP4uFgcGE59mENKH0oA/G5WMBP84WFRlvSnYXKD5cpDFpj4gD
+         4FWIJpBFv66DpfxqJ+Ff1zq9pfky+/q0cfnQiZ7gShUoXg3BMaqbybB2hGJsV0oXOa6F
+         CfhsykdZGNeyZF3on+UlAYd61OXtTfug5+OjtUHUNBf0geFJcMYIq8HDH4FN2bjmS4HZ
+         WEVw==
+X-Gm-Message-State: ACrzQf3r7S2HE0A+V60+4lELBtpiovG/S8UB0ld5o2Wk2AP39HzvAJpr
+        H4fG7GJ/I9wQgTNj6y5YqE5/vRBehc/OZhjUB8spmgIH9jQk
+X-Google-Smtp-Source: AMsMyM6+mci7CiMGFOSoPKpcBGvBPlA2ZzygnkM7KvsXzaUCMSOUy7LNa9tykfS4y7djtZgVf/wYxy4Hi+PVSdXEoWlGqnXdOpQW
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:94ab:0:b0:35a:d1b9:c71c with SMTP id
+ x40-20020a0294ab000000b0035ad1b9c71cmr15224587jah.310.1665583419955; Wed, 12
+ Oct 2022 07:03:39 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 07:03:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000017227f05ead6dc15@google.com>
+Subject: [syzbot] possible deadlock in tcp_sock_set_cork
+From:   syzbot <syzbot+c4b21407c3b1dc66ee65@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SPI Multi I/O Bus Controller (RPC-IF) on R-Car Gen4 SoCs is very
-similar to the RPC-IF on R-Car Gen3 SoCs.  It does support four instead
-of three bits of strobe timing adjustment (STRTIM), and thus requires a
-new mask and new settings.
+Hello,
 
-Inspired by a patch in the BSP by Cong Dang.
+syzbot found the following issue on:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+HEAD commit:    a5088ee7251e Merge tag 'thermal-6.1-rc1' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17c929b8880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=201ae572239e648
+dashboard link: https://syzkaller.appspot.com/bug?extid=c4b21407c3b1dc66ee65
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/26341f70ccb8/disk-a5088ee7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ca8a6f6b0303/vmlinux-a5088ee7.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c4b21407c3b1dc66ee65@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-syzkaller-00372-ga5088ee7251e #0 Not tainted
+------------------------------------------------------
+kworker/u4:27/14295 is trying to acquire lock:
+ffff888022948fb0 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1712 [inline]
+ffff888022948fb0 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: tcp_sock_set_cork+0x16/0x90 net/ipv4/tcp.c:3337
+
+but task is already holding lock:
+ffffc90004a4fda8 ((work_completion)(&(&cp->cp_send_w)->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 ((work_completion)(&(&cp->cp_send_w)->work)){+.+.}-{0:0}:
+       __flush_work+0x105/0xae0 kernel/workqueue.c:3069
+       __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
+       rds_tcp_reset_callbacks+0x1cb/0x4d0 net/rds/tcp.c:171
+       rds_tcp_accept_one+0x9d5/0xd10 net/rds/tcp_listen.c:203
+       rds_tcp_accept_worker+0x55/0x80 net/rds/tcp.c:529
+       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e4/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+-> #0 (k-sk_lock-AF_INET6){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5666 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+       lock_sock_nested+0x36/0xf0 net/core/sock.c:3393
+       lock_sock include/net/sock.h:1712 [inline]
+       tcp_sock_set_cork+0x16/0x90 net/ipv4/tcp.c:3337
+       rds_send_xmit+0x386/0x2540 net/rds/send.c:194
+       rds_send_worker+0x92/0x2e0 net/rds/threads.c:200
+       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e4/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock((work_completion)(&(&cp->cp_send_w)->work));
+                               lock(k-sk_lock-AF_INET6);
+                               lock((work_completion)(&(&cp->cp_send_w)->work));
+  lock(k-sk_lock-AF_INET6);
+
+ *** DEADLOCK ***
+
+2 locks held by kworker/u4:27/14295:
+ #0: ffff888027f19938 ((wq_completion)krdsd){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888027f19938 ((wq_completion)krdsd){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888027f19938 ((wq_completion)krdsd){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888027f19938 ((wq_completion)krdsd){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888027f19938 ((wq_completion)krdsd){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888027f19938 ((wq_completion)krdsd){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc90004a4fda8 ((work_completion)(&(&cp->cp_send_w)->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+
+stack backtrace:
+CPU: 0 PID: 14295 Comm: kworker/u4:27 Not tainted 6.0.0-syzkaller-00372-ga5088ee7251e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Workqueue: krdsd rds_send_worker
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ lock_sock_nested+0x36/0xf0 net/core/sock.c:3393
+ lock_sock include/net/sock.h:1712 [inline]
+ tcp_sock_set_cork+0x16/0x90 net/ipv4/tcp.c:3337
+ rds_send_xmit+0x386/0x2540 net/rds/send.c:194
+ rds_send_worker+0x92/0x2e0 net/rds/threads.c:200
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
 ---
- drivers/memory/renesas-rpc-if.c | 19 ++++++++++++-------
- include/memory/renesas-rpc-if.h |  1 +
- 2 files changed, 13 insertions(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index 61c288d403750b14..09cd4318a83d84d3 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -136,7 +136,8 @@
- #define RPCIF_PHYCNT_DDRCAL	BIT(19)
- #define RPCIF_PHYCNT_HS		BIT(18)
- #define RPCIF_PHYCNT_CKSEL(v)	(((v) & 0x3) << 16) /* valid only for RZ/G2L */
--#define RPCIF_PHYCNT_STRTIM(v)	(((v) & 0x7) << 15) /* valid for R-Car and RZ/G2{E,H,M,N} */
-+#define RPCIF_PHYCNT_STRTIM(v)	(((v) & 0x7) << 15 | ((v) & 0x8) << 24) /* valid for R-Car and RZ/G2{E,H,M,N} */
-+
- #define RPCIF_PHYCNT_WBUF2	BIT(4)
- #define RPCIF_PHYCNT_WBUF	BIT(2)
- #define RPCIF_PHYCNT_PHYMEM(v)	(((v) & 0x3) << 0)
-@@ -323,6 +324,9 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
- 	if (rpc->type == RPCIF_RCAR_GEN3)
- 		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
- 				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
-+	else if (rpc->type == RPCIF_RCAR_GEN4)
-+		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
-+				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
- 
- 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
- 			   RPCIF_PHYOFFSET1_DDRTMG(3));
-@@ -333,17 +337,17 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
- 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
- 				   RPCIF_PHYINT_WPVAL, 0);
- 
--	if (rpc->type == RPCIF_RCAR_GEN3)
--		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
--				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_BSZ(3),
--				   RPCIF_CMNCR_MOIIO(3) |
--				   RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
--	else
-+	if (rpc->type == RPCIF_RZ_G2L)
- 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
- 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
- 				   RPCIF_CMNCR_BSZ(3),
- 				   RPCIF_CMNCR_MOIIO(1) | RPCIF_CMNCR_IOFV(2) |
- 				   RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
-+	else
-+		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
-+				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_BSZ(3),
-+				   RPCIF_CMNCR_MOIIO(3) |
-+				   RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
- 
- 	/* Set RCF after BSZ update */
- 	regmap_write(rpc->regmap, RPCIF_DRCR, RPCIF_DRCR_RCF);
-@@ -718,6 +722,7 @@ static int rpcif_remove(struct platform_device *pdev)
- 
- static const struct of_device_id rpcif_of_match[] = {
- 	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
-+	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
- 	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
- 	{},
- };
-diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
-index 9c0ad64b8d292d49..862eff613dc7963d 100644
---- a/include/memory/renesas-rpc-if.h
-+++ b/include/memory/renesas-rpc-if.h
-@@ -59,6 +59,7 @@ struct rpcif_op {
- 
- enum rpcif_type {
- 	RPCIF_RCAR_GEN3,
-+	RPCIF_RCAR_GEN4,
- 	RPCIF_RZ_G2L,
- };
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
