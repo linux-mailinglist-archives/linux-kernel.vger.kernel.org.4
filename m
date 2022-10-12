@@ -2,128 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE175FCE2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4187F5FCE1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiJLWJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
+        id S230050AbiJLWH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiJLWJM (ORCPT
+        with ESMTP id S230028AbiJLWHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:09:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB1A272D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665612438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=+UHVZ0OKpbw8jecQvx7/f32wxsaBtJja/aKylAWrChs=;
-        b=UvlzHPARCHvGClQFcvConZdnUUIPrJkbu/DCR201+ZbbBYrf2NPHgAxaHHAoxSksMD4uRD
-        SlZqLK2jov0McEqn869wr+OcwXyzooE+njeJuw4CyRWoII01nfpr1hqa+aLnD2kSJNOAyV
-        o//txZib/Wx7MIClvIF8ZKqooLuM7cs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-313-FGFMeAr4MFCpr55Hmd6WpA-1; Wed, 12 Oct 2022 18:04:07 -0400
-X-MC-Unique: FGFMeAr4MFCpr55Hmd6WpA-1
-Received: by mail-wm1-f70.google.com with SMTP id k22-20020a05600c0b5600b003c6cf5c5592so89108wmr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:04:07 -0700 (PDT)
+        Wed, 12 Oct 2022 18:07:30 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478863AE77
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:05:41 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o17-20020a17090aac1100b0020d98b0c0f4so1840334pjq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4pGHWCM3N3OUCM1ER+rKkscIwlNTBChe1kgAgXac27k=;
+        b=ZxJoRoLe4ZBw6t/WVbwcJncoE0viTUu8WwUYo7HbCWwah3umOJMh7nIangr40Amqkq
+         9W0ohHrMfNY+RUM2a81m+RD18ceXG+efXZmb0U/XCJCPPqQMUDOn4Ud9rbXn2edUNUgZ
+         crmhtoIrm7mDYAljbxaMlHUxbJWvFs5GJQKj8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UHVZ0OKpbw8jecQvx7/f32wxsaBtJja/aKylAWrChs=;
-        b=WBsfK100W4i9QIA6/h3Q/CQ/SRkdvmTx0pHwme2YeIDHPJrMSAMXt7m5A+lWJVNDy3
-         HBVce69+Kx6jj8GQA7CB7SXhp8o9fb/S/rhbdr+X7xikV1rxEcpNYeD/ZuaMRpaL9o5X
-         mMtxwBfFVm2x5ba1V5Y2iRWHmk6QAkH1fDBfRo71yP9kZP3FVhsR/ExxPryKB3KY0eAY
-         xhFVxR14g6p/YS9pnVMQTHWX5FeD6WRfR3o6gtvUI1wpMZfNJ3SLTW6rO2vQsIkWrLzB
-         EAcVoOR2nvnu7OofH5x/CuEJKo15VhtzPo7lBPi8iyTIL8Bhw+S108I5fO+VckG7+//w
-         JUqw==
-X-Gm-Message-State: ACrzQf1pzilS9dDWiuYSWhobta3GuuG8DLyef8Is67M3g3u6Z58hxXiS
-        p9dkiz51R8RPa+PTCitARdFWCvq04dOryn7J45Xe+xEKx2sVb1rAuv5KDsMXUG/6y4C+SZxF5Xf
-        fp4yeQIqgj+1JZjNR/VirTOmEiPvTpFp305FtR1HehKC65GxGinufuVFl0qbVP7W2E1qdEQ==
-X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr4103272wmi.67.1665612246228;
-        Wed, 12 Oct 2022 15:04:06 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4MfahqjXwEkSDDOMNB17Cw+s5zIwA1SUMh4iBqCWkVIvhAH97bnjQIK7k88X1UxN6qaBAVEg==
-X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr4103254wmi.67.1665612245909;
-        Wed, 12 Oct 2022 15:04:05 -0700 (PDT)
-Received: from redhat.com ([2.54.162.123])
-        by smtp.gmail.com with ESMTPSA id l27-20020a056000023b00b0022a403954c3sm609517wrz.42.2022.10.12.15.04.04
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4pGHWCM3N3OUCM1ER+rKkscIwlNTBChe1kgAgXac27k=;
+        b=ebQs8eSpf4VrPnZaGl1V4oUzyJAPKADtiGWGs72jaek3FqoIOMDmjqQQPUCv+kLOga
+         jtNrL+LWGyiV5rSD6dU6BrHqI5qd1VoF9rX7EEBxuGRRhSV73D9Z7n5NQpGce/6dsumd
+         mx5eQcBvlLJcOUbZ+qLCZACXnDypT82d+AlYt8rBtrgZj7LmNLngaAsVYWTTE9Y2ztrn
+         Gs1hPE8tWUTGgKYQmhGrhPH3abLAjCSlFUieOZfexmW1+uDulhOVUVGYrN8c6SLSBrHA
+         SWR6u5Mu4wVFTgM3P4VtT5G/4RVGC5zLcB3ysHx4yXHPPDYGJ8DsfKonkjvThI0dMEZc
+         bzBA==
+X-Gm-Message-State: ACrzQf06dz7vK6JCCYin8jp1biygqC3hTg++QH/znTwBWtlrZtn5+Oi8
+        Ko91+wpGJP9Bl2mg9pwejdd2LA==
+X-Google-Smtp-Source: AMsMyM5qJXypLtEuI7LmQWOcC6PZlx4jhq65/txaKudvas3aDV4YoebnKIfrSMm8JqEgIT2QXo2a9Q==
+X-Received: by 2002:a17:90b:400c:b0:20a:bb11:a0f3 with SMTP id ie12-20020a17090b400c00b0020abb11a0f3mr7423615pjb.166.1665612251178;
+        Wed, 12 Oct 2022 15:04:11 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w133-20020a62828b000000b0052d4b0d0c74sm360959pfd.70.2022.10.12.15.04.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 15:04:05 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 18:04:03 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Angus Chen <angus.chen@jaguarmicro.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH] virtio_pci: use irq to detect interrupt support
-Message-ID: <20221012220312.308522-1-mst@redhat.com>
+        Wed, 12 Oct 2022 15:04:10 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 15:04:09 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        jmorris@namei.org, selinux@vger.kernel.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v38 39/39] LSM: Create lsm_module_list system call
+Message-ID: <202210121459.00980C2@keescook>
+References: <20220927195421.14713-1-casey@schaufler-ca.com>
+ <20220927203155.15060-1-casey@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
+In-Reply-To: <20220927203155.15060-1-casey@schaufler-ca.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
-breaks virtio_pci on powerpc, when running as a qemu guest.
+On Tue, Sep 27, 2022 at 01:31:55PM -0700, Casey Schaufler wrote:
+> +SYSCALL_DEFINE3(lsm_module_list,
+> +	       unsigned int __user *, ids,
+> +	       size_t __user *, size,
+> +	       int, flags)
 
-vp_find_vqs() bails out because pci_dev->pin == 0.
+Please make this unsigned int.
 
-But pci_dev->irq is populated correctly, so vp_find_vqs_intx() would
-succeed if we called it - which is what the code used to do.
+> +{
+> +	unsigned int *interum;
+> +	size_t total_size = lsm_id * sizeof(*interum);
+> +	size_t usize;
+> +	int rc;
+> +	int i;
 
-This seems to happen because pci_dev->pin is not populated in
-pci_assign_irq().
+Please test that flags == 0 so it can be used in the future:
 
-Which is absolutely a bug in the relevant PCI code, but it
-may also affect other platforms that use of_irq_parse_and_map_pci().
+	if (flags)
+		return -EINVAL;
 
-However Linus said:
-	The correct way to check for "no irq" doesn't use NO_IRQ at all, it just does
-		if (dev->irq) ...
-so let's just check irq and be done with it.
+> +
+> +	if (get_user(usize, size))
+> +		return -EFAULT;
+> +
+> +	if (usize < total_size) {
+> +		if (put_user(total_size, size) != 0)
+> +			return -EFAULT;
+> +		return -E2BIG;
+> +	}
+> +
+> +	interum = kzalloc(total_size, GFP_KERNEL);
+> +	if (interum == NULL)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < lsm_id; i++)
+> +		interum[i] = lsm_idlist[i]->id;
+> +
+> +	if (copy_to_user(ids, interum, total_size) != 0 ||
+> +	    put_user(total_size, size) != 0)
+> +		rc = -EFAULT;
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-Fixes: 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
-Cc: "Angus Chen" <angus.chen@jaguarmicro.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
+No need to repeat this, if it is written first.
 
-Build tested only - very late here. Angus any chance you could
-help test this? Thanks!
+> +	else
+> +		rc = lsm_id;
+> +
+> +	kfree(interum);
+> +	return rc;
 
- drivers/virtio/virtio_pci_common.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+No need for the alloc/free. Here's what I would imagine for the whole
+thing:
 
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index 4df77eeb4d16..a6c86f916dbd 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -409,8 +409,8 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
- 	err = vp_find_vqs_msix(vdev, nvqs, vqs, callbacks, names, false, ctx, desc);
- 	if (!err)
- 		return 0;
--	/* Is there an interrupt pin? If not give up. */
--	if (!(to_vp_device(vdev)->pci_dev->pin))
-+	/* Is there an interrupt? If not give up. */
-+	if (!(to_vp_device(vdev)->pci_dev->irq))
- 		return err;
- 	/* Finally fall back to regular interrupts. */
- 	return vp_find_vqs_intx(vdev, nvqs, vqs, callbacks, names, ctx);
+	if (flags)
+		return -EINVAL;
+
+	if (get_user(usize, size))
+		return -EFAULT;
+
+	if (put_user(total_size, size) != 0)
+		return -EFAULT;
+
+	if (usize < total_size)
+		return -E2BIG;
+
+	for (i = 0; i < lsm_id; i++)
+		if (put_user(lsm_idlist[i]->id, id++))
+			return -EFAULT;
+
+	return lsm_id;
+
 -- 
-MST
-
+Kees Cook
