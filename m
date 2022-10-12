@@ -2,355 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3168B5FCBE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A65FCBEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJLUP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 16:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S229617AbiJLUUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 16:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiJLUPZ (ORCPT
+        with ESMTP id S229516AbiJLUUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 16:15:25 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2062.outbound.protection.outlook.com [40.107.95.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362256111C;
-        Wed, 12 Oct 2022 13:15:24 -0700 (PDT)
+        Wed, 12 Oct 2022 16:20:10 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922A454663
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:20:08 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CKFgdl010273;
+        Wed, 12 Oct 2022 20:19:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=FYN/i14Ob5neKFN0zP31T0SVupN+sbzg4n6ewCpPMX8=;
+ b=esnNlZCqCWA1GRY3fh+tO2MeNpHV8pi428NICp8FpwaXqmmXDdw5hoLIOLXkNXuQ5eXh
+ ZAmRyJe+6lXOnMLr1MzuDTlu/CgpNF95LP6VpFkmm7QgWp4N0cKXeT6UYA5YbPn+cEIG
+ I7smaf5OsQd/youaAk+hZVSe1P0/ne7A80EZLCNoqzsB+zMrRt9iE7f4G0AK8EAo6Qk5
+ tZqKh0mkYFm27aJ+logYGYOQ1sTPOuc7lc+q8YEPfXvhh8Cazo7/U+saMyQXU/nlouYr
+ J1H41FijFd9FFBDJ/7aGGeWDOP1QMF6RBCaOmvu6e+LzwORhdTYNedQEEqR85P7hy/zS mw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k2yt1k91d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Oct 2022 20:19:31 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29CHr83o039751;
+        Wed, 12 Oct 2022 20:19:29 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k2ynbsapr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Oct 2022 20:19:29 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ERo9aNiGM03vSWfZ2GD978Eykyjyvt8X6E4dBiUl/8yWjLckUYfPA4KOtekE0OAiiAPPFYpCfuFtFzUHPhkn2Wg1FJbiAz3jaC46mlY6J8kST7m4/qI8kMTWcUFa74/ABxsVTr9199TDTvyj8JHHSehBmu2B6SrQMt7qRWgeFJpOT1szXGliEfmkPuaejoEVMacMAwnsb7uk7bZzd5q9K5FEFB8GD9b/F+5Fj8W/hhiecnkipCQBsdANsgv2gSbVyNrPsUuxmatveO7DhCXKVsL4s+CfVoN4VJrFg68apqS3U1t01e7xtIcbj943RGPhMKyLO4rIuE0nNbcb/Hus6g==
+ b=Se18jW0dyvbKsIa6VKCt1mFVtV2mhhlAEWfhH52uqX+1jv+NSkuh0/wOznh6LWp7Zx7d12H3pdmbM+CYvMPNiKKaf1mL5r7z7/e+SRcTD1awxYvwy4b9An7AkFX2jCrGvuZpOOG/ZYZTYGLS0AuDe9njgqXQ6k2xnzVpmCmk7xOtXMhxkadsxrVPf5Mf5fQ0SY6/8s05Xjy71yx8EpgTC7XpO1Xs6pKd0FoZjA5KZmNxl8pLW2yj/FavDztLzZoepg0elUG1FL2+bb5Uaqxa4tS2AaAxccO2UFBMgt2nsvheCeB8NYrMy8SbKR9LjEq3Sy9Wtn4KOrHcC66tG0qdUw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U/3HZQmwknpYl9oZt59nlPrhaIIW+sGjgbq4ShTpvuQ=;
- b=PSkHDzExp6LPDePCOBEvCb9aYp/my+3H9Kb6ooiTWVm4woPdUtZll0rRGFKoCyzfURdCVHJ2oC649q8dKth60rnsaPFAAWbzHa1VoTW944DCqV8ErHAvhpeMUU1kZaItPUlQ2tgq4h3QKizPZWBxrk6LOmXaNLdXeilI7cnjH0TAU2XmMriaRuNu6WYMLNQU5b+f4UD7XqHHHUdgEopnczFIJaS8znKryaHaIr8rpE/kZ0nlMKUMijxOU4/OOXbXQhR+fFgbdBN7SkQStWcR8JIukIbVCw3EwYL+lkRqgWXC95Aec/Ogep9fxnZBXaPtWiFopUf0+0Jr5J6GWxrUsA==
+ bh=FYN/i14Ob5neKFN0zP31T0SVupN+sbzg4n6ewCpPMX8=;
+ b=UXRVPJcnGAC3mfbbAVfw5Mg6udG/Fqm7UGu/TFJwnrA4RmkqIMWCTIHSZ9Wcj9lXwT2cV9M4S6KMbifZDKzsoz006oUrg3etC8VTtkr2YzDQX6foK657ikSlEZ7EM6gJiyNES+JuabuSgV7QVy/eS3qbrKrazqs5lljK5Ax3UcocTzdqmolOfmJaT7jf/zPb48FEbtsb5be2Wz8SnOy9G+GZaLzlowddhfrHwq2E3CuDDM3T7wWLXKkWaFMCCUWtVBQ3pj/GEKk38xjrrDGU82L2doNnvHdosjWA17120PD8wQE3TwNPMx6AXv0fe6SVkqLwje9yzx0+6iUW2XEU8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U/3HZQmwknpYl9oZt59nlPrhaIIW+sGjgbq4ShTpvuQ=;
- b=A1HR7c0Jz9U4sdUHEzxkMh9nx+WAlTwEamsyCJyJisAZwVN5rHHOIgO9BrDJSdZFSmChiStn1WEfx+5FZ8X4o4oncLi12gb1T3CrDSvIE+bGWsw8Rmq4MzNflgDUetQpJ9m82vptWg6zdEf1PiBGl+v0DS+Wo4l8OWVPty6mnlU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by CH2PR12MB4280.namprd12.prod.outlook.com (2603:10b6:610:ac::11) with
+ bh=FYN/i14Ob5neKFN0zP31T0SVupN+sbzg4n6ewCpPMX8=;
+ b=X98qhWhUxaA7MYWQVaeKcmpdtl4RiMeN+9zORYSilQvvaK7puPa+2TMATv86ZJsNaGfiGdpZpgWOfiUGSLe23yNT4vb9e91XqtJN9Hbl7phKhdVSHaOSWN0MqJgCu/29uV/IagJFtZKkrt8cDFgy55vGnEKPjLQKJry/JHOkGzU=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by SJ0PR10MB4542.namprd10.prod.outlook.com (2603:10b6:a03:2da::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Wed, 12 Oct
- 2022 20:15:22 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::b3f1:abb4:f311:5193]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::b3f1:abb4:f311:5193%4]) with mapi id 15.20.5709.021; Wed, 12 Oct 2022
- 20:15:22 +0000
-Message-ID: <53010b89-ae47-0065-9238-0ab065b70a44@amd.com>
-Date:   Wed, 12 Oct 2022 15:15:15 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH Part2 v6 37/49] KVM: SVM: Add support to handle MSR based
- Page State Change VMGEXIT
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Wed, 12 Oct
+ 2022 20:19:27 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::f7b2:af85:fe37:31a7]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::f7b2:af85:fe37:31a7%7]) with mapi id 15.20.5709.021; Wed, 12 Oct 2022
+ 20:19:26 +0000
+Message-ID: <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
+Date:   Wed, 12 Oct 2022 15:19:19 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
 Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>, Ashish Kalra <ashkalra@amd.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Alper Gun <alpergun@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <78e30b5a25c926fcfdcaafea3d484f1bb25f20b9.1655761627.git.ashish.kalra@amd.com>
- <CAMkAt6rrGJ5DYTAJKFUTagN9i_opS8u5HPw5c_8NoyEjK7rYzA@mail.gmail.com>
- <CABpDEum157s5+yQvikjwQRaOcxau27NkMzX9eCs9=HFOW5FYnA@mail.gmail.com>
- <0716365f-3572-638b-e841-fcce7d30571a@amd.com>
- <CABpDEu=quPsv6cXfbvpsGS2N+5Pcw7inCfmv=sx3-VaK0UE76g@mail.gmail.com>
- <8113b5d4-31c6-012c-fc0c-78a9bdbb1e69@amd.com>
- <31c1b2bb-b43a-709a-2b7e-0e945b9e8bb7@amd.com>
- <CAMkAt6o=G7W3pRgVYiBKK5RjQskMfzL_9me2Hcr7_e9rTHuStw@mail.gmail.com>
-From:   "Kalra, Ashish" <ashish.kalra@amd.com>
-In-Reply-To: <CAMkAt6o=G7W3pRgVYiBKK5RjQskMfzL_9me2Hcr7_e9rTHuStw@mail.gmail.com>
+To:     Borislav Petkov <bp@alien8.de>, Baoquan He <bhe@redhat.com>
+Cc:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, david@redhat.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+References: <20220909210509.6286-1-eric.devolder@oracle.com>
+ <20220909210509.6286-8-eric.devolder@oracle.com>
+ <Yx7XEcXZ8PwwQW95@nazgul.tnic>
+ <cb343eef-46be-2d67-b93a-84c75be86325@oracle.com> <YzRxPAoN+XmOfJzV@zn.tnic>
+ <fd08c13d-a917-4cd6-85ec-267e0fe74c41@oracle.com> <Yzceb/y3SSFMuALR@zn.tnic>
+ <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com> <YzcqE1RVtPcuLlxN@zn.tnic>
+ <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv> <Y0b9apyIs+RpSo1e@zn.tnic>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <Y0b9apyIs+RpSo1e@zn.tnic>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0088.namprd03.prod.outlook.com
- (2603:10b6:208:329::33) To SN6PR12MB2767.namprd12.prod.outlook.com
- (2603:10b6:805:75::23)
+X-ClientProxiedBy: SA0PR11CA0209.namprd11.prod.outlook.com
+ (2603:10b6:806:1bc::34) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|CH2PR12MB4280:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9a8b8e2-8c34-4fd2-c839-08daac8e7d90
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|SJ0PR10MB4542:EE_
+X-MS-Office365-Filtering-Correlation-Id: f39b8fe3-d017-4026-68ad-08daac8f0f74
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U2TFPmQiHcWsNH/NvpLW/SI9JVF9oKRPmLDeQw2SFmnNY6wRe3EUOVKmKQZPvmPkaH6JLDB+pz2UPvXPQrDgrCsz/FGJNr6CJ0U56elVymXRRzHVmVbXXwzWaLWBE0qpCJDv/6LZhy0rBojCxBS0jdrr3fdSWCxKXVePGnJzrCiPgfmtSw6hl1B2eu/t351I26ttpvx3TBt1Orxznoh1ICrEtnQF2odzwMdsD0GN5z+Tetyh7EDewH0H5sFGn//yoOKVGp6Qhn7qtpMn8XL9glnTm/95MWKMo/mlnriZKnS1Z44i4gfKe62EnBD46VkrbjIw807k0TgrqKbl7bYRx+lVgEFWEmB4uH9jdMaQ/8RCV9BMvj4SJRX9L4zab9DDRIbcAzhCr64ZAG+nucfQIEBE8Y17eWd5smGoLjHMLl95l6MnQxuP/qUA/gJsHDrbxPAcVfG3M5Fwx8gFxuvWb3K+/q46KIjfGdNLpmYckmLcHScAXA5Cfo9J03xVnjXyqaPQ9Xdy+kIN2QI+qEmCDi1iWI6CQJUX3VMyZq8FiuFVTJ2tFRGB01VV/46Mz5th3VBdcJNYpW65itHGTHF3DMfqukW01gro1wTv1aRTkdX/Q8ayMtAxnrbKxeIfoORlLildfv+WfBTBw0qOn6KVSud1QCy6UrVIyzTUpoKFazu+ujeaszwbs8Hs2gws+YsdN75LSwQbvHp6onhaSfFLtKo+hGmxHo2vDtlSbC9PrOyjZma+bxAXabjx8fxwNWUruuLBPAO9kuPkXHtWFd0uZeTtgmGzopG/nM5k3aEtwqE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199015)(54906003)(6636002)(316002)(110136005)(2906002)(8936002)(66946007)(4326008)(8676002)(66556008)(66476007)(5660300002)(7416002)(7406005)(41300700001)(26005)(83380400001)(6512007)(186003)(2616005)(6506007)(53546011)(478600001)(6486002)(6666004)(31686004)(31696002)(38100700002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ee53uLdO5ecl028OA1oDzDx/+D6EidtxDh9YT81fgoHQ5JGYxdULKFRCq4RoWjp/eZX2xwDoBCkNOQIW5RVeV95qVB5CeRLT9+HLnr4SbeTDmPQTwPztpDV0t9F+YkCxRFu4EiNGLv+8PMjoBsJYXxytMjp0ExFUEZ12IMnc5KB8/wuiXQOSnu/89FYMq6Y3hb8qgUYPryRh+y4uvQ8TqnBQq6+PpeYrdCZxjI7cuHpEGZFPCN0TzhzSIjV8/ziFEv7YBOfiJkbvDCmHfrm9YfcqEyRaaZAoyJTTxy5Ob/G31NDJDx322CRCI+AwDf74bNhjNhrXcoNLLk6yNcDYsoth/hPrQ6oaWT8/zAWMdLABAgkEg4HNjxbxE3jG5TXiQh5Jq0NEdZx1/cLdKArpSXjTll740XhYuzwFlfvjDvISfrrJyqqBOJQHrTNXnkem2MxOBTpsSz3MEUi0VikWuJUSi83Y2NO05OTTFHFn5DJw/Xp2fB2exYM7FonZw+o/ErUtmkOVaJ099WrZT23wQ9MKfwO+Uumv6vg1GI5uM5YdzS4XX+K2SYfunam03/eeyiHtjDuKw0ZNxj4BMSEkfxUxMX+z/ig+JoQcDmnbk3EAfKHM7fy/1CX2gp5DptQl2pzS6PufCToKaU0PAIKb2eh0AJWtyElON0suc3JOkRfyprE/AIq6LPKmnz85vlBSXT0LJcjLqWnKlaupm7i0fza5M2fM6PXgguogjv0q2eOkwF+hlAnUNd1AzbpDvH4W38MDGYubLLwXWdo1ay/4SuaApdIdgjSb0fnRdBTV0ME=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(396003)(136003)(346002)(39860400002)(451199015)(54906003)(6666004)(41300700001)(66476007)(36756003)(316002)(478600001)(5660300002)(6486002)(66946007)(8676002)(7416002)(66556008)(8936002)(186003)(4326008)(38100700002)(83380400001)(53546011)(86362001)(6512007)(6506007)(110136005)(2616005)(31696002)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zkc3WTFPN2kyOEQvUG5NckY3MmNtZkxqcy9Pa0Y3a0gyY1NlWTNkQ2dNOTlJ?=
- =?utf-8?B?WVYxeW41Tkt6RWk1c1hVeUdPNEd6MTNic1ljOEwxU1ZmU2NmbTN2MHhOdzRm?=
- =?utf-8?B?OUhBejFCUFhqeUN6UGd2MG9JQ3RpOFE5VHBvYWNUWmE2Y001QzgyMHR5Q1Iz?=
- =?utf-8?B?YS9nNUhHUzBlY1JuNzU3dmp1MUIra1I2WTEvbkR2T2hSV2ZyT1V0aFpNdC9i?=
- =?utf-8?B?ZmdxVm9JdW5sV0Z2S0FrU0ZmdVpqSjNSZHh0eTlJQXFMUHM0cWRMclp2RHd3?=
- =?utf-8?B?RjlPSG0xTUZTTGtuRkM3aUl5Q3BSNkVLckp5ZmUvL29vMzh3L21hSFBmc2JX?=
- =?utf-8?B?VGhmelhndStFUUo0ZTZKcEs5ZndlNVhxUmZzWEhSSnhLdHk4MERyYXV1WUpQ?=
- =?utf-8?B?N1JrVXFKZXdxSGlPNnFhWVNYdkV0UlVMY2xHZW5OSEwwK3lEb0drMFY5S2Jo?=
- =?utf-8?B?d0lZYTZtUVJQbXVEb0lJZ2M1T3E3azlnK3lQYlBiZTFFaXFjeHR3V2V2K0RX?=
- =?utf-8?B?cHB5eEh5WTA0V2tMSFBxRi9FQWw3MlJOYXQwMnJIbUoyT25ua3RZTG1XYlRm?=
- =?utf-8?B?YXo1WDB6N2IxVktlMXBVVmdJNWJkU2U0Y2o3eTNSNGN5NFBxMU5GSldOeFZn?=
- =?utf-8?B?bHdJV3F6c3RoM3o0WDVCZmNsbGtLTkJPcHFGZHducnp3dTNHV2hPWnozbEFs?=
- =?utf-8?B?bFV2OHVXM1BXNWhxZ0lncUt2S3RydmljNGZjOS9TWUtFVGZyNUNpNXErQlUr?=
- =?utf-8?B?djF5WGlyemFUOTVCeTFDNFN5bXpMaGRGZUtFckVNRGF2K0U2NWpZWUhIRk9X?=
- =?utf-8?B?UXMxTDZoZTBlTWlBUDlYNSt4VGJSV25nVDI5eVgwNElDTUNIN3ZYZVNGcVdT?=
- =?utf-8?B?NFhWQWFSQkhhSHUxSWowditLSDhvaFlwQllGR3Jac2p6Y2xnaWdma2tZTklm?=
- =?utf-8?B?VWZBSUZvRUxXQU1icHBaVkNBV3hocDN0aVc4cEwrRmVrejYrMDQwSUdpZWh1?=
- =?utf-8?B?TWYrQVhUaEJOaEVscFhaTXNjUnIrNGN5b2ZwUW85dHlYdHhVbGR3OXZsYytF?=
- =?utf-8?B?cGwzbWw4UmJnMDRTenBoeFZTYS9ieGZjcmR4U3RiR2ZBM0o1Vi9zM2F2NW96?=
- =?utf-8?B?NVBkd3lOK29QNkV1UVFnTWEwdXlnMnVNTmYrQ3ZDMU1qWWk3T2ZpK2E0c3ZE?=
- =?utf-8?B?blRvdkl6WVFOOWFUQ0YzTWdacTBjNkFYREVhSDVwWDI5UWJwNnFQWFNCNTVL?=
- =?utf-8?B?YXhJM05ISFRpWm1jOUJ2WE9lYVhIbFZpRVRycjIycE51ZHI2WkJZcXlORjRY?=
- =?utf-8?B?cXVCa1JuS3ZPZXlIQUZYakt0M296ZnFSL1owU2YwNUJWK0ppeXhUc1ZvVzhu?=
- =?utf-8?B?b1ZQM1hJa3M4MmtZVXpVdGZ5WEtDcURWK09IbkRsWmFiandVRFlRQjJSdkdt?=
- =?utf-8?B?UzI4LzNaUWxFM2U3S1R1RGhzQkcxcVlGQnV2MDVqQUNGY0kvQVVIbnhCN1NB?=
- =?utf-8?B?dkpPZUlsallpNGFHY3Z5bEUwTVBTSVZtQ0tVbm41UzdLZnp2ZkpSZ1JDU2Vk?=
- =?utf-8?B?akRFN05yWmlqcUxRT0xVWkZjem9yRzd5NWVITFdwcGpBdmdmbGFKczJ0dTUx?=
- =?utf-8?B?MGN1ait1QkY2T2JoS2tGU050SFRTRTFQT0NVSU9HeXNyWWhKS0VrcmFNMjI0?=
- =?utf-8?B?aEpTb09Da0pVZm1PcVUzS29tMU5hQ0hXK25hR1dsTDJESm13c1RRSHZjZHFr?=
- =?utf-8?B?TXEyL1RnQUw4bWdKK0grQTYvTVJyTkxUR1IxSC9BVy9SMmpVeGtXcGUxRndt?=
- =?utf-8?B?VGQ3eG8wTHNvNmZPalAwWktjaW52TDlzZDNYZW9NYllPN1M3djBRVHBkRWF3?=
- =?utf-8?B?NG9NbnJGZmhLMEp6MzdaMlZTVGpJRlRvYmNZZU8zNDBuQ0tUTVNlQ2doSkl4?=
- =?utf-8?B?VEVuRnpGUFI0dWQ3MTNpeU1oMGVXcDM1aGZZVUQvSDV0Q2RXNVhvVFFDaTly?=
- =?utf-8?B?NW9TMVNQeEhUN0hPc1ZwcDhiNDkvS2hyRWtCVzBKT3BoMnNxTmV5OHRyOU91?=
- =?utf-8?B?SkFTTVpzWlpXaEJSZTRiYmtvK0w3OWJyMFYzODMvdCs5MUJTQW55VGxZQUNx?=
- =?utf-8?Q?myMtX/EyfsYjTXLmERQVLVIv4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9a8b8e2-8c34-4fd2-c839-08daac8e7d90
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QjdxZjFJdXBSZkh5UldIT2NURE9wZUo4T2Jyck9NQWFiaVN2cEFEMTJQM1Np?=
+ =?utf-8?B?ekhyUmFpdld3cVFxNS9OTEhJbU1ZV3FEc3g2YTc0a0Q4amc1N3d6aWtwK0FM?=
+ =?utf-8?B?OFB2cjRnS3FnQUhRREVDWHh4bVJCcnNtZ29wOXYyUVZuR1I1ME5KdmRtWGdi?=
+ =?utf-8?B?N25SZm1sYUZJSTd2OXVrRWl4OHhBZWhSV0hIQW02L0dFMlRwZnJmTHlGSTJY?=
+ =?utf-8?B?bVl0R0svT2ZhSVhRM0UvSXIzSDBsWndTdG41cUtmOVdhbUhkejhtbXpZZlJy?=
+ =?utf-8?B?VnJFWmdCL1FLTHlIRnNIVURYSWV6TEt2ZFlZOG5MRzBZc3BFK1FmWVc0K3h3?=
+ =?utf-8?B?d1F2ZDZEcndXRWJiUFdWQzRCQWVQWng2QllURURXT05qc3N0a21LNGo0Tk9I?=
+ =?utf-8?B?L2wwN2p6THlYOU9BYUFzL1FYd0ZRNFhGdWh6RWJZTVljU3NiVkd6NVVUWS9L?=
+ =?utf-8?B?bHBYakFTcVkwZll3dWNTTzBSbnkxT0JFRDhqbDZMRjRBaWJsdlZ2SW9JSlQy?=
+ =?utf-8?B?TjI0cjJqUmxoZUVQTGVPTGU4NHRDcXFtbjVYcEZqenRnaUJEemNnSUd4UUFS?=
+ =?utf-8?B?bVQzMkw1TEt0UUoxdXVqd2xlbkVyclh3QWlsNzZ4VExBbGhGZzBMdjI1dkg3?=
+ =?utf-8?B?V2tFQmZEUlBja2VYK3NFeTQ4RFluRlZNSFN4UG5hSnlXc2hDL3hDQW1JUDJ1?=
+ =?utf-8?B?aCtTU0pSY1VWVEVTVXliOFpkUk9tUDkwVG1qaGd0SE5rQitRQnBsY3BVVGhw?=
+ =?utf-8?B?L0lSWTYzUEZtVkhwNDZrUnJWT3JKTzJaT2grc09ZbUdmKzI2dVpTRE1neGIx?=
+ =?utf-8?B?MWZwNFhESmhObWlMV2hZRzVlbjJXY1VEWjNFeU82QlNxR05XMGM5U2d0SE4x?=
+ =?utf-8?B?OEZwcGNVWGFJT0pCUkZPemFWa0xuZHBNMU4vY1pYY2NmQkpEWXJ1T3lQZFRs?=
+ =?utf-8?B?anlDc0NXMzB5Ynd5d2lEVEtNMzFGdHBmaVE4WHc4QzRHeVlpNE9SOFhWV1ZH?=
+ =?utf-8?B?RWZjaGEvZVQ3eDk5eC9OdlJkSHZndHEzL0pZSmMwbUpZRU1JdVVsZ2w2T09p?=
+ =?utf-8?B?WlRKT29kbUM4VEdSU1JGbzQ0TGsxQmQrdUtma2FCc1NsZmFsc0s0TlJ0YzNo?=
+ =?utf-8?B?MGF2TVg3WDdqS0JSZU9ucGlZSUdRUk5ocisyMUNzVk9QM21uUkdyNEVHNlZX?=
+ =?utf-8?B?YXRkUXhyUlB0K2NlbXBsWW9zOHp3aTJhUy9VVTlnNXdiUjNwOTQrL1NsdkVM?=
+ =?utf-8?B?R1haZVpMT1I1cUhFSXVidmlyV2lHZWRBLzdlajJKK3ZPdWRWeHphZGVxdE8z?=
+ =?utf-8?B?OXdtbG5jN1R5N3FTamxrbDJHaTNqZTRsanZGZ0RRYU95eHBSYkFtVUgxSSsy?=
+ =?utf-8?B?VFYxZ3piVTM2eWQzRXdub1JCRzhnT2R5MzVocFBrcmlWNUFkOTgzWHZiUVhu?=
+ =?utf-8?B?eHc4STcyYzdBVklnaTUxL1k4VjZJeVN5OEIrbHVVNUhXSXF6dHdhWWRDdVRw?=
+ =?utf-8?B?WmorK04wVFliTjZabXRUNUYvZVdKUStXcVVOajRPZmZ4cXU3aDZVRWZBZEhS?=
+ =?utf-8?B?NmMxQkdieUtLMFdGdTlycjNzTnllVDY0bWo3dTQ3U2ZwTXVFQmtDeHQ0VG5n?=
+ =?utf-8?B?SVNacDF5d0pUdktadE0xbkE0MGc1ZUx2WWxPZ1p2V2xHN2FqeFVqUkIzVEk4?=
+ =?utf-8?B?aXd3N2hzRGV1SmJIKzd0ekZWbGZGVGdjRDMzc1ZZUHdvZ2xoZ1NwcWtxSEto?=
+ =?utf-8?B?cnFlWUJ0b1pKRFpMRjJBYzVQcjczRUFwQXhDNnFwSkU3NU1qUTVOQkRDWmpi?=
+ =?utf-8?B?SnhzTnBjZi9CR2Q0Ris4Sk85VXg1djJnTGdhT21iVndHV05sWDBRKzNWNTU2?=
+ =?utf-8?B?aWErL3JaOGVHZktqaXc3c0ZMZXo3R1VxVjFUMlNqeS81L0xqNzZDU3lxOU5m?=
+ =?utf-8?B?R1QzcFJUUWRhMVNFbFNNeUhZREhPT3luTW9mTVdTY0ZDeHVIVlhwVEEvNjhi?=
+ =?utf-8?B?QTZPbmpnNVNsYlBlRkN2Um1wbHNJWFgyVndIcUJMQVpjT1FJcThHMkFJeGJU?=
+ =?utf-8?B?SjdTNk8yOWxldm9GNW9RazFZQmtpU2h4NWtxT1dUR0ZubUJuUFl3T3p6dGNq?=
+ =?utf-8?B?YzZmcG0xRlZqNW5uVnNWY1VXR0o5eEFLUmJSbmJNLzhkUEs3ZWFnVlFNUm1s?=
+ =?utf-8?Q?ifupYMHfzy1vNDgzZQ8dViA=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f39b8fe3-d017-4026-68ad-08daac8f0f74
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 20:15:22.0664
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 20:19:26.8121
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /C0cZyjBhCr8i6BhquIAh0c8FGL7rBCHN2OWdsHIJ4DoK+r+iyUfWlS9ynY0EeLPRRS3Z32vNRP6v7eMns3xxg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4280
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: XuqgmvNBg34sdVTpHQkb4tGDtKWSmS6mjzsuIfdSs99DpTFKynyVZt6wdrsk98+xxeum9F3QMAbkHG5JN3MfUL3WS+TvWeR2zCk0Wt5ZRPk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4542
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_10,2022-10-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210120130
+X-Proofpoint-GUID: y_xyDX_hqxwHrzHk6g9SN5wd7ggFbW-z
+X-Proofpoint-ORIG-GUID: y_xyDX_hqxwHrzHk6g9SN5wd7ggFbW-z
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/26/2022 10:19 AM, Peter Gonda wrote:
-> On Mon, Sep 19, 2022 at 5:47 PM Ashish Kalra <ashkalra@amd.com> wrote:
->>
->>
->> On 9/19/22 22:18, Tom Lendacky wrote:
->>> On 9/19/22 17:02, Alper Gun wrote:
->>>> On Mon, Sep 19, 2022 at 2:38 PM Tom Lendacky
->>>> <thomas.lendacky@amd.com> wrote:
->>>>>
->>>>> On 9/19/22 12:53, Alper Gun wrote:
->>>>>> On Fri, Aug 19, 2022 at 9:54 AM Peter Gonda <pgonda@google.com> wrote:
->>>>>>>
->>>>>>>> +
->>>>>>>> +static int __snp_handle_page_state_change(struct kvm_vcpu *vcpu,
->>>>>>>> enum psc_op op, gpa_t gpa,
->>>>>>>> +                                         int level)
->>>>>>>> +{
->>>>>>>> +       struct kvm_sev_info *sev = &to_kvm_svm(vcpu->kvm)->sev_info;
->>>>>>>> +       struct kvm *kvm = vcpu->kvm;
->>>>>>>> +       int rc, npt_level;
->>>>>>>> +       kvm_pfn_t pfn;
->>>>>>>> +       gpa_t gpa_end;
->>>>>>>> +
->>>>>>>> +       gpa_end = gpa + page_level_size(level);
->>>>>>>> +
->>>>>>>> +       while (gpa < gpa_end) {
->>>>>>>> +               /*
->>>>>>>> +                * If the gpa is not present in the NPT then
->>>>>>>> build the NPT.
->>>>>>>> +                */
->>>>>>>> +               rc = snp_check_and_build_npt(vcpu, gpa, level);
->>>>>>>> +               if (rc)
->>>>>>>> +                       return -EINVAL;
->>>>>>>> +
->>>>>>>> +               if (op == SNP_PAGE_STATE_PRIVATE) {
->>>>>>>> +                       hva_t hva;
->>>>>>>> +
->>>>>>>> +                       if (snp_gpa_to_hva(kvm, gpa, &hva))
->>>>>>>> +                               return -EINVAL;
->>>>>>>> +
->>>>>>>> +                       /*
->>>>>>>> +                        * Verify that the hva range is
->>>>>>>> registered. This enforcement is
->>>>>>>> +                        * required to avoid the cases where a
->>>>>>>> page is marked private
->>>>>>>> +                        * in the RMP table but never gets
->>>>>>>> cleanup during the VM
->>>>>>>> +                        * termination path.
->>>>>>>> +                        */
->>>>>>>> +                       mutex_lock(&kvm->lock);
->>>>>>>> +                       rc = is_hva_registered(kvm, hva,
->>>>>>>> page_level_size(level));
->>>>>>>> +                       mutex_unlock(&kvm->lock);
->>>>>>>> +                       if (!rc)
->>>>>>>> +                               return -EINVAL;
->>>>>>>> +
->>>>>>>> +                       /*
->>>>>>>> +                        * Mark the userspace range unmerable
->>>>>>>> before adding the pages
->>>>>>>> +                        * in the RMP table.
->>>>>>>> +                        */
->>>>>>>> +                       mmap_write_lock(kvm->mm);
->>>>>>>> +                       rc = snp_mark_unmergable(kvm, hva,
->>>>>>>> page_level_size(level));
->>>>>>>> +                       mmap_write_unlock(kvm->mm);
->>>>>>>> +                       if (rc)
->>>>>>>> +                               return -EINVAL;
->>>>>>>> +               }
->>>>>>>> +
->>>>>>>> +               write_lock(&kvm->mmu_lock);
->>>>>>>> +
->>>>>>>> +               rc = kvm_mmu_get_tdp_walk(vcpu, gpa, &pfn,
->>>>>>>> &npt_level);
->>>>>>>> +               if (!rc) {
->>>>>>>> +                       /*
->>>>>>>> +                        * This may happen if another vCPU
->>>>>>>> unmapped the page
->>>>>>>> +                        * before we acquire the lock. Retry the
->>>>>>>> PSC.
->>>>>>>> +                        */
->>>>>>>> + write_unlock(&kvm->mmu_lock);
->>>>>>>> +                       return 0;
->>>>>>>> +               }
->>>>>>>
->>>>>>> I think we want to return -EAGAIN or similar if we want the caller to
->>>>>>> retry, right? I think returning 0 here hides the error.
->>>>>>>
->>>>>>
->>>>>> The problem here is that the caller(linux guest kernel) doesn't retry
->>>>>> if PSC fails. The current implementation in the guest kernel is that
->>>>>> if a page state change request fails, it terminates the VM with
->>>>>> GHCB_TERM_PSC reason.
->>>>>> Returning 0 here is not a good option because it will fail the PSC
->>>>>> silently and will probably cause a nested RMP fault later. Returning
->>>>>
->>>>> Returning 0 here is ok because the PSC current index into the PSC
->>>>> structure will not be updated and the guest will then retry (see the
->>>>> loop
->>>>> in vmgexit_psc() in arch/x86/kernel/sev.c).
->>>>>
->>>>> Thanks,
->>>>> Tom
->>>>
->>>> But the host code updates the index. It doesn't leave the loop because
->>>> rc is 0. The guest will think that it is successful.
->>>> rc = __snp_handle_page_state_change(vcpu, op, gpa, level);
->>>> if (rc)
->>>> goto out;
->>>>
->>>> Also the page state change request with MSR is not retried. It
->>>> terminates the VM if the MSR request fails.
->>>
->>> Ah, right. I see what you mean. It should probably return a -EAGAIN
->>> instead of 0 and then the if (rc) check should be modified to
->>> specifically look for -EAGAIN and goto out after setting rc to 0.
->>>
->>> But that does leave the MSR protocol open to the problem that you
->>> mention, so, yes, retry logic in snp_handle_page_state_change() for a
->>> -EAGAIN seems reasonable.
->>>
->>> Thanks,
->>> Tom
->>
->> I believe it makes more sense to add the retry logic within
->> __snp_handle_page_state_change() itself, as that will make it work for
->> both the GHCB MSR protocol and the GHCB VMGEXIT requests.
+
+
+On 10/12/22 12:46, Borislav Petkov wrote:
+> On Sat, Oct 08, 2022 at 10:35:14AM +0800, Baoquan He wrote:
+>> Memory hptlug is not limited by a certin or a max number of memory
+>> regions, but limited by how large of the linear mapping range which
+>> physical can be mapped into.
 > 
-> You are suggesting we just retry 'kvm_mmu_get_tdp_walk' inside of
-> __snp_handle_page_state_change()? That should work but how many times
-> do we retry? If we return EAGAIN or error we can leave it up to the
-> caller
+> Memory hotplug is not limited by some abstract range but by the *actual*
+> possibility of how many DIMM slots on any motherboard can hotplug
+> memory. Certainly not 32K.
 > 
+> So you can choose a sane default which covers *all* actual systems out
+> there.
 
-Ok, we return -EAGAIN here and then let the caller in 
-snp_handle_page_state_change() or sev_handle_vmgexit_msr_protocol()
-(in case of GHCB MSR protocol) do the retries.
 
-But, the question still remains, how may retry attempts should the 
-caller attempt ?
+We run here QEMU with the ability for 1024 DIMM slots. A DIMM can be any
+reasonable power of 2 size, and then that DIMM is further divided into memblocks,
+typically 128MiB.
 
-Thanks,
-Ashish
+So, for example, 1TiB requires 1024 DIMMs of 1GiB each with 128MiB memblocks, that results
+in 8K possible memory regions. So just going to 4TiB reaches 32K memory regions.
 
->>>
->>>>
->>>>>
->>>>>> an error also terminates the guest immediately with current guest
->>>>>> implementation. I think the best approach here is adding a retry logic
->>>>>> to this function. Retrying without returning an error should help it
->>>>>> work because snp_check_and_build_npt will be called again and in the
->>>>>> second attempt this should work.
->>>>>>
->>>>>>>> +
->>>>>>>> +               /*
->>>>>>>> +                * Adjust the level so that we don't go higher
->>>>>>>> than the backing
->>>>>>>> +                * page level.
->>>>>>>> +                */
->>>>>>>> +               level = min_t(size_t, level, npt_level);
->>>>>>>> +
->>>>>>>> +               trace_kvm_snp_psc(vcpu->vcpu_id, pfn, gpa, op,
->>>>>>>> level);
->>>>>>>> +
->>>>>>>> +               switch (op) {
->>>>>>>> +               case SNP_PAGE_STATE_SHARED:
->>>>>>>> +                       rc = snp_make_page_shared(kvm, gpa, pfn,
->>>>>>>> level);
->>>>>>>> +                       break;
->>>>>>>> +               case SNP_PAGE_STATE_PRIVATE:
->>>>>>>> +                       rc = rmp_make_private(pfn, gpa, level,
->>>>>>>> sev->asid, false);
->>>>>>>> +                       break;
->>>>>>>> +               default:
->>>>>>>> +                       rc = -EINVAL;
->>>>>>>> +                       break;
->>>>>>>> +               }
->>>>>>>> +
->>>>>>>> +               write_unlock(&kvm->mmu_lock);
->>>>>>>> +
->>>>>>>> +               if (rc) {
->>>>>>>> +                       pr_err_ratelimited("Error op %d gpa %llx
->>>>>>>> pfn %llx level %d rc %d\n",
->>>>>>>> +                                          op, gpa, pfn, level, rc);
->>>>>>>> +                       return rc;
->>>>>>>> +               }
->>>>>>>> +
->>>>>>>> +               gpa = gpa + page_level_size(level);
->>>>>>>> +       }
->>>>>>>> +
->>>>>>>> +       return 0;
->>>>>>>> +}
->>>>>>>> +
+This I can attest for virtualized DIMMs, not sure about other memory hotplug technologies
+like virtio-mem or DynamicMemory. But it seems reasonable that those technologies could
+also easily reach into these number ranges.
+
+Eric
+
+> 
+>> For the Kconfig CRASH_MAX_MEMORY_RANGES Eric added, it's meaningful to
+>> me to set a fixed value which is enough in reality.
+> 
+> Yes, exactly.
+> 
+>> For extreme testing with special purpose, it could be broken easily,
+>> people need decide by self whether the CONFIG_CRASH_MAX_MEMORY_RANGES
+>> is enlarged or not.
+> 
+> I don't want for people to decide on one more thing where they have to
+> go and read a bunch of specs just to know what is a good value. So we
+> should set a sane, *practical* upper limit and simply go with it.
+> 
+> Everything else is testing stuff and if you test the kernel, then you
+> can change limits and values and so on as you want to.
+> 
+> Thx.
+> 
