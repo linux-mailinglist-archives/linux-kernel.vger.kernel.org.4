@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C375FC991
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C495FC99F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiJLQzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
+        id S229865AbiJLQ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJLQzt (ORCPT
+        with ESMTP id S229811AbiJLQ7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:55:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 316D2DED0F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:55:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28771165C;
-        Wed, 12 Oct 2022 09:55:54 -0700 (PDT)
-Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D03A3F766;
-        Wed, 12 Oct 2022 09:55:46 -0700 (PDT)
-Message-ID: <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com>
-Date:   Wed, 12 Oct 2022 17:55:40 +0100
+        Wed, 12 Oct 2022 12:59:17 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD653FDB7D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:59:16 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id i9so11302816qvo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:59:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QEi7mCU8aFQrq7+X6TvhVYf4QcPUFRJ3UuljS9y8koA=;
+        b=seNl6HDTdPRmel6AJpVZSoutBpRKvr+Fl5eYJyJfzmQ09TFhOHG7w9fH+YZ3MeaX3F
+         tfa7o/90smt5ohP3CfyZPWln986aidkMqSi4xH2UYQ9hZoJ8z6JUt1B4JfkBOSnPTckU
+         L2MHRFVagT6JJTCYwIMABOuiQo/EistC7XK3lst2zcDplPuzbulJk2xRM77d+knDeRDc
+         Qj5EJdZX95pei/CPMjqLwpAOlcilE7Jsd/rzS7t21U4xn9CNNdtyt+JPESojYzpV5l05
+         rHVYLTKefmG1zjpKjqH/Xs500V1Hc3V8SETGBP8WM6aKSbV+h+AiAJIdofSsAPID6mq8
+         4vQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QEi7mCU8aFQrq7+X6TvhVYf4QcPUFRJ3UuljS9y8koA=;
+        b=BXux6U1WFXnxxUoeTEMT9Snx6BjI2zsd+URBmoZNaaPRFqxDBlBI4h6o7Jd1rxtD6g
+         UhgyikgmoA4UWhoVNOJTSLn6sl2TUj2Qqi6TjPl8LOINNEgXNXaMaDV8+C9r6j0ZlJyc
+         pkm3JDASzCLZ5wjFrr64T7jDMDzIvntd9nhv8AQCVFNg4J2KBBau/CqXvQW1vNnBTf/t
+         7ISKo32LTcmA/UxES+UGuQh3129LM08GNOl4NNQnS91eAsFhHubUilcjO7QLaVVn4ypR
+         LeSgiJbipFLNoIcpqnkUCw4LN8ZZtZRwHUSnTEbPz2fMSNUJf1nvR0LlSszsWJnztr8l
+         56HA==
+X-Gm-Message-State: ACrzQf3Hj/mpywztp6YTxSRIqlYQfxLpaKvNyBS9MCESGP79TLSbXvfH
+        /XyUGcXXcnyBD9jPKnea8Lg9fg==
+X-Google-Smtp-Source: AMsMyM6x34jR+AP+1/mSelLoInUqYH5ACE9NR5sY5Ibk5fqjjftS3t/PO24LF9V3ByCJkQ+scARgvw==
+X-Received: by 2002:a05:6214:d8a:b0:4b1:9f67:450b with SMTP id e10-20020a0562140d8a00b004b19f67450bmr24107709qve.119.1665593955541;
+        Wed, 12 Oct 2022 09:59:15 -0700 (PDT)
+Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id r4-20020a05622a034400b00398a7c860c2sm9476039qtw.4.2022.10.12.09.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:59:14 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] arm64: dts: qcom: msm8994: Correct SPI10 CS pin
+Date:   Wed, 12 Oct 2022 12:57:10 -0400
+Message-Id: <20221012165712.93053-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
-Content-Language: en-GB
-To:     Peter Newman <peternewman@google.com>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Gaurang Upasani <gupasani@google.com>
-References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
- <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com>
- <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
- <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
- <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
- <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi guys,
+The GPIO55 is part of SPI10 pins, not its chip-select.  Probably the
+intention was to use one of dedicated chip-select GPIOs: 47 or 67.
+GPIO47 is used for UART2, so choose GPIO67.
 
-On 12/10/2022 12:21, Peter Newman wrote:
-> On Tue, Oct 11, 2022 at 1:35 AM Reinette Chatre
-> <reinette.chatre@intel.com> wrote:
->> On 10/7/2022 10:28 AM, Tony Luck wrote:
->>> I don't know how complex it would for the kernel to implement this. Or
->>> whether it would meet Google's needs.
->>>
->>
->> How about moving monitor groups from one control group to another?
->>
->> Based on the initial description I got the impression that there is
->> already a monitor group for every container. (Please correct me if I am
->> wrong). If this is the case then it may be possible to create an interface
->> that could move an entire monitor group to another control group. This would
->> keep the benefit of usage counts remaining intact, tasks get a new closid, but
->> keep their rmid. There would be no need for the user to specify process-ids.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Yes, Stephane also pointed out the importance of maintaining RMID assignments
-> as well and I don't believe I put enough emphasis on it during my
-> original email.
-> 
-> We need to maintain accurate memory bandwidth usage counts on all
-> containers, so it's important to be able to maintain an RMID assignment
-> and its event counts across a CoS downgrade. The solutions Tony
-> suggested do solve the races in moving the tasks, but the container
-> would need to temporarily join the default MON group in the new CTRL_MON
-> group before it can be moved to its replacement MON group.
-> 
-> Being able to re-parent a MON group would allow us to change the CLOSID
-> independently of the RMID in a container and would address the issue.
-> 
-> The only other point I can think of to differentiate it from the
-> automatic CLOSID management solution is whether the 1:1 CTRL_MON:CLOSID
-> approach will become too limiting going forward. For example, if there
-> are configurations where one resource has far fewer CLOSIDs than others
-> and we want to start assigning CLOSIDs on-demand, per-resource to avoid
-> wasting other resources' available CLOSID spaces. If we can foresee this
-> becoming a concern, then automatic CLOSID management would be
-> inevitable.
+---
 
-You originally asked:
-| Any concerns about the CLOSID-reusing behavior?
+Not tested on hardware.
+---
+ arch/arm64/boot/dts/qcom/msm8994.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't think this will work well with MPAM ... I expect it will mess up the bandwidth
-counters.
-
-MPAM's equivalent to RMID is PMG. While on x86 CLOSID and RMID are independent numbers,
-this isn't true for PARTID (MPAM's version of CLOSID) and PMG. The PMG bits effectively
-extended the PARTID with bits that aren't used to look up the configuration.
-
-x86's monitors match only on RMID, and there are 'enough' RMID... MPAMs monitors are more
-complicated. I've seen details of a system that only has 1 bit of PMG space.
-
-While MPAM's bandwidth monitors can match just the PMG, there aren't expected to be enough
-unique PMG for every control/monitor group to have a unique value. Instead, MPAM's
-monitors are expected to be used with both the PARTID and PMG.
-
-('bandwidth monitors' is relevant here, MPAM's 'cache storage utilisation' monitors can't
-match on just PMG at all - they have to be told the PARTID too)
-
-
-If you're re-using CLOSID like this, I think you'll end up with noisy measurements on MPAM
-systems as the caches hold PARTID/PMG values from before the re-use pattern changed, and
-the monitors have to match on both.
-
-
-I have half-finished patches that add a 'resctrl' cgroup controller that can be used to
-group tasks and assign them to control or monitor groups. (the creation and configuration
-of control and monitor groups stays in resctrl - it effectively makes the tasks file
-read-only). I think this might help, as a group of processes can be moved between two
-control/monitor groups with one syscall. New processes that are created inherit from the
-cgroup setting instead of their parent task.
-
-If want to take a look, its here:
-https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?h=mpam/snapshot/v6.0&id=4e5987d8ecbc8647dee0aebfb73c3890843ef5dd
-
-I've not worked the cgroup thread stuff out yet ... it doesn't appear to hook thread
-creation, only fork().
-
-
-Thanks,
-
-James
+diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+index ded5b7ceeaf9..7a582a5fe3a8 100644
+--- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+@@ -897,7 +897,7 @@ default {
+ 				};
+ 				cs {
+ 					function = "gpio";
+-					pins = "gpio55";
++					pins = "gpio67";
+ 					drive-strength = <2>;
+ 					bias-disable;
+ 				};
+-- 
+2.34.1
 
