@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1675FC29E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 366555FC2A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiJLJDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S229811AbiJLJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJLJCi (ORCPT
+        with ESMTP id S229953AbiJLJCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:02:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA2EBC458;
-        Wed, 12 Oct 2022 02:02:04 -0700 (PDT)
+        Wed, 12 Oct 2022 05:02:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F304B97A2;
+        Wed, 12 Oct 2022 02:02:09 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 53D9721C70;
-        Wed, 12 Oct 2022 09:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665565322; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 639301F37C;
+        Wed, 12 Oct 2022 09:02:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665565328; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uFWFfMheJTOOV1FrVwY0u7BLBhL6m9es6OGGtnPOeMc=;
-        b=mXHifDq2GZMvQ6iVD5VGHOwsOzdg9MuIM0zk5KNI5VrSfjuqwmHaPHqbmmgNVyxDSdwLJf
-        qmysYQdAxxc4NL6Z8MRgTkBh+T36W9hQcNi1e2zsAGWPsjDCj0bLEXNq3+pAzbuU3Ei6L+
-        Jd7XLbyyLW0GrVhFiWndVsDMKZmSOL4=
+        bh=EfiK9XlS8vf7wIi3+hdD7zY490h6oKiwsp6Xn66hWgY=;
+        b=WPol0X1B1o9AbyBJWj7Iv3i5W/wpqOOySalW8RUqEW0lKSc/583PO2rPghDhh+wACq3Guz
+        v39fmHRVHHE2wfahT+5zczVmhdHI4Dt97NEYs2Ec6/ntd/bVgpsjD1JTcDdOckmMbeJ7pF
+        ZozlvF2MyfUZ17fO09KvWExRfklCDO4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665565328;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EfiK9XlS8vf7wIi3+hdD7zY490h6oKiwsp6Xn66hWgY=;
+        b=AxLojc2Yw/MfXh2RPy4Sr8u0Xm5pT3f8YHjoc1J9PsZBvBOMkrnl/V7gboDE3q957HxHZZ
+        iWs/RycEnlnNOlDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F381A13A5C;
-        Wed, 12 Oct 2022 09:02:01 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D19E313A5C;
+        Wed, 12 Oct 2022 09:02:07 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id YACKOYmCRmOxawAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 12 Oct 2022 09:02:01 +0000
-Date:   Wed, 12 Oct 2022 11:02:01 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
-Subject: Re: [External] Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-Message-ID: <Y0aCiYMQ4liL2azT@dhcp22.suse.cz>
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
- <Y0WEbCqJHjnqsg8n@dhcp22.suse.cz>
- <582cf257-bc0d-c96e-e72e-9164cff4fce1@bytedance.com>
+        id jhvAL4+CRmO7awAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Wed, 12 Oct 2022 09:02:07 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id ce5a5aa3;
+        Wed, 12 Oct 2022 09:03:03 +0000 (UTC)
+Date:   Wed, 12 Oct 2022 10:03:03 +0100
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] ext4: fix BUG_ON() when a directory entry has an invalid
+ rec_len
+Message-ID: <Y0aCx45PBQrde4IC@suse.de>
+References: <20221011155745.15264-1-lhenriques@suse.de>
+ <Y0YQ42Z/XPuHZRS8@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <582cf257-bc0d-c96e-e72e-9164cff4fce1@bytedance.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y0YQ42Z/XPuHZRS8@mit.edu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-10-22 15:55:44, Zhongkun He wrote:
-> Hi  michal, thanks for your reply and suggestiones.
+On Tue, Oct 11, 2022 at 08:57:07PM -0400, Theodore Ts'o wrote:
+> On Tue, Oct 11, 2022 at 04:57:45PM +0100, Luís Henriques wrote:
+> > diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> > index 3a31b662f661..06803292e394 100644
+> > --- a/fs/ext4/namei.c
+> > +++ b/fs/ext4/namei.c
+> > @@ -2254,8 +2254,18 @@ static int make_indexed_dir(handle_t *handle, struct ext4_filename *fname,
+> >  	memset(de, 0, len); /* wipe old data */
+> >  	de = (struct ext4_dir_entry_2 *) data2;
+> >  	top = data2 + len;
+> > -	while ((char *)(de2 = ext4_next_entry(de, blocksize)) < top)
+> > +	while ((char *)(de2 = ext4_next_entry(de, blocksize)) < top) {
+> > +		if (de->rec_len & 3) {
 > 
-> > Please add some explanation why the cpuset interface is not usable for
-> > that usecase.
-> OK.
+> As the kernel test bot as flaged, de->rec_len needs to be byte swapped
+> on big endian machines.  Also, for block sizes larger than 64k the low
+> 2 bits are used to encode rec_len sizes 256k-4.  All of this is
+> encoded in ext4_rec_len_from_disk().
 > 
-> > > To solve the issue, this patch introduces a new syscall
-> > > pidfd_set_mempolicy(2).  it sets the NUMA memory policy of the thread
-> > > specified in pidfd.
-> > > 
-> > > In current process context there is no locking because only the process
-> > > accesses its own memory policy, so task_work is used in
-> > > pidfd_set_mempolicy() to update the mempolicy of the process specified
-> > > in pidfd, avoid using locks and race conditions.
-> > 
-> > Why cannot you alter kernel_set_mempolicy (and do_set_mempolicy) to
-> > accept a task rather than operate on current?
-> 
-> I have tried it before this patch, but I found a problem.The allocation and
-> update of mempolicy are in the current context, so it is not protected by
-> any lock.But when the mempolicy is modified by other processes, the race
-> condition appears.
-> Say something like the following
-> 
-> 	pidfd_set_mempolicy	     target task stack
-> 				       alloc_pages
-> 					mpol = get_task_policy;
-> 	 task_lock(task);
-> 	 old = task->mempolicy;
-> 	 task->mempolicy = new;
-> 	 task_unlock(task);
-> 	 mpol_put(old);			
-> 					page = __alloc_pages(mpol);
-> There is a situation that when the old mempolicy is released, the target
-> task is still using the policy.It would be better if there are suggestions
-> on this case.
+> However, I think a better thing to do is instead of doing this one
+> check on rec len, that instead we call ext4_check_dir_entry(), which
+> will do this check, and many more besides.  It will also avoid some
+> code duplication, since it will take care of calling EXT4_ERROR_INODE
+> with the appropriate explanatory message.
 
-Yes, this will require some refactoring and one potential way is to make
-mpol ref counting unconditional. The conditional ref. counting has
-already caused issues in the past and the code is rather hard to follow
-anyway. I am not really sure this optimization is worth it.
+Awesome, thanks for the explanation, Ted.  I'll work on a v2 of the patch
+that'll use ext4_check_dir_entry() and send it after running some tests
+with it.  Thanks for the suggestion!
 
-Another option would be to block the pidfd side of things on completion
-which would wake it up from the task_work context but I would rather
-explore the ref counting approach first and only if this is proven to be
-too expensive to go with hacks like this.
--- 
-Michal Hocko
-SUSE Labs
+Cheers,
+--
+Luís
