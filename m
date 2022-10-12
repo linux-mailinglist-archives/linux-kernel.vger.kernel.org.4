@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79D65FC8AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4995FC8AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJLPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
+        id S229982AbiJLPvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiJLPuZ (ORCPT
+        with ESMTP id S229560AbiJLPvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:50:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C8113D15;
-        Wed, 12 Oct 2022 08:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40E96CE1CBC;
-        Wed, 12 Oct 2022 15:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D52C433C1;
-        Wed, 12 Oct 2022 15:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665589819;
-        bh=+gtutM/sDsmZtehVItKJH/vQ3u/GKRsWlIbIFKVnlqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oA29ihYU6RyV6B4EjVtRg3DaUcmYNt2E3CtvlLD9SQ1SD0cU1dWoPy30tdgh/8Epk
-         9K9DxCcvdXfPp6oVSwyH8ZtlrJDc3ua6IT+7MmYv6CXtklV1Wt1gMGfcWjZZ654A2C
-         0ebBEh7ITOJqbgNlMsIe35McLh6oj+Kd3VKmQn9qc4vPBLl4am0QPDWmCogNqiBCiO
-         33zis6V8emINQmxxNGJj9xpdM1KeOguPQa0+FA3NFYI6q1HGSJW4GBl7PyPzp7RbnD
-         50NlxV7D5VDvtldTQcRpUh6Qm9b7+stTuqsbdxk9xpy/TvPWZ2hzDuDRxEPnNlKFkX
-         PI5NqxPSKit5Q==
-Date:   Wed, 12 Oct 2022 18:50:15 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
-Message-ID: <Y0biN3/JsZMa0yUr@kernel.org>
-References: <20220929160647.362798-1-kristen@linux.intel.com>
- <Y0BEV+Xgkrln8xoh@iweiny-desk3>
- <Y0ZphugZZBhlv/vT@kernel.org>
- <711f8036-787a-571e-1c0d-1a258175ebb2@intel.com>
- <Y0bUK6krEQdnFlOg@kernel.org>
+        Wed, 12 Oct 2022 11:51:12 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580227FFB7;
+        Wed, 12 Oct 2022 08:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nEbf/siCGkGv7ZDAYpR4vqV4raB403QmjiUpggtSBAI=; b=eHAf0WpPwGSpbKuq+ay8LX9yf4
+        MNMfkj2sRREg68NWmmJJGWm4gphf/SNch3xqDEzxcFsy7f8YynTK4Rb1XxoxXLdetoJyaDa7EDk+1
+        Y+EAOv/0wsIYoE1qkFJyPXSjVafnam0vmUWATceLPQc4Yvs+uUQ1UtJ6cwcS50PLzQz2+jaQe5m4d
+        FG3AqE1QlSr9JC4xdlpI+ltvanptTg/R3qrz0t/iCAw5jQuNgsJ6PewM8/PO3J0cE4wvtrYA1d3eS
+        BDXaV13+/FMQHUdRpAdWT2T4iHNVOcpHIqU917opaSbOUaA0ay7AXzximFp4zbwRUSA+3hWvKL6NZ
+        ah2NOE/w==;
+Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oie0f-000HpG-H0; Wed, 12 Oct 2022 17:51:05 +0200
+Message-ID: <839e44ed-ae89-dfd4-9c38-978ce2693910@igalia.com>
+Date:   Wed, 12 Oct 2022 12:50:50 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0bUK6krEQdnFlOg@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 0/8] Some pstore improvements
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ardb@kernel.org, kernel@gpiccoli.net, anton@enomsg.org,
+        ccross@android.com, Tony Luck <tony.luck@intel.com>,
+        kernel-dev@igalia.com, linux-efi@vger.kernel.org
+References: <20221006224212.569555-1-gpiccoli@igalia.com>
+ <166509868540.1834775.12982405101524535051.b4-ty@chromium.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <166509868540.1834775.12982405101524535051.b4-ty@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 05:50:19PM +0300, Jarkko Sakkinen wrote:
-> On Wed, Oct 12, 2022 at 07:13:26AM -0700, Dave Hansen wrote:
-> > On 10/12/22 00:15, Jarkko Sakkinen wrote:
-> > > There's no data to show that this change would be useful to do.
-> > 
-> > Jarkko, I think the overall transition to kmap_local_page() is a good
-> > one.  It is a superior API and having it around will pave the way for
-> > new features.  I don't think we should demand 'data' for each and every
-> > one of these.
-> > 
-> > Please take a look around the tree and see how other maintainers are
-> > handling these patches.  They're not limited to SGX.
+On 06/10/2022 20:24, Kees Cook wrote:
+> On Thu, 6 Oct 2022 19:42:04 -0300, Guilherme G. Piccoli wrote:
+>> overall. Most of them are minors, but the implicit conversion thing
+>> is a bit more "relevant" in a sense it's more invasive and would fit
+>> more as a "fix".
+>>
+>> The code is based on v6.0, and it was tested with multiple compression
+>> algorithms (zstd, deflate, lz4, lzo, 842) and two backends (ramoops and
+>> efi_pstore) - I've used a QEMU UEFI guest and Steam Deck for this goal.
+>>
+>> [...]
 > 
-> Sure, I'll take a look for comparison.
+> Applied to for-next/pstore, thanks!
+> 
+> [1/8] pstore: Improve error reporting in case of backend overlap
+>       https://git.kernel.org/kees/c/55dbe25ee4c8
+> [2/8] pstore: Expose kmsg_bytes as a module parameter
+>       https://git.kernel.org/kees/c/1af13c2b6324
+> [3/8] pstore: Inform unregistered backend names as well
+>       https://git.kernel.org/kees/c/a4f92789f799
+> 
 
-Yeah, I think it is pretty solid idea.
+Thanks Kees! just a heads-up on how I'll proceed.
 
-Looking at the decription:
+(a) Patches 1-3 were added already.
 
-"It is not necessary to disable page faults or preemption when
-using kmap calls, so replace kmap_atomic() and kunmap_atomic()
-calls with more the more appropriate kmap_local_page() and
-kunmap_local() calls."
+(b) MAINTAINERS patch was reworked by yourself in the other series, so
+I'll discard my version.
 
-We did not pick kmap_atomic() because it disables preeemption,
-i.e. it was not a "design choice". I'd rather phrase this as
-along the lines:
+(c) I'll rework patches 4 and 8 and re-submit them plus patch 7
+(including the ACK from Ard).
 
-"Migrate to the newer kmap_local_page() interface from kmap_atomic()
-in order to move away from per-CPU maps to pre-task_struct maps.
-This in effect removes the need to disable preemption in the
-local CPU while kmap is active, and thus vastly reduces overall
-system latency."
+(d) Gonna discard for now patch 5, planning to test a new version on top
+of the crypto acomp interface V2 from Ard/you.
 
-Can be improved or written completely otherwise. I just wrote it
-in the way that I had understood the whole deal in the first place.
+Cheers,
 
-BR, Jarkko
+
+Guilherme
