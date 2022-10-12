@@ -2,73 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B298C5FCAA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3335C5FCAA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJLS3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S229831AbiJLSa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiJLS31 (ORCPT
+        with ESMTP id S229614AbiJLSaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:29:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1682E6FA07;
-        Wed, 12 Oct 2022 11:29:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C60E3B81B99;
-        Wed, 12 Oct 2022 18:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 77FEFC433D7;
-        Wed, 12 Oct 2022 18:29:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665599364;
-        bh=U7x9QUONu3NO4ZRKzX+IH17ruMAnDe7sJ9Z4TTOpugQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=uqfarTvZ+btEb74m72pSlBjvKGT5rWixplZIUa5U8AfLxTxhXh/JtQYxlotiF7jpx
-         3ZwzSGY0wUaxVzET9XN+1BHEzlE4qjwmmYVDacx+rOXpTO78PKPzAb1b6sWl8Ao0/1
-         kMZuKo1ROwRl4PsdkVi7AZp7suz1NrwbxL9El2iRSmC6YP85OKDPkEFLELGWf2mzeD
-         kU9ljEjg7sdE1Y2XBi+LOdgqOe4shAYbsmUeVNxLCUjy4eccbuT/GmFoVasSDHaugM
-         OysqIXNIKce9cP04ctMmfkw+TNeo1J8pAQBFovhQDPhsK/kWG///nFN4k2iIPD4vgu
-         0fpj6nwYrButA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 66089E21EC5;
-        Wed, 12 Oct 2022 18:29:24 +0000 (UTC)
-Subject: Re: [GIT PULL] hotfixes for 6.1-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221011191042.ff46a7531fb68d05da1d2530@linux-foundation.org>
-References: <20221011191042.ff46a7531fb68d05da1d2530@linux-foundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221011191042.ff46a7531fb68d05da1d2530@linux-foundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-10-11
-X-PR-Tracked-Commit-Id: d0d51a97063db4704a5ef6bc978dddab1636a306
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1440f576022887004f719883acb094e7e0dd4944
-Message-Id: <166559936441.10775.2502105119182320202.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Oct 2022 18:29:24 +0000
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 14:30:52 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15234B84F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:30:51 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id z20so17001317plb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BlwFT/czCkzZYPQLFNBenmnjlc6I7VIZp8IwB7h7paY=;
+        b=Kj30AAISyYWYT7BrVovWAeueM7BNNd0i3ZC4ngZALVv6W9+ubEoGP3RYUiZUyPFFKz
+         RVTBvlO3nqmNSsX9HPQqCFEtgYkbD/eIUfnAn4QFNwBKrKsqPPdEeY8XqXQSRpDp+8zc
+         4HTrLO0cQXhOTW1sojjFLi7/cQVEKwexEQinqhY4SHYVfCMK8XOSaP9xQIVZ9yOhPuiO
+         E9eAObM7Elg4VY0a98VMvzrtdj4N04T8XBNW+IEfhB3sCZPQXqALZF7akh7931FwDhWm
+         v3Xich7HJ7Vr7qbQVgif+2fggN+RcyKz26yuw4PqrW/XNyEOx+nUgEmBzY3CegJBQrMk
+         Zi6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BlwFT/czCkzZYPQLFNBenmnjlc6I7VIZp8IwB7h7paY=;
+        b=rIvHNRbPzjNtB0SiWEmXH12Z0S+dl4WX2uMyeTikdZ8JzGIwbHDnqMGH3a29M2HS7g
+         OvYWR3dLOkOyBGeFjvzltDkFQoIAU9cW1Oju7SFKIH3/oU94O6Agk8Uonh5Tl/ujHqdf
+         kVBDo3RW4jF2tQuT9J2oRkkZ9wSTss8l2iUVFPJoXfGpHTxkWqwsGkAzjAxQAx2NweLs
+         YV8xgz0OIGsk61HzihQWMvtPX01Ai/KP006OJ5aPjrL8oEiKg2AytjqmZEe2zLFhQ6BL
+         g+fVr/pd3HzDS1nEIagggDAmIOdBWQCF4k5N3XqknG0ymmtNLfzQNwWhCU0s0Ve9TYE5
+         /iAg==
+X-Gm-Message-State: ACrzQf0NK4dScB2ocsSZlZHGfmL+EbMRQxs9X9IN8pS6AOrG/5wVJ6+O
+        NGOGWhONUMGZth6Q0hj1srl5FxIyd3adFg==
+X-Google-Smtp-Source: AMsMyM5Pg9H18CzLYwcq5WouBmpX3CQHQzHdiOuWQNtFgiemrAHx6iDmkxf0qjsvuMtqhF9aEjyTQA==
+X-Received: by 2002:a17:902:ba8f:b0:17f:9b1b:6634 with SMTP id k15-20020a170902ba8f00b0017f9b1b6634mr31275040pls.171.1665599439327;
+        Wed, 12 Oct 2022 11:30:39 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s18-20020a656452000000b00464aa9ea6fasm3214145pgv.20.2022.10.12.11.30.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 11:30:38 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 12 Oct 2022 08:30:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     syzbot <syzbot+9baaae5fc5795e2e6acf@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ kernfs_walk_and_get_ns
+Message-ID: <Y0cEQbWsy7XAkyVZ@slm.duckdns.org>
+References: <0000000000002b89b205ead703ff@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000002b89b205ead703ff@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 11 Oct 2022 19:10:42 -0700:
+On Wed, Oct 12, 2022 at 07:14:35AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    282342f2dc97 Add linux-next specific files for 20220830
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14b47c63080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c7b70bd555c649f4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9baaae5fc5795e2e6acf
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12acb375080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1718658b080000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9baaae5fc5795e2e6acf@syzkaller.appspotmail.com
+> 
+> BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1498
+> in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 3603, name: syz-executor323
+> preempt_count: 1, expected: 0
+> RCU nest depth: 0, expected: 0
+> INFO: lockdep is turned off.
+> irq event stamp: 0
+> hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+> hardirqs last disabled at (0): [<ffffffff814710e0>] copy_process+0x20f0/0x7120 kernel/fork.c:2199
+> softirqs last  enabled at (0): [<ffffffff81471128>] copy_process+0x2138/0x7120 kernel/fork.c:2203
+> softirqs last disabled at (0): [<0000000000000000>] 0x0
+> Preemption disabled at:
+> [<0000000000000000>] 0x0
+> CPU: 1 PID: 3603 Comm: syz-executor323 Not tainted 6.0.0-rc3-next-20220830-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+>  down_read+0x71/0x450 kernel/locking/rwsem.c:1498
+>  kernfs_walk_and_get_ns+0xcc/0x3a0 fs/kernfs/dir.c:897
+>  kernfs_walk_and_get include/linux/kernfs.h:600 [inline]
+>  cgroup_get_from_path+0x61/0x610 kernel/cgroup/cgroup.c:6647
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-10-11
+The fix for this one is already queued in cgroup/for-6.1-fixes. Will send
+that to linus once rc1 drops.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1440f576022887004f719883acb094e7e0dd4944
-
-Thank you!
+Thanks.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+tejun
