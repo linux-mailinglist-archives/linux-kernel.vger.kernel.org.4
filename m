@@ -2,149 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E65D5FC95C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED255FC988
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiJLQfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S230072AbiJLQw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJLQfG (ORCPT
+        with ESMTP id S229830AbiJLQwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:35:06 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0618D2FC0D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:35:03 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso2573775pjk.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Det2ITA/n+WXH8RhBcuNargdlyOW5bs99Gk+aJ7/qCQ=;
-        b=QMdpGzfBf0NldWY/bD/I/AQC+34DaQ6T41DAl98Jbq3s4BBRU97wbxp6mrDPsK+Ajy
-         2edzfjH61I/TPtM4Ld3Sg286tM7g4/bes7Zj7CMqf7PHJuiZGAuKkb6vrw7R0AqElJ9g
-         q5JEZvX/mhYNsoqrl/mrS7yh+EMgeDi+PhabUfW+c9hkX5GBav4GP492SXT4icsqZZ/V
-         eezHq/vlZYz/Pecf8ouJtRivFcbERqR8LAZMKRKHEx10V7KKojX63yeROb8OYzdtW9eV
-         xcjCMO/aCFW0H9FYI8asOxTjzUTXU1kGeFnALca+5xVmM5t5zT1ohcqLE2wChC6vaWJL
-         3d2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Det2ITA/n+WXH8RhBcuNargdlyOW5bs99Gk+aJ7/qCQ=;
-        b=Xmp4qI9HyQIJd0jDt0IhBJdZ7vVDHIF0W7krC5X3psTLTvvXqXoeZXwKPnxqZWo36j
-         oqTR1qIM5IWpIY9Bq90+Gn1/pkjg+66cl4bLNvKCKMQNztIQBSeSG71eelQD1cfSfmVC
-         pkxF7+kQZqjC1lu8nINO30P8pDk8+LorZ733PgF8oXV4wpfC8SBNIDzan+eyLGvL42VG
-         Y1sAoLwEf3u464po26SiFDJiOupiBZGWzwp2/Xf5RlTmMAdAa1bcOW+bq14rnHwUeVWc
-         RXuPVNn4W6yW9WpO+YpqP8l4K7kx4vzWRxdGisKQl4XUysrnlYaueMexbCyGnj0YdFT4
-         HGbg==
-X-Gm-Message-State: ACrzQf0nj1YJe5QJHQnbc+AZTXzPbhEQI3jWBNXrYIEoath6Pp4TgKuW
-        VfgzNhKdJfWRlDo2L7Md+YkS6A==
-X-Google-Smtp-Source: AMsMyM5bRwBjSvlQxjunzry9lBqSVllHge5nfGrWav7re3NtQU4PfgFY/iLmKUI5YvxO/sC4U49WJw==
-X-Received: by 2002:a17:90b:1e4b:b0:20d:2ad0:ce00 with SMTP id pi11-20020a17090b1e4b00b0020d2ad0ce00mr6388449pjb.72.1665592502345;
-        Wed, 12 Oct 2022 09:35:02 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0017a1145eec7sm10799750ple.157.2022.10.12.09.35.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 09:35:01 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 16:34:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Mark transfer type as X86_TRANSFER_RET when
- loading CS in iret emulation
-Message-ID: <Y0bssbjJTQVB+SCg@google.com>
-References: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
+        Wed, 12 Oct 2022 12:52:53 -0400
+Received: from 5.mo583.mail-out.ovh.net (5.mo583.mail-out.ovh.net [87.98.173.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EE3E31A7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:52:48 -0700 (PDT)
+Received: from player791.ha.ovh.net (unknown [10.111.208.144])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id D3AD825353
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:37:03 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player791.ha.ovh.net (Postfix) with ESMTPSA id CF17F2F8C633A;
+        Wed, 12 Oct 2022 16:36:57 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-99G0034e94a6aa-b5e1-453f-a575-418187936090,
+                    75377E6B882747309559AE06BD3DFEEF97A89409) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        Peter Rosin <peda@axentia.se>
+Cc:     Stephen Kitt <steve@sk2.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/i2c: use simple i2c probe
+Date:   Wed, 12 Oct 2022 18:36:47 +0200
+Message-Id: <20221012163647.3930565-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17090879111357302491
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedguddtgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkphepuddvjedrtddrtddruddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeefpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022, Hou Wenlong wrote:
-> When loading code segment descriptor in iret instruction emulation, the
-> checks are same as far return instruction emulation, so transfer type
-> should be X86_TRANSFER_RET in __load_segment_descriptor(). Although,
-> only iret in real mode is implemented now, and no checks are actually
-> needed for real mode, it would still be better to mark transfer type as
-> X86_TRANSFER_RET.
+All these drivers have an i2c probe function which doesn't use the
+"struct i2c_device_id *id" parameter, so they can trivially be
+converted to the "probe_new" style of probe with a single argument.
 
-It's not strictly a RET though.  The RPL vs. DPL checks in __load_segment_descriptor()
-might do the right thing, but there's a rather large pile of stuff IRET can do that
-RET can't (ignoring the fact that KVM doesn't even emulate FAR RET to outer privilege
-levels).
+This is part of an ongoing transition to single-argument i2c probe
+functions. Old-style probe functions involve a call to i2c_match_id:
+in drivers/i2c/i2c-core-base.c,
 
-And __emulate_int_real() also loads CS with X86_TRANSFER_NONE, i.e. KVM still has
-a weird path to worry about.
+         /*
+          * When there are no more users of probe(),
+          * rename probe_new to probe.
+          */
+         if (driver->probe_new)
+                 status = driver->probe_new(client);
+         else if (driver->probe)
+                 status = driver->probe(client,
+                                        i2c_match_id(driver->id_table, client));
+         else
+                 status = -EINVAL;
 
-Rather than make the IRET case slightly less wrong, what about adding a sanity
-check in __load_segment_descriptor() that KVM doesn't attempt to load CS in Protected
-Mode with X86_TRANSFER_NONE?
+Drivers which don't need the second parameter can be declared using
+probe_new instead, avoiding the call to i2c_match_id. Drivers which do
+can still be converted to probe_new-style, calling i2c_match_id
+themselves (as is done currently for of_match_id).
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 3b27622d4642..fe735e18c419 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -1641,6 +1641,14 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
-                        goto exception;
-                break;
-        case VCPU_SREG_CS:
-+               /*
-+                * KVM uses "none" when loading CS as part of emulating Real
-+                * Mode exceptions and IRET (handled above).  In all other
-+                * cases, loading CS without a control transfer is a KVM bug.
-+                */
-+               if (WARN_ON_ONCE(transfer == X86_TRANSFER_NONE))
-+                       goto exception;
-+
-                if (!(seg_desc.type & 8))
-                        goto exception;
+This change was done using the following Coccinelle script, and fixed
+up for whitespace changes:
 
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> ---
->  arch/x86/kvm/emulate.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index 3b27622d4642..5052eb480068 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -2100,6 +2100,7 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
->  			     X86_EFLAGS_FIXED;
->  	unsigned long vm86_mask = X86_EFLAGS_VM | X86_EFLAGS_VIF |
->  				  X86_EFLAGS_VIP;
-> +	u8 cpl = ctxt->ops->cpl(ctxt);
->  
->  	/* TODO: Add stack limit check */
->  
-> @@ -2121,7 +2122,8 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
->  	if (rc != X86EMUL_CONTINUE)
->  		return rc;
->  
-> -	rc = load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS);
-> +	rc = __load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS, cpl,
-> +				       X86_TRANSFER_RET, NULL);
->  
->  	if (rc != X86EMUL_CONTINUE)
->  		return rc;
-> -- 
-> 2.31.1
-> 
+@ rule1 @
+identifier fn;
+identifier client, id;
+@@
+
+- static int fn(struct i2c_client *client, const struct i2c_device_id *id)
++ static int fn(struct i2c_client *client)
+{
+...when != id
+}
+
+@ rule2 depends on rule1 @
+identifier rule1.fn;
+identifier driver;
+@@
+
+struct i2c_driver driver = {
+-       .probe
++       .probe_new
+                =
+(
+                   fn
+|
+-                  &fn
++                  fn
+)
+                ,
+};
+
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ drivers/i2c/i2c-core-base.c         | 5 ++---
+ drivers/i2c/i2c-smbus.c             | 5 ++---
+ drivers/i2c/muxes/i2c-mux-pca9541.c | 5 ++---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 8c7e3494ca5f..ff64ba2abb6d 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1013,15 +1013,14 @@ static const struct i2c_device_id dummy_id[] = {
+ 	{ },
+ };
+ 
+-static int dummy_probe(struct i2c_client *client,
+-		       const struct i2c_device_id *id)
++static int dummy_probe(struct i2c_client *client)
+ {
+ 	return 0;
+ }
+ 
+ static struct i2c_driver dummy_driver = {
+ 	.driver.name	= "dummy",
+-	.probe		= dummy_probe,
++	.probe_new	= dummy_probe,
+ 	.id_table	= dummy_id,
+ };
+ 
+diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+index 07c92c8495a3..f4c74b9135b3 100644
+--- a/drivers/i2c/i2c-smbus.c
++++ b/drivers/i2c/i2c-smbus.c
+@@ -112,8 +112,7 @@ static void smbalert_work(struct work_struct *work)
+ }
+ 
+ /* Setup SMBALERT# infrastructure */
+-static int smbalert_probe(struct i2c_client *ara,
+-			  const struct i2c_device_id *id)
++static int smbalert_probe(struct i2c_client *ara)
+ {
+ 	struct i2c_smbus_alert_setup *setup = dev_get_platdata(&ara->dev);
+ 	struct i2c_smbus_alert *alert;
+@@ -170,7 +169,7 @@ static struct i2c_driver smbalert_driver = {
+ 	.driver = {
+ 		.name	= "smbus_alert",
+ 	},
+-	.probe		= smbalert_probe,
++	.probe_new	= smbalert_probe,
+ 	.remove		= smbalert_remove,
+ 	.id_table	= smbalert_ids,
+ };
+diff --git a/drivers/i2c/muxes/i2c-mux-pca9541.c b/drivers/i2c/muxes/i2c-mux-pca9541.c
+index ea83de78f52d..09d1d9e67e31 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca9541.c
++++ b/drivers/i2c/muxes/i2c-mux-pca9541.c
+@@ -283,8 +283,7 @@ static int pca9541_release_chan(struct i2c_mux_core *muxc, u32 chan)
+ /*
+  * I2C init/probing/exit functions
+  */
+-static int pca9541_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int pca9541_probe(struct i2c_client *client)
+ {
+ 	struct i2c_adapter *adap = client->adapter;
+ 	struct i2c_mux_core *muxc;
+@@ -337,7 +336,7 @@ static struct i2c_driver pca9541_driver = {
+ 		   .name = "pca9541",
+ 		   .of_match_table = of_match_ptr(pca9541_of_match),
+ 		   },
+-	.probe = pca9541_probe,
++	.probe_new = pca9541_probe,
+ 	.remove = pca9541_remove,
+ 	.id_table = pca9541_id,
+ };
+
+base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
+-- 
+2.30.2
+
