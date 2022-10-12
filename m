@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AD85FC877
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA105FC87B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiJLPeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S229615AbiJLPgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJLPd7 (ORCPT
+        with ESMTP id S229540AbiJLPgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:33:59 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0718263D;
-        Wed, 12 Oct 2022 08:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FcG94y6UwISA+lHDHdY/DVnnCmrPksg3e4hWI/ZibTM=; b=YaTX83ygihnOx5Ts65HIdrwQVB
-        9Lv6VMb2rGWVo9xcK4n/yxLP++T456Hk7YQxtITsYrLJRAE01q3P8uun44DcMaZMULFH3qSVcS8/i
-        WHB0eWPp0wk9gInhBkI584d1uCaCz4jRWaJ614cX+TkjRWMeDYeghZPbfVcDcfCLYu9cXvfumQKRM
-        DhyKrFfDQgwB8is3XwixEalLm5zRC+fywwlGkn5+w7H8oRuViHsdW6tgOJmwzaOSi8GsfupFVgjtv
-        DZS9B3qzGdRe6pZRki339+Iu+qb8oPOoXn/dg5KcNcTHelcUeJ1JnX+yQi7wahAmVc69wIsGaL5cO
-        Tw77G0ZQ==;
-Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oidjz-000HPZ-Ay; Wed, 12 Oct 2022 17:33:51 +0200
-Message-ID: <267ccf8f-1fea-7648-ec2b-e7f4ae822ae4@igalia.com>
-Date:   Wed, 12 Oct 2022 12:33:36 -0300
+        Wed, 12 Oct 2022 11:36:35 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35621D9978;
+        Wed, 12 Oct 2022 08:36:34 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id j188so12496649oih.4;
+        Wed, 12 Oct 2022 08:36:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n5lptyW3ie5pClcDGn5r9fNjFpkWHmTzbf2OcN0VuAU=;
+        b=mCkEIB+J+Ljz0kUI9auglrJwIkJm74kgGhA8UUHrgOdLu8Q7uT8OZTpMBfUoVhyUfg
+         DUiAzb5HEKY+4ntFmsSirnGlzBZQ/eGTHTiTt/90TKEsDMmKiXK6Dfch1OLJ3McikDD+
+         2UEMWiUP6DqMTw1mRHFwkEfESobi5Fx+0bX6c71DABLmy7PNZK+nB9+NX6RboDP4uHyp
+         fAbfBkrFGvUuaYLJbuA7FVlb40NNUzjMvzASkrgYZqKyiHH40lgUyUDOp46pbzSotL41
+         H+MQTBBBRERrj4cRu7h/kl6CA/iAsCU9iA+Fe004g7ZNX3jlcwtman9X7C7TmzEezBut
+         0sAw==
+X-Gm-Message-State: ACrzQf0rPn5MzUGi3gDoW3rB9pXHENSsJZtMXgxuMk6Zp6js1tx7NFU0
+        I61Xh+C6nuTbkQpiRL+H0g==
+X-Google-Smtp-Source: AMsMyM7YihuyUnIzLG6/okwQkls3Kbv8bMnGi6YmV46cxfr/5CDfSMZlI0ueMUzM8VQx2RPDXUmARA==
+X-Received: by 2002:a05:6808:1487:b0:354:923c:bc7a with SMTP id e7-20020a056808148700b00354923cbc7amr2454582oiw.145.1665588993393;
+        Wed, 12 Oct 2022 08:36:33 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a28-20020a544e1c000000b00339befdfad0sm6746011oiy.50.2022.10.12.08.36.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 08:36:32 -0700 (PDT)
+Received: (nullmailer pid 2164100 invoked by uid 1000);
+        Wed, 12 Oct 2022 15:36:34 -0000
+Date:   Wed, 12 Oct 2022 10:36:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        lee@kernel.org, robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        chiaen_wu@richtek.com, matthias.bgg@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        krzysztof.kozlowski+dt@linaro.org, cy_huang@richtek.com,
+        sre@kernel.org
+Subject: Re: [PATCH v3] dt-bindings: mfd: mt6370: fix the interrupt order of
+ the charger in the example
+Message-ID: <166558333754.1988433.10175192101178879616.robh@kernel.org>
+References: <fcf4e7e7594070a8698dc0d4b96e031bcaa9b3a3.1665585952.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 2/8] pstore: Expose kmsg_bytes as a module parameter
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
-        ccross@android.com, tony.luck@intel.com
-References: <20221006224212.569555-1-gpiccoli@igalia.com>
- <20221006224212.569555-3-gpiccoli@igalia.com> <202210061628.76EAEB8@keescook>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <202210061628.76EAEB8@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fcf4e7e7594070a8698dc0d4b96e031bcaa9b3a3.1665585952.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/10/2022 20:32, Kees Cook wrote:
-> [...]
-> Doing a mount will override the result, so I wonder if there should be
-> two variables, etc... not a concern for the normal use case.
+On Wed, 12 Oct 2022 15:08:14 +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> Also, I've kind of wanted to get rid of a "default" for this and instead
-> use a value based on the compression vs record sizes, etc. But I didn't
-> explore it.
+> Fix the interrupt order of the charger in the binding example.
+> 
+> Fixes: 76f52f815f1a ("dt-bindings: mfd: Add MediaTek MT6370")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+> v3
+> - Add a 'Reviewed-by' tag.
+> 
+> v2
+> - Revise the commit syntax.
+> 
+> v1
+> - Due to this patch modifiacation
+>   (https://lore.kernel.org/all/20221001202918.me7z2qzm7cmrkzsg@mercury.elektranox.org/),
+>   there will get some warnings in linux-next when compiling the dts.
+> ---
+>  Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 
-For some reason I forgot to respond that, sorry!
-
-I didn't understand exactly how the mount would override things; I've
-done some tests:
-
-(1) booted with the new kmsg_bytes module parameter set to 64k, and it
-was preserved across multiple mount/umount cycles.
-
-(2) When I manually had "-o kmsg_bytes=16k" set during the mount
-operation, it worked as expected, setting the thing to 16k (and
-reflecting in the module parameter, as observed in /sys/modules).
-
-Maybe I'm missing something?
-
-Now, regarding the idea of setting that as a function of
-compression/record_sizes, I feel it makes sense and could be worked,
-like a heuristic right?
-
-In the end, if you think properly, what is the purpose of kmsg_bytes?
-Wouldn't make sense to just fill the record_size with the maximum amount
-of data it can handle? Of course there is the partitioning thing, but in
-the end kmsg_bytes seems a mechanism to _restrict_ the data collection,
-so maybe the default would be a value that means "save whatever you can
-handle" (maybe 0), and if the parameter/mount option is set, then pstore
-would restrict the saved size.
-Thoughts?
-
-Thanks,
-
-
-Guilherme
+Applying to go into rc1 along with the other mt6370 fix, thanks!
