@@ -2,102 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F645FC545
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661CF5FC54B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiJLM0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S229623AbiJLM3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJLM0I (ORCPT
+        with ESMTP id S229504AbiJLM33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:26:08 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DD3B7EE3;
-        Wed, 12 Oct 2022 05:26:07 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m16so1159969edc.4;
-        Wed, 12 Oct 2022 05:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jgt7h+7zEf+su2CjtW/uMJnyivJolNg+cF0vxRW9Nzk=;
-        b=p16oZuIM89LYxVRriJlesnrSaZE3tE22QHSG5z5k4rpdN0LDqhZxuWXSzoyrZRIzoB
-         llm0fkaSl7G7IdjmHM2iHsvCKqEUhwhL7B1sTy5oHyPGAAt+F+LNLPN7JNMh3clDoCq4
-         ChWsMssRSpFaer0dImKpo2qwUP7sK4xOQx6ggfHhLUmXzAimV3yT3YkIxz5JuywhGOP+
-         mhjfS7bqvmp7lL1CwkzsFd6TntVpz2cw9xz+NHShk5erIJim8DDvICmLtKZlXyA1mr0M
-         3RXM6XfxkURXFM24HhwcD3zuxGnkYtucdh1uoTh6aQajNf2qTB5+e1GmxWFfyXJB1ZYD
-         arBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jgt7h+7zEf+su2CjtW/uMJnyivJolNg+cF0vxRW9Nzk=;
-        b=Ow9wiVG3Uaia4OIp3Rhhpn1dhPgf87ATSu0Ka4Cr5jN1seYm13LScHBF1qD19Bv7fN
-         JLrwz9xyxv6agtjnKIDfNU4onuELV1DdxNRgfgm35abjeJR2Zp6E6VJaN2FQDalzlq/n
-         cEtTyObra900nMJC337EOfWUCnkgw/13PQ+CUy+fW2tio8iixhizw5NgmnAiICuAN2nz
-         S05Bi6KTCc+xFgLBJ+EPVsC4WbgbkBZQP/th5nSj+oYb++Ifl5cZr3sAbnAOjffhpbOh
-         XVPO9/VcGI4qyzIDwPCgp8oRfQryv0dGmh93iduR6O/OOChbtD4Hwi5A5ClGzsKELZzW
-         PEmw==
-X-Gm-Message-State: ACrzQf0WwTFpvwgjEuMFYctZC5P2CT2jtpyeFVgFmUyDrfHGVV1XqKrG
-        t+Gyrv+fVzvr+5bqSVEMJpCbbeVeWGo=
-X-Google-Smtp-Source: AMsMyM5FbzchDPKJfJY27Af9c9FuOxTsjTFWfwyGfCsHkJ65C9WioS6xg2i7l/q/vZHC5HTt3NfAUA==
-X-Received: by 2002:a05:6402:42c3:b0:459:cebb:8d3a with SMTP id i3-20020a05640242c300b00459cebb8d3amr27762688edc.421.1665577565819;
-        Wed, 12 Oct 2022 05:26:05 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id bt6-20020a0564020a4600b00458dda85495sm11243997edb.0.2022.10.12.05.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 05:26:05 -0700 (PDT)
-Message-ID: <6346b25d.050a0220.37e6e.99cf@mx.google.com>
-X-Google-Original-Message-ID: <Y0ayWkCVNIBp4ITm@Ansuel-xps.>
-Date:   Wed, 12 Oct 2022 14:26:02 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pawel Dembicki <paweldembicki@gmail.com>,
-        Lech Perczak <lech.perczak@gmail.com>
-Subject: Re: [net PATCH 1/2] net: dsa: qca8k: fix inband mgmt for big-endian
- systems
-References: <20221010111459.18958-1-ansuelsmth@gmail.com>
- <20221012072717.nuybkswd7zuwvqsp@skbuf>
+        Wed, 12 Oct 2022 08:29:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E834C512B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665577767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yatbm6s+sCCHHYxeiS9jcRF6BVrcOy6ikVoqgXdujac=;
+        b=L8EVLbc7YBsZr7n2dNlH1sadnclOIwh8pXoAu+rv8WBMCg8FTsKw9Godf5mZhthHcwoOUM
+        5LDsFvhpQLLcJ8jmFAjGd3f4X3sAMZCYpf6h0+869Y161tUY/3ef0Yqlf0rf/gOIwfKrT8
+        sPGh6LkJhEZczrKNNlVcLOjnTJ0Nsys=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-foHGkTWmNQyaIYxC2fG-KA-1; Wed, 12 Oct 2022 08:29:25 -0400
+X-MC-Unique: foHGkTWmNQyaIYxC2fG-KA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8B101C08968;
+        Wed, 12 Oct 2022 12:29:23 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A5F974EA47;
+        Wed, 12 Oct 2022 12:29:15 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+        <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+        <87ilkr27nv.fsf@oldenburg.str.redhat.com>
+        <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
+Date:   Wed, 12 Oct 2022 14:29:13 +0200
+In-Reply-To: <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com> (Rick
+        P. Edgecombe's message of "Mon, 10 Oct 2022 16:44:33 +0000")
+Message-ID: <87v8opz0me.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012072717.nuybkswd7zuwvqsp@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 10:27:17AM +0300, Vladimir Oltean wrote:
-> On Mon, Oct 10, 2022 at 01:14:58PM +0200, Christian Marangi wrote:
-> > The header and the data of the skb for the inband mgmt requires
-> > to be in little-endian. This is problematic for big-endian system
-> > as the mgmt header is written in the cpu byte order.
-> > 
-> > Fix this by converting each value for the mgmt header and data to
-> > little-endian, and convert to cpu byte order the mgmt header and
-> > data sent by the switch.
-> 
-> By any chance, is the endianness of the data configurable?
+* Rick P. Edgecombe:
 
-By checking the documentation and the regs relevant to global switch
-settings it doesn't look like the switch supports any kind of option
-about endianess...
+>> I think the goal is to support the new kernel interface for actually
+>> switching on SHSTK in glibc 2.37.  But at that point, hopefully all
+>> those existing binaries can start enjoying the STSTK benefits.
+>
+> Can you share more about this plan? HJ was previously planning to wait
+> until the kernel support was upstream before making any more glibc
+> changes. Hopefully this will be in time for that, but I'd really rather
+> not repeat what happened last time where we had to design the kernel
+> interface around not breaking old glibc's with mismatched CET
+> enablement.
 
--- 
-	Ansuel
+You're still doing that (keeping that gap in this constant), and this
+appreciated and very much necessary.
+
+> What did you think of the proposal to disable existing binaries and
+> start from scratch? Elaborated in the coverletter in the section
+> "Compatibility of Existing Binaries/Enabling Interface".
+
+The ABI was finalized around four years ago, and we have shipped several
+Fedora and Red Hat Enterprise Linux versions with it.  Other
+distributions did as well.  It's a bit late to make changes now, and
+certainly not for such trivialities.  In the case of the IBT ABI, it may
+be tempting to start over in a less trivial way, to radically reduce the
+amount of ENDBR instructions.  But that doesn't concern SHSTK, and
+there's no actual implementation anyway.
+
+But as H.J. implied, you would have to do rather nasty things in the
+kernel to prevent us from achieving ABI compatibility in userspace, like
+parsing property notes on the main executable and disabling the new
+arch_prctl calls if you see something there that you don't like. 8-)
+Of course no one is going to implement that.
+
+(We are fine with swapping out glibc and its dynamic loader to enable
+CET with the appropriate kernel mechanism, but we wouldn't want to
+change the way all other binaries are marked up.)
+
+Thanks,
+Florian
+
