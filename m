@@ -2,111 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697415FCA1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CB95FCA20
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiJLR51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 13:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        id S229490AbiJLR6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 13:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiJLR5W (ORCPT
+        with ESMTP id S229586AbiJLR6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:57:22 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F0ACE9AD;
-        Wed, 12 Oct 2022 10:57:21 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1364357a691so13807600fac.7;
-        Wed, 12 Oct 2022 10:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AdY2upGu3PKFhlNCranhBSH0eiafPTkseasEdjQaa3I=;
-        b=L6te7nMBxbCmWHFIiy+cBYPK4VNOG0fe05bq+QjCKa9NbVIsJtlM8i0HdNFgGACCJg
-         YOTpdQJlX9bz4/vlP90+SxUSkTYBvnTtPpcEIqdiz4GkypA632KEo7vC1b8kAL4NLBer
-         aBE57rcxwwE/CXwJrA5fhbdcC79ADH4thIQaIFJnlI4CeQi7vSSOl2DjmnN05Z5zieGM
-         rVkzx8EaxZ+kJRUMoE8ire5IIoLBeTAs1GFq8hNPrKXgnp4J08IW/rdUJhjqHhoAEUxn
-         o8jSBm09apszXisgGfDfqF7RxcrhBygJwQMM9vyO/u8lksC+KIuD9ssy1npMRE7t0AaY
-         BoKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AdY2upGu3PKFhlNCranhBSH0eiafPTkseasEdjQaa3I=;
-        b=uu3/eycCQttXPjT/ABbjjrCekAo4bZ+17yXPMs4quoll4+BAPTtcSyal1/KhHQgVG+
-         pTZuHcejh/lRPF4xjgYP90emoLFFNYiNqMlDRwrRw/Tc93uNDqxmMCY9+zcUziympA+H
-         mtU+8AW2mepaTMgt8ZfR4mWUTLjyanUE2Wy5qS5r+fjXgcbMMDRKJXUVtk2AjVhtwseG
-         cJwA4i9CaaaPVDJ5LF+egWUcUW9VYuX42bm1vKyPW4ygLRRV7AfYKHa21EdBHeTgW3rM
-         2sB9TRmzUuPd4c+UX8mpPCP4XabDmZgcLwCHs6aRyfKJHgz8ig4S9kIb9uwLAsaftUKl
-         eTVA==
-X-Gm-Message-State: ACrzQf1eiBZXuJxAb0vu2ay5GcMepJIxLN/x/exKxSwxm8U6wR5PSzCt
-        QVcsiMnEHI7ybGdkyWsOPQ==
-X-Google-Smtp-Source: AMsMyM4jd4vrIegykWWlvsxsRc7igCBJUc91fX8+i8/IFDevYvTAoJM7djy913Xfh9HcZX1JNOp+RA==
-X-Received: by 2002:a05:6870:d187:b0:136:4db6:2980 with SMTP id a7-20020a056870d18700b001364db62980mr3252715oac.230.1665597440426;
-        Wed, 12 Oct 2022 10:57:20 -0700 (PDT)
-Received: from bytedance ([74.199.177.246])
-        by smtp.gmail.com with ESMTPSA id p7-20020a9d6947000000b0065bf42c967fsm7554426oto.19.2022.10.12.10.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 10:57:19 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 10:57:17 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net/sock: Introduce trace_sk_data_ready()
-Message-ID: <20221012175717.GA26425@bytedance>
-References: <20221007221038.2345-1-yepeilin.cs@gmail.com>
- <20221011195856.13691-1-yepeilin.cs@gmail.com>
- <Y0ZXiDiqxYb7yYmS@unreal>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0ZXiDiqxYb7yYmS@unreal>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 13:58:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE9ED7E3D;
+        Wed, 12 Oct 2022 10:58:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4560B81BA0;
+        Wed, 12 Oct 2022 17:58:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81243C433D6;
+        Wed, 12 Oct 2022 17:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665597488;
+        bh=SwKpCBahfSJnN0XUzb13FyH0Ae6UKHlly7aHXxqQhnQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=WNj1PvK3tV3zlCAooCwY4DeLoDk9R8X58g2NTxoXpQ1bTPrp1oKph08qu2KgDCwe5
+         S/FmV12GvOhlr5x5wOkDDs6JUDWCEaP94GCtZT3qaD7IihduyKmvoTPVkgS80msMpu
+         ahCUF3bIDYIgoPbWY9zVp2LIJ0xGk/sTQ9ZyVc/JUebIt/jF5DlTyQJjsnnUSW3fh7
+         L3uIJ0jPJR9L8M9UU0Uny6IxuddC+k0v/nYGfP00rriTYWZ+QFnQe3hapVdtmQHggx
+         /+ea9XvwfDVFp7Fb1ynj5SjaCVs67s+LSK2gAwQwtSHXRurj2EELXuzLlXs86AmQLR
+         pm170qtv+Pf+g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6F2D5E29F35;
+        Wed, 12 Oct 2022 17:58:08 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch changes for v6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221012144846.2963749-1-chenhuacai@loongson.cn>
+References: <20221012144846.2963749-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <loongarch.lists.linux.dev>
+X-PR-Tracked-Message-Id: <20221012144846.2963749-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.1
+X-PR-Tracked-Commit-Id: 2c8577f5e455b149f3ecb24e9a9f48f372a5d71a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 95b8b5953a315081eadbadf49200e57d7e05aae7
+Message-Id: <166559748844.25532.2588994164402935329.pr-tracker-bot@kernel.org>
+Date:   Wed, 12 Oct 2022 17:58:08 +0000
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 08:58:32AM +0300, Leon Romanovsky wrote:
-> > +	trace_sk_data_ready(sk, __func__);
-> >  	pr_debug("Entering iscsi_target_sk_data_ready: conn: %p\n", conn);
-> 
-> This can go.
+The pull request you sent on Wed, 12 Oct 2022 22:48:46 +0800:
 
-<...>
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.1
 
-> __func__ repetitive pattern hints that it is not best API interface.
-> 
-> 
-> > +TRACE_EVENT(sk_data_ready,
-> > +
-> > +	TP_PROTO(const struct sock *sk, const char *func),
-> > +
-> > +	TP_ARGS(sk, func),
-> > +
-> > +	TP_STRUCT__entry(
-> > +		__field(const void *, skaddr)
-> > +		__field(__u16, family)
-> > +		__field(__u16, protocol)
-> > +		__string(func, func)
-> 
-> TRACE_EVENT() is macro defined in .h file, you can safely put __func__
-> instead.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/95b8b5953a315081eadbadf49200e57d7e05aae7
 
-Thanks for the suggestions!  I will update in v4.
+Thank you!
 
-Peilin Ye
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
