@@ -2,148 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3905FCB0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6F65FCB30
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiJLSx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S229694AbiJLS5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiJLSxc (ORCPT
+        with ESMTP id S229470AbiJLS5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:53:32 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F64FF8D3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:53:27 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id gf8so16024727pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HUI2zzepOnCEU2KAh1PakPcQFkZcRivQX+cynj5FE/k=;
-        b=G47NFXoBtILJJHsl1h9GdNIzukt6VCgb5/pFLeR7U3O5C4N4qiIoQW1NZPvUsa8st/
-         oPEm2Nx/P2qbHAMkKQd6lCihhUbjxai2CtXpicsaa4D5ZMIjuOiplNYvO747uR/eVsS3
-         qIYRG3YYLOh0QhkdC4Pj6EJGdWLkY13ZTg5uU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HUI2zzepOnCEU2KAh1PakPcQFkZcRivQX+cynj5FE/k=;
-        b=GBXLJ5maO+G3SMNJMza0Pcem0TU2shzfJk7f3xDOXxnEYehi1wO4/70AsJ7JhmN/LX
-         hPDO72l/2j4PHsADi89h/U8kv4EPRBVuE6hGhZmfkXE+4WbN9Uf40hSoOhN33RLTbpM4
-         sS86/a/+lTsA7T2b+74ITiG6U0728Jdq0MBatJH6nJbzS+usSfT79wx4Kh42QOt6AFKC
-         A0cOpEGlxpc0NTxo/I8t7bC7ZIMDuCp/g+0XfheqEBJCJXx9CY9xlF2RshBYIvLeS+19
-         xXohAyfjcMff8yXACwS4IG8M4ivNhxyjRFRhMl3UlwR0QvhHZwv0cDmtKlRBuQvkiE3f
-         Y9MA==
-X-Gm-Message-State: ACrzQf1B2JtMoTZAOpCxVxkZ2GUBtF0amRB2/6IMj2SdLB/fGtuxKigQ
-        zu98OcC+Sh4plDlWWqTNv1U3JQ==
-X-Google-Smtp-Source: AMsMyM6tV4/PVbF4fBXiv77LdOk7IfPzalAhIVuB7YI1s3Hec2Euf7PJLzGzNvVQPMDGgGwcWHVGdQ==
-X-Received: by 2002:a17:90a:50:b0:20a:b146:e75e with SMTP id 16-20020a17090a005000b0020ab146e75emr6663558pjb.216.1665600803058;
-        Wed, 12 Oct 2022 11:53:23 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa7972f000000b00561578478f9sm194609pfg.134.2022.10.12.11.53.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 11:53:22 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] firmware: meson_sm: Fix memcpy vs iomem type warnings
-Date:   Wed, 12 Oct 2022 11:53:16 -0700
-Message-Id: <20221012185234.never.936-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 12 Oct 2022 14:57:48 -0400
+X-Greylist: delayed 219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 11:57:46 PDT
+Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C773AD;
+        Wed, 12 Oct 2022 11:57:45 -0700 (PDT)
+Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
+        by pb-smtp1.pobox.com (Postfix) with ESMTP id 6AD551551EE;
+        Wed, 12 Oct 2022 14:54:05 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+        :to:cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=ocnc+2r0vxqNuyxVHePXxoUh1gWAZCMQYekr3k
+        sGhDo=; b=DibnxC3UKNnsAlNgebz3YPB2R6yF2VAhQsDyP67brysCvirgGEdpG6
+        N2+uEvnO11hoaqA5yHpd2mv5Hz8seaJ9I2P2IJz1X0mbhnR9/RurZI/oLt/DWcNt
+        KtvkyCWxK4FFktsEtLnUkI84RVXcnnkls950GnFdLViShtKGMxOBY=
+Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp1.pobox.com (Postfix) with ESMTP id 603FF1551ED;
+        Wed, 12 Oct 2022 14:54:05 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=81lGIyVyMpAU5HDAaXAdVFPBsmczXQLcnAYTitfm3/U=; b=Gl7MxQiaAyFnzvFaaJiexzUcJdrSC+LQMlOBFbw4eSrc/DeuczqmhDPiL4Ls9nLDZweTc3X60O09SsAsVO7K9LABGEKqellAyhfLsX8vTvOm59xf5mLIq0I8EZ10UieB/jdy17gFnwfHxzcGOgrAXalfGttXjOf9r1s4s+9v1b0=
+Received: from yoda.home (unknown [96.21.170.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id BF4D31551EC;
+        Wed, 12 Oct 2022 14:54:04 -0400 (EDT)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 6D50E47DF06;
+        Wed, 12 Oct 2022 14:54:03 -0400 (EDT)
+Date:   Wed, 12 Oct 2022 14:54:03 -0400 (EDT)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+cc:     Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] fs/cramfs: Convert kmap() to kmap_local_data()
+In-Reply-To: <20221012091356.16632-1-fmdefrancesco@gmail.com>
+Message-ID: <87672pr-o821-qns6-11rp-902sp1s34r3@syhkavp.arg>
+References: <20221012091356.16632-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3429; h=from:subject:message-id; bh=4n3aQuAgsH9cCFaGFV2YF2qCSZt1D1FxI4ZpoSOMr4Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRw0bGTY4oQVYR+ruKC+orN1r6Teh+Od53Fv9waOT HIZn6LuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0cNGwAKCRCJcvTf3G3AJu5FD/ wMubbkTAppw3VbhksSb2rvGtd2RwYLblLaevZVfdiIIxQKesFXrZQi/wS2Cwb6XxaSTXOEgSOffPOa zhEq33SvE4ENM7J5ZqIAPv9VqvtcX+fPBliGpBoGcWAnKCxR667DtFC9LZXMeLhmxjbPMgRAMZoOAU 4//ZxbyuL9UHpu800Xr/8nnEuJ3cMu4nHovmggaKixXK1N5GX1ZdcBWCo5RGdwh5n0Iif3o9HJJjmU s3UwoFQvJHoUqMH+FEZHmdFiJE/XGDbJ5JwNXNfpqU5x4d8xrvyJ3JbsiXmQeugU2GOZoc22W6FrwS NIN2b0hZ4FEl77gdRrWT/Vz2bTj6VuezL7QRwgolwQRuaVG6mAinZCwTnbWDttcvkNvuMy9R5MekK3 aVn0JOcp+BCMyv5VZ12X0equ31lB2Xs9L+eK9VgpfeHoIHN+RjohE6es2z0WiIfiYDtk/CG2t6vwGQ sd9WC3iTu9CgiV3pzaUDGybpycEYkapB5rMindsjvRaLBpSPcIGd89A6P06RRh5/vd72Wpe1tskKRU kYyAUVF5RAeskLkQHaDW3hXYoiW1iMipK+yGMKGoRyl7udlBJOde7Zhj8TDuPKp2KV6kuJmFZl6t/J fwr4H8dbXiTgXoSmQtZNB0kMV9isVsilNsltNeyV26+C8DN9xIJbWZO+Y/+g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-1044884447-1665600843=:1258"
+X-Pobox-Relay-ID: 3E6DE3A0-4A5F-11ED-8611-2AEEC5D8090B-78420484!pb-smtp1.pobox.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use memcpy_{toio,fromio}() instead of memcpy(). Silences warnings from
-Sparse:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 1 (different address spaces)
-drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
-drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
-drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 2 (different address spaces)
-drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
-drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
-drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-drivers/firmware/meson/meson_sm.c:206:9:    expected void *
-drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+--8323328-1044884447-1665600843=:1258
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-While here, fix this warning as well:
+On Wed, 12 Oct 2022, Fabio M. De Francesco wrote:
 
-drivers/firmware/meson/meson_sm.c:85:24: warning: Using plain integer as NULL pointer
+> The use of kmap() is being deprecated in favor of kmap_local_page().
+>=20
+> There are two main problems with kmap(): (1) It comes with an overhead =
+as
+> the mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when t=
+he
+> kmap=E2=80=99s pool wraps and it might block when the mapping space is =
+fully
+> utilized until a slot becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, t=
+he
+> kernel virtual addresses are restored and still valid.
+>=20
+> Since its use in fs/cramfs is safe everywhere, it should be preferred.
+>=20
+> Therefore, replace kmap() with kmap_local_page() in fs/cramfs. Instead
+> of open-coding kmap_local_page() + memcpy(), use memcpy_from_page().
+>=20
+> Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202210122023.zF56nCzM-lkp@intel.com
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-amlogic@lists.infradead.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/firmware/meson/meson_sm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Reviewed-by: Nicolas Pitre <nico@fluxnic.net>
 
-diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
-index 77aa5c6398aa..4efde225a580 100644
---- a/drivers/firmware/meson/meson_sm.c
-+++ b/drivers/firmware/meson/meson_sm.c
-@@ -82,7 +82,7 @@ static void __iomem *meson_sm_map_shmem(u32 cmd_shmem, unsigned int size)
- 
- 	sm_phy_base = __meson_sm_call(cmd_shmem, 0, 0, 0, 0, 0);
- 	if (!sm_phy_base)
--		return 0;
-+		return NULL;
- 
- 	return ioremap_cache(sm_phy_base, size);
- }
-@@ -167,7 +167,7 @@ int meson_sm_call_read(struct meson_sm_firmware *fw, void *buffer,
- 		size = bsize;
- 
- 	if (buffer)
--		memcpy(buffer, fw->sm_shmem_out_base, size);
-+		memcpy_fromio(buffer, fw->sm_shmem_out_base, size);
- 
- 	return ret;
- }
-@@ -203,7 +203,7 @@ int meson_sm_call_write(struct meson_sm_firmware *fw, void *buffer,
- 	if (!fw->chip->cmd_shmem_in_base)
- 		return -EINVAL;
- 
--	memcpy(fw->sm_shmem_in_base, buffer, size);
-+	memcpy_toio(fw->sm_shmem_in_base, buffer, size);
- 
- 	if (meson_sm_call(fw, cmd_index, &written, arg0, arg1, arg2, arg3, arg4) < 0)
- 		return -EINVAL;
--- 
-2.34.1
-
+> ---
+>  fs/cramfs/inode.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/fs/cramfs/inode.c b/fs/cramfs/inode.c
+> index 61ccf7722fc3..c17cbba5d45e 100644
+> --- a/fs/cramfs/inode.c
+> +++ b/fs/cramfs/inode.c
+> @@ -238,8 +238,7 @@ static void *cramfs_blkdev_read(struct super_block =
+*sb, unsigned int offset,
+>  		struct page *page =3D pages[i];
+> =20
+>  		if (page) {
+> -			memcpy(data, kmap(page), PAGE_SIZE);
+> -			kunmap(page);
+> +			memcpy_from_page(data, page, 0, PAGE_SIZE);
+>  			put_page(page);
+>  		} else
+>  			memset(data, 0, PAGE_SIZE);
+> @@ -815,7 +814,7 @@ static int cramfs_read_folio(struct file *file, str=
+uct folio *folio)
+> =20
+>  	maxblock =3D (inode->i_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
+>  	bytes_filled =3D 0;
+> -	pgdata =3D kmap(page);
+> +	pgdata =3D kmap_local_page(page);
+> =20
+>  	if (page->index < maxblock) {
+>  		struct super_block *sb =3D inode->i_sb;
+> @@ -903,13 +902,13 @@ static int cramfs_read_folio(struct file *file, s=
+truct folio *folio)
+> =20
+>  	memset(pgdata + bytes_filled, 0, PAGE_SIZE - bytes_filled);
+>  	flush_dcache_page(page);
+> -	kunmap(page);
+> +	kunmap_local(pgdata);
+>  	SetPageUptodate(page);
+>  	unlock_page(page);
+>  	return 0;
+> =20
+>  err:
+> -	kunmap(page);
+> +	kunmap_local(pgdata);
+>  	ClearPageUptodate(page);
+>  	SetPageError(page);
+>  	unlock_page(page);
+> --=20
+> 2.37.3
+>=20
+>=20
+--8323328-1044884447-1665600843=:1258--
