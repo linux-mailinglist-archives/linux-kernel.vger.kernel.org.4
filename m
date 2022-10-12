@@ -2,204 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150495FC026
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 07:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDFC5FC027
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 07:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJLFdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 01:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S229612AbiJLFhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 01:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLFdq (ORCPT
+        with ESMTP id S229436AbiJLFht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 01:33:46 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F31A9A9F8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 22:33:46 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id g15-20020a6be60f000000b006bc6bc8715aso3171547ioh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 22:33:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O2jSEdNU5vRSYeAa6Q5STwH5/PLEx1zBdNdNcj1koqs=;
-        b=77DPTGs4sR1ZEt3U5pbJjKzKNhIhcbTbM6VdfDmQ6FRZeM1pBLdxftGSpalFyhbzFF
-         VFB3kIRBw8w/CQgpvTrLHKLI9vy2Fag852phmZkok7cqXTr9lWBcdL73qxjpee7OPE6C
-         L69OMM8JYgT4xOxFTKmdd/DBE9Yr7leKOmCKL1YFx8d0c8JxxDk9dKypMawoRLrYySsU
-         suOmuwFiV98EpJkUIHQRHf8zDLg68jLZhkXaKOOW7ypdIvMTBK5zHjlFwiw4hLwkt826
-         SCsWh3cmmJa6FqiynCsXq/x6HjqQO9G1bxgePvmEMgW0zcryCoDlnLdxO+eomBsT7AAB
-         lrQg==
-X-Gm-Message-State: ACrzQf1e/2oDzpIuD0mvMf7YX9CiLXt0ijDKJ+Mfj2Eq7Zyh/zPQErBe
-        gzR03qHFjtxYMI9UpqhNg6we8dXZhGRW67FIZY6xxg9ZtvT3
-X-Google-Smtp-Source: AMsMyM5/BRbx2hYGZLCP/xEXFknUygBv1+1DGkoLdp2dHkxFlh4zc8XTAj59vppdRVpo55ESbO1qDBjIy+6JbvftpkYLghHCZ0GR
+        Wed, 12 Oct 2022 01:37:49 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83A1A3F7D
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 22:37:48 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C5VLgm008408
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 22:37:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : mime-version; s=s2048-2021-q4;
+ bh=NdvGKWGngl6rSCf5qKsCtMx6nVWpFudwQfbOQ9fkbnQ=;
+ b=fFEiCt7ecLXGFxKhFjy47mzkj+xsfmcxbllOXjwvXaG8fGbjyK1tpP35y6+tLot0bg90
+ 6B6q2YlW8+Kj8CuVwAdiJjeHVwtft1XBu+PORjIOg75BIDRC8uiweMfROrkFHNBuIEFu
+ 93Bt7Vb10PuRXGO5/qqiWkciOiV8dBD04BXU7Sokg7x7pybKyeIEZhG0M66mCWE8AepC
+ 1Iicr/xHyrJvY1Xlbtp22sFW92IZ2rxcY4bgSC1RIhk/A9ex0arYyCniOKa0ePGB0Vxr
+ yixPR1kULyqtB2UR1Bjcvw+09jBRl3xaMXBSth58JYvzQx+RB/TcJHOun4mg0VV+5bZ9 tw== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k5qgr022a-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 22:37:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XSqNXph6BR8LapqIQc4ZkaoW3DlcS2A+sZmspmMSEQHhFrI341o0xiJJPgfz8Wtux+Aq9BL9HrddBe5lvieh7VsACVfjDj8wtFYchRW1L3qdp5d0u73HqXfD54Lrm8tPJJeDVOy22oU7DFtDekQur9IegPcVthyjCgRYFo3elgkrByCRwHMqiBsGr/eg1g+x1kNhWlQE2MevqRbWbAhKCRk8cIbpt4UIGMfOm3bwQBL5+doh53HNn2hwsjVSdtSJTQg0oG2NBOezDJXXF9S5d6iWzOrAoq5iqu2aDVvWdYe4uekfWM5N9YlAkUwWtWONT2lCbTegwVGyX2/PrCi1fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NdvGKWGngl6rSCf5qKsCtMx6nVWpFudwQfbOQ9fkbnQ=;
+ b=I6+ZgCYx+rokRQpiBvD7f4SvHaTnCdqsRXDxUEok1+RFxqF5hQ4DV1+ZnysbkR+R51f0C4cyFpjGmY0uLMkcCC53AZ6aJ6/JlCHKkMUwdp1202+T2ecc7aPkSXCkUQisNJ3EaslusOEjjjfc7+BKfD0ZbPP43Jcv0PTVsA8qQbPZXoKbSptngzY07CvGZw1mtwNMCCq/eeC29w4qQlEa7SyongcZ3umIDRXw5cAG5t5Vw64RreEa/yvMkNb5BtQs/zHZz9Q0Qv1JY8I8ozEqL9IJgwEWQBuCsAxcxOWd1IjA3bxoQhtHRcMhtXNTRAtH6+tCZA0/SXprjlwAqLVQVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by SJ0PR15MB4711.namprd15.prod.outlook.com (2603:10b6:a03:37c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Wed, 12 Oct
+ 2022 05:37:44 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::d70d:8cce:bb1:e537]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::d70d:8cce:bb1:e537%6]) with mapi id 15.20.5709.022; Wed, 12 Oct 2022
+ 05:37:44 +0000
+From:   Song Liu <songliubraving@meta.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+CC:     Song Liu <songliubraving@meta.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "song@kernel.org" <song@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "urezki@gmail.com" <urezki@gmail.com>
+Subject: Re: [RFC v2 4/4] vmalloc_exec: share a huge page with kernel text
+Thread-Topic: [RFC v2 4/4] vmalloc_exec: share a huge page with kernel text
+Thread-Index: AQHY2qb4/DleVypvfEGw7i865KJ5wq4H9+4AgAAKPACAABD6AIABU84AgABHRYCAAJX7gA==
+Date:   Wed, 12 Oct 2022 05:37:43 +0000
+Message-ID: <0D4668C5-28C1-4846-9698-C5C05BC23F0B@fb.com>
+References: <20221007234315.2877365-1-song@kernel.org>
+ <20221007234315.2877365-5-song@kernel.org>
+ <af5c148fb3b9c56d1eb7e92b05db7c6c04bcfc3c.camel@intel.com>
+ <B849A9FF-1054-4D5C-AEBD-72AED8B8F277@fb.com>
+ <3842f1e7cfdde4f848e164872f62c0c1da654fec.camel@intel.com>
+ <2B66E2E7-7D32-418C-9DFD-1E17180300B4@fb.com>
+ <99201f0c3509e1ea3d08a462beaaea9d60382cff.camel@intel.com>
+In-Reply-To: <99201f0c3509e1ea3d08a462beaaea9d60382cff.camel@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|SJ0PR15MB4711:EE_
+x-ms-office365-filtering-correlation-id: 4b1de4f2-35df-4579-c9be-08daac13e313
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1l9XEtB2TSb6rlnrzSqDe/aSR5a3/XGOkMzzmcQhObM+pSPh2sGPb9B+lJDTJjmZMNF3yopT8mH4QZK2qaQd99v9PjgknIq6pwIviWsSBA2v99Iei3RooxFk+RBm6Vt83osLFOJGhFr+TutEuPh9E9M4Z++aTQggOEWkHZ7OKCPTl42Spf2iS+zPGrpPebvPfTwH50gkjU4qR77kRyCq2xCSWWGJrmXcys5w6KNdtqwVkHRO+XS8r4q54vxmhF3F/M0n9Cut8egY094PZdGXbWkuekJNy0FVdl4S/ca3azpdSd0bc7w1zvOsjWwGdpptfCT+xUeJN/iRQVkaEyXRNX7Cy5eD5SnkXrwe3tvKjDIXpSpMvbCo6ewjSym3Jk72YapaEC+dehE95vdu6OVDQCtR5sfaOaFIxio92fu3VN4BKfon7MW4ZpwmDJaEgMzdPOnnmgqViMDq/DAaMpfVKYdi5sEfesejVpMmVgJnuYhnShJDWg/Fl/y5Tqt0sFWNizJ6h6XZ7UkRfboufmIqA/R6LyKi5/QRW7Wsiqd/MyrQ28wSNHczKb7EIL0unuen1YNSJv8D0hZdY24BOzqP43S/j3+ySuax0MGh120J9amK+H5lCYJrblLcWGPY0l0Kz6hC5v2AFWc045wBbeVcS0X5FBVWqaoa6RwJ3b4v1sLC+Q7We6nzfqI9VwRjaYy6DNrOeSTYV4DfiyC/4SHB9gMRrrUZi7dDrNz6wtY7E+GcXfm1Eq2vUPVAKQZ+QtJUBd62ETZsAZLxjMqEsz3IfjblrSLgpPIvEsSJK0USflI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(376002)(366004)(136003)(451199015)(83380400001)(478600001)(186003)(6486002)(53546011)(86362001)(6506007)(66446008)(6512007)(9686003)(54906003)(4001150100001)(71200400001)(6916009)(66946007)(36756003)(8676002)(38100700002)(91956017)(4326008)(38070700005)(76116006)(64756008)(66476007)(66556008)(2906002)(316002)(7416002)(122000001)(8936002)(41300700001)(33656002)(5660300002)(14583001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iWVj+166mfCScUvQWkLmgmqapHuVGikWFFaM/vgC80uYVDqi5Yph2wXT2a67?=
+ =?us-ascii?Q?AJuiUnjCZI+b1GTlb06bp3TZZa9J1cb0UEM302+bdjMGKASRE8Zl3eU/8bIS?=
+ =?us-ascii?Q?2Exg5UYexfjO4cG4Jt4ZCR20VOEjyHH1/p3VcTLyItdvjk/FLxqlBPQjqhMV?=
+ =?us-ascii?Q?hIqZHUhP91aUM3M1InBoeMtDCZ+RbipQtiBcRfjGtOH+eJA0HtU5enwKtP4e?=
+ =?us-ascii?Q?RdJK1YVWOTQD7Io/3t+bKgJlB+il+JdttCA6br6AlMCKY70MAvWUTRnjmiwv?=
+ =?us-ascii?Q?SI9DmikwSDCQplfxRx/P31dUvAHeXv/jyUfSax6Cl1RXgMrAIghur/TS5j8v?=
+ =?us-ascii?Q?bAJasRmpjVb2aUStiQ64iu+A71ALi4kpQlV4hWjp+BUgYf8/91g8UmuuVM+L?=
+ =?us-ascii?Q?y9yEZObLXvrFLrVwgBYYxENM80KBFEShNuMyU30fG4TpRogeDFaOppyUBVDV?=
+ =?us-ascii?Q?KJmULZXD5YpQBtESx7dP0J6lmkXqrN4vABGeoE6bgXKFwXoRh84eiCvA69/f?=
+ =?us-ascii?Q?tZGrL0ZsoGWR7tdcSjxrgpVQUJalx07XZPpPwmPfRF65TGZxSkHeT9C5kX3v?=
+ =?us-ascii?Q?oYhRb1kE/c2tig6WWP8Vjr1P0ypX5U81tz0Ir7tBMnxIWqs094f+WETX16S3?=
+ =?us-ascii?Q?HY32YvY7CIjgMAvO0u+vPAU3Lkp0wmPnKoUpWuqnIDMf5z/nFChpeHlsx7Th?=
+ =?us-ascii?Q?v+f8f2D1NFO3cO+81htjOCmf27+zJ0wtwrCcmC2+yYjnlV9No3bdvw0vCU9o?=
+ =?us-ascii?Q?uu6qYLoNLFVH17hnUnsvRBEEO0GY11p1FSxm+X2Ki9L5rrqHWplX+zu65bd4?=
+ =?us-ascii?Q?Qt5YO8YzTzP49GOimDYRcrl5d24I5vKnxWjI6N5EhGnojbeQ9yhzr9A5jLjC?=
+ =?us-ascii?Q?QhkiwkK8PdOn5q5It6rav4lH1jSR9RDIMlE0EtwAfN1+09Zd+tRrN6zo2lLE?=
+ =?us-ascii?Q?L746PM9E7AgLHnJgGAhWqAho4aLir8sJze/5UCDS6AFJ1zLXf5oMURYk3B+t?=
+ =?us-ascii?Q?dsM4xGRiT4ExhDRqh0Tvzj7D9qT+gznyNiSpsca21OW6WPHfpHiGmRVluao9?=
+ =?us-ascii?Q?U15fZnNtOalQV8ov17VvdlvyMF9L4nYX07glgNO/Vt+VYDsWCGwu0+DMcsjb?=
+ =?us-ascii?Q?3LUbLkvWF7Z5wveiFG+uORKZ44nZqQtjhE/qa/1LqilW/KVM7W3IDgEQOS2s?=
+ =?us-ascii?Q?YYRpfOv6EKEWDzUeppslbWd/FeAe8qAa90wQf2abuTy2P6GkP74QGyVx5dYU?=
+ =?us-ascii?Q?jg3Q6ByhfSmPH6kmz1x0/FQcXivs6f3MOC8UJzILnWpx7xEazHbthdMSg7I0?=
+ =?us-ascii?Q?O2b1qVp+tTPpYZqz/y4NYYbhBFxG+ejPhTG6ga113gFpglaKqO4bg5RXWF7N?=
+ =?us-ascii?Q?Slm1uee78cfPH6UinwjWgeRS+ifybaAZEOZqMbZEr3MBXMbvsXEqaZ9ONcYC?=
+ =?us-ascii?Q?N2iY8zsZVhQlhOejuwkp7yL0kZOv3njiXXYMAlDiEoejZoDFSH8LKxazVruB?=
+ =?us-ascii?Q?bElyFpCXvCl+tFnjl1mFH7lzRppR9GyBZLeykix+EhP7jthjtaaG/irpPQID?=
+ =?us-ascii?Q?8nD4A5FRLeC7mVawMpaTDNPZZ2R6eDgchjPciixk3CpNylDd91HZXIc2Fbdb?=
+ =?us-ascii?Q?TxN4fVI+kBwNdRIaoAD3auCAq8FO9EZ8NyXa4Sh5v4nF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F9B4057D2B861E4C94FB081223F22CBD@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:eea:b0:2fb:f7a6:48a9 with SMTP id
- j10-20020a056e020eea00b002fbf7a648a9mr8720522ilk.301.1665552825371; Tue, 11
- Oct 2022 22:33:45 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 22:33:45 -0700
-In-Reply-To: <00000000000034ae0f05e9f94c79@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082d66a05eacfbc3d@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in jfs_lazycommit
-From:   syzbot <syzbot+885a4f3281b8d99c48d8@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b1de4f2-35df-4579-c9be-08daac13e313
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2022 05:37:44.0115
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: d+Qqiy6SerHkEjqQKDzM89+VHAwnjguqL8z+sSMlRriv3qOOdKV93zb8hUe8NrdAaqpYbwzwJPyl1hrr1e2MjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4711
+X-Proofpoint-GUID: Jt8rQkrPoP2r4XwOIkqwXlz39CHzcmjf
+X-Proofpoint-ORIG-GUID: Jt8rQkrPoP2r4XwOIkqwXlz39CHzcmjf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_03,2022-10-11_02,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=165e218a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=885a4f3281b8d99c48d8
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1523402c880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b5fc78880000
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/9aaa6f9b6f7e/mount_0.gz
+> On Oct 11, 2022, at 1:40 PM, Edgecombe, Rick P <rick.p.edgecombe@intel.com> wrote:
+> 
+> On Tue, 2022-10-11 at 16:25 +0000, Song Liu wrote:
+>>> Maybe this is just me missing some vmalloc understanding, but this
+>>> pointer to an all zero vm_struct seems weird too. Are there other
+>>> vmap
+>>> allocations like this? Which vmap APIs work with this and which
+>>> don't?
+>> 
+>> There are two vmap trees at the moment: free_area_ tree and 
+>> vmap_area_ tree. free_area_ tree uses vmap->subtree_max_size, while 
+>> vmap_area_ tree contains vmap backed by vm_struct, and thus uses 
+>> vmap->vm. 
+>> 
+>> This set add a new tree, free_text_area_. This tree is different to 
+>> the other two, as it uses subtree_max_size, and it is also backed 
+>> by vm_struct. To handle this requirement without growing vmap_struct,
+>> we introduced all_text_vm to store the vm_struct for free_text_area_
+>> tree. 
+>> 
+>> free_text_area_ tree is different to vmap_area_ tree. Each vmap in
+>> vmap_area_ tree has its own vm_struct (1 to 1 mapping), while 
+>> multiple vmap in free_text_area_ tree map to a single vm_struct.
+>> 
+>> Also, free_text_area_ handles granularity < PAGE_SIZE; while the
+>> other two trees only work with PAGE_SIZE aligned memory. 
+>> 
+>> Does this answer your questions? 
+> 
+> I mean from the perspective of someone trying to use this without
+> diving into the entire implementation.
+> 
+> The function is called vmalloc_exec() and is freed with vfree_exec().
+> Makes sense. But with the other vmallocs_foo's (including previous
+> vmalloc_exec() implementations) you can call find_vm_area(), etc on
+> them. They show in "vmallocinfo" and generally behave similarly. That
+> isn't true for these new allocations, right?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+885a4f3281b8d99c48d8@syzkaller.appspotmail.com
+That's right. These operations are not supported (at least for now). 
 
-ERROR: (device loop0): remounting filesystem as read-only
-blkno = 400000, nblocks = 0
-ERROR: (device loop0): dbFree: block to be freed is outside the map
-==================================================================
-BUG: KASAN: use-after-free in jfs_lazycommit+0x746/0xba0 fs/jfs/jfs_txnmgr.c:2730
-Read of size 4 at addr ffff88807ee78094 by task jfsCommit/120
+> 
+> Then you have code that operates on module text like:
+> if (is_vmalloc_or_module_addr(addr))
+> 	pfn = vmalloc_to_pfn(addr);
+> 
+> It looks like it would work (on x86 at least). Should it be expected
+> to?
+> 
+> Especially after this patch, where there is memory that isn't even
+> tracked by the original vmap_area trees, it is pretty much a separate
+> allocator. So I think it might be nice to spell out which other vmalloc
+> APIs work with these new functions since they are named "vmalloc".
+> Maybe just say none of them do.
 
-CPU: 1 PID: 120 Comm: jfsCommit Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x65/0x4b0 mm/kasan/report.c:317
- print_report+0x108/0x1f0 mm/kasan/report.c:433
- kasan_report+0xc3/0xf0 mm/kasan/report.c:495
- jfs_lazycommit+0x746/0xba0 fs/jfs/jfs_txnmgr.c:2730
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+I guess it is fair to call this a separate allocator. Maybe 
+vmalloc_exec is not the right name? I do think this is the best 
+way to build an allocator with vmap tree logic. 
 
-Allocated by task 4321:
- kasan_save_stack mm/kasan/common.c:38 [inline]
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc+0xcd/0x100 mm/kasan/common.c:516
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- kmem_cache_alloc_trace+0x97/0x310 mm/slub.c:3289
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- jfs_fill_super+0xfb/0xc50 fs/jfs/super.c:495
- mount_bdev+0x26c/0x3a0 fs/super.c:1400
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> 
+> Separate from that, I guess you are planning to make this limited to
+> certain architectures? It might be better to put logic with assumptions
+> about x86 boot time page table details inside arch/x86 somewhere.
 
-Freed by task 3642:
- kasan_save_stack mm/kasan/common.c:38 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:45
- kasan_set_free_info+0x1f/0x40 mm/kasan/generic.c:370
- ____kasan_slab_free+0xd8/0x120 mm/kasan/common.c:367
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1759 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1785
- slab_free mm/slub.c:3539 [inline]
- kfree+0xda/0x210 mm/slub.c:4567
- generic_shutdown_super+0x130/0x310 fs/super.c:491
- kill_block_super+0x79/0xd0 fs/super.c:1427
- deactivate_locked_super+0xa7/0xf0 fs/super.c:331
- cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Yes, the architecture need some text_poke mechanism to use this. 
+On BPF side, x86_64 calls this directly from arch code (jit engine), 
+so it is mostly covered. For modules, we need to handle this better. 
 
-The buggy address belongs to the object at ffff88807ee78000
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 148 bytes inside of
- 256-byte region [ffff88807ee78000, ffff88807ee78100)
-
-The buggy address belongs to the physical page:
-page:ffffea0001fb9e00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7ee78
-head:ffffea0001fb9e00 order:1 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea00004bed80 dead000000000004 ffff888012041b40
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (init), ts 11597877098, free_ts 11078632692
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
- alloc_slab_page+0x70/0xf0 mm/slub.c:1829
- allocate_slab+0x5e/0x520 mm/slub.c:1974
- new_slab mm/slub.c:2034 [inline]
- ___slab_alloc+0x3ee/0xc40 mm/slub.c:3036
- __slab_alloc mm/slub.c:3123 [inline]
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3256 [inline]
- __kmalloc+0x2bd/0x370 mm/slub.c:4425
- kmalloc_array include/linux/slab.h:640 [inline]
- kcalloc include/linux/slab.h:671 [inline]
- __list_lru_init+0xa0/0x5f0 mm/list_lru.c:571
- alloc_super+0x7a7/0x920 fs/super.c:272
- sget_fc+0x257/0x6c0 fs/super.c:559
- vfs_get_super fs/super.c:1163 [inline]
- get_tree_nodev+0x26/0x160 fs/super.c:1198
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3476
- free_contig_range+0xa3/0x160 mm/page_alloc.c:9457
- destroy_args+0xfe/0x91d mm/debug_vm_pgtable.c:1031
- debug_vm_pgtable+0x43e/0x497 mm/debug_vm_pgtable.c:1354
- do_one_initcall+0x1c9/0x400 init/main.c:1296
- do_initcall_level+0x168/0x218 init/main.c:1369
- do_initcalls+0x4b/0x8c init/main.c:1385
- kernel_init_freeable+0x3f1/0x57b init/main.c:1623
- kernel_init+0x19/0x2b0 init/main.c:1512
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Memory state around the buggy address:
- ffff88807ee77f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88807ee78000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807ee78080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                         ^
- ffff88807ee78100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88807ee78180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
+Thanks,
+Song
