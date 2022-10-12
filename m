@@ -2,156 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DF45FCAC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882E35FCAC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJLSiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S229882AbiJLSiH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Oct 2022 14:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiJLSiC (ORCPT
+        with ESMTP id S229885AbiJLSiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:38:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50646F544
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:38:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64D9FB81B97
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 18:38:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42431C433D6;
-        Wed, 12 Oct 2022 18:37:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EbB3hbWd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665599874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mH1YH8iZJgTt44uLDgFWnHBdALElFzORZFNsA0EO3Gg=;
-        b=EbB3hbWdmITNqmE0mJo7NoeYeL+vhhWWjJ1jRsIZFYdkbXbvzAsb5seUub34Yf1R0k46jJ
-        MT07mlWNgGZ2vWu64irvQcO4t5uVkJt/zSyl6s+TAd0rh75mNEO4edUvXBYGIca6F+9oq1
-        /w9XfndFs6HV4aiAlur8+ElMZQ0An0M=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6d3f2353 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 12 Oct 2022 18:37:54 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 12:37:50 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        ajd@linux.ibm.com, aneesh.kumar@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
-        cuigaosheng1@huawei.com, david@redhat.com, farosas@linux.ibm.com,
-        geoff@infradead.org, gustavoars@kernel.org, haren@linux.ibm.com,
-        hbathini@linux.ibm.com, joel@jms.id.au, lihuafei1@huawei.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
-        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
-        pali@kernel.org, paul@paul-moore.com, rmclure@linux.ibm.com,
-        ruscur@russell.cc, windhl@126.com,
-        wsa+renesas@sang-engineering.com, ye.xingchen@zte.com.cn,
-        yuanjilin@cdjrlc.com, zhengyongjun3@huawei.com
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
-Message-ID: <Y0cJfoPLGeuzm/gQ@zx2c4.com>
-References: <87edvhntv0.fsf@mpe.ellerman.id.au>
- <20221012141827.GA2405914@roeck-us.net>
- <Y0biBtCUtc2mowbQ@zx2c4.com>
- <20221012164452.GA2990467@roeck-us.net>
- <Y0b3ZsTRHWG6jGK8@zx2c4.com>
- <20221012174826.GB2995920@roeck-us.net>
+        Wed, 12 Oct 2022 14:38:05 -0400
+Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190896F546;
+        Wed, 12 Oct 2022 11:38:04 -0700 (PDT)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 1294F122F07;
+        Wed, 12 Oct 2022 20:38:02 +0200 (CEST)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id E898C122EDD;
+        Wed, 12 Oct 2022 20:38:01 +0200 (CEST)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (unknown [10.149.2.42])
+        by mail4.swissbit.com (Postfix) with ESMTPS;
+        Wed, 12 Oct 2022 20:38:01 +0200 (CEST)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Wed, 12 Oct
+ 2022 20:38:01 +0200
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Wed, 12 Oct 2022 20:37:58 +0200
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCHv4 1/2] mmc: block: Remove error check of hw_reset on reset
+Thread-Topic: [PATCHv4 1/2] mmc: block: Remove error check of hw_reset on
+ reset
+Thread-Index: Adjeaabz7a/Vp/YESbKGERCtIHQ41g==
+Date:   Wed, 12 Oct 2022 18:37:58 +0000
+Message-ID: <f7757a12fb204b8584dacc04e67fdd1c@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.242.2.2]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221012174826.GB2995920@roeck-us.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27198.001
+X-TMASE-Result: 10-0.521300-10.000000
+X-TMASE-MatchedRID: dc8Jy61QoRpgljMcj2tyXt5x7RpGJf1a4SkIdSwphgahLh9e7qvSIg2V
+        4b0zHULvGgn/HW4MjTmKoat5I/Uj/worSvYb1VTuKsurITpSv+M2LwvzxRX0gMC5DTEMxpeQfiq
+        1gj2xET9dBLSzNqCHg1o4rfBbwEORvvHAd28bGMe5x7uAXGEprfWr7HvOSElar4YC4lUEmf2Ypu
+        G7kpoKR5p6VbtqvFM0+WatSktubmiel3N+gDvB54knvYO5kHScNUSduuqYHDuZtziFUn+D+UzAk
+        Vmkw08mi/rJKndm3e8gE0bHoPl2Aq+/EguYor8cEzQnFLEeMUndB/CxWTRRu/558CedkGIvqcoA
+        hihTwvhT9DdstK6naoyidLLBmKNP4BqxW0NCo8420zviUk4+fiXH6tsKNnAM
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 29804778-e865-4b84-b688-f2a6fce2c007-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 10:48:26AM -0700, Guenter Roeck wrote:
-> > I've also managed to not hit this bug a few times. When it triggers,
-> > after "kprobes: kprobe jump-optimization is enabled. All kprobes are
-> > optimized if possible.", there's a long hang - tens seconds before it
-> > continues. When it doesn't trigger, there's no hang at that point in the
-> > boot process.
-> > 
-> 
-> That probably explains why my attempts to bisect the problem were
-> unsuccessful.
+Before switching back to the right partition in mmc_blk_reset there used
+to be a check if hw_reset was even supported. This return value
+was removed, so there is no reason to check. Furthermore ensure
+part_curr is not falsely set to a valid value on reset or
+partition switch error.
 
-So I just did this:
+As part of this change the code paths of mmc_blk_reset calls were checked
+to ensure no commands are issued after a failed mmc_blk_reset directly
+without going through the block layer.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 2fe28eeb2f38..2d70bc09db7e 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1212,6 +1212,7 @@ static void __cold try_to_generate_entropy(void)
-        struct entropy_timer_state stack;
-        unsigned int i, num_different = 0;
-        unsigned long last = random_get_entropy();
-+       return;
+Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|sw_reset()")
+Cc: stable@vger.kernel.org
 
-        for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
-                stack.entropy = random_get_entropy();
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+-v4: Only partition switch if necessary and fix one mmc_blk_reset call
+-v3: Ensure invalid part_curr on error
+-v2: Do not attempt to switch partitions if reset failed
 
-And then ran it, and now we get the lockup from the idle process:
+ drivers/mmc/core/block.c | 42 ++++++++++++++++++++++++----------------
+ 1 file changed, 25 insertions(+), 17 deletions(-)
 
-udhcpc: started, v1.33.0
-udhcpc: sending discover
-watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:0]
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-28380-gde492c83cae0-dirty #10
-Hardware name: PowerMac3,1 PPC970FX 0x3c0301 PowerMac
-NIP:  c0000000000300f8 LR: c0000000000304e8 CTR: c00000000001a410
-REGS: c0000000028c79a8 TRAP: 0900   Not tainted  (6.0.0-28380-gde492c83cae0-dirty)
-MSR:  800000000000b032 <SF,EE,FP,ME,IR,DR,RI>  CR: 24088442  XER: 00000000
-IRQMASK: 0
-GPR00: c0000000000304e8 c0000000028c7b30 c000000001435500 c0000000028c79a8
-GPR04: c0000000013366c0 0000000000000000 000000000010029c 0000000000000000
-GPR08: c000000002d3bbb0 0000000000000000 c000000002883d00 c000000002915500
-GPR12: 0000000044088442 c000000002e00000 0000000000000007 0000000002295698
-GPR16: 00000000039400e8 0000000002295258 0000000002295660 00000000022953d0
-GPR20: 0000000002295b10 00000000022b34d0 0000000002295b38 0000000003945500
-GPR24: 0000000003945500 0000000000080000 c000000002883d80 c000000002883d00
-GPR28: c00000000290d0c0 0000000000000001 c00000000290d018 c00000000290cc78
-NIP [c0000000000300f8] .replay_soft_interrupts+0x28/0x2d0
-LR [c0000000000304e8] .arch_local_irq_restore+0x148/0x1a0
-Call Trace:
-[c0000000028c7b30] [c0000000000304e8] .arch_local_irq_restore+0x148/0x1a0 (unreliable)
-[c0000000028c7bb0] [c00000000001a388] .arch_cpu_idle+0xb8/0x140
-[c0000000028c7c30] [c000000000fd4940] .default_idle_call+0x80/0xc8
-[c0000000028c7ca0] [c000000000148480] .do_idle+0x150/0x1a0
-[c0000000028c7d50] [c000000000148748] .cpu_startup_entry+0x38/0x40
-[c0000000028c7dd0] [c0000000000113a8] .rest_init+0x168/0x170
-[c0000000028c7e60] [c000000002004224] .arch_post_acpi_subsys_init+0x0/0x24
-[c0000000028c7ed0] [c000000002004ba8] .start_kernel+0x8d0/0x924
-[c0000000028c7f90] [c00000000000d4ac] start_here_common+0x1c/0x20
-Instruction dump:
-60000000 60000000 7c0802a6 f8010010 f821fe01 60000000 60000000 38610078
-e92d0af8 f92101f8 39200000 4803a491 <60000000> 39200000 e9410180 f92101b0
-Kernel panic - not syncing: softlockup: hung tasks
-CPU: 0 PID: 0 Comm: swapper/0 Tainted: G             L     6.0.0-28380-gde492c83cae0-dirty #10
-Hardware name: PowerMac3,1 PPC970FX 0x3c0301 PowerMac
-Call Trace:
-[c0000000028c74a0] [c000000000f93b90] .dump_stack_lvl+0x7c/0xc4 (unreliable)
-[c0000000028c7530] [c0000000000d2a58] .panic+0x180/0x438
-[c0000000028c75e0] [c000000000232424] .watchdog_timer_fn+0x3a4/0x410
-[c0000000028c76a0] [c0000000001cb964] .__hrtimer_run_queues+0x1f4/0x590
-[c0000000028c77a0] [c0000000001cc354] .hrtimer_interrupt+0x134/0x300
-[c0000000028c7860] [c000000000021cd4] .timer_interrupt+0x1c4/0x5d0
-[c0000000028c7930] [c0000000000302f8] .replay_soft_interrupts+0x228/0x2d0
-[c0000000028c7b30] [c0000000000304e8] .arch_local_irq_restore+0x148/0x1a0
-[c0000000028c7bb0] [c00000000001a388] .arch_cpu_idle+0xb8/0x140
-[c0000000028c7c30] [c000000000fd4940] .default_idle_call+0x80/0xc8
-[c0000000028c7ca0] [c000000000148480] .do_idle+0x150/0x1a0
-[c0000000028c7d50] [c000000000148748] .cpu_startup_entry+0x38/0x40
-[c0000000028c7dd0] [c0000000000113a8] .rest_init+0x168/0x170
-[c0000000028c7e60] [c000000002004224] .arch_post_acpi_subsys_init+0x0/0x24
-[c0000000028c7ed0] [c000000002004ba8] .start_kernel+0x8d0/0x924
-[c0000000028c7f90] [c00000
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index ce89611a136e..2619cc47b97c 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -134,6 +134,7 @@ struct mmc_blk_data {
+ 	 * track of the current selected device partition.
+ 	 */
+ 	unsigned int	part_curr;
++#define MMC_BLK_PART_INVALID	UINT_MAX	/* Unknown partition active */
+ 	int	area_type;
+ 
+ 	/* debugfs files (only in main mmc_blk_data) */
+@@ -987,33 +988,39 @@ static unsigned int mmc_blk_data_timeout_ms(struct mmc_host *host,
+ 	return ms;
+ }
+ 
++/*
++ * Attempts to reset the card and get back to the requested partition.
++ * Therefore any error here must result in cancelling the block layer
++ * request, it must not be reattempted without going through the mmc_blk
++ * partition sanity checks.
++ */
+ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
+ 			 int type)
+ {
+ 	int err;
++	struct mmc_blk_data *main_md = dev_get_drvdata(&host->card->dev);
+ 
+ 	if (md->reset_done & type)
+ 		return -EEXIST;
+ 
+ 	md->reset_done |= type;
+ 	err = mmc_hw_reset(host->card);
++	/*
++	 * A successful reset will leave the card in the main partition, but
++	 * upon failure it might not be, so set it to MMC_BLK_PART_INVALID
++	 * in that case.
++	 */
++	main_md->part_curr = err ? MMC_BLK_PART_INVALID : main_md->part_type;
++	if (err)
++		return err;
+ 	/* Ensure we switch back to the correct partition */
+-	if (err) {
+-		struct mmc_blk_data *main_md =
+-			dev_get_drvdata(&host->card->dev);
+-		int part_err;
+-
+-		main_md->part_curr = main_md->part_type;
+-		part_err = mmc_blk_part_switch(host->card, md->part_type);
+-		if (part_err) {
+-			/*
+-			 * We have failed to get back into the correct
+-			 * partition, so we need to abort the whole request.
+-			 */
+-			return -ENODEV;
+-		}
+-	}
+-	return err;
++	if (mmc_blk_part_switch(host->card, md->part_type))
++		/*
++		 * We have failed to get back into the correct
++		 * partition, so we need to abort the whole request.
++		 */
++		return -ENODEV;
++	return 0;
+ }
+ 
+ static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int type)
+@@ -1868,7 +1875,8 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue *mq, struct request *req)
+ 
+ 	/* Reset before last retry */
+ 	if (mqrq->retries + 1 == MMC_MAX_RETRIES)
+-		mmc_blk_reset(md, card->host, type);
++		if (mmc_blk_reset(md, card->host, type))
++			return;
+ 
+ 	/* Command errors fail fast, so use all MMC_MAX_RETRIES */
+ 	if (brq->sbc.error || brq->cmd.error)
+-- 
+2.37.3
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
