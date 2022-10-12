@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0165FC96B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8E95FC96D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiJLQqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S229641AbiJLQqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJLQqA (ORCPT
+        with ESMTP id S230009AbiJLQqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:46:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3044DD8ED5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:45:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8359B81B7D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50E7C433C1;
-        Wed, 12 Oct 2022 16:45:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AVbEDK+R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665593150;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TSht1t3DJSD+hCa5eztAtyyaCNDlKdgo6SBIjdjkWrQ=;
-        b=AVbEDK+RM/LtmdRyRgkFg9SfqjpWY/wu5EEuGoqtLZgO9lwLm2SHEMBqU5dMljE4PHW9N5
-        +s20+E+Bnj81IM20QVgXJqiYTZRoWgDJcAORwAt2JPLM+F1u77oUPDwlx2lC7gZy3P1AQl
-        CD6vl9emDlZQwmQ0bbSy/vlKEGnl0JQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8392b9ce (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 12 Oct 2022 16:45:50 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 10:45:46 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        ajd@linux.ibm.com, aneesh.kumar@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
-        cuigaosheng1@huawei.com, david@redhat.com, farosas@linux.ibm.com,
-        geoff@infradead.org, gustavoars@kernel.org, haren@linux.ibm.com,
-        hbathini@linux.ibm.com, joel@jms.id.au, lihuafei1@huawei.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
-        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
-        pali@kernel.org, paul@paul-moore.com, rmclure@linux.ibm.com,
-        ruscur@russell.cc, windhl@126.com,
-        wsa+renesas@sang-engineering.com, ye.xingchen@zte.com.cn,
-        yuanjilin@cdjrlc.com, zhengyongjun3@huawei.com
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
-Message-ID: <Y0bvOreqH2BdyVqt@zx2c4.com>
-References: <87edvhntv0.fsf@mpe.ellerman.id.au>
- <20221012141827.GA2405914@roeck-us.net>
- <Y0biBtCUtc2mowbQ@zx2c4.com>
+        Wed, 12 Oct 2022 12:46:14 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093A3D9971
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:46:12 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so2597255pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4/SxT9WXP86l+o0DWBekitp4ZdIgzH5udKb6UlO/lM=;
+        b=ib+6UivP//E8nL8k6ksvAUIJQTZ3hvKI9UQtlL90TePrFXIvmB+s3vBimAD/hRcfsK
+         L7itR2oOUL+cCDxmX75z6BCSSl9pCv5fKm4J8Qj8uDL1rN0E8LVKjySfjuQCbFjPXBVh
+         RD6jTPfkB7KhQNAxGERTyj/bdff+EDzrMAkEYQ3kPWssrPad0mpgfZMvBkbTH9RZAJ2T
+         PiMe+8MHBJmomArLumtsec5n3c97jhglfm7+QMhWTOwtCaI/+am0mgEk+5n5ywBxvsei
+         Y+1g2rfj8TF8WVe9WT/3WffEr1eDR9GKceZY5Aa29bJoJoSvg7DZsTXcwOAbJGQu6eAC
+         5omQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4/SxT9WXP86l+o0DWBekitp4ZdIgzH5udKb6UlO/lM=;
+        b=Wm/Ao1gRFEH+fH9GW06yPxT3QyDYjMGEez3FxJ7XuBIYIMGVX9umvOopimfNGD56To
+         k6JrD+HRzGsrjWYU9Xu/Z4FROtqM7HYS99Gikv3hr+fjZP07TEr5ad5Vdqpw936nYlVv
+         Xauvfqqar9WuU7Zmhm/LffzKavHFTZO8di52oHGSoYIBsGgvAUpd6lEgGWXB5rzYrH/j
+         GD9vhqZHhOdAAqogcPQ2AWxAU/ZZoIiCopMWI0NyvLBXjM47w69M/f/Ve08wdQ7oEAkd
+         VX149MAQG3072SA6zDIQvF2c5ojxwdbCO8cC2ESJZtXu1IJGRA3gXjq2Cv8uzm48TUcx
+         2FjQ==
+X-Gm-Message-State: ACrzQf0EqMqGywdw5dxDvvnX1lLsOTy0RMEpvFpuF9LfreY7Z63Th23Z
+        D51z5qLItFxaKR4K87Q14noyJw==
+X-Google-Smtp-Source: AMsMyM6alaWfTTlvUHvRgG4dPW7MCm9VOEIR2aj0c7pDunNqsAfe37N6LDR3WNl6bxsU5oTHZrEvIg==
+X-Received: by 2002:a17:902:ef47:b0:179:d18e:4262 with SMTP id e7-20020a170902ef4700b00179d18e4262mr29808345plx.22.1665593171139;
+        Wed, 12 Oct 2022 09:46:11 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b0020a0571b354sm1627890pjs.57.2022.10.12.09.46.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:46:10 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 16:46:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
+ in kvm_set_pte_rmapp()
+Message-ID: <Y0bvT8k9vlDUPup+@google.com>
+References: <cover.1665214747.git.houwenlong.hwl@antgroup.com>
+ <0ce24d7078fa5f1f8d64b0c59826c50f32f8065e.1665214747.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0biBtCUtc2mowbQ@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <0ce24d7078fa5f1f8d64b0c59826c50f32f8065e.1665214747.git.houwenlong.hwl@antgroup.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,44 +80,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 09:49:26AM -0600, Jason A. Donenfeld wrote:
-> On Wed, Oct 12, 2022 at 07:18:27AM -0700, Guenter Roeck wrote:
-> > NIP [c000000000031630] .replay_soft_interrupts+0x60/0x300
-> > LR [c000000000031964] .arch_local_irq_restore+0x94/0x1c0
-> > Call Trace:
-> > [c000000007df3870] [c000000000031964] .arch_local_irq_restore+0x94/0x1c0 (unreliable)
-> > [c000000007df38f0] [c000000000f8a444] .__schedule+0x664/0xa50
-> > [c000000007df39d0] [c000000000f8a8b0] .schedule+0x80/0x140
-> > [c000000007df3a50] [c00000000092f0dc] .try_to_generate_entropy+0x118/0x174
-> > [c000000007df3b40] [c00000000092e2e4] .urandom_read_iter+0x74/0x140
-> > [c000000007df3bc0] [c0000000003b0044] .vfs_read+0x284/0x2d0
-> > [c000000007df3cd0] [c0000000003b0d2c] .ksys_read+0xdc/0x130
-> > [c000000007df3d80] [c00000000002a88c] .system_call_exception+0x19c/0x330
-> > [c000000007df3e10] [c00000000000c1d4] system_call_common+0xf4/0x258
+On Mon, Oct 10, 2022, Hou Wenlong wrote:
+> When the spte of hupe page is dropped in kvm_set_pte_rmapp(), the whole
+> gfn range covered by the spte should be flushed. However,
+> rmap_walk_init_level() doesn't align down the gfn for new level like tdp
+> iterator does, then the gfn used in kvm_set_pte_rmapp() is not the base
+> gfn of huge page. And the size of gfn range is wrong too for huge page.
+> Use the base gfn of huge page and the size of huge page for flushing
+> tlbs for huge page. Also introduce a helper function to flush the given
+> page (huge or not) of guest memory, which would help prevent future
+> buggy use of kvm_flush_remote_tlbs_with_address() in such case.
 > 
-> Obviously the first couple lines of this concern me a bit. But I think
-> actually this might just be a catalyst for another bug. You could view
-> that function as basically just:
+> Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c          |  4 +++-
+>  arch/x86/kvm/mmu/mmu_internal.h | 10 ++++++++++
+>  2 files changed, 13 insertions(+), 1 deletion(-)
 > 
->     while (something)
->     	schedule();
-> 
-> And I guess in the process of calling the scheduler a lot, which toggles
-> interrupts a lot, something got wedged.
-> 
-> Curious, though, I did try to reproduce this, to no avail. My .config is
-> https://xn--4db.cc/rBvHWfDZ . What's yours?
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 7de3579d5a27..4874c603ed1c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1430,7 +1430,9 @@ static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+>  	}
+>  
+>  	if (need_flush && kvm_available_flush_tlb_with_range()) {
+> -		kvm_flush_remote_tlbs_with_address(kvm, gfn, 1);
+> +		gfn_t base = gfn_round_for_level(gfn, level);
+> +
+> +		kvm_flush_remote_tlbs_gfn(kvm, base, level);
+>  		return false;
+>  	}
+>  
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index 17488d70f7da..249bfcd502b4 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -168,8 +168,18 @@ void kvm_mmu_gfn_allow_lpage(const struct kvm_memory_slot *slot, gfn_t gfn);
+>  bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm,
+>  				    struct kvm_memory_slot *slot, u64 gfn,
+>  				    int min_level);
+> +
+>  void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
+>  					u64 start_gfn, u64 pages);
+> +
+> +/* Flush the given page (huge or not) of guest memory. */
+> +static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_t gfn, int level)
+> +{
+> +	u64 pages = KVM_PAGES_PER_HPAGE(level);
+> +
 
-I also just tried using your github linux-build-test scripts as a guide
-for construction a config -- https://xn--4db.cc/B0HpEQDQ -- and loaded
-up your rootfs over sdhci and such, and still couldn't manage to
-reproduce. I tried commenting out the line "if (!bits)" in
-_credit_init_bits(), so that the rng would never initialize, so that the
-schedule() loop would just keep on running indefinitely, but still no
-dice.
+Rather than require the caller to align gfn, what about doing gfn_round_for_level()
+in this helper?  It's a little odd that the caller needs to align gfn but doesn't
+have to compute the size.
 
-But also, I'm running Linus' tree. From your log, I see
-"6.0.0-rc2-00163-ga5edf9815dd7". So maybe these bugs got fixed
-elsewhere?
+I'm 99% certain kvm_set_pte_rmap() is the only path that doesn't already align the
+gfn, but it's nice to not have to worry about getting this right, e.g. alternatively
+this helper could WARN if the gfn is misaligned, but that's _more work.
 
-Jason
+	kvm_flush_remote_tlbs_with_address(kvm, gfn_round_for_level(gfn, level),
+					   KVM_PAGES_PER_HPAGE(level);
+
+If no one objects, this can be done when the series is applied, i.e. no need to
+send v5 just for this.
+
+
+> +	kvm_flush_remote_tlbs_with_address(kvm, gfn, pages);
+> +}
+> +
+>  unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
+>  
+>  extern int nx_huge_pages;
+> -- 
+> 2.31.1
+> 
