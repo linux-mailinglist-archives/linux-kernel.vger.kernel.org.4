@@ -2,116 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7845FBED9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 03:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF3B5FBEDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 03:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJLBdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 21:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S229600AbiJLBfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 21:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJLBdv (ORCPT
+        with ESMTP id S229591AbiJLBfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 21:33:51 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64AE82D14;
-        Tue, 11 Oct 2022 18:33:49 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MnFVW4z6fzKF7N;
-        Wed, 12 Oct 2022 09:31:31 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAnKMp6GUZjH6SIAA--.46401S3;
-        Wed, 12 Oct 2022 09:33:48 +0800 (CST)
-Subject: Re: [PATCH -next 4/5] blk-iocost: bypass if only one cgroup issues io
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221011083547.1831389-1-yukuai1@huaweicloud.com>
- <20221011083547.1831389-5-yukuai1@huaweicloud.com>
- <Y0WhpuqK/8CEZAGc@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <c19008c3-512e-92cc-6be1-3ecc24e74341@huaweicloud.com>
-Date:   Wed, 12 Oct 2022 09:33:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 11 Oct 2022 21:35:18 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD03F5AC52;
+        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id e129so14264921pgc.9;
+        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Iv50hxDOHDOsgzOAMRq0QBK53acG/P2BUJFVAKGAT4o=;
+        b=RNhHYy1UfHXMhd5n5YAnce/Zp70WW6q9uoBYfQrhK1zu9MvI4ebhewW12jIx0SNz9R
+         +M/xG/u16A0yXJSmO++vuRMShouqpRwgJOjTcOggxIcoRgP8wpibOSPkZYuAw1Y0s91C
+         rMatDckiihko0xHYquALUnmLv0//XTalaueU/gKb1Ggv1gxUVgeN1yscEVyKD8BI/WR+
+         RKi/tKIcrtKwSPejHtInDDJyDW+7knAAdIwF6a5ynYuwL/lcwjChvqLMRHpqhWUHSRMR
+         6AQtJuBLhwQZliEoD1oZ3dR/SjzpEB9pGmXrztHEezssfs3UOIUxxSJ/TLRNjq3CCbHj
+         rYEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iv50hxDOHDOsgzOAMRq0QBK53acG/P2BUJFVAKGAT4o=;
+        b=2oBJmjWY5crixx91qgfimIR5g3ef6FEhTD7nT8Qyfc7aJ7xb9k7nSj/eLFOHcek/5p
+         /WrNV5s09EPGMDk6XJHi2ZZM1vbqyCEoMHMXJnI1w/KplXf3cn0roXFSwP3g1o09eNRD
+         VyNc4t7DDSIhmUEDFPWTHtqL7TkRwAmzDUj1iJThTTyCElj6s2xzyjfZocjh/kIHzRr8
+         KBgJ3a4uQE+5MPEycwVcqAjIoJ2l9QcItMmodTq2oe0KF3+7kVrj8WBiJG6xfMseVz3g
+         38F9gEMxj7m7CG9q3reyikpAU+amETUaKB6bziep/Pupe/XAmEx6hrd6hYHPxb8KflvH
+         xMmg==
+X-Gm-Message-State: ACrzQf0VnD0BI16Uy+GfydldzjcNcMF/PP3p3ecSe7SulPAmsNR0a5qC
+        0fVoId0ADEfQrUqUZf9tozo=
+X-Google-Smtp-Source: AMsMyM5oBIu8PXuIxBRmKnnpErAVdRzStgCkrL1aBvmTfHnz+x+lClsxCe5ZnkYRl0jp9GK59mOp6Q==
+X-Received: by 2002:a05:6a00:1781:b0:561:7f7f:dc38 with SMTP id s1-20020a056a00178100b005617f7fdc38mr28362340pfg.42.1665538516114;
+        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w10-20020a62820a000000b0052dfe83e19csm9986097pfd.16.2022.10.11.18.35.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 18:35:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
+Date:   Tue, 11 Oct 2022 18:35:13 -0700
 MIME-Version: 1.0
-In-Reply-To: <Y0WhpuqK/8CEZAGc@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     karthik gengan <gengankarthik@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
+ supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
+In-Reply-To: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAnKMp6GUZjH6SIAA--.46401S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww47Xr1kXr1fZw17Kw45Jrb_yoW8WFWkpr
-        ZrGanYya98Wr92k3ZagaySq34Fq3yvg3W0yr1fCw15Ar9xCr9IyFs7Ar45CF18Zrs3XrWI
-        qFsxJryrCF1UC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tejun!
-
-�� 2022/10/12 1:02, Tejun Heo д��:
-> On Tue, Oct 11, 2022 at 04:35:46PM +0800, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> In this special case, there is no need to throttle io.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   block/blk-iocost.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
->> index 5acc5f13bbd6..32e7e416d67c 100644
->> --- a/block/blk-iocost.c
->> +++ b/block/blk-iocost.c
->> @@ -2564,8 +2564,13 @@ static void ioc_rqos_throttle(struct rq_qos *rqos, struct bio *bio)
->>   	bool use_debt, ioc_locked;
->>   	unsigned long flags;
->>   
->> -	/* bypass IOs if disabled, still initializing, or for root cgroup */
->> -	if (!ioc->enabled || !iocg || !iocg->level)
->> +	/*
->> +	 * bypass IOs if disabled, still initializing, for root cgroup,
->> +	 * or the cgroup is the only cgroup with io.
->> +	 */
->> +	if (!ioc->enabled || !iocg || !iocg->level ||
->> +	    (iocg->hweight_inuse == WEIGHT_ONE &&
->> +	     atomic_read(&ioc->hweight_gen) == iocg->hweight_gen))
+On 10/11/22 16:59, karthik gengan wrote:
+> Linear mode config calculation is based on the exponent value
+> derived from vout_mode. So vout_mode value should be valid
+> for PMBUS_VOUT_MODE command-supported chips.
 > 
-> I'm not sure about this one. Bypassing here means that we lose track of how
-> much IO it's issuing which can affect future throttling decisions, right?
 
-Yes, you're right, this patch doesn't look good in this case.
+We can not do this. The operational word is "should". See comment
+below "Not all chips support the VOUT_MODE command". It is what it is.
+We can not just refuse to support such chips because they don't
+support what we expect them to support.
 
-The reason why I tried to do this is because during test, I found that
-io performance is affected when I only issue io from one cgroup��only
-happened in some environment with default configuration��, and I found
-out that each io is throttled for some time before dispatching.
+Sure, those chips will (likely) report wrong values since the
+exponent will default to 0. That can be adjusted in user space,
+or whoever finds such a chip can provide a back-end driver
+with the appropriate values configured (for example by providing
+a dummy VOUT_MODE command response). That is better than just
+rejecting the chip entirely.
 
-Perhaps a suitable configuration can avoid this problem.
+ From a practical perspective, if you know about an affected chip
+one that would refuse to instantiate after your patch is applied,
+I would suggest to submit (or improve) a back-end driver with
+an explanation instead.
 
 Thanks,
-Kuai
+Guenter
 
+> Signed-off-by: karthik.gengan <gengankarthik@gmail.com <mailto:gengankarthik@gmail.com>>
+> ---
+>   drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> Thanks.
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 7ec04934747e..5f80c3b8f245 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2507,9 +2507,17 @@ static int pmbus_identify_common(struct i2c_client *client,
+>   {
+>      int vout_mode = -1;
 > 
+> -   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
+> +   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE)) {
+>          vout_mode = _pmbus_read_byte_data(client, page,
+>                            PMBUS_VOUT_MODE);
+> +       /*
+> +        * If the client page supports PMBUS_VOUT_MODE,
+> +        * then the output of the VOUT_MODE command should
+> +        * be a valid value for linear mode calculation.
+> +        */
+> +       if ((data->info->format[PSC_VOLTAGE_OUT] == linear) && (vout_mode < 0))
+> +           return -ENODEV;
+> +   }
+>      if (vout_mode >= 0 && vout_mode != 0xff) {
+>          /*
+>           * Not all chips support the VOUT_MODE command,
+> --
+> 2.25.1
+> 
+
 
