@@ -2,153 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DD65FC16D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255885FC16E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiJLHu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 03:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
+        id S229762AbiJLHvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 03:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJLHuY (ORCPT
+        with ESMTP id S229586AbiJLHvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 03:50:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC3924C037;
-        Wed, 12 Oct 2022 00:50:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B7FBE15A1;
-        Wed, 12 Oct 2022 00:50:28 -0700 (PDT)
-Received: from [10.162.41.10] (unknown [10.162.41.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E86C3F67D;
-        Wed, 12 Oct 2022 00:50:19 -0700 (PDT)
-Message-ID: <31b72985-5c12-b421-0cec-3c6b027a7070@arm.com>
-Date:   Wed, 12 Oct 2022 13:20:16 +0530
+        Wed, 12 Oct 2022 03:51:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9852564E0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 00:51:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 748FD61452
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1627C433C1;
+        Wed, 12 Oct 2022 07:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665561111;
+        bh=UXhkkQ4MVDfaNPAPLmIXIH0sALSXdfSP/Izku8psacE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IyyvwzAkL048bUiAUEKHbKRGtEapFy8aUh1TdlB6W+e0IoC8WDnJCaxZr6747Xf0O
+         ivw0MV05ssJPo3jOhMJ88PquYRPm/dqdu6x/PfItI0mgCtYUiJnkgPKSoU5E0/YWmn
+         DxYLyL8i0IKMPAvfaTun6r2iEzcjuNActXUxo0/6z2fZehse5hEnYIou84Q3aODF3t
+         6o0DKPiNbZQxkPdUpSB3Kw6P7jesl/J8g61TwS3UO6IGGggm9LGO2d8o5cY/aExtZN
+         NYE1bsQbAUJhnLqtEXj++zrNK9SRkCd+F35qRPapeTPAZAQ2J6QH9/0TKv5JGMkGdU
+         +nNIxRDgZ/b8w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oiWWr-00Fzb1-JU;
+        Wed, 12 Oct 2022 08:51:49 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Colin King <colin.i.king@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] irqchip fixes for 6.1, take #1
+Date:   Wed, 12 Oct 2022 08:51:25 +0100
+Message-Id: <20221012075125.1244143-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3 4/7] driver/perf/arm_pmu_platform: Add support for BRBE
- attributes detection
-Content-Language: en-US
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-References: <20220929075857.158358-1-anshuman.khandual@arm.com>
- <20220929075857.158358-5-anshuman.khandual@arm.com>
- <02ce379c-c718-b72d-fc74-cd8c904265fb@arm.com>
- <bf70b7d6-0564-7ae3-6fe6-24483461839b@arm.com>
- <d82de618-9e97-3d5d-f4eb-7710e9094001@arm.com>
-In-Reply-To: <d82de618-9e97-3d5d-f4eb-7710e9094001@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, colin.i.king@gmail.com, Frank.Li@nxp.com, geert+renesas@glider.be, vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
+Here are 3 irqchip fixes for 6.1, addressing a couple of issues found
+in the newly merged IMX-MU driver, as well as one for the ls-extirq
+driver. Nothing exciting.
 
-On 10/11/22 14:51, Anshuman Khandual wrote:
-> 
-> On 10/10/22 19:47, James Clark wrote:
->>
->> On 06/10/2022 14:37, James Clark wrote:
->>>
->>> On 29/09/2022 08:58, Anshuman Khandual wrote:
->>>> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
->>>> driver exported callbacks later. The actual BRBE feature detection will be
->>>> added by the driver itself.
->>>>
->>>> CPU specific BRBE entries, cycle count, format support gets detected during
->>>> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
->>>> later helps in operating BRBE during a perf event context.
->>>>
->>>> Cc: Will Deacon <will@kernel.org>
->>>> Cc: Mark Rutland <mark.rutland@arm.com>
->>>> Cc: linux-arm-kernel@lists.infradead.org
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> ---
->>>>  drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
->>>>  1 file changed, 34 insertions(+)
->>>>
->>>> diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
->>>> index 933b96e243b8..acdc445081aa 100644
->>>> --- a/drivers/perf/arm_pmu_platform.c
->>>> +++ b/drivers/perf/arm_pmu_platform.c
->>>> @@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
->>>>  	return err;
->>>>  }
->>>>  
->>>> +static void arm_brbe_probe_cpu(void *info)
->>>> +{
->>>> +	struct pmu_hw_events *hw_events;
->>>> +	struct arm_pmu *armpmu = info;
->>>> +
->>>> +	/*
->>>> +	 * Return from here, if BRBE driver has not been
->>>> +	 * implemented for this PMU. This helps prevent
->>>> +	 * kernel crash later when brbe_probe() will be
->>>> +	 * called on the PMU.
->>>> +	 */
->>>> +	if (!armpmu->brbe_probe)
->>>> +		return;
->>>> +
->>>> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
->>>> +	armpmu->brbe_probe(hw_events);
->>>> +}
->>>> +
->>>> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
->>>> +{
->>>> +	int cpu, err = 0;
->>>> +
->>>> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
->>>> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
->>> Hi Anshuman,
->>>
->>> I have LOCKDEP on and the patchset applied to perf/core (82aad7ff7) on
->>> git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git and I get
->> Can you confirm if this is currently the correct place to apply this to?
-> This series applied on v6.0-rc5 after the perf ABI changes, both in kernel
-> and in user space tools.
-> 
->> I'm only getting 0 length branch stacks now. Seems like it could be
->> something to do with the layout of perf samples because I know that was
->> done in separate commits:
-> Right, might be.
-> 
->>   sudo ./perf record -j any_call -- ls
->>   ./perf report -D | grep "branch stack"
->>   ... branch stack: nr:0
->>   ... branch stack: nr:0
->>   ... branch stack: nr:0
->>   ... branch stack: nr:0
-> I am planning to respin the series on 6.1-rc1 next week which should solve
-> these multiple moving parts problem
+Please pull,
 
-There are some recent changes which require PMU driver to set data.sample_flags
-indicating what kind of records are being filled in there. Here are the commits
+	M.
 
-a9a931e2666878343 ("perf: Use sample_flags for branch stack")
-3aac580d5cc3001ca ("perf: Add sample_flags to indicate the PMU-filled sample data")
+The following changes since commit 732d69c80cb04a587d9ec2935bcb63989e66eb92:
 
-Following fix solves the problem for BRBE driver.
+  Merge branch irq/misc-6.1 into irq/irqchip-next (2022-09-29 17:21:16 +0100)
 
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index 98e9a615d3cb..85a3aaefc0fb 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -877,6 +877,7 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
-                if (has_branch_stack(event)) {
-                        cpu_pmu->brbe_read(cpuc, event);
-                        data.br_stack = &cpuc->branches->brbe_stack;
-+                       data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
-                        cpu_pmu->brbe_reset(cpuc);
-                }
- 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-6.1-1
+
+for you to fetch changes up to 6c9f7434159b96231f5b27ab938f4766e3586b48:
+
+  irqchip: IMX_MU_MSI should depend on ARCH_MXC (2022-10-12 08:43:59 +0100)
+
+----------------------------------------------------------------
+irqchip fixes for 6.1, take #1
+
+- Fix IMX-MU Kconfig, keeping it private to IMX
+
+- Fix a register offset for the same IMX-MU driver
+
+- Fix the ls-extirq irqchip driver that would use the wrong
+  flavour of spinlocks
+
+----------------------------------------------------------------
+Frank Li (1):
+      irqchip/imx-mu-msi: Fix wrong register offset for 8ulp
+
+Geert Uytterhoeven (1):
+      irqchip: IMX_MU_MSI should depend on ARCH_MXC
+
+Vladimir Oltean (1):
+      irqchip/ls-extirq: Fix invalid wait context by avoiding to use regmap
+
+ drivers/irqchip/Kconfig          |  7 ++--
+ drivers/irqchip/irq-imx-mu-msi.c |  2 +-
+ drivers/irqchip/irq-ls-extirq.c  | 87 +++++++++++++++++++++++++++++-----------
+ 3 files changed, 68 insertions(+), 28 deletions(-)
