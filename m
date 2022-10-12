@@ -2,244 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452C35FC56F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565C25FC5C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJLMgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S229880AbiJLM7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiJLMgb (ORCPT
+        with ESMTP id S229811AbiJLM7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:36:31 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4401DF00;
-        Wed, 12 Oct 2022 05:36:29 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MnXCV6ZjLzl9XM;
-        Wed, 12 Oct 2022 20:34:30 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgCXl8nJtEZjnY6gAA--.12812S4;
-        Wed, 12 Oct 2022 20:36:27 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     axboe@kernel.dk, gregkh@linuxfoundation.org, willy@infradead.org,
-        kch@nvidia.com, martin.petersen@oracle.com,
-        johannes.thumshirn@wdc.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH RFC] block: fix use after free for bd_holder_dir/slave_dir
-Date:   Wed, 12 Oct 2022 20:58:38 +0800
-Message-Id: <20221012125838.1608619-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
+        Wed, 12 Oct 2022 08:59:17 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E48B9783;
+        Wed, 12 Oct 2022 05:59:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VDmzA8M+6MdRR/NIAMvncReGhmwtwMew1/nc7IOREJlFRaClcF2Kry4Oj1h64Oc7sTwDGLZpTZ91ai8p4yEhrOrED9AXYMjP4Zd1E/QoF7RabkSeC46OGnU68vLoiop3+iRfJPiM2vABVde6L20djPTHLiGC8bvhHfN6Yuy/cuON2Ws777LwnUq+eIPRk3a9JY34qX84NwgE/bbHna1CPjaFLhjJhmgWyiYtnXUiDKa2A/z5gDbuBjKTilQuqDK3rmoMj/XDzpIpAl8kjBrX0UvvIrzLs9bglidEerXSZt0P89SHwNnf/d8y6Bgxc8Xp03/qvYPcbC1ncFU4PHpFVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=okX+mvxr3HcRfNe7xur7BUtptqQ3buJrufgtx9DMvvY=;
+ b=kjuX2wPfR7vSX/b6+tOriRVuxHXSXO5QMUDw4QjirjJdv8QP0pD7CbTubWz5rsESpVav4XIzBIFoCnwodYuyBno+aUR4LlxFGcO9dkbAnnhgM3xGWrah2f10HQu/pWhSWtamNCSRscW0Up44uNDuF6aW504+uu8m3Mm5YQ/ciRGhrU7WYhphEREA9I7udTBQwj1oXDI5hV/XMfoO++y7Yi9qVwPt713GtWWg50TSHfgTpZg8s93p+HpCY7GaB2N85o1jxyHQHnHBm5W5Qmz5WXOO+FIyrXVlWwOHG0RFkYsMwgTARPPWrmq58dB+uEawef+ZHObRy5fWMYoAoEp1OQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=okX+mvxr3HcRfNe7xur7BUtptqQ3buJrufgtx9DMvvY=;
+ b=0Kz83Ur0oLFEk4DwXeAhrD6MabvbVabAIPV/VMqiLHkxaEaa4gHr6WbBHx09HhiatEJmKRQdLLCNLn7q2FlA0nxqN6jAHWCBOIXakRGG9ID7tBSHzcvYY4F9I71fOl/wGA9kjkji/Pxc2qY3LENZd3U71+sp0IcnFeSvsR0Qfp8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CH0PR12MB5060.namprd12.prod.outlook.com (2603:10b6:610:e3::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Wed, 12 Oct
+ 2022 12:59:05 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::76ec:6acf:dd4d:76a3]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::76ec:6acf:dd4d:76a3%9]) with mapi id 15.20.5676.030; Wed, 12 Oct 2022
+ 12:59:05 +0000
+Message-ID: <bbf46b1b-0c1e-7232-ce53-37878f049cf1@amd.com>
+Date:   Wed, 12 Oct 2022 07:59:02 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3] xhci-pci: Set runtime PM as default policy on all xHC
+ 1.2 or later devices
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221010160022.647-1-mario.limonciello@amd.com>
+ <Y0T68lC6bUY7dg7D@black.fi.intel.com>
+ <7c08c4c8-562d-553f-e513-c925080300a7@linux.intel.com>
+ <MN0PR12MB6101ECEA1CCED9B65667031DE2239@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <7df4a91d-6829-5ebf-18ca-c0783c03f443@linux.intel.com>
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <7df4a91d-6829-5ebf-18ca-c0783c03f443@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCXl8nJtEZjnY6gAA--.12812S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3ArW3Kr47WFyDGw1DCr4DArb_yoW7ZryfpF
-        s8Ga97ArW8WryDuw47Xa4xWr1UJa1DJwn7Gasa9r4I9r43A3yqyFyUtrW7ua47WryfCFW5
-        Z3WDt3W5Jr18G37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SN1PR12CA0054.namprd12.prod.outlook.com
+ (2603:10b6:802:20::25) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH0PR12MB5060:EE_
+X-MS-Office365-Filtering-Correlation-Id: ddfef65e-bd33-43b2-0a98-08daac518b1e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9vAQB2QQ5dHcdgfJtcI+0I2hxW9G6UXxsWFUuOZ5LQDkdsvnY6DIOyMPanzsALzk3CU5lTqt251eM3frdEJGwc8nlDbBjC+O+E6UNVXyUXaW22ceYIxkZ8Z6+Y5cW374a3FGUCSXmdYG4KkwthHMdai0ryxVgZNu5TnFcwXCFlG7tfrvC4WMKfuDiH7amsaoh9bNHml/HyFxN4A3ohnX15M/hIng/D4D5AvKoeqYhXr1m2iT/wkdFjOiG1dIrg8agYgV7vLwrtwcAgg8OnTt2LFF9+dkCnJVhZWuNIf+OEhLcDBzSBS0l3hO8NlPo9CNWJaqdJN6sDWyOeuqvQhDYd1Y20Er4XtJ3+4tG/LyEFG5NI0jCz670Tna7ChI7zNSD/ybeuI3IR2KCZac79CByetnZEECN5lE4WSw+Rqrcc4srHB2yHSOlqwMX+LITHX0iJzMz0LB43cs4vjptZwGu1mUKu1s9faOjsWvLfA0jlmFQj+QAl57tGT8rKwmqiKCuxL4AROS7hUObaXK+T7x1aH6hucO1Yjwj2QRr/q2j/jSCR7h8HEfDh8CM/9QvppJ8mOjPPD/Ec9QCVINi71IcN4YmAYrSGiZ6uEQpz53mZxY2Ih3eIYS38qg7dKRWSxu7hD4hqMDzX395kqM0rgj5Bb2deHpJ7JT9svYqFV80YwAPrSszBNij3fglcPj6WoVJoG9+OS72IhECtWfHAQH55jx705dY6sEM/skcZ9O258IiZs86z9onAJ6MlrZIvc1b7hRRIy2s62KwVRGUa1Pnx0mYPyLqQwa8TphhxMvzm0jCzoDweBk4jBMfaClDjakE+cLNyDVvAw4p+Td8pBv6w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(366004)(396003)(346002)(451199015)(83380400001)(186003)(2616005)(2906002)(31686004)(8676002)(4326008)(6666004)(53546011)(41300700001)(6506007)(38100700002)(86362001)(31696002)(36756003)(316002)(44832011)(110136005)(66476007)(54906003)(478600001)(5660300002)(26005)(66556008)(6512007)(8936002)(66946007)(966005)(6486002)(45080400002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dVdxS3lsNEdoN1UwdkdwclVQc0dJQzNkbFJWeTBTcDRDNVJQdWFRZ2JCUmgv?=
+ =?utf-8?B?a3FBa0ZGMTBzMitVUU9uY1BIRVdZWUtxbHVTU1BMNFl1cnoxenlJalc0OEgv?=
+ =?utf-8?B?R05LWDBBWm0wcUQwQ1ZWMThWdEFUQ1RObmErRkZJU1JWaDBNejVQOWNrVG4x?=
+ =?utf-8?B?TXRIemxRZThQZit6dndMT3QwbDJLQ2J2Z1hFTG9QazhNOXByTG1ER3JncjZH?=
+ =?utf-8?B?TzNvdlhwVWFVU3prQnB3V05CTGU2WC9BbThxUC9KNzhxUkNxR2xaU1AvY3Zo?=
+ =?utf-8?B?YWF2MFp2TkVXVWY3dkdxeVZGaCs5a2ZtVENtTHFoaHJVelhObXRKQTdFNnF0?=
+ =?utf-8?B?U05wZXdKaUpWNUVsd2JsOHJPZEZ3TkFOcnFOUTk2c1JWWVovaDN0Z2liU2xt?=
+ =?utf-8?B?Z2VvczFSNjBIODh2NlVWL0pYZ1NlNWRqclRTa1FoMlZPQzZLclZJR3RaZ2ZM?=
+ =?utf-8?B?bVdzR0xta1Q0Z2tzeUZwbUczL3ZCV3ArSkI5NC9wMk9JZER2S0pNd1FTc0xq?=
+ =?utf-8?B?MGpiVXJtNmZVY3JmS0w5dU1EVFpZeTc1NEVwWjlScTE5SSt2UlAyeVQ4Um5T?=
+ =?utf-8?B?aDFlblR5TEtWU2dheXVRb3ZCQnBIODJvOElMTkVUSmMreGJvRHlWdjZrL2I4?=
+ =?utf-8?B?b3F3dmFWeDMxVThSMDZYZmhpd2hKcTJ6NkpxSStGZ0lDTFhrNVoxY0tTdjgv?=
+ =?utf-8?B?RFJ3NVl6NW96Nm9nRHhSNldwSjFBbHBoZUxHOFhlZWhUcDhPM0dER2Z3YUpn?=
+ =?utf-8?B?eEZqVnY3b3ZjRmgzY042RTY2Z0ZsRG0vRGJOQjZxZEZpcXFCYWNXZGFhZTdM?=
+ =?utf-8?B?dkNpODVGT3k3bER2VE96NjZhakt6ZG9tc0xCMEo5MDJweHNqNlVPNlMzemJY?=
+ =?utf-8?B?N2plVTY0YXZXOURZTGhXUDNXU0ZtZDVsOEU4T0dOVVk1R3YxcGZFYks0TGRl?=
+ =?utf-8?B?RkFxMWt5QzRoeXJycTV1d21FdGN2a3pvWlNBbisrcHBTY0M0NnZjRFJkNm5P?=
+ =?utf-8?B?ZDdqME1adWs1MjgzWUYyYXVUait4ZjZJRGluZUh6U2RxR2trWmRjNzlmRHZ4?=
+ =?utf-8?B?MFFZbU5Gd3JYWDFpd3NqUkU4bStJYWtlVUE5Vmhwb3hYQ2dOdmlSMTQycGlH?=
+ =?utf-8?B?Z0VycEVhRTFBbEhJdmNIcFNuSXNhR0dUenNvSWNaZGZvZlhPSjdVV3llakJH?=
+ =?utf-8?B?OW1OcmNuTGVQMTlCMW83MWpEVXhaRE82dUYraUQ0UE5Gei9kNDNGK3JHUGdo?=
+ =?utf-8?B?YS9DelFpYnJqSkNNelNyRjVvOWI1Rktvd2VlRXBQbHI2akZicnBRZGxpZzBX?=
+ =?utf-8?B?anAwUi9TVC93MXhWVjV4cWh2RmdsOCtJbVdENDNrZXZFK3U3Ri9RTnRucVBp?=
+ =?utf-8?B?dlBacHhGcDRmVGxqQTBSaDhJTVNyV3B1ekVJcmI3ZjhyY3Niek1ZZHB2OVdj?=
+ =?utf-8?B?NkZEREQrY1JnUlpsYUcyT1ZGcmM2elVHWlNUd1cxVTl1YlRjOER0am0wVXpi?=
+ =?utf-8?B?UjZ4ckVKNkFaZGxVOTBnYXJRKy9TM3doQ3NtZHFvQ1VWYm10WVBpQmxKNGRU?=
+ =?utf-8?B?WjFuSmdaZkdOcVB1TE9CYWdjRWJ6emxtcXI5dmFiQm4xZE9lM1podzMyVlNY?=
+ =?utf-8?B?amp1V2g0bGJhZGZNSkRJTVRNWHU4a3I2RVEvTFhHVnFXWEFPSFNEMWtGdXpj?=
+ =?utf-8?B?RG9uTTlWWXNVdTBrY3BWSlpPcjBBOUZtVkxlYTRRSTVqRXNVUHd1WThSS0JP?=
+ =?utf-8?B?NXd2M0Y2dkJpZ0FzQmtFZTVBZDk0UzJGOVJYZlQ3V29YREZFYlpMdEZTcWhu?=
+ =?utf-8?B?N1Yrc1h3b0ZjcjBYL0thcjUzeUdMZzYzemNsMXZNd1g3KzFPQnppOHJDRU9L?=
+ =?utf-8?B?bERSUzUyRk4rWng4TXFzamhWdFJicmZKREJUaXpKamVsaHV4OHhCcDdIWHRU?=
+ =?utf-8?B?YU16UkVLOTZOSkZEbWd4UXJNMWU0RlpiUFM3d1FxU0JJMzR2WDk3ekJTTXN2?=
+ =?utf-8?B?bnUreDlGNTFqY3E0azBVbWZYQlhCMWF0VmhvakJtK0l5UDFtN1hFSDR1N2tj?=
+ =?utf-8?B?SDIwOU1sUkl5NlRwaitPNVJQNldUbVRHRHMyRFA3ZXIvdEpIRXdvZjhLTFRH?=
+ =?utf-8?Q?h7pgG9ptWWmlbtnO1kt17084w?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ddfef65e-bd33-43b2-0a98-08daac518b1e
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 12:59:05.4395
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aFPwo9i+0sxqV+in8pIH+5p29dcMs75MATiREwyptnVkhba/7LSSci13JXTGEJ79m1l+rmyQPxeAssg5UW+eLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5060
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On 10/12/22 03:34, Mathias Nyman wrote:
+> On 11.10.2022 19.46, Limonciello, Mario wrote:
+>> [Public]
+>>
+>>> -----Original Message-----
+>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>> Sent: Tuesday, October 11, 2022 08:16
+>>> To: Mika Westerberg <mika.westerberg@linux.intel.com>; Limonciello,
+>>> Mario <Mario.Limonciello@amd.com>
+>>> Cc: Mathias Nyman <mathias.nyman@intel.com>; Mehta, Sanju
+>>> <Sanju.Mehta@amd.com>; Greg Kroah-Hartman
+>>> <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
+>>> kernel@vger.kernel.org
+>>> Subject: Re: [PATCH v3] xhci-pci: Set runtime PM as default policy on 
+>>> all xHC
+>>> 1.2 or later devices
+>>>
+>>> On 11.10.2022 8.11, Mika Westerberg wrote:
+>>>> On Mon, Oct 10, 2022 at 11:00:21AM -0500, Mario Limonciello wrote:
+>>>>> For optimal power consumption of USB4 routers the XHCI PCIe endpoint
+>>>>> used for tunneling must be in D3.  Historically this is accomplished
+>>>>> by a long list of PCIe IDs that correspond to these endpoints because
+>>>>> the xhci_hcd driver will not default to allowing runtime PM for all
+>>>>> devices.
+>>>>>
+>>>>> As both AMD and Intel have released new products with new XHCI
+>>> controllers
+>>>>> this list continues to grow. In reviewing the XHCI specification 
+>>>>> v1.2 on
+>>>>> page 607 there is already a requirement that the PCI power management
+>>>>> states D3hot and D3cold must be supported.
+>>>>>
+>>>>> In the quirk list, use this to indicate that runtime PM should be 
+>>>>> allowed
+>>>>> on XHCI controllers. The following controllers are known to be xHC 
+>>>>> 1.2 and
+>>>>> dropped explicitly:
+>>>>> * AMD Yellow Carp
+>>>>> * Intel Alder Lake
+>>>>> * Intel Meteor Lake
+>>>>> * Intel Raptor Lake
+>>>>>
+>>>>> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>> Link:
+>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fww
+>>> w.intel.com%2Fcontent%2Fdam%2Fwww%2Fpublic%2Fus%2Fen%2Fdocum
+>>> ents%2Ftechnical-specifications%2Fextensible-host-controler-interface-usb-
+>>> xhci.pdf&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7Cb286e9c
+>>> 63e9e4c3a1a3708daab8a9b23%7C3dd8961fe4884e608e11a82d994e183d%7C0
+>>> %7C0%7C638010909687542135%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
+>>> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%
+>>> 7C%7C%7C&amp;sdata=CetIs1VuAqj8nNBoLnXaGncw6Sl4JcImYY67JpVxyjg%
+>>> 3D&amp;reserved=0
+>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>>
+>>>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>>>
+>>> Thanks, added to queue
+>>
+>> Thanks!
+>> For my own clarity - is this something you'll still take to 6.1, or 
+>> are you meaning
+>> 6.2 queue at this point?
+> 
+> Was planning on sending it to usb-next after 6.1-rc1 is out, so ending 
+> up in 6.2
+> But if there's some benefit in having this already in 6.1 then I don't 
+> object that either.
+> 
 
-Our test report a following uaf:
+It's a blocker causing higher power consumption on some of the affected 
+platforms.  So if you're amenable, I would like to see it for 6.1 so 
+these things have a better chance at passing energy certifications.
 
-==================================================================
-BUG: KASAN: use-after-free in sysfs_remove_link+0x23/0x60
-Read of size 8 at addr ffff888117398db0 by task dmsetup/1097
+>>
+>> This thread originated from enabling Pink Sardine.  Wherever it lands 
+>> after it's
+>> baked for $long_enough I would like to bring it back to stable 
+>> eventually too.
+>> If you think it's too risky for stable later on, can we do separate 
+>> set of commits
+>> that adds and then removes the IDs for pink sardine that can go to 
+>> stable?  This
+>> would at least mirror more closely what has been done historically for 
+>> the other
+>> USB4 products.
+> 
+> I think we can add this to stable. It's fine for Intel xHCI 1.2 hosts.
+> 
 
-CPU: 12 PID: 1097 Comm: dmsetup Not tainted 6.0.0-next-20221007-00011-gf46c8956
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-4
-Call Trace:
- <TASK>
- ? dump_stack_lvl+0x73/0x9f
- ? print_report+0x249/0x746
- ? __virt_addr_valid+0xd4/0x200
- ? sysfs_remove_link+0x23/0x60
- ? kasan_report+0xc0/0x120
- ? sysfs_remove_link+0x23/0x60
- ? __asan_load8+0x74/0x110
- ? sysfs_remove_link+0x23/0x60
- ? __unlink_disk_holder.isra.0+0x2f/0x80
- ? bd_unlink_disk_holder+0xd2/0x1c0
- ? dm_put_table_device+0xf1/0x250
- ? dm_put_device+0x14f/0x230
- ? linear_dtr+0x34/0x50
- ? dm_table_destroy+0x7b/0x280
- ? table_load+0x34a/0x710
- ? list_devices+0x4c0/0x4c0
- ? kvmalloc_node+0x7d/0x160
- ? __kmalloc_node+0x185/0x2b0
- ? ctl_ioctl+0x388/0x7b0
- ? list_devices+0x4c0/0x4c0
- ? free_params+0x50/0x50
- ? do_vfs_ioctl+0x931/0x10d0
- ? tick_program_event+0x65/0xd0
- ? __kasan_check_read+0x1d/0x30
- ? __fget_light+0xc2/0x370
- ? dm_ctl_ioctl+0x12/0x20
- ? __x64_sys_ioctl+0xd5/0x150
- ? do_syscall_64+0x35/0x80
- ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
- </TASK>
+OK thanks.
 
-Allocated by task 1097:
- kasan_save_stack+0x26/0x60
- kasan_set_track+0x29/0x40
- kasan_save_alloc_info+0x1f/0x40
- __kasan_kmalloc+0xcb/0xe0
- kmalloc_trace+0x7e/0x150
- kobject_create_and_add+0x3d/0xc0
- device_add_disk+0x429/0x7e0
- dm_setup_md_queue+0x15b/0x240
- table_load+0x469/0x710
- ctl_ioctl+0x388/0x7b0
- dm_ctl_ioctl+0x12/0x20
- __x64_sys_ioctl+0xd5/0x150
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 1097:
- kasan_save_stack+0x26/0x60
- kasan_set_track+0x29/0x40
- kasan_save_free_info+0x32/0x60
- __kasan_slab_free+0x172/0x2c0
- __kmem_cache_free+0x11c/0x560
- kfree+0xd3/0x240
- dynamic_kobj_release+0x1e/0x60
- kobject_put+0x192/0x410
- device_add_disk+0x535/0x7e0
- dm_setup_md_queue+0x15b/0x240
- table_load+0x469/0x710
- ctl_ioctl+0x388/0x7b0
- dm_ctl_ioctl+0x12/0x20
- __x64_sys_ioctl+0xd5/0x150
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-This problem is very easy to reporduce by injecting failure while creating
-dm, and root cause is that lifetime of bd_holder_dir/slave_dir is
-problematic:
-
-1) device alloc
-alloc_disk_node
- kzalloc_node			-> gendisk
- disk->part0 = bdev_alloc	-> part0
- device_initialize
-  kobject_init()		-> part0->bd_device
-
-2) device create
-device_add_disk
- device_add
-  kobject_add			-> part0->bd_device
- kobject_create_and_add		-> part0->bd_holder_dir
- kobject_create_and_add		-> gendisk->slave_dir
-
-3) device remove
-del_gendisk
- kobject_put			-> part0->bd_holder_dir
- kobject_put			-> gendisk->slave_dir
- device_del
-  kobject_del			-> part0->bd_device
-
-4) device free
-disk_release
- iput
-  bdev_free_inode
-   kfree			-> gendisk
-   kmem_cache_free		-> part0
-
-bd_holder_dir and slave_dir is allocated in step 2), and freed in steup
-3), while they are still accessible before step 4).
-
-This patch delay the kobject destruction to disk_release/part_release to
-fix the problem.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/genhd.c           | 7 ++++---
- block/partitions/core.c | 3 ++-
- drivers/base/core.c     | 1 -
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/block/genhd.c b/block/genhd.c
-index 514395361d7c..7ebd085d3a3f 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -615,9 +615,6 @@ void del_gendisk(struct gendisk *disk)
- 
- 	blk_unregister_queue(disk);
- 
--	kobject_put(disk->part0->bd_holder_dir);
--	kobject_put(disk->slave_dir);
--
- 	part_stat_set_all(disk->part0, 0);
- 	disk->part0->bd_stamp = 0;
- 	if (!sysfs_deprecated)
-@@ -1139,6 +1136,10 @@ static void disk_release(struct device *dev)
- 	might_sleep();
- 	WARN_ON_ONCE(disk_live(disk));
- 
-+	kobject_put(disk->part0->bd_holder_dir);
-+	kobject_put(disk->slave_dir);
-+	kobject_del(&dev->kobj);
-+
- 	/*
- 	 * To undo the all initialization from blk_mq_init_allocated_queue in
- 	 * case of a probe failure where add_disk is never called we have to
-diff --git a/block/partitions/core.c b/block/partitions/core.c
-index b8112f52d388..b86a66198cc8 100644
---- a/block/partitions/core.c
-+++ b/block/partitions/core.c
-@@ -250,6 +250,8 @@ static const struct attribute_group *part_attr_groups[] = {
- 
- static void part_release(struct device *dev)
- {
-+	kobject_put(dev_to_bdev(dev)->bd_holder_dir);
-+	kobject_del(&dev->kobj);
- 	put_disk(dev_to_bdev(dev)->bd_disk);
- 	iput(dev_to_bdev(dev)->bd_inode);
- }
-@@ -279,7 +281,6 @@ static void delete_partition(struct block_device *part)
- 	__invalidate_device(part, true);
- 
- 	xa_erase(&part->bd_disk->part_tbl, part->bd_partno);
--	kobject_put(part->bd_holder_dir);
- 	device_del(&part->bd_device);
- 
- 	/*
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index d02501933467..d2ff3d2a8710 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3712,7 +3712,6 @@ void device_del(struct device *dev)
- 					     BUS_NOTIFY_REMOVED_DEVICE, dev);
- 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
- 	glue_dir = get_glue_dir(dev);
--	kobject_del(&dev->kobj);
- 	cleanup_glue_dir(dev, glue_dir);
- 	memalloc_noio_restore(noio_flag);
- 	put_device(parent);
--- 
-2.31.1
 
