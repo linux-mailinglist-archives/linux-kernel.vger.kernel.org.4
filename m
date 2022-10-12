@@ -2,213 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9287A5FC8DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF1D5FC8DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiJLQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S229825AbiJLQHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiJLQGv (ORCPT
+        with ESMTP id S229566AbiJLQHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:06:51 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2950D895EE;
-        Wed, 12 Oct 2022 09:06:50 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1364357a691so13464056fac.7;
-        Wed, 12 Oct 2022 09:06:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ukt7vGP6CsiYiD8LNPDRe24U+aWDDsk6nJCXZF6ming=;
-        b=dhVePhRzLkFbgYy/8Cn56wTqmpOCk9ULCSbzIcYNZPuwTV2gHyPl2Kfp/jHzxOfqSA
-         siu4oJbkpu3JkwNhvtn7Q0tGnfBBohqbjjSNyTaICuUyp+lVNZUeyvhLZ0d7iomc7e3u
-         IHez4gGmKMc1fGPn5b5gKchBcysdxGZgdNT5/nUlU1wRsXxoLoverwgT6w1MjfR8y+sx
-         dEOVOQFdTZmctZb2hVS5snkiciXnaIgJJUq3CIM7mWLveqC55gclr9e0bc1B7IbIKnH5
-         HZ+KYooVhawb/MhDoIqgrzoVy00dCDawMdtBJyzIxSodBxRg4Z/13UtbcmDT4a0zO0+V
-         dE5w==
-X-Gm-Message-State: ACrzQf1mJTE81Yk8AofBxLwz6SBOUSNhGj+RGRbj/rJ2s+O7fMjlloUc
-        KV/z21NDZoDrbKi6cDdOLzEsds/rZ5vH8YuPGHvxOvCzMhQ=
-X-Google-Smtp-Source: AMsMyM61djge6d8lMJXZNa7E55BAzX+NGb7o2YesC2pZscEK25B3HBT5xy24+E4kk+ZVjitjMUsWqO+mYGSgOkxQfMk=
-X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
- q44-20020a05687082ac00b00133034b6f10mr2933403oae.218.1665590799120; Wed, 12
- Oct 2022 09:06:39 -0700 (PDT)
+        Wed, 12 Oct 2022 12:07:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90D77A0306
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:07:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28FD8165C;
+        Wed, 12 Oct 2022 09:07:45 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.35.175])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED5D63F67D;
+        Wed, 12 Oct 2022 09:07:35 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 17:07:34 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        chris.hyser@oracle.com, valentin.schneider@arm.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org
+Subject: Re: [PATCH v5 5/7] sched/fair: Add sched group latency support
+Message-ID: <20221012160734.hrkb5jcjdq7r23pr@wubuntu>
+References: <20220925143908.10846-1-vincent.guittot@linaro.org>
+ <20220925143908.10846-6-vincent.guittot@linaro.org>
+ <20221012142248.k6pdjgxwkk2cshuu@wubuntu>
+ <CAKfTPtADxP7eSETpazO9LFr+Et=GnSuWc45s3cfRACq82tRO_g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221012094633.21669-1-james.clark@arm.com> <20221012094633.21669-2-james.clark@arm.com>
-In-Reply-To: <20221012094633.21669-2-james.clark@arm.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 12 Oct 2022 09:06:27 -0700
-Message-ID: <CAM9d7ci-o4fzBLaLB5pcKA2=GAUVFt8PJofnuy6RjG7bibJE-w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] perf test: Fix attr tests for PERF_FORMAT_LOST
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtADxP7eSETpazO9LFr+Et=GnSuWc45s3cfRACq82tRO_g@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 10/12/22 17:42, Vincent Guittot wrote:
+> On Wed, 12 Oct 2022 at 16:22, Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > On 09/25/22 16:39, Vincent Guittot wrote:
+> > > Task can set its latency priority with sched_setattr(), which is then used
+> > > to set the latency offset of its sched_entity, but sched group entities
+> > > still have the default latency offset value.
+> > >
+> > > Add a latency.nice field in cpu cgroup controller to set the latency
+> > > priority of the group similarly to sched_setattr(). The latency priority
+> > > is then used to set the offset of the sched_entities of the group.
+> > >
+> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > ---
+> > >  Documentation/admin-guide/cgroup-v2.rst |  8 ++++
+> > >  kernel/sched/core.c                     | 53 +++++++++++++++++++++++++
+> > >  kernel/sched/fair.c                     | 33 +++++++++++++++
+> > >  kernel/sched/sched.h                    |  4 ++
+> > >  4 files changed, 98 insertions(+)
+> > >
+> > > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> > > index be4a77baf784..d8ae7e411f9c 100644
+> > > --- a/Documentation/admin-guide/cgroup-v2.rst
+> > > +++ b/Documentation/admin-guide/cgroup-v2.rst
+> > > @@ -1095,6 +1095,14 @@ All time durations are in microseconds.
+> > >          values similar to the sched_setattr(2). This maximum utilization
+> > >          value is used to clamp the task specific maximum utilization clamp.
+> > >
+> > > +  cpu.latency.nice
+> > > +     A read-write single value file which exists on non-root
+> > > +     cgroups.  The default is "0".
+> > > +
+> > > +     The nice value is in the range [-20, 19].
+> > > +
+> > > +     This interface file allows reading and setting latency using the
+> > > +     same values used by sched_setattr(2).
+> >
+> > I still don't understand how tasks will inherit the latency_nice value from
+> > cgroups they're attached to.
+> 
+> The behavior is the same as for sched_entity weight. The latency is
+> applied on the sched_entity of the group
 
-On Wed, Oct 12, 2022 at 2:47 AM James Clark <james.clark@arm.com> wrote:
->
-> Since PERF_FORMAT_LOST was added, the default read format has that bit
-> set, so add it to the tests. Keep the old value as well so that the test
-> still passes on older kernels.
->
-> This fixes the following failure:
->
->   expected read_format=0|4, got 20
->   FAILED './tests/attr/test-record-C0' - match failure
->
-> Fixes: 85b425f31c88 ("perf record: Set PERF_FORMAT_LOST by default")
-> Signed-off-by: James Clark <james.clark@arm.com>
+But this is the point I am raising. Not all users behave the same as weight.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+In EAS we just look at the effective value of the task (see uclamp for
+example). We don't care about the group value except to calculate how it
+impacts the task's value.
 
-Thanks,
-Namhyung
+Or am I missing something here?
 
 
-> ---
->  tools/perf/tests/attr/base-record                | 2 +-
->  tools/perf/tests/attr/system-wide-dummy          | 2 +-
->  tools/perf/tests/attr/test-record-group          | 4 ++--
->  tools/perf/tests/attr/test-record-group-sampling | 6 +++---
->  tools/perf/tests/attr/test-record-group1         | 4 ++--
->  tools/perf/tests/attr/test-record-group2         | 4 ++--
->  6 files changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/base-record
-> index 8c10955eff93..3ef07a12aa14 100644
-> --- a/tools/perf/tests/attr/base-record
-> +++ b/tools/perf/tests/attr/base-record
-> @@ -9,7 +9,7 @@ size=128
->  config=0
->  sample_period=*
->  sample_type=263
-> -read_format=0|4
-> +read_format=0|4|20
->  disabled=1
->  inherit=1
->  pinned=0
-> diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/attr/system-wide-dummy
-> index 86a15dd359d9..8fec06eda5f9 100644
-> --- a/tools/perf/tests/attr/system-wide-dummy
-> +++ b/tools/perf/tests/attr/system-wide-dummy
-> @@ -11,7 +11,7 @@ size=128
->  config=9
->  sample_period=4000
->  sample_type=455
-> -read_format=4
-> +read_format=4|20
->  # Event will be enabled right away.
->  disabled=0
->  inherit=1
-> diff --git a/tools/perf/tests/attr/test-record-group b/tools/perf/tests/attr/test-record-group
-> index 14ee60fd3f41..6c1cff8aae8b 100644
-> --- a/tools/perf/tests/attr/test-record-group
-> +++ b/tools/perf/tests/attr/test-record-group
-> @@ -7,14 +7,14 @@ ret     = 1
->  fd=1
->  group_fd=-1
->  sample_type=327
-> -read_format=4
-> +read_format=4|20
->
->  [event-2:base-record]
->  fd=2
->  group_fd=1
->  config=1
->  sample_type=327
-> -read_format=4
-> +read_format=4|20
->  mmap=0
->  comm=0
->  task=0
-> diff --git a/tools/perf/tests/attr/test-record-group-sampling b/tools/perf/tests/attr/test-record-group-sampling
-> index 300b9f7e6d69..97e7e64a38f0 100644
-> --- a/tools/perf/tests/attr/test-record-group-sampling
-> +++ b/tools/perf/tests/attr/test-record-group-sampling
-> @@ -7,7 +7,7 @@ ret     = 1
->  fd=1
->  group_fd=-1
->  sample_type=343
-> -read_format=12
-> +read_format=12|28
->  inherit=0
->
->  [event-2:base-record]
-> @@ -21,8 +21,8 @@ config=3
->  # default | PERF_SAMPLE_READ
->  sample_type=343
->
-> -# PERF_FORMAT_ID | PERF_FORMAT_GROUP
-> -read_format=12
-> +# PERF_FORMAT_ID | PERF_FORMAT_GROUP  | PERF_FORMAT_LOST
-> +read_format=12|28
->  task=0
->  mmap=0
->  comm=0
-> diff --git a/tools/perf/tests/attr/test-record-group1 b/tools/perf/tests/attr/test-record-group1
-> index 3ffe246e0228..eeb1db392bc9 100644
-> --- a/tools/perf/tests/attr/test-record-group1
-> +++ b/tools/perf/tests/attr/test-record-group1
-> @@ -7,7 +7,7 @@ ret     = 1
->  fd=1
->  group_fd=-1
->  sample_type=327
-> -read_format=4
-> +read_format=4|20
->
->  [event-2:base-record]
->  fd=2
-> @@ -15,7 +15,7 @@ group_fd=1
->  type=0
->  config=1
->  sample_type=327
-> -read_format=4
-> +read_format=4|20
->  mmap=0
->  comm=0
->  task=0
-> diff --git a/tools/perf/tests/attr/test-record-group2 b/tools/perf/tests/attr/test-record-group2
-> index 6b9f8d182ce1..cebdaa8e64e4 100644
-> --- a/tools/perf/tests/attr/test-record-group2
-> +++ b/tools/perf/tests/attr/test-record-group2
-> @@ -9,7 +9,7 @@ group_fd=-1
->  config=0|1
->  sample_period=1234000
->  sample_type=87
-> -read_format=12
-> +read_format=12|28
->  inherit=0
->  freq=0
->
-> @@ -19,7 +19,7 @@ group_fd=1
->  config=0|1
->  sample_period=6789000
->  sample_type=87
-> -read_format=12
-> +read_format=12|28
->  disabled=0
->  inherit=0
->  mmap=0
-> --
-> 2.28.0
->
+Cheers
+
+--
+Qais Yousef
