@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7425FCE2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4D25FCE32
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiJLWKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S230234AbiJLWLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiJLWKP (ORCPT
+        with ESMTP id S230003AbiJLWLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:10:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CDE125730
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665612515;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e1Csc5OKDLMm08qWQhJj0nFioDDfbxhqyYmrCk7iHHE=;
-        b=i2A1XqpruM38C2MxuNCblSi4VKWwCfcwOF0hN2sqQMWxWzwaa0UJrQeIcMbb3Y2C8w0MCX
-        mXFOKChmkY6fY6nPj4PJtXdCGCHYyLvFaMRpe8YkGc68jhzcOEp6Pa3d5rxalH4FKrRKgs
-        7bhARNB11lNZ6ssAoYCom7YYeOLv9qM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-191-E9V_eHylMruLj_67f5TnbA-1; Wed, 12 Oct 2022 18:08:33 -0400
-X-MC-Unique: E9V_eHylMruLj_67f5TnbA-1
-Received: by mail-wm1-f72.google.com with SMTP id h205-20020a1c21d6000000b003c56437e529so1198577wmh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:08:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e1Csc5OKDLMm08qWQhJj0nFioDDfbxhqyYmrCk7iHHE=;
-        b=RVSngkUFj93XtuBFxIm7hm8DfvPerQdM13tlW9p1YtPfdKQpCfJu5XALnO2FOY0W8U
-         W5JWN1+NoqnkidRsXtZAER4FCSwz6SkXtT/2VMjlP+sDJ6Mil6/IkiJPjRLLW4mfx50G
-         eWpFWLJNAT4Ex2kK8wZOFFbIF9Ckz6t0YcaOOcGG4FVEWm+8dZgssnLkW4Lblk0ZuVLd
-         yUJg51c0OYnyxH106oKbuCEfXaiUgIRNXOnvYWC7cFL5PINqHP1GIq8EN6007iuSdv7Y
-         0gBdiSTNnmSZwOKmgRAtboiratt2NiIaPLrWCQN9VG6almFcnYpJ341LydNnRWJQcj5D
-         GW/Q==
-X-Gm-Message-State: ACrzQf1yudzOcy707NLSIS0M556o9692qA2qhC0+/EJR0X+b73c4prWn
-        iyuRVFkAlt2loD4RptfSB3ZffVvHtpwkMRlH5iQnRjvJCLuWYF7Ze6KLvL0dX16pJnpJWPjznsC
-        fnkzqnu3e+zQKP00vTbk8qdE4
-X-Received: by 2002:adf:d1cc:0:b0:22e:6371:65ad with SMTP id b12-20020adfd1cc000000b0022e637165admr19590796wrd.326.1665612512756;
-        Wed, 12 Oct 2022 15:08:32 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4Hfapj638ZSQQKBud2DiNS0QJza/l7oyJMq2zEMTl7MZoMYSzTy3MWiISMgB3bUUa2AIbrEw==
-X-Received: by 2002:adf:d1cc:0:b0:22e:6371:65ad with SMTP id b12-20020adfd1cc000000b0022e637165admr19590785wrd.326.1665612512531;
-        Wed, 12 Oct 2022 15:08:32 -0700 (PDT)
-Received: from redhat.com ([2.54.162.123])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003a5f4fccd4asm2812081wmq.35.2022.10.12.15.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 15:08:31 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 18:08:27 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        xiujianfeng@huawei.com, kvm@vger.kernel.org,
-        alvaro.karsz@solid-run.com, Jason Wang <jasowang@redhat.com>,
-        angus.chen@jaguarmicro.com, wangdeming@inspur.com,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Netdev <netdev@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, lingshan.zhu@intel.com,
-        linuxppc-dev@lists.ozlabs.org, gavinl@nvidia.com
-Subject: Re: [GIT PULL] virtio: fixes, features
-Message-ID: <20221012180806-mutt-send-email-mst@kernel.org>
-References: <20221010132030-mutt-send-email-mst@kernel.org>
- <87r0zdmujf.fsf@mpe.ellerman.id.au>
- <20221012070532-mutt-send-email-mst@kernel.org>
- <87mta1marq.fsf@mpe.ellerman.id.au>
- <87edvdm7qg.fsf@mpe.ellerman.id.au>
- <20221012115023-mutt-send-email-mst@kernel.org>
- <CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com>
- <38893b2e-c7a1-4ad2-b691-7fbcbbeb310f@app.fastmail.com>
+        Wed, 12 Oct 2022 18:11:03 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E78C36851;
+        Wed, 12 Oct 2022 15:09:57 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 034235C00A7;
+        Wed, 12 Oct 2022 18:09:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 12 Oct 2022 18:09:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665612592; x=1665698992; bh=0leQkUAZUI
+        5cucdkNBVhjMl36k1QA7DeTpC2Onp0f+w=; b=UnTUc1kk2NAEPqvpO9VxiKjZEG
+        87qKksTdiQL01NHDiQKMD9YUibH9qqJFMF1grFOeUW+8A7vUHd6uMKdNgf1Remnp
+        zMvsNI5Wa7h0NUwJI7Fzes2c2fYThI8zCWAFxaZib/AhXmOojIloz91PrlywjJea
+        tM6PC+soY1czngRifzgrqIL4J9/20GV65L1v0IEe1cVuDwfoxpr8ITR/+imX2yPl
+        ouTZJ0MuDqhtGSjOWsu6uWaV6jkl4OK+uLbmWOd9icV05XDnjINv57uG7uJxa6wb
+        eV050lNwSc1KVxRy9nDuv10yT/n/QB3U/NrteeP0mbOQPvv4px7Cmh5VjXHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665612592; x=1665698992; bh=0leQkUAZUI5cucdkNBVhjMl36k1Q
+        A7DeTpC2Onp0f+w=; b=ah1xWjviASU9PJqysetmOvV2VFbUt/UTVJCFlS5i9Afc
+        CFiSc557m8MxCe4jDKTEZtencrE9aA0gKgTqWKDStiVlz+x893H7Lofx8bM/tYdf
+        sIQuZkM0ZL5sQA+yDCpc1jjc11eV95B50/LVK2IVjFfU+EJ9uxT/m+Nyl9TZMikC
+        Q46ZKEJnRBai+fge4Xbs+juC84Iz7TWkWlDTznnGlbMwoHTwSfclDy+vR2pvt4i6
+        yEPXP3VzV2HMRidHjsvSwgBQdTsMSB6WIsYm29LWzpXvcBr7l5RcNVZ0kRb0wdld
+        RT5AQVPbYCJOHpX37jFvE8VvknxItkrWRV6gcrTgeQ==
+X-ME-Sender: <xms:MDtHYyZ5qBqV__E8_aIu4Fj7NOyxZ-g_HqY-1m5s0gKYZOmogYu1kQ>
+    <xme:MDtHY1bVkaG4YuqMJco2lCnnesGNWvoMzA34bCNi-31vgYBHibsofhWhm6O601XjL
+    4-Ezu4CMKp04vmIvg>
+X-ME-Received: <xmr:MDtHY89xawe8c5Nqr9I3U9hYGnMbplA3LNSvErk66KS1Q76xrKh70Lj42rYWpdNphRR0cBfO9XALq-ng>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejledgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddt
+    tddvnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqne
+    cuggftrfgrthhtvghrnhepffffvdefhfduhfefjeejvdeiudeigfdvgffhjeekheeuuefh
+    vdeifedtuefgfffhnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdig
+    hiii
+X-ME-Proxy: <xmx:MDtHY0rbtmKfFq-VewpkLXdqQIp74ZcCyQzSUvds1LIxSqvuul-sYA>
+    <xmx:MDtHY9qeW-Hel7F2VQp3QB8bDlVMllIvJ7zXGDbzL53q32Pwa-7SAA>
+    <xmx:MDtHYyQbmUIbBvlCIiOS22WU6OflwCKf1XbFVJ7f_nYXY6s3_9Vv2Q>
+    <xmx:MDtHY41iwbi_fWwJGEPrfvpF1kM-Ats0D4QtIGMtS7Vy0Pr9WpP3Mw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Oct 2022 18:09:51 -0400 (EDT)
+Date:   Wed, 12 Oct 2022 16:09:53 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     pablo@netfilter.org, fw@strlen.de, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        bpf@vger.kernel.org, memxor@gmail.com
+Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: Add connmark read test
+Message-ID: <20221012220953.i2xevhu36kxyxscl@k2>
+References: <cover.1660254747.git.dxu@dxuuu.xyz>
+ <d3bc620a491e4c626c20d80631063922cbe13e2b.1660254747.git.dxu@dxuuu.xyz>
+ <43bf4a5f-dac9-4fe9-1eba-9ab9beb650aa@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <38893b2e-c7a1-4ad2-b691-7fbcbbeb310f@app.fastmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+In-Reply-To: <43bf4a5f-dac9-4fe9-1eba-9ab9beb650aa@linux.dev>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,29 +89,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:06:54PM +0200, Arnd Bergmann wrote:
-> On Wed, Oct 12, 2022, at 7:22 PM, Linus Torvalds wrote:
-> >
-> > The NO_IRQ thing is mainly actually defined by a few drivers that just
-> > never got converted to the proper world order, and even then you can
-> > see the confusion (ie some drivers use "-1", others use "0", and yet
-> > others use "((unsigned int)(-1)".
+Hi Martin,
+
+On Tue, Oct 11, 2022 at 10:49:32PM -0700, Martin KaFai Lau wrote:
+> On 8/11/22 2:55 PM, Daniel Xu wrote:
+> > Test that the prog can read from the connection mark. This test is nice
+> > because it ensures progs can interact with netfilter subsystem
+> > correctly.
+> > 
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > ---
+> >   tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
+> >   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
+> >   2 files changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> > index 88a2c0bdefec..544bf90ac2a7 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> > @@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
+> >   static void test_bpf_nf_ct(int mode)
+> >   {
+> > -	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
+> > +	const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
+> Hi Daniel Xu, this test starts failing recently in CI [0]:
 > 
-> The last time I looked at removing it for arch/arm/, one problem was
-> that there were a number of platforms using IRQ 0 as a valid number.
-> We have converted most of them in the meantime, leaving now only
-> mach-rpc and mach-footbridge. For the other platforms, we just
-> renumbered all interrupts to add one, but footbridge apparently
-> relies on hardcoded ISA interrupts in device drivers. For rpc,
-> it looks like IRQ 0 (printer) already wouldn't work, and it
-> looks like there was never a driver referencing it either.
-
-
-Do these two boxes even have pci?
-
-> I see that openrisc and parisc also still define NO_IRQ to -1, but at
-> least openrisc already relies on 0 being the invalid IRQ (from
-> CONFIG_IRQ_DOMAIN), probably parisc as well.
+> Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+>   iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> Invalid argument
 > 
->      Arnd
+>   Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+>   iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> Invalid argument
+> 
+>   Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+>   iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> Invalid argument
+> 
+>   Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+>   iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> Invalid argument
+> 
+>   test_bpf_nf_ct:PASS:test_bpf_nf__open_and_load 0 nsec
+>   test_bpf_nf_ct:FAIL:iptables unexpected error: 1024 (errno 0)
+> 
+> Could you help to take a look? Thanks.
+> 
+> [0]: https://github.com/kernel-patches/bpf/actions/runs/3231598391/jobs/5291529292
 
+[...]
+
+Thanks for letting me know. I took a quick look and it seems that
+synproxy selftest is also failing:
+
+    2022-10-12T03:14:20.2007627Z test_synproxy:FAIL:iptables -t raw -I PREROUTING      -i tmp1 -p tcp -m tcp --syn --dport 8080 -j CT --notrack unexpected error: 1024 (errno 2)
+
+Googling the "Could not fetch rule set generation id" yields a lot of
+hits. Most of the links are from downstream projects recommending user
+downgrade iptables (nftables) to iptables-legacy.
+
+So perhaps iptables/nftables suffered a regression somewhere. I'll take
+a closer look tonight / tomorrow morning.
+
+Thanks,
+Daniel
