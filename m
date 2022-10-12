@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C00B5FC82F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3805FC852
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiJLPSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S229942AbiJLPV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJLPRx (ORCPT
+        with ESMTP id S229932AbiJLPVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:17:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D579D18C9;
-        Wed, 12 Oct 2022 08:17:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8B28A1F381;
-        Wed, 12 Oct 2022 15:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1665587864; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YUQdCV8qiu2z5cZbzxSEaEkk7or+cErTkTgKM6DkvSE=;
-        b=TQBH6wZEfg2J4/JXfuz2CUfAw1+Wpt5z7yW90MCznNrPc1PrIJijJ1VCqid5Cvm+eI60qQ
-        5WWug0YABffQ/hGUHPcDgZhagmRKLa90pB0Wew+DeotunOyVKjqfwfB6eOJem5VKN1lmll
-        uCEHtshMka44Sj3n5sJJu1jBIKwEHAQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1665587864;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YUQdCV8qiu2z5cZbzxSEaEkk7or+cErTkTgKM6DkvSE=;
-        b=ZGqGu7Q+iBgrLcvuZ+tMwCZGjy+Qc/1rmPnZpoX8IMOOWToDcLWEdjt38F6XYNAO2Xee72
-        Q3pu8bOFCyF3fiDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1219F13ACD;
-        Wed, 12 Oct 2022 15:17:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 78FiAZjaRmM4PAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 12 Oct 2022 15:17:44 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id a8723c1a;
-        Wed, 12 Oct 2022 15:18:39 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 16:18:39 +0100
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] ext4: fix BUG_ON() when directory entry has invalid
- rec_len
-Message-ID: <Y0baz6C1aKRjKzvJ@suse.de>
-References: <20221010142035.2051-1-lhenriques@suse.de>
- <20221012131330.32456-1-lhenriques@suse.de>
- <Y0a+Ommsgm4ogo7u@suse.de>
- <Y0bNc9XZA5wXNJMX@mit.edu>
+        Wed, 12 Oct 2022 11:21:51 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D923E311E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:21:44 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1665588064t60qpwjk
+Received: from [192.168.1.231] ( [113.72.146.141])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Oct 2022 23:21:03 +0800 (CST)
+X-QQ-SSF: 01000000002000B09000B00A0000000
+X-QQ-FEAT: KIY2vMteGsnGVHU+ba51y7vPyCbSJaIaZ6gxnecS9ihrQQ367JLoPxBIpdNbj
+        wlbEPxPu/5ajoHlIXg6QhPtejOg4CZ7gCycgNWfh5YL1hPaCldCSGwcN6tzEdQwtt0Pr9Ni
+        EHf5nhCGXvAqQZwRBK6+j/D0a1NzK+cx+/yMLFVXaJtCvhCAA9EAfVSX0aXACTP7JCIWGEi
+        zLa/M2SnrL+l3WF4guJJCAFD34U02adfqy1bp+/cmQ7HopUnq286iLGRUvjhJ4FHPw9qgZM
+        xd3wdNV8fJd5Yj7u3UohYqwngziPBVBtQySkNPR5BDl9THlQ6wlemfyQN6hWSQfR8nSE1Hs
+        GDKWyWS5XvLtuegT39Q/5HzwV9YEC2RplY1tsVI9ueMMcOt9sqmZrMeQiBFbQ==
+X-QQ-GoodBg: 0
+Message-ID: <3BC97E98404F6FB8+c46d2e75-a2ce-96a2-04bd-f37a7f63ff31@linux.starfivetech.com>
+Date:   Wed, 12 Oct 2022 23:21:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y0bNc9XZA5wXNJMX@mit.edu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 12/30] dt-bindings: reset: Add starfive,jh7110-reset
+ bindings
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929175147.19749-1-hal.feng@linux.starfivetech.com>
+ <20220929184349.GA2551443-robh@kernel.org>
+ <8BEAFAD2C4CE6E4A+0a00376c-1e3e-f597-bcf6-106ff294859a@linux.starfivetech.com>
+ <2f1d1afd-3c97-6ce0-8247-6e1c4a24e548@linaro.org>
+ <4769BE3503398017+b1699221-ccc9-a0c1-0b11-141ce9644d74@linux.starfivetech.com>
+ <9f04267d-2592-b303-9b79-9cef672c970a@linaro.org> <Y0bJkGQklX+eOGyW@wendy>
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <Y0bJkGQklX+eOGyW@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 10:21:39AM -0400, Theodore Ts'o wrote:
-> On Wed, Oct 12, 2022 at 02:16:42PM +0100, Luís Henriques wrote:
-> > Grr, looks like I accidentally reused a 'git send-email' from shell
-> > history which had a '--in-reply-to' in it.  Please ignore and sorry about
-> > that.  I've just resent a new email.
+On Wed, 12 Oct 2022 15:05:04 +0100, Conor Dooley wrote:
+> Hey Hal Feng,
 > 
-> No worries!  The --in-reply-to wasn't actually a problem, since b4
-> generally will do the right thing (and sometimes humans prefer the
-> in-reply-to since they can more easily see the patch that it is
-> replacing/obsoleting).
+> On Wed, Oct 12, 2022 at 09:33:42AM -0400, Krzysztof Kozlowski wrote:
+> > >>> These two properties are the key differences among different reset controllers.
+> > >>
+> > >> Different as in different compatibles? Please answer the questions..> 
+> > >>> There are five memory regions for clock and reset in StarFive JH7110 SoC. They
+> > >>> are "syscrg", "aoncrg", "stgcrg", "ispcrg" and "voutcrg". Each memory region
+> > >>> has different reset ASSERT/STATUS register offset and different number of reset
+> > >>> signals. 
+> > >>
+> > >> Then these are not exactly the same devices, so using one compatible for
+> > >> them does not look correct.
+> > > 
+> > > One compatible can just be matched by one device? I think this is what
+> > > confuses me.
+> > 
+> > I don't understand the question.
 > 
-> b4 can sometimes get confused when a patch series gets split, and both
-> parts of the patch series are in a reply-to mail thread to the
-> original patch series, since if it can't use the -vn+1 hueristic or
-> the "subject line has stayed the same but has a newer date" hueristic,
-> it falls back to "latest patch in the mail thread".  So if there are
-> two "valid" patches or patch series in an e-mail thread, b4 -c
-> (--check-newer-revisions) can get confused.  But even in that case,
-> that it's more a minor annoyance than anything else.
+> If two SoCs have exactly the same device/peripheral then they _can_ use
+> the same compatible. If they share some common, viable feature-set then
+> one can "fall back" to the other depending on what your Venn diagram of
+> common features looks like. I've not been following this too closely,
+> but I think what Krzysztof is suggesting is that you have a jh7100 and
+> a jh7110 compatible. Then in your driver you just "know" that if you
+> match against jh7110 which values to use for register offsets & vice
+> versa for a match against the jh7100. There's many examples over the
+> tree for how to handle this sort of thing rather than including it in
+> the devicetree.
 > 
-> So in the future, don't feel that you need to resend a patch if
-> there's an incorrect/older --in-reply-to; it's not a big deal.
+> Maybe Rob and Krzysztof will scream at me for this description, but
+> devicetree is about how periperhals etc are connected together in the
+> system not about the internals of a given peripheral.
+> 
+> Following that logic, the devicetree should not contain register offsets
+> etc that are a known quanitity once you've determined that you are running
+> on vendor,soc-foo.
+> 
+> Hopefully that helps with your confusion somewhat?
+> Conor.
 
-Great, I haven't yet included b4 in my workflow so, to be honest, I didn't
-really thought about that tool being confused.  What really made me resend
-the patch was that I used the *wrong message-ID in the "--in-reply-to"!
-And that thread already had a v2 patch, which would could easily confuse
-humans.  Hopefully, b4 won't be confused by that either.
+Yes, anyway, thank you for the detailed reply.
 
-Cheers,
---
-Luís
+Best regards,
+Hal
