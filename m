@@ -2,125 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19F55FCBB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211575FCBB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiJLTqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 15:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
+        id S229604AbiJLTq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 15:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJLTqE (ORCPT
+        with ESMTP id S229682AbiJLTqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 15:46:04 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DA44E874
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:46:03 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so16357102pgr.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:46:03 -0700 (PDT)
+        Wed, 12 Oct 2022 15:46:21 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA16C9DD92
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:46:20 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id u71so8885082pgd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Im0nQichbXcRvcg6wP4SlKYnzCnTVIm76mkhOYwoF9Q=;
-        b=MZ2yXpsFBNdXEPxh5idgAGtQA0FBXt825rbGwIczGvKP7RQjAs98r/iL6u4KRv5AKg
-         XoPaiIzhZS6QEXJk+ZlSjnQ/2oxk6qvRA9HndwGbjHihZCfzb3NHGL4QSjTRbfQXVzXq
-         yLKk1aKLn2a+IXh6TTlGMcQ68clHBK6gvtLivxG/hRJivRskK55l2JUR+7psmjn7cuxu
-         9dTpfEWafUDioThskQt0gC+YPejkqI5BBYpq8IPnANzdAMBCjKSdvH8v3DHltrcIR+vf
-         zpYMD5eVySUz2Wd1p7Qpan5qL/Kt6XlgnNn1mqDTww/ZrlIYoxFV67p6AgFglPLe1uFf
-         JuKg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ziKrp+EXj/Jcjg6bjdAH2WyjL4ZEXqf7YYoBHqSFhQk=;
+        b=ORTJzoSxjClvoDX83+uN7SHaBapCwExOHeh1Cxp6DnZ9utVinBgs8SVRoanOe+++yg
+         Rhr9CHl6v7dlKsbwL265HCg/w21Q+58HzSGamqfMx10DzbbjO3CKZqMqHPe6czkstBAH
+         ESdDm8LuM0V6LXXDQNr7jLnZdIPTm/sehLUUBbkE1m4oudsVrRIiCDFxJZSHNs3SwYNY
+         qU5S05lcuO2No1hbejiwFCWmng2aKGYZDLUToTibteK7E533n76mUIbAtcAJTWkIpp7M
+         fHJlSqFabtcSg8awywfjYwWC4t9cnx1bGl6tHoyJRJ75JMMeA/DFQ3n7Q0FJev84mhOr
+         1Dgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Im0nQichbXcRvcg6wP4SlKYnzCnTVIm76mkhOYwoF9Q=;
-        b=HKGvWlp17HxUMGC8owaY7lBZXevKyrRePTqyvSkSFyDkrFrqSdQmVVp+RenCEcUzQ0
-         UASYJwg3yFknX/8WT3z5yTGichDqm00E7JcNacc5pemTtnZYHHNyF89TJhCWE5fIe+iB
-         WuIqltxyXAbxLJT15K+vu3sBCvTcCEEmPhy1K0o9WgIv7/Hl6PiT7uPWewGYhsaxK0JK
-         LIE66EX3e1II2btwxPB+rFdQPZOAGWPhtT/Mp4cPCJ1BQHlWXM4PhHeEcriDvlxm9fWk
-         6FEFKXvxW6q3MDa2wF5ZY0uoGhfI1JItFJFnUgAaXSCTdKH4739zVzQC25rf/VETCmWS
-         zTwA==
-X-Gm-Message-State: ACrzQf3NDxzTz9/EcH569Y2WTM74m6ZSF47p1M2A/TOwUE7a7M3IIRDi
-        D50voz+AgBVjFZ8f2DNd92EFNuhVL5ZXag==
-X-Google-Smtp-Source: AMsMyM5bXXVoNbq0NM25A8vuy0XmQoix/gWpgC8wpoPA17PXzcDitRFnafvn66WBmiUkX20jHYXifQ==
-X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id s201-20020a632cd2000000b0041c590167d8mr26923302pgs.365.1665603962918;
-        Wed, 12 Oct 2022 12:46:02 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p4-20020a625b04000000b0054097cb2da6sm270166pfb.38.2022.10.12.12.46.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 12:46:02 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 19:45:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v5 05/30] KVM: Provide more information in kernel log if
- hardware enabling fails
-Message-ID: <Y0cZdmySTNEUo6Ji@google.com>
-References: <cover.1663869838.git.isaku.yamahata@intel.com>
- <c7855171bb693746e17beeb149534d0b37fea6a0.1663869838.git.isaku.yamahata@intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ziKrp+EXj/Jcjg6bjdAH2WyjL4ZEXqf7YYoBHqSFhQk=;
+        b=HJ+oZvu+7IvMiAbVBtmREe8EtXGlSIsQ8aFufRoKB6TXrR4HonPVJljfoXZ58LkjeI
+         BRTDSaWPyG8H8OYjr2oj+x9vhfYpa1b8QNTH4gp6tUCbhMeF7Y2/0uOGvnXaFj06FUO3
+         f4/C52iF+AgKeolHNyFW2lJyOJWh8vQ5SjBskB4y8Eou4v9PjwdpSxRmD/PPujZ0WwgV
+         01h5Tt1a2g9YyPwLA4JbUKbYhLJLo1ylK5whqhygtGpU8yWRJC2OboBprEfW7cOD1Rkh
+         dhnbm18b9+wQhU/TzWCcgbuP7TTxqZaf1hqbWdsyRNXRE2m8EsvsEd+5qfXKnPUoQD8G
+         d6ww==
+X-Gm-Message-State: ACrzQf0d5+tOo8stY+vXYUfJOmf+oUTFBSy7P3l6Y5UkYJ+6Xx+AzT5G
+        ei/eiydcYpfUfbSUemK9xBM=
+X-Google-Smtp-Source: AMsMyM4GjpZuBejJX+/vGwjbNwT4SsamzhcGKVe7m2t5LjPiAUR+eH1y2XidbbErA7WYOFkRLzgzfQ==
+X-Received: by 2002:a63:191d:0:b0:434:4bb3:e016 with SMTP id z29-20020a63191d000000b004344bb3e016mr27467827pgl.133.1665603979945;
+        Wed, 12 Oct 2022 12:46:19 -0700 (PDT)
+Received: from [172.30.1.63] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id e13-20020a170902784d00b00180a7ff78ccsm9301489pln.126.2022.10.12.12.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 12:46:19 -0700 (PDT)
+Message-ID: <995fc676-0c16-cc8c-ce2d-01fd38a1300e@gmail.com>
+Date:   Thu, 13 Oct 2022 04:46:16 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7855171bb693746e17beeb149534d0b37fea6a0.1663869838.git.isaku.yamahata@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drivers/extcon: use simple i2c probe
+Content-Language: en-US
+To:     Stephen Kitt <steve@sk2.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20221012141846.3916480-1-steve@sk2.org>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20221012141846.3916480-1-steve@sk2.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Provide the name of the calling function to hardware_enable_nolock() and
-> include it in the error message to provide additional information on
-> exactly what path failed.
+Hi,
 
-Changelog doesn't match the code.
+Looks good to me. Could you change the patch title as following:
+-  extcon: Use simple i2c probe
 
-> Opportunistically bump the pr_info() to pr_warn(), failure to enable
-> virtualization support is warn-worthy as _something_ is wrong with the
-> system.
+On 22. 10. 12. 23:18, Stephen Kitt wrote:
+> All these drivers have an i2c probe function which doesn't use the
+> "struct i2c_device_id *id" parameter, so they can trivially be
+> converted to the "probe_new" style of probe with a single argument.
 > 
-> Suggested-by: Chao Gao <chao.gao@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> This is part of an ongoing transition to single-argument i2c probe
+> functions. Old-style probe functions involve a call to i2c_match_id:
+> in drivers/i2c/i2c-core-base.c,
+> 
+>          /*
+>           * When there are no more users of probe(),
+>           * rename probe_new to probe.
+>           */
+>          if (driver->probe_new)
+>                  status = driver->probe_new(client);
+>          else if (driver->probe)
+>                  status = driver->probe(client,
+>                                         i2c_match_id(driver->id_table, client));
+>          else
+>                  status = -EINVAL;
+> 
+> Drivers which don't need the second parameter can be declared using
+> probe_new instead, avoiding the call to i2c_match_id. Drivers which do
+> can still be converted to probe_new-style, calling i2c_match_id
+> themselves (as is done currently for of_match_id).
+> 
+> This change was done using the following Coccinelle script, and fixed
+> up for whitespace changes:
+> 
+> @ rule1 @
+> identifier fn;
+> identifier client, id;
+> @@
+> 
+> - static int fn(struct i2c_client *client, const struct i2c_device_id *id)
+> + static int fn(struct i2c_client *client)
+> {
+> ...when != id
+> }
+> 
+> @ rule2 depends on rule1 @
+> identifier rule1.fn;
+> identifier driver;
+> @@
+> 
+> struct i2c_driver driver = {
+> -       .probe
+> +       .probe_new
+>                 =
+> (
+>                    fn
+> |
+> -                  &fn
+> +                  fn
+> )
+>                 ,
+> };
+> 
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 > ---
->  virt/kvm/kvm_main.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/extcon/extcon-fsa9480.c      | 5 ++---
+>  drivers/extcon/extcon-rt8973a.c      | 5 ++---
+>  drivers/extcon/extcon-usbc-tusb320.c | 5 ++---
+>  3 files changed, 6 insertions(+), 9 deletions(-)
 > 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 4243a9541543..4f19c47aab1c 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -5006,7 +5006,8 @@ static void hardware_enable_nolock(void *junk)
->  	if (r) {
->  		cpumask_clear_cpu(cpu, cpus_hardware_enabled);
->  		atomic_inc(&hardware_enable_failed);
-> -		pr_info("kvm: enabling virtualization on CPU%d failed\n", cpu);
-> +		pr_warn("kvm: enabling virtualization on CPU%d failed during %pSb\n",
-> +			cpu, __builtin_return_address(0));
+> diff --git a/drivers/extcon/extcon-fsa9480.c b/drivers/extcon/extcon-fsa9480.c
+> index 7cff66c29907..e8b2671eb29b 100644
+> --- a/drivers/extcon/extcon-fsa9480.c
+> +++ b/drivers/extcon/extcon-fsa9480.c
+> @@ -257,8 +257,7 @@ static irqreturn_t fsa9480_irq_handler(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static int fsa9480_probe(struct i2c_client *client,
+> -			 const struct i2c_device_id *id)
+> +static int fsa9480_probe(struct i2c_client *client)
+>  {
+>  	struct fsa9480_usbsw *info;
+>  	int ret;
+> @@ -370,7 +369,7 @@ static struct i2c_driver fsa9480_i2c_driver = {
+>  		.pm		= &fsa9480_pm_ops,
+>  		.of_match_table = fsa9480_of_match,
+>  	},
+> -	.probe			= fsa9480_probe,
+> +	.probe_new		= fsa9480_probe,
+>  	.id_table		= fsa9480_id,
+>  };
+>  
+> diff --git a/drivers/extcon/extcon-rt8973a.c b/drivers/extcon/extcon-rt8973a.c
+> index e6e448f6ea2f..afc9b405d103 100644
+> --- a/drivers/extcon/extcon-rt8973a.c
+> +++ b/drivers/extcon/extcon-rt8973a.c
+> @@ -548,8 +548,7 @@ static void rt8973a_init_dev_type(struct rt8973a_muic_info *info)
+>  	}
+>  }
+>  
+> -static int rt8973a_muic_i2c_probe(struct i2c_client *i2c,
+> -				 const struct i2c_device_id *id)
+> +static int rt8973a_muic_i2c_probe(struct i2c_client *i2c)
+>  {
+>  	struct device_node *np = i2c->dev.of_node;
+>  	struct rt8973a_muic_info *info;
+> @@ -696,7 +695,7 @@ static struct i2c_driver rt8973a_muic_i2c_driver = {
+>  		.pm	= &rt8973a_muic_pm_ops,
+>  		.of_match_table = rt8973a_dt_match,
+>  	},
+> -	.probe	= rt8973a_muic_i2c_probe,
+> +	.probe_new = rt8973a_muic_i2c_probe,
+>  	.remove	= rt8973a_muic_i2c_remove,
+>  	.id_table = rt8973a_i2c_id,
+>  };
+> diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+> index 6ba3d89b106d..ca752ddf7763 100644
+> --- a/drivers/extcon/extcon-usbc-tusb320.c
+> +++ b/drivers/extcon/extcon-usbc-tusb320.c
+> @@ -230,8 +230,7 @@ static const struct regmap_config tusb320_regmap_config = {
+>  	.val_bits = 8,
+>  };
+>  
+> -static int tusb320_extcon_probe(struct i2c_client *client,
+> -				const struct i2c_device_id *id)
+> +static int tusb320_extcon_probe(struct i2c_client *client)
+>  {
+>  	struct tusb320_priv *priv;
+>  	const void *match_data;
+> @@ -313,7 +312,7 @@ static const struct of_device_id tusb320_extcon_dt_match[] = {
+>  MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
+>  
+>  static struct i2c_driver tusb320_extcon_driver = {
+> -	.probe		= tusb320_extcon_probe,
+> +	.probe_new	= tusb320_extcon_probe,
+>  	.driver		= {
+>  		.name	= "extcon-tusb320",
+>  		.of_match_table = tusb320_extcon_dt_match,
+> 
+> base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
 
-I vote to drop this patch.  Trying to capture the caller is just a poor man's
-version of WARN, and at the end of this series KVM should be at a point where KVM
-can WARN when hardware enabling indicates a potentially fatal issue.
 
-Specifically, kvm_arch_add_vm() shouldn't WARN since x86 can fail due a misbehaving
-userspace.  kvm_arch_online_cpu() on the other hand can and should WARN since
-failure in that case means hardware enabling succeeded on other CPUs, and in the x86
-case, that KVM is actively running VMs.
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
