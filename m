@@ -2,73 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77405FCA21
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29F55FCA23
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiJLR60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 13:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S229727AbiJLR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 13:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiJLR6Q (ORCPT
+        with ESMTP id S229689AbiJLR6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:58:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0561D8ECE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:58:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D479615A1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 17:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B4222C433C1;
-        Wed, 12 Oct 2022 17:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665597494;
-        bh=HNAwbyU0QrEeUAf47+URYIJiu2DZL/66q2f0E40S06A=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=mjiDvI4pt32oqP8ZY2bxygz0c7ewJeB3ZrRVDQB0rPXaEAO2IiVk36cLreERfzIop
-         H3E4yaSjQOVnbxxtF79d0oEW8fkB5bbKYstUiGSSrV+n4ZnKAjSHemgOGTYttq4xbR
-         6GMvYAr4C407yc7iiMJFKqIesNQtUpUgIJRJCKXpHsNiFnCcncJXTVLJ+Hioz6V1dY
-         Hdg/2uqn+mY7RCyzh8D+w7WJCUBqUp0ZZvHEC4/pAF9Jg21eJmo6Fg1XTsEkxL2I29
-         yvST8ndRziY8sugdm/YGt3GTvbMEykEn78qXbNP4+KRzGhEtF4nplG/h1G9SrFz92G
-         ne8nereWFJVFg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B51BE29F35;
-        Wed, 12 Oct 2022 17:58:14 +0000 (UTC)
-Subject: Re: [GIT pull] irq/core for v6.1-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <166558251511.208146.10184958171655902083.tglx@xen13.fritz.box>
-References: <166558251511.208146.10184958171655902083.tglx@xen13.fritz.box>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <166558251511.208146.10184958171655902083.tglx@xen13.fritz.box>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-core-2022-10-12
-X-PR-Tracked-Commit-Id: b8d49bcd8fd19824888c766a217891855d8692ad
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 60ac35bf6b98fb87475c2f85f022d5ea737dd68c
-Message-Id: <166559749463.25532.2147568745775222238.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Oct 2022 17:58:14 +0000
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 13:58:48 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD745D7E30
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:58:46 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id l1so16906536pld.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RuAk5hsnZSvAvw2wDCUvGvOXLRInHQhqvp0BW6poLwo=;
+        b=UBiG7yHuvbThq5QxATiWf8UzkROoEQsIbKTWOgvr1cSEsFd375KUdPgARAjslccbNJ
+         ArMmZ6FUehCeXjOYoYdMt01ZOVXN6/NmH+M4YoEMgUz0dm5hkTrv/+BotiKUAI+ttxbA
+         rENVdmfne7MGbUXF96giy/btcYsvzPXQDYcy4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RuAk5hsnZSvAvw2wDCUvGvOXLRInHQhqvp0BW6poLwo=;
+        b=fkPD07uvPwEQotVflEl/T4iirP4ROHZtzhV46TkRfsHElQ2/C3tJzagK6tNL+bN3O+
+         x+QkEvPckAxFGL28kUGORpbsg/zNFvtebitXWM7058LnhAbb9j6k3Cjk+97uwM2cbqBD
+         akhKdVJd7Uq+FAnySyOeMtc9B3Gr53VWsVaBSsukGU31KH6SDQeCfGOd4KIkhtDAyrO/
+         DDQnW4INnrE2ISJ8H4HII3U0HhSJpKd+XTSuailAKK3AIj8kuukKBzF6M/OnnAoRl329
+         cQZBonfbZnjYK4QUhNrEfdBNFf3ZXY/TNEzarMoAxWOscTynBzjYoie4qmTHVCT6UMl6
+         rRXQ==
+X-Gm-Message-State: ACrzQf1XJoCuU/4In9yA1XwBBsEy1FDc1CIghGrFR7TF7zb+88TFrAub
+        3kI9C7ijBVW5hi1rZR/YG1Nxzg==
+X-Google-Smtp-Source: AMsMyM6VWK/GmWFoY0YIGv8lIKLXnRH2iuzrFBw7I21YH03Ejw15cOU0bNxMOhtyjvn3yMX65x8nmA==
+X-Received: by 2002:a17:902:bd45:b0:17f:6b19:bf6f with SMTP id b5-20020a170902bd4500b0017f6b19bf6fmr30613889plx.73.1665597526239;
+        Wed, 12 Oct 2022 10:58:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902e14400b00183ba0fd54dsm3715572pla.262.2022.10.12.10.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 10:58:45 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 10:58:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com
+Subject: Re: [PATCH 2/8] pstore: Expose kmsg_bytes as a module parameter
+Message-ID: <202210120958.37D9621E8C@keescook>
+References: <20221006224212.569555-1-gpiccoli@igalia.com>
+ <20221006224212.569555-3-gpiccoli@igalia.com>
+ <202210061628.76EAEB8@keescook>
+ <267ccf8f-1fea-7648-ec2b-e7f4ae822ae4@igalia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <267ccf8f-1fea-7648-ec2b-e7f4ae822ae4@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 12 Oct 2022 15:48:46 +0200 (CEST):
+On Wed, Oct 12, 2022 at 12:33:36PM -0300, Guilherme G. Piccoli wrote:
+> On 06/10/2022 20:32, Kees Cook wrote:
+> > [...]
+> > Doing a mount will override the result, so I wonder if there should be
+> > two variables, etc... not a concern for the normal use case.
+> > 
+> > Also, I've kind of wanted to get rid of a "default" for this and instead
+> > use a value based on the compression vs record sizes, etc. But I didn't
+> > explore it.
+> > 
+> 
+> For some reason I forgot to respond that, sorry!
+> 
+> I didn't understand exactly how the mount would override things; I've
+> done some tests:
+> 
+> (1) booted with the new kmsg_bytes module parameter set to 64k, and it
+> was preserved across multiple mount/umount cycles.
+> 
+> (2) When I manually had "-o kmsg_bytes=16k" set during the mount
+> operation, it worked as expected, setting the thing to 16k (and
+> reflecting in the module parameter, as observed in /sys/modules).
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-core-2022-10-12
+What I was imagining was the next step:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/60ac35bf6b98fb87475c2f85f022d5ea737dd68c
+(3) umount, unload the backend, load a new backend, and mount it
+    without kmsg_bytes specified -- kmsg_bytes will be 16k, not 64k.
 
-Thank you!
+It's a pretty extreme corner-case, I realize. :) However, see below...
+
+> In the end, if you think properly, what is the purpose of kmsg_bytes?
+> Wouldn't make sense to just fill the record_size with the maximum amount
+> of data it can handle? Of course there is the partitioning thing, but in
+> the end kmsg_bytes seems a mechanism to _restrict_ the data collection,
+> so maybe the default would be a value that means "save whatever you can
+> handle" (maybe 0), and if the parameter/mount option is set, then pstore
+> would restrict the saved size.
+
+Right, kmsg_bytes is the maximum size to save from the console on a
+crash. The design of the ram backend was to handle really small amounts
+of persistent RAM -- if a single crash would eat all of it and possibly
+wrap around, it could write over useful parts at the end (since it's
+written from the end to the front). However, I think somewhere along
+the way, stricter logic was added to the ram backend:
+
+        /*
+         * Explicitly only take the first part of any new crash.
+         * If our buffer is larger than kmsg_bytes, this can never happen,
+         * and if our buffer is smaller than kmsg_bytes, we don't want the
+         * report split across multiple records.
+         */
+        if (record->part != 1)
+                return -ENOSPC;
+
+This limits it to just a single record.
+
+However, this does _not_ exist for other backends, so they will see up
+to kmsg_bytes-size dumps split across psinfo->bufsize many records. For
+the backends, this record size is not always fixed:
+
+- efi uses 1024, even though it allocates 4096 (as was pointed out earlier)
+- zone uses kmsg_bytes
+- acpi-erst uses some ACPI value from ACPI_ERST_GET_ERROR_LENGTH
+- ppc-nvram uses the configured size of nvram partition
+
+Honestly, it seems like the 64k default is huge, but I don't think it
+should be "unlimited" given the behaviors of ppc-nvram, and acpi-erst.
+For ram and efi, it's effectively unlimited because of the small bufsizes
+(and the "only 1 record" logic in ram).
+
+Existing documentation I can find online seem to imply making it smaller
+(8000 bytes[1], 16000 bytes), but without justification. Even the "main"
+documentation[2] doesn't mention it.
+
+-Kees
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/ABI/testing/pstore
+[2] https://docs.kernel.org/admin-guide/ramoops.html
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kees Cook
