@@ -2,105 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7665FC51B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55945FC521
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiJLMQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S229641AbiJLMRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJLMQW (ORCPT
+        with ESMTP id S229678AbiJLMRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:16:22 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1C4B4886
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:16:20 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id 3so17214340vsh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t6nwrNU0AH4f7iCQlXPH/XS5dC6On4VeTBI659GaqJI=;
-        b=vevTxUPJ2H0KTi9Wj8buza5iEeGLeor1UI2UWdrrpCMTE+DPKtQpmTr/qCgdCaTpnD
-         PKtrkvmeN0PUN+qp17dND8u3B53TnuB6ULTZZhuie1exOK1kIBFIrZarMlMi011S0M4A
-         aKPbJanToEx38erRU7yddVnzxN8iVY85fV13fjsqj6cG0XvMHXiWIm8AqFyCn0H4UlxD
-         oC7COYN2cKGobE38hxJW/AaxuzP3E54BVrXDDlxl5ssaj87qc+UqEceiufL39e9RtXeG
-         Eqiu/FsrLPSe1v3edH28VxJIqn7qDKb92oOpYlKUvMx8Fx7fysJaQqZbJWtpD6RJZEni
-         /I5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t6nwrNU0AH4f7iCQlXPH/XS5dC6On4VeTBI659GaqJI=;
-        b=pP8d9yei14mDF3sPcG6BnJStRfY8rgqLtdFddWpwTWpBPFzfdi/T8Rgkl5qXrXyVEH
-         ePZ+a/ql7/Ana9SUxATavlUP/+CE4dIy8ZDg5dE4RKZX+czvo1NK6b7l9OzuBW9PXxLc
-         3Lf6B74pq3KeHrfDlXvRnn5k4Z70bJFbspDCp49i5B683wQME89I2g0yCEDNNn+1RnZN
-         TZrORqplsdvwY15i8B/OhC8vZXzi3EF/WmicELc5W8eyr43nAajAtwJvn2GZcuEFUgPO
-         uydqbfZCuqhHxFXZtcNZsFoO+Ev8iaCRNnf2eDx2jcF2B1uq0Gq8XEidtS93XQt/eGDa
-         MU8g==
-X-Gm-Message-State: ACrzQf1XdWNbC4D9h1YwoDVwAP/PP19ftoLPgV2rjscrlOPpmC9R+ETm
-        c4QYCgGbLXM/jz9RdrJMYgg9ebXnLrcn2+gKnn9v6g==
-X-Google-Smtp-Source: AMsMyM5GtV8SqwPGtpPeISERi9xTPcmdjX0MLuusrG/da9K3IRfi7wYwFUiAPDgNHQKn9pqqOg4yJTNzZYhNh7+fxm4=
-X-Received: by 2002:a67:ead5:0:b0:3a6:e463:4b0e with SMTP id
- s21-20020a67ead5000000b003a6e4634b0emr13782590vso.61.1665576979909; Wed, 12
- Oct 2022 05:16:19 -0700 (PDT)
+        Wed, 12 Oct 2022 08:17:07 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD5DB5146;
+        Wed, 12 Oct 2022 05:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=771q3x4hOnkGzc78SSiuR2Kc8F2eZjEEOxi50XFCd14=; b=E1drx2e5ov2RYK9oK5Zx5/KeJi
+        euNoevVzCIAtLYs/LZRRj1ulRyX2D/g1DoT/h6nJ8WHN4wg8v9l8zMHApB0wkPYhVKPO75VrWjbuZ
+        6MezWJMrWmFs+QNaXuL1ijf3KmKfIZqg2nux/9HZGvrJjKNQB4C3JgNYbiafLXR01Q7K+kpVkjcxl
+        yA/QkyrirVfJz1SUdljE2HM4DMFlxizmQa9C0Gij2voz7Mv8EFIszLrDBUY4ZHMnXzldcVLvtj55A
+        qfhTY8b4HbKz14NvEk9HXzGkBgibBW6NpB/P9lmwrLP9E63vjpm2kMHSQU/7f0TdNQivVL5jIjQlp
+        UsjTPjFA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oiaf1-002rHx-8r; Wed, 12 Oct 2022 12:16:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CCA95300023;
+        Wed, 12 Oct 2022 14:16:29 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A982F20E06FFE; Wed, 12 Oct 2022 14:16:29 +0200 (CEST)
+Date:   Wed, 12 Oct 2022 14:16:29 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        will@kernel.org, robh@kernel.org, mingo@redhat.com,
+        catalin.marinas@arm.com, ndesaulniers@google.com,
+        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v2] perf: Rewrite core context handling
+Message-ID: <Y0awHa8oS5yal5M9@hirez.programming.kicks-ass.net>
+References: <20221008062424.313-1-ravi.bangoria@amd.com>
+ <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
+ <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
+ <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
+ <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
+ <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
 MIME-Version: 1.0
-References: <20221005145746.172138-1-m.zatovic1@gmail.com> <20221005145746.172138-4-m.zatovic1@gmail.com>
-In-Reply-To: <20221005145746.172138-4-m.zatovic1@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 12 Oct 2022 14:16:08 +0200
-Message-ID: <CAMRc=MfogAnGPL7BQp6r9_BpnJPPQ=DunqErfLrn2Ci960c=sg@mail.gmail.com>
-Subject: Re: [RFCv2 PATCH 4/4] gpio: add Wiegand GPIO driver
-To:     =?UTF-8?B?TWFydGluIFphxaVvdmnEjQ==?= <m.zatovic1@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, gregkh@linuxfoundation.org,
-        jeffrey.l.hugo@gmail.com, andersson@kernel.org,
-        Michael.Srba@seznam.cz, saravanak@google.com, mani@kernel.org,
-        hemantk@codeaurora.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 4:58 PM Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail.c=
-om> wrote:
->
-> Wiegand GPIO driver uses GPIO lines defined in the devicetree to
-> transmit data following the Wiegand protocol.
->
-> Signed-off-by: Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail.com>
-> ---
+On Wed, Oct 12, 2022 at 02:09:00PM +0530, Ravi Bangoria wrote:
 
-[snip]
+> > @@ -3366,6 +3370,14 @@ static void perf_event_sync_stat(struct
+> >  	}
+> >  }
+> >  
+> > +#define list_for_each_entry_double(pos1, pos2, head1, head2, member)	\
+> > +	for (pos1 = list_first_entry(head1, typeof(*pos1), member),	\
+> > +	     pos2 = list_first_entry(head2, typeof(*pos2), member);	\
+> > +	     !list_entry_is_head(pos1, head1, member) &&		\
+> > +	     !list_entry_is_head(pos2, head2, member);			\
+> > +	     pos1 = list_next_entry(pos1, member),			\
+> > +	     pos2 = list_next_entry(pos2, member))
+> > +
+> >  static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
+> >  					  struct perf_event_context *next_ctx)
+> >  {
+> > @@ -3374,16 +3386,9 @@ static void perf_event_swap_task_ctx_dat
+> >  	if (!prev_ctx->nr_task_data)
+> >  		return;
+> >  
+> > -	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
+> > -				    struct perf_event_pmu_context,
+> > -				    pmu_ctx_entry);
+> > -	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
+> > -				    struct perf_event_pmu_context,
+> > -				    pmu_ctx_entry);
+> > -
+> > -	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
+> > -	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
+> > -
+> > +	list_for_each_entry_double(prev_epc, next_epc,
+> > +				   &prev_ctx->pmu_ctx_list, &next_ctx->pmu_ctx_list,
+> > +				   pmu_ctx_entry) {
+> 
+> There are more places which can use list_for_each_entry_double().
+> I'll fix those.
 
-> +
-> +DEVICE_ATTR_RW(pulse_len);
-> +DEVICE_ATTR_RW(interval_len);
-> +DEVICE_ATTR_RW(frame_gap);
-> +DEVICE_ATTR_RW(format);
-> +DEVICE_ATTR_RW(payload_len);
-> +
+I've gone and renamed it: double_list_for_each_entry(), but yeah, didn't
+look too hard for other users.
 
-We don't really allow GPIO drivers to define all kinds of custom
-device attributes. Also: this driver does not register a GPIO provider
-- rather it's a GPIO consumer.
+> > @@ -4859,7 +4879,14 @@ static void put_pmu_ctx(struct perf_even
+> >  	if (epc->ctx) {
+> >  		struct perf_event_context *ctx = epc->ctx;
+> >  
+> > -		// XXX ctx->mutex
+> > +		/*
+> > +		 * XXX
+> > +		 *
+> > +		 * lockdep_assert_held(&ctx->mutex);
+> > +		 *
+> > +		 * can't because of the call-site in _free_event()/put_event()
+> > +		 * which isn't always called under ctx->mutex.
+> > +		 */
+> 
+> Yes. I came across the same and could not figure out how to solve
+> this. So Just kept XXX as is.
 
-For what you're trying to achieve: have you tried using libgpiod and
-controlling the lines from user-space? If that's too slow, then I'd
-say this driver should go somewhere else. Maybe you'd need a whole new
-protocol sub-system for that. In any case - this subsystem is not the
-right place.
+Yeah, I can sorta fix it, but it's ugly so there we are.
 
-Bartosz
+> >  
+> >  		WARN_ON_ONCE(list_empty(&epc->pmu_ctx_entry));
+> >  		raw_spin_lock_irqsave(&ctx->lock, flags);
 
-[snip]
+> > @@ -12657,6 +12675,13 @@ perf_event_create_kernel_counter(struct
+> >  		goto err_unlock;
+> >  	}
+> >  
+> > +	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
+> > +	if (IS_ERR(pmu_ctx)) {
+> > +		err = PTR_ERR(pmu_ctx);
+> > +		goto err_unlock;
+> > +	}
+> > +	event->pmu_ctx = pmu_ctx;
+> 
+> We should call find_get_pmu_context() with ctx->mutex held and thus
+> above perf_event_create_kernel_counter() change. Is my understanding
+> correct?
+
+That's the intent yeah. But due to not always holding ctx->mutex over
+put_pmu_ctx() this might be moot. I'm almost through auditing epc usage
+and I think ctx->lock is sufficient, fingers crossed.
+
+> > +
+> >  	if (!task) {
+> >  		/*
+> >  		 * Check if the @cpu we're creating an event for is online.
+
+> > @@ -12998,7 +13022,7 @@ void perf_event_free_task(struct task_st
+> >  	struct perf_event_context *ctx;
+> >  	struct perf_event *event, *tmp;
+> >  
+> > -	ctx = rcu_dereference(task->perf_event_ctxp);
+> > +	ctx = rcu_access_pointer(task->perf_event_ctxp);
+> 
+> We dereference ctx pointer but with mutex and lock held. And thus
+> rcu_access_pointer() is sufficient. Is my understanding correct?
+
+We do not in fact hold ctx->lock here IIRC; but this is a NULL test, if
+it is !NULL we know we have a reference on it and are good.
