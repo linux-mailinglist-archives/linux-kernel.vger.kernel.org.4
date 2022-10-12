@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4CB5FCA2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F083F5FCA2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJLSBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S229527AbiJLSCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJLSBs (ORCPT
+        with ESMTP id S229572AbiJLSCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:01:48 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BC1FBCF6;
-        Wed, 12 Oct 2022 11:01:43 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 3CAFF5C0D08;
-        Wed, 12 Oct 2022 18:01:41 +0000 (UTC)
-Received: from pdx1-sub0-mail-a274.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 802BF5C0E3F;
-        Wed, 12 Oct 2022 18:01:40 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1665597700; a=rsa-sha256;
-        cv=none;
-        b=0lst7vhA9KXl0BlodcmFdXLLZnM+x1RONigwbyhU8YAfOubeu4FyF7EFXcVs3B2HU5EIk7
-        G63URJOktCMk82zgBGpvIk6oRHbXtWkrDGdDPlQMYVBsxmFji7rMBZ/T4XYteX21PR8I9J
-        xYqi/wrX5NZvAvm/ioWYMHLMO8jqONyf2X8RgXD4qulxWyQKn5TCSugCFR/zkXB0YxebBw
-        IwtZZc/MpEmlbzCg8aHvla+utDKFBf9J8thfYg/HcQL5MAJzDMceASdJZiiloY+39jhSFK
-        ljisgF2iA2XitA5NBb2ZGwhDnlMC7g3gD/G6qjBjdVv3bCD6NNcYfqfasfGNPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1665597700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Azo9u6vmwQjmSBLUFi8/jPp/M7Ky8iFJDRjtNAbVVcU=;
-        b=N2iY9VJE9bgfsoS0d8LUQQ0OumugEGE8p3ovQ31isgCcfcs882Sd5J4mGvTR/Bw1kEb5Dl
-        a4IIdZ+wT3I00iaQPbBUIKTje2ZsXb99B2rlMynnD7uwWzAhglYDZGTfZJylarKbs6IwpM
-        bV47iU7JbBWCOt+avco15FVa8NvjxzuXjWxGBq3w7SWso3rSkvYIn7veF9eTmx8Sn6v5GB
-        zTDXw5w/Z2gpWvSGVb+J6uPYufrpBU9giKktlrlC/uiDNW+RJzMI481AbA6CnlQVBUwOic
-        HyZU1KzPSkLBKlwIl4nbROc3WJt1Zwl89Sa+Tqh/BQtvZg1psIa8Qf7jmsG/vA==
-ARC-Authentication-Results: i=1;
-        rspamd-7c485dd8cf-gbptx;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Shade-Occur: 1123a4d62971cc82_1665597700946_3907678197
-X-MC-Loop-Signature: 1665597700946:1268412590
-X-MC-Ingress-Time: 1665597700946
-Received: from pdx1-sub0-mail-a274.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.129.213 (trex/6.7.1);
-        Wed, 12 Oct 2022 18:01:40 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a274.dreamhost.com (Postfix) with ESMTPSA id 4MngSz4SgDz2l;
-        Wed, 12 Oct 2022 11:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1665597700;
-        bh=Azo9u6vmwQjmSBLUFi8/jPp/M7Ky8iFJDRjtNAbVVcU=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=fdlc1Hni/YpMgQn4bNby6ioIjqrq6tUchl1LgX/qM7tuvwy2qTsNF3erQkYrh5iD5
-         NkYXWGbgK0saY4jqyAguyXEh58wUBH7CcIMwJbovKqQDxuuUlTmtVZi7wDCVJBRxSD
-         2uttD+J8P8cSk3HgSAV4JWSrdRDkN56pRsxRMlXeompyVVMoXWIHe7Jptb1YbE4ho7
-         mkFc9so21D/hdUKjneaEe4QoG9lExH2i4PxDuyQDSGeMzydddjT9cXnVTtT4OmkBsh
-         SsweFUIvpwSx6EZpaRSrpAsfW4WDjXssBiiz6V3P8xPPZY6dbDdjNXlHVPJCQIrVWt
-         DM+KOy60hxutQ==
-Date:   Wed, 12 Oct 2022 11:01:36 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-Subject: Re: [RFC V2 PATCH 11/11] cxl/mem: Wire up event interrupts
-Message-ID: <20221012180136.tc3ryjumquvnaqk2@offworld>
-References: <20221010224131.1866246-1-ira.weiny@intel.com>
- <20221010224131.1866246-12-ira.weiny@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221010224131.1866246-12-ira.weiny@intel.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 12 Oct 2022 14:02:02 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15096DD898;
+        Wed, 12 Oct 2022 11:02:01 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q1so7829392pgl.11;
+        Wed, 12 Oct 2022 11:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mI6JTDhKVYSrCGCD4V56C9X6Kiak+3dUkc3QnuibHPU=;
+        b=ZwTl6AAaQ0Ws45vSBrLIcUrnyeGPkzph09dsda8I/3iok8sidXoeHPpBSYWXOhWO4I
+         VotyRNrTD2SYFyLa0rgP3w9dLcgU0io4629+19FHN7tg5P7vrE9tTi871hDFV81cYjgf
+         s05P6xeO/0de/53iAG8UuId+EXcpeOBccSvpUxeEcWXz9cyEyrKfHnYSvuhWjccb6/CE
+         sQNFkSa7PZFUOTCbx/fQ+02VgEkRTs0qibiKXdmr7plpmDS/81QioTTfVhHBbYG8fTqo
+         CQoct7DhqlQpGvbd6vSyxz/dbVVl7CyWJ2771hpPjKopD5so1Nq8b4vzopepLQvUUL+V
+         tXUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mI6JTDhKVYSrCGCD4V56C9X6Kiak+3dUkc3QnuibHPU=;
+        b=bYEYMkdXdGL8vg+I3STyGeb1izw5IYtr7/ObPH9POETAXf98dFkfnJZoI6ylm71pAR
+         LlVci1EYwZSCplV+AdgLd2PC0kPOS/aVWYyZOrnIAB4OFd0OHUUasuJo3p46XQQgNTE/
+         rh1Kq2e7uxjjo2JT3Qe+QgNMT5MjjmXegWzSQz34y8m455E+b19lRMODg4ALuJQUk35Y
+         QGmoAL7CdFHMVXmPgIcpLzQlR/vWAfJu64pBNxkgMqyzkCx8DgLUl9I3l63Y3uCeBnXV
+         GlXBoq8v9RH/w870x/+IWQJz5v7jjdJ5aaAhuV64hl0AjDApHmzOZuXSYvXMohKpQgw0
+         9G6A==
+X-Gm-Message-State: ACrzQf1RVHuQA/eEm0mIXlVeHbBVeh11x+3V7ac/+/X+C1BCu1++CN8M
+        +B07ZkVvs9KNKFWIPL80+aiTvSS4kfKKYA==
+X-Google-Smtp-Source: AMsMyM6wGKajSAd4wPGHhoHm+LRw505WIZj871/gi+wZTScVudBPvwvqo9aSHUegpMeeYFn/afRAgg==
+X-Received: by 2002:a63:1c47:0:b0:44c:2476:12ff with SMTP id c7-20020a631c47000000b0044c247612ffmr27537426pgm.50.1665597720308;
+        Wed, 12 Oct 2022 11:02:00 -0700 (PDT)
+Received: from localhost ([2406:7400:61:b6fa:b70b:65a4:a699:40c8])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0016c50179b1esm10777750pln.152.2022.10.12.11.01.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 11:01:59 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 12 Oct 2022 23:31:51 +0530
+Message-Id: <CNK541A4RD4B.31EY633R2WS9O@skynet-linux>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <linux-kernel@vger.kernel.org>
+Cc:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <dmitry.baryshkov@linaro.org>, "Andy Gross" <agross@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH v3 1/2] remoteproc: qcom: pas: Add MSM8953 ADSP PIL
+ support
+From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
+X-Mailer: aerc 0.12.0
+References: <20221008174658.336470-1-sireeshkodali1@gmail.com>
+ <20221008174658.336470-2-sireeshkodali1@gmail.com>
+ <56e8fc84-aad0-b153-e415-8c1bd1647c2b@linaro.org>
+In-Reply-To: <56e8fc84-aad0-b153-e415-8c1bd1647c2b@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,27 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022, ira.weiny@intel.com wrote:
-
->From: Ira Weiny <ira.weiny@intel.com>
+On Mon Oct 10, 2022 at 4:22 PM IST, Krzysztof Kozlowski wrote:
+> On 08/10/2022 13:46, Sireesh Kodali wrote:
+> > Add support for the Audio DSP PIL found on the Qualcomm MSM8953
+> > platform. The same configuration is used on all SoCs based on the
+> > MSM8953 platform (SDM450, SDA450, SDM625, SDM632, APQ8053).
+> >=20
+> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> > ---
+> >  drivers/remoteproc/qcom_q6v5_pas.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qc=
+om_q6v5_pas.c
+> > index 6afd0941e552..70b3a37c4814 100644
+> > --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> > +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> > @@ -950,6 +950,7 @@ static const struct of_device_id adsp_of_match[] =
+=3D {
+> >  	{ .compatible =3D "qcom,msm8226-adsp-pil", .data =3D &adsp_resource_i=
+nit},
+> >  	{ .compatible =3D "qcom,msm8974-adsp-pil", .data =3D &adsp_resource_i=
+nit},
+> >  	{ .compatible =3D "qcom,msm8996-adsp-pil", .data =3D &msm8996_adsp_re=
+source},
+> > +	{ .compatible =3D "qcom,msm8953-adsp-pil", .data =3D &msm8996_adsp_re=
+source},
 >
->CXL device events are signaled via interrupts.  Each event log may have
->a different interrupt message number.  These message numbers are
->reported in the Get Event Interrupt Policy mailbox command.
+> This one also in alphanumeric order, by compatible.
+
+Will be fixed in the next iteration
+
+Regards,
+Sireesh Kodali
 >
->Create an infrastructure to query the max vectors required for the CXL
->device.  Add event interrupt information that infrastructure.  Set up a
->handler for each event log.
 >
->Davidlohr suggested the generic vector code.
+> Best regards,
+> Krzysztof
 
-So this should be a separate patch, and out of the event series altogether.
-There are a number of interested parties for irq support, and imo the
-generic vector stuff should be a first dependency to all of them.
-
-I've sent out a patch with some updates you did. I also kept the whole
-table populated with nil callbacks as I believe this documents the TODO
-nicely.
-
-Thanks,
-Davidlohr
