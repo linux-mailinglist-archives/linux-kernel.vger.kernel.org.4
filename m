@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA8D5FC1D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFF45FC1CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJLIRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S229550AbiJLIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiJLIQA (ORCPT
+        with ESMTP id S229894AbiJLIP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:16:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801A6A02E0;
+        Wed, 12 Oct 2022 04:15:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A02172690;
         Wed, 12 Oct 2022 01:15:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C7CCB819BD;
-        Wed, 12 Oct 2022 08:15:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EFAC43166;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68CB461477;
+        Wed, 12 Oct 2022 08:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83074C4FEBD;
         Wed, 12 Oct 2022 08:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665562555;
-        bh=B6Y8geYh7KWwxOGiDhINCWSgJCk5R5cG/Om7WKbybd4=;
+        bh=erC65IQqHAKXzl/EEYi72T7IH4BMuinND2MOz4IUJvo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YuZY7R1+h6oV3CELnigCjSD4xScflSfN2FTOfaUQTbFAvGUpoLz6XUPDpatGbnNhT
-         e0Jogd/RDpZVPC1GmPXJFMgllgGbD1ZO4XXx6pHy3CiOA4Sji9QbdDCmveF3fklonY
-         DSvkkKGC6rcFr5REUu3sTncN3RfjCrdcNJ8GccmPF6Ysb5M8nTOVC0YMvf7/fy5lZV
-         5thnYcNmVEy5NOoenY6Jwv8vgflbtj6mv+hXYG75LDcPm/3JXfhMp8zeweFDrpRmZp
-         k5gOkDRx+OI3VjNoCdifcZJvqDjRkTX7UFS0nctVpDfa17DP3dovbaDD7zN/ExWoeH
-         DI+PZkJ9oeFgQ==
+        b=mt6v3er0QS29BlZ06xRZs5nZwUPu4IY9O7bqw1Evh+GPoct2zQPgKLrq0hhg1Wtjb
+         z0MF7mfLeUObUj9/xlG2J/DWR5sQd0sRbZC6Q1S9WxcWTCrW6hbyWtQzZ3gjlTMkZN
+         tTkGaqZWpgQrEgBYzuCXMLSznV1NeKx5CHvfvZeY4X09EODIBCVtJpfn03m+dq3MSK
+         /TolRxRNH7ivqiO1paiPQsR1VZ3zavXLwK5D0myzFkdWqtmhbvrbydBnvCzgSPTZ3+
+         D0g4fSfOS5hcXtfJLZLf3WvLOSHangfmgdlyatHbvkh6axTmJ4EWQUlgsIiEZbWwXF
+         rYPlRFQd6muJw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oiWu3-0004om-0z; Wed, 12 Oct 2022 10:15:47 +0200
+        id 1oiWu3-0004oo-49; Wed, 12 Oct 2022 10:15:47 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 10/14] phy: qcom-qmp-pcie-msm8996: drop power-down delay config
-Date:   Wed, 12 Oct 2022 10:12:37 +0200
-Message-Id: <20221012081241.18273-11-johan+linaro@kernel.org>
+Subject: [PATCH v2 11/14] phy: qcom-qmp-combo: drop sc8280xp power-down delay
+Date:   Wed, 12 Oct 2022 10:12:38 +0200
+Message-Id: <20221012081241.18273-12-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221012081241.18273-1-johan+linaro@kernel.org>
 References: <20221012081241.18273-1-johan+linaro@kernel.org>
@@ -62,54 +62,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The power-down delay was included in the first version of the QMP driver
-for MSM8996 as an optional delay after powering on the PHY (using
-POWER_DOWN_CONTROL) and just before starting it. Later changes modified
-this sequence by powering on before initialising the PHY, but the
-optional delay stayed where it was (i.e. before starting the PHY).
+The SC8280XP combo PHY does not need a delay before starting the USB PHY
+(which is what the has_pwrdn_delay config option really controls) so
+drop the unnecessary delay.
 
-The vendor driver does not use a delay before starting the PHY and this
-is likely not needed on any platform unless there is a corresponding
-delay in the vendor kernel init sequence tables (i.e. in devicetree).
-
-Let's keep the delay for now, but drop the redundant configuration
-options while increasing the unnecessarily low timer slack somewhat.
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-index 31ac405d3785..899be7bd4d92 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-@@ -41,7 +41,7 @@
- 
- #define PHY_INIT_COMPLETE_TIMEOUT		10000
- #define POWER_DOWN_DELAY_US_MIN			10
--#define POWER_DOWN_DELAY_US_MAX			11
-+#define POWER_DOWN_DELAY_US_MAX			20
- 
- struct qmp_phy_init_tbl {
- 	unsigned int offset;
-@@ -203,12 +203,6 @@ struct qmp_phy_cfg {
- 	unsigned int mask_com_pcs_ready;
- 	/* bit offset of PHYSTATUS in QPHY_PCS_STATUS register */
- 	unsigned int phy_status;
--
--	/* true, if PHY needs delay after POWER_DOWN */
--	bool has_pwrdn_delay;
--	/* power_down delay in usec */
--	int pwrdn_delay_min;
--	int pwrdn_delay_max;
- };
- 
- /**
-@@ -326,10 +320,6 @@ static const struct qmp_phy_cfg msm8996_pciephy_cfg = {
- 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
- 	.mask_com_pcs_ready	= PCS_READY,
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index 84380852ba5b..a8e09333072e 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -1210,10 +1210,6 @@ static const struct qmp_phy_cfg sc8280xp_usb43dp_usb_cfg = {
+ 	.start_ctrl		= SERDES_START | PCS_START,
+ 	.pwrdn_ctrl		= SW_PWRDN,
  	.phy_status		= PHYSTATUS,
 -
 -	.has_pwrdn_delay	= true,
@@ -117,17 +85,7 @@ index 31ac405d3785..899be7bd4d92 100644
 -	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
  };
  
- static void qmp_pcie_msm8996_configure_lane(void __iomem *base,
-@@ -523,8 +513,7 @@ static int qmp_pcie_msm8996_power_on(struct phy *phy)
- 	 */
- 	qphy_setbits(pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL, cfg->pwrdn_ctrl);
- 
--	if (cfg->has_pwrdn_delay)
--		usleep_range(cfg->pwrdn_delay_min, cfg->pwrdn_delay_max);
-+	usleep_range(POWER_DOWN_DELAY_US_MIN, POWER_DOWN_DELAY_US_MAX);
- 
- 	/* Pull PHY out of reset state */
- 	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+ static const struct qmp_phy_cfg sc8280xp_usb43dp_dp_cfg = {
 -- 
 2.35.1
 
