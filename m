@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D215FC649
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878785FC645
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJLNUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S229815AbiJLNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJLNTt (ORCPT
+        with ESMTP id S229684AbiJLNTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:19:49 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61C3EE22;
-        Wed, 12 Oct 2022 06:19:43 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so12119072ooi.5;
-        Wed, 12 Oct 2022 06:19:43 -0700 (PDT)
+        Wed, 12 Oct 2022 09:19:42 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495AF07;
+        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1326637be6eso19386601fac.13;
+        Wed, 12 Oct 2022 06:19:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vK3/2ktgZFYxmk6D2dAbFjGlvGPsnMW8mq4UIJV60gw=;
-        b=X3/pJ1KMDZpjoEORfIEzwpZibCaaufimt1q5kxt9kWrA+aut65ZIq+uzUtNtHtwoBt
-         t3G/E4u3UpL9QVlgS2b43sXpE2Nu5UCn2VQY75TKQp28Z6WKKWYvzQ0qdoyvPZoLbww2
-         aaukCGRloxGdoI9AagW0deDiAmPWG7lwmeviroGg1vC37G4HcDizZK+6lI6mv8WMYWl8
-         7vC9e9xZUHJo309h/2qC5qbg7EgZPcedm7M9wtvi6CEH8EXRyi47F6ZSqK8vhqifD/iV
-         u/6aPA2Z/ioHXWBZib5If8TQOKTOcXh0fnzOOFM48Irzj573cOrPiL8abZtIavgoZ40m
-         KJnQ==
-X-Gm-Message-State: ACrzQf1gYYAmx6e81dBNBsADiZ4ncwj+lhrKuv8oiQeVsazhgCgmT5RM
-        P08mzCwTTPjooqx42S3Clw==
-X-Google-Smtp-Source: AMsMyM4IrNGXQTD0hDlqbYMLetA/d6BTgR/0gu4wgW2iciejDR0oJA3WkrTBrQIuJMT1xDM2vVBC3A==
-X-Received: by 2002:a9d:4808:0:b0:661:b220:cb5b with SMTP id c8-20020a9d4808000000b00661b220cb5bmr3070570otf.370.1665580782513;
-        Wed, 12 Oct 2022 06:19:42 -0700 (PDT)
+        bh=7EAJFO7neLdf3WjMmm37zm/4YHZwmJFmdFV44FOsiFk=;
+        b=7CJx76oCPoGg+j8jq0Qnlc6kw5MZZKrHdBIAO+BMzX0wE4NpJLgPrRXo7boI20CbKR
+         7RJr+TjG+k+a8Uv11UFOT5QjIQ/Vc5FTRExSssSXC2l/Iw00wYxfSGT06bSvYWv18CqZ
+         wd/TBATDjj9aMb3OZtrAffZ+7zARUF5a7eCVTSoUYdaI5hMU65ZFWAfwhQaDva8lLIPV
+         b/fKEGFV/VnbguC25sYqIS6V7mqaLejUZXNxYdUZyfrgcIE7ldV0FOhd1CsqjwKIcimd
+         gnqAa/yvuojmw1SDVgVQegjISqsj670fVLrxywXb9DRYx2/HxJHB2ZSdpgg9x5YqN+Ws
+         0fHA==
+X-Gm-Message-State: ACrzQf09ovdWav289/j1zT8soouKb14mLEoFBwIQ9AWzgtYCu2vk0BOF
+        syMMI8eT9cDptPYByOcltg==
+X-Google-Smtp-Source: AMsMyM7K5jb6v64ktWm+n2zTk2z7te9iFpUFOXpPsi2Kx8O72MAANdsaWdTy1AA7cGj9J993ook2Lg==
+X-Received: by 2002:a05:6870:15d3:b0:122:5c72:f21f with SMTP id k19-20020a05687015d300b001225c72f21fmr2417883oad.178.1665580778204;
+        Wed, 12 Oct 2022 06:19:38 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c28-20020a056830349c00b00660fe564e12sm6436095otu.58.2022.10.12.06.19.41
+        by smtp.gmail.com with ESMTPSA id cg12-20020a056830630c00b006618b23df05sm6026187otb.21.2022.10.12.06.19.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 06:19:42 -0700 (PDT)
-Received: (nullmailer pid 1941576 invoked by uid 1000);
+        Wed, 12 Oct 2022 06:19:37 -0700 (PDT)
+Received: (nullmailer pid 1941571 invoked by uid 1000);
         Wed, 12 Oct 2022 13:19:39 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     aakarsh jain <aakarsh.jain@samsung.com>
-Cc:     linux-fsd@tesla.com, linux-media@vger.kernel.org,
-        pankaj.dubey@samsung.com, linux-arm-kernel@lists.infradead.org,
-        dillon.minfei@gmail.com, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, smitha.t@samsung.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        jernej.skrabec@gmail.com, robh+dt@kernel.org,
-        aswani.reddy@samsung.com, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, mark.rutland@arm.com,
-        m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, andi@etezian.org, andrzej.hajda@intel.com,
-        ezequiel@vanguardiasur.com.ar, david.plowman@raspberrypi.com
-In-Reply-To: <20221011122516.32135-2-aakarsh.jain@samsung.com>
-References: <20221011122516.32135-1-aakarsh.jain@samsung.com>        <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com> <20221011122516.32135-2-aakarsh.jain@samsung.com>
-Message-Id: <166558064414.1937173.2124012536890566845.robh@kernel.org>
-Subject: Re: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema for MFC
+To:     Bryan Brattlof <bb@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux Device Tree <devicetree@vger.kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Keerthy <j-keerthy@ti.com>,
+        Linux Thermal <linux-pm@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+In-Reply-To: <20221011231727.8090-7-bb@ti.com>
+References: <20221011231727.8090-1-bb@ti.com> <20221011231727.8090-7-bb@ti.com>
+Message-Id: <166558062789.1936784.4988511846855638539.robh@kernel.org>
+Subject: Re: [PATCH 06/11] dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
 Date:   Wed, 12 Oct 2022 08:19:39 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -68,94 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 17:55:02 +0530, aakarsh jain wrote:
-> From: Smitha T Murthy <smitha.t@samsung.com>
+On Tue, 11 Oct 2022 18:17:22 -0500, Bryan Brattlof wrote:
+> Only some of TI's J721E SoCs will need a eFuse register range mapped to
+> determine if they're affected by TI's i2128 erratum. All other SoC will
+> not need this eFuse range to be mapped to function properly
 > 
-> Convert DT schema for s5p-mfc in yaml format
+> Update the bindings for the k3_j72xx_bandgap thermal driver so other
+> devices will only need to define two register ranges
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
-> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
 > ---
->  .../devicetree/bindings/media/s5p-mfc.txt     |  75 --------
->  .../bindings/media/samsung,s5p-mfc.yaml       | 163 ++++++++++++++++++
->  2 files changed, 163 insertions(+), 75 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+>  .../bindings/thermal/ti,j72xx-thermal.yaml    | 34 +++++++++++++------
+>  1 file changed, 24 insertions(+), 10 deletions(-)
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dtb: thermal-sensor@42040000: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
 
+doc reference errors (make refcheckdocs):
 
-codec@13400000: clock-names: ['mfc', 'sclk_mfc'] is too long
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-	arch/arm/boot/dts/exynos3250-monk.dtb
-	arch/arm/boot/dts/exynos3250-rinato.dtb
+See https://patchwork.ozlabs.org/patch/
 
-codec@13400000: clocks: [[7, 178], [7, 228]] is too long
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-	arch/arm/boot/dts/exynos3250-monk.dtb
-	arch/arm/boot/dts/exynos3250-rinato.dtb
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-codec@13400000: iommus: [[36]] is too short
-	arch/arm/boot/dts/exynos3250-monk.dtb
-	arch/arm/boot/dts/exynos3250-monk.dtb
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-codec@13400000: iommus: [[40]] is too short
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
-	arch/arm/boot/dts/exynos3250-artik5-eval.dtb
+pip3 install dtschema --upgrade
 
-codec@13400000: iommus: [[47]] is too short
-	arch/arm/boot/dts/exynos3250-rinato.dtb
-	arch/arm/boot/dts/exynos3250-rinato.dtb
-
-codec@13400000: memory-region: [[31], [32]] is too long
-	arch/arm/boot/dts/exynos4210-smdkv310.dtb
-
-codec@13400000: memory-region: [[37], [38]] is too long
-	arch/arm/boot/dts/exynos4210-origen.dtb
-
-codec@13400000: memory-region: [[41], [42]] is too long
-	arch/arm/boot/dts/exynos4412-smdk4412.dtb
-
-codec@13400000: memory-region: [[43], [44]] is too long
-	arch/arm/boot/dts/exynos4412-origen.dtb
-
-codec@13400000: memory-region: [[47], [48]] is too long
-	arch/arm/boot/dts/exynos4412-itop-elite.dtb
-	arch/arm/boot/dts/exynos4412-odroidx2.dtb
-	arch/arm/boot/dts/exynos4412-odroidx.dtb
-
-codec@13400000: memory-region: [[48], [49]] is too long
-	arch/arm/boot/dts/exynos4412-odroidu3.dtb
-
-codec@f1700000: clock-names:0: 'mfc' was expected
-	arch/arm/boot/dts/s5pv210-aquila.dtb
-	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-	arch/arm/boot/dts/s5pv210-galaxys.dtb
-	arch/arm/boot/dts/s5pv210-goni.dtb
-	arch/arm/boot/dts/s5pv210-smdkc110.dtb
-	arch/arm/boot/dts/s5pv210-smdkv210.dtb
-	arch/arm/boot/dts/s5pv210-torbreck.dtb
-
-codec@f1700000: clock-names:1: 'sclk_mfc' was expected
-	arch/arm/boot/dts/s5pv210-aquila.dtb
-	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-	arch/arm/boot/dts/s5pv210-galaxys.dtb
-	arch/arm/boot/dts/s5pv210-goni.dtb
-	arch/arm/boot/dts/s5pv210-smdkc110.dtb
-	arch/arm/boot/dts/s5pv210-smdkv210.dtb
-	arch/arm/boot/dts/s5pv210-torbreck.dtb
-
-codec@f1700000: memory-region: [[51], [52]] is too long
-	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-
-codec@f1700000: memory-region: [[55], [56]] is too long
-	arch/arm/boot/dts/s5pv210-galaxys.dtb
+Please check and re-submit.
 
