@@ -2,123 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721A45FC98F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C375FC991
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJLQy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S229492AbiJLQzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJLQyX (ORCPT
+        with ESMTP id S229613AbiJLQzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:54:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E31FBCDD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665593661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qoy7AAHiT4kxg+sBg7GCQnX3x7hXvCR1aAfKGHjNP8Q=;
-        b=YpohtWp463Kd1/sAXlyvEjQ6ceoCQf4Wf+QtGFE9WKzv7fmYWUZukNRzZQPZVLuDmDm69b
-        gUbhSvjKd1aQfaL4sKB8wSns/hkwKlJ0DbNbkKl3ZaTwfq1BMp4FMifoiDVf0R8FOwsOMr
-        e1Fjr52DNPteUJpWOg0xnHCK2BOVQ5w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-YWRLYSt9O42ciCepQ4HeNw-1; Wed, 12 Oct 2022 12:54:17 -0400
-X-MC-Unique: YWRLYSt9O42ciCepQ4HeNw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A49E185A792;
-        Wed, 12 Oct 2022 16:54:15 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8BB8640FF71C;
-        Wed, 12 Oct 2022 16:54:07 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-        <20220929222936.14584-2-rick.p.edgecombe@intel.com>
-        <87ilkr27nv.fsf@oldenburg.str.redhat.com>
-        <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
-        <87v8opz0me.fsf@oldenburg.str.redhat.com>
-        <e3c3d68d-ce99-a70a-1026-0ba99520ae57@intel.com>
-Date:   Wed, 12 Oct 2022 18:54:06 +0200
-In-Reply-To: <e3c3d68d-ce99-a70a-1026-0ba99520ae57@intel.com> (Dave Hansen's
-        message of "Wed, 12 Oct 2022 08:59:51 -0700")
-Message-ID: <87y1tlx9sh.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Wed, 12 Oct 2022 12:55:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 316D2DED0F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:55:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28771165C;
+        Wed, 12 Oct 2022 09:55:54 -0700 (PDT)
+Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D03A3F766;
+        Wed, 12 Oct 2022 09:55:46 -0700 (PDT)
+Message-ID: <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com>
+Date:   Wed, 12 Oct 2022 17:55:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
+Content-Language: en-GB
+To:     Peter Newman <peternewman@google.com>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Gaurang Upasani <gupasani@google.com>
+References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
+ <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com>
+ <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
+ <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
+ <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
+ <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Dave Hansen:
+Hi guys,
 
-> On 10/12/22 05:29, Florian Weimer wrote:
->>> What did you think of the proposal to disable existing binaries and
->>> start from scratch? Elaborated in the coverletter in the section
->>> "Compatibility of Existing Binaries/Enabling Interface".
->> The ABI was finalized around four years ago, and we have shipped several
->> Fedora and Red Hat Enterprise Linux versions with it.  Other
->> distributions did as well.  It's a bit late to make changes now, and
->> certainly not for such trivialities. 
->
-> Just to be clear: You're saying that a user/kernel ABI was "finalized"
-> by glibc shipping the user side of it, before there being an upstream
-> kernel implementation?
+On 12/10/2022 12:21, Peter Newman wrote:
+> On Tue, Oct 11, 2022 at 1:35 AM Reinette Chatre
+> <reinette.chatre@intel.com> wrote:
+>> On 10/7/2022 10:28 AM, Tony Luck wrote:
+>>> I don't know how complex it would for the kernel to implement this. Or
+>>> whether it would meet Google's needs.
+>>>
+>>
+>> How about moving monitor groups from one control group to another?
+>>
+>> Based on the initial description I got the impression that there is
+>> already a monitor group for every container. (Please correct me if I am
+>> wrong). If this is the case then it may be possible to create an interface
+>> that could move an entire monitor group to another control group. This would
+>> keep the benefit of usage counts remaining intact, tasks get a new closid, but
+>> keep their rmid. There would be no need for the user to specify process-ids.
 
-Sorry for being unclear.  I was refering to the x86-64 ELF psABI
-supplement for CET, not the kernel/userspace interface, which still does
-not exist in its final form as of today, as far as I understand it.
+> Yes, Stephane also pointed out the importance of maintaining RMID assignments
+> as well and I don't believe I put enough emphasis on it during my
+> original email.
+> 
+> We need to maintain accurate memory bandwidth usage counts on all
+> containers, so it's important to be able to maintain an RMID assignment
+> and its event counts across a CoS downgrade. The solutions Tony
+> suggested do solve the races in moving the tasks, but the container
+> would need to temporarily join the default MON group in the new CTRL_MON
+> group before it can be moved to its replacement MON group.
+> 
+> Being able to re-parent a MON group would allow us to change the CLOSID
+> independently of the RMID in a container and would address the issue.
+> 
+> The only other point I can think of to differentiate it from the
+> automatic CLOSID management solution is whether the 1:1 CTRL_MON:CLOSID
+> approach will become too limiting going forward. For example, if there
+> are configurations where one resource has far fewer CLOSIDs than others
+> and we want to start assigning CLOSIDs on-demand, per-resource to avoid
+> wasting other resources' available CLOSID spaces. If we can foresee this
+> becoming a concern, then automatic CLOSID management would be
+> inevitable.
+
+You originally asked:
+| Any concerns about the CLOSID-reusing behavior?
+
+I don't think this will work well with MPAM ... I expect it will mess up the bandwidth
+counters.
+
+MPAM's equivalent to RMID is PMG. While on x86 CLOSID and RMID are independent numbers,
+this isn't true for PARTID (MPAM's version of CLOSID) and PMG. The PMG bits effectively
+extended the PARTID with bits that aren't used to look up the configuration.
+
+x86's monitors match only on RMID, and there are 'enough' RMID... MPAMs monitors are more
+complicated. I've seen details of a system that only has 1 bit of PMG space.
+
+While MPAM's bandwidth monitors can match just the PMG, there aren't expected to be enough
+unique PMG for every control/monitor group to have a unique value. Instead, MPAM's
+monitors are expected to be used with both the PARTID and PMG.
+
+('bandwidth monitors' is relevant here, MPAM's 'cache storage utilisation' monitors can't
+match on just PMG at all - they have to be told the PARTID too)
+
+
+If you're re-using CLOSID like this, I think you'll end up with noisy measurements on MPAM
+systems as the caches hold PARTID/PMG values from before the re-use pattern changed, and
+the monitors have to match on both.
+
+
+I have half-finished patches that add a 'resctrl' cgroup controller that can be used to
+group tasks and assign them to control or monitor groups. (the creation and configuration
+of control and monitor groups stays in resctrl - it effectively makes the tasks file
+read-only). I think this might help, as a group of processes can be moved between two
+control/monitor groups with one syscall. New processes that are created inherit from the
+cgroup setting instead of their parent task.
+
+If want to take a look, its here:
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?h=mpam/snapshot/v6.0&id=4e5987d8ecbc8647dee0aebfb73c3890843ef5dd
+
+I've not worked the cgroup thread stuff out yet ... it doesn't appear to hook thread
+creation, only fork().
+
 
 Thanks,
-Florian
+
+James
 
