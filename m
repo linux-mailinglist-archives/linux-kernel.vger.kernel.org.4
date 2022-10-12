@@ -2,118 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228415FC756
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138AB5FC79D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiJLO0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S229537AbiJLOm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiJLOZw (ORCPT
+        with ESMTP id S229502AbiJLOmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:25:52 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6D0DED0A;
-        Wed, 12 Oct 2022 07:25:32 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id b2so38358878eja.6;
-        Wed, 12 Oct 2022 07:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ywo9sjefIn96Juo5BZ8AbB7AgyvrswOBWDpdFl0oFUw=;
-        b=inDUemQ0kv7qq1Bjuhh2lkZznWqTA2l4GzombHIlTwqosX0q7m3raN+ehOCSiKY8zV
-         MYCH/P8Q4Lffr/D+pepZzlg+BBMBaidVCZbLTvTQtuBMbuKIlTjo4NQ71JsbyVrj5oW8
-         AO+kuOqo7NNshnQon0px61dxJvRpqYsiQj1xR+QfQrEdnhhptJI320OH4XSB3z3pA10G
-         4Vndh/MOPaMA0IXXs28DF6bB4DzAbmQ2METRkzSLlJvfQels+kBIRQTeP+jVDT9VyANe
-         H5bFFL2EQ5Bz6wpSn7xi2pH0YmlbzXDVgiQIQon6pRA4VuLB6USC2mavOX/qbH5Gmz7o
-         Qm2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ywo9sjefIn96Juo5BZ8AbB7AgyvrswOBWDpdFl0oFUw=;
-        b=gzNf4J0nIPrBPI81xnWelc/b4aQg1Zwo6ty4q9TZH0x0iRmwdDLSLuj6A9R3Ed6dqA
-         48MGQ6L5BU7wEM97vozZp0BmoaCAW5X3hcI1U0B5oQZDbfVl1GjS791LhswFzMkQipXm
-         waI+L1OOjMuZz9/52kUp3zipJSMYTPdYj4t5TipAstwlknb/LmS24LVVdmzfQSzxk6Mf
-         Gq84oqVHU9W+514joS1MyPX4uXouFYR+uHImClg8oKY7i0yCV2O3EOcHqq+JznNM926M
-         Uwh3SLZYGVkq1FcsQ02iL7WZ1Wmsmb9NJ9IaPB1gNOLRxLnB/esXQjNqt2XOLbHQmFtz
-         TVQA==
-X-Gm-Message-State: ACrzQf3FlW/jgSJopkOv4xYSwE2nESPBiuW9KOzPa5JGG6wIYMBGcJ8P
-        TqPNYVhkXLqrYzNu6DKykXM=
-X-Google-Smtp-Source: AMsMyM4QaZmdN3l/HekMZ55kLeYaK9fCFXFfR73VG+I210r0JA1I72UV+9uFu9cmuCq3k7iUjQE7yg==
-X-Received: by 2002:a17:906:cc49:b0:78d:361a:561e with SMTP id mm9-20020a170906cc4900b0078d361a561emr23706683ejb.741.1665584719253;
-        Wed, 12 Oct 2022 07:25:19 -0700 (PDT)
-Received: from linux.fritz.box (089144213149.atnat0022.highway.a1.net. [89.144.213.149])
-        by smtp.googlemail.com with ESMTPSA id kv13-20020a17090778cd00b0077b2b0563f4sm1336981ejc.173.2022.10.12.07.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 07:25:18 -0700 (PDT)
-Message-ID: <bee1807b7d072b221c44ac8c2ed8064939d33696.camel@gmail.com>
-Subject: Re: [PATCH] ufs: core: Disable auto h8 before ssu
-From:   Bean Huo <huobean@gmail.com>
-To:     =?UTF-8?Q?=E9=AB=98=E4=B8=A5=E5=87=AF?= <gaoyankaigeren@gmail.com>,
-        Avri Altman <Avri.Altman@wdc.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 12 Oct 2022 16:25:17 +0200
-In-Reply-To: <CAFN68yVajOkV++gCp-y1+SD5VOKLgUeBhfgskrJZOX5dfGi07A@mail.gmail.com>
-References: <20221011021653.27277-1-gaoyankaigeren@gmail.com>
-         <DM6PR04MB6575AE77585D584652179089FC239@DM6PR04MB6575.namprd04.prod.outlook.com>
-         <CAFN68yVajOkV++gCp-y1+SD5VOKLgUeBhfgskrJZOX5dfGi07A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Wed, 12 Oct 2022 10:42:52 -0400
+Received: from 15.mo583.mail-out.ovh.net (15.mo583.mail-out.ovh.net [178.33.107.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB4FC8205
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:42:48 -0700 (PDT)
+Received: from player788.ha.ovh.net (unknown [10.110.171.148])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id DA70F253CE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 14:25:43 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player788.ha.ovh.net (Postfix) with ESMTPSA id 5AC742F9B390F;
+        Wed, 12 Oct 2022 14:25:39 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-102R0049184b12f-2b4e-4dcb-9236-01c8d45e0aad,
+                    75377E6B882747309559AE06BD3DFEEF97A89409) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Stephen Kitt <steve@sk2.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/gpio: use simple i2c probe
+Date:   Wed, 12 Oct 2022 16:25:23 +0200
+Message-Id: <20221012142524.3920266-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 14872856296705656539
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgjeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppeduvdejrddtrddtrddupdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsthgvvhgvsehskhdvrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-11 at 19:53 +0800, =E9=AB=98=E4=B8=A5=E5=87=AF wrote:
-> Dear Avri
-> =C2=A0 Unisoc reports resume fail on UFS(micron FS164) during
-> suspend/resume test.
-> =C2=A0 We check host inserts auto H8 enter/exit event between SSU sleep
-> command and H8 enter command in runtime suspend .
-> =C2=A0 Asfollows: SSU Sleep command --> auto H8 enter --> auto H8 exit --=
->
-> H8 enter --> idle 2ms --> VCC off.
-> =C2=A0 However device AQL FW can=E2=80=99t enter LPM within 2ms after sec=
-ond H8
-> enter command.
-> =C2=A0 FW already enter LPM after receive auto H8 enter command , Next
-> auto
-> H8 exit command will trigger FW exit from LPM, it need take over
-> 10ms,
-> and FW can=E2=80=99t enter
-> =C2=A0 LPM again after second H8 enter command until device complete exit
-> from LPM. So disable auto h8 before ssu is a reasonable solution to
-> solve it.
-> =C2=A0 Hynix also has similar request.
+All these drivers have an i2c probe function which doesn't use the
+"struct i2c_device_id *id" parameter, so they can trivially be
+converted to the "probe_new" style of probe with a single argument.
 
+This is part of an ongoing transition to single-argument i2c probe
+functions. Old-style probe functions involve a call to i2c_match_id:
+in drivers/i2c/i2c-core-base.c,
 
-Hi gaoyan,
+         /*
+          * When there are no more users of probe(),
+          * rename probe_new to probe.
+          */
+         if (driver->probe_new)
+                 status = driver->probe_new(client);
+         else if (driver->probe)
+                 status = driver->probe(client,
+                                        i2c_match_id(driver->id_table, client));
+         else
+                 status = -EINVAL;
 
-The above sequence confuses me. UFSHCI has idle time before bringing
-Link into hibern8 mode, do you know what the settings are?
+Drivers which don't need the second parameter can be declared using
+probe_new instead, avoiding the call to i2c_match_id. Drivers which do
+can still be converted to probe_new-style, calling i2c_match_id
+themselves (as is done currently for of_match_id).
 
-Also, if auto-hibern8 is supported, in this case, the host-side SW
-should not send manual hibern8. If this is an issue to all UFS or
-UFSHCI, we should disable manual hibern8 if auto-hibern8 is enabled. or
-let customer to choose one of two.
+This change was done using the following Coccinelle script, and fixed
+up for whitespace changes:
 
+@ rule1 @
+identifier fn;
+identifier client, id;
+@@
 
-Kind regards,
-Bean
+- static int fn(struct i2c_client *client, const struct i2c_device_id *id)
++ static int fn(struct i2c_client *client)
+{
+...when != id
+}
+
+@ rule2 depends on rule1 @
+identifier rule1.fn;
+identifier driver;
+@@
+
+struct i2c_driver driver = {
+-       .probe
++       .probe_new
+                =
+(
+                   fn
+|
+-                  &fn
++                  fn
+)
+                ,
+};
+
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ drivers/gpio/gpio-gw-pld.c   | 5 ++---
+ drivers/gpio/gpio-max7300.c  | 5 ++---
+ drivers/gpio/gpio-tpic2810.c | 5 ++---
+ drivers/gpio/gpio-ts4900.c   | 5 ++---
+ 4 files changed, 8 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpio/gpio-gw-pld.c b/drivers/gpio/gpio-gw-pld.c
+index 2109803ffb38..5057fa9ad610 100644
+--- a/drivers/gpio/gpio-gw-pld.c
++++ b/drivers/gpio/gpio-gw-pld.c
+@@ -67,8 +67,7 @@ static void gw_pld_set8(struct gpio_chip *gc, unsigned offset, int value)
+ 	gw_pld_output8(gc, offset, value);
+ }
+ 
+-static int gw_pld_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int gw_pld_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct gw_pld *gw;
+@@ -126,7 +125,7 @@ static struct i2c_driver gw_pld_driver = {
+ 		.name = "gw_pld",
+ 		.of_match_table = gw_pld_dt_ids,
+ 	},
+-	.probe = gw_pld_probe,
++	.probe_new = gw_pld_probe,
+ 	.id_table = gw_pld_id,
+ };
+ module_i2c_driver(gw_pld_driver);
+diff --git a/drivers/gpio/gpio-max7300.c b/drivers/gpio/gpio-max7300.c
+index 43da381a4d7e..cf482f4f0098 100644
+--- a/drivers/gpio/gpio-max7300.c
++++ b/drivers/gpio/gpio-max7300.c
+@@ -28,8 +28,7 @@ static int max7300_i2c_read(struct device *dev, unsigned int reg)
+ 	return i2c_smbus_read_byte_data(client, reg);
+ }
+ 
+-static int max7300_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int max7300_probe(struct i2c_client *client)
+ {
+ 	struct max7301 *ts;
+ 
+@@ -63,7 +62,7 @@ static struct i2c_driver max7300_driver = {
+ 	.driver = {
+ 		.name = "max7300",
+ 	},
+-	.probe = max7300_probe,
++	.probe_new = max7300_probe,
+ 	.remove = max7300_remove,
+ 	.id_table = max7300_id,
+ };
+diff --git a/drivers/gpio/gpio-tpic2810.c b/drivers/gpio/gpio-tpic2810.c
+index d642c35cb97c..349c5fbd9b02 100644
+--- a/drivers/gpio/gpio-tpic2810.c
++++ b/drivers/gpio/gpio-tpic2810.c
+@@ -98,8 +98,7 @@ static const struct of_device_id tpic2810_of_match_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, tpic2810_of_match_table);
+ 
+-static int tpic2810_probe(struct i2c_client *client,
+-			  const struct i2c_device_id *id)
++static int tpic2810_probe(struct i2c_client *client)
+ {
+ 	struct tpic2810 *gpio;
+ 	int ret;
+@@ -144,7 +143,7 @@ static struct i2c_driver tpic2810_driver = {
+ 		.name = "tpic2810",
+ 		.of_match_table = tpic2810_of_match_table,
+ 	},
+-	.probe = tpic2810_probe,
++	.probe_new = tpic2810_probe,
+ 	.remove = tpic2810_remove,
+ 	.id_table = tpic2810_id_table,
+ };
+diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
+index 416725c26e94..43e8b66e04f7 100644
+--- a/drivers/gpio/gpio-ts4900.c
++++ b/drivers/gpio/gpio-ts4900.c
+@@ -136,8 +136,7 @@ static const struct of_device_id ts4900_gpio_of_match_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ts4900_gpio_of_match_table);
+ 
+-static int ts4900_gpio_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int ts4900_gpio_probe(struct i2c_client *client)
+ {
+ 	struct ts4900_gpio_priv *priv;
+ 	u32 ngpio;
+@@ -186,7 +185,7 @@ static struct i2c_driver ts4900_gpio_driver = {
+ 		.name = "ts4900-gpio",
+ 		.of_match_table = ts4900_gpio_of_match_table,
+ 	},
+-	.probe = ts4900_gpio_probe,
++	.probe_new = ts4900_gpio_probe,
+ 	.id_table = ts4900_gpio_id_table,
+ };
+ module_i2c_driver(ts4900_gpio_driver);
+
+base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
+-- 
+2.30.2
+
