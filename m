@@ -2,144 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAFF5FC7B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58615FC7B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJLOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
+        id S229734AbiJLOuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJLOt0 (ORCPT
+        with ESMTP id S229495AbiJLOuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:49:26 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D44CF874
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:49:24 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id f14so11029044qvo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:49:24 -0700 (PDT)
+        Wed, 12 Oct 2022 10:50:00 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5CC1A83B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:49:58 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id s125-20020a4a5183000000b0047fbaf2fcbcso10156877ooa.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:49:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpH7YacmPgJRhB88lfN4bgUYtMzcUBjV6s2E6XdIZEU=;
-        b=JC3ySPLwRyfQg1Kmj0tnIBpxlSTXhQ1ixuoqE9QD7so5yjoihg8EmWgGQHFV7qkC2R
-         hDMAPswfA/BB0yKl/SCc6FBpXOn3Inr2N6So/0xw/uFTDvDCyXyKE42j82EHBU2KxtvC
-         N8rQ48IUtbFrQBQg+FaVQN9DG3ElLOrfbcctY=
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UplEK3mqcrCacidHdATkuawjVeYJHMCCCUOFPWg9KqI=;
+        b=xxa3t8CNGe00EQznVWzeR4p9qdPhSp15k51tQXdr2nv2XNggjAfIopyLbnwFzcLn77
+         JONZsylSPTvToCleo2vBdV6jFtbzb+zWhvQ1yKTFTg2gTgKxiqg5DQNIFP9ft+MQ5NSR
+         3pJ5GyWlGcBg2zzHRMlxqIk4kXf1ULdK1QT0A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tpH7YacmPgJRhB88lfN4bgUYtMzcUBjV6s2E6XdIZEU=;
-        b=Vmn1TH/s6EGhLw3xud282h5BuEQJuPaaN2L/GoxIqTyZuNEISaDFpxuKq75NJsc7sx
-         qCaDSkLfyKj0V/0fg+qmp/tY8MnqCunY8KCc9algC44OsSSMDt8p7Hc5PAxB2miBF0eJ
-         /+BbY6aOTpkYco8l3lfkGfiuzYXytVi4rYFEE1LhFa9V5YXcfonN2tS/K9+rEQA+FIc8
-         p4+7xNE6dis51zi2M49bkSZEMRFe4FdQPkJMdr1ibJfJEN+A5PfeS5glq6eSPkcWEYz+
-         W7LGsF6hH74hQNAtGgK4royxmy1d5So6buT8exC/JKtRwomD/5H109y+WUWBw26pda/Y
-         Lc9w==
-X-Gm-Message-State: ACrzQf17c4uDTfZPteur0b5MpBQftZO5sZJwK9Mxn4/mG74cdcQ6XH9I
-        9zrJp4TKnzs29IAkjsUDsBkhmezJBHlbQA==
-X-Google-Smtp-Source: AMsMyM4dvLcVxOPBRm5dxkBxLGQ/wpAx/iHlZYPEHqw5AVD0y1AV31RaI/co0MFkPFcJqiMzYaAXMA==
-X-Received: by 2002:ad4:5d6c:0:b0:4af:b5e0:63f1 with SMTP id fn12-20020ad45d6c000000b004afb5e063f1mr23576873qvb.35.1665586162906;
-        Wed, 12 Oct 2022 07:49:22 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id ey23-20020a05622a4c1700b0035cf31005e2sm12874646qtb.73.2022.10.12.07.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 07:49:22 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 14:49:22 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] rcu/nocb: Spare bypass locking upon normal enqueue
-Message-ID: <Y0bT8jRig7b9PxTe@google.com>
-References: <20221010223956.1041247-1-frederic@kernel.org>
- <20221010223956.1041247-3-frederic@kernel.org>
- <Y0TOSE3ZM/3uHRWX@google.com>
- <20221011192150.GA1052160@lothringen>
- <CAEXW_YTk+=SmC77PQASkwcMkmB0fyArJEKfPRVmK5+nS4E3y4A@mail.gmail.com>
- <20221012102358.GA1074896@lothringen>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UplEK3mqcrCacidHdATkuawjVeYJHMCCCUOFPWg9KqI=;
+        b=5lxJjk2GPkl8hb8KozszX1oF1Sbqsfz/wmMuviRGWalN9BhhLWkUZVCVxYbc+DTMeR
+         pI0rT78+RLwYggwltQQ6NTA4u1qa0Ekck/hLZH3yTwfrwjMgcFS/FgmibRN+yEqD+Ckx
+         GHswib0acFaLe60qUAYX2xeWWyDLdqMVUJ6Hn0KO2s6/HMc1s0mzLsiMEQajDwXFZWUw
+         6Aekk2w5ahbNlT7fMb6spRfKHJUx6+ypDxw++fAJZcH23BgBZctbkdmV9kovW4bbwAKT
+         tzsiXdRHzs6gmS0orSLt9reWBUWar0kgqWuhwhJGzOlrcxZ+gvBh4JGrtv5bioryU5Wy
+         ilAA==
+X-Gm-Message-State: ACrzQf0n9kHOmn0vgQGWXtVPRgDhTNYBOYYB4mSi96f60hewvhhgbmIB
+        R6ZtNjaGat1M0XfBwFmM491l/6FZA1Pctg==
+X-Google-Smtp-Source: AMsMyM7MEoBnOEtucWMs4RmpJji3LR4RnzFNkuhTrYE9+kcQbEU8ejIMYbfxQ7HOuznctRkHlaV3Bg==
+X-Received: by 2002:a05:6830:2682:b0:659:e2dc:f033 with SMTP id l2-20020a056830268200b00659e2dcf033mr12910298otu.196.1665586197525;
+        Wed, 12 Oct 2022 07:49:57 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id k14-20020a056870818e00b0010d5d5c3fc3sm1329477oae.8.2022.10.12.07.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 07:49:57 -0700 (PDT)
+Message-ID: <cc5c3efe-7dc3-65d6-d7d9-761bfc2c9711@cloudflare.com>
+Date:   Wed, 12 Oct 2022 09:49:56 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012102358.GA1074896@lothringen>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH 1/1] crypto: af_alg - Support symmetric encryption via
+ keyring keys
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net, hch@lst.de,
+        smueller@chronox.de, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kernel-team@cloudflare.com,
+        Ondrej Mosnacek <omosnace@redhat.com>
+References: <20221004212927.1539105-1-fred@cloudflare.com>
+ <Y0X3L/jhinCqJXxj@sol.localdomain>
+Content-Language: en-US
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <Y0X3L/jhinCqJXxj@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 12:23:58PM +0200, Frederic Weisbecker wrote:
-> On Tue, Oct 11, 2022 at 07:47:07PM -0400, Joel Fernandes wrote:
-> > On Tue, Oct 11, 2022 at 3:21 PM Frederic Weisbecker <frederic@kernel.org> wrote:
-> > >
-> > > On Tue, Oct 11, 2022 at 02:00:40AM +0000, Joel Fernandes wrote:
-> > > > On Tue, Oct 11, 2022 at 12:39:56AM +0200, Frederic Weisbecker wrote:
-> > > > > When a callback is to be enqueued to the normal queue and not the bypass
-> > > > > one, a flush to the bypass queue is always tried anyway. This attempt
-> > > > > involves locking the bypass lock unconditionally. Although it is
-> > > > > guaranteed not to be contended at this point, because only call_rcu()
-> > > > > can lock the bypass lock without holding the nocb lock, it's still not
-> > > > > free and the operation can easily be spared most of the time by just
-> > > > > checking if the bypass list is empty. The check is safe as nobody can
-> > > > > queue nor flush the bypass concurrently.
-> > > > >
-> > > > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > > > > ---
-> > > > >  kernel/rcu/tree_nocb.h | 6 ++++--
-> > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > > > > index 094fd454b6c3..30c3d473ffd8 100644
-> > > > > --- a/kernel/rcu/tree_nocb.h
-> > > > > +++ b/kernel/rcu/tree_nocb.h
-> > > > > @@ -423,8 +423,10 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> > > > >             if (*was_alldone)
-> > > > >                     trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
-> > > > >                                         TPS("FirstQ"));
-> > > > > -           WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-> > > > > -           WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
-> > > > > +           if (rcu_cblist_n_cbs(&rdp->nocb_bypass)) {
-> > > > > +                   WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-> > > > > +                   WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
-> > > > > +           }
-> > > > >             return false; // Caller must enqueue the callback.
-> > > > >     }
-> > > >
-> > > > Instead of this, since as you mentioned that the bypass lock is not contended
-> > > > in this path, isn't it unnecessary to even check or attempt to acquire the
-> > > > lock in call_rcu() path? So how about something like the following, or would
-> > > > this not work for some reason?
-> > >
-> > > You're right. But it's a bit error prone and it adds quite some code complication
-> > > just for a gain on a rare event (bypass is supposed to be flushed on rare
-> > > occasions by the caller).
-> > 
-> > But the "checking of whether to flush" which leads to "acquiring the
-> > bypass lock first" , is not a rare event as you pointed out (can be
-> > spared most of the time as you said). The alternative I proposed
-> > removes the need for the frequent locking (which is another way of
-> > implementing what you suggested).
+Hi Eric,
+
+On 10/11/22 6:07 PM, Eric Biggers wrote:
+> Hi Frederick,
 > 
-> It's not rare as a whole but this quick-check patch addresses the fast path.
-> What you propose is to extend the API to also cover the other flushes in
-> rcu_nocb_try_bypass() that are slower path.
+> On Tue, Oct 04, 2022 at 04:29:27PM -0500, Frederick Lawler wrote:
+>> We want to leverage keyring to store sensitive keys, and then use those
+>> keys for symmetric encryption via the crypto API. Among the key types we
+>> wish to support are: user, logon, encrypted, and trusted.
+>>
+>> User key types are already able to have their data copied to user space,
+>> but logon does not support this. Further, trusted and encrypted keys will
+>> return their encrypted data back to user space on read, which make them not
+>> ideal for symmetric encryption.
+>>
+>> To support symmetric encryption for these key types, add a new
+>> ALG_SET_KEY_BY_KEY_SERIAL setsockopt() option to the crypto API. This
+>> allows users to pass a key_serial_t to the crypto API to perform
+>> symmetric encryption. The behavior is the same as ALG_SET_KEY, but
+>> the crypto key data is copied in kernel space from a keyring key,
+>> which allows for the support of logon, encrypted, and trusted key types.
+>>
+>> Keyring keys must have the KEY_(POS|USR|GRP|OTH)_SEARCH permission set
+>> to leverage this feature. This follows the asymmetric_key type where key
+>> lookup calls eventually lead to keyring_search_rcu() without the
+>> KEYRING_SEARCH_NO_CHECK_PERM flag set.
+>>
+>> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> 
+> There was a similar patch several years ago by Ondrej Mosnacek:
+> https://lore.kernel.org/linux-crypto/20190521100034.9651-1-omosnace@redhat.com/T/#u
+> 
+> Have you addressed all the feedback that was raised on that one?
 
-You can keep the same API though.
+Thanks for sharing that.
 
-But there is also the unlock path which needs to be conditional, so I agree
-it does complicate the code a bit more.
+I believe I've addressed most of the feedback. Starting with we agree 
+preferring key_serial_t. I changed to to use IS_REACHABLE(), and set 
+ALG_SET_KEY_BY_KEY_SERIAL to 10 leaving a comment about libkcapi 
+reserving values 7-9.
 
-> I think this makes the API more error prone (users may get it easily wrong)
-> and complicated for tiny, if measurable, gains.
+I've made other additional changes since the RFC, so we should consider 
+this code outdated. I'll submit a v1 that is a bit cleaner after the 
+merge window.
 
-Ok fair point. So then your original patch is good with me then. And nice
-observation indeed.
+Your comment about broken crypto algorithms exposing sensitive data is 
+interesting. We've had similar thoughts about adding additional 
+permission, but ultimately decided to stick to the pattern asymmetric 
+key types use.
 
-thanks!
+lookup_user_key() ultimately makes a call into a security hook 
+security_key_permission() given a key_ref_t, so users can further 
+restrict access based on keys that way if enabled. We've also had 
+similar discussions regarding X.509 certificates, and I'm not opposed to 
+Ondrej's suggestion of disabling this feature by default with Kconfig. 
+I'll look into this a bit more, and we're open to suggestions here.
 
- - Joel
+> 
+> Two random nits below:
+> 
+>> +	*dest_len = key->datalen;
+>> +	*dest = kmalloc(*dest_len, GFP_KERNEL);
+>> +	if (!*dest)
+>> +		return -ENOMEM;
+>> +
+>> +	memcpy(*dest, ukp->data, *dest_len);
+> 
+> This should use kmemdup(). >
+>> +	} else if (IS_ENABLED(CONFIG_ENCRYPTED_KEYS) &&
+>> +			   !strcmp(key->type->name, "encrypted")) {
+>> +		read_key = &read_key_type_encrypted;
+>> +	} else if (IS_ENABLED(CONFIG_TRUSTED_KEYS) &&
+>> +			   !strcmp(key->type->name, "trusted")) {
+>> +		read_key = &read_key_type_trusted;
+> 
+> These need to use IS_REACHABLE(), not IS_ENABLED().
+> 
+> - Eric
 
