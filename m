@@ -2,153 +2,456 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984135FCA9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BC95FCAD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiJLS0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S229899AbiJLSlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiJLS0m (ORCPT
+        with ESMTP id S229786AbiJLSlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:26:42 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8A51F9D8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:26:41 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id i21-20020a6bf415000000b006bc987bf9faso2818910iog.6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:26:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w9E4FGrgNA2t7iVK5WJAXLQ73iKqHUC0p6WTicNH5HI=;
-        b=KjkgDTTHEv7/H9fzgVne6Er0HDyI6dv/sov7YvV8davILwAqPyYkzbs//q3l2KHfOI
-         QvO5mW40zbs8S4DATxbhsy4WpE0kBN6AFy5kokvCEy0SVFhgvrHjS6/jNMZhhXtJeKQD
-         bQmZd7z1k9ivwWqmjCFztJ9YFa8UUcHIrlawo4AsU01rbMCpjBNwOK/gL+aSW1xNWetE
-         ReTtfu9iJVaj+jf7peOcA5L+4Qr0W4p+hO5kv/K4VIScwxu8V5lcn8i2VvE4trO8RqVC
-         AYlRK/mRRCmbjylFpzKjAPMZwfKYzQnph2YJqPLc4zOt3vNPxr9hDOQf9wxU+rmwaiCO
-         129A==
-X-Gm-Message-State: ACrzQf2iZ9Z7TFFKvPlvh8u45DAmAZOaRMa4wyahXnZU2tK6w4VEevx+
-        Q5bDADYV+RYEXaJGps/XiMyoljLde+8lGSZhb2Hq5kBEjTUb
-X-Google-Smtp-Source: AMsMyM6JLuT2RuIdhxwPKrhuwo+D+YFm7PP82rP0WGBtsSpEWXCji7rBUrIPlPcKpyRlWQfDPBv1NJAxIcs1TPQg1TaczmiEcAxX
+        Wed, 12 Oct 2022 14:41:02 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2899E6B8;
+        Wed, 12 Oct 2022 11:40:59 -0700 (PDT)
+Received: from cp.tophost.it (vm1054.cs12.seeweb.it [217.64.195.253])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 5B1F320645;
+        Wed, 12 Oct 2022 20:40:55 +0200 (CEST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d94:b0:35a:6828:6804 with SMTP id
- l20-20020a0566380d9400b0035a68286804mr16609925jaj.149.1665599200624; Wed, 12
- Oct 2022 11:26:40 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 11:26:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b1060905eada8881@google.com>
-Subject: [syzbot] WARNING in ip_rt_bug (2)
-From:   syzbot <syzbot+e738404dcd14b620923c@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, kuznet@ms2.inr.ac.ru,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Date:   Wed, 12 Oct 2022 20:27:15 +0200
+From:   konrad.dybcio@somainline.org
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: msm8994: Align TLMM pin
+ configuration with DT schema
+In-Reply-To: <20221012165712.93053-2-krzysztof.kozlowski@linaro.org>
+References: <20221012165712.93053-1-krzysztof.kozlowski@linaro.org>
+ <20221012165712.93053-2-krzysztof.kozlowski@linaro.org>
+User-Agent: Roundcube Webmail/1.4.6
+Message-ID: <908877458e34e83b90b799a7018c094d@somainline.org>
+X-Sender: konrad.dybcio@somainline.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022-10-12 18:57, Krzysztof Kozlowski wrote:
+> DT schema expects TLMM pin configuration nodes to be named with
+> '-state' suffix and their optional children with '-pins' suffix.
+> 
+> Order the "function" and "pins" property to match other DTS.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-syzbot found the following issue on:
-
-HEAD commit:    a0ba26f37ea0 Merge git://git.kernel.org/pub/scm/linux/kern..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=1594a825e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=27392dd2975fd692
-dashboard link: https://syzkaller.appspot.com/bug?extid=e738404dcd14b620923c
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16851c6de00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f5d605e00000
-
-Bisection is inconclusive: the issue happens on the oldest tested release.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1422a825e00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1622a825e00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1222a825e00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e738404dcd14b620923c@syzkaller.appspotmail.com
-
-syz-executor857 uses obsolete (PF_INET,SOCK_PACKET)
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 7033 at net/ipv4/route.c:1243 ip_rt_bug+0x11/0x20 net/ipv4/route.c:1242
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 7033 Comm: syz-executor857 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x188/0x20d lib/dump_stack.c:118
- panic+0x2e3/0x75c kernel/panic.c:221
- __warn.cold+0x2f/0x35 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x220 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:ip_rt_bug+0x11/0x20 net/ipv4/route.c:1243
-Code: ff ff e8 c2 d7 33 fb e9 eb fe ff ff e8 b8 d7 33 fb e9 59 ff ff ff 0f 1f 00 55 48 89 d5 e8 17 0e f7 fa 48 89 ef e8 6f 0c 8f ff <0f> 0b 31 c0 5d c3 66 0f 1f 84 00 00 00 00 00 41 54 49 89 fc e8 f6
-RSP: 0018:ffffc90001937300 EFLAGS: 00010293
-RAX: ffff8880a2bc2540 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff867b1711 RDI: 0000000000000286
-RBP: ffff8880a31fb940 R08: 0000000000000000 R09: ffffed1015ce7074
-R10: ffffed1015ce7073 R11: ffff8880ae73839b R12: ffff8880970b0e00
-R13: ffff8880a31fb940 R14: ffff8880a4a71240 R15: ffff8880a31fb998
- dst_output include/net/dst.h:436 [inline]
- ip_local_out+0xaf/0x1a0 net/ipv4/ip_output.c:125
- ip_send_skb+0x3e/0xe0 net/ipv4/ip_output.c:1560
- ip_push_pending_frames+0x5f/0x80 net/ipv4/ip_output.c:1580
- icmp_push_reply+0x33f/0x490 net/ipv4/icmp.c:390
- __icmp_send+0xc44/0x14a0 net/ipv4/icmp.c:740
- icmp_send include/net/icmp.h:43 [inline]
- ip_options_compile+0xad/0xf0 net/ipv4/ip_options.c:486
- ip_rcv_options net/ipv4/ip_input.c:278 [inline]
- ip_rcv_finish_core.isra.0+0x4aa/0x1ec0 net/ipv4/ip_input.c:370
- ip_rcv_finish+0x144/0x2f0 net/ipv4/ip_input.c:426
- NF_HOOK include/linux/netfilter.h:307 [inline]
- NF_HOOK include/linux/netfilter.h:301 [inline]
- ip_rcv+0xd0/0x3c0 net/ipv4/ip_input.c:538
- __netif_receive_skb_one_core+0xf5/0x160 net/core/dev.c:5187
- __netif_receive_skb+0x27/0x1c0 net/core/dev.c:5301
- netif_receive_skb_internal net/core/dev.c:5391 [inline]
- netif_receive_skb+0x16e/0x960 net/core/dev.c:5450
- tun_rx_batched.isra.0+0x47b/0x7d0 drivers/net/tun.c:1553
- tun_get_user+0x134a/0x3be0 drivers/net/tun.c:1997
- tun_chr_write_iter+0xb0/0x147 drivers/net/tun.c:2026
- call_write_iter include/linux/fs.h:1902 [inline]
- new_sync_write+0x49c/0x700 fs/read_write.c:483
- __vfs_write+0xc9/0x100 fs/read_write.c:496
- vfs_write+0x262/0x5c0 fs/read_write.c:558
- ksys_write+0x127/0x250 fs/read_write.c:611
- do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x440699
-Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 fb 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fffce0515b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000440699
-RDX: 000000000000100c RSI: 0000000020000240 RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000002c00 R09: 00007fff0000000d
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401f20
-R13: 0000000000401fb0 R14: 0000000000000000 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Konrad
+>  .../dts/qcom/msm8994-msft-lumia-octagon.dtsi  |   8 +-
+>  .../qcom/msm8994-sony-xperia-kitakami.dtsi    |   6 +-
+>  arch/arm64/boot/dts/qcom/msm8994.dtsi         | 130 +++++++++---------
+>  3 files changed, 74 insertions(+), 70 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
+> b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
+> index f9d8bd09e074..63568f73e9d3 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
+> @@ -881,28 +881,28 @@ &sdhc2 {
+>  };
+> 
+>  &tlmm {
+> -	grip_default: grip-default {
+> +	grip_default: grip-default-state {
+>  		pins = "gpio39";
+>  		function = "gpio";
+>  		drive-strength = <6>;
+>  		bias-pull-down;
+>  	};
+> 
+> -	grip_sleep: grip-sleep {
+> +	grip_sleep: grip-sleep-state {
+>  		pins = "gpio39";
+>  		function = "gpio";
+>  		drive-strength = <2>;
+>  		bias-pull-down;
+>  	};
+> 
+> -	hall_front_default: hall-front-default {
+> +	hall_front_default: hall-front-default-state {
+>  		pins = "gpio42";
+>  		function = "gpio";
+>  		drive-strength = <2>;
+>  		bias-disable;
+>  	};
+> 
+> -	hall_back_default: hall-back-default {
+> +	hall_back_default: hall-back-default-state {
+>  		pins = "gpio75";
+>  		function = "gpio";
+>  		drive-strength = <2>;
+> diff --git
+> a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> index ff60b7004d26..a390af54c715 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> @@ -477,15 +477,17 @@ &sdhc2 {
+>  };
+> 
+>  &tlmm {
+> -	ts_int_active: ts-int-active {
+> +	ts_int_active: ts-int-active-state {
+>  		pins = "gpio42";
+> +		function = "gpio";
+>  		drive-strength = <2>;
+>  		bias-disable;
+>  		input-enable;
+>  	};
+> 
+> -	ts_reset_active: ts-reset-active {
+> +	ts_reset_active: ts-reset-active-state {
+>  		pins = "gpio109";
+> +		function = "gpio";
+>  		drive-strength = <2>;
+>  		bias-disable;
+>  		output-low;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> index 7a582a5fe3a8..ba687e64ba3c 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> @@ -773,254 +773,256 @@ tlmm: pinctrl@fd510000 {
+>  			interrupt-controller;
+>  			#interrupt-cells = <2>;
+> 
+> -			blsp1_uart2_default: blsp1-uart2-default {
+> -				function = "blsp_uart2";
+> +			blsp1_uart2_default: blsp1-uart2-default-state {
+>  				pins = "gpio4", "gpio5";
+> +				function = "blsp_uart2";
+>  				drive-strength = <16>;
+>  				bias-disable;
+>  			};
+> 
+> -			blsp1_uart2_sleep: blsp1-uart2-sleep {
+> -				function = "gpio";
+> +			blsp1_uart2_sleep: blsp1-uart2-sleep-state {
+>  				pins = "gpio4", "gpio5";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-pull-down;
+>  			};
+> 
+> -			blsp2_uart2_default: blsp2-uart2-default {
+> +			blsp2_uart2_default: blsp2-uart2-default-state {
+> +				pins = "gpio45", "gpio46", "gpio47", "gpio48";
+>  				function = "blsp_uart8";
+> -				pins = "gpio45", "gpio46",
+> -						"gpio47", "gpio48";
+>  				drive-strength = <16>;
+>  				bias-disable;
+>  			};
+> 
+> -			blsp2_uart2_sleep: blsp2-uart2-sleep {
+> +			blsp2_uart2_sleep: blsp2-uart2-sleep-state {
+> +				pins = "gpio45", "gpio46", "gpio47", "gpio48";
+>  				function = "gpio";
+> -				pins = "gpio45", "gpio46",
+> -						"gpio47", "gpio48";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c1_default: i2c1-default {
+> -				function = "blsp_i2c1";
+> +			i2c1_default: i2c1-default-state {
+>  				pins = "gpio2", "gpio3";
+> +				function = "blsp_i2c1";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c1_sleep: i2c1-sleep {
+> -				function = "gpio";
+> +			i2c1_sleep: i2c1-sleep-state {
+>  				pins = "gpio2", "gpio3";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c2_default: i2c2-default {
+> -				function = "blsp_i2c2";
+> +			i2c2_default: i2c2-default-state {
+>  				pins = "gpio6", "gpio7";
+> +				function = "blsp_i2c2";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c2_sleep: i2c2-sleep {
+> -				function = "gpio";
+> +			i2c2_sleep: i2c2-sleep-state {
+>  				pins = "gpio6", "gpio7";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c4_default: i2c4-default {
+> -				function = "blsp_i2c4";
+> +			i2c4_default: i2c4-default-state {
+>  				pins = "gpio19", "gpio20";
+> +				function = "blsp_i2c4";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c4_sleep: i2c4-sleep {
+> -				function = "gpio";
+> +			i2c4_sleep: i2c4-sleep-state {
+>  				pins = "gpio19", "gpio20";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-pull-down;
+>  				input-enable;
+>  			};
+> 
+> -			i2c5_default: i2c5-default {
+> -				function = "blsp_i2c5";
+> +			i2c5_default: i2c5-default-state {
+>  				pins = "gpio23", "gpio24";
+> +				function = "blsp_i2c5";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c5_sleep: i2c5-sleep {
+> -				function = "gpio";
+> +			i2c5_sleep: i2c5-sleep-state {
+>  				pins = "gpio23", "gpio24";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c6_default: i2c6-default {
+> -				function = "blsp_i2c6";
+> +			i2c6_default: i2c6-default-state {
+>  				pins = "gpio28", "gpio27";
+> +				function = "blsp_i2c6";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c6_sleep: i2c6-sleep {
+> -				function = "gpio";
+> +			i2c6_sleep: i2c6-sleep-state {
+>  				pins = "gpio28", "gpio27";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c7_default: i2c7-default {
+> -				function = "blsp_i2c7";
+> +			i2c7_default: i2c7-default-state {
+>  				pins = "gpio44", "gpio43";
+> +				function = "blsp_i2c7";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c7_sleep: i2c7-sleep {
+> -				function = "gpio";
+> +			i2c7_sleep: i2c7-sleep-state {
+>  				pins = "gpio44", "gpio43";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			blsp2_spi10_default: blsp2-spi10-default {
+> -				default {
+> -					function = "blsp_spi10";
+> +			blsp2_spi10_default: blsp2-spi10-default-state {
+> +				default-pins {
+>  					pins = "gpio53", "gpio54", "gpio55";
+> +					function = "blsp_spi10";
+>  					drive-strength = <10>;
+>  					bias-pull-down;
+>  				};
+> -				cs {
+> -					function = "gpio";
+> +
+> +				cs-pins {
+>  					pins = "gpio67";
+> +					function = "gpio";
+>  					drive-strength = <2>;
+>  					bias-disable;
+>  				};
+>  			};
+> 
+> -			blsp2_spi10_sleep: blsp2-spi10-sleep {
+> +			blsp2_spi10_sleep: blsp2-spi10-sleep-state {
+>  				pins = "gpio53", "gpio54", "gpio55";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c11_default: i2c11-default {
+> -				function = "blsp_i2c11";
+> +			i2c11_default: i2c11-default-state {
+>  				pins = "gpio83", "gpio84";
+> +				function = "blsp_i2c11";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			i2c11_sleep: i2c11-sleep {
+> -				function = "gpio";
+> +			i2c11_sleep: i2c11-sleep-state {
+>  				pins = "gpio83", "gpio84";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			blsp1_spi1_default: blsp1-spi1-default {
+> -				default {
+> -					function = "blsp_spi1";
+> +			blsp1_spi1_default: blsp1-spi1-default-state {
+> +				default-pins {
+>  					pins = "gpio0", "gpio1", "gpio3";
+> +					function = "blsp_spi1";
+>  					drive-strength = <10>;
+>  					bias-pull-down;
+>  				};
+> -				cs {
+> -					function = "gpio";
+> +
+> +				cs-pins {
+>  					pins = "gpio8";
+> +					function = "gpio";
+>  					drive-strength = <2>;
+>  					bias-disable;
+>  				};
+>  			};
+> 
+> -			blsp1_spi1_sleep: blsp1-spi1-sleep {
+> +			blsp1_spi1_sleep: blsp1-spi1-sleep-state {
+>  				pins = "gpio0", "gpio1", "gpio3";
+> +				function = "gpio";
+>  				drive-strength = <2>;
+>  				bias-disable;
+>  			};
+> 
+> -			sdc1_clk_on: clk-on {
+> +			sdc1_clk_on: clk-on-state {
+>  				pins = "sdc1_clk";
+>  				bias-disable;
+>  				drive-strength = <16>;
+>  			};
+> 
+> -			sdc1_clk_off: clk-off {
+> +			sdc1_clk_off: clk-off-state {
+>  				pins = "sdc1_clk";
+>  				bias-disable;
+>  				drive-strength = <2>;
+>  			};
+> 
+> -			sdc1_cmd_on: cmd-on {
+> +			sdc1_cmd_on: cmd-on-state {
+>  				pins = "sdc1_cmd";
+>  				bias-pull-up;
+>  				drive-strength = <8>;
+>  			};
+> 
+> -			sdc1_cmd_off: cmd-off {
+> +			sdc1_cmd_off: cmd-off-state {
+>  				pins = "sdc1_cmd";
+>  				bias-pull-up;
+>  				drive-strength = <2>;
+>  			};
+> 
+> -			sdc1_data_on: data-on {
+> +			sdc1_data_on: data-on-state {
+>  				pins = "sdc1_data";
+>  				bias-pull-up;
+>  				drive-strength = <8>;
+>  			};
+> 
+> -			sdc1_data_off: data-off {
+> +			sdc1_data_off: data-off-state {
+>  				pins = "sdc1_data";
+>  				bias-pull-up;
+>  				drive-strength = <2>;
+>  			};
+> 
+> -			sdc1_rclk_on: rclk-on {
+> +			sdc1_rclk_on: rclk-on-state {
+>  				pins = "sdc1_rclk";
+>  				bias-pull-down;
+>  			};
+> 
+> -			sdc1_rclk_off: rclk-off {
+> +			sdc1_rclk_off: rclk-off-state {
+>  				pins = "sdc1_rclk";
+>  				bias-pull-down;
+>  			};
+> 
+> -			sdc2_clk_on: sdc2-clk-on {
+> +			sdc2_clk_on: sdc2-clk-on-state {
+>  				pins = "sdc2_clk";
+>  				bias-disable;
+>  				drive-strength = <10>;
+>  			};
+> 
+> -			sdc2_clk_off: sdc2-clk-off {
+> +			sdc2_clk_off: sdc2-clk-off-state {
+>  				pins = "sdc2_clk";
+>  				bias-disable;
+>  				drive-strength = <2>;
+>  			};
+> 
+> -			sdc2_cmd_on: sdc2-cmd-on {
+> +			sdc2_cmd_on: sdc2-cmd-on-state {
+>  				pins = "sdc2_cmd";
+>  				bias-pull-up;
+>  				drive-strength = <10>;
+>  			};
+> 
+> -			sdc2_cmd_off: sdc2-cmd-off {
+> +			sdc2_cmd_off: sdc2-cmd-off-state {
+>  				pins = "sdc2_cmd";
+>  				bias-pull-up;
+>  				drive-strength = <2>;
+>  			};
+> 
+> -			sdc2_data_on: sdc2-data-on {
+> +			sdc2_data_on: sdc2-data-on-state {
+>  				pins = "sdc2_data";
+>  				bias-pull-up;
+>  				drive-strength = <10>;
+>  			};
+> 
+> -			sdc2_data_off: sdc2-data-off {
+> +			sdc2_data_off: sdc2-data-off-state {
+>  				pins = "sdc2_data";
+>  				bias-pull-up;
+>  				drive-strength = <2>;
