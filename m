@@ -2,253 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8F85FC3D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 12:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4775FC3D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 12:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJLKea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 06:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S229804AbiJLKgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 06:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLKe2 (ORCPT
+        with ESMTP id S229736AbiJLKgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 06:34:28 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2040.outbound.protection.outlook.com [40.107.95.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15C4BBF3A;
-        Wed, 12 Oct 2022 03:34:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ib66tedVGxRIYKaBLRSeka6eFIPYKI8dz2MIJcazeBXE1gqEmGXT8AqpWvBcYD6dDgrYpdDmuFhdyh90a8PMa0Dg22hpgqzYE1tsT1ZQMGDNKMeJDpEyTXYGolChI5W+IMvAx/PkIHf4SLN+jn/UL06vPPjQmcWt0TFPZu5Cf2/UTP3H3MG0cqK5DLkg+wWufvkT9sF3oMnEQQ03AurytTx3Vwwpks6HmHDveKKGuj35wh8tDN6a7V7eh2du7QxvLp8bGP0yXWDTD88taVDJAMWtrXEIM5h6/UQdVsgWaQdC1a9AE379VkWIWLmbsRS5HOgm2UfswGLdkTYhz0KEhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8H82YeQdZ65jmCLPdhwfvGTkwVlz1+X9NsJMnlrlKoU=;
- b=Y77lDrlf6nSK2VliO9AxbtZWgzN3VZOVJtaQ7zBGI99+/aoHI4yt0CMmkq4p9OrOuFoE4txGpLIN3LPf7xQSsN/j6HwA68XHoiUBnPWlREji5ROmxzCAZOkBXQV5HyfkCaP3ZsYzF17IOcxhio/8oaR2DRemX+VjZSwl9Z3hUncFsX5MGryZ4ShI5kZdio9m3YHxrbKk1r0eo5VjPZsN1H8+jlCB0/5NSH3oEyG2QftfQvpaW5eETD6utPNdXeo9KvGt8jYoOg2u1IXrlsQukKMYj4I1yR4m5ykzuUUg+AUpcOewXnTGpG0/hL5qEw12okgqFDdg7Nfmftbk55ukcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8H82YeQdZ65jmCLPdhwfvGTkwVlz1+X9NsJMnlrlKoU=;
- b=xHSqyQrnIDAXBYW5oWZouCb2nJ0xlOv3exZlRErVGqbyBHe453U4calJl3ltdIS3EOh1IyfQbD25+Z/DaCMRSZMQU/xIAKfztXLUOy+7b0dzHCx8e87EC7/Ty3Aq3Mn1BX87oI2QSFQ7kNL7hLjeCwyujO3hBmtJKW9+ncrQSgM=
-Received: from MN2PR12MB4358.namprd12.prod.outlook.com (2603:10b6:208:24f::12)
- by MW6PR12MB7085.namprd12.prod.outlook.com (2603:10b6:303:238::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.19; Wed, 12 Oct
- 2022 10:34:24 +0000
-Received: from MN2PR12MB4358.namprd12.prod.outlook.com
- ([fe80::a094:c6b2:d306:d7bf]) by MN2PR12MB4358.namprd12.prod.outlook.com
- ([fe80::a094:c6b2:d306:d7bf%3]) with mapi id 15.20.5709.022; Wed, 12 Oct 2022
- 10:34:23 +0000
-From:   "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>
-To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "jgg@nvidia.com" <jgg@nvidia.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
- domain as parent
-Thread-Topic: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
- domain as parent
-Thread-Index: AQHYwfdzMPgE56itm0GRwc9i4G18eq3T9LKAgDbLT4CAAAON8A==
-Date:   Wed, 12 Oct 2022 10:34:23 +0000
-Message-ID: <MN2PR12MB43586084670E14691920952889229@MN2PR12MB4358.namprd12.prod.outlook.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
-        <20220906134801.4079497-1-nipun.gupta@amd.com>
-        <20220906134801.4079497-5-nipun.gupta@amd.com> <87h71juxuk.wl-maz@kernel.org>
- <DM6PR12MB30820EE430405FF50C7F856BE8229@DM6PR12MB3082.namprd12.prod.outlook.com>
-In-Reply-To: <DM6PR12MB30820EE430405FF50C7F856BE8229@DM6PR12MB3082.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-10-12T10:34:20Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=9eba8937-eed0-45ce-8661-54be192ea195;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR12MB4358:EE_|MW6PR12MB7085:EE_
-x-ms-office365-filtering-correlation-id: 3b83d138-3afc-46e0-f359-08daac3d5474
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tGIs1GPXWNxXkDB1PLqtVQfeD0c6+OUhy4UVdmZlg2f3ZlGohzOL5tCDvzO/VEINeIu/TCl1ZDh1FXMFs3eXKe9+dP0fcGQqf5rvKbsgLGMyWwjZMPSFAlNOvVxT6bC6qN9po+SIMl9+5req6ro6hTJlZ6xjSuKGyJHZDcOqQgZ18wXPKYaDpmAlnD6uTooXZYcXMWdp7Ths4XoM/61intwa6puRLc4lzhWuM59h5AWxnmOLywOjBQ43sGzc0Dm13PTbB2TgDegRcocH5qlRnHqWKrkudvn2kvpnmz4t/pa7tt3Y5jfEYls3cIjk0VisNkjszhvXjR/orZXwPYZ22pWtZDm9ib6sB/36HdNGh5nX3to5uajjz6cyz3nxuj0jMLYFYt5/q2Oz9ChEO7GBmH4vQ1usxFQSl7JuCMIoDQ/7NgVwDVN2apLecagA/KT/UFhsxr0r+WGX/BlAG5qat8Ddm90SzwYlMhJzzkX/6sJCeY+j0Rh9dhRBuuSxWTED53FTlERsnsLow17hEuDemN6vnwpFsbQmkbhH8Yn5NxG9LaGqWhHdk0uAXm+EEmm8lpDaek/ViADCZ6z9txxk81x+xuGgruvHczA6lep8LLUf9VZxiNhhRbBfBeTKC/SBGgXwRL5NU/TRDFraD29tgAQMPX3psGgDKai38Ht+doA4EjZw4MunWQtzz478rdSTedfaz9RL/ZDnMs8ZqVmUWq7NQuRwT/NUEedOJDeVvg2U8mR0KwFgUCldBGVnC5D5zZIOA2H6Lh24N35Ye9G9qg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4358.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(376002)(136003)(346002)(396003)(451199015)(33656002)(86362001)(5660300002)(7416002)(38100700002)(122000001)(186003)(7406005)(38070700005)(2906002)(6506007)(7696005)(478600001)(76116006)(26005)(66476007)(83380400001)(64756008)(66946007)(8676002)(53546011)(316002)(66556008)(66446008)(52536014)(8936002)(9686003)(4326008)(41300700001)(110136005)(71200400001)(55016003)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2TeRKvfOr8/o5qM8NkQ3YxH7GFgxaMo+to9zGqep7/rmDem3sF25dW7pHLgL?=
- =?us-ascii?Q?vE1dhkR6AbXyPoCBdy3RLPaMbTpWrvWqDqSlZ4AUrhHcWn5/nvmQET6rEHNp?=
- =?us-ascii?Q?rbNmiRVQgaXXIhSy/FDsvXzv76ei2IlpAhYW1LJ4LgMVtJ9ttJK/dG/qAxjd?=
- =?us-ascii?Q?7SGo3bI48RmlW/fIMjbLZm/Q2Erk9cAwnqqOfBvUpRsP1CDMfQj/5glaKHud?=
- =?us-ascii?Q?+5+YMnz373BycLKfYL43jKNuboN7L4o1mQ4q3og9121IHmFdBoiqnBRQug5c?=
- =?us-ascii?Q?/ZUQXGpZqw0DNV9sTqR67xlyYrxmzC95zQH+tmfPpCcKiqDXfPWmRIrYTIJd?=
- =?us-ascii?Q?wl2mRKJSFIWuzhwR7RcFCmRryKWRhL7lD1fouiL/RZqOt0VmMb//Nh1W5zqe?=
- =?us-ascii?Q?dtyUmZD17yUth3QHc+aEE4xXbDekLcp7HiWS3jmjUZlsXhKac+ZoYRbScym+?=
- =?us-ascii?Q?jU719nueW/n7eI88VwBpOv6v9zZgpmHfkqho7QVxIeqqwZXSBxn2otUeRD9q?=
- =?us-ascii?Q?baWRQMronvnrDkzVTh3PGmQh1i3nqexSpTGFGp/vosmrKX1eo+4GVDBnOYC8?=
- =?us-ascii?Q?hiwymGfGR7ej8mprwdQ4DCbMks6hBRHgTiOc+Tg+xfynqGiE1fz8VWQWOXq1?=
- =?us-ascii?Q?tbCCNzDA2SUs4aHG+UN5BYB6YIYgemY8v+g4ZYZnNzzRzrVvzbPly1qBfVPI?=
- =?us-ascii?Q?2xtyHz2stxAv6acDWASGNwzV0XxupODYiJDoYylfa0iamT49baIuSbCvHpC+?=
- =?us-ascii?Q?ZZzfV3CWnVWkbgz2SzbALNtZoLRXZEEOvdlfn3V6bkZ7l98Y5JkXj+O6DFHH?=
- =?us-ascii?Q?7Prl2lISaQXwVLRh/1jCceKhRv8oisoVse4LtHCI93pMGTaBDheofewaFWsJ?=
- =?us-ascii?Q?c2aSE+JXXKOaR1snQO36erCZBG7tAZC1pR+1LznfYMfT7DEd3JZqzuNSDlCR?=
- =?us-ascii?Q?gzm6+mwKRVWnh7zWMfn4kWIWvfAS927y/mrq+qw8gaxcgoOJnIT6Odq8lX/n?=
- =?us-ascii?Q?N9rczlkZWd3YuNNS7rNqAbuWLezhBuL7F2Z1sV/IDnV2Z/dOmvJmx+YX3jgI?=
- =?us-ascii?Q?iA8IRCA4iEDBUYY3yR0wJUm4fbvqh8IdeVkZrpiMUZDrit38YceyvbkR09kZ?=
- =?us-ascii?Q?eiGACzkqvqP5TErotLF+3O6CVQZSFsvi9XDLPL2V5CpaamPBBuPpDZWyd02O?=
- =?us-ascii?Q?YuSndh6huR1eT4GhYOuGSbhNTyX8yujQqIKKF8bq9GxyToF8DhCYd946/kME?=
- =?us-ascii?Q?Iw4BlDMJ5Tyxnc0j1eAIs8Ikqtx0fLUqfQz2C1GniPeJ78JJjMxLwEMdII85?=
- =?us-ascii?Q?VEMICuFVbLU7gXLm02VCVLgJ5dxyaJyXKO+nmRUq6exv5zTh7ClFlDQ2x+Mb?=
- =?us-ascii?Q?RM5j4/5QINTzucq3Q+bZbXTX0BBEwBwMiqPzMBIY8IKaBeF5myKW/Tb76PCd?=
- =?us-ascii?Q?K5YGql2Mk9mZlKUy0z4IYX4GS+Fxxle1oBQX602N7aQw367MoOZdlOE8lSEU?=
- =?us-ascii?Q?T7uk4X6/O17jwZjNwClHaDvCbUuOAuczHBF+ImDFGeOYhYUnnjkY6LYyS9hd?=
- =?us-ascii?Q?59vu2MFEQXCEKzqa4MI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 12 Oct 2022 06:36:35 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88B9BA26A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:36:34 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l5-20020a056e0212e500b002fa8ea32922so12829914iln.15
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:36:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=726YeQ3V7M0/A+m5EoxUUeMid2vMENKP8inDN5BryDw=;
+        b=McRHy6635ffy7zQw9DJ1p9m9fu8/EkMEcLYqrGbm6b40M7edCvCQ/08qDxG7MIQpr6
+         VXSuOdJoOiydVUQFFqshGMJB/ukk9CV1l+tsI7AbRNCMWXYMvYltTaWJheUH6sBXa1oQ
+         fuUoGFUr+Gh73JpnUbX4MgB1pxKfeYMytkgd3Pr7Ze7NjMvUoZdKhh+7l4vFCGVE7JmO
+         zkCOr+F4cQJ8WnfekZE3HoOg44kSDGQMHs8uU9Sz+t7VvtEzV7IWFm46xptNl0WOwScc
+         +s7BXyPAcwGGF0CgBiwa7Rq30hL3ObiB200HBqbXCx+1hNemEHutaVyPK15CSZVKXaK4
+         rR5w==
+X-Gm-Message-State: ACrzQf04k+0ZWLmA0H4nFuDFFPqfauv+E54UBkoHnEr50M2UCTYYygVj
+        dXhDeetTcnJXiKLRponesE52H/LyAskd8aGs9I0Byiu/pdTL
+X-Google-Smtp-Source: AMsMyM59CoUjiALFeu9H4zWQYkUEiBH+XU8QfaBJMX0K7pGWvY2E3AFQjBNohVlhkRPWR9bvjAhQsCKfPQDNFdi5kW11962mlUqD
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4358.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b83d138-3afc-46e0-f359-08daac3d5474
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2022 10:34:23.5656
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ELffysMwAJdlZA241Xg/NGPlR2Fev9/lxctBBjyCLdnIHeywujRXkpyldZu+itHmEyavcuGsio1zpWQ16163Lw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7085
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cdaf:0:b0:2fa:27e1:727a with SMTP id
+ g15-20020a92cdaf000000b002fa27e1727amr14303755ild.135.1665570993987; Wed, 12
+ Oct 2022 03:36:33 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 03:36:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000071e45405ead3f73c@google.com>
+Subject: [syzbot] WARNING in ext4_da_release_space
+From:   syzbot <syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hello,
 
-> -----Original Message-----
-> From: Gupta, Nipun <Nipun.Gupta@amd.com>
-> Sent: 12 October 2022 11:04
-> To: Marc Zyngier <maz@kernel.org>; Robin Murphy
-> <robin.murphy@arm.com>
-> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> gregkh@linuxfoundation.org; rafael@kernel.org; eric.auger@redhat.com;
-> alex.williamson@redhat.com; cohuck@redhat.com; Gupta, Puneet (DCG-
-> ENG) <puneet.gupta@amd.com>; song.bao.hua@hisilicon.com;
-> mchehab+huawei@kernel.org; f.fainelli@gmail.com;
-> jeffrey.l.hugo@gmail.com; saravanak@google.com;
-> Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com;
-> jgg@ziepe.ca; jgg@nvidia.com; will@kernel.org; joro@8bytes.org;
-> masahiroy@kernel.org; ndesaulniers@google.com; linux-arm-
-> kernel@lists.infradead.org; linux-kbuild@vger.kernel.org; linux-
-> kernel@vger.kernel.org; devicetree@vger.kernel.org; kvm@vger.kernel.org;
-> okaya@kernel.org; Anand, Harpreet <harpreet.anand@amd.com>; Agarwal,
-> Nikhil <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
-> Radovanovic, Aleksandar <aleksandar.radovanovic@amd.com>; git (AMD-
-> Xilinx) <git@amd.com>
-> Subject: RE: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
-> domain as parent
->=20
-> [AMD Official Use Only - General]
->=20
->=20
-> <snip>
->=20
-> >
-> > > +}
-> > > +
-> > > +static void cdx_msi_write_msg(struct irq_data *irq_data,
-> > > +                           struct msi_msg *msg) {
-> > > +     /*
-> > > +      * Do nothing as CDX devices have these pre-populated
-> > > +      * in the hardware itself.
-> > > +      */
-> >
-> > We talked about this in a separate thread. This is a major problem.
->=20
-> We discussed this further with the hardware design team and now have the
-> correct and complete understanding here. As the CDX devices are FPGA
-> based, they don't exist yet, so it would be possible to construct them in=
- such
-> a way that the eventid is programable.
->=20
-> To make it generic for CDX devices, we have added a firmware API which
-> provide the mappings (MSI vector ID to eventID) to the fabric, that can b=
-e
-> referred by the device while generating the MSI interrupt.
->=20
-> Also, there is an existing table to have GITS_TRANSLATOR iova address
-> (address in
-> msi_msg) for CDX devices, which can be programmed by the firmware. So,
-> providing IOVA address to device would also not be a problem here.
->=20
-> We would be rolling out RFC v4 with these changes soon.
->=20
-> Regards,
-> Nipun
+syzbot found the following issue on:
 
-Just to be clear, there will be some HW limitations with the proposed solut=
-ion,
-so let's just make sure that we're all OK with it.
+HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10bbd09c880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=c740bb18df70ad00952e
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16b7bfcc880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c59bdc880000
 
-For the MSI EventID, the HW interrupt logic assumes the MSI write value is=
-=20
-equal to the MSI vector number. However, the vector number is programmable
-for most (all) of the interrupt sources, which isn't exactly the same as sa=
-ying
-EventID is programmable for a vector number, but can be used to emulate the
-desired behaviour, with a translation table in firmware.=20
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/70b26613fa58/mount_0.gz
 
-The limitation here is that we support at most 16 bits of EventID (and this=
- still
-needs to be confirmed for all interrupt sources)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c740bb18df70ad00952e@syzkaller.appspotmail.com
 
-As for GITS_TRANSLATER, we can take up to 4 different IOVAs, which limits u=
-s
-to 4 CDX devices (should be sufficient for current HW use-cases). Also, it =
-means
-that the address part must be the same for all vectors within a single CDX=
-=20
-device. I'm assuming this is OK as it is going to be a single interrupt and=
- IOMMU
-domain anyway.
+EXT4-fs (loop0): Free/Dirty block details
+EXT4-fs (loop0): free_blocks=0
+EXT4-fs (loop0): dirty_blocks=0
+EXT4-fs (loop0): Block reservation details
+EXT4-fs (loop0): i_reserved_data_blocks=0
+EXT4-fs warning (device loop0): ext4_da_release_space:1527: ext4_da_release_space: ino 18, to_free 1 with only 0 reserved data blocks
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 92 at fs/ext4/inode.c:1528 ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1524
+Modules linked in:
+CPU: 0 PID: 92 Comm: kworker/u4:4 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Workqueue: writeback wb_workfn (flush-7:0)
+RIP: 0010:ext4_da_release_space+0x25e/0x370 fs/ext4/inode.c:1528
+Code: a9 ff 4d 8b 07 4c 89 e7 48 c7 c6 87 2d 49 8c ba f7 05 00 00 48 c7 c1 00 90 a3 8a 45 89 f1 31 c0 53 e8 a6 6d 0e 00 48 83 c4 08 <0f> 0b 48 b8 00 00 00 00 00 fc ff df 8a 44 05 00 84 c0 0f 85 da 00
+RSP: 0018:ffffc900015f6c90 EFLAGS: 00010296
+RAX: 42215896cd52ea00 RBX: 0000000000000000 RCX: 42215896cd52ea00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: 1ffff1100e907d96 R08: ffffffff816aa79d R09: fffff520002bece5
+R10: fffff520002bece5 R11: 1ffff920002bece4 R12: ffff888021fd2000
+R13: ffff88807483ecb0 R14: 0000000000000001 R15: ffff88807483e740
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005555569ba628 CR3: 000000000c88e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4_es_remove_extent+0x1ab/0x260 fs/ext4/extents_status.c:1461
+ mpage_release_unused_pages+0x24d/0xef0 fs/ext4/inode.c:1589
+ ext4_writepages+0x12eb/0x3be0 fs/ext4/inode.c:2852
+ do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+ __writeback_single_inode+0xd1/0x670 fs/fs-writeback.c:1587
+ writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1870
+ wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2044
+ wb_do_writeback fs/fs-writeback.c:2187 [inline]
+ wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2227
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-Thanks,
-Aleksandar=
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
