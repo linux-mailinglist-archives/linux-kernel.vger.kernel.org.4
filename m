@@ -2,230 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F185FCB6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9045FCB6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiJLTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 15:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S229804AbiJLTU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 15:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJLTTS (ORCPT
+        with ESMTP id S229662AbiJLTU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 15:19:18 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF5D102DFC;
-        Wed, 12 Oct 2022 12:19:08 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b15so16132846pje.1;
-        Wed, 12 Oct 2022 12:19:08 -0700 (PDT)
+        Wed, 12 Oct 2022 15:20:56 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47D5CBFC9;
+        Wed, 12 Oct 2022 12:20:54 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i3so17393071pfk.9;
+        Wed, 12 Oct 2022 12:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6fX48vIWYpjViCZeXxicInI+kxNPFmk1lK5Wh8mOwOE=;
-        b=hkf1+ecZnUs6So29ZrMzVhnpZJIc7YvWAraVgbsVnnRWZEJ6Z1lwp8UxBEsRbTwTwr
-         H8/IPCQ1QX1OA9//RJK3tfbSMEtAo2QVs/qo0jR0I4pI16ALkwNw3OnVptrBI3kxavel
-         zbA8MPtvTI03WPz0Dloz53jm1H8J3TTp4MtiliFW8gND3R/wG/aObAuHxga5ylwt5QNZ
-         gzPWsRnKwQbBuebprJWh4agaVwkZ8Nk7xe1Ue8o6AzppUH6mDNuR6vWZObWwovfPdy88
-         Dm/TXUNA3Chit+RmBaxbbIoI8s4PUFM0/poMjOlxhLB5P3rTHcLUvwGdtvBeTiMWNTkw
-         cZwA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0rrEqvpdS6/A3qRrs8G1ifD0QqY6vlEf+AAA3SCDLo=;
+        b=iBzv5RFIKLcFDEFE31IHe5x6LpZ6Ym8lDJNJeOhVbsP1RRe3jLwXPlZtKWBY3l+p+c
+         tPANZJM2r0maEn4ei2n8BoT6KxZSzL7yfEd+GM64JY9f+dz4jw/evfMMx7f5xymfc4L9
+         fBOGaAbreD8+EC1lKjn6AMUcelQ3GRPOOm8q1Z87N26wnX2ma+zFww+4/qKesnPsdq2l
+         7Poe2kgZZA33gB5s3V/jHwHmrp9KxE55WifPvVMjz5U5uX3o/xoCn6j0UdpuJNx+vmAQ
+         xPxZFqc/Yh7xQ6ItD/BfMV8hWNEXg1i/L7UXdMcOt0izsTw0RuAxSwmfBD8cYNPE+mb4
+         s7dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fX48vIWYpjViCZeXxicInI+kxNPFmk1lK5Wh8mOwOE=;
-        b=CAOjKOYfC70dSAF1YM3GgIaOKSMskyqZWJkQeIKhYhdeI4xOU7YaGaZlkffioMbPGu
-         gzgW/LFkK/DTKjdfQPYTp6FJAFlts5nLBrA/3HZnttfRDHjSwCtrV5E373mjcJ26jsVO
-         /B8y13Kje439A+UQA0iLonJjDZLVE0mHb/1W72RooppY1XPMCmGQ8mWXtWD2FRXE4f5c
-         tWvggCzk3BCUFPR0UP8qlp9iVkfFYNvCFW3ULa0o56Me4at2wR8s5R2VaZOOt8J4ERWv
-         RrsR5g7DU/h4HMKef/omLlaucr5lTSaU9NNU9WYrwn7tDDfnz/QEgI4CvcpVe5VrF63l
-         yDTg==
-X-Gm-Message-State: ACrzQf3gEXpiPucR04hduv7jrsC9uc4KCESy6t2+NKAmDWzZYc8/KZxc
-        yyGp8np/RrmADsEx8e2ChGA=
-X-Google-Smtp-Source: AMsMyM6eTdTcJhsmb+6koMRnl4pt5nemqWVsWU6ktVqtB8uM40UucIJ4B8qmiHyNDzjH6U/E/dBS5g==
-X-Received: by 2002:a17:90b:1bcb:b0:20d:75b8:ee64 with SMTP id oa11-20020a17090b1bcb00b0020d75b8ee64mr6821059pjb.162.1665602347623;
-        Wed, 12 Oct 2022 12:19:07 -0700 (PDT)
-Received: from [172.30.1.63] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b0018003571809sm10692908ple.224.2022.10.12.12.19.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 12:19:07 -0700 (PDT)
-Message-ID: <abc402b1-1253-fe94-94c4-afb1dfb9aebd@gmail.com>
-Date:   Thu, 13 Oct 2022 04:19:03 +0900
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E0rrEqvpdS6/A3qRrs8G1ifD0QqY6vlEf+AAA3SCDLo=;
+        b=3q2oqbVQuvtx1fEYZLuxjr7xX6TvcQyAjx5+Nr0Ijb4lgVXwZDykWwkHAcd1k99Usu
+         ro+STpnhI99WxpBhx3m74wkzoyLCYrNooUh0vyD0+8zI3oWsFbolEmUwnQPNDsZsxMhn
+         vy5uIItBFKw9/mHZ0jF3lwiaEBHWJ8aPMGnUb2CW1pJLMjS8UDaEDF3tY9AM+FQ1C19a
+         8F8LchdkHJ1tZKGPN27J/IfrFrHn0e5r/LznZ1/kBrqUWT0lvazCZAO4FhJnyDrLsktE
+         o8ptmMyoa5pumh5k3V6ezP/JiwhFYujCAY2d77EkrSiGznRBwrCmDWk6LoKhA4J8yaOD
+         Ux8A==
+X-Gm-Message-State: ACrzQf3Ha1Tpm57qnWfNo2i4nJutG/s5+K7G7ou2JBBQCg0R5ipfi5Vc
+        bxCK+XDQ6HViUWtuaz1lU0o=
+X-Google-Smtp-Source: AMsMyM5LApyzMLt69cPOLbkpAgOB7rUw1DRn6jbML7+50wdhr0ZswZ9v/4yWajRa1tsPYbe6J0I/UQ==
+X-Received: by 2002:a63:24d:0:b0:452:87c1:9781 with SMTP id 74-20020a63024d000000b0045287c19781mr26962898pgc.512.1665602454084;
+        Wed, 12 Oct 2022 12:20:54 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d4c1:686c:5489:5df9])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b0016d72804664sm11021027plg.205.2022.10.12.12.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 12:20:53 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 12:20:50 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 2/7] gpiolib: of: consolidate simple renames into a
+ single quirk
+Message-ID: <Y0cTkubAA4637o5y@google.com>
+References: <20221011-gpiolib-quirks-v1-0-e01d9d3e7b29@gmail.com>
+ <20221011-gpiolib-quirks-v1-2-e01d9d3e7b29@gmail.com>
+ <Y0aS80PlA/T3mx2d@maple.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] devfreq: governor: Add a private governor_data for
- governors in devfreq
-Content-Language: en-US
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-To:     Kant Fan <kant@allwinnertech.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221010072202.78731-1-kant@allwinnertech.com>
- <00ed0b46-54db-330e-8ff8-146ff9a09491@gmail.com>
-In-Reply-To: <00ed0b46-54db-330e-8ff8-146ff9a09491@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0aS80PlA/T3mx2d@maple.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 10. 13. 04:00, Chanwoo Choi wrote:
-> Hi,
+On Wed, Oct 12, 2022 at 11:12:03AM +0100, Daniel Thompson wrote:
+> On Tue, Oct 11, 2022 at 03:19:30PM -0700, Dmitry Torokhov wrote:
+> > This consolidates all quirks doing simple renames (either allowing
+> > suffix-less names or trivial renames, when index changes are not
+> > required) into a single quirk.
+> >
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> >  drivers/gpio/gpiolib-of.c | 176 +++++++++++++++++-----------------------------
+> >  1 file changed, 64 insertions(+), 112 deletions(-)
 > 
-> I'm sorry for late reply. It looks good to me.
-> Instead, this patch should contain the 'Fixes' information
-> with the following commit because the changed code was merged
-> on the patch[1]. Also, need to send it to stable mailing list.
+> Nice diffstat, almost a shame that the diff algo itself has latched onto
+> spurious anchor points to generate something that is so hard to read
+> ;-) .
 > 
-> [1] ce26c5bb9569d8b826f01b8620fc16d8da6821e9
-> PM / devfreq: Add basic governors
+> I've reviewed this pretty closely and AFAICT it does exactly what the
+> preivous code does. Thus the comments below are all related to things
+> that the new table makes obvious that the previous code handled in a
+> rather inconsistent way. Maybe that means these could/should be fixed
+> in an extra patch within this patch set.
 > 
-> Lastly, I think that need to change the patch title as following:
-> - PM / devfreq: governor: Add a private governor_data for governor
+> I guess that means, despite the feedback below, *this* patch is:
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 > 
 > 
-> On 22. 10. 10. 16:22, Kant Fan wrote:
->> The member void *data in the structure devfreq can be overwrite
->> by governor_userspace. For example:
->> 1. The device driver assigned the devfreq governor to simple_ondemand
->> by the function devfreq_add_device() and init the devfreq member
->> void *data to a pointer of a static structure devfreq_simple_ondemand_data
->> by the function devfreq_add_device().
->> 2. The user changed the devfreq governor to userspace by the command
->> "echo userspace > /sys/class/devfreq/.../governor".
->> 3. The governor userspace alloced a dynamic memory for the struct
->> userspace_data and assigend the member void *data of devfreq to
->> this memory by the function userspace_init().
->> 4. The user changed the devfreq governor back to simple_ondemand
->> by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
->> 5. The governor userspace exited and assigned the member void *data
->> in the structure devfreq to NULL by the function userspace_exit().
->> 6. The governor simple_ondemand fetched the static information of
->> devfreq_simple_ondemand_data in the function
->> devfreq_simple_ondemand_func() but the member void *data of devfreq was
->> assigned to NULL by the function userspace_exit().
->> 7. The information of upthreshold and downdifferential is lost
->> and the governor simple_ondemand can't work correctly.
->>
->> The member void *data in the structure devfreq is designed for
->> a static pointer used in a governor and inited by the function
->> devfreq_add_device(). This patch add an element named governor_data
->> in the devfreq structure which can be used by a governor(E.g userspace)
->> who want to assign a private data to do some private things.
->>
->> Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
->>
->> Signed-off-by: Kant Fan <kant@allwinnertech.com>
->> ---
->>  drivers/devfreq/governor_userspace.c | 12 ++++++------
->>  include/linux/devfreq.h              |  7 ++++---
->>  2 files changed, 10 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
->> index ab9db7adb3ad..d69672ccacc4 100644
->> --- a/drivers/devfreq/governor_userspace.c
->> +++ b/drivers/devfreq/governor_userspace.c
->> @@ -21,7 +21,7 @@ struct userspace_data {
->>  
->>  static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
->>  {
->> -	struct userspace_data *data = df->data;
->> +	struct userspace_data *data = df->governor_data;
->>  
->>  	if (data->valid)
->>  		*freq = data->user_frequency;
->> @@ -40,7 +40,7 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
->>  	int err = 0;
->>  
->>  	mutex_lock(&devfreq->lock);
->> -	data = devfreq->data;
->> +	data = devfreq->governor_data;
->>  
->>  	sscanf(buf, "%lu", &wanted);
->>  	data->user_frequency = wanted;
->> @@ -60,7 +60,7 @@ static ssize_t set_freq_show(struct device *dev,
->>  	int err = 0;
->>  
->>  	mutex_lock(&devfreq->lock);
->> -	data = devfreq->data;
->> +	data = devfreq->governor_data;
->>  
->>  	if (data->valid)
->>  		err = sprintf(buf, "%lu\n", data->user_frequency);
->> @@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
->>  		goto out;
->>  	}
->>  	data->valid = false;
->> -	devfreq->data = data;
->> +	devfreq->governor_data = data;
->>  
->>  	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
->>  out:
->> @@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
->>  	if (devfreq->dev.kobj.sd)
->>  		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
->>  
->> -	kfree(devfreq->data);
->> -	devfreq->data = NULL;
->> +	kfree(devfreq->governor_data);
->> +	devfreq->governor_data = NULL;
->>  }
->>  
->>  static int devfreq_userspace_handler(struct devfreq *devfreq,
->> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
->> index 34aab4dd336c..d265af3fb0a4 100644
->> --- a/include/linux/devfreq.h
->> +++ b/include/linux/devfreq.h
->> @@ -152,8 +152,8 @@ struct devfreq_stats {
->>   * @max_state:		count of entry present in the frequency table.
->>   * @previous_freq:	previously configured frequency value.
->>   * @last_status:	devfreq user device info, performance statistics
->> - * @data:	Private data of the governor. The devfreq framework does not
->> - *		touch this.
->> + * @data:	devfreq core pass to governors, governor should not change it.
+> > diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> > index cef4f6634125..619aae0c5476 100644
+> > @@ -365,127 +365,83 @@ struct gpio_desc *gpiod_get_from_of_node(const struct device_node *node,
+> > +static struct gpio_desc *of_find_gpio_rename(struct device_node *np,
+> >  					     const char *con_id,
+> >  					     unsigned int idx,
+> >  					     enum of_gpio_flags *of_flags)
+> >  {
+> > +	static const struct of_rename_gpio {
+> > +		const char *con_id;
+> > +		const char *legacy_id;	/* NULL - same as con_id */
+> > +		const char *compatible; /* NULL - don't check */
+> 
+> "don't check" doesn't seem desirable. It's not too big a deal here
+> because everything affected has a vendor prefix (meaning incorrect
+> matching is unlikely). Should there be a comment about the general care
+> needed for a NULL compatible?
 
-In addition, the devfreq driver pass the 'data' from devfreq driver
-to governor by using devfreq_add_device. I think that 'devfreq driver'
-is more proper 
+I'll add the wording that NULL is only acceptable if property has a
+vendor prefi, Will that be OK? Otherwise I'll have to add a lot of
+entries for Arizona and Madera.
 
-* @data:	devfreq driver pass to governors, governor should not change it.
+> 
+> 
+> > +	} gpios[] = {
+> > +#if IS_ENABLED(CONFIG_MFD_ARIZONA)
+> > +		{ "wlf,reset",	NULL,		NULL },
+> 
+> CONFIG_REGULATOR_ARIZONA_LDO1 is better guard for this con id.
 
-And then, there are extra changes required.
+Are you sure? I see reset handling happening in
+drivers/mfd/arizona-core.c independently of regulator code...
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 63347a5ae599..0c59b7978391 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -776,8 +776,7 @@ static void remove_sysfs_files(struct devfreq *devfreq,
-  * @dev:       the device to add devfreq feature.
-  * @profile:   device-specific profile to run devfreq.
-  * @governor_name:     name of the policy to choose frequency.
-- * @data:      private data for the governor. The devfreq framework does not
-- *             touch this value.
-+ * @data:      devfreq driver pass to governors, governor should not change it.
-  */
- struct devfreq *devfreq_add_device(struct device *dev,
-                                   struct devfreq_dev_profile *profile,
-@@ -1011,8 +1010,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
-  * @dev:       the device to add devfreq feature.
-  * @profile:   device-specific profile to run devfreq.
-  * @governor_name:     name of the policy to choose frequency.
-- * @data:      private data for the governor. The devfreq framework does not
-- *             touch this value.
-+ * @data:      devfreq driver pass to governors, governor should not change it.
-  *
-  * This function manages automatically the memory of devfreq device using device
-  * resource management and simplify the free operation for memory of devfreq
+> 
+> 
+> > +#endif
+> > +#if IS_ENABLED(CONFIG_REGULATOR)
+> > +		/*
+> > +		 * Some regulator bindings happened before we managed to
+> > +		 * establish that GPIO properties should be named
+> > +		 * "foo-gpios" so we have this special kludge for them.
+> > +		 */
+> > +		{ "wlf,ldoena",  NULL,		NULL }, /* Arizona */
+> 
+> CONFIG_REGULATOR_ARIZONA_LDO1 is better for this one too.
+
+Good idea.
+
+> 
+> 
+> > +		{ "wlf,ldo1ena", NULL,		NULL }, /* WM8994 */
+> > +		{ "wlf,ldo2ena", NULL,		NULL }, /* WM8994 */
+> 
+> CONFIG_REGULATOR_WM8994 is a better guard for these.
+
+Yep.
+
+> 
+> 
+> > +#endif
+> > +#if IS_ENABLED(CONFIG_SPI_MASTER)
+> > +		/*
+> > +		 * The SPI GPIO bindings happened before we managed to
+> > +		 * establish that GPIO properties should be named
+> > +		 * "foo-gpios" so we have this special kludge for them.
+> > +		 */
+> > +		{ "miso",	"gpio-miso",	"spi-gpio" },
+> > +		{ "mosi",	"gpio-mosi",	"spi-gpio" },
+> > +		{ "sck",	"gpio-sck",	"spi-gpio" },
+> 
+> CONFIG_SPI_GPIO is a better guard for these.
+
+OK.
+
+> 
+> 
+> >
+> > +		/*
+> > +		 * The old Freescale bindings use simply "gpios" as name
+> > +		 * for the chip select lines rather than "cs-gpios" like
+> > +		 * all other SPI hardware. Allow this specifically for
+> > +		 * Freescale and PPC devices.
+> > +		 */
+> > +		{ "cs",		"gpios",	"fsl,spi" },
+> > +		{ "cs",		"gpios",	"aeroflexgaisler,spictrl" },
+> 
+> CONFIG_SPI_FSL_SPI for these.
+
+OK.
+
+> 
+> > +		{ "cs",		"gpios",	"ibm,ppc4xx-spi" },
+> 
+> CONFIG_SPI_PPC4xx for this.
+
+OK.
+
+> 
+> 
+> > +#endif
+> > +#if IS_ENABLED(CONFIG_TYPEC_FUSB302)
+> > +		/*
+> > +		 * Fairchild FUSB302 host is using undocumented "fcs,int_n"
+> > +		 * property without the compulsory "-gpios" suffix.
+> > +		 */
+> > +		{ "fcs,int_n",	NULL,		"fcs,fusb302" },
+> > +#endif
+> >  	};
+> > +	struct gpio_desc *desc;
+> > +	const char *legacy_id;
+> > +	unsigned int i;
+> >
+> >  	if (!con_id)
+> >  		return ERR_PTR(-ENOENT);
+> >
+> > +	for (i = 0; i < ARRAY_SIZE(gpios); i++) {
+> > +		if (strcmp(con_id, gpios[i].con_id))
+> > +			continue;
+> >
+> > +		if (gpios[i].compatible &&
+> > +		    !of_device_is_compatible(np, gpios[i].compatible))
+> > +			continue;
+> >
+> > +		legacy_id = gpios[i].legacy_id ?: gpios[i].con_id;
+> > +		desc = of_get_named_gpiod_flags(np, legacy_id, idx, of_flags);
+> > +		if (!gpiod_not_found(desc)) {
+> > +			pr_info("%s uses legacy gpio name '%s' instead of '%s-gpios'\n",
+> > +				of_node_full_name(np), legacy_id, con_id);
+> > +			return desc;
+> > +		}
+> > +	}
+> >
+> > +	return ERR_PTR(-ENOENT);
+> >  }
+> 
+> I would normally trim last but this but given what git did to this particular
+> patch I left it as a public service ;-)  (it has the - parts of the
+> patch removed).
+> 
+> 
+> Daniel.
+
+Thanks.
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Dmitry
