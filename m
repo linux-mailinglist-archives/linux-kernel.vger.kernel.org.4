@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E395FCE8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4CB5FCE94
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiJLWs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S229659AbiJLWtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLWs1 (ORCPT
+        with ESMTP id S229436AbiJLWs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:48:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC31DD77DF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:48:22 -0700 (PDT)
+        Wed, 12 Oct 2022 18:48:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4F5D77DF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:48:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665614901;
+        s=mimecast20190719; t=1665614930;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6cQbK112G3CBY1iPorRDqAdSJlO6cOwytKNZM4RSxzY=;
-        b=eL422QMjrB6LYxyXRNWVn2VQl57EmpF70t1alwPFIup7PxEMnCjbUgBBrsdIMlw1OOMDvY
-        20ErjViN1ctYoELr7jvtivxRIUQWYpIc2XrCaxEIElKUF12dI5nRLPmysSeH6o4ukZopHR
-        PflDJ0/ttRTzyziIqXFbnhGBgGppZUU=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=p5nfuKdPwrQVXi/vnKW1FCyCONTVZtF3Xa0tpdwXNtg=;
+        b=ULnhQPMbjGKdhY5cpzHTtTKonC9hIAcph92D1mAMTgB2PlepfWFbeJPxDqkioRYu4eJM5e
+        bgh9dHdRozEGJgEdvbCWEk/osyXZVf7XKZJU1Job4fNP7yhfIQXkSFcuKavmDSsxnlf9s7
+        7m8XxYUCfKVrvu7FLFxhY5o65mJRh8Q=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-646-RTeibYE-MR6vAsq-A-bKTQ-1; Wed, 12 Oct 2022 18:48:18 -0400
-X-MC-Unique: RTeibYE-MR6vAsq-A-bKTQ-1
-Received: by mail-qt1-f197.google.com with SMTP id s14-20020a05622a1a8e00b00397eacd9c1aso8617401qtc.21
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:48:18 -0700 (PDT)
+ us-mta-453-IYq6pzPkNNGjFbeFn3_jOA-1; Wed, 12 Oct 2022 18:48:48 -0400
+X-MC-Unique: IYq6pzPkNNGjFbeFn3_jOA-1
+Received: by mail-qk1-f199.google.com with SMTP id o13-20020a05620a2a0d00b006cf9085682dso110694qkp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:48:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:user-agent:organization
          :references:in-reply-to:date:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6cQbK112G3CBY1iPorRDqAdSJlO6cOwytKNZM4RSxzY=;
-        b=1umadboy44U9YDgUVyu0Pkprg9U1wbRCs9n1CsYtKeXQ42op6bRdY0vguSPtmZ+7g6
-         HQ4fyLE+rm++X+F6hsbsZH6zfkEw0aSRCZA31hh7SR4xA7b9b2v8cFrFsI8S+DQRYkov
-         S5jV5s91T7jaaQ4qVlRoBP9Ge7A4Hho08deBkeUUlxPyWmknACeKV8tHYh/hBGDx7Zl+
-         xA3J+UV7t6EhGWnSfHGmy3S3BsznDtxLP0QlVmrGdLhxN5GXrZCr9o97Pr+URfB133H1
-         5/Cx3VJ8y5HndaXP4KD0qzhYvi8q7SJicuSA97xUxaDdOd3n2hfe1O6SOtYDOqtpqd0q
-         IIYw==
-X-Gm-Message-State: ACrzQf2fiYc6D9k80bWoXKo2rzvio3lJbkE2FJZx6mGdmr1WZ1mlivVR
-        E6XD+EHC77knkLTqBSgTHtkSCJUQeidIRf0Ity7ntcKEULcEy/VIFmacwwP4NV1KTqCp2qG9TWN
-        N3nyBXOwC6eYR97BbbCT3Yl5k
-X-Received: by 2002:a05:622a:1183:b0:39c:606d:1f7f with SMTP id m3-20020a05622a118300b0039c606d1f7fmr8858874qtk.313.1665614897689;
-        Wed, 12 Oct 2022 15:48:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5tzPmYPKNIbVp3GJbjJyU2orb8Zq7NMYarr1l6JZruGvyaqWohInpYh6qO0ffWOFde1Yrniw==
-X-Received: by 2002:a05:622a:1183:b0:39c:606d:1f7f with SMTP id m3-20020a05622a118300b0039c606d1f7fmr8858864qtk.313.1665614897486;
-        Wed, 12 Oct 2022 15:48:17 -0700 (PDT)
+        bh=p5nfuKdPwrQVXi/vnKW1FCyCONTVZtF3Xa0tpdwXNtg=;
+        b=HjLN0JPwTEP1DjMzBcW9DW61UphaKvtB/l3+3BVD/v4c8H4Q/+FkLyatQMHLK3GPDj
+         OzupQkST0M6mtQDRUEpv74e0lFkzm2BQBWwihnc1+KzlM6E2/TLogSfg7czBWVnUAECl
+         J5Bs7xAFgs/IWCsa6L3+xIj5esAIqT3cZznSQLaiWOfCEf0V8HYLfgvRz/lSn/AOCI+f
+         /GdxvYTvAzrx2WP4RSk9HpJ6ixdO4Qj1OlTsikgyPkzPpesknLeNQv0y52uXSuoYrVFb
+         nlg2Bn+Z5xPjfLnLOmZjINq/GbFQsfiPFt06RzcgbWyDwmdhcKcYHp6T7yFhGT0R1T+p
+         IBSA==
+X-Gm-Message-State: ACrzQf1942Csan29u5MBpTBfnbGcVlDXyKoIuGMqcK86s3PQ9uczYC2f
+        Gqb3JwcFYjx0Sw/7DY/+dxAqSheyghFYfWkJC0Eu/9Esj0O0Ge4XAwncWfAGIjXL9LrONxrUKOD
+        sFRYlzVeaKOk08uxowI8Iu5JF
+X-Received: by 2002:a05:620a:27d2:b0:6cf:b644:f644 with SMTP id i18-20020a05620a27d200b006cfb644f644mr22536271qkp.35.1665614928439;
+        Wed, 12 Oct 2022 15:48:48 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM72AflosodYNtr/quj11dfW8xw1ovGZzl7sA9B7tx1ZGymI0DOPi1vu4e2bPcM1ZP1Q5MC8dg==
+X-Received: by 2002:a05:620a:27d2:b0:6cf:b644:f644 with SMTP id i18-20020a05620a27d200b006cfb644f644mr22536261qkp.35.1665614928240;
+        Wed, 12 Oct 2022 15:48:48 -0700 (PDT)
 Received: from ?IPv6:2600:4040:5c68:4300:fdba:af4a:bbcd:7e28? ([2600:4040:5c68:4300:fdba:af4a:bbcd:7e28])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac87014000000b0039cb9ef50b5sm3192209qtm.26.2022.10.12.15.48.16
+        by smtp.gmail.com with ESMTPSA id l10-20020ac8148a000000b0039cc47752casm1669626qtj.77.2022.10.12.15.48.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 15:48:16 -0700 (PDT)
-Message-ID: <b52dbad5e3c2c5f19c605440de3e4e017e70a2ec.camel@redhat.com>
+        Wed, 12 Oct 2022 15:48:47 -0700 (PDT)
+Message-ID: <9c36a93654c5aa9c850cd5d42681aa951df9e769.camel@redhat.com>
 Subject: Re: [PATCH -next] drm/nouveau/disp: fix cast removes address space
  of expression warnings
 From:   Lyude Paul <lyude@redhat.com>
@@ -66,7 +66,7 @@ To:     ruanjinjie <ruanjinjie@huawei.com>, bskeggs@redhat.com,
         tzimmermann@suse.de, hverkuil-cisco@xs4all.nl, greenfoo@u92.eu,
         seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
         nouveau@lists.freedesktop.org
-Date:   Wed, 12 Oct 2022 18:48:15 -0400
+Date:   Wed, 12 Oct 2022 18:48:46 -0400
 In-Reply-To: <20220924092516.10007-1-ruanjinjie@huawei.com>
 References: <20220924092516.10007-1-ruanjinjie@huawei.com>
 Organization: Red Hat Inc.
@@ -83,8 +83,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good to me (sorry for the slow response! I think this one just got lost
-in the noise). Will push to drm-misc-next in a moment
+...oops, totally forgot to actually give you the magic tag so patchwork knows
+I reviewed it:
+
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
 On Sat, 2022-09-24 at 17:25 +0800, ruanjinjie wrote:
 > When build Linux kernel with 'make C=2', encounter the following warnings:
