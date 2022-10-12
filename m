@@ -2,126 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF9D5FC1EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BAE5FC1FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJLIY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S229703AbiJLIaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJLIY0 (ORCPT
+        with ESMTP id S229650AbiJLI34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:24:26 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922AE10FD2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:24:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id l22so23439011edj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7lFb5VGMrKqGiWjpUWI9EzMjINze79jE20NYZw+7BU=;
-        b=TctAz9U0qNsHioaodZojAQZGpjFhs7VtnS40MlUDZia2UD8j8P3/HITlY6h0GU2PF1
-         zD0AG/q5mkc9TbXnI5A1y0cWwcySzp9vRfy17G5kNjkT4vzFPe25TRAjyoaaAZESMNgk
-         +RjUYGe7FUO8Y+9AIEMXsYrm9DAhRD0sJyzuPPsYkh9H6LSC6FFbLFAaxUuyNYYEKAFl
-         8PmGbiBhxlT91BcI7rlG5YrugMGCayRMKEocR0WFLpei9+x3iSkkxNkeFQcz6O4XuQyt
-         Upe706L0oD/6qpdjAYsjz5cIYRBaK1t+PgyyNClo5lAmilTgWPiSwuLhn1RVdygK6lUO
-         cYZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b7lFb5VGMrKqGiWjpUWI9EzMjINze79jE20NYZw+7BU=;
-        b=PFEp5tUL1fnE+4NkYnyUs7h2ItkTMn58yXt2N184I/qJHV5Tsfe3DiFDJ8A3kX1Ku4
-         FEhWAGc41lxiVKQNwO+sz0qcIhgXaHAcx0hMYJmAD34xYvnX5WyZIU2e1RYTqLP+m4NC
-         GkrM202MFUALO+VUZZ4efpEIcwA7sZbHCKD9A4g1yIHaj8ugZrnLLsLvz6a+p+MxWtMp
-         pmTxz+AzIv3jvVTowOIxepTIB+/3NKpctges5okvxwv3ArmkWHAzuvmSju010OMfJjBS
-         lOBZ4QSBTsz2FWfpiuviearpSLDAuXS7Dj+OkajVTGGHlOr8JkPMy9u0M8ssRXYZhmbu
-         19Wg==
-X-Gm-Message-State: ACrzQf0yKscNp5Wr7OCclc/8CQIryiPkEVz0/CJNsH+MItTkiYv7iveg
-        YDHq0SF05SuUYPxsV8TW7V7mew==
-X-Google-Smtp-Source: AMsMyM4jbe+TfSx7fdWP2zz12rYd/aqcNJgUyHFTLLdyLDStYwLjjEel6kVanW16OU+uXqnqwFPaMw==
-X-Received: by 2002:a05:6402:298d:b0:451:5fc5:d423 with SMTP id eq13-20020a056402298d00b004515fc5d423mr26207769edb.102.1665563064130;
-        Wed, 12 Oct 2022 01:24:24 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id l25-20020a50d6d9000000b0045723aa48ccsm10618900edj.93.2022.10.12.01.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 01:24:23 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 10:24:22 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH v2] x86: Fix /proc/cpuinfo cpumask warning
-Message-ID: <20221012082422.uavybxdfmv4xkhxi@kamzik>
-References: <20221012081905.1800640-1-ajones@ventanamicro.com>
+        Wed, 12 Oct 2022 04:29:56 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8301EC60;
+        Wed, 12 Oct 2022 01:29:55 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1665563393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OVdrn/Jn8bciC/DXtG15W5lQxTAJiYriHkBH3410Vo8=;
+        b=PXhUb1I+hoet4Cvu28QFTnN8Hek3irQwmyqbG1kGTwdr2SN7PkjyXCzEik5AZhmUNrC9ub
+        AGQLGtnK28U4JRfzd1MDMlDhaq7Cj7TglabCGF2G502nlUV4jNnHAgAL4V0laKUtd7RJVD
+        l9229ZZaIwm/CmONouNLvzWDlHlMj/A=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     leonro@nvidia.com
+Cc:     caihuoqing <caihuoqing@baidu.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qiao Ma <mqaio@linux.alibaba.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: hinic: Update the range of MTU from 256 to 9600
+Date:   Wed, 12 Oct 2022 16:29:40 +0800
+Message-Id: <20221012082945.10353-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012081905.1800640-1-ajones@ventanamicro.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 10:19:05AM +0200, Andrew Jones wrote:
-> Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
-> started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
-> are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
-> start and next seq operations implement a pattern like
-> 
->   n = cpumask_next(n - 1, mask);
->   show(n);
->   while (1) {
->       ++n;
->       n = cpumask_next(n - 1, mask);
->       if (n >= nr_cpu_ids)
->           break;
->       show(n);
->   }
-> 
-> which will issue the warning when reading /proc/cpuinfo. Ensure no
-> warning is generated by validating the cpu index before calling
-> cpumask_next().
-> 
-> [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
-> 
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-> Cc: Yury Norov <yury.norov@gmail.com>
-> ---
+From: caihuoqing <caihuoqing@baidu.com>
 
-Forgot the changelog...
+Hinic hardware only support MTU from 256 to 9600, so set
+the max_mtu and min_mtu.
 
-v2:
-  - Added all the information I should have in the first place to the
-    commit message [Boris]
-  - Changed style of fix [Boris]
+And not need to add the validity judgment when set mtu,
+because the judgment is made in net/core: dev_validate_mtu
 
->  arch/x86/kernel/cpu/proc.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> index 099b6f0d96bd..94ac02c8dd6f 100644
-> --- a/arch/x86/kernel/cpu/proc.c
-> +++ b/arch/x86/kernel/cpu/proc.c
-> @@ -153,6 +153,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->  
->  static void *c_start(struct seq_file *m, loff_t *pos)
->  {
-> +	if (*pos >= nr_cpu_ids)
-> +		return NULL;
-> +
->  	*pos = cpumask_next(*pos - 1, cpu_online_mask);
->  	if ((*pos) < nr_cpu_ids)
->  		return &cpu_data(*pos);
-> -- 
-> 2.37.3
-> 
+Signed-off-by: caihuoqing <caihuoqing@baidu.com>
+---
+ drivers/net/ethernet/huawei/hinic/hinic_dev.h  |  3 +++
+ drivers/net/ethernet/huawei/hinic/hinic_main.c |  3 ++-
+ drivers/net/ethernet/huawei/hinic/hinic_port.c | 17 +----------------
+ 3 files changed, 6 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
+index a4fbf44f944c..2bbc94c0a9c1 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_dev.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
+@@ -22,6 +22,9 @@
+ 
+ #define LP_PKT_CNT		64
+ 
++#define HINIC_MAX_MTU_SIZE		9600
++#define HINIC_MIN_MTU_SIZE		256
++
+ enum hinic_flags {
+ 	HINIC_LINK_UP = BIT(0),
+ 	HINIC_INTF_UP = BIT(1),
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+index c23ee2ddbce3..41e52f775aae 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+@@ -1189,7 +1189,8 @@ static int nic_dev_init(struct pci_dev *pdev)
+ 	else
+ 		netdev->netdev_ops = &hinicvf_netdev_ops;
+ 
+-	netdev->max_mtu = ETH_MAX_MTU;
++	netdev->max_mtu = HINIC_MAX_MTU_SIZE;
++	netdev->min_mtu = HINIC_MIN_MTU_SIZE;
+ 
+ 	nic_dev = netdev_priv(netdev);
+ 	nic_dev->netdev = netdev;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+index 28ae6f1201a8..0a39c3dffa9a 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+@@ -17,9 +17,6 @@
+ #include "hinic_port.h"
+ #include "hinic_dev.h"
+ 
+-#define HINIC_MIN_MTU_SIZE              256
+-#define HINIC_MAX_JUMBO_FRAME_SIZE      15872
+-
+ enum mac_op {
+ 	MAC_DEL,
+ 	MAC_SET,
+@@ -147,24 +144,12 @@ int hinic_port_get_mac(struct hinic_dev *nic_dev, u8 *addr)
+  **/
+ int hinic_port_set_mtu(struct hinic_dev *nic_dev, int new_mtu)
+ {
+-	struct net_device *netdev = nic_dev->netdev;
+ 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
+ 	struct hinic_port_mtu_cmd port_mtu_cmd;
+ 	struct hinic_hwif *hwif = hwdev->hwif;
+ 	u16 out_size = sizeof(port_mtu_cmd);
+ 	struct pci_dev *pdev = hwif->pdev;
+-	int err, max_frame;
+-
+-	if (new_mtu < HINIC_MIN_MTU_SIZE) {
+-		netif_err(nic_dev, drv, netdev, "mtu < MIN MTU size");
+-		return -EINVAL;
+-	}
+-
+-	max_frame = new_mtu + ETH_HLEN + ETH_FCS_LEN;
+-	if (max_frame > HINIC_MAX_JUMBO_FRAME_SIZE) {
+-		netif_err(nic_dev, drv, netdev, "mtu > MAX MTU size");
+-		return -EINVAL;
+-	}
++	int err;
+ 
+ 	port_mtu_cmd.func_idx = HINIC_HWIF_FUNC_IDX(hwif);
+ 	port_mtu_cmd.mtu = new_mtu;
+-- 
+2.25.1
+
