@@ -2,118 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012845FC86A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723A15FC86C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJLPay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S229930AbiJLPbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiJLPau (ORCPT
+        with ESMTP id S229839AbiJLPaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:30:50 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B70D8263D;
-        Wed, 12 Oct 2022 08:30:49 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f193so15883418pgc.0;
-        Wed, 12 Oct 2022 08:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jgmSGKWiIJIpmvQ8q/p+qHWdSAvJyDT4YhTIosvbO2U=;
-        b=lqsttROg2cCrxJ2Bl9FcBPLiU2PO77JZxmRbQppEIbCw40JE4Hma4eaNUJqJWvDFef
-         biMxcw/yw2mQRgVWJmG6KxiT2VHCyW9lGM1aIbvpGRRiM3VXkE9a5WiIHcmKBmLoGt9c
-         JFofXzrbgVTrOf5WuGZ8hR1Ns6Il9XhkEpqojHHVfFroxh+wWOyfQKTW/c7y4cLQrqM5
-         h4he8xr48itJH2jTAcB9z1IVynBEV43U81JlyfbC5L6DD+xMq8LSKYu8SlhqlbM4CD9c
-         cbSs1zJ+tP/qPabTWWo8xNUYYI3rh5zzNwOmqGNxXx47PNMZlV6EBm65mtCMXxEDSAU+
-         kCyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jgmSGKWiIJIpmvQ8q/p+qHWdSAvJyDT4YhTIosvbO2U=;
-        b=upAhsZvrcHnvgC1VSNeXXILVfOOcMOGpMii7hzP1QtilNl6go0NAdcgqDBwELHzHso
-         WkInX151zb7RRSivIs07lO+LGpcY6FOLIFmYfBXGHNnFcSplG1+P3YgeQ5Gs/wnVwAHT
-         W0Z8CZfmeqUuwGhe7/rdwPfHe4GMyS330XJRp5DjoJWsDgNxPPR+Nr1XRIKU6q3guLDy
-         Jp+buEsQsIRz4CMuQjUINy49v05MoW4QMJ0paA6j73NXSHRX+q3tfZpG2b/IXnbz0p38
-         oiNkBz060BDeTeTDZYeDMRi1csWla4IMjbzULXlJRyV/+LIKNlkHN56mXWpdB3oeyah6
-         bu4w==
-X-Gm-Message-State: ACrzQf2kGChsmbU1qL2OQtuY2ADODg+v9neTNueO2stDjSDxBKl2/YYW
-        d6ZiHIhEJTG2aeQE4pp21ns=
-X-Google-Smtp-Source: AMsMyM4Rme9GP63iTEYp6GDtI8cANT8/bRXLd6LmA4Ak4TfcpODAEz3uYTWmpmRdtSuWInqPN4hvmQ==
-X-Received: by 2002:a63:2c6:0:b0:43c:1f18:a475 with SMTP id 189-20020a6302c6000000b0043c1f18a475mr25922948pgc.186.1665588648509;
-        Wed, 12 Oct 2022 08:30:48 -0700 (PDT)
-Received: from ?IPv6:::1? ([2607:fb90:370a:3fc:ad3:2951:4f00:9866])
-        by smtp.gmail.com with ESMTPSA id a67-20020a621a46000000b0055f98a2c64bsm11804430pfa.142.2022.10.12.08.30.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 08:30:47 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 08:30:45 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_6/7=5D_gpiolib=3A_of=3A_factor_o?= =?US-ASCII?Q?ut_code_overriding_gpio_line_polarity?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y0agrWGm5CR3Rk5e@smile.fi.intel.com>
-References: <20221011-gpiolib-quirks-v1-0-e01d9d3e7b29@gmail.com> <20221011-gpiolib-quirks-v1-6-e01d9d3e7b29@gmail.com> <Y0agrWGm5CR3Rk5e@smile.fi.intel.com>
-Message-ID: <6D279EC4-6124-45C2-BCBB-D6CBB3385024@gmail.com>
+        Wed, 12 Oct 2022 11:30:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE70CA894;
+        Wed, 12 Oct 2022 08:30:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC8B261556;
+        Wed, 12 Oct 2022 15:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED87C433D6;
+        Wed, 12 Oct 2022 15:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665588654;
+        bh=XbTyHiZP7iedmm7OWxyWL6XwynJZBsCOZXG5smQEDEY=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=h5VkM9g3xva3tcH4oVEQmiSC6yrFLJ6fc30XwacHHqWZNmEcAVOPKAoKaCxAy24Fw
+         kRqYXi9sD80EzZxNB8iDFt8iqFx3TSqAYKqN8/faBZNH3LLCq6y1lNIKZ3WxfnPTmY
+         neGfZbH03nibY1yUoQ3NfVWuFr9r9YPiS7dlGrHs1SwMTSGRo/5WBg/+BRgqaUwv7h
+         Yg5I79txZK6MXHEAq1MvodRBu/wlGsHOtte2WQ6MTC8mNm0Mg2BQfiB1airSknOQaY
+         FUq4jm0qYS2s9H/m6lMggAZOpP+GmDrXAtkRd2ulEP+TxxolnxSoJ5b+QbA1yfb3vg
+         f9CMJXJB6Enkg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Youghandhar Chintala <quic_youghand@quicinc.com>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH v2] wifi: ath10k: Delay the unmapping of the buffer
+References: <20221012142733.32420-1-quic_youghand@quicinc.com>
+        <1c64fe906b36438d63a7fc3fc9d0ab010b6db42f.camel@sipsolutions.net>
+Date:   Wed, 12 Oct 2022 18:30:48 +0300
+In-Reply-To: <1c64fe906b36438d63a7fc3fc9d0ab010b6db42f.camel@sipsolutions.net>
+        (Johannes Berg's message of "Wed, 12 Oct 2022 16:49:03 +0200")
+Message-ID: <87a661njo7.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 12, 2022 4:10:37 AM PDT, Andy Shevchenko <andriy=2Eshevchenko@li=
-nux=2Eintel=2Ecom> wrote:
->On Tue, Oct 11, 2022 at 03:19:34PM -0700, Dmitry Torokhov wrote:
->> There are several instances where we use a separate property to
->> override polarity specified in gpio property=2E Factor it out into
->> a separate function=2E
->
->=2E=2E=2E
->
->>  static void of_gpio_flags_quirks(const struct device_node *np,
->>  				 const char *propname,
->>  				 enum of_gpio_flags *flags,
->> @@ -145,7 +167,7 @@ static void of_gpio_flags_quirks(const struct devic=
-e_node *np,
->>  	     (!(strcmp(propname, "enable-gpio") &&
->>  		strcmp(propname, "enable-gpios")) &&
->>  	      of_device_is_compatible(np, "regulator-gpio")))) {
->> -		bool active_low =3D !of_property_read_bool(np,
->> +		bool active_high =3D of_property_read_bool(np,
->
->Defining
->
->	bool active_high;
->
->at the top of the function will save you a few ugly indented code lines h=
-ere
->and in the next patch=2E
->
+Johannes Berg <johannes@sipsolutions.net> writes:
 
-Indeed, but I think the idea was to keep the quirks as independent as poss=
-ible=2E
-I guess I could split it further into separate functions, like the other q=
-uirk handling=2E=20
+> On Wed, 2022-10-12 at 19:57 +0530, Youghandhar Chintala wrote:
+>> 
+>> @@ -418,6 +426,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+>>  		.dynamic_sar_support = false,
+>>  		.hw_restart_disconnect = false,
+>>  		.use_fw_tx_credits = true,
+>> +		.delay_unmap_buffer = false,
+>> 
+>
+> All the false are unnecessary and just distract from the content, imho.
 
-Bartosz, Linus, any preference here?=20
+In this case I actually prefer having explicitly set false (and zero),
+it makes it easier to maintain the correct order and compare between
+hardware values.
 
-Thanks=2E=20
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
---=20
-Dmitry
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
