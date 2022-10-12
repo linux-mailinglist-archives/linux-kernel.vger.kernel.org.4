@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893415FCCB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 23:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2305FCCBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 23:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiJLVCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 17:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S229959AbiJLVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 17:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiJLVCO (ORCPT
+        with ESMTP id S229984AbiJLVFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 17:02:14 -0400
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CD91038
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 14:01:52 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id E38FF20148;
-        Wed, 12 Oct 2022 23:01:49 +0200 (CEST)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CBk8J5dCBBeV; Wed, 12 Oct 2022 23:01:49 +0200 (CEST)
-Received: from begin.home (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
+        Wed, 12 Oct 2022 17:05:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0C61ADB8;
+        Wed, 12 Oct 2022 14:04:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id EF1652012C;
-        Wed, 12 Oct 2022 23:01:47 +0200 (CEST)
-Received: from samy by begin.home with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1oiirM-00CNqf-20;
-        Wed, 12 Oct 2022 23:01:48 +0200
-Date:   Wed, 12 Oct 2022 23:01:48 +0200
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     gregkh@linuxfoundation.org, speakup@linux-speakup.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Accessiblity: speakup: specifying the default driver
- parameters among the module params
-Message-ID: <20221012210148.di6qxcdproztponz@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Osama Muhammad <osmtendev@gmail.com>, gregkh@linuxfoundation.org,
-        speakup@linux-speakup.org, linux-kernel@vger.kernel.org
-References: <20221012204723.110285-1-osmtendev@gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnlXP0752z4x1G;
+        Thu, 13 Oct 2022 08:04:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665608693;
+        bh=EJJS9FjesJU7J8a3BxU2JXR13tD1ROBRuN06W4YTZ+Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sfydKeycADu9MwB1Wjq1wp2PFh68r4sZzTYgM8foaxjUyeFA+BbvVTfR4egR9zQLC
+         4vOBMpzNVVR1ZgPOpZl5XPrijgqOsZ6N+s3BKQL4hy9pBaf21KZY1t6VMCJhtG29N6
+         9sQWiaLCfUFqxtYMj3jOEu96QrWfYXf9S+klbYhQnHU01BBQk59KzLeZhwL6MuNxQW
+         9VO0nJtPqe828yDyLP9Q9Drd6UEePLIVrsEEY7HQULM8CLkTevpyxNXCEBdYtuPXJI
+         3Q3rBGHQ22OoH+IHcuazsv/qdq5w4C+XFo+G2hereDe4SVSTsrg/4OtRKt6W2UBZnU
+         fq7b7//kKwRXA==
+Date:   Thu, 13 Oct 2022 08:04:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the fuse tree
+Message-ID: <20221013080437.4924f2ac@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012204723.110285-1-osmtendev@gmail.com>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/HAeT6v1TBsW6/26nhGBNTQH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/HAeT6v1TBsW6/26nhGBNTQH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Osama Muhammad, le jeu. 13 oct. 2022 01:47:23 +0500, a ecrit:
-> +enum default_vars_id {
-> +	DIRECT_ID = 0, CAPS_START_ID, CAPS_STOP_ID,
-> +	PAUSE_ID, RATE_ID, PITCH_ID, INFLECTION_ID,
-> +	VOL_ID, TONE_ID, PUNCT_ID, VOICE_ID,
-> +	FREQUENCY_ID,
-> +};
-> +
-> +
->  static struct var_t vars[] = {
->  	/* DIRECT is put first so that module_param_named can access it easily */
->  	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
-> @@ -451,10 +460,33 @@ static int softsynth_adjust(struct spk_synth *synth, struct st_var_header *var)
+Hi all,
 
-We need to make sure that the entries in vars are in the same order, so
-use 
+Commit
 
-  	[DIRECT_ID] = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
+  aabee0953ad4 ("fs/fuse: Replace kmap() with kmap_local_page()")
 
-etc. to make sure that the indexes are correct. Also add NB_ID as last
-member of the enum, and use it for the "vars" array length, so we're
-sure we're not missing anything.
+is missing a Signed-off-by from its committer.
 
->  module_param_named(start, synth_soft.startup, short, 0444);
-> -module_param_named(direct, vars[0].u.n.default_val, int, 0444);
-> +module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
-> +module_param_named(caps_start, vars[CAPS_START_ID].u.s.default_val, charp, 0444);
-> +module_param_named(caps_stop, vars[CAPS_STOP_ID].u.s.default_val, charp, 0444);
-> +module_param_named(pause, vars[PAUSE_ID].u.n.default_val, int, 0444);
-> +module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
-> +module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
-> +module_param_named(inflection, vars[INFLECTION_ID].u.n.default_val, int, 0444);
-> +module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
-> +module_param_named(tone, vars[TONE_ID].u.n.default_val, int, 0444);
-> +module_param_named(punct, vars[PUNCT_ID].u.n.default_val, int, 0444);
-> +module_param_named(voice, vars[VOICE_ID].u.n.default_val, int, 0444);
-> +module_param_named(frequency, vars[FREQUENCY_ID].u.n.default_val, int, 0444);
+--=20
+Cheers,
+Stephen Rothwell
 
-Not all vars make sense as parameters: caps_start, caps_stop and pause
-are not actually tunable, so don't add a parameter for them.
+--Sig_/HAeT6v1TBsW6/26nhGBNTQH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Samuel
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHK+UACgkQAVBC80lX
+0GyWhgf+MaUE9SsDJF9er1ObWdchlV+xz7TN2OpEurMpTSZc7xgEDWjYWFQfMov3
+Y/Ryl2wFzY+vuzPtJPOfCVIljMdpGZHwT3hhboqMPhRr2Po101ycbOr9K34WmX6X
+pSPbEFDY+WZbRZ1vs3wsFg5YT8aVQ5KIqx8FlFsz75KW1dPRq20cs6AsURJJjnPF
+HgvAsBE14io5V1NZxdgHBHMg5jQhg0rMCaTNebseJCPu6HHfmcd9UvKoOpu+espr
+80JBqWCrlvjk4U8eO1IrqbvKbs8/eZ4C8mes8qtG8nfqA2A//CfxB6imKDML62CD
+Oznhq3QpIIhAH/nmYjHDFBgrOtvMGA==
+=dD7H
+-----END PGP SIGNATURE-----
+
+--Sig_/HAeT6v1TBsW6/26nhGBNTQH--
