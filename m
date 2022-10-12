@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48305FCE1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE175FCE2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiJLWHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S230212AbiJLWJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJLWHX (ORCPT
+        with ESMTP id S230407AbiJLWJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:07:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DDB12C894;
-        Wed, 12 Oct 2022 15:05:32 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fy4so129495ejc.5;
-        Wed, 12 Oct 2022 15:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=05/YOF9lKengUXPyv4GjbMJL03h9GoaGK9qputQVcKQ=;
-        b=pSZ1sMPUODSiAfjgbX18qE71vIigyta7liB/jyM3MF3Ewq6S/sCW92zPFD9qlmLzx5
-         RK/dU+TwB7ooNVLGLVNwoVmYcgBfmRvMtpN1gv4KVeaIRSE4fs4QR4C0Ukve+vkbfR4d
-         DRJ/4RkQvdtl6jqTe3on/a9T8c8MIgo3r/tDHmvu9GONEnWzeyHfN0xPBEu8voM8SPgy
-         +EqCG0kB0YMj37kW6tlQimAm1DaasJ89y/wE46w6sfFAl7R1HxSeyltZ4SAXYshTR5db
-         DpRd05DA6mZGdJUU++o0BF4d9HxIgii260GjcVXYRW9RrO2s+Yk+HNPmpiJGefWuiQ43
-         Jfww==
+        Wed, 12 Oct 2022 18:09:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB1A272D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665612438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=+UHVZ0OKpbw8jecQvx7/f32wxsaBtJja/aKylAWrChs=;
+        b=UvlzHPARCHvGClQFcvConZdnUUIPrJkbu/DCR201+ZbbBYrf2NPHgAxaHHAoxSksMD4uRD
+        SlZqLK2jov0McEqn869wr+OcwXyzooE+njeJuw4CyRWoII01nfpr1hqa+aLnD2kSJNOAyV
+        o//txZib/Wx7MIClvIF8ZKqooLuM7cs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-313-FGFMeAr4MFCpr55Hmd6WpA-1; Wed, 12 Oct 2022 18:04:07 -0400
+X-MC-Unique: FGFMeAr4MFCpr55Hmd6WpA-1
+Received: by mail-wm1-f70.google.com with SMTP id k22-20020a05600c0b5600b003c6cf5c5592so89108wmr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:04:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=05/YOF9lKengUXPyv4GjbMJL03h9GoaGK9qputQVcKQ=;
-        b=uuuapBa5zaKyR73SUkY2xmYuHxIgddcUbkPtbWSjif1/RpakKbHtSOAH/S6sM7eEc+
-         6vNkqTgkk+8cO9y7BNpDfuu3h7jpJb/LYCnU/F2Q4pXZMuIs0Ets+pA5L7IFiqAvR5ca
-         ef6TkFzIFbjlNtILr8INC1ptg3GBOMLcxRtl3ODrKZ+TG5a84O+pdNhmUwWze/X7gy6c
-         62RYYoU5fMSA1w7P4PG0AC5RSyPL4TB2DRMp2m2ET3RptYXDZmCBXJ4g59sNKXiuPRza
-         SxPbtBK/GA2lN1s3HsLS5A/xPE+w00JnsmKHhvi8P6UKPi9GymOaNo3dzX2RshBXiV9S
-         21jw==
-X-Gm-Message-State: ACrzQf3OiNUYiyBsFXaro2BJlxQxUzxpekwfHj7HeFdNb7w4sfQfRw88
-        Hpj+RslO2oY7S+cFP3g1BK8=
-X-Google-Smtp-Source: AMsMyM7H5BDzL7/Y47HYKrpQ9t0CHdfgPAcDBA0E2sccNKcx67HoTE4AqTsjnHFp8sFb7pAx0Z+6lQ==
-X-Received: by 2002:a17:907:3181:b0:787:d81c:a6ad with SMTP id xe1-20020a170907318100b00787d81ca6admr23629517ejb.769.1665612245437;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UHVZ0OKpbw8jecQvx7/f32wxsaBtJja/aKylAWrChs=;
+        b=WBsfK100W4i9QIA6/h3Q/CQ/SRkdvmTx0pHwme2YeIDHPJrMSAMXt7m5A+lWJVNDy3
+         HBVce69+Kx6jj8GQA7CB7SXhp8o9fb/S/rhbdr+X7xikV1rxEcpNYeD/ZuaMRpaL9o5X
+         mMtxwBfFVm2x5ba1V5Y2iRWHmk6QAkH1fDBfRo71yP9kZP3FVhsR/ExxPryKB3KY0eAY
+         xhFVxR14g6p/YS9pnVMQTHWX5FeD6WRfR3o6gtvUI1wpMZfNJ3SLTW6rO2vQsIkWrLzB
+         EAcVoOR2nvnu7OofH5x/CuEJKo15VhtzPo7lBPi8iyTIL8Bhw+S108I5fO+VckG7+//w
+         JUqw==
+X-Gm-Message-State: ACrzQf1pzilS9dDWiuYSWhobta3GuuG8DLyef8Is67M3g3u6Z58hxXiS
+        p9dkiz51R8RPa+PTCitARdFWCvq04dOryn7J45Xe+xEKx2sVb1rAuv5KDsMXUG/6y4C+SZxF5Xf
+        fp4yeQIqgj+1JZjNR/VirTOmEiPvTpFp305FtR1HehKC65GxGinufuVFl0qbVP7W2E1qdEQ==
+X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr4103272wmi.67.1665612246228;
+        Wed, 12 Oct 2022 15:04:06 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4MfahqjXwEkSDDOMNB17Cw+s5zIwA1SUMh4iBqCWkVIvhAH97bnjQIK7k88X1UxN6qaBAVEg==
+X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr4103254wmi.67.1665612245909;
         Wed, 12 Oct 2022 15:04:05 -0700 (PDT)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b00731803d4d04sm1870324eja.82.2022.10.12.15.04.03
+Received: from redhat.com ([2.54.162.123])
+        by smtp.gmail.com with ESMTPSA id l27-20020a056000023b00b0022a403954c3sm609517wrz.42.2022.10.12.15.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 15:04:04 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     yong.deng@magewell.com, Yang Li <yang.lee@linux.alibaba.com>
-Cc:     mchehab@kernel.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] media: sun6i-csi: Remove unnecessary print function dev_err()
-Date:   Thu, 13 Oct 2022 00:04:03 +0200
-Message-ID: <2603792.X9hSmTKtgW@kista>
-In-Reply-To: <20220929054003.37487-1-yang.lee@linux.alibaba.com>
-References: <20220929054003.37487-1-yang.lee@linux.alibaba.com>
+        Wed, 12 Oct 2022 15:04:05 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 18:04:03 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Angus Chen <angus.chen@jaguarmicro.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH] virtio_pci: use irq to detect interrupt support
+Message-ID: <20221012220312.308522-1-mst@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
+commit 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
+breaks virtio_pci on powerpc, when running as a qemu guest.
 
-Dne =C4=8Detrtek, 29. september 2022 ob 07:40:03 CEST je Yang Li napisal(a):
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
->=20
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2314
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+vp_find_vqs() bails out because pci_dev->pin == 0.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+But pci_dev->irq is populated correctly, so vp_find_vqs_intx() would
+succeed if we called it - which is what the code used to do.
 
-Best regards,
-Jernej
+This seems to happen because pci_dev->pin is not populated in
+pci_assign_irq().
 
-> ---
->  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
-> 8b99c17e8403..9119f5e0e05e 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> @@ -913,7 +913,6 @@ static int sun6i_csi_resources_setup(struct
-> sun6i_csi_device *csi_dev,
->=20
->  	irq =3D platform_get_irq(platform_dev, 0);
->  	if (irq < 0) {
-> -		dev_err(dev, "failed to get interrupt\n");
->  		ret =3D -ENXIO;
->  		goto error_clock_rate_exclusive;
->  	}
-> --
-> 2.20.1.7.g153144c
+Which is absolutely a bug in the relevant PCI code, but it
+may also affect other platforms that use of_irq_parse_and_map_pci().
 
+However Linus said:
+	The correct way to check for "no irq" doesn't use NO_IRQ at all, it just does
+		if (dev->irq) ...
+so let's just check irq and be done with it.
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+Fixes: 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
+Cc: "Angus Chen" <angus.chen@jaguarmicro.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+
+Build tested only - very late here. Angus any chance you could
+help test this? Thanks!
+
+ drivers/virtio/virtio_pci_common.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index 4df77eeb4d16..a6c86f916dbd 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -409,8 +409,8 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ 	err = vp_find_vqs_msix(vdev, nvqs, vqs, callbacks, names, false, ctx, desc);
+ 	if (!err)
+ 		return 0;
+-	/* Is there an interrupt pin? If not give up. */
+-	if (!(to_vp_device(vdev)->pci_dev->pin))
++	/* Is there an interrupt? If not give up. */
++	if (!(to_vp_device(vdev)->pci_dev->irq))
+ 		return err;
+ 	/* Finally fall back to regular interrupts. */
+ 	return vp_find_vqs_intx(vdev, nvqs, vqs, callbacks, names, ctx);
+-- 
+MST
 
