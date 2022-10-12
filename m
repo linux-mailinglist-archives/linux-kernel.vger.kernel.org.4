@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990585FC16B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DD65FC16D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJLHtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 03:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S229749AbiJLHu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 03:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiJLHtG (ORCPT
+        with ESMTP id S229586AbiJLHuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 03:49:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85258AD9A0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 00:49:05 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 07:49:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1665560943;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nILnuT5+EWFw6pzt97EzXBIfRzVx4FkNiw7lRp5vR7Q=;
-        b=FP7/q2PU1AcVFCgFZ+X/MFtYzyn1ian3BK9l+N3rDu2D5exXg0u0KIhNwcWeHisZrBVom1
-        wJpBqNdgWgI79ENTznuLEz1QiibvTwg9RsdxnlQcJEWv7JdLD62uB45F5YnjGMaykpFbp4
-        gEyWbeW3X+ynW4ksDSQ8C8/PQA1km8TrmrP0T/LE03aF8tduUo3FHcHZ9frq/8czZHQHh2
-        uOs/3xmne5A0oDSrB5xLiRVqgwKN6NLkFNJiQurFaat7N4zVPWiYg9Cw4iuO6rATZkU/wJ
-        KpWi6X6Nh1bKwk8qHEP4yBinXg0ZX1wReu5hbB2vuWi6spi9OQL/sLy7H2QfMg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1665560943;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nILnuT5+EWFw6pzt97EzXBIfRzVx4FkNiw7lRp5vR7Q=;
-        b=MVuFZ2nB7yq6VFUyUnqVWXNiny961uKxiIhtojsD7yfsXbEStnGR10HM26LCoCcDt9JhOF
-        15s/xfeVoiky3pDg==
-From:   "irqchip-bot for Geert Uytterhoeven" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip: IMX_MU_MSI should depend on ARCH_MXC
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: =?utf-8?q?=3C7f3bd932614ddbff46a1b750ef45b231130364ad=2E16649?=
- =?utf-8?q?00434=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
-References: =?utf-8?q?=3C7f3bd932614ddbff46a1b750ef45b231130364ad=2E166490?=
- =?utf-8?q?0434=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
+        Wed, 12 Oct 2022 03:50:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC3924C037;
+        Wed, 12 Oct 2022 00:50:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B7FBE15A1;
+        Wed, 12 Oct 2022 00:50:28 -0700 (PDT)
+Received: from [10.162.41.10] (unknown [10.162.41.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E86C3F67D;
+        Wed, 12 Oct 2022 00:50:19 -0700 (PDT)
+Message-ID: <31b72985-5c12-b421-0cec-3c6b027a7070@arm.com>
+Date:   Wed, 12 Oct 2022 13:20:16 +0530
 MIME-Version: 1.0
-Message-ID: <166556094146.401.3044335312264028864.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 4/7] driver/perf/arm_pmu_platform: Add support for BRBE
+ attributes detection
+Content-Language: en-US
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+References: <20220929075857.158358-1-anshuman.khandual@arm.com>
+ <20220929075857.158358-5-anshuman.khandual@arm.com>
+ <02ce379c-c718-b72d-fc74-cd8c904265fb@arm.com>
+ <bf70b7d6-0564-7ae3-6fe6-24483461839b@arm.com>
+ <d82de618-9e97-3d5d-f4eb-7710e9094001@arm.com>
+In-Reply-To: <d82de618-9e97-3d5d-f4eb-7710e9094001@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Commit-ID:     6c9f7434159b96231f5b27ab938f4766e3586b48
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6c9f7434159b96231f5b27ab938f4766e3586b48
-Author:        Geert Uytterhoeven <geert+renesas@glider.be>
-AuthorDate:    Tue, 04 Oct 2022 18:22:30 +02:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Wed, 12 Oct 2022 08:43:59 +01:00
 
-irqchip: IMX_MU_MSI should depend on ARCH_MXC
+On 10/11/22 14:51, Anshuman Khandual wrote:
+> 
+> On 10/10/22 19:47, James Clark wrote:
+>>
+>> On 06/10/2022 14:37, James Clark wrote:
+>>>
+>>> On 29/09/2022 08:58, Anshuman Khandual wrote:
+>>>> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
+>>>> driver exported callbacks later. The actual BRBE feature detection will be
+>>>> added by the driver itself.
+>>>>
+>>>> CPU specific BRBE entries, cycle count, format support gets detected during
+>>>> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+>>>> later helps in operating BRBE during a perf event context.
+>>>>
+>>>> Cc: Will Deacon <will@kernel.org>
+>>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>>> Cc: linux-arm-kernel@lists.infradead.org
+>>>> Cc: linux-kernel@vger.kernel.org
+>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>>> ---
+>>>>  drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
+>>>>  1 file changed, 34 insertions(+)
+>>>>
+>>>> diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+>>>> index 933b96e243b8..acdc445081aa 100644
+>>>> --- a/drivers/perf/arm_pmu_platform.c
+>>>> +++ b/drivers/perf/arm_pmu_platform.c
+>>>> @@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
+>>>>  	return err;
+>>>>  }
+>>>>  
+>>>> +static void arm_brbe_probe_cpu(void *info)
+>>>> +{
+>>>> +	struct pmu_hw_events *hw_events;
+>>>> +	struct arm_pmu *armpmu = info;
+>>>> +
+>>>> +	/*
+>>>> +	 * Return from here, if BRBE driver has not been
+>>>> +	 * implemented for this PMU. This helps prevent
+>>>> +	 * kernel crash later when brbe_probe() will be
+>>>> +	 * called on the PMU.
+>>>> +	 */
+>>>> +	if (!armpmu->brbe_probe)
+>>>> +		return;
+>>>> +
+>>>> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
+>>>> +	armpmu->brbe_probe(hw_events);
+>>>> +}
+>>>> +
+>>>> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
+>>>> +{
+>>>> +	int cpu, err = 0;
+>>>> +
+>>>> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
+>>>> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
+>>> Hi Anshuman,
+>>>
+>>> I have LOCKDEP on and the patchset applied to perf/core (82aad7ff7) on
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git and I get
+>> Can you confirm if this is currently the correct place to apply this to?
+> This series applied on v6.0-rc5 after the perf ABI changes, both in kernel
+> and in user space tools.
+> 
+>> I'm only getting 0 length branch stacks now. Seems like it could be
+>> something to do with the layout of perf samples because I know that was
+>> done in separate commits:
+> Right, might be.
+> 
+>>   sudo ./perf record -j any_call -- ls
+>>   ./perf report -D | grep "branch stack"
+>>   ... branch stack: nr:0
+>>   ... branch stack: nr:0
+>>   ... branch stack: nr:0
+>>   ... branch stack: nr:0
+> I am planning to respin the series on 6.1-rc1 next week which should solve
+> these multiple moving parts problem
 
-The Freescale/NXP i.MX Messaging Unit is only present on Freescale/NXP
-i.MX SoCs.  Hence add a dependency on ARCH_MXC, to prevent asking the
-user about this driver when configuring a kernel without Freescale/NXP
-i.MX SoC family support.
+There are some recent changes which require PMU driver to set data.sample_flags
+indicating what kind of records are being filled in there. Here are the commits
 
-While at it, expand "MU" to "Messaging Unit" in the help text.
+a9a931e2666878343 ("perf: Use sample_flags for branch stack")
+3aac580d5cc3001ca ("perf: Add sample_flags to indicate the PMU-filled sample data")
 
-Fixes: 70afdab904d2d1e6 ("irqchip: Add IMX MU MSI controller driver")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/7f3bd932614ddbff46a1b750ef45b231130364ad.1664900434.git.geert+renesas@glider.be
----
- drivers/irqchip/Kconfig | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Following fix solves the problem for BRBE driver.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 4d85a18..93d9901 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -484,14 +484,15 @@ config IMX_INTMUX
- config IMX_MU_MSI
- 	tristate "i.MX MU used as MSI controller"
- 	depends on OF && HAS_IOMEM
-+	depends on ARCH_MXC || COMPILE_TEST
- 	default m if ARCH_MXC
- 	select IRQ_DOMAIN
- 	select IRQ_DOMAIN_HIERARCHY
- 	select GENERIC_MSI_IRQ_DOMAIN
- 	help
--	  Provide a driver for the MU block used as a CPU-to-CPU MSI
--	  controller. This requires a specially crafted DT to make use
--	  of this driver.
-+	  Provide a driver for the i.MX Messaging Unit block used as a
-+	  CPU-to-CPU MSI controller. This requires a specially crafted DT
-+	  to make use of this driver.
- 
- 	  If unsure, say N
+diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+index 98e9a615d3cb..85a3aaefc0fb 100644
+--- a/arch/arm64/kernel/perf_event.c
++++ b/arch/arm64/kernel/perf_event.c
+@@ -877,6 +877,7 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
+                if (has_branch_stack(event)) {
+                        cpu_pmu->brbe_read(cpuc, event);
+                        data.br_stack = &cpuc->branches->brbe_stack;
++                       data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+                        cpu_pmu->brbe_reset(cpuc);
+                }
  
