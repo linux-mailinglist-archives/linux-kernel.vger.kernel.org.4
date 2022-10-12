@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49915FC8D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735FD5FC8CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiJLQAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
+        id S230018AbiJLQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiJLQAG (ORCPT
+        with ESMTP id S229620AbiJLQAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:00:06 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8C920F7E
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:00:00 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h185so8838642pgc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x2lvFXzj1B5AbFhRx0jQ0CX63rE8hZfFVslgge4Qybs=;
-        b=o7zR5YOCdpSYtKJk/cFHbC2zAt7QwxSG5H2JsihQkXq2yIMYUJ9KHWNAlAZRQCFS+5
-         O3R++Z8N9Q1jBlXTdarjJSH4CzpGC9skg9+iwMqhbILhx5y+M2NWUn2cxezcrIwXHeaF
-         +SgzRw/Tuk7x0ZSmZ991tXAXpz3bzVLm9DCfvtnveT+IgtQTzCF55niQDpStbGmB3Gey
-         UrMLy+B42UyIKWl1HWl1g1jkMYXRIwpAVOuWjL9w3OWgGcVz2Tz+mYgv8n1U1zxwzxn0
-         mw82v7xinaLpon6ig5zi6Eezu/BwX80vy3evLw0dQm7qCfWaF9UXett6WQWJAhTgNwdC
-         6kJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x2lvFXzj1B5AbFhRx0jQ0CX63rE8hZfFVslgge4Qybs=;
-        b=D3OtFqFr7+TvxI4PDbcMQ5Y8RqHuKnXdD0hCrb0y5PtUoiYGjTrGCnH9rP798tS/rl
-         5iQ2EoiSTy1xHZMRbm429Yq4qBiJIWMcAf6k1W/V4nbLYRLp+qSvIRWxzwZAPjZgRPEr
-         Rq06SyrILwj4RjcIjl88tYCgSMwgmbOc92FtIeLy6K2gT9l3aIMO382OnDpKrUamcacL
-         87xMmQpmyPP4Goa3SpVmnVe4e64ay6bIhHkkM0Cjf7o3hzrfFb0J78FBNEaepUirWOi6
-         uBO7/vJ/wpJwH+H9JwEJGfpjQZ6+3ByyzVXxJZROM91NfNOB1nJD8JyNf47AwIm/Llg8
-         1kHQ==
-X-Gm-Message-State: ACrzQf1AsPmk06r0q2ipX6NlhwAXkzPm4siqVZujD9mW8lC0roaifTKZ
-        P/kpOtpHZLBvf7QDWh4F1rnNzw==
-X-Google-Smtp-Source: AMsMyM4L7kfhQ6titzJtV6W57V3d2nORtXiwltbKsZB7DHCP68SPxamj3WMqedvmtOyyzFy67jgm0Q==
-X-Received: by 2002:a63:5761:0:b0:43c:5940:9176 with SMTP id h33-20020a635761000000b0043c59409176mr25604652pgm.65.1665590400186;
-        Wed, 12 Oct 2022 09:00:00 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id l6-20020a17090ab70600b0020d39ffe987sm1630094pjr.50.2022.10.12.08.59.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 08:59:59 -0700 (PDT)
-In-Reply-To: <20220728210715.17214-1-palmer@rivosinc.com>
-References: <20220728210715.17214-1-palmer@rivosinc.com>
-Subject: Re: [PATCH] doc: RISC-V: Document that misaligned accesses are supported
-Message-Id: <166559036448.27925.6190896060696605736.b4-ty@rivosinc.com>
-Date:   Wed, 12 Oct 2022 08:59:24 -0700
+        Wed, 12 Oct 2022 12:00:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A341A83A;
+        Wed, 12 Oct 2022 08:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665590397; x=1697126397;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x+Vvi8HGhrn79pVpDuauzqv2LPYrdQbCpKoSgkWyCaQ=;
+  b=N7H43qoXTLbxJSfPjHM4NCPeS1rlSqKT03ZpBOZfCc1HCUKHpvN2S7Lc
+   /LWM+V7kffocXoUn8fZCkc0Z7cVyGwDk/Qmaal8Bqzu04A3nbtWoinE6P
+   69fKUtdPsCQA6HW+mZJa17pRGrRd3fUTd+w0ZgxhPDX0PxFXkjyKwO86+
+   V3kK5xp/YaluMUOKgQcpyz1jxamEzBO0mqSyx6ybe7FnAYp3w9cvJ1S/Z
+   63o7Kad+a/GYCNvcEdllfimxNhzEr5FA95UOHelCKBzmqmvyilpYSImZx
+   yz98Lw1AdjlaJFeIZ6hcwx2bnHKijetXcPTFBoa2eOwoNU8cSozsmEXUS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="304818430"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="304818430"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 08:59:56 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="695522374"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="695522374"
+Received: from mpatter1-mobl.amr.corp.intel.com (HELO [10.209.53.34]) ([10.209.53.34])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 08:59:51 -0700
+Message-ID: <e3c3d68d-ce99-a70a-1026-0ba99520ae57@intel.com>
+Date:   Wed, 12 Oct 2022 08:59:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-Cc:     linux@rivosinc.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, bagasdotme@gmail.com,
-        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>, corbet@lwn.net
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+Content-Language: en-US
+To:     Florian Weimer <fweimer@redhat.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+ <87ilkr27nv.fsf@oldenburg.str.redhat.com>
+ <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
+ <87v8opz0me.fsf@oldenburg.str.redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <87v8opz0me.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 14:07:15 -0700, Palmer Dabbelt wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> The RISC-V ISA manual used to mandate that misaligned accesses were
-> supported in user mode, but that requirement was removed in 2018 via
-> riscv-isa-manual commit 61cadb9 ("Provide new description of misaligned
-> load/store behavior compatible with privileged architecture.").  Since
-> the Linux uABI was already frozen at that point it's just been demoted
-> to part of the uABI, but that was never written down.
-> 
-> [...]
+On 10/12/22 05:29, Florian Weimer wrote:
+>> What did you think of the proposal to disable existing binaries and
+>> start from scratch? Elaborated in the coverletter in the section
+>> "Compatibility of Existing Binaries/Enabling Interface".
+> The ABI was finalized around four years ago, and we have shipped several
+> Fedora and Red Hat Enterprise Linux versions with it.  Other
+> distributions did as well.  It's a bit late to make changes now, and
+> certainly not for such trivialities. 
 
-Applied, thanks!
-
-[1/1] doc: RISC-V: Document that misaligned accesses are supported
-      commit: 06267eb2decaa6baac81bbd882265a8e7782dba4
-
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+Just to be clear: You're saying that a user/kernel ABI was "finalized"
+by glibc shipping the user side of it, before there being an upstream
+kernel implementation?
