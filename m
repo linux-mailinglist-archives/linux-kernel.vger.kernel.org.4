@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BB95FBFC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520D05FBFC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJLDzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 23:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S229621AbiJLD6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 23:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiJLDzh (ORCPT
+        with ESMTP id S229594AbiJLD6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 23:55:37 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6641A476E7;
-        Tue, 11 Oct 2022 20:55:36 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so11410413ooi.5;
-        Tue, 11 Oct 2022 20:55:36 -0700 (PDT)
+        Tue, 11 Oct 2022 23:58:53 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602C24B4AD;
+        Tue, 11 Oct 2022 20:58:52 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-131ea99262dso18224317fac.9;
+        Tue, 11 Oct 2022 20:58:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ybHzhD2pPizAeeXQb/YjlSiUKqRewEOBpM2hPa2QoIU=;
-        b=BcOqE9uLA0rQvbO4f1i2eETcXFJ5jY+/87BjkdNIETNFKIq2JVmy4f7a8OmpIC8l3n
-         UhXxCC3VBjVRbBH3kPr+4169uwlM2+z4zBH70PpPheh3kBkH6MA6b/D3gqvKWbwxS3jv
-         EL5FEVCXl+NwsDc2dd51fVhJT4SgQfMWdGkfQtOHW2ByJz2UdYDgkk0NpBkCMMGvNoPN
-         n0Xf+I4SBIBjakY3/eseet0VzCeQJxM+YlxzfedGhUxZkvuVzmoPCSvhCf95Tveh+pMk
-         jWJFV70FKP38dH328+wi1obf1lDnxG/6gtMcEUyHQ1+EhrlL/KStPq/mL+GwXZEHveTW
-         /7Rw==
-X-Gm-Message-State: ACrzQf2XjeSCvMfh8Ox2Ba2BSfpAiVz87A+FeKG5e3/7ggvTkmrpoNyM
-        kD6jxLAbtvS1eIJ6hII3NFSUBRcw1ov0kQDwaYg=
-X-Google-Smtp-Source: AMsMyM4zPQE+dli32wYjxj1l56vjHdrOaYXGyQuDipE8r2Am0DDQB+iAsNxdpCMxwAXrNAqzsf7j2RWFomAEJbrAit0=
-X-Received: by 2002:a9d:6848:0:b0:661:a608:cbc3 with SMTP id
- c8-20020a9d6848000000b00661a608cbc3mr4502119oto.206.1665546935511; Tue, 11
- Oct 2022 20:55:35 -0700 (PDT)
+        bh=fN4Rni4jGwkw15y0j6ev8lSPVxwgaeF2vMkVARXcjSE=;
+        b=OleGlH58RDdGmOBT1x8mKmDK6fmCFscx7ucYYVRL459i0GpIP6H9uAB5svKQ+HY467
+         VKoY2RkygrrR6X8d9ik10BiotWk3PU6SPzcOeqAVgW6sTBaLY08oVDwnrqLCI4kfsXAr
+         wXme/lC0a85mDzcBC7XuFSf/coe7KkjkQLjsupKBqbfbhQPdb+QMkgfowYLfy2dqKLAh
+         OTUpG5/kdfMtLFvCKXcvqhn/kIhv9bWe+71nxoDKbBEDerFUPK4jEksyKnuyxg+TOhtF
+         4O7l5zqyL0Mr5i3vn5QRSeGxlm9zXxuDa7ulPgCUg2qLkrAejN7yEceBUKyO4uemgmO1
+         x7Mg==
+X-Gm-Message-State: ACrzQf12UPOaowtabX3hdatZe2uaHvkyuWYClT2ndUlnQZdssa9mXjFD
+        Y3815d1NUEs6bSOB99PggLSVX23dG2QqUmMuahng3b4d
+X-Google-Smtp-Source: AMsMyM63mTGKjlbXS3Tu+oPX7FPioKqJ9+bKaSf2Ig7Ko4zcy0dRt9bw6wHqzYtl8BhzV196ZEuh8/2/klAKM2KgV6Y=
+X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
+ q44-20020a05687082ac00b00133034b6f10mr1414365oae.218.1665547131632; Tue, 11
+ Oct 2022 20:58:51 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221010053600.272854-1-namhyung@kernel.org> <ebc8e57e-1584-5f47-48d8-3bc38497799b@linux.intel.com>
- <CAM9d7chavgTHwFdU4m=GRx9kwSX1Pi8w58rgQc4nP_X-bpnbUQ@mail.gmail.com> <CAP-5=fUK8VXZAyjTVQ3e88F5AeYfEF5PP-=k=PoFONWpXE+XVA@mail.gmail.com>
-In-Reply-To: <CAP-5=fUK8VXZAyjTVQ3e88F5AeYfEF5PP-=k=PoFONWpXE+XVA@mail.gmail.com>
+ <CAM9d7chavgTHwFdU4m=GRx9kwSX1Pi8w58rgQc4nP_X-bpnbUQ@mail.gmail.com> <c65f10bd-e486-42d7-b221-dd763623775d@linux.intel.com>
+In-Reply-To: <c65f10bd-e486-42d7-b221-dd763623775d@linux.intel.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 11 Oct 2022 20:55:24 -0700
-Message-ID: <CAM9d7cgfkZUi-n0rnBUHLErpXA4aSzY0yNUbpjpLF3Z2JKenZA@mail.gmail.com>
+Date:   Tue, 11 Oct 2022 20:58:40 -0700
+Message-ID: <CAM9d7cg=yKnA3EFs8-K5ag0=DVNjBPhmxamcXn_Xon3OnTxMSA@mail.gmail.com>
 Subject: Re: [RFC/PATCHSET 00/19] perf stat: Cleanup counter aggregation (v1)
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -67,66 +67,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 11:14 PM Ian Rogers <irogers@google.com> wrote:
+On Tue, Oct 11, 2022 at 4:57 AM Andi Kleen <ak@linux.intel.com> wrote:
 >
-> On Mon, Oct 10, 2022 at 10:38 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hi Andi,
-> >
-> > On Mon, Oct 10, 2022 at 5:25 PM Andi Kleen <ak@linux.intel.com> wrote:
-> > >
-> > >
-> > > On 10/10/2022 10:35 PM, Namhyung Kim wrote:
-> > > > Hello,
-> > > >
-> > > > Current perf stat code is somewhat hard to follow since it handles
-> > > > many combinations of PMUs/events for given display and aggregation
-> > > > options.  This is my attempt to clean it up a little. ;-)
-> > >
-> > >
-> > > My main concern would be subtle regressions since there are so many
-> > > different combinations and way to travel through the code, and a lot of
-> > > things are not covered by unit tests. When I worked on the code it was
-> > > difficult to keep it all working. I assume you have some way to
-> > > enumerate them all and tested that the output is identical?
-> >
+>
+> >> My main concern would be subtle regressions since there are so many
+> >> different combinations and way to travel through the code, and a lot of
+> >> things are not covered by unit tests. When I worked on the code it was
+> >> difficult to keep it all working. I assume you have some way to
+> >> enumerate them all and tested that the output is identical?
 > > Right, that's my concern too.
 > >
 > > I have tested many combinations manually and checked if they
-> > produced similar results.  But the problem is that I cannot test
+> > produced similar results.
+>
+> I had a script to test many combinations, but had to check the output
+> manually
+>
+>
+> > But the problem is that I cannot test
 > > all hardwares and more importantly it's hard to check
-> > programmatically if the output is the same or not.  The numbers
-> > vary on each run and sometimes it fluctuates a lot.  I don't have
-> > good test workloads and the results work for every combination.
-> >
-> > Any suggestions?
+> > programmatically if the output is the same or not.
 >
-> I don't think there is anything clever we can do here. A few releases
-> ago summary mode was enabled by default. For CSV output this meant a
-> summary was printed at the bottom of perf stat and importantly the
-> summary print out added a column on the left of all the other columns.
-> This caused some tool issues for us. We now have a test that CSV
-> output has a fixed number of columns. We added the CSV test because
-> the json output code reformatted the display code and it would be easy
-> to introduce a regression (in fact I did :-/ ). So my point is that
-> stat output can change and break things and we've been doing this by
-> accident for a while now. This isn't a reason to not merge this
-> change.
->
-> I think the real fix here is for tools to stop using text or CSV
-> output and switch to the json output, that way output isn't as brittle
-> except to the keys we use. It isn't feasible for the perf tool to
-> stand still in case there is a script somewhere, we'll just accumulate
-> bugs and baggage. However, if someone has a script and they want to
-> enforce an output, all they need to do is stick a test on it (the
-> Beyonce principle except s/ring/test/).
+> Can use "dummy" or some software event (e.g. a probe on some syscall) to
+> get stable numbers. I don't think we need to cover all hardware for the
+> output options, the different events should be similar, but need some
+> coverage for the different aggregation. Or we could add some more tool
+> events just for testing purposes, that would allow covering different
+> core scopes etc. and would easily allow generating known counts.
 
-Thanks for your opinion.
-
-I agree that it'd be better using JSON output for machine processing.
-Although there are records of historic perf stat brekages, it'd be nice
-if we could avoid that for the default output mode. :)
-Let me think about if there's a better way.
+Even if we can get a stable number, it still needs to know cpu topology
+for different aggregation modes to verify the count.  Also I'm afraid that
+cpu hotplug can affect the aggregation.
 
 Thanks,
 Namhyung
