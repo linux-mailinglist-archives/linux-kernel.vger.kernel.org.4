@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA165FC6AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2125FC6AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiJLNlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S229683AbiJLNmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJLNlc (ORCPT
+        with ESMTP id S229712AbiJLNmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:41:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC6A3910E;
-        Wed, 12 Oct 2022 06:41:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B2A61525;
-        Wed, 12 Oct 2022 13:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E212FC433D6;
-        Wed, 12 Oct 2022 13:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665582091;
-        bh=gS9wxuRyVQOOebK7MIwLmtqB4zEv1W61TkcfnxFrAzY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VaPCfZrrRSpbp0FpZmR1OJ4MlXTMM58CVhb6JBzhst2KoQINIjDTsKQWs70AoHBvD
-         M3bC/U76FQYv5IWdX5jE/b+99vF002V9IJHUXShTnyBH3KxhdYLGlq5SnPpwvJEaIO
-         g+aj+AeUvIP1GdNd7dFgfUGjRkMGHKJESwegLjIZamG0JgzjA7MQT6IqKo67n3ZQYM
-         inTvLp4QLgLGjDYCe06AvlHXrh9a0jLXF4Kd/NXxU6MkBwsQBxkjT3D9E1dNFPeukW
-         JEVYEdoAsah/bqeMc5y3XiF9K5cDtR0wjjE9jrJhDzOpGj60odsNvUFKiKKTEXMScx
-         4EauRhKk9PsTg==
-Message-ID: <bfb59645-17fe-eba9-e244-9e5b639ce2dd@kernel.org>
-Date:   Wed, 12 Oct 2022 09:41:24 -0400
+        Wed, 12 Oct 2022 09:42:49 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BABFCF840;
+        Wed, 12 Oct 2022 06:42:48 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id r8-20020a1c4408000000b003c47d5fd475so1228316wma.3;
+        Wed, 12 Oct 2022 06:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cjMwxO2ttET/k2mjc9FVTHy1myqG3lEVWgLpdfrfxrw=;
+        b=QYRWwt2fBEopyPIg16PTiZkfIjXfhIfuNpYq+Hq3C3uTPRNV4Hf/iFmnuVn5kuUmrT
+         8bQmV53q2pKi5lNnsKqTIUmxHHyxseKFALyvRgWrXM3YNP39FRaN+A2xyhBcJB/YPq4L
+         Z0k1YbQ3RfkR3kWHTUNUkz4/H58OSB4hXnkHHJunLYEC1mBYJPOj8CCirkZyJNEn9cJz
+         dohpMkuetNIRysqsO4ih/VFP0lStRArbEY4Rg6bA/qb1lunRzhGm47efZ7TVWAb+gTOw
+         EzSRGBZX6OOdyImRFPLwVkG0uVq8y5ZzjJKA2K7rDIIdePKyLPQbDmlG/iwFDwgqBvwm
+         Qk7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cjMwxO2ttET/k2mjc9FVTHy1myqG3lEVWgLpdfrfxrw=;
+        b=PRTS2hqoJ8ugSYu9AJT+9rEayMQlfJkpoYe+qGl2icgF/aBM4YENckzaicJJZJMko4
+         UA3Vhlb/+0XQiN3nsdZGCrHfUloi1qbaVJK2I8MQ6hjPTajaZFr1EP6uEruYszwwjvzz
+         aAZlrredXlxwfbCL2/voOs3S1fVEVUg/FKsf3PIiKEWD/fthIRthoy50JUgy8xQywQMl
+         0TRzAqh5DbwRgjm6wsKY8is/9SX3AmToeguqPCe9q92p6HIHi7VDWw9qZxW2fKZCkVKH
+         8TCFpi5EuzAo8Wd96vtJ2T5+D6Kl2Dlfl/HLegQbegZCnkgzJ3xNuXcsCuJy26aVaVju
+         Rocw==
+X-Gm-Message-State: ACrzQf0zRni2UB02CYv2txy+XQ2zVJC+ywg3/uaEimY30pyYZ2qe9vYt
+        M1Xe0eZaOaZEWiJxemXJqT2y/anatCY/xTAr
+X-Google-Smtp-Source: AMsMyM4Xsv+D5FOPwtZLeNd44KTSrQIiig6fL9DAADtD1DAivKJfz2c9aoGaFtSkyTgYLR1oFO23mA==
+X-Received: by 2002:a05:600c:35c8:b0:3b4:bf50:f844 with SMTP id r8-20020a05600c35c800b003b4bf50f844mr2979332wmq.192.1665582166710;
+        Wed, 12 Oct 2022 06:42:46 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id ay38-20020a05600c1e2600b003c6b70a4d69sm1738310wmb.42.2022.10.12.06.42.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 06:42:46 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: adc: mcp3911: Fix out of bounds access of array mcp3911_osr_table
+Date:   Wed, 12 Oct 2022 14:42:45 +0100
+Message-Id: <20221012134245.5345-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [Patch v3 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
- for MFC
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        aakarsh jain <aakarsh.jain@samsung.com>
-Cc:     linux-fsd@tesla.com, linux-media@vger.kernel.org,
-        pankaj.dubey@samsung.com, linux-arm-kernel@lists.infradead.org,
-        dillon.minfei@gmail.com, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, smitha.t@samsung.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        jernej.skrabec@gmail.com, robh+dt@kernel.org,
-        aswani.reddy@samsung.com, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, mark.rutland@arm.com,
-        m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, andi@etezian.org, andrzej.hajda@intel.com,
-        ezequiel@vanguardiasur.com.ar, david.plowman@raspberrypi.com
-References: <20221011122516.32135-1-aakarsh.jain@samsung.com>
- <CGME20221011125142epcas5p13c858a5f27830fb1de50fa51e9730eca@epcas5p1.samsung.com>
- <20221011122516.32135-2-aakarsh.jain@samsung.com>
- <166558064414.1937173.2124012536890566845.robh@kernel.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <166558064414.1937173.2124012536890566845.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,34 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 09:19, Rob Herring wrote:
-> On Tue, 11 Oct 2022 17:55:02 +0530, aakarsh jain wrote:
->> From: Smitha T Murthy <smitha.t@samsung.com>
->>
->> Convert DT schema for s5p-mfc in yaml format
->>
->> Cc: linux-fsd@tesla.com
->> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
->> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
->> ---
->>  .../devicetree/bindings/media/s5p-mfc.txt     |  75 --------
->>  .../bindings/media/samsung,s5p-mfc.yaml       | 163 ++++++++++++++++++
->>  2 files changed, 163 insertions(+), 75 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
+Currently the for-loop is using the size of the array mcp3911_osr_table
+as the upper bounds which is 0..31 which is causing an out of bounds
+access to the array at indexes 8..31. Fix this using the ARRAY_SIZE
+macro to get the size of the array in elements rather than bytes.
 
-All these must be fixed before schema can be applied.
+Fixes: 6d965885f4ea ("iio: adc: mcp3911: add support for oversampling ratio")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/iio/adc/mcp3911.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+index b35fd2c9c3c0..015a9ffdb26a 100644
+--- a/drivers/iio/adc/mcp3911.c
++++ b/drivers/iio/adc/mcp3911.c
+@@ -248,7 +248,7 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
+ 		break;
+ 
+ 	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+-		for (int i = 0; i < sizeof(mcp3911_osr_table); i++) {
++		for (int i = 0; i < ARRAY_SIZE(mcp3911_osr_table); i++) {
+ 			if (val == mcp3911_osr_table[i]) {
+ 				val = FIELD_PREP(MCP3911_CONFIG_OSR, i);
+ 				ret = mcp3911_update(adc, MCP3911_REG_CONFIG, MCP3911_CONFIG_OSR,
+-- 
+2.37.3
 
