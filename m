@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F3C5FC567
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665115FC56A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiJLMfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S229841AbiJLMfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiJLMew (ORCPT
+        with ESMTP id S229821AbiJLMfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:34:52 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BECADEAF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:34:49 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-229-kq7pF1itNsC6iyqikphG3w-1; Wed, 12 Oct 2022 13:34:47 +0100
-X-MC-Unique: kq7pF1itNsC6iyqikphG3w-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 12 Oct
- 2022 13:34:45 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Wed, 12 Oct 2022 13:34:45 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 2/3] tracing: Add "(fault)" name injection to kernel
- probes
-Thread-Topic: [PATCH v2 2/3] tracing: Add "(fault)" name injection to kernel
- probes
-Thread-Index: AQHY3ifBg4j8RCzGYUSWbqKRph9Bsa4KsQDw
-Date:   Wed, 12 Oct 2022 12:34:45 +0000
-Message-ID: <13544aa157fc4083a59127bbc5a2bb1e@AcuMS.aculab.com>
-References: <20221012104055.421393330@goodmis.org>
- <20221012104534.644803645@goodmis.org>
-In-Reply-To: <20221012104534.644803645@goodmis.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 12 Oct 2022 08:35:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6807027CDF;
+        Wed, 12 Oct 2022 05:35:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14EC6B81A88;
+        Wed, 12 Oct 2022 12:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32A1C433D6;
+        Wed, 12 Oct 2022 12:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665578119;
+        bh=P1sBFZ5OfQ3xulKkj/ktcKq5OmyfyAwZboKPGajaiIU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JCu8ojD/4ZuqUvqQwYzussHK7WszyvO+WxymQNq0453fLTWCA2vXd3m02RFuPve73
+         nq9vauPqKJv2B9IRAjdOr4AA4iUOj7s5eZXlCP+nyO0jVDC2U9DrtmWS4+q2eclNhy
+         e5/dy8tR8p9T3g59BwfeLW22IIiC8Z9+Vvle1fuJCgmgD+e6JE1DMdQeUJqnwfBEb5
+         rv13pNqiZd86Q4fpnp0Davc+kDKrV+P7NKkPUQhvBNUCMD+q5dULKfgpMc5hDmeF9E
+         PtmQPkvV8iAvZHP4ARMV1ZHsAIjVM+LGC0Tv/9HWk4zhOubJb6m75ZA3fFJ/o6pYqg
+         6yNR/Zgwt5Eyw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oiawz-0008Ev-Ll; Wed, 12 Oct 2022 14:35:05 +0200
+Date:   Wed, 12 Oct 2022 14:35:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/14] phy: qcom-qmp: further prep cleanups
+Message-ID: <Y0a0eYNrexI8uwfn@hovoldconsulting.com>
+References: <20221012081241.18273-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012081241.18273-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,40 +61,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogU3RldmVuIFJvc3RlZHQNCj4gU2VudDogMTIgT2N0b2JlciAyMDIyIDExOjQxDQo+IA0K
-PiBIYXZlIHRoZSBzcGVjaWZpYyBmdW5jdGlvbnMgZm9yIGtlcm5lbCBwcm9iZXMgdGhhdCByZWFk
-IHN0cmluZ3MgdG8gaW5qZWN0DQo+IHRoZSAiKGZhdWx0KSIgbmFtZSBkaXJlY3RseS4gdHJhY2Vf
-cHJvYmVzLmMgZG9lcyB0aGlzIHRvbyAoZm9yIHVwcm9iZXMpDQo+IGJ1dCBhcyB0aGUgY29kZSB0
-byByZWFkIHN0cmluZ3MgYXJlIGdvaW5nIHRvIGJlIHVzZWQgYnkgc3ludGhldGljIGV2ZW50cw0K
-PiAoYW5kIHBlcmhhcHMgb3RoZXIgdXRpbGl0aWVzKSwgaXQgc2ltcGxpZmllcyB0aGUgY29kZSBi
-eSBtYWtpbmcgc3VyZSB0aG9zZQ0KPiBvdGhlciB1c2VzIGRvIG5vdCBuZWVkIHRvIGltcGxlbWVu
-dCB0aGUgIihmYXVsdCkiIG5hbWUgaW5qZWN0aW9uIGFzIHdlbGwuDQo+IA0KPiBDYzogc3RhYmxl
-QHZnZXIua2VybmVsLm9yZw0KPiBGaXhlczogYmQ4MjYzMWQ3Y2NkYyAoInRyYWNpbmc6IEFkZCBz
-dXBwb3J0IGZvciBkeW5hbWljIHN0cmluZ3MgdG8gc3ludGhldGljIGV2ZW50cyIpDQo+IFNpZ25l
-ZC1vZmYtYnk6IFN0ZXZlbiBSb3N0ZWR0IChHb29nbGUpIDxyb3N0ZWR0QGdvb2RtaXMub3JnPg0K
-PiAtLS0NCj4gIGtlcm5lbC90cmFjZS90cmFjZV9wcm9iZV9rZXJuZWwuaCB8IDMxICsrKysrKysr
-KysrKysrKysrKysrKysrKystLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyNSBpbnNlcnRpb25z
-KCspLCA2IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2tlcm5lbC90cmFjZS90cmFj
-ZV9wcm9iZV9rZXJuZWwuaCBiL2tlcm5lbC90cmFjZS90cmFjZV9wcm9iZV9rZXJuZWwuaA0KPiBp
-bmRleCAxZDQzZGYyOWExZjguLjc3ZGJkOWZmOTc4MiAxMDA2NDQNCj4gLS0tIGEva2VybmVsL3Ry
-YWNlL3RyYWNlX3Byb2JlX2tlcm5lbC5oDQo+ICsrKyBiL2tlcm5lbC90cmFjZS90cmFjZV9wcm9i
-ZV9rZXJuZWwuaA0KPiBAQCAtMiw2ICsyLDggQEANCj4gICNpZm5kZWYgX19UUkFDRV9QUk9CRV9L
-RVJORUxfSF8NCj4gICNkZWZpbmUgX19UUkFDRV9QUk9CRV9LRVJORUxfSF8NCj4gDQo+ICsjZGVm
-aW5lIEZBVUxUX1NUUklORyAiKGZhdWx0KSINCj4gKw0KPiAgLyoNCj4gICAqIFRoaXMgZGVwZW5k
-cyBvbiB0cmFjZV9wcm9iZS5oLCBidXQgY2FuIG5vdCBpbmNsdWRlIGl0IGR1ZSB0bw0KPiAgICog
-dGhlIHdheSB0cmFjZV9wcm9iZV90bXBsLmggaXMgdXNlZCBieSB0cmFjZV9rcHJvYmUuYyBhbmQg
-dHJhY2VfZXByb2JlLmMuDQo+IEBAIC0xMyw4ICsxNSwxNiBAQCBzdGF0aWMgbm9rcHJvYmVfaW5s
-aW5lIGludA0KPiAga2Vybl9mZXRjaF9zdG9yZV9zdHJsZW5fdXNlcih1bnNpZ25lZCBsb25nIGFk
-ZHIpDQo+ICB7DQo+ICAJY29uc3Qgdm9pZCBfX3VzZXIgKnVhZGRyID0gIChfX2ZvcmNlIGNvbnN0
-IHZvaWQgX191c2VyICopYWRkcjsNCj4gKwlpbnQgcmV0Ow0KPiANCj4gLQlyZXR1cm4gc3Rybmxl
-bl91c2VyX25vZmF1bHQodWFkZHIsIE1BWF9TVFJJTkdfU0laRSk7DQo+ICsJcmV0ID0gc3Rybmxl
-bl91c2VyX25vZmF1bHQodWFkZHIsIE1BWF9TVFJJTkdfU0laRSk7DQo+ICsJLyoNCj4gKwkgKiBz
-dHJubGVuX3VzZXJfbm9mYXVsdCByZXR1cm5zIHplcm8gb24gZmF1bHQsIGluc2VydCB0aGUNCj4g
-KwkgKiBGQVVMVF9TVFJJTkcgd2hlbiB0aGF0IG9jY3Vycy4NCj4gKwkgKi8NCj4gKwlpZiAocmV0
-IDw9IDApDQo+ICsJCXJldHVybiBzdHJsZW4oRkFVTFRfU1RSSU5HKSArIDE7DQo+ICsJcmV0dXJu
-IHJldDsNCj4gIH0NCg0KSXNuJ3QgdGhhdCBnb2luZyB0byBkbyB0aGUgd3JvbmcgdGhpbmcgaWYg
-dGhlIHVzZXINCnN0cmluZyBpcyB2YWxpZCBtZW1vcnkgYnV0IGp1c3QgemVybyBsZW5ndGg/Pw0K
-DQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQs
-IE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86
-IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, Oct 12, 2022 at 10:12:27AM +0200, Johan Hovold wrote:
+> Here's the next batch of QMP cleanups in preparation for adding support
+> for SC8280XP and its four-lane PCIe PHYs.
+> 
+> Note that these apply on top of the following two series that have been
+> reviewed and should be ready to be merged when the PHY tree opens:
 
+I forgot to mention this series:
+
+	https://lore.kernel.org/lkml/20220928152822.30687-1-johan+linaro@kernel.org/
+
+which has also been reviewed but did not make it into 6.1.
+
+> 	https://lore.kernel.org/linux-arm-msm/20220929092916.23068-1-johan+linaro@kernel.org/
+> 	https://lore.kernel.org/all/20220927092207.161501-1-dmitry.baryshkov@linaro.org/
+> 
+> After this I have one more series of related cleanups before posting the
+> SC8280XP support.
+ 
+Johan
