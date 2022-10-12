@@ -2,98 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920245FC6B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCA05FC6B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJLNqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S229924AbiJLNsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiJLNqT (ORCPT
+        with ESMTP id S229807AbiJLNsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:46:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62953B8C3A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:46:18 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id 13so38111947ejn.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6spuubBZPMae2KH0MSDLc1QYT4H++OxwkE+WifF21RI=;
-        b=p72rHA9cbLgi17z4uAJ/PM0KlXaJFxUA5op94F0cDL+w1zvPL0D+JfSRE3n3AKpdQk
-         H/aWc7cQEC+scz8S7Q+03GyOtOyhOikepVm1I2GaMBEqfr3mKbVgGRVS/06KuSPESb9M
-         AGTbpCtU63hWdB6EtKhA56WpuGmpAD6gRMpmg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6spuubBZPMae2KH0MSDLc1QYT4H++OxwkE+WifF21RI=;
-        b=yf+giP42W8+9hRw17fi8tMcwVe1EZVzizi4d3ztzMHVXDnfqLJ+22eYWPIo5zgHNqo
-         19yDR/6bZE/17zhv9EuqbbnC4FBB/fF0WxTVIhjmdZJ+GX2pDV/Lvk8NXiLVGTChzpNg
-         0U3nzlNDoruZhj/abmz8aKYROpudgIj7xJdm/3VPJgVWml/TecdAuaMZsIl2gnpSzGmv
-         VtF9wQDPe6gMokGNDryQF9MSbb7ZWydCjwlWop9rz0eCBnXoaIhkIvhn7SRscxTKdkrO
-         n8rCOSJDRi+xXxCdBy4txca2hLTS4nCLiNZtw4lYyL6fGGy5uYQQ7I/8XbqE2d1/AkVz
-         vo8w==
-X-Gm-Message-State: ACrzQf3kuS+Ly+ltV/LdSZFh7Olfql1EI8PLZPvPRBqh0J9WtAeNL3VO
-        qBzXP5JtqVzg/0lZiVJM8XEHi2zZ0DbSQqUnCduOVbjMTl78oQ==
-X-Google-Smtp-Source: AMsMyM4gO1Qr7n6O37HwwouesWkCNAAHFX/9bBxS3E3xd4O3QGKsOAs7e/uWYy1U6778LF81rv28AI/+ZDfGMuh+LNc=
-X-Received: by 2002:a17:907:86a7:b0:78d:f741:7f9a with SMTP id
- qa39-20020a17090786a700b0078df7417f9amr1838481ejc.8.1665582377009; Wed, 12
- Oct 2022 06:46:17 -0700 (PDT)
+        Wed, 12 Oct 2022 09:48:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124EBB40F4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:48:05 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CCm6uK007754;
+        Wed, 12 Oct 2022 13:47:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=gcwlcDkSbiXzSkIE1la7GPJMtot1ddfaQvrcqhJVYWM=;
+ b=HeBwuEU/tLqK6dnuN6OkENy5xp7/bc1h2imhrJSeKRZqpeplngldpcmqHb1u5CofSyNo
+ 9ligIi91Pf/DPYzR/MzH4m9IRhbSqcEF10IO11hxbFpTZlhlhx4MEg+XBNNNwS2Cs5uM
+ QsENy1eVCD8+x7q2kYO7mthu43zx6vmu7HBJ8d+6ETYcwQCJgo8N51CGfYuhBF6BrWWi
+ wIi3AeXmHN9DWzSbVCtQeSVJWgkb+opoY7Dc+kcAIqfzXHWzb4KWE+m9tclbwrHAX+Vv
+ XXzqEzgB1ptTPEwR3Lwh3qqprhZjEByd+qZ3Lf3eFEQyPakPypS0ohbSPq6vtqZe0wAI CQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k5v5p5f7a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 13:47:36 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29CAvE8r011571;
+        Wed, 12 Oct 2022 13:47:36 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k5v5p5f5w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 13:47:36 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29CDZdbs032265;
+        Wed, 12 Oct 2022 13:47:33 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3k30u9ck3f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 13:47:33 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29CDlVaG60752326
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Oct 2022 13:47:31 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA0E1A4054;
+        Wed, 12 Oct 2022 13:47:30 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A32BA405C;
+        Wed, 12 Oct 2022 13:47:30 +0000 (GMT)
+Received: from localhost (unknown [9.43.87.244])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Oct 2022 13:47:30 +0000 (GMT)
+Date:   Wed, 12 Oct 2022 19:17:29 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v4 11/16] objtool: Add --mnop as an option to --mcount
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     aik@ozlabs.ru, chenzhongjin@huawei.com,
+        christophe.leroy@csgroup.eu, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        mbenes@suse.cz, mingo@redhat.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, peterz@infradead.org, rostedt@goodmis.org,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20221002104240.1316480-1-sv@linux.ibm.com>
+        <20221002104240.1316480-12-sv@linux.ibm.com>
+        <1665401725.d3dolquorh.naveen@linux.ibm.com>
+        <20221011203332.zzmv6awd5eiydxgw@treble>
+In-Reply-To: <20221011203332.zzmv6awd5eiydxgw@treble>
 MIME-Version: 1.0
-References: <20220914142632.2016571-1-jannh@google.com>
-In-Reply-To: <20220914142632.2016571-1-jannh@google.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 12 Oct 2022 15:46:06 +0200
-Message-ID: <CAJfpegsncvnDtTHEv=qT0dGoD4B4L=cukyFwwVtaq8MKiWFQjw@mail.gmail.com>
-Subject: Re: [PATCH] fuse: Remove user_ns check for FUSE_DEV_IOC_CLONE
-To:     Jann Horn <jannh@google.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1665582234.mk6z7nug7r.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: iymZSnfnhIoj72GV350C7WEnf4S2fkTS
+X-Proofpoint-GUID: TIjhMEWQitVB-KEzow5hVt3tzFTH_mwX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_06,2022-10-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
+ spamscore=0 malwarescore=0 impostorscore=0 suspectscore=0 adultscore=0
+ phishscore=0 priorityscore=1501 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210120089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Sept 2022 at 16:27, Jann Horn <jannh@google.com> wrote:
->
-> Commit 8ed1f0e22f49e ("fs/fuse: fix ioctl type confusion") fixed a type
-> confusion bug by adding an ->f_op comparison.
->
-> Based on some off-list discussion back then, another check was added to
-> compare the f_cred->user_ns. This is not for security reasons, but was
-> based on the idea that a FUSE device FD should be using the UID/GID
-> mappings of its f_cred->user_ns, and those translations are done using
-> fc->user_ns, which matches the f_cred->user_ns of the initial
-> FUSE device FD thanks to the check in fuse_fill_super().
-> See also commit 8cb08329b0809 ("fuse: Support fuse filesystems outside of
-> init_user_ns").
->
-> But FUSE_DEV_IOC_CLONE is, at a higher level, a *cloning* operation that
-> copies an existing context (with a weird API that involves first opening
-> /dev/fuse, then tying the resulting new FUSE device FD to an existing FUSE
-> instance). So if an application is already passing FUSE FDs across
-> userns boundaries and dealing with the resulting ID mapping complications
-> somehow, it doesn't make much sense to block this cloning operation.
->
-> I've heard that this check is an obstacle for some folks, and I don't see
-> a good reason to keep it, so remove it.
->
-> Signed-off-by: Jann Horn <jannh@google.com>
+Josh Poimboeuf wrote:
+> On Mon, Oct 10, 2022 at 05:07:46PM +0530, Naveen N. Rao wrote:
+>> > +++ b/scripts/Makefile.lib
+>> > @@ -234,6 +234,7 @@ objtool_args =3D								\
+>> >  	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=3Dnoinstr)		\
+>> >  	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
+>> >  	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+>> > +	$(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
+>>=20
+>> This still won't help: for instance, if CONFIG_FTRACE itself is disabled=
+. I
+>> think we should make this depend on CONFIG_FTRACE_MCOUNT_USE_OBJTOOL. Th=
+e
+>> below change works for me:
+>>=20
+>> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+>> index 54d2d6451bdacc..fd3f55a1fdb7bb 100644
+>> --- a/scripts/Makefile.lib
+>> +++ b/scripts/Makefile.lib
+>> @@ -245,8 +245,8 @@ objtool_args =3D                                    =
+                          \
+>>        $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=3Djump_label)       =
+ \
+>>        $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=3Dnoinstr)             =
+ \
+>>        $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
+>> -       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             =
+\
+>> -       $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 =
+\
+>> +        $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL),                      =
+ \
+>> +             $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mcount --mnop, -=
+-mcount)) \
+>>        $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
+>>        $(if $(CONFIG_RETPOLINE), --retpoline)                          \
+>>        $(if $(CONFIG_RETHUNK), --rethunk)                              \
+>=20
+> This has a new conflict, may need something like:
+>=20
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -256,6 +256,9 @@ objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+=3D --h=
+acks=3Djump_label
+>  objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+=3D --hacks=3Dnoinstr
+>  objtool-args-$(CONFIG_X86_KERNEL_IBT)			+=3D --ibt
+>  objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+=3D --mcount
+> +ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
+> +objtool-args-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+=3D --mnop
+> +endif
+>  objtool-args-$(CONFIG_UNWINDER_ORC)			+=3D --orc
+>  objtool-args-$(CONFIG_RETPOLINE)			+=3D --retpoline
+>  objtool-args-$(CONFIG_RETHUNK)				+=3D --rethunk
 
-I see no issues with this.   f_cred seems to be unused by the VFS, so
-this should have zero effect on anything other than rejecting or
-allowing FUSE_DEV_IOC_CLONE.
+Thanks. That's definitely simpler.
 
-Applied.
+I haven't checked if there are any other conflicts with=20
+tip/objtool/core though. Not sure how to proceed here.
 
-Thanks,
-Miklos
+
+- Naveen
