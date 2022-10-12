@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544C05FCF02
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6E65FCF04
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiJLXl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
+        id S229747AbiJLXmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiJLXl1 (ORCPT
+        with ESMTP id S229614AbiJLXmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:41:27 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B621142D6;
-        Wed, 12 Oct 2022 16:41:25 -0700 (PDT)
-Message-ID: <c23d728a-f90b-7272-e180-48c7ce8dcd3c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665618084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mslSDPTMNRKqD8KCVjba8zSlG+U+mj9oVGajsN/Bli8=;
-        b=ZMFgscRr/Nmtm4sm4p5pwxWv3c1lOPbWK3wOrsW5bLLtZosXUW9Wx8lQjbYrTbqjgzdj+e
-        xABu8ESIqxlvloQC8awNLGl9OMFEKpnexi889npBN1A7tgOyl7Hp7K34CyN9APtTOafxET
-        dFx5IT2uPqfTCVNEvlblMdCsalvkknA=
-Date:   Wed, 12 Oct 2022 16:41:15 -0700
+        Wed, 12 Oct 2022 19:42:42 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6617D6889D;
+        Wed, 12 Oct 2022 16:42:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mnq2Q3Pzsz4xGG;
+        Thu, 13 Oct 2022 10:42:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665618158;
+        bh=MSgqIlLNuoLVp0EJwgBfD8Q46u9XEpVHooayGrvn7Jw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KmuDHxg7WQCeaIYJs0urcN696PI1aLGg+fPSj0KsQzNE+IFaJHCVaXdqtXJ2vpNDt
+         VgpcKLFMT/eYAioaSNKmBOgpd85ytenFgSaaITv1Gc1p7TRM1qmc56IdBX0L0TxUwl
+         4xQGPzl3VhJC3EfgP0XyTJWC/uPuiJYJUF1YH14aCg9c224c2nBxeCluh1OAHOeJR/
+         QdtBV7HhYdVhKI1WwGxIxznEFsSTGTujpYMnhWYHjmZdv9Q2JPbkeHr8eOfODMcfNu
+         j6zUf8jmQZLzhYh2b0YiIeWCT5SvzfC8xS+jDyuQwSSbAAVeJ++X0Wbja8rIEkkMB1
+         JL/57dG7peq4A==
+Date:   Thu, 13 Oct 2022 10:42:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Carlos Llamas <cmllamas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the mm-stable tree
+Message-ID: <20221013104234.11e88852@canb.auug.org.au>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 0/6] Fix bugs found by ASAN when running
- selftests
-Content-Language: en-US
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221011120108.782373-1-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; boundary="Sig_/9wo_KwYw/tNprJT532caCWR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,13 +51,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 5:01 AM, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
-> 
-> This series fixes bugs found by ASAN when running bpf selftests on arm64
+--Sig_/9wo_KwYw/tNprJT532caCWR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Overall lgtm.
+Hi all,
 
-Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
+Commit
 
+  db24ef4e6b0a ("mm/mmap: undo ->mmap() when arch_validate_flags() fails")
 
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9wo_KwYw/tNprJT532caCWR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHUOsACgkQAVBC80lX
+0GxDzgf+L8iPHqShlZ4+VjcZv3/fg0A1uRA0jlY3H1sZJUMXJsF5mXjP4sVcVDqw
+Y75yBhMfyi2euEXOCXCPogzYMXK+Ar4Eh1SPsbnn0/kVC/ev2vCjYT81x2qXsS5W
+ZRg7tYCmf+QietKubJFwEDfeFSM0kYrRV98d/BagCJbNVFFEd/auHrvSpknGtvbQ
+dOxk/05W1y8u7HGn6Loy21dH9vVwTiZlEVkZI8PYQj4DTQEJVUMMGzoxGpLNUvE7
+dZbpfmcnkj2/MI6gnlTWucZd4033hLlZoN0kuX2waoYCem5IY+L/6mWpP9f45RQZ
+wNCtOAq89iVRamJK5jQNd1UxqwBt5A==
+=dwFC
+-----END PGP SIGNATURE-----
+
+--Sig_/9wo_KwYw/tNprJT532caCWR--
