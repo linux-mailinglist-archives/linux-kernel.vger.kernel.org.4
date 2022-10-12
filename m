@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28935FC5A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DC25FC5A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJLMyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S229851AbiJLMz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJLMyN (ORCPT
+        with ESMTP id S229868AbiJLMzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB88C97F2;
-        Wed, 12 Oct 2022 05:54:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 920846141C;
-        Wed, 12 Oct 2022 12:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5AAC433D6;
-        Wed, 12 Oct 2022 12:54:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665579251;
-        bh=AIeGGSg/EfOPT/q/5pGppJEf2mu95V7y75CXy5HDoLY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eghw1zmWDlGQL6bVwaqS77HemFRMGuZ2H+EbyNO069FGb4Eb/0lVuGESOshgOGPAG
-         93pqukcfVGNRVLX0KoGz7mPxXXG/KvxKXm8WfI7UXzQ7nnDW7yEUxQn/tdeCOb4YC8
-         bfoX31FcNxkE/zyF137OmHghScvxw34m/oadhqN9aVRYYCBtuy+Yw3ghDNcMDLFnbF
-         y0Uyr3wXOXIR0hTE3uhMMSRBeF52vzVBZI10O+5gA0fampASQ6cyQ+i/sXhBkJgYnZ
-         dnoSevIC3y5P5plUORPRyFUdVEWxTNaW/JDRu47y2Qr9Z0NF/ee3/T1aUxIU5l6vFC
-         YzmbMXV0pIetQ==
-Message-ID: <2ee13936-4589-8711-2f20-a52f27047492@kernel.org>
-Date:   Wed, 12 Oct 2022 08:54:06 -0400
+        Wed, 12 Oct 2022 08:55:07 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8FF186DF;
+        Wed, 12 Oct 2022 05:55:00 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id q9so33245511ejd.0;
+        Wed, 12 Oct 2022 05:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=v8IwUcx5X1rZkbWMDsrbcC20oSFNufwW/oJWRFUHsbI=;
+        b=YCsHTEdXOhTgRYogfR0YgBa31FlkuzhfbwHfl39EMES4gqu0zcA+k4G+sOCG/lUxrU
+         93rKi3Fp9mtI7W/4fgMH8HoeVe765Vk49N9Z/4DWIb5UGcTD6c9qJS0qhxh2iMEn+58R
+         Xq4ZKZOBMg35xymVGWp9XsIdR2xF/sqDfVsudvvE64ukoxjMMI91F7DnVpcTYLIRFZE/
+         N13rPLJjQlO9JcLugqFIX0RArL4834yaAcd1L2hk11tdvnstPcJYbt71hssH3/y+/lwj
+         qSQdDCwb7eGof+P5gqo0SDmeoCNCzIRdS9bw3R9qiPXvRdLcPXznYb8ugT6XiwhutNRp
+         rf6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v8IwUcx5X1rZkbWMDsrbcC20oSFNufwW/oJWRFUHsbI=;
+        b=4XXCWrCkSVP9BavAVczNcBLSVdB+WtlndvhZxtjZymWvjHJpC+t68W6/ht3ZYoCDoY
+         kMzZwjZwANFgTZw2+ONRyEQzbEBACBNU+cSZWwnb8sULi4HlbwSPB30r9W0vIasiuArX
+         uvxGZ+QOPJfXa0R2zgOZsXFygagVwBfTS/XWwRKfxBUDPXPWWHojF0ruHre7MxYlGSDd
+         6EKze5kEA3iqE91cOgOq2X5uGSpY+sx2OZ5ttkDHdQpXdNTe3XUTu4Vu5boCOzVGaa1l
+         RFeyGXMlwHfhKwysrqV4I+56iHClEv9AoGJ92s1wqw9TBa9/0LjrAl339v4l9RfhdbOL
+         CIpA==
+X-Gm-Message-State: ACrzQf08w/99lOpOoHWFEWbYJC2uJjTbAmYWUd1tNwoedZRF8vtzfWZy
+        J7gC8uBawXMpL0RPJ+QbctE=
+X-Google-Smtp-Source: AMsMyM5B+Wn5Lk3WaMk6hzFXBkzGPgv5QgiMMFUKsKNXhdU4mn/vUh8FsegbGhfv5GxO8t1Igql3Ag==
+X-Received: by 2002:a17:907:1c98:b0:78d:3b08:33ef with SMTP id nb24-20020a1709071c9800b0078d3b0833efmr23140976ejc.175.1665579297988;
+        Wed, 12 Oct 2022 05:54:57 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.gmail.com with ESMTPSA id r23-20020aa7c157000000b0044e937ddcabsm11247699edp.77.2022.10.12.05.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 05:54:57 -0700 (PDT)
+Message-ID: <6346b921.a70a0220.64f4e.a0bc@mx.google.com>
+X-Google-Original-Message-ID: <Y0a5Hrs+FWq0RFaL@Ansuel-xps.>
+Date:   Wed, 12 Oct 2022 14:54:54 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pawel Dembicki <paweldembicki@gmail.com>,
+        Lech Perczak <lech.perczak@gmail.com>
+Subject: Re: [net PATCH 1/2] net: dsa: qca8k: fix inband mgmt for big-endian
+ systems
+References: <20221010111459.18958-1-ansuelsmth@gmail.com>
+ <Y0a2KD9pVeoYkHkK@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V14 1/7] dt-bindings: Added the yaml bindings for DCC
-Content-Language: en-US
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
-References: <cover.1664383851.git.quic_schowdhu@quicinc.com>
- <e320555b2075c94946ef3f9c78732dc84ba39449.1664383851.git.quic_schowdhu@quicinc.com>
- <4d0f7a01-1995-1b1e-40b9-125c3447b8c7@kernel.org>
- <78b42aab-164a-7fe6-fec5-77f52199c641@quicinc.com>
- <e028ad6a-9687-5089-4938-e982764b9c58@kernel.org>
- <a1a79910-c697-3660-ddf8-5f4f164c1b34@quicinc.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <a1a79910-c697-3660-ddf8-5f4f164c1b34@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0a2KD9pVeoYkHkK@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,35 +83,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 01:57, Souradeep Chowdhury wrote:
+On Wed, Oct 12, 2022 at 02:42:16PM +0200, Andrew Lunn wrote:
+> On Mon, Oct 10, 2022 at 01:14:58PM +0200, Christian Marangi wrote:
+> > The header and the data of the skb for the inband mgmt requires
+> > to be in little-endian. This is problematic for big-endian system
+> > as the mgmt header is written in the cpu byte order.
+> > 
+> > Fix this by converting each value for the mgmt header and data to
+> > little-endian, and convert to cpu byte order the mgmt header and
+> > data sent by the switch.
+> > 
+> > Fixes: 5950c7c0a68c ("net: dsa: qca8k: add support for mgmt read/write in Ethernet packet")
+> > Tested-by: Pawel Dembicki <paweldembicki@gmail.com>
+> > Tested-by: Lech Perczak <lech.perczak@gmail.com>
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Reviewed-by: Lech Perczak <lech.perczak@gmail.com>
+> > ---
+> >  drivers/net/dsa/qca/qca8k-8xxx.c | 63 ++++++++++++++++++++++++--------
+> >  include/linux/dsa/tag_qca.h      |  6 +--
+> >  2 files changed, 50 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
+> > index 5669c92c93f7..4bb9b7eac68b 100644
+> > --- a/drivers/net/dsa/qca/qca8k-8xxx.c
+> > +++ b/drivers/net/dsa/qca/qca8k-8xxx.c
+> > @@ -137,27 +137,42 @@ static void qca8k_rw_reg_ack_handler(struct dsa_switch *ds, struct sk_buff *skb)
+> >  	struct qca8k_mgmt_eth_data *mgmt_eth_data;
+> >  	struct qca8k_priv *priv = ds->priv;
+> >  	struct qca_mgmt_ethhdr *mgmt_ethhdr;
+> > +	u32 command;
+> >  	u8 len, cmd;
+> > +	int i;
+> >  
+> >  	mgmt_ethhdr = (struct qca_mgmt_ethhdr *)skb_mac_header(skb);
+> >  	mgmt_eth_data = &priv->mgmt_eth_data;
+> >  
+> > -	cmd = FIELD_GET(QCA_HDR_MGMT_CMD, mgmt_ethhdr->command);
+> > -	len = FIELD_GET(QCA_HDR_MGMT_LENGTH, mgmt_ethhdr->command);
+> > +	command = le32_to_cpu(mgmt_ethhdr->command);
+> > +	cmd = FIELD_GET(QCA_HDR_MGMT_CMD, command);
+> > +	len = FIELD_GET(QCA_HDR_MGMT_LENGTH, command);
 > 
-> On 10/11/2022 6:50 PM, Krzysztof Kozlowski wrote:
->> On 30/09/2022 02:59, Souradeep Chowdhury wrote:
->>> Also the ./script/maintainers.pl gives the below output
->>>
->>> Souradeep Chowdhury<quic_schowdhu@quicinc.com>  (maintainer:DCC QTI
->>> DRIVER,in file)
->>> Andy Gross<agross@kernel.org>  (maintainer:ARM/QUALCOMM SUPPORT)
->>> Bjorn Andersson<andersson@kernel.org>  (maintainer:ARM/QUALCOMM SUPPORT)
->>> Konrad Dybcio<konrad.dybcio@somainline.org>  (reviewer:ARM/QUALCOMM SUPPORT)
->>> Rob Herring<robh+dt@kernel.org>  (maintainer:OPEN FIRMWARE AND FLATTENED
->>> DEVICE TREE BINDINGS)
->>> Krzysztof Kozlowski<krzysztof.kozlowski+dt@linaro.org>  (maintainer:OPEN
->>> FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
->>> linux-arm-msm@vger.kernel.org  (open list:DCC QTI DRIVER)
->>> devicetree@vger.kernel.org  (open list:OPEN FIRMWARE AND FLATTENED DEVICE
->>> TREE BINDINGS)
->>> linux-kernel@vger.kernel.org  (open list)
->>>
->>> Will send out the next version accordingly, let me know in case of any
->>> further concerns.
->> v15 and v16 was still not sent according to what you wrote above...
+> Humm...
 > 
-> I have copied all of the above in the mailing list, also I have 
-> implemented all the previous comments.
+> This might have the same alignment issue as the second patch. In fact,
+> because the Ethernet header is 14 bytes in size, it is often
+> deliberately out of alignment by 2 bytes, so that the IP header is
+> aligned. You should probably be using get_unaligned_le32() when
+> accessing members of mgmt_ethhdr.
+> 
+> 	  Andrew
 
-At least my address is not correct.
+Should I replace everything to get_unaligned_le32? Or this is only
+needed for the mgmt_ethhdr as it's 12 bytes?
 
-Best regards,
-Krzysztof
+The skb data is all 32 bit contiguous stuff so it should be safe? Or
+should we treat that also as unalligned just to make sure?
 
+Same question for patch 2. the rest of the mib in skb data are all 32 or
+64 values contiguous so wonder if we just take extra care of the
+mgmt_ethhdr. 
+
+-- 
+	Ansuel
