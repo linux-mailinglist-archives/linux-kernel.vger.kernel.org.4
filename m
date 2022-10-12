@@ -2,229 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA1A5FC154
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296815FC159
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJLHi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 03:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S229520AbiJLHkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 03:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiJLHiY (ORCPT
+        with ESMTP id S229480AbiJLHkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 03:38:24 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DE42642;
-        Wed, 12 Oct 2022 00:38:23 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C6gY90007048;
-        Wed, 12 Oct 2022 07:37:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=+E3WNqbZSjRYc1ZlLiUkCIoqj0aLrerAjucEDmI+m2Q=;
- b=IOx5PnHAY2IeYxoRwFjF5+JkKBsDNC9/zIgTKiCAuFpnFXAdqFrZtKWKrl8Xj0C4CodF
- uaDJK+gOTqSlKBVzN/y4lv+5mQEd/LwekibJIRNRpCW4eEbD+5PxBH385kIg0zk7g0zj
- tJ5wGQSwnBOGLnMJ+KTCpp2J8Vt8108DItwJwIhcmi6lPO2fo9hgsbiz98S05Da7E8cI
- x4YfSHsLEr6nIF+ZZvlZ47WqVDwLDK7b8X2mcQFVYGlJyzkPsg1kzKfoF+3tw349LOoF
- SLVX/LezlSKopf1bGr/Gr0IJDoDIXk8qp5v3FaEROV+/rAW/W6s5JLNWL6gj/AzHdOZU EQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k5rhthhhu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 07:37:56 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29C6nIhb034809;
-        Wed, 12 Oct 2022 07:37:55 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k5rhthhgf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 07:37:55 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29C7b0cC027637;
-        Wed, 12 Oct 2022 07:37:53 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9dkq2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 07:37:52 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29C7bnpH3146384
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Oct 2022 07:37:50 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBE72AE055;
-        Wed, 12 Oct 2022 07:37:49 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55C72AE04D;
-        Wed, 12 Oct 2022 07:37:49 +0000 (GMT)
-Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Oct 2022 07:37:49 +0000 (GMT)
-Message-ID: <d78edb587ecda0aa09ba80446d0f1883e391996d.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 09/11] s390: mm: Convert to GENERIC_IOREMAP
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        christophe.leroy@csgroup.eu, David.Laight@aculab.com,
-        shorne@gmail.com, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Date:   Wed, 12 Oct 2022 09:37:49 +0200
-In-Reply-To: <Y0ZWBMKKIuf5Q+qk@MiWiFi-R3L-srv>
-References: <20221009103114.149036-1-bhe@redhat.com>
-         <20221009103114.149036-10-bhe@redhat.com>
-         <b6ac5c44917390b9a5cc7ebb87a089568279c459.camel@linux.ibm.com>
-         <Y0ZWBMKKIuf5Q+qk@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 12 Oct 2022 03:40:46 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D6595AFD;
+        Wed, 12 Oct 2022 00:40:41 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id r22so18342788ljn.10;
+        Wed, 12 Oct 2022 00:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a+IYmi8tEOzQZXwBg2WQPAuUHlGeEUS5FrkTkjk+8r4=;
+        b=FOPJ9nrj9y5QZ8FojeBTK5zlj/pB+V9L1nBdMphMqh/X69LUfrnDyKffKpTkvzRrya
+         WzDqax1bXpZ2azImvJwrIYIvQYnBcWOIsYWkTsRjbun2XkRQuJkqKgJRUew5W5EPh2W6
+         d3U4QXHAZQBoL9JQhWBgCHu+MSeBqd4UPq8MBUN+/zdxEVD8yv4nhjJmoALtj75UaI3t
+         S5kN5E2o5yj8bdKj2HyKPnIMigQuYenZFsCdd3D65xq4s6LtPn2Lcp+OwoaL6FIR9FAR
+         Frs6oVs3IVlxKQR6VRPXwHvnzHfP3vtfqA9LFpFloSSnw9mC/Sd3Tic5EYrTEXxnBttE
+         uetQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+IYmi8tEOzQZXwBg2WQPAuUHlGeEUS5FrkTkjk+8r4=;
+        b=wpVnqnKr41o7y9lVFeh0zt4xdI3JO+9aF1pPkpPnPGFQzkguvNCC4uJRQr1sBbALIu
+         D5K/pTeUImfcsQM78nBfCxXKhOr0dzwu0J5wrd0bi52H2JxxbB7voAcCotBu1/lvS2zM
+         Oey48ViV9hfxsZiHOubZnhtR9MROrGXA1OZDhZuCehaPmpuVUDgzEWUmLMPXkPwMHiJL
+         FBDBIGFrqv1slib3q5EAsLBqP5F6wzSRbW/tdz2favQrhHPJ3OKah3GGHzuUxbHfu4+2
+         1dCKYvjRns1J8B2Qh+5msTZmh7HA1Vz0ljKieD/9pX+0qtQPHiebQp0OZRKTh1NukZfR
+         Y1Hg==
+X-Gm-Message-State: ACrzQf35r6d8GcMVBJSSDH7FO2BeAw3aCI/oap3oQR2Rlzn3JNLdWMxE
+        +Ah/nNnMtvgKv2gR7wssKLg=
+X-Google-Smtp-Source: AMsMyM7Bx7O5hrdirsTUZ5eU0BSzcJT7QqqMLDiJPPkhbIOX9ZLjuOyM2YM/6mObCPUwrE759uFqXw==
+X-Received: by 2002:a2e:a54d:0:b0:26c:64ae:236a with SMTP id e13-20020a2ea54d000000b0026c64ae236amr10808580ljn.207.1665560440059;
+        Wed, 12 Oct 2022 00:40:40 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::4? (dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::4])
+        by smtp.gmail.com with ESMTPSA id dt11-20020a0565122a8b00b00497c3fdf995sm2183545lfb.152.2022.10.12.00.40.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 00:40:39 -0700 (PDT)
+Message-ID: <b1700ea7-4a7a-263c-595c-0f7a56763c10@gmail.com>
+Date:   Wed, 12 Oct 2022 10:40:38 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+ <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
+ <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+ <98b59ad5-8c29-be41-4da1-a961db67827c@gmail.com>
+ <Y0QIzf2cAH9ehSeO@smile.fi.intel.com>
+ <19a6db0f-40a8-dacf-4583-cdb9d74e1243@fi.rohmeurope.com>
+Content-Language: en-US
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+In-Reply-To: <19a6db0f-40a8-dacf-4583-cdb9d74e1243@fi.rohmeurope.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tGd_NHM3wT8CGpgEF7oA0GaNhf8Dt6TG
-X-Proofpoint-ORIG-GUID: PNzw5jxkI3PV-j1vBDPFqdCoo73CaWp7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_03,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 adultscore=0 clxscore=1015
- mlxscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210120049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-12 at 13:52 +0800, Baoquan He wrote:
-> On 10/11/22 at 05:16pm, Niklas Schnelle wrote:
-> > On Sun, 2022-10-09 at 18:31 +0800, Baoquan He wrote:
-> > > By taking GENERIC_IOREMAP method, the generic ioremap_prot() and
-> > > iounmap() are visible and available to arch. Arch only needs to
-> > > provide implementation of arch_ioremap() or arch_iounmap() if there's
-> > > arch specific handling needed in its ioremap() or iounmap(). This
-> > > change will simplify implementation by removing duplicated codes with
-> > > generic ioremap() and iounmap(), and has the equivalent functioality
-> > > as before.
-> > > 
-> > > For s390, add hooks arch_ioremap() and arch_iounmap() for s390's special
-> > > operation when ioremap() and iounmap(), then ioremap_[wc|wt]() are
-> > > converted to use ioremap_prot() from GENERIC_IOREMAP.
-> > > 
-> > > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > > Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> > > Cc: Heiko Carstens <hca@linux.ibm.com>
-> > > Cc: Vasily Gorbik <gor@linux.ibm.com>
-> > > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> > > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> > > Cc: Sven Schnelle <svens@linux.ibm.com>
-> > > Cc: linux-s390@vger.kernel.org
-> > > ---
-> > > v2->v3:
-> > > - Add code comment inside arch_ioremap() to help uderstand the
-> > >   obsucre code. Christoph suggested this, Niklas provided the
-> > >   paragraph of text.
-> > > 
-> > >  arch/s390/Kconfig          |  1 +
-> > >  arch/s390/include/asm/io.h | 25 +++++++++------
-> > >  arch/s390/pci/pci.c        | 65 ++++++++------------------------------
-> > >  3 files changed, 30 insertions(+), 61 deletions(-)
-> > > 
-> > > diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> > > index 318fce77601d..c59e1b25f59d 100644
-> > > --- a/arch/s390/Kconfig
-> > > +++ b/arch/s390/Kconfig
-> > > @@ -135,6 +135,7 @@ config S390
-> > >  	select GENERIC_SMP_IDLE_THREAD
-> > >  	select GENERIC_TIME_VSYSCALL
-> > >  	select GENERIC_VDSO_TIME_NS
-> > > +	select GENERIC_IOREMAP
-> > 
-> > I think you should add the "if PCI" from the diff in your last mail to
-> > this patch.
-> 
-> That's reasonable, will do.
-> 
-> The code change in driver should be posted separately to get reviewing
-> from the relevant drvier maintainers. I may wrap it into this series in
-> next post so that people know its background.
+On 10/10/22 16:20, Vaittinen, Matti wrote:
+> On 10/10/22 14:58, Andy Shevchenko wrote:
+>> On Mon, Oct 10, 2022 at 12:12:34PM +0300, Matti Vaittinen wrote:
+>> ...
+>>
+>>>>> +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
+>>>>> +			       sizeof(s16));
+>>
+>>>> No endianess awareness (sizeof __le16 / __be16)
+>>
+>>>>> +	if (ret)
+>>>>> +		return ret;
+>>>>> +
+>>>>> +	*val = data->buffer[0];
+>>>>
+>>>> Ditto (get_unaligned_be16/le16 / le16/be16_to_cpup()).
+>>>
+>>> I have probably misunderstood something but I don't see why we should use
+>>> 'endianess awareness' in drivers? I thought the IIO framework code takes
+>>> care of the endianes conversions based on scan_type so each individual
+>>> driver does not need to do that. That however has been just my assumption. I
+>>> will need to check this. Thanks for pointing it out.
+>>
+>> The IIO core uses endianness field only once in iio_show_fixed_type() AFAICS.
 
-I agree about doing the driver change separately. Since the problem
-already exists one could send it separately. If you want I can take of
-that too.
+Following is some hand waving and speculation after my quick code read. 
+So, I may be utterly wrong in which case please do correct me...
 
-> 
-> > >  	select HAVE_ALIGNED_STRUCT_PAGE if SLUB
-> > >  	select HAVE_ARCH_AUDITSYSCALL
-> > >  	select HAVE_ARCH_JUMP_LABEL
-> ......
-> > > diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> > > index 73cdc5539384..3c00dc7d79bc 100644
-> > > --- a/arch/s390/pci/pci.c
-> > > +++ b/arch/s390/pci/pci.c
-> > > @@ -244,64 +244,25 @@ void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
-> > >         zpci_memcpy_toio(to, from, count);
-> > >  }
-> > >  
-> > > -static void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot)
-> > > +void __iomem *
-> > > +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
-> > >  {
-> > > -	unsigned long offset, vaddr;
-> > > -	struct vm_struct *area;
-> > > -	phys_addr_t last_addr;
-> > > -
-> > > -	last_addr = addr + size - 1;
-> > > -	if (!size || last_addr < addr)
-> > > -		return NULL;
-> > > -
-> > > +	/*
-> > > +	 * When PCI MIO instructions are unavailable the "physical" address
-> > > +	 * encodes a hint for accessing the PCI memory space it represents.
-> > > +	 * Just pass it unchanged such that ioread/iowrite can decode it.
-> > > +	 */
-> > >  	if (!static_branch_unlikely(&have_mio))
-> > > -		return (void __iomem *) addr;
-> > > -
-> > > -	offset = addr & ~PAGE_MASK;
-> > > -	addr &= PAGE_MASK;
-> > > -	size = PAGE_ALIGN(size + offset);
-> > > -	area = get_vm_area(size, VM_IOREMAP);
-> > > -	if (!area)
-> > > -		return NULL;
-> > > -
-> > > -	vaddr = (unsigned long) area->addr;
-> > > -	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
-> > > -		free_vm_area(area);
-> > > -		return NULL;
-> > > -	}
-> > > -	return (void __iomem *) ((unsigned long) area->addr + offset);
-> > > +		return (void __iomem *) *paddr;
-> > 
-> > nit: no space after the cast
-> 
-> Sorry, remember you pointed this out in v2, while I didn't get what
-> it is. Could you be more specific or give the right line of code?
-> 
-> Are you suggesting below line? 
-> 
-> -	return (void __iomem *) ((unsigned long) area->addr + offset);
-> +		return (void __iomem *)*paddr;
+Anyways, it seems to me that you're correct. The endianness field is 
+only used by the IIO to build the channel information for user-space so 
+that applications reading data can parse it. As far as I understand, the 
+driver does not need to do the conversions for user-space, but the 
+user-space tools should inspect the type information and do the 
+conversion. I think it makes sense as user-space applications may be 
+better equipped to do some maths. It also may be some applications do 
+not want to spend cycles doing the conversion but the conversions can be 
+done later "offline" for the captured raw data. So omitting conversion 
+in the IIO driver kind of makes sense to me.
 
-Yes, though I did just check and somehow checkpatch doesn't complain,
-maybe because of the dereference. I do think I remember it complaining
-but I guess if it doesn't you might as well keep it this way.
+I haven't thoroughly looked (and I have never used) the in-kernel IIO 
+APIs for getting the data. A quick look at the 
+include/linux/iio/consumer.h allows me to assume the iio_chan_spec can 
+be obtained by the consumer drivers. This should make the endianess 
+information available for the consumer drivers as well. So, again, 
+consumer drivers can parse the raw-format data themself.
 
-> 
-> > > +	return NULL;
-> > >  }
-> > > 
----8<---
+I have this far only used the sysfs and iio_generic_buffer on a 
+little-endian machine so I have had no issues with the little-endian 
+data and I have only observed the code. Hence I can not really say if my 
+reasoning is correct - or if it is how IIO has been designed to operate. 
+But based on my quick study I don't see a need for the IIO driver to do 
+endianess conversion to any other format but what is indicated by 
+scan_type. Specifically for KX022A, the data is already 16B LE when read 
+from the sensor. This is also advertised by scan_type so no conversion 
+should be needed (unless, of course, I am mistaken :]).
 
+>> And it does nothing with it. Maybe Jonathan can shed a light what is it for
+>> (I mean the field)?
+>>
+
+I agree. It'd be great to listen to someone who actually knows what he 
+is talking about and is not just guessing as I am ^_^;
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
