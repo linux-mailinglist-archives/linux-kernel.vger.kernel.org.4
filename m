@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5285FC9B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737FD5FC9B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJLRD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 13:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S229808AbiJLREE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 13:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiJLRDX (ORCPT
+        with ESMTP id S229506AbiJLREA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:03:23 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595EE13F91;
-        Wed, 12 Oct 2022 10:03:20 -0700 (PDT)
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 29CH30iU014538;
-        Thu, 13 Oct 2022 02:03:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29CH30iU014538
+        Wed, 12 Oct 2022 13:04:00 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510E41CB25;
+        Wed, 12 Oct 2022 10:03:59 -0700 (PDT)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 29CH3imf029337;
+        Thu, 13 Oct 2022 02:03:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 29CH3imf029337
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665594181;
-        bh=dYL++UgevmgJ7yY8bIaXHYj6+6J5/LR2yQL53Eybgzs=;
+        s=dec2015msa; t=1665594225;
+        bh=gJFvJD5Toog9MSkzt/sgw8zJUGXxC6L2j5lcvOuhyvc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=s6WSMEBnQBTL8TYXQwpZT4KEs+J2f+2mlS307sZRJ+dkkZMA89/pDpPso59+8OLOU
-         a6CCrxzcjKr9RqpcLSGEs/YTxKuh+8ARD/dx8H0C5CnWmLL+Ndaxm4rX0BIE4NvHeZ
-         5xxtb/u5L1LHQbYRB6TA05agDPVaWPbFmNYKA0SYjdgKuaw15EEVfgGbHdT/jqZYGS
-         ynK0Elp77EdX83cl6dH0ruBvsVE8pcH5GBcTI25Z4KftrT0v7qmoMb93gq/Ps+AILP
-         PVSz59F6mW6zSMOIiExnutS6BISE+oMILgGD6JkQxiGPRAPy6TcZSyhBg6x2b4rt+o
-         x9o33HLKZnA2g==
-X-Nifty-SrcIP: [209.85.160.41]
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-12c8312131fso20152677fac.4;
-        Wed, 12 Oct 2022 10:03:01 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1IWX5zPNikTH6c4GcZ/Y27HLL7NDNFUiiL+rgCJgGuwlgB21SA
-        w1voladd4NapPRZu5qW7cdL7d4aFB8bf0mMNDZg=
-X-Google-Smtp-Source: AMsMyM48Te47KEoasVl33NErmSr2tgtVZMWYZ6J7vHLT54THsardOvzATmyS/KHr7uacA8Phlro4+7J+ONa0ssYHB1I=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr2926974oab.287.1665594180123; Wed, 12
- Oct 2022 10:03:00 -0700 (PDT)
+        b=FPmni/c29hTC74FYjRoka6FdYhSZe1ihxsJcxid+CqNTlumTIoOtwq6V26BPasqOF
+         Y6hCNg2y2XJcTAinAXX+SVQolNxlQcUfdwjnbEqd3pezUewn1IwNUCr7hOJfKGZmXA
+         190G8iCtMC50y6EZiIGSmCNyctcDTvV7/Ef8rxY35p9KwS7T+cCs86GVXKJto13u2q
+         692V2pSsOjOTpvEe1OE/IRQp+Bru+guE/U5agL58do/PSF53oVjlzGT0Zor7ba6TH2
+         FWolRNggit22kwZQ+6lVmtUeUF6QnPeF7jgb1v7kfMiUl8pBGgCAXO/xN5EYuS/Pk0
+         imsVLXZtyjFBg==
+X-Nifty-SrcIP: [209.85.167.180]
+Received: by mail-oi1-f180.google.com with SMTP id u15so13822917oie.2;
+        Wed, 12 Oct 2022 10:03:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf38LyT4f3HK9bTAfCbDnNUMb5fly6id6M0JfP9Em9eQQZ6ww2UA
+        InwOSWh1XRK8JsR/Dkhy9KPn2NCfWS3tXGiTg4I=
+X-Google-Smtp-Source: AMsMyM77GatT3gECuVsuDHWuGP7T8aoZ5IGgwm+DSWdTKTNVGyt2580CFjAUOuEjW2JlMjodOZGrHfbZ4tPWgTbS6qc=
+X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
+ cj5-20020a0568081b8500b0034d8ce1d5b0mr2622350oib.194.1665594224127; Wed, 12
+ Oct 2022 10:03:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221004162905.24997-1-masahiroy@kernel.org>
-In-Reply-To: <20221004162905.24997-1-masahiroy@kernel.org>
+References: <20221004162905.24997-1-masahiroy@kernel.org> <20221004162905.24997-2-masahiroy@kernel.org>
+In-Reply-To: <20221004162905.24997-2-masahiroy@kernel.org>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 13 Oct 2022 02:02:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASe=r228HoLw7QRkd27v7Q+DPEGvrQf=XgXbe_-NVTEKg@mail.gmail.com>
-Message-ID: <CAK7LNASe=r228HoLw7QRkd27v7Q+DPEGvrQf=XgXbe_-NVTEKg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] Kconfig.debug: simplify the dependency of DEBUG_INFO_DWARF4/5
+Date:   Thu, 13 Oct 2022 02:03:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASeVxHhgdmSWadqF_t-zNPfuZa-NADg37pbosZGOikK-A@mail.gmail.com>
+Message-ID: <CAK7LNASeVxHhgdmSWadqF_t-zNPfuZa-NADg37pbosZGOikK-A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] Kconfig.debug: add toolchain checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -62,10 +62,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Oct 5, 2022 at 1:30 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Commit c0a5c81ca9be ("Kconfig.debug: drop GCC 5+ version check for
-> DWARF5") could have cleaned up the code a bit more.
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT does not give explicit
+> -gdwarf-* flag. The actual DWARF version is up to the toolchain.
 >
-> "CC_IS_CLANG &&" is unneeded. No functional change is intended.
+> The combination of GCC and GAS works fine, and Clang with the integrated
+> assembler is good too.
+>
+> The combination of Clang and GAS is tricky, but at least, the -g flag
+> works for Clang <=13, which defaults to DWARF v4.
+>
+> Clang 14 switched its default to DWARF v5.
+>
+> Now, CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT has the same issue as
+> addressed by commit 98cd6f521f10 ("Kconfig: allow explicit opt in to
+> DWARF v5").
+>
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y for Clang >= 14 and
+> GAS < 2.35 produces a ton of errors like follows:
+>
+>   /tmp/main-c2741c.s: Assembler messages:
+>   /tmp/main-c2741c.s:109: Error: junk at end of line, first unrecognized character is `"'
+>   /tmp/main-c2741c.s:109: Error: file number less than one
+>
+> Add 'depends on' to check toolchains.
 >
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
@@ -75,34 +94,23 @@ Applied to linux-kbuild.
 
 
 
->
 > (no changes since v1)
 >
->  lib/Kconfig.debug | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  lib/Kconfig.debug | 1 +
+>  1 file changed, 1 insertion(+)
 >
 > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index d3e5f36bb01e..f4b2165f24db 100644
+> index f4b2165f24db..cc90414d492e 100644
 > --- a/lib/Kconfig.debug
 > +++ b/lib/Kconfig.debug
-> @@ -264,7 +264,7 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  config DEBUG_INFO_DWARF4
->         bool "Generate DWARF Version 4 debuginfo"
+> @@ -253,6 +253,7 @@ config DEBUG_INFO_NONE
+>  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>         bool "Rely on the toolchain's implicit default DWARF version"
 >         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
 >         help
->           Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
->           if using clang without clang's integrated assembler, and gdb 7.0+.
-> @@ -276,7 +276,7 @@ config DEBUG_INFO_DWARF4
->  config DEBUG_INFO_DWARF5
->         bool "Generate DWARF Version 5 debuginfo"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
->         help
->           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
->           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+>           The implicit default version of DWARF debug info produced by a
+>           toolchain changes over time.
 > --
 > 2.34.1
 >
