@@ -2,174 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3C55FC334
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90975FC337
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiJLJld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S229693AbiJLJmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJLJla (ORCPT
+        with ESMTP id S229691AbiJLJmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:41:30 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3217A8782
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 02:41:25 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id j7so19415648ybb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 02:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QO5UAtsbTOA2QtV51cL1r5mzkqKAD5U2QTqmHsarUI4=;
-        b=MfZbYK3iHyCKKWuayMmcfb0qHNyba5LF4B5+66v9+iP4VN+eS1Cx94qouCzQH4x5fN
-         B10gmdNgerz27I2ZQ6CcoN+6mK9JLJ2IfMkkGQGBGxSFnDTc2yagQ1/SjBYPpKI61uCy
-         WVSWpnkMe4h+4d0VzB/28xJ6kZA2Iz0WGEAVMqtwk9PAD2BWOLNmPybg4TUCXWKBYXTj
-         d1hJREGBY2LVdPH1LqZKbkJvL529GXshPxv6MEv6J7YWU0+9wcy7egS1v/HTz634ZLnt
-         cwS6bZZvdm/hE3oAmQnvlQUEyxsZwX0rVKX6Hm1joB9ChVaD5BX7Xz6Jc+CjB0ETSJbE
-         fd4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QO5UAtsbTOA2QtV51cL1r5mzkqKAD5U2QTqmHsarUI4=;
-        b=lanBNKKxt7p9GWFL5lhs+usmm0sqyPkUdkBBoRjmyeP4tIrrOhb6nbOz0L0K6zvCFh
-         OmOXMj3vJep6iIyepT/+ymqFaEzbyGQUP8qk/f0MumuLO/EXlCBpJOXqUVkG0yfM9Fgp
-         zs5lXQBKKIQbdBebXzGeAN3kXxzFMDDkqQKD+cNyu50zD2COrnEfheR1wMcebtBFXmpF
-         LXVdSocOxpqH1ddnNcO04PKKCUeI8b6Si7O9RSgdq1oEypwjDXSvT0ReSEcAXuRot6mj
-         vuOEktiq31G+CR+GN4Pj4WfigoC03d1Uc92SjMa4x4DtDC8TbGg4CdMnbH/YmiRDgxVB
-         RE2A==
-X-Gm-Message-State: ACrzQf17rfmPY3Saqbt85Un+FAr1OvR74P5hWJFyJ2hAySenNnM3ls1j
-        XKonmtKIf2WZ7QsoviS7LH5qtbeYeWrIjM5GBcEpqyYG2vQ=
-X-Google-Smtp-Source: AMsMyM4zzhrpbPSbHUdsO+t9d+lTwYMUO9IV3rHROF7KFdsTtEIQDhlEpD3PTbKR/c8IiciPKdofHwUcXneCwSwnILg=
-X-Received: by 2002:a25:2415:0:b0:6be:5349:91c2 with SMTP id
- k21-20020a252415000000b006be534991c2mr28368390ybk.318.1665567684634; Wed, 12
- Oct 2022 02:41:24 -0700 (PDT)
+        Wed, 12 Oct 2022 05:42:46 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1333D42E52;
+        Wed, 12 Oct 2022 02:42:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VS.Jp8U_1665567757;
+Received: from 30.221.98.246(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VS.Jp8U_1665567757)
+          by smtp.aliyun-inc.com;
+          Wed, 12 Oct 2022 17:42:39 +0800
+Message-ID: <f8d3ae66-73a8-db89-c4c4-918610fb5f35@linux.alibaba.com>
+Date:   Wed, 12 Oct 2022 17:42:37 +0800
 MIME-Version: 1.0
-References: <20221011203621.1446507-1-Liam.Howlett@oracle.com>
-In-Reply-To: <20221011203621.1446507-1-Liam.Howlett@oracle.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 12 Oct 2022 11:41:13 +0200
-Message-ID: <CAKXUXMzVb_gMUOEZJbrysphVqAGD0yN=3A5+N348adrs8q1asQ@mail.gmail.com>
-Subject: Re: [PATCH] mmap: Fix copy_vma() failure path
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V6 0/6] RISC-V fixups to work with crash tool
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        anup@brainfault.org, heiko@sntech.de, guoren@kernel.org,
+        mick@ics.forth.gr, alexandre.ghiti@canonical.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, corbet@lwn.net,
+        Conor.Dooley@microchip.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 10:36 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+
+在 2022/8/12 上午12:17, Palmer Dabbelt 写道:
+> On Thu, 11 Aug 2022 00:41:44 PDT (-0700), 
+> xianting.tian@linux.alibaba.com wrote:
+>> I ever sent the patch 1 in the link:
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/ 
+>>
+>> And patch 2,3 in the link:
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/ 
+>>
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/ 
+>>
+>>
+>> This patch set just put these patches together, and with three new 
+>> patch 4, 5, 6.
+>> these six patches are the fixups for machine_kexec, kernel mode PC 
+>> for vmcore
+>> and improvements for vmcoreinfo, memory layout dump and fixup 
+>> schedule out issue
+>> in machine_crash_shutdown().
+>>
+>> The main changes in the six patchs as below,
+>> Patch 1: Fixup use of smp_processor_id() in preemptible context, to 
+>> cleanup
+>>          the console prints.
+>> Patch 2: Fixup to get correct kernel mode PC for kernel mode regs for 
+>> vmcore.
+>> Patch 3: Fixup schedule out issue in machine_crash_shutdown()
+>> Patch 4: Add modules to virtual kernel memory layout dump.
+>> Patch 5: Add VM layout, va bits, ram base to vmcoreinfo, which can 
+>> simplify
+>>          the development of crash tool as ARM64 already did
+>>          (arch/arm64/kernel/crash_core.c).
+>> Patch 6: Updates vmcoreinfo.rst for vmcoreinfo export for RISCV64.
+>>
+>> With these six patches(patch 2 is must), crash tool can work well to 
+>> analyze
+>> a vmcore. The patches for crash tool for RISCV64 is in the link:
+>> https://lore.kernel.org/linux-riscv/20220801043040.2003264-1-xianting.tian@linux.alibaba.com/ 
+>>
+>>
+>> ------
+>> Changes v1 -> v2:
+>>   1, remove the patch "Add a fast call path of crash_kexec()" from 
+>> this series
+>>      of patches, as it already applied to riscv git.
+>> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
+>>   2, add 'Reviewed-by' based on the comments of v1.
+>> Changes v2 -> v3:
+>>   use "riscv" instead of "riscv64" in patch 5 subject line.
+>> Changes v3 -> v4:
+>>   use "riscv" instead of "riscv64" in the summary of patch 5 subject 
+>> line.
+>> Changes v4 -> v5:
+>>   add a new patch "RISC-V: Fixup schedule out issue in 
+>> machine_crash_shutdown()"
+>> Changes v5 -> v6:
+>>   1, move "fixup" patches to the start of the patch set.
+>>   2, change patch 1, 2, 6's subject to make it tell more what it's 
+>> about.
+>>   3, add Fixes for patch 3.
+>>   4, adjuest the changes format for patch 6.
+>>
+>>
+>> Xianting Tian (6):
+>>   RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+>>   RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+>>   RISC-V: Fixup schedule out issue in machine_crash_shutdown()
+>>   RISC-V: Add modules to virtual kernel memory layout dump
+>>   RISC-V: Add arch_crash_save_vmcoreinfo support
+>>   Documentation: kdump: describe VMCOREINFO export for RISCV64
+>>
+>>  .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
+>>  arch/riscv/kernel/Makefile                    |  1 +
+>>  arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+>>  arch/riscv/kernel/crash_save_regs.S           |  2 +-
+>>  arch/riscv/kernel/machine_kexec.c             | 28 ++++++++++++++---
+>>  arch/riscv/mm/init.c                          |  4 +++
+>>  6 files changed, 89 insertions(+), 6 deletions(-)
+>>  create mode 100644 arch/riscv/kernel/crash_core.c
 >
-> The anon vma was not unlinked and the file was not closed in the failure
-> path when the machine runs out of memory during the maple tree
-> modification.  This caused a memory leak of the anon vma chain and vma
-> since neither would be freed.
->
-> Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Fixes: 524e00b36e8c (mm: remove rb tree.)
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
+> Thank.  I've taken the first 4 onto for-next, which is still targeted 
+> for 5.20, as they're fixes.  I'm not opposed to taking the 
+> documentation patch for this cycle as well, it just needs some 
+> going-over as the wording looks very odd (or at least it does to me 
+> right now, maybe I'm just still half asleep).  Patch 5 is a new 
+> feature, and given that it's being spun during the merge window it's 
+> too late.
 
-Here my detailed test report:
+Hi Palmer
 
-First, I ran the reproducer
-https://elisa-builder-00.iol.unh.edu/syzkaller-next/report?id=3113810b9abd3dfeb581759df93d3171d1a90f18
-on the latest commit from Linus' tree, i.e., commit 49da07006239.
-This resulted in the following kernel crash report on x86_64 defconfig
-+ syzkaller-recommended debug features:
+Do you plan to merge the two patch to Linux 6.1 to support crash tool 
+work?  thanks
 
-[  632.446911] kmemleak: 2 new suspected memory leaks (see
-/sys/kernel/debug/kmemleak)
-[  642.194797] kmemleak: 2 new suspected memory leaks (see
-/sys/kernel/debug/kmemleak)
+   RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+   RISC-V: Fixup get incorrect user mode PC for kernel mode regs
 
-BUG: memory leak
-unreferenced object 0xffff88800eab3220 (size 208):
-  comm "a.out", pid 411, jiffies 4295289355 (age 20.054s)
-  hex dump (first 32 bytes):
-    20 32 ab 0e 80 88 ff ff 00 00 00 00 00 00 00 00   2..............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<000000006344da94>] __anon_vma_prepare+0x288/0x520
-    [<0000000079cb6e3d>] __handle_mm_fault+0x1672/0x1a90
-    [<000000003165d13e>] handle_mm_fault+0x177/0x520
-    [<00000000d502ed60>] __get_user_pages+0x696/0x13b0
-    [<000000000c44f161>] populate_vma_page_range+0x242/0x320
-    [<00000000429a417a>] __mm_populate+0x1c6/0x3b0
-    [<00000000988f9924>] do_mlock+0x3ad/0x6f0
-    [<0000000099ba0e21>] __x64_sys_mlock2+0xba/0x100
-    [<00000000a302ea0e>] do_syscall_64+0x3a/0x90
-    [<0000000069487f88>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88800ef27ba0 (size 64):
-  comm "a.out", pid 411, jiffies 4295289357 (age 20.053s)
-  hex dump (first 32 bytes):
-    30 3c 94 09 80 88 ff ff 20 32 ab 0e 80 88 ff ff  0<...... 2......
-    78 3c 94 09 80 88 ff ff 78 3c 94 09 80 88 ff ff  x<......x<......
-  backtrace:
-    [<00000000ecf2fb6f>] anon_vma_clone+0xd3/0x590
-    [<00000000e1cdd897>] copy_vma+0x3ea/0x7f0
-    [<00000000ef59b15d>] move_vma.isra.48+0x8e6/0xf40
-    [<00000000cf84e8ba>] mremap_to.isra.49+0x4d0/0x6c0
-    [<00000000cf08a1f8>] __x64_sys_mremap+0x9cc/0xf20
-    [<00000000a302ea0e>] do_syscall_64+0x3a/0x90
-    [<0000000069487f88>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88800df86330 (size 208):
-  comm "a.out", pid 412, jiffies 4295296993 (age 12.417s)
-  hex dump (first 32 bytes):
-    30 63 f8 0d 80 88 ff ff 00 00 00 00 00 00 00 00  0c..............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<000000006344da94>] __anon_vma_prepare+0x288/0x520
-    [<0000000079cb6e3d>] __handle_mm_fault+0x1672/0x1a90
-    [<000000003165d13e>] handle_mm_fault+0x177/0x520
-    [<00000000d502ed60>] __get_user_pages+0x696/0x13b0
-    [<000000000c44f161>] populate_vma_page_range+0x242/0x320
-    [<00000000429a417a>] __mm_populate+0x1c6/0x3b0
-    [<00000000988f9924>] do_mlock+0x3ad/0x6f0
-    [<0000000099ba0e21>] __x64_sys_mlock2+0xba/0x100
-    [<00000000a302ea0e>] do_syscall_64+0x3a/0x90
-    [<0000000069487f88>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff888015235180 (size 64):
-  comm "a.out", pid 412, jiffies 4295296995 (age 12.415s)
-  hex dump (first 32 bytes):
-    00 fd 57 0d 80 88 ff ff 30 63 f8 0d 80 88 ff ff  ..W.....0c......
-    48 fd 57 0d 80 88 ff ff 48 fd 57 0d 80 88 ff ff  H.W.....H.W.....
-  backtrace:
-    [<00000000ecf2fb6f>] anon_vma_clone+0xd3/0x590
-    [<00000000e1cdd897>] copy_vma+0x3ea/0x7f0
-    [<00000000ef59b15d>] move_vma.isra.48+0x8e6/0xf40
-    [<00000000cf84e8ba>] mremap_to.isra.49+0x4d0/0x6c0
-    [<00000000cf08a1f8>] __x64_sys_mremap+0x9cc/0xf20
-    [<00000000a302ea0e>] do_syscall_64+0x3a/0x90
-    [<0000000069487f88>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-This is just as expected and as I reported it to Liam.
-
-Then, I applied this patch here, rebuilt the kernel and re-ran the
-reproducer. After roughly running the reproducer for 15 minutes, it
-did not show any kernel crash report. So, the patch seems to have
-solved the reported issue.
-
-Tested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-
-Thanks, Liam.
-
-Lukas
