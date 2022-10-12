@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6846A5FCEEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAA75FCEEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiJLX0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S229724AbiJLX0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiJLX0O (ORCPT
+        with ESMTP id S229711AbiJLX0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:26:14 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F417E7CAB6;
-        Wed, 12 Oct 2022 16:26:12 -0700 (PDT)
-Message-ID: <33d17f23-03cb-9bff-2e50-06ab0f597640@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665617171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5yl+IrN5JIQ6K70LZJo+pynH1PkVtppZ1pBc7ZksFtE=;
-        b=w6ezJSmwVtpssAQF1n7F/pKNNksCrEHY0OQ1FrnzUF3KMPxsi+r+vsiRLMmTeEUGndN1PN
-        Da/O4jzRf8uvdRiqAihiKSFJJoGy5G1hBNSatTQWmTnq8lb4+AA3jiGdX49xo7k7zAioOm
-        KJE8ao5VMLWa80iMGQBoEQ2dz4UwuPY=
-Date:   Wed, 12 Oct 2022 16:26:05 -0700
+        Wed, 12 Oct 2022 19:26:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A154A10A;
+        Wed, 12 Oct 2022 16:26:33 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CNJURK010887;
+        Wed, 12 Oct 2022 23:26:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CNPmxgW3pPlP+BkFNJfzz3SBIfQiNzpnFWL/syGAZ3w=;
+ b=YYT8oAslM5mllwEzPfjAVavKxoQkuy0RtVdCtZS6GOzj3XH2NOG/Boj3T7pF7udzr5ts
+ 7dNz3LZQqGpAZjIW8vEywLrhhlSalgDv+wFiKQjH8s1gKOG/8KrLOVmvDl6K6DJ09oR/
+ fVh2VC33jxOy6FkcNd5q/qk16ZQ81zTNagEcO8XhAtluyeGeSVp5Mlmrz/jrpP2pSeKC
+ tQVj2tdGtpb0nL6uYQ92/pos6XHgDE2wQQIor5XFTAW0C5pxbgXmRC9STMm+CtnIdPc8
+ 8puUrlEd4npN7bKB92uV3WvShVvCzU5bgICbh2eLdouic7GYFuseEFKsMLeTUpEvef6r bA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5x7g1ptt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 23:26:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29CNQLq8014442
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 23:26:21 GMT
+Received: from [10.38.241.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 12 Oct
+ 2022 16:26:17 -0700
+Message-ID: <e8d49510-4e1e-2327-2dcc-1274c2a70a2f@quicinc.com>
+Date:   Wed, 12 Oct 2022 16:26:15 -0700
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 6/6] selftest/bpf: Fix error usage of
- ASSERT_OK in xdp_adjust_tail.c
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 10/10] drm/msm/dsi: Prevent signed BPG offsets from
+ bleeding into adjacent bits
 Content-Language: en-US
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
- <20221011120108.782373-7-xukuohai@huaweicloud.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221011120108.782373-7-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221009184824.457416-1-marijn.suijten@somainline.org>
+ <20221009185316.462522-3-marijn.suijten@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221009185316.462522-3-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0whAIauxe-5GPU5WOKX9nvzxO4GX52Ed
+X-Proofpoint-ORIG-GUID: 0whAIauxe-5GPU5WOKX9nvzxO4GX52Ed
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_11,2022-10-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999
+ impostorscore=0 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210120146
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 5:01 AM, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
+
+
+On 10/9/2022 11:53 AM, Marijn Suijten wrote:
+> The bpg_offset array contains negative BPG offsets which fill the full 8
+> bits of a char thanks to two's complement: this however results in those
+> bits bleeding into the next field when the value is packed into DSC PPS
+> by the drm_dsc_helper function, which only expects range_bpg_offset to
+> contain 6-bit wide values.  As a consequence random slices appear
+> corrupted on-screen (tested on a Sony Tama Akatsuki device with sdm845).
 > 
-> xdp_adjust_tail.c calls ASSERT_OK() to check the return value of
-> bpf_prog_test_load(), but the condition is not correct. Fix it.
+> Use AND operators to limit these two's complement values to 6 bits,
+> similar to the AMD and i915 drivers.
 > 
-> Fixes: 791cad025051 ("bpf: selftests: Get rid of CHECK macro in xdp_adjust_tail.c")
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
->   tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-> index 009ee37607df..39973ea1ce43 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-> @@ -18,7 +18,7 @@ static void test_xdp_adjust_tail_shrink(void)
->   	);
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 46032c576a59..c5c2d70ac27d 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -1804,7 +1804,11 @@ static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc
+>   	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+>   		dsc->rc_range_params[i].range_min_qp = min_qp[i];
+>   		dsc->rc_range_params[i].range_max_qp = max_qp[i];
+> -		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i];
+> +		/*
+> +		 * Range BPG Offset contains two's-complement signed values that fill
+> +		 * 8 bits, yet the registers and DCS PPS field are only 6 bits wide.
+> +		 */
+> +		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i] & DSC_RANGE_BPG_OFFSET_MASK;
+>   	}
 >   
->   	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
-> -	if (ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
-> +	if (!ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
->   		return;
->   
->   	err = bpf_prog_test_run_opts(prog_fd, &topts);
-> @@ -53,7 +53,7 @@ static void test_xdp_adjust_tail_grow(void)
->   	);
->   
->   	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
-> -	if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-> +	if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-
-Ouch... ic.  It is why this test has been passing.
-
-
->   		return;
->   
->   	err = bpf_prog_test_run_opts(prog_fd, &topts);
-> @@ -90,7 +90,7 @@ static void test_xdp_adjust_tail_grow2(void)
->   	);
->   
->   	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
-> -	if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-> +	if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
->   		return;
->   
->   	/* Test case-64 */
-
+>   	dsc->initial_offset = 6144;		/* Not bpp 12 */
