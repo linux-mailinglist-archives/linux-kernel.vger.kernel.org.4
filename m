@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206495FC0B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA985FC0BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJLGfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S229761AbiJLGhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiJLGff (ORCPT
+        with ESMTP id S229745AbiJLGhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:35:35 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D5481FF;
-        Tue, 11 Oct 2022 23:35:32 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id f140so15664158pfa.1;
-        Tue, 11 Oct 2022 23:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UQnkMXwyxVQogDtNelDtTOOBNOEp5pQlgWybNCBtvM=;
-        b=SMGdNLxMn+aL3HJ35F+yBAVTjBucxlDC0FmNVcdxdT73OTtO1iMm59m8yv6YNbrFDw
-         ZCfyzfyjVrfz1zgWQxaWHTCqVAcMGyCU0Nq8QngmmHmtczoKCh4CaAM0AoCOQ2J3RVkn
-         CaBDSXH2pqsqYxWRjrdYKDavtEwfLXdkbd4rcaDqw48OiwjskXKPWakkf3jklcCii/sp
-         II5n6oEBRU1NCbsFYSngT921tSEy6hs/ezT9FhJ/e3sWQ8GPApwfRkxyxvVk2CCaxYCW
-         radMf/wZFprB0t2Ed28KB5YWA/egveLR8PXT4AEHjm1NKZ5abAvzPwuf0jp9wLdSGali
-         wnwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+UQnkMXwyxVQogDtNelDtTOOBNOEp5pQlgWybNCBtvM=;
-        b=CqRC1yK+PHe1B83IVdQyLGgbyzHdLBwkXgvIbJTToU6siBDxBHOYNWYgF5mNH0lpLU
-         16W0OGW7Sc/GMi7PbTHrPYssnNhIQSviuX5NkpUAiICc3+G0ij9T8xwmxTgty1DwqR9x
-         aN84FTc7pUiMO7EHqW1J+speRw/f/T2tlbQZVxWLLo3OZn9uv6a5syrcPj1WYWvRsCmq
-         +Wq6OFLda+RmEHMBZVb4KLgLiwxcmOKmCqGcpE2j1MCPVuy3Y7pb/p9EuBn7VIljkzUZ
-         e5PtXWgWs9sms/9igwz+vvQQ/ZyleapHyrdNuJYruHte1l+tusSDN2Eu89VN+G+nCxRg
-         PBNA==
-X-Gm-Message-State: ACrzQf1UBC8ETWGbCiAZ/hErcQ14veuNJFDI+aWX2ZAh5vD6/ZXIUqHA
-        WxlaiJdA4iNlmCDH0zdXauo=
-X-Google-Smtp-Source: AMsMyM6EQf8gdkpEXrDIlF3gSKpnu+PCerw953ixic+puLItEt8AO0aKVpgxedc06FDOLHrm5Orw9g==
-X-Received: by 2002:aa7:8e8c:0:b0:562:a549:efc5 with SMTP id a12-20020aa78e8c000000b00562a549efc5mr28646199pfr.20.1665556532091;
-        Tue, 11 Oct 2022 23:35:32 -0700 (PDT)
-Received: from Zbook.localdomain ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00174c0dd29f0sm9796491plh.144.2022.10.11.23.35.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 23:35:31 -0700 (PDT)
-From:   Yuwei Guan <ssawgyw@gmail.com>
-X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
-To:     paolo.valente@linaro.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuwei.Guan@zeekrlife.com
-Subject: [RESEND PATCH] block, bfq: remove unused variable for bfq_queue
-Date:   Wed, 12 Oct 2022 14:34:48 +0800
-Message-Id: <20221012063448.248-1-Yuwei.Guan@zeekrlife.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 12 Oct 2022 02:37:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9FFB03C0;
+        Tue, 11 Oct 2022 23:37:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39127B81964;
+        Wed, 12 Oct 2022 06:37:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B22C433D7;
+        Wed, 12 Oct 2022 06:37:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665556624;
+        bh=VpYQlndqycx0FJh72D35XMdOGmJBs1MOcPOJvcY/kAA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=JJUhNO4PN6dpLW2afeHD0HeOfZK/QIh8XQ6pcAaItqvVRdjdBr4b3vxqAG+XCengq
+         VERekJdkwMICbF1PcwVjrmnRpwqleb1sWEzGtiro0eyUyAfwtaOBgjpmDdlhfuXyyj
+         v/K7KI7aIx7X2Ymh6caJIpU6zyfdC2t7A8dQ1HErbJoQoMMBQNdlkADwtZHG/WPYAG
+         Mgh3cUww5DNf3L6QoJIhCQdc67cj5an/+1LoHqSyUn6KYFL1MEbXQteWhPxgOqYluB
+         6Qzovf0N6aisxt06WkzVNCSkCa43/xw/Lnxs0TWewsz6hHo8BYy6cOOFUURSkh+ztp
+         wuEoz3sUN5pQw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: carl9170: Remove -Warray-bounds exception
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221006192051.1742930-1-keescook@chromium.org>
+References: <20221006192051.1742930-1-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Christian Lamparter <chunkeey@googlemail.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166555661512.24262.8970482659659186700.kvalo@kernel.org>
+Date:   Wed, 12 Oct 2022 06:37:01 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-it defined in d0edc2473be9d, but there's nowhere to use it,
-so remove it.
+Kees Cook <keescook@chromium.org> wrote:
 
-Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
----
- block/bfq-iosched.h | 3 ---
- 1 file changed, 3 deletions(-)
+> GCC-12 emits false positive -Warray-bounds warnings with
+> CONFIG_UBSAN_SHIFT (-fsanitize=shift). This is fixed in GCC 13[1],
+> and there is top-level Makefile logic to remove -Warray-bounds for
+> known-bad GCC versions staring with commit f0be87c42cbd ("gcc-12: disable
+> '-Warray-bounds' universally for now").
+> 
+> Remove the local work-around.
+> 
+> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index 64ee618064ba..6bcef8e5871a 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -369,11 +369,8 @@ struct bfq_queue {
- 	unsigned long split_time; /* time of last split */
- 
- 	unsigned long first_IO_time; /* time of first I/O for this queue */
--
- 	unsigned long creation_time; /* when this queue is created */
- 
--	/* max service rate measured so far */
--	u32 max_service_rate;
- 
- 	/*
- 	 * Pointer to the waker queue for this queue, i.e., to the
+Patch applied to ath-next branch of ath.git, thanks.
+
+2577a58df244 wifi: carl9170: Remove -Warray-bounds exception
+
 -- 
-2.34.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20221006192051.1742930-1-keescook@chromium.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
