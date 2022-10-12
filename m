@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E495F5FC565
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642385FC562
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiJLMe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S229688AbiJLMec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiJLMep (ORCPT
+        with ESMTP id S229676AbiJLMe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:34:45 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F574E099;
-        Wed, 12 Oct 2022 05:34:43 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id z20so16073791plb.10;
-        Wed, 12 Oct 2022 05:34:43 -0700 (PDT)
+        Wed, 12 Oct 2022 08:34:28 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8D9C6960;
+        Wed, 12 Oct 2022 05:34:27 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a26so37673012ejc.4;
+        Wed, 12 Oct 2022 05:34:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFBHoOeG3ghGeuO274+7fL8QgYjk7OYjm0X789Rsduk=;
-        b=ea0YD8TEwyHxV2D0ffzgep/rqf+7nMi89namwACoS79RTxlEuwazEaupSaJqkcaIhP
-         W5BWcaB16bI2AalWWeM36/ijmi76MRUFY7aE+d/m83LdlAGuSeOdwL8B2R/V3bBq09D9
-         /p9L55f7HaKlONLqq8N1ZWKJ1q0pPVZalzfB9xgVrbqqbJ2UP80VxhzsQBeZQH8MG8W7
-         tj9vvM6YOCEFNMOLHKTXyAPP2I/jI2I5CkkRJ2eiLYyAO9I1UCsDYvOEbPrH+obRCv6y
-         yxfwjE9IZYrkCpzlbrZ5DKX6wqB79ZqyomP7C1u83f7ty7IfaFl692KGlOqQrxAxxL2x
-         NZCQ==
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9/RIE4UtfSnbb24YnWB8sjXppAAKMhorvgvYfIUj5k4=;
+        b=dBQz1uVSih9iBYNDG+HvDmLo2oLgdqcmQEq1z+bpjGgeQM2VbL6mvbFTVD8bQrRg8w
+         SiDoQTUOn4BCEALVWnpIxLPD4/QogY2rqMaNw+ZseI4XTqvSDEdmj+EdlTzAVPxvuUFX
+         SLg9sUHpH27bwUUp4wZDxlh9Hobs39km8D0RBUghVFePZh1v8bx356ApfBUGtBJrpllt
+         83ZikNmUH+iCo0LL3ZKoaDisVK5douU410IW0J0xSK20RxgIkQR/XiSY09xxp/aUBjBh
+         Mo71R3FtgBUjzsmevzYgpWXa6eCJ3btCkjFTjPYzdbj7WBTT+RpU+62Wo5mSbcuee5/H
+         yPZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NFBHoOeG3ghGeuO274+7fL8QgYjk7OYjm0X789Rsduk=;
-        b=Nks8kibAKPMbWVzc5b7e3chQ7QPe9pT5mFf8KpS5nuGkgLZN0Icmc7JP5owG14X3Zo
-         rSBGNVniCtbhID85y8oBQNW3zrWLjNO6C6vZ1kQxTCFkS1wHL+GELY/OP7mcNx9fdTER
-         Bd2gF/pTpDKH4BGkqqYUTMe+umDqC+JEW4WsdMu+eXWTEqSD5YvEktwtIA3q7NWoBkbo
-         bttLygGuTiDPFphhu4703qWl7CM8UcVL8WyQZfOOWV91FkuF9zjc6Kq2KJJQy/jPosNz
-         +sP7xQ703nzPj5ZPBE69YrCMg4eObTQjpB5upvWOZ3yg+8u2HpAGygRTjrvZsO7ltLhB
-         z1eA==
-X-Gm-Message-State: ACrzQf1SZm1d0f8lsSRoZu4zSDciezKRv8bF9YefqLL4oUsX4zqsML2S
-        H5Ojfmpv0JxMlIoC8nePbihqIgKZKhcyr1wW98s=
-X-Google-Smtp-Source: AMsMyM7vomdIe7mnxwPdFaZGIzuDJHCoALDasxWDvWlwqR7qabo9kulZv+0PAH7jr/hGViyB7QrdwnPv3s0QAACNN94=
-X-Received: by 2002:a17:90b:4a4d:b0:20d:4dc7:fa72 with SMTP id
- lb13-20020a17090b4a4d00b0020d4dc7fa72mr4814262pjb.86.1665578083191; Wed, 12
- Oct 2022 05:34:43 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9/RIE4UtfSnbb24YnWB8sjXppAAKMhorvgvYfIUj5k4=;
+        b=FJfzh6R60MOgI5P7ca2o4P1a4KBrT+WHXxuLMzn22fTW/3v1mia4LSsa0t4bN9vmaF
+         50VEum1vKkDCjVYFF9OGo+y381Mm663KnF+JgYJ7yKSqDxkb31hsNoegAHa82Yy9d/sG
+         EGbzCvOVj3u19kUW0rDTtdluwTgW877P01rc8z9+eqr5tl+PMcQNCK/iN4UfNwyhfV5w
+         Y8jwETlRVrHKphWSJ46m/UFidI1PTl1DT9OnKx1GpidrjYEwD/Ea01q+re2vhpx5uumX
+         f+hC4BdhdMQ6xPgWdBFk92z9XMgI90uDGrNqnJcuR9W/jdM5OuhJIrbxGgidNBhDOZMR
+         ihhA==
+X-Gm-Message-State: ACrzQf3Pta+WuQkz07EfwwqykaTtn/Xnsd++KwOelPPy8WV2o4+pwLyl
+        uBLycl4IsZD9GLj5P1kPvRk=
+X-Google-Smtp-Source: AMsMyM6iiVUpEIeWX1XO2f5hwEdoAqSvNflAm9iN3wbYxrZVZpcjBbuOvdp6juwchz1X6lRVeYFhVQ==
+X-Received: by 2002:a17:907:8a15:b0:782:e6da:f13d with SMTP id sc21-20020a1709078a1500b00782e6daf13dmr22750273ejc.152.1665578066004;
+        Wed, 12 Oct 2022 05:34:26 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.gmail.com with ESMTPSA id r10-20020a17090609ca00b00780636a85fasm1133082eje.221.2022.10.12.05.34.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 05:34:25 -0700 (PDT)
+Message-ID: <6346b451.170a0220.2c49b.3ebc@mx.google.com>
+X-Google-Original-Message-ID: <Y0a0Tkbsg40yFOq5@Ansuel-xps.>
+Date:   Wed, 12 Oct 2022 14:34:22 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pawel Dembicki <paweldembicki@gmail.com>,
+        Lech Perczak <lech.perczak@gmail.com>
+Subject: Re: [net PATCH 1/2] net: dsa: qca8k: fix inband mgmt for big-endian
+ systems
+References: <20221010111459.18958-1-ansuelsmth@gmail.com>
+ <Y0RqDd/P3XkrSzc3@lunn.ch>
+ <63446da5.050a0220.92e81.d3fb@mx.google.com>
+ <Y0azJlxthYXr7gMX@lunn.ch>
 MIME-Version: 1.0
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
- <CAPTztWYTGOb8ZQzfgThqJn+fyi4ZB8=JQQZi5_rUoDhdftKtvg@mail.gmail.com>
- <Y0WE/lEiNvl2ljo1@dhcp22.suse.cz> <CAPTztWZZOxtzdEm=wbOiL_VDPJuCaW0XVCvsdRpCHE+ph+5eZQ@mail.gmail.com>
- <Y0XEAUD9Ujcu/j8y@dhcp22.suse.cz>
-In-Reply-To: <Y0XEAUD9Ujcu/j8y@dhcp22.suse.cz>
-From:   Vinicius Petrucci <vpetrucci@gmail.com>
-Date:   Wed, 12 Oct 2022 07:34:06 -0500
-Message-ID: <CAEZ6=UOA6=ikSdxN662xyhT3wauGuqZReKLOb=_9EmSRckNr=Q@mail.gmail.com>
-Subject: Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Frank van der Linden <fvdl@google.com>,
-        Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0azJlxthYXr7gMX@lunn.ch>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,42 +85,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Well, per address range operation is a completely different beast I
-> would say. External tool would need to a) understand what that range is
-> used for (e.g. stack/heap ranges, mmaped shared files like libraries or
-> private mappings) and b) by in sync with memory layout modifications
-> done by applications (e.g. that an mmap has been issued to back malloc
-> request). Quite a lot of understanding about the specific process. I
-> would say that with that intimate knowledge it is quite better to be
-> part of the process and do those changes from within of the process
-> itself.
+On Wed, Oct 12, 2022 at 02:29:26PM +0200, Andrew Lunn wrote:
+> On Mon, Oct 10, 2022 at 02:44:46PM +0200, Christian Marangi wrote:
+> > On Mon, Oct 10, 2022 at 08:53:01PM +0200, Andrew Lunn wrote:
+> > > >  /* Special struct emulating a Ethernet header */
+> > > >  struct qca_mgmt_ethhdr {
+> > > > -	u32 command;		/* command bit 31:0 */
+> > > > -	u32 seq;		/* seq 63:32 */
+> > > > -	u32 mdio_data;		/* first 4byte mdio */
+> > > > +	__le32 command;		/* command bit 31:0 */
+> > > > +	__le32 seq;		/* seq 63:32 */
+> > > > +	__le32 mdio_data;		/* first 4byte mdio */
+> > > >  	__be16 hdr;		/* qca hdr */
+> > > >  } __packed;
+> > > 
+> > > It looks odd that hdr is BE while the rest are LE. Did you check this?
+> > > 
+> > >    Andrew
+> > 
+> > Yes we did many test to analyze this and I just checked with some
+> > tcpdump that the hdr is BE everytime.
+> 
+> That might actual make sense. The comment says:
+> 
+> > > >  /* Special struct emulating a Ethernet header */
+> 
+> And hdr is where the Ether type would be, which is network endian,
+> i.e. big endian.
+> 
+>      Andrew
 
-Sorry, this may be a digression, but just wanted to mention a
-particular use case from a project I recently collaborated on (to
-appear next month at IIWSC 2022:
-http://www.iiswc.org/iiswc2022/index.html).
+Yes that is my theory... hdr is in the ether type position so it's the
+only part that the switch treat in a standard way as it has to be like
+that or a dev creating a tagger driver would have no way to understand
+if the packet is autocast, in band ack or a simple packet so who created
+the fw for the switch had this concern in mind and stick to keeping at
+least the hdr in a standard way.
 
-We carried out a performance analysis of the latest Linux AutoNUMA
-memory tiering on graph processing applications. We noticed that hot
-pages cannot be properly identified by the reactive approach used by
-AutoNUMA due to irregular/random memory access patterns. Thus, as a
-POC, we implemented and evaluated a simple idea of having an external
-user-level process/agent that, based on prior profiling results of
-memory regions, could make more effectively memory chunk/object-based
-mappings (instead of page-level allocation/migration) in advance on
-either DRAM or CXL/PMEM (via mbind calls). This kind of tiering
-solution could deliver up to 2x more performance for graph analytics
-workloads. We plan to evaluate other workloads as well.
-
-Having a feature like "pidfd/process_mbind" would really simplify our
-user-level agent implementation moving forward, as right now we are
-adding a LD_PRELOAD wrapper (for signal handler) to listen and execute
-"mbind" requests from another process. If there's any other
-alternative solution to this already (via ptrace?), please let me
-know.
-
-Thank you!
-
-Vinicius Petrucci
-Principal Performance Engineer
-Micron Technology
+-- 
+	Ansuel
