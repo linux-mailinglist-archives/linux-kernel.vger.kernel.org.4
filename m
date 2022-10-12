@@ -2,160 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECB75FC1AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB545FC1B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiJLIOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S229888AbiJLIP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiJLIO3 (ORCPT
+        with ESMTP id S229773AbiJLIPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:14:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D4E9DDA7;
-        Wed, 12 Oct 2022 01:14:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BF1D61473;
-        Wed, 12 Oct 2022 08:14:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF244C433D6;
-        Wed, 12 Oct 2022 08:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665562467;
-        bh=LztmwvXdNCm1f+34a+megCcYhhpdDqS6aiTmicYdPF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kleJYJtMEas4yS4RIXkTvXxxmFB47lcONJVV4sKjv+gcua2rPdtmCSedjkBabAc5b
-         hURHMNdHWx7r4wowISznvsizi5Im+t49R31DXBrxGFTPbODdfTQ45XZDHhKYo+JvHL
-         t6QsJW8EDjUc9rhZsiuHIKhUNbaOtRdEwyO+hSXYPGCmYEKpWNusDs75tgGv3i7DGB
-         Cabm5X3AcR4lCdWi6S4ohFHrXaIkXFb5OiLHlboF0GIBH8p74FABaO+Qze8RI5WE1J
-         AOOcOtKMetuPMcewlepYLN3mlBduTOUDyUr3WWYASoOrEnFMPOJaqW2LeRPKXF8rL8
-         D1OfYmz8/fNBA==
-Date:   Wed, 12 Oct 2022 11:14:24 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y0Z3YH7buJHfpHsC@kernel.org>
-References: <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
- <Yz7s+JIexAHJm5dc@kernel.org>
- <Yz7vHXZmU3EpmI0j@kernel.org>
- <Yz71ogila0mSHxxJ@google.com>
- <Y0AJ++m/TxoscOZg@kernel.org>
- <Y0A+rogB6TRDtbyE@google.com>
- <Y0CgFIq6JnHmdWrL@kernel.org>
- <Y0GiEW0cYCNx5jyK@kernel.org>
- <Y0G085xCmFBxSodG@kernel.org>
- <20221010082507.GA3144879@chaop.bj.intel.com>
+        Wed, 12 Oct 2022 04:15:53 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E1C53D0C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:15:52 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c24so15558296pls.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ofda32LPZu7lWSl20UKRGtfT8GE9G8KpQ50I/r7L2UI=;
+        b=50kRz2RseqZqhVkCNVfryDTOcVDlb78vcfTZRWtKliNsYLIpHMkQVFWQiUkUk8+VfL
+         UJkpVl/VO7qi0d7YNYY49uYm+RPbsEu4AJk2UCmciWYHQ+8bLYUVecTxX98wp8REPF0h
+         muSZEhT70wNOWxYBCcFReMkfQBmqp5e0KFWlRoVPvDKUVEUIpuhHD7zSgv69v5bawY9u
+         WQCGPUyta1n53toSYZufxWQCicBF4MSkp/aBw0RkR1zvZ9qiA7El7gdSN7Gc1VTCPfqB
+         mcB6MatzXzSVdjgwWN7kJyeGmNRhOa7Uc/48Zz+AdpdH0whV2FJwY8iOXbU9i+Sr8VHX
+         07HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ofda32LPZu7lWSl20UKRGtfT8GE9G8KpQ50I/r7L2UI=;
+        b=SfjbBtW9uIveyMr4z8M4wstkZ3OhXXRuchcvtBLPxDTaUIqR/mrM6+AcGNsSjOwFlm
+         V909aGbTkFmvdzIyUQ72TK6JTj8OXuMY+pYoDz1vHzc7bttebWFV95R2hSn46PTuJxpT
+         +bfrZJLZBp6POvzW/VWJkgrjvSNvY+aMFyHRXXQJ0/NbF5jE/0oclr540L/HWO21FlWx
+         8bJa72Ma8922Im/q+epFCRj7xLsqjQC1ZpRkLozltynuIyt/91O1Y+Bmu/zB7sCESXOM
+         NENz56awuNdG/Jco1Nau3kJIsxRS+MTDnRJBUoEujLOOQiegW2qFFgVwrR3NQVxhs47+
+         hH1w==
+X-Gm-Message-State: ACrzQf3Tv3XwYUYZhvoW0rq5CWhov0eiYH/7pTC51isrHNByIeyn6l5H
+        jT0J3mut6e3CNvCYXHUMPkcrqQ==
+X-Google-Smtp-Source: AMsMyM73y4yvEpl2fqOEISK2r+hxSqUI6/frXGpX7FvzZS+Pautcan6/4Py1TGhC5o/9n0xQj6xRtg==
+X-Received: by 2002:a17:90b:4c48:b0:20d:5c55:b8a8 with SMTP id np8-20020a17090b4c4800b0020d5c55b8a8mr3793626pjb.207.1665562552127;
+        Wed, 12 Oct 2022 01:15:52 -0700 (PDT)
+Received: from C02FG34NMD6R.bytedance.net ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b0016c9e5f291bsm10211618plh.111.2022.10.12.01.15.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 01:15:51 -0700 (PDT)
+From:   Albert Huang <huangjie.albert@bytedance.com>
+To:     songmuchun@bytedance.com
+Cc:     "huangjie.albert" <huangjie.albert@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: hugetlb: support get/set_policy for hugetlb_vm_ops
+Date:   Wed, 12 Oct 2022 16:15:25 +0800
+Message-Id: <20221012081526.73067-1-huangjie.albert@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010082507.GA3144879@chaop.bj.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 04:25:07PM +0800, Chao Peng wrote:
-> On Sat, Oct 08, 2022 at 08:35:47PM +0300, Jarkko Sakkinen wrote:
-> > On Sat, Oct 08, 2022 at 07:15:17PM +0300, Jarkko Sakkinen wrote:
-> > > On Sat, Oct 08, 2022 at 12:54:32AM +0300, Jarkko Sakkinen wrote:
-> > > > On Fri, Oct 07, 2022 at 02:58:54PM +0000, Sean Christopherson wrote:
-> > > > > On Fri, Oct 07, 2022, Jarkko Sakkinen wrote:
-> > > > > > On Thu, Oct 06, 2022 at 03:34:58PM +0000, Sean Christopherson wrote:
-> > > > > > > On Thu, Oct 06, 2022, Jarkko Sakkinen wrote:
-> > > > > > > > On Thu, Oct 06, 2022 at 05:58:03PM +0300, Jarkko Sakkinen wrote:
-> > > > > > > > > On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
-> > > > > > > > > > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
-> > > > > > > > > > additional KVM memslot fields private_fd/private_offset to allow
-> > > > > > > > > > userspace to specify that guest private memory provided from the
-> > > > > > > > > > private_fd and guest_phys_addr mapped at the private_offset of the
-> > > > > > > > > > private_fd, spanning a range of memory_size.
-> > > > > > > > > > 
-> > > > > > > > > > The extended memslot can still have the userspace_addr(hva). When use, a
-> > > > > > > > > > single memslot can maintain both private memory through private
-> > > > > > > > > > fd(private_fd/private_offset) and shared memory through
-> > > > > > > > > > hva(userspace_addr). Whether the private or shared part is visible to
-> > > > > > > > > > guest is maintained by other KVM code.
-> > > > > > > > > 
-> > > > > > > > > What is anyway the appeal of private_offset field, instead of having just
-> > > > > > > > > 1:1 association between regions and files, i.e. one memfd per region?
-> > > > > > > 
-> > > > > > > Modifying memslots is slow, both in KVM and in QEMU (not sure about Google's VMM).
-> > > > > > > E.g. if a vCPU converts a single page, it will be forced to wait until all other
-> > > > > > > vCPUs drop SRCU, which can have severe latency spikes, e.g. if KVM is faulting in
-> > > > > > > memory.  KVM's memslot updates also hold a mutex for the entire duration of the
-> > > > > > > update, i.e. conversions on different vCPUs would be fully serialized, exacerbating
-> > > > > > > the SRCU problem.
-> > > > > > > 
-> > > > > > > KVM also has historical baggage where it "needs" to zap _all_ SPTEs when any
-> > > > > > > memslot is deleted.
-> > > > > > > 
-> > > > > > > Taking both a private_fd and a shared userspace address allows userspace to convert
-> > > > > > > between private and shared without having to manipulate memslots.
-> > > > > > 
-> > > > > > Right, this was really good explanation, thank you.
-> > > > > > 
-> > > > > > Still wondering could this possibly work (or not):
-> > > > > > 
-> > > > > > 1. Union userspace_addr and private_fd.
-> > > > > 
-> > > > > No, because userspace needs to be able to provide both userspace_addr (shared
-> > > > > memory) and private_fd (private memory) for a single memslot.
-> > > > 
-> > > > Got it, thanks for clearing my misunderstandings on this topic, and it
-> > > > is quite obviously visible in 5/8 and 7/8. I.e. if I got it right,
-> > > > memblock can be partially private, and you dig the shared holes with
-> > > > KVM_MEMORY_ENCRYPT_UNREG_REGION. We have (in Enarx) ATM have memblock
-> > > > per host mmap, I was looking into this dilated by that mindset but makes
-> > > > definitely sense to support that.
-> > > 
-> > > For me the most useful reference with this feature is kvm_set_phys_mem()
-> > > implementation in privmem-v8 branch. Took while to find it because I did
-> > > not have much experience with QEMU code base. I'd even recommend to mention
-> > > that function in the cover letter because it is really good reference on
-> > > how this feature is supposed to be used.
-> 
-> That's a good point, I can mention that if people find useful. 
+From: "huangjie.albert" <huangjie.albert@bytedance.com>
 
-Yeah, I did implementation for Enarx (https://www.enarx.dev/) using just
-that part as a reference. It has all the essentials what you need to
-consider when you are already using KVM API, and want to add private
-regions.
+implement these two functions so that we can set the mempolicy to
+the inode of the hugetlb file. This ensures that the mempolicy of
+all processes sharing this huge page file is consistent.
 
-BR, Jarkko
+In some scenarios where huge pages are shared:
+if we need to limit the memory usage of vm within node0, so I set qemu's
+mempilciy bind to node0, but if there is a process (such as virtiofsd)
+shared memory with the vm, in this case. If the page fault is triggered
+by virtiofsd, the allocated memory may go to node1 which  depends on
+virtiofsd.
+
+Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
+---
+ mm/hugetlb.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 0ad53ad98e74..ed7599821655 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4678,6 +4678,24 @@ static vm_fault_t hugetlb_vm_op_fault(struct vm_fault *vmf)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_NUMA
++int hugetlb_vm_op_set_policy(struct vm_area_struct *vma, struct mempolicy *mpol)
++{
++	struct inode *inode = file_inode(vma->vm_file);
++
++	return mpol_set_shared_policy(&HUGETLBFS_I(inode)->policy, vma, mpol);
++}
++
++struct mempolicy *hugetlb_vm_op_get_policy(struct vm_area_struct *vma, unsigned long addr)
++{
++	struct inode *inode = file_inode(vma->vm_file);
++	pgoff_t index;
++
++	index = ((addr - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
++	return mpol_shared_policy_lookup(&HUGETLBFS_I(inode)->policy, index);
++}
++#endif
++
+ /*
+  * When a new function is introduced to vm_operations_struct and added
+  * to hugetlb_vm_ops, please consider adding the function to shm_vm_ops.
+@@ -4691,6 +4709,10 @@ const struct vm_operations_struct hugetlb_vm_ops = {
+ 	.close = hugetlb_vm_op_close,
+ 	.may_split = hugetlb_vm_op_split,
+ 	.pagesize = hugetlb_vm_op_pagesize,
++#ifdef CONFIG_NUMA
++	.set_policy = hugetlb_vm_op_set_policy,
++	.get_policy = hugetlb_vm_op_get_policy,
++#endif
+ };
+ 
+ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
+-- 
+2.31.1
+
