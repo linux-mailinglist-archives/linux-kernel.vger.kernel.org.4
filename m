@@ -2,161 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45EF5FC984
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E4B5FC987
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiJLQw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
+        id S229979AbiJLQwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiJLQwY (ORCPT
+        with ESMTP id S229830AbiJLQwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:52:24 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56F2E3105
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:52:22 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id n7so16812820plp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MOsSdEMIqzmaXEJTvNGU9U8dwUA0w+tOWtkc3jQusuU=;
-        b=TT5w/mmSOL4m6p27LuU5cONBfB/8vRbE57RIgnkle1+vQO6iqd041rZVu/I3DwPOxU
-         zYriGzsEU/3Zfp1cKaw6OFXkKw0R0nSph2mLzxSv3FaLtu/TxSZQHUT/NapYNO1BbYBa
-         ZvwWIdtqQzxBGa0PdoNwArmHmrxCRRsFTJ1Eu6yw0vRelL0392dPxmXc3RXifTD7MY7k
-         /I9gQ0LghE19x27zD2SVnRBjwLqx1moAEoAA5VG1mWVnG5MbpNs4C/qKPwVEqvQoi0sB
-         zKCahlOINf4UlgsMvk2OEaORL8eqyoM9myjeetPgIdktqHj1LWvsOqr/GTgeuOjo18nN
-         0Zog==
+        Wed, 12 Oct 2022 12:52:46 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E3DE0729;
+        Wed, 12 Oct 2022 09:52:45 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id l5so19702023oif.7;
+        Wed, 12 Oct 2022 09:52:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MOsSdEMIqzmaXEJTvNGU9U8dwUA0w+tOWtkc3jQusuU=;
-        b=mks2HX84UP1nFfKi86/V8vOMCL+OOhx5D78tWW4IM1QpDvQt9Op03F2S5N+iqH6tCJ
-         YhM07cI6YQbUq8GjyKwsuG487TbExxKQzbiCH+V9vEzdHS7tU9C1AfbhUIZqoiBdOI/Y
-         qs3lSoSzqNIkFp+amWhcqAEUTjU7FnCSvnU3fTbArFYR6Gr8P9Sk+8cqSaeIuv8NzWRk
-         jDlF0V0u7zXie1w5YTA3uKWbxwdbgYzoljkxLXheF4Bh7O9xYvIQTFbRkGk1OvV11+uT
-         o07pCV1P2WfONcjDSb3L+nReiuaj4gAlP5pQynhPa9zvGT+Lu8D1cJhlSC+39cbHiAmS
-         QkLw==
-X-Gm-Message-State: ACrzQf17cb20IJh3oiNR7/F5Df1qTPb3QQf+IK04NVOpCxqFBJewtx0Z
-        9Pdmsr4940E1I3rYz1cWK/js6Q==
-X-Google-Smtp-Source: AMsMyM7qJZXDgn3nv0ZoJYxXuNana0IUjpv7TwoHaQul1TAFM2JgYZO8spd6F7tXGY006EDxQnIwvQ==
-X-Received: by 2002:a17:903:2594:b0:17c:6117:2434 with SMTP id jb20-20020a170903259400b0017c61172434mr31144511plb.135.1665593542028;
-        Wed, 12 Oct 2022 09:52:22 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w196-20020a6282cd000000b00553d573222fsm67015pfd.199.2022.10.12.09.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 09:52:21 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 16:52:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] KVM: selftests: Test Hyper-V invariant TSC control
-Message-ID: <Y0bwwfuO/iubQDPH@google.com>
-References: <20220922143655.3721218-1-vkuznets@redhat.com>
- <20220922143655.3721218-7-vkuznets@redhat.com>
- <Y0XGuk4vwJBTU9oN@google.com>
- <87v8op6wq3.fsf@ovpn-194-196.brq.redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S/5xq2x209F1HQNndofzRRLO7+fGWFD7vQy4M5xyyDo=;
+        b=1gVhmmi6hlg5BVqoQbRfIzeiSW56V1QoPdbjP0jLFKLGCxLzQ9s+77DVbeaXiXENMt
+         gnsYbrdVnbffsNpxYdCXDQsgxeYT9NW741tzW8SDhWka6twuyZCOA2XINn7398QRJy1b
+         iUukZisJpZ1/2akPQNMaEl3nL60pZXsAp/juPajX4Q08hOB4bdx+g6dTQoyWrgkqqzzi
+         Yx+gF8IGvfaTF9BqZckCPkB0pnd9CH3Ft547UTvJC3JodeablpUiV7uoMPkfH1wpO90V
+         78t1UA5JbJvH1Q0QVyn63aBzrfprvdYR+nyBqvPWP2+f/+4lUDRzAGOzQ/H4GTf35bti
+         i3Kw==
+X-Gm-Message-State: ACrzQf02GEma37xa9f1zq14AnnZXTaIrqmcFhwEZn4DJGDsirG6cO/h/
+        uU9/ZpAosSpnhvL0fSR59NUTrFvGcV35PsN6XqY=
+X-Google-Smtp-Source: AMsMyM43MdzORV1T5jtpSttpjtA28n05iNg+hBMk1ZV5r23rVBY1RkUq+3J9Wn0elJUoaksJBoCR3qAtncnR0kHmL/E=
+X-Received: by 2002:a05:6808:1a09:b0:350:107b:f89a with SMTP id
+ bk9-20020a0568081a0900b00350107bf89amr2644451oib.218.1665593564509; Wed, 12
+ Oct 2022 09:52:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8op6wq3.fsf@ovpn-194-196.brq.redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221012143857.48198-1-james.clark@arm.com>
+In-Reply-To: <20221012143857.48198-1-james.clark@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 12 Oct 2022 09:52:33 -0700
+Message-ID: <CAM9d7chCQRKwFoQ5OOXzqMvu5t9HamS3z9DdgaDgqCjPiD8G2A@mail.gmail.com>
+Subject: Re: [PATCH] perf: Fix missing raw data on tracepoint events
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Thu, Sep 22, 2022, Vitaly Kuznetsov wrote:
-> >> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> >> index d4bd18bc580d..18b44450dfb8 100644
-> >> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> >> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-> >> @@ -46,20 +46,33 @@ struct hcall_data {
-> >>  
-> >>  static void guest_msr(struct msr_data *msr)
-> >>  {
-> >> -	uint64_t ignored;
-> >> +	uint64_t msr_val = 0;
-> >>  	uint8_t vector;
-> >>  
-> >>  	GUEST_ASSERT(msr->idx);
-> >>  
-> >> -	if (!msr->write)
-> >> -		vector = rdmsr_safe(msr->idx, &ignored);
-> >> -	else
-> >> +	if (!msr->write) {
-> >> +		vector = rdmsr_safe(msr->idx, &msr_val);
-> >
-> > This is subtly going to do weird things if the RDMSR faults.  rdmsr_safe()
-> > overwrites @val with whatever happens to be in EDX:EAX if the RDMSR faults, i.e.
-> > this may yield garbage instead of '0'.  Arguably rdmsr_safe() is a bad API, but
-> > at the same time the caller really shouldn't consume the result if RDMSR faults
-> > (though aligning with the kernel is also valuable).
-> >
-> > Aha!  Idea.  Assuming none of the MSRs are write-only, what about adding a prep
-> > patch to rework this code so that it verifies RDMSR returns what was written when
-> > a fault didn't occur.
-> >
-> 
-> There is at least one read-only MSR which comes to mind:
-> HV_X64_MSR_EOI.
+On Wed, Oct 12, 2022 at 7:39 AM James Clark <james.clark@arm.com> wrote:
+>
+> Since commit 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+> raw data is not being output on tracepoints due to the PERF_SAMPLE_RAW
+> field not being set. Fix this by setting it for tracepoint events.
+>
+> This fixes the following test failure:
+>
+>   perf test "sched_switch" -vvv
+>
+>    35: Track with sched_switch
+>   --- start ---
+>   test child forked, pid 1828
+>   ...
+>   Using CPUID 0x00000000410fd400
+>   sched_switch: cpu: 2 prev_tid -14687 next_tid 0
+>   sched_switch: cpu: 2 prev_tid -14687 next_tid 0
+>   Missing sched_switch events
+>   4613 events recorded
+>   test child finished with -1
+>   ---- end ----
+>   Track with sched_switch: FAILED!
+>
+> Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-I assume s/read-only/write-only since it's EOI?
+Ouch.. thanks for the fix.
 
-> Also, some of the MSRs don't preserve the written value,
-> e.g. HV_X64_MSR_RESET which always reads as '0'.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Hrm, that's annoying.
+Thanks,
+Namhyung
 
-> I do, however, like the additional check that RDMSR returns what was
-> written to the MSR, we will just need an additional flag in 'struct
-> msr_data' ('check_written_value' maybe?).
 
-Rather than force the testcase to specify information that's intrinsic to the MSR,
-what about adding helpers to communicate the types?  E.g.
-
-        if (msr->write)
-                vector = wrmsr_safe(msr->idx, msr->write_val);
-
-        if (!vector && !is_write_only_msr(msr->idx))
-                vector = rdmsr_safe(msr->idx, &msr_val);
-
-        if (msr->fault_expected)
-                GUEST_ASSERT_2(vector == GP_VECTOR, msr->idx, vector);
-        else
-                GUEST_ASSERT_2(!vector, msr->idx, vector);
-
-	if (is_read_zero_msr(msr->idx))
-		GUEST_ASSERT_2(msr_val == 0, msr_val, 0);
-	else
-		GUEST_ASSERT_2(msr_val == msr->write_val, msr_val, msr->write_val);
-
-I think that'd make the code a bit less magical and easier to understand for folks
-that aren't familiar with Hyper-V.  The number of special MSRs is likely very small,
-so the helpers should be trivial, e.g.
-
-static bool is_write_only_msr(uint32_t msr)
-{
-	return msr == HV_X64_MSR_EOI;
-}
-
-static bool is_read_zero_msr(uint32_t msr)
-{
-	return msr == HV_X64_MSR_RESET || msr == ???;
-}
+> ---
+>  kernel/events/core.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index b981b879bcd8..824c23830272 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -9759,6 +9759,7 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+>
+>         perf_sample_data_init(&data, 0, 0);
+>         data.raw = &raw;
+> +       data.sample_flags |= PERF_SAMPLE_RAW;
+>
+>         perf_trace_buf_update(record, event_type);
+>
+> --
+> 2.28.0
+>
