@@ -2,61 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368875FC0CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674A05FC0D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJLGlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
+        id S229717AbiJLGmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiJLGlH (ORCPT
+        with ESMTP id S229605AbiJLGmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:41:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236E721E28;
-        Tue, 11 Oct 2022 23:41:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CCD411F37C;
-        Wed, 12 Oct 2022 06:41:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665556864; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nl+ySH2Hy0TmPdpCGvYlAGDj4zROtpYB8MQhL5sxvts=;
-        b=iIj/Nho/6liYpKPdsFxn6Pon/ZLel4ZyIrkSX894lB0maBuhIeZhEbE7pHwFf1KUCJvuKZ
-        UKV/JZ/TIwldLkpCHsYjBEKcuPuBKtWnOKl20Pv4wjkW4OLIuYq7/KnW9d8MKMvgxFoU1t
-        OEpeuYnu6rVDBRC3hCHEvjUU8tkXMt8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8260F13ACD;
-        Wed, 12 Oct 2022 06:41:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ypDhHYBhRmMKKwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 12 Oct 2022 06:41:04 +0000
-Message-ID: <ef118620-486d-072a-4f0d-12a9757c6c4b@suse.com>
-Date:   Wed, 12 Oct 2022 08:41:04 +0200
+        Wed, 12 Oct 2022 02:42:03 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F774D818;
+        Tue, 11 Oct 2022 23:42:03 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C5np1W030643;
+        Wed, 12 Oct 2022 06:41:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MA5guw7a0c13JePpvNEp5lk8mucRGKkZURE+DJS4VhU=;
+ b=Dv4oywekiMovuFhdZ5hLhjfi3MXw9X+az60i6JeD81A++Bu+lyXg+fRVG1xhQoLKBEeC
+ aJq/m+6a0OBbMejfSikAVJHVwDXPKSF9z6zZXKl5C4vOGrKY3x/JhFXYhuZQc17fTxdQ
+ SplVkCBA63eT/Kio3PWNdCQRBJBu8pQ5wThNBMTVF1gm2mtY1dA+zU/VOpnijIa9CpRX
+ sFbmk6y4HaKi8mO3IHWfHU8D7mbrnX1FVFvb8SOWeX10rvq4CFDU9FvLIct1kMXCrRjB
+ /fvfTczQXzL1ar4xHpPSccj30LceGtHCvhYapj0DkoZnPondhfM8bKfqO5UXRHkhzgXc 7A== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5e7fhdu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 06:41:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29C6fsMr015783
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 06:41:54 GMT
+Received: from [10.110.0.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 23:41:49 -0700
+Message-ID: <3e2a3f01-0283-1c9c-9d12-c171fc381813@quicinc.com>
+Date:   Wed, 12 Oct 2022 12:11:45 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] xen: Kconfig: Fix spelling mistake "Maxmium" -> "Maximum"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V14 1/7] dt-bindings: Added the yaml bindings for DCC
 Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221007203500.2756787-1-colin.i.king@gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221007203500.2756787-1-colin.i.king@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------CONNMaY0pNYVsgt9bIBLQVdX"
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1664383851.git.quic_schowdhu@quicinc.com>
+ <e320555b2075c94946ef3f9c78732dc84ba39449.1664383851.git.quic_schowdhu@quicinc.com>
+ <4d0f7a01-1995-1b1e-40b9-125c3447b8c7@kernel.org>
+ <78b42aab-164a-7fe6-fec5-77f52199c641@quicinc.com>
+ <e028ad6a-9687-5089-4938-e982764b9c58@kernel.org>
+ <a1a79910-c697-3660-ddf8-5f4f164c1b34@quicinc.com>
+In-Reply-To: <a1a79910-c697-3660-ddf8-5f4f164c1b34@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: p6yeGIy7_WJbPpgCJyUyyOwJplW7Bg2r
+X-Proofpoint-GUID: p6yeGIy7_WJbPpgCJyUyyOwJplW7Bg2r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_03,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=927 spamscore=0
+ impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210120043
 X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,109 +90,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------CONNMaY0pNYVsgt9bIBLQVdX
-Content-Type: multipart/mixed; boundary="------------l9r5jK4t18TqVqBB10oBu8pm";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Colin Ian King <colin.i.king@gmail.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- xen-devel@lists.xenproject.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <ef118620-486d-072a-4f0d-12a9757c6c4b@suse.com>
-Subject: Re: [PATCH] xen: Kconfig: Fix spelling mistake "Maxmium" -> "Maximum"
-References: <20221007203500.2756787-1-colin.i.king@gmail.com>
-In-Reply-To: <20221007203500.2756787-1-colin.i.king@gmail.com>
 
---------------l9r5jK4t18TqVqBB10oBu8pm
-Content-Type: multipart/mixed; boundary="------------r0dqWpWPY0zF3ozRRlcSDj5t"
 
---------------r0dqWpWPY0zF3ozRRlcSDj5t
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 10/12/2022 11:27 AM, Souradeep Chowdhury wrote:
+> 
+> On 10/11/2022 6:50 PM, Krzysztof Kozlowski wrote:
+>> On 30/09/2022 02:59, Souradeep Chowdhury wrote:
+>>> Also the ./script/maintainers.pl gives the below output
+>>>
+>>> Souradeep Chowdhury<quic_schowdhu@quicinc.com>  (maintainer:DCC QTI
+>>> DRIVER,in file)
+>>> Andy Gross<agross@kernel.org>  (maintainer:ARM/QUALCOMM SUPPORT)
+>>> Bjorn Andersson<andersson@kernel.org>  (maintainer:ARM/QUALCOMM SUPPORT)
+>>> Konrad Dybcio<konrad.dybcio@somainline.org>  (reviewer:ARM/QUALCOMM SUPPORT)
+>>> Rob Herring<robh+dt@kernel.org>  (maintainer:OPEN FIRMWARE AND FLATTENED
+>>> DEVICE TREE BINDINGS)
+>>> Krzysztof Kozlowski<krzysztof.kozlowski+dt@linaro.org>  (maintainer:OPEN
+>>> FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+>>> linux-arm-msm@vger.kernel.org  (open list:DCC QTI DRIVER)
+>>> devicetree@vger.kernel.org  (open list:OPEN FIRMWARE AND FLATTENED DEVICE
+>>> TREE BINDINGS)
+>>> linux-kernel@vger.kernel.org  (open list)
+>>>
+>>> Will send out the next version accordingly, let me know in case of any
+>>> further concerns.
+>> v15 and v16 was still not sent according to what you wrote above...
+> 
+> I have copied all of the above in the mailing list, also I have 
+> implemented all the previous comments.
+> 
+> [PATCH V16 0/7] soc: qcom: dcc: Add driver support for Data Capture and 
+> Compare unit(DCC) - Souradeep Chowdhury (kernel.org) 
+> <https://lore.kernel.org/lkml/cover.1664805059.git.quic_schowdhu@quicinc.com/#r>
+> 
+> Can you please let me know what is expected here so that I can correct 
+> in the next version accordingly?
 
-T24gMDcuMTAuMjIgMjI6MzUsIENvbGluIElhbiBLaW5nIHdyb3RlOg0KPiBUaGVyZSBpcyBh
-IHNwZWxsaW5nIG1pc3Rha2UgaW4gYSBLY29uZmlnIGRlc2NyaXB0aW9uLiBGaXggaXQuDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBDb2xpbiBJYW4gS2luZyA8Y29saW4uaS5raW5nQGdtYWls
-LmNvbT4NCg0KUHVzaGVkIHRvIHhlbi90aXAuZ2l0IGZvci1saW51cy02LjENCg0KDQpKdWVy
-Z2VuDQoNCg==
---------------r0dqWpWPY0zF3ozRRlcSDj5t
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Apologies for sending the previous mail in html format.
+My comments are as above.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------r0dqWpWPY0zF3ozRRlcSDj5t--
-
---------------l9r5jK4t18TqVqBB10oBu8pm--
-
---------------CONNMaY0pNYVsgt9bIBLQVdX
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNGYYAFAwAAAAAACgkQsN6d1ii/Ey/Z
-ngf+NCEIB+X69O6S3Ke3drn46e4Z+STRc1QHK+8BhY3MiO63AP1ym2u5mQ+LuGuniwP7D+/qlwa1
-AZ2qa0VOLxLbpjJwtiVTTNx4Xj98sMKzfs88ErBkSvj5S00fMX9s4dj8yeF8CydovLjyq4bLp9rZ
-EQ64Y+B7AUopfmynbK/JuAM7QWxC+p45sFPzJTSwEbM2kA/Pp2ARQZQmfulScL108ywPG0LThSa1
-ZlTPIFFOtWOSW+TOypMk/SvLZXuPJ67B85awtH0eAx0bSsXlsDke1e0o3zKNqrDNZ/PMVGnrmGSj
-U0hK96GDeJyMwTEULMi7CRnsoR7t2ncpLjJZs8mtlQ==
-=/AKw
------END PGP SIGNATURE-----
-
---------------CONNMaY0pNYVsgt9bIBLQVdX--
+> 
+>> Best regards,
+>> Krzysztof
+>>
