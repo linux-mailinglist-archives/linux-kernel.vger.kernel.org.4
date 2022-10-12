@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790C55FBE92
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 02:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A895FBE91
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 02:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJLAB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 20:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S229678AbiJLABy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 20:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJLABu (ORCPT
+        with ESMTP id S229511AbiJLABt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 20:01:50 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA70A4B93;
-        Tue, 11 Oct 2022 17:01:48 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id l5so17588424oif.7;
-        Tue, 11 Oct 2022 17:01:48 -0700 (PDT)
+        Tue, 11 Oct 2022 20:01:49 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212FCA487F;
+        Tue, 11 Oct 2022 17:01:46 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1321a1e94b3so17836385fac.1;
+        Tue, 11 Oct 2022 17:01:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3fAeho2Eqr7WdY5Q6r5sPrZ3FQPcP2pCR4gq4JvRwbI=;
-        b=nfdlyCmhao/rxgjsbIPYfrDWDqVs7a4r586FErdMxfEOL4KCti9lw9/f+vljfU4g4L
-         JPNOU/D1Xz8dJ6v+8jeo94m+DFQ0cgj4rmHuuvTvE50NFbSLoDCJFz1QYV0vHDFt3mUw
-         XzKaybwkfKPlQpPNEIC3WR8nhn6jIlw348LMQuVDJ0lSxhg6HRidXStAlDbXXngV/ENB
-         oxWYUQe8Q1a+ilEokUuy0qwUUryrEmhqEW4rD0MmsxugAtdGDiCulNJUMllEtsrWIydf
-         p2qoNeROKNlqAEgC6bcZrNZhF6fRTbKwUHExI5XWStQHFL+uex8rl3jTxxUo13rfWZnb
-         FN1g==
-X-Gm-Message-State: ACrzQf3yvJyZOUKafbQ3X5QI9Q1Z8XZNEHXcg3tuY9C3A6D1lbtTvVhs
-        mzIc1abugx1LmpZm9OKQ9Q==
-X-Google-Smtp-Source: AMsMyM4LTOIea7y4B4rEJ6rNmLa3jrLz79VUZhaMvh2WocECH31DMUxRctr4Q7bA59RLauQhLeY9Gw==
-X-Received: by 2002:a05:6808:1911:b0:354:cede:ec0d with SMTP id bf17-20020a056808191100b00354cedeec0dmr781400oib.161.1665532907100;
-        Tue, 11 Oct 2022 17:01:47 -0700 (PDT)
+        bh=Yu7+tEZ6aYM6e8Y/GPKskmbmDxOQCtazL2x0VzwdFp8=;
+        b=XJm9xz6NTNNYRMh6wiFIppaZ9fXy28rpBqpQZpA0aFmcnOzIEAqk9GRRJ7pObR35jR
+         w4PhqzP0IVKMHs6E+T6EAXDlusQa2n1Uxf1sxHIsnsKpIpVBmvBnxpa8jiAp5TPxTA4W
+         /S7uQd1isocxy8tweEUKb2e09GceubwfBIA+jlDQBmGDbRttclWW4W2dOp6m8dWuzorg
+         7dR2QlHiia4B9bDcAJYQLXDCdRu/mrQSrlL8KNk+MKfCgO4wFysEH7hqX+ojKPPmqSHh
+         /kf1jDQsbbKN23Lu59Kr58MD/v9Kv+kHllCiTSMuy0ZvCnCsmYWSU/2kjasNH8CaP6n7
+         HICw==
+X-Gm-Message-State: ACrzQf0C/eRIoHHvHzxNN2f3k+5fhCwg6wjLjmGzHp1PITcWkcAUtfIl
+        rLpJn+4iEaNEZmD4V0IJzg==
+X-Google-Smtp-Source: AMsMyM6p0HBUTyPXJ8P4LZSlHr46dkxleO8f8BdMw6orJHncRRJCeYkVoVfsQ9bAvCRazLwTfJ6WNA==
+X-Received: by 2002:a05:6870:3415:b0:133:197:3ca3 with SMTP id g21-20020a056870341500b0013301973ca3mr1000187oah.115.1665532905521;
+        Tue, 11 Oct 2022 17:01:45 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v24-20020a4ac018000000b00476995b5f0fsm423357oop.9.2022.10.11.17.01.45
+        by smtp.gmail.com with ESMTPSA id w22-20020a9d6756000000b00661a38ebbdasm2330547otm.59.2022.10.11.17.01.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 17:01:46 -0700 (PDT)
-Received: (nullmailer pid 418290 invoked by uid 1000);
+        Tue, 11 Oct 2022 17:01:44 -0700 (PDT)
+Received: (nullmailer pid 418283 invoked by uid 1000);
         Wed, 12 Oct 2022 00:01:46 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Job Noorman <job@noorman.info>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221011190729.14747-2-job@noorman.info>
-References: <20221011190729.14747-1-job@noorman.info> <20221011190729.14747-2-job@noorman.info>
-Message-Id: <166553283105.416548.10912099366359324486.robh@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: touchscreen: add Himax hx83112b bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+In-Reply-To: <20221011184119.3754096-1-robh@kernel.org>
+References: <20221011184119.3754096-1-robh@kernel.org>
+Message-Id: <166553283000.416500.15587145212925837942.robh@kernel.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: Convert dmic-codec to DT schema
 Date:   Tue, 11 Oct 2022 19:01:46 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 19:08:06 +0000, Job Noorman wrote:
-> This patch adds device tree bindings for Himax 83112b touchscreen
-> devices.
+On Tue, 11 Oct 2022 13:41:19 -0500, Rob Herring wrote:
+> Convert the dmic-codec binding to DT schema format.
 > 
-> Signed-off-by: Job Noorman <job@noorman.info>
+> The '#sound-dai-cells' and 'sound-name-prefix' properties were not
+> documented, but are in use, so add them.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  .../input/touchscreen/himax,hx83112b.yaml     | 59 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.yaml
+>  .../devicetree/bindings/sound/dmic-codec.yaml | 55 +++++++++++++++++++
+>  .../devicetree/bindings/sound/dmic.txt        | 22 --------
+>  2 files changed, 55 insertions(+), 22 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/dmic-codec.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/dmic.txt
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -79,11 +83,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/input/touchscreen/himax,hx83112b.yaml#
-Error: Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.example.dts:28.30-31 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.example.dtb] Error 1
+Documentation/devicetree/bindings/sound/dmic-codec.example.dts:18:18: fatal error: dt-bindings/gpio.h: No such file or directory
+   18 |         #include <dt-bindings/gpio.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/sound/dmic-codec.example.dtb] Error 1
 make[1]: *** Waiting for unfinished jobs....
 make: *** [Makefile:1420: dt_binding_check] Error 2
 
