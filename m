@@ -2,68 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D555FBEA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 02:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0335FBEA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 02:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJLAXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 20:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S229694AbiJLA0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 20:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLAXp (ORCPT
+        with ESMTP id S229436AbiJLA0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 20:23:45 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243C7915FE
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 17:23:45 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id u12-20020a17090a410c00b0020b7d65a875so245940pjf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 17:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XAIQlfhQxtiJi8UMEPSh4ft6T3GSXHlCE4VlMzFLAmA=;
-        b=jnQWsqoj/L9+kkfPwOLqzTeb4pxdDPA3++KAqL6FCzRcC5K7/DR6dY7MvFvdGPoDV5
-         chiLW84esu/MImcZSvaeAP5AYkADNL4bFTPkFuOna20H/nfz0nlQlhke+RtSR8NqWfNI
-         UOAPtZ1ku47Gtxf5uvp1/1x3bgRZe4JNTLmMKE/CYb1+zKRt9k5o7eCOyIXVFiz1NVG+
-         sWsJRNiXdfRybflCJQPxtKxUtQT4T2faz9c4DdISQtUlnlozeFE5CYDvPjFWOXV+vgOR
-         3Js5R66z41iT1WjgAxZeEakH0Pl1J2OFA+8Zv4jsZG96WposnBG/4N4KlQZoTO5tP2hE
-         yTfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XAIQlfhQxtiJi8UMEPSh4ft6T3GSXHlCE4VlMzFLAmA=;
-        b=wQYdKy4yFfwbSfcgd6wnsyaZy0P5wN7K1i1qkTCjyGg28e2O1rXfRWxjTXe1MhoBKR
-         z6i77QRWjm7GkLdQH/+/3HCh05EPI7dePF4lmdzgXY3HVuhQaS51G/wshZ9SdwkTTYxu
-         sMcaeX/pdtc34Ct78xno+TRae6vyD2YHIb4o5y8XCQsO6pIAswm5+6DjZt/AkvEZn6ep
-         /y5FL+Af7KYUf2aa/YkbSN62ywJYT5zUmP63CF6Q7r2Xx/nBOxOKRo/wuX5klIFvdfUf
-         7idpebVlC383PODpqDAmtaBmk4l9SzbjeTQCh1lTn/8ybIAxylvfxIoSEIrI9EtiX5az
-         VXIw==
-X-Gm-Message-State: ACrzQf2H2qqm31dI4CHdOwhXuxCuH2j6Bj/sUA9uFLGpxWmcqtwb6f7j
-        rw73+qTANBv6iWjxZuMMq7B5dFIzzeL+XrlD9g==
-X-Google-Smtp-Source: AMsMyM4ST89r16LZrARpzsqKLu0H4+RyEaqFTqe5v5BiRRPOz7muxrWPOMJcdcehswQWkrxTq0hj4X0Yp4Lm+y9FGg==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:aa7:88c2:0:b0:562:6ca0:2f7a with SMTP
- id k2-20020aa788c2000000b005626ca02f7amr28100093pff.72.1665534224024; Tue, 11
- Oct 2022 17:23:44 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 00:23:22 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221012002323.2015637-1-dionnaglaze@google.com>
-Subject: [PATCH] virt/coco/sev-guest: Initialize err in handle_guest_request
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Tue, 11 Oct 2022 20:26:08 -0400
+X-Greylist: delayed 105953 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 17:26:03 PDT
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56DF7EFE8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 17:26:03 -0700 (PDT)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 747FA1003E3A2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 00:25:51 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id iPZGoEezs2FNCiPZHoGXNy; Wed, 12 Oct 2022 00:25:51 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=E+cIGYRl c=1 sm=1 tr=0 ts=6346098f
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=Qawa6l4ZSaYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nGTssDer9ZusJeYVUULlKNZ7pNC4oNVyeuAvEq5s8ck=; b=L/iGxK9LkgqkfG2kWiWl8ly9TB
+        C6hBdKcH2qfe09kTebf2vhl/QH89VQ3BdrPtLTiPi/eQvtJkJKhF0XumGlb1nTB1deNo2TSaeEjQL
+        jrn8ki3AFQ9EIAATqQ2cFAFkQazu+IpVPvRHA+L8UuW+ry6I3QUGIXvIFgbrpI+M37lx+esOI/E2p
+        qW+x080+EdyuI99PXa8MrfzJ270D8yKlVQzvlJGYJiSydWRQEIpgpyElmgadldltNY5jnlcPqrHBU
+        PD+vPe+EnJNIhLapSmN/fuoUJpmNTgapzeaqC0nAEvwyPVSQcJWvi/MKTw4s5Qtq4tG4UTBrdx9mP
+        VkuZIFGw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53450 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oiPZE-001BVA-ON;
+        Tue, 11 Oct 2022 18:25:48 -0600
+Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221010070330.159911806@linuxfoundation.org>
+In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <d54d833c-90c5-3047-5d27-70335c4158e8@w6rz.net>
+Date:   Tue, 11 Oct 2022 17:25:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oiPZE-001BVA-ON
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:53450
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 16
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,36 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The err variable may not be set in the call to snp_issue_guest_request,
-yet it is unconditionally written back to fw_err if fw_err is non-null.
-This is undefined behavior, and currently returns uninitialized kernel
-stack memory to user space.
+On 10/10/22 12:04 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.1 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- drivers/virt/coco/sevguest/sevguest.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/virt/coco/sevguest/sevguest.c b/drivers/virt/coco/sevguest/sevguest.c
-index 112c0458cbda..7a62bfc063fc 100644
---- a/drivers/virt/coco/sevguest/sevguest.c
-+++ b/drivers/virt/coco/sevguest/sevguest.c
-@@ -307,7 +307,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
- 				u32 resp_sz, __u64 *fw_err)
- {
--	unsigned long err;
-+	unsigned long err = 0;
- 	u64 seqno;
- 	int rc;
- 
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+Tested-by: Ron Economos <re@w6rz.net>
 
