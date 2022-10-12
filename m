@@ -1,143 +1,193 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37BD5FC2C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:14:29 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id A55C35FC2D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJLJOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S229926AbiJLJPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiJLJN7 (ORCPT
+        with ESMTP id S229827AbiJLJP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:13:59 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88370BC46D;
-        Wed, 12 Oct 2022 02:13:53 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a13so23641413edj.0;
-        Wed, 12 Oct 2022 02:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2kW5MauxS98pwWXxx4M/kTdbKrwsWsdXlDypkIhrENA=;
-        b=HC3zbbp+P9LikbMl5NHcR5Xlp2Jr32+oOCPK5NKcvSaEv+Hc8CB6hJ2v3zbeXI9HoE
-         8hBRhgAHifaM9NDHaglA+LqT8c+gm24cFgKF6iyb6LHqlspso3/U1TyhZF1G4GtX4o71
-         lbY/wC2Ko+RQa9krVsVe3qjv6eLyrstVkH/v1HXGIyqCQhmqXQvVy0qQA1GkjCzS/DfG
-         WMP3ahZIxZqSGbgz5Iu6dAcWScOkT+mfYpLN78AcRfuvKFyp1WwaFCuhZnrRq1zUHmJN
-         gddhem/P1u29YWHQaC+Cu1qDl8cYReIRaPET2HFgKQw+gHJYSM3pPlhamJTTT14PKh/l
-         Y6Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2kW5MauxS98pwWXxx4M/kTdbKrwsWsdXlDypkIhrENA=;
-        b=oRqw+Wv9iOjSQvk2HFn1hk05Lrf/Hg9PWnFobLfz50P0yDkdS770QoU2xnbBLniZLv
-         O1VYq/c9bXFzBuziwdSU8WrMUupmTMFouxvDyIjwmwx5O9pesZrb/EpMTyzQEluEnOr6
-         GSbipmJQRC8VaMdu5s4F1QXIj7T/d10wU1ZhUj0TQmFdvxy52WBaSnAp0XZet4v0C3QI
-         X8XhSsyjofpsBeDSts04Nty7anEOyQtMl/R2dvxGMbjD2FaKFw+en9jRtjqHYAIKtobT
-         pKs2yVX1dqXiSRTFkOy18L9wpd6gDmkQoqIjIEa5EbuvTm5xaamVXjmwXEWwIUUyFh7F
-         arxw==
-X-Gm-Message-State: ACrzQf2mfa4agCGOo18h/uEgLYLBBYXy7YbtkmzrjXYjGNycamQFV97S
-        8Tp1OoRIZfbEBzVTycjANVQ=
-X-Google-Smtp-Source: AMsMyM5ZzG8H5P8U3mM7yxBrerHruhHdjGDmY2mYKH037ZFXENct6Wq3iJID5vNgwKT4r1tIqshkDA==
-X-Received: by 2002:a05:6402:1bc6:b0:45c:7611:d86e with SMTP id ch6-20020a0564021bc600b0045c7611d86emr7030281edb.194.1665566031975;
-        Wed, 12 Oct 2022 02:13:51 -0700 (PDT)
-Received: from localhost.localdomain (host-87-17-81-193.retail.telecomitalia.it. [87.17.81.193])
-        by smtp.gmail.com with ESMTPSA id lt2-20020a170906fa8200b00779cde476e4sm929649ejb.62.2022.10.12.02.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 02:13:51 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Nicolas Pitre <nico@fluxnic.net>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] fs/cramfs: Convert kmap() to kmap_local_data()
-Date:   Wed, 12 Oct 2022 11:13:56 +0200
-Message-Id: <20221012091356.16632-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 12 Oct 2022 05:15:27 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE6A491E9;
+        Wed, 12 Oct 2022 02:15:25 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C8tfB7026001;
+        Wed, 12 Oct 2022 11:15:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=WuRU+MntGnCMaXFzcXMNoaYrVG/2orVNcEHKCqBKaQg=;
+ b=aw/8jJZgI81jBzPEP9vF3LPDs5aPjpEocaar0BEyHQIeBVJf3IwXqr8qU9eA4qNGhZD9
+ E/nWHpM0HKAQu6GHR9oua6gbkxKEp8P8I2lo/AA8USiX4Xe+czS5yGGuVt7q+1ZN9Xwn
+ ePM0vVGgCRcJnkLY7tg+T3VvVfJ414fl/qxlyr4ks3itHGgzRBBRHp9ywxuXepQEGey/
+ T+Xyefm7Ygfu2fYejo3QmnJtKUFGrSTrb+yS8LMlEXZiWh/6XipB/p1YXMR2nZQJA0V8
+ McEPwXYZZpTlLsru2vbghdKsFOAMtA36QFVBzB6m+JVbv9Mc4jx3/vva+CYVqy7dyBd1 uA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k4hwf66qg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 11:15:11 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6AE25100034;
+        Wed, 12 Oct 2022 11:15:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A10C32194EC;
+        Wed, 12 Oct 2022 11:15:04 +0200 (CEST)
+Received: from [10.201.22.54] (10.75.127.122) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Wed, 12 Oct
+ 2022 11:15:01 +0200
+Message-ID: <cce333f4-17db-f891-a9a2-97036c7d7332@foss.st.com>
+Date:   Wed, 12 Oct 2022 11:15:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] ASoC: dt-bindings: Convert dmic-codec to DT schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        <arnaud.pouliquen@foss.st.com>, Heiko Stuebner <heiko@sntech.de>
+CC:     <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221011184119.3754096-1-robh@kernel.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20221011184119.3754096-1-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.122]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_04,2022-10-11_02,2022-06-22_01
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
+Hi Rob,
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-the mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+On 10/11/22 20:41, Rob Herring wrote:
+> Convert the dmic-codec binding to DT schema format.
+> 
+> The '#sound-dai-cells' and 'sound-name-prefix' properties were not
+> documented, but are in use, so add them.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/sound/dmic-codec.yaml | 55 +++++++++++++++++++
+>  .../devicetree/bindings/sound/dmic.txt        | 22 --------
+>  2 files changed, 55 insertions(+), 22 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/dmic-codec.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/dmic.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/dmic-codec.yaml b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+> new file mode 100644
+> index 000000000000..767152fa99cc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/dmic-codec.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/dmic-codec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic PDM Digital microphone (DMIC) codec
+> +
+> +maintainers:
+> +  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and still valid.
+I don't have much activity on the audio topic anymore, so I don't know if I'm
+the best person.
+But if one maintainer is needed, that's fine.
+Please just change my email address to arnaud.pouliquen@foss.st.com
+With that and the fix reported by the bot
+Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-Since its use in fs/cramfs is safe everywhere, it should be preferred.
+Thanks,
+Arnaud
 
-Therefore, replace kmap() with kmap_local_page() in fs/cramfs. Instead
-of open-coding kmap_local_page() + memcpy(), use memcpy_from_page().
-
-Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/cramfs/inode.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/fs/cramfs/inode.c b/fs/cramfs/inode.c
-index 61ccf7722fc3..c17cbba5d45e 100644
---- a/fs/cramfs/inode.c
-+++ b/fs/cramfs/inode.c
-@@ -238,8 +238,7 @@ static void *cramfs_blkdev_read(struct super_block *sb, unsigned int offset,
- 		struct page *page = pages[i];
- 
- 		if (page) {
--			memcpy(data, kmap(page), PAGE_SIZE);
--			kunmap(page);
-+			memcpy_from_page(data, page, 0, PAGE_SIZE);
- 			put_page(page);
- 		} else
- 			memset(data, 0, PAGE_SIZE);
-@@ -815,7 +814,7 @@ static int cramfs_read_folio(struct file *file, struct folio *folio)
- 
- 	maxblock = (inode->i_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
- 	bytes_filled = 0;
--	pgdata = kmap(page);
-+	pgdata = kmap_local_page(page);
- 
- 	if (page->index < maxblock) {
- 		struct super_block *sb = inode->i_sb;
-@@ -903,13 +902,13 @@ static int cramfs_read_folio(struct file *file, struct folio *folio)
- 
- 	memset(pgdata + bytes_filled, 0, PAGE_SIZE - bytes_filled);
- 	flush_dcache_page(page);
--	kunmap(page);
-+	kunmap_local(pgdata);
- 	SetPageUptodate(page);
- 	unlock_page(page);
- 	return 0;
- 
- err:
--	kunmap(page);
-+	kunmap_local(pgdata);
- 	ClearPageUptodate(page);
- 	SetPageError(page);
- 	unlock_page(page);
--- 
-2.37.3
-
+> +
+> +allOf:
+> +  - $ref: name-prefix.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: dmic-codec
+> +
+> +  '#sound-dai-cells':
+> +    const: 0
+> +
+> +  dmicen-gpios:
+> +    description: GPIO specifier for DMIC to control start and stop
+> +    maxItems: 1
+> +
+> +  num-channels:
+> +    description: Number of microphones on this DAI
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 8
+> +    default: 8
+> +
+> +  modeswitch-delay-ms:
+> +    description: Delay (in ms) to complete DMIC mode switch
+> +
+> +  wakeup-delay-ms:
+> +    description: Delay (in ms) after enabling the DMIC
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio.h>
+> +
+> +    dmic {
+> +        compatible = "dmic-codec";
+> +        dmicen-gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
+> +        num-channels = <1>;
+> +        wakeup-delay-ms <50>;
+> +        modeswitch-delay-ms <35>;
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/sound/dmic.txt b/Documentation/devicetree/bindings/sound/dmic.txt
+> deleted file mode 100644
+> index 32e871037269..000000000000
+> --- a/Documentation/devicetree/bindings/sound/dmic.txt
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -Device-Tree bindings for Digital microphone (DMIC) codec
+> -
+> -This device support generic PDM digital microphone.
+> -
+> -Required properties:
+> -	- compatible: should be "dmic-codec".
+> -
+> -Optional properties:
+> -	- dmicen-gpios: GPIO specifier for dmic to control start and stop
+> -	- num-channels: Number of microphones on this DAI
+> -	- wakeup-delay-ms: Delay (in ms) after enabling the DMIC
+> -	- modeswitch-delay-ms: Delay (in ms) to complete DMIC mode switch
+> -
+> -Example node:
+> -
+> -	dmic_codec: dmic@0 {
+> -		compatible = "dmic-codec";
+> -		dmicen-gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
+> -		num-channels = <1>;
+> -		wakeup-delay-ms <50>;
+> -		modeswitch-delay-ms <35>;
+> -	};
