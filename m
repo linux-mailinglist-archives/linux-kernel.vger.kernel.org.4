@@ -2,849 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C225FCB0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3905FCB0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiJLSxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S230021AbiJLSx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiJLSxT (ORCPT
+        with ESMTP id S230013AbiJLSxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:53:19 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3402100BED;
-        Wed, 12 Oct 2022 11:52:54 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id s2so25738305edd.2;
-        Wed, 12 Oct 2022 11:52:54 -0700 (PDT)
+        Wed, 12 Oct 2022 14:53:32 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F64FF8D3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:53:27 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id gf8so16024727pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wW2dwdf0P1Fs3CAXzIbVl6dBEt4D4Ubvs/FmFJU6weE=;
-        b=R2hnwtEBphiV+pBHSaMSuw+6txIkW9MkiFgq1iEBZdW3A78RpeGMJ2zfaSTByOwtER
-         cocnMeioylxwRYVZFNYc8wSoCmzLSkK/gi0dWe4N/wuNFACJdp1cEEQFinoG2CbBybak
-         XfDuXDY7p/JgLhHFSbMUow+WB49bRGBkHDbJkuvj6LuecAkykgmuPSf2Yy5hf+ymwmbx
-         J9h9RXFEk3Td8wWOlw3WphXx/gWW0AlHeVgN4IGA+q7rIntX7VDhVSecq0o4WjvioQiD
-         bwcaBVUOqvsnccA4Nx6oCVgiO78iSXScihjMgGKx/C6TKJvoTiqwWkMIfzQZkDLJWslk
-         0z+A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HUI2zzepOnCEU2KAh1PakPcQFkZcRivQX+cynj5FE/k=;
+        b=G47NFXoBtILJJHsl1h9GdNIzukt6VCgb5/pFLeR7U3O5C4N4qiIoQW1NZPvUsa8st/
+         oPEm2Nx/P2qbHAMkKQd6lCihhUbjxai2CtXpicsaa4D5ZMIjuOiplNYvO747uR/eVsS3
+         qIYRG3YYLOh0QhkdC4Pj6EJGdWLkY13ZTg5uU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wW2dwdf0P1Fs3CAXzIbVl6dBEt4D4Ubvs/FmFJU6weE=;
-        b=CodYUU2IUefHDKGOF6KzEgWqAq/8UPMq9sDdfwD/ra2LV1FgpIMLJhiGcHhd4W/xJX
-         62NedF/EzgK84VIrARxkqg/j3pJ7AlNUInQDo/MhpHv96zFW6FqRLW5di1HKy2LN5nZd
-         GMuiL3/ch9mnbWmJgclJrRI5nhv+l1d8AMJXl4urh1mUY942OHuiYGxerUDqyuGBT07J
-         7HhaHTqzIfrKRTmz3afhim8aIUenMQVt4Zc09uIaWTnRJGL6seOXfw5OY/s5WK8Bdctp
-         BbZZEHQ3lVSATUv8t0a8iY3wMhlwyH9J/OZ8gYU8XQ7tzQ6ean1bnsvNhG39kWmX9T0E
-         VE8w==
-X-Gm-Message-State: ACrzQf31QZcCTcz9r1ol26osrjIVbdodPHBs/qypJAXzYgJzVJ9iOPgU
-        n/K9xWl4OHmcTwnSChZw8G8QscLbSsU=
-X-Google-Smtp-Source: AMsMyM6YzcYWCE1QT22VgY3FQRt8/Fs76MLxCRuirzh5OUytl9JMEJFHKzZy+p9wc3XA8jvSzVr8/Q==
-X-Received: by 2002:a05:6402:5cb:b0:452:e416:2bc4 with SMTP id n11-20020a05640205cb00b00452e4162bc4mr28133976edx.114.1665600771777;
-        Wed, 12 Oct 2022 11:52:51 -0700 (PDT)
-Received: from localhost.localdomain ([46.216.9.29])
-        by smtp.googlemail.com with ESMTPSA id k6-20020a170906970600b00781dbdb292asm1644410ejx.155.2022.10.12.11.52.50
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HUI2zzepOnCEU2KAh1PakPcQFkZcRivQX+cynj5FE/k=;
+        b=GBXLJ5maO+G3SMNJMza0Pcem0TU2shzfJk7f3xDOXxnEYehi1wO4/70AsJ7JhmN/LX
+         hPDO72l/2j4PHsADi89h/U8kv4EPRBVuE6hGhZmfkXE+4WbN9Uf40hSoOhN33RLTbpM4
+         sS86/a/+lTsA7T2b+74ITiG6U0728Jdq0MBatJH6nJbzS+usSfT79wx4Kh42QOt6AFKC
+         A0cOpEGlxpc0NTxo/I8t7bC7ZIMDuCp/g+0XfheqEBJCJXx9CY9xlF2RshBYIvLeS+19
+         xXohAyfjcMff8yXACwS4IG8M4ivNhxyjRFRhMl3UlwR0QvhHZwv0cDmtKlRBuQvkiE3f
+         Y9MA==
+X-Gm-Message-State: ACrzQf1B2JtMoTZAOpCxVxkZ2GUBtF0amRB2/6IMj2SdLB/fGtuxKigQ
+        zu98OcC+Sh4plDlWWqTNv1U3JQ==
+X-Google-Smtp-Source: AMsMyM6tV4/PVbF4fBXiv77LdOk7IfPzalAhIVuB7YI1s3Hec2Euf7PJLzGzNvVQPMDGgGwcWHVGdQ==
+X-Received: by 2002:a17:90a:50:b0:20a:b146:e75e with SMTP id 16-20020a17090a005000b0020ab146e75emr6663558pjb.216.1665600803058;
+        Wed, 12 Oct 2022 11:53:23 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k15-20020aa7972f000000b00561578478f9sm194609pfg.134.2022.10.12.11.53.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 11:52:51 -0700 (PDT)
-From:   Dzmitry Sankouski <dsankouski@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS)
-Subject: [PATCH v9 2/2] arm64: dts: qcom: sagit: add initial device tree for sagit
-Date:   Wed, 12 Oct 2022 21:52:45 +0300
-Message-Id: <20221012185245.1282599-3-dsankouski@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221012185245.1282599-1-dsankouski@gmail.com>
-References: <20221012185245.1282599-1-dsankouski@gmail.com>
+        Wed, 12 Oct 2022 11:53:22 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] firmware: meson_sm: Fix memcpy vs iomem type warnings
+Date:   Wed, 12 Oct 2022 11:53:16 -0700
+Message-Id: <20221012185234.never.936-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3429; h=from:subject:message-id; bh=4n3aQuAgsH9cCFaGFV2YF2qCSZt1D1FxI4ZpoSOMr4Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRw0bGTY4oQVYR+ruKC+orN1r6Teh+Od53Fv9waOT HIZn6LuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0cNGwAKCRCJcvTf3G3AJu5FD/ wMubbkTAppw3VbhksSb2rvGtd2RwYLblLaevZVfdiIIxQKesFXrZQi/wS2Cwb6XxaSTXOEgSOffPOa zhEq33SvE4ENM7J5ZqIAPv9VqvtcX+fPBliGpBoGcWAnKCxR667DtFC9LZXMeLhmxjbPMgRAMZoOAU 4//ZxbyuL9UHpu800Xr/8nnEuJ3cMu4nHovmggaKixXK1N5GX1ZdcBWCo5RGdwh5n0Iif3o9HJJjmU s3UwoFQvJHoUqMH+FEZHmdFiJE/XGDbJ5JwNXNfpqU5x4d8xrvyJ3JbsiXmQeugU2GOZoc22W6FrwS NIN2b0hZ4FEl77gdRrWT/Vz2bTj6VuezL7QRwgolwQRuaVG6mAinZCwTnbWDttcvkNvuMy9R5MekK3 aVn0JOcp+BCMyv5VZ12X0equ31lB2Xs9L+eK9VgpfeHoIHN+RjohE6es2z0WiIfiYDtk/CG2t6vwGQ sd9WC3iTu9CgiV3pzaUDGybpycEYkapB5rMindsjvRaLBpSPcIGd89A6P06RRh5/vd72Wpe1tskKRU kYyAUVF5RAeskLkQHaDW3hXYoiW1iMipK+yGMKGoRyl7udlBJOde7Zhj8TDuPKp2KV6kuJmFZl6t/J fwr4H8dbXiTgXoSmQtZNB0kMV9isVsilNsltNeyV26+C8DN9xIJbWZO+Y/+g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-New device support - Xiaomi Mi6 phone
+Use memcpy_{toio,fromio}() instead of memcpy(). Silences warnings from
+Sparse:
 
-What works:
-- storage
-- usb
-- power regulators
+drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 1 (different address spaces)
+drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
+drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
+drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 2 (different address spaces)
+drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
+drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
+drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
+drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
+drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
+drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+drivers/firmware/meson/meson_sm.c:206:9:    expected void *
+drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
 
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+While here, fix this warning as well:
+
+drivers/firmware/meson/meson_sm.c:85:24: warning: Using plain integer as NULL pointer
+
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202210122023.zF56nCzM-lkp@intel.com
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-amlogic@lists.infradead.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-Changes for v2:
-- remove memory nodes before redefining
-- add board compatible to schema
-- remove board msm-id, add chassis type
-- remove common dtsi
-- move resin to pm8998 dtsi file
-- dts formatting
-- unsupported properties removed
-- add copyright
-- rebase on latest master(6.0.0-rc6)
-Changes for v3:
-- regulators nodes renamed to match pattern 'regulators-[01]'
-- duplicate cci1-default node deleted
-- add state suffix to '.*(active|suspend|default)' pinctrl
-- rebase on latest master(6.0.0)
-Changes for v4:
-- fix dts compilation errors(rename pinctrl label usages)
-Changes for v5:
-- use pm8005_regulators label
-Changes for v6:
-- add state suffix to all pinctrl
-- move status nodes to last position
-- disable resin node by default
-- move the debounce param to pm8998.dtsi file
-- place this patch after dt-binding patch
-Changes for v7:
-- fix Properties must precede subnodes dts compilation error
-Changes for v8:
-- enable resin node
-- rename nodes in reserved memory to comply with 'memory@.*' pattern
-Changes for v9: none
+ drivers/firmware/meson/meson_sm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/msm8998-xiaomi-sagit.dts    | 682 ++++++++++++++++++
- arch/arm64/boot/dts/qcom/pm8998.dtsi          |   8 +
- 3 files changed, 691 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 1d86a33de528..0460aabf1b59 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -46,6 +46,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-oneplus-dumpling.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-lilac.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-maple.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-poplar.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-xiaomi-sagit.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts b/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
-new file mode 100644
-index 000000000000..aa5bf48e0ab8
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
-@@ -0,0 +1,682 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Xiaomi Mi 6 (sagit) device tree source based on msm8998-mtp.dtsi
-+ *
-+ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Degdag Mohamed <degdagmohamed@gmail.com>
-+ * Copyright (c) 2022, Dzmitry Sankouski <dsankouski@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "msm8998.dtsi"
-+#include "pm8005.dtsi"
-+#include "pm8998.dtsi"
-+#include "pmi8998.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-+
-+/*
-+ * Delete following upstream (msm8998.dtsi) reserved
-+ * memory mappings which are different in this device.
-+ */
-+/delete-node/ &mpss_mem;
-+/delete-node/ &venus_mem;
-+/delete-node/ &mba_mem;
-+/delete-node/ &slpi_mem;
-+/delete-node/ &ipa_fw_mem;
-+/delete-node/ &ipa_gsi_mem;
-+/delete-node/ &gpu_mem;
-+/delete-node/ &wlan_msa_mem;
-+
-+/ {
-+	model = "Xiaomi Mi 6";
-+	compatible = "xiaomi,sagit", "qcom,msm8998";
-+	chassis-type = "handset";
-+	/* Required for bootloader to select correct board */
-+	qcom,board-id = <30 0>;
-+
-+	reserved-memory {
-+		/*
-+		 * The following memory regions on downstream are "dynamically allocated"
-+		 * but given the same addresses every time. Hard code them as these addresses
-+		 * are where the Xiaomi signed firmware expects them to be.
-+		 */
-+		ipa_fws_region: memory@f7800000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x0 0xf7800000 0x0 0x5000>;
-+			no-map;
-+		};
-+
-+		zap_shader_region: memory@f7900000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x0 0xf7900000 0x0 0x2000>;
-+			no-map;
-+		};
-+
-+		mpss_mem: memory@8d000000 {
-+			reg = <0x0 0x8d000000 0x0 0x7000000>;
-+			no-map;
-+		};
-+
-+		venus_mem: memory@94000000 {
-+			reg = <0x0 0x94000000 0x0 0x500000>;
-+			no-map;
-+		};
-+
-+		mba_mem: memory@94500000 {
-+			reg = <0x0 0x94500000 0x0 0x200000>;
-+			no-map;
-+		};
-+
-+		slpi_mem: memory@94700000 {
-+			reg = <0x0 0x94700000 0x0 0x10000>;
-+			no-map;
-+		};
-+
-+		ipa_fw_mem: memory@95600000 {
-+			reg = <0x0 0x95600000 0x0 0x10000>;
-+			no-map;
-+		};
-+
-+		ipa_gsi_mem: memory@95610000 {
-+			reg = <0x0 0x95610000 0x0 0x5000>;
-+			no-map;
-+		};
-+
-+		gpu_mem: memory@95615000 {
-+			reg = <0x0 0x95615000 0x0 0x100000>;
-+			no-map;
-+		};
-+
-+		wlan_msa_mem: memory@95715000 {
-+			reg = <0x0 0x95715000 0x0 0x100000>;
-+			no-map;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		label = "Volume buttons";
-+		autorepeat;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vol_up_key_default>;
-+
-+		key-vol-up {
-+			label = "Volume up";
-+			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEUP>;
-+			debounce-interval = <15>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	gpio-hall-sensor {
-+		compatible = "gpio-keys";
-+		label = "Hall effect sensor";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hall_sensor_default_state>;
-+
-+		event-hall-sensor {
-+			label = "Hall Effect Sensor";
-+			gpios = <&tlmm 124 GPIO_ACTIVE_LOW>;
-+			linux,input-type = <EV_SW>;
-+			linux,code = <SW_LID>;
-+			linux,can-disable;
-+			wakeup-source;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	disp_vddts_vreg: disp-vddts-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "disp-vddts-regulator";
-+		gpio = <&tlmm 50 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&blsp1_i2c5 {
-+	pinctrl-names = "default", "sleep";
-+	status = "okay";
-+
-+	touchscreen@20 {
-+		compatible = "syna,rmi4-i2c";
-+		reg = <0x20>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <125 IRQ_TYPE_EDGE_FALLING>;
-+
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&ts_active_state>;
-+		pinctrl-1 = <&ts_int_suspend_state &ts_reset_suspend_state>;
-+
-+		vdd-supply = <&disp_vddts_vreg>;
-+		vio-supply = <&vreg_l6a_1p8>;
-+
-+		syna,reset-delay-ms = <20>;
-+		syna,startup-delay-ms = <20>;
-+
-+		rmi4-f01@1 {
-+			reg = <0x01>;
-+			syna,nosleep-mode = <1>;
-+		};
-+
-+		rmi4-f12@12 {
-+			reg = <0x12>;
-+			touchscreen-x-mm = <64>;
-+			touchscreen-y-mm = <114>;
-+			syna,sensor-type = <1>;
-+			syna,rezero-wait-ms = <20>;
-+		};
-+
-+		rmi4-f1a@1a {
-+			reg = <0x1a>;
-+			syna,codes = <KEY_BACK KEY_APPSELECT>;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c5_sleep {
-+	/delete-property/ bias-pull-up;
-+	bias-disable;
-+};
-+
-+&blsp1_uart3 {
-+	status = "okay";
-+	bluetooth {
-+		compatible = "qcom,wcn3990-bt";
-+
-+		vddio-supply = <&vreg_s4a_1p8>;
-+		vddxo-supply = <&vreg_l7a_1p8>;
-+		vddrf-supply = <&vreg_l17a_1p3>;
-+		vddch0-supply = <&vreg_l25a_3p3>;
-+		max-speed = <3200000>;
-+	};
-+};
-+
-+&blsp1_uart3_on {
-+	rx {
-+		/delete-property/ bias-disable;
-+		/*
-+		 * Configure a pull-up on 46 (RX). This is needed to
-+		 * avoid garbage data when the TX pin of the Bluetooth
-+		 * module is in tri-state (module powered off or not
-+		 * driving the signal yet).
-+		 */
-+		bias-pull-up;
-+	};
-+
-+	cts {
-+		/delete-property/ bias-disable;
-+		/*
-+		 * Configure a pull-down on 47 (CTS) to match the pull
-+		 * of the Bluetooth module.
-+		 */
-+		bias-pull-down;
-+	};
-+};
-+
-+&blsp2_uart1 {
-+	status = "okay";
-+};
-+
-+&pm8005_regulators {
-+	compatible = "qcom,pm8005-regulators";
-+
-+	vdd_s1-supply = <&vph_pwr>;
-+
-+	pm8005_s1: s1 { /* VDD_GFX supply */
-+		regulator-min-microvolt = <524000>;
-+		regulator-max-microvolt = <1100000>;
-+		regulator-enable-ramp-delay = <500>;
-+
-+		/* hack until we rig up the gpu consumer */
-+		regulator-always-on;
-+	};
-+};
-+
-+&pm8998_gpio {
-+	vol_up_key_default: vol-up-key-default-state {
-+		pins = "gpio6";
-+		function = "normal";
-+		bias-pull-up;
-+		input-enable;
-+		qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
-+	};
-+
-+	audio_mclk_pin: audio-mclk-pin-active-state {
-+		pins = "gpio13";
-+		function = "func2";
-+		power-source = <0>;
-+	};
-+};
-+
-+&qusb2phy {
-+	vdda-pll-supply = <&vreg_l12a_1p8>;
-+	vdda-phy-dpdm-supply = <&vreg_l24a_3p075>;
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm8998-regulators";
-+
-+		vdd_s1-supply = <&vph_pwr>;
-+		vdd_s2-supply = <&vph_pwr>;
-+		vdd_s3-supply = <&vph_pwr>;
-+		vdd_s4-supply = <&vph_pwr>;
-+		vdd_s5-supply = <&vph_pwr>;
-+		vdd_s6-supply = <&vph_pwr>;
-+		vdd_s7-supply = <&vph_pwr>;
-+		vdd_s8-supply = <&vph_pwr>;
-+		vdd_s9-supply = <&vph_pwr>;
-+		vdd_s10-supply = <&vph_pwr>;
-+		vdd_s11-supply = <&vph_pwr>;
-+		vdd_s12-supply = <&vph_pwr>;
-+		vdd_s13-supply = <&vph_pwr>;
-+		vdd_l1_l27-supply = <&vreg_s7a_1p025>;
-+		vdd_l2_l8_l17-supply = <&vreg_s3a_1p35>;
-+		vdd_l3_l11-supply = <&vreg_s7a_1p025>;
-+		vdd_l4_l5-supply = <&vreg_s7a_1p025>;
-+		vdd_l6-supply = <&vreg_s5a_2p04>;
-+		vdd_l7_l12_l14_l15-supply = <&vreg_s5a_2p04>;
-+		vdd_l9-supply = <&vreg_bob>;
-+		vdd_l10_l23_l25-supply = <&vreg_bob>;
-+		vdd_l13_l19_l21-supply = <&vreg_bob>;
-+		vdd_l16_l28-supply = <&vreg_bob>;
-+		vdd_l18_l22-supply = <&vreg_bob>;
-+		vdd_l20_l24-supply = <&vreg_bob>;
-+		vdd_l26-supply = <&vreg_s3a_1p35>;
-+		vdd_lvs1_lvs2-supply = <&vreg_s4a_1p8>;
-+
-+		vreg_s3a_1p35: s3 {
-+			regulator-min-microvolt = <1352000>;
-+			regulator-max-microvolt = <1352000>;
-+		};
-+
-+		vreg_s4a_1p8: s4 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_s5a_2p04: s5 {
-+			regulator-min-microvolt = <1904000>;
-+			regulator-max-microvolt = <2040000>;
-+		};
-+
-+		vreg_s7a_1p025: s7 {
-+			regulator-min-microvolt = <900000>;
-+			regulator-max-microvolt = <1028000>;
-+		};
-+
-+		vreg_l1a_0p875: l1 {
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <880000>;
-+		};
-+
-+		vreg_l2a_1p2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		vreg_l3a_1p0: l3 {
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1000000>;
-+		};
-+
-+		vreg_l5a_0p8: l5 {
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <800000>;
-+		};
-+
-+		vreg_l6a_1p8: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_l7a_1p8: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_l8a_1p2: l8 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		vreg_l9a_1p8: l9 {
-+			regulator-min-microvolt = <1808000>;
-+			regulator-max-microvolt = <2960000>;
-+		};
-+
-+		vreg_l10a_1p8: l10 {
-+			regulator-min-microvolt = <1808000>;
-+			regulator-max-microvolt = <2960000>;
-+		};
-+
-+		vreg_l11a_1p0: l11 {
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1000000>;
-+		};
-+
-+		vreg_l12a_1p8: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_l13a_2p95: l13 {
-+			regulator-min-microvolt = <1808000>;
-+			regulator-max-microvolt = <2960000>;
-+		};
-+
-+		vreg_l14a_1p8: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_l15a_1p8: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		vreg_l16a_2p7: l16 {
-+			regulator-min-microvolt = <2704000>;
-+			regulator-max-microvolt = <2704000>;
-+		};
-+
-+		vreg_l17a_1p3: l17 {
-+			regulator-min-microvolt = <1304000>;
-+			regulator-max-microvolt = <1304000>;
-+		};
-+
-+		vreg_l18a_2p7: l18 {
-+			regulator-min-microvolt = <2704000>;
-+			regulator-max-microvolt = <2704000>;
-+		};
-+
-+		vreg_l19a_3p0: l19 {
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3008000>;
-+		};
-+
-+		vreg_l20a_2p95: l20 {
-+			regulator-min-microvolt = <2960000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l21a_2p95: l21 {
-+			regulator-min-microvolt = <2960000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-system-load = <800000>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l22a_2p85: l22 {
-+			regulator-min-microvolt = <2864000>;
-+			regulator-max-microvolt = <2864000>;
-+		};
-+
-+		vreg_l23a_3p3: l23 {
-+			regulator-min-microvolt = <3312000>;
-+			regulator-max-microvolt = <3312000>;
-+		};
-+
-+		vreg_l24a_3p075: l24 {
-+			regulator-min-microvolt = <3088000>;
-+			regulator-max-microvolt = <3088000>;
-+		};
-+
-+		vreg_l25a_3p3: l25 {
-+			regulator-min-microvolt = <3104000>;
-+			regulator-max-microvolt = <3312000>;
-+		};
-+
-+		vreg_l26a_1p2: l26 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l28_3p0: l28 {
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3008000>;
-+		};
-+
-+		vreg_lvs1a_1p8: lvs1 { };
-+
-+		vreg_lvs2a_1p8: lvs2 { };
-+	};
-+
-+	regulators-1 {
-+		compatible = "qcom,rpm-pmi8998-regulators";
-+
-+		vdd_bob-supply = <&vph_pwr>;
-+
-+		vreg_bob: bob {
-+			regulator-min-microvolt = <3312000>;
-+			regulator-max-microvolt = <3600000>;
-+		};
-+	};
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <0 4>, <81 4>;
-+
-+	cci1_default_state: cci1-default-state {
-+		pins = "gpio19", "gpio20";
-+		function = "cci_i2c";
-+		bias-disable;
-+		drive-strength = <2>;
-+	};
-+
-+	cdc_reset_n_state: cdc-reset-n-state {
-+		pins = "gpio64";
-+		function = "gpio";
-+		bias-pull-down;
-+		drive-strength = <16>;
-+		output-high;
-+	};
-+
-+	hall_sensor_default_state: hall-sensor-default-state {
-+		pins = "gpio124";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		input-enable;
-+	};
-+
-+	mdss_dsi_active_state: mdss-dsi-active-state {
-+		pins = "gpio94";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-disable;
-+	};
-+
-+	mdss_dsi_suspend_state: mdss-dsi-suspend-state {
-+		pins = "gpio94";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	mdss_te_active_state: mdss-te-active-state {
-+		pins = "gpio10";
-+		function = "mdp_vsync_a";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	mdss_te_suspend_state: mdss-te-suspend-state {
-+		pins = "gpio10";
-+		function = "mdp_vsync_a";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	msm_mclk0_active_state: msm-mclk0-active-state {
-+		pins = "gpio13";
-+		function = "cam_mclk";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	msm_mclk0_suspend_state: msm-mclk0-suspend-state {
-+		pins = "gpio13";
-+		function = "cam_mclk";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	msm_mclk1_active_state: msm-mclk1-active-state {
-+		pins = "gpio14";
-+		function = "cam_mclk";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	msm_mclk1_suspend_state: msm-mclk1-suspend-state {
-+		pins = "gpio14";
-+		function = "cam_mclk";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	nfc_int_active_state: nfc-int-active-state {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nfc_int_suspend_state: nfc-int-suspend-state {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nfc_enable_active_state: nfc-enable-active-state {
-+		pins = "gpio12", "gpio116";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-pull-up;
-+	};
-+
-+	nfc_enable_suspend_state: nfc-enable-suspend-state {
-+		pins = "gpio12", "gpio116";
-+		function = "gpio";
-+		drive-strength = <6>;
-+		bias-disable;
-+	};
-+
-+	ts_active_state: ts-active-state {
-+		pins = "gpio89", "gpio125";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-pull-up;
-+		input-enable;
-+	};
-+
-+	ts_int_suspend_state: ts-int-suspend-state {
-+		pins = "gpio125";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	ts_reset_suspend_state: ts-reset-suspend-state {
-+		pins = "gpio89";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	wcd_int_n_state: wcd-int-n-state {
-+		pins = "gpio54";
-+		function = "gpio";
-+		bias-pull-down;
-+		drive-strength = <2>;
-+		input-enable;
-+	};
-+
-+	wsa_leftspk_pwr_n_state: wsa-leftspk-pwr-n-state {
-+		pins = "gpio65";
-+		function = "gpio";
-+		bias-disable;
-+		drive-strength = <2>;
-+		output-low;
-+	};
-+
-+	wsa_rightspk_pwr_n_state: wsa-rightspk-pwr-n-state {
-+		pins = "gpio66";
-+		function = "gpio";
-+		bias-disable;
-+		drive-strength = <2>;
-+		output-low;
-+	};
-+};
-+
-+&pm8998_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&ufshc {
-+	vcc-supply = <&vreg_l20a_2p95>;
-+	vccq-supply = <&vreg_l26a_1p2>;
-+	vccq2-supply = <&vreg_s4a_1p8>;
-+	vcc-max-microamp = <750000>;
-+	vccq-max-microamp = <560000>;
-+	vccq2-max-microamp = <750000>;
-+	status = "okay";
-+};
-+
-+&ufsphy {
-+	vdda-phy-supply = <&vreg_l1a_0p875>;
-+	vdda-pll-supply = <&vreg_l2a_1p2>;
-+	vddp-ref-clk-supply = <&vreg_l26a_1p2>;
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	/* Disable USB3 clock requirement as the device only supports USB2 */
-+	qcom,select-utmi-as-pipe-clk;
-+	status = "okay";
-+};
-+
-+&usb3_dwc3 {
-+	/* Drop the unused USB 3 PHY */
-+	phys = <&qusb2phy>;
-+	phy-names = "usb2-phy";
-+
-+	/* Fastest mode for USB 2 */
-+	maximum-speed = "high-speed";
-+
-+	/* Force to peripheral until we can switch modes */
-+	dr_mode = "peripheral";
-+};
-+
-+&wifi {
-+	vdd-0.8-cx-mx-supply = <&vreg_l5a_0p8>;
-+	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
-+	vdd-1.3-rfa-supply = <&vreg_l17a_1p3>;
-+	vdd-3.3-ch0-supply = <&vreg_l25a_3p3>;
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/pm8998.dtsi b/arch/arm64/boot/dts/qcom/pm8998.dtsi
-index d09f2954b6f9..7929fa64e1ef 100644
---- a/arch/arm64/boot/dts/qcom/pm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8998.dtsi
-@@ -52,6 +52,14 @@ pm8998_pwrkey: pwrkey {
- 				bias-pull-up;
- 				linux,code = <KEY_POWER>;
- 			};
-+
-+			pm8998_resin: resin {
-+				compatible = "qcom,pm8941-resin";
-+				bias-pull-up;
-+				interrupts = <GIC_SPI 0x8 1 IRQ_TYPE_EDGE_BOTH>;
-+				debounce = <15625>;
-+				status = "disabled";
-+			};
- 		};
+diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
+index 77aa5c6398aa..4efde225a580 100644
+--- a/drivers/firmware/meson/meson_sm.c
++++ b/drivers/firmware/meson/meson_sm.c
+@@ -82,7 +82,7 @@ static void __iomem *meson_sm_map_shmem(u32 cmd_shmem, unsigned int size)
  
- 		pm8998_temp: temp-alarm@2400 {
+ 	sm_phy_base = __meson_sm_call(cmd_shmem, 0, 0, 0, 0, 0);
+ 	if (!sm_phy_base)
+-		return 0;
++		return NULL;
+ 
+ 	return ioremap_cache(sm_phy_base, size);
+ }
+@@ -167,7 +167,7 @@ int meson_sm_call_read(struct meson_sm_firmware *fw, void *buffer,
+ 		size = bsize;
+ 
+ 	if (buffer)
+-		memcpy(buffer, fw->sm_shmem_out_base, size);
++		memcpy_fromio(buffer, fw->sm_shmem_out_base, size);
+ 
+ 	return ret;
+ }
+@@ -203,7 +203,7 @@ int meson_sm_call_write(struct meson_sm_firmware *fw, void *buffer,
+ 	if (!fw->chip->cmd_shmem_in_base)
+ 		return -EINVAL;
+ 
+-	memcpy(fw->sm_shmem_in_base, buffer, size);
++	memcpy_toio(fw->sm_shmem_in_base, buffer, size);
+ 
+ 	if (meson_sm_call(fw, cmd_index, &written, arg0, arg1, arg2, arg3, arg4) < 0)
+ 		return -EINVAL;
 -- 
-2.30.2
+2.34.1
 
