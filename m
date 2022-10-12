@@ -2,187 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C81B5FC7A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0365FC78F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJLOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S229468AbiJLOii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJLOni (ORCPT
+        with ESMTP id S229648AbiJLOif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:43:38 -0400
-X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 07:43:37 PDT
-Received: from mail-200163.simplelogin.co (mail-200163.simplelogin.co [176.119.200.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D945CF1A0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=dkim;
-        t=1665585415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=48nyvPRw0jqJPbOytTMFkgquP0UbxyMjAUI56j3ha90=;
-        b=C1+5NgJ+8W7zMI5cP5g3DX6ohcEjFc4hFA6mBJO0Snfe3Ke5WpawlQqi7Mi0yV9jB3JYk0
-        zbji8k7wMa5iBTuPZCDIypHBuxIgFHf3v1vriiPSKaw5ErImLrtH267mUOT0XTWF7i/yRw
-        XB/Ww8mrOQyw97xjLJxWkuiTuAv3DnE=
-Subject: [PATCH v4] staging: rtl8192e: remove unnecessary braces for single
- statement blocks
-Date:   Wed, 12 Oct 2022 22:36:33 +0800
+        Wed, 12 Oct 2022 10:38:35 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFDE03B;
+        Wed, 12 Oct 2022 07:38:34 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id x13so8017476qkg.11;
+        Wed, 12 Oct 2022 07:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rKPVsd3W7uhNdx8AxGe9ZGmFEXcX2gtbcARjTMPwtE0=;
+        b=jGgCcVxw9aYw+7+X6FUgRTvWP9wT47kEmtOZr477HoPkmQAsPEA5JGobOI6Qze1oP6
+         HPXB6t9x0H25ecRAwTY0BEXhlzAMg/o6RTruu8USuaYPuJvTdljw3u9oSPXN4yGstANA
+         aLxFp546AW+Ay1L/fgx7sRfkKlIGSymtayWFQ4DwNZ0T9qB9Trv5DUmuBtdlKrU41ESi
+         cgyR3kfuwNlBTsq3NS01dpqfazFNVgF1b6Wr8aOSTkmeMAqBxjpEU6+Tq60kBrey2PpH
+         x8y0MTNGT2fsR1ECqiiwD2wXi6jMN9JWReiWyiVOUMbL075hz+qaAOCf93KVgCINHefo
+         b7cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rKPVsd3W7uhNdx8AxGe9ZGmFEXcX2gtbcARjTMPwtE0=;
+        b=JAug/8IoJHJJn6bghM1xUQKV5YAvspMCnZcVzxAJIPMDjFB+IJM/vZUWYkvKAN3C7U
+         gwSR4zgmBJEeY9SIncRHIw9YZvgXcQ+J2un8EQdUZuJFA81S+8PfRb38RwE9KU5yK+lx
+         zOEmdmumrnIlbjelwz+nV2qlknY+viJk1E0opGo4omfoSZ4m5NaqxIfwbD4/hCD6vHQB
+         mvHqvD4IdVIQ3Z8r6fNViPRpGyvWKc4wNbmk2YlpJ+1Aus87k8kzVKDl9ZXX/UlJ+HGM
+         ZCPYItpYl1r4RBEoxAdFyndNv6JhyLtV891t/kddmMpcxNGAEe/w+6KdoGZG+NYuW/p7
+         8G3g==
+X-Gm-Message-State: ACrzQf3SmyVMIv2CfsX+vslzee9Fae7pvcVOLRGxa3zBERqsqbYGIgnX
+        k8b8y9ZcOsRN47eXc6jImMYmZD9H3WSRP5zIoGA=
+X-Google-Smtp-Source: AMsMyM7b7eFUYW469t9gBAUzXjB/1SiBsX+TjGi2DrbbBdSxt9U56YHR1FbMXNHgZ43uuhcXFE2IKeNMDRcE++1W0/Y=
+X-Received: by 2002:a05:620a:2552:b0:6ca:bf8f:4d27 with SMTP id
+ s18-20020a05620a255200b006cabf8f4d27mr20286297qko.383.1665585512923; Wed, 12
+ Oct 2022 07:38:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-From:   Rui Li <me@lirui.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Message-ID: <166558541522.9.15423282339326993462.68459319@lirui.org>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 68459321
-X-SimpleLogin-Want-Signing: yes
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221012142205.13041-1-olivier.moysan@foss.st.com>
+In-Reply-To: <20221012142205.13041-1-olivier.moysan@foss.st.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 12 Oct 2022 17:37:56 +0300
+Message-ID: <CAHp75VeUXwqeb+kZE7HshMwjRRrd0=85=qxEGmLDkiyoEEuKrA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] iio: stm32-adc: add support of adc for stm32mp13
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit cleans up checkpatch warning as follows:
-braces {} are not necessary for single statement blocks
+On Wed, Oct 12, 2022 at 5:23 PM Olivier Moysan
+<olivier.moysan@foss.st.com> wrote:
+>
+> On STM32MP13 SoCs, each ADC peripheral has a single ADC block.
+> These ADC peripherals, ADC1 and ADC2, are fully independent.
+> The STM32MP131 SoC provides only ADC2, while other STM32MP13x
+> SoCs provide both ADC1 and ADC2.
+>
+> The STM32MP13 ADC features and characteristics are slightly
+> different from STM32MP15 ADC ones, requiring a specific support
+> in the driver.
+>
+> This patchset enables the ADC peripheral on STM32MP135F-DK board.
+>
+> On STM32MP135F-DK board the ADC is connected to VDDA voltage
+> provided by the PMIC LOD1 supply, which has to be enabled through
+> SCMI regulator framework.
+> This serie introduces a fixed regulator to allow ADC probing,
+> while SCMI regulators support is not available. This does
+> not ensure ADC regulator enabling however.
 
-Signed-off-by: Rui Li <me@lirui.org>
----
-Changes since v3:
- - Clean one more warning as code updated
+FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+for patches 1,3, and 4.
 
-Changes since v2:
- - Correct commit message title
- - Add changelog
+> Changes in v4:
+> - reformat patch 1 commit message
+> - reorder adc1 node
+>
+> v3:
+> - Remove blank line in tag block
+> - Use HZ_PER_MHZ unit for max frequency definition
+> - Coding style updates
+>
+> v2:
+> - Rework commit message length
+> - Add missing spaces
+> - Remove useless defines
+>
+> Olivier Moysan (8):
+>   iio: adc: stm32-adc: fix channel sampling time init
+>   dt-bindings: iio: adc: stm32-adc: add stm32mp13 compatibles
+>   iio: adc: stm32-adc: add stm32mp13 support
+>   iio: adc: stm32: manage min sampling time on all internal channels
+>   ARM: dts: stm32: add adc support to stm32mp13
+>   ARM: dts: stm32: add adc pins muxing on stm32mp135f-dk
+>   ARM: dts: stm32: add dummy vdd_adc regulator on stm32mp135f-dk
+>   ARM: dts: stm32: add adc support on stm32mp135f-dk
+>
+>  .../bindings/iio/adc/st,stm32-adc.yaml        |  68 ++++-
+>  arch/arm/boot/dts/stm32mp13-pinctrl.dtsi      |   7 +
+>  arch/arm/boot/dts/stm32mp131.dtsi             |  43 +++
+>  arch/arm/boot/dts/stm32mp133.dtsi             |  31 +++
+>  arch/arm/boot/dts/stm32mp135f-dk.dts          |  33 +++
+>  drivers/iio/adc/stm32-adc-core.c              |  30 ++-
+>  drivers/iio/adc/stm32-adc-core.h              |  30 +++
+>  drivers/iio/adc/stm32-adc.c                   | 247 +++++++++++++++---
+>  8 files changed, 443 insertions(+), 46 deletions(-)
+>
+> --
+> 2.25.1
+>
 
-Changes since v1:
- - Only fix one of checkpatch warnings
----
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  3 +--
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  9 +++------
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 12 ++++--------
- drivers/staging/rtl8192e/rtllib_softmac_wx.c   |  3 +--
- 4 files changed, 9 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 18e4e5d84878..8d20b0deca37 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -1112,9 +1112,8 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
- 	if (cb_desc->bHwSec) {
- 		static u8 tmp;
- 
--		if (!tmp) {
-+		if (!tmp)
- 			tmp = 1;
--		}
- 		switch (priv->rtllib->pairwise_key_type) {
- 		case KEY_TYPE_WEP40:
- 		case KEY_TYPE_WEP104:
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 1b592258e640..4e3d183be0f2 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -522,9 +522,8 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
- 		rtStatus  = rtl92e_check_bb_and_rf(dev,
- 						   (enum hw90_block)eCheckItem,
- 						   (enum rf90_radio_path)0);
--		if (!rtStatus) {
-+		if (!rtStatus)
- 			return rtStatus;
--		}
- 	}
- 	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x0);
- 	_rtl92e_phy_config_bb(dev, BaseBand_Config_PHY_REG);
-@@ -1379,9 +1378,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
- 					i++;
- 				}
- 
--				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
-+				if (i >= MAX_DOZE_WAITING_TIMES_9x)
- 					break;
--				}
- 			}
- 			rtl92e_set_rf_off(dev);
- 			break;
-@@ -1398,9 +1396,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
- 					i++;
- 				}
- 
--				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
-+				if (i >= MAX_DOZE_WAITING_TIMES_9x)
- 					break;
--				}
- 			}
- 
- 			if (pPSC->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 702551056227..641961a14c52 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -267,9 +267,8 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
- 			"PATH=/usr/bin:/bin",
- 			 NULL};
- 
--	if (priv->ResetProgress == RESET_TYPE_SILENT) {
-+	if (priv->ResetProgress == RESET_TYPE_SILENT)
- 		return;
--	}
- 
- 	if (priv->rtllib->state != RTLLIB_LINKED)
- 		return;
-@@ -330,9 +329,8 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
- 	bool bshort_gi_enabled = false;
- 	static u8 ping_rssi_state;
- 
--	if (!priv->up) {
-+	if (!priv->up)
- 		return;
--	}
- 
- 	if (pra->rate_adaptive_disabled)
- 		return;
-@@ -777,9 +775,8 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
- 		tmpRegA = rtl92e_get_bb_reg(dev, rOFDM0_XATxIQImbalance,
- 					    bMaskDWord);
- 		for (i = 0; i < OFDM_Table_Length; i++) {
--			if (tmpRegA == OFDMSwingTable[i]) {
-+			if (tmpRegA == OFDMSwingTable[i])
- 				priv->OFDM_index[0] = i;
--			}
- 		}
- 
- 		TempCCk = rtl92e_get_bb_reg(dev, rCCK0_TxFilter1, bMaskByte2);
-@@ -1066,9 +1063,8 @@ void rtl92e_dm_restore_state(struct net_device *dev)
- 	u32	reg_ratr = priv->rate_adaptive.last_ratr;
- 	u32 ratr_value;
- 
--	if (!priv->up) {
-+	if (!priv->up)
- 		return;
--	}
- 
- 	if (priv->rate_adaptive.rate_adaptive_disabled)
- 		return;
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-index f9589c5b62ba..fdf867a5dd7a 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-@@ -571,9 +571,8 @@ int rtllib_wx_set_power(struct rtllib_device *ieee,
- 		ieee->ps = RTLLIB_PS_DISABLED;
- 		goto exit;
- 	}
--	if (wrqu->power.flags & IW_POWER_TIMEOUT) {
-+	if (wrqu->power.flags & IW_POWER_TIMEOUT)
- 		ieee->ps_timeout = wrqu->power.value / 1000;
--	}
- 
- 	if (wrqu->power.flags & IW_POWER_PERIOD)
- 		ieee->ps_period = wrqu->power.value / 1000;
 -- 
-2.30.2
-
-
+With Best Regards,
+Andy Shevchenko
