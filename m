@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EDC5FCA64
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1145FCA5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJLSRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S229666AbiJLSRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJLSR0 (ORCPT
+        with ESMTP id S229462AbiJLSRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:17:26 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A904A817
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:16 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id t21-20020a056a0021d500b0056358536cdeso4801386pfj.22
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:16 -0700 (PDT)
+        Wed, 12 Oct 2022 14:17:20 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8D145F6E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:17 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id j20-20020a056a00235400b00565af23c8c2so1135142pfj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y/LJ+bYPOjVmy5bXWpTx2anrdUeoNGY754k8mkXwTdk=;
-        b=K7ewdJSMaryouSIQqqXh+tEwQj0DP7qWAXEcN0vWUDuNPNdsMGpffpcR6dlydV12Lr
-         9+2ckE7nczJUyTO++zxeaEGSc/WBLOlI62yv0lHon3PaTpfT5G7zj4Pmy661k4HXvobB
-         4ti4CMZQAbov6LiocNpv/9tlu6O7EahHIPCwXo1oGQlL8fiFGCX8qMhu2a4WHQjmHikP
-         VWg50NzQ4N7btUZv6sh/k0vbA93kiFzN8eV0l2IFarjziZc2bvjjX+gM3BmDRmeWkBkq
-         8NZxJYvvdXaCe9FhD8o6YDn5CVZMFLt5Hb6lqJisMCc+59aY8IEY0DyVXqf8tPY9NZPZ
-         tlRQ==
+        bh=UcVvkDQBBHipi7B9bc9w9EXjqJE1fFNcFSTj++h2wVs=;
+        b=QkHR2nWKcX4fk382uPwPldcRQqjFRAey2CHttSccJdRNJsDzASiGBLZma3s8fgFwmK
+         MPC2y+wVmpuFeM9PgB6jB8hbl+3JliNqQSjdpvYHGZDj2AeAFrWh/dlqtwmDflksZw+8
+         zChiYaPDsdA6SyO0YKD4tc/D0n2NdJyGoBXY9ozL8wJzWo7AKgogmmoNLJGKtX75uJid
+         YZHjqVB8ZThf0XVWDUjszIJL2WMI8R6gLOnnrB3A9jMbqh2h5VtqprIKbsUEjJAUWns+
+         E2y684CDnfAzdbgV7Mug7sVXg/iSOHFHaVDXNovV0gZobyyYa649/V760naGZ/GqaciV
+         CTBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Y/LJ+bYPOjVmy5bXWpTx2anrdUeoNGY754k8mkXwTdk=;
-        b=I17lVHrrbOsZpUcVkf3aJ/DbrRsRXcB56jFNls1wDTmolAWKFM7ToCLyHljUimrDDI
-         +vkznXE3GA4R9iVyOx9PugA6nC1hSLpV35Ld1qt/hB96i27tXPhU+dABYqn6FIVE+PQu
-         gGbJ1YXUz7EJ0NWCXyGc791X/e4IV+JlQyZ6mmABzJ8D1ZdNBsFrmSre1srUSSvh5wVB
-         CNjeKHXDNZKM0r7YdB8Melv0kmY7PIT5lI4HVrrL9SgumJhEBPms5FURq0AP1i7zjg96
-         gSJnjW2jacJLYySWcMQeKexswMngL6eSJz+YyqfHsqGHrY1gOrsgYdhGUZD6t1dJT2A+
-         sMjw==
-X-Gm-Message-State: ACrzQf2A4lgKxbvRiIEAuexK87iQVO6MTX93TeTva9Gtbb7l61I25X1X
-        qfU0iVIhzaBfceG1fT4w3+bIYrBXjvU=
-X-Google-Smtp-Source: AMsMyM6aUnnCS0syZQAS1W2pUNJGA7rl+aN7n8C9LHWe129DVcZ/WhCwQpElYJ7gd9Pzkd5+llP8oCAuTS0=
+        bh=UcVvkDQBBHipi7B9bc9w9EXjqJE1fFNcFSTj++h2wVs=;
+        b=4+mfb7t0CScCwliq+H+2E4aeQVrL/LtLas6j1Pp3z+dagGu39IntC53cX6LroV2vl5
+         MxJM0/kEd4krqxiHfCWM+xcRc8yiI6y13qezO7IzRRoH955lgpaeWmIHWdLdXxXcEyZs
+         8r5/nE/YyVNxXt0wX2bHZMZnqP7dWB4HGi81qBd63Pfrm9IeZDgdTjFxw9nDfNe2cESi
+         IUDp9ZxaSDqFUfsYedwiBabFCfv0hOXG8UZZwpE9rtJrBKw7PnLx6dS8INdGlPPFnaIb
+         0t1lqsTPy+i1S75nZhDpV4wl26iR4TS05OG7kych5cfLXZxDKXXXRFfna039e9AbYEMp
+         vaIg==
+X-Gm-Message-State: ACrzQf1RUpQUwdIdc5RuX0n2edevDN/L4Q8ZCRn5DmWcfVgGb7kM1g5P
+        N5UEWjEwo0CaLNeze3Nm2sryvdQZ07I=
+X-Google-Smtp-Source: AMsMyM6tFuF6KpvADH5ubFcQPbqpoqffWf9m6rAN+DG10+8ZPvAr4c5f85Ii1WQeXWz6bSfoOnmWTNVm+Oc=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:c40d:b0:17f:7ef6:57cd with SMTP id
- k13-20020a170902c40d00b0017f7ef657cdmr30715748plk.151.1665598634380; Wed, 12
- Oct 2022 11:17:14 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:ba8f:b0:17f:9b1b:6634 with SMTP id
+ k15-20020a170902ba8f00b0017f9b1b6634mr31226126pls.171.1665598635998; Wed, 12
+ Oct 2022 11:17:15 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 12 Oct 2022 18:16:55 +0000
+Date:   Wed, 12 Oct 2022 18:16:56 +0000
 In-Reply-To: <20221012181702.3663607-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221012181702.3663607-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221012181702.3663607-5-seanjc@google.com>
-Subject: [PATCH v4 04/11] KVM: x86/mmu: Handle error PFNs in kvm_faultin_pfn()
+Message-ID: <20221012181702.3663607-6-seanjc@google.com>
+Subject: [PATCH v4 05/11] KVM: x86/mmu: Avoid memslot lookup during
+ KVM_PFN_ERR_HWPOISON handling
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -64,7 +65,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,68 +75,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Matlack <dmatlack@google.com>
 
-Handle error PFNs in kvm_faultin_pfn() rather than relying on the caller
-to invoke handle_abnormal_pfn() after kvm_faultin_pfn().
-Opportunistically rename kvm_handle_bad_page() to kvm_handle_error_pfn()
-to make it more consistent with is_error_pfn().
-
-This commit moves KVM closer to being able to drop
-handle_abnormal_pfn(), which will reduce the amount of duplicate code in
-the various page fault handlers.
+Pass the kvm_page_fault struct down to kvm_handle_error_pfn() to avoid a
+memslot lookup when handling KVM_PFN_ERR_HWPOISON. Opportunistically
+move the gfn_to_hva_memslot() call and @current down into
+kvm_send_hwpoison_signal() to cut down on line lengths.
 
 No functional change intended.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
+Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 72c3dc1884f6..6417a909181c 100644
+index 6417a909181c..07c3f83b3204 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3155,7 +3155,7 @@ static void kvm_send_hwpoison_signal(unsigned long address, struct task_struct *
- 	send_sig_mceerr(BUS_MCEERR_AR, (void __user *)address, PAGE_SHIFT, tsk);
+@@ -3150,23 +3150,25 @@ static int __direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 	return ret;
  }
  
--static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-+static int kvm_handle_error_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+-static void kvm_send_hwpoison_signal(unsigned long address, struct task_struct *tsk)
++static void kvm_send_hwpoison_signal(struct kvm_memory_slot *slot, gfn_t gfn)
+ {
+-	send_sig_mceerr(BUS_MCEERR_AR, (void __user *)address, PAGE_SHIFT, tsk);
++	unsigned long hva = gfn_to_hva_memslot(slot, gfn);
++
++	send_sig_mceerr(BUS_MCEERR_AR, (void __user *)hva, PAGE_SHIFT, current);
+ }
+ 
+-static int kvm_handle_error_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
++static int kvm_handle_error_pfn(struct kvm_page_fault *fault)
  {
  	/*
  	 * Do not cache the mmio info caused by writing the readonly gfn
-@@ -3176,10 +3176,6 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
- static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
- 			       unsigned int access)
- {
--	/* The pfn is invalid, report the error! */
--	if (unlikely(is_error_pfn(fault->pfn)))
--		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
--
- 	if (unlikely(!fault->slot)) {
- 		gva_t gva = fault->is_tdp ? 0 : fault->addr;
+ 	 * into the spte otherwise read access on readonly gfn also can
+ 	 * caused mmio page fault and treat it as mmio access.
+ 	 */
+-	if (pfn == KVM_PFN_ERR_RO_FAULT)
++	if (fault->pfn == KVM_PFN_ERR_RO_FAULT)
+ 		return RET_PF_EMULATE;
  
-@@ -4201,10 +4197,19 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+-	if (pfn == KVM_PFN_ERR_HWPOISON) {
+-		kvm_send_hwpoison_signal(kvm_vcpu_gfn_to_hva(vcpu, gfn), current);
++	if (fault->pfn == KVM_PFN_ERR_HWPOISON) {
++		kvm_send_hwpoison_signal(fault->slot, fault->gfn);
+ 		return RET_PF_RETRY;
+ 	}
  
- static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- {
-+	int ret;
-+
- 	fault->mmu_seq = vcpu->kvm->mmu_invalidate_seq;
- 	smp_rmb();
+@@ -4207,7 +4209,7 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 		return ret;
  
--	return __kvm_faultin_pfn(vcpu, fault);
-+	ret = __kvm_faultin_pfn(vcpu, fault);
-+	if (ret != RET_PF_CONTINUE)
-+		return ret;
-+
-+	if (unlikely(is_error_pfn(fault->pfn)))
-+		return kvm_handle_error_pfn(vcpu, fault->gfn, fault->pfn);
-+
-+	return RET_PF_CONTINUE;
+ 	if (unlikely(is_error_pfn(fault->pfn)))
+-		return kvm_handle_error_pfn(vcpu, fault->gfn, fault->pfn);
++		return kvm_handle_error_pfn(fault);
+ 
+ 	return RET_PF_CONTINUE;
  }
- 
- /*
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
