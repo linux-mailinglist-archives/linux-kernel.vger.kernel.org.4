@@ -2,169 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F875FCBC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1826F5FCBD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiJLUCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 16:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S229641AbiJLUKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 16:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiJLUCC (ORCPT
+        with ESMTP id S229468AbiJLUKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 16:02:02 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18B51C40D;
-        Wed, 12 Oct 2022 13:01:58 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so27312099lfb.13;
-        Wed, 12 Oct 2022 13:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=79SDMbgsMFe0kAcWZ8337yYSlLiSbukp1ZkX77xJUZE=;
-        b=A0DaAUXrSk8uSYalBXlUqYnuljoQRW/N20juqG5exBub1TqJK8oaXCMUGResoK5v29
-         kJi6wTIgYWUfXLifEnMXSJwP+/NALgb7zqaUZ4sYWHGJXnvKQGEweeiQ7qWO2G8ztYXs
-         3qYOrllH8Ys/HjnlZNgLP0tODfSa2lj8uAdEyRc/2lUQ/ZR+hmzu7hzK2bd07vw9k+81
-         f+vZnvq6oGle7Ini9kNKhD1VBFIGcUlXKUvQi+Z2VqERXYhwt4lqW8JCyH+RkzuLup+O
-         a1rcgMsVroAHhIT7EN4nPJAnVHnOZ+DZazDCaTN+P5O6/h8mG59xCD1z4VTdUsgeAC1g
-         5sKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=79SDMbgsMFe0kAcWZ8337yYSlLiSbukp1ZkX77xJUZE=;
-        b=YzHJuc1S+pHLY/IhTzWVglyr/Ppf7TSDr6fca4AWcCZgKCGtUV0KUcBxXPUx8OJNZo
-         VWACNO1UYrleYUJIHJtWIfTSph0zqX5BokcvFnadb/I9nAz5Fd1UURDi8+FDk6y89FDf
-         M3oSUEAdHvbzCzgT92Pe6hrT73Br0hIlgPJ0jBxA6sXBC4V/x4lRKDB6ycK96UAFGI+w
-         EDjSW0gJ/UD/C9Aqgzrcwy+KySWrZQCMS3+IymolioQEjRzPRR0JER+w3479UX/w2OOz
-         M3yJbvBV7zPodi3OuvEVCtskMqMP9JOJk3MMiX60JdDwpSOH/DeaeVBTpEBcqAtI1NOu
-         j7Rw==
-X-Gm-Message-State: ACrzQf2QDD33nsSObOLxrCo/n/yfcMY1lS1phM8/VpYBk4/YmAIvDjTr
-        RbdbAmJHHbrfgt2keNsxRDc=
-X-Google-Smtp-Source: AMsMyM56lNbIdMP/1IFUiefmVanFBnoRLeLA5Dn4YMgxV2CKC8uoqx68T07GaMTuQrPiWJ+lTNlK2Q==
-X-Received: by 2002:ac2:4d46:0:b0:4a2:473f:1fb3 with SMTP id 6-20020ac24d46000000b004a2473f1fb3mr10297325lfp.408.1665604917094;
-        Wed, 12 Oct 2022 13:01:57 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id e11-20020a05651236cb00b004a44ffb1050sm84837lfs.171.2022.10.12.13.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 13:01:56 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 23:01:54 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 13/17] EDAC/mc: Add MC unique index allocation
- procedure
-Message-ID: <20221012200154.7fq3i7igbgkcy2mx@mobilestation>
-References: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
- <20220929232712.12202-14-Sergey.Semin@baikalelectronics.ru>
- <Y0b5cq4evSg1nfb0@zn.tnic>
+        Wed, 12 Oct 2022 16:10:51 -0400
+X-Greylist: delayed 4198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 13:10:50 PDT
+Received: from 15.mo561.mail-out.ovh.net (15.mo561.mail-out.ovh.net [87.98.150.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341EA8322A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:10:49 -0700 (PDT)
+Received: from player696.ha.ovh.net (unknown [10.111.172.45])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 47F5F25243
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:33:19 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player696.ha.ovh.net (Postfix) with ESMTPSA id 68B922573F8DE;
+        Wed, 12 Oct 2022 16:33:14 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-101G004926c2626-9614-4700-a3bb-23ab756441d8,
+                    75377E6B882747309559AE06BD3DFEEF97A89409) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stephen Kitt <steve@sk2.org>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH] drivers/hid: use simple i2c probe
+Date:   Wed, 12 Oct 2022 18:33:00 +0200
+Message-Id: <20221012163300.3928075-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0b5cq4evSg1nfb0@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17027828717298353769
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedguddtfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeelgeetueejffejfeejvefhtddufeejgfetleegtddukeelieelvddvteduveejtdenucfkphepuddvjedrtddrtddruddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedupdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 07:29:22PM +0200, Borislav Petkov wrote:
-> On Fri, Sep 30, 2022 at 02:27:08AM +0300, Serge Semin wrote:
-> > In case of the unique index allocation it's not that optimal to always
-> > rely on the low-level device drivers (platform drivers), because they get
-> > to start to implement either the same design pattern (for instance global
-> > static MC counter) or may end-up with having non-unique index eventually
-> > at runtime. Needless to say that having a generic unique index
-> > allocation/tracking procedure will make code more readable and safer.
-> 
+All these drivers have an i2c probe function which doesn't use the
+"struct i2c_device_id *id" parameter, so they can trivially be
+converted to the "probe_new" style of probe with a single argument.
 
-> I guess this is trying to say that the current memory controller index
-> thing doesn't work. But why doesn't it work?
+This is part of an ongoing transition to single-argument i2c probe
+functions. Old-style probe functions involve a call to i2c_match_id:
+in drivers/i2c/i2c-core-base.c,
 
-From what have you got this? I said that the current MC indexing
-approach wasn't that optimal (always relying on the low-level driver
-to allocate the index) because it caused having the same IDx
-allocation pattern re-implemented in the drivers. It can be avoided by
-the provided patch. The unified approach makes code indeed more
-readable in the platform drivers and safer since they didn't have to
-bother with more coding. See for instance the drivers with the
-static variable-based IDs allocation. It doesn't seem like these
-drivers bother with the detected DDR devices order. If so then the
-automatic IDs allocation is perfect for them. Note the static variable
-increment isn't atomic. Thus the ID allocation algorithm there is prone
-to races should the devices probe is run concurrently.
+         /*
+          * When there are no more users of probe(),
+          * rename probe_new to probe.
+          */
+         if (driver->probe_new)
+                 status = driver->probe_new(client);
+         else if (driver->probe)
+                 status = driver->probe(client,
+                                        i2c_match_id(driver->id_table, client));
+         else
+                 status = -EINVAL;
 
-> 
-> It works just fine with the x86 drivers - there the memory controller
-> number is the same as the node number where it is located so that works
-> just fine.
-> 
-> If that scheme cannot work on other systems, then I need to see an
-> explanation why it cannot work first.
-> 
-> > The suggested implementation is based on the kernel IDA infrastructure
-> > exposed by the lib/idr.c driver with API described in linux/idr.h header
-> > file. It's used to create an ID resource descriptor "mc_idr", which then
-> > is utilized either to track the custom MC idx specified by EDAC LLDDs or
-> > to allocate the next-free MC idx.
-> 
+Drivers which don't need the second parameter can be declared using
+probe_new instead, avoiding the call to i2c_match_id. Drivers which do
+can still be converted to probe_new-style, calling i2c_match_id
+themselves (as is done currently for of_match_id).
 
-> This is talking about the "what" and not the "why".
-> 
-> > A new special MC index is introduced here. It's defined by the
-> > EDAC_AUTO_MC_NUM macro with a value specifically chosen as the least
-> > probable value used for the real MC index. In case if the EDAC_AUTO_MC_NUM
-> > index is specified by the EDAC LLDD, the MC index will be either retrieved
-> > from the MC device OF-node alias index ("mc[:number:]") or automatically
-> > generated as the next-free MC index found by the ID allocation procedure.
-> 
-> This is also talking about the "what" and not the "why".
-> 
-> At best, what you're doing should be visible from the patch itself.
-> 
-> Here's a longer explanation of how a commit message should look like:
-> 
-> https://kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
+This change was done using the following Coccinelle script, and fixed
+up for whitespace changes:
 
-Have you read it yourself? Here is a short excerpt from there:
-"Once the problem is established, describe what you are actually doing
-about it in technical detail.  It's important to describe the change
-in plain English for the reviewer to verify that the code is behaving
-as you intend it to."
+@ rule1 @
+identifier fn;
+identifier client, id;
+@@
 
-So the "problem" is described in the first paragraph and the technical
-details in the later paragraphs.
+- static int fn(struct i2c_client *client, const struct i2c_device_id *id)
++ static int fn(struct i2c_client *client)
+{
+...when != id
+}
 
--Sergey
+@ rule2 depends on rule1 @
+identifier rule1.fn;
+identifier driver;
+@@
 
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+struct i2c_driver driver = {
+-       .probe
++       .probe_new
+                =
+(
+                   fn
+|
+-                  &fn
++                  fn
+)
+                ,
+};
+
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ drivers/hid/i2c-hid/i2c-hid-of-elan.c   | 5 ++---
+ drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 5 ++---
+ drivers/hid/i2c-hid/i2c-hid-of.c        | 5 ++---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hid/i2c-hid/i2c-hid-of-elan.c b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
+index 2d991325e734..76ddc8be1cbb 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-of-elan.c
++++ b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
+@@ -68,8 +68,7 @@ static void elan_i2c_hid_power_down(struct i2chid_ops *ops)
+ 	regulator_disable(ihid_elan->vcc33);
+ }
+ 
+-static int i2c_hid_of_elan_probe(struct i2c_client *client,
+-				 const struct i2c_device_id *id)
++static int i2c_hid_of_elan_probe(struct i2c_client *client)
+ {
+ 	struct i2c_hid_of_elan *ihid_elan;
+ 
+@@ -119,7 +118,7 @@ static struct i2c_driver elan_i2c_hid_ts_driver = {
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 		.of_match_table = of_match_ptr(elan_i2c_hid_of_match),
+ 	},
+-	.probe		= i2c_hid_of_elan_probe,
++	.probe_new	= i2c_hid_of_elan_probe,
+ 	.remove		= i2c_hid_core_remove,
+ 	.shutdown	= i2c_hid_core_shutdown,
+ };
+diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+index ec6c73f75ffe..29c6cb174032 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
++++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+@@ -87,8 +87,7 @@ static int ihid_goodix_vdd_notify(struct notifier_block *nb,
+ 	return ret;
+ }
+ 
+-static int i2c_hid_of_goodix_probe(struct i2c_client *client,
+-				   const struct i2c_device_id *id)
++static int i2c_hid_of_goodix_probe(struct i2c_client *client)
+ {
+ 	struct i2c_hid_of_goodix *ihid_goodix;
+ 	int ret;
+@@ -167,7 +166,7 @@ static struct i2c_driver goodix_i2c_hid_ts_driver = {
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 		.of_match_table = of_match_ptr(goodix_i2c_hid_of_match),
+ 	},
+-	.probe		= i2c_hid_of_goodix_probe,
++	.probe_new	= i2c_hid_of_goodix_probe,
+ 	.remove		= i2c_hid_core_remove,
+ 	.shutdown	= i2c_hid_core_shutdown,
+ };
+diff --git a/drivers/hid/i2c-hid/i2c-hid-of.c b/drivers/hid/i2c-hid/i2c-hid-of.c
+index 97a27a803f58..10176568133a 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-of.c
++++ b/drivers/hid/i2c-hid/i2c-hid-of.c
+@@ -66,8 +66,7 @@ static void i2c_hid_of_power_down(struct i2chid_ops *ops)
+ 			       ihid_of->supplies);
+ }
+ 
+-static int i2c_hid_of_probe(struct i2c_client *client,
+-			    const struct i2c_device_id *dev_id)
++static int i2c_hid_of_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct i2c_hid_of *ihid_of;
+@@ -138,7 +137,7 @@ static struct i2c_driver i2c_hid_of_driver = {
+ 		.of_match_table = of_match_ptr(i2c_hid_of_match),
+ 	},
+ 
+-	.probe		= i2c_hid_of_probe,
++	.probe_new	= i2c_hid_of_probe,
+ 	.remove		= i2c_hid_core_remove,
+ 	.shutdown	= i2c_hid_core_shutdown,
+ 	.id_table	= i2c_hid_of_id_table,
+
+base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
+-- 
+2.30.2
+
