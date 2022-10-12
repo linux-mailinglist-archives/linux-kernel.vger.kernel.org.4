@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CAC5FC0F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2805FC0F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJLGwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S229484AbiJLGxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJLGwA (ORCPT
+        with ESMTP id S229541AbiJLGxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:52:00 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1257A8053C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:51:57 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z3so22188272edc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K6Gfe2DXR3j95IDhPMundYuLswZnG5sQhGBSuBr4Vek=;
-        b=Jf6svROqedy5cpY/qryRgnx9jnAZOVLWSIj4Xg+GRTFySlVlgHiA5HR/JeDyVvcPqb
-         tviuMMvus/zDBUeusc9xKLA/+w8j26g5+RDf22sJyTKnXSEHS9g6vYDwlg9vC9MCNXT7
-         QS7CtqDwRCirURa6HukWyMzfQMJjPhy1bGt2rThsPY0N+Uth9KN0lzZWa9eYnrqVOq6A
-         Auz5mkl9xxOjEIDQsEV3XsJ+2QV0SudA0i345DOaO/CLmlf0LPUYmU6A6TodK9xJXbPn
-         jrpux7xmrzjkDRy1Y8D02+HNe67/LJdg9aSRjNx7HccSLShrJJEmVI/5s4UIPDGOEYm0
-         xuow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K6Gfe2DXR3j95IDhPMundYuLswZnG5sQhGBSuBr4Vek=;
-        b=lcyc1g9TH70R0Rjjy+YRS0Am80hfiyVRFWGNbU3GGNvo8kbPntwyd1trHNn1jrt0JT
-         yd99aOg7FMUjRqqSATJtpslkMQolrkMUf2BgXbtqcwLhj5Z517r+NOdf8FTfo0umQVI+
-         g3pyebWrW4kXJTL9ItmZZK5M8+DfUJb+hbojuRymPTNIiuEPoimRUUTMf+gf9KjaNx5t
-         h4wXLy2xyqPoj0XhxLrfU8MfT1j6TYr1+e8GlvRtt7dI5JwISQKFq0GnhgYSljOCNsob
-         DVaP1c6beCZVrpfnoJu+asUr+SA0YquTI2anpP9R2CJh+F+9GSrsRf6fj3/ZmhLNKdJU
-         ZGhA==
-X-Gm-Message-State: ACrzQf09c7t6KfdogX8DlgEEMYuDRr17OxSryOAOWWn6GAEiOLcHgczY
-        AiiqI8j7tZG7giarsVa7Wv5W7PmdOaOK2w==
-X-Google-Smtp-Source: AMsMyM4CI+l6phb/FvF7SGDs/PI5uqDhsyvLFsqzZ5G740D/TcSk8oYG1OsFypZWgJBI60fm4mbA/w==
-X-Received: by 2002:a05:6402:27c6:b0:45c:1f1a:6b85 with SMTP id c6-20020a05640227c600b0045c1f1a6b85mr12818463ede.316.1665557516147;
-        Tue, 11 Oct 2022 23:51:56 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id k1-20020aa7d2c1000000b00457a92f8ad6sm10507382edr.28.2022.10.11.23.51.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 23:51:55 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 08:51:54 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH] x86: Fix /proc/cpuinfo cpumask warning
-Message-ID: <20221012065154.p6mn35sy7fynkwdi@kamzik>
-References: <20221011175031.1782748-1-ajones@ventanamicro.com>
- <Y0WvX9Mp0kuohNdq@zn.tnic>
- <20221011181715.dpayrpjueha7kxoj@kamzik>
- <CAAH8bW8Gz66aT4bBbxsrM4iYmpx-DDv8j_M48R+WOuSTravSgQ@mail.gmail.com>
+        Wed, 12 Oct 2022 02:53:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1DA025C;
+        Tue, 11 Oct 2022 23:53:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D6E5B81981;
+        Wed, 12 Oct 2022 06:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64741C433D6;
+        Wed, 12 Oct 2022 06:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665557585;
+        bh=kfeTdt8LgFzpRd1qO+A5KoG7Tuot/w4Ck8QJHAn273s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x0HW7/m2tSyoFLA3qql8FIicJScZBTHHWTk/xt1rAnuVz2+u+RtSLbMkWsaDyeE+T
+         WqbtrwvSDbljxNm4Fd1SpdW1W8xvlJbPyt5En0oXTZChaUVbkQuGYXErqZoxq+cMyV
+         DbRERVUUjp7aDrTCOQWdVwBJzW2605lWG9H+qxLE=
+Date:   Wed, 12 Oct 2022 08:53:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
+ Console Services
+Message-ID: <Y0ZkfT8gSSbKQSI4@kroah.com>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-15-quic_eberman@quicinc.com>
+ <YzbePxTF8hRbWNRU@kroah.com>
+ <14d0ff9f-60f3-71cc-ea42-ceee389298ac@quicinc.com>
+ <Yz/YBDqqwBUlswgX@kroah.com>
+ <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
+ <Y0R/QbysXa6ebNd8@kroah.com>
+ <ca42d89e-9e19-0536-0951-2c123d898892@quicinc.com>
+ <Y0ULqlIMKTc6gdeV@kroah.com>
+ <13eee213-f6c2-d998-ba2e-459509ae7ee7@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAH8bW8Gz66aT4bBbxsrM4iYmpx-DDv8j_M48R+WOuSTravSgQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <13eee213-f6c2-d998-ba2e-459509ae7ee7@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,68 +81,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:02:26PM -0700, Yury Norov wrote:
-> On Tue, Oct 11, 2022 at 11:17 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Tue, Oct 11, 2022 at 08:01:03PM +0200, Borislav Petkov wrote:
-> > > On Tue, Oct 11, 2022 at 07:50:31PM +0200, Andrew Jones wrote:
-> > > > Upcoming cpumask changes will start issuing warnings[*] when cpu
-> > >
-> > > What upcoming changes?
-> > >
-> > > This needs a concrete pointer to a commit or so.
-> >
-> > Hi Boris,
-> >
-> > Sorry, I should have pointed this out. The upcoming change is
-> >
-> > linux-next/master commit a314123c8bdb ("cpumask: fix checking valid cpu
-> > range")
-> >
-> > And also an ongoing discussion here
-> > https://lore.kernel.org/lkml/20221011170949.upxk3tcfcwnkytwm@kamzik/
-> >
-> > I'm hoping that Yury will pick these patches up and integrate
-> > them at the front of his series when introducing the warnings.
-> > I wasn't sure how to call that out other than with the generic
-> > "upcoming change".
-> >
-> > >
-> > > > indices equal to nr_cpu_ids are passed to cpumask_next* functions.
-> > >
-> > > How do those indices get passed here? I think you need to explain how
-> > > exactly this happens.
+On Tue, Oct 11, 2022 at 03:04:08PM -0700, Elliot Berman wrote:
 > 
-> The cpumask_check() fix is already in master. Because of some mess in
+> 
+> On 10/10/2022 11:22 PM, Greg Kroah-Hartman wrote:
+> > On Mon, Oct 10, 2022 at 01:58:00PM -0700, Elliot Berman wrote:
+> > > 
+> > > 
+> > > On 10/10/2022 1:23 PM, Greg Kroah-Hartman wrote:
+> > > > On Sun, Oct 09, 2022 at 01:59:21PM -0700, Elliot Berman wrote:
+> > > > > 
+> > > > > > > > On 10/7/2022 12:40 AM, Greg Kroah-Hartman wrote:
+> > > > > > On Thu, Oct 06, 2022 at 10:59:51PM -0700, Elliot Berman wrote:
+> > > > > > > 
+> > > > > > > "GH" is the shorthand we've been using for "Gunyah". I didn't find
+> > > > > > > documentation for dynamically assigned char devices, but if it exists, I can
+> > > > > > > add entry for ttyGH.
+> > > > > > 
+> > > > > > Why use a new name at all?  Why not stick with the existing tty names
+> > > > > > and device numbers?
+> > > > > > 
+> > > > > 
+> > > > > I can use hvc framework, although driver-level buffering is needed on
+> > > > > both the get_chars/put_chars paths because:
+> > > > 
+> > > > I'm not asking about the framework (although that is a good question,
+> > > > you need to document why this has to be new.)  I'm asking why pick a new
+> > > > name?  You will not have a name conflict in your system with this device
+> > > > with any other tty name right?
+> > > > 
+> > > 
+> > > That's correct, I didn't see any other instances of "ttyGH" in kernel.
+> > 
+> > Do you see any instances of ttyS?  Any other existing name?  Why pick a
+> > new name at all?
+> > 
+> > And if you do pick a new name, you need to document it really really
+> > well, not bury it downn within the tty driver code.
+> > 
+> 
+> Seems other drivers are adding a comment in Kconfig help text. I can do the
+> same.
 
-Ah, it's already in master. I should have checked that...
-
-> cpumask, cpumask_check() was broken for quite a long time, and didn't
-> bark when passed with an out-of-range CPU.
-> 
-> I fixed some false-positives and sent those fixes together with a314123c8bdb.
-> Now, I expect that people will see warnings generated by correct
-> cpumask_check().
-> This is actually the first sign.
-> 
-> Andrew, can you please answer Borislav's question:
-
-I answered in the discussion[1], but I'll send a v2 of this patch,
-properly based on master, with a proper pointer to commit 78e5a3399421
-("cpumask: fix checking valid cpu range"), and also with a condensed
-analysis for justification in the commit message.
-
-Thanks,
-drew
-
-> 
-> > > How do those indices get passed here? I think you need to explain how
-> > > exactly this happens.
-> 
-> It might be either an expected behaviour, and then there should be a great
-> explanation on how and why things work in the subsystem.
-> 
-> Or it might be an error in the caller. In that case, the caller must be fixed.
-> 
-> Thanks,
-> Yury
+If you really want this, yes.  But again, you have not justified a whole
+new name yet...
