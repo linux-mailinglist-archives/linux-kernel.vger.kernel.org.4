@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337E35FC2E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081205FC2EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiJLJSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S229864AbiJLJSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiJLJS2 (ORCPT
+        with ESMTP id S229677AbiJLJS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:18:28 -0400
+        Wed, 12 Oct 2022 05:18:29 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E32FBC468;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E27BC473;
         Wed, 12 Oct 2022 02:18:26 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MnRq02R0gzl4KT;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MnRq05JWpzl911;
         Wed, 12 Oct 2022 17:16:28 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgAnKMpehkZjlH+ZAA--.8980S6;
-        Wed, 12 Oct 2022 17:18:24 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgAnKMpehkZjlH+ZAA--.8980S7;
+        Wed, 12 Oct 2022 17:18:25 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     tj@kernel.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         linan122@huawei.com
-Subject: [PATCH v2 2/4] blk-iocost: don't release 'ioc->lock' while updating params
-Date:   Wed, 12 Oct 2022 17:40:33 +0800
-Message-Id: <20221012094035.390056-3-yukuai1@huaweicloud.com>
+Subject: [PATCH v2 3/4] blk-iocost: prevent configuration update concurrent with io throttling
+Date:   Wed, 12 Oct 2022 17:40:34 +0800
+Message-Id: <20221012094035.390056-4-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221012094035.390056-1-yukuai1@huaweicloud.com>
 References: <20221012094035.390056-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAnKMpehkZjlH+ZAA--.8980S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr18ZFW8JFyfAw4rCF17KFg_yoW5CF1rpF
-        yFg39Iq3yjyrn2vrnFgrsY9r1ru397KryxAFykJrn3Jr12qrnaqF1DCry09FyUtFWfJrZ8
-        XrWrX3yFyF4UArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: gCh0CgAnKMpehkZjlH+ZAA--.8980S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF1fXrWUXw4DtFW7Zw15twb_yoW5ArykpF
+        WfGa9xtw40qrs7XFsruF47Xr13W397Kr4xAa97GryfCr17Kr1IqF1vkryj9r48tFZ5Ars8
+        JFZ5XrWqyry8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUU9m14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
+        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
         A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
         0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
@@ -50,7 +50,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxAr18ZFW8JFyfAw4rCF17KFg_yoW5CF1rpF
         6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
         AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
         s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUc6pPUUUUU=
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd8n5UUUUU=
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -63,97 +63,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-ioc_qos_write() and ioc_cost_model_write() are the same:
+This won't cause any severe problem currently, however, this doesn't
+seems appropriate:
 
-1) hold lock to read 'ioc->params' to local variable;
-2) update params to local variable without lock;
-3) hold lock to write local variable to 'ioc->params';
+1) 'ioc->params' is read from multiple places without holding
+'ioc->lock', unexpected value might be read if writing it concurrently.
 
-In theroy, if user updates params concurrenty, the params might be lost:
-
-t1: update params a		t2: update params b
-spin_lock_irq(&ioc->lock);
-memcpy(qos, ioc->params.qos, sizeof(qos))
-spin_unlock_irq(&ioc->lock);
-
-qos[a] = xxx;
-
-				spin_lock_irq(&ioc->lock);
-				memcpy(qos, ioc->params.qos, sizeof(qos))
-				spin_unlock_irq(&ioc->lock);
-
-				qos[b] = xxx;
-
-spin_lock_irq(&ioc->lock);
-memcpy(ioc->params.qos, qos, sizeof(qos));
-ioc_refresh_params(ioc, true);
-spin_unlock_irq(&ioc->lock);
-
-				spin_lock_irq(&ioc->lock);
-				// updates of a will be lost
-				memcpy(ioc->params.qos, qos, sizeof(qos));
-				ioc_refresh_params(ioc, true);
-				spin_unlock_irq(&ioc->lock);
-
-Althrough this is not common case, the problem can by fixed easily by
-holding the lock through the read, update, write process.
+2) If configuration is changed while io is throttling, the functionality
+might be affected. For example, if module params is updated and cost
+becomes smaller, waiting for timer that is caculated under old
+configuration is not appropriate.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 Acked-by: Tejun Heo <tj@kernel.org>
 ---
- block/blk-iocost.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ block/blk-iocost.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 08036476e6fa..6d36a4bd4382 100644
+index 6d36a4bd4382..5acc5f13bbd6 100644
 --- a/block/blk-iocost.c
 +++ b/block/blk-iocost.c
-@@ -3191,7 +3191,6 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+@@ -3187,6 +3187,9 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+ 		ioc = q_to_ioc(disk->queue);
+ 	}
+ 
++	blk_mq_freeze_queue(disk->queue);
++	blk_mq_quiesce_queue(disk->queue);
++
+ 	spin_lock_irq(&ioc->lock);
  	memcpy(qos, ioc->params.qos, sizeof(qos));
  	enable = ioc->enabled;
- 	user = ioc->user_qos_params;
--	spin_unlock_irq(&ioc->lock);
+@@ -3278,10 +3281,17 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+ 	ioc_refresh_params(ioc, true);
+ 	spin_unlock_irq(&ioc->lock);
  
- 	while ((p = strsep(&input, " \t\n"))) {
- 		substring_t args[MAX_OPT_ARGS];
-@@ -3258,8 +3257,6 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
- 	if (qos[QOS_MIN] > qos[QOS_MAX])
- 		goto einval;
- 
--	spin_lock_irq(&ioc->lock);
--
- 	if (enable) {
- 		blk_stat_enable_accounting(disk->queue);
- 		blk_queue_flag_set(QUEUE_FLAG_RQ_ALLOC_TIME, disk->queue);
-@@ -3284,6 +3281,7 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
++	blk_mq_unquiesce_queue(disk->queue);
++	blk_mq_unfreeze_queue(disk->queue);
++
  	blkdev_put_no_open(bdev);
  	return nbytes;
  einval:
-+	spin_unlock_irq(&ioc->lock);
+ 	spin_unlock_irq(&ioc->lock);
++
++	blk_mq_unquiesce_queue(disk->queue);
++	blk_mq_unfreeze_queue(disk->queue);
++
  	ret = -EINVAL;
  err:
  	blkdev_put_no_open(bdev);
-@@ -3359,7 +3357,6 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
+@@ -3336,6 +3346,7 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
+ 				    size_t nbytes, loff_t off)
+ {
+ 	struct block_device *bdev;
++	struct request_queue *q;
+ 	struct ioc *ioc;
+ 	u64 u[NR_I_LCOEFS];
+ 	bool user;
+@@ -3346,14 +3357,18 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
+ 	if (IS_ERR(bdev))
+ 		return PTR_ERR(bdev);
+ 
+-	ioc = q_to_ioc(bdev_get_queue(bdev));
++	q = bdev_get_queue(bdev);
++	ioc = q_to_ioc(q);
+ 	if (!ioc) {
+ 		ret = blk_iocost_init(bdev->bd_disk);
+ 		if (ret)
+ 			goto err;
+-		ioc = q_to_ioc(bdev_get_queue(bdev));
++		ioc = q_to_ioc(q);
+ 	}
+ 
++	blk_mq_freeze_queue(q);
++	blk_mq_quiesce_queue(q);
++
  	spin_lock_irq(&ioc->lock);
  	memcpy(u, ioc->params.i_lcoefs, sizeof(u));
  	user = ioc->user_cost_model;
--	spin_unlock_irq(&ioc->lock);
+@@ -3402,11 +3417,18 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
+ 	ioc_refresh_params(ioc, true);
+ 	spin_unlock_irq(&ioc->lock);
  
- 	while ((p = strsep(&input, " \t\n"))) {
- 		substring_t args[MAX_OPT_ARGS];
-@@ -3396,7 +3393,6 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
- 		user = true;
- 	}
- 
--	spin_lock_irq(&ioc->lock);
- 	if (user) {
- 		memcpy(ioc->params.i_lcoefs, u, sizeof(u));
- 		ioc->user_cost_model = true;
-@@ -3410,6 +3406,7 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
++	blk_mq_unquiesce_queue(q);
++	blk_mq_unfreeze_queue(q);
++
+ 	blkdev_put_no_open(bdev);
  	return nbytes;
  
  einval:
-+	spin_unlock_irq(&ioc->lock);
+ 	spin_unlock_irq(&ioc->lock);
++
++	blk_mq_unquiesce_queue(q);
++	blk_mq_unfreeze_queue(q);
++
  	ret = -EINVAL;
  err:
  	blkdev_put_no_open(bdev);
