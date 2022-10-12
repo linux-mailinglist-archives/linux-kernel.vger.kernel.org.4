@@ -2,120 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFAE5FCF0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8D95FCF12
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiJLXuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S229683AbiJLXzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLXun (ORCPT
+        with ESMTP id S229436AbiJLXzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:50:43 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E119E6BA;
-        Wed, 12 Oct 2022 16:50:42 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CMxCiD018337;
-        Wed, 12 Oct 2022 23:50:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2022-7-12;
- bh=TO2rT4QW5sSLO3uUF5zSXceKqy+NzNsukctRQKypwjM=;
- b=EagXag9MqBZB8N6GlCoPS3XTPu/vAtnNSX7uhbtDP3UL1B7v8ncl53JEAMJRjKLoq0Dk
- bHm6/XHKFXhxEvtuYob3+1f33YCIB7nECWtor/eDKeI2rFSJ9i1/r2khoLVkK8NoNP/s
- rWy0B5jJyxvIHXlpN6UATGM/sNpK0GGZp0sBn+2ZkM9a9l75UeB5dTDlgkcfWtR6HHlf
- B+/rufwWoYCdTqIy7KLZJ102N0dV2Pw/bIianA7jtJ1ZmRJva0sdXFRenPNFuEyHqyxk
- PmkWy3AIbD17V5Fs5SvOWUGOM+N4lJlRDq9LWeIoINgae/OZv4BFi2epn/kZAi7kiZoi 0A== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k30ttbjm0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Oct 2022 23:50:36 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29CNZp0N025010;
-        Wed, 12 Oct 2022 23:50:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k2yn53dun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Oct 2022 23:50:35 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29CNoY51024951;
-        Wed, 12 Oct 2022 23:50:34 GMT
-Received: from akolappa-linux.us.oracle.com (dhcp-10-159-236-166.vpn.oracle.com [10.159.236.166])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3k2yn53duh-1;
-        Wed, 12 Oct 2022 23:50:34 +0000
-From:   Aru Kolappan <aru.kolappan@oracle.com>
-To:     leon@kernel.org, jgg@ziepe.ca, saeedm@nvidia.com,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     manjunath.b.patil@oracle.com, rama.nichanamatlu@oracle.com,
-        aru.kolappan@oracle.com
-Subject: [PATCH  1/1] net/mlx5: add dynamic logging for mlx5_dump_err_cqe
-Date:   Wed, 12 Oct 2022 16:52:52 -0700
-Message-Id: <1665618772-11048-1-git-send-email-aru.kolappan@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_12,2022-10-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=898 bulkscore=0
- adultscore=0 malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120148
-X-Proofpoint-GUID: xatjI9Naqecl5-zrpOnhFnKcg89AsXmq
-X-Proofpoint-ORIG-GUID: xatjI9Naqecl5-zrpOnhFnKcg89AsXmq
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 19:55:00 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CDA27145
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:54:58 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j21so155770qkk.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HTHHr/MWxMd0iit2mQfPzchuu/gnFAYaWicjCw3O9Rk=;
+        b=WwKieyq6thYuR2x+u6cnHGLiFETZ8wGw39vL83H0ji9AvWeFzn8/BwVhy6WQPR/gHH
+         r5VGVqR+n3eQWCnaF52CAcfUb+ET/wZrRzyn1vmtYBGuejll8QFVUgzK57orunlKsdyt
+         vIHEmccnxEGj76jdRfOOWP26+ePsTNrfYhiys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HTHHr/MWxMd0iit2mQfPzchuu/gnFAYaWicjCw3O9Rk=;
+        b=d2nzzFakpKwLDg/tisqbQlNWi3s9rtgXc5KYYPOYdzDXunSDb4R9DcDzKQRZHMC2Na
+         UtXk7uFdIBQrBdBfdl2TUPOXSqbCM+c7BCJdHqa18CxPHkhRUv2GT05EcG/amnPG2ABa
+         CNHeq0pS+YhHrxhxP4yfNZyFiqZIU/CymfBcTWRHOVG8DUfoiitBx7dmAtBBbsyg/VTq
+         HewvUCgDcB1lXOIa4xe53YWy37DnXa2e5+Pr7wNugrd+t0vTCwGLAEuqxnPZO8fcZvGn
+         qXwNOfsij3hcrkfREeHIX3f90bNDloFNbgx/gz9DuPO9Y7URlKgjWRt1ILQXbmN8ar6P
+         +5Mg==
+X-Gm-Message-State: ACrzQf2A6YlNZGfRP9l/lqSCy6fTxECAfHADXIvMJBJQnv3zu3CZRR9T
+        vmifd+giqU8XwP5S9IRJCauSIg==
+X-Google-Smtp-Source: AMsMyM4ehnZmNiTd8M9kwI1JyvgcnqVezhHqNngddOT+3Cnvi74FuSbkfF80x+ps7n5eJkMO3Fzz3g==
+X-Received: by 2002:a05:620a:2903:b0:6cf:920f:435c with SMTP id m3-20020a05620a290300b006cf920f435cmr21743122qkp.741.1665618897718;
+        Wed, 12 Oct 2022 16:54:57 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id j4-20020a05620a410400b006eea4b5abcesm2290428qko.89.2022.10.12.16.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 16:54:56 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 23:54:56 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: Re: [RFC PATCH 01/11] locking/ww_mutex: Remove wakeups from under
+ mutex::wait_lock
+Message-ID: <Y0dT0D3d/07mNHAK@google.com>
+References: <20221003214501.2050087-1-connoro@google.com>
+ <20221003214501.2050087-2-connoro@google.com>
+ <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arumugam Kolappan <aru.kolappan@oracle.com>
+On Tue, Oct 04, 2022 at 12:01:13PM -0400, Waiman Long wrote:
+> On 10/3/22 17:44, Connor O'Brien wrote:
+> > diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
+> > index 56f139201f24..dfc174cd96c6 100644
+> > --- a/kernel/locking/ww_mutex.h
+> > +++ b/kernel/locking/ww_mutex.h
+> > @@ -161,6 +161,11 @@ static inline void lockdep_assert_wait_lock_held(struct rt_mutex *lock)
+> >   #endif /* WW_RT */
+> > +void ww_ctx_wake(struct ww_acquire_ctx *ww_ctx)
+> > +{
+> > +	wake_up_q(&ww_ctx->wake_q);
+> > +}
+> > +
+> >   /*
+> >    * Wait-Die:
+> >    *   The newer transactions are killed when:
+> > @@ -284,7 +289,7 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
+> >   #ifndef WW_RT
+> >   		debug_mutex_wake_waiter(lock, waiter);
+> >   #endif
+> > -		wake_up_process(waiter->task);
+> > +		wake_q_add(&ww_ctx->wake_q, waiter->task);
+> >   	}
+> >   	return true;
+> > @@ -331,7 +336,7 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
+> >   		 * wakeup pending to re-read the wounded state.
+> >   		 */
+> >   		if (owner != current)
+> > -			wake_up_process(owner);
+> > +			wake_q_add(&ww_ctx->wake_q, owner);
+> >   		return true;
+> >   	}
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index ee28253c9ac0..617e737392be 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1013,6 +1013,13 @@ void wake_up_q(struct wake_q_head *head)
+> >   		wake_up_process(task);
+> >   		put_task_struct(task);
+> >   	}
+> > +	/*
+> > +	 * XXX connoro: seems this is needed now that ww_ctx_wake() passes in a
+> > +	 * wake_q_head that is embedded in struct ww_acquire_ctx rather than
+> > +	 * declared locally.
+> > +	 */
+> > +	head->first = node;
+> > +	head->lastp = &head->first;
+> >   }
+> 
+> You shouldn't do wake_q_init() here in wake_up_q(). Instead, you should do
+> it in ww_ctx_wake() right after the wake_up_q() call.
+> :
 
-Presently, mlx5 driver dumps error CQE by default for few syndromes. Some
-syndromes are expected due to application behavior[Ex: REMOTE_ACCESS_ERR
-for revoking rkey before RDMA operation is completed]. There is no option
-to disable the log if the application decided to do so. This patch
-converts the log into dynamic print and by default, this debug print is
-disabled. Users can enable/disable this logging at runtime if needed.
+Exactly, it is also mentioned in the wake_q.h header:
 
-Suggested-by: Manjunath Patil <manjunath.b.patil@oracle.com>
-Signed-off-by: Arumugam Kolappan <aru.kolappan@oracle.com>
----
- drivers/infiniband/hw/mlx5/cq.c | 2 +-
- include/linux/mlx5/cq.h         | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ * The DEFINE_WAKE_Q macro declares and initializes the list head.
+ * wake_up_q() does NOT reinitialize the list; it's expected to be
+ * called near the end of a function. Otherwise, the list can be
+ * re-initialized for later re-use by wake_q_init().
+ *
 
-diff --git a/drivers/infiniband/hw/mlx5/cq.c b/drivers/infiniband/hw/mlx5/cq.c
-index be189e0..890cdc3 100644
---- a/drivers/infiniband/hw/mlx5/cq.c
-+++ b/drivers/infiniband/hw/mlx5/cq.c
-@@ -269,7 +269,7 @@ static void handle_responder(struct ib_wc *wc, struct mlx5_cqe64 *cqe,
- 
- static void dump_cqe(struct mlx5_ib_dev *dev, struct mlx5_err_cqe *cqe)
- {
--	mlx5_ib_warn(dev, "dump error cqe\n");
-+	mlx5_ib_dbg(dev, "dump error cqe\n");
- 	mlx5_dump_err_cqe(dev->mdev, cqe);
- }
- 
-diff --git a/include/linux/mlx5/cq.h b/include/linux/mlx5/cq.h
-index cb15308..2eae88a 100644
---- a/include/linux/mlx5/cq.h
-+++ b/include/linux/mlx5/cq.h
-@@ -198,8 +198,8 @@ int mlx5_core_modify_cq_moderation(struct mlx5_core_dev *dev,
- static inline void mlx5_dump_err_cqe(struct mlx5_core_dev *dev,
- 				     struct mlx5_err_cqe *err_cqe)
- {
--	print_hex_dump(KERN_WARNING, "", DUMP_PREFIX_OFFSET, 16, 1, err_cqe,
--		       sizeof(*err_cqe), false);
-+	print_hex_dump_debug("", DUMP_PREFIX_OFFSET, 16, 1, err_cqe,
-+			     sizeof(*err_cqe), false);
- }
- int mlx5_debug_cq_add(struct mlx5_core_dev *dev, struct mlx5_core_cq *cq);
- void mlx5_debug_cq_remove(struct mlx5_core_dev *dev, struct mlx5_core_cq *cq);
--- 
-1.8.3.1
+Thanks.
 
