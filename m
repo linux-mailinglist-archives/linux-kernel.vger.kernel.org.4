@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFD95FC5F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECB25FC602
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJLNH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S229736AbiJLNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiJLNHx (ORCPT
+        with ESMTP id S229745AbiJLNKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:07:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4DECAE4B;
-        Wed, 12 Oct 2022 06:07:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id ECC571F381;
-        Wed, 12 Oct 2022 13:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665580068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=noRw341ciNnXF2Fe3Zu8GlyFJvJlbriboL+oH8utWA8=;
-        b=Hpqv7y7duLf4qQYyRbwbcD9yTwe3/BS2Ob/qn6ah/cL/4k5nGbsLLVJaNvgdka6iCoKHEz
-        HhTrfROTTyzpNtb/vSORr+hLkzWRMgMVxtM+60yAkiUTeqLzLUeYmuElHA14k9rN/neRMG
-        yr7g4hiFxVLMJuR1KQxOvS0QXM9Om+I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2C5913ACD;
-        Wed, 12 Oct 2022 13:07:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WS+OJSS8RmM7cAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 12 Oct 2022 13:07:48 +0000
-Date:   Wed, 12 Oct 2022 15:07:47 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Vinicius Petrucci <vpetrucci@gmail.com>
-Cc:     Frank van der Linden <fvdl@google.com>,
-        Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
-Subject: Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-Message-ID: <Y0a8IxAXy43unTSb@dhcp22.suse.cz>
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
- <CAPTztWYTGOb8ZQzfgThqJn+fyi4ZB8=JQQZi5_rUoDhdftKtvg@mail.gmail.com>
- <Y0WE/lEiNvl2ljo1@dhcp22.suse.cz>
- <CAPTztWZZOxtzdEm=wbOiL_VDPJuCaW0XVCvsdRpCHE+ph+5eZQ@mail.gmail.com>
- <Y0XEAUD9Ujcu/j8y@dhcp22.suse.cz>
- <CAEZ6=UOA6=ikSdxN662xyhT3wauGuqZReKLOb=_9EmSRckNr=Q@mail.gmail.com>
+        Wed, 12 Oct 2022 09:10:51 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B87C30E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:10:45 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id o2so3172070qkk.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C7G2Yq+rJ1ZhtKUz9+hk3hjumuAmKCtJeLM6FaHLR48=;
+        b=EBBu9Jumc1NjlI14sXDx18bN/BhlEoRIemgjAThwEMFR4FDMdr837XPmF153c97kiv
+         KgcAuD/nM2Euj12kgMiaOXwAOTRq++/xwzxIHQmpe6xRr1dqHJ9MqCeA0wdscFQgL02T
+         CF1Hk19v2NS1ExOdWA0ZFZYbLAmAIWU+Xr5GoCiIpHRVVNzhVvWjKtRJH29P+eGXrADl
+         6nbKtAfmckcRubnodOptTE8/cnKXnI8/6vjIoMXu3UUADv+mF4+YcqeTq3/VO7ndRtX1
+         hOhdAW3sgs2C1nkaSDXIr6P4rIAH1T94fuJJEAZ3zc7ZiMBzfB3S499/GZOz10ZE7NX6
+         cigw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C7G2Yq+rJ1ZhtKUz9+hk3hjumuAmKCtJeLM6FaHLR48=;
+        b=bgHgUQJJLT36sm469xcK1Ht5NDzs4Lw+LpvLIXreTg/P8MSg86XREr9c6aKWXc8RV+
+         45ZPPOeyRed7IU7d+iraf4UOxHTECTB+1g0flME4p4cRd5277VqdPV3lSGbl3vE5zdql
+         iS8VgMQWzD468Ydqg1aRAULqNpubAVGv7jPZJ39JFGzLWBoN3ueZwABP4hzShLYutjr6
+         Yfz0XYF8szx0vL82no//vdAkgfoQsLvJLHSkADHBHpc0dGSj7zyXPL0+Wln93zcueSY6
+         2vDXobK5yDc17SyLhzg6ygNKq/CCsg7mQ7eYOkfVC1I2Cyq8M6G94k6Y+O/Bp8zChCCi
+         zA5w==
+X-Gm-Message-State: ACrzQf3NgQV5DXbgL1hHgIPWQqPI72qWMEdR0HsLQDKUq6wKmjca3QsH
+        hpduPJkskP1yQ3K9haxd1PDYSw==
+X-Google-Smtp-Source: AMsMyM47s2HEd/ei/G/HHcLx+xnZuL6fbjDhrLQjxBM2msx4b/k/ATJETtbWtIuy6tjp4xspUJ11Ug==
+X-Received: by 2002:a37:2e84:0:b0:6cf:8dd4:7adc with SMTP id u126-20020a372e84000000b006cf8dd47adcmr20148712qkh.723.1665580244143;
+        Wed, 12 Oct 2022 06:10:44 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id br7-20020a05620a460700b006e9b3096482sm13642940qkb.64.2022.10.12.06.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 06:10:43 -0700 (PDT)
+Message-ID: <4e5ed6bf-8af1-d8b9-b89a-e9207a6ea756@linaro.org>
+Date:   Wed, 12 Oct 2022 09:08:32 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEZ6=UOA6=ikSdxN662xyhT3wauGuqZReKLOb=_9EmSRckNr=Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 03/10] dt-bindings: usb: sunxi-musb: add F1C100s MUSB
+ compatible string
+Content-Language: en-US
+To:     Icenowy Zheng <uwu@icenowy.me>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+References: <20221012055602.1544944-1-uwu@icenowy.me>
+ <20221012055602.1544944-4-uwu@icenowy.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221012055602.1544944-4-uwu@icenowy.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-10-22 07:34:06, Vinicius Petrucci wrote:
-> > Well, per address range operation is a completely different beast I
-> > would say. External tool would need to a) understand what that range is
-> > used for (e.g. stack/heap ranges, mmaped shared files like libraries or
-> > private mappings) and b) by in sync with memory layout modifications
-> > done by applications (e.g. that an mmap has been issued to back malloc
-> > request). Quite a lot of understanding about the specific process. I
-> > would say that with that intimate knowledge it is quite better to be
-> > part of the process and do those changes from within of the process
-> > itself.
+On 12/10/2022 01:55, Icenowy Zheng wrote:
+> Allwinner F1C100s has a hybrid MUSB controller between the A10 one and
+> the A33 one.
 > 
-> Sorry, this may be a digression, but just wanted to mention a
-> particular use case from a project I recently collaborated on (to
-> appear next month at IIWSC 2022:
-> http://www.iiswc.org/iiswc2022/index.html).
+> Add a compatible string for it.
 > 
-> We carried out a performance analysis of the latest Linux AutoNUMA
-> memory tiering on graph processing applications. We noticed that hot
-> pages cannot be properly identified by the reactive approach used by
-> AutoNUMA due to irregular/random memory access patterns.
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
 
-Yes, I can see how a reactive approach might not be the best fit.
-Automatic NUMA balancing can help quite a lot where memory regions
-are accessed consistently. I can imagine situations where the user space
-agent can tell much better what is the best node to place data when the
-access pattern is not obvbious or hard to deduce from local metrics.
 
-My main argument is though that those are rather specialized and it is
-much easier to implement the agent as a part of the process as they are
-unlikely to be generic enough to serve many different processes. I might
-be wrong in this of course and I am also not saying that pidfd_mbind is
-a completely unreasonable idea. We just need a strong usecase before
-going that way.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Thus, as a
-> POC, we implemented and evaluated a simple idea of having an external
-> user-level process/agent that, based on prior profiling results of
-> memory regions, could make more effectively memory chunk/object-based
-> mappings (instead of page-level allocation/migration) in advance on
-> either DRAM or CXL/PMEM (via mbind calls). This kind of tiering
-> solution could deliver up to 2x more performance for graph analytics
-> workloads. We plan to evaluate other workloads as well.
-> 
-> Having a feature like "pidfd/process_mbind" would really simplify our
-> user-level agent implementation moving forward, as right now we are
-> adding a LD_PRELOAD wrapper (for signal handler) to listen and execute
-> "mbind" requests from another process. If there's any other
-> alternative solution to this already (via ptrace?), please let me
-> know.
+Best regards,
+Krzysztof
 
-userfaultfd sounds like the closest match if #PF handling under control
-of an external agent is viable.
--- 
-Michal Hocko
-SUSE Labs
