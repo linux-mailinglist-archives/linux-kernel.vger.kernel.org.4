@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6F65FCB30
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAA95FCB1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiJLS5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S229745AbiJLSyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJLS5s (ORCPT
+        with ESMTP id S230037AbiJLSy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:57:48 -0400
-X-Greylist: delayed 219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 11:57:46 PDT
-Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C773AD;
-        Wed, 12 Oct 2022 11:57:45 -0700 (PDT)
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 6AD551551EE;
-        Wed, 12 Oct 2022 14:54:05 -0400 (EDT)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-        :to:cc:subject:in-reply-to:message-id:references:mime-version
-        :content-type; s=sasl; bh=ocnc+2r0vxqNuyxVHePXxoUh1gWAZCMQYekr3k
-        sGhDo=; b=DibnxC3UKNnsAlNgebz3YPB2R6yF2VAhQsDyP67brysCvirgGEdpG6
-        N2+uEvnO11hoaqA5yHpd2mv5Hz8seaJ9I2P2IJz1X0mbhnR9/RurZI/oLt/DWcNt
-        KtvkyCWxK4FFktsEtLnUkI84RVXcnnkls950GnFdLViShtKGMxOBY=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 603FF1551ED;
-        Wed, 12 Oct 2022 14:54:05 -0400 (EDT)
-        (envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=81lGIyVyMpAU5HDAaXAdVFPBsmczXQLcnAYTitfm3/U=; b=Gl7MxQiaAyFnzvFaaJiexzUcJdrSC+LQMlOBFbw4eSrc/DeuczqmhDPiL4Ls9nLDZweTc3X60O09SsAsVO7K9LABGEKqellAyhfLsX8vTvOm59xf5mLIq0I8EZ10UieB/jdy17gFnwfHxzcGOgrAXalfGttXjOf9r1s4s+9v1b0=
-Received: from yoda.home (unknown [96.21.170.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id BF4D31551EC;
-        Wed, 12 Oct 2022 14:54:04 -0400 (EDT)
-        (envelope-from nico@fluxnic.net)
-Received: from xanadu.home (xanadu [192.168.2.2])
-        by yoda.home (Postfix) with ESMTPSA id 6D50E47DF06;
-        Wed, 12 Oct 2022 14:54:03 -0400 (EDT)
-Date:   Wed, 12 Oct 2022 14:54:03 -0400 (EDT)
-From:   Nicolas Pitre <nico@fluxnic.net>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-cc:     Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] fs/cramfs: Convert kmap() to kmap_local_data()
-In-Reply-To: <20221012091356.16632-1-fmdefrancesco@gmail.com>
-Message-ID: <87672pr-o821-qns6-11rp-902sp1s34r3@syhkavp.arg>
-References: <20221012091356.16632-1-fmdefrancesco@gmail.com>
+        Wed, 12 Oct 2022 14:54:26 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ED1FBCE1;
+        Wed, 12 Oct 2022 11:54:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sc25so33785636ejc.12;
+        Wed, 12 Oct 2022 11:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dpNAjIP3+/CYveBRP1wK/QYkcqvRFS3jNUinLQYeflQ=;
+        b=L14dIfx8sUT5dwY0c4owUOXGJoyaq7E8rFKe9s4Fy5EyDUGDxJ/coXeSiaDLgItJcq
+         hgbDS9Ent15GVDV3kqohjV5E8AEI1pqEYrkrcFkZYiv+fwo7UumrTo/als1ZDP2jlyWa
+         DU4LxX8Nv90I+X6gy5TDv5+4EHcEBAaC+s8lRg/YU5nl3IJHcCHZuFuTdbC4CiLiIBKO
+         llYtadqOytjMUm8xH+DmmIecmJhVmog9uMQG+RdhT3XR/rnL+P0gTy+JUJvW3eD1Cz5B
+         zSBIFKveODf9mGBZsfvp5bu8CBxF//gVm00wFe2N2+9DfW8Zt1tSQYZ1+HE2u9LBCaLl
+         BRNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dpNAjIP3+/CYveBRP1wK/QYkcqvRFS3jNUinLQYeflQ=;
+        b=gmjKLF7I4Qc8vnKjpGMghCJoXM+m5yKOH7MW24YsswPqxzxsg6UzDKpx4FGuVnkqF+
+         QlVk37D8+6whTbxxDwytmriqa+CoSHYCj1mxa3wcD4nBf1MkUliIWO2P6njcpeJ0BgPF
+         ChF9nPeuZmJmDQT1wLFnMcIRDTvWHYwyXOfAVE6wmI89ZMPiPQIEUxCWYqzZkK6nXpyk
+         6rIQiu2E85Y+wBDkVSuW+7yXkqSSEkwMLaSw3rwwZ1IWHaYXHh5Y/YgNNqiMVFgQjwe0
+         mQ3Y5rAgOwiseunQaB5NCgczfSSxV4VhBH9sOIRKG3r377JLDJTiPlVKkpCdEJcqCRHA
+         f/LA==
+X-Gm-Message-State: ACrzQf00jvdW9IwpJHhKMPuOFuLCwNAEzWhsnds94kvJ+Q/Q4WAVDqMU
+        QyxpJ3ErinHro8VxCrkgxNGAe0uYM90=
+X-Google-Smtp-Source: AMsMyM4+dkMPTk53nm+2lFF6ZKKWyQQOA4QE6x4T9y0IFp/QJYLp9gQuL+7OR9DwC3DHYxwZxJqhMw==
+X-Received: by 2002:a17:907:6e09:b0:78d:a326:49c6 with SMTP id sd9-20020a1709076e0900b0078da32649c6mr15728366ejc.507.1665600856015;
+        Wed, 12 Oct 2022 11:54:16 -0700 (PDT)
+Received: from localhost.localdomain ([46.216.9.29])
+        by smtp.googlemail.com with ESMTPSA id ay8-20020a170906d28800b00788c622fa2csm1668235ejb.135.2022.10.12.11.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 11:54:15 -0700 (PDT)
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v3 0/2] add device Samsung Galaxy S9 phone (codename starqltechn) and board binding
+Date:   Wed, 12 Oct 2022 21:54:09 +0300
+Message-Id: <20221012185411.1282838-1-dsankouski@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1044884447-1665600843=:1258"
-X-Pobox-Relay-ID: 3E6DE3A0-4A5F-11ED-8611-2AEEC5D8090B-78420484!pb-smtp1.pobox.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,92 +76,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Add initial support for Samsung Galaxy S9 phone (codename starqltechn) and board binding
 
---8323328-1044884447-1665600843=:1258
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Dzmitry Sankouski (2):
+  dt-bindings: arm: add samsung,starqltechn board based on sdm845 chip
+  arm64: dts: qcom: starqltechn: add initial device tree for starqltechn
 
-On Wed, 12 Oct 2022, Fabio M. De Francesco wrote:
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../dts/qcom/sdm845-samsung-starqltechn.dts   | 460 ++++++++++++++++++
+ 3 files changed, 462 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm845-samsung-starqltechn.dts
 
-> The use of kmap() is being deprecated in favor of kmap_local_page().
->=20
-> There are two main problems with kmap(): (1) It comes with an overhead =
-as
-> the mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when t=
-he
-> kmap=E2=80=99s pool wraps and it might block when the mapping space is =
-fully
-> utilized until a slot becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, t=
-he
-> kernel virtual addresses are restored and still valid.
->=20
-> Since its use in fs/cramfs is safe everywhere, it should be preferred.
->=20
-> Therefore, replace kmap() with kmap_local_page() in fs/cramfs. Instead
-> of open-coding kmap_local_page() + memcpy(), use memcpy_from_page().
->=20
-> Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+-- 
+2.30.2
 
-Reviewed-by: Nicolas Pitre <nico@fluxnic.net>
-
-> ---
->  fs/cramfs/inode.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->=20
-> diff --git a/fs/cramfs/inode.c b/fs/cramfs/inode.c
-> index 61ccf7722fc3..c17cbba5d45e 100644
-> --- a/fs/cramfs/inode.c
-> +++ b/fs/cramfs/inode.c
-> @@ -238,8 +238,7 @@ static void *cramfs_blkdev_read(struct super_block =
-*sb, unsigned int offset,
->  		struct page *page =3D pages[i];
-> =20
->  		if (page) {
-> -			memcpy(data, kmap(page), PAGE_SIZE);
-> -			kunmap(page);
-> +			memcpy_from_page(data, page, 0, PAGE_SIZE);
->  			put_page(page);
->  		} else
->  			memset(data, 0, PAGE_SIZE);
-> @@ -815,7 +814,7 @@ static int cramfs_read_folio(struct file *file, str=
-uct folio *folio)
-> =20
->  	maxblock =3D (inode->i_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
->  	bytes_filled =3D 0;
-> -	pgdata =3D kmap(page);
-> +	pgdata =3D kmap_local_page(page);
-> =20
->  	if (page->index < maxblock) {
->  		struct super_block *sb =3D inode->i_sb;
-> @@ -903,13 +902,13 @@ static int cramfs_read_folio(struct file *file, s=
-truct folio *folio)
-> =20
->  	memset(pgdata + bytes_filled, 0, PAGE_SIZE - bytes_filled);
->  	flush_dcache_page(page);
-> -	kunmap(page);
-> +	kunmap_local(pgdata);
->  	SetPageUptodate(page);
->  	unlock_page(page);
->  	return 0;
-> =20
->  err:
-> -	kunmap(page);
-> +	kunmap_local(pgdata);
->  	ClearPageUptodate(page);
->  	SetPageError(page);
->  	unlock_page(page);
-> --=20
-> 2.37.3
->=20
->=20
---8323328-1044884447-1665600843=:1258--
