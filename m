@@ -2,227 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467A95FC323
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165245FC32D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiJLJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S229705AbiJLJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJLJeR (ORCPT
+        with ESMTP id S229470AbiJLJkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:34:17 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2750BE51B;
-        Wed, 12 Oct 2022 02:34:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m16so597738edc.4;
-        Wed, 12 Oct 2022 02:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5hwOC37cPRVT+Lgt6Q6oTRESj5g4dMDJkms4UxcNz6o=;
-        b=gOWYd7cgiPSqMjcd2my2MAjZEF7vcSQs4HKRsvLSimpo/ry33sb15M2wKdnw5mprZf
-         wyCAKHyDGHBg6aRI0Z4ASWUB2qKF+CVeEAGnKxQZ/EPSwgQgDcVhXZ6ufR/DSMalG3h/
-         zdC5ggB3s9GDURjFRSohw+//Bys+Chny2WD0uRMCLATGn49f8YSkd/yNgOswbV8DH2lv
-         fXwOHd4Fw8Kim8LQyRAaXNuLHyNurQ+ysnFyK9xGWAosMx/iU5oGMCu6wkgzexqr1I+p
-         4iNVSgeThfrUSL55uW885yBO9c6DC2BpDHdYIPW6NDd1t+3/hebys9Eif5WNCEVuyXaG
-         leOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5hwOC37cPRVT+Lgt6Q6oTRESj5g4dMDJkms4UxcNz6o=;
-        b=r/ZxG9LHhn/39sS+0oJ5WtSLZSektKrfbzF9Z6DOjGLs1m7WgxyApFq0Xl7gDjcoyp
-         ONLI7otW5CWWDMbaFbSyJ4TJ85V6X5ouDQlIKGTuBlTIDDdIW6MT0mddGvF06nsafEaM
-         Le//uQnLG6/VOYV7/t/u3aynXGf/tjXqfygvLA8DLqhSWujvWBG+XA1D532TgYC5VmDh
-         gh5LZ6NBdg0TJNmZHvc+zq4mQqkm3pK49HpZPwADuhxrVOQ0NjuN8Nf6jTM4+LE2Ck7D
-         l9o0TYUyaufy7vGISx13JgdgKWsfxdZIjwKZYu5Wp9wZ3FT+Jr0clyEGz+tsL1ZZri2O
-         REMg==
-X-Gm-Message-State: ACrzQf1+39IpxbFV8rjIAzFMU8ZayRHu/YyoYTrrQWyrw4wG2CFT4ACR
-        Qd/tQepE4IqOpDecJBoIVPPMCbOB9/YJGarIVmE=
-X-Google-Smtp-Source: AMsMyM7np7gDeepsDAM0PBQ0jBNtCsz3pC/4X0bx7r4wpvQb4BioUS97iasxlET2qoc9ejtvGFICpqJzcRu6OHtLSE0=
-X-Received: by 2002:a05:6402:46:b0:45c:bd68:6ab0 with SMTP id
- f6-20020a056402004600b0045cbd686ab0mr924498edu.16.1665567255027; Wed, 12 Oct
- 2022 02:34:15 -0700 (PDT)
+        Wed, 12 Oct 2022 05:40:11 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25E5357C9;
+        Wed, 12 Oct 2022 02:40:09 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 70CB7580320;
+        Wed, 12 Oct 2022 05:40:07 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 12 Oct 2022 05:40:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665567607; x=
+        1665574807; bh=jIw1X1OWq80oU2H2+NRiXoIfwbXHEKKKboIcZC9PvE0=; b=F
+        gE06xXtIGl/CXdZ/hYvqQ3ivFNxdzi1khTxMRZfc43pIXIdYIhyKtMOrHh4B80ss
+        NnjqxmaiTBwL5IFtp2Re7QI+gTp2R+1WjAxdrYHzfWX4wJVd0UTwdcvQnPvyWyKA
+        h48aT27TDws2hy1lh8LkiLSkdIQNEccILZCb5To97hCDvTp2A0idUZdAEjM40vu0
+        ecgKzFxp1Px5LLQm+MD3xvuK7Qmcf8LRHJkmDOrgAAcMz/4arKqAasIHoAoQNm91
+        M9AHHJhmWRjL6ShjyKc1BfpzOdHRd/4Y1H/48hcIqigeWUAfnIpPpYcM+PF3Hwsj
+        ufPeM5ebRVtSqQjiY7nRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665567607; x=
+        1665574807; bh=jIw1X1OWq80oU2H2+NRiXoIfwbXHEKKKboIcZC9PvE0=; b=V
+        WiGVFXdVd0Dd/zto8rpPDKrniT+oGSjiT5TToUmPb3s2yCwiJUONhsWaRrCtLExZ
+        tOXR/LKwbj2TVeBrTEh3LJoClem2AVdH7q1Dak48wynGv8fJxi0gjmlTN8mDpK2O
+        eVAvWlJNE7xESEoC+Mb0vtI3jJgA6+I1oM3hlGbgIfCRK6LpVeReUI3bZEYbY9q2
+        vJrLcpqsNRaC5aLsVRaVKD4PqeRvBHmypNwfbeZjlwjlNJRdYm5Up+7lg0QqKODQ
+        +GngeDgTuv8QQJe1VNs6Q3fa2gMd+1P2dKikB7aX4wi7KgIC3HllrV/yNWwr0H1e
+        qhOT5oJxULVaBPutwnL6A==
+X-ME-Sender: <xms:dotGY-GvlhZotYDF22OxWd1rynwv8cqBYUlp3tPAfopsnLrcie_pNw>
+    <xme:dotGY_Ukj4mVbm_h2N844-w7OlP5qJcWAXvIslfm4KXiIt0U2I5lJKr2oQUcRXvel
+    FXIS-zHcI0q8vaWxoE>
+X-ME-Received: <xmr:dotGY4IyY6w4YgGrbxn7KYZLydtDgjrxzzsLLjFFOEc_aBkWv98tp7J1W8S4EMUlot1N7MNFyZFXKko0AAGe_eUHHJUkb_i0yCx4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepiedtueffveeiueeftdduvdffffffgeffgfekiefhleelkedtlefhvefh
+    udduhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:d4tGY4G5WBa42tjim1N_Mt_R5-O0VdB8TjSZ6s8Cvp8QaCVMXgd17g>
+    <xmx:d4tGY0WmoFfYn876J-XBkqpyPMn36acN3EbyU9oOrKXM_o6J80MLvg>
+    <xmx:d4tGY7NlS0PAFPfno4vmrdKGtkVmpYDB-mLLgW34lk_8u9N8jXWRAA>
+    <xmx:d4tGY529AaZHmTLWqHb1-eqoPQhNNFR1SsyDAbE0EDFWIfv3SlQrsw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Oct 2022 05:40:06 -0400 (EDT)
+Date:   Wed, 12 Oct 2022 11:40:04 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
+        chun-jie.chen@mediatek.com, miles.chen@mediatek.com,
+        wenst@chromium.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] clk: mediatek: clk-mux: Add .determine_rate() callback
+Message-ID: <20221012094004.jgiyvmbgomiyedik@houat>
+References: <20221011135548.318323-1-angelogioacchino.delregno@collabora.com>
+ <20221012085555.3nls7ja56vlnaz2w@houat>
+ <c4a1eb9f-016d-c184-e494-c869038b87ff@collabora.com>
 MIME-Version: 1.0
-References: <20221012055602.1544944-1-uwu@icenowy.me> <20221012055602.1544944-11-uwu@icenowy.me>
-In-Reply-To: <20221012055602.1544944-11-uwu@icenowy.me>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Wed, 12 Oct 2022 11:34:03 +0200
-Message-ID: <CAJiuCcfSPaX_boxUjLUVdUKf7eENbOjX96aw=fTOUPEe=4cSwg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick v1.1
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>, soc@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <c4a1eb9f-016d-c184-e494-c869038b87ff@collabora.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Icenowy,
+On Wed, Oct 12, 2022 at 11:09:59AM +0200, AngeloGioacchino Del Regno wrote:
+> Il 12/10/22 10:55, Maxime Ripard ha scritto:
+> > Hi,
+> >=20
+> > On Tue, Oct 11, 2022 at 03:55:48PM +0200, AngeloGioacchino Del Regno wr=
+ote:
+> > > Since commit 262ca38f4b6e ("clk: Stop forwarding clk_rate_requests
+> > > to the parent"), the clk_rate_request is .. as the title says, not
+> > > forwarded anymore to the parent:
+> >=20
+> > It's not entirely true, the rate request should still be forwarded, but
+> > we don't pass the same instance of clk_rate_request anymore.
+> >=20
+> > > this produces an issue with the MediaTek clock MUX driver during GPU
+> > > DVFS on MT8195, but not on MT8192 or others.
+> > >=20
+> > > This is because, differently from others, like MT8192 where all of
+> > > the clocks in the MFG parents tree are of mtk_mux type, but in the
+> > > parent tree of MT8195's MFG clock, we have one mtk_mux clock and
+> > > one (clk framework generic) mux clock, like so:
+> > >=20
+> > > names: mfg_bg3d -> mfg_ck_fast_ref -> top_mfg_core_tmp (or) mfgpll
+> > > types: mtk_gate ->      mux        ->     mtk_mux      (or) mtk_pll
+> > >=20
+> > > To solve this issue and also keep the GPU DVFS clocks code working
+> > > as expected, wire up a .determine_rate() callback for the mtk_mux
+> > > ops; for that, the standard clk_mux_determine_rate_flags() was used
+> > > as it was possible to.
+> >=20
+> > It probably fixes things indeed, but I'm a bit worried that it just
+> > works around the actual issue instead of fixing the actual bug...
+> >=20
+> > > This commit was successfully tested on MT6795 Xperia M5, MT8173 Elm,
+> > > MT8192 Spherion and MT8195 Tomato; no regressions were seen.
+> > >=20
+> > > For the sake of some more documentation about this issue here's the
+> > > trace of it:
+> > >=20
+> > > [   12.211587] ------------[ cut here ]------------
+> > > [   12.211589] WARNING: CPU: 6 PID: 78 at drivers/clk/clk.c:1462 clk_=
+core_init_rate_req+0x84/0x90
+> > > [   12.211593] Modules linked in: stp crct10dif_ce mtk_adsp_common ll=
+c rfkill snd_sof_xtensa_dsp
+> > >                 panfrost(+) sbs_battery cros_ec_lid_angle cros_ec_sen=
+sors snd_sof_of
+> > >                 cros_ec_sensors_core hid_multitouch cros_usbpd_logger=
+ snd_sof gpu_sched
+> > >                 snd_sof_utils fuse ipv6
+> > > [   12.211614] CPU: 6 PID: 78 Comm: kworker/u16:2 Tainted: G        W=
+          6.0.0-next-20221011+ #58
+> > > [   12.211616] Hardware name: Acer Tomato (rev2) board (DT)
+> > > [   12.211617] Workqueue: devfreq_wq devfreq_monitor
+> > > [   12.211620] pstate: 40400009 (nZcv daif +PAN -UAO -TCO -DIT -SSBS =
+BTYPE=3D--)
+> > > [   12.211622] pc : clk_core_init_rate_req+0x84/0x90
+> > > [   12.211625] lr : clk_core_forward_rate_req+0xa4/0xe4
+> > > [   12.211627] sp : ffff80000893b8e0
+> > > [   12.211628] x29: ffff80000893b8e0 x28: ffffdddf92f9b000 x27: ffff4=
+6a2c0e8bc05
+> > > [   12.211632] x26: ffff46a2c1041200 x25: 0000000000000000 x24: 00000=
+000173eed80
+> > > [   12.211636] x23: ffff80000893b9c0 x22: ffff80000893b940 x21: 00000=
+00000000000
+> > > [   12.211641] x20: ffff46a2c1039f00 x19: ffff46a2c1039f00 x18: 00000=
+00000000000
+> > > [   12.211645] x17: 0000000000000038 x16: 000000000000d904 x15: 00000=
+00000000003
+> > > [   12.211649] x14: ffffdddf9357ce48 x13: ffffdddf935e71c8 x12: 00000=
+0000004803c
+> > > [   12.211653] x11: 00000000a867d7ad x10: 00000000a867d7ad x9 : ffffd=
+ddf90c28df4
+> > > [   12.211657] x8 : ffffdddf9357a980 x7 : 0000000000000000 x6 : 00000=
+00000000004
+> > > [   12.211661] x5 : ffffffffffffffc8 x4 : 00000000173eed80 x3 : ffff8=
+0000893b940
+> > > [   12.211665] x2 : 00000000173eed80 x1 : ffff80000893b940 x0 : 00000=
+00000000000
+> > > [   12.211669] Call trace:
+> > > [   12.211670]  clk_core_init_rate_req+0x84/0x90
+> > > [   12.211673]  clk_core_round_rate_nolock+0xe8/0x10c
+> > > [   12.211675]  clk_mux_determine_rate_flags+0x174/0x1f0
+> > > [   12.211677]  clk_mux_determine_rate+0x1c/0x30
+> > > [   12.211680]  clk_core_determine_round_nolock+0x74/0x130
+> > > [   12.211682]  clk_core_round_rate_nolock+0x58/0x10c
+> > > [   12.211684]  clk_core_round_rate_nolock+0xf4/0x10c
+> > > [   12.211686]  clk_core_set_rate_nolock+0x194/0x2ac
+> > > [   12.211688]  clk_set_rate+0x40/0x94
+> > > [   12.211691]  _opp_config_clk_single+0x38/0xa0
+> > > [   12.211693]  _set_opp+0x1b0/0x500
+> > > [   12.211695]  dev_pm_opp_set_rate+0x120/0x290
+> > > [   12.211697]  panfrost_devfreq_target+0x3c/0x50 [panfrost]
+> > > [   12.211705]  devfreq_set_target+0x8c/0x2d0
+> > > [   12.211707]  devfreq_update_target+0xcc/0xf4
+> > > [   12.211708]  devfreq_monitor+0x40/0x1d0
+> > > [   12.211710]  process_one_work+0x294/0x664
+> > > [   12.211712]  worker_thread+0x7c/0x45c
+> > > [   12.211713]  kthread+0x104/0x110
+> > > [   12.211716]  ret_from_fork+0x10/0x20
+> > > [   12.211718] irq event stamp: 7102
+> > > [   12.211719] hardirqs last  enabled at (7101): [<ffffdddf904ea5a0>]=
+ finish_task_switch.isra.0+0xec/0x2f0
+> > > [   12.211723] hardirqs last disabled at (7102): [<ffffdddf91794b74>]=
+ el1_dbg+0x24/0x90
+> > > [   12.211726] softirqs last  enabled at (6716): [<ffffdddf90410be4>]=
+ __do_softirq+0x414/0x588
+> > > [   12.211728] softirqs last disabled at (6507): [<ffffdddf904171d8>]=
+ ____do_softirq+0x18/0x24
+> > > [   12.211730] ---[ end trace 0000000000000000 ]---
+> >=20
+> > ... Indeed, you shouldn't hit that warning at all. It happens in
+> > clk_core_round_rate_nolock, which takes (before your patch) the
+> > CLK_SET_RATE_PARENT branch. This indeed has been changed by the patch
+> > you mentioned, and will call clk_core_forward_rate_req() now, that in
+> > turn calls clk_core_init_rate_nolock().
+> >=20
+> > I think the warning you hit is because core->parent is NULL, which is
+> > passed to clk_core_forward_rate_req() as the parent argument, and we'll
+> > call clk_core_init_rate_req() with parent set as the core argument.
+> >=20
+> > In clk_core_init_rate_req(), the first thing we do is a WARN_ON(!core),
+> > which is what you hit here I think.
+> >=20
+> > This is different to the previous behavior that was calling
+> > clk_core_round_rate_nolock() with core->parent directly, and
+> > clk_core_round_rate_nolock() if its core argument is NULL will set
+> > req->rate to 0 and bail out without returning an error.
+> >=20
+> > Now, your patch probably works because now that you provide a
+> > determine_rate implementation, clk_core_can_round() returns true and
+> > you'll take a different branch in clk_core_round_rate_nolock(), avoiding
+> > that issue entirely.
+> >=20
+> > Does that patch work better (on top of next-20221012)?
+>
+> I admit I didn't go too deep in the research, as my brain processed that =
+as
+> "this is a mux clock, not really different from a standard mux, this call=
+back
+> is missing, that's not optimal"... then that fixed it and called it a day.
+>=20
+> I should've prolonged my research for a better understanding of what was
+> actually going on.
 
-On Wed, 12 Oct 2022 at 07:57, Icenowy Zheng <uwu@icenowy.me> wrote:
->
-> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
->
-> Add a device tree for it. As F1C200s is just F1C100s with a different
-> DRAM chip co-packaged, directly use F1C100s DTSI here.
->
-> This commit covers the v1.1 version of this board, which is now shipped.
-> v1.0 is some internal sample that have not been shipped at all.
->
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
-> New patch introduced in v2.
->
->  arch/arm/boot/dts/Makefile                    |   3 +-
->  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 101 ++++++++++++++++++
->  2 files changed, 103 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 6aa7dc4db2fc..0249c07bd8a6 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
->         sun9i-a80-optimus.dtb \
->         sun9i-a80-cubieboard4.dtb
->  dtb-$(CONFIG_MACH_SUNIV) += \
-> -       suniv-f1c100s-licheepi-nano.dtb
-> +       suniv-f1c100s-licheepi-nano.dtb \
-> +       suniv-f1c200s-popstick-v1.1.dtb
->  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
->         tegra20-acer-a500-picasso.dtb \
->         tegra20-asus-tf101.dtb \
-> diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> new file mode 100644
-> index 000000000000..121dfc6f609d
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> @@ -0,0 +1,101 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-> + */
-> +
-> +/dts-v1/;
-> +#include "suniv-f1c100s.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +       model = "Popcorn Computer PopStick v1.1";
-> +       compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
-> +                    "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
-> +
-> +       aliases {
-> +               mmc0 = &mmc0;
-> +               serial0 = &uart0;
-> +               spi0 = &spi0;
-> +       };
-> +
-> +       chosen {
-> +               stdout-path = "serial0:115200n8";
-> +       };
-> +
-> +       leds {
-> +               compatible = "gpio-leds";
-> +
-> +               led {
-> +                       function = LED_FUNCTION_STATUS;
-> +                       color = <LED_COLOR_ID_GREEN>;
-> +                       gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
-> +                       linux,default-trigger = "heartbeat";
-> +               };
-> +       };
-> +
-> +       reg_vcc3v3: vcc3v3 {
-> +               compatible = "regulator-fixed";
-> +               regulator-name = "vcc3v3";
-> +               regulator-min-microvolt = <3300000>;
-> +               regulator-max-microvolt = <3300000>;
-> +       };
-> +};
-> +
-> +&mmc0 {
-> +       cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-> +       bus-width = <4>;
-> +       disable-wp;
-> +       status = "okay";
-> +       vmmc-supply = <&reg_vcc3v3>;
-> +};
-> +
-> +&spi0 {
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&spi0_pc_pins>;
-> +       status = "okay";
-> +
-> +       flash@0 {
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               compatible = "spi-nand";
-> +               reg = <0>;
-> +               spi-max-frequency = <40000000>;
-> +
-> +               partitions {
-> +                       compatible = "fixed-partitions";
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +
-> +                       partition@0 {
-> +                               label = "u-boot-with-spl";
-> +                               reg = <0x0 0x100000>;
-> +                       };
-> +
-> +                       ubi@100000 {
-> +                               label = "ubi";
-> +                               reg = <0x100000 0x7f00000>;
-> +                       };
-> +               };
-> +       };
-> +};
-> +
-> +&otg_sram {
+No worries :)
 
-Nitpick, but this should be alphabetically ordered no?
+> What you said actually opened my mind and, with little surprise, your pat=
+ch
+> works as good as mine - no warnings and the clock scales as expected!
 
-> +       status = "okay";
-> +};
-> +
-> +&uart0 {
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&uart0_pe_pins>;
-> +       status = "okay";
-> +};
-> +
-> +&usb_otg {
-> +       dr_mode = "peripheral";
-> +       status = "okay";
-> +};
-> +
-> +&usbphy {
-> +       status = "okay";
-> +};
-> --
-> 2.37.1
->
->
+I'm actually wondering if you didn't encounter two issues. What kernel
+were you testing before? If it's older than today's next
+(next-20221012), you're likely missing
+
+https://lore.kernel.org/linux-clk/20221010-rpi-clk-fixes-again-v1-0-d87ba82=
+ac404@cerno.tech/
+
+Which is likely to be what fixed the clock scaling. And my patch only
+fixed the warning. Could you test next-20221012? If I'm right, you
+should only get the warning.
+
+> I still think that the mtk-mux driver should get a determine_rate callbac=
+k but,
+> at this point, that's going to have an entirely different commit descript=
+ion...
+
+Yeah, it might, but as you said it's a separate discussion
+
+> Please go on and send your patch: if you want, please remember to add me =
+to
+> the Cc's, so that I can give you my R-b tag in a timely manner.
+
+Thanks!
+Maxime
