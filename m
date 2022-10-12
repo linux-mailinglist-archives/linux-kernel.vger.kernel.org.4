@@ -2,154 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713C85FCE0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AD35FCE12
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJLWEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
+        id S229715AbiJLWEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiJLWDU (ORCPT
+        with ESMTP id S229816AbiJLWDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:03:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FED12792C;
-        Wed, 12 Oct 2022 15:00:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Oct 2022 18:03:44 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1F912C8A3;
+        Wed, 12 Oct 2022 15:01:20 -0700 (PDT)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CKwflC006339;
+        Wed, 12 Oct 2022 21:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pps0720;
+ bh=pkIjY3xNYdD7u0iVrBec5NLvLKLYByXvLSfeEAPzOWA=;
+ b=H/+AVupIA0qT3WW+ZAU2dM2Gj2l3wqwR0WsAa/VfsVsS5iNMLJC7y8Ht8zY9f5OvhkBx
+ 2yLbpwmj37y7COimS4bcYZXap7tWfA+f9jfIliFcbQ+513C5zXVqoqpMPMUKpaQZdv18
+ hktdM2YGYo3tRFTVAi7YV1xAMWnSW89cLVpbAz4A923DrH/GUDNRl5Ld07SqTiP+PXvj
+ VO8N9e4AHFDwKfHaVK05G3rZ6EdQ3Am7Xvyz8NwOIvIN/3DX0mQtHBM0ONsISnk24f22
+ +trjHtXOEgf2mx27hfc02CqJehN6CTaOKRtBmoBwWIjCo4twBOe4dR3MxIan4xh9zojX PQ== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3k653c8da7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 21:59:50 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C5466162A;
-        Wed, 12 Oct 2022 22:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C184CC43470;
-        Wed, 12 Oct 2022 22:00:35 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oijmW-0049DA-0r;
-        Wed, 12 Oct 2022 18:00:52 -0400
-Message-ID: <20221012220052.099921906@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 12 Oct 2022 17:59:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Tom Zanussi <zanussi@kernel.org>
-Subject: [for-linus][PATCH 5/5] tracing: Fix reading strings from synthetic events
-References: <20221012215911.735621065@goodmis.org>
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 8611C806B5C;
+        Wed, 12 Oct 2022 21:59:49 +0000 (UTC)
+Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 28602808ECE;
+        Wed, 12 Oct 2022 21:59:49 +0000 (UTC)
+From:   Robert Elliott <elliott@hpe.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Elliott <elliott@hpe.com>
+Subject: [PATCH v2 04/19] crypto: x86/sha - limit FPU preemption
+Date:   Wed, 12 Oct 2022 16:59:16 -0500
+Message-Id: <20221012215931.3896-5-elliott@hpe.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221012215931.3896-1-elliott@hpe.com>
+References: <20221006223151.22159-1-elliott@hpe.com>
+ <20221012215931.3896-1-elliott@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: Uwyq1NOSShnQQpJzF5T27vXCpBPm0wlx
+X-Proofpoint-ORIG-GUID: Uwyq1NOSShnQQpJzF5T27vXCpBPm0wlx
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_11,2022-10-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 priorityscore=1501 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210120138
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+As done by the ECB and CBC helpers in arch/x86/crypt/ecb_cbc_helpers.h,
+limit the number of bytes processed between kernel_fpu_begin() and
+kernel_fpu_end() calls.
 
-The follow commands caused a crash:
+Those functions call preempt_disable() and preempt_enable(), so
+the CPU core is unavailable for scheduling while running.
 
-  # cd /sys/kernel/tracing
-  # echo 's:open char file[]' > dynamic_events
-  # echo 'hist:keys=common_pid:file=filename:onchange($file).trace(open,$file)' > events/syscalls/sys_enter_openat/trigger'
-  # echo 1 > events/synthetic/open/enable
+This leads to "rcu_preempt detected expedited stalls" with stack dumps
+pointing to the optimized hash function if the module is loaded and
+used a lot:
+    rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: ...
 
-BOOM!
+For example, that can occur during boot with the stack track pointing
+to the sha512-x86 function if the system set to use SHA-512 for
+module signing. The call trace includes:
+    module_sig_check
+    mod_verify_sig
+    pkcs7_verify
+    pkcs7_digest
+    sha512_finup
+    sha512_base_do_update
 
-The problem is that the synthetic event field "char file[]" will read
-the value given to it as a string without any memory checks to make sure
-the address is valid. The above example will pass in the user space
-address and the sythetic event code will happily call strlen() on it
-and then strscpy() where either one will cause an oops when accessing
-user space addresses.
-
-Use the helper functions from trace_kprobe and trace_eprobe that can
-read strings safely (and actually succeed when the address is from user
-space and the memory is mapped in).
-
-Now the above can show:
-
-     packagekitd-1721    [000] ...2.   104.597170: open: file=/usr/lib/rpm/fileattrs/cmake.attr
-    in:imjournal-978     [006] ...2.   104.599642: open: file=/var/lib/rsyslog/imjournal.state.tmp
-     packagekitd-1721    [000] ...2.   104.626308: open: file=/usr/lib/rpm/fileattrs/debuginfo.attr
-
-Link: https://lkml.kernel.org/r/20221012104534.826549315@goodmis.org
-
-Cc: stable@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Fixes: bd82631d7ccdc ("tracing: Add support for dynamic strings to synthetic events")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 66be89515888 ("crypto: sha1 - SSSE3 based SHA1 implementation for x86-64")
+Fixes: 8275d1aa6422 ("crypto: sha256 - Create module providing optimized SHA256 routines using SSSE3, AVX or AVX2 instructions.")
+Fixes: 87de4579f92d ("crypto: sha512 - Create module providing optimized SHA512 routines using SSSE3, AVX or AVX2 instructions.")
+Fixes: aa031b8f702e ("crypto: x86/sha512 - load based on CPU features")
+Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+Signed-off-by: Robert Elliott <elliott@hpe.com>
 ---
- kernel/trace/trace_events_synth.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ arch/x86/crypto/sha1_ssse3_glue.c   | 32 ++++++++++++++++++++++++-----
+ arch/x86/crypto/sha256_ssse3_glue.c | 32 ++++++++++++++++++++++++-----
+ arch/x86/crypto/sha512_ssse3_glue.c | 32 ++++++++++++++++++++++++-----
+ 3 files changed, 81 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 5e8c07aef071..e310052dc83c 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -17,6 +17,8 @@
- /* for gfp flag names */
- #include <linux/trace_events.h>
- #include <trace/events/mmflags.h>
-+#include "trace_probe.h"
-+#include "trace_probe_kernel.h"
+diff --git a/arch/x86/crypto/sha1_ssse3_glue.c b/arch/x86/crypto/sha1_ssse3_glue.c
+index 44340a1139e0..a9f5779b41ca 100644
+--- a/arch/x86/crypto/sha1_ssse3_glue.c
++++ b/arch/x86/crypto/sha1_ssse3_glue.c
+@@ -26,6 +26,8 @@
+ #include <crypto/sha1_base.h>
+ #include <asm/simd.h>
  
- #include "trace_synth.h"
- 
-@@ -409,6 +411,7 @@ static unsigned int trace_string(struct synth_trace_event *entry,
++#define FPU_BYTES 4096U /* avoid kernel_fpu_begin/end scheduler/rcu stalls */
++
+ static int sha1_update(struct shash_desc *desc, const u8 *data,
+ 			     unsigned int len, sha1_block_fn *sha1_xform)
  {
- 	unsigned int len = 0;
- 	char *str_field;
-+	int ret;
+@@ -41,9 +43,18 @@ static int sha1_update(struct shash_desc *desc, const u8 *data,
+ 	 */
+ 	BUILD_BUG_ON(offsetof(struct sha1_state, state) != 0);
  
- 	if (is_dynamic) {
- 		u32 data_offset;
-@@ -417,19 +420,27 @@ static unsigned int trace_string(struct synth_trace_event *entry,
- 		data_offset += event->n_u64 * sizeof(u64);
- 		data_offset += data_size;
- 
--		str_field = (char *)entry + data_offset;
--
--		len = strlen(str_val) + 1;
--		strscpy(str_field, str_val, len);
-+		len = kern_fetch_store_strlen((unsigned long)str_val);
- 
- 		data_offset |= len << 16;
- 		*(u32 *)&entry->fields[*n_u64] = data_offset;
- 
-+		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+-	kernel_fpu_begin();
+-	sha1_base_do_update(desc, data, len, sha1_xform);
+-	kernel_fpu_end();
++	do {
++		unsigned int chunk = min(len, FPU_BYTES);
 +
- 		(*n_u64)++;
- 	} else {
- 		str_field = (char *)&entry->fields[*n_u64];
- 
--		strscpy(str_field, str_val, STR_VAR_LEN_MAX);
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+		if ((unsigned long)str_val < TASK_SIZE)
-+			ret = strncpy_from_user_nofault(str_field, str_val, STR_VAR_LEN_MAX);
-+		else
-+#endif
-+			ret = strncpy_from_kernel_nofault(str_field, str_val, STR_VAR_LEN_MAX);
++		if (chunk) {
++			kernel_fpu_begin();
++			sha1_base_do_update(desc, data, chunk, sha1_xform);
++			kernel_fpu_end();
++		}
 +
-+		if (ret < 0)
-+			strcpy(str_field, FAULT_STRING);
++		len -= chunk;
++		data += chunk;
++	} while (len);
+ 
+ 	return 0;
+ }
+@@ -54,9 +65,20 @@ static int sha1_finup(struct shash_desc *desc, const u8 *data,
+ 	if (!crypto_simd_usable())
+ 		return crypto_sha1_finup(desc, data, len, out);
+ 
++	do {
++		unsigned int chunk = min(len, FPU_BYTES);
 +
- 		(*n_u64) += STR_VAR_LEN_MAX / sizeof(u64);
- 	}
++		if (chunk) {
++			kernel_fpu_begin();
++			sha1_base_do_update(desc, data, chunk, sha1_xform);
++			kernel_fpu_end();
++		}
++
++		len -= chunk;
++		data += chunk;
++	} while (len);
++
+ 	kernel_fpu_begin();
+-	if (len)
+-		sha1_base_do_update(desc, data, len, sha1_xform);
+ 	sha1_base_do_finalize(desc, sha1_xform);
+ 	kernel_fpu_end();
  
-@@ -462,7 +473,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
- 		val_idx = var_ref_idx[field_pos];
- 		str_val = (char *)(long)var_ref_vals[val_idx];
+diff --git a/arch/x86/crypto/sha256_ssse3_glue.c b/arch/x86/crypto/sha256_ssse3_glue.c
+index 3a5f6be7dbba..322c8aa907af 100644
+--- a/arch/x86/crypto/sha256_ssse3_glue.c
++++ b/arch/x86/crypto/sha256_ssse3_glue.c
+@@ -40,6 +40,8 @@
+ #include <linux/string.h>
+ #include <asm/simd.h>
  
--		len = strlen(str_val) + 1;
-+		len = kern_fetch_store_strlen((unsigned long)str_val);
++#define FPU_BYTES 4096U /* avoid kernel_fpu_begin/end scheduler/rcu stalls */
++
+ asmlinkage void sha256_transform_ssse3(struct sha256_state *state,
+ 				       const u8 *data, int blocks);
  
- 		fields_size += len;
- 	}
+@@ -58,9 +60,18 @@ static int _sha256_update(struct shash_desc *desc, const u8 *data,
+ 	 */
+ 	BUILD_BUG_ON(offsetof(struct sha256_state, state) != 0);
+ 
+-	kernel_fpu_begin();
+-	sha256_base_do_update(desc, data, len, sha256_xform);
+-	kernel_fpu_end();
++	do {
++		unsigned int chunk = min(len, FPU_BYTES);
++
++		if (chunk) {
++			kernel_fpu_begin();
++			sha256_base_do_update(desc, data, chunk, sha256_xform);
++			kernel_fpu_end();
++		}
++
++		len -= chunk;
++		data += chunk;
++	} while (len);
+ 
+ 	return 0;
+ }
+@@ -71,9 +82,20 @@ static int sha256_finup(struct shash_desc *desc, const u8 *data,
+ 	if (!crypto_simd_usable())
+ 		return crypto_sha256_finup(desc, data, len, out);
+ 
++	do {
++		unsigned int chunk = min(len, FPU_BYTES);
++
++		if (chunk) {
++			kernel_fpu_begin();
++			sha256_base_do_update(desc, data, chunk, sha256_xform);
++			kernel_fpu_end();
++		}
++
++		len -= chunk;
++		data += chunk;
++	} while (len);
++
+ 	kernel_fpu_begin();
+-	if (len)
+-		sha256_base_do_update(desc, data, len, sha256_xform);
+ 	sha256_base_do_finalize(desc, sha256_xform);
+ 	kernel_fpu_end();
+ 
+diff --git a/arch/x86/crypto/sha512_ssse3_glue.c b/arch/x86/crypto/sha512_ssse3_glue.c
+index 6d3b85e53d0e..fd5075a32613 100644
+--- a/arch/x86/crypto/sha512_ssse3_glue.c
++++ b/arch/x86/crypto/sha512_ssse3_glue.c
+@@ -39,6 +39,8 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/simd.h>
+ 
++#define FPU_BYTES 4096U /* avoid kernel_fpu_begin/end scheduler/rcu stalls */
++
+ asmlinkage void sha512_transform_ssse3(struct sha512_state *state,
+ 				       const u8 *data, int blocks);
+ 
+@@ -57,9 +59,18 @@ static int sha512_update(struct shash_desc *desc, const u8 *data,
+ 	 */
+ 	BUILD_BUG_ON(offsetof(struct sha512_state, state) != 0);
+ 
+-	kernel_fpu_begin();
+-	sha512_base_do_update(desc, data, len, sha512_xform);
+-	kernel_fpu_end();
++	do {
++		unsigned int chunk = min(len, FPU_BYTES);
++
++		if (chunk) {
++			kernel_fpu_begin();
++			sha512_base_do_update(desc, data, chunk, sha512_xform);
++			kernel_fpu_end();
++		}
++
++		len -= chunk;
++		data += chunk;
++	} while (len);
+ 
+ 	return 0;
+ }
+@@ -70,9 +81,20 @@ static int sha512_finup(struct shash_desc *desc, const u8 *data,
+ 	if (!crypto_simd_usable())
+ 		return crypto_sha512_finup(desc, data, len, out);
+ 
++	do {
++		unsigned int chunk = min(len, FPU_BYTES);
++
++		if (chunk) {
++			kernel_fpu_begin();
++			sha512_base_do_update(desc, data, chunk, sha512_xform);
++			kernel_fpu_end();
++		}
++
++		len -= chunk;
++		data += chunk;
++	} while (len);
++
+ 	kernel_fpu_begin();
+-	if (len)
+-		sha512_base_do_update(desc, data, len, sha512_xform);
+ 	sha512_base_do_finalize(desc, sha512_xform);
+ 	kernel_fpu_end();
+ 
 -- 
-2.35.1
+2.37.3
+
