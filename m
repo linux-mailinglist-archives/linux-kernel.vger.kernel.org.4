@@ -2,197 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A71D5FC791
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5BD5FC790
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiJLOjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S229727AbiJLOim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiJLOjC (ORCPT
+        with ESMTP id S229537AbiJLOie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:39:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B08A9081B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:38:57 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CCuk5A018747;
-        Wed, 12 Oct 2022 14:38:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0//PYTbYVrI3z70oeGvjtrPIGrjbJO2IwlHL+Mp55KU=;
- b=GIH0dcc+QrzNYSQsseUX3edrGjq4dfw7qu5DNWwnWT5lepy/k++Nx2oOauVRiqKK3AqN
- U8ZKs8JgyFt3j/FgtfHEpB6lQNyRP3HfpeeqAtKXrtU0edpjeDOm1jf0qpEo+ak/IIWM
- Jz/R7rujhP9hlsrkbrAsSYzNFy0QKPy1eT9DehAI0wK8MM1B4wM4+Qb869WtRSk0D9s+
- 0qRAfWWtGPRuNOqzxMBuAcGgBLPCcwRTYSvJ/1CLLXyhXuTPuZzf2qdmoWIRaX+aW6iz
- oRCGa4z7ttKctQG6pVuvUINQ/G1QAm8CFcACbGe9QevdiXf0Cl/NUSbSSgA/Etj0ZnWh PQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5j7b2706-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 14:38:38 +0000
-Received: from pps.filterd (NASANPPMTA05.qualcomm.com [127.0.0.1])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 29CEcbZR025936;
-        Wed, 12 Oct 2022 14:38:37 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NASANPPMTA05.qualcomm.com (PPS) with ESMTPS id 3k3jqakg40-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 14:38:37 +0000
-Received: from NASANPPMTA05.qualcomm.com (NASANPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29CEcagM025925;
-        Wed, 12 Oct 2022 14:38:36 GMT
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (PPS) with ESMTPS id 29CEcaXL025920
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 14:38:36 +0000
-Received: from [10.216.35.42] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 12 Oct
- 2022 07:38:32 -0700
-Message-ID: <d31605a0-440b-989d-3762-d5e162ec79a6@quicinc.com>
-Date:   Wed, 12 Oct 2022 20:08:28 +0530
+        Wed, 12 Oct 2022 10:38:34 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773C0422FF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:38:33 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id o22so10152532qkl.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0eqSs8D8Zyq93HxhcB9uauCbxkxsD79LqnsXThBZU4=;
+        b=nBlGzmppneJVftZVAdRUc8SDMtu28+R52PjX0hqulIEfS4QZ9X3ZxOsFb+wI9VyrWn
+         L/LUAF4zAGuwresjaJtPbsUQzAbxfPQ0W2hprNo7mjdNFp4BPvQT9n9LBcPQkREsO7Af
+         6b9iZUi3QgZnvK6cGojAjMQUAd6i+J3tln76arHaaeh3g/AUeFxxwDOr6ngw2zlZt5LZ
+         JI28ohC7AeIA6B2gAXCA3RPFGhJ/s3wMBSxnkdNKGiphQAntDwcnxELsJvGLiKgoJ22n
+         PfjHbfxSykYX0msc93QSe97LiewYxQf7oVnf6O3oXEw2GKmjUiydwB8oUe6E42DMK7Y0
+         zXIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0eqSs8D8Zyq93HxhcB9uauCbxkxsD79LqnsXThBZU4=;
+        b=mIhI1/ea0sfM59kpY+rAnphzGYU6ksL9SFw3S0jMZcCYBXpoZakbTipvgnmSvlfOzA
+         7y0HyVeNauFEF4LOxAdbW8AdFOiZ4wxLhrBYZr82nO8kHwyXXiWrEpo3xKY2n+ho6VQT
+         A+DqdZPD/YmJkMccqpltsfI/L9aX3ETehEkY2gebjJkva/Na3OekBK77IMMNmTwB6oOV
+         L4AKFa/kQLXMyutWjnylU8xN7LUr5p28Kii3NXDb65+NAbarczczVA+6GOHFEzVBr+BM
+         m6vofPXLR/A6+WxSKCZNjMmLMP9D7F8pLqdprD46MWllk5Pnv3bbMNRuQ95Um+1PIsR0
+         hLdg==
+X-Gm-Message-State: ACrzQf08hGb3cr6UM/rrBGeHsgG++8tAaNFfQeqrdWFTumTNCxh7vvyG
+        hojzZgR80ld4vp7q3gV1TuvrYQ==
+X-Google-Smtp-Source: AMsMyM4+AIWJQxWBA4Jv0JHMqvqHYDWJctiOTgcBHB44Ww27YolyE0l6UFRUO8aTgAryoalNdC720g==
+X-Received: by 2002:a37:34e:0:b0:6ea:2cef:131f with SMTP id 75-20020a37034e000000b006ea2cef131fmr16541977qkd.554.1665585512620;
+        Wed, 12 Oct 2022 07:38:32 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id i8-20020a05620a404800b006bc192d277csm16352660qko.10.2022.10.12.07.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 07:38:31 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oicsP-001y84-7s;
+        Wed, 12 Oct 2022 11:38:29 -0300
+Date:   Wed, 12 Oct 2022 11:38:29 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>
+Cc:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
+ domain as parent
+Message-ID: <Y0bRZTP9Kc6mdCiu@ziepe.ca>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-5-nipun.gupta@amd.com>
+ <87h71juxuk.wl-maz@kernel.org>
+ <DM6PR12MB30820EE430405FF50C7F856BE8229@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <MN2PR12MB43586084670E14691920952889229@MN2PR12MB4358.namprd12.prod.outlook.com>
+ <Y0a65a9leWXpKfTo@ziepe.ca>
+ <MN2PR12MB4358A871519748CD7A6DB7A089229@MN2PR12MB4358.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 2/2] locking/rwsem: Limit # of null owner retries for
- handoff writer
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <john.p.donnelly@oracle.com>,
-        Hillf Danton <hdanton@sina.com>,
-        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
-References: <20221012133333.1265281-1-longman@redhat.com>
- <20221012133333.1265281-3-longman@redhat.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20221012133333.1265281-3-longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: saxh4T4u47dL9aAIaDWYqEqDlaQme-42
-X-Proofpoint-ORIG-GUID: saxh4T4u47dL9aAIaDWYqEqDlaQme-42
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_07,2022-10-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- spamscore=0 suspectscore=0 clxscore=1015 impostorscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120096
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MN2PR12MB4358A871519748CD7A6DB7A089229@MN2PR12MB4358.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 10/12/2022 7:03 PM, Waiman Long wrote:
-> Commit 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically
-> spin on owner") assumes that when the owner field is changed to NULL,
-> the lock will become free soon.  That assumption may not be correct
-> especially if the handoff writer doing the spinning is a RT task which
-> may preempt another task from completing its action of either freeing
-> the rwsem or properly setting up owner.
+On Wed, Oct 12, 2022 at 01:37:54PM +0000, Radovanovic, Aleksandar wrote:
+> > On Wed, Oct 12, 2022 at 10:34:23AM +0000, Radovanovic, Aleksandar wrote:
+> > 
+> > 
+> > > As for GITS_TRANSLATER, we can take up to 4 different IOVAs, which
+> > > limits us to 4 CDX devices (should be sufficient for current HW
+> > > use-cases). Also, it means that the address part must be the same for
+> > > all vectors within a single CDX device. I'm assuming this is OK as it
+> > > is going to be a single interrupt and IOMMU domain anyway.
+> > 
+> > This is not at all how MSI is supposed to work.
 > 
-> To prevent this live lock scenario, we have to limit the number of
-> trylock attempts without sleeping. The current limit is now set to 8
-> to allow enough time for the other task to hopefully complete its action.
-> 
-> By adding new lock events to track the number of NULL owner retries with
-> handoff flag set before a successful trylock when running a 96 threads
-> locking microbenchmark with equal number of readers and writers running
-> on a 2-core 96-thread system for 15 seconds, the following stats are
-> obtained. Note that none of locking threads are RT tasks.
-> 
->    Retries of successful trylock    Count
->    -----------------------------    -----
->               1                     1738
->               2                       19
->               3                       11
->               4                        2
->               5                        1
->               6                        1
->               7                        1
->               8                        0
->               X                        1
-> 
-> The last row is the one failed attempt that needs more than 8 retries.
-> So a retry count maximum of 8 should capture most of them if no RT task
-> is in the mix.
-> 
-> Fixes: 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically spin on owner")
-> Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/locking/rwsem.c | 18 ++++++++++++++++--
->   1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-> index 3839b38608da..12eb093328f2 100644
-> --- a/kernel/locking/rwsem.c
-> +++ b/kernel/locking/rwsem.c
-> @@ -1123,6 +1123,7 @@ static struct rw_semaphore __sched *
->   rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->   {
->   	struct rwsem_waiter waiter;
-> +	int null_owner_retries;
->   	DEFINE_WAKE_Q(wake_q);
->   
->   	/* do optimistic spinning and steal lock if possible */
-> @@ -1164,7 +1165,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->   	set_current_state(state);
->   	trace_contention_begin(sem, LCB_F_WRITE);
->   
-> -	for (;;) {
-> +	for (null_owner_retries = 0;;) {
->   		if (rwsem_try_write_lock(sem, &waiter)) {
->   			/* rwsem_try_write_lock() implies ACQUIRE on success */
->   			break;
-> @@ -1190,8 +1191,21 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->   			owner_state = rwsem_spin_on_owner(sem);
->   			preempt_enable();
->   
-> -			if (owner_state == OWNER_NULL)
-> +			/*
-> +			 * owner is NULL doesn't guarantee the lock is free.
-> +			 * An incoming reader will temporarily increment the
-> +			 * reader count without changing owner and the
-> +			 * rwsem_try_write_lock() will fails if the reader
-> +			 * is not able to decrement it in time. Allow 8
-> +			 * trylock attempts when hitting a NULL owner before
-> +			 * going to sleep.
-> +			 */
-> +			if ((owner_state == OWNER_NULL) &&
-> +			    (null_owner_retries < 8)) {
+> In the general case, no, they're not.
 
-define MAX_NULL_OWNER_RETRY		8
+I don't mean that you can hack this to work - I mean that in MSI the
+addr/data is supposed to come from the end point itself, not from some
+kind of shared structure. This is important because the actual act of
+generating the write has to be coherent with the DMA the device is
+doing, as the MSI write must push any DMA data to visibility to meet
+the "producer / consumer" model.
 
-??
+So it is really weird/wrong to have a HW design where the MSI
+infrastructure is shared across many devices.
 
-> +				null_owner_retries++;
->   				goto trylock_again;
-> +			}
-> +			null_owner_retries = 0;
->   		}
->   
-
-Thanks for considering this patch.
-
-LGTM.
-Reviewed-and-Tested-by: Mukesh Ojha <quic_mojha@quicinc.com>
-
--Mukesh
-
->   		schedule();
+Jason
