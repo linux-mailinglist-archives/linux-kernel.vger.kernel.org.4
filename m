@@ -2,300 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A8E5FCA92
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984135FCA9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiJLSYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
+        id S229786AbiJLS0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiJLSYt (ORCPT
+        with ESMTP id S229709AbiJLS0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:24:49 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FCC5FCF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:24:48 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3560e81aa1dso163202187b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:24:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rvCM5wrnm0iHR+mXt46+NGumysVqkJEClXF9/6pdPzg=;
-        b=o0gEjLaKQhrLmVEhrvhskVfLPtzedqjlTFMtapwOAPvbU9HtRW0uWrx8cPnmALkz8Q
-         f6X909pPBLFj1gfZTJWSoBps14ML0SC6Ggj/YlBFmxjrU+MDlaPKeHX3+WaQziWNrvra
-         bqX1aU4C9lTfiqQmZRvXNkpZmBfbQ54Uo9tleubnw51nFMMHoOeWxTcR0Ak9SqnbWXGW
-         zIjVvx1jGx0mvIyd4CvGtS7VapLAh5VuxwuaYEwkDtQWD0y2NSwz0uWC+qDZzaFaWovg
-         Cgekw4YN4vnyLzoElFeXEEcMIRuBO4frWrmonoXhLamaCXTkLvf9iMS1ruUX+asTB/r/
-         4gfQ==
+        Wed, 12 Oct 2022 14:26:42 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8A51F9D8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:26:41 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id i21-20020a6bf415000000b006bc987bf9faso2818910iog.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:26:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rvCM5wrnm0iHR+mXt46+NGumysVqkJEClXF9/6pdPzg=;
-        b=YncQAf3DVV5t4+5jaVQniaTOmfZvfcGsfeZF18gLoEHT0zzwydbDghuqDrwY9+2h/u
-         5y1mvJZoKM6XhjXl1H5G05t4CijsYCGhJOBoTwuomdSjnKQYCP7dgDdA9M+zSbnuBQw3
-         svBs9345HKNaCDBbf0IeyAUVPK/VtVwI03FD1BiOmUouI7edNXqdnHe16tm+60sVTqcp
-         m5wm5LDY/cUKakxw6OoR+M01R/2LQbXYQ9tUJZN/RBjIANgQlCLVUwMtbg8JNEBB9CSi
-         s0ZIi3E0QSk6MPXnoInuXvfjMaVtKZQJHr2uvBSfVxwzbXvfQ7oKbtoR+77aSZxr2i07
-         l1Fw==
-X-Gm-Message-State: ACrzQf2mO1CZdxtl72Opw+YzMhzJWkgzehsOk0bze7iqaOVqiBPVX2Ka
-        y/H5ZtbrjSLLOMzqESQStRqTt2wevymRI9/j6JNnYA==
-X-Google-Smtp-Source: AMsMyM7hG3XhqeZicYGdMA5OZS+IJkytVZ9V1ytm0uzcP/1YQ6GsscbQ2B9Sp8vETYLNKFbpOT44NRDsC0y+qnKGnds=
-X-Received: by 2002:a81:6ccf:0:b0:35b:c5a5:1df3 with SMTP id
- h198-20020a816ccf000000b0035bc5a51df3mr28710474ywc.132.1665599087111; Wed, 12
- Oct 2022 11:24:47 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w9E4FGrgNA2t7iVK5WJAXLQ73iKqHUC0p6WTicNH5HI=;
+        b=KjkgDTTHEv7/H9fzgVne6Er0HDyI6dv/sov7YvV8davILwAqPyYkzbs//q3l2KHfOI
+         QvO5mW40zbs8S4DATxbhsy4WpE0kBN6AFy5kokvCEy0SVFhgvrHjS6/jNMZhhXtJeKQD
+         bQmZd7z1k9ivwWqmjCFztJ9YFa8UUcHIrlawo4AsU01rbMCpjBNwOK/gL+aSW1xNWetE
+         ReTtfu9iJVaj+jf7peOcA5L+4Qr0W4p+hO5kv/K4VIScwxu8V5lcn8i2VvE4trO8RqVC
+         AYlRK/mRRCmbjylFpzKjAPMZwfKYzQnph2YJqPLc4zOt3vNPxr9hDOQf9wxU+rmwaiCO
+         129A==
+X-Gm-Message-State: ACrzQf2iZ9Z7TFFKvPlvh8u45DAmAZOaRMa4wyahXnZU2tK6w4VEevx+
+        Q5bDADYV+RYEXaJGps/XiMyoljLde+8lGSZhb2Hq5kBEjTUb
+X-Google-Smtp-Source: AMsMyM6JLuT2RuIdhxwPKrhuwo+D+YFm7PP82rP0WGBtsSpEWXCji7rBUrIPlPcKpyRlWQfDPBv1NJAxIcs1TPQg1TaczmiEcAxX
 MIME-Version: 1.0
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
- <20221010104206.12184-1-zhouchengming@bytedance.com> <CAJuCfpF7Z+CYhk-f_aaDTE232+m9z_n-QfjGfdLje7QrX9bFtw@mail.gmail.com>
- <a73f58a3-9f96-2ce5-38a0-8abab27a2260@bytedance.com> <CAJuCfpET+B3X-uX2vDp-2yH-+OVxOu3YXL7JWZrPuoh22P+5SQ@mail.gmail.com>
- <dea56c22-ab5b-25e2-9819-cc598f9aad80@bytedance.com>
-In-Reply-To: <dea56c22-ab5b-25e2-9819-cc598f9aad80@bytedance.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 12 Oct 2022 11:24:36 -0700
-Message-ID: <CAJuCfpFTDyR1V+JYOY_uN6Xg1Nip5b=9dzkwm-CNd8vMWaQQFQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     hannes@cmpxchg.org, quic_pkondeti@quicinc.com,
-        peterz@infradead.org, quic_charante@quicinc.com,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6638:d94:b0:35a:6828:6804 with SMTP id
+ l20-20020a0566380d9400b0035a68286804mr16609925jaj.149.1665599200624; Wed, 12
+ Oct 2022 11:26:40 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 11:26:40 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b1060905eada8881@google.com>
+Subject: [syzbot] WARNING in ip_rt_bug (2)
+From:   syzbot <syzbot+e738404dcd14b620923c@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, kuznet@ms2.inr.ac.ru,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 7:11 PM Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> On 2022/10/12 01:00, Suren Baghdasaryan wrote:
-> > On Mon, Oct 10, 2022 at 5:07 PM Chengming Zhou
-> > <zhouchengming@bytedance.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> On 2022/10/11 05:21, Suren Baghdasaryan wrote:
-> >>> On Mon, Oct 10, 2022 at 3:42 AM Chengming Zhou
-> >>> <zhouchengming@bytedance.com> wrote:
-> >>>>
-> >>>> Pavan reported a problem that PSI avgs_work idle shutoff is not
-> >>>> working at all. Because PSI_NONIDLE condition would be observed in
-> >>>> psi_avgs_work()->collect_percpu_times()->get_recent_times() even if
-> >>>> only the kworker running avgs_work on the CPU.
-> >>>>
-> >>>> Although commit 1b69ac6b40eb ("psi: fix aggregation idle shut-off")
-> >>>> avoided the ping-pong wake problem when the worker sleep, psi_avgs_work()
-> >>>> still will always re-arm the avgs_work, so shutoff is not working.
-> >>>>
-> >>>> This patch changes to consider current CPU groupc as IDLE if the
-> >>>> kworker running avgs_work is the only task running and no IOWAIT
-> >>>> or MEMSTALL sleep tasks, in which case we will shut off the avgs_work
-> >>>> if other CPUs' groupc are also IDLE.
-> >>>>
-> >>>> One potential problem is that the brief period of non-idle time
-> >>>> incurred between the aggregation run and the kworker's dequeue will
-> >>>> be stranded in the per-cpu buckets until avgs_work run next time.
-> >>>> The buckets can hold 4s worth of time, and future activity will wake
-> >>>> the avgs_work with a 2s delay, giving us 2s worth of data we can leave
-> >>>> behind when shut off the avgs_work. If the kworker run other works after
-> >>>> avgs_work shut off and doesn't have any scheduler activities for 2s,
-> >>>> this maybe a problem.
-> >>>>
-> >>>> Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-> >>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> >>>
-> >>> Copying my comments from
-> >>> https://lore.kernel.org/all/CAJuCfpHyYMak-mfVmtEN9Z-hGYQ6Wko57TLjukz9HaN26EDAuA@mail.gmail.com/
-> >>> in case you want to continue the discussion here...
-> >>>
-> >>>> ---
-> >>>>  kernel/sched/psi.c | 15 +++++++++++++++
-> >>>>  1 file changed, 15 insertions(+)
-> >>>>
-> >>>> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> >>>> index ee2ecc081422..f4cdf6f184ba 100644
-> >>>> --- a/kernel/sched/psi.c
-> >>>> +++ b/kernel/sched/psi.c
-> >>>> @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
-> >>>>                              u32 *pchanged_states)
-> >>>>  {
-> >>>>         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
-> >>>> +       int current_cpu = raw_smp_processor_id();
-> >>>> +       bool only_avgs_work = false;
-> >>>>         u64 now, state_start;
-> >>>>         enum psi_states s;
-> >>>>         unsigned int seq;
-> >>>> @@ -256,6 +258,15 @@ static void get_recent_times(struct psi_group *group, int cpu,
-> >>>>                 memcpy(times, groupc->times, sizeof(groupc->times));
-> >>>>                 state_mask = groupc->state_mask;
-> >>>>                 state_start = groupc->state_start;
-> >>>> +               /*
-> >>>> +                * This CPU has only avgs_work kworker running, snapshot the
-> >>>> +                * newest times then don't need to re-arm for this groupc.
-> >>>> +                * Normally this kworker will sleep soon and won't wake
-> >>>> +                * avgs_work back up in psi_group_change().
-> >>>> +                */
-> >>>> +               if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1 &&
-> >>>> +                   !groupc->tasks[NR_IOWAIT] && !groupc->tasks[NR_MEMSTALL])
-> >>>> +                       only_avgs_work = true;
-> >>>
-> >>> Why do you determine only_avgs_work while taking a snapshot? The
-> >>> read_seqcount_retry() might fail and the loop gets retried, which
-> >>> might lead to a wrong only_avgs_work value if the state changes
-> >>> between retries. I think it's safer to do this after the snapshot was
-> >>> taken and to use tasks[NR_RUNNING] instead of  roupc->tasks.
-> >>
-> >> Ah, you are right, coping groupc->tasks[NR_RUNNING] and tasks[NR_IOWAIT], tasks[NR_MEMSTALL]
-> >> is ok for me. (Maybe we only need to copy groupc->tasks[NR_RUNNING]?)
-> >>
-> >> Another way is to add an else branch:
-> >>
-> >>                 if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1 &&
-> >>                     !groupc->tasks[NR_IOWAIT] && !groupc->tasks[NR_MEMSTALL])
-> >>                         only_avgs_work = true;
-> >>                 else
-> >>                         only_avgs_work = false;
-> >>
-> >> Both are ok for me.
-> >
-> > Let's use the simple way and use the tasks[] after the snapshot is taken.
->
-> Ok, I changed like this:
->
->         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
-> +       int current_cpu = raw_smp_processor_id();
-> +       unsigned int tasks[NR_PSI_TASK_COUNTS];
->         u64 now, state_start;
->         enum psi_states s;
->         unsigned int seq;
-> @@ -256,6 +258,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                 memcpy(times, groupc->times, sizeof(groupc->times));
->                 state_mask = groupc->state_mask;
->                 state_start = groupc->state_start;
-> +               if (cpu == current_cpu)
-> +                       memcpy(tasks, groupc->tasks, sizeof(groupc->tasks));
->         } while (read_seqcount_retry(&groupc->seq, seq));
->
-> >
-> >>
-> >>>
-> >>>>         } while (read_seqcount_retry(&groupc->seq, seq));
-> >>>>
-> >>>>         /* Calculate state time deltas against the previous snapshot */
-> >>>> @@ -280,6 +291,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
-> >>>>                 if (delta)
-> >>>>                         *pchanged_states |= (1 << s);
-> >>>>         }
-> >>>> +
-> >>>> +       /* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
-> >>>> +       if (only_avgs_work)
-> >>>> +               *pchanged_states &= ~(1 << PSI_NONIDLE);
-> >>>
-> >>> This seems to be safe because changed_states&(1<< PSI_NONIDLE) is used
-> >>> only for re-arming psi_avgs_work, however semantically this is
-> >>> incorrect. The CPU was not idle when it was executing psi_avgs_work.
-> >>> IMO a separate flag would avoid this confusion.
-> >>
-> >> Yes, it's safe, but has this confusion. Use a separate flag looks better, like PSI_ONLY_AVGS_WORK.
-> >> But then in collect_percpu_times() we still have to clear PSI_NONIDLE of this CPU if PSI_ONLY_AVGS_WORK
-> >> has been set.
-> >>
-> >>         for_each_possible_cpu(cpu) {
-> >>                 u32 times[NR_PSI_STATES];
-> >>                 u32 nonidle;
-> >>                 u32 cpu_changed_states;
-> >>
-> >>                 get_recent_times(group, cpu, aggregator, times,
-> >>                                 &cpu_changed_states);
-> >>                 changed_states |= cpu_changed_states;
-> >>
-> >> cpu_changed_states should clear PSI_NONIDLE if PSI_ONLY_AVGS_WORK already set.
-> >
-> > No, PSI_NONIDLE should not be affected by PSI_ONLY_AVGS_WORK. These
-> > flags should be independent and aggregated into changed_states without
-> > affecting each other. Something similar to how I suggested with
-> > PSI_STATE_WAKE_CLOCK in
-> > https://lore.kernel.org/all/CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com/#t.
->
-> If we don't clear PSI_NONIDLE of this CPU, changed_states |= cpu_changed_states;
-> so changed_states has PSI_NONIDLE, and we won't know if other CPUs are IDLE or not
-> in psi_avgs_work().
+Hello,
 
-I was thinking something like this:
+syzbot found the following issue on:
 
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -244,6 +244,7 @@ static void get_recent_times(struct psi_group
-*group, int cpu,
-        enum psi_states s;
-        unsigned int seq;
-        u32 state_mask;
-+       bool reschedule;
+HEAD commit:    a0ba26f37ea0 Merge git://git.kernel.org/pub/scm/linux/kern..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=1594a825e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=27392dd2975fd692
+dashboard link: https://syzkaller.appspot.com/bug?extid=e738404dcd14b620923c
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16851c6de00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f5d605e00000
 
-        *pchanged_states = 0;
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-@@ -254,6 +255,14 @@ static void get_recent_times(struct psi_group
-*group, int cpu,
-               memcpy(times, groupc->times, sizeof(groupc->times));
-               state_mask = groupc->state_mask;
-               state_start = groupc->state_start;
-+              if (current_cpu == cpu)
-+                     reschedule = groupc->tasks[NR_RUNNING] +
-+                            groupc->tasks[NR_IOWAIT] +
-+                            groupc->tasks[NR_MEMSTALL] > 1;
-+              else
-+                     reschedule = times[PSI_NONIDLE] >
-+                            groupc->times_prev[aggregator][PSI_NONIDLE];
-+
-        } while (read_seqcount_retry(&groupc->seq, seq));
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1422a825e00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1622a825e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1222a825e00000
 
-        /* Calculate state time deltas against the previous snapshot */
-@@ -278,6 +287,8 @@ static void get_recent_times(struct psi_group
-*group, int cpu,
-               if (delta)
-                      *pchanged_states |= (1 << s);
-        }
-+       if (reschedule)
-+              *pchanged_states |= PSI_STATE_RESCHEDULE;
- }
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e738404dcd14b620923c@syzkaller.appspotmail.com
 
- static void calc_avgs(unsigned long avg[3], int missed_periods,
-@@ -413,7 +424,7 @@ static void psi_avgs_work(struct work_struct *work)
-        struct delayed_work *dwork;
-        struct psi_group *group;
-        u32 changed_states;
--       bool nonidle;
-+       bool reschedule;
-        u64 now;
+syz-executor857 uses obsolete (PF_INET,SOCK_PACKET)
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 7033 at net/ipv4/route.c:1243 ip_rt_bug+0x11/0x20 net/ipv4/route.c:1242
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 7033 Comm: syz-executor857 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x188/0x20d lib/dump_stack.c:118
+ panic+0x2e3/0x75c kernel/panic.c:221
+ __warn.cold+0x2f/0x35 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x220 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:ip_rt_bug+0x11/0x20 net/ipv4/route.c:1243
+Code: ff ff e8 c2 d7 33 fb e9 eb fe ff ff e8 b8 d7 33 fb e9 59 ff ff ff 0f 1f 00 55 48 89 d5 e8 17 0e f7 fa 48 89 ef e8 6f 0c 8f ff <0f> 0b 31 c0 5d c3 66 0f 1f 84 00 00 00 00 00 41 54 49 89 fc e8 f6
+RSP: 0018:ffffc90001937300 EFLAGS: 00010293
+RAX: ffff8880a2bc2540 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff867b1711 RDI: 0000000000000286
+RBP: ffff8880a31fb940 R08: 0000000000000000 R09: ffffed1015ce7074
+R10: ffffed1015ce7073 R11: ffff8880ae73839b R12: ffff8880970b0e00
+R13: ffff8880a31fb940 R14: ffff8880a4a71240 R15: ffff8880a31fb998
+ dst_output include/net/dst.h:436 [inline]
+ ip_local_out+0xaf/0x1a0 net/ipv4/ip_output.c:125
+ ip_send_skb+0x3e/0xe0 net/ipv4/ip_output.c:1560
+ ip_push_pending_frames+0x5f/0x80 net/ipv4/ip_output.c:1580
+ icmp_push_reply+0x33f/0x490 net/ipv4/icmp.c:390
+ __icmp_send+0xc44/0x14a0 net/ipv4/icmp.c:740
+ icmp_send include/net/icmp.h:43 [inline]
+ ip_options_compile+0xad/0xf0 net/ipv4/ip_options.c:486
+ ip_rcv_options net/ipv4/ip_input.c:278 [inline]
+ ip_rcv_finish_core.isra.0+0x4aa/0x1ec0 net/ipv4/ip_input.c:370
+ ip_rcv_finish+0x144/0x2f0 net/ipv4/ip_input.c:426
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ NF_HOOK include/linux/netfilter.h:301 [inline]
+ ip_rcv+0xd0/0x3c0 net/ipv4/ip_input.c:538
+ __netif_receive_skb_one_core+0xf5/0x160 net/core/dev.c:5187
+ __netif_receive_skb+0x27/0x1c0 net/core/dev.c:5301
+ netif_receive_skb_internal net/core/dev.c:5391 [inline]
+ netif_receive_skb+0x16e/0x960 net/core/dev.c:5450
+ tun_rx_batched.isra.0+0x47b/0x7d0 drivers/net/tun.c:1553
+ tun_get_user+0x134a/0x3be0 drivers/net/tun.c:1997
+ tun_chr_write_iter+0xb0/0x147 drivers/net/tun.c:2026
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write+0x49c/0x700 fs/read_write.c:483
+ __vfs_write+0xc9/0x100 fs/read_write.c:496
+ vfs_write+0x262/0x5c0 fs/read_write.c:558
+ ksys_write+0x127/0x250 fs/read_write.c:611
+ do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x440699
+Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 fb 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fffce0515b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000440699
+RDX: 000000000000100c RSI: 0000000020000240 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000002c00 R09: 00007fff0000000d
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401f20
+R13: 0000000000401fb0 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-        dwork = to_delayed_work(work);
-@@ -424,7 +435,7 @@ static void psi_avgs_work(struct work_struct *work)
-        now = sched_clock();
 
-        collect_percpu_times(group, PSI_AVGS, &changed_states);
--       nonidle = changed_states & (1 << PSI_NONIDLE);
-+       reschedule = changed_states & (1 << PSI_STATE_RESCHEDULE);
-        /*
-         * If there is task activity, periodically fold the per-cpu
-         * times and feed samples into the running averages. If things
-@@ -435,7 +446,7 @@ static void psi_avgs_work(struct work_struct *work)
-        if (now >= group->avg_next_update)
-               group->avg_next_update = update_averages(group, now);
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--       if (nonidle) {
-+       if (reschedule) {
-               schedule_delayed_work(dwork, nsecs_to_jiffies(
-                             group->avg_next_update - now) + 1);
-        }
-
-Does that address your concern?
-
->
-> Thanks.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
