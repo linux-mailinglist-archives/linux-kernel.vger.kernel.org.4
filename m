@@ -2,137 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568ED5FC14B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4805FC150
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiJLHf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 03:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S229795AbiJLHha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 03:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiJLHfY (ORCPT
+        with ESMTP id S229684AbiJLHh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 03:35:24 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2074.outbound.protection.outlook.com [40.107.117.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45BD57888;
-        Wed, 12 Oct 2022 00:35:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jrs4oXnX/PSJxBQaNA1xiDXWiiVsBWpN438dIFuimmW7fHZLsi3owGPctahEE8flv90JokBfnSyvSAUT/Benv6FvdO61rv2jqdzm17Mqwd7OElKlnPATVZQYfPjcEE0+hGZkMWvI78nwziae7SGYudGoLxcWqJRktXKSlTthOh8TFM4Qfgw62iMJSfzRrf2TEkXllGoyYc0PxzhzxEBDObwTH394vhn9POzX3DEo+pPW1XSg+IKGFeUq52LhTacNcO6c8db6+adrhQ0nRYkNf+DnGSDK44rrTfnJEClfLQlJ+8DA7oc2xQMGYsPUYVxHOoV4ZvU9iNCXP/rZKElm3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1SnIPgYzpo2fudFqfrMN+lEY6pHxMzb1u1BVAqC+PLQ=;
- b=A17cPcIoKLWEA/wdmRi3aYnXhOcfmp2xmKjF+TRLGLYo70YW/sEDmgR69wkMDV4a5taAc5VNEqeBu7kghMLG1i1W11KJAWjTZAFyXJGuNGyeq95nYOknR6bqUFo9eNtO8RyDQOQ5QLFpaxgBpaX9yHghNJs9lJN91FqjZbUucrvF1hjqwtOz/l4mfcR88tgD+LA0SJi2FgPl7CCA0m+nm/a/fzqJ28iBzh7q2+2aYTOWLCW1vJdnhZYZ2mkwJXYL1ppvLJdjPyfZH9Znm1ToNyEc34gmqvTps3zeFa7nQY3ng1+K98jftypVnRUZCIu08vavQF/Du7AIxGeWL9S0LQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1SnIPgYzpo2fudFqfrMN+lEY6pHxMzb1u1BVAqC+PLQ=;
- b=JpidCFIXV41sIyCpt7AIfJmYOHGscfYCHD5toERVO7coPMq2ALxYtQQtwMQIGV6bXvm85mcDytqJ9Hxwohneyvye+hy4ttClN611fkS3SqZd2UaSEZT/7BMASyujBwSdgr3KOUKos2JLgEhooA4Hqc8U05ThUXvGGB4Gx/nbfHnZhFuGMaijG8TLvrvz5xbtK47p2ADR688RXe118b8OGgrFQh/OjrlXO5jDgwWyb40YTJbFbtgdjvtrLRpkF603+AcBkv2F29mZxoXEUGGEMNXmXCfR0vdqnYGFeK8nd5t9yvgPXe4ZdoooUzdLZ1FeC017LeSFN/KkD46I311pOQ==
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com (2603:1096:404:104::19)
- by PSAPR06MB4198.apcprd06.prod.outlook.com (2603:1096:301:3e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Wed, 12 Oct
- 2022 07:35:18 +0000
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::aa83:33dc:435c:cb5d]) by TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::aa83:33dc:435c:cb5d%6]) with mapi id 15.20.5709.021; Wed, 12 Oct 2022
- 07:35:17 +0000
-From:   Angus Chen <angus.chen@jaguarmicro.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alvaro.karsz@solid-run.com" <alvaro.karsz@solid-run.com>,
-        "gavinl@nvidia.com" <gavinl@nvidia.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "lingshan.zhu@intel.com" <lingshan.zhu@intel.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "wangdeming@inspur.com" <wangdeming@inspur.com>,
-        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: RE: [GIT PULL] virtio: fixes, features
-Thread-Topic: [GIT PULL] virtio: fixes, features
-Thread-Index: AQHY3MyiiKqJa7Fnx0Wd1nXI+hxoOK4KTBsAgAAR5+A=
-Date:   Wed, 12 Oct 2022 07:35:17 +0000
-Message-ID: <TY2PR06MB3424CA67A42A40B16FA7A66285229@TY2PR06MB3424.apcprd06.prod.outlook.com>
-References: <20221010132030-mutt-send-email-mst@kernel.org>
- <87r0zdmujf.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87r0zdmujf.fsf@mpe.ellerman.id.au>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR06MB3424:EE_|PSAPR06MB4198:EE_
-x-ms-office365-filtering-correlation-id: 76ec6c5a-7f5b-428d-e6b5-08daac244f30
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 76vC2fg6UFuQsMYeJeU2bAL01tlTqDuTcKqbWvODrmgrnhTNZ1g0OT0Ru4L+9W7xUD1JSCfQ5Ll9eTQlqO7pMF5ZPJBeF8r9LssheSuEmjEvPtZoHTzV2rjrZ+e7LL8/M19BFubFS2zwuxfn7qm66BpgNoXU/uNHJc50VmHdj+ehw3uuaRu82yt0oUov7YON75oHfnTyznDQaJDxqs6A07BvlyQ+0WaU7zu/VI29Xm9CCnW2ZW+Kfem8d9F6o0D3IYaozu4B8/28z70qSgw5AMKMwllLnyN82T+K5nGSel17FOnw1aI7mDGdVqe7hII4he7Do7WHkNviu9TAwmClV8Cd3qCjL6Ulbe517sLQvFrjqTHA99zjqH50ksLRrmLK5R8G+MF4k0icOE35lvzPyNwlPLBQBkqHyeKw3+PgqD2amWDD0jRu2zlEEnviQU7NoUGFwZ/QjO8SZ4AYK5XdViway7h+lWxMi3YLOaADBTPRQNReAKN09qL01wqkzcI7q5WBrJXpclvMfhd4MbtcpQt2M1sQgY9QKXakFCtezcwpQ20ZqlFP6w1tLH4u6F72x/atH0chPDVSHW3tHVptkjQRgsekKugZoSt4J7CbHPfdR44/7WrmMcg16c2hN4LMB4cME8LdBhqWv1OWNh85gLZiBMQ1ieH6EDLGiA/VCjxMX2HF9jnamPyapKjbREXCbHpDK++xir/p+WkVJeXAwRceplzcuCue/sgQhUc4X0++iNiEBMRv5Z1Fa9iGcjMNFnMb9qWhBiGeeWh8RpVWSmOulvUmNNs3RGgdUCuJBmk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3424.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39830400003)(376002)(346002)(136003)(396003)(451199015)(71200400001)(86362001)(316002)(38070700005)(110136005)(54906003)(41300700001)(2906002)(55016003)(5660300002)(33656002)(186003)(8936002)(83380400001)(966005)(66446008)(64756008)(66476007)(66556008)(66946007)(52536014)(44832011)(4326008)(7416002)(76116006)(8676002)(478600001)(9686003)(26005)(6506007)(66899015)(38100700002)(122000001)(7696005)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SkorekFUKzRBeU14NGRaZTdjRXJIZ28zWjdxWlczZTFBV1dMUllNaDhGUCsw?=
- =?utf-8?B?VFk2NnRVV3owZkFKRnZQL3RiVGpZUFpoRHNRSzZlTXNXLzlweHdqampZdmoy?=
- =?utf-8?B?OWk2NDZFRk5ISzhyU3FSS2tGYTBxaEord000MDlrQ0E2VWdTanUwSVhQV2c3?=
- =?utf-8?B?c2xMNWJpQ0tzd2gzeWhyT1RPamwxK1l6a244UmhsK3lGNWlDQldpU3hUMkpL?=
- =?utf-8?B?YmFqMmY3d2U4ZWh4QmUrTUF5RTVoc3R5VVNrcjVleUVjSnlySEFqdUFuaTRl?=
- =?utf-8?B?TW9QcHFxZFlaazZjbkdxQ3FhMFFFNUNna2VFZ3NiOWc5L29JWDJGV01iaVF6?=
- =?utf-8?B?dGZWQXgrQUVEdWFVSVVLTlFESm5KWDZMYU9JUEhFNWY3LzFpRUo0aTlIUjls?=
- =?utf-8?B?bHFrbzBJc3lJUlpPKzFDTmU1UVJBMXNOSmQ2dHFIK1EyUzBpQ3RERm0weHhP?=
- =?utf-8?B?d2pRQnNQM2xsOVJ1aUNwQ3RySk9QSG1TNXVKQVh1VGVsYTBicmlzMkxKZzA0?=
- =?utf-8?B?b3lXV1UrYXdLYmxhUU0xRkplTmJoYW51RkFMR3lmM044WmU2emZCTUR6TGcv?=
- =?utf-8?B?eFNzNjNiQ2pyeU1YOGgranQ1ekhJdTNIZzNvcjNhNE04a2w1anpvMHhsQW9W?=
- =?utf-8?B?NWJPckZrSXpRWlhVQ0ZSUFJsK1hOc1VvNnZ1UkNHMWJSK2ZGYWI3TzZzQTJl?=
- =?utf-8?B?Z0ZXc004eEY4c3NpT3JsVUExbmVHb1BVRGV2MVpKZExrdzF1Wllrd2FpdVZt?=
- =?utf-8?B?UWZLNHVrNHFyb1VhRFFQaUMvQjBwaS9RU3JMYVhSK2RaNi9PY2RkN1ZYYUVq?=
- =?utf-8?B?YmhMdVp3VFZnVUZERld1ckErTnRQOHRQNHZNMXZ1dTdMWk1weHovdmZ3SGpI?=
- =?utf-8?B?MC9RaWl0aTB0eGg1ck95QlZrVTc1VW9kdXFXRmxRQkJ3dk04U2FENnRZekI2?=
- =?utf-8?B?bVg4Z0JFYmR2ZEhLSU8zcnRMWUZEaDNLZ2k4SWs5N0R3YjJRcXhxQk1UNHhs?=
- =?utf-8?B?eEJyanJtUVVXeDZsanNEbnBKa2NzU0h4S2hOSXp0ZkV0cW0rMlRpaDNhVDRH?=
- =?utf-8?B?ZE9nSnJHSVgxdmxNTlZCUEV1MFJxbm1nS2ZTN3V4MDB4NGVhSjErZEU2VFd6?=
- =?utf-8?B?ckVTV0RRK25zd3dWeGZic3FPaktUblJyOUc2MkNadkFPYTNzVWVvdGVHT0Ur?=
- =?utf-8?B?bmEydlZKNzlzZGhKeXk4QWZSRVdhM1ZZMnduajZvTE1WNnV4VlErYytBNFhv?=
- =?utf-8?B?Z0dtczlBaEV0VC94REFkSWdJakJ0WmQzRGZOZk9odDhuVU9vcERoLzZhT2Z0?=
- =?utf-8?B?L0F0UERuMlZkU1VQMFdncDg2SDFteWxGSlJEbHVQY1B2REtFalc2a2Juc3hW?=
- =?utf-8?B?ellLcEhkNDh2disvbFlUZU5USDRoYWZpSVhiRzNVbzJIbytwaCs5NW1MSzNY?=
- =?utf-8?B?bWZ1eXlyYzJWTW5YRE45MDlZZTV0aWkyOW1EKzhQV091RHB3QmxwcnB5N2hY?=
- =?utf-8?B?TFFpNi9RQ1VTUkUxRVdYamVkTkV3dWhka1ZDVCtKaU5QeGlESTNPY3d4T1hN?=
- =?utf-8?B?aTJmc3RsMStqQmNlY1dUdCtGMmtSdHZ5MjQ1Nlk1V1FuRzQwUnphSThaNzNj?=
- =?utf-8?B?TkJOcEFvT0ZGeTZhWGwvZ3BCQXJybFZITEV0K3BPMWlUZlJPbU1uNGZINnRX?=
- =?utf-8?B?NTE4RTMwMGFUcEZrUnVKbk9FWUVvbi9tL0IrLzd0QjVmSmNabm01aHZOQTg1?=
- =?utf-8?B?aUZ1L2dhS2tFNThXcGwydGUxU2UycW9aVGswWDU5OEIvOU5HeGIzd2RUSkM4?=
- =?utf-8?B?eTR4M2lhV0pkWWdSWk9hUXArUDdsL1dOVmhEcEdIczVrZ0pxbUNtNkVLMy9l?=
- =?utf-8?B?RjkyZUpUK1BJWGRETi9DVlN2RUg4Y1FXK1Zwb3QxaEtyNFMrWTRqeEQySDJD?=
- =?utf-8?B?MjFRNDkyc2JwZkp0MWlObVZqWkk3UzhXbldBYzZxSmZRTHZIcXl6UFlhRkZK?=
- =?utf-8?B?Y21UNi8xTFpUUFRnS2J5NTVUQjZCRjlDdC9FckdPTE5neVB1OXRtSkRFNElC?=
- =?utf-8?B?K0FLWTZzYXFIRms5ekxqT0NURFRGWFNwT0l4L3c2OElUSHpGb3g3SkJ6cUR1?=
- =?utf-8?B?UTNELzE4TXRITS9JT2RDaEk2NlpsTzJYa2luZEliTDRDZUozWTUwMTRRSUxo?=
- =?utf-8?B?S3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 12 Oct 2022 03:37:28 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5191C2642;
+        Wed, 12 Oct 2022 00:37:25 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id m19so23156586lfq.9;
+        Wed, 12 Oct 2022 00:37:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NjfphTrD74SCe2Wqn9sjzTarSBfrRBT5WV/r6ddhkjc=;
+        b=AoIoo8VCzL3Q/mizCE+qWAtBX4JpELxjdtE6seGxWpX14JcAJCVDbzhjw9M7n828Qr
+         i7vnT7gPoFXwP+OqdiiqDFy0T+O6R1gHN9OmKVo88ikUINEwjLMbS2MQWegnuIczVSQJ
+         Kxn/uSwkdNWQqffzNSbd/i1tooPQ8bu3t9WXrdaZr/TimhUwo2na8XHIboH1scxbt3xB
+         bN4pf66PcE8JVfurzdLpaOa9ihSSj2uswXRAvAOwBjGIRUOMN5kzzunaCGzpxUpD5qZ5
+         rbfxNYCnj3uXNY7DsQOzcK68MYXQ3fLcmz3bv73QjON1TfW6uEh1vRArEiqnfsLp4xXa
+         B0Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NjfphTrD74SCe2Wqn9sjzTarSBfrRBT5WV/r6ddhkjc=;
+        b=C7O0f0C1/cAvDAK78E3NpAaFLdGw5k22YB8ZcNw9bwoUc+PNseGTyhwHjIfLTmSzp0
+         xpZS3vgbQ8Xo/NMh2SaqxGA2IfVmAarXdydv7SqlLH/B+1jnzcQNcy/lE7g8qguFK3l9
+         oLZfPlkMijWUGqwGpO14JsIyN7kD9eKS4pVVBkJhcI+w9F481TJZ8t5RlxOBTL3euPif
+         ezMqqyY+giUMfgYaaZ5XfrVdkhuZu5EAv1mnug2l/Ncgb0UJrSruyOCQPtAucunXRnw6
+         fDVzcmiD5Gdw9PZXm3DpcumpI/OK9DE4zWUPlQGEZi1QcC7mNwTmJJrShqd/JQ+Wx4UJ
+         JDIw==
+X-Gm-Message-State: ACrzQf0oUoLOf8lBcp6c4660/0sxyQ2vb90k+flkaF/v4WPZXkPYJRNE
+        t+wImi8LmYZzlMDrIZ0e358jZL/B6U7NcXmTNjU=
+X-Google-Smtp-Source: AMsMyM4sgAAd2sHPlijuFV3EPm6SjKYIRCRRKlhOqGL78Xp1B9gu+vUic/xGRHnKmdeyIFoT2tY7/7rJ8lWLSoQyCdU=
+X-Received: by 2002:a05:6512:3404:b0:4a2:c780:7077 with SMTP id
+ i4-20020a056512340400b004a2c7807077mr7958380lfr.165.1665560243465; Wed, 12
+ Oct 2022 00:37:23 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3424.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76ec6c5a-7f5b-428d-e6b5-08daac244f30
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2022 07:35:17.3126
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PjZ5E4NM6zaKx0IkG9Q7MgeL/4luBJNnW6+9DNpn8p1QYq5I1I++iWi/gDIt//qU34L6WnEaqmWJ78vd+YWIPnwwWRGgdQUQG2O5Ijb/u34=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4198
+References: <1665450964-27487-1-git-send-email-zhaoyang.huang@unisoc.com> <202210121406.d4ebc9bc-oliver.sang@intel.com>
+In-Reply-To: <202210121406.d4ebc9bc-oliver.sang@intel.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Wed, 12 Oct 2022 15:36:54 +0800
+Message-ID: <CAGWkznHr-dOdq0MG0DTz6XwEU8LpxURK-7jmHw2+7K0PMSOk3A@mail.gmail.com>
+Subject: Re: [mm] 0e949320db: BUG:kernel_NULL_pointer_dereference,address
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>, lkp@lists.01.org,
+        lkp@intel.com, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -140,50 +72,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWljaGFlbCBFbGxlcm1h
-biA8bXBlQGVsbGVybWFuLmlkLmF1Pg0KPiBTZW50OiBXZWRuZXNkYXksIE9jdG9iZXIgMTIsIDIw
-MjIgMjoyMSBQTQ0KPiBUbzogTWljaGFlbCBTLiBUc2lya2luIDxtc3RAcmVkaGF0LmNvbT4NCj4g
-Q2M6IGt2bUB2Z2VyLmtlcm5lbC5vcmc7IHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5k
-YXRpb24ub3JnOw0KPiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5r
-ZXJuZWwub3JnOw0KPiBhbHZhcm8ua2Fyc3pAc29saWQtcnVuLmNvbTsgQW5ndXMgQ2hlbiA8YW5n
-dXMuY2hlbkBqYWd1YXJtaWNyby5jb20+Ow0KPiBnYXZpbmxAbnZpZGlhLmNvbTsgamFzb3dhbmdA
-cmVkaGF0LmNvbTsgbGluZ3NoYW4uemh1QGludGVsLmNvbTsNCj4gbXN0QHJlZGhhdC5jb207IHdh
-bmdkZW1pbmdAaW5zcHVyLmNvbTsgeGl1amlhbmZlbmdAaHVhd2VpLmNvbTsNCj4gbGludXhwcGMt
-ZGV2QGxpc3RzLm96bGFicy5vcmc7IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3Vu
-ZGF0aW9uLm9yZz4NCj4gU3ViamVjdDogUmU6IFtHSVQgUFVMTF0gdmlydGlvOiBmaXhlcywgZmVh
-dHVyZXMNCj4gDQo+ICJNaWNoYWVsIFMuIFRzaXJraW4iIDxtc3RAcmVkaGF0LmNvbT4gd3JpdGVz
-Og0KPiA+IFRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQNCj4gNGZlODlkMDdkY2My
-ODA0YzhiNTYyZjZjNzg5NmE0NTY0M2QzNGIyZjoNCj4gPg0KPiA+ICAgTGludXggNi4wICgyMDIy
-LTEwLTAyIDE0OjA5OjA3IC0wNzAwKQ0KPiA+DQo+ID4gYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0
-IHJlcG9zaXRvcnkgYXQ6DQo+ID4NCj4gPiAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3Nj
-bS9saW51eC9rZXJuZWwvZ2l0L21zdC92aG9zdC5naXQNCj4gdGFncy9mb3JfbGludXMNCj4gPg0K
-PiA+IGZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0bw0KPiA3MTQ5MWM1NGVhZmEzMThmZGQy
-NGExZjI2YTFjODJiMjhlMWFjMjFkOg0KPiA+DQo+ID4gICB2aXJ0aW9fcGNpOiBkb24ndCB0cnkg
-dG8gdXNlIGludHhpZiBwaW4gaXMgemVybyAoMjAyMi0xMC0wNyAyMDowMDo0NCAtMDQwMCkNCj4g
-Pg0KPiA+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0NCj4gPiB2aXJ0aW86IGZpeGVzLCBmZWF0dXJlcw0KPiA+DQo+ID4gOWsg
-bXR1IHBlcmYgaW1wcm92ZW1lbnRzDQo+ID4gdmRwYSBmZWF0dXJlIHByb3Zpc2lvbmluZw0KPiA+
-IHZpcnRpbyBibGsgU0VDVVJFIEVSQVNFIHN1cHBvcnQNCj4gPg0KPiA+IEZpeGVzLCBjbGVhbnVw
-cyBhbGwgb3ZlciB0aGUgcGxhY2UuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIFMu
-IFRzaXJraW4gPG1zdEByZWRoYXQuY29tPg0KPiA+DQo+ID4gLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+IEFsdmFybyBL
-YXJzeiAoMSk6DQo+ID4gICAgICAgdmlydGlvX2JsazogYWRkIFNFQ1VSRSBFUkFTRSBjb21tYW5k
-IHN1cHBvcnQNCj4gPg0KPiA+IEFuZ3VzIENoZW4gKDEpOg0KPiA+ICAgICAgIHZpcnRpb19wY2k6
-IGRvbid0IHRyeSB0byB1c2UgaW50eGlmIHBpbiBpcyB6ZXJvDQo+IA0KPiBUaGlzIGNvbW1pdCBi
-cmVha3MgdmlydGlvX3BjaSBmb3IgbWUgb24gcG93ZXJwYywgd2hlbiBydW5uaW5nIGFzIGEgcWVt
-dQ0KPiBndWVzdC4NCj4gDQo+IHZwX2ZpbmRfdnFzKCkgYmFpbHMgb3V0IGJlY2F1c2UgcGNpX2Rl
-di0+cGluID09IDAuDQo+IA0KPiBCdXQgcGNpX2Rldi0+aXJxIGlzIHBvcHVsYXRlZCBjb3JyZWN0
-bHksIHNvIHZwX2ZpbmRfdnFzX2ludHgoKSB3b3VsZA0KPiBzdWNjZWVkIGlmIHdlIGNhbGxlZCBp
-dCAtIHdoaWNoIGlzIHdoYXQgdGhlIGNvZGUgdXNlZCB0byBkby4NCj4gDQo+IEkgdGhpbmsgdGhp
-cyBoYXBwZW5zIGJlY2F1c2UgcGNpX2Rldi0+cGluIGlzIG5vdCBwb3B1bGF0ZWQgaW4NCj4gcGNp
-X2Fzc2lnbl9pcnEoKS4NCj4gDQo+IEkgd291bGQgYWJzb2x1dGVseSBiZWxpZXZlIHRoaXMgaXMg
-YnVnIGluIG91ciBQQ0kgY29kZSwgYnV0IEkgdGhpbmsgaXQNCj4gbWF5IGFsc28gYWZmZWN0IG90
-aGVyIHBsYXRmb3JtcyB0aGF0IHVzZSBvZl9pcnFfcGFyc2VfYW5kX21hcF9wY2koKS4NCj4gDQo+
-IGNoZWVycw0KSEksc29ycnkgZm9yIHJlcGx5IGFnYWluLiBJZiBJIGNoYW5nZSB0aGUgY29kZSBs
-aWtlIGJsZXc6DQogcGNpX3JlYWRfY29uZmlnX2J5dGUoZGV2LCBQQ0lfSU5URVJSVVBUX1BJTiwg
-JnBpbik7DQogaWYgKCFwaW4pIHsNCiAgICAgICAgd2Fybl9vbigic29tZSB0aGluZyIpOw0KICAg
-ICAgICAgcmV0dXJuIDA7DQogICAgICAgIH0NCkl0IHdpbGwgZml4IHRoZSBvcmlnbiBidWcuDQpP
-ciB3ZSBzaG91bGQgcG9wdWxhdGVkIHRoZSBwY2lfZGV2LT5waW4gdmFsdWUgY29ycmVjdGx5IGFj
-Y29yZGluZyB0byBQQ0kgc3BlYyBhYm91dCAiSW50ZXJydXB0IFBpbiIgUmVnaXN0ZXIuDQoNCkkg
-aGF2ZSBubyBpZGVhIGFib3V0IGl0LCBhbnkgc3VnZ2VzdGlvbnMgYXJlIHdlbGNvbWUuDQpUaGFu
-ayB5b3UuDQo=
+This is introduced by a very early kmemleak_alloc before kmemleak_init
+which gets an object from mem_pool, which could not be produced on my
+v5.4 based environment, sorry for the disturbance. I would like to
+send a fixup later.
+
+On Wed, Oct 12, 2022 at 2:34 PM kernel test robot <oliver.sang@intel.com> wrote:
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: 0e949320dbee7ffe242b1a9b4fc59661e954e6e5 ("[Resend PATCH] mm: use stack_depot for recording kmemleak's backtrace")
+> url: https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-use-stack_depot-for-recording-kmemleak-s-backtrace/20221011-091833
+> base: https://git.kernel.org/cgit/linux/kernel/git/akpm/mm.git mm-everything
+> patch link: https://lore.kernel.org/linux-mm/1665450964-27487-1-git-send-email-zhaoyang.huang@unisoc.com
+> patch subject: [Resend PATCH] mm: use stack_depot for recording kmemleak's backtrace
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+> +---------------------------------------------+------------+------------+
+> |                                             | 029cc2b410 | 0e949320db |
+> +---------------------------------------------+------------+------------+
+> | boot_successes                              | 6          | 0          |
+> | boot_failures                               | 0          | 6          |
+> | BUG:kernel_NULL_pointer_dereference,address | 0          | 6          |
+> | Oops:#[##]                                  | 0          | 6          |
+> | RIP:__stack_depot_save                      | 0          | 6          |
+> | Kernel_panic-not_syncing:Fatal_exception    | 0          | 6          |
+> +---------------------------------------------+------------+------------+
+>
+>
+> If you fix the issue, kindly add following tag
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Link: https://lore.kernel.org/r/202210121406.d4ebc9bc-oliver.sang@intel.com
+>
+>
+> [    0.244585][    T0] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [    0.246464][    T0] #PF: supervisor read access in kernel mode
+> [    0.247823][    T0] #PF: error_code(0x0000) - not-present page
+> [    0.249179][    T0] PGD 0 P4D 0
+> [    0.249986][    T0] Oops: 0000 [#1] SMP PTI
+> [    0.251025][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc3-00707-g0e949320dbee #4
+> [    0.252895][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> [ 0.255242][ T0] RIP: 0010:__stack_depot_save (kbuild/src/x86_64-2/lib/stackdepot.c:452)
+> [ 0.256583][ T0] Code: 03 48 c7 c7 ec 17 b3 84 e8 91 e8 85 ff 44 89 e0 23 05 74 a8 01 03 48 8d 04 c3 48 89 c3 48 89 c7 48 89 44 24 28 e8 d4 f9 85 ff <4c> 8b 33 4d 85 f6 0f 84 b6 00 00 00 8b 04 24 83 e8 01 48 8d 04 c5
+> All code
+> ========
+>    0:   03 48 c7                add    -0x39(%rax),%ecx
+>    3:   c7                      (bad)
+>    4:   ec                      in     (%dx),%al
+>    5:   17                      (bad)
+>    6:   b3 84                   mov    $0x84,%bl
+>    8:   e8 91 e8 85 ff          callq  0xffffffffff85e89e
+>    d:   44 89 e0                mov    %r12d,%eax
+>   10:   23 05 74 a8 01 03       and    0x301a874(%rip),%eax        # 0x301a88a
+>   16:   48 8d 04 c3             lea    (%rbx,%rax,8),%rax
+>   1a:   48 89 c3                mov    %rax,%rbx
+>   1d:   48 89 c7                mov    %rax,%rdi
+>   20:   48 89 44 24 28          mov    %rax,0x28(%rsp)
+>   25:   e8 d4 f9 85 ff          callq  0xffffffffff85f9fe
+>   2a:*  4c 8b 33                mov    (%rbx),%r14              <-- trapping instruction
+>   2d:   4d 85 f6                test   %r14,%r14
+>   30:   0f 84 b6 00 00 00       je     0xec
+>   36:   8b 04 24                mov    (%rsp),%eax
+>   39:   83 e8 01                sub    $0x1,%eax
+>   3c:   48                      rex.W
+>   3d:   8d                      .byte 0x8d
+>   3e:   04 c5                   add    $0xc5,%al
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   4c 8b 33                mov    (%rbx),%r14
+>    3:   4d 85 f6                test   %r14,%r14
+>    6:   0f 84 b6 00 00 00       je     0xc2
+>    c:   8b 04 24                mov    (%rsp),%eax
+>    f:   83 e8 01                sub    $0x1,%eax
+>   12:   48                      rex.W
+>   13:   8d                      .byte 0x8d
+>   14:   04 c5                   add    $0xc5,%al
+> [    0.261023][    T0] RSP: 0000:ffffffff83603ca8 EFLAGS: 00010046
+> [    0.262337][    T0] RAX: ffffffff83613cd8 RBX: 0000000000000000 RCX: ffffffff81b16f8c
+> [    0.264139][    T0] RDX: 0000000000000b64 RSI: 0000000000000000 RDI: 0000000000000000
+> [    0.265948][    T0] RBP: 00000000c5a6b597 R08: ffffffff8479d118 R09: 0000000000000000
+> [    0.267668][    T0] R10: 0000000000000004 R11: 0001ffffffffffff R12: 0000000027b2cd0a
+> [    0.269492][    T0] R13: 0000000000000003 R14: 000000004954f68c R15: ffffffff83603d54
+> [    0.271315][    T0] FS:  0000000000000000(0000) GS:ffffffff842c9000(0000) knlGS:0000000000000000
+> [    0.273215][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    0.274736][    T0] CR2: 0000000000000000 CR3: 000000000360a000 CR4: 00000000000406b0
+> [    0.276558][    T0] Call Trace:
+> [    0.277339][    T0]  <TASK>
+> [ 0.278031][ T0] stack_depot_save (kbuild/src/x86_64-2/lib/stackdepot.c:534)
+> [ 0.279163][ T0] set_track_prepare (kbuild/src/x86_64-2/mm/slub.c:752)
+> [ 0.280296][ T0] ? memblock_alloc_range_nid (kbuild/src/x86_64-2/mm/memblock.c:1424)
+> [ 0.281692][ T0] ? memblock_alloc_internal (kbuild/src/x86_64-2/mm/memblock.c:1514)
+> [ 0.282985][ T0] ? memblock_alloc_try_nid (kbuild/src/x86_64-2/mm/memblock.c:1614 (discriminator 3))
+> [ 0.286557][ T0] ? setup_command_line (kbuild/src/x86_64-2/init/main.c:631)
+> [ 0.287706][ T0] ? start_kernel (kbuild/src/x86_64-2/init/main.c:965)
+> [ 0.288803][ T0] ? secondary_startup_64_no_verify (kbuild/src/x86_64-2/arch/x86/kernel/head_64.S:358)
+> [ 0.290257][ T0] ? __raw_callee_save___native_queued_spin_unlock (??:?)
+> [ 0.291867][ T0] ? write_comp_data (kbuild/src/x86_64-2/kernel/kcov.c:236)
+> [ 0.292883][ T0] ? strncpy (kbuild/src/x86_64-2/lib/string.c:115)
+> [ 0.293763][ T0] __create_object (kbuild/src/x86_64-2/mm/kmemleak.c:681)
+> [ 0.294761][ T0] kmemleak_alloc_phys (kbuild/src/x86_64-2/mm/kmemleak.c:1212)
+> [ 0.295882][ T0] memblock_alloc_range_nid (kbuild/src/x86_64-2/mm/memblock.c:1424)
+> [ 0.297105][ T0] memblock_alloc_internal (kbuild/src/x86_64-2/mm/memblock.c:1514)
+> [ 0.298293][ T0] memblock_alloc_try_nid (kbuild/src/x86_64-2/mm/memblock.c:1614 (discriminator 3))
+> [ 0.299516][ T0] setup_command_line (kbuild/src/x86_64-2/init/main.c:631)
+> [ 0.300691][ T0] start_kernel (kbuild/src/x86_64-2/init/main.c:965)
+> [ 0.301806][ T0] ? load_ucode_bsp (kbuild/src/x86_64-2/arch/x86/kernel/cpu/microcode/core.c:176)
+> [ 0.302954][ T0] secondary_startup_64_no_verify (kbuild/src/x86_64-2/arch/x86/kernel/head_64.S:358)
+> [    0.304315][    T0]  </TASK>
+> [    0.305039][    T0] Modules linked in:
+> [    0.305938][    T0] CR2: 0000000000000000
+> [    0.306882][    T0] ---[ end trace 0000000000000000 ]---
+> [ 0.307913][ T0] RIP: 0010:__stack_depot_save (kbuild/src/x86_64-2/lib/stackdepot.c:452)
+> [ 0.309033][ T0] Code: 03 48 c7 c7 ec 17 b3 84 e8 91 e8 85 ff 44 89 e0 23 05 74 a8 01 03 48 8d 04 c3 48 89 c3 48 89 c7 48 89 44 24 28 e8 d4 f9 85 ff <4c> 8b 33 4d 85 f6 0f 84 b6 00 00 00 8b 04 24 83 e8 01 48 8d 04 c5
+> All code
+> ========
+>    0:   03 48 c7                add    -0x39(%rax),%ecx
+>    3:   c7                      (bad)
+>    4:   ec                      in     (%dx),%al
+>    5:   17                      (bad)
+>    6:   b3 84                   mov    $0x84,%bl
+>    8:   e8 91 e8 85 ff          callq  0xffffffffff85e89e
+>    d:   44 89 e0                mov    %r12d,%eax
+>   10:   23 05 74 a8 01 03       and    0x301a874(%rip),%eax        # 0x301a88a
+>   16:   48 8d 04 c3             lea    (%rbx,%rax,8),%rax
+>   1a:   48 89 c3                mov    %rax,%rbx
+>   1d:   48 89 c7                mov    %rax,%rdi
+>   20:   48 89 44 24 28          mov    %rax,0x28(%rsp)
+>   25:   e8 d4 f9 85 ff          callq  0xffffffffff85f9fe
+>   2a:*  4c 8b 33                mov    (%rbx),%r14              <-- trapping instruction
+>   2d:   4d 85 f6                test   %r14,%r14
+>   30:   0f 84 b6 00 00 00       je     0xec
+>   36:   8b 04 24                mov    (%rsp),%eax
+>   39:   83 e8 01                sub    $0x1,%eax
+>   3c:   48                      rex.W
+>   3d:   8d                      .byte 0x8d
+>   3e:   04 c5                   add    $0xc5,%al
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   4c 8b 33                mov    (%rbx),%r14
+>    3:   4d 85 f6                test   %r14,%r14
+>    6:   0f 84 b6 00 00 00       je     0xc2
+>    c:   8b 04 24                mov    (%rsp),%eax
+>    f:   83 e8 01                sub    $0x1,%eax
+>   12:   48                      rex.W
+>   13:   8d                      .byte 0x8d
+>   14:   04 c5                   add    $0xc5,%al
+>
+>
+> To reproduce:
+>
+>         # build kernel
+>         cd linux
+>         cp config-6.0.0-rc3-00707-g0e949320dbee .config
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>         cd <mod-install-dir>
+>         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+>
+>
