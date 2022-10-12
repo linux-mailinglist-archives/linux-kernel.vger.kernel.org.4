@@ -2,75 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF3B5FBEDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 03:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AAF5FBEE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 03:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiJLBfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 21:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S229603AbiJLBkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 21:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiJLBfS (ORCPT
+        with ESMTP id S229614AbiJLBkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 21:35:18 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD03F5AC52;
-        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id e129so14264921pgc.9;
-        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iv50hxDOHDOsgzOAMRq0QBK53acG/P2BUJFVAKGAT4o=;
-        b=RNhHYy1UfHXMhd5n5YAnce/Zp70WW6q9uoBYfQrhK1zu9MvI4ebhewW12jIx0SNz9R
-         +M/xG/u16A0yXJSmO++vuRMShouqpRwgJOjTcOggxIcoRgP8wpibOSPkZYuAw1Y0s91C
-         rMatDckiihko0xHYquALUnmLv0//XTalaueU/gKb1Ggv1gxUVgeN1yscEVyKD8BI/WR+
-         RKi/tKIcrtKwSPejHtInDDJyDW+7knAAdIwF6a5ynYuwL/lcwjChvqLMRHpqhWUHSRMR
-         6AQtJuBLhwQZliEoD1oZ3dR/SjzpEB9pGmXrztHEezssfs3UOIUxxSJ/TLRNjq3CCbHj
-         rYEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iv50hxDOHDOsgzOAMRq0QBK53acG/P2BUJFVAKGAT4o=;
-        b=2oBJmjWY5crixx91qgfimIR5g3ef6FEhTD7nT8Qyfc7aJ7xb9k7nSj/eLFOHcek/5p
-         /WrNV5s09EPGMDk6XJHi2ZZM1vbqyCEoMHMXJnI1w/KplXf3cn0roXFSwP3g1o09eNRD
-         VyNc4t7DDSIhmUEDFPWTHtqL7TkRwAmzDUj1iJThTTyCElj6s2xzyjfZocjh/kIHzRr8
-         KBgJ3a4uQE+5MPEycwVcqAjIoJ2l9QcItMmodTq2oe0KF3+7kVrj8WBiJG6xfMseVz3g
-         38F9gEMxj7m7CG9q3reyikpAU+amETUaKB6bziep/Pupe/XAmEx6hrd6hYHPxb8KflvH
-         xMmg==
-X-Gm-Message-State: ACrzQf0VnD0BI16Uy+GfydldzjcNcMF/PP3p3ecSe7SulPAmsNR0a5qC
-        0fVoId0ADEfQrUqUZf9tozo=
-X-Google-Smtp-Source: AMsMyM5oBIu8PXuIxBRmKnnpErAVdRzStgCkrL1aBvmTfHnz+x+lClsxCe5ZnkYRl0jp9GK59mOp6Q==
-X-Received: by 2002:a05:6a00:1781:b0:561:7f7f:dc38 with SMTP id s1-20020a056a00178100b005617f7fdc38mr28362340pfg.42.1665538516114;
-        Tue, 11 Oct 2022 18:35:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w10-20020a62820a000000b0052dfe83e19csm9986097pfd.16.2022.10.11.18.35.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 18:35:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
-Date:   Tue, 11 Oct 2022 18:35:13 -0700
+        Tue, 11 Oct 2022 21:40:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D9A2844
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 18:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665538837; x=1697074837;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=taCHtXVPbBQA8FPlUHonRujUKGuRvRnrF/aPYiwSgaI=;
+  b=FOUzoG6FV0A9eZYTDMhEEwYVw2hG2wgONIurVRGGOftaRR25SRqf2c6J
+   HI4PaRZlYTYgv50qesFbaX7ss8OZV4ZymunlfGLX8F45bd+DJgzkTb7CM
+   USxo5Av2kQ7HnwYC3w8WDtYaTor/H33RCghmoawKp7qsme2u6FiGwU5pw
+   zMCc2PMUNZJs+69cMUzl3JuhOF89pilKPjoF3K4GQPMJYa2aDYuTXrFzE
+   s/Z0xsyaPbt8OpA9+avotNPJkew+YYiBxPwchaUCZRGVgR+MpIP+j/ruN
+   cG+Ed9o8I1/L1n4Y7nRQxCDP9Vtmlrbi/8BvlTLtwm1prLxMmiT/IGNpf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="306296844"
+X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
+   d="scan'208";a="306296844"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 18:40:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="621609764"
+X-IronPort-AV: E=Sophos;i="5.95,177,1661842800"; 
+   d="scan'208";a="621609764"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 11 Oct 2022 18:40:36 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 18:40:35 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 11 Oct 2022 18:40:35 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 11 Oct 2022 18:40:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EVgU2q9NzUi5iW5rWpKl27iwnyDgYB4e09hFut34XUT9z9QOEBBNuPvHnahUgmaCWbTh2pMU2xDM77QTLRhg1YBYAN8ZZsu5XmTJKi6QscB2NbveJamLSCb8Ga/1eQm5BqWjwBqm/AAZ8N7Z8fWA3a0JAtM55GOSnJaAUDPqTTwi8qnYJRA7uGzsOIOaf9qfymzVCIOJ/rvmp+ptCQweZ48X3MTafX1NkIKIh5hkE1FOwt9DF123ROG1AOf1p6nO9tVHCM1x5C2W20NyDGOf8YJBKRo25GUNTzWaI7LPPDmhoMizqUg7em1v3goTEw2VBbEVKBK2IiW2lRD0fpJjqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hp5QbkHPf5H3CAcl1lO2QHnzhkrY/64CIV+zyQUP9cE=;
+ b=a+OypGbE6X4FatsU43rZEYtQg8E65p5PWE5qj4MO3HdPwahk++H+c5zGtAOU2FEXmsSf7jVVXgJfHUVAygnirH9zg+FDMKYUz+9CRCdMy2BFMpUiFuT+75JNvuwoMWVy5uW5BB0ZaS+1pjKWA0i2QN0K69ram78BPINAhkqxuYI3jfsjvnWb6o3A1j2d0OpjhwAgdMcTdpHdFG01Q7TtYyRwXcsw7ClGZH4aww2Om1DSujpFwl3JgAYsAj3W4OjL3+LUVgMZ/ONWBko4NKyP1gMUTXy6kLEmUOdV9EjZQviSn73VflFwiEugRzW08WbJRFT3HufJHWRdISskot5e6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by PH8PR11MB6951.namprd11.prod.outlook.com (2603:10b6:510:225::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.18; Wed, 12 Oct
+ 2022 01:40:29 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::a805:3436:ae38:788e]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::a805:3436:ae38:788e%9]) with mapi id 15.20.5709.015; Wed, 12 Oct 2022
+ 01:40:28 +0000
+Message-ID: <cca7e8ec-9fa0-7517-12d2-b0fd115bb9e9@intel.com>
+Date:   Tue, 11 Oct 2022 18:40:26 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 1/6] x86/cpufeature: add cpu feature bit for LKGS
+Content-Language: en-CA
+To:     Xin Li <xin3.li@intel.com>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <peterz@infradead.org>
+References: <20221010190159.11920-1-xin3.li@intel.com>
+ <20221010190159.11920-2-xin3.li@intel.com>
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+In-Reply-To: <20221010190159.11920-2-xin3.li@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR13CA0028.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::41) To PH0PR11MB4855.namprd11.prod.outlook.com
+ (2603:10b6:510:41::12)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     karthik gengan <gengankarthik@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
- supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
-In-Reply-To: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|PH8PR11MB6951:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d939868-a54f-49d6-a513-08daabf2be0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9A1Jj8k7o0eMey5Uc+6XHCCGYuMp39cmPdfMlzzrnKJMQ74EF2intbI/jVvip6t8bvbtlJzqkR2IIoAvpcK0qpCLhtI68xEDo37L6kxDNV8DIaGm6zEEiB5YxYAYXUu2NSVl1FJwvV+080ySOFxaACGr3EGwMiyk9QNpWbh6ZgSVaNVwLoAxO1f6UIwbr7PDN1GYWJ4KWOJ6IgKpzOkbX1RtIZJDFfFUYQDKUtezdAgdnjaMnR28eyWECR5z0y6EwycU5jXrCqqIZCXDF6EumoTwmU0gTe1eNWjQqEQOrEpoZHIBxEBhU5IbWxYsrZpqSIw2n4qiSvWB4cD+1QifUFz/gjcy3rLJzimJUThm9s6EtNL3Fwp8NaVppvEVB7TPFTPxiuCgVnopG53CiI2oS3BeTepc6oCB73CRaq8xnu+Pgj5/P0R+08FXH8RwtOsAlXr+mEE1m79WRKrreBOFnt8l+QCujBaYP/tvXoxlwukqoULLx5/0sUf42cpl8WNsKf4tEwuxY927lsLnDjQLmAG6dJkLRJjjFtSNJtdaw9/iuSFAV+O4dCM1KrtgPks16PtKSg0ZbVWnse2OZCuPAeGULGTQxI08BYSoP+xf4aRdOhNybksYTlEorH05+cqxxARZBMYJc3WfJTIG+TJl6XUD2H4Or7P3PbaakmcL7+urUqEr0Q41O26qahTvAywD/S999jnZmtU9QEkPuLHX9vmTg0uaNHh3jgfGdImst8tMtJqFWvxFH/EnmfKuQlYB8oVBOL1V4rWxMrk/OzaqSyroOgBAIwnjH9gVsMa5hgHeptO57IXx93lqWQtRGTr6QGUbmgWwxpnO54TC+DMd6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199015)(31686004)(82960400001)(66946007)(186003)(2616005)(2906002)(6506007)(316002)(5660300002)(26005)(8936002)(6512007)(4744005)(53546011)(36756003)(86362001)(8676002)(66476007)(66556008)(31696002)(38100700002)(4326008)(41300700001)(966005)(6486002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUU1d2hTTDFKZkNQRk1uVVVQZzRpN1FQcnR3U3JVRWVTcFlZSC8xdVRIKzlr?=
+ =?utf-8?B?QjdFVUFZTDJKSWduYlhZUGs0OFBmZzNFWHpLMTFqeW1Sd0pvQWNpcGg2MGpu?=
+ =?utf-8?B?WlZBOTI0NjBEUDNsdUs0UWNWYWRJak9VUVNnYmhMcG0zTHFGRHdGVldMeExw?=
+ =?utf-8?B?Q2pRUmE3aGZlY0hCNERyYzhqUm41Wmx5WVozVXJ0aDgxZ1dHVlBTSDNpVGUw?=
+ =?utf-8?B?alZjM0NSUlIwemtBQ29rQVJiZFVXd3hDbHR5cUJsMGFLd1dZUWZKajYwaFo4?=
+ =?utf-8?B?QlFmeE4wdXVJbVBON1AwQXpabXlwMHFXQU5YaFdyN1VNRXQvd3orNWw1RW5E?=
+ =?utf-8?B?Vmo0anVod0RCZDZ6cjdSQjZ5cHV6U0tmQURtRzkvd0lvSlBqY2lxQ0Z1K2VR?=
+ =?utf-8?B?dkJsZkNEWDFKeFo3dzBRVWpKdXVGYTJoSmdSaWJTM1poVVdNSytyeTZkMEtS?=
+ =?utf-8?B?aGhDWTRPL1JiaURBRVZsWktiU2Q5UzlDZm9DVHFPck0rbkJyQTVyTEtBK0o5?=
+ =?utf-8?B?MWs3emhkRFJRejNGZWxyM2hOWWF0OC9MandZN1FOalRyQTg2Z01yYTAxdW1W?=
+ =?utf-8?B?R2c0dmtvK3E4amlaeVVOMElJc1o5U25DQU5SQmd4VWVOemU2Z0pINzJ0cGsv?=
+ =?utf-8?B?djNtckI0K3cyc0x3R0c5K29STWRuN3hXZ0VvVW1ySWJNSytFSmtiZk1ZSGpG?=
+ =?utf-8?B?U3JzSExqbHpldzhta1NXbWcvN1hSVElzMGZkRkFnczk4YlltZTVaUjd2cjY0?=
+ =?utf-8?B?anZGcXJ3VWsxRExFTXV4dGxxTUhUeTVLRXE5WkRwTU9GT2RLK2lpKzVBbVU2?=
+ =?utf-8?B?ZVRmclR6NHdldTRUNU5XTHpCb3RFQm1zV0xJRC9EK0lSclBpTWl6Q1ZoUzV5?=
+ =?utf-8?B?ZE1PSk1tZmRWdzRVMEtFOHdmeGdhMFlIa2J1cmUzRm10Mm5iM2tGanhpVWQ1?=
+ =?utf-8?B?N0xZMUY0bExQVkRmTUVueDQ1L3p5VTlMVStOUG43R3BCTjc4elRUaG8xM1F2?=
+ =?utf-8?B?MTVFaFpyRGNiNkd3eG9FQmF6Y0RSQmEwV05Xb0FCVGlqeTE5dTdjY3huaXFp?=
+ =?utf-8?B?QlJwZ1R0NUREbXBMRW03MnlIeEhTVlltV1lyYWRUaWNsTitDbk14eFlsN0NJ?=
+ =?utf-8?B?a2tIRmZ6K25DeHpHdFR6eVI2TktYQVFNMXQ2UUtCZURrRHZDazlTdEMzU0dN?=
+ =?utf-8?B?SmcrVENVakVSSzhpUHArYU95REFqb2dZYkNWWlQ2dXdlMWYrNENiWjFaUU9G?=
+ =?utf-8?B?UTRuS1F0Y2xqeURodjFNMkdVVU10L3BraS9uQitZbHYrU05jSkxlQkpDOFFm?=
+ =?utf-8?B?ZG85eDlrZzBkQlVJdEppMnZqMC8yU0lxVWVTb3BRSTdMenNVTWZPb01KWjZR?=
+ =?utf-8?B?dkFRamwrWWZyVlN4SVN3VVB5WGdTcUFBV3VpYWZyOW50U3lHcnVUTElVWlpO?=
+ =?utf-8?B?ZjhPSVFHaTk3NVcwU1JNcmJNSkNLSU5Ec1dYUEFONkRHbUFpK2pGMFJobVpF?=
+ =?utf-8?B?UytubEZQZFBnUnd6NnRUZlU4TlR4UGkxNXVXRi9PQi9JRVBWTElNdWdXVyta?=
+ =?utf-8?B?bGdGVlBTd1dQMFE5dWdSRE1hb3kvSVR4emx2QUZYOTZWZzZxQkxlcmZ4TTNT?=
+ =?utf-8?B?ZFRuTXMveEIyaGZJMGpxYzZKTjFOUXBrMjVkTEFWMGJMQUNwU0toTzlZOThu?=
+ =?utf-8?B?Um5CbmJMR2pEUHZ4MnJhVGtlK05MeVpDQkxZeHlMYnJxUzdLcmFMcEZZdVY4?=
+ =?utf-8?B?TGYvMTd4QTJ3MmRMUjVqRXhJbW0zLzE4OVhqdVEzZm5YZXE5dngrQXJpL0pl?=
+ =?utf-8?B?Z0E4VnB1SjR0QXhFbVV3NytJcTNzTUcwY24vc212UzMvK1R6RVlETlFJdUxB?=
+ =?utf-8?B?L25wTUxZMWo2UWtWWHlxTXpwYzAvaGdlUE5IWkFkeENUcVI3bytjcHNoazNy?=
+ =?utf-8?B?SkllQVkxMGtZVmpTNlI4dk0yV0E2OVkzcU5BUUtqYy9lOTBYYWN6cFVDVHF5?=
+ =?utf-8?B?a1ZyRkRuODZ5SUIrdWlqN0JHcnVwNFIzQmRQWEkwRGdxcWR4cFVtRlQyTTc1?=
+ =?utf-8?B?WVZDb296NXZPUXFwZlpOeXYyYmNmLy92WWxDRXp3VUloTXZMSE9hcnl3WWVS?=
+ =?utf-8?B?QnVDMW1DbzkyUUpOV29VbE4zODdrelc4TDA0MWFmVmc4WmpJOUl3V1VRc3VM?=
+ =?utf-8?B?Q0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d939868-a54f-49d6-a513-08daabf2be0c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 01:40:28.6842
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f3Ns2r0hRvKxIO1FJgY6COo5Jo0Y4/AGg3rF0qlwaPrutVfpLyQJb9Il2Myxiga5IuPGjOfSXK5QKFrrbPDyxqqsKnkhxm6p1uSatrbHmQw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6951
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,62 +160,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 16:59, karthik gengan wrote:
-> Linear mode config calculation is based on the exponent value
-> derived from vout_mode. So vout_mode value should be valid
-> for PMBUS_VOUT_MODE command-supported chips.
+On 10/10/2022 12:01 PM, Xin Li wrote:
 > 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index ef4775c6db01..459fb0c21dd4 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -308,6 +308,7 @@
+>   /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+>   #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+>   #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+> +#define X86_FEATURE_LKGS		(12*32+ 18) /* Load "kernel" (userspace) gs */
 
-We can not do this. The operational word is "should". See comment
-below "Not all chips support the VOUT_MODE command". It is what it is.
-We can not just refuse to support such chips because they don't
-support what we expect them to support.
+The spec says [1]:
+     "Execution of LKGS causes an invalid-opcode exception (#UD) if CPL >
+      0."
 
-Sure, those chips will (likely) report wrong values since the
-exponent will default to 0. That can be adjusted in user space,
-or whoever finds such a chip can provide a back-end driver
-with the appropriate values configured (for example by providing
-a dummy VOUT_MODE command response). That is better than just
-rejecting the chip entirely.
-
- From a practical perspective, if you know about an affected chip
-one that would refuse to instantiate after your patch is applied,
-I would suggest to submit (or improve) a back-end driver with
-an explanation instead.
+Perhaps userspace has no interest in this. Then, we can add "" not to 
+show "lkgs" in /proc/cpuinfo:
+     +#define X86_FEATURE_LKGS		(12*32+ 18) /* "" Load "kernel" 
+(userspace) gs */
 
 Thanks,
-Guenter
+Chang
 
-> Signed-off-by: karthik.gengan <gengankarthik@gmail.com <mailto:gengankarthik@gmail.com>>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 7ec04934747e..5f80c3b8f245 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2507,9 +2507,17 @@ static int pmbus_identify_common(struct i2c_client *client,
->   {
->      int vout_mode = -1;
-> 
-> -   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
-> +   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE)) {
->          vout_mode = _pmbus_read_byte_data(client, page,
->                            PMBUS_VOUT_MODE);
-> +       /*
-> +        * If the client page supports PMBUS_VOUT_MODE,
-> +        * then the output of the VOUT_MODE command should
-> +        * be a valid value for linear mode calculation.
-> +        */
-> +       if ((data->info->format[PSC_VOLTAGE_OUT] == linear) && (vout_mode < 0))
-> +           return -ENODEV;
-> +   }
->      if (vout_mode >= 0 && vout_mode != 0xff) {
->          /*
->           * Not all chips support the VOUT_MODE command,
-> --
-> 2.25.1
-> 
-
-
+[1] https://cdrdv2.intel.com/v1/dl/getContent/678938
