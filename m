@@ -2,219 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7835FCC44
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2AE5FCC48
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiJLUoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 16:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S229820AbiJLUoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 16:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiJLUnp (ORCPT
+        with ESMTP id S229883AbiJLUnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 16:43:45 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA48B10B784
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:43:16 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c24so17353557plo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:43:16 -0700 (PDT)
+        Wed, 12 Oct 2022 16:43:52 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF366BBF34
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:43:47 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id pq16so97540pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:43:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U6r/BPuFlFmFKd44EKySSOKaSq/489LAsa5byNyptW8=;
-        b=RnEe0ZX+RHvVag17aEkAUEXw3yPvtk0wrRCTtThUqRZUYQJxmmTC0nhCKDdOMBwVhp
-         k224QpffiM/1rSCpcSmJxrDqW2zPD9Bb7kYnRg03JTHiRHx+WV5fIQpg/XBOirrKwl2+
-         R325Yugy7Jv1PZVc5vKN7pfiRDTrnU7hOm9fBYuWVWriWsYyE9fpRnW1/IKA+gf7i+Ez
-         ED5QLEgks5D+jr56BGxICRUEyKzQdXB/9YVNsH8oFOPIsXe2RSsILF1rqwcnSDA0+EHv
-         /NGOGQ9hjaiIW0e+0IXFR3PU8/kXkWuPjMFKa70m4/wKOW9EUdRT1lDvZA2m6U2pDWtT
-         J2jg==
+        bh=/XV5pr8QqFGjPs8+6LG6NFfr+//dPbYGj0pCHlYmCJo=;
+        b=O3BbsgmKcyrP8JEZyCXj8RAZ2efDkDTDsgnsREnCkCP1sXwl0wl4OXjVLPkwgocarI
+         Eh6eeUvtYyniV3TaJaml6MFIpbXpJUN8gPtZa8iJCHm/NfijSkyViAb/LQNR4N7SzCR7
+         Qk5eBDdK86ktcQzBhwiC0Wk/sF1B6d5H0y4JAcTWOir5CtQACV8ajvzApP9Py+HuQ8TC
+         D8r/e6GKsJaa54aKLq7l/cIOB+ammSdhY6RCGanZqpHED9m/+wsFboJRj/XVYJCpbsaS
+         GMDPv/h7KMlE5vZCQ45ySUITpN3V1y21y3mPz5QXL9BBC3C8PuvCN8/I6BCLt/Wmr6Hq
+         7agg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U6r/BPuFlFmFKd44EKySSOKaSq/489LAsa5byNyptW8=;
-        b=IbvEaYmNa0CUI/lugj+/9lp7RCeeZ5f3oqjk72Y6X/K+r8LHotsr39EI5me76r/wL3
-         vJJXb7MYEP4w7IBznVeJkJNx7d84ug7/FXbb5LTNwDrHgyadWzN8t/dicUZ4oI5Dcxpt
-         wNhp3RcSOyQaty+srz6eklrduM5saTq0ZeCy1GUBVkgv2yfuIx2NbsKeHiXO9fHDUacB
-         LxupZjNm8ktxDfOq0D74kugSF5QlnyzDLJykHv4jSBE6gqPBD72MkjTnBYqr3xon9tHh
-         TE02BU4vDiQi7LxfYFSs153ZGXRn92/grHe21IKzhgBolnyqPzUbXdt95FW430ZX7+jP
-         7psA==
-X-Gm-Message-State: ACrzQf3TYmXvCoFGMaOC3vRV0p118pCwr6OwTd3uYnQlrS3ayOhRx4FE
-        Fw0Vwx/zNz3gzDHqMV2KVnuQ3g==
-X-Google-Smtp-Source: AMsMyM7izQqjj1waykTDHWBlkRoyvjYygmLJQciJ4HBHmj/OkRkXvuQE4xmk6WpnEXGpBUCQp+2gNA==
-X-Received: by 2002:a17:90b:1e0b:b0:20d:85ca:b50e with SMTP id pg11-20020a17090b1e0b00b0020d85cab50emr6766634pjb.82.1665607394482;
-        Wed, 12 Oct 2022 13:43:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m14-20020a17090a668e00b0020aedddd3cesm1842187pjj.5.2022.10.12.13.43.13
+        bh=/XV5pr8QqFGjPs8+6LG6NFfr+//dPbYGj0pCHlYmCJo=;
+        b=zroyzZUciNZh+27H4Q6fW2yWHiAikTnWSt8IdpHOluadbTaJaXJVt/OLqjb0mn1+9H
+         OVkUQTkw6K4dX0XSHrAFgUjQAfnmsH1a3UqZ8mkQbLy5yTO3DLEhGw/KwD8akv7y+lXx
+         UYXW+mf8F4eGjAPeIQXf0Bd7db0H20G3otE0CEK8tqwRPmRKe2u8BeOeIpDztjdllBJ4
+         lCuIqmm4ITzbn4sWi7+9SHS+5+5iCENhLuPIKtJONgj3JQfgH1I86hgC0GjEBBsvUYlT
+         3AXb2WolGzzQH7Rli8E8n8CdX4nmeyBd1Mctp/LxUic+wvrxpJ0c2yY59qUBk9wNsn6Y
+         V0Ng==
+X-Gm-Message-State: ACrzQf1gYVWQm1wppISOsas2IAxtzscldI0Udp9d0+CiZSRIdxMzbrbD
+        2Q+ApVY/SHEHPttfVoLxjaEFv+ZtN5gzAA==
+X-Google-Smtp-Source: AMsMyM7LKuK725wPc8GpTSojQ0O9922L8xMD/vZb34gAp6nqMYstaPxFfsYeAgOfShV9qxydWjJbGA==
+X-Received: by 2002:a17:902:e1cd:b0:184:aa71:217d with SMTP id t13-20020a170902e1cd00b00184aa71217dmr3824714pla.77.1665607427224;
+        Wed, 12 Oct 2022 13:43:47 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id c18-20020a624e12000000b005626c3e5fdbsm288176pfb.143.2022.10.12.13.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 13:43:13 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 20:43:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v5 10/30] KVM: Add arch hooks when VM is added/deleted
-Message-ID: <Y0cm3dJmgnpLgswQ@google.com>
-References: <cover.1663869838.git.isaku.yamahata@intel.com>
- <aab342d576fe22b8f5b27e61d4fc635d45a4f866.1663869838.git.isaku.yamahata@intel.com>
+        Wed, 12 Oct 2022 13:43:46 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 14:43:44 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Maria Yu <quic_aiquny@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_clew@quicinc.com
+Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
+Message-ID: <20221012204344.GA1178915@p14s>
+References: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
+ <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aab342d576fe22b8f5b27e61d4fc635d45a4f866.1663869838.git.isaku.yamahata@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+Please add what has changed from one version to another, either in a cover
+letter or after the "Signed-off-by".  There are many examples on how to do that
+on the mailing list.
+
+On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
+> RPROC_OFFLINE state indicate there is no recovery process
+> is in progress and no chance to do the pm_relax.
+> Because when recovering from crash, rproc->lock is held and
+> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+> and then unlock rproc->lock.
+
+You are correct - because the lock is held rproc->state should be set to RPROC_RUNNING
+when rproc_trigger_recovery() returns.  If that is not the case then something
+went wrong.
+
+Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before returning,
+so we know the remote processor was stopped.  Therefore if rproc->state is set
+to RPROC_OFFLINE something went wrong in either request_firmware() or
+rproc_start().  Either way the remote processor is offline and the system probably
+in an unknown/unstable.  As such I don't see how calling pm_relax() can help
+things along.  
+
+I suggest spending time understanding what leads to the failure when recovering
+from a crash and address that problem(s).
+
+Thanks,
+Mathieu
+
+
+> When the state is in RPROC_OFFLINE it means separate request
+> of rproc_stop was done and no need to hold the wakeup source
+> in crash handler to recover any more.
 > 
-> and pass kvm_usage_count with kvm_lock.  Move kvm_arch_post_init_vm() under
-> kvm_arch_add_vm().  Replace enable/disable_hardware_all() with the default
-> implementation of kvm_arch_add/del_vm().  Later kvm_arch_post_init_vm() is
-> deleted once x86 overrides kvm_arch_add_vm().
-
-This needs to explain _why_ KVM is pivoting to add/remove hooks.
-
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
 > ---
->  include/linux/kvm_host.h |   2 +
->  virt/kvm/kvm_main.c      | 121 ++++++++++++++++++++-------------------
->  2 files changed, 65 insertions(+), 58 deletions(-)
+>  drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index eab352902de7..3fbb01bbac98 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1445,6 +1445,8 @@ int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
->  bool kvm_arch_dy_runnable(struct kvm_vcpu *vcpu);
->  bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int kvm_arch_post_init_vm(struct kvm *kvm);
-> +int kvm_arch_add_vm(struct kvm *kvm, int usage_count);
-> +int kvm_arch_del_vm(int usage_count);
->  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
->  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index e5279ed9a8d7..6bc7b8b7d01e 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>  	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+>  		/* handle only the first crash detected */
+>  		mutex_unlock(&rproc->lock);
+> +		/*
+> +		 * RPROC_OFFLINE state indicate there is no recovery process
+> +		 * is in progress and no chance to have pm_relax in place.
+> +		 * Because when recovering from crash, rproc->lock is held and
+> +		 * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+> +		 * and then unlock rproc->lock.
+> +		 * RPROC_OFFLINE is only an intermediate state in recovery
+> +		 * process.
+> +		 */
+> +		if (rproc->state == RPROC_OFFLINE)
+> +			pm_relax(rproc->dev.parent);
+>  		return;
+>  	}
 >  
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index c4b908553726..e2c8823786ff 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -142,8 +142,9 @@ static int kvm_no_compat_open(struct inode *inode, struct file *file)
->  #define KVM_COMPAT(c)	.compat_ioctl	= kvm_no_compat_ioctl,	\
->  			.open		= kvm_no_compat_open
->  #endif
-> -static int hardware_enable_all(void);
-> -static void hardware_disable_all(void);
-> +static void hardware_enable_nolock(void *junk);
-> +static void hardware_disable_nolock(void *junk);
-> +static void kvm_del_vm(void);
-
-I think kvm_remove_vm() will be less confusing as "remove" is almost never used
-to describe freeing something, whereas "delete" is somewhat interchangeable with
-"free.  I.e. make it more obvious that the hook isn't intented to actually
-delete/free a VM, rather it's there to remove/delete a VM from global tracking.
-
-Ah, and this is especially true since the VM needs to be deleted from vm_list
-before the is destroyed, but hardware needs to stay enabled until the VM is fully
-destroyed.
-
-Hmm, actually, I think even better would be to have kvm_remove_vm() and kvm_drop_vm()
-to make it more obvious that there isn't 100% symmetry between "add" and "remove".
-
-E.g. rename kvm_arch_pre_destroy_vm() => kvm_arch_remove_vm() and then we end up
-with (see comments below for more details):
-
-static int kvm_add_vm(struct kvm *kvm)
-{
-	/*
-	 * During onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
-	 * is called, i.e. on_each_cpu() includes CPUs that have not yet been
-	 * onlined by KVM.  Disable CPU hotplug to prevent enabling hardware on
-	 * a CPU that hasn't yet done compatibility checks.
-	 */
-	cpus_read_lock();
-	mutex_lock(&kvm_lock);
-	r = kvm_arch_add_vm(kvm, ++kvm_usage_count);
-	if (r) {
-		--kvm_usage_count;
-		goto out;
-	}
-	
-	list_add(&kvm->vm_list, &vm_list);
-
-out:
-	mutex_unlock(&kvm_lock);
-	cpus_read_unlock();
-}
-
-static void kvm_remove_vm(struct kvm *kvm)
-{
-	mutex_lock(&kvm_lock);
-	list_del(&kvm->vm_list);
-	mutex_unlock(&kvm_lock);
-	kvm_arch_remove_vm(kvm);
-}
-
-static void kvm_drop_vm(void)
-{
-	cpus_read_lock();
-	mutex_lock(&kvm_lock);
-	WARN_ON_ONCE(!kvm_usage_count);
-	kvm_usage_count--;
-	kvm_arch_drop_vm(kvm_usage_count);
-	mutex_unlock(&kvm_lock);
-	cpus_read_unlock();
-}
-
-> @@ -1223,13 +1255,28 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
->  	if (r)
->  		goto out_err_no_debugfs;
->  
-> -	r = kvm_arch_post_init_vm(kvm);
-> -	if (r)
-> -		goto out_err;
-> -
-> +	/*
-> +	 * During onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
-> +	 * is called. on_each_cpu() between them includes the CPU. As a result,
-> +	 * hardware_enable_nolock() may get invoked before kvm_online_cpu().
-> +	 * This would enable hardware virtualization on that cpu without
-> +	 * compatibility checks, which can potentially crash system or break
-> +	 * running VMs.
-> +	 *
-> +	 * Disable CPU hotplug to prevent this case from happening.
-> +	 */
-> +	cpus_read_lock();
->  	mutex_lock(&kvm_lock);
-> +	kvm_usage_count++;
-> +	r = kvm_arch_add_vm(kvm, kvm_usage_count);
-> +	if (r) {
-> +		/* the following kvm_del_vm() decrements kvm_usage_count. */
-
-This is buggy on two fronts.  kvm_usage_count needs to be protected with kvm_lock,
-and AFAICT cpus_read_unlock() isn't called.
-
-Invoking kvm_del_vm() in the error path is the source of both bugs.  Typically,
-the paired "undo" of an operation should only be used if the "do" operation was
-fully successful.
-
-As above, move this to a helper to make juggling the locks less painful.
+> -- 
+> 2.7.4
+> 
