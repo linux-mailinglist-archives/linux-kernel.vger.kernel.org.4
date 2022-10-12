@@ -1,142 +1,130 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5AC5FC44A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 13:23:30 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 964A45FC45E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 13:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJLLX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 07:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S229567AbiJLLiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 07:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJLLXZ (ORCPT
+        with ESMTP id S229469AbiJLLiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 07:23:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D85BC1486
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 04:23:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCAE0B81A61
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:23:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84070C433D6;
-        Wed, 12 Oct 2022 11:23:19 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 07:23:19 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     eadavis@sina.com
-Cc:     syzbot+dfcc5f4da15868df7d4d@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
-        mhiramat@kernel.org, syzkaller-bugs@googlegroups.com,
-        vbabka@suse.cz, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] mm: slab, with same context require fs_reclaim lock
-Message-ID: <20221012072319.1a678100@rorschach.local.home>
-In-Reply-To: <20220927071134.1674904-1-eadavis@sina.com>
-References: <00000000000074b50005e997178a@google.com>
-        <20220927071134.1674904-1-eadavis@sina.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Oct 2022 07:38:52 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5539E2C2;
+        Wed, 12 Oct 2022 04:38:51 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z97so24069806ede.8;
+        Wed, 12 Oct 2022 04:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0T6nmePp2TxBInBRKTNwdtk0QBcDQcNUBzlpn0r3R4=;
+        b=FhoHUghMukLhKd44RX7L+JuGjoZQW9PCBuFzYskYTSm9MZz0TYDYF9eSYlkGXFh/38
+         sROxnN8q8RXac+P3sxNYt+ZiuIAaO0qfFbKA2U7eG+R0Ugt+8jg3i7ON67hNtyTur3GQ
+         hfkvULN2Ys0k24Umbo+yvnlyN56kfg3RAaoHklJxgmWoIqzXb6/zJpCjQp5jbbLoZ9Le
+         oCxB5/3ct6TxOd9O9SPdSbNAgzDpLyD0Xnd5hsD+2rvuYKvseK4z2gbWMcZh0ufPlZu4
+         JiJylmTCW8EzV83TgK6RL6E0/YOpv7zUuJkSoJ4WjVrJgJ4Mmed/4eQHbAg15QhAwFvo
+         2hRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k0T6nmePp2TxBInBRKTNwdtk0QBcDQcNUBzlpn0r3R4=;
+        b=4G/KGbSw+tUCJJ64Ev/+EUf2Ohi3QSoouqWdbMwE/0qvGsukubGic9WSGLlgD4s3lg
+         tNanmT+A4xZqRBFdHwmUltNGcWCU+lvXXe9h7FAvjhUbHxsVLsatBUVy0rpQYuH1FSH2
+         GJLvQmI7i7Df8KeWc6uzEqyihAxIogh9Fl1TUAgoJvjrJZMaklc4zvVQ34SQ6tt/hK+r
+         JU5205G3FSxQM6dNfl1/jqLb/c9BMOelnDSqP+1X4DN1E2fNvMFQcuiJyjBXQ5dcy2K7
+         PuYo/kzcCB52HjVNNGhdOq8/Jm2C8WKZp/iMPTqtdK4c6RuF8dbCpZ2bJEVNxE6RfgAp
+         KkOw==
+X-Gm-Message-State: ACrzQf3i+mO/phrmKqbUlEgLX6Z/vnjkuK4HQXzRGp4NrHV2d0m1AXZI
+        SFQyoA+nBwWEHDWhLLe7NZs=
+X-Google-Smtp-Source: AMsMyM5+rPMlEdXd6W15optYwDQS72MSBluQwXiMX9x7kjUTAijliQkbs6rdxrGCuf2RM4hJ01rNEA==
+X-Received: by 2002:a05:6402:3215:b0:45c:97de:b438 with SMTP id g21-20020a056402321500b0045c97deb438mr4706026eda.7.1665574729216;
+        Wed, 12 Oct 2022 04:38:49 -0700 (PDT)
+Received: from localhost.localdomain (host-87-17-81-193.retail.telecomitalia.it. [87.17.81.193])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170906360700b00781d411a63csm1098854ejb.151.2022.10.12.04.38.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 04:38:48 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs/fuse: Replace kmap() with kmap_local_page()
+Date:   Wed, 12 Oct 2022 13:23:23 +0200
+Message-Id: <20221012112323.23283-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 15:11:34 +0800
-eadavis@sina.com wrote:
+The use of kmap() is being deprecated in favor of kmap_local_page().
 
-> From: Edward Adam Davis <eadavis@sina.com>
-> 
->  1. ENABLE_SOFTIRQ held the fs_reclaim lock:
->  {SOFTIRQ-ON-W} state was registered at:
->   lock_acquire kernel/locking/lockdep.c:5666 [inline]
->   lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
->   __fs_reclaim_acquire mm/page_alloc.c:4674 [inline]
->   fs_reclaim_acquire+0x115/0x160 mm/page_alloc.c:4688
->   might_alloc include/linux/sched/mm.h:271 [inline]
->   slab_pre_alloc_hook mm/slab.h:700 [inline]
->   slab_alloc mm/slab.c:3278 [inline]
->   kmem_cache_alloc_trace+0x38/0x460 mm/slab.c:3557
->   kmalloc include/linux/slab.h:600 [inline]
->   kzalloc include/linux/slab.h:733 [inline]
->   alloc_workqueue_attrs+0x39/0xc0 kernel/workqueue.c:3394
->   wq_numa_init kernel/workqueue.c:5964 [inline]
->   workqueue_init+0x12f/0x8ae kernel/workqueue.c:6091
->   kernel_init_freeable+0x3fb/0x73a init/main.c:1607
->   kernel_init+0x1a/0x1d0 init/main.c:1512
->   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> 
->  2. IN_SOFTIRQ require the fs_reclaim lock:
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_usage_bug kernel/locking/lockdep.c:3961 [inline]
->  valid_state kernel/locking/lockdep.c:3973 [inline]
->  mark_lock_irq kernel/locking/lockdep.c:4176 [inline]
->  mark_lock.part.0.cold+0x18/0xd8 kernel/locking/lockdep.c:4632
->  mark_lock kernel/locking/lockdep.c:4596 [inline]
->  mark_usage kernel/locking/lockdep.c:4527 [inline]
->  __lock_acquire+0x11d9/0x56d0 kernel/locking/lockdep.c:5007
->  lock_acquire kernel/locking/lockdep.c:5666 [inline]
->  lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
->  __fs_reclaim_acquire mm/page_alloc.c:4674 [inline]
->  fs_reclaim_acquire+0x115/0x160 mm/page_alloc.c:4688
->  might_alloc include/linux/sched/mm.h:271 [inline]
->  slab_pre_alloc_hook mm/slab.h:700 [inline]
->  slab_alloc mm/slab.c:3278 [inline]
-> 
->  move slab_pre_alloc_hook() to irq context, confirm the context to IN_SOFTIRQ.
-> 
-> Link: https://syzkaller.appspot.com/bug?extid=dfcc5f4da15868df7d4d
-> Reported-by: syzbot+dfcc5f4da15868df7d4d@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@sina.com>
-> Changes in v2: 
-> 	comments update. 
-> ---
->  mm/slab.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 10e96137b44f..29d49d1b1e96 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3275,15 +3275,19 @@ slab_alloc(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
->  	bool init = false;
->  
->  	flags &= gfp_allowed_mask;
-> +	local_irq_save(save_flags);
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-Please do not do this. Open coding interrupt disabling due to locking
-issues is not the solution. You need to make the locks themselves
-disable interrupts if need be. This breaks PREEMPT_RT, and creates a
-"big kernel lock" situation where there's random interrupts being
-disabled for no apparent reason.
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
--- Steve
+Therefore, replace kmap() with kmap_local_page() in fuse_readdir_cached(), 
+it being the only call site of kmap() currently left in fs/fuse.
 
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
->  	cachep = slab_pre_alloc_hook(cachep, lru, &objcg, 1, flags);
-> -	if (unlikely(!cachep))
-> +	if (unlikely(!cachep)) {
-> +		local_irq_restore(save_flags);
->  		return NULL;
-> +	}
->  
->  	objp = kfence_alloc(cachep, orig_size, flags);
-> -	if (unlikely(objp))
-> +	if (unlikely(objp)) {
-> +		local_irq_restore(save_flags);
->  		goto out;
-> +	}
->  
-> -	local_irq_save(save_flags);
->  	objp = __do_cache_alloc(cachep, flags);
->  	local_irq_restore(save_flags);
->  	objp = cache_alloc_debugcheck_after(cachep, flags, objp, caller);
+These changes are not tested in a 32 bits VM as I use to do with other more
+problematic conversions. Mere code inspection makes me reasonably think
+that the rules of local mappings are not violated by this conversion.
+
+Furthermore, I have no idea how to test this code. If maintainers think
+that tests are absolutely necessary, any hints about how to perform them
+would be greatly appreciated.
+
+ fs/fuse/readdir.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/fuse/readdir.c b/fs/fuse/readdir.c
+index b4e565711045..9e40c19e90dc 100644
+--- a/fs/fuse/readdir.c
++++ b/fs/fuse/readdir.c
+@@ -539,9 +539,9 @@ static int fuse_readdir_cached(struct file *file, struct dir_context *ctx)
+ 	 * Contents of the page are now protected against changing by holding
+ 	 * the page lock.
+ 	 */
+-	addr = kmap(page);
++	addr = kmap_local_page(page);
+ 	res = fuse_parse_cache(ff, addr, size, ctx);
+-	kunmap(page);
++	kunmap_local(addr);
+ 	unlock_page(page);
+ 	put_page(page);
+ 
+-- 
+2.37.3
 
