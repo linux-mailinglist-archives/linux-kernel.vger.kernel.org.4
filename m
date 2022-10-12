@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF6D5FC582
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330335FC583
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiJLMlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S229867AbiJLMlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJLMk6 (ORCPT
+        with ESMTP id S229895AbiJLMlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:40:58 -0400
+        Wed, 12 Oct 2022 08:41:13 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CB1C705E
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:40:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EDCC8948
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665578456;
+        s=mimecast20190719; t=1665578467;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=V4PET4IVn842CPc9kqbnyaF1hjwBFJjyklLZTxjKQUA=;
-        b=cEdIzSqj89K9qTNwSVV+BCmxfhuyI7kYhFPbOB0DLHA16ChxGClV9o70+ttcHHrdj33j1b
-        N/NjI9ZubK2NXwJmhfebX1kl/KcKL1WgVhEaQn3k9jvfJD6pOskysMBEM5YY10fzgFUDrS
-        lRdwMgIDJTPUehfexB3K9FxQrC7Kw5c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bv29RAREeBAbvgsCg22WvWf89lmnsctG7Ho4iszploI=;
+        b=U8aygZFCEZt8rvoGs5m6ow/ROh2wOI/DHI3aH3yDJ1DgFUOO8m0d1hUQlsKF+jugWIvpoo
+        WB3Ci0shG149qBdc7WobETVD5WcDRqhiaRKKeAQFB7lGYEJTUcHTcdLosfE6Cc1EE76DFm
+        3CW6Mimj0hXe7gtkxaMIXCOo5xy2ZMs=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-197-zdNk3D49MIOfSE1LWsoJXA-1; Wed, 12 Oct 2022 08:40:55 -0400
-X-MC-Unique: zdNk3D49MIOfSE1LWsoJXA-1
-Received: by mail-wm1-f69.google.com with SMTP id c3-20020a7bc843000000b003b486fc6a40so437490wml.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:40:55 -0700 (PDT)
+ us-mta-625-ZPBVURhDNAy5N4IM4btQiw-1; Wed, 12 Oct 2022 08:41:05 -0400
+X-MC-Unique: ZPBVURhDNAy5N4IM4btQiw-1
+Received: by mail-wr1-f69.google.com with SMTP id k30-20020adfb35e000000b0022e04708c18so4973684wrd.22
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:41:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4PET4IVn842CPc9kqbnyaF1hjwBFJjyklLZTxjKQUA=;
-        b=fwGj5+4D1j5zqXlPM7VffFPzwB8zcScRa+p7dKcpbuufAmQCI5CZWktjx75PXRPWPM
-         ngWBSoPzwUPslJh6/cS/Jw6CUjF0df89O3B87A0/qnYdSB9cpNXKmCh1w3rrAnuJ34yp
-         oHfVVukqr+s5U2H4sYn3HWkV3fA3jqbnw7SGR+HNvD2ECPXOai3HamwTe920SBSmdTX9
-         DOJAd8DvkRDYrTTDf42swP5Z/zsdWEQeebeKbWhWkkyCDKx+Q99mla7WQ7ZHhvmCtYcZ
-         VxIohYfefvF4BBkx94waQLTL5y13Me2zESirXD/MsNaUUi3ukCNNFzDOX1gG5432v/by
-         yfMw==
-X-Gm-Message-State: ACrzQf2seTU78s1kczTw64+GnrcwwhujfxNlBqGThCTUUJ1RcBVLcNI6
-        sOeNlnGAmK/PGyftv6+RKOCB8RrbUheEF3om4ErUBQp37MBqzMRXtxuX7QEYcmiKnFAfTVE0KHW
-        e3x/4bY6pdt+claPMrrVIZ1TJb259wGPFkQ+/Jyw1UBzyaa1q/zReESEBUlj9iL/27tsSxopD3N
-        Z7
-X-Received: by 2002:adf:f301:0:b0:22e:4479:c1ba with SMTP id i1-20020adff301000000b0022e4479c1bamr18010297wro.133.1665578454647;
-        Wed, 12 Oct 2022 05:40:54 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7qIVCyeWKildFEGP/RIqDFvG6GG0zeSXyIH6WUGqkiQOJh0eBqGfO3EEFyhJ9XcwTTzGqZVQ==
-X-Received: by 2002:adf:f301:0:b0:22e:4479:c1ba with SMTP id i1-20020adff301000000b0022e4479c1bamr18010278wro.133.1665578454345;
-        Wed, 12 Oct 2022 05:40:54 -0700 (PDT)
-Received: from ovpn-194-196.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c001100b003c6bbe910fdsm2079979wmc.9.2022.10.12.05.40.53
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bv29RAREeBAbvgsCg22WvWf89lmnsctG7Ho4iszploI=;
+        b=0gsfKSfpj/YSGHB5TFT1+GUTYJ5QJNKWCseAFBTiX+ak4hMbSf1GNrYubZbfNq1eo1
+         xaSFujKErxFvWQcA4d1QBLNzAetoM+4NKzbmJAZF4nkuaE+zDMxRIytGV6Zb6jdfrW9l
+         7/hkRjuJr+JH8wQR+izZHT+zuscJ6vM/WIny4RGycA/REmZfQYIWKK2HQXyEFsqiF0VD
+         TAW9ah8mQp2jzbUkrGNADOHymEaXkXhGT3V4qitBIs4R6iRlD9e5dr1Y2GBLWa6uoQkZ
+         w0NUWG709qVU8H9QyEBZbTL23TmxzykyWKLFt5HSFrzqKGUtsJq62Pa0NXL/qvTKJd+m
+         +A1Q==
+X-Gm-Message-State: ACrzQf0AFvK6BAB2g/PuW2DrojQxYtnd8os5Xt5jGifejW9KEjDtlqs1
+        uV9MAW3w0EGA9Er0vVzvAXRhIT4H9H5ttW4ms/HK8XvuDy3Bj0XLwagDsiPCLyBre6UpFO927+7
+        IoZUncu647phsvx3QilU5/9k=
+X-Received: by 2002:a05:600c:5388:b0:3c5:4c1:a1f6 with SMTP id hg8-20020a05600c538800b003c504c1a1f6mr2667807wmb.11.1665578462814;
+        Wed, 12 Oct 2022 05:41:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4dcKfBQlPa8rKv5cAIxddw7gshNEWnNWfy0+8T9tkuVfrvyH2Mi+L/rptrecqXCPaC5O45tg==
+X-Received: by 2002:a05:600c:5388:b0:3c5:4c1:a1f6 with SMTP id hg8-20020a05600c538800b003c504c1a1f6mr2667793wmb.11.1665578462568;
+        Wed, 12 Oct 2022 05:41:02 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id u11-20020a5d6acb000000b0022afedf3c87sm13662057wrw.105.2022.10.12.05.41.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 05:40:53 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] KVM: selftests: Test Hyper-V invariant TSC control
-In-Reply-To: <Y0XGuk4vwJBTU9oN@google.com>
-References: <20220922143655.3721218-1-vkuznets@redhat.com>
- <20220922143655.3721218-7-vkuznets@redhat.com>
- <Y0XGuk4vwJBTU9oN@google.com>
-Date:   Wed, 12 Oct 2022 14:40:52 +0200
-Message-ID: <87v8op6wq3.fsf@ovpn-194-196.brq.redhat.com>
+        Wed, 12 Oct 2022 05:41:02 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 13:41:01 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     frederic@kernel.org, mtosatti@redhat.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        atomlin@atomlin.com
+Subject: Re: [PATCH v8 5/5] tick/sched: Ensure quiet_vmstat() is called when
+ the idle tick was stopped too
+Message-ID: <20221012124101.zod6m2brlzpgx6nb@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220924152227.819815-1-atomlin@redhat.com>
+ <20220925010511.1482-1-hdanton@sina.com>
+ <20221003124435.1769-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221003124435.1769-1-hdanton@sina.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -81,48 +82,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+> Given work canceled because per-CPU pages can be freed remotely from
+> housekeeping CPUs (see patch 3/5), what is added here is not needed.
 
-> On Thu, Sep 22, 2022, Vitaly Kuznetsov wrote:
->> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
->> index d4bd18bc580d..18b44450dfb8 100644
->> --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
->> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
->> @@ -46,20 +46,33 @@ struct hcall_data {
->>  
->>  static void guest_msr(struct msr_data *msr)
->>  {
->> -	uint64_t ignored;
->> +	uint64_t msr_val = 0;
->>  	uint8_t vector;
->>  
->>  	GUEST_ASSERT(msr->idx);
->>  
->> -	if (!msr->write)
->> -		vector = rdmsr_safe(msr->idx, &ignored);
->> -	else
->> +	if (!msr->write) {
->> +		vector = rdmsr_safe(msr->idx, &msr_val);
->
-> This is subtly going to do weird things if the RDMSR faults.  rdmsr_safe()
-> overwrites @val with whatever happens to be in EDX:EAX if the RDMSR faults, i.e.
-> this may yield garbage instead of '0'.  Arguably rdmsr_safe() is a bad API, but
-> at the same time the caller really shouldn't consume the result if RDMSR faults
-> (though aligning with the kernel is also valuable).
->
-> Aha!  Idea.  Assuming none of the MSRs are write-only, what about adding a prep
-> patch to rework this code so that it verifies RDMSR returns what was written when
-> a fault didn't occur.
->
+Hi Hillf,
 
-There is at least one read-only MSR which comes to mind:
-HV_X64_MSR_EOI. Also, some of the MSRs don't preserve the written value,
-e.g. HV_X64_MSR_RESET which always reads as '0'.
+Firstly, apologies for the delay!
 
-I do, however, like the additional check that RDMSR returns what was
-written to the MSR, we will just need an additional flag in 'struct
-msr_data' ('check_written_value' maybe?).
+The concern is to ensure CPU-specific vmstat counters are reset and folded
+into NUMA node and zone specific and global counters too before entering
+idle. It is necessary to invoke quiet_vmstat() on return to idle even if
+the scheduling-clock tick has been previously stopped.
+Please refer to the complete scenario I described again.
+
+If I understand correctly, indeed the remote drain/or free of zone
+CPU-specific pages can be initiated by a "housekeeping" CPU i.e.
+refresh_cpu_vm_stats(true) via a worker thread/or kworker, yet the actual
+free will only occur when the nohz_full CPU exits idle code and calls
+schedule_idle().
+
+
+Kind regards,
 
 -- 
-Vitaly
+Aaron Tomlin
 
