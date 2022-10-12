@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A715FC431
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 13:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3C65FC433
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 13:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiJLLM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 07:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
+        id S229436AbiJLLNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 07:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiJLLMW (ORCPT
+        with ESMTP id S229693AbiJLLNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 07:12:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393CC148A;
-        Wed, 12 Oct 2022 04:12:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Oct 2022 07:13:08 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAEFC2C96
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 04:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1665573181; bh=jQXI5aEReKrw+ZRZjXWpuy3D8HVFbu5pIl125t8w5MA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YInqk2tXDllQoaKT8SucQez+0E2IhD+nG3xXtlMN3R1btmb5/JqcpxxxIK//2m/ib
+         INpXBiREeIuwhCsrF1PyMWMFcLviOZxsoscEoMPhulmLn4rdSrsit+2KSF8Vhdz2nC
+         YoxTD/DCAKibg5q494Tnp0z2P7dnez0l05hUsIVE=
+Received: from ld50.lan (unknown [101.88.135.226])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4E7614AC;
-        Wed, 12 Oct 2022 11:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66033C433D6;
-        Wed, 12 Oct 2022 11:12:17 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 07:12:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/ftrace: fix dynamic_events dependency check
-Message-ID: <20221012071216.1a74cc21@rorschach.local.home>
-In-Reply-To: <20221010074207.714077-1-svens@linux.ibm.com>
-References: <20221010074207.714077-1-svens@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 334E1600CF;
+        Wed, 12 Oct 2022 19:12:59 +0800 (CST)
+From:   WANG Xuerui <kernel@xen0n.name>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] LoongArch: Expose LBT features in cpuinfo and ELF HWCAP
+Date:   Wed, 12 Oct 2022 19:12:54 +0800
+Message-Id: <20221012111254.3194431-1-kernel@xen0n.name>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,51 +46,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 09:42:07 +0200
-Sven Schnelle <svens@linux.ibm.com> wrote:
+From: WANG Xuerui <git@xen0n.name>
 
-> commit 95c104c378dc ("tracing: Auto generate event name when creating a
-> group of events") changed the syntax in the ftrace README file which is
-> used by the selftests to check what features are support. Adjust the
-> string to make test_duplicates.tc and trigger-synthetic-eprobe.tc work
-> again.
-> 
-> Fixes: 95c104c378dc ("tracing: Auto generate event name when creating a group of events")
-> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Although proper context switching support for LBT is not present yet,
+this fixes an apparent oversight where other similarly not-yet-supported
+features e.g. LSX, LASX, Crypto, or LVZ are being reported but the LBT
+ones are not.
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 628c3bb40e9a ("LoongArch: Add boot and setup routines")
+Signed-off-by: WANG Xuerui <git@xen0n.name>
+Cc: loongarch@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/loongarch/kernel/cpu-probe.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
--- Steve
-
-> ---
->  .../testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc | 2 +-
->  .../test.d/trigger/inter-event/trigger-synthetic-eprobe.tc      | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
-> index db522577ff78..d3a79da215c8 100644
-> --- a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
-> @@ -1,7 +1,7 @@
->  #!/bin/sh
->  # SPDX-License-Identifier: GPL-2.0
->  # description: Generic dynamic event - check if duplicate events are caught
-> -# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
-> +# requires: dynamic_events "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
->  
->  echo 0 > events/enable
->  
-> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
-> index 914fe2e5d030..6461c375694f 100644
-> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
-> @@ -1,7 +1,7 @@
->  #!/bin/sh
->  # SPDX-License-Identifier: GPL-2.0
->  # description: event trigger - test inter-event histogram trigger eprobe on synthetic event
-> -# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
-> +# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
->  
->  echo 0 > events/enable
->  
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index 529ab8f44ec6..82de5264d2c9 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -123,6 +123,18 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
+ 		c->options |= LOONGARCH_CPU_LVZ;
+ 		elf_hwcap |= HWCAP_LOONGARCH_LVZ;
+ 	}
++	if (config & CPUCFG2_X86BT) {
++		c->options |= LOONGARCH_CPU_LBT_X86;
++		elf_hwcap |= HWCAP_LOONGARCH_LBT_X86;
++	}
++	if (config & CPUCFG2_ARMBT) {
++		c->options |= LOONGARCH_CPU_LBT_ARM;
++		elf_hwcap |= HWCAP_LOONGARCH_LBT_ARM;
++	}
++	if (config & CPUCFG2_MIPSBT) {
++		c->options |= LOONGARCH_CPU_LBT_MIPS;
++		elf_hwcap |= HWCAP_LOONGARCH_LBT_MIPS;
++	}
+ 
+ 	config = read_cpucfg(LOONGARCH_CPUCFG6);
+ 	if (config & CPUCFG6_PMP)
+-- 
+2.38.0
 
