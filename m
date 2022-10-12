@@ -2,164 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759345FC872
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012845FC86A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJLPcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
+        id S229771AbiJLPay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJLPcA (ORCPT
+        with ESMTP id S229526AbiJLPau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:32:00 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883C3C695E
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:31:59 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id 8so3207706qka.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:31:59 -0700 (PDT)
+        Wed, 12 Oct 2022 11:30:50 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B70D8263D;
+        Wed, 12 Oct 2022 08:30:49 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f193so15883418pgc.0;
+        Wed, 12 Oct 2022 08:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CoV8mWntzVcAfAl3JXoUDwAhCZVSliB3wLU/NyVEXwU=;
-        b=VyuN/nNatDf74KMBwFIFfCSQivpKpSpD9ESjBMxz3NW6mCzQAywWGakXKDe/EwvhjA
-         UVSLYp2oqrC/g6Nd9S4QrRPNxYTvFwX4gl5R64orFhLCgpFV2B3neOVhY3I+0pyCfzcG
-         GijF9/JtQ19/haPSrgKp8eAHyPPcwWfc7xV7JwuLY+IvoeKO5eiHsvLKWSRiRG4V550r
-         9A1bU0IMAbl0jhI6RfWzlXSM8L2OTjujpNvxn/oU5hVh0+NgKiO7Wj0dJyM5XJ5VFlvl
-         YkYr6cv1jQ3PGWNMtNbcLNn/KJUi6Cuf8CdlfzHIXj7j6TrDisARjpOdWFOGC+0/3UkN
-         D7Zg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jgmSGKWiIJIpmvQ8q/p+qHWdSAvJyDT4YhTIosvbO2U=;
+        b=lqsttROg2cCrxJ2Bl9FcBPLiU2PO77JZxmRbQppEIbCw40JE4Hma4eaNUJqJWvDFef
+         biMxcw/yw2mQRgVWJmG6KxiT2VHCyW9lGM1aIbvpGRRiM3VXkE9a5WiIHcmKBmLoGt9c
+         JFofXzrbgVTrOf5WuGZ8hR1Ns6Il9XhkEpqojHHVfFroxh+wWOyfQKTW/c7y4cLQrqM5
+         h4he8xr48itJH2jTAcB9z1IVynBEV43U81JlyfbC5L6DD+xMq8LSKYu8SlhqlbM4CD9c
+         cbSs1zJ+tP/qPabTWWo8xNUYYI3rh5zzNwOmqGNxXx47PNMZlV6EBm65mtCMXxEDSAU+
+         kCyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CoV8mWntzVcAfAl3JXoUDwAhCZVSliB3wLU/NyVEXwU=;
-        b=AgWzeDE9ZDTO+3NKxwQjWrCH3vqbeL+uafrd6f9gksH6wXr1HHRzdLj4+qR1/zouzb
-         NttWQ6scoXPeeJShsLcRaoBppi+uaHlWDK88brnh3JMtSFtjHk5EZhwNV1IMWZCZG4YI
-         B9EC16Bsz5D69IQ4A/lQxqV7g/iRUhjF0PXY4oTBI7+8dLlbSyG8M8RmGYO//WVtszy4
-         1RLDBvRikBOigDiUn5a8wPob5W5tH/1GByE2LHqVOw5K02SgcLOJPJQPf8Nee+8m40hn
-         niN+k2HORJR+7XUOwykauWM6njzvYmsFskem3HPmK7bbohIFaiBo68R+lird/9dXLQDi
-         TCuw==
-X-Gm-Message-State: ACrzQf33vQkJ+OGuHaLWoKNsS+DJMu5P33VfDuNhTfGXS5g755+1hI9G
-        ViYublOb6jqSfUGgX1i8oiisFg==
-X-Google-Smtp-Source: AMsMyM6Rdj22kqr3e0wlZpFGK9jDuY9Gjwj7v+n72OmUgaqR6812NyzJhXQ8IbnACDj8n5J3lPCvuA==
-X-Received: by 2002:a37:e205:0:b0:6ee:834:1a1b with SMTP id g5-20020a37e205000000b006ee08341a1bmr8712931qki.342.1665588718677;
-        Wed, 12 Oct 2022 08:31:58 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05620a294100b006ee949b8051sm2360358qkp.51.2022.10.12.08.31.57
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jgmSGKWiIJIpmvQ8q/p+qHWdSAvJyDT4YhTIosvbO2U=;
+        b=upAhsZvrcHnvgC1VSNeXXILVfOOcMOGpMii7hzP1QtilNl6go0NAdcgqDBwELHzHso
+         WkInX151zb7RRSivIs07lO+LGpcY6FOLIFmYfBXGHNnFcSplG1+P3YgeQ5Gs/wnVwAHT
+         W0Z8CZfmeqUuwGhe7/rdwPfHe4GMyS330XJRp5DjoJWsDgNxPPR+Nr1XRIKU6q3guLDy
+         Jp+buEsQsIRz4CMuQjUINy49v05MoW4QMJ0paA6j73NXSHRX+q3tfZpG2b/IXnbz0p38
+         oiNkBz060BDeTeTDZYeDMRi1csWla4IMjbzULXlJRyV/+LIKNlkHN56mXWpdB3oeyah6
+         bu4w==
+X-Gm-Message-State: ACrzQf2kGChsmbU1qL2OQtuY2ADODg+v9neTNueO2stDjSDxBKl2/YYW
+        d6ZiHIhEJTG2aeQE4pp21ns=
+X-Google-Smtp-Source: AMsMyM4Rme9GP63iTEYp6GDtI8cANT8/bRXLd6LmA4Ak4TfcpODAEz3uYTWmpmRdtSuWInqPN4hvmQ==
+X-Received: by 2002:a63:2c6:0:b0:43c:1f18:a475 with SMTP id 189-20020a6302c6000000b0043c1f18a475mr25922948pgc.186.1665588648509;
+        Wed, 12 Oct 2022 08:30:48 -0700 (PDT)
+Received: from ?IPv6:::1? ([2607:fb90:370a:3fc:ad3:2951:4f00:9866])
+        by smtp.gmail.com with ESMTPSA id a67-20020a621a46000000b0055f98a2c64bsm11804430pfa.142.2022.10.12.08.30.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 08:31:58 -0700 (PDT)
-Message-ID: <fa60ba81-6cc7-7f78-55cc-9ca0053336b8@linaro.org>
-Date:   Wed, 12 Oct 2022 11:29:47 -0400
+        Wed, 12 Oct 2022 08:30:47 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 08:30:45 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_6/7=5D_gpiolib=3A_of=3A_factor_o?= =?US-ASCII?Q?ut_code_overriding_gpio_line_polarity?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y0agrWGm5CR3Rk5e@smile.fi.intel.com>
+References: <20221011-gpiolib-quirks-v1-0-e01d9d3e7b29@gmail.com> <20221011-gpiolib-quirks-v1-6-e01d9d3e7b29@gmail.com> <Y0agrWGm5CR3Rk5e@smile.fi.intel.com>
+Message-ID: <6D279EC4-6124-45C2-BCBB-D6CBB3385024@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v10 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
- bindings
-Content-Language: en-US
-To:     Tanmay Shah <tanmay.shah@amd.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@amd.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221011212501.2661003-1-tanmay.shah@amd.com>
- <20221011212501.2661003-2-tanmay.shah@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221011212501.2661003-2-tanmay.shah@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 17:24, Tanmay Shah wrote:
-> Xilinx ZynqMP platform has dual-core ARM Cortex R5 Realtime Processing
-> Unit(RPU) subsystem. This patch adds dt-bindings for RPU subsystem
-> (cluster).
-> 
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
-> ---
-> 
-> Changes in v10:
->   - rename example node to remoteproc
-> 
-> Changes in v9:
->   - remove power-domains property description
->   - fix nitpicks in description of other properties
-> 
-> Changes in v8:
->   - Add 'items:' for sram property
-> 
-> Changes in v7:
->   - Add minItems in sram property
-> 
-> Changes in v6:
->   - Add maxItems to sram and memory-region property
-> 
-> Changes in v5:
-> - Add constraints of the possible values of xlnx,cluster-mode property
-> - fix description of power-domains property for r5 core
-> - Remove reg, address-cells and size-cells properties as it is not required
-> - Fix description of mboxes property
-> - Add description of each memory-region and remove old .txt binding link
->   reference in the description
-> 
-> Changes in v4:
->   - Add memory-region, mboxes and mbox-names properties in example
-> 
-> Changes in v3:
->   - None
-> 
->  .../bindings/remoteproc/xlnx,r5f-rproc.yaml   | 135 ++++++++++++++++++
->  include/dt-bindings/power/xlnx-zynqmp-power.h |   6 +
->  2 files changed, 141 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
-> new file mode 100644
-> index 000000000000..8079b60b950e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+On October 12, 2022 4:10:37 AM PDT, Andy Shevchenko <andriy=2Eshevchenko@li=
+nux=2Eintel=2Ecom> wrote:
+>On Tue, Oct 11, 2022 at 03:19:34PM -0700, Dmitry Torokhov wrote:
+>> There are several instances where we use a separate property to
+>> override polarity specified in gpio property=2E Factor it out into
+>> a separate function=2E
+>
+>=2E=2E=2E
+>
+>>  static void of_gpio_flags_quirks(const struct device_node *np,
+>>  				 const char *propname,
+>>  				 enum of_gpio_flags *flags,
+>> @@ -145,7 +167,7 @@ static void of_gpio_flags_quirks(const struct devic=
+e_node *np,
+>>  	     (!(strcmp(propname, "enable-gpio") &&
+>>  		strcmp(propname, "enable-gpios")) &&
+>>  	      of_device_is_compatible(np, "regulator-gpio")))) {
+>> -		bool active_low =3D !of_property_read_bool(np,
+>> +		bool active_high =3D of_property_read_bool(np,
+>
+>Defining
+>
+>	bool active_high;
+>
+>at the top of the function will save you a few ugly indented code lines h=
+ere
+>and in the next patch=2E
+>
 
-The convention is to have filename matching the compatible, so:
-xlnx,zynqmp-r5fss.yaml
+Indeed, but I think the idea was to keep the quirks as independent as poss=
+ible=2E
+I guess I could split it further into separate functions, like the other q=
+uirk handling=2E=20
 
-> @@ -0,0 +1,135 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/xlnx,r5f-rproc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx R5F processor subsystem
-> +
-> +maintainers:
-> +  - Ben Levinsky <ben.levinsky@amd.com>
-> +  - Tanmay Shah <tanmay.shah@amd.com>
-> +
-> +description: |
-> +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
-> +  real-time processing based on the Cortex-R5F processor core from ARM.
-> +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
-> +  floating-point unit that implements the Arm VFPv3 instruction set.
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,zynqmp-r5fss
-> +
+Bartosz, Linus, any preference here?=20
 
+Thanks=2E=20
 
-
-Best regards,
-Krzysztof
-
+--=20
+Dmitry
