@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A265FCB54
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69B55FCB55
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiJLTLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 15:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S229988AbiJLTMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 15:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJLTLp (ORCPT
+        with ESMTP id S229933AbiJLTMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 15:11:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A496CD5EE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:11:45 -0700 (PDT)
+        Wed, 12 Oct 2022 15:12:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFA8CD5CE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:12:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1688615B9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 19:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03272C433D6;
-        Wed, 12 Oct 2022 19:11:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A24FB81BAC
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 19:12:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0259AC433C1;
+        Wed, 12 Oct 2022 19:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665601904;
-        bh=Ga6EodlgETpMCD6v9Enbmq6fA9jv2ptq4OEgHx1YD5M=;
+        s=k20201202; t=1665601923;
+        bh=842rEsxNEoTTXm2YSLeKRUjCxxnVJCWE23SS6zP6ItI=;
         h=Date:From:To:Cc:Subject:From;
-        b=u9mPsy+yTLyQCT/E+KVRSIxdyfEH8RUNlzkjJtY473k/2sJaomFCql/pJBaoeesYk
-         wiB4jvXQGM7CQ1D3oTFlJvMQvtbDkDmKz+6pFEijlxYREYnYxtgoZm4w6Mw7J7n43J
-         YqdfG9C3yPJutaq2wsi4U/9v7eCnG6NhO8TZ+ctLbctiGCkhV6n7OOPcnha7krgnwp
-         e4EQeU1AUCZ9d4eMa2nUnBmZQkWiWZHN0eWrbzWbcasVTu6iZn7azwdtUBBWG05Is+
-         QsqFj/zDNadU3kgq1wiSEAl/BDr5WWpe/qAVWu5eSSH2tlbiNhdE2V+4AlVHZ+wF9V
-         5o5O+i8qgubsA==
-Date:   Wed, 12 Oct 2022 14:11:42 -0500
+        b=oj2DomY0VF7qd0WD4i4U+TQaRxqKp3ikw78T/ICeIi8No3Uww29OjVZ6b1iDXGAiR
+         uc8aeMU1G26i8j9PTcQmFC4kjngi1gfQAYRblSa0F9JjRcOv2J7f8fdhD057Shr6mq
+         NJA6+H8YWQsMeyV8++Qc7RkW7ALd2RoY5pf+IypVHwrtBTHv84k35P41y9KcWpahyR
+         fwubYeJSVr6RXypCkBuduZrPpCL9QPGEAy8/z8cTF4zBVFVbkgdVMsfG8DoWnfuSmH
+         qf8/Q5p45wR1ZBDigfNopYxrpvF71durOHk6iv7ywyHxAlVxAi0CyA9tGEJ46LmZJG
+         0+RFFdHGk2G0w==
+Date:   Wed, 12 Oct 2022 14:12:01 -0500
 From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-um@lists.infradead.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um-owner@lists.infradead.org, linux-kernel@vger.kernel.org,
-        helpdesk@kernel.org
-Subject: Add linux-um archives to lore.kernel.org?
-Message-ID: <20221012191142.GA3109265@bhelgaas>
+To:     linux-parport@lists.infradead.org
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Tim Waugh <tim@cyberelk.net>,
+        linux-parport-owner@lists.infradead.org,
+        linux-kernel@vger.kernel.org, helpdesk@kernel.org
+Subject: Add linux-parport archives to lore.kernel.org?
+Message-ID: <20221012191201.GA3107702@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -54,14 +53,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The linux-um@lists.infradead.org mailing list is listed in MAINTAINERS
-and is quite active [1].  Once in a while a commit links to the
-infradead pipermail archive [2] (the link in that commit appears
-broken).
+The linux-parport@lists.infradead.org mailing list is listed in
+MAINTAINERS.  There's not much current activity [1], but I suspect
+there's some useful history that we might want to preserve.
 
-I propose that we add linux-um to the lore.kernel.org archives so
-future commits can use lore.kernel.org links that don't depend on
-infradead.
+Should we add linux-parport to the lore.kernel.org archives?
 
 https://korg.docs.kernel.org/lore.html says pipermail archives like
 infradead has are not ideal, but I don't have any archives at all, and
@@ -69,5 +65,4 @@ I don't know how to get even pipermail archives out of infradead.
 
 Bjorn
 
-[1] http://lists.infradead.org/pipermail/linux-um/
-[2] https://git.kernel.org/linus/3b0b42527937
+[1] https://lists.infradead.org/pipermail/linux-parport/
