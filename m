@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94E85FC92F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7931B5FC92E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJLQZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJLQZ1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229959AbiJLQZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 12 Oct 2022 12:25:27 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAA3B03EA;
-        Wed, 12 Oct 2022 09:25:26 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1322d768ba7so20030914fac.5;
-        Wed, 12 Oct 2022 09:25:26 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229646AbiJLQZY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Oct 2022 12:25:24 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234925FAD2;
+        Wed, 12 Oct 2022 09:25:21 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so12481359ooi.5;
+        Wed, 12 Oct 2022 09:25:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DBMigr3FS6M7Tme4HNYJL0mrMQ1H4UvqlHB2i2CRcmk=;
-        b=z45oWLWhA9B47uJULnBDigCcU59O3qf5X64ZkDlFHlL54b786e/esLNtWX8rnGCra6
-         dP/bTfhDhQYfnKb/LjPWRZ0QJ4ndG3pzUuX+9zUFldnmh+0tFu/Vl6orB0Ce9Prh2cez
-         pcpTbDFzoxHiUROoPMULOi/3HuCNsKlFdRxgrYILI5NagavMx/oUMwG0pTsKNO2hN0SI
-         +1rgiCkCCOrIHv7TJtTUg9Nymps+7XECzSBUA53s+WwPYtfK6ZtgBx00k3/Eua2Ll4B1
-         MEzCHBIc3/H+Orcw4mVwzjbs+hzNjknK/Leds6t2G6/oCuGWMqY+rp+48++BYFTaIFin
-         uY4w==
-X-Gm-Message-State: ACrzQf2KLS+L9B4/FC95atN2k25puo2+itCH3efnEzL3lWb1dlcFA2rr
-        M8aW5Gva1MeFXnO40FTrrmjuvV1Rz5qKAR7alj92fHQH
-X-Google-Smtp-Source: AMsMyM49Pk81tm16EjpfYhNOdd8zt9Qbo+S52VtLhkzMhG1o9eq36gFeYbByUD2HSK5GibVBzv3FwYyqz5jw3HcvLkU=
-X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
- q44-20020a05687082ac00b00133034b6f10mr2991744oae.218.1665591925447; Wed, 12
- Oct 2022 09:25:25 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XbGkRBfc7blEHX2oiLr1yUH1nf0Co3xQFCa79h+BBRk=;
+        b=o3Bk6hLFr1DNT8JRxe5OAUis+w4HBwv2oe5DErzvQPVxWeou0OgYqvQVz3LWRN+/Oe
+         jno6N1B2q/kIQsp0VFQLbU0vP9c/5bIqF4LlAIDX6eUY4zrRT/nykH99211JDwyQs59Y
+         0bdT1hwmBPxfYxBY13Qo1sqZ1N2S+XKyu0Fc9ESOinJOXyV7VF5kPR5njtqYE7m3Nm2w
+         XAButS+a3iY6H2fiEkKtNGM/hiDpOhC8/941KUnvzJ8LVAdwOSIZdZih3tv1hEDfa2ye
+         UCGtRSkQoY/sgGc46zMnEeziW6sL2XI5j0aYsNNtf16ZKa/n3/QSWmsYVzFyjdtyknTQ
+         RmeQ==
+X-Gm-Message-State: ACrzQf1njzWTtR0Hm/QUjQdBNV3pPvOS99i6lrk5QTmg71kljY6I7WGv
+        xMRMVZ0wTX9pcAie9muA4Q==
+X-Google-Smtp-Source: AMsMyM5WZKYN3WOatUVAQahyGG5zpQ2QpJ9rGf1419QBSTH+VPlsKqDKNZYOHp9EcGV1Saa4zwhNsA==
+X-Received: by 2002:a05:6830:34a5:b0:661:a0a5:b0f with SMTP id c37-20020a05683034a500b00661a0a50b0fmr6481648otu.165.1665591920378;
+        Wed, 12 Oct 2022 09:25:20 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b6-20020a9d4786000000b00661b019accbsm1876633otf.3.2022.10.12.09.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:25:19 -0700 (PDT)
+Received: (nullmailer pid 2286501 invoked by uid 1000);
+        Wed, 12 Oct 2022 16:25:21 -0000
+Date:   Wed, 12 Oct 2022 11:25:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v4 2/8] dt-bindings: iio: adc: stm32-adc: add stm32mp13
+ compatibles
+Message-ID: <166559192047.2286466.15301667518001122082.robh@kernel.org>
+References: <20221012142205.13041-1-olivier.moysan@foss.st.com>
+ <20221012142205.13041-3-olivier.moysan@foss.st.com>
 MIME-Version: 1.0
-References: <20221012082259.22394-1-adrian.hunter@intel.com> <20221012082259.22394-3-adrian.hunter@intel.com>
-In-Reply-To: <20221012082259.22394-3-adrian.hunter@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 12 Oct 2022 09:25:14 -0700
-Message-ID: <CAM9d7chCGw-iXUiD+Bj3azTdVdYz21KtBOhR5ZbLoVuFXE6nbA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf intel-pt: Fix system_wide dummy event for hybrid
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012142205.13041-3-olivier.moysan@foss.st.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 1:23 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> User space tasks can migrate between CPUs, so when tracing selected CPUs,
-> system-wide sideband is still needed, however evlist->core.has_user_cpus
-> is not set in the hybrid case, so check the target cpu_list instead.
->
-> Fixes: 7d189cadbeeb ("perf intel-pt: Track sideband system-wide when needed")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
-
-
+On Wed, 12 Oct 2022 16:21:59 +0200, Olivier Moysan wrote:
+> Add st,stm32mp13-adc-core and st,stm32mp13-adc compatibles
+> to support STM32MPU13 SoC.
+> 
+> On STM32MP13x, each ADC peripheral has a single ADC block.
+> These ADC peripherals, ADC1 and ADC2, are fully independent.
+> 
+> Main characteristics of STM32MP13x ADC:
+> - One interrupt line per ADC
+> - 6 to 12 bits resolution
+> - 19 channels
+> 
+> ADC2 instance supports two extra internal channels VDDCPU and VDDQ_DDR.
+> Add "vddcpu" and "vddq_ddr" internal channels names to the reserved
+> labels list.
+> 
+> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 > ---
->  tools/perf/arch/x86/util/intel-pt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
-> index 793b35f2221a..af102f471e9f 100644
-> --- a/tools/perf/arch/x86/util/intel-pt.c
-> +++ b/tools/perf/arch/x86/util/intel-pt.c
-> @@ -866,7 +866,7 @@ static int intel_pt_recording_options(struct auxtrace_record *itr,
->                  * User space tasks can migrate between CPUs, so when tracing
->                  * selected CPUs, sideband for all CPUs is still needed.
->                  */
-> -               need_system_wide_tracking = evlist->core.has_user_cpus &&
-> +               need_system_wide_tracking = opts->target.cpu_list &&
->                                             !intel_pt_evsel->core.attr.exclude_user;
->
->                 tracking_evsel = evlist__add_aux_dummy(evlist, need_system_wide_tracking);
-> --
-> 2.25.1
->
+>  .../bindings/iio/adc/st,stm32-adc.yaml        | 68 ++++++++++++++++++-
+>  1 file changed, 65 insertions(+), 3 deletions(-)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
