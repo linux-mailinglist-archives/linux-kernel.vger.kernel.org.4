@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3915FC06F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474035FC071
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiJLGJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S229543AbiJLGMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJLGJK (ORCPT
+        with ESMTP id S229491AbiJLGMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:09:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9BD77EB0;
-        Tue, 11 Oct 2022 23:09:09 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C5t8d8011501;
-        Wed, 12 Oct 2022 06:09:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jQYrO476z41NopM/bcra25kVZpYW49EA2sUprgcs8ic=;
- b=o+yvO1xx/RixIYUGAHU4qkfR+n/AQS5AI3T/JwQkUH637BLfSkOYVr3K61YJ5+E8bN4L
- Pw9Az601SbMqwIDeulzV+ddGDnSLOo5K5AqBCRifAlw8Ef1LMVm8zAGphbTjtlUlBULD
- 7v5XyG9j5rPn+sd4w4KGJq5LP75mhmmLL8d954/DkXnyZqc/cD0oFpFEfa9VOQ2rE546
- LnbA1m10/G37RDfxG9pcZ3Nd7lIPFejhG2vtnUq0nwb3Ys/aZuUYZa09VelN+3XsxuSv
- hXzNXoglRsLd/ATRzTxewEdH9UxOv6Y1uF233EpVcun+oXdd3PUaz0YC34dFJskjhOIM UQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5kar0m56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 06:09:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29C6911J009180
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 06:09:01 GMT
-Received: from [10.131.117.203] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
- 2022 23:08:58 -0700
-Message-ID: <ea0d7156-972b-8ce7-6169-c49dd7cd03d1@quicinc.com>
-Date:   Wed, 12 Oct 2022 11:38:49 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
- SC7280 CPU compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: u15rEIGE9huMAx7oLW2Sr8x_AlRq-uk3
-X-Proofpoint-GUID: u15rEIGE9huMAx7oLW2Sr8x_AlRq-uk3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_03,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- phishscore=0 suspectscore=0 adultscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120040
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 02:12:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AB1A98FC
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:12:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C0C1221DDB;
+        Wed, 12 Oct 2022 06:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665555121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=60RwzO+h/rAlNAEiPv1WmlKrQxfV91bwtvurUGTx2UI=;
+        b=fwM/ZYgyNt9tAfsW56mQHDfbU0fN0VadtQHB39ReTUQuaZHpqgwrQ5pniUQIb99bwY3PoJ
+        D8ITKF/5KOLSqXY4U14xCLIIBp+T/PpDJRKB44tFYyrbYOKhhmlffhYXjzTCiyMEpoEzmb
+        BTlAXkvWO70RflcQxZvykrT6UVkKkyU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665555121;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=60RwzO+h/rAlNAEiPv1WmlKrQxfV91bwtvurUGTx2UI=;
+        b=S/BofqIL2buICK1A+sh5Sv+mMiQFtCVGlRnWzYRQkpUzzPSbAvZOTka6b6FceIUXsCtwBF
+        b7VCZ/SOi5K2AnBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6018313ACD;
+        Wed, 12 Oct 2022 06:12:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id C6eSFbFaRmP0HwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 12 Oct 2022 06:12:01 +0000
+Date:   Wed, 12 Oct 2022 08:12:00 +0200
+Message-ID: <875ygpbmfj.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v1 0/5] Support System Suspend and Resume for CS35L41 HDA
+In-Reply-To: <20221011143552.621792-1-sbinding@opensource.cirrus.com>
+References: <20221011143552.621792-1-sbinding@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/11/2022 7:37 PM, Krzysztof Kozlowski wrote:
-> Two different compatibles for SC7280 CPU BWMON instance were used
-> in DTS and bindings.  Correct the bindings to use the same one as in
-> DTS, because it is more specific.
+On Tue, 11 Oct 2022 16:35:47 +0200,
+Stefan Binding wrote:
 > 
-> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-ah, thanks for the fixing this,
-Reviewed-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-
-> ---
->   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> The CS35L41 HDA driver currently only supports runtime suspend and resume.
+> Add support for system suspend and resume into the CS35L41 HDA driver.
+> The driver will put the parts into a state where they can be powered down
+> during suspend, and on system resume, it will restore the part.
+> If firmware was previously loaded, during system suspend, the firmware will
+> be unloaded, and during system resume, it will be loaded again.
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> index 2684562df4d9..be29e0b80995 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> @@ -24,7 +24,7 @@ properties:
->       oneOf:
->         - items:
->             - enum:
-> -              - qcom,sc7280-bwmon
-> +              - qcom,sc7280-cpu-bwmon
->                 - qcom,sdm845-bwmon
->             - const: qcom,msm8998-bwmon
->         - const: qcom,msm8998-bwmon       # BWMON v4
+> Note: System suspend is only supported for models which use Internal Boost,
+> or models which use External Boost with a Boost Enable GPIO.
+> 
+> The chain also contains minor bug fixes for the CS35L41 HDA driver, and
+> associated hda_cs_dsp_ctl driver.
+> 
+> Richard Fitzgerald (1):
+>   ALSA: hda/cs_dsp_ctl: Fix mutex inversion when creating controls
+> 
+> Stefan Binding (4):
+>   ALSA: hda: hda_cs_dsp_ctl: Minor clean and redundant code removal
+>   ALSA: hda: hda_cs_dsp_ctl: Ensure pwr_lock is held before
+>     reading/writing controls
+>   ALSA: hda: cs35l41: Remove suspend/resume hda hooks
+>   ALSA: hda: cs35l41: Support System Suspend
+
+Applied all five patches now.
+
+
+thanks,
+
+Takashi
