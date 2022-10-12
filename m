@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A515FC2B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC035FC2F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJLJLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        id S229751AbiJLJT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLJLU (ORCPT
+        with ESMTP id S230001AbiJLJT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:11:20 -0400
-Received: from out0-137.mail.aliyun.com (out0-137.mail.aliyun.com [140.205.0.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE86140F0;
-        Wed, 12 Oct 2022 02:11:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047201;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---.Pa6ue-p_1665565873;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.Pa6ue-p_1665565873)
-          by smtp.aliyun-inc.com;
-          Wed, 12 Oct 2022 17:11:13 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Mark transfer type as X86_TRANSFER_RET when loading CS in iret emulation
-Date:   Wed, 12 Oct 2022 17:11:13 +0800
-Message-Id: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Oct 2022 05:19:26 -0400
+X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 02:19:20 PDT
+Received: from proxima.lasnet.de (proxima.lasnet.de [78.47.171.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED70BD070;
+        Wed, 12 Oct 2022 02:19:19 -0700 (PDT)
+Received: from [IPV6:2003:e9:d70e:f1c1:fef2:18a8:26e3:47fd] (p200300e9d70ef1c1fef218a826e347fd.dip0.t-ipconnect.de [IPv6:2003:e9:d70e:f1c1:fef2:18a8:26e3:47fd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 60649C00BF;
+        Wed, 12 Oct 2022 11:11:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1665565919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eZtg5Y3YtjLfjZ4AiTBdcZo4Fd7NX7MVDXLwGnUiQ7Q=;
+        b=R3ttwxL9bRyb4vppo/ti1r3DgUf0lKIstR2BJ2kgWJyC2GrRAKK0BjfVkPOrl7ZbDkjJZb
+        hq9g2ubZUQnl+YMJDiSbmzM3zfTnxVdFLRHWi5gWrf1+EvRG9Ymck5ESr2BIZMx+qvkfOI
+        UQgPt1HWgve8lKY/3h6RAbAosTWDXdgAFFPry1XeytBpzs/efXMsngqQBwvQDtqLZ1IKK/
+        i3Ksf/9wVMCl1f0ayQYHe1QHu0FsTwBHUUkMsdmozinVjrZDRitLRMlfjhapzXkME9zIi+
+        meOc22QFEkVXPpXVwy45wgreNXJ85NIx+gnqQrVC/EA3a/BxKaXh/faBZ0QB5A==
+Message-ID: <20f6407e-aecc-cd84-f57c-8f4f477630ab@datenfreihafen.org>
+Date:   Wed, 12 Oct 2022 11:11:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH linux-next] ieee802154: cc2520: remove the unneeded result
+ variable
+Content-Language: en-US
+To:     cgel.zte@gmail.com, varkabhadram@gmail.com
+Cc:     alex.aring@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+References: <20220912072041.16873-1-xu.panda@zte.com.cn>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220912072041.16873-1-xu.panda@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When loading code segment descriptor in iret instruction emulation, the
-checks are same as far return instruction emulation, so transfer type
-should be X86_TRANSFER_RET in __load_segment_descriptor(). Although,
-only iret in real mode is implemented now, and no checks are actually
-needed for real mode, it would still be better to mark transfer type as
-X86_TRANSFER_RET.
+Hello.
 
-No functional change intended.
+On 12.09.22 09:20, cgel.zte@gmail.com wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+> 
+> Return the value cc2520_write_register() directly instead of storing it in
+> another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> ---
+>   drivers/net/ieee802154/cc2520.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/ieee802154/cc2520.c b/drivers/net/ieee802154/cc2520.c
+> index c69b87d3837d..abe331c795df 100644
+> --- a/drivers/net/ieee802154/cc2520.c
+> +++ b/drivers/net/ieee802154/cc2520.c
+> @@ -632,7 +632,6 @@ static int
+>   cc2520_set_channel(struct ieee802154_hw *hw, u8 page, u8 channel)
+>   {
+>          struct cc2520_private *priv = hw->priv;
+> -       int ret;
+> 
+>          dev_dbg(&priv->spi->dev, "trying to set channel\n");
+> 
+> @@ -640,10 +639,8 @@ cc2520_set_channel(struct ieee802154_hw *hw, u8 page, u8 channel)
+>          WARN_ON(channel < CC2520_MINCHANNEL);
+>          WARN_ON(channel > CC2520_MAXCHANNEL);
+> 
+> -       ret = cc2520_write_register(priv, CC2520_FREQCTRL,
+> -                                   11 + 5 * (channel - 11));
+> -
+> -       return ret;
+> +       return cc2520_write_register(priv, CC2520_FREQCTRL,
+> +                                    11 + 5 * (channel - 11));
+>   }
+> 
+>   static int
 
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
----
- arch/x86/kvm/emulate.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+The patch itself looks good, but it does not apply here:
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 3b27622d4642..5052eb480068 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -2100,6 +2100,7 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
- 			     X86_EFLAGS_FIXED;
- 	unsigned long vm86_mask = X86_EFLAGS_VM | X86_EFLAGS_VIF |
- 				  X86_EFLAGS_VIP;
-+	u8 cpl = ctxt->ops->cpl(ctxt);
- 
- 	/* TODO: Add stack limit check */
- 
-@@ -2121,7 +2122,8 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
- 	if (rc != X86EMUL_CONTINUE)
- 		return rc;
- 
--	rc = load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS);
-+	rc = __load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS, cpl,
-+				       X86_TRANSFER_RET, NULL);
- 
- 	if (rc != X86EMUL_CONTINUE)
- 		return rc;
--- 
-2.31.1
+[stefan@localhost wpan-next]$ git am -s 
+linux-next-ieee802154-cc2520-remove-the-unneeded-result-variable.patch
+Applying: ieee802154: cc2520: remove the unneeded result variable
+error: patch failed: drivers/net/ieee802154/cc2520.c:632
+error: drivers/net/ieee802154/cc2520.c: patch does not apply
+Patch failed at 0001 ieee802154: cc2520: remove the unneeded result variable
 
+Against which tree did you make this patch? Could you please rebase 
+against latest net-next or wpan-next?
+
+regards
+Stefan Schmidt
