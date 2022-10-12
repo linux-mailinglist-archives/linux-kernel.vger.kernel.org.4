@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE4C5FC089
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1E55FC088
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiJLGU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S229625AbiJLGUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiJLGUW (ORCPT
+        with ESMTP id S229501AbiJLGUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:20:22 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CCEE604A1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:20:19 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxX+CNXEZj5a8rAA--.27100S3;
-        Wed, 12 Oct 2022 14:19:59 +0800 (CST)
-Subject: Re: [PATCH v3] checksyscalls: Ignore fstat to silence build warning
- on LoongArch
-To:     Xi Ruoyao <xry111@xry111.site>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>
-References: <1661830021-8643-1-git-send-email-yangtiezhu@loongson.cn>
- <f794e452-eb04-88df-afa8-991bd40eb3d6@loongson.cn>
- <6ef6686dea98a65176af01f518d30727bde9b2b7.camel@xry111.site>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <23cb8d88-f18c-cd6d-a0b8-6c7c8c47ad8b@loongson.cn>
-Date:   Wed, 12 Oct 2022 14:19:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Wed, 12 Oct 2022 02:20:04 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2796F4AD7C
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:20:02 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i3so6051942pfc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=L1DBCnqUWhGB+br9qPogkPCpewlTh7l7APNpyuPMgnc=;
+        b=tSIgrK9R8quYMlKPHoAR2TiQYQinwSPupSlTrpqcDazc8Djrf8h+J8uy1Deju1sRaP
+         HUIm8v1EDo2lEXoCQcin34U8dIBoxU+u0FKqHjuxw2fdwcnIeZtjDOSALN/WKjEsg9YX
+         OPkMPS3zp5hOn9jjmlix4NRhEiI+2pCUQyPUzTlUy4ePKW62SaVqcyy0HuOWSPHJUgej
+         3l51Lo1Y4HrKmkmCmLsl1Zy1MKYOTIWH2L0tRtdQzzbbd2RncC/DsSrMWre8h+1zNYnK
+         6ha9w41B98s3rVRxHaS8ap4k5Ll8e9eTtdi9nVq6OfP1gBh8cbwlMedwQom2L0UjE6fO
+         84iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1DBCnqUWhGB+br9qPogkPCpewlTh7l7APNpyuPMgnc=;
+        b=wQSgH6fFkkW3ShAbPlZi1nDuR0QPcg6xJjG+lrjEaO21RnUBvw/d+2oIFXDLdUgULO
+         svjaoh8Ti/32Z0WLqFSX5ivfXtclThA1JFArDArupeNtcxmJkeeQaFmnKhGILYkZ2aJ6
+         OamamZi6ToPsnMmLeIQxbNgRWvt2IItC83qv9hxF9vyyFUB0o9s28shsMdN/xvLDZdNh
+         GlHNF+HTiA3dGAApNN6opD7O8oxq7VpOvljSka2JGK9ziB9UcEcar54DaB9v7qfKlP1l
+         gJA4GoXUXQITi1xMB6D9lZ4BOVIYBiiWixE+EeTxBSk/CuuR0mLkVk398hJnU+BLM5FV
+         qBmQ==
+X-Gm-Message-State: ACrzQf1cYWERSC5S+yN8BVddGVmgqd5ypCpRFQeU6wtlVaOR1hWPm4yX
+        sRKuzgBZLFEGRwqZgENGV+3TKw==
+X-Google-Smtp-Source: AMsMyM5d4J4J3Gk4lp+FLUDAe2grvtFcBiQy+UBxS3dMKP5NY726GPrMuMnikSc3GVmxYo5eEh3cCg==
+X-Received: by 2002:a05:6a00:1956:b0:557:7f97:3ff3 with SMTP id s22-20020a056a00195600b005577f973ff3mr29340817pfk.77.1665555601674;
+        Tue, 11 Oct 2022 23:20:01 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id x3-20020a1709029a4300b0016d773aae60sm9696338plv.19.2022.10.11.23.20.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 23:20:00 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 11:49:58 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     =?utf-8?B?5rSq5oiQ5paHKEtldmVuKQ==?= <hongchengwen@oppo.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?6ZmI5b6B6byO?= <chenzhengding@oppo.com>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIEFORFJPSUQ=?= =?utf-8?Q?=3A?=
+ cpufreq: times: record fast switch frequency transitions
+Message-ID: <20221012061958.xoio4xt3kywpjyf3@vireshk-i7>
+References: <1665231397-115755-1-git-send-email-hongchengwen@oppo.com>
+ <20221010063235.3zb6bgtxwpmltlrk@vireshk-i7>
+ <HK0PR02MB3379062A9BE6515D1DADB306A0229@HK0PR02MB3379.apcprd02.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <6ef6686dea98a65176af01f518d30727bde9b2b7.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxX+CNXEZj5a8rAA--.27100S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Wr4DtF1xKF4UCrW7Gr1xZrb_yoW8JF1fpa
-        48ua1kuFs5CFy8AanF93yxuF9Yy3sxAr93WFn8Xws8Arn0vFs5tr1Fqay5uF129rW3KF1j
-        9F4vg34IvF1jyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9vb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-        Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8N18PUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <HK0PR02MB3379062A9BE6515D1DADB306A0229@HK0PR02MB3379.apcprd02.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12-10-22, 06:17, 洪成文(Keven) wrote:
+> Viresh Kumar
+> 
+> This is a modification based on the Linux kernel, not an Android version.
+> You may have misunderstood some fields in the commit message.
 
-Cc KERNEL BUILD maintainers:
+Linux doesn't have cpufreq_times_record_transition().
 
-Masahiro Yamada <masahiroy@kernel.org>
-Michal Marek <michal.lkml@markovi.net>
-Nick Desaulniers <ndesaulniers@google.com>
-
-On 10/09/2022 10:01 PM, Xi Ruoyao wrote:
-> On Sun, 2022-10-09 at 12:33 +0800, Tiezhu Yang wrote:
->>
->>
->> On 08/30/2022 11:27 AM, Tiezhu Yang wrote:
->>> fstat is replaced by statx on the new architecture, so an exception
->>> is added to the checksyscalls script to silence the following build
->>> warning on LoongArch:
->>>
->>>   CALL    scripts/checksyscalls.sh
->>> <stdin>:569:2: warning: #warning syscall fstat not implemented [-
->>> Wcpp]
->>
->> Hi all,
->>
->> The above warning still exists when build the latest loongarch-next.
->>
->> Do you know which tree this patch will go through?
->>
->> Could you please pick it up via your tree in this merge window?
->
-> A similar change 3ef6ca4f354c ("checksyscalls: Unconditionally ignore
-> fstat{,at}64") was merged through RISC-V tree, so it should be OK to
-> merge this from loongarch-next.
->
-> Not sure if we need to get an Ack from someone first though.
->
-
-Since this is a kernel build warning, maybe it is proper through
-linux-kbuild.git.
-
-https://lore.kernel.org/lkml/1661830021-8643-1-git-send-email-yangtiezhu@loongson.cn/
-
-Thanks,
-Tiezhu
-
+-- 
+viresh
