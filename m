@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404525FC8F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF235FC8FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiJLQMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S229680AbiJLQOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJLQMw (ORCPT
+        with ESMTP id S229607AbiJLQOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:12:52 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842BCD8EC5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:12:44 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id n83so19552821oif.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:12:44 -0700 (PDT)
+        Wed, 12 Oct 2022 12:14:46 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1EABC1A;
+        Wed, 12 Oct 2022 09:14:44 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so19948014fac.11;
+        Wed, 12 Oct 2022 09:14:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ye7cT/HQlpxKJ6m3avMn9jU5d/vCmwstsQKoi6uiyY8=;
-        b=CXS/MTWMngkL/Tunul/2EXbcDQP0PEDhpeJ0WjBlLVFcgGjd/YZKk5FFzWZimoZp1v
-         Hx2Qly2H0yOG83/ZwVOThknwvGVRoxx3v1f6PQLBEqOznMmxoDpRzQQhKmh/rnlkwnBT
-         foebjFWdPN84d26hWagHrVJHZf18tr1xlUdSDTXImT0HCl1c3EWiaNJDJ2TMiyNZOUiA
-         6j8SSPTV3sXREkXvIBMyBnRmQaiPeAr31dlRcK7Me7POZ2uU3V8THh6vX23PsXpGpDt/
-         wqGkXt2ZQkp0t4spz4GfbV2RQfE2hXbMvNJgKAZWWCOBUAWnGjHS+yQO1bV6DIaDMf9Y
-         WajQ==
-X-Gm-Message-State: ACrzQf2S9X9mK6Jcufh+S1+1gGJfkgzEZfscCtsxnww8aYZ541NFGc/I
-        pWGI8xAU44OIDRddcAogYS46vX+0I6kniAS0nJKxKlvQ
-X-Google-Smtp-Source: AMsMyM5bNnPHBi9iM5KCM2Ep1rp4l9SeVY0Qr+Kc/k93OyN7ziaXyLyg/CHkTZKAYetA33OQwFWt8u9Gato7sUcvsNU=
-X-Received: by 2002:a05:6808:1a09:b0:350:107b:f89a with SMTP id
- bk9-20020a0568081a0900b00350107bf89amr2551489oib.218.1665591163722; Wed, 12
- Oct 2022 09:12:43 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fO0PpGdOVvPpij/NXGuyWGNOEjG4oK2xZeS4yIzf9J4=;
+        b=4SrGnPa4+NDqmNxNSPXb2Jo4ICUv51zxMiil2e5oiwt0r3o1fBgo3ENq2s6DQNbodb
+         KR9d73JBphKR/63wSAiLmWLAqeop77qkygJM28KK7culpn7gTZ4tQyMBQoLRMOcm0JkB
+         tkmkkY0+35pHFzEJWvuF8dY2+ulj+8t3/dgxNbq8+4QAn3H8Fv5NhivcuGO50SiI7XQQ
+         pR86ayR+MuEBdZ8I/dsFeWKDkksk2faRjoW7KHZgcHj4M04P+EWrYwBtS1IHJgk+8j//
+         GIHPNF968auRTxBLBrG5xPpFERtS+xGO40XK4JlcIL3RXYRZuZj2tWyJef8ZIR+poSxh
+         cAkw==
+X-Gm-Message-State: ACrzQf0J3OXptZXuNP5cFK7uk1JPCpDnhYYsI2aRsK3nhhQI/mFdAsXm
+        vhlOkP84Qbk/FUd+5DLCMA==
+X-Google-Smtp-Source: AMsMyM6yAD0owmN5GAuYeIUjCw5q1buKdw+7TnS/U5p7z0BsjaAGZsqW07muqSIV4LFv2mhUPCiI4w==
+X-Received: by 2002:a05:6870:42d1:b0:136:3b49:cc26 with SMTP id z17-20020a05687042d100b001363b49cc26mr2861625oah.238.1665591284209;
+        Wed, 12 Oct 2022 09:14:44 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id cm21-20020a056830651500b00660d73c8bdesm7646591otb.50.2022.10.12.09.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:14:43 -0700 (PDT)
+Received: (nullmailer pid 2274735 invoked by uid 1000);
+        Wed, 12 Oct 2022 16:14:45 -0000
+Date:   Wed, 12 Oct 2022 11:14:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] dt-bindings: pinctrl: qcom,msm8998: convert to
+ dtschema
+Message-ID: <166559128462.2274700.1712884947445787957.robh@kernel.org>
+References: <20221011213145.122879-1-krzysztof.kozlowski@linaro.org>
+ <20221011213145.122879-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20220901130959.1285717-1-kan.liang@linux.intel.com>
- <20220901130959.1285717-3-kan.liang@linux.intel.com> <CAM9d7cgWDVAq8-11RbJ2uGfwkKD6fA-OMwOKDrNUrU_=8MgEjg@mail.gmail.com>
- <Y0Z1Jr2jtrrAN5L+@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y0Z1Jr2jtrrAN5L+@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 12 Oct 2022 09:12:32 -0700
-Message-ID: <CAM9d7chpXGm9vDf4qN0JQQWdgWDNR05vPuqnDo4=F2jWdo0S3A@mail.gmail.com>
-Subject: Re: [PATCH V2 2/6] perf/x86/intel/pebs: Fix PEBS timestamps overwritten
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, andreas.kogler.0x@gmail.com,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011213145.122879-4-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,22 +69,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Tue, 11 Oct 2022 17:31:45 -0400, Krzysztof Kozlowski wrote:
+> Convert Qualcomm MSM8998 pin controller bindings to DT schema.  Keep the
+> parsing of pin configuration subnodes consistent with other Qualcomm
+> schemas (children named with '-state' suffix, their children with
+> '-pins').
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,msm8998-pinctrl.txt | 202 ------------------
+>  .../pinctrl/qcom,msm8998-pinctrl.yaml         | 176 +++++++++++++++
+>  2 files changed, 176 insertions(+), 202 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.txt
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml
+> 
 
-On Wed, Oct 12, 2022 at 1:05 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Oct 11, 2022 at 11:20:54AM -0700, Namhyung Kim wrote:
->
-> > One thing I noticed is that the system has a config option
-> > CONFIG_HAVE_UNSTABLE_SCHED_CLOCK=y.
->
-> You can't build x86 without that.
-
-Oh, I didn't know that..  so it's not a config problem.
-
-Kan, could you check the following command?
-
-  $ perf record -e cycles:upp dd if=/dev/zero of=/dev/null count=10000
-
-Thanks,
-Namhyung
+Reviewed-by: Rob Herring <robh@kernel.org>
