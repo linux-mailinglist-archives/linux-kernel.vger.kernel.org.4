@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC315FC9A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652335FC9A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiJLQ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S229963AbiJLQ70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiJLQ7T (ORCPT
+        with ESMTP id S229864AbiJLQ7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:59:19 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2D0FDB58
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:59:17 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id x13so8314943qkg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:59:17 -0700 (PDT)
+        Wed, 12 Oct 2022 12:59:21 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23DFFE748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:59:19 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id cj27so10556744qtb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:59:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0SAxnVlGBGE20DggOg0swRYR9z1My5R0YrdoU6cMzXI=;
-        b=eUn72RlgFiGWHyV4h7I5ybDmLyOztT1VYS6URRUdPLMhzFXngbL0EgSnF2vaZU3JQg
-         0HE6Exet8iyH75ZEiQJz5HY0T3bKyfdV3uFn4YYXUnkEomuOBxAeoLkgYDczDgWs0f8V
-         hYAfvj7T5+zzcEQ0bdhAukeh33FYyxY0xHoOMsElRrhVoIfc/CFjyJ7b+oDuMLFsZt5n
-         k2jGTjJIoGdVrqxe36IDcpa1npjfakHS2yfO+y91lx9rYplsQd2Iv1DpN1lb8PkozXnj
-         w3ONqbamLstzSuhxa4oFx+E4ksg4uicylFiP+TftCOSrwGTxiEDYDoEsldJxg09uMDni
-         ZzIg==
+        bh=HQmvEnxCacSKmyhsDZfwB55uF8afbebAIdbb3HMdfts=;
+        b=s6Wzx5P4f8uEwd+o6Qzs040cp30gJ6wUNosjjCWK/EwmGMuIhgM42PrbcogJ2eiu12
+         aovwR2z9NRGsQNenpprlj2MvSlyvg988/0Esx2WJgxYMyxuFHreqXae4/CxGwpLwVqK6
+         QysE73f1hzUAMecCRohR+cA6WeO5apFPx2DsWchMk7KzCmUQ00rZy28MdHdZWXs4XGHm
+         Uhd+X0xYYCnQVaesXAAK5cUTYm+1gTybr+YMvQDU24tgKPxlv/9BC4bM4oR75oBDMbbF
+         XAVCDrVF5eT0jABbeSkOgGkaqHZXC7SWvQ0cZg9DgjjDcYuzimuyv6Ck/jDpeyXSe6or
+         xfHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0SAxnVlGBGE20DggOg0swRYR9z1My5R0YrdoU6cMzXI=;
-        b=fKhtD1Bf6SMY30m2pM3VmyPdt5+tv39EHy4q9ggcQsJSkVdQklkGfQ/9qAFJtKKzr6
-         GjBsXorW7aHpLOI7tYYGF+OfqbBwwTemfabHFPQCsXXwLmQW5yUh5JCaWbn7oWoU5BxL
-         DTlLbizKSGMeK9p17Gv0DKCRwp3/rwWbYX0GiSjsMH/YCpYWq6WEoFb9lqcu6CvyRCyM
-         BmuBtCY65NQw+eon6Z3hJAWtbDtizXeIt+o+/ODDXYgXQ+57zxw50INBVCcyiHtpVKR3
-         JyT6FrbpoG9gGyy2d4V9bedeTNRd1UMXsofvSihwDQJk0Cg2+u/LuzxvGMdWX3+eV3fh
-         LK7Q==
-X-Gm-Message-State: ACrzQf3RvorUsDpR1yHbvB9d6wCaPSWJVdOAWXKHhR1U3EAtaDolkJG9
-        LMbJt7xvLiMfrOZKCtxPSHjiQw==
-X-Google-Smtp-Source: AMsMyM7fcXK1BzXqFXt9/+7WVWbLW18XRhGXtneQgH4IMfmFcaIwNaYlRuXvdfCUExpQyWXeLnYXBA==
-X-Received: by 2002:a05:620a:c4a:b0:6cf:8135:e81d with SMTP id u10-20020a05620a0c4a00b006cf8135e81dmr20610356qki.280.1665593957078;
-        Wed, 12 Oct 2022 09:59:17 -0700 (PDT)
+        bh=HQmvEnxCacSKmyhsDZfwB55uF8afbebAIdbb3HMdfts=;
+        b=RVZ+ndU0xHDlFjZToag9pwEHwlNnphdJAkAQLtIMARuv1XRX72h/RUBUr0jmFqKw1y
+         OI2aSv4eQD1oH3FPwiFwSWbutY+wVRfPeF5avR0bJhMzBIN/A8Q7dAk4wDPxhlyWgT53
+         1dRLev6/Q2f6ZQ6ptaQlfCbC8Ro2P8ZYHcSvqhGHWsMNVutF7R+p+noxlHchfNgFJtgF
+         ptx/WsWO4HzoexAuP+CxtgZO4TXa6ULlIZay4IYVD378SwKOb/1pxrPHeNggR4cIvcAy
+         RpwfTUVoEBPBSFGShwK3IUHHrZmD8s8gtL+rASuWcO3/kSSmUWRFIcqPYkHFhRUlXqkE
+         4drQ==
+X-Gm-Message-State: ACrzQf3nqOwEyAZw9gRUfexuo6eTCIet/nxrUEUzQxI5JP6HlBpDmHql
+        vPoOW0WIb52WdUQBnNki5VtjBQ==
+X-Google-Smtp-Source: AMsMyM65dtK7p0p/HXjsHGYyfbRzuz2UDQRLeNnp8iPJyAAVb/nn+f5tYXkqvMZe2HT8ejYK0hZ4Lg==
+X-Received: by 2002:ac8:5208:0:b0:399:5248:aad2 with SMTP id r8-20020ac85208000000b003995248aad2mr15222060qtn.449.1665593958567;
+        Wed, 12 Oct 2022 09:59:18 -0700 (PDT)
 Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id r4-20020a05622a034400b00398a7c860c2sm9476039qtw.4.2022.10.12.09.59.15
+        by smtp.gmail.com with ESMTPSA id r4-20020a05622a034400b00398a7c860c2sm9476039qtw.4.2022.10.12.09.59.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 09:59:16 -0700 (PDT)
+        Wed, 12 Oct 2022 09:59:18 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
@@ -60,9 +60,9 @@ To:     Bjorn Andersson <andersson@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/3] arm64: dts: qcom: msm8994: Align TLMM pin configuration with DT schema
-Date:   Wed, 12 Oct 2022 12:57:11 -0400
-Message-Id: <20221012165712.93053-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/3] dt-bindings: pinctrl: qcom,msm8994: convert to dtschema
+Date:   Wed, 12 Oct 2022 12:57:12 -0400
+Message-Id: <20221012165712.93053-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221012165712.93053-1-krzysztof.kozlowski@linaro.org>
 References: <20221012165712.93053-1-krzysztof.kozlowski@linaro.org>
@@ -77,404 +77,384 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT schema expects TLMM pin configuration nodes to be named with
-'-state' suffix and their optional children with '-pins' suffix.
-
-Order the "function" and "pins" property to match other DTS.
+Convert Qualcomm MSM8994 pin controller bindings to DT schema.  Keep the
+parsing of pin configuration subnodes consistent with other Qualcomm
+schemas (children named with '-state' suffix, their children with
+'-pins').
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../dts/qcom/msm8994-msft-lumia-octagon.dtsi  |   8 +-
- .../qcom/msm8994-sony-xperia-kitakami.dtsi    |   6 +-
- arch/arm64/boot/dts/qcom/msm8994.dtsi         | 130 +++++++++---------
- 3 files changed, 74 insertions(+), 70 deletions(-)
+ .../bindings/pinctrl/qcom,msm8994-pinctrl.txt | 186 ------------------
+ .../pinctrl/qcom,msm8994-pinctrl.yaml         | 167 ++++++++++++++++
+ 2 files changed, 167 insertions(+), 186 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.yaml
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-index f9d8bd09e074..63568f73e9d3 100644
---- a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-@@ -881,28 +881,28 @@ &sdhc2 {
- };
- 
- &tlmm {
--	grip_default: grip-default {
-+	grip_default: grip-default-state {
- 		pins = "gpio39";
- 		function = "gpio";
- 		drive-strength = <6>;
- 		bias-pull-down;
- 	};
- 
--	grip_sleep: grip-sleep {
-+	grip_sleep: grip-sleep-state {
- 		pins = "gpio39";
- 		function = "gpio";
- 		drive-strength = <2>;
- 		bias-pull-down;
- 	};
- 
--	hall_front_default: hall-front-default {
-+	hall_front_default: hall-front-default-state {
- 		pins = "gpio42";
- 		function = "gpio";
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
- 
--	hall_back_default: hall-back-default {
-+	hall_back_default: hall-back-default-state {
- 		pins = "gpio75";
- 		function = "gpio";
- 		drive-strength = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
-index ff60b7004d26..a390af54c715 100644
---- a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
-@@ -477,15 +477,17 @@ &sdhc2 {
- };
- 
- &tlmm {
--	ts_int_active: ts-int-active {
-+	ts_int_active: ts-int-active-state {
- 		pins = "gpio42";
-+		function = "gpio";
- 		drive-strength = <2>;
- 		bias-disable;
- 		input-enable;
- 	};
- 
--	ts_reset_active: ts-reset-active {
-+	ts_reset_active: ts-reset-active-state {
- 		pins = "gpio109";
-+		function = "gpio";
- 		drive-strength = <2>;
- 		bias-disable;
- 		output-low;
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 7a582a5fe3a8..ba687e64ba3c 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -773,254 +773,256 @@ tlmm: pinctrl@fd510000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 
--			blsp1_uart2_default: blsp1-uart2-default {
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.txt
+deleted file mode 100644
+index da52df6273bc..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.txt
++++ /dev/null
+@@ -1,186 +0,0 @@
+-Qualcomm MSM8994 TLMM block
+-
+-This binding describes the Top Level Mode Multiplexer block found in the
+-MSM8994 platform.
+-
+-- compatible:
+-	Usage: required
+-	Value type: <string>
+-	Definition: Should contain one of:
+-		    "qcom,msm8992-pinctrl",
+-		    "qcom,msm8994-pinctrl".
+-
+-- reg:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: the base address and size of the TLMM register space.
+-
+-- interrupts:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the TLMM summary IRQ.
+-
+-- interrupt-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as an interrupt controller
+-
+-- #interrupt-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/interrupt-controller/irq.h>
+-
+-- gpio-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as a gpio controller
+-
+-- #gpio-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/gpio/gpio.h>
+-
+-- gpio-ranges:
+-	Usage: required
+-	Definition:  see ../gpio/gpio.txt
+-
+-- gpio-reserved-ranges:
+-	Usage: optional
+-	Definition: see ../gpio/gpio.txt
+-
+-Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
+-a general description of GPIO and interrupt bindings.
+-
+-Please refer to pinctrl-bindings.txt in this directory for details of the
+-common pinctrl bindings used by client devices, including the meaning of the
+-phrase "pin configuration node".
+-
+-The pin configuration nodes act as a container for an arbitrary number of
+-subnodes. Each of these subnodes represents some desired configuration for a
+-pin, a group, or a list of pins or groups. This configuration can include the
+-mux function to select on those pin(s)/group(s), and various pin configuration
+-parameters, such as pull-up, drive strength, etc.
+-
+-
+-PIN CONFIGURATION NODES:
+-
+-The name of each subnode is not important; all subnodes should be enumerated
+-and processed purely based on their content.
+-
+-Each subnode only affects those parameters that are explicitly listed. In
+-other words, a subnode that lists a mux function but no pin configuration
+-parameters implies no information about any pin configuration parameters.
+-Similarly, a pin subnode that describes a pullup parameter implies no
+-information about e.g. the mux function.
+-
+-
+-The following generic properties as defined in pinctrl-bindings.txt are valid
+-to specify in a pin configuration subnode:
+-
+-- pins:
+-	Usage: required
+-	Value type: <string-array>
+-	Definition: List of gpio pins affected by the properties specified in
+-		    this subnode.
+-
+-		    Valid pins are:
+-		      gpio0-gpio145
+-		        Supports mux, bias and drive-strength
+-
+-		      sdc1_clk, sdc1_cmd, sdc1_data sdc1_rclk, sdc2_clk,
+-		      sdc2_cmd, sdc2_data
+-		        Supports bias and drive-strength
+-
+-- function:
+-	Usage: required
+-	Value type: <string>
+-	Definition: Specify the alternative function to be configured for the
+-		    specified pins. Functions are only valid for gpio pins.
+-		    Valid values are:
+-
+-		    audio_ref_clk,  blsp_i2c1, blsp_i2c2, blsp_i2c3, blsp_i2c4, blsp_i2c5,
+-		    blsp_i2c6, blsp_i2c7, blsp_i2c8, blsp_i2c9, blsp_i2c10, blsp_i2c11,
+-		    blsp_i2c12, blsp_spi1, blsp_spi1_cs1, blsp_spi1_cs2, blsp_spi1_cs3,
+-		    blsp_spi2, blsp_spi2_cs1, blsp_spi2_cs2, blsp_spi2_cs3, blsp_spi3,
+-		    blsp_spi4, blsp_spi5, blsp_spi6, blsp_spi7, blsp_spi8, blsp_spi9,
+-		    blsp_spi10, blsp_spi10_cs1, blsp_spi10_cs2, blsp_spi10_cs3, blsp_spi11,
+-		    blsp_spi12, blsp_uart1, blsp_uart2, blsp_uart3, blsp_uart4, blsp_uart5,
+-		    blsp_uart6, blsp_uart7, blsp_uart8, blsp_uart9, blsp_uart10, blsp_uart11,
+-		    blsp_uart12, blsp_uim1, blsp_uim2, blsp_uim3, blsp_uim4, blsp_uim5,
+-		    blsp_uim6, blsp_uim7, blsp_uim8, blsp_uim9, blsp_uim10, blsp_uim11,
+-		    blsp_uim12, blsp11_i2c_scl_b, blsp11_i2c_sda_b, blsp11_uart_rx_b,
+-		    blsp11_uart_tx_b, cam_mclk0, cam_mclk1, cam_mclk2, cam_mclk3,
+-		    cci_async_in0, cci_async_in1, cci_async_in2, cci_i2c0, cci_i2c1,
+-		    cci_timer0, cci_timer1, cci_timer2, cci_timer3, cci_timer4,
+-		    gcc_gp1_clk_a, gcc_gp1_clk_b, gcc_gp2_clk_a, gcc_gp2_clk_b, gcc_gp3_clk_a,
+-		    gcc_gp3_clk_b, gp_mn, gp_pdm0, gp_pdm1, gp_pdm2, gp0_clk,
+-		    gp1_clk, gps_tx, gsm_tx, hdmi_cec, hdmi_ddc, hdmi_hpd, hdmi_rcv,
+-		    mdp_vsync, mss_lte, nav_pps, nav_tsync, qdss_cti_trig_in_a,
+-		    qdss_cti_trig_in_b, qdss_cti_trig_in_c, qdss_cti_trig_in_d,
+-		    qdss_cti_trig_out_a, qdss_cti_trig_out_b, qdss_cti_trig_out_c,
+-		    qdss_cti_trig_out_d, qdss_traceclk_a, qdss_traceclk_b, qdss_tracectl_a,
+-		    qdss_tracectl_b, qdss_tracedata_a, qdss_tracedata_b, qua_mi2s, pci_e0,
+-		    pci_e1, pri_mi2s, sdc4, sec_mi2s, slimbus, spkr_i2s, ter_mi2s, tsif1,
+-		    tsif2, uim_batt_alarm, uim1, uim2, uim3, uim4, gpio
+-
+-- bias-disable:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as no pull.
+-
+-- bias-pull-down:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull down.
+-
+-- bias-pull-up:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull up.
+-
+-- output-high:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    high.
+-		    Not valid for sdc pins.
+-
+-- output-low:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    low.
+-		    Not valid for sdc pins.
+-
+-- drive-strength:
+-	Usage: optional
+-	Value type: <u32>
+-	Definition: Selects the drive strength for the specified pins, in mA.
+-		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
+-
+-Example:
+-
+-	msmgpio: pinctrl@fd510000 {
+-		compatible = "qcom,msm8994-pinctrl";
+-		reg = <0xfd510000 0x4000>;
+-		interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		gpio-ranges = <&msmgpio 0 0 146>;
+-		interrupt-controller;
+-		#interrupt-cells = <2>;
+-
+-		blsp1_uart2_default: blsp1_uart2_default {
+-			pinmux {
+-				pins = "gpio4", "gpio5";
 -				function = "blsp_uart2";
-+			blsp1_uart2_default: blsp1-uart2-default-state {
- 				pins = "gpio4", "gpio5";
-+				function = "blsp_uart2";
- 				drive-strength = <16>;
- 				bias-disable;
- 			};
- 
--			blsp1_uart2_sleep: blsp1-uart2-sleep {
--				function = "gpio";
-+			blsp1_uart2_sleep: blsp1-uart2-sleep-state {
- 				pins = "gpio4", "gpio5";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-pull-down;
- 			};
- 
--			blsp2_uart2_default: blsp2-uart2-default {
-+			blsp2_uart2_default: blsp2-uart2-default-state {
-+				pins = "gpio45", "gpio46", "gpio47", "gpio48";
- 				function = "blsp_uart8";
--				pins = "gpio45", "gpio46",
--						"gpio47", "gpio48";
- 				drive-strength = <16>;
- 				bias-disable;
- 			};
- 
--			blsp2_uart2_sleep: blsp2-uart2-sleep {
-+			blsp2_uart2_sleep: blsp2-uart2-sleep-state {
-+				pins = "gpio45", "gpio46", "gpio47", "gpio48";
- 				function = "gpio";
--				pins = "gpio45", "gpio46",
--						"gpio47", "gpio48";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c1_default: i2c1-default {
--				function = "blsp_i2c1";
-+			i2c1_default: i2c1-default-state {
- 				pins = "gpio2", "gpio3";
-+				function = "blsp_i2c1";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c1_sleep: i2c1-sleep {
--				function = "gpio";
-+			i2c1_sleep: i2c1-sleep-state {
- 				pins = "gpio2", "gpio3";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c2_default: i2c2-default {
--				function = "blsp_i2c2";
-+			i2c2_default: i2c2-default-state {
- 				pins = "gpio6", "gpio7";
-+				function = "blsp_i2c2";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c2_sleep: i2c2-sleep {
--				function = "gpio";
-+			i2c2_sleep: i2c2-sleep-state {
- 				pins = "gpio6", "gpio7";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c4_default: i2c4-default {
--				function = "blsp_i2c4";
-+			i2c4_default: i2c4-default-state {
- 				pins = "gpio19", "gpio20";
-+				function = "blsp_i2c4";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c4_sleep: i2c4-sleep {
--				function = "gpio";
-+			i2c4_sleep: i2c4-sleep-state {
- 				pins = "gpio19", "gpio20";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-pull-down;
- 				input-enable;
- 			};
- 
--			i2c5_default: i2c5-default {
--				function = "blsp_i2c5";
-+			i2c5_default: i2c5-default-state {
- 				pins = "gpio23", "gpio24";
-+				function = "blsp_i2c5";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c5_sleep: i2c5-sleep {
--				function = "gpio";
-+			i2c5_sleep: i2c5-sleep-state {
- 				pins = "gpio23", "gpio24";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c6_default: i2c6-default {
--				function = "blsp_i2c6";
-+			i2c6_default: i2c6-default-state {
- 				pins = "gpio28", "gpio27";
-+				function = "blsp_i2c6";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c6_sleep: i2c6-sleep {
--				function = "gpio";
-+			i2c6_sleep: i2c6-sleep-state {
- 				pins = "gpio28", "gpio27";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c7_default: i2c7-default {
--				function = "blsp_i2c7";
-+			i2c7_default: i2c7-default-state {
- 				pins = "gpio44", "gpio43";
-+				function = "blsp_i2c7";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c7_sleep: i2c7-sleep {
--				function = "gpio";
-+			i2c7_sleep: i2c7-sleep-state {
- 				pins = "gpio44", "gpio43";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			blsp2_spi10_default: blsp2-spi10-default {
--				default {
--					function = "blsp_spi10";
-+			blsp2_spi10_default: blsp2-spi10-default-state {
-+				default-pins {
- 					pins = "gpio53", "gpio54", "gpio55";
-+					function = "blsp_spi10";
- 					drive-strength = <10>;
- 					bias-pull-down;
- 				};
--				cs {
--					function = "gpio";
+-			};
+-			pinconf {
+-				pins = "gpio4", "gpio5";
+-				drive-strength = <16>;
+-				bias-disable;
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.yaml
+new file mode 100644
+index 000000000000..611a51269487
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.yaml
+@@ -0,0 +1,167 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,msm8994-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+				cs-pins {
- 					pins = "gpio67";
-+					function = "gpio";
- 					drive-strength = <2>;
- 					bias-disable;
- 				};
- 			};
- 
--			blsp2_spi10_sleep: blsp2-spi10-sleep {
-+			blsp2_spi10_sleep: blsp2-spi10-sleep-state {
- 				pins = "gpio53", "gpio54", "gpio55";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c11_default: i2c11-default {
--				function = "blsp_i2c11";
-+			i2c11_default: i2c11-default-state {
- 				pins = "gpio83", "gpio84";
-+				function = "blsp_i2c11";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c11_sleep: i2c11-sleep {
--				function = "gpio";
-+			i2c11_sleep: i2c11-sleep-state {
- 				pins = "gpio83", "gpio84";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			blsp1_spi1_default: blsp1-spi1-default {
--				default {
--					function = "blsp_spi1";
-+			blsp1_spi1_default: blsp1-spi1-default-state {
-+				default-pins {
- 					pins = "gpio0", "gpio1", "gpio3";
-+					function = "blsp_spi1";
- 					drive-strength = <10>;
- 					bias-pull-down;
- 				};
--				cs {
--					function = "gpio";
++title: Qualcomm MSM8994 TLMM pin controller
 +
-+				cs-pins {
- 					pins = "gpio8";
-+					function = "gpio";
- 					drive-strength = <2>;
- 					bias-disable;
- 				};
- 			};
- 
--			blsp1_spi1_sleep: blsp1-spi1-sleep {
-+			blsp1_spi1_sleep: blsp1-spi1-sleep-state {
- 				pins = "gpio0", "gpio1", "gpio3";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			sdc1_clk_on: clk-on {
-+			sdc1_clk_on: clk-on-state {
- 				pins = "sdc1_clk";
- 				bias-disable;
- 				drive-strength = <16>;
- 			};
- 
--			sdc1_clk_off: clk-off {
-+			sdc1_clk_off: clk-off-state {
- 				pins = "sdc1_clk";
- 				bias-disable;
- 				drive-strength = <2>;
- 			};
- 
--			sdc1_cmd_on: cmd-on {
-+			sdc1_cmd_on: cmd-on-state {
- 				pins = "sdc1_cmd";
- 				bias-pull-up;
- 				drive-strength = <8>;
- 			};
- 
--			sdc1_cmd_off: cmd-off {
-+			sdc1_cmd_off: cmd-off-state {
- 				pins = "sdc1_cmd";
- 				bias-pull-up;
- 				drive-strength = <2>;
- 			};
- 
--			sdc1_data_on: data-on {
-+			sdc1_data_on: data-on-state {
- 				pins = "sdc1_data";
- 				bias-pull-up;
- 				drive-strength = <8>;
- 			};
- 
--			sdc1_data_off: data-off {
-+			sdc1_data_off: data-off-state {
- 				pins = "sdc1_data";
- 				bias-pull-up;
- 				drive-strength = <2>;
- 			};
- 
--			sdc1_rclk_on: rclk-on {
-+			sdc1_rclk_on: rclk-on-state {
- 				pins = "sdc1_rclk";
- 				bias-pull-down;
- 			};
- 
--			sdc1_rclk_off: rclk-off {
-+			sdc1_rclk_off: rclk-off-state {
- 				pins = "sdc1_rclk";
- 				bias-pull-down;
- 			};
- 
--			sdc2_clk_on: sdc2-clk-on {
-+			sdc2_clk_on: sdc2-clk-on-state {
- 				pins = "sdc2_clk";
- 				bias-disable;
- 				drive-strength = <10>;
- 			};
- 
--			sdc2_clk_off: sdc2-clk-off {
-+			sdc2_clk_off: sdc2-clk-off-state {
- 				pins = "sdc2_clk";
- 				bias-disable;
- 				drive-strength = <2>;
- 			};
- 
--			sdc2_cmd_on: sdc2-cmd-on {
-+			sdc2_cmd_on: sdc2-cmd-on-state {
- 				pins = "sdc2_cmd";
- 				bias-pull-up;
- 				drive-strength = <10>;
- 			};
- 
--			sdc2_cmd_off: sdc2-cmd-off {
-+			sdc2_cmd_off: sdc2-cmd-off-state {
- 				pins = "sdc2_cmd";
- 				bias-pull-up;
- 				drive-strength = <2>;
- 			};
- 
--			sdc2_data_on: sdc2-data-on {
-+			sdc2_data_on: sdc2-data-on-state {
- 				pins = "sdc2_data";
- 				bias-pull-up;
- 				drive-strength = <10>;
- 			};
- 
--			sdc2_data_off: sdc2-data-off {
-+			sdc2_data_off: sdc2-data-off-state {
- 				pins = "sdc2_data";
- 				bias-pull-up;
- 				drive-strength = <2>;
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description:
++  Top Level Mode Multiplexer pin controller in Qualcomm MSM8994 SoC.
++
++properties:
++  compatible:
++    enum:
++      - qcom,msm8992-pinctrl
++      - qcom,msm8994-pinctrl
++
++  reg:
++    maxItems: 1
++
++  interrupts: true
++  interrupt-controller: true
++  "#interrupt-cells": true
++  gpio-controller: true
++  "#gpio-cells": true
++  gpio-ranges: true
++  wakeup-parent: true
++
++  gpio-reserved-ranges:
++    minItems: 1
++    maxItems: 75
++
++  gpio-line-names:
++    maxItems: 150
++
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-msm8994-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-msm8994-tlmm-state"
++        additionalProperties: false
++
++$defs:
++  qcom-msm8994-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
++            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
++                      sdc2_cmd, sdc2_data, sdc3_clk, sdc3_cmd, sdc3_data ]
++        minItems: 1
++        maxItems: 36
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
++
++        enum: [ gpio, audio_ref_clk, blsp_i2c1, blsp_i2c2, blsp_i2c3,
++                blsp_i2c4, blsp_i2c5, blsp_i2c6, blsp_i2c7, blsp_i2c8,
++                blsp_i2c9, blsp_i2c10, blsp_i2c11, blsp_i2c12, blsp_spi1,
++                blsp_spi1_cs1, blsp_spi1_cs2, blsp_spi1_cs3, blsp_spi2,
++                blsp_spi2_cs1, blsp_spi2_cs2, blsp_spi2_cs3, blsp_spi3,
++                blsp_spi4, blsp_spi5, blsp_spi6, blsp_spi7, blsp_spi8,
++                blsp_spi9, blsp_spi10, blsp_spi10_cs1, blsp_spi10_cs2,
++                blsp_spi10_cs3, blsp_spi11, blsp_spi12, blsp_uart1, blsp_uart2,
++                blsp_uart3, blsp_uart4, blsp_uart5, blsp_uart6, blsp_uart7,
++                blsp_uart8, blsp_uart9, blsp_uart10, blsp_uart11, blsp_uart12,
++                blsp_uim1, blsp_uim2, blsp_uim3, blsp_uim4, blsp_uim5,
++                blsp_uim6, blsp_uim7, blsp_uim8, blsp_uim9, blsp_uim10,
++                blsp_uim11, blsp_uim12, blsp11_i2c_scl_b, blsp11_i2c_sda_b,
++                blsp11_uart_rx_b, blsp11_uart_tx_b, cam_mclk0, cam_mclk1,
++                cam_mclk2, cam_mclk3, cci_async_in0, cci_async_in1,
++                cci_async_in2, cci_i2c0, cci_i2c1, cci_timer0, cci_timer1,
++                cci_timer2, cci_timer3, cci_timer4, gcc_gp1_clk_a,
++                gcc_gp1_clk_b, gcc_gp2_clk_a, gcc_gp2_clk_b, gcc_gp3_clk_a,
++                gcc_gp3_clk_b, gp_mn, gp_pdm0, gp_pdm1, gp_pdm2, gp0_clk,
++                gp1_clk, gps_tx, gsm_tx, hdmi_cec, hdmi_ddc, hdmi_hpd,
++                hdmi_rcv, mdp_vsync, mss_lte, nav_pps, nav_tsync,
++                qdss_cti_trig_in_a, qdss_cti_trig_in_b, qdss_cti_trig_in_c,
++                qdss_cti_trig_in_d, qdss_cti_trig_out_a, qdss_cti_trig_out_b,
++                qdss_cti_trig_out_c, qdss_cti_trig_out_d, qdss_traceclk_a,
++                qdss_traceclk_b, qdss_tracectl_a, qdss_tracectl_b,
++                qdss_tracedata_a, qdss_tracedata_b, qua_mi2s, pci_e0, pci_e1,
++                pri_mi2s, sdc4, sec_mi2s, slimbus, spkr_i2s, ter_mi2s, tsif1,
++                tsif2, uim_batt_alarm, uim1, uim2, uim3, uim4 ]
++
++      drive-strength:
++        enum: [2, 4, 6, 8, 10, 12, 14, 16]
++        default: 2
++        description:
++          Selects the drive strength for the specified pins, in mA.
++
++      bias-pull-down: true
++      bias-pull-up: true
++      bias-disable: true
++      input-enable: true
++      output-high: true
++      output-low: true
++
++    required:
++      - pins
++
++    additionalProperties: false
++
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    tlmm: pinctrl@fd510000 {
++        compatible = "qcom,msm8994-pinctrl";
++        reg = <0xfd510000 0x4000>;
++        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++        gpio-controller;
++        gpio-ranges = <&tlmm 0 0 146>;
++        #gpio-cells = <2>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        blsp1-uart2-default-state {
++            function = "blsp_uart2";
++            pins = "gpio4", "gpio5";
++            drive-strength = <16>;
++            bias-disable;
++        };
++
++        blsp1-spi1-default-state {
++            default-pins {
++                pins = "gpio0", "gpio1", "gpio3";
++                function = "blsp_spi1";
++                drive-strength = <10>;
++                bias-pull-down;
++            };
++
++            cs-pins {
++                pins = "gpio8";
++                function = "gpio";
++                drive-strength = <2>;
++                bias-disable;
++            };
++        };
++    };
 -- 
 2.34.1
 
