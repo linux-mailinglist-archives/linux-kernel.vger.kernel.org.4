@@ -2,141 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3715FC680
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F325FC66C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiJLNaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
+        id S230028AbiJLN26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJLNaR (ORCPT
+        with ESMTP id S229994AbiJLN2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:30:17 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE133F315
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:30:15 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id x13so7874238qkg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=afx1ZUqeiYFFIsDIPyGi6jdl/Bfo8+YGidTSsospIO8=;
-        b=G9I0WOy7GRTJuGqu7tFU2yADPFJn79gPN93sAfqSaFuxUizi+cvINq5ZOE/10RRud/
-         nLfXRA2z+Qgherce0oM66BDsgEq97pQmAKKJUmwgl/pSkEZsBqpObvDy/fZRbqFMZ2Yf
-         nbusbD13vN0it7E5AJBK4ye0ehbgbHoElKcnU5uWe4zSlhlEHWnrcSwcvKzbFQCTSOXG
-         hGN36i8jPD+FuknRWNjBhjlSbzT/utr6cuthM1wmqJhV7XOTOUxjN2wSVviYcJV69UXz
-         mtAfmlzZwsjcg7JpCrRZdKrZW+WfvGrcWApXhYgb2WBIBoEkPn6uhVeaoOkhJ5EVTA/A
-         SOdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=afx1ZUqeiYFFIsDIPyGi6jdl/Bfo8+YGidTSsospIO8=;
-        b=ek1B0PlRcUPMJTebMWoI17TtjfEPri/bp6eWoERjs+eTLM5ZJRQrckwK75D9EV/rFZ
-         ZYl8y396KGgGfK1cshXPB+wnrF/UJvoJImk9GptMMorg60LgJaeZibgH+82jPYGhBuEf
-         BM4ObQaEDQFGMBbkJD0lXtgEUAnZ3N+LAV4SaHMsGCnz211YZDM3H8umsiL6ICSoUngx
-         H2j2yyTefpNG+JlXbSbVfeMTQQYr1WRTu+qsD64OXbIONLBYmolV7tkaEoLKtNLO3IWe
-         MHcAxRSCjpSLmUKZt+o8EGfXRnzBho8Ki/RrBMp3EFWhWYDu8ZJ+EdddAF0jBxq3fS3D
-         krHQ==
-X-Gm-Message-State: ACrzQf1XC7lTDwx7XwoCEo14RGI8Ot167IAV2c8nyDAa1ibCX4+H4X4K
-        DgLaPDgSlcb4rcEhQ4FrnKcMNQ==
-X-Google-Smtp-Source: AMsMyM4tIyXqJb2NSCtLgGnokhnQqKWd4N0bJ0FSwi5lzOrDt/guBCmXfFMCdKH+nEzyqIH7vgdRaQ==
-X-Received: by 2002:a05:620a:4709:b0:6ce:d97a:fc9a with SMTP id bs9-20020a05620a470900b006ced97afc9amr19891291qkb.340.1665581414179;
-        Wed, 12 Oct 2022 06:30:14 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id e8-20020ac85988000000b0034305a91aaesm5894919qte.83.2022.10.12.06.30.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 06:30:13 -0700 (PDT)
-Message-ID: <f68cdc01-2195-70fa-df11-521cca3505f0@linaro.org>
-Date:   Wed, 12 Oct 2022 09:28:00 -0400
+        Wed, 12 Oct 2022 09:28:53 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F340FCE99B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:28:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1665581328; x=1697117328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zLOMPQX/UZ2BIcOn/66Oe03IRbrUXRGhlWZylqU+JUI=;
+  b=ioJbApTeaFfBm5pm0/wfyuY1SCMuV0luW09mCyFK8ad87AMFVnvk/ZUV
+   uctVD954f9bZZDnRId7q7Pz6ZzlDtNA+G0Lqwc1C+xHOW+bCsy5I4kPVq
+   rOzNdEJKhkq6d3rHXVwTYT1UxKeT+heHnieVmU9juvIfu86PqAwn9hqS5
+   gGJ3gAJp7gSg8+1E811QL80SjsSbT+/vuo2GpZbFTGb4RW95Lsm5niTZa
+   6ieRCdvtIanXz42ZLbSk8jvYoTEjcQKi02vXKPh8TFdqNd0CwXE5CFOag
+   fdGLUdoORL2uDW0VSqFLuAIi6JWuGPUf6VoayIUuPiIev3CPqg0PtJ4i6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="178371523"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Oct 2022 06:28:46 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 12 Oct 2022 06:28:41 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 12 Oct 2022 06:28:38 -0700
+Date:   Wed, 12 Oct 2022 14:28:16 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        Samuel Holland <samuel@sholland.org>,
+        Andrew Jones <ajones@ventanamicro.com>
+Subject: Re: [PATCH v2] riscv: jump_label: mark arguments as const to satisfy
+ asm constraints
+Message-ID: <Y0bA8HUL9eC3Dp8C@wendy>
+References: <20221008145437.491-1-jszhang@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 4/6] dt-bindings: usb: usbmisc-imx: convert to yaml
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20221010101816.298334-1-peng.fan@oss.nxp.com>
- <20221010101816.298334-5-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221010101816.298334-5-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221008145437.491-1-jszhang@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/2022 06:18, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+Hey Jisheng,
+LKP reported an error that seems to only have gone to myself & Samuel,
+but the branch it's complaining about is your v1:
+https://lore.kernel.org/lkml/202210122123.Cc4FPShJ-lkp@intel.com/
+
+Any idea what the story is here?
+
+Thanks,
+Conor.
+
+On Sat, Oct 08, 2022 at 10:54:37PM +0800, Jisheng Zhang wrote:
+> Samuel reported that the static branch usage in cpu_relax() breaks
+> building with CONFIG_CC_OPTIMIZE_FOR_SIZE:
 > 
-> Convert usbmisc-imx to yaml format.
+> In file included from <command-line>:
+> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
+> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0
+> probably does not match constraints
+>   285 | #define asm_volatile_goto(x...) asm goto(x)
+>       |                                 ^~~
+> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
+> 'asm_volatile_goto'
+>    41 |         asm_volatile_goto(
+>       |         ^~~~~~~~~~~~~~~~~
+> ././include/linux/compiler_types.h:285:33: error: impossible constraint
+> in 'asm'
+>   285 | #define asm_volatile_goto(x...) asm goto(x)
+>       |                                 ^~~
+> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
+> 'asm_volatile_goto'
+>    41 |         asm_volatile_goto(
+>       |         ^~~~~~~~~~~~~~~~~
+> make[1]: *** [scripts/Makefile.build:249:
+> arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Maybe "-Os" prevents GCC from detecting that the key/branch arguments
+> can be treated as constants and used as immediate operands. Inspired
+> by x86's commit 864b435514b2("x86/jump_label: Mark arguments as const to
+> satisfy asm constraints"), and as pointed out by Steven: "The "i"
+> constraint needs to be a constant.", let's do similar modifications to
+> riscv.
+> 
+> Tested by CC_OPTIMIZE_FOR_SIZE + gcc and CC_OPTIMIZE_FOR_SIZE + clang.
+> 
+> Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+> Link: https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
+> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
+> Reported-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > ---
->  .../devicetree/bindings/usb/usbmisc-imx.txt   | 18 -------
->  .../devicetree/bindings/usb/usbmisc-imx.yaml  | 52 +++++++++++++++++++
->  2 files changed, 52 insertions(+), 18 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-> deleted file mode 100644
-> index b796836d2ce7..000000000000
-> --- a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -* Freescale i.MX non-core registers
-> -
-> -Required properties:
-> -- #index-cells: Cells used to describe usb controller index. Should be <1>
-> -- compatible: Should be one of below:
-> -	"fsl,imx6q-usbmisc" for imx6q
-> -	"fsl,vf610-usbmisc" for Vybrid vf610
-> -	"fsl,imx6sx-usbmisc" for imx6sx
-> -	"fsl,imx7d-usbmisc" for imx7d
-> -	"fsl,imx7ulp-usbmisc" for imx7ulp
-> -- reg: Should contain registers location and length
-> -
-> -Examples:
-> -usbmisc@2184800 {
-> -	#index-cells = <1>;
-> -	compatible = "fsl,imx6q-usbmisc";
-> -	reg = <0x02184800 0x200>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-
-Filename: fsl,usbmisc.yaml
-
-> new file mode 100644
-> index 000000000000..c0741ce9b523
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/usbmisc-imx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale i.MX non-core registers
-
-non-core registers? Does not look right.
-
-
-Best regards,
-Krzysztof
-
+> since v1:
+>  - add Reported-by, Reviewed-by, Fixes and Link tag
+> 
+>  arch/riscv/include/asm/jump_label.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
+> index 38af2ec7b9bf..6d58bbb5da46 100644
+> --- a/arch/riscv/include/asm/jump_label.h
+> +++ b/arch/riscv/include/asm/jump_label.h
+> @@ -14,8 +14,8 @@
+>  
+>  #define JUMP_LABEL_NOP_SIZE 4
+>  
+> -static __always_inline bool arch_static_branch(struct static_key *key,
+> -					       bool branch)
+> +static __always_inline bool arch_static_branch(struct static_key * const key,
+> +					       const bool branch)
+>  {
+>  	asm_volatile_goto(
+>  		"	.option push				\n\t"
+> @@ -35,8 +35,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
+>  	return true;
+>  }
+>  
+> -static __always_inline bool arch_static_branch_jump(struct static_key *key,
+> -						    bool branch)
+> +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
+> +						    const bool branch)
+>  {
+>  	asm_volatile_goto(
+>  		"	.option push				\n\t"
+> -- 
+> 2.37.2
+> 
