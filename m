@@ -2,134 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958035FC62A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B3F5FC637
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJLNPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        id S229717AbiJLNRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJLNPM (ORCPT
+        with ESMTP id S229613AbiJLNRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:15:12 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718F04DF32;
-        Wed, 12 Oct 2022 06:15:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 58B8B1F37C;
-        Wed, 12 Oct 2022 13:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1665580508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PsXqFi/QyBBQvf+ZBOFYCVIG2VhKmDNKpOSFFp52hGY=;
-        b=mc4JspB0mQWlNaAkWjaMB3UXlyD3C5Sjy5DssODX190Q+1vnocbD5X9NhSaT7NXRpttntn
-        awaC76uph9pf+XJkIcwGXCA8u4phQFKSa5dQEn6bel0jBEYbC9bbdl9Huv7P6jG0dRVJOl
-        7ZSDOKnbH1zkHmrhoohkg5PCGoWV4oQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1665580508;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PsXqFi/QyBBQvf+ZBOFYCVIG2VhKmDNKpOSFFp52hGY=;
-        b=E1Z8ytamuaTSUJh2wCdZRdckLYz/s8KvkQrQnuagz3eIJNtGsWLTmLhp45EEQSOoCJfmUJ
-        rGEiRhJ5ZvA7C6CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D4CAA13ACD;
-        Wed, 12 Oct 2022 13:15:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5WvJMNu9RmM8dAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 12 Oct 2022 13:15:07 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 4bb4f812;
-        Wed, 12 Oct 2022 13:16:03 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        stable@vger.kernel.org
-Subject: [PATCH v2] ext4: fix BUG_ON() when directory entry has invalid rec_len
-Date:   Wed, 12 Oct 2022 14:16:01 +0100
-Message-Id: <20221012131601.383-1-lhenriques@suse.de>
+        Wed, 12 Oct 2022 09:17:03 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D04FCE980;
+        Wed, 12 Oct 2022 06:17:00 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1665580609te3ildxc
+Received: from [192.168.50.235] ( [113.72.147.11])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 12 Oct 2022 21:16:48 +0800 (CST)
+X-QQ-SSF: 01000000002000B09000B00A0000000
+X-QQ-FEAT: DQ0OCu3gog3rE8xw6j7Rk2p48ngJp/0LijQoGV4LH0QojjfF4o4ZASfem9Y0t
+        97G5CD3OTqWO+XOLkxERsTJV8d2IdYsp2kM9pX5fmgZXlBZSzR+0jdM0VofduY8zFBdacI8
+        mey1YLnP7aJJdNgRqLZzbuYjhg3o8+aIBdO6iK22IMlAl0SimfzjNa+U7HTGBIblW8C+nVD
+        4NHP4RI0e9I2r2Wv5goooGgBeOyaTZWY7BHnYQCiVJ7JMk50j8JRvD2bYxmGLut+rhGiUC6
+        0y9KUvA5jiRW60GEBEHKvamQ/8Ls174w97JS7i0ZmFOiKkY7qY2VGmuLZWH5bq8VJVgsB8h
+        ENgdEWeBCZSO7SAENWnnPhCrU2l/S2TD6W6BGHfGpfI104nuctgszgCTYj1/03uqlTVuAiQ
+X-QQ-GoodBg: 0
+Message-ID: <4769BE3503398017+b1699221-ccc9-a0c1-0b11-141ce9644d74@linux.starfivetech.com>
+Date:   Wed, 12 Oct 2022 21:16:37 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 12/30] dt-bindings: reset: Add starfive,jh7110-reset
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929175147.19749-1-hal.feng@linux.starfivetech.com>
+ <20220929184349.GA2551443-robh@kernel.org>
+ <8BEAFAD2C4CE6E4A+0a00376c-1e3e-f597-bcf6-106ff294859a@linux.starfivetech.com>
+ <2f1d1afd-3c97-6ce0-8247-6e1c4a24e548@linaro.org>
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <2f1d1afd-3c97-6ce0-8247-6e1c4a24e548@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rec_len field in the directory entry has to be a multiple of 4.  A
-corrupted filesystem image can be used to hit a BUG() in
-ext4_rec_len_to_disk(), called from make_indexed_dir().
+On Tue, 11 Oct 2022 12:36:08 -0400, Krzysztof Kozlowski wrote:
+> On 11/10/2022 11:30, Hal Feng wrote:
+>> On Thu, 29 Sep 2022 13:43:49 -0500, Rob Herring wrote:
+>>> On Fri, Sep 30, 2022 at 01:51:47AM +0800, Hal Feng wrote:
+>>>> Add bindings for the reset controller on the JH7110 RISC-V
+>>>> SoC by StarFive Technology Ltd.
+>>>>
+>>>> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+>>>> ---
+>>>>  .../bindings/reset/starfive,jh7110-reset.yaml | 54 +++++++++++++++++++
+>>>>  1 file changed, 54 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml b/Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..bb0010c200f9
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+>>>> @@ -0,0 +1,54 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/reset/starfive,jh7110-reset.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: StarFive JH7110 SoC Reset Controller Device Tree Bindings
+>>>> +
+>>>> +maintainers:
+>>>> +  - Emil Renner Berthing <kernel@esmil.dk>
+>>>> +  - Hal Feng <hal.feng@linux.starfivetech.com>
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - starfive,jh7110-reset
+>>>
+>>> 'reg' needed? Is this a sub-block of something else?
+>> 
+>> Yes, the reset node is a child node of the syscon node, see patch 27 for detail.
+>> You might not see the complete patches at that time due to technical issue of
+>> our smtp email server. Again, I feel so sorry about that.
+>> 
+>> 	syscrg: syscrg@13020000 {
+>> 		compatible = "syscon", "simple-mfd";
+>> 		reg = <0x0 0x13020000 0x0 0x10000>;
+>> 
+>> 		syscrg_clk: clock-controller@13020000 {
+>> 			compatible = "starfive,jh7110-clkgen-sys";
+>> 			clocks = <&osc>, <&gmac1_rmii_refin>,
+>> 				 <&gmac1_rgmii_rxin>,
+>> 				 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
+>> 				 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
+>> 				 <&tdm_ext>, <&mclk_ext>;
+>> 			clock-names = "osc", "gmac1_rmii_refin",
+>> 				"gmac1_rgmii_rxin",
+>> 				"i2stx_bclk_ext", "i2stx_lrck_ext",
+>> 				"i2srx_bclk_ext", "i2srx_lrck_ext",
+>> 				"tdm_ext", "mclk_ext";
+>> 			#clock-cells = <1>;
+>> 		};
+>> 
+>> 		syscrg_rst: reset-controller@13020000 {
+>> 			compatible = "starfive,jh7110-reset";
+>> 			#reset-cells = <1>;
+> 
+> So the answer to the "reg needed?" is what? You have unit address but no
+> reg, so this is not correct.
 
- ------------[ cut here ]------------
- kernel BUG at fs/ext4/ext4.h:2413!
- ...
- RIP: 0010:make_indexed_dir+0x53f/0x5f0
- ...
- Call Trace:
-  <TASK>
-  ? add_dirent_to_buf+0x1b2/0x200
-  ext4_add_entry+0x36e/0x480
-  ext4_add_nondir+0x2b/0xc0
-  ext4_create+0x163/0x200
-  path_openat+0x635/0xe90
-  do_filp_open+0xb4/0x160
-  ? __create_object.isra.0+0x1de/0x3b0
-  ? _raw_spin_unlock+0x12/0x30
-  do_sys_openat2+0x91/0x150
-  __x64_sys_open+0x6c/0xa0
-  do_syscall_64+0x3c/0x80
-  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+Not needed in the reset-controller node, but needed in its parent node. I am sorry
+for missing description to point it out in the bindings. I will rewrite all bindings
+for the next version. Unit address here should be deleted.
 
-The fix simply adds a call to ext4_check_dir_entry() to validate the
-directory entry, returning -EFSCORRUPTED if the entry is invalid.
+> 
+>> 			starfive,assert-offset = <0x2F8>;
+>> 			starfive,status-offset= <0x308>;
+>> 			starfive,nr-resets = <JH7110_SYSRST_END>;
+>> 		};
+>> 	};
+>> 
+>> In this case, we get the memory mapped space through the parent node with syscon
+>> APIs. You can see patch 13 for detail.
+>> 
+>> static int reset_starfive_register(struct platform_device *pdev, const u32 *asserted)
+>> {
+> 
+> 
+> (...)
+> 
+>> 
+>>>
+>>>> +
+>>>> +  "#reset-cells":
+>>>> +    const: 1
+>>>> +
+>>>> +  starfive,assert-offset:
+>>>> +    description: Offset of the first ASSERT register
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +
+>>>> +  starfive,status-offset:
+>>>> +    description: Offset of the first STATUS register
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>
+>>> These can't be implied from the compatible string?
 
-CC: stable@vger.kernel.org
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216540
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
-* Changes since v1:
+Definitely can. We do this is for simplifying the reset driver.
+Otherwise, we may need to define more compatibles because there
+are multiple reset blocks in JH7110. Another case can be found at
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/reset/altr,rst-mgr.yaml
 
-As suggested by Ted, I've removed the incorrect 'de->rec_len' check from
-previous version and replaced it with a call to ext4_check_dir_entry()
-instead, which is a much more complete verification.
+>> 
+>> These two properties are the key differences among different reset controllers.
+> 
+> Different as in different compatibles? Please answer the questions..> 
+>> There are five memory regions for clock and reset in StarFive JH7110 SoC. They
+>> are "syscrg", "aoncrg", "stgcrg", "ispcrg" and "voutcrg". Each memory region
+>> has different reset ASSERT/STATUS register offset and different number of reset
+>> signals. 
+> 
+> Then these are not exactly the same devices, so using one compatible for
+> them does not look correct.
 
- fs/ext4/namei.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+One compatible can just be matched by one device? I think this is what
+confuses me.
 
-diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-index 3a31b662f661..ed76e89ffbe9 100644
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -2254,8 +2254,16 @@ static int make_indexed_dir(handle_t *handle, struct ext4_filename *fname,
- 	memset(de, 0, len); /* wipe old data */
- 	de = (struct ext4_dir_entry_2 *) data2;
- 	top = data2 + len;
--	while ((char *)(de2 = ext4_next_entry(de, blocksize)) < top)
-+	while ((char *)(de2 = ext4_next_entry(de, blocksize)) < top) {
-+		if (ext4_check_dir_entry(dir, NULL, de, bh2, data2, len,
-+					 (data2 + (blocksize - csum_size) -
-+					  (char *) de))) {
-+			brelse(bh2);
-+			brelse(bh);
-+			return -EFSCORRUPTED;
-+		}
- 		de = de2;
-+	}
- 	de->rec_len = ext4_rec_len_to_disk(data2 + (blocksize - csum_size) -
- 					   (char *) de, blocksize);
- 
+Best regards,
+Hal
+
+> 
+>> After storing them in dt, the reset driver can register all reset
+>> controllers with the same compatible string. 
+> 
+> Which is not how the compatible should be used...
+> 
+>> All we expect is that all reset
+>> controllers in a single SoC use the same compatible string for matching and the
+>> reset driver can be applied to all StarFive SoCs using different compatible strings.
+> 
+> Keep driver out of the talks.
+> 
+>> Just like
+> 
+> Existing bad pattern is not an argument to keep it going. Fix bad
+> patterns instead.
+> 
+>> 
+>> arch/riscv/boot/dts/starfive/jh7100.dtsi:
+>> 
+>> 	rstgen: reset-controller@11840000 {
+>> 		compatible = "starfive,jh7100-reset";
+>> 		reg = <0x0 0x11840000 0x0 0x10000>;
+>> 		#reset-cells = <1>;
+>> 		starfive,assert-offset = <0x0>;
+>> 		starfive,status-offset= <0x10>;
+>> 		starfive,nr-resets = <JH7100_RSTN_END>;
+>> 	};
+>> 
+>> arch/riscv/boot/dts/starfive/jh7110.dtsi:
+>> 
+>> 	syscrg: syscrg@13020000 {
+>> 		compatible = "syscon", "simple-mfd";
+>> 		reg = <0x0 0x13020000 0x0 0x10000>;
+>> 
+>> 		syscrg_clk: clock-controller@13020000 {
+>> 			compatible = "starfive,jh7110-clkgen-sys";
+>> 			...
+>> 		};
+>> 
+>> 		syscrg_rst: reset-controller@13020000 {
+>> 			compatible = "starfive,jh7110-reset";
+>> 			#reset-cells = <1>;
+>> 			starfive,assert-offset = <0x2F8>;
+>> 			starfive,status-offset= <0x308>;
+>> 			starfive,nr-resets = <JH7110_SYSRST_END>;
+>> 		};
+>> 	};
+>> 
+>> 	aoncrg: aoncrg@17000000 {
+>> 		compatible = "syscon", "simple-mfd";
+>> 		reg = <0x0 0x17000000 0x0 0x10000>;
+>> 
+>> 		aoncrg_clk: clock-controller@17000000 {
+>> 			compatible = "starfive,jh7110-clkgen-aon";
+>> 			...
+>> 		};
+>> 
+>> 		aoncrg_rst: reset-controller@17000000 {
+>> 			compatible = "starfive,jh7110-reset";
+>> 			#reset-cells = <1>;
+>> 			starfive,assert-offset = <0x38>;
+>> 			starfive,status-offset= <0x3C>;
+>> 			starfive,nr-resets = <JH7110_AONRST_END>;
+>> 		};
+>> 	};
+>> 
+>> 	stgcrg: stgcrg@10230000 {	//Not submmited yet
+>> 		compatible = "syscon", "simple-mfd";
+>> 		reg = <0x0 0x10230000 0x0 0x10000>;
+>> 
+>> 		stgcrg_clk: clock-controller@10230000 {
+>> 			compatible = "starfive,jh7110-clkgen-stg";
+>> 			...
+>> 		};
+>> 
+>> 		stgcrg_rst: reset-controller@10230000 {
+>> 			compatible = "starfive,jh7110-reset";
+>> 			#reset-cells = <1>;
+>> 			starfive,assert-offset = <0x74>;
+>> 			starfive,status-offset= <0x78>;
+>> 			starfive,nr-resets = <JH7110_STGRST_END>;
+>> 		};
+>> 	};
+>> 	...
+>> 
+>>>
+>>>> +
+>>>> +  starfive,nr-resets:
+>>>> +    description: Number of reset signals
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>
+>>> Why do you need this? Most bindings don't. If just to validate 'resets' 
+>>> args, then don't.
+>> 
+>> Can be removed. Instead, the reset driver should includes some related
+>> binding headers or defines some macros for pointing out the number of
+>> reset signals of each reset controller.
+>> 
+>> Best regards,
+>> Hal
+>> 
+>>>
+>>>
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - "#reset-cells"
+>>>> +  - starfive,assert-offset
+>>>> +  - starfive,status-offset
+>>>> +  - starfive,nr-resets
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/reset/starfive-jh7110.h>
+>>>> +
+>>>> +    syscrg_rst: reset-controller@13020000 {
+> 
+> Please test your patches.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+
+
