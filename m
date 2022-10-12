@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4915FC9D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFFF5FC9D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiJLRU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 13:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S229678AbiJLRWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 13:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJLRUx (ORCPT
+        with ESMTP id S229619AbiJLRWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:20:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F337F11A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:20:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08483B81B95
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 17:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B914C433D6;
-        Wed, 12 Oct 2022 17:20:45 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ncFsUUsz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665595242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lCC8WU8fqHhCCL6BECSZHH7057yA7Q1m9CV8Moo+c9Q=;
-        b=ncFsUUszG24nnTyYDSyMU8VotVZIDWXaXBjZfLsD9AlJDrGGkwE6HBUccYKTVHlPVXYMOg
-        nmjuKL+yVHwTPKaNwTCdjq+mEBtf8qEh8UDZLsqRKsWcjmGnhqOCxge4nfV0V2bHevYgM/
-        23vCymkwRA426m4pGDhnGLva5m8IQ80=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a567209d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 12 Oct 2022 17:20:42 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 11:20:38 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        ajd@linux.ibm.com, aneesh.kumar@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
-        cuigaosheng1@huawei.com, david@redhat.com, farosas@linux.ibm.com,
-        geoff@infradead.org, gustavoars@kernel.org, haren@linux.ibm.com,
-        hbathini@linux.ibm.com, joel@jms.id.au, lihuafei1@huawei.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
-        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
-        pali@kernel.org, paul@paul-moore.com, rmclure@linux.ibm.com,
-        ruscur@russell.cc, windhl@126.com,
-        wsa+renesas@sang-engineering.com, ye.xingchen@zte.com.cn,
-        yuanjilin@cdjrlc.com, zhengyongjun3@huawei.com
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
-Message-ID: <Y0b3ZsTRHWG6jGK8@zx2c4.com>
-References: <87edvhntv0.fsf@mpe.ellerman.id.au>
- <20221012141827.GA2405914@roeck-us.net>
- <Y0biBtCUtc2mowbQ@zx2c4.com>
- <20221012164452.GA2990467@roeck-us.net>
+        Wed, 12 Oct 2022 13:22:33 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F69126AEF
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:22:30 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id w74so11575894oie.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZRYFk+9yyHZHAcB/2rwgdrsgnigrvHFKirKgHeDmUno=;
+        b=AE8z8KD6uwSVMiRp4ABm0Kn9UkMq8P+bk8+Y1ITmg3vl1hYmjp6k8LU6URk5HzGGQF
+         2/fqw2HhcOa/gTcb1tS3SQgcP9XK2z4BjeVToHve1GXn4ay7pgmzQA+nKS017UcVgGKS
+         Udydt9y4k+dIUSNMddvtmXX3tSMn7byJOqVUk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZRYFk+9yyHZHAcB/2rwgdrsgnigrvHFKirKgHeDmUno=;
+        b=Br+UPU7kLGTueibMfyWw+tvQJwuERi/qm5eb34CnrTa6dUNQ5Sj0vvN5+ZtRy5yANz
+         x/JJu4euquZGklv/ILijT6rW/xw61v8GG4QZH+DQVPhBwZplQiBRv0XgVip7c+hUiyWr
+         SJzKJgMX3UHwMjAtB9xiNFjLQUsLIlE9FZdCWzrKK/exgJo607c11tZra14/lseO+Z+k
+         lSjrk3Jagb/v5X3pqlRTeAwvXNLmago7bM89OaOdOHsial1ARmgOeSi5PLo+19+tg0Hf
+         9tvCcznPyhV1eBO+yIJSnTOmBD06/5KwFW4wS42PzR30Yec2CwfqYdQXkyY8v7aafEG8
+         X8Xw==
+X-Gm-Message-State: ACrzQf3ApM9ABMh0yTykduCAGOcvAM4m89fqEqS2ms7qBk7RGQU7z8Fb
+        14T62mEeNRQQZAwEAiyUYtKiO6X63Xz8bg==
+X-Google-Smtp-Source: AMsMyM6sG+/2s70ytlWDfU2Vi4MFm5Bx9whp/yVm0lQ+TeY+VmqgC0uBjlP4ToCet7DvvnwG8YppPQ==
+X-Received: by 2002:a05:6808:1916:b0:354:d449:7805 with SMTP id bf22-20020a056808191600b00354d4497805mr2567977oib.137.1665595348233;
+        Wed, 12 Oct 2022 10:22:28 -0700 (PDT)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
+        by smtp.gmail.com with ESMTPSA id j11-20020acab90b000000b003504f8f6ac5sm7039550oif.38.2022.10.12.10.22.24
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 10:22:24 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1324e7a1284so20201501fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:22:24 -0700 (PDT)
+X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
+ e9-20020a056870c0c900b00127c4df5b50mr3072194oad.126.1665595344160; Wed, 12
+ Oct 2022 10:22:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221012164452.GA2990467@roeck-us.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20221010132030-mutt-send-email-mst@kernel.org>
+ <87r0zdmujf.fsf@mpe.ellerman.id.au> <20221012070532-mutt-send-email-mst@kernel.org>
+ <87mta1marq.fsf@mpe.ellerman.id.au> <87edvdm7qg.fsf@mpe.ellerman.id.au> <20221012115023-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20221012115023-mutt-send-email-mst@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 12 Oct 2022 10:22:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com>
+Message-ID: <CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com>
+Subject: Re: [GIT PULL] virtio: fixes, features
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alvaro.karsz@solid-run.com,
+        angus.chen@jaguarmicro.com, gavinl@nvidia.com, jasowang@redhat.com,
+        lingshan.zhu@intel.com, wangdeming@inspur.com,
+        xiujianfeng@huawei.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,83 +81,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 09:44:52AM -0700, Guenter Roeck wrote:
-> On Wed, Oct 12, 2022 at 09:49:26AM -0600, Jason A. Donenfeld wrote:
-> > On Wed, Oct 12, 2022 at 07:18:27AM -0700, Guenter Roeck wrote:
-> > > NIP [c000000000031630] .replay_soft_interrupts+0x60/0x300
-> > > LR [c000000000031964] .arch_local_irq_restore+0x94/0x1c0
-> > > Call Trace:
-> > > [c000000007df3870] [c000000000031964] .arch_local_irq_restore+0x94/0x1c0 (unreliable)
-> > > [c000000007df38f0] [c000000000f8a444] .__schedule+0x664/0xa50
-> > > [c000000007df39d0] [c000000000f8a8b0] .schedule+0x80/0x140
-> > > [c000000007df3a50] [c00000000092f0dc] .try_to_generate_entropy+0x118/0x174
-> > > [c000000007df3b40] [c00000000092e2e4] .urandom_read_iter+0x74/0x140
-> > > [c000000007df3bc0] [c0000000003b0044] .vfs_read+0x284/0x2d0
-> > > [c000000007df3cd0] [c0000000003b0d2c] .ksys_read+0xdc/0x130
-> > > [c000000007df3d80] [c00000000002a88c] .system_call_exception+0x19c/0x330
-> > > [c000000007df3e10] [c00000000000c1d4] system_call_common+0xf4/0x258
-> > 
-> > Obviously the first couple lines of this concern me a bit. But I think
-> > actually this might just be a catalyst for another bug. You could view
-> > that function as basically just:
-> > 
-> >     while (something)
-> >     	schedule();
-> > 
-> > And I guess in the process of calling the scheduler a lot, which toggles
-> > interrupts a lot, something got wedged.
-> > 
-> > Curious, though, I did try to reproduce this, to no avail. My .config is
-> > https://xn--4db.cc/rBvHWfDZ . What's yours?
-> > 
-> 
-> Attached. My qemu command line is
+On Wed, Oct 12, 2022 at 8:51 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> Are you sure?
 
-Okay, thanks, I reproduced it. In this case, I suspect
-try_to_generate_entropy() is just the messenger. There's an earlier
-problem:
+MichaelE is right.
 
-BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-caller is .__flush_tlb_pending+0x40/0xf0
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-28380-gde492c83cae0-dirty #4
-Hardware name: PowerMac3,1 PPC970FX 0x3c0301 PowerMac
-Call Trace:
-[c0000000044c3540] [c000000000f93ef0] .dump_stack_lvl+0x7c/0xc4 (unreliable)
-[c0000000044c35d0] [c000000000fc9550] .check_preemption_disabled+0x140/0x150
-[c0000000044c3660] [c000000000073dd0] .__flush_tlb_pending+0x40/0xf0
-[c0000000044c36f0] [c000000000334434] .__apply_to_page_range+0x764/0xa30
-[c0000000044c3840] [c00000000006cad0] .change_memory_attr+0xf0/0x160
-[c0000000044c38d0] [c0000000002a1d70] .bpf_prog_select_runtime+0x150/0x230
-[c0000000044c3970] [c000000000d405d4] .bpf_prepare_filter+0x504/0x6f0
-[c0000000044c3a30] [c000000000d4085c] .bpf_prog_create+0x9c/0x140
-[c0000000044c3ac0] [c000000002051d9c] .ptp_classifier_init+0x44/0x78
-[c0000000044c3b50] [c000000002050f3c] .sock_init+0xe0/0x100
-[c0000000044c3bd0] [c000000000010bd4] .do_one_initcall+0xa4/0x438
-[c0000000044c3cc0] [c000000002005008] .kernel_init_freeable+0x378/0x428
-[c0000000044c3da0] [c0000000000113d8] .kernel_init+0x28/0x1a0
-[c0000000044c3e10] [c00000000000ca3c] .ret_from_kernel_thread+0x58/0x60
+This is just bogus historical garbage:
 
-This in turn is because __flush_tlb_pending() calls:
+> arch/arm/include/asm/irq.h:#ifndef NO_IRQ
+> arch/arm/include/asm/irq.h:#define NO_IRQ       ((unsigned int)(-1))
 
-static inline int mm_is_thread_local(struct mm_struct *mm)
-{
-        return cpumask_equal(mm_cpumask(mm),
-                              cpumask_of(smp_processor_id()));
-}
+that I've tried to get rid of for years, but for some reason it just won't die.
 
-__flush_tlb_pending() has a comment about this:
+NO_IRQ should be zero. Or rather, it shouldn't exist at all. It's a bogus thing.
 
- * Must be called from within some kind of spinlock/non-preempt region...
- */
-void __flush_tlb_pending(struct ppc64_tlb_batch *batch)
+You can see just how bogus it is from grepping for it - the users are
+all completely and utterly confused, and all are entirely historical
+brokenness.
 
-So I guess that didn't happen for some reason? Maybe this is indicative
-of some lock imbalance that then gets hit later?
+The correct way to check for "no irq" doesn't use NO_IRQ at all, it just does
 
-I've also managed to not hit this bug a few times. When it triggers,
-after "kprobes: kprobe jump-optimization is enabled. All kprobes are
-optimized if possible.", there's a long hang - tens seconds before it
-continues. When it doesn't trigger, there's no hang at that point in the
-boot process.
+        if (dev->irq) ...
 
-Jason
+which is why you will only find a few instances of NO_IRQ in the tree
+in the first place.
+
+The NO_IRQ thing is mainly actually defined by a few drivers that just
+never got converted to the proper world order, and even then you can
+see the confusion (ie some drivers use "-1", others use "0", and yet
+others use "((unsigned int)(-1)".
+
+                   Linus
