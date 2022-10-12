@@ -2,187 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992725FC77D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919815FC727
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiJLOhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
+        id S229709AbiJLOVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJLOhU (ORCPT
+        with ESMTP id S229567AbiJLOVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:37:20 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 07:37:18 PDT
-Received: from 4.mo575.mail-out.ovh.net (4.mo575.mail-out.ovh.net [46.105.59.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B16402D7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:37:18 -0700 (PDT)
-Received: from player746.ha.ovh.net (unknown [10.110.208.22])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 87AE724FA6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 14:18:54 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player746.ha.ovh.net (Postfix) with ESMTPSA id 098612240642C;
-        Wed, 12 Oct 2022 14:18:50 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-95G001fb4e0ef8-106b-41a5-ada3-e1102ea64411,
-                    75377E6B882747309559AE06BD3DFEEF97A89409) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Stephen Kitt <steve@sk2.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/extcon: use simple i2c probe
-Date:   Wed, 12 Oct 2022 16:18:46 +0200
-Message-Id: <20221012141846.3916480-1-steve@sk2.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 12 Oct 2022 10:21:48 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA3CCAE58;
+        Wed, 12 Oct 2022 07:21:46 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 29CELeMh028090
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 10:21:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1665584501; bh=J6a6VIyEzUMRpbDIUXDP84uOVaF5el/zhaaj5YEX97w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=WVvV3nLkuRB9whMaM9Wup1SxN/8urRDrrGzGOmobE7mp74ahEuQ+tzt9L06e/LB5b
+         2Vvxz1b2TCNKm3Iaw4ye2LWelkG9cAhsVPyTQjg3f9EnpDLtcqJuV/j3D5YFSYhJ1M
+         Ps+J+lTkBqn9cmY61zkRKwVls0zPL4b7jj4IR+yaJpgQdmtYxzhaIRglj0ZsupcvwU
+         BG40RDJ3utIrx0QPdT6e5gSWy8LTyG8n8krQHM/+TeC6afn2HBrsnekFGIe7J+Z21m
+         8Pyni2WSq4AvkA6oRx00eCrIrSz/rFSyo2ensjKKI2s8QCrh6tvSu8sy4YumLFrYlt
+         ndmnKziJphX8Q==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id F0C8515C3AC9; Wed, 12 Oct 2022 10:21:39 -0400 (EDT)
+Date:   Wed, 12 Oct 2022 10:21:39 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] ext4: fix BUG_ON() when directory entry has invalid
+ rec_len
+Message-ID: <Y0bNc9XZA5wXNJMX@mit.edu>
+References: <20221010142035.2051-1-lhenriques@suse.de>
+ <20221012131330.32456-1-lhenriques@suse.de>
+ <Y0a+Ommsgm4ogo7u@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 14757733032743241435
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppeduvdejrddtrddtrddupdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsthgvvhgvsehskhdvrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y0a+Ommsgm4ogo7u@suse.de>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All these drivers have an i2c probe function which doesn't use the
-"struct i2c_device_id *id" parameter, so they can trivially be
-converted to the "probe_new" style of probe with a single argument.
+On Wed, Oct 12, 2022 at 02:16:42PM +0100, Luís Henriques wrote:
+> Grr, looks like I accidentally reused a 'git send-email' from shell
+> history which had a '--in-reply-to' in it.  Please ignore and sorry about
+> that.  I've just resent a new email.
 
-This is part of an ongoing transition to single-argument i2c probe
-functions. Old-style probe functions involve a call to i2c_match_id:
-in drivers/i2c/i2c-core-base.c,
+No worries!  The --in-reply-to wasn't actually a problem, since b4
+generally will do the right thing (and sometimes humans prefer the
+in-reply-to since they can more easily see the patch that it is
+replacing/obsoleting).
 
-         /*
-          * When there are no more users of probe(),
-          * rename probe_new to probe.
-          */
-         if (driver->probe_new)
-                 status = driver->probe_new(client);
-         else if (driver->probe)
-                 status = driver->probe(client,
-                                        i2c_match_id(driver->id_table, client));
-         else
-                 status = -EINVAL;
+b4 can sometimes get confused when a patch series gets split, and both
+parts of the patch series are in a reply-to mail thread to the
+original patch series, since if it can't use the -vn+1 hueristic or
+the "subject line has stayed the same but has a newer date" hueristic,
+it falls back to "latest patch in the mail thread".  So if there are
+two "valid" patches or patch series in an e-mail thread, b4 -c
+(--check-newer-revisions) can get confused.  But even in that case,
+that it's more a minor annoyance than anything else.
 
-Drivers which don't need the second parameter can be declared using
-probe_new instead, avoiding the call to i2c_match_id. Drivers which do
-can still be converted to probe_new-style, calling i2c_match_id
-themselves (as is done currently for of_match_id).
+So in the future, don't feel that you need to resend a patch if
+there's an incorrect/older --in-reply-to; it's not a big deal.
 
-This change was done using the following Coccinelle script, and fixed
-up for whitespace changes:
+Cheers, and thanks!
 
-@ rule1 @
-identifier fn;
-identifier client, id;
-@@
-
-- static int fn(struct i2c_client *client, const struct i2c_device_id *id)
-+ static int fn(struct i2c_client *client)
-{
-...when != id
-}
-
-@ rule2 depends on rule1 @
-identifier rule1.fn;
-identifier driver;
-@@
-
-struct i2c_driver driver = {
--       .probe
-+       .probe_new
-                =
-(
-                   fn
-|
--                  &fn
-+                  fn
-)
-                ,
-};
-
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/extcon/extcon-fsa9480.c      | 5 ++---
- drivers/extcon/extcon-rt8973a.c      | 5 ++---
- drivers/extcon/extcon-usbc-tusb320.c | 5 ++---
- 3 files changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/extcon/extcon-fsa9480.c b/drivers/extcon/extcon-fsa9480.c
-index 7cff66c29907..e8b2671eb29b 100644
---- a/drivers/extcon/extcon-fsa9480.c
-+++ b/drivers/extcon/extcon-fsa9480.c
-@@ -257,8 +257,7 @@ static irqreturn_t fsa9480_irq_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--static int fsa9480_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static int fsa9480_probe(struct i2c_client *client)
- {
- 	struct fsa9480_usbsw *info;
- 	int ret;
-@@ -370,7 +369,7 @@ static struct i2c_driver fsa9480_i2c_driver = {
- 		.pm		= &fsa9480_pm_ops,
- 		.of_match_table = fsa9480_of_match,
- 	},
--	.probe			= fsa9480_probe,
-+	.probe_new		= fsa9480_probe,
- 	.id_table		= fsa9480_id,
- };
- 
-diff --git a/drivers/extcon/extcon-rt8973a.c b/drivers/extcon/extcon-rt8973a.c
-index e6e448f6ea2f..afc9b405d103 100644
---- a/drivers/extcon/extcon-rt8973a.c
-+++ b/drivers/extcon/extcon-rt8973a.c
-@@ -548,8 +548,7 @@ static void rt8973a_init_dev_type(struct rt8973a_muic_info *info)
- 	}
- }
- 
--static int rt8973a_muic_i2c_probe(struct i2c_client *i2c,
--				 const struct i2c_device_id *id)
-+static int rt8973a_muic_i2c_probe(struct i2c_client *i2c)
- {
- 	struct device_node *np = i2c->dev.of_node;
- 	struct rt8973a_muic_info *info;
-@@ -696,7 +695,7 @@ static struct i2c_driver rt8973a_muic_i2c_driver = {
- 		.pm	= &rt8973a_muic_pm_ops,
- 		.of_match_table = rt8973a_dt_match,
- 	},
--	.probe	= rt8973a_muic_i2c_probe,
-+	.probe_new = rt8973a_muic_i2c_probe,
- 	.remove	= rt8973a_muic_i2c_remove,
- 	.id_table = rt8973a_i2c_id,
- };
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index 6ba3d89b106d..ca752ddf7763 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -230,8 +230,7 @@ static const struct regmap_config tusb320_regmap_config = {
- 	.val_bits = 8,
- };
- 
--static int tusb320_extcon_probe(struct i2c_client *client,
--				const struct i2c_device_id *id)
-+static int tusb320_extcon_probe(struct i2c_client *client)
- {
- 	struct tusb320_priv *priv;
- 	const void *match_data;
-@@ -313,7 +312,7 @@ static const struct of_device_id tusb320_extcon_dt_match[] = {
- MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
- 
- static struct i2c_driver tusb320_extcon_driver = {
--	.probe		= tusb320_extcon_probe,
-+	.probe_new	= tusb320_extcon_probe,
- 	.driver		= {
- 		.name	= "extcon-tusb320",
- 		.of_match_table = tusb320_extcon_dt_match,
-
-base-commit: 833477fce7a14d43ae4c07f8ddc32fa5119471a2
--- 
-2.30.2
-
+						- Ted
