@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78F65FCB8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CD75FCB68
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJLT0h convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Oct 2022 15:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S229794AbiJLTTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 15:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiJLT0b (ORCPT
+        with ESMTP id S229769AbiJLTS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 15:26:31 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A9910251A;
-        Wed, 12 Oct 2022 12:26:30 -0700 (PDT)
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 2096E1C6C41;
-        Wed, 12 Oct 2022 19:17:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id AB9FC17;
-        Wed, 12 Oct 2022 19:16:43 +0000 (UTC)
-Message-ID: <f8ad3ba44d28dec1a5f7626b82c5e9c2aeefa729.camel@perches.com>
-Subject: Re: [PATCH v1 3/5] treewide: use get_random_u32() when possible
-From:   Joe Perches <joe@perches.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org
-Cc:     brcm80211-dev-list.pdl@broadcom.com, cake@lists.bufferbloat.net,
-        ceph-devel@vger.kernel.org, coreteam@netfilter.org,
-        dccp@vger.kernel.org, dev@openvswitch.org,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fbdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-raid@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, rds-devel@oss.oracle.com,
-        SHA-cyfmac-dev-list@infineon.com, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Date:   Wed, 12 Oct 2022 12:16:53 -0700
-In-Reply-To: <20221005214844.2699-4-Jason@zx2c4.com>
-References: <20221005214844.2699-1-Jason@zx2c4.com>
-         <20221005214844.2699-4-Jason@zx2c4.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Wed, 12 Oct 2022 15:18:58 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D632D9944
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:18:57 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 70so16094279pjo.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HfNZT46KpoZ6E+JcaCCJsllBrcf6mEq3qk/ybdRTrq0=;
+        b=X+DPYNJrssrHWrE1RZGFFcJAHcL8f3jkXOrZa2E/MM2M/to/lV2QrCFKS8bI7qt/0E
+         8/koq5Qr1X9hUTAPwaYWMWYd+CohHeCQZwo03o04Zwg3JXYnYwu93IAJaJCZbF767eTe
+         6z3UH6dskbodOaDb67ec4ZtUKpL9WlqzWt0Uo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HfNZT46KpoZ6E+JcaCCJsllBrcf6mEq3qk/ybdRTrq0=;
+        b=iG577RxjpW9wfBjzH4zdm4PGB6BbFOztXnFHOC8q8OCdcztyJ4/85krqb7bc2Dj7Dk
+         0sY3lz0BaCHlJ29G05GszMAdzFTbKdgjmo84NlBqQQwdljFWNRvmOFpxm8DGGaBApCTI
+         t0S7E2KlbgrXUVYc7+0hdDOXZRvsF8YrQ2tm2reXHqyNdHsZBytJY9HHhtGLE6TlMzIn
+         02v17nlUP8c57wvchaPtvLyE1nqwVDzV8WlMjdledCtHy3EhpFN7+BCp5rqojDCyljBs
+         Hw4KTrNcMqsMQKxxE6oyfZZPT1q1GjYk7oYL0g8aUuyOsnaTb1zlylvwTJ1dOutqtK/w
+         ZFqw==
+X-Gm-Message-State: ACrzQf1lL10pVEOO5309huue27pwTJzliJtkxUjsldEdpI5R3zzzWP7e
+        RWnQNcnTXIaoh51aSuTO49Fh1j2rDea1Sw==
+X-Google-Smtp-Source: AMsMyM6/xIjOix8KD97FHd4GE6/wahQp6RRj0q3RGJzOPf50xMJPV0jcuY79BaTZXUVDboidomw0Gg==
+X-Received: by 2002:a17:90b:4c48:b0:20d:5c55:b8a8 with SMTP id np8-20020a17090b4c4800b0020d5c55b8a8mr6894465pjb.207.1665602337108;
+        Wed, 12 Oct 2022 12:18:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z19-20020aa79593000000b0056316f0b7f8sm250273pfj.33.2022.10.12.12.18.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 12:18:56 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] fbdev: MIPS supports iomem addresses
+Date:   Wed, 12 Oct 2022 12:18:54 -0700
+Message-Id: <20221012191838.never.778-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1339; h=from:subject:message-id; bh=RSExtY7BNwRYriF1xMHXemT9zuCYbQ4xQoSpDfr8rVo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjRxMeloP/ixxePXeqRevP8QT9EZXyWJkUAg4g2qmM AE/qZjCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0cTHgAKCRCJcvTf3G3AJmN4D/ 4hcVz71SZPswjgclHLavAl1hUb1O3LJ1wli7G8k2lX2OMCcN80qc088g6rbhMQOA1Ig6UWiLFJz6ZP 3mDl2lt1VDZ1nOdA6412wHxsH8eVGKhtT/KFln4bCbGPDfEIAh5Uh2ih9uDdJ+yUCHJZlMi0EueYsy ous3OfunCbRYnOJRm8VCCJYW8ow04uaO3Eiryj74ccpNGl8OZ0aZvnMSs0qCJpH7PLhmhKIDsnMDwJ Chvht0XOjXBshmliHA8U/1Zta3yXsufhHO1wtSKL7Orkkv9UZDsrnIoCRAKkZYctL8pov/Po7zES2Q rlBCf+Y094+ABm9epnmtuYCQMOOqFvNaGyzLzkqmqqVlS9sA2qQrWlZ95AlRLrPFfmlJ/rU0B6US4o 1d/nwuLYg7vLtnV5sZnuTBH2Ur+tH7b2HK5QHDsPrNlE4uHPB6XwtwcT+xst9sFKEDHFzNWvRdut/9 JEWP+4LDD5z38jIjzDkeq5Ujv7KmYbu5be4pUNsVW+jBQj9eSBxV5gktwCh9sMylU87Qgw6CrgUpZb bdgcoaPV8cTPL8br9Yt+eA+hm39dRSR+wcMRAJWI++zPLUXXZpwoGxlBNOhNqbudpn+QxRwgTChyFK G2AW+Sk5wgsR2sjAZYcVFlkbg1esbL1G8/zRrAd2wjAmeI1/6aRSWjAUPKmw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Stat-Signature: c3d78nppyrywoyngway5d943fw3wwtdu
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: AB9FC17
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/Qw27OeRP8/mQW0Su38d7rwhSo1NO9QCw=
-X-HE-Tag: 1665602203-428634
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-05 at 23:48 +0200, Jason A. Donenfeld wrote:
-> The prandom_u32() function has been a deprecated inline wrapper around
-> get_random_u32() for several releases now, and compiles down to the
-> exact same code. Replace the deprecated wrapper with a direct call to
-> the real function.
-[]
-> diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxgb4/cm.c
-[]
-> @@ -734,7 +734,7 @@ static int send_connect(struct c4iw_ep *ep)
->  				   &ep->com.remote_addr;
->  	int ret;
->  	enum chip_type adapter_type = ep->com.dev->rdev.lldi.adapter_type;
-> -	u32 isn = (prandom_u32() & ~7UL) - 1;
-> +	u32 isn = (get_random_u32() & ~7UL) - 1;
+Add MIPS to fb_* helpers list for iomem addresses. This silences Sparse
+warnings about lacking __iomem address space casts:
 
-trivia:
+drivers/video/fbdev/pvr2fb.c:800:9: sparse: sparse: incorrect type in argument 1 (different address spaces)
+drivers/video/fbdev/pvr2fb.c:800:9: sparse:     expected void const *
+drivers/video/fbdev/pvr2fb.c:800:9: sparse:     got char [noderef] __iomem *screen_base
 
-There are somewhat odd size mismatches here.
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202210100209.tR2Iqbqk-lkp@intel.com/
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-fbdev@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/fb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I had to think a tiny bit if random() returned a value from 0 to 7
-and was promoted to a 64 bit value then truncated to 32 bit.
-
-Perhaps these would be clearer as ~7U and not ~7UL
-
->  	struct net_device *netdev;
->  	u64 params;
->  
-> @@ -2469,7 +2469,7 @@ static int accept_cr(struct c4iw_ep *ep, struct sk_buff *skb,
->  	}
->  
->  	if (!is_t4(adapter_type)) {
-> -		u32 isn = (prandom_u32() & ~7UL) - 1;
-> +		u32 isn = (get_random_u32() & ~7UL) - 1;
-
-etc...
-
-drivers/infiniband/hw/cxgb4/cm.c:	u32 isn = (prandom_u32() & ~7UL) - 1;
-drivers/infiniband/hw/cxgb4/cm.c:		u32 isn = (prandom_u32() & ~7UL) - 1;
-drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_cm.c:	rpl5->iss = cpu_to_be32((prandom_u32() & ~7UL) - 1);
-drivers/scsi/cxgbi/cxgb4i/cxgb4i.c:		u32 isn = (prandom_u32() & ~7UL) - 1;
-drivers/scsi/cxgbi/cxgb4i/cxgb4i.c:		u32 isn = (prandom_u32() & ~7UL) - 1;
-drivers/target/iscsi/cxgbit/cxgbit_cm.c:	rpl5->iss = cpu_to_be32((prandom_u32() & ~7UL) - 1);
+diff --git a/include/linux/fb.h b/include/linux/fb.h
+index 07fcd0e56682..3822734a38c7 100644
+--- a/include/linux/fb.h
++++ b/include/linux/fb.h
+@@ -555,7 +555,7 @@ static inline struct apertures_struct *alloc_apertures(unsigned int max_num) {
+ 
+ #elif defined(__i386__) || defined(__alpha__) || defined(__x86_64__) ||	\
+ 	defined(__hppa__) || defined(__sh__) || defined(__powerpc__) ||	\
+-	defined(__arm__) || defined(__aarch64__)
++	defined(__arm__) || defined(__aarch64__) || defined(__mips__)
+ 
+ #define fb_readb __raw_readb
+ #define fb_readw __raw_readw
+-- 
+2.34.1
 
