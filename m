@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC1A5FC873
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AD85FC877
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJLPc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S229834AbiJLPeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJLPcz (ORCPT
+        with ESMTP id S229540AbiJLPd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:32:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A498263D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:32:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 26B9E1F381;
-        Wed, 12 Oct 2022 15:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1665588773; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o5DBzCeO215OOajCS2K1ajL8njr4qHFYDFUKbY3eWpA=;
-        b=YXPd6OUbss93REbGV/CmJjxbHwmkC0TsYZk1bVnom0Q1iIIZF5no88q4JVeP6DWHw9+2lu
-        unMjDS++ewAcMVLvLVkpLaQ1b3PfOMMxs+ApgL3qqxj6RO/6F+FetdS07de0Gs6ZDaK7wV
-        oH7NPHsuXlzYjGI3xwjE1H7YSenWnUI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1665588773;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o5DBzCeO215OOajCS2K1ajL8njr4qHFYDFUKbY3eWpA=;
-        b=sxpD0K832rcV0dLo5/gu9QOioRlkHQRiDogmh66Lb6Ajohq1bK7IwpC7/c+NKZyPljEKVi
-        nc5QQzVHOA1xvtDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F039A13ACD;
-        Wed, 12 Oct 2022 15:32:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pYieOiTeRmPsRAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 12 Oct 2022 15:32:52 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 783C1A06F3; Wed, 12 Oct 2022 17:32:46 +0200 (CEST)
-Date:   Wed, 12 Oct 2022 17:32:46 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Li zeming <zeming@nfschina.com>
-Cc:     jack@suse.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: udf: Optimize udf_free_in_core_inode and
- udf_find_fileset function
-Message-ID: <20221012153246.pt6ju4i3cdsenbny@quack3>
-References: <20221012104235.3331-1-zeming@nfschina.com>
+        Wed, 12 Oct 2022 11:33:59 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0718263D;
+        Wed, 12 Oct 2022 08:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FcG94y6UwISA+lHDHdY/DVnnCmrPksg3e4hWI/ZibTM=; b=YaTX83ygihnOx5Ts65HIdrwQVB
+        9Lv6VMb2rGWVo9xcK4n/yxLP++T456Hk7YQxtITsYrLJRAE01q3P8uun44DcMaZMULFH3qSVcS8/i
+        WHB0eWPp0wk9gInhBkI584d1uCaCz4jRWaJ614cX+TkjRWMeDYeghZPbfVcDcfCLYu9cXvfumQKRM
+        DhyKrFfDQgwB8is3XwixEalLm5zRC+fywwlGkn5+w7H8oRuViHsdW6tgOJmwzaOSi8GsfupFVgjtv
+        DZS9B3qzGdRe6pZRki339+Iu+qb8oPOoXn/dg5KcNcTHelcUeJ1JnX+yQi7wahAmVc69wIsGaL5cO
+        Tw77G0ZQ==;
+Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oidjz-000HPZ-Ay; Wed, 12 Oct 2022 17:33:51 +0200
+Message-ID: <267ccf8f-1fea-7648-ec2b-e7f4ae822ae4@igalia.com>
+Date:   Wed, 12 Oct 2022 12:33:36 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012104235.3331-1-zeming@nfschina.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 2/8] pstore: Expose kmsg_bytes as a module parameter
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com
+References: <20221006224212.569555-1-gpiccoli@igalia.com>
+ <20221006224212.569555-3-gpiccoli@igalia.com> <202210061628.76EAEB8@keescook>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <202210061628.76EAEB8@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-10-22 18:42:35, Li zeming wrote:
-> These two functions perform the following optimizations.
-> 1. Delete the type cast of foo pointer. Void * does not need to convert
-> the type.
-> 2. Delete the initialization assignment of bh variable, which is
-> assigned first.
+On 06/10/2022 20:32, Kees Cook wrote:
+> [...]
+> Doing a mount will override the result, so I wonder if there should be
+> two variables, etc... not a concern for the normal use case.
 > 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-
-Thanks for the patch. It looks good, I'll queue it into my tree once the
-merge window closes.
-
-								Honza
-
-> ---
->  fs/udf/super.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Also, I've kind of wanted to get rid of a "default" for this and instead
+> use a value based on the compression vs record sizes, etc. But I didn't
+> explore it.
 > 
-> diff --git a/fs/udf/super.c b/fs/udf/super.c
-> index 4042d9739fb7..06eda8177b5f 100644
-> --- a/fs/udf/super.c
-> +++ b/fs/udf/super.c
-> @@ -162,7 +162,7 @@ static void udf_free_in_core_inode(struct inode *inode)
->  
->  static void init_once(void *foo)
->  {
-> -	struct udf_inode_info *ei = (struct udf_inode_info *)foo;
-> +	struct udf_inode_info *ei = foo;
->  
->  	ei->i_data = NULL;
->  	inode_init_once(&ei->vfs_inode);
-> @@ -820,7 +820,7 @@ static int udf_find_fileset(struct super_block *sb,
->  			    struct kernel_lb_addr *fileset,
->  			    struct kernel_lb_addr *root)
->  {
-> -	struct buffer_head *bh = NULL;
-> +	struct buffer_head *bh;
->  	uint16_t ident;
->  	int ret;
->  
-> -- 
-> 2.18.2
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+For some reason I forgot to respond that, sorry!
+
+I didn't understand exactly how the mount would override things; I've
+done some tests:
+
+(1) booted with the new kmsg_bytes module parameter set to 64k, and it
+was preserved across multiple mount/umount cycles.
+
+(2) When I manually had "-o kmsg_bytes=16k" set during the mount
+operation, it worked as expected, setting the thing to 16k (and
+reflecting in the module parameter, as observed in /sys/modules).
+
+Maybe I'm missing something?
+
+Now, regarding the idea of setting that as a function of
+compression/record_sizes, I feel it makes sense and could be worked,
+like a heuristic right?
+
+In the end, if you think properly, what is the purpose of kmsg_bytes?
+Wouldn't make sense to just fill the record_size with the maximum amount
+of data it can handle? Of course there is the partitioning thing, but in
+the end kmsg_bytes seems a mechanism to _restrict_ the data collection,
+so maybe the default would be a value that means "save whatever you can
+handle" (maybe 0), and if the parameter/mount option is set, then pstore
+would restrict the saved size.
+Thoughts?
+
+Thanks,
+
+
+Guilherme
