@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878785FC645
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBB35FC647
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJLNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S229900AbiJLNT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiJLNTm (ORCPT
+        with ESMTP id S229711AbiJLNTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:19:42 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495AF07;
-        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1326637be6eso19386601fac.13;
-        Wed, 12 Oct 2022 06:19:38 -0700 (PDT)
+        Wed, 12 Oct 2022 09:19:48 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1F162C7;
+        Wed, 12 Oct 2022 06:19:40 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-134072c15c1so16181526fac.2;
+        Wed, 12 Oct 2022 06:19:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EAJFO7neLdf3WjMmm37zm/4YHZwmJFmdFV44FOsiFk=;
-        b=7CJx76oCPoGg+j8jq0Qnlc6kw5MZZKrHdBIAO+BMzX0wE4NpJLgPrRXo7boI20CbKR
-         7RJr+TjG+k+a8Uv11UFOT5QjIQ/Vc5FTRExSssSXC2l/Iw00wYxfSGT06bSvYWv18CqZ
-         wd/TBATDjj9aMb3OZtrAffZ+7zARUF5a7eCVTSoUYdaI5hMU65ZFWAfwhQaDva8lLIPV
-         b/fKEGFV/VnbguC25sYqIS6V7mqaLejUZXNxYdUZyfrgcIE7ldV0FOhd1CsqjwKIcimd
-         gnqAa/yvuojmw1SDVgVQegjISqsj670fVLrxywXb9DRYx2/HxJHB2ZSdpgg9x5YqN+Ws
-         0fHA==
-X-Gm-Message-State: ACrzQf09ovdWav289/j1zT8soouKb14mLEoFBwIQ9AWzgtYCu2vk0BOF
-        syMMI8eT9cDptPYByOcltg==
-X-Google-Smtp-Source: AMsMyM7K5jb6v64ktWm+n2zTk2z7te9iFpUFOXpPsi2Kx8O72MAANdsaWdTy1AA7cGj9J993ook2Lg==
-X-Received: by 2002:a05:6870:15d3:b0:122:5c72:f21f with SMTP id k19-20020a05687015d300b001225c72f21fmr2417883oad.178.1665580778204;
-        Wed, 12 Oct 2022 06:19:38 -0700 (PDT)
+        bh=nHbkoBjQM3cnHgeuFNh4CLJQpR2gyMYlo/zWXCKAPu8=;
+        b=mA284yT9su6vAE0X7cBgYnjcC+QdjCy6005CZObAo/M7EI43IFlUbfwYZy4bd5I7Q4
+         uvadVUDsg00pPwVX4P4qvOaO5s3RWPy/RHATJRYlE1i0LkE6LVWbNF0TK8PgeDg5Dn21
+         6iS9+iRNzMcn4tXgSJ4Kl1iGvkeakRMoaXhi7pCU3HAl7/riMFISal4QAI7Xu8bSMstr
+         WM85JouC+rKXYIBsEyxO0tq+vVHBumiv27uS8C+yaAxIbgxnQQafIPFuuX9HLT/jGGA4
+         9Mfqcr09KbfIul6EgQUTEgYuhr0+TF/V6hqP2ucc/5OuzPHu9nVf90iXr65Qf56V0VZ6
+         PSFg==
+X-Gm-Message-State: ACrzQf10/mOFnsj3ZDwOp/uU5o956acNUH2wKP0qa6oNcWyPsbBPsPW3
+        CGe2igVWFd/YyT3GB7wY0w==
+X-Google-Smtp-Source: AMsMyM6pWmlDqANOqRxlJk0ps4RQ7CWJkauLGFTwb5K5BiMbI6+BceXPvi6XGB6cNc2hfI/VVxxo5Q==
+X-Received: by 2002:a05:6870:6586:b0:132:62a5:a663 with SMTP id fp6-20020a056870658600b0013262a5a663mr2247606oab.229.1665580779562;
+        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cg12-20020a056830630c00b006618b23df05sm6026187otb.21.2022.10.12.06.19.37
+        by smtp.gmail.com with ESMTPSA id r16-20020a4a9650000000b00448a3ecdc9dsm972657ooi.22.2022.10.12.06.19.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 06:19:37 -0700 (PDT)
-Received: (nullmailer pid 1941571 invoked by uid 1000);
+        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
+Received: (nullmailer pid 1941574 invoked by uid 1000);
         Wed, 12 Oct 2022 13:19:39 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Bryan Brattlof <bb@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux Device Tree <devicetree@vger.kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Keerthy <j-keerthy@ti.com>,
-        Linux Thermal <linux-pm@vger.kernel.org>,
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, Puranjay Mohan <p-mohan@ti.com>,
+        srk@ti.com, Suman Anna <s-anna@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-In-Reply-To: <20221011231727.8090-7-bb@ti.com>
-References: <20221011231727.8090-1-bb@ti.com> <20221011231727.8090-7-bb@ti.com>
-Message-Id: <166558062789.1936784.4988511846855638539.robh@kernel.org>
-Subject: Re: [PATCH 06/11] dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
+        Bjorn Andersson <bjorn.andersson@linaro.org>, nm@ti.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Tero Kristo <t-kristo@ti.com>, vigneshr@ti.com
+In-Reply-To: <20221012114429.2341215-2-danishanwar@ti.com>
+References: <20221012114429.2341215-1-danishanwar@ti.com> <20221012114429.2341215-2-danishanwar@ti.com>
+Message-Id: <166558063092.1936865.1773120279875751081.robh@kernel.org>
+Subject: Re: [PATCH v6 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
 Date:   Wed, 12 Oct 2022 08:19:39 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 18:17:22 -0500, Bryan Brattlof wrote:
-> Only some of TI's J721E SoCs will need a eFuse register range mapped to
-> determine if they're affected by TI's i2128 erratum. All other SoC will
-> not need this eFuse range to be mapped to function properly
+On Wed, 12 Oct 2022 17:14:25 +0530, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> Update the bindings for the k3_j72xx_bandgap thermal driver so other
-> devices will only need to define two register ranges
+> Add a YAML binding document for PRU consumers. The binding includes
+> all the common properties that can be used by different PRU consumer
+> or application nodes and supported by the PRU remoteproc driver.
+> These are used to configure the PRU hardware for specific user
+> applications.
 > 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> The application nodes themselves should define their own bindings.
+> 
+> Co-developed-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
 > ---
->  .../bindings/thermal/ti,j72xx-thermal.yaml    | 34 +++++++++++++------
->  1 file changed, 24 insertions(+), 10 deletions(-)
+>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 132 ++++++++++++++++++
+>  1 file changed, 132 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -91,8 +96,7 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dtb: thermal-sensor@42040000: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.example.dtb:0:0: /example-0/icssg2-eth: failed to match any schema with compatible: ['ti,am654-icssg-prueth']
 
 doc reference errors (make refcheckdocs):
 
