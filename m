@@ -2,94 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727315FCA42
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4294A5FCA45
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 20:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJLSLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 14:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S229709AbiJLSL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 14:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJLSLL (ORCPT
+        with ESMTP id S229544AbiJLSL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 14:11:11 -0400
-Received: from outbound-smtp06.blacknight.com (outbound-smtp06.blacknight.com [81.17.249.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D45D25BE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 11:11:09 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp06.blacknight.com (Postfix) with ESMTPS id 8174AC2B6E
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 19:11:07 +0100 (IST)
-Received: (qmail 8216 invoked from network); 12 Oct 2022 18:11:07 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Oct 2022 18:11:07 -0000
-Date:   Wed, 12 Oct 2022 19:11:05 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix event handler registration ordering
- issue
-Message-ID: <20221012181105.tskfwovexx44kff3@techsingularity.net>
-References: <5629262.DvuYhMxLoT@kreacher>
+        Wed, 12 Oct 2022 14:11:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87088DED19;
+        Wed, 12 Oct 2022 11:11:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665598316; x=1697134316;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qgFUurzL+QlDsqQsQhjjS0FK/bFClVnNfpHEO/UpWnk=;
+  b=Yv9XDlHP7vSvIPJW3XoSpZTq90Ho/EuddU+lX21OSN6DUkMEDYC746ap
+   qEdPbKNWOfNbpDDV28S8nR8FHVE/YIz67QTJmw2Gn5fju2lOiwhzkZyPL
+   qcK7/gLrphs+nE0MwhmFHwScW9+x7sqTfkxJBGQMubLJGe3UXbXW+IZ/0
+   EWVV0HOVUlRd+okgC1XOmbO+qYAb8fU937SPyWyertoq6bee0fusk8AoW
+   +exKFcyS4pLTT10buHsqBpdM8oUpoTLu2jwYhCdaZKC6983ZyOP/Yo0/6
+   j5EjKandV/zmLbwIuxlorS/2HbkF7xGvwZ9JvRteSztyP+VTS8x+JTqm1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="391175717"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="391175717"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 11:11:56 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="689777127"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="689777127"
+Received: from jbrolli1-mobl.amr.corp.intel.com (HELO [10.212.174.189]) ([10.212.174.189])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 11:11:55 -0700
+Message-ID: <f951a29a-edad-89a7-cf04-c87fdfa9ba5e@linux.intel.com>
+Date:   Wed, 12 Oct 2022 11:11:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <5629262.DvuYhMxLoT@kreacher>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v14 1/3] x86/tdx: Make __tdx_module_call() usable in
+ driver module
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y0aUb3n7ouaeAt2a@zn.tnic>
+ <acc212d6-782b-a398-825a-212849beba00@linux.intel.com>
+ <Y0bOtzlrkKzHmQVZ@zn.tnic>
+ <6759025f-fc08-74f0-efd7-2331110dec0c@linux.intel.com>
+ <Y0bqA8+Xi1kLchxh@kroah.com>
+ <62ef9740-64f0-ee60-71fa-80cc90da435c@linux.intel.com>
+ <Y0b4zrOTU6adb0xi@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y0b4zrOTU6adb0xi@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 08:07:01PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Because acpi_install_fixed_event_handler() enables the event
-> automatically on success, it is incorrect to call it before the
-> handler routine passed to it is ready to handle events.
-> 
-> Unfortunately, the rtc-cmos driver does exactly the incorrect thing
-> by calling cmos_wake_setup(), which passes rtc_handler() to
-> acpi_install_fixed_event_handler(), before cmos_do_probe(), because
-> rtc_handler() uses dev_get_drvdata() to get to the cmos object
-> pointer and the driver data pointer is only populated in
-> cmos_do_probe().
-> 
-> This leads to a NULL pointer dereference in rtc_handler() on boot
-> if the RTC fixed event happens to be active at the init time.
-> 
-> To address this issue, change the initialization ordering of the
-> driver so that cmos_wake_setup() is always called after a successful
-> cmos_do_probe() call.
-> 
-> While at it, change cmos_pnp_probe() to call cmos_do_probe() after
-> the initial if () statement used for computing the IRQ argument to
-> be passed to cmos_do_probe() which is cleaner than calling it in
-> each branch of that if () (local variable "irq" can be of type int,
-> because it is passed to that function as an argument of type int).
-> 
-> Note that commit 6492fed7d8c9 ("rtc: rtc-cmos: Do not check
-> ACPI_FADT_LOW_POWER_S0") caused this issue to affect a larger number
-> of systems, because previously it only affected systems with
-> ACPI_FADT_LOW_POWER_S0 set, but it is present regardless of that
-> commit.
-> 
-> Fixes: 6492fed7d8c9 ("rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0")
-> Fixes: a474aaedac99 ("rtc-cmos: move wake setup from ACPI glue into RTC driver")
-> Link: https://lore.kernel.org/linux-acpi/20221010141630.zfzi7mk7zvnmclzy@techsingularity.net/
-> Reported-by: Mel Gorman <mgorman@techsingularity.net>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Works for me so;
 
-Tested-by: Mel Gorman <mgorman@techsingularity.net>
+On 10/12/22 10:26 AM, Greg Kroah-Hartman wrote:
+> On Wed, Oct 12, 2022 at 10:13:50AM -0700, Sathyanarayanan Kuppuswamy wrote:
+>> Hi,
+>>
+>> On 10/12/22 9:23 AM, Greg Kroah-Hartman wrote:
+>>> On Wed, Oct 12, 2022 at 08:44:04AM -0700, Sathyanarayanan Kuppuswamy wrote:
+>>>>
+>>>>
+>>>> On 10/12/22 7:27 AM, Borislav Petkov wrote:
+>>>>> On Wed, Oct 12, 2022 at 06:35:56AM -0700, Sathyanarayanan Kuppuswamy wrote:
+>>>>>> So we should create a new wrapper for this use case or use
+>>>>>
+>>>>> Yes, you got it - a new wrapper pls.
+>>>>
+>>>> Ok. I will add a new wrapper to get the TDREPORT. 
+>>>>
+>>>> +/*
+>>>>
+>>>> + * Add a wrapper for TDG.MR.REPORT TDCALL. It is used in TDX guest
+>>>>
+>>>> + * driver module to get the TDREPORT.
+>>>>
+>>>> + */
+>>>>
+>>>> +long tdx_mcall_get_report(void *reportdata, void *tdreport, u8 subtype)
+>>>
+>>> Why "long"?
+>>
+>> We used long because __tdx_module_call() call returns u64 value.
+> 
+> Great, then use u64 please.  Or if you are returning negative errors,
+> use s64 to be specific.
+> 
+>> Alternatively, we can also check for return value of __tdx_module_call() here
+>> and return 0/-EIO as return values. In this case we can change return value
+>> to int.
+> 
+> That would make more sense, right?
+
+Yes. I will change it as mentioned above.
+
+> 
+>>>
+>>> Why void *?  Don't you have real types for these?
+>>
+>> We use these buffers as an intermediary to transfer data between userspace and
+>> the TDX module. In the kernel we don't consume these datas. So we did not define
+>> the type of the data.
+> 
+> Then these are userspace pointers?  Why are they not marked as such?
+
+They are not userspace pointers. Since we need to pass physical addresses of reportdata
+and tdreport buffers to the TDX Module, we cannot directly use userspace pointers. So
+we allocate these intermediary buffers in the TDX guest driver and use it to copy the
+data from/to user pointers. 
+
+> 
+> thanks,
+> 
+> greg k-h
 
 -- 
-Mel Gorman
-SUSE Labs
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
