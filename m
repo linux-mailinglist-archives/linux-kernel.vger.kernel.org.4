@@ -2,147 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8D95FCF12
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EDB5FCF15
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJLXzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S229468AbiJLX6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLXzA (ORCPT
+        with ESMTP id S229506AbiJLX6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:55:00 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CDA27145
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:54:58 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id j21so155770qkk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:54:58 -0700 (PDT)
+        Wed, 12 Oct 2022 19:58:00 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E00437FC;
+        Wed, 12 Oct 2022 16:57:58 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id o2so156439qkk.10;
+        Wed, 12 Oct 2022 16:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTHHr/MWxMd0iit2mQfPzchuu/gnFAYaWicjCw3O9Rk=;
-        b=WwKieyq6thYuR2x+u6cnHGLiFETZ8wGw39vL83H0ji9AvWeFzn8/BwVhy6WQPR/gHH
-         r5VGVqR+n3eQWCnaF52CAcfUb+ET/wZrRzyn1vmtYBGuejll8QFVUgzK57orunlKsdyt
-         vIHEmccnxEGj76jdRfOOWP26+ePsTNrfYhiys=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FmGTt81upNKJCIsUibynyofUcfo56u99EQM7Huk1XAY=;
+        b=CgtNenL/z9CyDUzMXKS8FMIVEYPcOxh4jHQx/8pN6R0+6F7+VW5sS7NklPE7bmXIeQ
+         XlqeopIhYfCMzOFNlev/XbSVskzyfM+wIFWhpM5HxUwVDqsV4n8YGPSvO72n0aXlTjZb
+         pQx8vjEUO+T/W4vYbflHq2m43HAjcE/ipFf0Jwc0UxGVnMEnWJo/hPqEyZ4SQwX3dVXw
+         TTq7+BTvX7xIGQBR5X+0pDLXCcUCgwQ9VglUwTAN+xsGuy9x7mgu0MrPicOHcdqczPe0
+         UYenH3Qnbe+aQXpO2QU13S23tsaJVRGA3Je281PDBV4lb4AmOvyZa+SJrINuVIXyiv/q
+         0wIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HTHHr/MWxMd0iit2mQfPzchuu/gnFAYaWicjCw3O9Rk=;
-        b=d2nzzFakpKwLDg/tisqbQlNWi3s9rtgXc5KYYPOYdzDXunSDb4R9DcDzKQRZHMC2Na
-         UtXk7uFdIBQrBdBfdl2TUPOXSqbCM+c7BCJdHqa18CxPHkhRUv2GT05EcG/amnPG2ABa
-         CNHeq0pS+YhHrxhxP4yfNZyFiqZIU/CymfBcTWRHOVG8DUfoiitBx7dmAtBBbsyg/VTq
-         HewvUCgDcB1lXOIa4xe53YWy37DnXa2e5+Pr7wNugrd+t0vTCwGLAEuqxnPZO8fcZvGn
-         qXwNOfsij3hcrkfREeHIX3f90bNDloFNbgx/gz9DuPO9Y7URlKgjWRt1ILQXbmN8ar6P
-         +5Mg==
-X-Gm-Message-State: ACrzQf2A6YlNZGfRP9l/lqSCy6fTxECAfHADXIvMJBJQnv3zu3CZRR9T
-        vmifd+giqU8XwP5S9IRJCauSIg==
-X-Google-Smtp-Source: AMsMyM4ehnZmNiTd8M9kwI1JyvgcnqVezhHqNngddOT+3Cnvi74FuSbkfF80x+ps7n5eJkMO3Fzz3g==
-X-Received: by 2002:a05:620a:2903:b0:6cf:920f:435c with SMTP id m3-20020a05620a290300b006cf920f435cmr21743122qkp.741.1665618897718;
-        Wed, 12 Oct 2022 16:54:57 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id j4-20020a05620a410400b006eea4b5abcesm2290428qko.89.2022.10.12.16.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 16:54:56 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 23:54:56 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [RFC PATCH 01/11] locking/ww_mutex: Remove wakeups from under
- mutex::wait_lock
-Message-ID: <Y0dT0D3d/07mNHAK@google.com>
-References: <20221003214501.2050087-1-connoro@google.com>
- <20221003214501.2050087-2-connoro@google.com>
- <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FmGTt81upNKJCIsUibynyofUcfo56u99EQM7Huk1XAY=;
+        b=kjK8CPP1/GfvVsq9oc3AyRQK3H81haCPJUiXi9pfwG139I/+D5sdrph4CXkQEMe2P7
+         YdRGToAm+1XuKtflPpT+lPRIiWPrFMYl4yOqKYqu/LBv5mxiZ6e77QIufZyFMWLfLF0A
+         I014yvH9SwgJGsMgnFUSG9qcrsYrHf6vGEEHsPzNRSoz72u7upBsxOZivV4USkcIM9i5
+         u7t64PtLa2NDmWMcjomlGeZlGYzhRBX2vOYMQ54iEN4ZoxCyOGC7iIcaFksidyVRcOAO
+         644bXVC0mr5XfeLZPH2/52bhVYvphJO7eIigKT4rOMhA5HXchRzmdT5X5WQFn6EB/1Z3
+         FiEQ==
+X-Gm-Message-State: ACrzQf1yPnlfnUP+5g008dCnuTtn85CLAOvOhA7gbndpFmv10CAoLBZM
+        ay5gQij2U1B5lQqwHDqEJBM=
+X-Google-Smtp-Source: AMsMyM6sAy/Ash+9v4opTMFFF5CqbSfOxYuzqswsETtOQTHE46P24Et4A6MkmJdYKowAg6hvDglWmw==
+X-Received: by 2002:a05:620a:43a8:b0:6ee:9b14:779e with SMTP id a40-20020a05620a43a800b006ee9b14779emr3519974qkp.343.1665619078010;
+        Wed, 12 Oct 2022 16:57:58 -0700 (PDT)
+Received: from [10.69.53.73] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h19-20020a05620a401300b006eeb185c209sm1256588qko.50.2022.10.12.16.57.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 16:57:57 -0700 (PDT)
+Message-ID: <0f038010-ed83-55bb-70a5-24f5c6d68666@gmail.com>
+Date:   Wed, 12 Oct 2022 16:57:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 2/9] mm/vmstat: show start_pfn when zone spans pages
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220928223301.375229-1-opendmb@gmail.com>
+ <20220928223301.375229-3-opendmb@gmail.com>
+ <8e61d0f4-0c40-6c2d-da60-fa97e2ee7530@redhat.com>
+ <b86d90fe-5d57-67ec-49b7-c477924f6438@gmail.com>
+ <84ee3d9e-9579-d3f2-fe5a-ec6ec4a2710a@redhat.com>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <84ee3d9e-9579-d3f2-fe5a-ec6ec4a2710a@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 12:01:13PM -0400, Waiman Long wrote:
-> On 10/3/22 17:44, Connor O'Brien wrote:
-> > diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
-> > index 56f139201f24..dfc174cd96c6 100644
-> > --- a/kernel/locking/ww_mutex.h
-> > +++ b/kernel/locking/ww_mutex.h
-> > @@ -161,6 +161,11 @@ static inline void lockdep_assert_wait_lock_held(struct rt_mutex *lock)
-> >   #endif /* WW_RT */
-> > +void ww_ctx_wake(struct ww_acquire_ctx *ww_ctx)
-> > +{
-> > +	wake_up_q(&ww_ctx->wake_q);
-> > +}
-> > +
-> >   /*
-> >    * Wait-Die:
-> >    *   The newer transactions are killed when:
-> > @@ -284,7 +289,7 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
-> >   #ifndef WW_RT
-> >   		debug_mutex_wake_waiter(lock, waiter);
-> >   #endif
-> > -		wake_up_process(waiter->task);
-> > +		wake_q_add(&ww_ctx->wake_q, waiter->task);
-> >   	}
-> >   	return true;
-> > @@ -331,7 +336,7 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
-> >   		 * wakeup pending to re-read the wounded state.
-> >   		 */
-> >   		if (owner != current)
-> > -			wake_up_process(owner);
-> > +			wake_q_add(&ww_ctx->wake_q, owner);
-> >   		return true;
-> >   	}
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index ee28253c9ac0..617e737392be 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1013,6 +1013,13 @@ void wake_up_q(struct wake_q_head *head)
-> >   		wake_up_process(task);
-> >   		put_task_struct(task);
-> >   	}
-> > +	/*
-> > +	 * XXX connoro: seems this is needed now that ww_ctx_wake() passes in a
-> > +	 * wake_q_head that is embedded in struct ww_acquire_ctx rather than
-> > +	 * declared locally.
-> > +	 */
-> > +	head->first = node;
-> > +	head->lastp = &head->first;
-> >   }
+On 10/5/2022 11:09 AM, David Hildenbrand wrote:
+> On 01.10.22 03:28, Doug Berger wrote:
+>> On 9/29/2022 1:15 AM, David Hildenbrand wrote:
+>>> On 29.09.22 00:32, Doug Berger wrote:
+>>>> A zone that overlaps with another zone may span a range of pages
+>>>> that are not present. In this case, displaying the start_pfn of
+>>>> the zone allows the zone page range to be identified.
+>>>>
+>>>
+>>> I don't understand the intention here.
+>>>
+>>> "/* If unpopulated, no other information is useful */"
+>>>
+>>> Why would the start pfn be of any use here?
+>>>
+>>> What is the user visible impact without that change?
+>> Yes, this is very subtle. I only caught it while testing some
+>> pathological cases.
+>>
+>> If you take the example system:
+>> The 7278 device has four ARMv8 CPU cores in an SMP cluster and two
+>> memory controllers (MEMCs). Each MEMC is capable of controlling up to
+>> 8GB of DRAM. An example 7278 system might have 1GB on each controller,
+>> so an arm64 kernel might see 1GB on MEMC0 at 0x40000000-0x7FFFFFFF and
+>> 1GB on MEMC1 at 0x300000000-0x33FFFFFFF.
+>>
 > 
-> You shouldn't do wake_q_init() here in wake_up_q(). Instead, you should do
-> it in ww_ctx_wake() right after the wake_up_q() call.
-> :
+> Okay, thanks. You should make it clearer in the patch description -- 
+> especially how this relates to DMB. Having that said, I still have to 
+> digest your examples:
+> 
+>> Placing a DMB on MEMC0 with 'movablecore=256M@0x70000000' will lead to
+>> the ZONE_MOVABLE zone spanning from 0x70000000-0x33fffffff and the
+>> ZONE_NORMAL zone spanning from 0x300000000-0x33fffffff.
+> 
+> Why is ZONE_MOVABLE spanning more than 256M? It should span
+> 
+> 0x70000000-0x80000000
+> 
+> Or what am I missing?
+I was working from the notion that the classic 'movablecore' 
+implementation keeps the ZONE_MOVABLE zone the last zone on System RAM 
+so it always spans the last page on the node (i.e. 0x33ffff000). My 
+implementation moves the start of ZONE_MOVABLE up to the lowest page of 
+any defined DMBs on the node.
 
-Exactly, it is also mentioned in the wake_q.h header:
+I see that memory hotplug does not behave this way, which is probably 
+more intuitive (though less consistent with the classic zone layout). I 
+could attempt to change this in a v3 if desired.
 
- * The DEFINE_WAKE_Q macro declares and initializes the list head.
- * wake_up_q() does NOT reinitialize the list; it's expected to be
- * called near the end of a function. Otherwise, the list can be
- * re-initialized for later re-use by wake_q_init().
- *
+> 
+>>
+>> If instead you specified 'movablecore=256M@0x70000000,512M' you would
+>> get the same ZONE_MOVABLE span, but the ZONE_NORMAL would now span
+>> 0x300000000-0x32fffffff. The requested 512M of movablecore would be
+>> divided into a 256MB DMB at 0x70000000 and a 256MB "classic" movable
+>> zone start would be displayed in the bootlog as:
+>> [    0.000000] Movable zone start for each node
+>> [    0.000000]   Node 0: 0x000000330000000
+> 
+> 
+> Okay, so that's the movable zone range excluding DMB.
+> 
+>>
+>> Finally, if you specified the pathological
+>> 'movablecore=256M@0x70000000,1G@12G' you would still have the same
+>> ZONE_MOVABLE span, and the ZONE_NORMAL span would go back to
+>> 0x300000000-0x33fffffff. However, because the second DMB (1G@12G)
+>> completely overlaps the ZONE_NORMAL there would be no pages present in
+>> ZONE_NORMAL and /proc/zoneinfo would report ZONE_NORMAL 'spanned
+>> 262144', but not where those pages are. This commit adds the 'start_pfn'
+>> back to the /proc/zoneinfo for ZONE_NORMAL so the span has context.
+> 
+> ... but why? If there are no pages present, there is no ZONE_NORMAL we 
+> care about. The zone span should be 0. Does this maybe rather indicate 
+> that there is a zone span processing issue in your DMB implementation?
+My implementation uses the zones created by the classic 'movablecore' 
+behavior and relocates the pages within DMBs. In this case the 
+ZONE_NORMAL still has a span which gets output but no present pages so 
+the output didn't show where the zone was without this patch. This is a 
+convenience to avoid adding zone resizing and destruction logic outside 
+of memory hotplug support, but I could attempt to add that code in a v3 
+if desired.
 
-Thanks.
+> 
+> Special-casing zones based on DMBs feels wrong. But most probably I am 
+> missing something important :)
+> 
 
+Thanks for making me aware of your confusion so I can attempt to make it 
+clearer.
+-Doug
