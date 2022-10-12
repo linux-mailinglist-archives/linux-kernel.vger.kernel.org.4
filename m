@@ -2,267 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E8D5FC4A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ACA5FC5A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiJLMBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S229957AbiJLMyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJLMB2 (ORCPT
+        with ESMTP id S229868AbiJLMyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:01:28 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC57A345C;
-        Wed, 12 Oct 2022 05:01:26 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CBdVXa018209;
-        Wed, 12 Oct 2022 12:01:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=xmOcjWcmYFeIOFAL20B4gK1vUDwcZrLKPOvWCBNAHDY=;
- b=meEJkLh+wd1rVvCo+AUFfpgFU/Jy10ICxvpO2cnwM9uTkkbteACbiN/aNeqFQgtdrA91
- ZasNm3NUjhpe7RaSrN53tBckUwDzQFCt8gLYNBy8pFswplq2hWXzpGoUfw9M1bvyWDgL
- lVY3DDXb1sS+bYjwYUnIIxgUPc3bqRrK7gdeUXYKeQmwUMGpsKJ9ydRUSqrZvEOcBq3P
- jVpTj8ILiZAb1lgFcQDDCz28kl5mPFlN6wHK4vdz7wQU0g2ah01WQCMfI5VsHh6QLIpM
- R0MWLIJttC77FnvRCrXjGbyJtf4hQeiayRUonitgbMoJPD2NT/gJs9wLA5fa5c9WDNqu dQ== 
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2046.outbound.protection.outlook.com [104.47.57.46])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5eh31wt9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 12:01:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V/4flFDlO58/60vZATdg/AxTdE5EOOoellDEG7OEA3lEYg+AmIPrwL3jYu0+7HTuYUTRXnvuuelZ/lb7ZeLbsm/gZbXAHS5mdBgWC7xavpZxTUjBz/Dz5qgt7jr14U1TR536nT1NYEx5mvT2TTyDJmobzJ+dtygvxHsW1c2UiIQjokUZRPPqsFNdjkLXuSxkd45Dp3c66iQUq67MtrjIXu9RCmyhugkwfTMbJjOICrHrkeoATnCYe0m6P9j1FYwpAdaUxGbLTT3qlSknFyIet6ttHZHQuvlBSUc9smSFS3SvR2+AEk4c0XTISo6+OlEW230+padCQakpjsrI7m2tXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xmOcjWcmYFeIOFAL20B4gK1vUDwcZrLKPOvWCBNAHDY=;
- b=h4ZPbXOo+0SaHG94QbBodiG7/SXmSisOYlg+rT/vVC0dR8WGPC6ZMc+QY7CONYiVH9uJRLdgASLXFWGpAFDCHu59OPqgNfuzWINj7ZH9GR5c80l39XpytTWso0YeuVwcqo4Q5rdPjUbjMwen65wlPBJcXxVH00e1g6cWq1JFXmkZFNRPSGXjVF6RA7IGmyF72ImeGV5M5peVxAF/w7Ojres0wJiuFLtNDJA/9Kx0DubXMQbcG7t39j2FYyNLtGYeiDkHzhVQIGBOvlyg8ZZrJP70sguNGyoosUhskt9TX+buJpAHDmtXTGTD9z3A8VkpOSHtvyS+lq5xMkgeLkrpPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
- header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
-Received: from BN0PR02MB8173.namprd02.prod.outlook.com (2603:10b6:408:166::9)
- by SJ0PR02MB7117.namprd02.prod.outlook.com (2603:10b6:a03:2a1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Wed, 12 Oct
- 2022 12:01:21 +0000
-Received: from BN0PR02MB8173.namprd02.prod.outlook.com
- ([fe80::e6e5:a4bb:f98a:9be6]) by BN0PR02MB8173.namprd02.prod.outlook.com
- ([fe80::e6e5:a4bb:f98a:9be6%2]) with mapi id 15.20.5709.021; Wed, 12 Oct 2022
- 12:01:20 +0000
-From:   Vinod Polimera <vpolimer@qti.qualcomm.com>
-To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "Vishnuvardhan Prodduturi (QUIC)" <quic_vproddut@quicinc.com>,
-        "Bjorn Andersson (QUIC)" <quic_bjorande@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Subject: RE: [PATCH v7 01/15] drm/msm/disp/dpu: clear dpu_assign_crtc and get
- crtc from connector state instead of dpu_enc
-Thread-Topic: [PATCH v7 01/15] drm/msm/disp/dpu: clear dpu_assign_crtc and get
- crtc from connector state instead of dpu_enc
-Thread-Index: AQHYx4BcwOHxJwdFT0u3tQ+R97Vh2K3dltyAgAAAN4CALT4L8A==
-Date:   Wed, 12 Oct 2022 12:01:20 +0000
-Message-ID: <BN0PR02MB8173A8C4775B8B96798C172FE4229@BN0PR02MB8173.namprd02.prod.outlook.com>
-References: <1663080676-12936-1-git-send-email-quic_vpolimer@quicinc.com>
- <1663080676-12936-2-git-send-email-quic_vpolimer@quicinc.com>
- <fc45b986-99ae-b63d-9ed4-0ca622b16a8f@linaro.org>
- <8fcfaf60-6886-bd6b-67a5-0f42b967a6fa@linaro.org>
-In-Reply-To: <8fcfaf60-6886-bd6b-67a5-0f42b967a6fa@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR02MB8173:EE_|SJ0PR02MB7117:EE_
-x-ms-office365-filtering-correlation-id: 73feb1ec-aa4b-4809-fb5d-08daac497a34
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /+1bxxkrtY8Yx7o5iUeaSwwu6y8uWIpEldbVWk9h0HDMiBVGACGzDkh1NVtYsJeQ2OP5z5l81ZnsExtI21wpIXHs0eGIjUs04fyNwWqfn/eRYIvcgL5miXSd3kFHff621JakoJAtEEIx8a2J2LnAEDQbssoAv/WSi+2dKw8tXqE9j+qVcd5LQ4Ts6vmD5KlYcXG/73wTE6BeK2dj6KxNx0E0PUqEKwbvRwu81CYaocGgAYmpfkmgsLEedlznNnokI8rnMkNHCzayFvXE7BXqxtpbFu+citS2PGTUooxw44N3WQA8Vm9a/l5nwyMcgIaQogPILB4lbwGltd460nC61wgut597jeoyQl/E6UdjqWCDe6zlbOQmsVP7NtuImoyA+j1PAqcYGMwWDIWORMnBltENm2VdOs0Yagli9jFljmtYMQxi8XYbhWGu6BXzkG9SSi+ir8UQO4Fceq9dlN958dWgTeRL3Rdws9AF1C13AiotfUK/LArdsoHGzmyfnxLcdq7FRTyDYSw/YZA4qE9x2m8BYFqJt5TxfagbsIHdoA3pxxADTJKAUXHMAxEo5w4/R/OdCb96ZihOJSJXWkVC9vZWnbYArt0V0congF2K6XV7+sAtWiQfvMuEMiIyWRNrBUw2ZKDYd+LSphS/gFJmUr90kQWTMtPmn/KasR2QTfUyl2ZghcjX8HBYaQJc75CprBPg0ELLjkCv5h6JQlXwSGw5g28CYwF7s32txRoLC2EMZkOw8Nk7GEpojSNdaAk8UdnoBHcqBCVf6z5YWy9yxw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR02MB8173.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(451199015)(55016003)(38070700005)(71200400001)(33656002)(38100700002)(122000001)(54906003)(86362001)(8676002)(110136005)(66476007)(8936002)(2906002)(316002)(64756008)(66446008)(66556008)(41300700001)(4326008)(76116006)(66946007)(83380400001)(7696005)(478600001)(6506007)(5660300002)(52536014)(186003)(107886003)(53546011)(26005)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aTEySStiZmJRQnhQbjEyQVhOMk5VZDB4cGVXK09iRndCWXFmd0FMTVVWNEZV?=
- =?utf-8?B?TFZmRVc1SlNlenVkZlo1azlMQVovWXpla3NCd2tIc0MveTVvakVVL3VIV3pu?=
- =?utf-8?B?WEJuM2NaZmdSRitsR3ZTaGd5QXFjTzV2ZFRJR2NVS0R1b3dvQy8zQVp1ZmVu?=
- =?utf-8?B?WThvUkRoNG5xd3h5TVQyT3R3c3J4OVVmcHh1TFhGTm9YWlhlTzZYR3BweDh1?=
- =?utf-8?B?Q3hIa25yd1hEdy9tU3diZHlIc1lSQVM2c1Mra2pOMkVCd08xOFphWC9hb0FS?=
- =?utf-8?B?T2lLWnl0a2o0VzBGd0o4aWxZeFVWTDNJMTRtQlZGcFhTYXd5MXpKeGdYM0kx?=
- =?utf-8?B?MFlnMzA1bENqM2t6MVdqaWRSUmVPV3NENjlqSDM2aWo0RXdJVXZLSFI2eXNY?=
- =?utf-8?B?MldLN3FOM1ZwWHlDNGZTWHIzQVl4dWxvNlhqSDg5WGIwdlppdkJJNitGWWRw?=
- =?utf-8?B?TFZsWGV1V1FkNGtlYXdSYUU3aThBRjk0UjJCR04zUlh3VktPRlRvSUx5YlZB?=
- =?utf-8?B?YmVqTktnMUJtaTBjNkE4b080dkhRZDZGa3NiMWxFNEZUUUs1bjV5SlBXcG85?=
- =?utf-8?B?NEt3UEFjNzVXTTZwc0VwaEZFMXcwTmIwamEvZitGOFVaYnVxUXhaQ1hFU21n?=
- =?utf-8?B?d1ZZSWFoTlBFeE5vcW9RYlpyakhvMjNRci9SckhCMUxvQ3RBWVI2VzNMWUZs?=
- =?utf-8?B?and6OElQU1AxK3c1dmEyWEUweFBKREFmVFlwcUtsVGdzb2RIaHVwZ2YwM3hs?=
- =?utf-8?B?Vk9rajB5bHdCMXBzdnlMR1RieW1yb1FMbzlPWjRkQ21iN1ZrVVNGZ2FhT2lF?=
- =?utf-8?B?Wnh6YnBvaTgwVlJROFVpWExjdnVwUVg4OGFqVnNiMjI2NWZOZTFHdnQ5aFVV?=
- =?utf-8?B?Y1lBeTdHUmJRVDR6dURjaWZMUVJDZ3VNZkprcHl1TEx4ZEVQTVBuOUM3TWk4?=
- =?utf-8?B?TFErTHJtMDl1QWNpMXU0NU43SzVaNnVyYVVvczNSUVNXS2VuVzkySktHeTk4?=
- =?utf-8?B?V1lML25IMkE1Zlg2V3ZJeTM4V2ZkTjVCRlR4U09xcFdsczJsSlp3NXVTUjcr?=
- =?utf-8?B?OUlFTm01dmhHekpmS2F6N2NsL3FvcEt2LzdKZjBkdjlDUWdrdWgza2FEZGpp?=
- =?utf-8?B?K0xSTmlmUlE2QWZOck9qY3N1U3RhVWpYQjQ0TTN5V3FFNjZrZmFSY2J0V2JP?=
- =?utf-8?B?YWFOV0dSck5TWTRmMWVlTHVCWG44RDZncjc0V05IVmJYRnFYVUZYM0owcWFE?=
- =?utf-8?B?R2NtclZjbG9vMWNOeG0zRi9waE90ZldOWXRtWjJFZVA3cDhpblZmbEVjVWUx?=
- =?utf-8?B?RkUrYW1sdXZDYks3VGxHb0VjZ24rTzl1Tmp6Vmx1cVNESFkxbkthL0tvejJq?=
- =?utf-8?B?dzJCaWtVc2ZVbnZ4Q1pnVFl6SjQvZUU4UUdDempPaVErNlJqdkh6dnpLUGkr?=
- =?utf-8?B?S1ZXd0IvVXR4dm5YcUpaWFh0eGlvOW5wUjBHTTVrT3pKN0kzbVF5Uk1aYVdP?=
- =?utf-8?B?TE1wUUdYcHg1MnpDck9jdndmT0NCajRVRkZUK0RWTmhkb1V3UWh0L3A3ci92?=
- =?utf-8?B?Qjg0SW00MnRVN3lzeDEyL0xjMFp6NVlUYU1JRDBEMG55dENmRFd1RThVSXkx?=
- =?utf-8?B?MFhPQ0RHMlZEeXJEaXZZOFB0SFh5di82aFdTc0xnZ0pjbzJ6bDB5NzJKVVdW?=
- =?utf-8?B?RVNiWU1pVVU3UVprWEZUSVFIclc1NjFITUhoUnRlWGRob0J5S3NHdG83SW9o?=
- =?utf-8?B?eng3c084U3JVSk5sOXhJVHpKb1NjdVlhTCtOMzRQdWRsS0xEK01pQ3NsazRF?=
- =?utf-8?B?elI3blFIY3FlS080YmV6MzF1WURWVHdOeFRlKzVoUGlLcXlEWHhkYWthcC9F?=
- =?utf-8?B?SDROZEM3QTEyOFM0T0UzWUJucGZWNnVFcWxKVm55dHIyRk0vekw1aUIxT29u?=
- =?utf-8?B?ZGJvS0J5YTZhVjFqTGZodFNPVitIUTBOeXJXUTZiOUtBRnhQeFBsblFXMW5D?=
- =?utf-8?B?QzZQTlhEWVFJWEdJYTVtaVhuQVg1RmtYQXhKMWtZNnZmRTNvaGtqbzVnOWJw?=
- =?utf-8?B?SWgxcE9ta05lS0p1NDVzdHozRHR3eXBZTStwbHZFeHRhaTlWTDRaTVA2Qytv?=
- =?utf-8?B?dENMWkdTbnkzS3A5MmJQQ0hHd2xiSlhCNEVOcVpmdUwyZGZmUFRVMzY3QUxP?=
- =?utf-8?B?NVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 12 Oct 2022 08:54:47 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5464C90C6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:54:33 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221012125428epoutp035247b60c9f5edff885a25270c3b754ba~dU4U-HLfN1309113091epoutp03D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:54:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221012125428epoutp035247b60c9f5edff885a25270c3b754ba~dU4U-HLfN1309113091epoutp03D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1665579268;
+        bh=TIZ+90NjmK8GlLtfIWETUWYIx+4NieEBiUUq9DU2zoA=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=LrjUUgdYihtiOPMfc5MoQXcN+ox2+gsszkMQ0VMVKZkP6Xt5BCH6cKBIm8tB2JRPq
+         NAV6cNekkoRg/jG5hkyEK8uHNsT2ko5XAyn0QKXF/QnRCeebfduPBnQLyxgiSGS3Cf
+         B9lCgnJvhdZEZsfbXKFudjpBYgagTKEFDbcvWq5A=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221012125428epcas5p20b0a7ee1be0543cbf35d7938fbd2950d~dU4UNZUxN0493404934epcas5p2K;
+        Wed, 12 Oct 2022 12:54:28 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4MnXfT2qWMz4x9Pq; Wed, 12 Oct
+        2022 12:54:25 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E0.2B.56352.109B6436; Wed, 12 Oct 2022 21:54:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221012083058epcas5p4e706c2396a492ac60234ea1286467992~dRSQmku3b1855818558epcas5p46;
+        Wed, 12 Oct 2022 08:30:58 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221012083058epsmtrp26b191784c535a1204b36927fc2c80bfa~dRSQlb9vB0346803468epsmtrp2n;
+        Wed, 12 Oct 2022 08:30:58 +0000 (GMT)
+X-AuditID: b6c32a4b-383ff7000001dc20-a1-6346b901b632
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        20.54.18644.24B76436; Wed, 12 Oct 2022 17:30:58 +0900 (KST)
+Received: from FDSFTE070 (unknown [107.116.189.86]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221012083056epsmtip1c51f7bf9bc28460843b662f8dd839e0d~dRSO7ZVKV2740327403epsmtip1K;
+        Wed, 12 Oct 2022 08:30:56 +0000 (GMT)
+From:   "Padmanabhan Rajanbabu" <p.rajanbabu@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alim.akhtar@samsung.com>, <chanho61.park@samsung.com>,
+        <linus.walleij@linaro.org>, <pankaj.dubey@samsung.com>
+Cc:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <fa7c6054-7076-299d-ed0f-9e4fc0ffc194@linaro.org>
+Subject: RE: [PATCH V2] arm64: dts: fix drive strength macros as per FSD HW
+ UM
+Date:   Wed, 12 Oct 2022 14:00:55 +0530
+Message-ID: <00d401d8de14$f40db1c0$dc291540$@samsung.com>
 MIME-Version: 1.0
-X-OriginatorOrg: qti.qualcomm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR02MB8173.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73feb1ec-aa4b-4809-fb5d-08daac497a34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2022 12:01:20.9073
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m7AvEiWGCN2W0jIzfu959seQctvDFR24VZQN9zcpXGTn7PiHCbUm2XtnTqtXhWWbzQ1OJNhpEpjxt0GGyD4/sWS1FjWqxB4kdQYCyIQD7VE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7117
-X-Proofpoint-GUID: bc2y557dH-6JiFEC20KANuHNUJJiYQR3
-X-Proofpoint-ORIG-GUID: bc2y557dH-6JiFEC20KANuHNUJJiYQR3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_05,2022-10-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 impostorscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120078
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJk+NbFvx0TMYgY6fQwuHFOTIN1bQKGmwhfAVNgZ0Ws02cq4A==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmpi7jTrdkg80NAhYP5m1js7i8X9ti
+        /pFzrBZ9Lx4yW+x9vZXdYsqf5UwWl3fNYbOYcX4fk8WirV/YLVr3HmF34PLYtKqTzePOtT1s
+        Hn1bVjF6fN4kF8ASlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk
+        4hOg65aZA3SPkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafApECvODG3uDQvXS8v
+        tcTK0MDAyBSoMCE749HJrawFKxUr3u8/xdbA2C/dxcjJISFgItF1ezNbFyMXh5DAbkaJH+sv
+        skA4nxgl9iz6yAzhfGaUWHztCztMS9/DnVAtuxglXjXtYIVwXjBKnGncywhSxSZgLrFo71JG
+        kISIwFtGiRWzZ4MlmAXSJU7Ong02ilPATuL7uWlgtrBAgMTvOeuZuhg5OFgEVCXe9aqChHkF
+        LCUm7d7NCGELSpyc+YQFYoy2xLKFr5khLlKQ+Pl0GSuILSLgJLGotZcJokZc4ujPHrAXJAQW
+        ckgcnLCQCaLBReJG/wWoZmGJV8e3QL0mJfH53V42CDtfYtrHZii7QqLt4waoXnuJA1fmsIDc
+        ySygKbF+lz5EWFZi6ql1UHv5JHp/P4Eq55XYMQ/GVpVYv3wTI4QtLbHv+l7GCYxKs5C8NgvJ
+        a7OQvDALYdsCRpZVjJKpBcW56anFpgXGeanl8BhPzs/dxAhOr1reOxgfPfigd4iRiYPxEKME
+        B7OSCK9LiFuyEG9KYmVValF+fFFpTmrxIUZTYHBPZJYSTc4HJvi8knhDE0sDEzMzMxNLYzND
+        JXHexTO0koUE0hNLUrNTUwtSi2D6mDg4pRqYdoUk/w7hMpD6NLs4/VFecfsX90NHV7ziyjP6
+        +naLf2T//t2OUhd8Nvg4bNGY4iu86b/cJrfdwkGfvnif0VrHNO24moVw8/TdC4yYd+jHTJRt
+        fZhcsOWtCNOv6VbHyy5bLUmX/vz3fGbakl8GKdMUGjatvhFyqExo6pT379+pfA38rzTFJOPD
+        zxOld1LfFQnIpqrofGviMAv5y9Uk/jLLIj5qRcJ8yxk70pRFTs+UauZ875N0do7vnqZZYi3F
+        dZ8WVZqqTFcVSnRQXr6EMf+deIXyOfVqtTnSF9mfOOxXTjn9ztGkPm1qhOdJtVPvpbaFhOX1
+        Tzquv0ht9cev+zm9+pdWsgXOWmFtb833oypMiaU4I9FQi7moOBEAJreOuTgEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJTtep2i3ZYOcpVYsH87axWVzer20x
+        /8g5Vou+Fw+ZLfa+3spuMeXPciaLy7vmsFnMOL+PyWLR1i/sFq17j7A7cHlsWtXJ5nHn2h42
+        j74tqxg9Pm+SC2CJ4rJJSc3JLEst0rdL4MrofD6FueCKQsWl6wdYGhg3SHUxcnJICJhI9D3c
+        ydbFyMUhJLCDUeJn71M2iIS0xPT+PVC2sMTKf8/ZIYqeMUocOfcbLMEmYC6xaO9SRpCEiMBn
+        Rol1M5aAJZgFMiW6jx5lgeg4wCixfMd5VpAEp4CdxPdz09hBbGEBP4ndTU1ARRwcLAKqEu96
+        VUHCvAKWEpN272aEsAUlTs58wgIxU1vi6c2ncPayha+ZIa5TkPj5dBnYeBEBJ4lFrb1MEDXi
+        Ekd/9jBPYBSehWTULCSjZiEZNQtJywJGllWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmb
+        GMExpqW1g3HPqg96hxiZOBgPMUpwMCuJ8LqEuCUL8aYkVlalFuXHF5XmpBYfYpTmYFES573Q
+        dTJeSCA9sSQ1OzW1ILUIJsvEwSnVwFT04lKK7jr7Bcatf23XV5ksl9r6QMi/NOdN4OlpJ09z
+        bznk1BEdOnXKfUvOrxUqqvv3Gj7fOb+XJ/LuQlmNkouTxIs0ar42/8iS5lDY9zWi6sjE8wlP
+        10w8P+elm9Dq6n6mB/nT/d6f0k3a1ppQxqHGxVfsUXnazm/aJGnfAqawl/r/sh/rrJxUcCHg
+        48G72fMymnsljqVNyq1gu7Je9M8S9vPiEe4aCzUnhW/5M505faGJqj9fblel/eujO24ai9av
+        8/xcYxlxWOiai5khi/d3vhsxEYaxgTMeO2fuPjfpZuO3vdmFiv07VwTnLdkjppO35L268fUL
+        D3ryAs9NuqAZ1fn4x6nzsy5eltfZxqHEUpyRaKjFXFScCACgwHbBIAMAAA==
+X-CMS-MailID: 20221012083058epcas5p4e706c2396a492ac60234ea1286467992
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8
+References: <CGME20221011083029epcas5p3cef6047d23d0682a9cb70ba6178067a8@epcas5p3.samsung.com>
+        <20221011080359.76220-1-p.rajanbabu@samsung.com>
+        <fa7c6054-7076-299d-ed0f-9e4fc0ffc194@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRG1pdHJ5IEJhcnlzaGtv
-diA8ZG1pdHJ5LmJhcnlzaGtvdkBsaW5hcm8ub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBTZXB0ZW1i
-ZXIgMTMsIDIwMjIgMTA6MzYgUE0NCj4gVG86IFZpbm9kIFBvbGltZXJhIChRVUlDKSA8cXVpY192
-cG9saW1lckBxdWljaW5jLmNvbT47IGRyaS0NCj4gZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3Jn
-OyBsaW51eC1hcm0tbXNtQHZnZXIua2VybmVsLm9yZzsNCj4gZnJlZWRyZW5vQGxpc3RzLmZyZWVk
-ZXNrdG9wLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmc7IHJvYmRjbGFya0BnbWFpbC5jb207DQo+IGRpYW5kZXJzQGNocm9t
-aXVtLm9yZzsgc3dib3lkQGNocm9taXVtLm9yZzsgS2FseWFuIFRob3RhIChRVUlDKQ0KPiA8cXVp
-Y19rYWx5YW50QHF1aWNpbmMuY29tPjsgS3VvZ2VlIEhzaWVoIChRVUlDKQ0KPiA8cXVpY19raHNp
-ZWhAcXVpY2luYy5jb20+OyBWaXNobnV2YXJkaGFuIFByb2RkdXR1cmkgKFFVSUMpDQo+IDxxdWlj
-X3Zwcm9kZHV0QHF1aWNpbmMuY29tPjsgQmpvcm4gQW5kZXJzc29uIChRVUlDKQ0KPiA8cXVpY19i
-am9yYW5kZUBxdWljaW5jLmNvbT47IEFyYXZpbmQgVmVua2F0ZXN3YXJhbiAoUVVJQykNCj4gPHF1
-aWNfYXJhdmluZGhAcXVpY2luYy5jb20+OyBBYmhpbmF2IEt1bWFyIChRVUlDKQ0KPiA8cXVpY19h
-YmhpbmF2a0BxdWljaW5jLmNvbT47IFNhbmtlZXJ0aCBCaWxsYWthbnRpIChRVUlDKQ0KPiA8cXVp
-Y19zYmlsbGFrYUBxdWljaW5jLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NyAwMS8xNV0g
-ZHJtL21zbS9kaXNwL2RwdTogY2xlYXIgZHB1X2Fzc2lnbl9jcnRjIGFuZA0KPiBnZXQgY3J0YyBm
-cm9tIGNvbm5lY3RvciBzdGF0ZSBpbnN0ZWFkIG9mIGRwdV9lbmMNCj4gDQo+IFdBUk5JTkc6IFRo
-aXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgUXVhbGNvbW0uIFBsZWFzZSBiZSB3
-YXJ5DQo+IG9mIGFueSBsaW5rcyBvciBhdHRhY2htZW50cywgYW5kIGRvIG5vdCBlbmFibGUgbWFj
-cm9zLg0KPiANCj4gT24gMTMvMDkvMjAyMiAyMDowNCwgRG1pdHJ5IEJhcnlzaGtvdiB3cm90ZToN
-Cj4gPiBPbiAxMy8wOS8yMDIyIDE3OjUxLCBWaW5vZCBQb2xpbWVyYSB3cm90ZToNCj4gPj4gVXBk
-YXRlIGNydGMgcmV0cmlldmFsIGZyb20gZHB1X2VuYyB0byBkcHVfZW5jIGNvbm5lY3RvciBzdGF0
-ZSwNCj4gPj4gc2luY2UgbmV3IGxpbmtzIGdldCBzZXQgYXMgcGFydCBvZiB0aGUgZHB1IGVuYyB2
-aXJ0IG1vZGUgc2V0Lg0KPiA+PiBUaGUgZHB1X2VuYy0+Y3J0YyBjYWNoZSBpcyBubyBtb3JlIG5l
-ZWRlZCwgaGVuY2UgY2xlYW5pbmcgaXQgYXMNCj4gPj4gcGFydCBvZiB0aGlzIGNoYW5nZS4NCj4g
-Pj4NCj4gPj4gU2lnbmVkLW9mZi1ieTogVmlub2QgUG9saW1lcmEgPHF1aWNfdnBvbGltZXJAcXVp
-Y2luYy5jb20+DQo+ID4+IC0tLQ0KPiA+PiAgIGRyaXZlcnMvZ3B1L2RybS9tc20vZGlzcC9kcHUx
-L2RwdV9jcnRjLmMgICAgfMKgIDQgLS0tLQ0KPiA+PiAgIGRyaXZlcnMvZ3B1L2RybS9tc20vZGlz
-cC9kcHUxL2RwdV9lbmNvZGVyLmMgfCAzNQ0KPiA+PiArKysrKysrKysrKystLS0tLS0tLS0tLS0t
-LS0tLQ0KPiA+PiAgIGRyaXZlcnMvZ3B1L2RybS9tc20vZGlzcC9kcHUxL2RwdV9lbmNvZGVyLmgg
-fMKgIDggLS0tLS0tLQ0KPiA+PiAgIDMgZmlsZXMgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKSwg
-MzMgZGVsZXRpb25zKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0v
-bXNtL2Rpc3AvZHB1MS9kcHVfY3J0Yy5jDQo+ID4+IGIvZHJpdmVycy9ncHUvZHJtL21zbS9kaXNw
-L2RwdTEvZHB1X2NydGMuYw0KPiA+PiBpbmRleCAxM2NlMzIxLi44ZWM5YTEzIDEwMDY0NA0KPiA+
-PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vbXNtL2Rpc3AvZHB1MS9kcHVfY3J0Yy5jDQo+ID4+ICsr
-KyBiL2RyaXZlcnMvZ3B1L2RybS9tc20vZGlzcC9kcHUxL2RwdV9jcnRjLmMNCj4gPj4gQEAgLTEw
-MjksNyArMTAyOSw2IEBAIHN0YXRpYyB2b2lkIGRwdV9jcnRjX2Rpc2FibGUoc3RydWN0IGRybV9j
-cnRjDQo+ICpjcnRjLA0KPiA+PiAgICAgICAgICAgICovDQo+ID4+ICAgICAgICAgICBpZiAoZHB1
-X2VuY29kZXJfZ2V0X2ludGZfbW9kZShlbmNvZGVyKSA9PSBJTlRGX01PREVfVklERU8pDQo+ID4+
-ICAgICAgICAgICAgICAgcmVsZWFzZV9iYW5kd2lkdGggPSB0cnVlOw0KPiA+PiAtICAgICAgICBk
-cHVfZW5jb2Rlcl9hc3NpZ25fY3J0YyhlbmNvZGVyLCBOVUxMKTsNCj4gPj4gICAgICAgfQ0KPiA+
-PiAgICAgICAvKiB3YWl0IGZvciBmcmFtZV9ldmVudF9kb25lIGNvbXBsZXRpb24gKi8NCj4gPj4g
-QEAgLTEwOTksOSArMTA5OCw2IEBAIHN0YXRpYyB2b2lkIGRwdV9jcnRjX2VuYWJsZShzdHJ1Y3Qg
-ZHJtX2NydGMNCj4gKmNydGMsDQo+ID4+ICAgICAgIHRyYWNlX2RwdV9jcnRjX2VuYWJsZShEUk1J
-RChjcnRjKSwgdHJ1ZSwgZHB1X2NydGMpOw0KPiA+PiAgICAgICBkcHVfY3J0Yy0+ZW5hYmxlZCA9
-IHRydWU7DQo+ID4+IC0gICAgZHJtX2Zvcl9lYWNoX2VuY29kZXJfbWFzayhlbmNvZGVyLCBjcnRj
-LT5kZXYsDQo+ID4+IGNydGMtPnN0YXRlLT5lbmNvZGVyX21hc2spDQo+ID4+IC0gICAgICAgIGRw
-dV9lbmNvZGVyX2Fzc2lnbl9jcnRjKGVuY29kZXIsIGNydGMpOw0KPiA+PiAtDQo+ID4+ICAgICAg
-IC8qIEVuYWJsZS9yZXN0b3JlIHZibGFuayBpcnEgaGFuZGxpbmcgKi8NCj4gPj4gICAgICAgZHJt
-X2NydGNfdmJsYW5rX29uKGNydGMpOw0KPiA+PiAgIH0NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvZ3B1L2RybS9tc20vZGlzcC9kcHUxL2RwdV9lbmNvZGVyLmMNCj4gPj4gYi9kcml2ZXJzL2dw
-dS9kcm0vbXNtL2Rpc3AvZHB1MS9kcHVfZW5jb2Rlci5jDQo+ID4+IGluZGV4IDljNjgxN2IuLjBj
-N2Q4YjUgMTAwNjQ0DQo+ID4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9tc20vZGlzcC9kcHUxL2Rw
-dV9lbmNvZGVyLmMNCj4gPj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL21zbS9kaXNwL2RwdTEvZHB1
-X2VuY29kZXIuYw0KPiA+PiBAQCAtMTMyLDExICsxMzIsNiBAQCBlbnVtIGRwdV9lbmNfcmNfc3Rh
-dGVzIHsNCj4gPj4gICAgKiBAaW50ZnNfc3dhcHBlZDogICAgV2hldGhlciBvciBub3QgdGhlIHBo
-eXNfZW5jIGludGVyZmFjZXMgaGF2ZQ0KPiA+PiBiZWVuIHN3YXBwZWQNCj4gPj4gICAgKiAgICAg
-ICAgICAgIGZvciBwYXJ0aWFsIHVwZGF0ZSByaWdodC1vbmx5IGNhc2VzLCBzdWNoIGFzIHBpbmdw
-b25nDQo+ID4+ICAgICogICAgICAgICAgICBzcGxpdCB3aGVyZSB2aXJ0dWFsIHBpbmdwb25nIGRv
-ZXMgbm90IGdlbmVyYXRlIElSUXMNCj4gPj4gLSAqIEBjcnRjOiAgICAgICAgUG9pbnRlciB0byB0
-aGUgY3VycmVudGx5IGFzc2lnbmVkIGNydGMuIE5vcm1hbGx5IHlvdQ0KPiA+PiAtICogICAgICAg
-ICAgICB3b3VsZCB1c2UgY3J0Yy0+c3RhdGUtPmVuY29kZXJfbWFzayB0byBkZXRlcm1pbmUgdGhl
-DQo+ID4+IC0gKiAgICAgICAgICAgIGxpbmsgYmV0d2VlbiBlbmNvZGVyL2NydGMuIEhvd2V2ZXIg
-aW4gdGhpcyBjYXNlIHdlIG5lZWQNCj4gPj4gLSAqICAgICAgICAgICAgdG8gdHJhY2sgY3J0YyBp
-biB0aGUgZGlzYWJsZSgpIGhvb2sgd2hpY2ggaXMgY2FsbGVkDQo+ID4+IC0gKiAgICAgICAgICAg
-IF9hZnRlcl8gZW5jb2Rlcl9tYXNrIGlzIGNsZWFyZWQuDQo+ID4+ICAgICogQGNvbm5lY3Rvcjog
-ICAgICAgIElmIGEgbW9kZSBpcyBzZXQsIGNhY2hlZCBwb2ludGVyIHRvIHRoZSBhY3RpdmUNCj4g
-Pj4gY29ubmVjdG9yDQo+ID4+ICAgICogQGNydGNfa2lja29mZl9jYjogICAgICAgIENhbGxiYWNr
-IGludG8gQ1JUQyB0aGF0IHdpbGwgZmx1c2ggJiBzdGFydA0KPiA+PiAgICAqICAgICAgICAgICAg
-ICAgIGFsbCBDVEwgcGF0aHMNCj4gPj4gQEAgLTE4MSw3ICsxNzYsNiBAQCBzdHJ1Y3QgZHB1X2Vu
-Y29kZXJfdmlydCB7DQo+ID4+ICAgICAgIGJvb2wgaW50ZnNfc3dhcHBlZDsNCj4gPj4gLSAgICBz
-dHJ1Y3QgZHJtX2NydGMgKmNydGM7DQo+ID4+ICAgICAgIHN0cnVjdCBkcm1fY29ubmVjdG9yICpj
-b25uZWN0b3I7DQo+ID4+ICAgICAgIHN0cnVjdCBkZW50cnkgKmRlYnVnZnNfcm9vdDsNCj4gPj4g
-QEAgLTEyODgsNiArMTI4Miw3IEBAIHN0YXRpYyB2b2lkIGRwdV9lbmNvZGVyX3ZibGFua19jYWxs
-YmFjayhzdHJ1Y3QNCj4gPj4gZHJtX2VuY29kZXIgKmRybV9lbmMsDQo+ID4+ICAgICAgICAgICBz
-dHJ1Y3QgZHB1X2VuY29kZXJfcGh5cyAqcGh5X2VuYykNCj4gPj4gICB7DQo+ID4+ICAgICAgIHN0
-cnVjdCBkcHVfZW5jb2Rlcl92aXJ0ICpkcHVfZW5jID0gTlVMTDsNCj4gPj4gKyAgICBzdHJ1Y3Qg
-ZHJtX2NydGMgKmNydGM7DQo+ID4+ICAgICAgIHVuc2lnbmVkIGxvbmcgbG9ja19mbGFnczsNCj4g
-Pj4gICAgICAgaWYgKCFkcm1fZW5jIHx8ICFwaHlfZW5jKQ0KPiA+PiBAQCAtMTI5OCw5ICsxMjkz
-LDE0IEBAIHN0YXRpYyB2b2lkDQo+IGRwdV9lbmNvZGVyX3ZibGFua19jYWxsYmFjayhzdHJ1Y3QN
-Cj4gPj4gZHJtX2VuY29kZXIgKmRybV9lbmMsDQo+ID4+ICAgICAgIGF0b21pY19pbmMoJnBoeV9l
-bmMtPnZzeW5jX2NudCk7DQo+ID4+ICsgICAgaWYgKCFkcHVfZW5jLT5jb25uZWN0b3IgfHwgIWRw
-dV9lbmMtPmNvbm5lY3Rvci0+c3RhdGUpDQo+ID4+ICsgICAgICAgIHJldHVybjsNCj4gPj4gKw0K
-PiA+PiArICAgIGNydGMgPSBkcHVfZW5jLT5jb25uZWN0b3ItPnN0YXRlLT5jcnRjOw0KPiA+PiAr
-DQo+ID4+ICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKCZkcHVfZW5jLT5lbmNfc3BpbmxvY2ssIGxv
-Y2tfZmxhZ3MpOw0KPiA+PiAtICAgIGlmIChkcHVfZW5jLT5jcnRjKQ0KPiA+PiAtICAgICAgICBk
-cHVfY3J0Y192YmxhbmtfY2FsbGJhY2soZHB1X2VuYy0+Y3J0Yyk7DQo+ID4+ICsgICAgaWYgKGNy
-dGMpDQo+ID4+ICsgICAgICAgIGRwdV9jcnRjX3ZibGFua19jYWxsYmFjayhjcnRjKTsNCj4gPj4g
-ICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZHB1X2VuYy0+ZW5jX3NwaW5sb2NrLCBsb2Nr
-X2ZsYWdzKTsNCj4gPg0KPiA+IFN0ZXBoZW4ncyBjb21tZW50IGFib3V0IHJlYWRpbmcgdGhlIHN0
-YXRlIGZyb20gb3V0c2lkZSBvZiB0aGUgbG9jayBhbmQNCj4gPiB0aGVuIHVzaW5nIGxvY2FsIHZh
-cmlhYmxlIHVuZGVyIHNwaW5sb2NrIGlzIHN0aWxsIHZhbGlkLiBNb3Jlb3ZlciBJJ20NCj4gPiBu
-b3Qgc3VyZSB0aGF0IGVuY19zcGlubG9jayBwcm90ZWN0cyBjb25uZWN0b3IncyBzdGF0ZS4gSSdk
-IHNheSBvbmUgaGFzDQo+ID4gdG8gdGFrZSB0aGUgbW9kZXNldHRpbmcgbG9jayBoZXJlLg0KPiAN
-Cj4gcy9TdGVwaGVuJ3MvRG91ZydzLw0KQXMgdGhpcyBpcyBpbiBpbnRlcnJ1cHQgY29udGV4dCAs
-IHdlIGNhbm5vdCB1c2UgbW9kZXNldCBsb2NrIGhlcmUgYW5kIGNvbm5lY3RvciBkb2VzIG5vdCBo
-YXZlIHRoZSBzcGlubG9jayB0byBwcm90ZWN0IHN0YXRlLg0Kc2luY2Ugc3RhdGUgc3dhcCBoYXBw
-ZW5zIGFmdGVyIGNvbW1pdCB0byBodyBkb25lLCB3aGljaCBpcyBhZnRlciB2YmxhbmsgcHJvY2Vz
-c2luZywgaSB3YXMgdGhpbmtpbmcgaXQgc2hvdWxkIGJlIG9rYXkgdG8gZHJvcCB0aGUgc3Bpbmxv
-Y2sgIHdoaWxlIGFjY2Vzc2luZyBjb25uZWN0b3Igc3RhdGUuDQpJIGhhdmUgdXBkYXRlZCB0aGUg
-cGF0Y2ggd2l0aCB0aGUgY2hhbmdlcyBpbiB2OCwgcGxlYXNlIGRvIHJldmlldy4NCj4gDQo+IC0t
-DQo+IFdpdGggYmVzdCB3aXNoZXMNCj4gRG1pdHJ5DQpUaGFua3MNClZpbm9kIFAuDQoNCg0KDQo=
+
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 12 October 2022 02:28 AM
+> To: Padmanabhan Rajanbabu <p.rajanbabu=40samsung.com>;
+> robh+dt=40kernel.org; krzysztof.kozlowski+dt=40linaro.org;
+> alim.akhtar=40samsung.com; chanho61.park=40samsung.com;
+> linus.walleij=40linaro.org; pankaj.dubey=40samsung.com
+> Cc: devicetree=40vger.kernel.org; linux-kernel=40vger.kernel.org; linux-
+> samsung-soc=40vger.kernel.org
+> Subject: Re: =5BPATCH V2=5D arm64: dts: fix drive strength macros as per =
+FSD HW
+> UM
+>=20
+> On 11/10/2022 04:03, Padmanabhan Rajanbabu wrote:
+> > Drive strength macros defined for FSD platform is not reflecting
+> > actual name and values as per HW UM. FSD SoC pinctrl has following
+> > four levels of
+>=20
+> s/name/names/
+Okay.
+>=20
+> > drive-strength and their corresponding values:
+> > Level-1 <-> 0
+> > Level-2 <-> 1
+> > Level-4 <-> 2
+> > Level-6 <-> 3
+> >
+> > The commit 684dac402f21 (=22arm64: dts: fsd: Add initial pinctrl
+> > support=22) used drive strength macros defined for Exynos4 SoC family.
+> > For some IPs the macros values of Exynos4 matched and worked well, but
+> > Exynos4 SoC family drive-strength (names and values) is not exactly
+> > matching with FSD SoC.
+> >
+> > Fix the drive strength macros to reflect actual names and values given
+> > in FSD HW UM. This also ensures that the existing peripherals in
+> > device tree file is using correct drive strength MACROs to function as
+> > expected.
+> >
+> > Fixes: 684dac402f21 (=22arm64: dts: fsd: Add initial pinctrl support=22=
+)
+> > Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu=40samsung.com>
+> > ---
+>=20
+> Rest of commit msg looks ok.
+>=20
+> >  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi =7C 34 +++++++++++---------=
+--
+> >  arch/arm64/boot/dts/tesla/fsd-pinctrl.h    =7C  6 ++--
+> >  2 files changed, 20 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > index d0abb9aa0e9e..e3852c946352 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > =40=40 -55,14 +55,14 =40=40
+> >  		samsung,pins =3D =22gpf5-0=22;
+> >  		samsung,pin-function =3D <FSD_PIN_FUNC_2>;
+> >  		samsung,pin-pud =3D <FSD_PIN_PULL_NONE>;
+> > -		samsung,pin-drv =3D <FSD_PIN_DRV_LV2>;
+> > +		samsung,pin-drv =3D <FSD_PIN_DRV_LV4>;
+> >  	=7D;
+> >
+> >  	ufs_refclk_out: ufs-refclk-out-pins =7B
+> >  		samsung,pins =3D =22gpf5-1=22;
+> >  		samsung,pin-function =3D <FSD_PIN_FUNC_2>;
+> >  		samsung,pin-pud =3D <FSD_PIN_PULL_NONE>;
+> > -		samsung,pin-drv =3D <FSD_PIN_DRV_LV2>;
+> > +		samsung,pin-drv =3D <FSD_PIN_DRV_LV4>;
+> >  	=7D;
+> >  =7D;
+> >
+> > =40=40 -239,105 +239,105 =40=40
+> >  		samsung,pins =3D =22gpb6-1=22;
+> >  		samsung,pin-function =3D <FSD_PIN_FUNC_2>;
+> >  		samsung,pin-pud =3D <FSD_PIN_PULL_UP>;
+> > -		samsung,pin-drv =3D <FSD_PIN_DRV_LV2>;
+> > +		samsung,pin-drv =3D <FSD_PIN_DRV_LV4>;
+> >  	=7D;
+> >
+> >  	pwm1_out: pwm1-out-pins =7B
+> >  		samsung,pins =3D =22gpb6-5=22;
+> >  		samsung,pin-function =3D <FSD_PIN_FUNC_2>;
+> >  		samsung,pin-pud =3D <FSD_PIN_PULL_UP>;
+> > -		samsung,pin-drv =3D <FSD_PIN_DRV_LV2>;
+> > +		samsung,pin-drv =3D <FSD_PIN_DRV_LV4>;
+> >  	=7D;
+> >
+> >  	hs_i2c0_bus: hs-i2c0-bus-pins =7B
+> >  		samsung,pins =3D =22gpb0-0=22, =22gpb0-1=22;
+> >  		samsung,pin-function =3D <FSD_PIN_FUNC_2>;
+> >  		samsung,pin-pud =3D <FSD_PIN_PULL_UP>;
+> > -		samsung,pin-drv =3D <FSD_PIN_DRV_LV1>;
+> > +		samsung,pin-drv =3D <FSD_PIN_DRV_LV4>;
+>=20
+> You are now changing both the value for register and the meaning (name).
+> Your commit msg indicated that the names are not correct, not the values.
+> Based on the commit msg, I expect the DTBs are the same. Are they? If not=
+,
+> it these are two different commits with their own explanations/reasoning.
+In some cases, yes, both name and values requires modification. I understoo=
+d=20
+that I have to split this into two patches, correcting the MACRO names and =
+values
+in one patch and fixing the drive strength for some of the IPs in other pat=
+ch.
+>=20
+> Best regards,
+> Krzysztof
+
+
