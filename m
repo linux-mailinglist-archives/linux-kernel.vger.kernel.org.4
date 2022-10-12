@@ -2,143 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251215FC85D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337FB5FC85F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiJLPZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        id S229931AbiJLP0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiJLPZW (ORCPT
+        with ESMTP id S229701AbiJLP0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:25:22 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C540D5247B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:25:20 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id z11-20020a056402274b00b0045ca9510fc8so2004167edd.23
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Yu3GPHeMlULojI1/JTHmBLmYCXwxkibU0UYNSNib01c=;
-        b=inBQ2+46OdZGEZP0EIgEMcLDhwizvr4YHaViVBNtyru9zGHKlVe/+cv6nNMrIIQMEJ
-         G8SBsNVB5KVekNAAkoVnGh8uWqXP+C5qInIzagUUH8IJEb0Y0+thwCWwOCFxe31p5MFk
-         VKO0vYPlrFI4qBJ6J7QiQl0Z7ve8sFFGMMbIIrASHKvmwM13K/hn/GM7zipYvCb8AZcM
-         g1WJoA3/B8s4cIwV1ptkxEDlDX8uNZ+5IL/jMjhWPbjhMtNrHoodNRdxmfq/+YngOxAM
-         gGYsiOUVilQPBB5jmQgDKlYzuRjvWWX1VIEf5k+wxlmMo4VE9+DW5/XomOJP/LuCGOuj
-         R/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yu3GPHeMlULojI1/JTHmBLmYCXwxkibU0UYNSNib01c=;
-        b=XGz2yy5EQ8rapxMr3j2nB/QLANK1BHofpZCzVwjM9UrSCbrV7kfUAdqCjgKabXeOJg
-         BPH3M6UUDEdkeRLt7NiJ5HGhpNhHe+lHVVe1jT+Z71TZrobPj5WKNz3S9mi81rR1PGiK
-         kdYyX0BNkbVLsnKkUGwVIjbw4LEcCqxyhZpSo6avImadX8Rs3WWP0+7gyKAdvfZGy4ZM
-         c0RB7eJmjdUHwRcHGdVDr2VyrDt90/1cy7A/26gF6WMnCJRI7+c2YGWo04KwG3FWslW7
-         ni1NQN0BUcIortOWlnsY9piSwbb4L+6cW9Q8aL2SPza8pIr70evBQBlg/FBo+WWWm8ol
-         rxfA==
-X-Gm-Message-State: ACrzQf1xJHcIfd24KN1lorohlzkmZxhkA0ngES6Lcc8n5+t6aCDxarPk
-        mfRQrTHyEdAiAH8xn66ApRVmpbdVL6c=
-X-Google-Smtp-Source: AMsMyM4gX8K2jJoiz4dWY4552ehVtk3lBTyvItbXkXJvUlI1B3yrv+e6K6QubS86fCNeG7TL5oxMW1D43UE=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:2b49:534b:bcb4:a3ee])
- (user=glider job=sendgmr) by 2002:a17:906:794b:b0:787:a9ee:3bf0 with SMTP id
- l11-20020a170906794b00b00787a9ee3bf0mr22636550ejo.354.1665588319189; Wed, 12
- Oct 2022 08:25:19 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 17:25:14 +0200
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221012152514.2060384-1-glider@google.com>
-Subject: [PATCH] tipc: fix an information leak in tipc_topsrv_kern_subscr
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     jmaloy@redhat.com, ying.xue@windriver.com, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 11:26:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A544D17F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:26:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B422221C52;
+        Wed, 12 Oct 2022 15:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1665588370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W22no4UHHSLq7kZ7HGvm7b6REa1W65pcxdWLEl8piKk=;
+        b=PTiQWe3U4bHLPCJI2dxB/KyCoAe4PJy9aRecJ5HW+crqwsRdiISGhSvGeYEpUpCPYGR0GC
+        trHaSmrnxgLFY1/rwlqQj7vdVy0ePfHm+axtbmf+zOy15w1PyqD76Cd/k0y+cgbt/vzXUG
+        N9wANPYoIFbi+FLljTE6Hx9DxN4ETx4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 384FE13ACD;
+        Wed, 12 Oct 2022 15:26:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oA0CDJLcRmMMQQAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 12 Oct 2022 15:26:10 +0000
+Message-ID: <9fcdf79b-8956-b976-704a-3018542cc557@suse.com>
+Date:   Wed, 12 Oct 2022 17:26:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] x86: Check return values from early_memremap calls
+Content-Language: en-US
+To:     Ross Philipson <ross.philipson@oracle.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        hpa@zytor.com, luto@amacapital.net, dave.hansen@linux.intel.com,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        jailhouse-dev@googlegroups.com, xen-devel@lists.xenproject.org,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+References: <1650035401-22855-1-git-send-email-ross.philipson@oracle.com>
+ <1650035401-22855-2-git-send-email-ross.philipson@oracle.com>
+ <Y0GTUg1ACpKZYMHY@nazgul.tnic>
+ <201850b3-5126-cd79-637f-79f198dd409d@oracle.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <201850b3-5126-cd79-637f-79f198dd409d@oracle.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0IevKUioMcP602uAHkVuaiL3"
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a 8-byte write to initialize sub.usr_handle in
-tipc_topsrv_kern_subscr(), otherwise four bytes remain uninitialized
-when issuing setsockopt(..., SOL_TIPC, ...).
-This resulted in an infoleak reported by KMSAN when the packet was
-received:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0IevKUioMcP602uAHkVuaiL3
+Content-Type: multipart/mixed; boundary="------------oasnLHEdbuwWbRHotwxlosfR";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Ross Philipson <ross.philipson@oracle.com>, Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+ hpa@zytor.com, luto@amacapital.net, dave.hansen@linux.intel.com,
+ kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
+ Jan Kiszka <jan.kiszka@siemens.com>, jailhouse-dev@googlegroups.com,
+ xen-devel@lists.xenproject.org, Andrew Cooper <andrew.cooper3@citrix.com>
+Message-ID: <9fcdf79b-8956-b976-704a-3018542cc557@suse.com>
+Subject: Re: [PATCH 1/2] x86: Check return values from early_memremap calls
+References: <1650035401-22855-1-git-send-email-ross.philipson@oracle.com>
+ <1650035401-22855-2-git-send-email-ross.philipson@oracle.com>
+ <Y0GTUg1ACpKZYMHY@nazgul.tnic>
+ <201850b3-5126-cd79-637f-79f198dd409d@oracle.com>
+In-Reply-To: <201850b3-5126-cd79-637f-79f198dd409d@oracle.com>
 
-  =====================================================
-  BUG: KMSAN: kernel-infoleak in copyout+0xbc/0x100 lib/iov_iter.c:169
-   instrument_copy_to_user ./include/linux/instrumented.h:121
-   copyout+0xbc/0x100 lib/iov_iter.c:169
-   _copy_to_iter+0x5c0/0x20a0 lib/iov_iter.c:527
-   copy_to_iter ./include/linux/uio.h:176
-   simple_copy_to_iter+0x64/0xa0 net/core/datagram.c:513
-   __skb_datagram_iter+0x123/0xdc0 net/core/datagram.c:419
-   skb_copy_datagram_iter+0x58/0x200 net/core/datagram.c:527
-   skb_copy_datagram_msg ./include/linux/skbuff.h:3903
-   packet_recvmsg+0x521/0x1e70 net/packet/af_packet.c:3469
-   ____sys_recvmsg+0x2c4/0x810 net/socket.c:?
-   ___sys_recvmsg+0x217/0x840 net/socket.c:2743
-   __sys_recvmsg net/socket.c:2773
-   __do_sys_recvmsg net/socket.c:2783
-   __se_sys_recvmsg net/socket.c:2780
-   __x64_sys_recvmsg+0x364/0x540 net/socket.c:2780
-   do_syscall_x64 arch/x86/entry/common.c:50
-   do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd arch/x86/entry/entry_64.S:120
+--------------oasnLHEdbuwWbRHotwxlosfR
+Content-Type: multipart/mixed; boundary="------------3wZ5tZFbtS6PNsirNBDZ207T"
 
-  ...
+--------------3wZ5tZFbtS6PNsirNBDZ207T
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-  Uninit was stored to memory at:
-   tipc_sub_subscribe+0x42d/0xb50 net/tipc/subscr.c:156
-   tipc_conn_rcv_sub+0x246/0x620 net/tipc/topsrv.c:375
-   tipc_topsrv_kern_subscr+0x2e8/0x400 net/tipc/topsrv.c:579
-   tipc_group_create+0x4e7/0x7d0 net/tipc/group.c:190
-   tipc_sk_join+0x2a8/0x770 net/tipc/socket.c:3084
-   tipc_setsockopt+0xae5/0xe40 net/tipc/socket.c:3201
-   __sys_setsockopt+0x87f/0xdc0 net/socket.c:2252
-   __do_sys_setsockopt net/socket.c:2263
-   __se_sys_setsockopt net/socket.c:2260
-   __x64_sys_setsockopt+0xe0/0x160 net/socket.c:2260
-   do_syscall_x64 arch/x86/entry/common.c:50
-   do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd arch/x86/entry/entry_64.S:120
+T24gMTIuMTAuMjIgMTc6MTMsIFJvc3MgUGhpbGlwc29uIHdyb3RlOg0KPiBPbiAxMC84LzIy
+IDExOjEyLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+PiBBZGRpbmcgWGVuIGFuZCBKYWls
+aG91c2UgcGVvcGxlIGFuZCBNTHMgdG8gQ2MuDQo+Pg0KPj4gRm9sa3MsIHRocmVhZCBzdGFy
+dHMgaGVyZToNCj4+DQo+PiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzE2NTAwMzU0MDEt
+MjI4NTUtMS1naXQtc2VuZC1lbWFpbC1yb3NzLnBoaWxpcHNvbkBvcmFjbGUuY29tDQo+Pg0K
+Pj4gT24gRnJpLCBBcHIgMTUsIDIwMjIgYXQgMTE6MTA6MDBBTSAtMDQwMCwgUm9zcyBQaGls
+aXBzb24gd3JvdGU6DQo+Pj4gVGhlcmUgYXJlIGEgbnVtYmVyIG9mIHBsYWNlcyB3aGVyZSBl
+YXJseV9tZW1yZW1hcCBpcyBjYWxsZWQNCj4+PiBidXQgdGhlIHJldHVybiBwb2ludGVyIGlz
+IG5vdCBjaGVja2VkIGZvciBOVUxMLiBUaGUgY2FsbA0KPj4+IGNhbiByZXN1bHQgaW4gYSBO
+VUxMIGJlaW5nIHJldHVybmVkIHNvIHRoZSBjaGVja3MgbXVzdA0KPj4+IGJlIGFkZGVkLg0K
+Pj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogUm9zcyBQaGlsaXBzb24gPHJvc3MucGhpbGlwc29u
+QG9yYWNsZS5jb20+DQo+Pj4gLS0tDQo+Pj4gwqAgYXJjaC94ODYva2VybmVsL2RldmljZXRy
+ZWUuYyB8IDEwICsrKysrKysrKysNCj4+PiDCoCBhcmNoL3g4Ni9rZXJuZWwvZTgyMC5jwqDC
+oMKgwqDCoMKgIHzCoCA1ICsrKysrDQo+Pj4gwqAgYXJjaC94ODYva2VybmVsL2phaWxob3Vz
+ZS5jwqAgfMKgIDYgKysrKysrDQo+Pj4gwqAgYXJjaC94ODYva2VybmVsL21wcGFyc2UuY8Kg
+wqDCoCB8IDIzICsrKysrKysrKysrKysrKysrKysrKysrDQo+Pj4gwqAgYXJjaC94ODYva2Vy
+bmVsL3NldHVwLmPCoMKgwqDCoMKgIHzCoCA1ICsrKysrDQo+Pj4gwqAgYXJjaC94ODYveGVu
+L2VubGlnaHRlbl9odm0uYyB8wqAgMiArKw0KPj4+IMKgIGFyY2gveDg2L3hlbi9tbXVfcHYu
+Y8KgwqDCoMKgwqDCoMKgIHzCoCA4ICsrKysrKysrDQo+Pj4gwqAgYXJjaC94ODYveGVuL3Nl
+dHVwLmPCoMKgwqDCoMKgwqDCoMKgIHzCoCAyICsrDQo+Pj4gwqAgOCBmaWxlcyBjaGFuZ2Vk
+LCA2MSBpbnNlcnRpb25zKCspDQo+Pg0KPj4gT2ssIGEgY291cGxlIG9mIG5vdGVzOg0KPj4N
+Cj4+IDEuIHRoZSBwcl8qKCI8cHJlZml4PjoiIC4uLiApDQo+Pg0KPj4gdGhpbmcgaXMgZG9u
+ZSB1c2luZyBwcl9mbXQoKSAtIGdyZXAgdGhlIHRyZWUgZm9yIGV4YW1wbGVzLg0KPiANCj4g
+SSBhbSBhbHJlYWR5IHVzaW5nIHRoZSBwcl8qIG1hY3JvcyBpbiB0aGUgcGF0Y2hlcy4gQXJl
+IHlvdSBhc2tpbmcgbWUgdG8gZG8gDQo+IHNvbWV0aGluZyBvciBpcyB0aGlzIGp1c3QgaW5m
+b3JtYXRpb25hbD8NCj4gDQo+Pg0KPj4gMi4gSSB0aGluayB5b3Ugc2hvdWxkIG5vdCBwYW5p
+YygpIHRoZSBtYWNoaW5lIGJ1dCBpc3N1ZSBhIHRoZQ0KPj4gd2FybmluZy9lcnJvciBhbmQg
+bGV0IHRoZSBtYWNoaW5lIGRpZSBhIHBhaW5mdWwgZGVhdGggYW55d2F5LiBCdXQgWGVuDQo+
+PiBmb2xrcyB3aWxsIGtub3cgYmV0dGVyIHdoYXQgd291bGQgYmUgdGhlIG9wdGltYWwgdGhp
+bmcgdG8gZG8uDQo+IA0KPiBXaGVuIEkgd2FzIHdvcmtpbmcgb24gdGhlIHBhdGNoZXMgSSBh
+c2tlZCBBbmRyZXcgQ29vcGVyIGF0IENpdHJpeCB3aGF0IGFjdGlvbiBJIA0KPiBzaG91bGQg
+dGFrZSBpZiBhbnkgb2YgdGhlIGNhbGxzIGluIHRoZSBYZW4gY29kZSBmYWlsZWQuIEkgYmVs
+aWV2ZSBoZSB0b2xkIG1lIGl0IA0KPiB3YXMgYmFzaWNhbGx5IGZhdGFsIGFuZCB0aGF0IHBh
+bmljKCkgd291bGQgYmUgZmluZSB0aGVyZS4NCg0KcGFuaWMoKSBpcyB0aGUgd2F5IHRvIGdv
+LiBFdmVyeXRoaW5nIGVsc2Ugd291bGQgbWFrZSB0aGUgZXJyb3IgaGFyZGVyDQp0byBhbmFs
+eXplLg0KDQpCVFcsIENDLWluZyB0aGUgbWFpbnRhaW5lcnMgb2YgdGhlIG1vZGlmaWVkIGNv
+ZGUgaXMgZ29vZCBwcmFjdGljZS4NCg0KDQpKdWVyZ2VuDQo=
+--------------3wZ5tZFbtS6PNsirNBDZ207T
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-  Local variable sub created at:
-   tipc_topsrv_kern_subscr+0x57/0x400 net/tipc/topsrv.c:562
-   tipc_group_create+0x4e7/0x7d0 net/tipc/group.c:190
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-  Bytes 84-87 of 88 are uninitialized
-  Memory access of size 88 starts at ffff88801ed57cd0
-  Data copied to user address 0000000020000400
-  ...
-  =====================================================
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Signed-off-by: Alexander Potapenko <glider@google.com>
-Fixes: 026321c6d056a5 ("tipc: rename tipc_server to tipc_topsrv")
----
- net/tipc/topsrv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--------------3wZ5tZFbtS6PNsirNBDZ207T--
 
-diff --git a/net/tipc/topsrv.c b/net/tipc/topsrv.c
-index 5522865deae95..14fd05fd6107d 100644
---- a/net/tipc/topsrv.c
-+++ b/net/tipc/topsrv.c
-@@ -568,7 +568,7 @@ bool tipc_topsrv_kern_subscr(struct net *net, u32 port, u32 type, u32 lower,
- 	sub.seq.upper = upper;
- 	sub.timeout = TIPC_WAIT_FOREVER;
- 	sub.filter = filter;
--	*(u32 *)&sub.usr_handle = port;
-+	*(u64 *)&sub.usr_handle = (u64)port;
- 
- 	con = tipc_conn_alloc(tipc_topsrv(net));
- 	if (IS_ERR(con))
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+--------------oasnLHEdbuwWbRHotwxlosfR--
 
+--------------0IevKUioMcP602uAHkVuaiL3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNG3JEFAwAAAAAACgkQsN6d1ii/Ey/k
+lgf+IDHKz+H4WUZuhhBLYi/ie36DnrSYs3Q85onru8DhPm/nkXNghvChcB6XlT7+MJjrdZlkJQap
++WEVoJXXUDDuR+ngE9Ewn2Ua+XApqTW8YfvCz64rpgP1N8sksRf7rfb66/KNlHnmtwLnmVgnNFba
+EK4PEjMXBt2k70dNlLxEY7Z03RCahwo/q60L9cHBcRE66uopoKx+COv/HWFeduP8RgZfPA8W3aFb
+Rp3/sotWNLIy/oFvPpo/ILyJifzUUnWWn9/l+GyU2oFXsIHYG7F21mbpQfiGK3YUX2LzGILc2JhT
+ax7ux5jmcS421T6ek9ozk5lML3l3+Ev38Idr4gUykQ==
+=54GQ
+-----END PGP SIGNATURE-----
+
+--------------0IevKUioMcP602uAHkVuaiL3--
