@@ -2,127 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A5C5FC123
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B375FC127
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 09:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiJLHQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 03:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S229703AbiJLHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 03:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJLHQW (ORCPT
+        with ESMTP id S229507AbiJLHRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 03:16:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE99B4DF0F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 00:16:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 814C31F8AC;
-        Wed, 12 Oct 2022 07:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665558979; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=uVN9aIUqx34P/45tcMyef9ckHEUfMNnGUM08QJbEcWE=;
-        b=FZS6AM6zDQA0sW9E4AD+vHPONn2WtBOhg/pbZ/EKi9wcFoL2lpkJUc5MYMKmtT0BbNORyO
-        rotC6zeIWH9kOkSQTxynPjX+Nlds9dAUuDfgnEezA+dCLuotphLFB882Cs/ODXkVenqH9X
-        mujfc4JLFRWQQQk+D2ikhwVu/4ADcq4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4873013A5C;
-        Wed, 12 Oct 2022 07:16:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KZxSEMNpRmNROQAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 12 Oct 2022 07:16:19 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        sstabellini@kernel.org
-Subject: [GIT PULL] xen: branch for v6.1-rc1
-Date:   Wed, 12 Oct 2022 09:16:18 +0200
-Message-Id: <20221012071618.8859-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 12 Oct 2022 03:17:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C577675F;
+        Wed, 12 Oct 2022 00:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665559029; x=1697095029;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uJPPiijsvfmVMsD+Sw9j7a0edMnEKrE5sNYkhJdmad0=;
+  b=c/VHzdFJUIkEPze2D3A3Acoy51BQYnkouimHtEeWXvY8NogA3IJ6rgpe
+   k2JmsYNjboMTF2CQke4xjfeJHjAJsDfH33LdAzJN5dHv7UVu2iHCQh8ZF
+   6sbIciQinWfvtmv65Hoq3jgCCYN/9Aaz1+A2nK9rQP6YZ1Sg4ggyDZoQE
+   b5FOXcLHsu7+1MhE4pECfIABORBzCu5sYvy+FHRxEYWobkJ2fWFqqSE5U
+   IWiRyjdtVFxmRKS8hvTqhzAsP1824J2IE2N/0YSKFKS9sshATbeVC1Ot6
+   d0zpqVv2Ty/uju6mdxqds0b/HCszb3Am/nBcg75k/TGE77Ubh71Y4Eijf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="292045692"
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="292045692"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 00:17:07 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="629002967"
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="629002967"
+Received: from beataba-mobl.ger.corp.intel.com (HELO localhost) ([10.213.23.28])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 00:17:04 -0700
+Date:   Wed, 12 Oct 2022 09:17:00 +0200
+From:   Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     Song Liu <song@kernel.org>, <linux-raid@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, jonathan.derrick@solidigm.com,
+        jonathanx.sk.derrick@intel.com
+Subject: Re: [RFC PATCH] mdadm: Add parameter for bitmap chunk threshold
+Message-ID: <20221012091700.0000695b@linux.intel.com>
+In-Reply-To: <20221006220840.275-2-jonathan.derrick@linux.dev>
+References: <20221006220840.275-1-jonathan.derrick@linux.dev>
+        <20221006220840.275-2-jonathan.derrick@linux.dev>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Thu,  6 Oct 2022 16:08:38 -0600
+Jonathan Derrick <jonathan.derrick@linux.dev> wrote:
 
-Please git pull the following tag:
+> Adds parameter to mdadm create, grow, and build similar to the delay
+> parameter, that specifies a chunk threshold. This value will instruct
+> the kernel, in-tandem with the delay timer, to flush the bitmap after
+> every N chunks have been dirtied. This can be used in-addition to the
+> delay parameter and complements it.
+> 
+> This requires an addition to the bitmap superblock and version increment.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.1-rc1-tag
+Hello Jonathan,
+To provide that to parameter to bitmap we are updating bitmap superblock, right?
+Why we need to define it in config then? I someone wants to change that
+should use --grow. Am I correct?
 
-xen: branch for v6.1-rc1
+The "threshold" is not a context property, it should be added to struct shape.
+Ideally, we can extract bitmap properties to separate struct and pass it around.
 
-It contains:
+And I would like to have IMSM support if that is possible.
 
-- Some minor typo fixes
-
-- A fix of the Xen pcifront driver for supporting the device model to
-  run in a Linux stub domain
-
-- A cleanup of the pcifront driver
-
-- A series to enable grant-based virtio with Xen on x86
-
-- A cleanup of Xen PV guests to distinguish between safe and faulting
-  MSR accesses
-
-- Two fixes of the Xen gntdev driver
-
-- Two fixes of the new xen grant DMA driver
-
-
-Thanks.
-
-Juergen
-
- Documentation/admin-guide/kernel-parameters.txt |   6 +
- arch/x86/xen/Kconfig                            |   9 ++
- arch/x86/xen/enlighten_hvm.c                    |   2 +-
- arch/x86/xen/enlighten_pv.c                     | 101 ++++++++++-----
- arch/x86/xen/pmu.c                              |  71 ++++++-----
- drivers/pci/xen-pcifront.c                      | 161 ++++++++----------------
- drivers/xen/Kconfig                             |   2 +-
- drivers/xen/gntdev-common.h                     |   3 +-
- drivers/xen/gntdev.c                            |  80 ++++++------
- drivers/xen/grant-dma-ops.c                     | 112 ++++++++++++-----
- drivers/xen/xen-pciback/xenbus.c                |   2 +-
- include/xen/xen-ops.h                           |   6 +
- 12 files changed, 313 insertions(+), 242 deletions(-)
-
-Colin Ian King (2):
-      xen/xenbus: Fix spelling mistake "hardward" -> "hardware"
-      xen: Kconfig: Fix spelling mistake "Maxmium" -> "Maximum"
-
-Jason Andryuk (1):
-      xen-pcifront: Handle missed Connected state
-
-Juergen Gross (8):
-      xen/pcifront: move xenstore config scanning into sub-function
-      xen/virtio: restructure xen grant dma setup
-      xen/virtio: use dom0 as default backend for CONFIG_XEN_VIRTIO_FORCE_GRANT
-      xen/virtio: enable grant based virtio on x86
-      xen/pv: add fault recovery control to pmu msr accesses
-      xen/pv: fix vendor checks for pmu emulation
-      xen/pv: refactor msr access functions to support safe and unsafe accesses
-      xen/pv: support selecting safe/unsafe msr accesses
-
-M. Vefa Bicakci (2):
-      xen/gntdev: Prevent leaking grants
-      xen/gntdev: Accommodate VMA splitting
-
-Oleksandr Tyshchenko (2):
-      xen/virtio: Fix n_pages calculation in xen_grant_dma_map(unmap)_page()
-      xen/virtio: Fix potential deadlock when accessing xen_grant_dma_devices
+Thanks,
+Mariusz
