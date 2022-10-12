@@ -2,100 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF435FCB48
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6E75FCB52
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiJLTET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 15:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S229807AbiJLTK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 15:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiJLTEI (ORCPT
+        with ESMTP id S229541AbiJLTK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 15:04:08 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA83D18C7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=UpgSkj6GmfW+NSNwCj+VisYlbK0M
-        /XzHlZVxGc9d2q0=; b=Rq8YyG+VnFmxwE+oj5mefztRzA2PNpIBSlEcT8i4uKYX
-        kjDIvj4cakn/MBHD+N7CdQh3kgqr55fW4KjlJ0Dw5R+7NmDsydOTSjEDSvo/z9fC
-        WKBY3h1haoxEkFAxwp7qdDZ5sqko9rLuA3YnuxW4NewT0n0H3lBQhuqzEBBevYE=
-Received: (qmail 816697 invoked from network); 12 Oct 2022 21:04:05 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Oct 2022 21:04:05 +0200
-X-UD-Smtp-Session: l3s3148p1@W0FtDtvq2rkgAwDtxxN7ABspc7EPVowl
-Date:   Wed, 12 Oct 2022 21:04:04 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hai Pham <hai.pham.ud@renesas.com>
-Subject: Re: [PATCH] dt-bindings: memory: renesas,rpc-if: Document R-Car V4H
- support
-Message-ID: <Y0cPpJin64ou4ivI@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hai Pham <hai.pham.ud@renesas.com>
-References: <c268cb4497cbe79773bb6568f36c37adc6fb5bbe.1665582645.git.geert+renesas@glider.be>
+        Wed, 12 Oct 2022 15:10:56 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B8ECD5CE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:10:54 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id y10-20020a5d914a000000b00688fa7b2252so11891492ioq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:10:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t8nF4IQtb58XajClhN/mJflKMS7BVWwTL21p2c0pUdE=;
+        b=r3jyEnq8ZT3bQI5YNOvdyuFW4yU60867vQfN87B0qTM2SEbJkV0fJ92jfVb05VIe94
+         baOMO2pcBF9k5DdudDX/bGqw4lJMD0meTx9d1J/af/gT8E1/LU1mU27SC2MkmO14N8j2
+         Bqs45JN7VqB2MtVa24+xAJPmLDWYnXwM2hteSUZ0af9h8cEuSCmS2DKUICtYlBvs8P26
+         Qx0RnIalfZ2qtK3lYxoUXTRd2JFqsuolaN5XgWJH5AnOC8JaZMonRP7mgJGj+mr4HwoT
+         yy/wOrMY5Isz1aCWykvotffpO/p/QsktnJFblTXpxk8FHkLH6koGYT9huiScO/Q3npsO
+         GraA==
+X-Gm-Message-State: ACrzQf3M+wYr5rUkgF6IQ22Tz0C1d55POGx8FhNW22g76t+ca0fYEFoT
+        WYCpOo07B9YI+2g9JxbnsHzPAlKx7zaOILXrKop9U/Omr59E
+X-Google-Smtp-Source: AMsMyM769wpn0lgVxSpHUE8r7EbiB7B0ALKp6b6ZDTt0s75rSoUraJvBc3vF/4gqzjhy6gQZ1/K6MtPnwGw9ZMbA1m6J1v6HB9rN
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qxEeX5/ZqgYrbyXW"
-Content-Disposition: inline
-In-Reply-To: <c268cb4497cbe79773bb6568f36c37adc6fb5bbe.1665582645.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2589:b0:363:bc7a:19eb with SMTP id
+ s9-20020a056638258900b00363bc7a19ebmr8309629jat.80.1665601853939; Wed, 12 Oct
+ 2022 12:10:53 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 12:10:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d7639205eadb267a@google.com>
+Subject: [syzbot] KMSAN: uninit-value in hsr_fill_frame_info (2)
+From:   syzbot <syzbot+b11c500e990cac6ba129@syzkaller.appspotmail.com>
+To:     claudiajkang@gmail.com, davem@davemloft.net,
+        ennoerlangen@gmail.com, george.mccollister@gmail.com,
+        glider@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---qxEeX5/ZqgYrbyXW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Wed, Oct 12, 2022 at 03:51:46PM +0200, Geert Uytterhoeven wrote:
-> From: Hai Pham <hai.pham.ud@renesas.com>
->=20
-> Document support for the SPI Multi I/O Bus Controller (RPC-IF) in the
-> R-Car V4H SoC.
->=20
-> Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+HEAD commit:    d6e2c8c7eb40 x86: kmsan: enable KMSAN builds for x86
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=143fe3c6f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=65d9eb7bfd2865c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=b11c500e990cac6ba129
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1257629ef00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17959c21f00000
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b11c500e990cac6ba129@syzkaller.appspotmail.com
 
-What about moving V3U to the new Gen4 section?
+hsr0: VLAN not yet supported
+=====================================================
+BUG: KMSAN: uninit-value in hsr_fill_frame_info+0x495/0x770 net/hsr/hsr_forward.c:526
+ hsr_fill_frame_info+0x495/0x770 net/hsr/hsr_forward.c:526
+ fill_frame_info net/hsr/hsr_forward.c:605 [inline]
+ hsr_forward_skb+0x7c4/0x3630 net/hsr/hsr_forward.c:619
+ hsr_dev_xmit+0x23a/0x530 net/hsr/hsr_device.c:222
+ __netdev_start_xmit include/linux/netdevice.h:4778 [inline]
+ netdev_start_xmit include/linux/netdevice.h:4792 [inline]
+ xmit_one+0x2f4/0x840 net/core/dev.c:3532
+ dev_hard_start_xmit+0x186/0x440 net/core/dev.c:3548
+ __dev_queue_xmit+0x22ee/0x3500 net/core/dev.c:4176
+ dev_queue_xmit+0x4b/0x60 net/core/dev.c:4209
+ packet_snd net/packet/af_packet.c:3063 [inline]
+ packet_sendmsg+0x6671/0x7d60 net/packet/af_packet.c:3094
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ __sys_sendto+0x9ef/0xc70 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ __se_sys_sendto net/socket.c:2048 [inline]
+ __x64_sys_sendto+0x19c/0x210 net/socket.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x51/0xa0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:754 [inline]
+ slab_alloc_node mm/slub.c:3231 [inline]
+ __kmalloc_node_track_caller+0xde3/0x14f0 mm/slub.c:4962
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1300 [inline]
+ alloc_skb_with_frags+0x1df/0xd60 net/core/skbuff.c:5995
+ sock_alloc_send_pskb+0xdf4/0xfc0 net/core/sock.c:2600
+ packet_alloc_skb net/packet/af_packet.c:2911 [inline]
+ packet_snd net/packet/af_packet.c:3006 [inline]
+ packet_sendmsg+0x506f/0x7d60 net/packet/af_packet.c:3094
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ __sys_sendto+0x9ef/0xc70 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ __se_sys_sendto net/socket.c:2048 [inline]
+ __x64_sys_sendto+0x19c/0x210 net/socket.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x51/0xa0 arch/x86/entry/common.c:81
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+CPU: 1 PID: 3506 Comm: syz-executor134 Not tainted 5.18.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
 
 
---qxEeX5/ZqgYrbyXW
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNHD6QACgkQFA3kzBSg
-KbbUzw/9E8oJB+kpMZ+KHq3pXk48esFSsUV0Mf0Quh1Fg33pERUyvT0O0M5weYWB
-UauVms76LbEC0deBGrS0ZVcLJYmExe9FRrUdOPOtQLsHjvLtUzMbcYGGDUh/hyTT
-aIWkbwF1k7N720mB6Ve+Sb2LnhKC0ap+jl2fToVgz4BgVbpb9SWCFmzDQpl5+h86
-GEpChdp91MU6FhBlNA47NzGCEegtkOp3B72XmvqIxS5KojtTZALLwc3db/DUlnHm
-oVCr3+m/jFOFHoOz24Xz6mWa9/d6aGNQd743pBuCWMy2HQu54PGFN9TWiLmVsi37
-1e/XxwBPNLbAqSpAaS4J6gGPu+4vz9Te1W3RiGKQBuIRqCZHwv3wrZYiQyAuEqMk
-AhRyoN543LODFdiuCdmKzOXuDbp4huMc9FsLh2j3GaNyJC2g+5NK0yWktXX/jpOm
-F+A0t7Rse+oLv+90rIxBMXsktTh674dkvcP+LBP4LMwmahmN4BU3Gq8Lqf26lsyq
-Ec2k1lwfb/OmzPPapjfRlVMRJvdCrnAUx9GbduBKBmvTc6oXTVcVc/ZBMvPMPJoU
-mX/apC5HUBlR8NdKkSzesgRiAQs12hxMQo0d9vJL69szP29CR0LuPCBUtqtqM1vM
-jn3zC3afKrePHLkqSAu0xAvDPOhokp3kqS4hI+I5clWfXBfi3gk=
-=ZWG+
------END PGP SIGNATURE-----
-
---qxEeX5/ZqgYrbyXW--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
