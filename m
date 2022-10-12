@@ -2,490 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD295FC820
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCF45FC80A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJLPQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S229782AbiJLPOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJLPQ1 (ORCPT
+        with ESMTP id S229829AbiJLPOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:16:27 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9DF1262A
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:16:25 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id a24so2797096qto.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/W16gySlDW3dAhFLI1DjGqkEZE40K/EWxlURaC3p1Gs=;
-        b=T7+CvOfds5/zsJErcGYnurKsOF9ixZkWHc0Vay7Ovamra7Yfgi8eMfCXUNEhaeid9u
-         wKAOOymmP/eYEwNyy+4KBQFv7jXHn+9OxpHBnm2c57n5KV7WdWWWeLPdy1A8bt4oXaVa
-         8uXBMfOTmlefsJcn9A5rdfV/1qi/hOPtKnGORFJnBYRkWQqz3K22wG1ATkXlGiUm9TCf
-         3i/amxA2sxFVeIggKEssHkVH/iOgZfXfeYRU/zvKs7dwu/qoJ1AEld+Apmd+OdABZ0ci
-         R/ow/xUiQ7uyj7ErIXbegvhLA7DfuDUJkMgduy88Y6k/93bat6F094gSWcAr0C+ugCAq
-         63rg==
+        Wed, 12 Oct 2022 11:14:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD94F7E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665587679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lvCLdD9hVzl92XEzd3wlNSAX65cU1Voc3mxq9uUCtIo=;
+        b=U2x8Oso7EENW3lXp8pZGgUIRK5spuAiHnyOsO34G7F009WvdVhfzi+8qSeXOh4Bz32oBXx
+        5ZQuCgkqRwdwNyX7jOiejrUo5icbl/2d3sZOmWDA75kG0Jo/v+njpxTqcs3Z5CgCvcxiH6
+        bM7tqbi1d/KFDKzKCBD4Ms1Q8PVZQDM=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-395-i-j5XscsM6ODoL64BIgbPA-1; Wed, 12 Oct 2022 11:14:38 -0400
+X-MC-Unique: i-j5XscsM6ODoL64BIgbPA-1
+Received: by mail-io1-f72.google.com with SMTP id u11-20020a6b490b000000b006bbcc07d893so7988547iob.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:14:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/W16gySlDW3dAhFLI1DjGqkEZE40K/EWxlURaC3p1Gs=;
-        b=FbR3TU+X6IsIjE9cxqjCU6I0P5aKue23cHT8+0Pb6AlpX6c7GbMscGVpT0R68AvmXL
-         GL2Qw3fDQsDbEDq1WiL3i4w4HKxgEX6PbToW1gU51QtkW53hDV/e54rsxrBh/soiNcqv
-         Yx9uOh5Lob5o0WcqtDvJ5IXJMZjAn9cnuUcAEdHWQFnmtdaidF/eqsJIuj64ApSXvXB6
-         9I89j0VHtXo32CPFhBBQ2/WyMZ/yQgFA0ZHspFebrcxMckl0zS/6qNruwSpPpOiOpa86
-         tR5Ygvg8jZbkiAG/WwfmGl4mbLBwFJej0h4/ar5bCCCx8Gv9XTFqzHQ/2tga0AMiYU1Z
-         ORpQ==
-X-Gm-Message-State: ACrzQf3r6+XpNIwNEAKj2zW9jYtN8Kul9+vsmd3sKtsIAchTRwdGVdeD
-        Va8iVshrekoz3Oa+F6BBndqV9w==
-X-Google-Smtp-Source: AMsMyM6FMJ6f3m5oq4OCtl8kIB1wGWO1lwo3M4Jt9MPIANCwFaChiMbZjvtfiuPtxBb5z6AeEW5Oeg==
-X-Received: by 2002:ac8:5a43:0:b0:39c:c4ec:636d with SMTP id o3-20020ac85a43000000b0039cc4ec636dmr1919000qta.87.1665587784033;
-        Wed, 12 Oct 2022 08:16:24 -0700 (PDT)
-Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id u2-20020a05620a454200b006af0ce13499sm16671612qkp.115.2022.10.12.08.16.22
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lvCLdD9hVzl92XEzd3wlNSAX65cU1Voc3mxq9uUCtIo=;
+        b=XGZKLS0521J2aIv84bYi3Sl29msdFD+PNL9D1dHEGqDEv5NflrwEL7pEiNGiVdWtUq
+         OYU/3hb/2AMhi++SZi/0TYAy06z5sIYmGIGJfLSf3v80S2R52J5SgFpRZAXrvOGdpz/8
+         b4cGZqL1eab92uNa89Kid3e+QrpRPpPYt9CpcQkjuSAJkFaapW51rflYLt7UTtDXZxtE
+         RhqqTi+H5Y9PvXUVkNlqNW907HKsz/0SNVhmVRNaiUKAGxWp+X+YuNIAMdFBLQZHLEk5
+         uJTiMJTx7mZcLMUYCvEtUqkQcNKXqmbfEQG63mkL9lee5OSLrOoPSvLfAi8hL6vSByF+
+         hCpA==
+X-Gm-Message-State: ACrzQf3RoadRNcZb12ZNR4RkzxcKCPedIQwPsWNTckoL01vftBYD7pvU
+        MVadar/vV1W74+PY9qzNrvz5yS88on85JGhW+jUdwpb4Zm/hCSz4EY+N6Z/KQqKywkpGcFPOC5/
+        IES1aoDtQOuztJ6Zux0o7lK7j
+X-Received: by 2002:a05:6638:1903:b0:363:e824:2193 with SMTP id p3-20020a056638190300b00363e8242193mr1321842jal.40.1665587677215;
+        Wed, 12 Oct 2022 08:14:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6qzDlGaLBJVuq49wdsvqo/L5/17dKv5UEq26PYXju5ZSVlfDMK6CTzZ3H/Y/CXF2mtwfgn7g==
+X-Received: by 2002:a05:6638:1903:b0:363:e824:2193 with SMTP id p3-20020a056638190300b00363e8242193mr1321789jal.40.1665587676076;
+        Wed, 12 Oct 2022 08:14:36 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id k15-20020a0566022d8f00b00688e35a2674sm6672137iow.40.2022.10.12.08.14.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 08:16:23 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/4] dt-bindings: pinctrl: qcom,msm8998: convert to dtschema
-Date:   Wed, 12 Oct 2022 11:14:16 -0400
-Message-Id: <20221012151416.38645-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221012151416.38645-1-krzysztof.kozlowski@linaro.org>
-References: <20221012151416.38645-1-krzysztof.kozlowski@linaro.org>
+        Wed, 12 Oct 2022 08:14:35 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 09:14:34 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        alex.williamson@redhat.com
+Subject: [GIT PULL] VFIO updates for v6.1-rc1
+Message-ID: <20221012091434.650250cd.alex.williamson@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm MSM8998 pin controller bindings to DT schema.  Keep the
-parsing of pin configuration subnodes consistent with other Qualcomm
-schemas (children named with '-state' suffix, their children with
-'-pins').
+Hi Linus,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The following changes since commit 939838632b9119614128028eaea3b1d7bf29f16f:
 
----
+  net/mlx5: Query ADV_VIRTUALIZATION capabilities (2022-09-07 11:57:27 +0300)
 
-Changes since v1:
-1. Correct bindings description.
----
- .../bindings/pinctrl/qcom,msm8998-pinctrl.txt | 202 ------------------
- .../pinctrl/qcom,msm8998-pinctrl.yaml         | 176 +++++++++++++++
- 2 files changed, 176 insertions(+), 202 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml
+are available in the Git repository at:
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.txt
-deleted file mode 100644
-index c4de930f2406..000000000000
---- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.txt
-+++ /dev/null
-@@ -1,202 +0,0 @@
--Qualcomm MSM8998 TLMM block
--
--This binding describes the Top Level Mode Multiplexer block found in the
--MSM8998 platform.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be "qcom,msm8998-pinctrl"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: the base address and size of the TLMM register space.
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the TLMM summary IRQ.
--
--- interrupt-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as an interrupt controller
--
--- #interrupt-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/interrupt-controller/irq.h>
--
--- gpio-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as a gpio controller
--
--- #gpio-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/gpio/gpio.h>
--
--- gpio-ranges:
--	Usage: required
--	Definition:  see ../gpio/gpio.txt
--
--- gpio-reserved-ranges:
--	Usage: optional
--	Definition: see ../gpio/gpio.txt
--
--Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
--a general description of GPIO and interrupt bindings.
--
--Please refer to pinctrl-bindings.txt in this directory for details of the
--common pinctrl bindings used by client devices, including the meaning of the
--phrase "pin configuration node".
--
--The pin configuration nodes act as a container for an arbitrary number of
--subnodes. Each of these subnodes represents some desired configuration for a
--pin, a group, or a list of pins or groups. This configuration can include the
--mux function to select on those pin(s)/group(s), and various pin configuration
--parameters, such as pull-up, drive strength, etc.
--
--
--PIN CONFIGURATION NODES:
--
--The name of each subnode is not important; all subnodes should be enumerated
--and processed purely based on their content.
--
--Each subnode only affects those parameters that are explicitly listed. In
--other words, a subnode that lists a mux function but no pin configuration
--parameters implies no information about any pin configuration parameters.
--Similarly, a pin subnode that describes a pullup parameter implies no
--information about e.g. the mux function.
--
--
--The following generic properties as defined in pinctrl-bindings.txt are valid
--to specify in a pin configuration subnode:
--
--- pins:
--	Usage: required
--	Value type: <string-array>
--	Definition: List of gpio pins affected by the properties specified in
--		    this subnode.
--
--		    Valid pins are:
--		      gpio0-gpio149
--		        Supports mux, bias and drive-strength
--
--		      sdc2_clk, sdc2_cmd, sdc2_data
--		        Supports bias and drive-strength
--
--		      ufs_reset
--		        Supports bias and drive-strength
--
--- function:
--	Usage: required
--	Value type: <string>
--	Definition: Specify the alternative function to be configured for the
--		    specified pins. Functions are only valid for gpio pins.
--		    Valid values are:
--
--		    gpio, adsp_ext, agera_pll, atest_char, atest_gpsadc0,
--		    atest_gpsadc1, atest_tsens, atest_tsens2, atest_usb1,
--		    atest_usb10, atest_usb11, atest_usb12, atest_usb13,
--		    audio_ref, bimc_dte0, bimc_dte1, blsp10_spi, blsp10_spi_a,
--		    blsp10_spi_b, blsp11_i2c, blsp1_spi, blsp1_spi_a,
--		    blsp1_spi_b, blsp2_spi, blsp9_spi, blsp_i2c1, blsp_i2c2,
--		    blsp_i2c3, blsp_i2c4, blsp_i2c5, blsp_i2c6, blsp_i2c7,
--		    blsp_i2c8, blsp_i2c9, blsp_i2c10, blsp_i2c11, blsp_i2c12,
--		    blsp_spi1, blsp_spi2, blsp_spi3, blsp_spi4, blsp_spi5,
--		    blsp_spi6, blsp_spi7, blsp_spi8, blsp_spi9, blsp_spi10,
--		    blsp_spi11, blsp_spi12, blsp_uart1_a, blsp_uart1_b,
--		    blsp_uart2_a, blsp_uart2_b, blsp_uart3_a, blsp_uart3_b,
--		    blsp_uart7_a, blsp_uart7_b, blsp_uart8, blsp_uart8_a,
--		    blsp_uart8_b, blsp_uart9_a, blsp_uart9_b, blsp_uim1_a,
--		    blsp_uim1_b, blsp_uim2_a, blsp_uim2_b, blsp_uim3_a,
--		    blsp_uim3_b, blsp_uim7_a, blsp_uim7_b, blsp_uim8_a,
--		    blsp_uim8_b, blsp_uim9_a, blsp_uim9_b, bt_reset,
--		    btfm_slimbus, cam_mclk, cci_async, cci_i2c, cci_timer0,
--		    cci_timer1, cci_timer2, cci_timer3, cci_timer4, cri_trng,
--		    cri_trng0, cri_trng1, dbg_out, ddr_bist, edp_hot, edp_lcd,
--		    gcc_gp1_a, gcc_gp1_b, gcc_gp2_a, gcc_gp2_b, gcc_gp3_a,
--		    gcc_gp3_b, hdmi_cec, hdmi_ddc, hdmi_hot, hdmi_rcv,
--		    isense_dbg, jitter_bist, ldo_en, ldo_update, lpass_slimbus,
--		    m_voc, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2,
--		    mdp_vsync3, mdp_vsync_a, mdp_vsync_b, modem_tsync, mss_lte,
--		    nav_dr, nav_pps, pa_indicator, pci_e0, phase_flag,
--		    pll_bypassnl, pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc,
--		    pwr_crypto, pwr_modem, pwr_nav, qdss_cti0_a, qdss_cti0_b,
--		    qdss_cti1_a, qdss_cti1_b, qdss, qlink_enable,
--		    qlink_request, qua_mi2s, sd_card, sd_write, sdc40, sdc41,
--		    sdc42, sdc43, sdc4_clk, sdc4_cmd, sec_mi2s, sp_cmu,
--		    spkr_i2s, ssbi1, ssc_irq, ter_mi2s, tgu_ch0, tgu_ch1,
--		    tsense_pwm1, tsense_pwm2, tsif0, tsif1,
--		    uim1_clk, uim1_data, uim1_present,
--		    uim1_reset, uim2_clk, uim2_data, uim2_present, uim2_reset,
--		    uim_batt, usb_phy, vfr_1, vsense_clkout, vsense_data0,
--		    vsense_data1, vsense_mode, wlan1_adc0, wlan1_adc1,
--		    wlan2_adc0, wlan2_adc1,
--
--- bias-disable:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as no pull.
--
--- bias-pull-down:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull down.
--
--- bias-pull-up:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull up.
--
--- output-high:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    high.
--		    Not valid for sdc pins.
--
--- output-low:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    low.
--		    Not valid for sdc pins.
--
--- drive-strength:
--	Usage: optional
--	Value type: <u32>
--	Definition: Selects the drive strength for the specified pins, in mA.
--		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
--
--Example:
--
--	tlmm: pinctrl@03400000 {
--		compatible = "qcom,msm8998-pinctrl";
--		reg = <0x03400000 0xc00000>;
--		interrupts = <0 208 0>;
--		gpio-controller;
--		#gpio-cells = <2>;
--		gpio-ranges = <&tlmm 0 0 175>;
--		gpio-reserved-ranges = <0 4>, <81 4>;
--		interrupt-controller;
--		#interrupt-cells = <2>;
--
--		uart_console_active: uart_console_active {
--			mux {
--				pins = "gpio4", "gpio5";
--				function = "blsp_uart8_a";
--			};
--
--			config {
--				pins = "gpio4", "gpio5";
--				drive-strength = <2>;
--				bias-disable;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml
-new file mode 100644
-index 000000000000..89c95b42b39b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml
-@@ -0,0 +1,176 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/qcom,msm8998-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm MSM8998 TLMM pin controller
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  Top Level Mode Multiplexer pin controller in Qualcomm MSM8998 SoC.
-+
-+properties:
-+  compatible:
-+    const: qcom,msm8998-pinctrl
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+  interrupt-controller: true
-+  "#interrupt-cells": true
-+  gpio-controller: true
-+  "#gpio-cells": true
-+  gpio-ranges: true
-+  wakeup-parent: true
-+
-+  gpio-reserved-ranges:
-+    minItems: 1
-+    maxItems: 75
-+
-+  gpio-line-names:
-+    maxItems: 150
-+
-+patternProperties:
-+  "-state$":
-+    oneOf:
-+      - $ref: "#/$defs/qcom-msm8998-tlmm-state"
-+      - patternProperties:
-+          "-pins$":
-+            $ref: "#/$defs/qcom-msm8998-tlmm-state"
-+        additionalProperties: false
-+
-+$defs:
-+  qcom-msm8998-tlmm-state:
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
-+    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-+
-+    properties:
-+      pins:
-+        description:
-+          List of gpio pins affected by the properties specified in this
-+          subnode.
-+        items:
-+          oneOf:
-+            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
-+            - enum: [ sdc2_clk, sdc2_cmd, sdc2_data, ufs_reset ]
-+        minItems: 1
-+        maxItems: 36
-+
-+      function:
-+        description:
-+          Specify the alternative function to be configured for the specified
-+          pins.
-+
-+        enum: [ gpio, adsp_ext, agera_pll, atest_char, atest_gpsadc0,
-+                atest_gpsadc1, atest_tsens, atest_tsens2, atest_usb1,
-+                atest_usb10, atest_usb11, atest_usb12, atest_usb13, audio_ref,
-+                bimc_dte0, bimc_dte1, blsp10_spi, blsp10_spi_a, blsp10_spi_b,
-+                blsp11_i2c, blsp1_spi, blsp1_spi_a, blsp1_spi_b, blsp2_spi,
-+                blsp9_spi, blsp_i2c1, blsp_i2c2, blsp_i2c3, blsp_i2c4,
-+                blsp_i2c5, blsp_i2c6, blsp_i2c7, blsp_i2c8, blsp_i2c9,
-+                blsp_i2c10, blsp_i2c11, blsp_i2c12, blsp_spi1, blsp_spi2,
-+                blsp_spi3, blsp_spi4, blsp_spi5, blsp_spi6, blsp_spi7,
-+                blsp_spi8, blsp_spi9, blsp_spi10, blsp_spi11, blsp_spi12,
-+                blsp_uart1_a, blsp_uart1_b, blsp_uart2_a, blsp_uart2_b,
-+                blsp_uart3_a, blsp_uart3_b, blsp_uart7_a, blsp_uart7_b,
-+                blsp_uart8, blsp_uart8_a, blsp_uart8_b, blsp_uart9_a,
-+                blsp_uart9_b, blsp_uim1_a, blsp_uim1_b, blsp_uim2_a,
-+                blsp_uim2_b, blsp_uim3_a, blsp_uim3_b, blsp_uim7_a,
-+                blsp_uim7_b, blsp_uim8_a, blsp_uim8_b, blsp_uim9_a,
-+                blsp_uim9_b, bt_reset, btfm_slimbus, cam_mclk, cci_async,
-+                cci_i2c, cci_timer0, cci_timer1, cci_timer2, cci_timer3,
-+                cci_timer4, cri_trng, cri_trng0, cri_trng1, dbg_out, ddr_bist,
-+                edp_hot, edp_lcd, gcc_gp1_a, gcc_gp1_b, gcc_gp2_a, gcc_gp2_b,
-+                gcc_gp3_a, gcc_gp3_b, hdmi_cec, hdmi_ddc, hdmi_hot, hdmi_rcv,
-+                isense_dbg, jitter_bist, ldo_en, ldo_update, lpass_slimbus,
-+                m_voc, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2,
-+                mdp_vsync3, mdp_vsync_a, mdp_vsync_b, modem_tsync, mss_lte,
-+                nav_dr, nav_pps, pa_indicator, pci_e0, phase_flag,
-+                pll_bypassnl, pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc,
-+                pwr_crypto, pwr_modem, pwr_nav, qdss_cti0_a, qdss_cti0_b,
-+                qdss_cti1_a, qdss_cti1_b, qdss, qlink_enable, qlink_request,
-+                qua_mi2s, sd_card, sd_write, sdc40, sdc41, sdc42, sdc43,
-+                sdc4_clk, sdc4_cmd, sec_mi2s, sp_cmu, spkr_i2s, ssbi1, ssc_irq,
-+                ter_mi2s, tgu_ch0, tgu_ch1, tsense_pwm1, tsense_pwm2, tsif0,
-+                tsif1, uim1_clk, uim1_data, uim1_present, uim1_reset, uim2_clk,
-+                uim2_data, uim2_present, uim2_reset, uim_batt, usb_phy, vfr_1,
-+                vsense_clkout, vsense_data0, vsense_data1, vsense_mode,
-+                wlan1_adc0, wlan1_adc1, wlan2_adc0, wlan2_adc1 ]
-+
-+      drive-strength:
-+        enum: [2, 4, 6, 8, 10, 12, 14, 16]
-+        default: 2
-+        description:
-+          Selects the drive strength for the specified pins, in mA.
-+
-+      bias-pull-down: true
-+      bias-pull-up: true
-+      bias-disable: true
-+      input-enable: true
-+      output-high: true
-+      output-low: true
-+
-+    required:
-+      - pins
-+
-+    additionalProperties: false
-+
-+allOf:
-+  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    tlmm: pinctrl@3400000 {
-+        compatible = "qcom,msm8998-pinctrl";
-+        reg = <0x03400000 0xc00000>;
-+        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-+        gpio-ranges = <&tlmm 0 0 150>;
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+        interrupt-controller;
-+        #interrupt-cells = <2>;
-+        gpio-reserved-ranges = <0 4>, <81 4>;
-+
-+        sdc2-off-state {
-+            clk-pins {
-+                pins = "sdc2_clk";
-+                drive-strength = <2>;
-+                bias-disable;
-+            };
-+
-+            cmd-pins {
-+                pins = "sdc2_cmd";
-+                drive-strength = <2>;
-+                bias-pull-up;
-+            };
-+
-+            data-pins {
-+                pins = "sdc2_data";
-+                drive-strength = <2>;
-+                bias-pull-up;
-+            };
-+        };
-+
-+        sdc2-cd-state {
-+            pins = "gpio95";
-+            function = "gpio";
-+            bias-pull-up;
-+            drive-strength = <2>;
-+        };
-+    };
--- 
-2.34.1
+  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.1-rc1
+
+for you to fetch changes up to b1b8132a651cf6a5b18a01d8f1bd304f5d210315:
+
+  vfio: More vfio_file_is_group() use cases (2022-10-07 13:06:52 -0600)
+
+----------------------------------------------------------------
+VFIO updates for v6.1-rc1
+
+ - Prune private items from vfio_pci_core.h to a new internal header,
+   fix missed function rename, and refactor vfio-pci interrupt defines.
+   (Jason Gunthorpe)
+
+ - Create consistent naming and handling of ioctls with a function per
+   ioctl for vfio-pci and vfio group handling, use proper type args
+   where available. (Jason Gunthorpe)
+
+ - Implement a set of low power device feature ioctls allowing userspace
+   to make use of power states such as D3cold where supported.
+   (Abhishek Sahu)
+
+ - Remove device counter on vfio groups, which had restricted the page
+   pinning interface to singleton groups to account for limitations in
+   the type1 IOMMU backend.  Document usage as limited to emulated IOMMU
+   devices, ie. traditional mdev devices where this restriction is
+   consistent.  (Jason Gunthorpe)
+
+ - Correct function prefix in hisi_acc driver incurred during previous
+   refactoring. (Shameer Kolothum)
+
+ - Correct typo and remove redundant warning triggers in vfio-fsl driver.
+   (Christophe JAILLET)
+
+ - Introduce device level DMA dirty tracking uAPI and implementation in
+   the mlx5 variant driver (Yishai Hadas & Joao Martins)
+
+ - Move much of the vfio_device life cycle management into vfio core,
+   simplifying and avoiding duplication across drivers.  This also
+   facilitates adding a struct device to vfio_device which begins the
+   introduction of device rather than group level user support and fills
+   a gap allowing userspace identify devices as vfio capable without
+   implicit knowledge of the driver. (Kevin Tian & Yi Liu)
+
+ - Split vfio container handling to a separate file, creating a more
+   well defined API between the core and container code, masking IOMMU
+   backend implementation from the core, allowing for an easier future
+   transition to an iommufd based implementation of the same.
+   (Jason Gunthorpe)
+
+ - Attempt to resolve race accessing the iommu_group for a device
+   between vfio releasing DMA ownership and removal of the device from
+   the IOMMU driver.  Follow-up with support to allow vfio_group to
+   exist with NULL iommu_group pointer to support existing userspace
+   use cases of holding the group file open.  (Jason Gunthorpe)
+
+ - Fix error code and hi/lo register manipulation issues in the hisi_acc
+   variant driver, along with various code cleanups. (Longfang Liu)
+
+ - Fix a prior regression in GVT-g group teardown, resulting in
+   unreleased resources. (Jason Gunthorpe)
+
+ - A significant cleanup and simplification of the mdev interface,
+   consolidating much of the open coded per driver sysfs interface
+   support into the mdev core. (Christoph Hellwig)
+
+ - Simplification of tracking and locking around vfio_groups that
+   fall out from previous refactoring. (Jason Gunthorpe)
+
+ - Replace trivial open coded f_ops tests with new helper.
+   (Alex Williamson)
+
+----------------------------------------------------------------
+Abhishek Sahu (5):
+      vfio: Add the device features for the low power entry and exit
+      vfio: Increment the runtime PM usage count during IOCTL call
+      vfio/pci: Mask INTx during runtime suspend
+      vfio/pci: Implement VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY/EXIT
+      vfio/pci: Implement VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+
+Alex Williamson (2):
+      Merge remote-tracking branch 'mlx5/mlx5-vfio' into v6.1/vfio/next
+      vfio: More vfio_file_is_group() use cases
+
+Christoph Hellwig (12):
+      drm/i915/gvt: fix a memory leak in intel_gvt_init_vgpu_types
+      drm/i915/gvt: simplify vgpu configuration management
+      vfio/mdev: make mdev.h standalone includable
+      vfio/mdev: embedd struct mdev_parent in the parent data structure
+      vfio/mdev: simplify mdev_type handling
+      vfio/mdev: remove mdev_from_dev
+      vfio/mdev: unexport mdev_bus_type
+      vfio/mdev: remove mdev_parent_dev
+      vfio/mdev: remove mtype_get_parent_dev
+      vfio/mdev: consolidate all the name sysfs into the core code
+      vfio/mdev: consolidate all the available_instance sysfs into the core code
+      vfio/mdev: consolidate all the description sysfs into the core code
+
+Christophe JAILLET (1):
+      vfio/fsl-mc: Fix a typo in a message
+
+Jason Gunthorpe (29):
+      vfio/pci: Split linux/vfio_pci_core.h
+      vfio/pci: Rename vfio_pci_register_dev_region()
+      vfio/pci: Simplify the is_intx/msi/msix/etc defines
+      vfio-pci: Fix vfio_pci_ioeventfd() to return int
+      vfio-pci: Break up vfio_pci_core_ioctl() into one function per ioctl
+      vfio-pci: Re-indent what was vfio_pci_core_ioctl()
+      vfio-pci: Replace 'void __user *' with proper types in the ioctl functions
+      vfio: Fold VFIO_GROUP_GET_DEVICE_FD into vfio_group_get_device_fd()
+      vfio: Fold VFIO_GROUP_SET_CONTAINER into vfio_group_set_container()
+      vfio: Follow the naming pattern for vfio_group_ioctl_unset_container()
+      vfio: Split VFIO_GROUP_GET_STATUS into a function
+      vfio: Remove vfio_group dev_counter
+      vfio: Add header guards and includes to drivers/vfio/vfio.h
+      vfio: Rename __vfio_group_unset_container()
+      vfio: Split the container logic into vfio_container_attach_group()
+      vfio: Remove #ifdefs around CONFIG_VFIO_NOIOMMU
+      vfio: Split out container code from the init/cleanup functions
+      vfio: Rename vfio_ioctl_check_extension()
+      vfio: Split the register_device ops call into functions
+      vfio: Move container code into drivers/vfio/container.c
+      vfio: Follow a strict lifetime for struct iommu_group
+      drm/i915/gvt: Add missing vfio_unregister_group_dev() call
+      vfio/mdev: consolidate all the device_api sysfs into the core code
+      vfio/mdev: add mdev available instance checking to the core
+      vfio: Remove the vfio_group->users and users_comp
+      vfio: Change vfio_group->group_rwsem to a mutex
+      vfio: Add vfio_file_is_group()
+      vfio: Hold a reference to the iommu_group in kvm for SPAPR
+      vfio: Make the group FD disassociate from the iommu_group
+
+Joao Martins (1):
+      vfio: Add an IOVA bitmap support
+
+Kevin Tian (6):
+      vfio: Add helpers for unifying vfio_device life cycle
+      drm/i915/gvt: Use the new device life cycle helpers
+      vfio/platform: Use the new device life cycle helpers
+      vfio/amba: Use the new device life cycle helpers
+      vfio/ccw: Use the new device life cycle helpers
+      vfio: Rename vfio_device_put() and vfio_device_try_get()
+
+Longfang Liu (5):
+      hisi_acc_vfio_pci: Fixes error return code issue
+      hisi_acc_vfio_pci: Fix device data address combination problem
+      hisi_acc_vfio_pci: Remove useless function parameter
+      hisi_acc_vfio_pci: Remove useless macro definitions
+      hisi_acc_vfio_pci: Update some log and comment formats
+
+Shameer Kolothum (1):
+      hisi_acc_vfio_pci: Correct the function prefix for hssi_acc_drvdata()
+
+Yi Liu (9):
+      vfio/pci: Use the new device life cycle helpers
+      vfio/mlx5: Use the new device life cycle helpers
+      vfio/hisi_acc: Use the new device life cycle helpers
+      vfio/mdpy: Use the new device life cycle helpers
+      vfio/mtty: Use the new device life cycle helpers
+      vfio/mbochs: Use the new device life cycle helpers
+      vfio/ap: Use the new device life cycle helpers
+      vfio/fsl-mc: Use the new device life cycle helpers
+      vfio: Add struct device to vfio_device
+
+Yishai Hadas (7):
+      vfio: Introduce DMA logging uAPIs
+      vfio: Introduce the DMA logging feature support
+      vfio/mlx5: Init QP based resources for dirty tracking
+      vfio/mlx5: Create and destroy page tracker object
+      vfio/mlx5: Report dirty pages from tracker
+      vfio/mlx5: Manage error scenarios on tracker
+      vfio/mlx5: Set the driver DMA logging callbacks
+
+ Documentation/ABI/testing/sysfs-devices-vfio-dev  |    8 +
+ Documentation/driver-api/vfio-mediated-device.rst |   26 +-
+ Documentation/s390/vfio-ap.rst                    |    2 +-
+ Documentation/s390/vfio-ccw.rst                   |    2 +-
+ MAINTAINERS                                       |    1 +
+ drivers/gpu/drm/i915/gvt/aperture_gm.c            |   20 +-
+ drivers/gpu/drm/i915/gvt/gvt.h                    |   46 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c                  |  205 +--
+ drivers/gpu/drm/i915/gvt/vgpu.c                   |  212 +---
+ drivers/s390/cio/vfio_ccw_drv.c                   |   12 +-
+ drivers/s390/cio/vfio_ccw_ops.c                   |   92 +-
+ drivers/s390/cio/vfio_ccw_private.h               |   11 +-
+ drivers/s390/crypto/vfio_ap_ops.c                 |  109 +-
+ drivers/s390/crypto/vfio_ap_private.h             |    6 +-
+ drivers/vfio/Kconfig                              |    1 +
+ drivers/vfio/Makefile                             |    7 +-
+ drivers/vfio/container.c                          |  680 ++++++++++
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c                 |   89 +-
+ drivers/vfio/iova_bitmap.c                        |  422 +++++++
+ drivers/vfio/mdev/mdev_core.c                     |  195 +--
+ drivers/vfio/mdev/mdev_driver.c                   |    7 +-
+ drivers/vfio/mdev/mdev_private.h                  |   32 +-
+ drivers/vfio/mdev/mdev_sysfs.c                    |  190 +--
+ drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |  136 +-
+ drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |    7 +-
+ drivers/vfio/pci/mlx5/cmd.c                       |  995 ++++++++++++++-
+ drivers/vfio/pci/mlx5/cmd.h                       |   63 +-
+ drivers/vfio/pci/mlx5/main.c                      |   55 +-
+ drivers/vfio/pci/vfio_pci.c                       |   22 +-
+ drivers/vfio/pci/vfio_pci_config.c                |    4 +-
+ drivers/vfio/pci/vfio_pci_core.c                  | 1105 ++++++++++------
+ drivers/vfio/pci/vfio_pci_igd.c                   |    8 +-
+ drivers/vfio/pci/vfio_pci_intrs.c                 |   34 +-
+ drivers/vfio/pci/vfio_pci_priv.h                  |  104 ++
+ drivers/vfio/pci/vfio_pci_rdwr.c                  |    6 +-
+ drivers/vfio/pci/vfio_pci_zdev.c                  |    2 +-
+ drivers/vfio/platform/vfio_amba.c                 |   72 +-
+ drivers/vfio/platform/vfio_platform.c             |   66 +-
+ drivers/vfio/platform/vfio_platform_common.c      |   71 +-
+ drivers/vfio/platform/vfio_platform_private.h     |   18 +-
+ drivers/vfio/vfio.h                               |   62 +
+ drivers/vfio/vfio_main.c                          | 1394 +++++++++------------
+ include/linux/iova_bitmap.h                       |   26 +
+ include/linux/mdev.h                              |   77 +-
+ include/linux/vfio.h                              |   57 +-
+ include/linux/vfio_pci_core.h                     |  149 +--
+ include/uapi/linux/vfio.h                         |  142 +++
+ samples/vfio-mdev/mbochs.c                        |  172 ++-
+ samples/vfio-mdev/mdpy.c                          |  185 ++-
+ samples/vfio-mdev/mtty.c                          |  157 ++-
+ virt/kvm/vfio.c                                   |   45 +-
+ 51 files changed, 4888 insertions(+), 2721 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-vfio-dev
+ create mode 100644 drivers/vfio/container.c
+ create mode 100644 drivers/vfio/iova_bitmap.c
+ create mode 100644 drivers/vfio/pci/vfio_pci_priv.h
+ create mode 100644 include/linux/iova_bitmap.h
 
