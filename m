@@ -2,103 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA405FCA08
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540CB5FCA0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiJLRqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 13:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S229544AbiJLRqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 13:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJLRq2 (ORCPT
+        with ESMTP id S229655AbiJLRqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:46:28 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B4C97F4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:46:27 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e705329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e705:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E58A01EC0230;
-        Wed, 12 Oct 2022 19:46:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665596782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Meljy89lAYExQlzfDo2HCH7IawAQ8LDvQAy651p5TKE=;
-        b=eZymPjEFV/FwQ8Rxc+xKEUGadAuWqwhaK1hnhI9q3UT0JUCatTADf74Y4LJuMtCmnplwLu
-        WT5stDquCviENtkSPoBEDcHALazjwMlGx+sYEsBNZc2KpzhrIxBA6tBl91O1i1n1GT0EKD
-        9PU6VGgv4181HTIajDnoQoTkcA1qhXo=
-Date:   Wed, 12 Oct 2022 19:46:18 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Eric DeVolder <eric.devolder@oracle.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>, david@redhat.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        sourabhjain@linux.ibm.com, linux-mm@kvack.org
-Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
-Message-ID: <Y0b9apyIs+RpSo1e@zn.tnic>
-References: <20220909210509.6286-1-eric.devolder@oracle.com>
- <20220909210509.6286-8-eric.devolder@oracle.com>
- <Yx7XEcXZ8PwwQW95@nazgul.tnic>
- <cb343eef-46be-2d67-b93a-84c75be86325@oracle.com>
- <YzRxPAoN+XmOfJzV@zn.tnic>
- <fd08c13d-a917-4cd6-85ec-267e0fe74c41@oracle.com>
- <Yzceb/y3SSFMuALR@zn.tnic>
- <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com>
- <YzcqE1RVtPcuLlxN@zn.tnic>
- <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
+        Wed, 12 Oct 2022 13:46:35 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F2FFC1FC;
+        Wed, 12 Oct 2022 10:46:34 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id r17so39544626eja.7;
+        Wed, 12 Oct 2022 10:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPmXPudUvAAgxzesevvcQguQuLGlpjd/EyDpnAZuAtc=;
+        b=qSNRcaQDGBvNiR2LPQyouzsn4X6roBIYCl9DBh6VFflM0wtkJRPGhQ0S+txPZ1MJdB
+         VrPGBXi2kVCdr9n0LSdNangU6BKVmfsLi/jgFrPxphT/53o042LyBLYk1kK1Fh5EbCj+
+         MqTcXUwcwXUX/a35figDmXFA/m1CF2W7iSRwi+k0OwhP8tJXHy3wksuIYqEJPaDbpGk4
+         JRVLIEfsqDNujz0k1+ct+vR6dvdHuN5I9x47rtpq7qVnzPrfmxE7azSiSeAgSnt0w/Iq
+         PO6L0DaiY+hC1HqV8grvDyDTdGTKlSKLowczuXHqS0XYQNBZMh5r5zQxHASrT3wFUHt7
+         OBpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uPmXPudUvAAgxzesevvcQguQuLGlpjd/EyDpnAZuAtc=;
+        b=Mty6QBfw7Knxa0v11E5/IOqbKArbkXtZZpxBug48slr88OPV2IsDrvr5RjcJplnorE
+         eajO78eHj4q6VP+Hgr7KdAfQdajcV6TOm0QYhANdNMyJO7gh+DZjZS+KDszzcW34WcXU
+         xzwE0F+ec/BO9tmdne3yR+ufCyTdyEvB4Di35//+cek1EcRcX7jsMMrrstVDjLVa/xCj
+         czNiJ/Ir2X8ur908NUfxjrBMiiYfRFvhwOnbHwGvnldtnbZW6ANjIQoyglOTWZWQ8axU
+         rjBncAK05CSDcLVzi/Lit5bWEXXSV1e+UH4RDXOCfw8YM5f+h8VteN7a1YkRbJ0jCwTz
+         VdpA==
+X-Gm-Message-State: ACrzQf0UjuocKFCzCDX4PH4hZhHXuALUYt5PzPocRVyCiiRxEysY4xPX
+        rgmj2TBA+rdb0lzlVHVypPM=
+X-Google-Smtp-Source: AMsMyM4wxBrlbSBVQUiR2EiAp/azvfgT7mC0zxfYBjdc8NtTQjM4JRdZsLS1hv9ppmwpVuzyQLFVag==
+X-Received: by 2002:a17:907:3f13:b0:782:1266:8c10 with SMTP id hq19-20020a1709073f1300b0078212668c10mr23480980ejc.197.1665596793067;
+        Wed, 12 Oct 2022 10:46:33 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-078-050-029-094.78.50.pool.telefonica.de. [78.50.29.94])
+        by smtp.gmail.com with ESMTPSA id e16-20020a170906315000b00731582babcasm1613824eje.71.2022.10.12.10.46.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 10:46:32 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] of: declare string literals const
+Date:   Wed, 12 Oct 2022 19:46:22 +0200
+Message-Id: <20221012174622.45006-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 10:35:14AM +0800, Baoquan He wrote:
-> Memory hptlug is not limited by a certin or a max number of memory
-> regions, but limited by how large of the linear mapping range which
-> physical can be mapped into.
+of_overlay_action_name() returns a string literal from a function local
+array.  Modifying string literals is undefined behavior which usage of
+const pointer can avoid.  of_overlay_action_name() is currently only
+used once in overlay_notify() to print the returned value.
 
-Memory hotplug is not limited by some abstract range but by the *actual*
-possibility of how many DIMM slots on any motherboard can hotplug
-memory. Certainly not 32K.
+While on it declare the data array const as well.
 
-So you can choose a sane default which covers *all* actual systems out
-there.
+Reported by Clang:
 
-> For the Kconfig CRASH_MAX_MEMORY_RANGES Eric added, it's meaningful to
-> me to set a fixed value which is enough in reality.
+    In file included from arch/x86/kernel/asm-offsets.c:22:
+    In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
+    In file included from ./include/linux/kvm_host.h:19:
+    In file included from ./include/linux/msi.h:23:
+    In file included from ./arch/x86/include/asm/msi.h:5:
+    In file included from ./arch/x86/include/asm/irqdomain.h:5:
+    In file included from ./include/linux/irqdomain.h:35:
+    ./include/linux/of.h:1555:3: error: initializing 'char *' with an expression of type 'const char[5]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                    "init",
+                    ^~~~~~
+    ./include/linux/of.h:1556:3: error: initializing 'char *' with an expression of type 'const char[10]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                    "pre-apply",
+                    ^~~~~~~~~~~
+    ./include/linux/of.h:1557:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                    "post-apply",
+                    ^~~~~~~~~~~~
+    ./include/linux/of.h:1558:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                    "pre-remove",
+                    ^~~~~~~~~~~~
+    ./include/linux/of.h:1559:3: error: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                    "post-remove",
+                    ^~~~~~~~~~~~~
 
-Yes, exactly.
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ include/linux/of.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> For extreme testing with special purpose, it could be broken easily,
-> people need decide by self whether the CONFIG_CRASH_MAX_MEMORY_RANGES
-> is enlarged or not.
-
-I don't want for people to decide on one more thing where they have to
-go and read a bunch of specs just to know what is a good value. So we
-should set a sane, *practical* upper limit and simply go with it.
-
-Everything else is testing stuff and if you test the kernel, then you
-can change limits and values and so on as you want to.
-
-Thx.
-
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 6b79ef9a6541..8b9f94386dc3 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1549,9 +1549,9 @@ enum of_overlay_notify_action {
+ 	OF_OVERLAY_POST_REMOVE,
+ };
+ 
+-static inline char *of_overlay_action_name(enum of_overlay_notify_action action)
++static inline const char *of_overlay_action_name(enum of_overlay_notify_action action)
+ {
+-	static char *of_overlay_action_name[] = {
++	static const char *const of_overlay_action_name[] = {
+ 		"init",
+ 		"pre-apply",
+ 		"post-apply",
 -- 
-Regards/Gruss,
-    Boris.
+2.37.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
