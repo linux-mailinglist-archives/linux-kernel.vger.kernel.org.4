@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8E95FC96D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA385FC973
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiJLQqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S229594AbiJLQrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiJLQqO (ORCPT
+        with ESMTP id S229699AbiJLQrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:46:14 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093A3D9971
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:46:12 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so2597255pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:46:12 -0700 (PDT)
+        Wed, 12 Oct 2022 12:47:47 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B620792EC;
+        Wed, 12 Oct 2022 09:47:46 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id b4so27098947wrs.1;
+        Wed, 12 Oct 2022 09:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W4/SxT9WXP86l+o0DWBekitp4ZdIgzH5udKb6UlO/lM=;
-        b=ib+6UivP//E8nL8k6ksvAUIJQTZ3hvKI9UQtlL90TePrFXIvmB+s3vBimAD/hRcfsK
-         L7itR2oOUL+cCDxmX75z6BCSSl9pCv5fKm4J8Qj8uDL1rN0E8LVKjySfjuQCbFjPXBVh
-         RD6jTPfkB7KhQNAxGERTyj/bdff+EDzrMAkEYQ3kPWssrPad0mpgfZMvBkbTH9RZAJ2T
-         PiMe+8MHBJmomArLumtsec5n3c97jhglfm7+QMhWTOwtCaI/+am0mgEk+5n5ywBxvsei
-         Y+1g2rfj8TF8WVe9WT/3WffEr1eDR9GKceZY5Aa29bJoJoSvg7DZsTXcwOAbJGQu6eAC
-         5omQ==
+        bh=bkYwffHoTj+UGeb69vyYv3Vi6xsZterM+r8p4HSwk3k=;
+        b=qt8qxQtSMmPSznXRe9pn8HRdFJaewZGwEj1d2XqeJIUx7fTdVWUet+16K0OFzpIWK6
+         Zk5upGfpxB93/w9tOsCA58VK11SJPgjbhNfiqAMe9K5nBOeFP7FusCxGHEYKFmUke4b/
+         tJRSixQsn1aCq2/YKwKNDqFFhAt4Xek2mA+DovqEa/pSJ4PqV0CNRLDTdYAol3bESito
+         y+A4DoxRkyPPRL4gG+R3UHZhAkPHviiSgz6gRsD7K0aMdi4hn/ReQf9ke+vM6TW5GEuN
+         wsHEWUBDeB5vZm1+IwtfJbyF4nfih/t790IREmOraOJFifaG+hVDFMpPjH/wX9142rvs
+         XmsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W4/SxT9WXP86l+o0DWBekitp4ZdIgzH5udKb6UlO/lM=;
-        b=Wm/Ao1gRFEH+fH9GW06yPxT3QyDYjMGEez3FxJ7XuBIYIMGVX9umvOopimfNGD56To
-         k6JrD+HRzGsrjWYU9Xu/Z4FROtqM7HYS99Gikv3hr+fjZP07TEr5ad5Vdqpw936nYlVv
-         Xauvfqqar9WuU7Zmhm/LffzKavHFTZO8di52oHGSoYIBsGgvAUpd6lEgGWXB5rzYrH/j
-         GD9vhqZHhOdAAqogcPQ2AWxAU/ZZoIiCopMWI0NyvLBXjM47w69M/f/Ve08wdQ7oEAkd
-         VX149MAQG3072SA6zDIQvF2c5ojxwdbCO8cC2ESJZtXu1IJGRA3gXjq2Cv8uzm48TUcx
-         2FjQ==
-X-Gm-Message-State: ACrzQf0EqMqGywdw5dxDvvnX1lLsOTy0RMEpvFpuF9LfreY7Z63Th23Z
-        D51z5qLItFxaKR4K87Q14noyJw==
-X-Google-Smtp-Source: AMsMyM6alaWfTTlvUHvRgG4dPW7MCm9VOEIR2aj0c7pDunNqsAfe37N6LDR3WNl6bxsU5oTHZrEvIg==
-X-Received: by 2002:a17:902:ef47:b0:179:d18e:4262 with SMTP id e7-20020a170902ef4700b00179d18e4262mr29808345plx.22.1665593171139;
-        Wed, 12 Oct 2022 09:46:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090a65c700b0020a0571b354sm1627890pjs.57.2022.10.12.09.46.10
+        bh=bkYwffHoTj+UGeb69vyYv3Vi6xsZterM+r8p4HSwk3k=;
+        b=SovgRyRQHISurAVVCovEUeEVP1g/ZaElmhFQ0WIcAFbpes0SHH592QjZSGMI5HwmqN
+         7anAJ8ykc4O6frT+YTO3msN0Yq+qh/EufcIqXTzTWEpWgfmxAtwCtaOu83PhYvi5YxZJ
+         cvjeL04hol/7K9MLjJN79KsKnKnXuw5KCcIK3E9s/IpD987OwHF7ZhjF1SarUTf7fWxL
+         hUuojgow220n2gCcH/ZHUsk2nyty/NWS4KpfvIiTrYM0wWI7ZF2Ndys567xY8NOA4FUY
+         XI5eGeyZP0p65SJg+VItMO3SCSglwpihMOeCv4MjZ8xfowyvj02j2aPrvQ1EUQkqUg1q
+         ZizA==
+X-Gm-Message-State: ACrzQf28G5Icqw2x/Vh4r9H68gJu07lTDFwuvIokAEjMl2Uuc7fK9Qes
+        wtmFgUhfom8/HlTV1a2CDvI=
+X-Google-Smtp-Source: AMsMyM5QG/hbTP0GgOdpLWkfLu7at/Wgl1M2fr1LZcGBYHj6q7svLrd3xOaQiLDwa/S213jc6sDvfA==
+X-Received: by 2002:a05:6000:10d1:b0:22e:3bc5:c91c with SMTP id b17-20020a05600010d100b0022e3bc5c91cmr18250079wrx.368.1665593264626;
+        Wed, 12 Oct 2022 09:47:44 -0700 (PDT)
+Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
+        by smtp.gmail.com with ESMTPSA id p22-20020a05600c065600b003c6c2ff7f25sm2056959wmm.15.2022.10.12.09.47.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 09:46:10 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 16:46:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc:     kvm@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
- in kvm_set_pte_rmapp()
-Message-ID: <Y0bvT8k9vlDUPup+@google.com>
-References: <cover.1665214747.git.houwenlong.hwl@antgroup.com>
- <0ce24d7078fa5f1f8d64b0c59826c50f32f8065e.1665214747.git.houwenlong.hwl@antgroup.com>
+        Wed, 12 Oct 2022 09:47:44 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 16:47:43 +0000
+From:   Stafford Horne <shorne@gmail.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Baoquan He <bhe@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        akpm@linux-foundation.org, hch@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org
+Subject: Re: [RFC PATCH 2/8] openrisc: mm: remove unneeded early ioremap code
+Message-ID: <Y0bvr/gKaKYd7ur2@oscomms1>
+References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
+ <9010e8719949cce376dc3f75a97b8bfb2ff98442.1665568707.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0ce24d7078fa5f1f8d64b0c59826c50f32f8065e.1665214747.git.houwenlong.hwl@antgroup.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <9010e8719949cce376dc3f75a97b8bfb2ff98442.1665568707.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,78 +78,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022, Hou Wenlong wrote:
-> When the spte of hupe page is dropped in kvm_set_pte_rmapp(), the whole
-> gfn range covered by the spte should be flushed. However,
-> rmap_walk_init_level() doesn't align down the gfn for new level like tdp
-> iterator does, then the gfn used in kvm_set_pte_rmapp() is not the base
-> gfn of huge page. And the size of gfn range is wrong too for huge page.
-> Use the base gfn of huge page and the size of huge page for flushing
-> tlbs for huge page. Also introduce a helper function to flush the given
-> page (huge or not) of guest memory, which would help prevent future
-> buggy use of kvm_flush_remote_tlbs_with_address() in such case.
+On Wed, Oct 12, 2022 at 12:09:38PM +0200, Christophe Leroy wrote:
+> From: Baoquan He <bhe@redhat.com>
 > 
-> Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
-> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> Under arch/openrisc, there isn't any place where ioremap() is called.
+> It means that there isn't early ioremap handling needed in openrisc,
+> So the early ioremap handling code in ioremap() of
+> arch/openrisc/mm/ioremap.c is unnecessary and can be removed.
+> 
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: openrisc@lists.librecores.org
+
+Thanks for picking this up.
+
+Perhaps add this link?
+
+Link: https://lore.kernel.org/linux-mm/YwxfxKrTUtAuejKQ@oscomms1/
+
+But either way.
+
+Acked-by: Stafford Horne <shorne@gmail.com>
+
 > ---
->  arch/x86/kvm/mmu/mmu.c          |  4 +++-
->  arch/x86/kvm/mmu/mmu_internal.h | 10 ++++++++++
->  2 files changed, 13 insertions(+), 1 deletion(-)
+>  arch/openrisc/mm/ioremap.c | 22 +++++-----------------
+>  1 file changed, 5 insertions(+), 17 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 7de3579d5a27..4874c603ed1c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1430,7 +1430,9 @@ static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+> diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
+> index 8ec0dafecf25..90b59bc53c8c 100644
+> --- a/arch/openrisc/mm/ioremap.c
+> +++ b/arch/openrisc/mm/ioremap.c
+> @@ -22,8 +22,6 @@
+>  
+>  extern int mem_init_done;
+>  
+> -static unsigned int fixmaps_used __initdata;
+> -
+>  /*
+>   * Remap an arbitrary physical address space into the kernel virtual
+>   * address space. Needed when the kernel wants to access high addresses
+> @@ -52,24 +50,14 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+>  	p = addr & PAGE_MASK;
+>  	size = PAGE_ALIGN(last_addr + 1) - p;
+>  
+> -	if (likely(mem_init_done)) {
+> -		area = get_vm_area(size, VM_IOREMAP);
+> -		if (!area)
+> -			return NULL;
+> -		v = (unsigned long)area->addr;
+> -	} else {
+> -		if ((fixmaps_used + (size >> PAGE_SHIFT)) > FIX_N_IOREMAPS)
+> -			return NULL;
+> -		v = fix_to_virt(FIX_IOREMAP_BEGIN + fixmaps_used);
+> -		fixmaps_used += (size >> PAGE_SHIFT);
+> -	}
+> +	area = get_vm_area(size, VM_IOREMAP);
+> +	if (!area)
+> +		return NULL;
+> +	v = (unsigned long)area->addr;
+>  
+>  	if (ioremap_page_range(v, v + size, p,
+>  			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
+> -		if (likely(mem_init_done))
+> -			vfree(area->addr);
+> -		else
+> -			fixmaps_used -= (size >> PAGE_SHIFT);
+> +		vfree(area->addr);
+>  		return NULL;
 >  	}
 >  
->  	if (need_flush && kvm_available_flush_tlb_with_range()) {
-> -		kvm_flush_remote_tlbs_with_address(kvm, gfn, 1);
-> +		gfn_t base = gfn_round_for_level(gfn, level);
-> +
-> +		kvm_flush_remote_tlbs_gfn(kvm, base, level);
->  		return false;
->  	}
->  
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 17488d70f7da..249bfcd502b4 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -168,8 +168,18 @@ void kvm_mmu_gfn_allow_lpage(const struct kvm_memory_slot *slot, gfn_t gfn);
->  bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm,
->  				    struct kvm_memory_slot *slot, u64 gfn,
->  				    int min_level);
-> +
->  void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
->  					u64 start_gfn, u64 pages);
-> +
-> +/* Flush the given page (huge or not) of guest memory. */
-> +static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_t gfn, int level)
-> +{
-> +	u64 pages = KVM_PAGES_PER_HPAGE(level);
-> +
-
-Rather than require the caller to align gfn, what about doing gfn_round_for_level()
-in this helper?  It's a little odd that the caller needs to align gfn but doesn't
-have to compute the size.
-
-I'm 99% certain kvm_set_pte_rmap() is the only path that doesn't already align the
-gfn, but it's nice to not have to worry about getting this right, e.g. alternatively
-this helper could WARN if the gfn is misaligned, but that's _more work.
-
-	kvm_flush_remote_tlbs_with_address(kvm, gfn_round_for_level(gfn, level),
-					   KVM_PAGES_PER_HPAGE(level);
-
-If no one objects, this can be done when the series is applied, i.e. no need to
-send v5 just for this.
-
-
-> +	kvm_flush_remote_tlbs_with_address(kvm, gfn, pages);
-> +}
-> +
->  unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
->  
->  extern int nx_huge_pages;
 > -- 
-> 2.31.1
+> 2.37.1
 > 
