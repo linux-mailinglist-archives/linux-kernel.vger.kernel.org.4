@@ -2,332 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F725FBFD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 06:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC56B5FBFD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 06:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJLEKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 00:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S229546AbiJLEQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 00:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiJLEKH (ORCPT
+        with ESMTP id S229436AbiJLEQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 00:10:07 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F93E1F9C0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 21:10:03 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so866736pjq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 21:10:03 -0700 (PDT)
+        Wed, 12 Oct 2022 00:16:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0953C1F9C8;
+        Tue, 11 Oct 2022 21:16:38 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id b2so15128399plc.7;
+        Tue, 11 Oct 2022 21:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YMYmfDXtL0KG/q4RUcOljekTDXhrXEWn1lhT/Gvet50=;
-        b=KWuAptyXrV9UyQlEdIeE0PJ8h7lVIvj+GqsN3AFoOJIv2PKcs6CkTnyHETGMJ09JJ9
-         OdZ3nHPANP8OmWj/wUfATpxihKgVo4ymZEx2yAiYbQEEipllFCFf3oAo37Izx8ndnVw2
-         amoKih8BI0s+gMumoGvtlWR2cg/C85IaasecI=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJHfxSkAdEzE02kXCOugwTptSZXfoXHK5Lb1A5ICHqE=;
+        b=Rrlze0pGp+8MKXLRlhhIebryFh3ieyIMcB2o/aN8bjOFElKnqhRCzRyHGrM5Ozy7As
+         XhXjKxEggNG5Lq8X0WD11nEVuFKlpRcousRl0vhe9BDA1cQ3rvLIzKYMScw5Z4eWQDiV
+         kkU2o8DvnldcSo7CAhpg17gqnMnuxSzNkSBjav+oezmEK2JTYHvS8CgGOe3YKMHbfvbN
+         ZYWbRgD1IQojFQlnXpywJWIdifq69Fkn1ebFLY2WDVr30lmWm6GK06Wy7ukasO1ixAex
+         rzBeX3Nx/p2r6SDE10qwD7taeC/QpSgCiEajfmS1rQVxcAnLQgman2U5iQSqlAoY8DvT
+         Fndw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YMYmfDXtL0KG/q4RUcOljekTDXhrXEWn1lhT/Gvet50=;
-        b=gZwWu+Sq67kEQDfjKnS93HTvg7p4GxZGmv3HSdeHE6e7f9JfpNjrRZXVdh6esYVpOt
-         5Mk4AeUXwmZhcFz1rflGNHzaXUtqZn5MikvF/zMjsVRX6bG+EL6hZvpGrEBnUeOY5yHI
-         gBgEP2Ev7VB1XNPfnFrRKVZuX5AiYyeujXEvngRdyN2r36aVLzgYvOrmWkuPMb/Ui7He
-         ErwYjOh4aeQFctx9w4JtFHoPFfmsDYqNsnc1CWzND6oV06joQVftA7+lecETxXbG2bO4
-         DI0mrwCGq5iNxOsNlXR7l0g+E7NfD8oBshLXdvI1f1O7XUxtdTcytn830pa8BRn+Rwi1
-         KAoQ==
-X-Gm-Message-State: ACrzQf0NfPO8yHNyxpHR8FPyZRERhMnGc/ulQZAxFBIm5C2F1Zn3YH90
-        +GlqPbEG39Nvc3sX4WviyEpStg==
-X-Google-Smtp-Source: AMsMyM6YKrTSotw4huVpc/eDK4nwlkXh8m/Ck3eOLUC6Z7mm63RnNBMc0yDbhwrbsa7DX+1k7UvCTA==
-X-Received: by 2002:a17:90b:1a88:b0:20d:8df0:ac64 with SMTP id ng8-20020a17090b1a8800b0020d8df0ac64mr685583pjb.140.1665547803039;
-        Tue, 11 Oct 2022 21:10:03 -0700 (PDT)
-Received: from localhost ([2401:fa00:9:14:4704:5b50:96e5:620f])
-        by smtp.gmail.com with UTF8SMTPSA id m15-20020a170902f64f00b00172751a2fa4sm3325863plg.80.2022.10.11.21.10.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 21:10:02 -0700 (PDT)
-From:   Dan Callaghan <dcallagh@chromium.org>
-To:     chrome-platform@lists.linux.dev
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?q?Sami=20Ky=C3=B6stil=C3=A4?= <skyostil@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Dan Callaghan <dcallagh@chromium.org>
-Subject: [PATCH v5 1/1] platform/chrome: add a driver for HPS
-Date:   Wed, 12 Oct 2022 15:09:18 +1100
-Message-Id: <20221012040918.272582-2-dcallagh@chromium.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-In-Reply-To: <20221012040918.272582-1-dcallagh@chromium.org>
-References: <20221012040918.272582-1-dcallagh@chromium.org>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OJHfxSkAdEzE02kXCOugwTptSZXfoXHK5Lb1A5ICHqE=;
+        b=7k98C08MGr5Hozit3GjEYLwBzd1sCwBH13COdPSj2cFbsOHrDV+AAZavvg7SiME1RD
+         xz+IZHi5UPJN5kMbD0d5pvr2KwolNe4JEnsY5TDUQ52rIoBB4V53bStxcGcDGWQO02sB
+         f2ozvtRF2LugB66Y47fEQ9msbU0jXb8GbTsBufgz4lj3C1EZm9GjOvlMGsWqlokJC+wq
+         QOrwmL2mU9ZFN71h9y64khS0sXxVL0IdBH8yfoD1m7XY3WZshEE1LRoMYzaIk0/VAwAk
+         9gdZCW/eroDjNo5hXGZSRFtkqPw13XW+f0r/qy0HQsEsDyczqbT6yC0W2p5xRLoNzOQ/
+         +HIA==
+X-Gm-Message-State: ACrzQf1ChdfZR/PjFKupCWAu+Qrb4OFARuFn9zbhIJXkzlS/KOgH46Ms
+        L4PBi9qkkW2+WYpZq4GSOjg=
+X-Google-Smtp-Source: AMsMyM7rH8I0S5TWLH2Y55oSGySHBD+eCj3dU5URWQ7rKYl8bkEET6BJVaqQnparD2Ld5bLDcnLWuQ==
+X-Received: by 2002:a17:90a:bd91:b0:20d:2add:96a4 with SMTP id z17-20020a17090abd9100b0020d2add96a4mr2849825pjr.195.1665548197414;
+        Tue, 11 Oct 2022 21:16:37 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
+        by smtp.gmail.com with ESMTPSA id x12-20020aa78f0c000000b0052c849d0886sm9816734pfr.86.2022.10.11.21.16.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 21:16:36 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id D02D41005BB; Wed, 12 Oct 2022 11:16:32 +0700 (WIB)
+Date:   Wed, 12 Oct 2022 11:16:32 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
+Cc:     corbet@lwn.net, mhocko@suse.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        wuyun.abel@bytedance.com
+Subject: Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
+Message-ID: <Y0Y/oGToVk3ags7h@debian.me>
+References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kr4kyCS+bdnKay0q"
+Content-Disposition: inline
+In-Reply-To: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sami Kyöstilä <skyostil@chromium.org>
 
-This patch introduces a driver for the ChromeOS human presence
-sensor (aka. HPS). The driver supports a sensor connected to the I2C bus
-and identified as "GOOG0020" in the ACPI tables.
+--kr4kyCS+bdnKay0q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-When loaded, the driver exports the sensor to userspace through a
-character device. This device only supports power management, i.e.,
-communication with the sensor must be done through regular I2C
-transmissions from userspace.
+On Mon, Oct 10, 2022 at 05:48:42PM +0800, Zhongkun He wrote:
+> There is usecase that System Management Software(SMS) want to give a
+> memory policy to other processes to make better use of memory.
+>=20
 
-Power management is implemented by enabling the respective power GPIO
-while at least one userspace process holds an open fd on the character
-device. By default, the device is powered down if there are no active
-clients.
+Better say "There are usecases when system management utilities
+want to apply memory policy to processes to make better use of memory".
 
-Note that the driver makes no effort to preserve the state of the sensor
-between power down and power up events. Userspace is responsible for
-reinitializing any needed state once power has been restored.
+> The information about how to use memory is not known to the app.
+> Instead, it is known to the userspace daemon(SMS), and that daemon
+> will decide the memory usage policy based on different factors.
+>=20
 
-The device firmware, I2C protocol and other documentation is available
-at https://chromium.googlesource.com/chromiumos/platform/hps-firmware.
+Better say "These utilities doesn't set memory usage policy, but
+rather the job of reporting memory usage and setting the policy is
+offloaded to an userspace daemon."
 
-Signed-off-by: Sami Kyöstilä <skyostil@chromium.org>
-Signed-off-by: Dan Callaghan <dcallagh@chromium.org>
----
+> To solve the issue, this patch introduces a new syscall
+> pidfd_set_mempolicy(2).  it sets the NUMA memory policy of the thread
+> specified in pidfd.
+>=20
 
-Changes in v5:
-- Updated MAINTAINERS.
+Better say "To solve the issue above, introduce new syscall
+pidfd_set_mempolicy(2). The syscall sets NUMA memory policy for the
+thread specified in pidfd".
 
-Changes in v4:
-- Simplified open/release pm logic.
-- Renamed device to "cros-hps".
-- Stylistics cleanups.
+> In current process context there is no locking because only the process
+> accesses its own memory policy, so task_work is used in
+> pidfd_set_mempolicy() to update the mempolicy of the process specified
+> in pidfd, avoid using locks and race conditions.
+>=20
 
-Changes in v3:
-- Moved from drivers/misc to drivers/platform/chrome.
+Better say "In current process context there is no locking because
+only processes access their own memory policy. For this reason, task_work
+is used in pidfd_set_mempolicy() to set or update the mempolicy of process
+specified in pid. Thuse, it avoids into race conditions."
 
-Changes in v2:
-- Removed custom ioctl interface.
-- Reworked to use miscdev.
+> The API is as follows,
+>=20
+> 		long pidfd_set_mempolicy(int pidfd, int mode,
+>                                      const unsigned long __user *nmask,
+>                                      unsigned long maxnode,
+>                                      unsigned int flags);
+>=20
+> Set's the [pidfd] task's "task/process memory policy". The pidfd argument
+> is a PID file descriptor (see pidfd_open(2) man page) that specifies the
+> process to which the mempolicy is to be applied. The flags argument is
+> reserved for future use; currently, this argument must be specified as 0.
+> Please see the set_mempolicy(2) man page for more details about
+> other's arguments.
+>=20
 
- MAINTAINERS                            |   6 +
- drivers/platform/chrome/Kconfig        |  10 ++
- drivers/platform/chrome/Makefile       |   1 +
- drivers/platform/chrome/cros_hps_i2c.c | 151 +++++++++++++++++++++++++
- 4 files changed, 168 insertions(+)
- create mode 100644 drivers/platform/chrome/cros_hps_i2c.c
+Why duplicating from the Documentation/ below?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c1e4977cb1c3..13bfab399219 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4903,6 +4903,12 @@ S:	Maintained
- F:	drivers/platform/chrome/cros_usbpd_notify.c
- F:	include/linux/platform_data/cros_usbpd_notify.h
- 
-+CHROMEOS HPS DRIVER
-+M:	Dan Callaghan <dcallagh@chromium.org>
-+R:	Sami Kyöstilä <skyostil@chromium.org>
-+S:	Maintained
-+F:	drivers/platform/chrome/cros_hps_i2c.c
-+
- CHRONTEL CH7322 CEC DRIVER
- M:	Joe Tessler <jrt@google.com>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index 6b954c5acadb..c1ca247987d2 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -228,6 +228,16 @@ config CROS_EC_TYPEC
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called cros_ec_typec.
- 
-+config CROS_HPS_I2C
-+	tristate "ChromeOS HPS device"
-+	depends on HID && I2C && PM
-+	help
-+	  Say Y here if you want to enable support for the ChromeOS
-+	  human presence sensor (HPS), attached via I2C. The driver supports a
-+	  sensor connected to the I2C bus and exposes it as a character device.
-+	  To save power, the sensor is automatically powered down when no
-+	  clients are accessing it.
-+
- config CROS_USBPD_LOGGER
- 	tristate "Logging driver for USB PD charger"
- 	depends on CHARGER_CROS_USBPD
-diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
-index 2950610101f1..f6068d077a40 100644
---- a/drivers/platform/chrome/Makefile
-+++ b/drivers/platform/chrome/Makefile
-@@ -27,6 +27,7 @@ obj-$(CONFIG_CROS_EC_DEBUGFS)		+= cros_ec_debugfs.o
- cros-ec-sensorhub-objs			:= cros_ec_sensorhub.o cros_ec_sensorhub_ring.o
- obj-$(CONFIG_CROS_EC_SENSORHUB)		+= cros-ec-sensorhub.o
- obj-$(CONFIG_CROS_EC_SYSFS)		+= cros_ec_sysfs.o
-+obj-$(CONFIG_CROS_HPS_I2C)		+= cros_hps_i2c.o
- obj-$(CONFIG_CROS_USBPD_LOGGER)		+= cros_usbpd_logger.o
- obj-$(CONFIG_CROS_USBPD_NOTIFY)		+= cros_usbpd_notify.o
- 
-diff --git a/drivers/platform/chrome/cros_hps_i2c.c b/drivers/platform/chrome/cros_hps_i2c.c
-new file mode 100644
-index 000000000000..a5505951f989
---- /dev/null
-+++ b/drivers/platform/chrome/cros_hps_i2c.c
-@@ -0,0 +1,151 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for the ChromeOS human presence sensor (HPS), attached via I2C.
-+ *
-+ * The driver exposes HPS as a character device, although currently no read or
-+ * write operations are supported. Instead, the driver only controls the power
-+ * state of the sensor, keeping it on only while userspace holds an open file
-+ * descriptor to the HPS device.
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/fs.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/miscdevice.h>
-+#include <linux/module.h>
-+#include <linux/pm_runtime.h>
-+
-+#define HPS_ACPI_ID		"GOOG0020"
-+
-+struct hps_drvdata {
-+	struct i2c_client *client;
-+	struct miscdevice misc_device;
-+	struct gpio_desc *enable_gpio;
-+};
-+
-+static void hps_set_power(struct hps_drvdata *hps, bool state)
-+{
-+	gpiod_set_value_cansleep(hps->enable_gpio, state);
-+}
-+
-+static int hps_open(struct inode *inode, struct file *file)
-+{
-+	struct hps_drvdata *hps = container_of(file->private_data,
-+					       struct hps_drvdata, misc_device);
-+	struct device *dev = &hps->client->dev;
-+
-+	return pm_runtime_resume_and_get(dev);
-+}
-+
-+static int hps_release(struct inode *inode, struct file *file)
-+{
-+	struct hps_drvdata *hps = container_of(file->private_data,
-+					       struct hps_drvdata, misc_device);
-+	struct device *dev = &hps->client->dev;
-+
-+	return pm_runtime_put(dev);
-+}
-+
-+static const struct file_operations hps_fops = {
-+	.owner = THIS_MODULE,
-+	.open = hps_open,
-+	.release = hps_release,
-+};
-+
-+static int hps_i2c_probe(struct i2c_client *client)
-+{
-+	struct hps_drvdata *hps;
-+	int ret;
-+
-+	hps = devm_kzalloc(&client->dev, sizeof(*hps), GFP_KERNEL);
-+	if (!hps)
-+		return -ENOMEM;
-+
-+	memset(&hps->misc_device, 0, sizeof(hps->misc_device));
-+	hps->misc_device.parent = &client->dev;
-+	hps->misc_device.minor = MISC_DYNAMIC_MINOR;
-+	hps->misc_device.name = "cros-hps";
-+	hps->misc_device.fops = &hps_fops;
-+
-+	i2c_set_clientdata(client, hps);
-+	hps->client = client;
-+	hps->enable_gpio = devm_gpiod_get(&client->dev, "enable", GPIOD_OUT_HIGH);
-+	if (IS_ERR(hps->enable_gpio)) {
-+		ret = PTR_ERR(hps->enable_gpio);
-+		dev_err(&client->dev, "failed to get enable gpio: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = misc_register(&hps->misc_device);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to initialize misc device: %d\n", ret);
-+		return ret;
-+	}
-+
-+	hps_set_power(hps, false);
-+	pm_runtime_enable(&client->dev);
-+	return 0;
-+}
-+
-+static int hps_i2c_remove(struct i2c_client *client)
-+{
-+	struct hps_drvdata *hps = i2c_get_clientdata(client);
-+
-+	pm_runtime_disable(&client->dev);
-+	misc_deregister(&hps->misc_device);
-+	hps_set_power(hps, true);
-+	return 0;
-+}
-+
-+static int hps_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct hps_drvdata *hps = i2c_get_clientdata(client);
-+
-+	hps_set_power(hps, false);
-+	return 0;
-+}
-+
-+static int hps_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct hps_drvdata *hps = i2c_get_clientdata(client);
-+
-+	hps_set_power(hps, true);
-+	return 0;
-+}
-+static UNIVERSAL_DEV_PM_OPS(hps_pm_ops, hps_suspend, hps_resume, NULL);
-+
-+static const struct i2c_device_id hps_i2c_id[] = {
-+	{ "cros-hps", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, hps_i2c_id);
-+
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id hps_acpi_id[] = {
-+	{ HPS_ACPI_ID, 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, hps_acpi_id);
-+#endif /* CONFIG_ACPI */
-+
-+static struct i2c_driver hps_i2c_driver = {
-+	.probe_new = hps_i2c_probe,
-+	.remove = hps_i2c_remove,
-+	.id_table = hps_i2c_id,
-+	.driver = {
-+		.name = "cros-hps",
-+		.pm = &hps_pm_ops,
-+		.acpi_match_table = ACPI_PTR(hps_acpi_id),
-+	},
-+};
-+module_i2c_driver(hps_i2c_driver);
-+
-+MODULE_ALIAS("acpi:" HPS_ACPI_ID);
-+MODULE_AUTHOR("Sami Kyöstilä <skyostil@chromium.org>");
-+MODULE_DESCRIPTION("Driver for ChromeOS HPS");
-+MODULE_LICENSE("GPL");
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Zhongkun He <hezhongkun.hzk@bytedance.com>
+> ---
+>  .../admin-guide/mm/numa_memory_policy.rst     | 21 ++++-
+>  arch/alpha/kernel/syscalls/syscall.tbl        |  1 +
+>  arch/arm/tools/syscall.tbl                    |  1 +
+>  arch/arm64/include/asm/unistd.h               |  2 +-
+>  arch/arm64/include/asm/unistd32.h             |  3 +-
+>  arch/ia64/kernel/syscalls/syscall.tbl         |  1 +
+>  arch/m68k/kernel/syscalls/syscall.tbl         |  1 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl   |  1 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl     |  1 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl     |  1 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl     |  1 +
+>  arch/parisc/kernel/syscalls/syscall.tbl       |  1 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl      |  1 +
+>  arch/s390/kernel/syscalls/syscall.tbl         |  1 +
+>  arch/sh/kernel/syscalls/syscall.tbl           |  1 +
+>  arch/sparc/kernel/syscalls/syscall.tbl        |  1 +
+>  arch/x86/entry/syscalls/syscall_32.tbl        |  1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl        |  1 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl       |  1 +
+>  include/linux/mempolicy.h                     | 11 +++
+>  include/linux/syscalls.h                      |  4 +
+>  include/uapi/asm-generic/unistd.h             |  5 +-
+>  kernel/sys_ni.c                               |  1 +
+>  mm/mempolicy.c                                | 89 +++++++++++++++++++
+>  24 files changed, 146 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Docume=
+ntation/admin-guide/mm/numa_memory_policy.rst
+> index 5a6afecbb0d0..b864dd88b2d2 100644
+> --- a/Documentation/admin-guide/mm/numa_memory_policy.rst
+> +++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
+> @@ -408,9 +408,10 @@ follows:
+>  Memory Policy APIs
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+> -Linux supports 4 system calls for controlling memory policy.  These APIS
+> -always affect only the calling task, the calling task's address space, or
+> -some shared object mapped into the calling task's address space.
+> +Linux supports 5 system calls for controlling memory policy.  The first =
+four
+> +APIS affect only the calling task, the calling task's address space, or =
+some
+> +shared object mapped into the calling task's address space. The last one=
+ can
+> +set the mempolicy of task specified in pidfd.
+> =20
+>  .. note::
+>     the headers that define these APIs and the parameter data types for
+> @@ -473,6 +474,20 @@ closest to which page allocation will come from. Spe=
+cifying the home node overri
+>  the default allocation policy to allocate memory close to the local node=
+ for an
+>  executing CPU.
+> =20
+> +Set [pidfd Task] Memory Policy::
+> +
+> +        long sys_pidfd_set_mempolicy(int pidfd, int mode,
+> +                                     const unsigned long __user *nmask,
+> +                                     unsigned long maxnode,
+> +                                     unsigned int flags);
+> +
+> +Set's the [pidfd] task's "task/process memory policy". The pidfd argumen=
+t is
+> +a PID file descriptor (see pidfd_open(2) man page) that specifies the pr=
+ocess
+> +to which the mempolicy is to be applied. The flags argument is reserved =
+for
+> +future use; currently, this argument must be specified as 0. Please see =
+the
+> +set_mempolicy(2) man page for more details about other's arguments.
+> +
+> +
+> =20
+>  Memory Policy Command Line Interface
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
+The wording can be improved:
+
+---- >8 ----
+
+diff --git a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Document=
+ation/admin-guide/mm/numa_memory_policy.rst
+index b864dd88b2d236..6df35bf4f960bd 100644
+--- a/Documentation/admin-guide/mm/numa_memory_policy.rst
++++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
+@@ -410,8 +410,8 @@ Memory Policy APIs
+=20
+ Linux supports 5 system calls for controlling memory policy.  The first fo=
+ur
+ APIS affect only the calling task, the calling task's address space, or so=
+me
+-shared object mapped into the calling task's address space. The last one c=
+an
+-set the mempolicy of task specified in pidfd.
++shared object mapped into the calling task's address space. The last one
++sets the mempolicy of task specified in the pidfd.
+=20
+ .. note::
+    the headers that define these APIs and the parameter data types for
+@@ -481,11 +481,11 @@ Set [pidfd Task] Memory Policy::
+                                      unsigned long maxnode,
+                                      unsigned int flags);
+=20
+-Set's the [pidfd] task's "task/process memory policy". The pidfd argument =
+is
+-a PID file descriptor (see pidfd_open(2) man page) that specifies the proc=
+ess
+-to which the mempolicy is to be applied. The flags argument is reserved for
+-future use; currently, this argument must be specified as 0. Please see the
+-set_mempolicy(2) man page for more details about other's arguments.
++Sets the task/process memory policy for the [pidfd] task. The pidfd argume=
+nt
++is a PID file descriptor (see pidfd_open(2) man page for details) that
++specifies the process for which the mempolicy is applied to. The flags
++argument is reserved for future use; currently, it must be specified as 0.
++For the description of all other arguments, see set_mempolicy(2) man page.
+=20
+=20
+=20
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--kr4kyCS+bdnKay0q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0Y/nAAKCRD2uYlJVVFO
+oy70AP4wEUgCFmmVfoPF+Ih5oXK6spLPS9lHk0Dk31CIgVAE7wEAgMChcWW248/J
+DbLqTdkHQzGWPrcJVo3ID2vm6Zz2MgQ=
+=8XfN
+-----END PGP SIGNATURE-----
+
+--kr4kyCS+bdnKay0q--
