@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E913F5FC1DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38F35FC1E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiJLIUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S229944AbiJLIVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJLIUa (ORCPT
+        with ESMTP id S229960AbiJLIUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:20:30 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2C5D0CE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:19:32 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r17so36369547eja.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dE/2qGYkUUnqJE7p+gf/1jfv6b0/ZXiraeAgOCSTCAw=;
-        b=DBvsJD5mAClRAEjKGE5SN+H+mW3bLWszADIthuonbpvLiktT+6fYTnHjxmosZ4zSiP
-         NQsYiSmWvu1H80GdUHnuV/Un4VX85t/EvNLHkwRo9+fhPQlGbUR5lBDtSaaft8xe4jnf
-         rLQ8rfsFW6WdkjItZ+xb9xCp3Zp+3YUw+U2fHINsPgXL7ITN/6oJUG+Jg6jp0yHqAklH
-         N6rDdGsjNA3JmKMKYbvSv9tJS96quK+8X7MMs4yCyIlzTDalP29sIeeb8uGTe3iH4bGW
-         +f7+rJsEYEZAdElXMfY1Lb2MhouuPgojNNtAbPPGJRorUWMFGY9aSr4l7dLHTEBvSggZ
-         iuwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dE/2qGYkUUnqJE7p+gf/1jfv6b0/ZXiraeAgOCSTCAw=;
-        b=VutIXsbmPSe/N7LqgUlIGdWfDxrSz5lv4s+vcTXTyxe9v3zwfoQE8qGOi7Im+CoWWe
-         anjoaaM4uYULM/kmGDVXeW/rNqlvsCZO5UX80S+YZQQtJQNpvOOE/41XyCYQzRYK5uxm
-         8fAGtqN67llfgqMlM1RhH/3tGkCVkz69gac5m9eUvQySWjwsy4igOqpAbCc35jESm5Xz
-         JoYTPZePjBqaHRXrv8iEeShYhi1ccjD8Jou9CoPPxcyBPvLNvzf3D0Vy54SUQOeFZobu
-         EfivvpZUUxVOm6cIanY714YwKzXOoalKLIPTgTGiz78hAEpRhE2kQ4zM25C9q4EUMM3o
-         m21Q==
-X-Gm-Message-State: ACrzQf3NpyecBnieAdRbXq83H8DVNRQlofMprh9DjIHYfQuXgMG2nmkq
-        w9PZwwk3RECnTHPnsNhYY19JOg==
-X-Google-Smtp-Source: AMsMyM5zSPt7TGKtXNXuQD+Rz0OEiEViKIOyp+31JAL7p5w1LHIq/CuHS1uVMMxyaEdWjJ80spB0Mw==
-X-Received: by 2002:a17:906:58c9:b0:78d:b042:eecc with SMTP id e9-20020a17090658c900b0078db042eeccmr12367308ejs.658.1665562747414;
-        Wed, 12 Oct 2022 01:19:07 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id i24-20020a50d758000000b00458a03203b1sm10702867edj.31.2022.10.12.01.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 01:19:07 -0700 (PDT)
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH v2] x86: Fix /proc/cpuinfo cpumask warning
-Date:   Wed, 12 Oct 2022 10:19:05 +0200
-Message-Id: <20221012081905.1800640-1-ajones@ventanamicro.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 12 Oct 2022 04:20:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21890AA3F7;
+        Wed, 12 Oct 2022 01:20:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A0C261458;
+        Wed, 12 Oct 2022 08:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B17AC433C1;
+        Wed, 12 Oct 2022 08:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665562816;
+        bh=TQ1OmF/oP4qYTQrpS4gOqgsinfFbOgwsgGnL/eJfDr8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eU82oOwmXo7Wt8iOke77uZF9vs+Y/v5r0cqRG3iHNWmLAupG8m6cuoNIj05aYDHcU
+         W4GObl4RyPF9WQqmOLfbxO5m0h3c1UHfyoYgYLlFEKT9I0nFTz8egNGdQtrqWb0zMA
+         miY5U5wFMEZfitgxeEopkb8C80mCD3nYBMJTfbi4idLIzLkzDobQ8JVFwbr7/iiW8G
+         g0BVpRNR5esWFgbzxrQSLEUOavLBqHsuIMqdKEVeFZpsRrdWUuTscCopirIJSbsEJO
+         0W1ffJoHu2RTrTOPoefVNj5FiUX06WjQCtqJgYQ3tPQ8CXy56uq1xiuNFOOgKBfJq/
+         Svj/CwQRd0FhA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3E85DE4D00C;
+        Wed, 12 Oct 2022 08:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH net] net: ethernet: ti: am65-cpsw: set correct devlink flavour
+ for unused ports
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166556281625.4495.12938019302652198027.git-patchwork-notify@kernel.org>
+Date:   Wed, 12 Oct 2022 08:20:16 +0000
+References: <20221011075002.3887-1-matthias.schiffer@ew.tq-group.com>
+In-Reply-To: <20221011075002.3887-1-matthias.schiffer@ew.tq-group.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, s-vadapalli@ti.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,47 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
-started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
-are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
-start and next seq operations implement a pattern like
+Hello:
 
-  n = cpumask_next(n - 1, mask);
-  show(n);
-  while (1) {
-      ++n;
-      n = cpumask_next(n - 1, mask);
-      if (n >= nr_cpu_ids)
-          break;
-      show(n);
-  }
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-which will issue the warning when reading /proc/cpuinfo. Ensure no
-warning is generated by validating the cpu index before calling
-cpumask_next().
+On Tue, 11 Oct 2022 09:50:02 +0200 you wrote:
+> am65_cpsw_nuss_register_ndevs() skips calling devlink_port_type_eth_set()
+> for ports without assigned netdev, triggering the following warning when
+> DEVLINK_PORT_TYPE_WARN_TIMEOUT elapses after 3600s:
+> 
+>     Type was not set for devlink port.
+>     WARNING: CPU: 0 PID: 129 at net/core/devlink.c:8095 devlink_port_type_warn+0x18/0x30
+> 
+> [...]
 
-[*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+Here is the summary with links:
+  - [net] net: ethernet: ti: am65-cpsw: set correct devlink flavour for unused ports
+    https://git.kernel.org/netdev/net/c/7e777b1b012e
 
-Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-Cc: Yury Norov <yury.norov@gmail.com>
----
- arch/x86/kernel/cpu/proc.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index 099b6f0d96bd..94ac02c8dd6f 100644
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -153,6 +153,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 
- static void *c_start(struct seq_file *m, loff_t *pos)
- {
-+	if (*pos >= nr_cpu_ids)
-+		return NULL;
-+
- 	*pos = cpumask_next(*pos - 1, cpu_online_mask);
- 	if ((*pos) < nr_cpu_ids)
- 		return &cpu_data(*pos);
+You are awesome, thank you!
 -- 
-2.37.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
