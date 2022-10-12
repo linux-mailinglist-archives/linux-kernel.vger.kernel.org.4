@@ -2,78 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A285FBFC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BB95FBFC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 05:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiJLDzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 23:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S229585AbiJLDzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 23:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJLDzI (ORCPT
+        with ESMTP id S229471AbiJLDzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 23:55:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D9522B1B
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 20:55:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0600B818D8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 03:55:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E56BC433C1;
-        Wed, 12 Oct 2022 03:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665546904;
-        bh=BI0ct6d4ungEd9u2K6tVYNhRP7LFScLKt5luEi6ouCA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=UubZs+Q27b3MzJgaQ2v0C3wz/NM98qywAO3wUOPwpOyPnuga1T3ruPviruCx+qBg7
-         UH4SFgQ1jB1zVUuDCCGsH8fZSdnI1zd9R6GGEqnkruyG4dZ8G/ZbJFUpvh1jOEPaW+
-         ckMr4rDG1QzvuL/vX5iwm92yLj/LEXdW5XwHhGy4d6bq16J5n+eN1r8keVwgC3cMbA
-         1tXYK6J+yTmaoJf784/dksnonsd7oZQtnEo2QK79zbCyurq9P8Wv7h5NFM/8LVT59I
-         fcY1pGvZLyy3oWWGupnak1p55lmaJA3b54Hz1aL9/yHlpd55dgEoHQQN1CdMEOJEXG
-         gJyeq3s1XdaiQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58A4CE21EC5;
-        Wed, 12 Oct 2022 03:55:04 +0000 (UTC)
-Subject: Re: [GIT PULL] memblock updates for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y0VHfYkFUqYwVAru@kernel.org>
-References: <Y0VHfYkFUqYwVAru@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y0VHfYkFUqYwVAru@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock for-next
-X-PR-Tracked-Commit-Id: 3e4519b7afc2f9d99f9303468ee0b23f88399c8d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 49da070062390094112b423ba443ea193527b2e4
-Message-Id: <166554690435.31218.945067918558658434.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Oct 2022 03:55:04 +0000
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 23:55:37 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6641A476E7;
+        Tue, 11 Oct 2022 20:55:36 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so11410413ooi.5;
+        Tue, 11 Oct 2022 20:55:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ybHzhD2pPizAeeXQb/YjlSiUKqRewEOBpM2hPa2QoIU=;
+        b=BcOqE9uLA0rQvbO4f1i2eETcXFJ5jY+/87BjkdNIETNFKIq2JVmy4f7a8OmpIC8l3n
+         UhXxCC3VBjVRbBH3kPr+4169uwlM2+z4zBH70PpPheh3kBkH6MA6b/D3gqvKWbwxS3jv
+         EL5FEVCXl+NwsDc2dd51fVhJT4SgQfMWdGkfQtOHW2ByJz2UdYDgkk0NpBkCMMGvNoPN
+         n0Xf+I4SBIBjakY3/eseet0VzCeQJxM+YlxzfedGhUxZkvuVzmoPCSvhCf95Tveh+pMk
+         jWJFV70FKP38dH328+wi1obf1lDnxG/6gtMcEUyHQ1+EhrlL/KStPq/mL+GwXZEHveTW
+         /7Rw==
+X-Gm-Message-State: ACrzQf2XjeSCvMfh8Ox2Ba2BSfpAiVz87A+FeKG5e3/7ggvTkmrpoNyM
+        kD6jxLAbtvS1eIJ6hII3NFSUBRcw1ov0kQDwaYg=
+X-Google-Smtp-Source: AMsMyM4zPQE+dli32wYjxj1l56vjHdrOaYXGyQuDipE8r2Am0DDQB+iAsNxdpCMxwAXrNAqzsf7j2RWFomAEJbrAit0=
+X-Received: by 2002:a9d:6848:0:b0:661:a608:cbc3 with SMTP id
+ c8-20020a9d6848000000b00661a608cbc3mr4502119oto.206.1665546935511; Tue, 11
+ Oct 2022 20:55:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221010053600.272854-1-namhyung@kernel.org> <ebc8e57e-1584-5f47-48d8-3bc38497799b@linux.intel.com>
+ <CAM9d7chavgTHwFdU4m=GRx9kwSX1Pi8w58rgQc4nP_X-bpnbUQ@mail.gmail.com> <CAP-5=fUK8VXZAyjTVQ3e88F5AeYfEF5PP-=k=PoFONWpXE+XVA@mail.gmail.com>
+In-Reply-To: <CAP-5=fUK8VXZAyjTVQ3e88F5AeYfEF5PP-=k=PoFONWpXE+XVA@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 11 Oct 2022 20:55:24 -0700
+Message-ID: <CAM9d7cgfkZUi-n0rnBUHLErpXA4aSzY0yNUbpjpLF3Z2JKenZA@mail.gmail.com>
+Subject: Re: [RFC/PATCHSET 00/19] perf stat: Cleanup counter aggregation (v1)
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 11 Oct 2022 13:37:49 +0300:
+On Mon, Oct 10, 2022 at 11:14 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Oct 10, 2022 at 10:38 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > Hi Andi,
+> >
+> > On Mon, Oct 10, 2022 at 5:25 PM Andi Kleen <ak@linux.intel.com> wrote:
+> > >
+> > >
+> > > On 10/10/2022 10:35 PM, Namhyung Kim wrote:
+> > > > Hello,
+> > > >
+> > > > Current perf stat code is somewhat hard to follow since it handles
+> > > > many combinations of PMUs/events for given display and aggregation
+> > > > options.  This is my attempt to clean it up a little. ;-)
+> > >
+> > >
+> > > My main concern would be subtle regressions since there are so many
+> > > different combinations and way to travel through the code, and a lot of
+> > > things are not covered by unit tests. When I worked on the code it was
+> > > difficult to keep it all working. I assume you have some way to
+> > > enumerate them all and tested that the output is identical?
+> >
+> > Right, that's my concern too.
+> >
+> > I have tested many combinations manually and checked if they
+> > produced similar results.  But the problem is that I cannot test
+> > all hardwares and more importantly it's hard to check
+> > programmatically if the output is the same or not.  The numbers
+> > vary on each run and sometimes it fluctuates a lot.  I don't have
+> > good test workloads and the results work for every combination.
+> >
+> > Any suggestions?
+>
+> I don't think there is anything clever we can do here. A few releases
+> ago summary mode was enabled by default. For CSV output this meant a
+> summary was printed at the bottom of perf stat and importantly the
+> summary print out added a column on the left of all the other columns.
+> This caused some tool issues for us. We now have a test that CSV
+> output has a fixed number of columns. We added the CSV test because
+> the json output code reformatted the display code and it would be easy
+> to introduce a regression (in fact I did :-/ ). So my point is that
+> stat output can change and break things and we've been doing this by
+> accident for a while now. This isn't a reason to not merge this
+> change.
+>
+> I think the real fix here is for tools to stop using text or CSV
+> output and switch to the json output, that way output isn't as brittle
+> except to the keys we use. It isn't feasible for the perf tool to
+> stand still in case there is a script somewhere, we'll just accumulate
+> bugs and baggage. However, if someone has a script and they want to
+> enforce an output, all they need to do is stick a test on it (the
+> Beyonce principle except s/ring/test/).
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock for-next
+Thanks for your opinion.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/49da070062390094112b423ba443ea193527b2e4
+I agree that it'd be better using JSON output for machine processing.
+Although there are records of historic perf stat brekages, it'd be nice
+if we could avoid that for the default output mode. :)
+Let me think about if there's a better way.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Namhyung
