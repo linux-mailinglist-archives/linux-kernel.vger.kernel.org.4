@@ -2,114 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED68B5FCEAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ED85FCEB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJLXAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229648AbiJLXBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJLW7s (ORCPT
+        with ESMTP id S229640AbiJLXBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:59:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454A265B;
-        Wed, 12 Oct 2022 15:59:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mnp4n3VNtz4xFy;
-        Thu, 13 Oct 2022 09:59:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665615577;
-        bh=dlSeURIZbGv4D6or2NL+ft3mN0Zln/f62r9aYjEnMow=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U+7uKzeYv21M1JzyLUkb/tiTrIuiz4TQhKYCO4hOGSfGn9eGvWY6hb+GWn0549712
-         b1Kotg7Sosfk6elk25ayJ+3blvtN5T/+hHWyUX3IIezk7nW1WaSLlk1mF8BTu26Ofv
-         LVc96KF6XED5IlVkqnRLxkOejoZN+A8/oycq4zZ5O/wPDQifAHNmXSN4EjACjJTIFH
-         idkoeMfFII75MCIZ/b9XkbzScgxFCZbKKn77mTSRP5tpMPsXcvIqZ8dx0Ix8aLTNoB
-         6UvM3YalN+h7/FPblRW9Liz+72LWbvkudiQ1HQ7el1y/ZW0ilae3fVSjKiVneWjjVD
-         gMuNbrR82IT7w==
-Date:   Thu, 13 Oct 2022 09:59:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: linux-next: manual merge of the fuse tree with Linus' tree
-Message-ID: <20221013095936.2dedd370@canb.auug.org.au>
+        Wed, 12 Oct 2022 19:01:37 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4C4E4A;
+        Wed, 12 Oct 2022 16:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665615696; x=1697151696;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=TQ4RFyACq3aRPxcEOgfEBDFxfsmGybilFCWDTC8Y6+s=;
+  b=A4TxOIb850nBBeQK2X2xNSWTztiBE0duuxCxpjvla0O91JOogQu9i0Ay
+   jNjA7Pfb4dyLnz8oxEoUjxYaN222yPVB6MkEeQPmwaRA/T+G2xWxIhPji
+   gZk1Dg1CP+uRRCmiEV9HrMpGERcHyxhQym2nxWgV4ODV+DP/dL+XQQH8o
+   ddjdZ/c9D8o9hFaMqaEx2CoogjM3vO/QtV4P1DQv2jMDOkkQLcQrW5gHQ
+   l8qsycbI5fFUPmKRG6fm4jX7tEtOrLRVkYVOxM9JukRNa4CkdjDJHdBEN
+   a1ZGeUM+H6wTbi7li+HAzJsZjtK7l+d5HcC9ffgtrA3jvhF11K8+Dwc4Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="305988543"
+X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
+   d="scan'208";a="305988543"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 16:01:34 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="695652822"
+X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
+   d="scan'208";a="695652822"
+Received: from jbrolli1-mobl.amr.corp.intel.com (HELO [10.212.174.189]) ([10.212.174.189])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 16:01:32 -0700
+Message-ID: <adc0987a-70f5-4203-c741-978d7d89cf76@linux.intel.com>
+Date:   Wed, 12 Oct 2022 16:01:31 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Llt5gQlEHDQTa.K.F1cSsqF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v14 2/3] virt: Add TDX guest driver
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220928215535.26527-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y0bhkVYfYhzkmrjp@zn.tnic>
+Content-Language: en-US
+In-Reply-To: <Y0bhkVYfYhzkmrjp@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Llt5gQlEHDQTa.K.F1cSsqF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the fuse tree got a conflict in:
+On 10/12/22 8:47 AM, Borislav Petkov wrote:
+> On Wed, Sep 28, 2022 at 02:55:34PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> +static long tdx_get_report(void __user *argp)
+>> +{
+>> +	u8 *reportdata, *tdreport;
+>> +	struct tdx_report_req req;
+>> +	long ret;
+>> +
+>> +	if (copy_from_user(&req, argp, sizeof(req)))
+>> +		return -EFAULT;
+>> +
+>> +	/*
+>> +	 * Per TDX Module 1.0 specification, section titled
+>> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
+>> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
+>> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as 0.
+>> +	 */
+>> +	if (req.subtype || req.rpd_len != TDX_REPORTDATA_LEN ||
+>> +	    req.tdr_len != TDX_REPORT_LEN)
+>> +		return -EINVAL;
+>> +
+>> +	if (memchr_inv(req.reserved, 0, sizeof(req.reserved)))
+> 
+> I'm guessing we should issue something here to userspace to let it know
+> why the it fails getting the report.
 
-  include/uapi/linux/fuse.h
+I am fine with adding an error message here. What about the above -EINVAL
+case? Do you suggest adding it there as well?
 
-between commit:
+> 
+> Otherwise it is starting to look good and boring. :)
+> 
+> Thx.
+> 
 
-  7d37539037c2 ("fuse: implement ->tmpfile()")
-
-from Linus' tree and commit:
-
-  22fb2e02a194 ("fuse: add "expire only" mode to FUSE_NOTIFY_INVAL_ENTRY")
-
-from the fuse tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/uapi/linux/fuse.h
-index 76ee8f9e024a,1688fdea550f..000000000000
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@@ -196,7 -196,7 +196,8 @@@
-   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
-   *
-   *  7.37
- + *  - add FUSE_TMPFILE
-+  *  - add FUSE_EXPIRE_ONLY flag to fuse_notify_inval_entry
-   */
- =20
-  #ifndef _LINUX_FUSE_H
-
---Sig_/Llt5gQlEHDQTa.K.F1cSsqF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNHRtgACgkQAVBC80lX
-0Gx+bggAhdojgh8S2JpfopzVI4uM7Bqdt4DvXgs2tMlcREdHwyU0hQpZBfui7qYq
-Sud1Rc2zB9sGxkK9uA3MyJkxbafV0X8twpXFJ/5qfP5ZAkiJ5yY7xIUa/L8jh+IT
-koL+kFgyIzNc+WHPDLshWwlCJRALblW5N9CYdGcaGUVg4MKPPlsal2y7NFj28TPV
-GowunLMSl0YZRxJiOGc5e8YIA6ayM3D/fFyULQmFJp+jLfczi7eTRHVU3TqQe8zG
-acLMlKlnxgXR68NghBepNt7JZ2m41fDuWAoStgbUtae2LBtwjLCsHVLsGwHOASU7
-Zy5j8GGix+xZ//LUbjBd5mr706NHmw==
-=icT7
------END PGP SIGNATURE-----
-
---Sig_/Llt5gQlEHDQTa.K.F1cSsqF--
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
