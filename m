@@ -2,82 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868425FCC6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33005FCC71
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiJLUvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 16:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
+        id S229814AbiJLUzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 16:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiJLUvE (ORCPT
+        with ESMTP id S229755AbiJLUzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 16:51:04 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7D023152
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:51:04 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id n18-20020a17090ade9200b0020b0012097cso4420736pjv.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:51:04 -0700 (PDT)
+        Wed, 12 Oct 2022 16:55:38 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EF1A478;
+        Wed, 12 Oct 2022 13:55:37 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id bn8so22068721ljb.6;
+        Wed, 12 Oct 2022 13:55:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0cESgrw4NedokYkK0txX56iX45B0Apl9vq611IjRsDE=;
-        b=K+Xjqt2vlukDMMeiHLsdfv06mGk8nWaTI1Kr4m6+4FmXzj93gH8cVGsN2j6XTdR+/c
-         7trslnjLMykFMPY4kIqeVvtE0VP1sOPJffTarfp9EikI4ifjLm8pHDjCp+nqMxqPVi5C
-         +cEWsv3qL9Z7TqWLVqVzWCmmJLKwBg7POpN1ia89anixYRAQ9WJG7mpT/THmQaT895oM
-         lDdJq8kaUaMYN7z5aIxanDy5VTRmlYFhr9SBtHlNTGmXFUEfjiiFl7wLBGizt0ESbpfc
-         VlkZ6x8d/M+SR/WCUnez17A0nLnDsnyjAL1n4ZZ4My1SKV1GhQCbGHkCbNXXifqM5Jdb
-         ZYMA==
+        bh=t94iU6tiDOrr2Z3ZKXKEtLbEQqYDhthkqiU9i1YH9OE=;
+        b=ninVkB9GUhO57bjgFgbl1StVZevTrq0zFzJBAvW68mWeHoY229TuMBta4JS9Tvwcp3
+         Bk/SD2031yWLCS//kymgyY65ZKkh2rnOVAdOkVE6+aZG8tUbTy5mKnF/5JV9CrGnYvBj
+         GSS9A6MxVRzvuUX10vRPhcLOYh8nxx4+nm8IR3ofrRlzM3+dfZGqajfsegUTA09h6301
+         eNeLDoWd+y91Hxur9PEAw2Yvo7avLRxa2G1f9cEvHkZxtQ4+ucT4x1ztE/0Z/Ud3QmDy
+         DTCSdhpH1NtqsrbzXdRJBix0u2FcX8h+/LQ62N2H76HpBJNbXwrUlKW+rONL4MuCBX6a
+         4ROw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0cESgrw4NedokYkK0txX56iX45B0Apl9vq611IjRsDE=;
-        b=z47xE7pm35IglM7HocVlJ3Xnd1ENKaKkqoeFPOUAE8w5Gl9Ta/ySGkc3NF5MX9Sri1
-         RoqDGenm9YG2S6pJjD87IpQJcPfhytZ3KAsMqJP48ePn8S6N/aqOzWl4jpeWu9DeQpYF
-         jL8mdIbErLkMWcoVFBxGH4cGuQxCg5zyTBeJapVr6B/OZ1CfpvtsFyubg8BFxyh8R6fk
-         Yi3LcfoFJmwrER7QnKjMX21zlhgIMmVvdomJgJtGVa6/2YlBH3E0pzi9YCksvkz6Nivf
-         ZsfKhJMk7LiI2SWuMIzo3Oww7Lj3KI8mp92TQIcbUqUwuUqdMGDf/hXenQr1tNY2ktPi
-         Ke/w==
-X-Gm-Message-State: ACrzQf2qBhTteV0VdFY1l/3yqnG+D2fH80LnnyuGHFodqvyJUGl14B71
-        RYrlmq8M/dUxjYZwJlFBvW9UxA==
-X-Google-Smtp-Source: AMsMyM5F7/JWJh+KGIbMjIBvU2JtLALv7GFFGjyC/yyvTlD72ZQSRbzoPpch/DTrg+m7/k1CxVWCvQ==
-X-Received: by 2002:a17:902:9a07:b0:178:8024:1393 with SMTP id v7-20020a1709029a0700b0017880241393mr31435918plp.128.1665607863453;
-        Wed, 12 Oct 2022 13:51:03 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b0017f7bef8cfasm11201545ple.281.2022.10.12.13.51.02
+        bh=t94iU6tiDOrr2Z3ZKXKEtLbEQqYDhthkqiU9i1YH9OE=;
+        b=DujCY4IXNgJYqQTi1ijNMNN14j+TVIJKNg/M3nhHccMvB3g6142rifMsnxUnA6a/+9
+         Hus5T1+MYJ9mWV6SAEoV/jX+2PxHVVmMbnYBJcn6p6PggCCTOLU37lskxTMS39HamVwp
+         mIWUikBd9OA2xlBcu9mkan/4keKENMQNz6y9NP5TOj01eXCy/xHvrgrX1qHvkdW2enQJ
+         1zLpfoObrCnDNvHIq7qOek625NA2YtcTj/mrvOs9Mknv8Sp1oJLf26K/hhVTlCze8Amq
+         kZsv3+RqDSYI7o+qnVaG1LIRB73LbHcXHxelSfWX2pVB+17ZTIT8czSXyZ25pxBxYOqv
+         wcIg==
+X-Gm-Message-State: ACrzQf1zZcdPZv6p8XENWNG/qc6UK6ofg7srsYk7njjlo2mQeLjFXzXc
+        MtTcP8YIA8zIPCNv3s9u16YbFE75D5mpyQ==
+X-Google-Smtp-Source: AMsMyM4+9+bYISlmz2xYMf7b5a3yNjLlkesrHctQO6qJpsGL+rStXibgcJcOtp8/RsiRapDieqUiig==
+X-Received: by 2002:a05:651c:1509:b0:26f:a762:7139 with SMTP id e9-20020a05651c150900b0026fa7627139mr6179680ljf.416.1665608136181;
+        Wed, 12 Oct 2022 13:55:36 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056512114700b0049aa7a56715sm93926lfg.267.2022.10.12.13.55.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 13:51:02 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 20:50:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v5 16/30] KVM: Remove
- on_each_cpu(hardware_disable_nolock) in kvm_exit()
-Message-ID: <Y0cos+UtxhvKSFIi@google.com>
-References: <cover.1663869838.git.isaku.yamahata@intel.com>
- <54c7065fa08a65f1fcd7f47492f1a83e6f7a3746.1663869838.git.isaku.yamahata@intel.com>
+        Wed, 12 Oct 2022 13:55:35 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 23:55:33 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 14/17] EDAC/synopsys: Detach Zynq DDRC
+ controller support
+Message-ID: <20221012205533.kp45dht3j5zk4bdx@mobilestation>
+References: <20220929232712.12202-1-Sergey.Semin@baikalelectronics.ru>
+ <20220929232712.12202-15-Sergey.Semin@baikalelectronics.ru>
+ <YzcAV2I/rhILfhwR@zn.tnic>
+ <20221006121740.ksugoodbagr45fky@mobilestation>
+ <Yz7XVqeopgGVR7+3@zn.tnic>
+ <20221008004224.owqbzbdctclua2hb@mobilestation>
+ <Y0b5UAMXPWbDC6HK@zn.tnic>
+ <20221012192743.ihy4nidkzxweqebj@mobilestation>
+ <Y0cZAGhUAzH6S9vI@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <54c7065fa08a65f1fcd7f47492f1a83e6f7a3746.1663869838.git.isaku.yamahata@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <Y0cZAGhUAzH6S9vI@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,56 +97,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Wed, Oct 12, 2022 at 09:44:00PM +0200, Borislav Petkov wrote:
+> On Wed, Oct 12, 2022 at 10:27:43PM +0300, Serge Semin wrote:
+> > ... inter-device parts of the core. The registration procedure is
+> > protected by the mutex and RCU. So it seems as the EDAC core developer
 > 
-> hardware_enable/disable_nolock() check if the hardware is already
-> enabled/disabled and work as nop when they are called multiple times.
+> Seems, schmeems. As I said already, EDAC has always had a single
+> chipset-specific driver. Period. So if one needs to run more than one
+> chipset-specific driver concurrently, then the whole code needs to be
+> audited because this hasn't been done before.
 > 
-> When VM is created/destroyed, on_each_cpu(hardware_enable/disable_nolock)
-> via kvm_arch_add/del_vm() and module_get/put() are called.  It means when
-> kvm module is removed, it's guaranteed that there is no vm and that
-> hardware_disable_nolock() was called on each cpus.
+> > If it has never needed to, then please explain why did you let the
+> > Synopsys EDAC driver being accepted like that then? 
 > 
-> Although the module exit function, kvm_exit(), calls
-> on_each_cpu(hardware_disable_nolock), it's essentially nop.  Eliminate nop
-> call in kvm_exit().
+> I think I already did.
 
-Add a WARN to "prove" that this is a nop, to guard against future bugs, and to
-document that it should be impossible for KVM to be unloaded with active VMs.
-E.g. do this in addition to dropping the hardware disabling.
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 1c1a2b0630bc..ca2251d02c77 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5855,6 +5855,8 @@ void kvm_exit(void)
- {
-        int cpu;
- 
-+       WARN_ON_ONCE(kvm_usage_count);
-+
-        debugfs_remove_recursive(kvm_debugfs_dir);
-        misc_deregister(&kvm_dev);
-        for_each_possible_cpu(cpu)
+Kind of. What you didn't explain was the driver-specific problem in the
+edac_mc core. What is the difference in the EDAC core handling
+two devices (including of difference types) on the same platform and
+handling the same devices each probed by two different drivers? (Consider
+the drivers are designed thread-safe and we are talking about the EDAC
+MC core.)
 
 > 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  virt/kvm/kvm_main.c | 1 -
->  1 file changed, 1 deletion(-)
+> > In my case it's a single EDAC driver per-chip. There can be several
+> > DDR-controllers installed on the same SoC, but all of them of the same
+> > type (Synopsys DW uMCTL2 v2.61a).
 > 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index ad9b8b7d21fa..d7c3bc14691f 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -6034,7 +6034,6 @@ void kvm_exit(void)
->  	unregister_syscore_ops(&kvm_syscore_ops);
->  	unregister_reboot_notifier(&kvm_reboot_notifier);
->  	cpuhp_remove_state_nocalls(CPUHP_AP_KVM_ONLINE);
-> -	on_each_cpu(hardware_disable_nolock, NULL, 1);
->  	kvm_arch_hardware_unsetup();
->  	kvm_arch_exit();
->  	kvm_irqfd_exit();
+> Good.
+> 
+> I'll look at your patches as time allows.
 
+Ok. Thanks in advance.
 
+-Sergey
+
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
