@@ -2,150 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7FC5FCA04
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1AF5FCA07
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 19:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJLRn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 13:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S229495AbiJLRqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 13:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJLRnx (ORCPT
+        with ESMTP id S229487AbiJLRqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:43:53 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFBCFBCE3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:43:52 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id x6-20020a056e021bc600b002fc96f780e7so3615663ilv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:43:52 -0700 (PDT)
+        Wed, 12 Oct 2022 13:46:05 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69B81C93F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:46:02 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id u71so8618198pgd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 10:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iadacU8HjMHZCZhJygxiIG7/MygN7METMFxWBA2IfjE=;
+        b=Yf1mCOSuC0WDz6zTEAp5QbI0HxH6ymxd5/zia+3afDO9yUKDLS+JDYybBqIpyHg2Dm
+         LWkFjYvZlU+lltgGLwmCmY0sjldmPQKxu+JgxLtghVhKKE9d2EGEo+4yL94ZOAonjxeV
+         kbj59D/U9GRzVI/buQnBYqv35sfmPZojLKOw5xjRiaI4ZELfvb/wGHiFtRagCRnx8ZcY
+         1Q2dHtoW+D8FBefYRYVjTKHhY/gfwrZKot2sJULgk+EIeE0Ckuti06zdPv2Ov1Wei8vx
+         t5+V2RKfZU6QUWknZ5QRlC7CW9PWtEWhquV1zMTl8C3mmCuTW7lX/uMUWODsxD2bXs1u
+         Kc7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3t3T5A0CNZfHnuiirguZVaaAi/cfmdOzs9XC2Yc3ro=;
-        b=K8Noasp5niEj6Impua9+X/LP7jktYSlGoqr6tCgE2mMbqWSeVjeTPH2wrYmOH+ZyMA
-         cj8qV1qUGXUONX0e+f37YRsiJDIf877VjFrJTECqmTYjnIKsM8eCQ+MZE7L19Tk0ewx1
-         pOK5V3Y8YXI7p9VbuB7VSpmE8HxvjGrTUrW4ZrGbWq/LIo1fYlS2JqtA64HNkh+5HzJD
-         jk+ULArKeXOCqcCtKOZFQheFIcNVyNuJzhu50ETayKqo2BfWnkfE7+aTigzQAjcvQm3w
-         mjI1ZEJw+cTeZAnqtm8GcZSKWF+ofVzPLn8fzfDfuAsj/4RaftjSFYrYJaPDeNVFA1pu
-         QlBA==
-X-Gm-Message-State: ACrzQf0VJRo92FKnD5sO042EDlvAc4smvWN7gdfSivrcE6cWNgOqP1HR
-        JaXQhDh1nTKoekqEVNASSA9uiAFOOxPNONJwXBjvFunBkK9y
-X-Google-Smtp-Source: AMsMyM42dMQOvWy91GEOPI1bnLiv5In7DR/xVs1GynbAy2Ai0ChovX2pHuLl6cHz/s/kmW85hU6mIifP+bAdkMCL5r1J/W2I+CwR
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iadacU8HjMHZCZhJygxiIG7/MygN7METMFxWBA2IfjE=;
+        b=wH7qCf+WrwHpSmfObLtmLEUSKLLp+UwB+iHwTUfsIOgtwoqR+Wl7yoajLjfSrG17PA
+         iGl/mNdxtkUUc3Pb4tO/LFT5g93Y9AIPa7c7mEhScHBHeGv+SZ8bkPNk6RVgSTxtUDkp
+         aj1w7Xx+V2dPofWkmj5pOJuxdgaMj6r5X1ViC9bvFMPVpfMtYUg2YLj9Cc2o/2vCd3t+
+         Kl+rbRQBdE2CgOa81wnKh6Sl94qAjljoJhjisIVgbpl6O0M23l5JZZMEWByJTHb9bUcV
+         L2fNfyvVIjymnzx00LMc0GR/pVvaxjW2nb0VBlcP0B9Hz/tF+HsUOU3OnnXA8WLfmi3V
+         veAQ==
+X-Gm-Message-State: ACrzQf3DomHB7moFXWmN04IBlwuMNJsLUZ/99V81hfWhn8q7zrw5rmkT
+        y+m+rW+i9T4Xo8WPE+L4nhFQC/om0dZQWbR1
+X-Google-Smtp-Source: AMsMyM7vJ/PR4P14DLQBaJpzHCGqSoud7gaIwx0eOUsQHSMeqXrfDtMP4isskWzcfYApPERl8yACrg==
+X-Received: by 2002:a17:902:dad1:b0:183:243c:d0d0 with SMTP id q17-20020a170902dad100b00183243cd0d0mr13409687plx.157.1665596751184;
+        Wed, 12 Oct 2022 10:45:51 -0700 (PDT)
+Received: from google.com ([2620:15c:2d:3:5351:89a8:5e92:8bed])
+        by smtp.gmail.com with ESMTPSA id t8-20020a170902e84800b00185002f0c6csm197132plg.134.2022.10.12.10.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 10:45:50 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 10:45:45 -0700
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <Y0b9SYI7v94ig5v8@google.com>
+References: <YlllpH+PB8XVUn6h@arm.com>
+ <YlvLqkIdrCp/rOsG@gondor.apana.org.au>
+ <YlvSEHul1Rv3Ap34@arm.com>
+ <YlvTNQGh+MfZFWKW@gondor.apana.org.au>
+ <YlxATW56ZoNtmxlk@arm.com>
+ <YtHo3Xu33jovwpFt@google.com>
+ <YtIvr7t8A/OlIXrT@gondor.apana.org.au>
+ <YtWeJ12GI7LxQ4IK@arm.com>
+ <YypfJQqj8PeOp8A4@google.com>
+ <Yzc2UrX7ndWw1vKI@arm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2c8e:b0:6a3:886a:30fb with SMTP id
- i14-20020a0566022c8e00b006a3886a30fbmr14692434iow.75.1665596632018; Wed, 12
- Oct 2022 10:43:52 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 10:43:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000097399505ead9ef34@google.com>
-Subject: [syzbot] WARNING in ovs_dp_reset_user_features
-From:   syzbot <syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com>
-To:     aahringo@redhat.com, ccaulfie@redhat.com, cluster-devel@redhat.com,
-        davem@davemloft.net, dev@openvswitch.org, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, pshelar@ovn.org,
-        syzkaller-bugs@googlegroups.com, teigland@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yzc2UrX7ndWw1vKI@arm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Sep 30, 2022 at 07:32:50PM +0100, Catalin Marinas wrote:
+> I started refreshing the series but I got stuck on having to do bouncing
+> for small buffers even if when they go through the iommu (and I don't
+> have the set up to test it yet).
 
-syzbot found the following issue on:
+For devices that go through the IOMMU, are you planning on adding
+similar logic as you did in the direct-DMA path to bounce the buffer
+prior to calling into whatever DMA ops are registered for the device?
 
-HEAD commit:    e8bc52cb8df8 Merge tag 'driver-core-6.1-rc1' of git://git...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=134de042880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7579993da6496f03
-dashboard link: https://syzkaller.appspot.com/bug?extid=31cde0bef4bbf8ba2d86
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12173a34880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1792461a880000
+Also, there are devices with ARM64 CPUs that disable SWIOTLB usage because
+none of the peripherals that they engage in DMA with need bounce buffering,
+and also to reclaim the default 64 MB of memory that SWIOTLB uses. With
+this approach, SWIOTLB usage will become mandatory if those devices need
+to perform non-coherent DMA transactions that may not necessarily be DMA
+aligned (e.g. small buffers), correct?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4dc25a89bfbd/disk-e8bc52cb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/16c9ca5fd754/vmlinux-e8bc52cb.xz
+If so, would there be concerns that the memory savings we get back from
+reducing the memory footprint of kmalloc might be defeated by how much
+memory is needed for bounce buffering? I understand that we can use the
+"swiotlb=num_slabs" command line parameter to minimize the amount of
+memory allocated for bounce buffering. If this is the only way to
+minimize this impact, how much memory would you recommend to allocate
+for bounce buffering on a system that will only use bounce buffers for
+non-DMA-aligned buffers?
 
-The issue was bisected to:
-
-commit 6b0afc0cc3e9a9a91f5a76d0965d449781441e18
-Author: Alexander Aring <aahringo@redhat.com>
-Date:   Wed Jun 22 18:45:23 2022 +0000
-
-    fs: dlm: don't use deprecated timeout features by default
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10d5787c880000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12d5787c880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14d5787c880000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com
-Fixes: 6b0afc0cc3e9 ("fs: dlm: don't use deprecated timeout features by default")
-
-------------[ cut here ]------------
-Dropping previously announced user features
-WARNING: CPU: 1 PID: 3608 at net/openvswitch/datapath.c:1619 ovs_dp_reset_user_features+0x1bc/0x240 net/openvswitch/datapath.c:1619
-Modules linked in:
-CPU: 1 PID: 3608 Comm: syz-executor162 Not tainted 6.0.0-syzkaller-07994-ge8bc52cb8df8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:ovs_dp_reset_user_features+0x1bc/0x240 net/openvswitch/datapath.c:1619
-Code: 00 c7 03 00 00 00 00 eb 05 e8 d0 be 67 f7 5b 41 5c 41 5e 41 5f 5d c3 e8 c2 be 67 f7 48 c7 c7 00 92 e3 8b 31 c0 e8 74 7a 2f f7 <0f> 0b eb c7 44 89 f1 80 e1 07 fe c1 38 c1 0f 8c f1 fe ff ff 4c 89
-RSP: 0018:ffffc90003b8f370 EFLAGS: 00010246
-RAX: e794c0e413340e00 RBX: ffff8880175cae68 RCX: ffff88801c069d80
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: 0000000000000008 R08: ffffffff816c58ad R09: ffffed1017364f13
-R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: dffffc0000000000
-R13: ffff8880175ca450 R14: 1ffff11002eb95cd R15: ffffc90003b8f6b0
-FS:  0000555557276300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000916 CR3: 000000001ed81000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ovs_dp_cmd_new+0x8f6/0xc80 net/openvswitch/datapath.c:1822
- genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
- genl_family_rcv_msg net/netlink/genetlink.c:808 [inline]
- genl_rcv_msg+0x11ca/0x1670 net/netlink/genetlink.c:825
- netlink_rcv_skb+0x1f0/0x460 net/netlink/af_netlink.c:2540
- genl_rcv+0x24/0x40 net/netlink/genetlink.c:836
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x7e7/0x9c0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x9b3/0xcd0 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0x597/0x8e0 net/socket.c:2482
- ___sys_sendmsg net/socket.c:2536 [inline]
- __sys_sendmsg+0x28e/0x390 net/socket.c:2565
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc51f29de89
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd99ec6ed8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 000000000000a2c4 RCX: 00007fc51f29de89
-RDX: 0000000000000000 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffd99ec7078 R09: 00007ffd99ec7078
-R10: 00007ffd99ec6950 R11: 0000000000000246 R12: 00007ffd99ec6eec
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks,
+Isaac
