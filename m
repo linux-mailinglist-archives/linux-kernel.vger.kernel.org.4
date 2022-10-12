@@ -2,164 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725D25FC775
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C81B5FC7A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 16:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiJLOev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 10:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S229616AbiJLOnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 10:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiJLOeq (ORCPT
+        with ESMTP id S229769AbiJLOni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:34:46 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914C7FAEE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:34:43 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id a18so7640556qko.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OMsZ+7M+Sgc7E+9hQ4WNx9YG06bm1iwnnpkAazR85FQ=;
-        b=v+NlSdt1xz25Z4nh5paIkrUedP3AyaVTV5F6ByBfEKCbp5uDnrvLuQZTADrqMTFH+K
-         ouXHzKcWPMhLSawAypW1+Si9D2IHWmm79RcK7w+e2WCcvYrmY2Wank2V9xT5QwYLNuCi
-         UJrq5X2oq1EwOmFPEFOQgQpuNvhENP8V7laGYPp26huydnOjvTg1QGKo57j4dzfkZUq7
-         5hdsfIUDrPJuzIGg+TwXGqJ76kCLaG0t8tKmt0rlMxoLzOpCorV3GzAnYzlloBHKR5bi
-         /anuljnptXX786g8htuf7LyNLu3PnQO92CVhapnNS6rguqUFk5tcihj0Cu7/HwYGvZ52
-         cDAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OMsZ+7M+Sgc7E+9hQ4WNx9YG06bm1iwnnpkAazR85FQ=;
-        b=RmdbTw5oHP5E4rkb8WtuO1L/rD7VkmnbzX92TmPtk+fJSqRwcE16NnqQuWq+tjVx2L
-         K1x65zOv9P0eaM5Ah9z4w/1l5ZyMFPgO12wsVDOn7CoZ86JryhzmXFOYeA3aSfTuirUO
-         oLLz1WMHfbWq5Y4Pc+5iEfPQSMwArMENpdRxxwIOCznWQhzU1EsZFDiSqXAW+9tp7ZXT
-         gHwBvIdpGyz5TmspKdSsKn+Rs5VcSAYgtvgGLq6whCf/qhGwQ6Y7cc7Rq90dWgbhMDMy
-         0W5thvvCpYTay0+aPXTGauzYJWNHxafrTbvskbUON4u31IzNhcwTpui59GTb/qAmp9F2
-         FAgQ==
-X-Gm-Message-State: ACrzQf0gwGjs/C+Wm8aMhz96uSRQw6rWcNoykCZAeKiLFPFalQLaMGBJ
-        Mns6JK/+zTsBUFWSAUpyc6nPTw==
-X-Google-Smtp-Source: AMsMyM4qzU6utKFRylYq2Fgww+YpmjOTOpohktT/qqMwnS8qvd0pIyK0JpDzT1OKiy9dH2IYptnjgw==
-X-Received: by 2002:a37:5a04:0:b0:6e0:a338:5f12 with SMTP id o4-20020a375a04000000b006e0a3385f12mr20382231qkb.420.1665585282401;
-        Wed, 12 Oct 2022 07:34:42 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id e124-20020a37b582000000b006ceb933a9fesm15796606qkf.81.2022.10.12.07.34.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 07:34:41 -0700 (PDT)
-Message-ID: <881e19a9-2e16-7661-0efd-cae7ef1067e7@linaro.org>
-Date:   Wed, 12 Oct 2022 10:34:40 -0400
+        Wed, 12 Oct 2022 10:43:38 -0400
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 07:43:37 PDT
+Received: from mail-200163.simplelogin.co (mail-200163.simplelogin.co [176.119.200.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D945CF1A0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 07:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=dkim;
+        t=1665585415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=48nyvPRw0jqJPbOytTMFkgquP0UbxyMjAUI56j3ha90=;
+        b=C1+5NgJ+8W7zMI5cP5g3DX6ohcEjFc4hFA6mBJO0Snfe3Ke5WpawlQqi7Mi0yV9jB3JYk0
+        zbji8k7wMa5iBTuPZCDIypHBuxIgFHf3v1vriiPSKaw5ErImLrtH267mUOT0XTWF7i/yRw
+        XB/Ww8mrOQyw97xjLJxWkuiTuAv3DnE=
+Subject: [PATCH v4] staging: rtl8192e: remove unnecessary braces for single
+ statement blocks
+Date:   Wed, 12 Oct 2022 22:36:33 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 1/3] dt-bindings: net: marvell,pp2: convert to
- json-schema
-Content-Language: en-US
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>,
-        devicetree@vger.kernel.org, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, upstream@semihalf.com
-References: <20221011190613.13008-1-mig@semihalf.com>
- <20221011190613.13008-2-mig@semihalf.com>
- <ad015bc9-a6d2-491d-463a-42a6a0afbf75@linaro.org>
- <CAPv3WKcY=erFTBDLP1AhQa0+CP6C8KJinmKFEkR2xh4mHHv_aQ@mail.gmail.com>
- <CAPv3WKdon28ntGQ=xbmL+CEFQ7=xzOQOcV9qN_8MOt-uiLHoXg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPv3WKdon28ntGQ=xbmL+CEFQ7=xzOQOcV9qN_8MOt-uiLHoXg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+From:   Rui Li <me@lirui.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Message-ID: <166558541522.9.15423282339326993462.68459319@lirui.org>
+X-SimpleLogin-Type: Reply
+X-SimpleLogin-EmailLog-ID: 68459321
+X-SimpleLogin-Want-Signing: yes
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 19:01, Marcin Wojtas wrote:
-,
->>
->> ethernet@
->> {
->>     ethernet-port@0
->>     {
->>      }
->>      ethernet-port@1
->>      {
->>      }
->> }
->>
->> What do you recommend?
->>
-> 
-> I moved the ethernet-controller.yaml reference to under the subnode
-> (this allowed me to remove phy and phy-mode description)) and it
-> doesn't complain about the node naming. Please let me know if below
-> would be acceptable.
-> 
-> --- a/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-> +++ b/Documentation/devicetree/bindings/net/marvell,pp2.yaml
-> @@ -61,7 +61,11 @@ patternProperties:
->      type: object
->      description: subnode for each ethernet port.
-> 
-> +    allOf:
+This commit cleans up checkpatch warning as follows:
+braces {} are not necessary for single statement blocks
 
-Skip the allOf, just $ref is enough.
+Signed-off-by: Rui Li <me@lirui.org>
+---
+Changes since v3:
+ - Clean one more warning as code updated
 
-> +      - $ref: ethernet-controller.yaml#
-> +
->      properties:
->        interrupts:
->          minItems: 1
->          maxItems: 10
-> @@ -95,19 +99,11 @@ patternProperties:
-> 
->        port-id:
->          $ref: /schemas/types.yaml#/definitions/uint32
-> +        deprecated: true
->          description: >
->            ID of the port from the MAC point of view.
->            Legacy binding for backward compatibility.
-> 
-> -      phy:
-> -        $ref: /schemas/types.yaml#/definitions/phandle
-> -        description: >
-> -          a phandle to a phy node defining the PHY address
-> -          (as the reg property, a single integer).
-> -
-> -      phy-mode:
-> -        $ref: ethernet-controller.yaml#/properties/phy-mode
-> -
->        marvell,loopback:
->          $ref: /schemas/types.yaml#/definitions/flag
->          description: port is loopback mode.
-> @@ -132,7 +128,6 @@ required:
->    - clock-names
-> 
->  allOf:
-> -  - $ref: ethernet-controller.yaml#
->    - if:
-> 
+Changes since v2:
+ - Correct commit message title
+ - Add changelog
 
-Yes, except:
+Changes since v1:
+ - Only fix one of checkpatch warnings
+---
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  3 +--
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  9 +++------
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 12 ++++--------
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c   |  3 +--
+ 4 files changed, 9 insertions(+), 18 deletions(-)
 
-1. top-level (so with no indentation) unevaluatedProperties: false
-should be now additionalProperties: false.
-2. You need unevaluatedProperties here:
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index 18e4e5d84878..8d20b0deca37 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -1112,9 +1112,8 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
+ 	if (cb_desc->bHwSec) {
+ 		static u8 tmp;
+ 
+-		if (!tmp) {
++		if (!tmp)
+ 			tmp = 1;
+-		}
+ 		switch (priv->rtllib->pairwise_key_type) {
+ 		case KEY_TYPE_WEP40:
+ 		case KEY_TYPE_WEP104:
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index 1b592258e640..4e3d183be0f2 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -522,9 +522,8 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
+ 		rtStatus  = rtl92e_check_bb_and_rf(dev,
+ 						   (enum hw90_block)eCheckItem,
+ 						   (enum rf90_radio_path)0);
+-		if (!rtStatus) {
++		if (!rtStatus)
+ 			return rtStatus;
+-		}
+ 	}
+ 	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x0);
+ 	_rtl92e_phy_config_bb(dev, BaseBand_Config_PHY_REG);
+@@ -1379,9 +1378,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 					i++;
+ 				}
+ 
+-				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
++				if (i >= MAX_DOZE_WAITING_TIMES_9x)
+ 					break;
+-				}
+ 			}
+ 			rtl92e_set_rf_off(dev);
+ 			break;
+@@ -1398,9 +1396,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 					i++;
+ 				}
+ 
+-				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
++				if (i >= MAX_DOZE_WAITING_TIMES_9x)
+ 					break;
+-				}
+ 			}
+ 
+ 			if (pPSC->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index 702551056227..641961a14c52 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -267,9 +267,8 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
+ 			"PATH=/usr/bin:/bin",
+ 			 NULL};
+ 
+-	if (priv->ResetProgress == RESET_TYPE_SILENT) {
++	if (priv->ResetProgress == RESET_TYPE_SILENT)
+ 		return;
+-	}
+ 
+ 	if (priv->rtllib->state != RTLLIB_LINKED)
+ 		return;
+@@ -330,9 +329,8 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
+ 	bool bshort_gi_enabled = false;
+ 	static u8 ping_rssi_state;
+ 
+-	if (!priv->up) {
++	if (!priv->up)
+ 		return;
+-	}
+ 
+ 	if (pra->rate_adaptive_disabled)
+ 		return;
+@@ -777,9 +775,8 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
+ 		tmpRegA = rtl92e_get_bb_reg(dev, rOFDM0_XATxIQImbalance,
+ 					    bMaskDWord);
+ 		for (i = 0; i < OFDM_Table_Length; i++) {
+-			if (tmpRegA == OFDMSwingTable[i]) {
++			if (tmpRegA == OFDMSwingTable[i])
+ 				priv->OFDM_index[0] = i;
+-			}
+ 		}
+ 
+ 		TempCCk = rtl92e_get_bb_reg(dev, rCCK0_TxFilter1, bMaskByte2);
+@@ -1066,9 +1063,8 @@ void rtl92e_dm_restore_state(struct net_device *dev)
+ 	u32	reg_ratr = priv->rate_adaptive.last_ratr;
+ 	u32 ratr_value;
+ 
+-	if (!priv->up) {
++	if (!priv->up)
+ 		return;
+-	}
+ 
+ 	if (priv->rate_adaptive.rate_adaptive_disabled)
+ 		return;
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+index f9589c5b62ba..fdf867a5dd7a 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+@@ -571,9 +571,8 @@ int rtllib_wx_set_power(struct rtllib_device *ieee,
+ 		ieee->ps = RTLLIB_PS_DISABLED;
+ 		goto exit;
+ 	}
+-	if (wrqu->power.flags & IW_POWER_TIMEOUT) {
++	if (wrqu->power.flags & IW_POWER_TIMEOUT)
+ 		ieee->ps_timeout = wrqu->power.value / 1000;
+-	}
+ 
+ 	if (wrqu->power.flags & IW_POWER_PERIOD)
+ 		ieee->ps_period = wrqu->power.value / 1000;
+-- 
+2.30.2
 
-+    type: object
-+    description: subnode for each ethernet port.
-+    $ref: ethernet-controller.yaml#
-+    unevaluatedProperties: false
-
-Best regards,
-Krzysztof
 
