@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1635FC25F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26725FC261
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiJLIv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S229646AbiJLIvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiJLIun (ORCPT
+        with ESMTP id S229762AbiJLIum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:50:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FECD7EFDE;
+        Wed, 12 Oct 2022 04:50:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F647F264;
         Wed, 12 Oct 2022 01:50:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 710826144A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7188A61496;
         Wed, 12 Oct 2022 08:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40BAC4FF1E;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C9FC4FF1B;
         Wed, 12 Oct 2022 08:50:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665564640;
-        bh=8Ptmo3nJGbpkV2ey9zNWxmr3Wo6Tci6upld/D0S8ty8=;
+        bh=OPKgUOopDhG/a9gweoH3JA1eoXHuUz63XssdJdVt9XU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=efth8sD+gWs77bAV1gFgYnNs/bXrCuPb2fkmOpQpOIGHiWyT9V2Z6o9pJSyq/Xak4
-         8V6Ozi6QYjh5KCBHE1vcbF//4q2aN+41Sj1z1HmGjuwzeuSXS67XlX+cBUbl08k4Zc
-         A2MXIRO1Ns3CJhWGNTrLtgeRPICrurtIsy1OVo/OgyDRanOgwoX2WIspYLokCR/8uL
-         m9BaljfsaIo4SB/bvzmbejcKgUj475shrVqu8T2ZSir0LWtQ+FNGclNsOWhxZ2V54x
-         c/9AM73gAtQ7CtP5VxN9mIuX+XOEa5IsR2hwCPksBHQ99P60gzrwHJuArOoRsP193H
-         aAKjz3WxhbL3Q==
+        b=ouXIGMGjw+x9qcybhbzq2bF4L8ImU/NFbhi9JKfyXOFCgT4tyKwO7hO2NPlK6aHh+
+         Zq880Op8pkdMSJMlDowSqa2OxkQo3Q8pa3+Dvz9uGNYbKZ2ngPaT1FSr8lWhQWpIVe
+         R3s+eawBlz5YeX+RJp61mIPlD2PcAl50xAXlKefTXMxY6faBb/2hJDkmHRi700u15J
+         5ytZj+kECsDVgvhkuEXXof97ajxClkTIGYDlnst6aM7LWhF+mAoORAF4SEuxCms6xm
+         gT980mc+ioOOHdBA3HRwZymnaocZNdiw+IPwnqaO6ei+gRWsVO2EsvSxAxpLrTDKKI
+         cFqGshUG2lNFA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oiXRf-0006IJ-JM; Wed, 12 Oct 2022 10:50:31 +0200
+        id 1oiXRf-0006IN-MW; Wed, 12 Oct 2022 10:50:31 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 18/20] phy: qcom-qmp-pcie-msm8996: drop start and pwrdn-ctrl abstraction
-Date:   Wed, 12 Oct 2022 10:50:00 +0200
-Message-Id: <20221012085002.24099-18-johan+linaro@kernel.org>
+Subject: [PATCH 19/20] phy: qcom-qmp-ufs: drop start and pwrdn-ctrl abstraction
+Date:   Wed, 12 Oct 2022 10:50:01 +0200
+Message-Id: <20221012085002.24099-19-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221012085002.24099-1-johan+linaro@kernel.org>
 References: <20221012084846.24003-1-johan+linaro@kernel.org>
@@ -68,65 +68,118 @@ since the QMP driver split.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c    | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 35 +++++--------------------
+ 1 file changed, 7 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-index cd8fafe4c295..ff198d846fd2 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-@@ -196,9 +196,6 @@ struct qmp_phy_cfg {
- 
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+index 1a51f803928b..9b58d742af3b 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+@@ -544,9 +544,6 @@ struct qmp_phy_cfg {
  	/* array of registers with different offsets */
  	const unsigned int *regs;
--
+ 
 -	unsigned int start_ctrl;
 -	unsigned int pwrdn_ctrl;
+-
+ 	/* true, if PCS block has no separate SW_RESET register */
+ 	bool no_pcs_sw_reset;
+ };
+@@ -662,9 +659,6 @@ static const struct qmp_phy_cfg msm8996_ufs_cfg = {
+ 
+ 	.regs			= msm8996_ufsphy_regs_layout,
+ 
+-	.start_ctrl		= SERDES_START,
+-	.pwrdn_ctrl		= SW_PWRDN,
+-
+ 	.no_pcs_sw_reset	= true,
  };
  
- /**
-@@ -311,9 +308,6 @@ static const struct qmp_phy_cfg msm8996_pciephy_cfg = {
+@@ -685,9 +679,6 @@ static const struct qmp_phy_cfg sdm845_ufsphy_cfg = {
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= sdm845_ufsphy_regs_layout,
+ 
+-	.start_ctrl		= SERDES_START,
+-	.pwrdn_ctrl		= SW_PWRDN,
+-
+ 	.no_pcs_sw_reset	= true,
+ };
+ 
+@@ -708,9 +699,6 @@ static const struct qmp_phy_cfg sm6115_ufsphy_cfg = {
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= sm6115_ufsphy_regs_layout,
+ 
+-	.start_ctrl		= SERDES_START,
+-	.pwrdn_ctrl		= SW_PWRDN,
+-
+ 	.no_pcs_sw_reset	= true,
+ };
+ 
+@@ -730,9 +718,6 @@ static const struct qmp_phy_cfg sm8150_ufsphy_cfg = {
  	.vreg_list		= qmp_phy_vreg_l,
  	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
- 	.regs			= pciephy_regs_layout,
+ 	.regs			= sm8150_ufsphy_regs_layout,
 -
--	.start_ctrl		= PCS_START | PLL_READY_GATE_EN,
--	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+-	.start_ctrl		= SERDES_START,
+-	.pwrdn_ctrl		= SW_PWRDN,
  };
  
- static void qmp_pcie_msm8996_configure_lane(void __iomem *base,
-@@ -503,7 +497,8 @@ static int qmp_pcie_msm8996_power_on(struct phy *phy)
- 	 * Pull out PHY from POWER DOWN state.
- 	 * This is active low enable signal to power-down PHY.
- 	 */
--	qphy_setbits(pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL, cfg->pwrdn_ctrl);
-+	qphy_setbits(pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
-+			SW_PWRDN | REFCLK_DRV_DSBL);
+ static const struct qmp_phy_cfg sm8350_ufsphy_cfg = {
+@@ -751,9 +736,6 @@ static const struct qmp_phy_cfg sm8350_ufsphy_cfg = {
+ 	.vreg_list		= qmp_phy_vreg_l,
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= sm8150_ufsphy_regs_layout,
+-
+-	.start_ctrl		= SERDES_START,
+-	.pwrdn_ctrl		= SW_PWRDN,
+ };
  
- 	usleep_range(POWER_DOWN_DELAY_US_MIN, POWER_DOWN_DELAY_US_MAX);
+ static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
+@@ -772,9 +754,6 @@ static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
+ 	.vreg_list		= qmp_phy_vreg_l,
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= sm8150_ufsphy_regs_layout,
+-
+-	.start_ctrl		= SERDES_START,
+-	.pwrdn_ctrl		= SW_PWRDN,
+ };
  
-@@ -511,7 +506,8 @@ static int qmp_pcie_msm8996_power_on(struct phy *phy)
- 	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+ static void qmp_ufs_configure_lane(void __iomem *base,
+@@ -832,8 +811,7 @@ static int qmp_ufs_com_init(struct qmp_phy *qphy)
+ 	if (ret)
+ 		goto err_disable_regulators;
  
- 	/* start SerDes and Phy-Coding-Sublayer */
+-	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
+-			cfg->pwrdn_ctrl);
++	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL], SW_PWRDN);
+ 
+ 	return 0;
+ 
+@@ -933,8 +911,9 @@ static int qmp_ufs_power_on(struct phy *phy)
+ 	/* Pull PHY out of reset state */
+ 	if (!cfg->no_pcs_sw_reset)
+ 		qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+-	/* start SerDes and Phy-Coding-Sublayer */
 -	qphy_setbits(pcs, cfg->regs[QPHY_START_CTRL], cfg->start_ctrl);
-+	qphy_setbits(pcs, cfg->regs[QPHY_START_CTRL],
-+			PCS_START | PLL_READY_GATE_EN);
++
++	/* start SerDes */
++	qphy_setbits(pcs, cfg->regs[QPHY_START_CTRL], SERDES_START);
  
- 	status = pcs + cfg->regs[QPHY_PCS_STATUS];
- 	ret = readl_poll_timeout(status, val, !(val & PHYSTATUS), 200,
-@@ -542,11 +538,12 @@ static int qmp_pcie_msm8996_power_off(struct phy *phy)
- 	qphy_setbits(qphy->pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+ 	status = pcs + cfg->regs[QPHY_PCS_READY_STATUS];
+ 	ret = readl_poll_timeout(status, val, (val & PCS_READY), 200,
+@@ -956,12 +935,12 @@ static int qmp_ufs_power_off(struct phy *phy)
+ 	if (!cfg->no_pcs_sw_reset)
+ 		qphy_setbits(qphy->pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
  
- 	/* stop SerDes and Phy-Coding-Sublayer */
+-	/* stop SerDes and Phy-Coding-Sublayer */
 -	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_START_CTRL], cfg->start_ctrl);
-+	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_START_CTRL],
-+			SERDES_START | PCS_START);
++	/* stop SerDes */
++	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_START_CTRL], SERDES_START);
  
  	/* Put PHY into POWER DOWN state: active low */
- 	qphy_clrbits(qphy->pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
+ 	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
 -			cfg->pwrdn_ctrl);
-+			SW_PWRDN | REFCLK_DRV_DSBL);
++			SW_PWRDN);
  
  	return 0;
  }
