@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0194F5FCE7D
+	by mail.lfdr.de (Postfix) with ESMTP id A2BC15FCE7F
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 00:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJLWeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 18:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S229959AbiJLWeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 18:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiJLWdi (ORCPT
+        with ESMTP id S230143AbiJLWdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 18:33:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C3103D83;
-        Wed, 12 Oct 2022 15:33:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28F6FB81C27;
-        Wed, 12 Oct 2022 22:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7E5DC433D6;
-        Wed, 12 Oct 2022 22:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665614014;
-        bh=NRwQVmcxuR/tZKbHXK5KTa5IwUsIuw5nUbHBMa9mBGc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jEoDwFBSYdyfAzOrLN91YWhpiuNbtBc28nL/0OeEwO/ry7M31yQx1cNOkycjL49Aa
-         UqcCgF4kJqxMUd7In5UuLz3ODxSDgj1Rfm/OdLS6NevL0siiiJxWEb4wwyig43MyHh
-         wXP6tdIEzx72a5pJrSzmJbKXtppow0CMLFlSocEzSobSCVvYLWdu9jcHCd+rTUg4K3
-         EyK7GzquB+wuQ6GDb6PZ0WBuDOOmwVS0AV7uMQ8R6LAotYfi2w1pVLX/Col3aGB+yb
-         TD/RSkq1Pji4M0s32xvSMEHOr/GBziCLbOO29Sk/+9/jNFadFIsK1meQDmgiAcf5TW
-         sP+Y305aObXJw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3E13E29F37;
-        Wed, 12 Oct 2022 22:33:34 +0000 (UTC)
-Subject: Re: [GIT PULL] KUnit second update for Linux 6.1-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <4de26e59-3ea8-a434-96ff-171c4616069e@linuxfoundation.org>
-References: <4de26e59-3ea8-a434-96ff-171c4616069e@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <4de26e59-3ea8-a434-96ff-171c4616069e@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-6.1-rc1-2
-X-PR-Tracked-Commit-Id: e98c4f6afc5e21507737066433699f225a180db7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a185a0995518a3355c8623c95c36aaaae489de10
-Message-Id: <166561401486.16489.7948642865645924814.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Oct 2022 22:33:34 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 18:33:54 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9A5118741
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:33:51 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-333a4a5d495so1923457b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 15:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FwLUfxB8SXrw3NQDomUAd60ArMa52KC+Lg79Tj4TeiI=;
+        b=s73IStGtmlEJucueszS7Vxm4EKvpKoXKq1IIpWNCmBF8DdU1OE4b3Z0dpdUMPfVSMo
+         lybvPLkLHBt1lIhm893t9PY8KQJyoWUwNUkxBke6xsoFs6WRhAQO8zthnBbx3LATUC2M
+         yxBCXh0nhYj64VTPSaCZ2cT+Z2Xxqtp1iF7YcU4u/hgXhLZUE5QL6A9yXO/De8zLOZrj
+         7nsXS4c0r/LE6uw5QFl35BAYrS3a7ihwGY9spFAx3LXsw42qw315Q8qFf8T5B53TWFWU
+         j74zPkaZu9JvCWHOWpgPrbohPSZrQR9r8l81918TH6xNdEuZ0TsqI6ekF6LJumBk8HGC
+         2Bhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FwLUfxB8SXrw3NQDomUAd60ArMa52KC+Lg79Tj4TeiI=;
+        b=2/bP/tzVJQCC3RUuo4wRA6AheZoDgyUVC9XlpStT6yBGOFeNbrK3XcLsOjAM88p+uY
+         GJrapTz2DHM+3rT6UgHJJdWIfV5/DDWiAmr4ays78wIwFAsfrf1vqKPoo2i1pHC5xRQ4
+         EV4q1mdlYqoJuM+LsWw/UswGHJgaeu0B01gkGi4K+Z3vM1AeDkS45h1KO+YP4w3cwuN9
+         sjkHD4pYsu2M9ebPl3WEN1JJ1oooYOHa6s9NZj0JfPZiYRQGwoJYUltwrz9+8arrA3RP
+         KwBpvJTLrciZFVHkhGhQtViu6GWuJiLo4GR0fzoisiWALbh4hS3vzQHyMMZD9WT4605/
+         m7IA==
+X-Gm-Message-State: ACrzQf1KtbXLdqDuQuXi1+Ay4oLbv7k2DCDrk+MmVw9ihmKvp6TYOJjf
+        pOJJ69zZpWsIkl33bPJTg7oOOjFqJiq2mel90RNcXA==
+X-Google-Smtp-Source: AMsMyM6Y0BgqVhw4oJ7krmkQ/dx4v7WLDCTnjrAR82SA5sw+4uSyqbCHFQJqpZW/bGq+yV9SodBTrZm24+EfX0EKpTc=
+X-Received: by 2002:a81:a43:0:b0:35e:445:a024 with SMTP id 64-20020a810a43000000b0035e0445a024mr30116302ywk.378.1665614030216;
+ Wed, 12 Oct 2022 15:33:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221012215613.32054-1-luca@z3ntu.xyz>
+In-Reply-To: <20221012215613.32054-1-luca@z3ntu.xyz>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 13 Oct 2022 01:33:38 +0300
+Message-ID: <CAA8EJpr2GS9XAd12-9abd0FBn0DKDpos9np00=M49BptYVz63g@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: msm8996: remove bogus ufs_variant node
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 12 Oct 2022 12:58:31 -0600:
+On Thu, 13 Oct 2022 at 00:56, Luca Weiss <luca@z3ntu.xyz> wrote:
+>
+> This ufs_variant node seems to be a remnant from downstream devicetree.
+>
+> As it doesn't seem to be used by anything upstream, remove it from the
+> dtsi.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 ----
+>  1 file changed, 4 deletions(-)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-6.1-rc1-2
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a185a0995518a3355c8623c95c36aaaae489de10
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thank you!
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+With best wishes
+Dmitry
