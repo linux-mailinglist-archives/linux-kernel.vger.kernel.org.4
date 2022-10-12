@@ -2,152 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B5A5FC68A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7EA5FC693
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJLNeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
+        id S229837AbiJLNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiJLNdy (ORCPT
+        with ESMTP id S229638AbiJLNf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:33:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C524CF1BD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:33:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665581632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MEvw/2l7N1BaFm5nkG7FVAudL+WwYTcW5bO+ziwTPB0=;
-        b=M55eRm4DR7WW4NRp006b8RGI/LzYopNp6zKgTFTqgex1ouDroy26kWnKgZ9WN1dUeN3DC3
-        SmsRGsBu1qpkqEYhDPChKnWA87jQ/7IziWrBLqNYixKOjblqg43f0yhcjNbGwrSSy1MgzG
-        BPA9vxfvoPmitVVMkFRu8IvgrNKk50g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-574-3lEp-pAUPES13LZSLs-n7A-1; Wed, 12 Oct 2022 09:33:49 -0400
-X-MC-Unique: 3lEp-pAUPES13LZSLs-n7A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1416985A5B6;
-        Wed, 12 Oct 2022 13:33:49 +0000 (UTC)
-Received: from llong.com (unknown [10.22.33.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A4A42112131E;
-        Wed, 12 Oct 2022 13:33:48 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        =?UTF-8?q?Ting11=20Wang=20=E7=8E=8B=E5=A9=B7?= 
-        <wangting11@xiaomi.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 2/2] locking/rwsem: Limit # of null owner retries for handoff writer
-Date:   Wed, 12 Oct 2022 09:33:33 -0400
-Message-Id: <20221012133333.1265281-3-longman@redhat.com>
-In-Reply-To: <20221012133333.1265281-1-longman@redhat.com>
-References: <20221012133333.1265281-1-longman@redhat.com>
+        Wed, 12 Oct 2022 09:35:59 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B51CAC3B7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:35:56 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id h15so6013841qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p9wv8237wgiOHnZzBeahRRwwZUTEpSK22YpW0WQ8ENQ=;
+        b=CjpoFkyKt2Uj/f6Lutf+q+eujpjTXoQucjGCs5xN1wirDfpq/0VvBPWcYKcLddDJXy
+         djpKrpZvTmv3ZoHid7/65Bnf/1/dOnIcA5QYJ156coiid0vDg+n0PMHRSSGQcxwTxuNU
+         NyWVYMO9YA+CLepPyiIQi3efN6EZpZxCkC8M7MROypc7fzVg+XJo/mxouo3fBC1NEq4j
+         SqVrnI8AflI1sBsvVftUCjYx7d4qk1fuHfM4I+fnkPZ6HtusEJ16xDYm8Jq/hSLyBeZK
+         WIKAs2sSxNdCBQ03vVFfFeezd/VBd1nLR3vZWiszCzozsTpFLjRf2EwYSdZCJSMNzDGy
+         eX5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p9wv8237wgiOHnZzBeahRRwwZUTEpSK22YpW0WQ8ENQ=;
+        b=yE8f9pB+QaQQMhBE2QB+T2IoQf8W0dVYPXH68cjdLEG39S6Mi140ZeJahEbK/7xtTn
+         CyBNjktOkSfKOXQrQaufw81pd1NBfpE87U7U0+5te9wdTnTQp5Qogb8gyodOblEmlqeI
+         u7CLjmCtUn30KrgCzjd1tc6L2OFPHAAyToDjbO62Cc0vl2VaHcAkm0Q2Hr0wthg39eVH
+         gicGd1Xd5Y3qIAflUwfC7Fj8kIwIvKgRbz+jb9u3wtYe1m0oh57KlXDHL/SYwNnODoC2
+         gBObPrSc1foP9jmIHp1QXxoH79gUTopD/x7WcM7HpPOnWoHI0zwvD8PGufumJI0sMLqT
+         4/LA==
+X-Gm-Message-State: ACrzQf1dnZ2DdntUOcDVaMMgx562luMEX/DM2G8RQGPVdLCqDMGG657u
+        TE+KKeWPmCVE8Cn91bsu9O8v6A==
+X-Google-Smtp-Source: AMsMyM7q7HOB8fihkeRyzWXkhwIJbD9lX9nJvsCeMqMfFiR6wEnE4o8DM3wgIHiz9qtWeHFh2y6ftw==
+X-Received: by 2002:a05:622a:60b:b0:399:69c8:9b54 with SMTP id z11-20020a05622a060b00b0039969c89b54mr14464320qta.180.1665581755389;
+        Wed, 12 Oct 2022 06:35:55 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b006bb29d932e1sm5669503qkp.105.2022.10.12.06.35.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 06:35:54 -0700 (PDT)
+Message-ID: <9f04267d-2592-b303-9b79-9cef672c970a@linaro.org>
+Date:   Wed, 12 Oct 2022 09:33:42 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 12/30] dt-bindings: reset: Add starfive,jh7110-reset
+ bindings
+Content-Language: en-US
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929175147.19749-1-hal.feng@linux.starfivetech.com>
+ <20220929184349.GA2551443-robh@kernel.org>
+ <8BEAFAD2C4CE6E4A+0a00376c-1e3e-f597-bcf6-106ff294859a@linux.starfivetech.com>
+ <2f1d1afd-3c97-6ce0-8247-6e1c4a24e548@linaro.org>
+ <4769BE3503398017+b1699221-ccc9-a0c1-0b11-141ce9644d74@linux.starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4769BE3503398017+b1699221-ccc9-a0c1-0b11-141ce9644d74@linux.starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically
-spin on owner") assumes that when the owner field is changed to NULL,
-the lock will become free soon.  That assumption may not be correct
-especially if the handoff writer doing the spinning is a RT task which
-may preempt another task from completing its action of either freeing
-the rwsem or properly setting up owner.
+On 12/10/2022 09:16, Hal Feng wrote:
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - starfive,jh7110-reset
+>>>>
+>>>> 'reg' needed? Is this a sub-block of something else?
+>>>
+>>> Yes, the reset node is a child node of the syscon node, see patch 27 for detail.
+>>> You might not see the complete patches at that time due to technical issue of
+>>> our smtp email server. Again, I feel so sorry about that.
+>>>
+>>> 	syscrg: syscrg@13020000 {
+>>> 		compatible = "syscon", "simple-mfd";
+>>> 		reg = <0x0 0x13020000 0x0 0x10000>;
+>>>
+>>> 		syscrg_clk: clock-controller@13020000 {
+>>> 			compatible = "starfive,jh7110-clkgen-sys";
+>>> 			clocks = <&osc>, <&gmac1_rmii_refin>,
+>>> 				 <&gmac1_rgmii_rxin>,
+>>> 				 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
+>>> 				 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
+>>> 				 <&tdm_ext>, <&mclk_ext>;
+>>> 			clock-names = "osc", "gmac1_rmii_refin",
+>>> 				"gmac1_rgmii_rxin",
+>>> 				"i2stx_bclk_ext", "i2stx_lrck_ext",
+>>> 				"i2srx_bclk_ext", "i2srx_lrck_ext",
+>>> 				"tdm_ext", "mclk_ext";
+>>> 			#clock-cells = <1>;
+>>> 		};
+>>>
+>>> 		syscrg_rst: reset-controller@13020000 {
+>>> 			compatible = "starfive,jh7110-reset";
+>>> 			#reset-cells = <1>;
+>>
+>> So the answer to the "reg needed?" is what? You have unit address but no
+>> reg, so this is not correct.
+> 
+> Not needed in the reset-controller node, but needed in its parent node. 
 
-To prevent this live lock scenario, we have to limit the number of
-trylock attempts without sleeping. The current limit is now set to 8
-to allow enough time for the other task to hopefully complete its action.
+We do not talk about parent node. Rob's question was in this bindings.
+Is this document a binding for the parent node or for this node?
 
-By adding new lock events to track the number of NULL owner retries with
-handoff flag set before a successful trylock when running a 96 threads
-locking microbenchmark with equal number of readers and writers running
-on a 2-core 96-thread system for 15 seconds, the following stats are
-obtained. Note that none of locking threads are RT tasks.
+> I am sorry
+> for missing description to point it out in the bindings. I will rewrite all bindings
+> for the next version. Unit address here should be deleted.
+> 
+>>
+>>> 			starfive,assert-offset = <0x2F8>;
+>>> 			starfive,status-offset= <0x308>;
+>>> 			starfive,nr-resets = <JH7110_SYSRST_END>;
+>>> 		};
+>>> 	};
+>>>
+>>> In this case, we get the memory mapped space through the parent node with syscon
+>>> APIs. You can see patch 13 for detail.
+>>>
+>>> static int reset_starfive_register(struct platform_device *pdev, const u32 *asserted)
+>>> {
+>>
+>>
+>> (...)
+>>
+>>>
+>>>>
+>>>>> +
+>>>>> +  "#reset-cells":
+>>>>> +    const: 1
+>>>>> +
+>>>>> +  starfive,assert-offset:
+>>>>> +    description: Offset of the first ASSERT register
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +
+>>>>> +  starfive,status-offset:
+>>>>> +    description: Offset of the first STATUS register
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>
+>>>> These can't be implied from the compatible string?
+> 
+> Definitely can. We do this is for simplifying the reset driver.
 
-  Retries of successful trylock    Count
-  -----------------------------    -----
-             1                     1738
-             2                       19
-             3                       11
-             4                        2
-             5                        1
-             6                        1
-             7                        1
-             8                        0
-             X                        1
+The role of the bindings is not to simplify some specific driver in some
+specific OS...
 
-The last row is the one failed attempt that needs more than 8 retries.
-So a retry count maximum of 8 should capture most of them if no RT task
-is in the mix.
+> Otherwise, we may need to define more compatibles because there
+> are multiple reset blocks in JH7110. Another case can be found at
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/reset/altr,rst-mgr.yaml
 
-Fixes: 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically spin on owner")
-Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/rwsem.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+And why is this a problem? You have different hardware, so should have
+different compatibles. Otherwise we would have a compatible
+"all,everything" and use it in all possible devices.
 
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 3839b38608da..12eb093328f2 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -1123,6 +1123,7 @@ static struct rw_semaphore __sched *
- rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- {
- 	struct rwsem_waiter waiter;
-+	int null_owner_retries;
- 	DEFINE_WAKE_Q(wake_q);
- 
- 	/* do optimistic spinning and steal lock if possible */
-@@ -1164,7 +1165,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 	set_current_state(state);
- 	trace_contention_begin(sem, LCB_F_WRITE);
- 
--	for (;;) {
-+	for (null_owner_retries = 0;;) {
- 		if (rwsem_try_write_lock(sem, &waiter)) {
- 			/* rwsem_try_write_lock() implies ACQUIRE on success */
- 			break;
-@@ -1190,8 +1191,21 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 			owner_state = rwsem_spin_on_owner(sem);
- 			preempt_enable();
- 
--			if (owner_state == OWNER_NULL)
-+			/*
-+			 * owner is NULL doesn't guarantee the lock is free.
-+			 * An incoming reader will temporarily increment the
-+			 * reader count without changing owner and the
-+			 * rwsem_try_write_lock() will fails if the reader
-+			 * is not able to decrement it in time. Allow 8
-+			 * trylock attempts when hitting a NULL owner before
-+			 * going to sleep.
-+			 */
-+			if ((owner_state == OWNER_NULL) &&
-+			    (null_owner_retries < 8)) {
-+				null_owner_retries++;
- 				goto trylock_again;
-+			}
-+			null_owner_retries = 0;
- 		}
- 
- 		schedule();
--- 
-2.31.1
+>>> These two properties are the key differences among different reset controllers.
+>>
+>> Different as in different compatibles? Please answer the questions..> 
+>>> There are five memory regions for clock and reset in StarFive JH7110 SoC. They
+>>> are "syscrg", "aoncrg", "stgcrg", "ispcrg" and "voutcrg". Each memory region
+>>> has different reset ASSERT/STATUS register offset and different number of reset
+>>> signals. 
+>>
+>> Then these are not exactly the same devices, so using one compatible for
+>> them does not look correct.
+> 
+> One compatible can just be matched by one device? I think this is what
+> confuses me.
+
+I don't understand the question.
+
+> 
+> Best regards,
+> Hal
+> 
+
+Trim the replies - no need to quote everything (entire message following
+last reply/quote).
+
+Best regards,
+Krzysztof
 
