@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6337D5FCC3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAF55FCC3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiJLUmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 16:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        id S229887AbiJLUms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 16:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiJLUlp (ORCPT
+        with ESMTP id S229945AbiJLUmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 16:41:45 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133D010C4C6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:41:18 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 10so27468153lfy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zhIhDVAW97twCZ5MabuY2Ud1J2BRwr7Q3gcJPzfiaEk=;
-        b=tY823eaX9qaerZcByxSCq2osg6Lf/C5tVZOcbk+7w6oMH2Yb3eXKepAmmFRsxdQfmL
-         msXjMQQC8rPz+4rmbII1HicOWeLPBxxR+O8v7To0wVTXM9JNXwq+9UOpFnUmEqzlSDPm
-         qB7hJ9jQbsDXaHaCtXozTdI5udkBZ6XONT1aLVmt/52+9ODjbTqvwr4zNJXYQuwRr+pl
-         xQNYWDid92w8r7/fWf2z2b/zH4vcNecDUw8HpQIwFjzkTL4QlZOwEUK+XF9ToYLirEDe
-         anERX8ikS0QWwV2ptGuGQXwdSiYw+D5zJi2naA7wX5MQNW+AvVfTvcyLuelxW+rbvgyM
-         093g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zhIhDVAW97twCZ5MabuY2Ud1J2BRwr7Q3gcJPzfiaEk=;
-        b=oYiFBn8MlpYnICLUA3tmyqRlz5fQR9jH8he7SRJA3ch1i4i2urt5SzedhNW0E8asmJ
-         vfJwriuDGUJyIHM/o4Mtnu2UhjmjY3O7VSyfG8wsV/wNWtkJ8VMhy20Xx38CZN8+MnrV
-         9Hr67ZLAbT6FUmGLoijJVfbXEkjZ6CfVi2X49sASMFXO8A+NwV4+wLE5QeDaLqhS9Bc6
-         cc91H32F2+uJUNUUHrqBY+CLAd3jO1GBKsJ+I36SpsAehbSTu+Die3ngb13MYiL7krxB
-         RzlPOUkPH4RSY6PT8VJjRho/O+8kbv/7NLlKT7TXZEq3pVL0RT5IVhXnnYCUUySC25ee
-         pdRw==
-X-Gm-Message-State: ACrzQf2JKJnz9finCzFXhUmUeMMdDoaMEzpHn5uYp5GGmm/np3baKYKE
-        ANh7W6fjSWaI1FGvLBLhblrhMw==
-X-Google-Smtp-Source: AMsMyM7BZl+KItpQHc4Q5ULHiFXjULZdB5o+YQoucUFZJK4MoeNepvpiWO07gZm3CSiyDLBss75QuA==
-X-Received: by 2002:ac2:4e0c:0:b0:4a2:4042:8698 with SMTP id e12-20020ac24e0c000000b004a240428698mr10713490lfr.170.1665607266941;
-        Wed, 12 Oct 2022 13:41:06 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512071000b004a27bb1ad62sm93941lfs.205.2022.10.12.13.41.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 13:41:06 -0700 (PDT)
-Message-ID: <24474f58-c513-f3f4-380a-e09b5e0cb30c@linaro.org>
-Date:   Wed, 12 Oct 2022 23:41:06 +0300
+        Wed, 12 Oct 2022 16:42:19 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05D210B783
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:41:39 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e705329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e705:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0A9D91EC064C;
+        Wed, 12 Oct 2022 22:41:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665607273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rE+ld/p5MuyBsBdPS4nma7ByO8JmhPHSjwCTmH8KlTA=;
+        b=lqWl4BuLduJ3cJte9Z55R4LFYPgBq/itUyfWHhlFRRavXHfLWW+asqhSGbSdLQ0Symthgj
+        EuIYudNyFi6l+MMLTCXGPYbncicbFioO5jcLU8vzlbYGr6ZQ6sUErm4kW3dHai2kYy8kGo
+        1yQ0Hn1VZj7rK32aWyV9Yyuvy/O+BPo=
+Date:   Wed, 12 Oct 2022 22:41:12 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Baoquan He <bhe@redhat.com>, Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, david@redhat.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        sourabhjain@linux.ibm.com, linux-mm@kvack.org
+Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Y0cmaPTKQuWtwIRh@zn.tnic>
+References: <Yx7XEcXZ8PwwQW95@nazgul.tnic>
+ <cb343eef-46be-2d67-b93a-84c75be86325@oracle.com>
+ <YzRxPAoN+XmOfJzV@zn.tnic>
+ <fd08c13d-a917-4cd6-85ec-267e0fe74c41@oracle.com>
+ <Yzceb/y3SSFMuALR@zn.tnic>
+ <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com>
+ <YzcqE1RVtPcuLlxN@zn.tnic>
+ <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
+ <Y0b9apyIs+RpSo1e@zn.tnic>
+ <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 11/14] phy: qcom-qmp-combo: drop sc8280xp power-down
- delay
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221012081241.18273-1-johan+linaro@kernel.org>
- <20221012081241.18273-12-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221012081241.18273-12-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 11:12, Johan Hovold wrote:
-> The SC8280XP combo PHY does not need a delay before starting the USB PHY
-> (which is what the has_pwrdn_delay config option really controls) so
-> drop the unnecessary delay.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ----
->   1 file changed, 4 deletions(-)
-> 
+On Wed, Oct 12, 2022 at 03:19:19PM -0500, Eric DeVolder wrote:
+> We run here QEMU with the ability for 1024 DIMM slots.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+QEMU, haha.
+
+What is the highest count of DIMM slots which are hotpluggable on a
+real, *physical* system today? Are you saying you can have 1K DIMM slots
+on a board?
+
+I hardly doubt that.
+
+> So, for example, 1TiB requires 1024 DIMMs of 1GiB each with 128MiB
+> memblocks, that results in 8K possible memory regions. So just going
+> to 4TiB reaches 32K memory regions.
+
+Lemme see if I understand this correctly: when a system like that
+crashes, you want to kdump *all* those 4TiB in a vmcore? How long would
+that dump take to complete? A day?
+
+IOW, how does a realistic use case of this look like - not a QEMU one?
+
+Thx.
 
 -- 
-With best wishes
-Dmitry
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
