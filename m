@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435855FCC58
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2ADF5FCC5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 22:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJLUpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 16:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S229827AbiJLUrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 16:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJLUpV (ORCPT
+        with ESMTP id S229741AbiJLUrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 16:45:21 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532FA5E556
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:45:16 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id a25so21577ljk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:45:16 -0700 (PDT)
+        Wed, 12 Oct 2022 16:47:22 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE5FE55
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:47:19 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 204so70209pfx.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 13:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Sti7xlJS8BDmPeM82erSW44bu9sTdRGshhN8rLPU3bA=;
-        b=RbhRt1rpSUaAOSD9pBZPyvuMFoWe6OutvYUttzUiIkADnJ4ofq2sMk1thS3vJa3JDX
-         N2nGP+2pMgqi9t8wBUFAKEFGZ8dMIuhpZfnpdWV5TJhYX23En8L39Lk13fwrwZph7Rvz
-         LSf6k0EbODorm4dKGTClNXmcko05jjDlV2+r211Z34RSwRg+nYN1V1QpM8shPUHNA4Au
-         6RBolRLH1AJUeh0xmnMeEF5dOYE4rg+St0HQUe4GqHRA8tdmpa07JGKOHmrmtDphhcRe
-         z318noV8MdCGzaomGb9ZZjBadvI6QG3wzg0Gc9GSEuGiJIxJrKx3iQks/vtGzQItVhQ3
-         fm7w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Op7us6H5yItQICnmAUV8XPAHd83VgMkaR2DiXRf8kqE=;
+        b=o9RR79ZvqOkXUcbnu1Ob0Luu/qScgjQ78WzOu9Vu/jnLCPUcSObdibkhGkdZYgI5x0
+         Zs4EP82PHdloiT1A+rLYOADt+LVJG9e9f9d1TAizmyPXcPFQ2iCZGxrxtJd538M8au/W
+         retr3+5+3KJGF1bcKl1zRWE9ZI5zUHhMIfaKsz34Nh1yJn8ujoWMHDKW+gnNnoEfCjlL
+         VEAMb4qoSvd+Zb52d1O1I5K9OFp0WOBQdYFhnOrLWiL0tAEtmZ+tiC9IsPw5YMACn1jN
+         kyFGqHNhlClAfD70noTA5folzgbxxWQnnpVsqH/vrb3/nc1iZi6Pca5yEM6x6oOr881H
+         8o7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sti7xlJS8BDmPeM82erSW44bu9sTdRGshhN8rLPU3bA=;
-        b=of4JNeJ/pV8sa+OEYOn4A6XkoZZul+xU90GWs0A5T3H3nqqWizhpiHNyr+zLUskeKW
-         aT5ARx1u9DMDow995ygnE5/lYWpZBq4Vkouv31UR84K/bXW9plKf9fXOe2Gp5h4uzMv9
-         E9KonDMP9NpuIMwRw5u/MeQaTzkzXR5XSk9q6mRlcr5fRk6mu0orT824Ws8mjKDcpVkV
-         SWhe8B2wNJ6v13QFBWlUaiV3e/wAWgmVSirAr0F9btDyjObFanC80oT3Mt94prRp2iH5
-         vR0EN1fVwrR2b6xxgoBXImWfPwPxTfhMODJ/6XDU7FVl6JugNCzCU1CByGkVS77TGbSV
-         T/4Q==
-X-Gm-Message-State: ACrzQf3aj7+n/5k7SIcHgf1h9Sz0t+Lyv6NIVhBo+FWfr3JWqtiL1thg
-        K/gAAfZM+ilVFckY83YdOBny1GQaUJzvGw==
-X-Google-Smtp-Source: AMsMyM71pvu/vjt3lZgu3Ss9P4ecS3RXKZjg0NzEj/bQ//NP9sw6TtXb/w0ZyLNfe2xeJ4G3thg5Qw==
-X-Received: by 2002:a2e:92c4:0:b0:25d:9d30:5d61 with SMTP id k4-20020a2e92c4000000b0025d9d305d61mr12046148ljh.202.1665607514237;
-        Wed, 12 Oct 2022 13:45:14 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id e3-20020a2e8ec3000000b0026c3ecf9a39sm115541ljl.38.2022.10.12.13.45.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 13:45:13 -0700 (PDT)
-Message-ID: <b9ae4d56-3d16-cf78-91c5-ce52dad02daa@linaro.org>
-Date:   Wed, 12 Oct 2022 23:45:13 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Op7us6H5yItQICnmAUV8XPAHd83VgMkaR2DiXRf8kqE=;
+        b=piQTM2V8178q/q2TxliQYyi6oY3T3G8D59u7+lhu/X+6wsCnVtAcHoLM7wPBlUgj4v
+         Wc8kZsTAK/usM6NsgxVPi/Q/ijA2YQn2w1yFIhcXUcXc0KaLXqSba/v9K02U12uHBzRV
+         2J3y0Ukar4NohfD1yf5NR/kvOKx27MmpOYJHQ+LkOa+0/Fl8zXQk//AZO4ktukiagaEo
+         yafdi5wh1EPwvXeqpvxSb4hT6+qT0ETXks2E2eC00Jv6OvEvmZlLf2HajHFCISm48r3/
+         LWG0SaGchv0VNxemmj/P3Qi0UBMHLoTo6pI84m7RtpDY69qkMakMTyhofkpqrYbD++l9
+         2OMQ==
+X-Gm-Message-State: ACrzQf3Sy1H/31oGM0TDzd5Pf2xLfSNAWVM0n3OpFmKG/9Qdww31Bq65
+        oCNyrNRIiyj9Q5UYFzR1TOERzw==
+X-Google-Smtp-Source: AMsMyM4W1QDG+k5mU/kt4rluoQMd1AM2z+5cytQUIClFMfeYaiP/l85RnMynLrtgzCCCCATIWyK/og==
+X-Received: by 2002:a63:3155:0:b0:45a:553a:3479 with SMTP id x82-20020a633155000000b0045a553a3479mr27047800pgx.408.1665607639028;
+        Wed, 12 Oct 2022 13:47:19 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l26-20020a635b5a000000b00460c67afbd5sm7265926pgm.7.2022.10.12.13.47.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 13:47:18 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 20:47:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
+        Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v5 11/30] KVM: Add arch hook for reboot event
+Message-ID: <Y0cn0nnDV/8SrWQn@google.com>
+References: <cover.1663869838.git.isaku.yamahata@intel.com>
+ <61dcd6722743bf221f6c612e120a9e2350d5a72f.1663869838.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 04/20] phy: qcom-qmp-pcie: clean up status polling
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221012084846.24003-1-johan+linaro@kernel.org>
- <20221012085002.24099-1-johan+linaro@kernel.org>
- <20221012085002.24099-4-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221012085002.24099-4-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61dcd6722743bf221f6c612e120a9e2350d5a72f.1663869838.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 11:49, Johan Hovold wrote:
-> Clean up the status polling by dropping the ready bit mask which is no
-> longer needed since the QMP driver split.
+On Thu, Sep 22, 2022, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Factor out the logic on reboot event as arch hook.  Later kvm/x86 overrides
+> it.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+...
 
--- 
-With best wishes
-Dmitry
+> @@ -5135,6 +5141,8 @@ static void kvm_del_vm(void)
+>  static int kvm_reboot(struct notifier_block *notifier, unsigned long val,
+>  		      void *v)
+>  {
+> +	int r;
+> +
+>  	/*
+>  	 * Some (well, at least mine) BIOSes hang on reboot if
+>  	 * in vmx root mode.
+> @@ -5143,8 +5151,14 @@ static int kvm_reboot(struct notifier_block *notifier, unsigned long val,
+>  	 */
+>  	pr_info("kvm: exiting hardware virtualization\n");
+>  	kvm_rebooting = true;
+> -	on_each_cpu(hardware_disable_nolock, NULL, 1);
+> -	return NOTIFY_OK;
+> +
+> +	/* This hook is called without cpuhotplug disabled.  */
+> +	cpus_read_lock();
+> +	mutex_lock(&kvm_lock);
+> +	r = kvm_arch_reboot(val);
 
+Unless there's a valid use case for rejecting/stopping reboot, which I'm pretty
+sure there isn't, don't allow arch code to return a value.  I.e. return NOTIFY_OK
+unconditionally from kvm_reboot() and drop the return from kvm_arch_reboot().
+
+> +	mutex_unlock(&kvm_lock);
+> +	cpus_read_unlock();
+> +	return r;
+>  }
+>  
+>  static struct notifier_block kvm_reboot_notifier = {
+> -- 
+> 2.25.1
+> 
