@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEDB5FC8EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A685FC8F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiJLQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S229933AbiJLQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJLQLV (ORCPT
+        with ESMTP id S229950AbiJLQLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:11:21 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915EDA033F;
-        Wed, 12 Oct 2022 09:11:20 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qw20so38431670ejc.8;
-        Wed, 12 Oct 2022 09:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B17w69Iz2NdYtUdmzCUWZNwrLTOOl7h6wkcqw6Cxh6Y=;
-        b=nnmYhgT6yHUjLg00VqhHteLb5AO8Pdjt/70ZiPO1TpGKF8Ig4Dpf1Tstm3q96mNDeG
-         YbB+YCO5g/au6QhZIkNblqIPL2ltJdNgUg+p+VeJYDYPDoKilk088OIIOSxXYL/afPWp
-         ekwTzNNdx6rvRXNp+eoKwF0zH50fjbQ+pyKxJNquzDMK0YA1vJa4bevNF8gCrq9w/xQp
-         VNl5NKACtAFkEzoDWNGOcqE5kUhIarG24q1o0d/5wjl6L8DWNa/ijd2FzMj5PJ4dHOVa
-         koS/wTN6shEZRFyuhRwqvQCTjTYOM2AqglTtnEYzGuEnv/jED3y1ocZHWOWKsosM/zjC
-         zXNQ==
+        Wed, 12 Oct 2022 12:11:30 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D67A033F;
+        Wed, 12 Oct 2022 09:11:30 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so12454995ooi.5;
+        Wed, 12 Oct 2022 09:11:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B17w69Iz2NdYtUdmzCUWZNwrLTOOl7h6wkcqw6Cxh6Y=;
-        b=sjnibrLD/mTm7ML7JmXDG68bJ9XUsPbXhytQqgSCJholNd/eJrKBFicPRmuKQUpwQW
-         aPy33a//fMvEaxag5xx+GR4LYAh4B9TPzFJ+7I5wmRQPMP/Ql2n3rDwMRMlrsvxz5S5e
-         HZyy5sIirzRJ+bufM9GS/8zgGuSLz15Z10A1tacg0mRNZOWygtZw5GzzunQ7GCsviTnx
-         nBsDzHXm3alE7vfRx6mUwIekxyBycwOW+MbTNTi8gYACgwjH66OAJhslczcHy04gDrYm
-         nGZC+IyEYKJFPwYGIUhjTjnLTyWNTJQugIglTs/Le7HtfL1i1YDIXTxCAOoyJDtVIy2/
-         S62A==
-X-Gm-Message-State: ACrzQf1ljsBwgYKGwAxZnGIm8Drz/Q7j+G2NWhs6zrxomk99VzBW27VH
-        VUmZ+EQ7JJ3tAbS9HRQA6PcrcgY92OKyGSRO/YKVfXPdlWVQjw==
-X-Google-Smtp-Source: AMsMyM6TEL6eeZKt8sdOki9RvQU7WssLXUhEdZuXfciNBAxs+hiMJqvFhMHxQS02jfK1Jhm5S7yAUYuA/DK1kFA+j48=
-X-Received: by 2002:a17:906:cc56:b0:78d:98c3:8714 with SMTP id
- mm22-20020a170906cc5600b0078d98c38714mr17354646ejb.445.1665591078973; Wed, 12
- Oct 2022 09:11:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221011172358.69043-1-krzysztof.kozlowski@linaro.org> <20221011172358.69043-24-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221011172358.69043-24-krzysztof.kozlowski@linaro.org>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-Date:   Wed, 12 Oct 2022 19:11:06 +0300
-Message-ID: <CAL7jhicvj2mH6eMG0q=YcUW99ngz7tedQO0U4HsHkAuVKhrJrw@mail.gmail.com>
-Subject: Re: [PATCH v2 23/34] dt-bindings: pinctrl: qcom,sm6115-tlmm: minor
- style cleanups
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9J7x9zN0OClxgUpHT1aRD0SP13D4n7eAdvmXv478zN0=;
+        b=x2ex/H+BoZBnL6sZWtvuIVNhwJn9oVhnz6GzhThc9SSQJCiIBDB/CcgEqrBZwZazrX
+         WlBWg5SIe6jaTz+yDvXSeDUvsk3a7nRDzm1qY/nGmWQgq1AqVmwAAkGQ8l2l4SpmEU6G
+         LfrepGAAhX8WUc/SZWphYRsskIOtL+F0BfAp8tKC0Bw983bfqIyJR0pqv3FHDiehvG8H
+         cVDiNd9Uglceliw+x6InhRItJ3/mHwyinHnfsPruEfhVwLhYIEdyi/KbVuiTCWxOZQea
+         VYd3bzwWdygqfDB3MSPXlfUJWOvBivAyLN8oYWQQ9BQTzlJT7wHyzt/y1tYnrAz342De
+         6buA==
+X-Gm-Message-State: ACrzQf0yEM/he/sPNRkkkyLKGdBMxTuy8q20BIrihEVu5/g+Epm3gCxn
+        qwwpbKB4qFr+vGXK5SDCBhNYb2gSjw==
+X-Google-Smtp-Source: AMsMyM7wW7pmkLQ/s8EMhQ0+P97Btqh8AR7UaS1Tkj2OpwWjhdoIQDU1UlMTqzbG25b7Byn/JCsZLg==
+X-Received: by 2002:a9d:68d9:0:b0:661:9e75:af9b with SMTP id i25-20020a9d68d9000000b006619e75af9bmr6591581oto.293.1665591089162;
+        Wed, 12 Oct 2022 09:11:29 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h13-20020a9d554d000000b006619f38a686sm3491517oti.56.2022.10.12.09.11.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:11:28 -0700 (PDT)
+Received: (nullmailer pid 2270880 invoked by uid 1000);
+        Wed, 12 Oct 2022 16:11:30 -0000
+Date:   Wed, 12 Oct 2022 11:11:30 -0500
+From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+Cc:     devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
+ SC7280 CPU compatible
+Message-ID: <166559108971.2270830.13074268044998349307.robh@kernel.org>
+References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,68 +69,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 8:26 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Drop "binding" from description (and align it with other Qualcomm
-> pinctrl bindings), use double quotes consistently, drop redundant
-> quotes and rename file to match compatible (to match coding convention).
->
+On Tue, 11 Oct 2022 10:07:44 -0400, Krzysztof Kozlowski wrote:
+> Two different compatibles for SC7280 CPU BWMON instance were used
+> in DTS and bindings.  Correct the bindings to use the same one as in
+> DTS, because it is more specific.
+> 
+> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Iskren Chernev <iskren.chernev@gmail.com>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
->  ...qcom,sm6115-pinctrl.yaml => qcom,sm6115-tlmm.yaml} | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
->  rename Documentation/devicetree/bindings/pinctrl/{qcom,sm6115-pinctrl.yaml => qcom,sm6115-tlmm.yaml} (95%)
->
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-> similarity index 95%
-> rename from Documentation/devicetree/bindings/pinctrl/qcom,sm6115-pinctrl.yaml
-> rename to Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-> index 3f5f5229a86c..ed68c4ee032f 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/pinctrl/qcom,sm6115-pinctrl.yaml#
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,sm6115-tlmm.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
->  title: Qualcomm Technologies, Inc. SM6115, SM4250 TLMM block
-> @@ -10,8 +10,8 @@ maintainers:
->    - Iskren Chernev <iskren.chernev@gmail.com>
->
->  description:
-> -  This binding describes the Top Level Mode Multiplexer block found in the
-> -  SM4250/6115 platforms.
-> +  Top Level Mode Multiplexer pin controller in Qualcomm SM4250 and SM6115
-> +  SoCs.
->
->  properties:
->    compatible:
-> @@ -36,9 +36,8 @@ properties:
->    gpio-reserved-ranges: true
->    wakeup-parent: true
->
-> -#PIN CONFIGURATION NODES
->  patternProperties:
-> -  '-state$':
-> +  "-state$":
->      oneOf:
->        - $ref: "#/$defs/qcom-sm6115-tlmm-state"
->        - patternProperties:
-> @@ -46,7 +45,7 @@ patternProperties:
->              $ref: "#/$defs/qcom-sm6115-tlmm-state"
->          additionalProperties: false
->
-> -'$defs':
-> +$defs:
->    qcom-sm6115-tlmm-state:
->      type: object
->      description:
-> --
-> 2.34.1
->
+Acked-by: Rob Herring <robh@kernel.org>
