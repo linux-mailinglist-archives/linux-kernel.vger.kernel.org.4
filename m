@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB3A5FC60C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3681C5FC60E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiJLNL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S229824AbiJLNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiJLNLQ (ORCPT
+        with ESMTP id S229970AbiJLNLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:11:16 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2397962D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:11:14 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id g11so5462213qts.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:11:14 -0700 (PDT)
+        Wed, 12 Oct 2022 09:11:23 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAFBCAE64
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:11:18 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id s30so24436934eds.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=duZMII461PybSOKzGZSZqhJJ/qLu0MRfPY5z6dxigmI=;
-        b=a7bw5Q23wINBvoFwz/iFZmdlemcJRCm9fhL7eS0XFlNQBZ19p4im/mcGTwHU1NAtzD
-         jk6jZhamKzPFSoVWO4p59MOJu3n5voX+W74YhAqC7zhP2wesfnJPhWUO72deAIFWJSC7
-         1p84rOHvcqZr6MaJnxgvtHgl8Y7lZOjcflhrDrkG1Qpr8tBoWZAXn7m+cbyhPn418YZX
-         PzSlw2xNcMvMAr0PyXBqclS6lkLZ6DWGl3D4omft/y9F/Aic/TZwQ8Dz3yxFtaCJM/lm
-         JFVVbcwmfcVn4kc6k5L7cHk5gOn9ei/ckUCjW4d+no+hO8d6nJWpK6ew5z4KYzrgRvwn
-         V2UA==
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WKQQtExmcOLWJbhqtQgzF7tmbKZpiaFY7Ige0YjH1nY=;
+        b=i9jyVgYjohPbZJBBUKOy9AQ1bIE2sxwGeFhlKacN0CKp6j7lE2YnsEBQn0R5EbRNSg
+         K/DXFwi94Ff1wlz5KPlaKeuqXImzT/XpLHVBjIEuTi7lFIQT4Qb4UctXDDhtz4REI2VY
+         jDcEswUf9KKDN8tZDYWiSv5dmqDEpel6tnHs4Y0CvlksVR0631lNK3RgCT5+0Hm3+3v2
+         hZ1ua1VBq2Nkqiug7iyxZReJOgjcDIkSI57BLgKQ7i/Ct+WXkmtvFgk5DSyeyL3h16ij
+         6dONj17RbCw3bCWIvJRdtYXjXL7avHFUGZBEmNiA8oavPog5kb4lIN1PxVVKNRDcbWLo
+         A4og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=duZMII461PybSOKzGZSZqhJJ/qLu0MRfPY5z6dxigmI=;
-        b=G9TS3NGPjVzaJhdZMMLXUSp/UGV/uw6agIGH8djL6Tc61xUbGWzlBj9EkFR+YfX+Li
-         iKhJk3TAE53rZAxX6ATPAmVtEA5E8tQqKp1gL7uVA/DJFN10AAnoYBgTHyL7G+xamleN
-         oefU9DRx/Wva5M5BpVD/0XLxPef8N3bgAgVlDJrbh1dblNydgBpRGT522BI14sfu02cF
-         9GK/QFJiLg7jyBhnDf+U5WZpjyuxY2/KspIZwsfEjVZ1qskdM1tvU+czDWjdSx5IX4oG
-         oSbfyhSxoVySbu40dysG8opyyI05izD0lxhnKwnfQ/wRX0gTVFywETPM4JyVXiM98Oh2
-         YZwA==
-X-Gm-Message-State: ACrzQf2o9Qf0B6sO4VMay+4mLwwi+FAVmKVhCP8ZOvx53QOoQ/fTkGvQ
-        U+HFeNsZb3VsuQ/0qMn8K2lJ6g==
-X-Google-Smtp-Source: AMsMyM5zJrz3dx98rqmztHfBVMqSLyUW8p6tkWsBylvPbfbtBcCaSwdh6OYo7aZ0HedmoRQQhkOkng==
-X-Received: by 2002:ac8:7fcc:0:b0:39c:bdf4:6323 with SMTP id b12-20020ac87fcc000000b0039cbdf46323mr2836670qtk.201.1665580274377;
-        Wed, 12 Oct 2022 06:11:14 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id he35-20020a05622a602300b0039a55f78792sm6338703qtb.89.2022.10.12.06.11.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 06:11:13 -0700 (PDT)
-Message-ID: <12461098-aea7-e486-f303-ef2387a6ae1f@linaro.org>
-Date:   Wed, 12 Oct 2022 09:11:12 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WKQQtExmcOLWJbhqtQgzF7tmbKZpiaFY7Ige0YjH1nY=;
+        b=VxLoOpy+1c6GQTp894B9P98qLA94NifT+bGJA/suK31kK1Jqp3qLLnduziBwUWGi1w
+         t3tYrNR5m8BIbSoImlvyeNd8jkc/5R2KAk4SGla0O03Ch5hWgWYgcet99RNGLPgoIHbg
+         zSPRqgvP8/OyiqgJZVKWGjuBaxwEeUqPS3CXKtl4z9fOtTqQDeZTWq0F1uiyzryP4Qbw
+         kefdsjmAEEr5ku/wnfc4z/o23dXLndMyQjf1xJQabOH4YL8aBSJjnJHKfjOMx7zJqCvU
+         bpZOYWNA8siaxXRVm8sxB7OoQJSs+FXeAi8sI1icHxYspy1wC3hns3cdPsChU9IGs8n1
+         QDjQ==
+X-Gm-Message-State: ACrzQf0K252EjZNFHcRcwq8ZMFnttFTa2YDSGqpXaO3+3alYa6/RfQTZ
+        m72mmf3wiAdUFsDajDkTA2Lmj8x2NUcIXedrGBw=
+X-Google-Smtp-Source: AMsMyM5KqRXpTLXDa5m8/kJHxu/67hkgCD2LtrByuyJYLBa4aR+qffWT3+vOUSsVxsJx7oY/r3MLXA==
+X-Received: by 2002:aa7:d28c:0:b0:459:3cc5:3cb8 with SMTP id w12-20020aa7d28c000000b004593cc53cb8mr28360444edq.261.1665580276644;
+        Wed, 12 Oct 2022 06:11:16 -0700 (PDT)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170906309500b0078d22b0bcf2sm1230039ejv.168.2022.10.12.06.11.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 06:11:16 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 15:11:15 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel panic: kernel stack overflow
+Message-ID: <Y0a88zDFLVeVzBPB@nanopsycho>
+References: <000000000000c8900705ead19e41@google.com>
+ <CACT4Y+Zuoo_rgf=DP90wgSVm909Qboj5kdYQjZELPDfdkQWJqA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick
- v1.1
-Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-References: <20221012055602.1544944-1-uwu@icenowy.me>
- <20221012055602.1544944-11-uwu@icenowy.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221012055602.1544944-11-uwu@icenowy.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+Zuoo_rgf=DP90wgSVm909Qboj5kdYQjZELPDfdkQWJqA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 01:56, Icenowy Zheng wrote:
-> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
+Wed, Oct 12, 2022 at 09:53:27AM CEST, dvyukov@google.com wrote:
+>On Wed, 12 Oct 2022 at 09:48, syzbot
+><syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com> wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+>> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=14a03a2a880000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=60748c96cf5c6df8e581
+>> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>> userspace arch: arm64
+>>
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com
+>
+>+Jiri
+>
+>It looks like the issue is with the team device. It seems to call
+>itself infinitely.
+>team_device_event was mentioned in stack overflow bugs in the past:
+>https://groups.google.com/g/syzkaller-bugs/search?q=%22team_device_event%22
 
+Hi, do you have dmesg output available by any chance?
 
-(...)
-
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +
-> +	reg_vcc3v3: vcc3v3 {
-
-Generic node names, so at least generic "regulator" prefix or suffix.
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +	};
-> +};
-> +
-> +&mmc0 {
-> +	cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-> +	bus-width = <4>;
-> +	disable-wp;
-> +	status = "okay";
-
-Keep status as last property.
-
-> +	vmmc-supply = <&reg_vcc3v3>;
-> +};
-> +
-> +&spi0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi0_pc_pins>;
-> +	status = "okay";
-> +
-> +	flash@0 {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "spi-nand";
-> +		reg = <0>;
-
-compatible and reg are by convention the first properties.
-
-> +		spi-max-frequency = <40000000>;
-> +
-
-Best regards,
-Krzysztof
-
+Thanks!
