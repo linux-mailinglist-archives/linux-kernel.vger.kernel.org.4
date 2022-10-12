@@ -2,114 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399105FC2AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B7F5FC2AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiJLJHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S229595AbiJLJIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLJHd (ORCPT
+        with ESMTP id S229612AbiJLJIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:07:33 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911884599A;
-        Wed, 12 Oct 2022 02:07:28 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oiXgv-00DsnR-3W; Wed, 12 Oct 2022 20:06:18 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 12 Oct 2022 17:06:17 +0800
-Date:   Wed, 12 Oct 2022 17:06:16 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Message-ID: <Y0aDiLp7BztzwNez@gondor.apana.org.au>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
- <Y0UxY51KQoKCq59o@gondor.apana.org.au>
- <Y0XLqd/+C1sxq2G0@zx2c4.com>
+        Wed, 12 Oct 2022 05:08:30 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5406632C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 02:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1665565709; x=1697101709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=frqKpQ/GfZmnAadzzaN+14iYXqvO5TCT0DXBBbMT2eA=;
+  b=Y1VTEKdH6X3hpl1BWG4EyK2S/NLBEa9G0Fgghy00Oms74edvWdGy0PrL
+   1KnGyxhTKes44LGmPpmOhcK53JHV+ceG3ZfqGiVuVjVm/eqi2DhnUsJ4p
+   wLm/f2QPjnHDs57k03nXLhePuIb45bCfSOZnytUUnoA6hGqsW1f5m0z07
+   1TXUf0WSysbM5lEs0TqbUylCP5cVmveIJLzishdtxp1GhCdASOJ/cQW/F
+   dn+uRuTGWPeKi+8pGI+ysuKuKjd9gcA2D22z2vahugYruG7p9yMSwnYUf
+   x6gvcpHySUsi7sYSBsvIM0k028/+vPWdSMBl6sXDxYNscN6TYwfuju7jQ
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="184456017"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Oct 2022 02:08:27 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 12 Oct 2022 02:08:27 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 12 Oct 2022 02:08:26 -0700
+Date:   Wed, 12 Oct 2022 10:08:03 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH v2] RISC-V: Fix /proc/cpuinfo cpumask warning
+Message-ID: <Y0aD81hx9Cn6sa6C@wendy>
+References: <20221012082949.1801222-1-ajones@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Y0XLqd/+C1sxq2G0@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221012082949.1801222-1-ajones@ventanamicro.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 02:01:45PM -0600, Jason A. Donenfeld wrote:
->
-> I've got no stake in this, but isn't the whole idea that if you specify
-> "aes" you get AES, and if you specify "cbc(aes)" you get AES-CBC, and so
-> forth? And so leaking implementation details into the algorithm name
-> feels like it breaks the abstraction a bit.
+On Wed, Oct 12, 2022 at 10:29:49AM +0200, Andrew Jones wrote:
+> Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
+> started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
+> are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
+> start and next seq operations implement a pattern like
+> 
+>   n = cpumask_next(n - 1, mask);
+>   show(n);
+>   while (1) {
+>       ++n;
+>       n = cpumask_next(n - 1, mask);
+>       if (n >= nr_cpu_ids)
+>           break;
+>       show(n);
+>   }
+> 
+> which will issue the warning when reading /proc/cpuinfo. Ensure no
+> warning is generated by validating the cpu index before calling
+> cpumask_next().
+> 
+> [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+> 
+> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> Cc: Yury Norov <yury.norov@gmail.com>
 
-Well, keys stored in hardware are fundamentally incompatible with
-the algorithm/implementation model.  The whole point of having
-algorithms with multiple implementations (e.g., drivers) is that
-they all provide exactly the same functionality and could be
-substituted at will.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-This completely breaks down with hardware keys because by definition
-the key is stored in a specific piece of hardware so it will only
-work with a particular driver.  IOW it almost never makes sense
-to allocate "aes" if you have a hardware key, you almost always
-want to allocate "aes-mydriver" instead.
+Thanks
 
-> Rather, drivers that do AES should be called "aes". For this hardware
-> key situation, I guess that means keys have a type (in-memory vs
-> hardware-resident). Then, a crypto operation takes an "algorithm" and a
-> "key", and the abstraction then picks the best implementation that's
-> compatible with both the "algorithm" and the "key".
-
-No the key is already in a specific hardware bound to some driver.
-The user already knows where the key is and therefore they know
-which driver it is.
-
-> If you don't want a proliferation of different ways of doing the same
-> thing, maybe the requirement should be that the author of this series
-> also converts the existing "paes" kludge to use the new thing he's
-> proposing?
-
-Yes that would definitely be a good idea.  We should also talk to the
-people who added paes in the first place, i.e., s390.
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> ---
+> v2:
+>   - Got comments on the x86 equivalent patch and made the same
+>     changes to this one
+>     - Added all the information I should have in the first place
+>       to the commit message [Boris]
+>     - Changed style of fix [Boris]
+> 
+> 
+>  arch/riscv/kernel/cpu.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index 4aa8cd749441..63138b880b92 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -166,6 +166,9 @@ static void print_mmu(struct seq_file *f)
+>  
+>  static void *c_start(struct seq_file *m, loff_t *pos)
+>  {
+> +	if (*pos >= nr_cpu_ids)
+> +		return NULL;
+> +
+>  	*pos = cpumask_next(*pos - 1, cpu_online_mask);
+>  	if ((*pos) < nr_cpu_ids)
+>  		return (void *)(uintptr_t)(1 + *pos);
+> -- 
+> 2.37.3
+> 
