@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95AA5FC04C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 07:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390F55FC04D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 07:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJLF5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 01:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40334 "EHLO
+        id S229788AbiJLF5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 01:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJLF5Y (ORCPT
+        with ESMTP id S229698AbiJLF5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 01:57:24 -0400
+        Wed, 12 Oct 2022 01:57:25 -0400
 Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F696ABD62;
-        Tue, 11 Oct 2022 22:57:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1665554222; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38F0ABD49;
+        Tue, 11 Oct 2022 22:57:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1665554228; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=FvfNG07iMKNR5U2ejpxyH2zlSm27+YkjplBGBsgjMzGIhJQuB8BXIUkQHBfYognfakb7GmEKRLPOLvY8W7MhrP13/Uvf0QP0TQvVP7j3duz7m7WexdcHEFtuK4f/bS4ML5FuzWiZkcRYISyxEhutI0GtYxcp+9aw2F+buYPrbdc=
+        b=Sh0fN5seShmABWmmPhLfq6HOJSM1Jbgjj9JIy+dUiN2MEFJw7jG9CQVV9yVo9HnB6JbVW6K/w3ciBvRtGUVVTIoLapCmemcMmEbzqVel4HYpDIBI9BNHVirdW2iVIQvDGQsNrBRx6uXquk+AcOHUcVcLx/JBGl8NH/AI2bJFOR0=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1665554222; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=IHTmXBmR+SFMmksKEImErp0u02umet9I7N/QedIBsg0=; 
-        b=I4ocvCEW7R83bS1dwEosMQ7CfgKOmdYkV2HT11tlbQ1ZwyPaI6uV44ShwfGFUk5amnytCe43kYvS7Q1OwRkriJTTMT4RfbVs6VFs7y3wSFBFSkqH/IweIghbxEJncFaShO3ByC0A1ywIC2J8ZRazOeaSe+FVmHe81xA6dDP2HaM=
+        t=1665554228; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ViIK05Q+GfR4lkwmGAJ30lw+1V3VdsMiq3fDv32+df0=; 
+        b=B9K71C7R5hKmW8ybqfb+0e1oVjNEYPAJ2kiYt6Dg+rzH6+j0bXa34Y9E04usjSNMgIybnC8rlW26Jpmmb3D6MdtQ4xkaiTZfMk342ZIT+jAtGT+MocXHGoEifXQTO0q9GXwwPwiawjRLvUcXefTQBwpOEMk8mFFrL/PUF595HJs=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=icenowy.me;
         spf=pass  smtp.mailfrom=uwu@icenowy.me;
         dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665554222;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665554228;
         s=zmail; d=icenowy.me; i=uwu@icenowy.me;
         h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=IHTmXBmR+SFMmksKEImErp0u02umet9I7N/QedIBsg0=;
-        b=fboFKdqMktGTVCo7PalO8Q/YiUucZt5w62Dh390+w6vyOo9cevo3BPWuzc5eWR1t
-        yINLo+qReqseC7WsRLjtwBfrm9jcnEyeRBjWY4GRLunAQ52wmgsP5uOd8iyqMF2YZq/
-        JWpc0Hk3zsK7A2snd5VKsJdNp8BF9gZG82wWDi74=
+        bh=ViIK05Q+GfR4lkwmGAJ30lw+1V3VdsMiq3fDv32+df0=;
+        b=PF0YG3n+Ilr0rEfoGwZl5t9ipBb0b+GYB/dv6guINw3aknqFOySWzPImgD8FuK8b
+        o9DxMdygBwsiI4RYNHMTFaSXqQaL3SnjB2Yg/Vdbp9k5BE4Ooa+anX5G7aTLlQKocD7
+        zXgzRkeQYW8ofzYZzQ6+UFeD/2rnuuNqNZja1Ivw=
 Received: from edelgard.fodlan.icenowy.me (112.94.102.144 [112.94.102.144]) by mx.zohomail.com
-        with SMTPS id 16655542214699.646510723270012; Tue, 11 Oct 2022 22:57:01 -0700 (PDT)
+        with SMTPS id 1665554226549388.7219000626267; Tue, 11 Oct 2022 22:57:06 -0700 (PDT)
 From:   Icenowy Zheng <uwu@icenowy.me>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -47,9 +47,9 @@ Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
         linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
-Subject: [PATCH v2 05/10] musb: sunxi: add support for the F1C100s MUSB controller
-Date:   Wed, 12 Oct 2022 13:55:57 +0800
-Message-Id: <20221012055602.1544944-6-uwu@icenowy.me>
+Subject: [PATCH v2 06/10] ARM: suniv: add USB-related device nodes
+Date:   Wed, 12 Oct 2022 13:55:58 +0800
+Message-Id: <20221012055602.1544944-7-uwu@icenowy.me>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20221012055602.1544944-1-uwu@icenowy.me>
 References: <20221012055602.1544944-1-uwu@icenowy.me>
@@ -65,50 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The suniv SoC has a MUSB controller like the one in A33, but with a SRAM
-region to be claimed.
+The suniv SoC has a USB OTG controller and a USB PHY like other
+Allwinner SoCs.
 
-Add support for it.
+Add their device tree node.
 
 Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 ---
 No changes since v1.
 
- drivers/usb/musb/sunxi.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/suniv-f1c100s.dtsi | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
-index 7f9a999cd5ff..4b368d16a73a 100644
---- a/drivers/usb/musb/sunxi.c
-+++ b/drivers/usb/musb/sunxi.c
-@@ -722,14 +722,17 @@ static int sunxi_musb_probe(struct platform_device *pdev)
- 	INIT_WORK(&glue->work, sunxi_musb_work);
- 	glue->host_nb.notifier_call = sunxi_musb_host_notifier;
+diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+index 0edc1724407b..a01541ba42c5 100644
+--- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
++++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+@@ -133,6 +133,32 @@ mmc1: mmc@1c10000 {
+ 			#size-cells = <0>;
+ 		};
  
--	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb"))
-+	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb") ||
-+	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
- 		set_bit(SUNXI_MUSB_FL_HAS_SRAM, &glue->flags);
-+	}
- 
- 	if (of_device_is_compatible(np, "allwinner,sun6i-a31-musb"))
- 		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
- 
- 	if (of_device_is_compatible(np, "allwinner,sun8i-a33-musb") ||
--	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb")) {
-+	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb") ||
-+	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
- 		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
- 		set_bit(SUNXI_MUSB_FL_NO_CONFIGDATA, &glue->flags);
- 	}
-@@ -815,6 +818,7 @@ static const struct of_device_id sunxi_musb_match[] = {
- 	{ .compatible = "allwinner,sun6i-a31-musb", },
- 	{ .compatible = "allwinner,sun8i-a33-musb", },
- 	{ .compatible = "allwinner,sun8i-h3-musb", },
-+	{ .compatible = "allwinner,suniv-f1c100s-musb", },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, sunxi_musb_match);
++		usb_otg: usb@1c13000 {
++			compatible = "allwinner,suniv-f1c100s-musb";
++			reg = <0x01c13000 0x0400>;
++			clocks = <&ccu CLK_BUS_OTG>;
++			resets = <&ccu RST_BUS_OTG>;
++			interrupts = <26>;
++			interrupt-names = "mc";
++			phys = <&usbphy 0>;
++			phy-names = "usb";
++			extcon = <&usbphy 0>;
++			allwinner,sram = <&otg_sram 1>;
++			status = "disabled";
++		};
++
++		usbphy: phy@1c13400 {
++			compatible = "allwinner,suniv-f1c100s-usb-phy";
++			reg = <0x01c13400 0x10>;
++			reg-names = "phy_ctrl";
++			clocks = <&ccu CLK_USB_PHY0>;
++			clock-names = "usb0_phy";
++			resets = <&ccu RST_USB_PHY0>;
++			reset-names = "usb0_reset";
++			#phy-cells = <1>;
++			status = "disabled";
++		};
++
+ 		ccu: clock@1c20000 {
+ 			compatible = "allwinner,suniv-f1c100s-ccu";
+ 			reg = <0x01c20000 0x400>;
 -- 
 2.37.1
 
