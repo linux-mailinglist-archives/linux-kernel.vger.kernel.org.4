@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386BA5FC1CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C9C5FC1D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiJLIQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S229659AbiJLIR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiJLIQA (ORCPT
+        with ESMTP id S229909AbiJLIQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:16:00 -0400
+        Wed, 12 Oct 2022 04:16:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8025E325;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515075E57E;
         Wed, 12 Oct 2022 01:15:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 055C5B819B9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FF02B819A1;
         Wed, 12 Oct 2022 08:15:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457D6C43155;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D079C4FEB8;
         Wed, 12 Oct 2022 08:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665562555;
-        bh=e8XpSHjTNJUNEEWSbFBHEVklGknG96PoGVTN8QWLfBI=;
+        bh=zj2f+fEcuy4BNH83sVnT+5iGBlx2okQalx8OhQNynWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pwe8DNgiMsexlj+WlWiztNuTtYfe9f34+TLqpNWj6pdloKALmXQFU4yraF9YWvzMg
-         zGSm4basaJf9bHGvt/q1/IK1pLC5s1Q3RVigYA+14HKzYHnWLgNf5suhfRe6qy3fxv
-         zOo/v+JoUAeCDO7ZiENieMONBJ4tB07lkXp6XaVzH37yJmtJEjDk/CqDBijeHlPlGv
-         lNvCaxJB2E83sV+ONYy/dc65nyc+6rcJaEUYJL/iSn5NOGhK8kKFjrsgMNLHRMNou3
-         NjXmiAQWIKtX5aa5qUk/3egTRFkk8ghfGLUxufgD+KbY3vj8LAjdjRHpD4gaYyDCjY
-         7OKcOH6AyqepA==
+        b=APeEtNn7vJKC8dYWsgC2KNtXwJlfJsHmg15yh0Z2Bn4rn+so4p8xN007l4D6AuDjL
+         OWPrTsDZunxbLSSy7s0NDDljVwKqPWSvcAh+SkT2iRCnwxADSVscawZN7086Q2Jxbr
+         AkLGnktALPsgF4v0lZdMRckFvDGsoriYMDNoSjTAn6bTF/krvnFdz7liKtlg2wvAZI
+         sin46TCw82RKfnjJjCoYk6M7j9nlpEItUrLZYNtVy7noTpprNs0xNS0lcsnRLsK1S4
+         ZOvUHQmFaIbzbfYqAPqhFB0x/Te9SWzRVQyvw+YWNHJYpDwR3WsLU7nfBM5MMDCjR8
+         xomabSF5NF8tA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oiWu2-0004of-Qi; Wed, 12 Oct 2022 10:15:46 +0200
+        id 1oiWu2-0004oj-Ty; Wed, 12 Oct 2022 10:15:46 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 08/14] phy: qcom-qmp-pcie: drop power-down delay config
-Date:   Wed, 12 Oct 2022 10:12:35 +0200
-Message-Id: <20221012081241.18273-9-johan+linaro@kernel.org>
+Subject: [PATCH v2 09/14] phy: qcom-qmp-pcie: replace power-down delay
+Date:   Wed, 12 Oct 2022 10:12:36 +0200
+Message-Id: <20221012081241.18273-10-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221012081241.18273-1-johan+linaro@kernel.org>
 References: <20221012081241.18273-1-johan+linaro@kernel.org>
@@ -72,138 +72,166 @@ The vendor driver does not use a delay before starting the PHY and this
 is likely not needed on any platform unless there is a corresponding
 delay in the vendor kernel init sequence tables (i.e. in devicetree).
 
-Let's keep the delay for now, but drop the redundant delay period
-configuration while increasing the unnecessarily low timer slack
-somewhat.
+But as the vendor kernel do have a 1 ms delay *after* starting the PHY
+and before starting to poll the status it is possible that later
+contributors have simply not noticed that the mainline power-down delay
+is not equivalent.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+As the current delay before even starting the PHY is pretty much
+pointless and likely a mistake, move the delay after starting the PHY
+which avoids a few iterations of polling and speeds up startup by 1 ms
+(the poll loop otherwise takes about 1.8 ms).
+
+Note that MSM8998 has never used a power-down delay so add a flag to
+skip the delay in case starting the PHY is faster on MSM8998. This can
+be removed after someone takes a measurement.
+
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 27 +-----------------------
- 1 file changed, 1 insertion(+), 26 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 33 +++++-------------------
+ 1 file changed, 6 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index fa8bc6aeedf1..315de484f875 100644
+index 315de484f875..151baa63e8e8 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -1362,9 +1362,6 @@ struct qmp_phy_cfg {
+@@ -1360,8 +1360,7 @@ struct qmp_phy_cfg {
+ 	/* bit offset of PHYSTATUS in QPHY_PCS_STATUS register */
+ 	unsigned int phy_status;
  
- 	/* true, if PHY needs delay after POWER_DOWN */
- 	bool has_pwrdn_delay;
--	/* power_down delay in usec */
--	int pwrdn_delay_min;
--	int pwrdn_delay_max;
+-	/* true, if PHY needs delay after POWER_DOWN */
+-	bool has_pwrdn_delay;
++	bool skip_start_delay;
  
  	/* QMP PHY pipe clock interface rate */
  	unsigned long pipe_clock_rate;
-@@ -1500,8 +1497,6 @@ static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
+@@ -1495,8 +1494,6 @@ static const struct qmp_phy_cfg ipq8074_pciephy_cfg = {
+ 	.start_ctrl		= SERDES_START | PCS_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
-@@ -1529,8 +1524,6 @@ static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
+@@ -1523,8 +1520,6 @@ static const struct qmp_phy_cfg ipq8074_pciephy_gen3_cfg = {
+ 	.start_ctrl		= SERDES_START | PCS_START,
  	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
- 
+-	.has_pwrdn_delay	= true,
+-
  	.pipe_clock_rate	= 250000000,
  };
-@@ -1562,8 +1555,6 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
- 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+@@ -1553,8 +1548,6 @@ static const struct qmp_phy_cfg ipq6018_pciephy_cfg = {
+ 
+ 	.start_ctrl		= SERDES_START | PCS_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
-@@ -1594,8 +1585,6 @@ static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
+@@ -1583,8 +1576,6 @@ static const struct qmp_phy_cfg sdm845_qmp_pciephy_cfg = {
+ 	.start_ctrl		= PCS_START | SERDES_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
-@@ -1624,8 +1613,6 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
+@@ -1611,8 +1602,6 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
+ 	.start_ctrl		= PCS_START | SERDES_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
-@@ -1666,8 +1653,6 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
+@@ -1651,8 +1640,6 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
+ 	.start_ctrl		= PCS_START | SERDES_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
-@@ -1708,8 +1693,6 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
+@@ -1691,8 +1678,6 @@ static const struct qmp_phy_cfg sm8250_qmp_gen3x2_pciephy_cfg = {
+ 	.start_ctrl		= PCS_START | SERDES_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
-@@ -1765,8 +1748,6 @@ static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
+@@ -1719,6 +1704,8 @@ static const struct qmp_phy_cfg msm8998_pciephy_cfg = {
+ 	.start_ctrl             = SERDES_START | PCS_START,
  	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+ 	.phy_status		= PHYSTATUS,
++
++	.skip_start_delay	= true,
+ };
  
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+ static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
+@@ -1746,8 +1733,6 @@ static const struct qmp_phy_cfg sc8180x_pciephy_cfg = {
+ 
+ 	.start_ctrl		= PCS_START | SERDES_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
-@@ -1797,8 +1778,6 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
+@@ -1776,8 +1761,6 @@ static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
+ 	.start_ctrl		= PCS_START | SERDES_START,
+ 	.pwrdn_ctrl		= SW_PWRDN,
  	.phy_status		= PHYSTATUS_4_20,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
-@@ -1829,8 +1808,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
+@@ -1806,8 +1789,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen3x1_pciephy_cfg = {
+ 	.start_ctrl             = SERDES_START | PCS_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
-@@ -1876,8 +1853,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+@@ -1851,8 +1832,6 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+ 	.start_ctrl             = SERDES_START | PCS_START,
+ 	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
  	.phy_status		= PHYSTATUS_4_20,
- 
- 	.has_pwrdn_delay	= true,
--	.pwrdn_delay_min	= 995,		/* us */
--	.pwrdn_delay_max	= 1005,		/* us */
+-
+-	.has_pwrdn_delay	= true,
  };
  
  static void qmp_pcie_configure_lane(void __iomem *base,
-@@ -2037,7 +2012,7 @@ static int qmp_pcie_power_on(struct phy *phy)
+@@ -2011,15 +1990,15 @@ static int qmp_pcie_power_on(struct phy *phy)
+ 	qmp_pcie_pcs_init(qphy, &cfg->tables);
  	qmp_pcie_pcs_init(qphy, mode_tables);
  
- 	if (cfg->has_pwrdn_delay)
--		usleep_range(cfg->pwrdn_delay_min, cfg->pwrdn_delay_max);
-+		usleep_range(1000, 1200);
- 
+-	if (cfg->has_pwrdn_delay)
+-		usleep_range(1000, 1200);
+-
  	/* Pull PHY out of reset state */
  	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+ 
+ 	/* start SerDes and Phy-Coding-Sublayer */
+ 	qphy_setbits(pcs, cfg->regs[QPHY_START_CTRL], cfg->start_ctrl);
+ 
++	if (!cfg->skip_start_delay)
++		usleep_range(1000, 1200);
++
+ 	status = pcs + cfg->regs[QPHY_PCS_STATUS];
+ 	mask = cfg->phy_status;
+ 	ready = 0;
 -- 
 2.35.1
 
