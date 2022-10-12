@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646405FC88F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3FF5FC895
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiJLPkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S229639AbiJLPnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJLPkh (ORCPT
+        with ESMTP id S229470AbiJLPnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:40:37 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624D3CD5DE
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:40:30 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3321c2a8d4cso159267487b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:40:29 -0700 (PDT)
+        Wed, 12 Oct 2022 11:43:01 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD79AE872
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:43:00 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id h8so9112232lja.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:42:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivMZDopBydPz/wE+y//4HcN78R6tls33wt70oMeZZfY=;
-        b=I0klZrTKxVSMv4twVpPFUgddLbVcA4lpsbbESqRG8zjXN8l9SRrK1XSkQhNmVwrAv4
-         fD+LKjbjNFZJgM+1cgbLQCexiXptvB/H79dwd/KsORIFbVEMy/3yNc7B8YMZKXA1kcGQ
-         A4KHjZ7Th7x9EVCveIq0qhNZSZSbj3wfrxAeL1rXyZXJEOEmRfkv7WPqjaXtX0DN6gYo
-         XNDLwf7P9BJJPBjWWHstjzcfHsURbWMfzxQG1A6O1NmDmrsqWkQjtojYKrOklii0ysd5
-         deOd/XT1kRWj+Telvutbv+U6MWUp59KD+12Qm/s3aJLcYPoq/RNvj9FWYTlYmQqBrNtv
-         n3NQ==
+        bh=y4UhhqJ3Oy5m10obzfeCNIu6uYRDzLagc7ZKXtuv5pA=;
+        b=AkEAzKnBFxMhZ3pp2TPSSUkFltWSBDEIRoxIXEyh8HGDb8xqq9TVqSiznTY8BhHrjw
+         BxB4bAM8bAV4Aiyti5oBdnz74FvaQhbobNWI+vYO3lD4RyFcjN9Rtf9TwzH8NXSKH19q
+         2psY+FHZ5NWA5+5jB62aLetgsu3KzRYnS41gPmAphyrQB/m2vM+115QDn1MEoe5pdotv
+         MiMRdZiizCG7Je4IPvg/7H9I+e1SjmgdlmhARHJicYfMOk69rR2cS5WElgx4gMOMGHpe
+         iVuATRlN4MHuNnnRJkLEBnbwAcq+vhsgizzU03+8CPS3uPPjmfMs1hFMzQAYOF7im1bA
+         12cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ivMZDopBydPz/wE+y//4HcN78R6tls33wt70oMeZZfY=;
-        b=0jsmre/k6KyFkc7pBIu4cDKFKziayl9rjspt6EFbqLlOdbG+JrXezD25Xa0jCWBp3K
-         NgJMW/VZOyMJWii1dZv6CP4BBIvLSgTBcKBAdxrlU5XXy4akbhbC07FWxsgJuKJcfoSr
-         coLqpGzskrzI1mRUyFVImAyp1CymF91qKwQemyli5jqk0tq5xeAQniz63qgUDS5KtwMP
-         noXbGeIHN2ldEPOcTWxjOapFc0ncXPsXTdx5FI2JWfsHkvhtiVpDOo9wYmKeAfFmYrxE
-         kzQLMuuIMRxbcEFqA6ZVHcPoveo7hBqOHLo+H4PCYTWaXS9ZgfSXAf3GLgtr/GSNNMT3
-         BRFA==
-X-Gm-Message-State: ACrzQf2d4fccsTmLtrmPLMXFIjKdahRvvh2PLIAHJeIwXakuC7SPkFXF
-        8h1rVPsrn2R3ZbLupp/5btlb7wCz1vK6a6rBfrLHqg==
-X-Google-Smtp-Source: AMsMyM6M4G8fMIeFkk1YSGBq294rxa2P74/9tGWBLFApkQ+EPdaSBq9DI8yQ1Dp0OwvgH1s+z2BjTGNoThcrLxrKuPg=
-X-Received: by 2002:a81:cd1:0:b0:356:e01d:269f with SMTP id
- 200-20020a810cd1000000b00356e01d269fmr27341436ywm.263.1665589228895; Wed, 12
- Oct 2022 08:40:28 -0700 (PDT)
+        bh=y4UhhqJ3Oy5m10obzfeCNIu6uYRDzLagc7ZKXtuv5pA=;
+        b=bKEViuLS1g5n0XN/t+QxtB4sZFOaIbOqomLatB31GWXNcr6jCH/w4hCMThoG8nIVDY
+         AKKcQwqjf8LTKBqHBr9eMaa5sZCyAG8T4P7nJOIOah7M06plopeGvQjHFDZ21erziHZt
+         fdwHkIT4M6FueA4oA4c6HcXd/vdnHmIoZYJtf0d2YDvqSxiVNFr+D/IHUUi2CFiq2JM7
+         RZud2QVYiCjiM6PHeMBqVupAxtR10mDWdvVJiX9k5R18gTT5xFXuyyplLp4GuGNEck4A
+         FH+c/l0TzvDi8IdkKYQG1vXUWi090qKSmTyLY0WKyWvDXlq4VbE1Ya0e+eIIbLNxu0N3
+         UIhw==
+X-Gm-Message-State: ACrzQf2H8XvtsanbGqheBy9dM2TuvGKzCBwIa/KJ401RV346aVTcPnA8
+        qmAyr/d05UVj5vPKAnIIjL7EJis4K/0wHbqNrw8cnA==
+X-Google-Smtp-Source: AMsMyM7EY/h+UhTrJZ4Pyz4Lq8smIvuC/YLM/Lg3P3wF36BIjUEbefgD8koPi0WZnrSYdsaILp0kRjPFKi420Xf4ImU=
+X-Received: by 2002:a05:651c:1548:b0:26c:61b3:7129 with SMTP id
+ y8-20020a05651c154800b0026c61b37129mr10314609ljp.381.1665589378239; Wed, 12
+ Oct 2022 08:42:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAJuCfpG=bADguJWdxV4ZhTze9fmKP2bhsbf0xzbd06Fhr4_U5w@mail.gmail.com>
- <20221012062034.486-1-hdanton@sina.com>
-In-Reply-To: <20221012062034.486-1-hdanton@sina.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 12 Oct 2022 08:40:17 -0700
-Message-ID: <CAJuCfpFsx6C1tRnAXVPz3Nn=odqDuQwgrEr5qVWWYh7t6Tpukw@mail.gmail.com>
-Subject: Re: PSI idle-shutoff
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, quic_charante@quicinc.com
+References: <20220925143908.10846-1-vincent.guittot@linaro.org>
+ <20220925143908.10846-6-vincent.guittot@linaro.org> <20221012142248.k6pdjgxwkk2cshuu@wubuntu>
+In-Reply-To: <20221012142248.k6pdjgxwkk2cshuu@wubuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 12 Oct 2022 17:42:46 +0200
+Message-ID: <CAKfTPtADxP7eSETpazO9LFr+Et=GnSuWc45s3cfRACq82tRO_g@mail.gmail.com>
+Subject: Re: [PATCH v5 5/7] sched/fair: Add sched group latency support
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        chris.hyser@oracle.com, valentin.schneider@arm.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 11:20 PM Hillf Danton <hdanton@sina.com> wrote:
+On Wed, 12 Oct 2022 at 16:22, Qais Yousef <qais.yousef@arm.com> wrote:
 >
-> On 11 Oct 2022 10:11:58 -0700 Suren Baghdasaryan <surenb@google.com>
-> >On Tue, Oct 11, 2022 at 4:38 AM Hillf Danton <hdanton@sina.com> wrote:
-> >>
-> >> Given activities on remote CPUs, can you specify what prevents psi_avgs_work
-> >> from being scheduled on remote CPUs if for example the local CPU has been
-> >> idle for a second?
+> On 09/25/22 16:39, Vincent Guittot wrote:
+> > Task can set its latency priority with sched_setattr(), which is then used
+> > to set the latency offset of its sched_entity, but sched group entities
+> > still have the default latency offset value.
 > >
-> > I'm not a scheduler expert but I can imagine some work that finished
-> > running on a big core A and generated some activity since the last
-> > time psi_avgs_work executed.  With no other activity the next
-> > psi_avgs_work could be scheduled on a small core B to conserve power.
+> > Add a latency.nice field in cpu cgroup controller to set the latency
+> > priority of the group similarly to sched_setattr(). The latency priority
+> > is then used to set the offset of the sched_entities of the group.
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+> >  Documentation/admin-guide/cgroup-v2.rst |  8 ++++
+> >  kernel/sched/core.c                     | 53 +++++++++++++++++++++++++
+> >  kernel/sched/fair.c                     | 33 +++++++++++++++
+> >  kernel/sched/sched.h                    |  4 ++
+> >  4 files changed, 98 insertions(+)
+> >
+> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> > index be4a77baf784..d8ae7e411f9c 100644
+> > --- a/Documentation/admin-guide/cgroup-v2.rst
+> > +++ b/Documentation/admin-guide/cgroup-v2.rst
+> > @@ -1095,6 +1095,14 @@ All time durations are in microseconds.
+> >          values similar to the sched_setattr(2). This maximum utilization
+> >          value is used to clamp the task specific maximum utilization clamp.
+> >
+> > +  cpu.latency.nice
+> > +     A read-write single value file which exists on non-root
+> > +     cgroups.  The default is "0".
+> > +
+> > +     The nice value is in the range [-20, 19].
+> > +
+> > +     This interface file allows reading and setting latency using the
+> > +     same values used by sched_setattr(2).
 >
-> Given core A and B, nothing prevents.
->
-> > There might be other cases involving cpuset limitation changes or cpu
-> > offlining but I didn't think too hard about these. The bottom line, I
-> > don't think we should be designing mechanisms which rely on
-> > assumptions about how tasks will be scheduled. Even if these
->
-> The tasks here makes me guess that we are on different pages - scheduling
-> work has little to do with how tasks are scheduled, and is no more than
-> queuing work on the system_wq in the case of psi_avgs_work,
+> I still don't understand how tasks will inherit the latency_nice value from
+> cgroups they're attached to.
 
-I must have misunderstood your question then. My original concern was
-that in the above example your suggested patch would not reschedule
-psi_avgs_work to aggregate the activity recorded from core A. Easily
-fixable but looks like a simpler approach is possible.
+The behavior is the same as for sched_entity weight. The latency is
+applied on the sched_entity of the group
 
 >
-> > assumptions are correct today they might change in the future and
-> > things will break in unexpected places.
+> For example, in EAS path we operate at task level only. If the task's
+> p->latency_nice = 0, but it belongs to a task group tg->latency_nice = -19;
+> what should the task's latency_nice be in this case? If it's in a hierarchy,
+> how would the effective value be calculated?
 >
-> with nothing assumed.
 >
+> Thanks
+>
+> --
+> Qais Yousef
