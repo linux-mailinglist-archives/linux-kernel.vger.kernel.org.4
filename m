@@ -2,454 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72245FC21F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA25FC222
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiJLIjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S229648AbiJLIj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiJLIjV (ORCPT
+        with ESMTP id S229623AbiJLIjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:39:21 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::61b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC26A9243;
+        Wed, 12 Oct 2022 04:39:24 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7232B40D4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:39:21 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so336286wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 01:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hvXoD/VVs1JfrFZOMMsbQhdRyKbY5BarUuX5aidq38Y=;
+        b=B+dmcHrOFnDJsNByaCqbLwnBYeVR0T8Bbjj3U7qdrXVj+1tlt6etlBxhzxZQD9fV7y
+         ii2Wmb6253awru1Ql/zEWAvmzKzJMSRiDIypHxoeSWnJGwD8p+QROKqnaCRDTv4qm4Wj
+         6klF17H7g7eUfj4mxwU+iQRgEx9+RUnam1+PgUNhAaIaYPXGydBlz0CP/1CdylTXQTtW
+         1C9E8U+kkXhHAsPalclwWpNztwrDX3PhoQ8F5Up4H7ZjvVZo8RLx9LFOC9wPOJAVXM9E
+         gmdlfbGdN6qK+2ZDVkRYaSfYvxJwBe5MJ7nkySW7VS4oZ+hN53V5Jo3+ySXIgvJDkEj7
+         eDkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hvXoD/VVs1JfrFZOMMsbQhdRyKbY5BarUuX5aidq38Y=;
+        b=r2UFTgyJgRiqBVJK/tDntH/mU7Te7Y5p9vg7w16BhP+pw6DZ+3tYRRLkeJEq5sSfIc
+         HZHBjVZ6GyRTNBNpmhfJVOGO4/s9ly+QWnof9lIgCBQXf7DjBLSObZjJmaD7UbB3DOMI
+         efTd3EV7iILzplqUmuA1znq4Dta6sddM50OraXVOCRPSUkXmyRaoi9W9pcQTAulgayub
+         5WIlRwBYJMpXMLF0lbACnjs+pKkEnxglnfxR+XrDcLfqJv3eCaHxV62wQE9Bz2TwTItu
+         Y2SFxVfgNbwnsvWtVawwIQUEv1Bdol5aAXs/s850ufLT/mmiT4vG1NBqk4cs4NRvOe/1
+         U3jg==
+X-Gm-Message-State: ACrzQf3tg9AAYcHoJHzmievO4qYcRw1frxyOKIIbzZYbRbDSesX7KEe4
+        gTmwv40oE3x3/nB57ZIcZ+V7ig==
+X-Google-Smtp-Source: AMsMyM4glDiV7BhepjKeAzqByR/Sam3MmgQWqu5AXGC5xtStDmrfsF0R1HiAZt9kVwUa0NaJu/4VSQ==
+X-Received: by 2002:a05:600c:46c9:b0:3c6:d853:4cb7 with SMTP id q9-20020a05600c46c900b003c6d8534cb7mr79213wmo.77.1665563960276;
         Wed, 12 Oct 2022 01:39:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MNGm3CnIIlIn5LEDFEHErOCZlZGmb4JJCIdoJloLm4HQIZOPNLPQDqw8heVh1NqoYo5Xx9Z0Gp8uTdUTIpypPcgZZ0nI3NkBc+7y0TVwAhR2Zz0qpeifIY+II47Ym5E6QY04pCM1bi5sAbgSl902jmUQuleH7EuIrYs3uGhq8LnrTzSWmHXwoIE4ZOJD5IOcm+1/VbjVjR7QNoiqx7loTU9EHcHyYB2fcJLEYaE+b1JkWIVbBzBCqc5lgTVJ+5P9U8Km+n2zh6l74F6tUgZYAYbxZgtPj/ak3DfHFSHQRAjNCEBWfomqC6dmrMPFEgQclf31VnNXz3CFo2ihs6KV4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qe1RCL6meOk4b8p9K/ABM+a2gAxB1xyyUr6drtmF24g=;
- b=AIuKsEFNL/HBOequ6v+7r2xx4JxRCErdI1AuWx8p9qo8ydJMJH9MHmYC84415jwHUaWSYpG/OS2gq6Ogv7CUw1nTQbvfSGA795ziIy0SSX1BTWoa8zUVEi8zsTiyB7/YOB2r0d1AW+OBxBM+QyOIbhj1kCNvsSBnnUYwC7thyqEMUfPHvTScaE5TtrgFvMvypgdnYMCeVIC2Ut15X+ilyVM4xQPhBubPvA5xM8BmeqGD3fIpuSsdYGwinyO4ex2e3amYb5lTO9zsTDh68LRhUvdL0fJivmpszbK4a9ELX1jaN7iILxC8wKkkICgtkwUmCc8RX+Ra34h/XkQzXz4IbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qe1RCL6meOk4b8p9K/ABM+a2gAxB1xyyUr6drtmF24g=;
- b=tyR/Ah2MQp72rnv2cqH7BG0J4t2VPASgYHqs9hUEefbX/xcf2rEOoaNWfP5wNMV94gkbqYTDKnCYuUgy9YTHB9/D6kMqwyjSWTCfcHxZO0gNrNEOcx46hIir4vN5kg70HNJay9TBW5uB9hNGkN0rkyiA2wgZH0hdDZ5IWZWboEA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by MN0PR12MB6269.namprd12.prod.outlook.com (2603:10b6:208:3c3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Wed, 12 Oct
- 2022 08:39:16 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::6216:d15b:e4a3:58af]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::6216:d15b:e4a3:58af%3]) with mapi id 15.20.5709.021; Wed, 12 Oct 2022
- 08:39:16 +0000
-Message-ID: <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
-Date:   Wed, 12 Oct 2022 14:09:00 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
- <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
- <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
- <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
- <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0228.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::16) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id p1-20020a5d68c1000000b0022cce7689d3sm16438399wrw.36.2022.10.12.01.39.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 01:39:19 -0700 (PDT)
+Message-ID: <60507e87-cf92-13d9-29d0-83f18a648f4b@baylibre.com>
+Date:   Wed, 12 Oct 2022 10:39:18 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|MN0PR12MB6269:EE_
-X-MS-Office365-Filtering-Correlation-Id: b59651a1-350f-4894-5d51-08daac2d3f55
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xvgWZx37wCygyuqWhoiS9FfISdnjjV7Au+UxjPy4EvkK1qI1WBalvzs+tpi2j2+vW39xLQzstFx1KfEWkEu7u1LfYf0efmhboUCo1l3EgDrz5zkSK3JZyvEJm3KWlzH92mIQHq6/cMuGdPcryHxgbyrpb96gUr0/fh+6FNuatwotiMcZEwvPQXRb1gzXkPwWJ+couq6OxxyLK6H1dkvV2YMWkBCwDcGGR4szJwOUtqcml75pmvoC8EWMvoeOdndcDIFbIMCQSzSiyNo3CHeeousLA5tuX6NmedYiBFwlFDNmWmTuY0a5lAllUA9N+f+DSiCW2+aoEsaN8AioDRvmHpPNGo3tsrVMV53OTSTK+ThBuyShNZPucvgIPfgw2v8kQx7EEdmTErhUULGnNZhOxgBkeiPQnyFHUl+OaoTUaC6Nv76FC6s5aSh7Dn32+6qcMDouyklHkM//ROQkQCxW5na681r0gEX/DUWmgO4bEPYv4Z/TEs4MsW4H/de8WRcu85+mLJXKCuIN6lQihCrsUMmJ00nEF1/1JCHZ3OSEnqNEyju2ItPJ0JqTWrhi6obMXsz5OPtcZ+A8iTc6cF3ICR78OrewzPVV4rlq5CMBYEwpVrtdyUgmEyjwSnQoGpBYdGHEGKXpTVHy2c9YcysfPApj8LLaKxdyrQlIl0uHyqQP0xuW3xx8lym28zVJWNCjxZ+O347QZ3sLCEreb2MJr5TGIcFWCZwriJOiT1tJXQKqkbefZDx9xed16o5S28hXPeu3PnLEF/XNH4iUEB4T+Xn+XDlzz65ucSZnoJnTR+A6oeldLhelRkH0WT1XPaSz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(39860400002)(366004)(396003)(451199015)(26005)(86362001)(6486002)(6916009)(316002)(8676002)(36756003)(66476007)(8936002)(66556008)(44832011)(41300700001)(2906002)(4326008)(66946007)(83380400001)(2616005)(478600001)(5660300002)(7416002)(6666004)(186003)(53546011)(6506007)(66899015)(31696002)(38100700002)(6512007)(31686004)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VlJQQmdrZHhXa243ZEFvK20xbHZPNndvcEFnazJReWdRdHJxTU0rWHJvYzJu?=
- =?utf-8?B?UDJJSlBWK1ZiQ0lXdms3czhKSlNzRmVpcklVMlA4VFY1bXM4ZXV2RTVzYlp6?=
- =?utf-8?B?eXM4ZGNMQmV0TnI2dkZSZmZYYVdUd1FWYzk0KzBNUElEYmVoYysxZlltUUxB?=
- =?utf-8?B?cWl3L05SMmdCMXc3RVJBTDNCSEJxVHhoalY1NXNJdnFma0MvbkJxSkdxSGll?=
- =?utf-8?B?d3l5UlNZK3J3UmpHU0hzalljUGpjUjg4Zmx5ZWVtMnNqVkRPdGVSRnRnaTl4?=
- =?utf-8?B?U3F1R1R1UEVxZG9jbHc3cXB4TFpzdUR0QnFYOUk0OUxacE9FMzFiM2Mrd01y?=
- =?utf-8?B?QTBtaDJsZVg5OWY4emorbEpHS3IzelgxazNsS1FpalpsZU1OTTFXZllxYk5P?=
- =?utf-8?B?eTc5OEpQZkZQNzhlK1MyUWthWVBYc0hlSmV3aEZmSVlER2tYKzlNdVVtdEpF?=
- =?utf-8?B?RlJ2NnVzMFJLdEFQTStEZTF5YWtHeVlIQmxoM1psV0N3QUZmMVBmditINGRY?=
- =?utf-8?B?akhSQ3FpeUgyallXU2tRS3dXenNMNnhYQ0l3OWZjNnlvSjYwVWZ1WU9LcXN0?=
- =?utf-8?B?bit1MVJweVBPRGNNTDVBOGVIUVp1cjkyaXpZRUFaTGVyK05sNStEZm9COVpB?=
- =?utf-8?B?bXh1U1pIa3FvUkRWc2wxSU1GN1JYOHVzZGp2ZFNHRTFOaGRSSG9GYzlpRmdl?=
- =?utf-8?B?c1R0bWY0cTJFVUdUU21oY2Q1QkR5WEcwK2hIWEF2TFAxV2xWaGNqOXkvbVNN?=
- =?utf-8?B?TXNvNUZGbDBWaVdOTnJGSWN5YmRTWFlGVmxKeWh5R3dZY2JkSzZJNnllaGdM?=
- =?utf-8?B?c05PK2ZScWdCb1RMTERCbENCYlJjZ2FCOFRycG9YeExlMW5TTFI0SWkzd0J0?=
- =?utf-8?B?S05JeWZFa3d3QXZKOGp2dU9OSkF1TjRUUDdKc0RBaWo3RmI1MTZJNnJLVDJq?=
- =?utf-8?B?SDQybC95OFlnSm5DenVVVnVGWm5rQUZQTkZkZ2szZGg1M2l0YkZ3L2VNcEFD?=
- =?utf-8?B?T2tidW5CTmoweThSKzZldlBvMDMrV1N5bDAxL3Mycy9NYnlrNHJTZi8yYjR3?=
- =?utf-8?B?NXpMT1ZQbzN1bHlrUEhWb2FUUkNkaTZKdlArWjlTWTY0bnVHUVlSTTJqRG1Y?=
- =?utf-8?B?WkM5Rmg4L2RmOFk5ZzhaN2RhVm1CMVVWdW8yTnhuZVcrQ2lpaXVlSkU0NmtC?=
- =?utf-8?B?WGlIemt4ODJGQVUxbk1jN1gyYkJCeHAxb0tUdVQxaTZmL05CVGRSS1AvMENZ?=
- =?utf-8?B?SHV6Y3lWUDdXK29kWk5xY2VvMDhjMlRzdmdQYTBxY04rUXJpM2RsQjNCTm9j?=
- =?utf-8?B?MHRoT210N2dGaXBLbWpQMmZWZER5N2szU2xHempkcjNLRWZpOXFxMUsrcW5O?=
- =?utf-8?B?bkJiSC9sMjR0YlZPNVoxbCtVNFBOQ0QwMWpuVmE2b0txQVhnK3BWQ281WkNl?=
- =?utf-8?B?NVo1MW5HSmwrK09UaG9ucGVWeEttUUd6OEl1WVFYVWI4NEl2NmtkME95UjlJ?=
- =?utf-8?B?b1ZobUgxTDhaQnhCMmN6bGdtWnhQMzArdjhXRTBkOXhpWU9PeGJ2UW5qL1NP?=
- =?utf-8?B?LzNGUlVKMTFiQWFiQlFGdThmWHRUcjRVVEt3VzZqT05zVUczVnA3U000Zmt0?=
- =?utf-8?B?N2w4V0ZOU0dxM2YvNmplbldtSmpnYlNxOUh2aVZJWHhtcEtuZE5FbkFaSHox?=
- =?utf-8?B?OVhlcUZJYUNiWTZyZE9VRUZoVHZtdFIzQ2Z6R09EZnNTSTFYTW5wU09iUFVC?=
- =?utf-8?B?MUVJTzRxNHZCOU0rTERGOTVCeTR3ZkRUb3hUYmhlaVUwWUIyR2NxdHM4Wi9i?=
- =?utf-8?B?a3VtZk1sbmdtLytIS2hKYlBjQlBiVFlLRGd1SlUyK0t4bGRZRzF6MUxZZ0d1?=
- =?utf-8?B?UDYrRjVYQ0QwdysrMEpTc1hGNzNkRnpEN291V3dUeklyQUFTSVRLbnNEUUdJ?=
- =?utf-8?B?RzA0bkszUkhuelYwWmFqa3ExVENHV0czS1FMWlhleEtCTDRaV0FJdFFITkxt?=
- =?utf-8?B?bmZ6Qyt1b3hEdzdyZTdxNllnbDVtVW4rQXZtTDNwRHVtcTZFUmJIK1B0WFdy?=
- =?utf-8?B?WWpMNEZ4TksrWm1mQThORlBWUmRhRUdOUms4MldVa3NRNUZVYk5reEUxMWkw?=
- =?utf-8?Q?VdixamEttITdLOAXy/ChKGOYu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b59651a1-350f-4894-5d51-08daac2d3f55
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 08:39:16.7267
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0wVRYOwmVc9Ac+S2ibKpHvQ0QSty8Hi9WdanhUx6VtGxiiDSVEekCOLe5RiVHCvz3UcAnAwn7R043UVtDUkGwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6269
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v6 6/6] arm64: defconfig: Add tps65219 as modules
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, lee@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com
+Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-omap@vger.kernel.org
+References: <20221011140549.16761-1-jneanne@baylibre.com>
+ <20221011140549.16761-7-jneanne@baylibre.com>
+ <72b9809e-d6d7-862a-26b8-221d14ea4322@linaro.org>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <72b9809e-d6d7-862a-26b8-221d14ea4322@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-Oct-22 11:17 PM, Peter Zijlstra wrote:
-> On Tue, Oct 11, 2022 at 04:02:56PM +0200, Peter Zijlstra wrote:
->> On Tue, Oct 11, 2022 at 06:49:55PM +0530, Ravi Bangoria wrote:
->>> On 11-Oct-22 4:59 PM, Peter Zijlstra wrote:
->>>> On Sat, Oct 08, 2022 at 11:54:24AM +0530, Ravi Bangoria wrote:
->>>>
->>>>> +static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
->>>>> +					  struct perf_event_context *next_ctx)
->>>>> +{
->>>>> +	struct perf_event_pmu_context *prev_epc, *next_epc;
->>>>> +
->>>>> +	if (!prev_ctx->nr_task_data)
->>>>> +		return;
->>>>> +
->>>>> +	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
->>>>> +				    struct perf_event_pmu_context,
->>>>> +				    pmu_ctx_entry);
->>>>> +	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
->>>>> +				    struct perf_event_pmu_context,
->>>>> +				    pmu_ctx_entry);
->>>>> +
->>>>> +	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
->>>>> +	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
->>>>> +
->>>>> +		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
->>>>> +
->>>>> +		/*
->>>>> +		 * PMU specific parts of task perf context can require
->>>>> +		 * additional synchronization. As an example of such
->>>>> +		 * synchronization see implementation details of Intel
->>>>> +		 * LBR call stack data profiling;
->>>>> +		 */
->>>>> +		if (prev_epc->pmu->swap_task_ctx)
->>>>> +			prev_epc->pmu->swap_task_ctx(prev_epc, next_epc);
->>>>> +		else
->>>>> +			swap(prev_epc->task_ctx_data, next_epc->task_ctx_data);
->>>>
->>>> Did I forget to advance the iterators here?
->>>
->>> Yeah. Seems so. I overlooked it too.
->>
->> OK; so I'm not slowly going crazy staring at this code ;-) Let me go add
->> it now then. :-)
->>
->> But first I gotta taxi the kids around for a bit, bbl.
+On 11/10/2022 16:48, Krzysztof Kozlowski wrote:
+> On 11/10/2022 10:05, Jerome Neanne wrote:
+>> This adds defconfig option to support TPS65219 PMIC, MFD, Regulators
 > 
-> OK, so I've been going over the perf_event_pmu_context life-time thing
-> as well, there were a bunch of XXXs there and I'm not sure Im happy with
-> things, but I'd also forgotten most of it.
+> Do not use "This commit/patch".
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 > 
-> Ideally epc works like it's a regular member of ctx -- locking wise that
-> is, but I'm not sure we can make that stick -- see the ctx->mutex issues
-> we have with put_ctx().
+>> and power-button.
 > 
-> As such, I'm going to have to re-audit all the epc usage to see if
-> pure ctx->lock is sufficient.
+> You explained what you did, which is easily visible. You did not explain
+> why you are doing it.
 > 
-> I did do make epc RCU freed, because pretty much everything is and that
-> was easy enough to make happen -- it means we don't need to worry about
-> that.
+> Best regards,
+> Krzysztof
 > 
-> But I'm going cross-eyes from staring at this all day, so more tomorrow.
-> The below is what I currently have.
-> 
-> ---
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -833,13 +833,13 @@ struct perf_event {
->   *           `--------[1:n]---------'     `-[n:1]-> pmu <-[1:n]-'
->   *
->   *
-> - * XXX destroy epc when empty
-> - *   refcount, !rcu
-> + * epc lifetime is refcount based and RCU freed (similar to perf_event_context).
-> + * epc locking is as if it were a member of perf_event_context; specifically:
->   *
-> - * XXX epc locking
-> + *   modification, both: ctx->mutex && ctx->lock
-> + *   reading, either: ctx->mutex || ctx->lock
->   *
-> - *   event->pmu_ctx            ctx->mutex && inactive
-> - *   ctx->pmu_ctx_list         ctx->mutex && ctx->lock
-> + * XXX except this isn't true ... see put_pmu_ctx().
->   *
->   */
->  struct perf_event_pmu_context {
-> @@ -857,6 +857,7 @@ struct perf_event_pmu_context {
->  	unsigned int			nr_events;
->  
->  	atomic_t			refcount; /* event <-> epc */
-> +	struct rcu_head			rcu_head;
->  
->  	void				*task_ctx_data; /* pmu specific data */
->  	/*
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -1727,6 +1727,10 @@ perf_event_groups_next(struct perf_event
->  	return NULL;
->  }
->  
-> +#define perf_event_groups_for_cpu_pmu(event, groups, cpu, pmu)		\
-> +	for (event = perf_event_groups_first(groups, cpu, pmu, NULL);	\
-> +	     event; event = perf_event_groups_next(event, pmu))
-> +
->  /*
->   * Iterate through the whole groups tree.
->   */
-> @@ -3366,6 +3370,14 @@ static void perf_event_sync_stat(struct
->  	}
->  }
->  
-> +#define list_for_each_entry_double(pos1, pos2, head1, head2, member)	\
-> +	for (pos1 = list_first_entry(head1, typeof(*pos1), member),	\
-> +	     pos2 = list_first_entry(head2, typeof(*pos2), member);	\
-> +	     !list_entry_is_head(pos1, head1, member) &&		\
-> +	     !list_entry_is_head(pos2, head2, member);			\
-> +	     pos1 = list_next_entry(pos1, member),			\
-> +	     pos2 = list_next_entry(pos2, member))
-> +
->  static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
->  					  struct perf_event_context *next_ctx)
->  {
-> @@ -3374,16 +3386,9 @@ static void perf_event_swap_task_ctx_dat
->  	if (!prev_ctx->nr_task_data)
->  		return;
->  
-> -	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
-> -				    struct perf_event_pmu_context,
-> -				    pmu_ctx_entry);
-> -	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
-> -				    struct perf_event_pmu_context,
-> -				    pmu_ctx_entry);
-> -
-> -	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
-> -	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
-> -
-> +	list_for_each_entry_double(prev_epc, next_epc,
-> +				   &prev_ctx->pmu_ctx_list, &next_ctx->pmu_ctx_list,
-> +				   pmu_ctx_entry) {
+Thanks for pointing me to the detailed guidelines
+I'm new to upstream and not well aware of all good practices.
 
-There are more places which can use list_for_each_entry_double().
-I'll fix those.
+Would below commit message be more suitable:
 
->  		WARN_ON_ONCE(prev_epc->pmu != next_epc->pmu);
->  
->  		/*
-> @@ -3706,7 +3711,6 @@ static noinline int visit_groups_merge(s
->  		perf_assert_pmu_disabled((*evt)->pmu_ctx->pmu);
->  	}
->  
-> -
->  	min_heapify_all(&event_heap, &perf_min_heap);
->  
->  	while (event_heap.nr) {
-> @@ -3845,7 +3849,6 @@ ctx_sched_in(struct perf_event_context *
->  		/* start ctx time */
->  		__update_context_time(ctx, false);
->  		perf_cgroup_set_timestamp(cpuctx);
-> -		// XXX ctx->task =? task
->  		/*
->  		 * CPU-release for the below ->is_active store,
->  		 * see __load_acquire() in perf_event_time_now()
-> @@ -4815,6 +4818,15 @@ find_get_pmu_context(struct pmu *pmu, st
->  
->  	__perf_init_event_pmu_context(new, pmu);
->  
-> +	/*
-> +	 * XXX
-> +	 *
-> +	 * lockdep_assert_held(&ctx->mutex);
-> +	 *
-> +	 * can't because perf_event_init_task() doesn't actually hold the
-> +	 * child_ctx->mutex.
-> +	 */
-> +
->  	raw_spin_lock_irq(&ctx->lock);
->  	list_for_each_entry(epc, &ctx->pmu_ctx_list, pmu_ctx_entry) {
->  		if (epc->pmu == pmu) {
-> @@ -4849,6 +4861,14 @@ static void get_pmu_ctx(struct perf_even
->  	WARN_ON_ONCE(!atomic_inc_not_zero(&epc->refcount));
->  }
->  
-> +static void free_epc_rcu(struct rcu_head *head)
-> +{
-> +	struct perf_event_pmu_context *epc = container_of(head, typeof(*epc), rcu_head);
-> +
-> +	kfree(epc->task_ctx_data);
-> +	kfree(epc);
-> +}
-> +
->  static void put_pmu_ctx(struct perf_event_pmu_context *epc)
->  {
->  	unsigned long flags;
-> @@ -4859,7 +4879,14 @@ static void put_pmu_ctx(struct perf_even
->  	if (epc->ctx) {
->  		struct perf_event_context *ctx = epc->ctx;
->  
-> -		// XXX ctx->mutex
-> +		/*
-> +		 * XXX
-> +		 *
-> +		 * lockdep_assert_held(&ctx->mutex);
-> +		 *
-> +		 * can't because of the call-site in _free_event()/put_event()
-> +		 * which isn't always called under ctx->mutex.
-> +		 */
+Add support for the TPS65219 PMIC by enabling MFD, regulator and 
+power-button drivers.  All drivers enabled as modules.
 
-Yes. I came across the same and could not figure out how to solve
-this. So Just kept XXX as is.
-
->  
->  		WARN_ON_ONCE(list_empty(&epc->pmu_ctx_entry));
->  		raw_spin_lock_irqsave(&ctx->lock, flags);
-> @@ -4874,17 +4901,15 @@ static void put_pmu_ctx(struct perf_even
->  	if (epc->embedded)
->  		return;
->  
-> -	kfree(epc->task_ctx_data);
-> -	kfree(epc);
-> +	call_rcu(&epc->rcu_head, free_epc_rcu);
->  }
->  
->  static void perf_event_free_filter(struct perf_event *event);
->  
->  static void free_event_rcu(struct rcu_head *head)
->  {
-> -	struct perf_event *event;
-> +	struct perf_event *event = container_of(head, typeof(*event), rcu_head);
->  
-> -	event = container_of(head, struct perf_event, rcu_head);
->  	if (event->ns)
->  		put_pid_ns(event->ns);
->  	perf_event_free_filter(event);
-> @@ -12643,13 +12668,6 @@ perf_event_create_kernel_counter(struct
->  		goto err_alloc;
->  	}
->  
-> -	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
-> -	if (IS_ERR(pmu_ctx)) {
-> -		err = PTR_ERR(pmu_ctx);
-> -		goto err_ctx;
-> -	}
-> -	event->pmu_ctx = pmu_ctx;
-> -
->  	WARN_ON_ONCE(ctx->parent_ctx);
->  	mutex_lock(&ctx->mutex);
->  	if (ctx->task == TASK_TOMBSTONE) {
-> @@ -12657,6 +12675,13 @@ perf_event_create_kernel_counter(struct
->  		goto err_unlock;
->  	}
->  
-> +	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
-> +	if (IS_ERR(pmu_ctx)) {
-> +		err = PTR_ERR(pmu_ctx);
-> +		goto err_unlock;
-> +	}
-> +	event->pmu_ctx = pmu_ctx;
-
-We should call find_get_pmu_context() with ctx->mutex held and thus
-above perf_event_create_kernel_counter() change. Is my understanding
-correct?
-
-> +
->  	if (!task) {
->  		/*
->  		 * Check if the @cpu we're creating an event for is online.
-> @@ -12668,13 +12693,13 @@ perf_event_create_kernel_counter(struct
->  			container_of(ctx, struct perf_cpu_context, ctx);
->  		if (!cpuctx->online) {
->  			err = -ENODEV;
-> -			goto err_unlock;
-> +			goto err_pmu_ctx;
->  		}
->  	}
->  
->  	if (!exclusive_event_installable(event, ctx)) {
->  		err = -EBUSY;
-> -		goto err_unlock;
-> +		goto err_pmu_ctx;
->  	}
->  
->  	perf_install_in_context(ctx, event, event->cpu);
-> @@ -12683,9 +12708,10 @@ perf_event_create_kernel_counter(struct
->  
->  	return event;
->  
-> +err_pmu_ctx:
-> +	put_pmu_ctx(pmu_ctx);
->  err_unlock:
->  	mutex_unlock(&ctx->mutex);
-> -err_ctx:
->  	perf_unpin_context(ctx);
->  	put_ctx(ctx);
->  err_alloc:
-> @@ -12702,9 +12728,7 @@ static void __perf_pmu_remove(struct per
->  {
->  	struct perf_event *event, *sibling;
->  
-> -	for (event = perf_event_groups_first(groups, cpu, pmu, NULL);
-> -	     event; event = perf_event_groups_next(event, pmu)) {
-> -
-> +	perf_event_groups_for_cpu_pmu(event, groups, cpu, pmu) {
->  		perf_remove_from_context(event, 0);
->  		unaccount_event_cpu(event, cpu);
->  		put_pmu_ctx(event->pmu_ctx);
-> @@ -12998,7 +13022,7 @@ void perf_event_free_task(struct task_st
->  	struct perf_event_context *ctx;
->  	struct perf_event *event, *tmp;
->  
-> -	ctx = rcu_dereference(task->perf_event_ctxp);
-> +	ctx = rcu_access_pointer(task->perf_event_ctxp);
-
-We dereference ctx pointer but with mutex and lock held. And thus
-rcu_access_pointer() is sufficient. Is my understanding correct?
-
-Thanks,
-Ravi
+Best regards
+Jerome
