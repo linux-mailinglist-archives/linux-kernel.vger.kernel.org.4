@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2BC5FC614
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752135FC61F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiJLNM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        id S229847AbiJLNNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiJLNMM (ORCPT
+        with ESMTP id S229653AbiJLNND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:12:12 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BECA8B0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:11:52 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id cj27so10094027qtb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:11:52 -0700 (PDT)
+        Wed, 12 Oct 2022 09:13:03 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B951CBFC2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:13:02 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id h15so5971773qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=j9+Qzqxt7KgFYl9VgYt697oSnxHcZquHPbAgGS8SmaM=;
-        b=i5KopcYd0S5y0FTk8nOqwzf8ktlLqOldknYkrP3HNP4L0gxn1qLfp6zc1VSeil/a4c
-         Dj0ATrsfm2XpDxT4RPnP6LLHYrTKzEFncU4SilZIDae2qND+yB5sr1H6kAqJk82ULgD7
-         h/ZBZChFmXrw8+k5PsL9z2X+3tA+9BBa1+Nc0xhhqYaKhEOooV4SLrUtEwL6i1XFt5fD
-         Cj2TPfB3FhW6GNAL96hHNz8TnskC+0EZg49cZmc1+TJcMX2Nu28bCfC7AgpoCbRp6AiU
-         WlAgrkbuIfVXvZZp1CcJQcvRy8rlxZnGXkvep55efNGEmTX4K9VAcac+tPLjiFuZPVLB
-         7gNA==
+        bh=Oya1NNXFgEbQyEYLD7+z5oGWxx/yoIcQNtgt3HKMgx4=;
+        b=kCBrGeiwJCLGFO9YEWhUCqI8U81XeVDagS8lBbFr4QTzwTJ9efP5w2c8W7wUlvpCUq
+         Qdo4f8jW0vNkfBAHSWC2eja6PjGVL2c4OMFxQaD+u3MQIyBqpeZS64yoiKGiz9rtPL0r
+         mMPbefxxoUw+1TEiG4lBNb78mKraShxuNlIiDVJe6eU5u/eGEBgoe29Qdn54GsI2wHDu
+         mnOT8GK+7oyrObhsqBiOaaWVriF2qI5A5oJyV+GbLV9Vq27yNGGBHq2Wsdvo0eDH9hCu
+         lATc8h4GMi6OqbPOgmmoRnduFf3BhQU0QcoOKW7p5basgZiICC+3b5sO6YKN3NB3oM7e
+         Rkhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9+Qzqxt7KgFYl9VgYt697oSnxHcZquHPbAgGS8SmaM=;
-        b=ps56zokzd4aiPtwf/Cbql1MyuSGwqXvNkQ8KerscoLeRxo8GVeUFDYhnCacyf/QJtH
-         vJ8sbQcKEptcybx8psN9O9EEbJgUBsVGBouC3C2DWV3zFUVPu/NVGpciXSZO6pJTGXvZ
-         IyVh9/7Gt6jzvg0UgomqQHP7/1w4nxbd0GczAWTlmo88nVFf2OCHAxWuoJ4f1wRPQ9lp
-         Tb/Cn2m4oKyo3443JjM85L9RNgAFguLZGZLKNkXqVjbnU2ckFAHHhBXTmfgXiicLXquj
-         32jJRQBY2/SnjuTWyvE6woeOH3Kz3VD6PSEXIPbc7Ymw5J2BRlIrG0q4vePO0zWcKKHJ
-         /T/A==
-X-Gm-Message-State: ACrzQf28/2N8ducZ5Jj31ezDBiHbB8Ay80krW65KURqbBEVg6PuQvGuk
-        2VY1kzWXUXk77Gprkms3aitTpQ==
-X-Google-Smtp-Source: AMsMyM4DfJC9ae7XyPW6fznrM10FQvK0VWx3DRthKZeCyYFIdrTbENb97n54jeRF57xiaUxKMbK7vw==
-X-Received: by 2002:a05:622a:3ce:b0:39c:c112:3c03 with SMTP id k14-20020a05622a03ce00b0039cc1123c03mr1737435qtx.575.1665580311970;
-        Wed, 12 Oct 2022 06:11:51 -0700 (PDT)
+        bh=Oya1NNXFgEbQyEYLD7+z5oGWxx/yoIcQNtgt3HKMgx4=;
+        b=jdF3NG9Jzp0H0kI3hrthTk8YFuirU2OlqCntOsv9m/afSkBiMdE4+GsvPMdlSkxUPd
+         SmzqufStIKvOUL8zKwBL5InXfxhSdD+yYqyRa7/ul0BUZ1he9V3Lgji3T5tJ2xeqWHcR
+         VOV4Y/Qm+3+l3kSzi8cpVmgIVehcqmdrmxzCyBaSAG/x9hylUUiz/oR1nymlUWfsekPA
+         6tn++/YITjyg0X9yTVry1AzN7Lni2V2Inf9z9bxsgbkcq4ES+S0Q75fwhfi98g3yWZmK
+         pcSHHFx/40vBey8z3dO5cdQPWaPwnsdbkBV9HzDiwpsV0VcpdCvEbWSFg9E0RfAJoap7
+         +CUA==
+X-Gm-Message-State: ACrzQf1yEioKzRy8OxRCx9ZFaFzqC9BJ+EBP05jZVXkTEC0HI7T2Q8dw
+        XlCGMbAfJarKKL+y3nuAtdvGxQ==
+X-Google-Smtp-Source: AMsMyM5NNr3Kol3tWrwbPqWrVG1qsyy7JWtJWBTKjLNZ4No9uMzIDaM7xeA1lVVCtlU0WkYy5oCinA==
+X-Received: by 2002:a05:622a:178d:b0:39c:c64e:292 with SMTP id s13-20020a05622a178d00b0039cc64e0292mr998862qtk.231.1665580381158;
+        Wed, 12 Oct 2022 06:13:01 -0700 (PDT)
 Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id 126-20020a370684000000b006ec5238eb97sm11062076qkg.83.2022.10.12.06.11.50
+        by smtp.gmail.com with ESMTPSA id q4-20020a05620a2a4400b006ee74cc976esm5919970qkp.70.2022.10.12.06.12.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 06:11:51 -0700 (PDT)
-Message-ID: <d483a82a-851c-6907-995d-a59638854fe7@linaro.org>
-Date:   Wed, 12 Oct 2022 09:11:49 -0400
+        Wed, 12 Oct 2022 06:13:00 -0700 (PDT)
+Message-ID: <d9b57819-c956-31bb-dedf-c7fd04d37902@linaro.org>
+Date:   Wed, 12 Oct 2022 09:12:58 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.2
-Subject: Re: [PATCH v2 07/10] ARM: suniv: f1c100s: enable USB on Lichee Pi
- Nano
+Subject: Re: [PATCH 2/3] dt-bindings: add mx93 description
 Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+To:     Clark Wang <xiaoning.wang@nxp.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com
+Cc:     kernel@pengutronix.de, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-References: <20221012055602.1544944-1-uwu@icenowy.me>
- <20221012055602.1544944-8-uwu@icenowy.me>
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20221012105129.3706062-1-xiaoning.wang@nxp.com>
+ <20221012105129.3706062-3-xiaoning.wang@nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221012055602.1544944-8-uwu@icenowy.me>
+In-Reply-To: <20221012105129.3706062-3-xiaoning.wang@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,24 +83,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 01:55, Icenowy Zheng wrote:
-> Lichee Pi Nano has a Micro-USB connector, with its D+, D- pins connected
-> to the USB pins of the SoC and ID pin connected to PE2 GPIO.
+On 12/10/2022 06:51, Clark Wang wrote:
+> Add mx93 compatible string for eqos driver.
 > 
-> Enable the USB functionality.
-
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
-
-This is a DTS change.
-
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 > ---
-> No changes since v1.
-> 
->  .../arm/boot/dts/suniv-f1c100s-licheepi-nano.dts | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
