@@ -2,145 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D485FC956
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E65D5FC95C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbiJLQby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S229892AbiJLQfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiJLQbw (ORCPT
+        with ESMTP id S229734AbiJLQfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:31:52 -0400
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADC6BE31;
-        Wed, 12 Oct 2022 09:31:51 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id u19-20020a4a9e93000000b004757198549cso12528850ook.0;
-        Wed, 12 Oct 2022 09:31:51 -0700 (PDT)
+        Wed, 12 Oct 2022 12:35:06 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0618D2FC0D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:35:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso2573775pjk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Det2ITA/n+WXH8RhBcuNargdlyOW5bs99Gk+aJ7/qCQ=;
+        b=QMdpGzfBf0NldWY/bD/I/AQC+34DaQ6T41DAl98Jbq3s4BBRU97wbxp6mrDPsK+Ajy
+         2edzfjH61I/TPtM4Ld3Sg286tM7g4/bes7Zj7CMqf7PHJuiZGAuKkb6vrw7R0AqElJ9g
+         q5JEZvX/mhYNsoqrl/mrS7yh+EMgeDi+PhabUfW+c9hkX5GBav4GP492SXT4icsqZZ/V
+         eezHq/vlZYz/Pecf8ouJtRivFcbERqR8LAZMKRKHEx10V7KKojX63yeROb8OYzdtW9eV
+         xcjCMO/aCFW0H9FYI8asOxTjzUTXU1kGeFnALca+5xVmM5t5zT1ohcqLE2wChC6vaWJL
+         3d2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B+sJcvXCW23zgMMTxvLx9gcuNc7Tz4vevgE0c+dxI1s=;
-        b=ERl/jxTT0VFg/ALsIA131G1eaIso0UGY5Oha9A0LqL+77dzc6KS1w1c0/Zow7Gwdsv
-         DhYCa7U/sR0faSrpup83UbVFO3sZ6jcgThYeBNUXBAF7m8mGmk7pLJHC6slh/osH38Bu
-         tNFRBtVLT1xh7j32X5XU7u97VK2CS6Gdx1dsIyJN2oi25+omuBoH1a3ziS6rFRnrHX5v
-         S7MP+Ltu5iR0ityxh864aG6DCOl8Glu/Jd3DQ8UsG8oJF/vk83+K/6ZcxUUFAANoKIC0
-         u/OzcjiP/Gyw6Y/jWIY2iaqqarRZU03/a+JdT6eOP2YEr4SAoFWB8heQ1zjz9/ZOvjbX
-         ECYQ==
-X-Gm-Message-State: ACrzQf2F4cBR9tcI0K5OdlZ2HpMFUoO8V1HZFWpmSgOd5CgyKJGYXD8q
-        83yeIxi1ISZ7rzg0/KJsMrDkkDPbHWaLQQT3q6I=
-X-Google-Smtp-Source: AMsMyM6yXX7lvJ8EDToeyHwMU7dFC00T56x5wr8m04AHWzThFtTOE0THwWXjM3hpP2HtWYwLItxswDchF1+yjOb4jPw=
-X-Received: by 2002:a9d:6848:0:b0:661:a608:cbc3 with SMTP id
- c8-20020a9d6848000000b00661a608cbc3mr5702293oto.206.1665592310829; Wed, 12
- Oct 2022 09:31:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Det2ITA/n+WXH8RhBcuNargdlyOW5bs99Gk+aJ7/qCQ=;
+        b=Xmp4qI9HyQIJd0jDt0IhBJdZ7vVDHIF0W7krC5X3psTLTvvXqXoeZXwKPnxqZWo36j
+         oqTR1qIM5IWpIY9Bq90+Gn1/pkjg+66cl4bLNvKCKMQNztIQBSeSG71eelQD1cfSfmVC
+         pkxF7+kQZqjC1lu8nINO30P8pDk8+LorZ733PgF8oXV4wpfC8SBNIDzan+eyLGvL42VG
+         Y1sAoLwEf3u464po26SiFDJiOupiBZGWzwp2/Xf5RlTmMAdAa1bcOW+bq14rnHwUeVWc
+         RXuPVNn4W6yW9WpO+YpqP8l4K7kx4vzWRxdGisKQl4XUysrnlYaueMexbCyGnj0YdFT4
+         HGbg==
+X-Gm-Message-State: ACrzQf0nj1YJe5QJHQnbc+AZTXzPbhEQI3jWBNXrYIEoath6Pp4TgKuW
+        VfgzNhKdJfWRlDo2L7Md+YkS6A==
+X-Google-Smtp-Source: AMsMyM5bRwBjSvlQxjunzry9lBqSVllHge5nfGrWav7re3NtQU4PfgFY/iLmKUI5YvxO/sC4U49WJw==
+X-Received: by 2002:a17:90b:1e4b:b0:20d:2ad0:ce00 with SMTP id pi11-20020a17090b1e4b00b0020d2ad0ce00mr6388449pjb.72.1665592502345;
+        Wed, 12 Oct 2022 09:35:02 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0017a1145eec7sm10799750ple.157.2022.10.12.09.35.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:35:01 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 16:34:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Mark transfer type as X86_TRANSFER_RET when
+ loading CS in iret emulation
+Message-ID: <Y0bssbjJTQVB+SCg@google.com>
+References: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
-References: <20221010053600.272854-1-namhyung@kernel.org> <20221010053600.272854-5-namhyung@kernel.org>
- <Y0adOTUulE/HnLU3@krava>
-In-Reply-To: <Y0adOTUulE/HnLU3@krava>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 12 Oct 2022 09:31:39 -0700
-Message-ID: <CAM9d7ciypq2uOGcoCPoYktz2eLpApsG_vCVHZ5snZt_F87J9qQ@mail.gmail.com>
-Subject: Re: [PATCH 04/19] perf stat: Add aggr id for global mode
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 3:56 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Sun, Oct 09, 2022 at 10:35:45PM -0700, Namhyung Kim wrote:
-> > To make the code simpler, I'd like to use the same aggregation code for
-> > the global mode.  We can simply add an id function to return cpu 0 and
-> > use print_aggr().
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/builtin-stat.c      | 39 ++++++++++++++++++++++++++++++++--
-> >  tools/perf/util/cpumap.c       | 10 +++++++++
-> >  tools/perf/util/cpumap.h       |  6 +++++-
-> >  tools/perf/util/stat-display.c |  9 ++------
-> >  4 files changed, 54 insertions(+), 10 deletions(-)
-> >
->
-> SNIP
->
-> > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> > index 4113aa86772f..1d8e585df4ad 100644
-> > --- a/tools/perf/util/stat-display.c
-> > +++ b/tools/perf/util/stat-display.c
-> > @@ -1477,13 +1477,8 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
-> >               if (config->iostat_run)
-> >                       iostat_print_counters(evlist, config, ts, prefix = buf,
-> >                                             print_counter_aggr);
-> > -             else {
-> > -                     evlist__for_each_entry(evlist, counter) {
-> > -                             print_counter_aggr(config, counter, prefix);
-> > -                     }
-> > -                     if (metric_only)
-> > -                             fputc('\n', config->output);
-> > -             }
-> > +             else
-> > +                     print_aggr(config, evlist, prefix);
->
-> this seems to break output for:
->
-> before:
->         # ./perf stat -M ipc -I 1000 --metric-only
->         #           time                  IPC
->              1.000674320                 0.61
->              2.001700284                 0.66
->              3.003677500                 0.67
->              4.005583140                 0.64
->
-> after:
->         # ./perf stat -M ipc -I 1000 --metric-only
->         #           time                  IPC
->              1.001004048                 0.94
->
->              2.003120471                 0.69
->
->              3.005030405                 0.65
->
->              4.006788766                 0.64
->
->              5.008004052                 0.68
->
->
-> also should this hunk be in separate patch?
+On Wed, Oct 12, 2022, Hou Wenlong wrote:
+> When loading code segment descriptor in iret instruction emulation, the
+> checks are same as far return instruction emulation, so transfer type
+> should be X86_TRANSFER_RET in __load_segment_descriptor(). Although,
+> only iret in real mode is implemented now, and no checks are actually
+> needed for real mode, it would still be better to mark transfer type as
+> X86_TRANSFER_RET.
 
-Yeah, looks like so.  Probably slipped into during rebase.  Will check.
+It's not strictly a RET though.  The RPL vs. DPL checks in __load_segment_descriptor()
+might do the right thing, but there's a rather large pile of stuff IRET can do that
+RET can't (ignoring the fact that KVM doesn't even emulate FAR RET to outer privilege
+levels).
 
-Thanks,
-Namhyung
+And __emulate_int_real() also loads CS with X86_TRANSFER_NONE, i.e. KVM still has
+a weird path to worry about.
 
+Rather than make the IRET case slightly less wrong, what about adding a sanity
+check in __load_segment_descriptor() that KVM doesn't attempt to load CS in Protected
+Mode with X86_TRANSFER_NONE?
 
->
-> >               break;
-> >       case AGGR_NONE:
-> >               if (metric_only)
-> > --
-> > 2.38.0.rc1.362.ged0d419d3c-goog
-> >
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 3b27622d4642..fe735e18c419 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1641,6 +1641,14 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+                        goto exception;
+                break;
+        case VCPU_SREG_CS:
++               /*
++                * KVM uses "none" when loading CS as part of emulating Real
++                * Mode exceptions and IRET (handled above).  In all other
++                * cases, loading CS without a control transfer is a KVM bug.
++                */
++               if (WARN_ON_ONCE(transfer == X86_TRANSFER_NONE))
++                       goto exception;
++
+                if (!(seg_desc.type & 8))
+                        goto exception;
+
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>  arch/x86/kvm/emulate.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 3b27622d4642..5052eb480068 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -2100,6 +2100,7 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
+>  			     X86_EFLAGS_FIXED;
+>  	unsigned long vm86_mask = X86_EFLAGS_VM | X86_EFLAGS_VIF |
+>  				  X86_EFLAGS_VIP;
+> +	u8 cpl = ctxt->ops->cpl(ctxt);
+>  
+>  	/* TODO: Add stack limit check */
+>  
+> @@ -2121,7 +2122,8 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
+>  	if (rc != X86EMUL_CONTINUE)
+>  		return rc;
+>  
+> -	rc = load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS);
+> +	rc = __load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS, cpl,
+> +				       X86_TRANSFER_RET, NULL);
+>  
+>  	if (rc != X86EMUL_CONTINUE)
+>  		return rc;
+> -- 
+> 2.31.1
+> 
