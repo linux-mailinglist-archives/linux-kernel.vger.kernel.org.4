@@ -2,94 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4575FC853
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F387F5FC865
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 17:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiJLPWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 11:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S229972AbiJLP1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 11:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiJLPVy (ORCPT
+        with ESMTP id S229949AbiJLP1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 11:21:54 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F05E0713
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:21:49 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-131dda37dddso19876907fac.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:21:49 -0700 (PDT)
+        Wed, 12 Oct 2022 11:27:15 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4B4BA93C
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:27:14 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id o2so3456815qkk.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 08:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwJqhNTRTFOg6KTTCmq+FiqxOKuhAXdi9Q4wCoPOfNA=;
-        b=LfBzqTPrASeASfAn0654FEvZUhQFsvG64bV9qcmnJd4LbEm+rkZNvoKFu0ffJ+FNtQ
-         4E6H/Gv2Q2RUfFZNewBefThDeYwq9SdFEk69iIOyc4abjB5Et0TliU2LrZpckIum6Pdz
-         ut9fbok3nZ9I9AtM6ckHbIFeZvb96geiPR6f/YrmSDPz9NkoH3imxf3Bm1Q/faP/lvqi
-         NjWfQnt7GfmQMkyXQB5IEfTaACIO89fSsdQT9uJKpNEORekRZz9GaeOmOB7YNA4V92f6
-         2klOhMMHe1zGx/15xksX3AII8yjZ8zm+/6ZTM5rG1LhkdfocruGU+1uaC7h4N90epx+K
-         lxEw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cyOn+XjhMrkROUZxuY81sZKNPsWKYHOGOyEQrBWv/Ko=;
+        b=ILJgM3xVO0tv24Z1liMTbC+6lSxwxapAMZoN0MXneb4BfPvujCP63uAv25AZdl/yKU
+         jTFPQoaN/IlwjiRq5nRvj3qfOniHoqBymUh6iYrsk9fHcbKizFtC6vSL3nkOMlVMtLzw
+         vsl/p81LPGTQcw+q6JFLVnuHByT0oz87QPnJRmQQBAe2WT5nzBT697gWXdKlp1tKwwMi
+         nBYaGiSs/T27onVYKKIeCSRXRx2VuJL6dSvLLQ8RslELgfYWbZ/3hjopXo3qH99ZnIlP
+         6i27+VGlYnZMZOH/9R1RHTwxcrxC6zq2O0d9ysHImx3X/KDNDofj8d5/NiAw1tufh7X3
+         BsEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kwJqhNTRTFOg6KTTCmq+FiqxOKuhAXdi9Q4wCoPOfNA=;
-        b=PMVL5dlpe+CaSsX1n/dah/1kzDPDOlBmuo033mT04BFvtl4507GNcfxEeETgH3kt+n
-         v6EKJ+EY0j5jpTSUsLLHIV4Ero/eB9Dh+AjDgwzZ8bkTUEqLme4CzdF0o7Dn8EJBg82T
-         ePBbTfE2hqsgGPr1nPUoxJ4T0ETwDJZ2T5sd2PllVQWJy43ETkFd0gFqfqcwb6t97hel
-         phFpgWH/t2WzBqRTnA+m7rHv4sIXy5QOrZmWpQSyF3+USCtEP+t5En64N5KhwvkMAmXe
-         cXNsiPhegSm8PPGZYA43cqECEihqXE2ZAmkDimGRhko70IJigHgbp7PgURUAmYhYFHgt
-         UU0w==
-X-Gm-Message-State: ACrzQf15wU/OsPxgydatyPYHgI1KG/BsF/1VJm+2KzWfOj24aKmCNGiv
-        L1CZg4//1OB7mdx2fo5nbZ3cUDaPZsvd1A==
-X-Google-Smtp-Source: AMsMyM6kEsuXW3HmeI0aeXF32Wl0YnPoY7Nc/gpj1Mziw/JRUJ4FdkB+Pc2sCFKPhLu+UaFZgU1aPA==
-X-Received: by 2002:a05:6870:f5a9:b0:136:3e51:eff7 with SMTP id eh41-20020a056870f5a900b001363e51eff7mr2828401oab.241.1665588109024;
-        Wed, 12 Oct 2022 08:21:49 -0700 (PDT)
-Received: from fedora.. ([186.122.181.28])
-        by smtp.gmail.com with ESMTPSA id h21-20020aca1815000000b00342ded07a75sm6808541oih.18.2022.10.12.08.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 08:21:48 -0700 (PDT)
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-To:     broonie@kernel.org
-Cc:     mika.westerberg@linux.intel.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
-Subject: [PATCH] spi: intel: Fix the offset to get the 64K erase opcode
-Date:   Wed, 12 Oct 2022 12:21:35 -0300
-Message-Id: <20221012152135.28353-1-mauro.lima@eclypsium.com>
-X-Mailer: git-send-email 2.34.3
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cyOn+XjhMrkROUZxuY81sZKNPsWKYHOGOyEQrBWv/Ko=;
+        b=df0o+HbC4AlL72v7JAI9G6vzVKL7STFa4TVrZO/kVLA4UGp6GHVfVvZA6Z4/nc59nc
+         wlYIrtn9D2/OA2GG4/4PPqzoVuJX08C6WB72PBKRhq/+908f0EKIlcIvoNyg5nTVPXAD
+         ZyVx2d5t4hZVIpFXWmli0FtND5BR3BHNW5E0gKgsl9AnytSOUjIrdZ8yp2drPc7IRdJA
+         qzvjrdchnWRQZY+NqKVDbyP5z0OUyQc/l0Cd7o8sbj/a/WAAkh8d5HSFgiS2u8BMxtq/
+         /1prGN2kXLACMFgjUHPP/WLXfZvRMMFKDnPtwVvtfSO+B3eS3i4hWy5W6M03f6t4UJ8V
+         rSeg==
+X-Gm-Message-State: ACrzQf0NUgrL7PJVIV8ocedTp5Th+7yAu1F8ALZAk5paStopXUOjDDVM
+        TpOxRFUMe/ujuO4nDQEznqefEKGVSq1tVg==
+X-Google-Smtp-Source: AMsMyM4itbCgzgNfgASHz/vlYDDlKaHFmCfg/cUdJzUglgTaIjdWhaDmIdu8FQnnBvkHuxYUpZYr+w==
+X-Received: by 2002:a05:620a:4448:b0:6e2:5ec9:c697 with SMTP id w8-20020a05620a444800b006e25ec9c697mr20636959qkp.438.1665588433177;
+        Wed, 12 Oct 2022 08:27:13 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id y8-20020a05620a25c800b006cbe3be300esm15799584qko.12.2022.10.12.08.27.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 08:27:12 -0700 (PDT)
+Message-ID: <78805233-0802-7a7e-f1b1-84c566084833@linaro.org>
+Date:   Wed, 12 Oct 2022 11:24:59 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v6 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
+Content-Language: en-US
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        nm@ti.com, vigneshr@ti.com, srk@ti.com,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tero Kristo <t-kristo@ti.com>,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        Puranjay Mohan <p-mohan@ti.com>
+References: <20221012114429.2341215-1-danishanwar@ti.com>
+ <20221012114429.2341215-2-danishanwar@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221012114429.2341215-2-danishanwar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to documentation, the 64K erase opcode is located in VSCC
-range [16:23] instead of [8:15].
-Use the proper value to shift the mask over the correct range.
+On 12/10/2022 07:44, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> Add a YAML binding document for PRU consumers. The binding includes
 
-Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
----
- drivers/spi/spi-intel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Add a DT schema binding for ...
 
-diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
-index 55f4ee2db002..605acb1bf4b0 100644
---- a/drivers/spi/spi-intel.c
-+++ b/drivers/spi/spi-intel.c
-@@ -114,7 +114,7 @@
- #define ERASE_OPCODE_SHIFT		8
- #define ERASE_OPCODE_MASK		(0xff << ERASE_OPCODE_SHIFT)
- #define ERASE_64K_OPCODE_SHIFT		16
--#define ERASE_64K_OPCODE_MASK		(0xff << ERASE_OPCODE_SHIFT)
-+#define ERASE_64K_OPCODE_MASK		(0xff << ERASE_64K_OPCODE_SHIFT)
- 
- /* Flash descriptor fields */
- #define FLVALSIG_MAGIC			0x0ff0a55a
--- 
-2.34.3
+Second thing: where is a user of this common binding? How do you apply
+this schema to anything?
+
+> all the common properties that can be used by different PRU consumer
+> or application nodes and supported by the PRU remoteproc driver.
+> These are used to configure the PRU hardware for specific user
+> applications.
+> 
+> The application nodes themselves should define their own bindings.
+> 
+> Co-developed-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 132 ++++++++++++++++++
+>  1 file changed, 132 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> new file mode 100644
+> index 000000000000..16be98b7d600
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> @@ -0,0 +1,132 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common TI PRU Consumer Binding
+> +
+> +maintainers:
+> +  - Suman Anna <s-anna@ti.com>
+> +
+> +description: |
+> +  A PRU application/consumer/user node typically uses one or more PRU device
+> +  nodes to implement a PRU application/functionality. Each application/client
+> +  node would need a reference to at least a PRU node, and optionally define
+> +  some properties needed for hardware/firmware configuration. The below
+> +  properties are a list of common properties supported by the PRU remoteproc
+> +  infrastructure.
+> +
+> +  The application nodes shall define their own bindings like regular platform
+> +  devices, so below are in addition to each node's bindings.
+> +
+> +properties:
+> +  ti,prus:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
+> +    minItems: 1
+> +    maxItems: 6
+> +    items:
+> +      maxItems: 1
+> +
+> +  firmware-name:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    minItems: 1
+> +    maxItems: 6
+> +    description: |
+> +      firmwares for the PRU cores, the default firmware for the core from
+> +      the PRU node will be used if not provided. The firmware names should
+> +      correspond to the PRU cores listed in the 'ti,prus' property
+> +
+> +  ti,pruss-gp-mux-sel:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 6
+> +    items:
+> +      enum: [0, 1, 2, 3, 4]
+> +    description: |
+> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
+> +      This selects the internal muxing scheme for the PRU instance. Values
+> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
+> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
+> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
+> +      same slice in the associative array. If the array size is smaller than
+> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
+> +      PRU core is used.
+> +
+> +required:
+> +  - ti,prus
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    /* PRU application node full example */
+> +    icssg2_eth: icssg2-eth {
+> +      compatible = "ti,am654-icssg-prueth";
+> +      pinctrl-names = "default";
+> +      pinctrl-0 = <&icssg2_rgmii_pins_default>;
+> +      sram = <&msmc_ram>;
+> +      ti,prus = <&pru2_0>, <&rtu2_0>, <&tx_pru2_0>,
+> +        <&pru2_1>, <&rtu2_1>, <&tx_pru2_1>;
+
+Fix alignment. In other places as well.
+
+
+> +      firmware-name = "ti-pruss/am65x-sr2-pru0-prueth-fw.elf",
+> +          "ti-pruss/am65x-sr2-rtu0-prueth-fw.elf",
+> +          "ti-pruss/am65x-sr2-txpru0-prueth-fw.elf",
+> +          "ti-pruss/am65x-sr2-pru1-prueth-fw.elf",
+> +          "ti-pruss/am65x-sr2-rtu1-prueth-fw.elf",
+> +          "ti-pruss/am65x-sr2-txpru1-prueth-fw.elf";
+> +
+
+Best regards,
+Krzysztof
 
