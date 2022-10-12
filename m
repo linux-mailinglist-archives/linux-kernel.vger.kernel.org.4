@@ -2,115 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6245FC351
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C95C5FC357
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiJLJxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        id S229876AbiJLJ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiJLJxo (ORCPT
+        with ESMTP id S229650AbiJLJ5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:53:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573AAA9243
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 02:53:43 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C8v6eo011853;
-        Wed, 12 Oct 2022 09:52:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=glxJRmcbch9XZrNGMqSkC0NjkzIix0j7J8ANO0eiw4k=;
- b=B9+p9qnSXfPKWiHP+lc+o9ke8+edrs9sdl7KW3aWb8q7DbWUXQPqJPbTLQOvvkVqsDcM
- S2YvkzuWJkyhe9cUnQGrgo0Q3FOuPA244vcERf6qJplL6R7KlP7rBsjTe7kySTkiSoqp
- rn3zssJzNbpN2DIC6KuPQsb8xg9QrwDJdd1wh2ylQ7N+nVk9nsi+eLkz79Nvehr5ig3Y
- SEI1Z8mF6NDVFxAmJxIQN9d50ufXfnpA/2MzToDDkGm1NckHScXuNqMdSU46jCCCANrW
- Z+MgMYNHp6m3RwwOo2mmoOpeZwUXLePZN6zegFvYkJe9oklQYHwbm3AKUkT0hAE3MG7P Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k5th81fkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 09:52:58 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29C9ho5M016423;
-        Wed, 12 Oct 2022 09:52:57 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k5th81fk6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 09:52:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29C9onn7004138;
-        Wed, 12 Oct 2022 09:52:56 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9dsjm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 09:52:55 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29C9m8hl48693742
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Oct 2022 09:48:08 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE67D4C040;
-        Wed, 12 Oct 2022 09:52:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42AD94C044;
-        Wed, 12 Oct 2022 09:52:53 +0000 (GMT)
-Received: from localhost (unknown [9.199.196.199])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Oct 2022 09:52:53 +0000 (GMT)
-Date:   Wed, 12 Oct 2022 15:22:51 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] powerpc/kprobes: Fix null pointer reference in
- arch_prepare_kprobe()
-To:     jniethe5@gmail.com, Li Huafei <lihuafei1@huawei.com>,
-        mpe@ellerman.id.au
-Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mhiramat@kernel.org,
-        npiggin@gmail.com, peterz@infradead.org, rostedt@goodmis.org
-References: <20220923093253.177298-1-lihuafei1@huawei.com>
-        <1664530538.ke6dp49pwh.naveen@linux.ibm.com>
-        <de8e524d-02b3-c2d0-45c3-5cc1e5556660@huawei.com>
-In-Reply-To: <de8e524d-02b3-c2d0-45c3-5cc1e5556660@huawei.com>
+        Wed, 12 Oct 2022 05:57:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD157199D;
+        Wed, 12 Oct 2022 02:57:20 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C5A7E6601704;
+        Wed, 12 Oct 2022 10:57:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665568638;
+        bh=/AQBbGZwKwTiqKo2iWxBrYNy7c454E4MzSdFSzFJdiU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OjKjoQ/auPATCCmgHukQqO95NnK7RwkbjKeE3DTlGOTmWtN73QdS6CVxalGfzMOgv
+         +un6otFtm0gD344br22HfrqFt1+0bTyv6sWTjWpM/fbj51BPW/sT39VD8nCETyf3qp
+         d2899bjMmilP1Bi7hHMul/B3687qm7B3HsYBp5hgi1Xlx7oJxiFU6u43Hr5h6s6VmK
+         nuWCgLTnVDp7IrgQ48ZbtfRB57u7Y66J0RdgRcNxfaTrHkpiIGYVyQfvuNOqxpQfuk
+         wPreNMGiWbTStWtcUzpCOG215hymusprE7/YtFOdWFdPh/49g2iVWtL34L1PqJun+f
+         /bcctkTzAIPIw==
+Message-ID: <6e76f90f-3b6a-330d-6902-b31bf3d33ad4@collabora.com>
+Date:   Wed, 12 Oct 2022 11:57:15 +0200
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1665565982.bae3snm0nx.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i-9rOK29ulhgXMgnGji_u1iwPxOEaoOV
-X-Proofpoint-ORIG-GUID: tPLdGK9qbPJVRZkR1oPNfWvGsspHRvsL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_04,2022-10-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2] clk: mediatek: clk-mux: Add .determine_rate() callback
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
+        chun-jie.chen@mediatek.com, miles.chen@mediatek.com,
+        wenst@chromium.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221011135548.318323-1-angelogioacchino.delregno@collabora.com>
+ <20221012085555.3nls7ja56vlnaz2w@houat>
+ <c4a1eb9f-016d-c184-e494-c869038b87ff@collabora.com>
+ <20221012094004.jgiyvmbgomiyedik@houat>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221012094004.jgiyvmbgomiyedik@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Li Huafei wrote:
+Il 12/10/22 11:40, Maxime Ripard ha scritto:
+> On Wed, Oct 12, 2022 at 11:09:59AM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 12/10/22 10:55, Maxime Ripard ha scritto:
+>>> Hi,
 >>>
->>> =C2=A0 # echo 'p cmdline_proc_show' > kprobe_events
->>> =C2=A0 # echo 'p cmdline_proc_show+16' >> kprobe_events
->>=20
->> I think we should extend multiple_kprobes selftest to also place
->> contiguous probes to catch such errors.
->>=20
-> Yes. But each architecture implementation is different and it looks a
-> little difficult to decide which offsets need to be tested.
+>>> On Tue, Oct 11, 2022 at 03:55:48PM +0200, AngeloGioacchino Del Regno wrote:
+>>>> Since commit 262ca38f4b6e ("clk: Stop forwarding clk_rate_requests
+>>>> to the parent"), the clk_rate_request is .. as the title says, not
+>>>> forwarded anymore to the parent:
+>>>
+>>> It's not entirely true, the rate request should still be forwarded, but
+>>> we don't pass the same instance of clk_rate_request anymore.
+>>>
+>>>> this produces an issue with the MediaTek clock MUX driver during GPU
+>>>> DVFS on MT8195, but not on MT8192 or others.
+>>>>
+>>>> This is because, differently from others, like MT8192 where all of
+>>>> the clocks in the MFG parents tree are of mtk_mux type, but in the
+>>>> parent tree of MT8195's MFG clock, we have one mtk_mux clock and
+>>>> one (clk framework generic) mux clock, like so:
+>>>>
+>>>> names: mfg_bg3d -> mfg_ck_fast_ref -> top_mfg_core_tmp (or) mfgpll
+>>>> types: mtk_gate ->      mux        ->     mtk_mux      (or) mtk_pll
+>>>>
+>>>> To solve this issue and also keep the GPU DVFS clocks code working
+>>>> as expected, wire up a .determine_rate() callback for the mtk_mux
+>>>> ops; for that, the standard clk_mux_determine_rate_flags() was used
+>>>> as it was possible to.
+>>>
+>>> It probably fixes things indeed, but I'm a bit worried that it just
+>>> works around the actual issue instead of fixing the actual bug...
+>>>
+>>>> This commit was successfully tested on MT6795 Xperia M5, MT8173 Elm,
+>>>> MT8192 Spherion and MT8195 Tomato; no regressions were seen.
+>>>>
+>>>> For the sake of some more documentation about this issue here's the
+>>>> trace of it:
+>>>>
+>>>> [   12.211587] ------------[ cut here ]------------
+>>>> [   12.211589] WARNING: CPU: 6 PID: 78 at drivers/clk/clk.c:1462 clk_core_init_rate_req+0x84/0x90
+>>>> [   12.211593] Modules linked in: stp crct10dif_ce mtk_adsp_common llc rfkill snd_sof_xtensa_dsp
+>>>>                  panfrost(+) sbs_battery cros_ec_lid_angle cros_ec_sensors snd_sof_of
+>>>>                  cros_ec_sensors_core hid_multitouch cros_usbpd_logger snd_sof gpu_sched
+>>>>                  snd_sof_utils fuse ipv6
+>>>> [   12.211614] CPU: 6 PID: 78 Comm: kworker/u16:2 Tainted: G        W          6.0.0-next-20221011+ #58
+>>>> [   12.211616] Hardware name: Acer Tomato (rev2) board (DT)
+>>>> [   12.211617] Workqueue: devfreq_wq devfreq_monitor
+>>>> [   12.211620] pstate: 40400009 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>> [   12.211622] pc : clk_core_init_rate_req+0x84/0x90
+>>>> [   12.211625] lr : clk_core_forward_rate_req+0xa4/0xe4
+>>>> [   12.211627] sp : ffff80000893b8e0
+>>>> [   12.211628] x29: ffff80000893b8e0 x28: ffffdddf92f9b000 x27: ffff46a2c0e8bc05
+>>>> [   12.211632] x26: ffff46a2c1041200 x25: 0000000000000000 x24: 00000000173eed80
+>>>> [   12.211636] x23: ffff80000893b9c0 x22: ffff80000893b940 x21: 0000000000000000
+>>>> [   12.211641] x20: ffff46a2c1039f00 x19: ffff46a2c1039f00 x18: 0000000000000000
+>>>> [   12.211645] x17: 0000000000000038 x16: 000000000000d904 x15: 0000000000000003
+>>>> [   12.211649] x14: ffffdddf9357ce48 x13: ffffdddf935e71c8 x12: 000000000004803c
+>>>> [   12.211653] x11: 00000000a867d7ad x10: 00000000a867d7ad x9 : ffffdddf90c28df4
+>>>> [   12.211657] x8 : ffffdddf9357a980 x7 : 0000000000000000 x6 : 0000000000000004
+>>>> [   12.211661] x5 : ffffffffffffffc8 x4 : 00000000173eed80 x3 : ffff80000893b940
+>>>> [   12.211665] x2 : 00000000173eed80 x1 : ffff80000893b940 x0 : 0000000000000000
+>>>> [   12.211669] Call trace:
+>>>> [   12.211670]  clk_core_init_rate_req+0x84/0x90
+>>>> [   12.211673]  clk_core_round_rate_nolock+0xe8/0x10c
+>>>> [   12.211675]  clk_mux_determine_rate_flags+0x174/0x1f0
+>>>> [   12.211677]  clk_mux_determine_rate+0x1c/0x30
+>>>> [   12.211680]  clk_core_determine_round_nolock+0x74/0x130
+>>>> [   12.211682]  clk_core_round_rate_nolock+0x58/0x10c
+>>>> [   12.211684]  clk_core_round_rate_nolock+0xf4/0x10c
+>>>> [   12.211686]  clk_core_set_rate_nolock+0x194/0x2ac
+>>>> [   12.211688]  clk_set_rate+0x40/0x94
+>>>> [   12.211691]  _opp_config_clk_single+0x38/0xa0
+>>>> [   12.211693]  _set_opp+0x1b0/0x500
+>>>> [   12.211695]  dev_pm_opp_set_rate+0x120/0x290
+>>>> [   12.211697]  panfrost_devfreq_target+0x3c/0x50 [panfrost]
+>>>> [   12.211705]  devfreq_set_target+0x8c/0x2d0
+>>>> [   12.211707]  devfreq_update_target+0xcc/0xf4
+>>>> [   12.211708]  devfreq_monitor+0x40/0x1d0
+>>>> [   12.211710]  process_one_work+0x294/0x664
+>>>> [   12.211712]  worker_thread+0x7c/0x45c
+>>>> [   12.211713]  kthread+0x104/0x110
+>>>> [   12.211716]  ret_from_fork+0x10/0x20
+>>>> [   12.211718] irq event stamp: 7102
+>>>> [   12.211719] hardirqs last  enabled at (7101): [<ffffdddf904ea5a0>] finish_task_switch.isra.0+0xec/0x2f0
+>>>> [   12.211723] hardirqs last disabled at (7102): [<ffffdddf91794b74>] el1_dbg+0x24/0x90
+>>>> [   12.211726] softirqs last  enabled at (6716): [<ffffdddf90410be4>] __do_softirq+0x414/0x588
+>>>> [   12.211728] softirqs last disabled at (6507): [<ffffdddf904171d8>] ____do_softirq+0x18/0x24
+>>>> [   12.211730] ---[ end trace 0000000000000000 ]---
+>>>
+>>> ... Indeed, you shouldn't hit that warning at all. It happens in
+>>> clk_core_round_rate_nolock, which takes (before your patch) the
+>>> CLK_SET_RATE_PARENT branch. This indeed has been changed by the patch
+>>> you mentioned, and will call clk_core_forward_rate_req() now, that in
+>>> turn calls clk_core_init_rate_nolock().
+>>>
+>>> I think the warning you hit is because core->parent is NULL, which is
+>>> passed to clk_core_forward_rate_req() as the parent argument, and we'll
+>>> call clk_core_init_rate_req() with parent set as the core argument.
+>>>
+>>> In clk_core_init_rate_req(), the first thing we do is a WARN_ON(!core),
+>>> which is what you hit here I think.
+>>>
+>>> This is different to the previous behavior that was calling
+>>> clk_core_round_rate_nolock() with core->parent directly, and
+>>> clk_core_round_rate_nolock() if its core argument is NULL will set
+>>> req->rate to 0 and bail out without returning an error.
+>>>
+>>> Now, your patch probably works because now that you provide a
+>>> determine_rate implementation, clk_core_can_round() returns true and
+>>> you'll take a different branch in clk_core_round_rate_nolock(), avoiding
+>>> that issue entirely.
+>>>
+>>> Does that patch work better (on top of next-20221012)?
+>>
+>> I admit I didn't go too deep in the research, as my brain processed that as
+>> "this is a mux clock, not really different from a standard mux, this callback
+>> is missing, that's not optimal"... then that fixed it and called it a day.
+>>
+>> I should've prolonged my research for a better understanding of what was
+>> actually going on.
+> 
+> No worries :)
+> 
+>> What you said actually opened my mind and, with little surprise, your patch
+>> works as good as mine - no warnings and the clock scales as expected!
+> 
+> I'm actually wondering if you didn't encounter two issues. What kernel
+> were you testing before? If it's older than today's next
+> (next-20221012), you're likely missing
+> 
 
-I don't think we need to be accurate here. A test to simply try putting=20
-a probe at every byte within the first 256 bytes of a kernel function=20
-should help catch many such issues. Some of those probes will be=20
-rejected, but we can ignore errors.
+I was testing next-20221011.
+
+> https://lore.kernel.org/linux-clk/20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech/
+> 
+> Which is likely to be what fixed the clock scaling. And my patch only
+> fixed the warning. Could you test next-20221012? If I'm right, you
+> should only get the warning.
+> 
+
+No, I am getting the same situation even after rebasing over next-20221012, without
+any of the two patches (determine_rate() for mtk mux, nor the one you shared for
+clk.c), when the warning happens, I get very slow GPU operation and the same "nice"
+timeout:
+
+[   27.785514] panfrost 13000000.gpu: gpu sched timeout, js=1, config=0x7b00, 
+status=0x0, head=0xa1cb180, tail=0xa1cb180, sched_job=00000000f07d39e3
+
+...so I'm not encountering the same issue that you've fixed with the patches that
+got merged in next-20221012.
+
+Of course, as you were expecting, the warning is also still there and still
+the same:
+
+[   27.750504] WARNING: CPU: 4 PID: 164 at drivers/clk/clk.c:1462 
+clk_core_init_rate_req+0x84/0x90
+
+Cheers,
+Angelo
+
+>> I still think that the mtk-mux driver should get a determine_rate callback but,
+>> at this point, that's going to have an entirely different commit description...
+> 
+> Yeah, it might, but as you said it's a separate discussion
+> 
+>> Please go on and send your patch: if you want, please remember to add me to
+>> the Cc's, so that I can give you my R-b tag in a timely manner.
+> 
+> Thanks!
+> Maxime
 
 
-- Naveen
