@@ -2,148 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90975FC337
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BE45FC339
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiJLJmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S229746AbiJLJqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJLJmq (ORCPT
+        with ESMTP id S229511AbiJLJqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:42:46 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1333D42E52;
-        Wed, 12 Oct 2022 02:42:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VS.Jp8U_1665567757;
-Received: from 30.221.98.246(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VS.Jp8U_1665567757)
-          by smtp.aliyun-inc.com;
-          Wed, 12 Oct 2022 17:42:39 +0800
-Message-ID: <f8d3ae66-73a8-db89-c4c4-918610fb5f35@linux.alibaba.com>
-Date:   Wed, 12 Oct 2022 17:42:37 +0800
+        Wed, 12 Oct 2022 05:46:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87744A3F51
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 02:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665567999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YfsXCwTcSggyX7tuAnY2CtFIQ9nALKDQL/d2xvVqOBk=;
+        b=DaYjFAJUUK6KMfulpUFDxEubPJ2Xaql/QhkGQS3jc+guMhOMr5wgYc8cdUg7l/1y74rbUS
+        je6/k2uctMGhFT+xSLh/hGZsAJzo+cSwGaF/oHhJnvoiTQXpDf5gSTqCgd2zHtJ7wkyUot
+        1h/upa+ZTpwFhIK0wBeGiS9T875Lf+s=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-427-Duc00O_HOqyRvo5y6ye90A-1; Wed, 12 Oct 2022 05:46:38 -0400
+X-MC-Unique: Duc00O_HOqyRvo5y6ye90A-1
+Received: by mail-qt1-f199.google.com with SMTP id n11-20020ac8674b000000b0039c9e248175so2546510qtp.14
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 02:46:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YfsXCwTcSggyX7tuAnY2CtFIQ9nALKDQL/d2xvVqOBk=;
+        b=0fM2VFts5yShz2YS0SfEMUCefxRYAFhZtRpGwfT0CTdSFNtUl+6tPyHrBwTxN1TDj6
+         gW4CeQ3If882QEKDXzVNXIYFGCrc5ua/e7+J9vYzCbvnCTyvrtaK2v87eNR4sgdlm68r
+         grQGgeeTzk+b5FNUOyhiPNKJg1qzLgktwRvcLZPsAweYw1kGopPlBBc8uKdbUGza6iZw
+         nDLOKHzXOropJfgMwgz3H4Gp85eLdgoNKJPyF4uV+ZXQe2S1CWr1VzbEAHVCvt8m0JTv
+         5ShGw4XLLA4iMg2GOaQRS33tjQTJkKNFN3DqyIXc29EHfkV/QxUnN8PbgGDtzTEF1bql
+         UEAQ==
+X-Gm-Message-State: ACrzQf3mhKZnYui64ouMI+tZAGCYuyByCT/NnsN8z0fpNYK3zwV/z1rH
+        8fDcgY8mX4ElTBSUXpT1WM0AoRkIWwPu45HgpIeW+zpx9zwSxD4RV5epufSI5tpz7DjO9E+J8P9
+        Fd7Tw/MXkhIenHG/7gLl3kh8y
+X-Received: by 2002:a37:65c1:0:b0:6ee:9097:9ce3 with SMTP id z184-20020a3765c1000000b006ee90979ce3mr3418775qkb.620.1665567997630;
+        Wed, 12 Oct 2022 02:46:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7IbP9QpkDA3jmDDRVyMxAGQ7tjY8Kcqrh5p5rLXHpHhVZdnmtnF8Z4Qbia42uCvUHPiB+UWw==
+X-Received: by 2002:a37:65c1:0:b0:6ee:9097:9ce3 with SMTP id z184-20020a3765c1000000b006ee90979ce3mr3418760qkb.620.1665567997320;
+        Wed, 12 Oct 2022 02:46:37 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.60.69])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05620a034300b006ecdfcf9d81sm7480168qkm.84.2022.10.12.02.46.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 02:46:36 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 11:46:29 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, youssefesmat@google.com
+Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
+Message-ID: <Y0aM9T600RUlR8PI@localhost.localdomain>
+References: <20221003214501.2050087-1-connoro@google.com>
+ <20221003214501.2050087-8-connoro@google.com>
+ <Y0YeUhDZWb49mpLo@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH V6 0/6] RISC-V fixups to work with crash tool
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        anup@brainfault.org, heiko@sntech.de, guoren@kernel.org,
-        mick@ics.forth.gr, alexandre.ghiti@canonical.com, bhe@redhat.com,
-        vgoyal@redhat.com, dyoung@redhat.com, corbet@lwn.net,
-        Conor.Dooley@microchip.com, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com
-References: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-In-Reply-To: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0YeUhDZWb49mpLo@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/10/22 01:54, Joel Fernandes wrote:
 
-在 2022/8/12 上午12:17, Palmer Dabbelt 写道:
-> On Thu, 11 Aug 2022 00:41:44 PDT (-0700), 
-> xianting.tian@linux.alibaba.com wrote:
->> I ever sent the patch 1 in the link:
->> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/ 
->>
->> And patch 2,3 in the link:
->> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/ 
->>
->> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/ 
->>
->>
->> This patch set just put these patches together, and with three new 
->> patch 4, 5, 6.
->> these six patches are the fixups for machine_kexec, kernel mode PC 
->> for vmcore
->> and improvements for vmcoreinfo, memory layout dump and fixup 
->> schedule out issue
->> in machine_crash_shutdown().
->>
->> The main changes in the six patchs as below,
->> Patch 1: Fixup use of smp_processor_id() in preemptible context, to 
->> cleanup
->>          the console prints.
->> Patch 2: Fixup to get correct kernel mode PC for kernel mode regs for 
->> vmcore.
->> Patch 3: Fixup schedule out issue in machine_crash_shutdown()
->> Patch 4: Add modules to virtual kernel memory layout dump.
->> Patch 5: Add VM layout, va bits, ram base to vmcoreinfo, which can 
->> simplify
->>          the development of crash tool as ARM64 already did
->>          (arch/arm64/kernel/crash_core.c).
->> Patch 6: Updates vmcoreinfo.rst for vmcoreinfo export for RISCV64.
->>
->> With these six patches(patch 2 is must), crash tool can work well to 
->> analyze
->> a vmcore. The patches for crash tool for RISCV64 is in the link:
->> https://lore.kernel.org/linux-riscv/20220801043040.2003264-1-xianting.tian@linux.alibaba.com/ 
->>
->>
->> ------
->> Changes v1 -> v2:
->>   1, remove the patch "Add a fast call path of crash_kexec()" from 
->> this series
->>      of patches, as it already applied to riscv git.
->> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
->>   2, add 'Reviewed-by' based on the comments of v1.
->> Changes v2 -> v3:
->>   use "riscv" instead of "riscv64" in patch 5 subject line.
->> Changes v3 -> v4:
->>   use "riscv" instead of "riscv64" in the summary of patch 5 subject 
->> line.
->> Changes v4 -> v5:
->>   add a new patch "RISC-V: Fixup schedule out issue in 
->> machine_crash_shutdown()"
->> Changes v5 -> v6:
->>   1, move "fixup" patches to the start of the patch set.
->>   2, change patch 1, 2, 6's subject to make it tell more what it's 
->> about.
->>   3, add Fixes for patch 3.
->>   4, adjuest the changes format for patch 6.
->>
->>
->> Xianting Tian (6):
->>   RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
->>   RISC-V: Fixup get incorrect user mode PC for kernel mode regs
->>   RISC-V: Fixup schedule out issue in machine_crash_shutdown()
->>   RISC-V: Add modules to virtual kernel memory layout dump
->>   RISC-V: Add arch_crash_save_vmcoreinfo support
->>   Documentation: kdump: describe VMCOREINFO export for RISCV64
->>
->>  .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
->>  arch/riscv/kernel/Makefile                    |  1 +
->>  arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
->>  arch/riscv/kernel/crash_save_regs.S           |  2 +-
->>  arch/riscv/kernel/machine_kexec.c             | 28 ++++++++++++++---
->>  arch/riscv/mm/init.c                          |  4 +++
->>  6 files changed, 89 insertions(+), 6 deletions(-)
->>  create mode 100644 arch/riscv/kernel/crash_core.c
->
-> Thank.  I've taken the first 4 onto for-next, which is still targeted 
-> for 5.20, as they're fixes.  I'm not opposed to taking the 
-> documentation patch for this cycle as well, it just needs some 
-> going-over as the wording looks very odd (or at least it does to me 
-> right now, maybe I'm just still half asleep).  Patch 5 is a new 
-> feature, and given that it's being spun during the merge window it's 
-> too late.
+...
 
-Hi Palmer
+> > +migrate_task:
+> > +	/*
+> > +	 * The blocked-on relation must not cross CPUs, if this happens
+> > +	 * migrate @p to the @owner's CPU.
+> > +	 *
+> > +	 * This is because we must respect the CPU affinity of execution
+> > +	 * contexts (@owner) but we can ignore affinity for scheduling
+> > +	 * contexts (@p). So we have to move scheduling contexts towards
+> > +	 * potential execution contexts.
+> > +	 *
+> > +	 * XXX [juril] what if @p is not the highest prio task once migrated
+> > +	 * to @owner's CPU?
+> 
+> Then that sounds like the right thing is happening, and @p will not proxy()
+> to @owner. Why does @p need to be highest prio?
 
-Do you plan to merge the two patch to Linux 6.1 to support crash tool 
-work?  thanks
+No, indeed. I (now :) don't think the above is a problem.
 
-   RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
-   RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+> > +	 *
+> > +	 * XXX [juril] also, after @p is migrated it is not migrated back once
+> > +	 * @owner releases the lock? Isn't this a potential problem w.r.t.
+> > +	 * @owner affinity settings?
+> 
+> Juri, Do you mean here, '@p affinity settings' ?  @p's affinity is being
+> ignored right?
+
+Yeah, @p affinity.
+
+> > +	 * [juril] OK. It is migrated back into its affinity mask in
+> > +	 * ttwu_remote(), or by using wake_cpu via select_task_rq, guess we
+> > +	 * might want to add a comment about that here. :-)
+> 
+> Good idea!
+
+Connor, maybe you can add such a comment in the next version? Thanks!
+
+> I am also wondering, how much more run-queue lock contention do these
+> additional migrations add, that we did not have before. Do we have any data
+> on that? Too much migration should not negate benefits of PE hopefully.
+
+Looks like this is a sensible thing to measure.
+
+Best,
+Juri
 
