@@ -2,114 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B435FC6A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C315FC6A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiJLNjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S229537AbiJLNlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiJLNja (ORCPT
+        with ESMTP id S229526AbiJLNl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:39:30 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5C5CF86F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:39:29 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id i12so10906812qvs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:39:29 -0700 (PDT)
+        Wed, 12 Oct 2022 09:41:29 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAD3C5888
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:41:28 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id p7so14145897vsr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:41:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V2VehAd5gLQUv4UjE5b9cSzsj4fTXuuHSx3swmWmJNA=;
-        b=fJWiIY/JGjWLeyzCpk4oWFV/lIWxyXQPkMhfz1zbPFlyE6tFO2nq7Kh2ZLTite/2Fq
-         i37gD2sMeQf66PxslJOZTHoz0pd+5TPQRpCB/YjIsBqf8cUr9142k+H2wRXZVLjzkVll
-         mKVoA56GC0ONVs+SEd60uCznFZViPHRLiNmtFe7y9wGkvH6n8AFfIBqMoC3glbCOCazJ
-         DHN3gCERAIHdL6tsNdIxekmr8I2ouzrz3LCBF+sbyN8SIsOx9DesBtUtXIKpBt/ZONtf
-         Lr3YUyJITtBSPVuEDD2e2m/EJryMTX/Nb6qUE2buNe2orPmJFZR6J04nwYBulMkiXYOW
-         xKaw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNaONkodKU8wuhjhY6olb/IOl+q0m7F2XRj580RmVHU=;
+        b=MhofUUXYT3tMT7oMQ+a5cs30JJ4oxfDawPPGaNHs4RrO+MqfLXIzE6Vb5DKawierXs
+         kBBWD3mF1Svm6j9Bk5Efo8SKBS5fj6LsDKyEmMxd5p0ScJj20zY+wLFWDFX1sZXmYeJ/
+         yWckjMTjg1kGb4YuR9giH8xD/PNg8MUWv2eYl9tOaB5OfqGP2zi7LJBFBubdEXhp/HV+
+         j+5m0uu7Q1SsV6RdzOqsXmbDVQflTXfn91nd0Mdh0lhhC7P6rLZL9otgU9vIRf6PgSsf
+         z0Qnd9DGQkDU0625sqluJJofMfWEk7nI+eWAuHsOJE75dWE7ddsUzxYpTiub0k/WZSKE
+         iotw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V2VehAd5gLQUv4UjE5b9cSzsj4fTXuuHSx3swmWmJNA=;
-        b=dqGS5kbfc0+M7BFe1TAN1yRnE/cXR0GPcjI1CjnmasyI0qrSTdD433Jae/sxFDeyFa
-         bI2rVdYOyNO+2noE7xaN+K1eFkPFXtMlAnRA/+TaVsn6DKrd9ptw4Mx8CkkeMFMRJkWN
-         mjPHBpwpRLff4asGFHYp2v93JjleDRRxlP0KjBMuHvHoWS0gNbQ6eNwwLfIc7W8laDyx
-         +l8FvJDOP/KekUsJFe6IMI9OgqsTGMjlnNgDSObPFYsAEPE0Fj04RuxDSVIf7kJ+D6b0
-         EFmzRx6KxQLWlrZgTTNR6PuhzsoRb1UH8Jea/i0K5gNLhHSfmX/P/iVyT4xzh8v4n0v1
-         lxJQ==
-X-Gm-Message-State: ACrzQf0z7YXROsm7fyIBY6zvWi99zwQLqU+RhADTle8FfGo0yn/cn1PU
-        Bpujt8LQLZEaqY59jEa92YCbfg==
-X-Google-Smtp-Source: AMsMyM4N7b9QcbpBeYehJ7xsQquGCxt6+7p6LALgbmSOwHp2iV6KBJYnmV/JNuTlYeNrwCM7dsFYEQ==
-X-Received: by 2002:ad4:5d61:0:b0:4b4:4f2:3099 with SMTP id fn1-20020ad45d61000000b004b404f23099mr12911230qvb.77.1665581968459;
-        Wed, 12 Oct 2022 06:39:28 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id d12-20020ac800cc000000b0039cbbcc7da8sm1916600qtg.7.2022.10.12.06.39.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 06:39:27 -0700 (PDT)
-Message-ID: <76415dd7-aa74-7bf7-1952-dd1c847a5b57@linaro.org>
-Date:   Wed, 12 Oct 2022 09:39:25 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZNaONkodKU8wuhjhY6olb/IOl+q0m7F2XRj580RmVHU=;
+        b=nl2JSjZa1CbCJYBQilVofumh0E2XWjEYxqQgHMJenX7efvN/l1QZs+OIGzBgYhEY9U
+         onnJEBCHA/9uuu8FXNQVt3QjukKfMqGLgaA3Iw4nrdxP0sHT9+7MsmZxDqPQC1rGyaWM
+         sAdqRL59Ezg7j9JauRrMFbTNWcVQXGs2q2ONEiUdMo+iZOJtvGBxUTugY7dEqyRLsAqQ
+         hme2xJg2aTEsc47ildInIebBeg6SwlF6TH3wyw75dcrMaK7BWpwZ0wn6OwRr78IsS7Lw
+         JPODbY5ktCRWIYAolquq8GB7SsxaE1Tf+yS++YC5nqRlVNvtjhiifqo01tE9LyjIxeXJ
+         dL/Q==
+X-Gm-Message-State: ACrzQf0tTTR9QysFpYVeXc39yAJgggV+KXZ8T4EVDy8zOO/nGMVcYv4x
+        aZ1vpYZ5DrGMowkpfyPUPHgeMZQAIxIzZGChcUo=
+X-Google-Smtp-Source: AMsMyM5+q5LtrcFWQspxCt566WeBlBUnLhzlSoIIWh3N2hJAuyYFmaM4pCXOCmY1Vj++tYwP0S9AlrvwQVCWofodsZI=
+X-Received: by 2002:a05:6102:31b6:b0:3a6:eeec:a566 with SMTP id
+ d22-20020a05610231b600b003a6eeeca566mr14831683vsh.28.1665582087089; Wed, 12
+ Oct 2022 06:41:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 06/11] dt-bindings: thermal: k3-j72xx: conditionally
- require efuse reg range
-Content-Language: en-US
-To:     Bryan Brattlof <bb@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linux Thermal <linux-pm@vger.kernel.org>,
-        Linux Device Tree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20221011231727.8090-1-bb@ti.com>
- <20221011231727.8090-7-bb@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221011231727.8090-7-bb@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221012082949.1801222-1-ajones@ventanamicro.com>
+ <Y0a5QYWzEwRlGtxf@yury-laptop> <20221012131325.oc7onxqo7t46wxq5@kamzik>
+In-Reply-To: <20221012131325.oc7onxqo7t46wxq5@kamzik>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Wed, 12 Oct 2022 06:41:16 -0700
+Message-ID: <CAAH8bW9z6D_DRCAvQi5BUN9dh82LBZwGd-GWa8r+MFc=xs6xVw@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: Fix /proc/cpuinfo cpumask warning
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 19:17, Bryan Brattlof wrote:
+On Wed, Oct 12, 2022 at 6:13 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Wed, Oct 12, 2022 at 05:55:29AM -0700, Yury Norov wrote:
+> > On Wed, Oct 12, 2022 at 10:29:49AM +0200, Andrew Jones wrote:
+> > > Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
+> > > started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
+> > > are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
+> > > start and next seq operations implement a pattern like
+> > >
+> > >   n = cpumask_next(n - 1, mask);
+> > >   show(n);
+> > >   while (1) {
+> > >       ++n;
+> > >       n = cpumask_next(n - 1, mask);
+> > >       if (n >= nr_cpu_ids)
+> > >           break;
+> > >       show(n);
+> > >   }
+> >
+> > Can you instead of sudo-code print show the real control flow? What
+> > function hosts the infinite loop?
+>
+> The function is seq_read_iter(), which is pointed out above. I'd rather
+> not reproduce / describe more than what I've done here, as the function
+> is large. I'd be happy for reviewers to double check my pseudocode to
+> make sure I got it and the analysis right, though.
+>
+> >
+> > > which will issue the warning when reading /proc/cpuinfo. Ensure no
+> > > warning is generated by validating the cpu index before calling
+> > > cpumask_next().
+> > >
+> > > [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+> > >
+> > > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> > > Cc: Yury Norov <yury.norov@gmail.com>
+> > > ---
+> > > v2:
+> > >   - Got comments on the x86 equivalent patch and made the same
+> > >     changes to this one
+> > >     - Added all the information I should have in the first place
+> > >       to the commit message [Boris]
+> > >     - Changed style of fix [Boris]
+> > >
+> > >
+> > >  arch/riscv/kernel/cpu.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > > index 4aa8cd749441..63138b880b92 100644
+> > > --- a/arch/riscv/kernel/cpu.c
+> > > +++ b/arch/riscv/kernel/cpu.c
+> > > @@ -166,6 +166,9 @@ static void print_mmu(struct seq_file *f)
+> > >
+> > >  static void *c_start(struct seq_file *m, loff_t *pos)
+> > >  {
+> > > +   if (*pos >= nr_cpu_ids)
+> > > +           return NULL;
+> > > +
+> > >     *pos = cpumask_next(*pos - 1, cpu_online_mask);
+> > >     if ((*pos) < nr_cpu_ids)
+> > >             return (void *)(uintptr_t)(1 + *pos);
+> >
+> > OK, as far as I understood your explanations, *pos == nr_cpu_ids
+> > is a valid index because it's used as stop-code for traversing.
+> >
+> > However, you're completely silencing cpumask_check(), including
+> > those cases where *pos > nr_cpu_ids. I suspect there's no valid
+> > cases for it. If so, the patch should look like:
+> >
+> >  +    if (*pos == nr_cpu_ids)
+> >  +            return NULL;
+> >  +
+>
+> That makes sense and it's probably worth a v3. I'll wait and see if more
+> comments roll in before sending though.
+>
+> >
+> > The same for x86 patch.
+> >
+> > If it comes to v3, can you send both as a series?
+>
+> OK. I'll write a cover letter trying to explain that I don't expect them
+> to both go through the same tree.
 
-> +then:
-> +  properties:
-> +    reg:
-> +      items:
-> +        - description: VTM cfg1 register space
-> +        - description: VTM cfg2 register space
-> +        - description: |
-> +            A software trimming method must be applied to some Jacinto
-> +            devices to function properly. This eFuse region provides
-> +            the information needed for these SoCs to report
-> +            temperatures accurately.
-> +else:
-> +  properties:
-> +    reg:
-> +      items:
-> +        - description: VTM cfg1 register space
-> +        - description: VTM cfg2 register space
-> +
-
-BTW, you have additionalProperties:false, so how you coded it won't
-work. Test your bindings before sending.
-
-Best regards,
-Krzysztof
-
+I can take it in my tree, if it helps.
