@@ -2,108 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330335FC583
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FB45FC586
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJLMlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S229921AbiJLMmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiJLMlN (ORCPT
+        with ESMTP id S229895AbiJLMmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:41:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EDCC8948
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665578467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bv29RAREeBAbvgsCg22WvWf89lmnsctG7Ho4iszploI=;
-        b=U8aygZFCEZt8rvoGs5m6ow/ROh2wOI/DHI3aH3yDJ1DgFUOO8m0d1hUQlsKF+jugWIvpoo
-        WB3Ci0shG149qBdc7WobETVD5WcDRqhiaRKKeAQFB7lGYEJTUcHTcdLosfE6Cc1EE76DFm
-        3CW6Mimj0hXe7gtkxaMIXCOo5xy2ZMs=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-625-ZPBVURhDNAy5N4IM4btQiw-1; Wed, 12 Oct 2022 08:41:05 -0400
-X-MC-Unique: ZPBVURhDNAy5N4IM4btQiw-1
-Received: by mail-wr1-f69.google.com with SMTP id k30-20020adfb35e000000b0022e04708c18so4973684wrd.22
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:41:05 -0700 (PDT)
+        Wed, 12 Oct 2022 08:42:19 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D454C8943
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:42:18 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id k2so37750687ejr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=scSSoPVjvPcIKMwAKdcIxF1HMnXwBEuvlyuD0JbeDac=;
+        b=hSkbNoXoG3wWcVdKnqVO7XYK1bv0MH9u8oEv95OaWkkCTB9RsoNg9sS+DyfAXD0gi8
+         C3B5RxdZ6EF3FePvqnrCKkr5w8XgiGA0OEB2iK+NsGb9ZOHdvUgBAY5mEupVk514sXh2
+         BcfULR6zZ2AZhQJP/B28JemyEcyeDcI3AKRJ5lPKFWuGde9NbfJyX15rLE2gsyDez6YX
+         OKDkOurVilre1ybmB6wqSmbSEpcfuh+ukasYa8QPIj2WOxaDkWQTz+Nri8qre79tIxTd
+         1cFDVYDQytan/tbkNZZVN4NNSOJbGSrVUq2mGHauT+3m9QGeWYsm/jufVV+rUDLqTO07
+         hCAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bv29RAREeBAbvgsCg22WvWf89lmnsctG7Ho4iszploI=;
-        b=0gsfKSfpj/YSGHB5TFT1+GUTYJ5QJNKWCseAFBTiX+ak4hMbSf1GNrYubZbfNq1eo1
-         xaSFujKErxFvWQcA4d1QBLNzAetoM+4NKzbmJAZF4nkuaE+zDMxRIytGV6Zb6jdfrW9l
-         7/hkRjuJr+JH8wQR+izZHT+zuscJ6vM/WIny4RGycA/REmZfQYIWKK2HQXyEFsqiF0VD
-         TAW9ah8mQp2jzbUkrGNADOHymEaXkXhGT3V4qitBIs4R6iRlD9e5dr1Y2GBLWa6uoQkZ
-         w0NUWG709qVU8H9QyEBZbTL23TmxzykyWKLFt5HSFrzqKGUtsJq62Pa0NXL/qvTKJd+m
-         +A1Q==
-X-Gm-Message-State: ACrzQf0AFvK6BAB2g/PuW2DrojQxYtnd8os5Xt5jGifejW9KEjDtlqs1
-        uV9MAW3w0EGA9Er0vVzvAXRhIT4H9H5ttW4ms/HK8XvuDy3Bj0XLwagDsiPCLyBre6UpFO927+7
-        IoZUncu647phsvx3QilU5/9k=
-X-Received: by 2002:a05:600c:5388:b0:3c5:4c1:a1f6 with SMTP id hg8-20020a05600c538800b003c504c1a1f6mr2667807wmb.11.1665578462814;
-        Wed, 12 Oct 2022 05:41:02 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4dcKfBQlPa8rKv5cAIxddw7gshNEWnNWfy0+8T9tkuVfrvyH2Mi+L/rptrecqXCPaC5O45tg==
-X-Received: by 2002:a05:600c:5388:b0:3c5:4c1:a1f6 with SMTP id hg8-20020a05600c538800b003c504c1a1f6mr2667793wmb.11.1665578462568;
-        Wed, 12 Oct 2022 05:41:02 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id u11-20020a5d6acb000000b0022afedf3c87sm13662057wrw.105.2022.10.12.05.41.01
+        bh=scSSoPVjvPcIKMwAKdcIxF1HMnXwBEuvlyuD0JbeDac=;
+        b=K6J1xEzQKFRNi0aftXTMOatr1H0vVau+okvKAf972DV+ypX1hgq4bZDzICXVUdwAiK
+         cNbhLMG+xWGVyFqm5c8tJky/jY4Uj+7XxW69KlZlvpPawl1YOukm5xxYDLnPDeledxoK
+         7MMvfkmJQ4IIMdtJVmqoBRZATnKqbxKLVATxvTirGg5exF5CXjXxVTz+DZU3g5MJoy7k
+         +rQcZpixt0GHYukHp7WZlJfwYHXHpABOcauHh1m3YZBXht/nbP8N5jayX0JYEZG1V5px
+         5VVS0ofYB30oSRWDlr13EoRYg3qoLt/2HB+gmYIcCbV49oxhXkZDv77ZN4Ttb81KOx3q
+         TonA==
+X-Gm-Message-State: ACrzQf1iaEUjW/sApshO59KySt+5uDKizu6dxebfYRjgHTwIt5uQB3Cz
+        MbKmcGXxfoA2nHNKDqhu63c49g==
+X-Google-Smtp-Source: AMsMyM5pMRTzBK4wxOaeWPxAICeTFfKr9UUi5U35RJKBVu1VmBh/W7bpRQUc+vTTEtwGS2qmCt2lPQ==
+X-Received: by 2002:a17:907:a06b:b0:78d:d25f:b726 with SMTP id ia11-20020a170907a06b00b0078dd25fb726mr7250759ejc.203.1665578537183;
+        Wed, 12 Oct 2022 05:42:17 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id w21-20020aa7da55000000b0044e01e2533asm11133463eds.43.2022.10.12.05.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 05:41:02 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 13:41:01 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     frederic@kernel.org, mtosatti@redhat.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        atomlin@atomlin.com
-Subject: Re: [PATCH v8 5/5] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-ID: <20221012124101.zod6m2brlzpgx6nb@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220924152227.819815-1-atomlin@redhat.com>
- <20220925010511.1482-1-hdanton@sina.com>
- <20221003124435.1769-1-hdanton@sina.com>
+        Wed, 12 Oct 2022 05:42:16 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 14:42:15 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v2] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <20221012124215.edmgo6767yipfkt2@kamzik>
+References: <20221012081905.1800640-1-ajones@ventanamicro.com>
+ <20221012082422.uavybxdfmv4xkhxi@kamzik>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221003124435.1769-1-hdanton@sina.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221012082422.uavybxdfmv4xkhxi@kamzik>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Given work canceled because per-CPU pages can be freed remotely from
-> housekeeping CPUs (see patch 3/5), what is added here is not needed.
 
-Hi Hillf,
+Adding more people and lists to CC in order to point this patch out,
+because, based on a quick grep of cpuinfo seq operations, I think at least
+openrisc, powerpc, and s390 also need an equivalent patch (and I've
+already sent a patch for riscv). While the test is simple (see next
+paragraph) I'm not equipped to test on each architecture.
 
-Firstly, apologies for the delay!
+To test, just build a kernel with DEBUG_PER_CPU_MAPS enabled, boot to a
+shell, do 'cat /proc/cpuinfo', and look for a kernel warning.
 
-The concern is to ensure CPU-specific vmstat counters are reset and folded
-into NUMA node and zone specific and global counters too before entering
-idle. It is necessary to invoke quiet_vmstat() on return to idle even if
-the scheduling-clock tick has been previously stopped.
-Please refer to the complete scenario I described again.
+Thanks,
+drew
 
-If I understand correctly, indeed the remote drain/or free of zone
-CPU-specific pages can be initiated by a "housekeeping" CPU i.e.
-refresh_cpu_vm_stats(true) via a worker thread/or kworker, yet the actual
-free will only occur when the nohz_full CPU exits idle code and calls
-schedule_idle().
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+On Wed, Oct 12, 2022 at 10:24:22AM +0200, Andrew Jones wrote:
+> On Wed, Oct 12, 2022 at 10:19:05AM +0200, Andrew Jones wrote:
+> > Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
+> > started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
+> > are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
+> > start and next seq operations implement a pattern like
+> > 
+> >   n = cpumask_next(n - 1, mask);
+> >   show(n);
+> >   while (1) {
+> >       ++n;
+> >       n = cpumask_next(n - 1, mask);
+> >       if (n >= nr_cpu_ids)
+> >           break;
+> >       show(n);
+> >   }
+> > 
+> > which will issue the warning when reading /proc/cpuinfo. Ensure no
+> > warning is generated by validating the cpu index before calling
+> > cpumask_next().
+> > 
+> > [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+> > 
+> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> > Cc: Yury Norov <yury.norov@gmail.com>
+> > ---
+> 
+> Forgot the changelog...
+> 
+> v2:
+>   - Added all the information I should have in the first place to the
+>     commit message [Boris]
+>   - Changed style of fix [Boris]
+> 
+> >  arch/x86/kernel/cpu/proc.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+> > index 099b6f0d96bd..94ac02c8dd6f 100644
+> > --- a/arch/x86/kernel/cpu/proc.c
+> > +++ b/arch/x86/kernel/cpu/proc.c
+> > @@ -153,6 +153,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+> >  
+> >  static void *c_start(struct seq_file *m, loff_t *pos)
+> >  {
+> > +	if (*pos >= nr_cpu_ids)
+> > +		return NULL;
+> > +
+> >  	*pos = cpumask_next(*pos - 1, cpu_online_mask);
+> >  	if ((*pos) < nr_cpu_ids)
+> >  		return &cpu_data(*pos);
+> > -- 
+> > 2.37.3
+> > 
