@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1115FBECB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 03:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC39E5FBECE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 03:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJLBFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 21:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S229542AbiJLBI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 21:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJLBFa (ORCPT
+        with ESMTP id S229459AbiJLBIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 21:05:30 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFF851409
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 18:05:28 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id z20so14802714plb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 18:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bR4X1g3CbR8zefRuNAZ27/g76yKRh5y750izJu4gJiU=;
-        b=k/oBbb+2oplFe0U0n7gc8hdye+dRix2x8tyWf6AqVd/0mjbuoOumovS6DbzPhnWY75
-         +upiKTamB8HMPpq0xHgxaaykwBua09vmUXWjzfg8kSlmHTlhB9B9gWK41YG2ldf1yagY
-         VaF28CD3Wr9TV3fG8WU6c2wAmiKzwmXCGrntah6qheQsln45TE/f/uCjixC3ceA5KVSx
-         n9JRh7vtOhGXb1Hh9l7JNczczyFrLa0wtdICfpjvImJoY31yeTP3CO6qVgsOtKOIe+kk
-         YlN8yJZbku5FyBYFQTaJ5Agp/P2nujAORGFz3cDt59NihOIuX2nkHnu+0fGWcLovrUqm
-         cW5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bR4X1g3CbR8zefRuNAZ27/g76yKRh5y750izJu4gJiU=;
-        b=5mUt3nSxBFUi4HvhxupLNV6QMjsuZWZT7kpGBgA7CTdoPINIKOYL4nkpo2KcXZylzV
-         EZhdhBq2M17eXCLwZCLAFZqWaK+oNkRrMZZvYqWRYw7eCVsXa06hm9v6FPllo9ti0vXE
-         zRQnIikYD1pHBt2stUxymT1mdNz7FGObNZrsB1e85FAYTd0l2cNocmLa1zxOQRw8srwS
-         cToOYfAEPm1q1LffVU/1FllYa77xPrEsFC2gnk2VZcSALTw66U8VKDfDASNeZXEuc7ZC
-         X+6RI7juHwQ4axB/hROZL3+PFgpMyxsUi7JJGz3ojo6cKm8Ol14j90r4qt23o80dKh3Y
-         btYg==
-X-Gm-Message-State: ACrzQf1dQCIPtTfrrBJauEijd+c9L4QK9F3M8LJFx32JVDah7OoWLWBd
-        EbR/plcdylyJR46abQC2YmM=
-X-Google-Smtp-Source: AMsMyM4/ZQXt08ZnLHvPTCv4edfW6NrrsDVJxjqb1+UzRBhesfv2+lAwA5i6OC4WStJyHcgkoWOfvQ==
-X-Received: by 2002:a17:90b:4d05:b0:202:ec78:9d73 with SMTP id mw5-20020a17090b4d0500b00202ec789d73mr2154340pjb.103.1665536728154;
-        Tue, 11 Oct 2022 18:05:28 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t195-20020a635fcc000000b004608b721dfesm6034052pgb.38.2022.10.11.18.05.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 18:05:27 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     andrew@lunn.ch
-Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next v2] soc: dove: Use generic_handle_domain_irq()
-Date:   Wed, 12 Oct 2022 01:05:22 +0000
-Message-Id: <20221012010522.334885-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Oct 2022 21:08:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01296796BA
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 18:08:21 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MnDtT56YHzlXZ1;
+        Wed, 12 Oct 2022 09:03:45 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 12 Oct 2022 09:08:20 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 12 Oct
+ 2022 09:08:18 +0800
+Subject: Re: [PATCH 00/20] rcu/context-tracking: Merge RCU eqs-dynticks
+ counter to context tracking v5
+To:     Frederic Weisbecker <frederic@kernel.org>
+CC:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Phil Auld" <pauld@redhat.com>, Alex Belits <abelits@marvell.com>,
+        "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
+        Marco Elver <elver@google.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Nicolas Saenz Julienne" <nsaenzju@redhat.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Yu Liao" <liaoyu15@huawei.com>, Boqun Feng <boqun.feng@gmail.com>,
+        "Marcelo Tosatti" <mtosatti@redhat.com>,
+        kernel test robot <lkp@intel.com>,
+        "Paul Gortmaker" <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+References: <20220628131619.2109651-1-frederic@kernel.org>
+ <43a38198-d80f-2135-646c-db7e7990a401@huawei.com>
+ <20221011191203.GA1051279@lothringen>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <38a2a38e-c04e-7820-b923-69211898ba56@huawei.com>
+Date:   Wed, 12 Oct 2022 09:08:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221011191203.GA1051279@lothringen>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hi, Frederic
 
-Replace generic_handle_irq(irq_find_mapping()) with
-generic_handle_domain_irq().
+On 2022/10/12 3:12, Frederic Weisbecker wrote:
+> On Tue, Oct 11, 2022 at 07:37:48PM +0800, Xiongfeng Wang wrote:
+>> Hi, Frederic
+>>
+>> Thanks for push RCU dynticks counters to upstream. It is very useful. After it
+>> is done, do we have plan to revive the sys-idle feature and use it to shutdown
+>> the tick on the last housekeeping when the whole system is idle. I'm very glad
+>> to help test it if you have some demo patches on your personal repo.
+> 
+> There is no plan yet but some other people seem to be interested. Would you
+> like to try to revive it yourself? Otherwise I may do it someday but I 
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
-v1 -> v2
-Make the subject line more specific.
- drivers/soc/dove/pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your reply ! I would like to give it a try. But I'm not sure if I can
+make it because I'm not so familiar with the RCU subsystem.
 
-diff --git a/drivers/soc/dove/pmu.c b/drivers/soc/dove/pmu.c
-index ffc5311c0ed8..308fe45231b4 100644
---- a/drivers/soc/dove/pmu.c
-+++ b/drivers/soc/dove/pmu.c
-@@ -243,7 +243,7 @@ static void pmu_irq_handler(struct irq_desc *desc)
- 		stat &= ~(1 << hwirq);
- 		done &= ~(1 << hwirq);
- 
--		generic_handle_irq(irq_find_mapping(domain, hwirq));
-+		generic_handle_domain_irq(domain, hwirq);
- 	}
- 
- 	/*
--- 
-2.25.1
+Thanks,
+Xiongfeng
 
+> have quite some work to complete first (ie: making CPU isolation tunable through
+> cpusets).
+> 
+> Thanks.
+> .
+> 
