@@ -2,73 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE555FCB3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8105FCB3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 21:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiJLTBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 15:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S229896AbiJLTBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 15:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiJLTAz (ORCPT
+        with ESMTP id S229533AbiJLTBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 15:00:55 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142949B875;
-        Wed, 12 Oct 2022 12:00:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id z20so17074683plb.10;
-        Wed, 12 Oct 2022 12:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aOuKQ0zXiovSsPQnXuIXHqNIP5tKjtfrc0UJmoK1jFI=;
-        b=i0BgDQb2aczsl0DrlhXtchMelkLflX1dQdIdy3mc+txnSZSEV3dgX9vR6QmPV4unAe
-         7ZPP1yZYulrLrt0WgD9joy7Lw4gtvVBu6DUIcXJOOJRDcveeaQBx1C67V7PfFimltOhp
-         bQFIWUqbZEwRV3L5malSls7kMkGp6gcq6B1uL5MCKOePlL/3Rp5rkEIxfQtFs7fRcjHs
-         Ym4jtm5K6SLmKreVde3fiqTE7pxtHFb2j+rd/r41yNt3ktinXlBiuYFhUC4N4DBK0Ae3
-         zC/oyhlWNRM0rpq1aqLLXBD9vmXwzN4IpgvH1dQ5JHF2sRUxj0XMhbJ0QAnGN9RTWCcM
-         G4tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aOuKQ0zXiovSsPQnXuIXHqNIP5tKjtfrc0UJmoK1jFI=;
-        b=aDEhIrs/R51MPA5DS8lc62bTYHvXGmXBlEiipplokQP3WYSZc0qRsbEWMwKUV85W8i
-         gP6tEA1Oh0mgDZrA98tqpwu3r4Bt9gS+olmGt6EtWy5dQAwBi5RC1I/X2VkDG+PbsYMO
-         p+3iDpvFgEmhBXKZ9cRVOv7Vhyr7vBKmPTlMmbRobNnw+CAlyp45v3W5fYqf6ScUiyyF
-         9zximfsgIu5C3KQwQ86dd0SXiJlsZJxabA2SYaer+cJGara40XxezFhJgzhQ1sar4LyB
-         Qmz70aqZs5jLe0j583k0BEsI15kMM2iLbKu2Aeq4go2blB5U6yJ9I6InoPd4NaLDmWTb
-         6CZw==
-X-Gm-Message-State: ACrzQf2T6IBPXYDJtVATDMiSQHGpvlJWz/2sp/NG+YRKuDiEj/G/fayd
-        bXimkqJ814qUYX2idLFDPQY=
-X-Google-Smtp-Source: AMsMyM7S63dSmSP82xcQhD5BhMNaURrMyjSfBmWRJ8G+5tsfYZKKzEAc/ayehcy3SrMXgVQV3wcdeQ==
-X-Received: by 2002:a17:902:d544:b0:17d:318a:adf7 with SMTP id z4-20020a170902d54400b0017d318aadf7mr31332166plf.148.1665601254358;
-        Wed, 12 Oct 2022 12:00:54 -0700 (PDT)
-Received: from [172.30.1.63] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id 7-20020a620507000000b00540f96b7936sm236257pff.30.2022.10.12.12.00.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 12:00:53 -0700 (PDT)
-Message-ID: <00ed0b46-54db-330e-8ff8-146ff9a09491@gmail.com>
-Date:   Thu, 13 Oct 2022 04:00:50 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] devfreq: governor: Add a private governor_data for
- governors in devfreq
+        Wed, 12 Oct 2022 15:01:48 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E8C22BD0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:01:47 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CGZp6k008404
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:01:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : mime-version; s=s2048-2021-q4;
+ bh=+Qti10ULGE3CwOxuvM8VWoUVNJHST6nVoyHjdssEvy4=;
+ b=Urr1zaroSBQa6BMa3eSCvgICkPKdYfJeSXviWiM875dbGIh3TaZ2ACXOqHu+BJE26iwj
+ hPL/MMmHqOBHtDsp85BvGakpYJIncZe+WH6fvz/Dp7A0buiUFWN1rFk1Od80ILWKpXyC
+ sKuZ3kj6qswLeqBXs8KdKVuhVQtPd75CRMmjgfhdXcB1d3Hgwq1EbrG/9K4/2AHuHhS3
+ QJUhhwBg8+R3ObIRGjGNCbMSdBd6xlXJtrFMFwtDf9PMM1TaSWSt7KUPVTKPCtEJ34Bv
+ skuAs/YH/kvR0KULkUfiVcV8ppSQyWD1SaPZGoLHjUAutlut0jY8zVX8VIfMDzSmpRzU jw== 
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2042.outbound.protection.outlook.com [104.47.56.42])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k5qgr5wwv-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 12:01:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b8oOkuVdfUIQawY5WMHoKpy/YRb1sP9hls3jEY4D1wTIUT33AMxRLsxbUIrKJNuwRSxoq6ovqO1EHICkZOs5jS37SZ4+XbfbLmpgLuKA8gOVhEuslEbjft0uVuRr07mAmg+1a73egPcVu0WMKaK7mQaZGTHzHCsJFY1yDWo2zSut+BFgAlPp0+4DA3vHRBsTmyVbAXuJvz1fBXfebTnfBz9c4s3Ji1oCqdsuFQvG4iwDfp9zAoUfHsFn/p+V0GIYkMOUKVLfGmyXrjlwr/FTfAQee+Zdb22wKqfVna/gPxmKDUTUDgV2x3Z80tdRHgfaDhRPbBdApY4iIOc50X8XYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+Qti10ULGE3CwOxuvM8VWoUVNJHST6nVoyHjdssEvy4=;
+ b=fBXzdd+mF8j64gjSVS/LBS3/2o/Qafg1z3JMld+jAqjeKKWaPXmK2UF3yl4wDqQ4TRWX8g18vIV+bcs0KFMNzZKnTv+TyzUaI6Ho8qDG5o+C0QD6790CIeUgola+uyjmO4oo6s44MCO6q1wddHycn85Qwl2BuMqy71IchAqzw1ITuVVnGZj5OteWMsVYEn/aymi3FHhXUbzUbjwoG/fQ81DNe0o+UZnqT3SbUxKL75J3mDwi046mh8PRi7T54BFVsYDMZJbbApTc7tR5FH3mwoFrzMxMbVTLDLA1IEiPUGGBEnM0TDhOISoZHZD8t9E6Reou6+ly1w6JPYNWrVVSCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by PH0PR15MB4829.namprd15.prod.outlook.com (2603:10b6:510:a6::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22; Wed, 12 Oct
+ 2022 19:01:44 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::d70d:8cce:bb1:e537]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::d70d:8cce:bb1:e537%6]) with mapi id 15.20.5709.022; Wed, 12 Oct 2022
+ 19:01:44 +0000
+From:   Song Liu <songliubraving@meta.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+CC:     Song Liu <songliubraving@meta.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "song@kernel.org" <song@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "urezki@gmail.com" <urezki@gmail.com>
+Subject: Re: [RFC v2 4/4] vmalloc_exec: share a huge page with kernel text
+Thread-Topic: [RFC v2 4/4] vmalloc_exec: share a huge page with kernel text
+Thread-Index: AQHY2qb4/DleVypvfEGw7i865KJ5wq4H9+4AgAAKPACAABD6AIABU84AgABHRYCAAJX7gIAA2jQAgAAGboA=
+Date:   Wed, 12 Oct 2022 19:01:44 +0000
+Message-ID: <0209B426-E425-44C2-825C-8AAC59B5BB2D@fb.com>
+References: <20221007234315.2877365-1-song@kernel.org>
+ <20221007234315.2877365-5-song@kernel.org>
+ <af5c148fb3b9c56d1eb7e92b05db7c6c04bcfc3c.camel@intel.com>
+ <B849A9FF-1054-4D5C-AEBD-72AED8B8F277@fb.com>
+ <3842f1e7cfdde4f848e164872f62c0c1da654fec.camel@intel.com>
+ <2B66E2E7-7D32-418C-9DFD-1E17180300B4@fb.com>
+ <99201f0c3509e1ea3d08a462beaaea9d60382cff.camel@intel.com>
+ <0D4668C5-28C1-4846-9698-C5C05BC23F0B@fb.com>
+ <6fb1ef25df1caa7206572f24a70da0c2f2714135.camel@intel.com>
+In-Reply-To: <6fb1ef25df1caa7206572f24a70da0c2f2714135.camel@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Kant Fan <kant@allwinnertech.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221010072202.78731-1-kant@allwinnertech.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20221010072202.78731-1-kant@allwinnertech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|PH0PR15MB4829:EE_
+x-ms-office365-filtering-correlation-id: c163f6a9-1e4d-431e-f032-08daac84346c
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Gqj9VFO5ZeAsrEfoK91jcESZFM5EGzqkvTULbh8/U/CDOlJEMfrHRKeFWm49jja+zi9Onjn68BxJ83lAJSn897ykmJ7ga4NvQSJGLlKuTP6dDbxCM7f8ISmOAOQZWESKGq0doT91QgS48NTboq6R+Fp0XWOgTo/RjuIHfXhlVHliVRwjh0KiJeO/qjmGQA+0EqOxGbcLt+t1lyHzhAR6QpQ8yOS4K2rDqC0TlKzrFdENdtqKNFCIXKThYvM8mGEbe/VVw0lJDK6WKXcXvauey5KOLAnKG/4sm52l/ahptOg1gnYJdsw7dqAc2WFQ9+5L+MZYfHZeOGt1EAU4H1y3kdxPWiyWbtRs4zd4aoO5O5cuKSkpeGd8JAMZkxH7cXUYgRyRCguGT0g15OTElZzcWUK8XJ0bUfC10DXUvwZEPqM5cy1Hgn72yZ0MB7ioRhcpAb81BBYNzB6GKeORthYH16NOJ7R9bgZg/xur8Ll5VKptG3ah4IcqOjwEqSw4jSbvfZbjBGmDer1s37jdWW/wgWqRiOUtLtHMF6+0MzcnqptboehYjsMbqS7J/NzZ9A767BPZbB5xyKnXYyIcYAUfvi4yL+Lwf5HsOVQ408eHoLJUgYsFkct1ctJ6JsDcK9iWRvYlQT3W/T+sgcOMAWmU/wgrnMgfdEXAzWjV233JaF4+RtDwGLPHHmbKP1Or9y3fUf16wyvA2HW22j8OXdQmZHTEprbw0KWUD7JnGIPQv086El7xx5VsESS77UxeqBlLCr7IbtlXpb1srpEPLLkzroyLhW3m/3py3I4ni9uAsxc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(136003)(366004)(451199015)(53546011)(316002)(38100700002)(71200400001)(110136005)(66446008)(64756008)(4326008)(8676002)(91956017)(66556008)(76116006)(66476007)(66946007)(122000001)(86362001)(38070700005)(36756003)(33656002)(83380400001)(6512007)(9686003)(6506007)(54906003)(478600001)(6486002)(8936002)(4001150100001)(2906002)(186003)(41300700001)(5660300002)(7416002)(14583001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kB8/jj++L/JILQdWscaT2DEhRp3zxoi7uBkRM7axTPAcYiHnBq37ntanlBc8?=
+ =?us-ascii?Q?aYRcmzQZop/essYHsvtZT1xUaafIWSJXETCidm8q8C2pxfg7vqTGeLYMu4/D?=
+ =?us-ascii?Q?fWBZKjBOKM8BvGweZrrSKM0K+yRnvd2s8g1Bo7tMxqJV5MJRm/JReUCocitH?=
+ =?us-ascii?Q?yzBh44GqO9Ob6nIiUeUz32h4UI4N4z/aGy7dn7P1HbkGcC9CpYBi8TagjjUg?=
+ =?us-ascii?Q?645pWmzmVBsPmTiOuSRE8XOMf/l+FRo78rE+yNaqKSx4pTrBoOrUuYyXG4wG?=
+ =?us-ascii?Q?698XTTUByDH/cnDJG0h1xMbxy6R0ny41632Hv7peO9epdMPSjI23XUloVpCR?=
+ =?us-ascii?Q?v4ygkXq1naeNynW9y/rd54hs/JLr7a7TWilDP0I2XZA29QfgY46lk1ewkPMi?=
+ =?us-ascii?Q?wXC/HP40J+rv0IzIrcMJQWNnAbgFx/AHkN3gYVn6Op8wouxxl0AzQCHSDdVm?=
+ =?us-ascii?Q?e9tplgBHDs5jGS0R5alTMMQr7tY4xLSt8kEUX+YyZTvo41vV+O+PEXdLs9Hs?=
+ =?us-ascii?Q?ITBbbB8cCei1qOtBRyMgsJXjZrxmIWzj/MRH1aTNu2zr+koz+AXN+3MYGrOm?=
+ =?us-ascii?Q?YTJG6Zl5pAbMigrbH7hHi+M/YlZ6iyAt9bOjTz8qksHz/no8eSy7FB/WEzkU?=
+ =?us-ascii?Q?/Jog2ByFH+fuWn1dj4cmweCUKK/EwuAdbxbiWz4U1FdUXjfTRIC8tTb2v2J0?=
+ =?us-ascii?Q?+sfkBcFzt7ZaSOuX4vKztl1HaJZQP8JQP4mO/NXUJepAySPEfh58YgiF0x8e?=
+ =?us-ascii?Q?9C0sx9SHu5cGvC5yF0M+6AJkdioXqUqUUyUZGZwzIRbHJ+d6ls328YR79Mcr?=
+ =?us-ascii?Q?a7CmcEjzuRnMWJ9tQ7hxonAgLv8b0ueEGaFSpby1Hs+KPHebow9ONDrUwg9o?=
+ =?us-ascii?Q?9MHmtiqyZhGAfCM0lgqcb4DxR7QrfAwQjiVsk5/9r/dIiSlo5RtQ9oOZhvBD?=
+ =?us-ascii?Q?cI2rSNpVs1bvrZKhsfUUsTxHyXKkhq7JKrqccgytuOm2+M1R1roKxIWbEObn?=
+ =?us-ascii?Q?Yh8Kqc3Ew8JUxQ6RhThtRlJTVo0hqORGXFsfW0/8u+4H/Cel7TCLgEPUFZYR?=
+ =?us-ascii?Q?XwWY3MpRWsVgaa1q++Y37jvQC6W7rafm4003ew7j2OOXXFsscxBZB2LIEcjf?=
+ =?us-ascii?Q?UOn+L01GjaCsdZAPXFEqSMwLdJQkNk0vNVWhEoH2IX7WlhxDryttGzH2gCwr?=
+ =?us-ascii?Q?VkhYvKkGPi18AtMqT2lAGu85T9XoXBXesadTiIUNaKecUsmF0jD14XpcG51f?=
+ =?us-ascii?Q?Xu0qrB5f3XlInmbzQKJSEFctmdIURMSCTQSiha4JvgGkKc+t1+NnTrJG47c7?=
+ =?us-ascii?Q?E+TD3N+0Uf8np85F88hzjNGYxUdhNghHmHKLuYXelGG3t19THQuBvoR9vOBY?=
+ =?us-ascii?Q?+tEFZq06sHMf78B2alzCYe920sZH71mkSAdGmxNITOYzz9NrUeEfUC8XRIBe?=
+ =?us-ascii?Q?lW6kGNjYd1uI0kmTCWus4eraL3vcX91Auys3Qk7v+uyGJlP6fLJU/syOaiUy?=
+ =?us-ascii?Q?siPAXGC0nEDYMkaH+KB0LyMVEhDoZ4Cq1wbQYfkgPckivH32rX3rKxAwsFj4?=
+ =?us-ascii?Q?eoji8ENUEDMqJlvQGi090ZaNPM6Sq7nZUfKbGiJmYkPy9MuufL//ERxtxQZE?=
+ =?us-ascii?Q?wYTQCvxmsz+XPG3Peu/TkkMv2q4sZGlNI0lsQnCwYDlH?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <ED786EB8CE7D4040B9B01FE74FB3FADB@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c163f6a9-1e4d-431e-f032-08daac84346c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2022 19:01:44.0936
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: d70LJ/ZN246gnmDp8RV1076CMdJlpBLsFHY/FUp3LmpwwIl+9Qg1XBMuyjUckvHByOBnVY269SjohosSpG3jOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4829
+X-Proofpoint-GUID: rRWX7CqXcKlLQ1cEW5EUbDrAdzoXcamx
+X-Proofpoint-ORIG-GUID: rRWX7CqXcKlLQ1cEW5EUbDrAdzoXcamx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_09,2022-10-12_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,135 +150,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I'm sorry for late reply. It looks good to me.
-Instead, this patch should contain the 'Fixes' information
-with the following commit because the changed code was merged
-on the patch[1]. Also, need to send it to stable mailing list.
-
-[1] ce26c5bb9569d8b826f01b8620fc16d8da6821e9
-PM / devfreq: Add basic governors
-
-Lastly, I think that need to change the patch title as following:
-- PM / devfreq: governor: Add a private governor_data for governor
 
 
-On 22. 10. 10. 16:22, Kant Fan wrote:
-> The member void *data in the structure devfreq can be overwrite
-> by governor_userspace. For example:
-> 1. The device driver assigned the devfreq governor to simple_ondemand
-> by the function devfreq_add_device() and init the devfreq member
-> void *data to a pointer of a static structure devfreq_simple_ondemand_data
-> by the function devfreq_add_device().
-> 2. The user changed the devfreq governor to userspace by the command
-> "echo userspace > /sys/class/devfreq/.../governor".
-> 3. The governor userspace alloced a dynamic memory for the struct
-> userspace_data and assigend the member void *data of devfreq to
-> this memory by the function userspace_init().
-> 4. The user changed the devfreq governor back to simple_ondemand
-> by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-> 5. The governor userspace exited and assigned the member void *data
-> in the structure devfreq to NULL by the function userspace_exit().
-> 6. The governor simple_ondemand fetched the static information of
-> devfreq_simple_ondemand_data in the function
-> devfreq_simple_ondemand_func() but the member void *data of devfreq was
-> assigned to NULL by the function userspace_exit().
-> 7. The information of upthreshold and downdifferential is lost
-> and the governor simple_ondemand can't work correctly.
+> On Oct 12, 2022, at 11:38 AM, Edgecombe, Rick P <rick.p.edgecombe@intel.com> wrote:
 > 
-> The member void *data in the structure devfreq is designed for
-> a static pointer used in a governor and inited by the function
-> devfreq_add_device(). This patch add an element named governor_data
-> in the devfreq structure which can be used by a governor(E.g userspace)
-> who want to assign a private data to do some private things.
+> On Wed, 2022-10-12 at 05:37 +0000, Song Liu wrote:
+>>> Then you have code that operates on module text like:
+>>> if (is_vmalloc_or_module_addr(addr))
+>>>       pfn = vmalloc_to_pfn(addr);
+>>> 
+>>> It looks like it would work (on x86 at least). Should it be
+>>> expected
+>>> to?
+>>> 
+>>> Especially after this patch, where there is memory that isn't even
+>>> tracked by the original vmap_area trees, it is pretty much a
+>>> separate
+>>> allocator. So I think it might be nice to spell out which other
+>>> vmalloc
+>>> APIs work with these new functions since they are named "vmalloc".
+>>> Maybe just say none of them do.
+>> 
+>> I guess it is fair to call this a separate allocator. Maybe 
+>> vmalloc_exec is not the right name? I do think this is the best 
+>> way to build an allocator with vmap tree logic. 
 > 
-> Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-> 
-> Signed-off-by: Kant Fan <kant@allwinnertech.com>
-> ---
->  drivers/devfreq/governor_userspace.c | 12 ++++++------
->  include/linux/devfreq.h              |  7 ++++---
->  2 files changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-> index ab9db7adb3ad..d69672ccacc4 100644
-> --- a/drivers/devfreq/governor_userspace.c
-> +++ b/drivers/devfreq/governor_userspace.c
-> @@ -21,7 +21,7 @@ struct userspace_data {
->  
->  static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
->  {
-> -	struct userspace_data *data = df->data;
-> +	struct userspace_data *data = df->governor_data;
->  
->  	if (data->valid)
->  		*freq = data->user_frequency;
-> @@ -40,7 +40,7 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
->  	int err = 0;
->  
->  	mutex_lock(&devfreq->lock);
-> -	data = devfreq->data;
-> +	data = devfreq->governor_data;
->  
->  	sscanf(buf, "%lu", &wanted);
->  	data->user_frequency = wanted;
-> @@ -60,7 +60,7 @@ static ssize_t set_freq_show(struct device *dev,
->  	int err = 0;
->  
->  	mutex_lock(&devfreq->lock);
-> -	data = devfreq->data;
-> +	data = devfreq->governor_data;
->  
->  	if (data->valid)
->  		err = sprintf(buf, "%lu\n", data->user_frequency);
-> @@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
->  		goto out;
->  	}
->  	data->valid = false;
-> -	devfreq->data = data;
-> +	devfreq->governor_data = data;
->  
->  	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
->  out:
-> @@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
->  	if (devfreq->dev.kobj.sd)
->  		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
->  
-> -	kfree(devfreq->data);
-> -	devfreq->data = NULL;
-> +	kfree(devfreq->governor_data);
-> +	devfreq->governor_data = NULL;
->  }
->  
->  static int devfreq_userspace_handler(struct devfreq *devfreq,
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 34aab4dd336c..d265af3fb0a4 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -152,8 +152,8 @@ struct devfreq_stats {
->   * @max_state:		count of entry present in the frequency table.
->   * @previous_freq:	previously configured frequency value.
->   * @last_status:	devfreq user device info, performance statistics
-> - * @data:	Private data of the governor. The devfreq framework does not
-> - *		touch this.
-> + * @data:	devfreq core pass to governors, governor should not change it.
-> + * @governor_data:	private data for governors, devfreq core doesn't touch it.
->   * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
->   * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
->   * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-> @@ -193,7 +193,8 @@ struct devfreq {
->  	unsigned long previous_freq;
->  	struct devfreq_dev_status last_status;
->  
-> -	void *data; /* private data for governors */
-> +	void *data;
-> +	void *governor_data;
->  
->  	struct dev_pm_qos_request user_min_freq_req;
->  	struct dev_pm_qos_request user_max_freq_req;
+> Yea, I don't know about the name. I think someone else suggested it
+> specifically, right?
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+I think Luis suggested rename module_alloc to vmalloc_exec. But I 
+guess we still need module_alloc for module data allocations. 
+
+> 
+> I had called mine perm_alloc() so it could also handle read-only and
+> other permissions.
+
+What are other permissions that we use? We can probably duplicate
+the free_text_are_ tree logic for other cases. 
+
+
+> If you keep vmalloc_exec() it needs some big
+> comments about which APIs can work with it, and an audit of the
+> existing code that works on module and JIT text.
+> 
+>> 
+>>> 
+>>> 
+>>> Separate from that, I guess you are planning to make this limited
+>>> to
+>>> certain architectures? It might be better to put logic with
+>>> assumptions
+>>> about x86 boot time page table details inside arch/x86 somewhere.
+>> 
+>> Yes, the architecture need some text_poke mechanism to use this. 
+> 
+> It also depends on the space between _etext and the PMD aligned _etext
+> to be present and not get used by anything else. For other
+> architectures, there might be rodata there or other things.
+
+Good point! We need to make sure this part is not used by other things.
+
+> 
+>> On BPF side, x86_64 calls this directly from arch code (jit engine), 
+>> so it is mostly covered. For modules, we need to handle this better. 
+> 
+> That old RFC has some ideas around this. I kind of like your
+> incremental approach though. To me it seems to be moving in the right
+> direction.
+
+Thanks!
+Song
