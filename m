@@ -2,93 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98945FCEB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8C95FCEBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiJLXD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
+        id S229673AbiJLXFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiJLXDY (ORCPT
+        with ESMTP id S229537AbiJLXF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:03:24 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6195F6558;
-        Wed, 12 Oct 2022 16:03:23 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CMrZxB005011;
-        Wed, 12 Oct 2022 23:03:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Z/00gzl0chtUGKnk6+6a/IXc4W8BOyQEfDKkrrKaGSQ=;
- b=oJVJWdueAjXeq7YTnFXzasDhoH9cAMAmDJvvLlOz8GGT8IewOkMN3fMJViRY2NymCZN4
- 2EQ2Sv+wnZlsWgWGd71npfJsIqH0j0zhCz3LInTvhm1GbGDzBXhqPNbeYaksuVLnurGN
- NMWiLJDLY4LBWlAZP51TfBjhL/3Ehve9XwmUefeG2qWAhSBj8NZRD9fXmMY4C04fxXi+
- LnM3hiIe+xXBTRNM/jETD7Z8zgdR/kBVGxHT/F/8ArWpz0FAV0TYqfiUu0OmtN1RcOqX
- jvwjST+hm3zpddWT6fbHZRBD+/RQDf3QBMLoY6s1/HKS9jpfMEMPQqjNhv4Bhwd1mNU8 nA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5eh339xb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 23:03:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29CN3CJQ016486
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 23:03:12 GMT
-Received: from [10.38.241.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 12 Oct
- 2022 16:03:09 -0700
-Message-ID: <5c178d7e-5022-f5e5-791d-d3800114b42b@quicinc.com>
-Date:   Wed, 12 Oct 2022 16:03:06 -0700
+        Wed, 12 Oct 2022 19:05:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9D957256;
+        Wed, 12 Oct 2022 16:05:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3887AB81BE1;
+        Wed, 12 Oct 2022 23:05:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E58C433D7;
+        Wed, 12 Oct 2022 23:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665615925;
+        bh=RKsj6eaHS0Dlw6VvnuAF/Tpwhbi5fwGsQ2fzFSv0svI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=QZHwE+fLiMLo4PpvLTomPm8Ro5c5NMVrF8ZoCdlQQd5wWk6Ohfth8VQBz7+rF9Jdv
+         +E0mhSK3p271mheOinlAZmc6ucgmdHYDQAbHf8akVVVoS0oqDY9/OVyh9190/tUuVo
+         jZe9OUvEFpXGufIEn8ntGJwp0DDPW65/M9r89CEWWCuhdHtE7ouGygKMkmBRIOakCi
+         UNwiEE7F1eZwVy4xoUCtog9qSYlnpapphrMio5xezduhDkuSk4l7n9MaAYjJBTM3Ha
+         dVtvTTjgck6LkLhjF9ssfqgRxnynfvkYN6vlsO5ICfgeA/ZrZCk6qQhWvZk7yh0ek6
+         1sQVgAiWPGmkA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH v3 06/10] drm/msm/dsi: Migrate to
- drm_dsc_compute_rc_parameters()
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
-        <linux-kernel@vger.kernel.org>
-References: <20221009184824.457416-1-marijn.suijten@somainline.org>
- <20221009185058.460688-1-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221009185058.460688-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ja0Tr9aJJVlp9CqstugiLkStvUu3-yFr
-X-Proofpoint-ORIG-GUID: ja0Tr9aJJVlp9CqstugiLkStvUu3-yFr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_11,2022-10-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 impostorscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120144
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAJM55Z8xxrKqaN64KAP9miTis4wFbL2S9uhV5h-SOiYjbYng+g@mail.gmail.com>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220929175602.19946-1-hal.feng@linux.starfivetech.com> <20220930214824.A14ACC433D6@smtp.kernel.org> <CAJM55Z8xxrKqaN64KAP9miTis4wFbL2S9uhV5h-SOiYjbYng+g@mail.gmail.com>
+Subject: Re: [PATCH v1 15/30] clk: starfive: Use regmap APIs to operate registers
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Hal Feng <hal.feng@linux.starfivetech.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 12 Oct 2022 16:05:23 -0700
+User-Agent: alot/0.10
+Message-Id: <20221012230525.C6E58C433D7@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,145 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Emil Renner Berthing (2022-10-05 06:14:44)
+> > > @@ -295,11 +296,13 @@ static int __init clk_starfive_jh7100_probe(str=
+uct platform_device *pdev)
+> > >         if (!priv)
+> > >                 return -ENOMEM;
+> > >
+> > > -       spin_lock_init(&priv->rmw_lock);
+> > >         priv->dev =3D &pdev->dev;
+> > > -       priv->base =3D devm_platform_ioremap_resource(pdev, 0);
+> > > -       if (IS_ERR(priv->base))
+> > > -               return PTR_ERR(priv->base);
+> > > +       priv->regmap =3D device_node_to_regmap(priv->dev->of_node);
+> >
+> > This is sad. Why do we need to make a syscon? Can we instead use the
+> > auxiliary bus to make a reset device that either gets a regmap made here
+> > in this driver or uses a void __iomem * mapped with ioremap
+> > (priv->base)?
+>=20
+> In my original code the clock driver just registers the resets too
+> similar to other combined clock and reset drivers. I wonder what you
+> think about that approach:
+> https://github.com/esmil/linux/commit/36f15e1b827b02d7f493dc5fce31060b219=
+76e68
+> and
+> https://github.com/esmil/linux/commit/4ccafadb72968480aa3dd28c227fcccae41=
+1c13b#diff-ffec81f902f810cb210012c25e8d88217ea5b4021419a4206d1fd4dd19edfce8=
+R471
 
-
-On 10/9/2022 11:50 AM, Marijn Suijten wrote:
-> As per the FIXME this code is entirely duplicate with what is already
-> provided inside drm_dsc_compute_rc_parameters(), and it is yet unknown
-> why this comment was put in place instead of resolved from the get-go.
-> Not only does it save on duplication, it would have also spared certain
-> issues.
-> 
-> For example, this code from downstream assumed dsc->bits_per_pixel to
-> contain an integer value, whereas the upstream drm_dsc_config struct has
-> it with 4 fractional bits.  drm_dsc_compute_rc_parameters() already
-> accounts for this feat, and the sole remaining use of
-> dsc->bits_per_pixel inside dsi_populate_dsc_params() will be addressed
-> in a separate patch.
-> 
-
-This is a nice cleanup! Thanks for doing this. I would actually like to 
-move towards the drm_dsc_compute_rc_parameters() API.
-
-But I would like to hold back this change till Vinod clarifies because 
-Vinod had mentioned that with drm_dsc_compute_rc_parameters() he was 
-seeing a mismatch in the computation of two values.
-
-slice_bpg_offset and the final_offset.
-
-The difference between the upstream drm_dsc_compute_rc_parameters() and 
-dsi_populate_dsc_params() causing this was not clear to me from his 
-explanation earlier.
-
-So this was left as a to-do item.
-
-I would like this to be re-tested on pixel3 and check if this works for 
-vinod. If not, i think its the right time to debug why and not delay 
-this more.
-
-Thanks
-
-Abhinav
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 64 +++---------------------------
->   1 file changed, 6 insertions(+), 58 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 83cde4d62b68..68c39debc22f 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -21,6 +21,7 @@
->   
->   #include <video/mipi_display.h>
->   
-> +#include <drm/display/drm_dsc_helper.h>
->   #include <drm/drm_of.h>
->   
->   #include "dsi.h"
-> @@ -1771,14 +1772,6 @@ static char bpg_offset[DSC_NUM_BUF_RANGES] = {
->   
->   static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->   {
-> -	int mux_words_size;
-> -	int groups_per_line, groups_total;
-> -	int min_rate_buffer_size;
-> -	int hrd_delay;
-> -	int pre_num_extra_mux_bits, num_extra_mux_bits;
-> -	int slice_bits;
-> -	int data;
-> -	int final_value, final_scale;
->   	int i;
->   
->   	dsc->rc_model_size = 8192;
-> @@ -1804,11 +1797,11 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->   	if (dsc->bits_per_pixel != 8)
->   		dsc->initial_offset = 2048;	/* bpp = 12 */
->   
-> -	mux_words_size = 48;		/* bpc == 8/10 */
-> -	if (dsc->bits_per_component == 12)
-> -		mux_words_size = 64;
-> +	if (dsc->bits_per_component <= 10)
-> +		dsc->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
-> +	else
-> +		dsc->mux_word_size = DSC_MUX_WORD_SIZE_12_BPC;
->   
-> -	dsc->mux_word_size = mux_words_size;
->   	dsc->initial_xmit_delay = 512;
->   	dsc->initial_scale_value = 32;
->   	dsc->first_line_bpg_offset = 12;
-> @@ -1820,52 +1813,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->   	dsc->rc_quant_incr_limit0 = 11;
->   	dsc->rc_quant_incr_limit1 = 11;
->   
-> -	/* FIXME: need to call drm_dsc_compute_rc_parameters() so that rest of
-> -	 * params are calculated
-> -	 */
-> -	groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
-> -	dsc->slice_chunk_size = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
-> -
-> -	/* rbs-min */
-> -	min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
-> -				dsc->initial_xmit_delay * dsc->bits_per_pixel +
-> -				groups_per_line * dsc->first_line_bpg_offset;
-> -
-> -	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->bits_per_pixel);
-> -
-> -	dsc->initial_dec_delay = hrd_delay - dsc->initial_xmit_delay;
-> -
-> -	dsc->initial_scale_value = 8 * dsc->rc_model_size /
-> -				       (dsc->rc_model_size - dsc->initial_offset);
-> -
-> -	slice_bits = 8 * dsc->slice_chunk_size * dsc->slice_height;
-> -
-> -	groups_total = groups_per_line * dsc->slice_height;
-> -
-> -	data = dsc->first_line_bpg_offset * 2048;
-> -
-> -	dsc->nfl_bpg_offset = DIV_ROUND_UP(data, (dsc->slice_height - 1));
-> -
-> -	pre_num_extra_mux_bits = 3 * (mux_words_size + (4 * dsc->bits_per_component + 4) - 2);
-> -
-> -	num_extra_mux_bits = pre_num_extra_mux_bits - (mux_words_size -
-> -			     ((slice_bits - pre_num_extra_mux_bits) % mux_words_size));
-> -
-> -	data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
-> -	dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
-> -
-> -	data = dsc->initial_xmit_delay * dsc->bits_per_pixel;
-> -	final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
-> -	dsc->final_offset = final_value;
-> -
-> -	final_scale = 8 * dsc->rc_model_size / (dsc->rc_model_size - final_value);
-> -
-> -	data = (final_scale - 9) * (dsc->nfl_bpg_offset + dsc->slice_bpg_offset);
-> -	dsc->scale_increment_interval = (2048 * dsc->final_offset) / data;
-> -
-> -	dsc->scale_decrement_interval = groups_per_line / (dsc->initial_scale_value - 8);
-> -
-> -	return 0;
-> +	return drm_dsc_compute_rc_parameters(dsc);
->   }
->   
->   static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
+I think we should use auxiliary bus and split the driver logically into
+a reset driver in drivers/reset and a clk driver in drivers/clk. That
+way the appropriate maintainers can review the code. There is only one
+platform device with a single reg property and node in DT, but there are
+two drivers.
