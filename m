@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206205FC967
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101135FC969
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 18:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiJLQnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 12:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S229785AbiJLQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 12:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiJLQmz (ORCPT
+        with ESMTP id S229741AbiJLQo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:42:55 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EE6D0CE6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:42:52 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id cb7-20020a056a00430700b00561b86e0265so9190576pfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:42:52 -0700 (PDT)
+        Wed, 12 Oct 2022 12:44:57 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC2B3B70B
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:44:54 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id l4so16756346plb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 09:44:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=K/Fnc9+q4LKbBT/q6STypgyHRaWcqXLmXQR/JVNc4yQ=;
-        b=lrsZvFUwTubPSEwHKvY5Blnl+ju3eYX8/bnV+IOt2cV7+AWeWURVMAG4eKse+3t/1S
-         jM21MXy6Eu+8anlC7Env9SqgQ8UOPFygBw8c6clZqEzwMVtMxKCHbBw6UkMg1+v/wY/y
-         T95lUrio+X6sO55QEJbRkt4QxrJdXVn1XBa+qsovuiiashJ7OmKCWC93NP7qs5HLGFhG
-         yYMnBPOfbnEZ++GdwdWZekgVF4J28+P0MW35ezdIppDclPeHGF4LEDnHaM3aNFaqAs4v
-         kpDLHAw4n7WxNc5BGUVpWlUfbDo1VIxBDzK8Bv0EFklWODwGlbwY06C3hnL6SoJha3nz
-         HmiA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ey/MykJEk63i05VPUc+DFNtZLXhqKF7E/oBAEq8JTxo=;
+        b=P9dIqtNRDK9c1bKXVTL8xukXKyDL6ihlkzKGW9sSMo5A3P4bZUxNZiE9jIirV3kHk1
+         p8Mn3GJQlW+LVi5sy+b0HEsb5rK4Df8fuN/i2ta6RICXEcuo+HvLS6JA4fBMiZvVEm9k
+         JwVeaOx2uI5FxnVfGtT0kYGv1yypeJWe2DcY5TBcnm4AdgRT5aIImnbHDk41phLlPkJo
+         o7ExhV9jCJzuekQWPF9MdmPslcexznpf4Ok/MeWs6XwiQPnSsjOJJJ3rKkdee1vIFf+K
+         0qTy/ghkIBPsmMIuKasYgSDXXab63oLV/UTASEtDnX/98YcMnagrL+F8frY1ZPhh7D/e
+         Su4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K/Fnc9+q4LKbBT/q6STypgyHRaWcqXLmXQR/JVNc4yQ=;
-        b=hyB/jtL8BBFYwGzB6NPOliL/sCfNkp/MAFs9mmFpA7rPyJ0bxtYcXoY2YclErON/xf
-         I2YXsU9xrlS6P4dKIBN8ciOfPFQYR2hEBlDIVCARJw4I2WsCb+zmtFglOBaBUV8f/nro
-         U54PknaDmm90AHjo3Lp58hXDDbYlLTsQw9o+zbBrKuYnXDHv5V4ylbCn+Hg96cJNL3++
-         WQlIc1+dfQHcrQ8OWJb1UlaygnM0oBEM5ovgUKSPdUQiPyAPJkbRzpQ0bS254u6apesb
-         b8caMlzCNQoxwq4QMVLbpPU7cHWJvbGyzQGwtwk7MAeK3Cbagt4Ylo+nIuAYNfJjQNgt
-         99tA==
-X-Gm-Message-State: ACrzQf1EbWF+i5K4TyIssJEDkuVVc1uOsiGWd5JBZTP13QmQMUn1oqu3
-        8moVDGYwzcJF3Pz3GiheHzFgqtc8+1uF
-X-Google-Smtp-Source: AMsMyM4SnEDuMYhK8+8zCd4uJM0ux9/7y0CcoTwhtDkZjFIgB64zo7UInYpKVOoE3r6yfsVnz/Pzf14s+CYE
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:69fb:58dc:f53:a58d])
- (user=irogers job=sendgmr) by 2002:a17:90b:4f4d:b0:20d:2225:4275 with SMTP id
- pj13-20020a17090b4f4d00b0020d22254275mr6242765pjb.191.1665592972295; Wed, 12
- Oct 2022 09:42:52 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 09:42:44 -0700
-Message-Id: <20221012164244.3027730-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Subject: [PATCH v2] perf jevents: Parse metrics during conversion
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ey/MykJEk63i05VPUc+DFNtZLXhqKF7E/oBAEq8JTxo=;
+        b=Sp4qmNNqJwvNFLGz7nMVwAKMZNACcdf5U8ZgJkjoMLUG7ysAuFRXXUGxo+q9jx00ia
+         JrBZ9bq36hyKX2w8TR+HmCuGVZTLGW7XziF5+vF1Zj9kBLn/8XxfkTGyuAVM6fKpQxQC
+         lYQTVNuF+9F+gtDJP7ahG8dcNXzsM4ywSEzIauYiIQFfITIrwYQfIKUxDt4a55CEZICT
+         7F+x4XTKchHjiiCbZHBz2xCC535ytgU7lmnvLookEHcXEYKifM1MIb6o3PaBfs3LfDfx
+         +YjJlDEW3C7K41puPoW3LyfBRMIngnb+r06tRS7VpdUQWM/8UB7LUE1vS1esvA6vnTNC
+         p92w==
+X-Gm-Message-State: ACrzQf1yB7T0a3DMM/5EFgRqDc4Gu6FdG7fQP/Ir2rUcfkC/AVhdfp73
+        pssTS/NyIcVHwRoyHo18z28=
+X-Google-Smtp-Source: AMsMyM5r1yfpIgIXaso2ljlPUm6NilPvRIPblum+H5yor6q+S6vLwhm/cPy1xPOW0eTuEztSge2iew==
+X-Received: by 2002:a17:903:2342:b0:17c:ae18:1c86 with SMTP id c2-20020a170903234200b0017cae181c86mr29785526plh.5.1665593094199;
+        Wed, 12 Oct 2022 09:44:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g18-20020a17090ae59200b0020ae09e9724sm1668824pjz.53.2022.10.12.09.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:44:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 12 Oct 2022 09:44:52 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        ajd@linux.ibm.com, aneesh.kumar@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
+        cuigaosheng1@huawei.com, david@redhat.com, farosas@linux.ibm.com,
+        geoff@infradead.org, gustavoars@kernel.org, haren@linux.ibm.com,
+        hbathini@linux.ibm.com, joel@jms.id.au, lihuafei1@huawei.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
+        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
+        pali@kernel.org, paul@paul-moore.com, rmclure@linux.ibm.com,
+        ruscur@russell.cc, windhl@126.com,
+        wsa+renesas@sang-engineering.com, ye.xingchen@zte.com.cn,
+        yuanjilin@cdjrlc.com, zhengyongjun3@huawei.com
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
+Message-ID: <20221012164452.GA2990467@roeck-us.net>
+References: <87edvhntv0.fsf@mpe.ellerman.id.au>
+ <20221012141827.GA2405914@roeck-us.net>
+ <Y0biBtCUtc2mowbQ@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="ikeVEW9yuYc//A+q"
+Content-Disposition: inline
+In-Reply-To: <Y0biBtCUtc2mowbQ@zx2c4.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,709 +88,398 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the 'MetricExpr' json value is passed from the json
-file to the pmu-events.c. This change introduces an expression
-tree that is parsed into. The parsing is done largely by using
-operator overloading and python's 'eval' function. Two advantages
-in doing this are:
 
-1) Broken metrics fail at compile time rather than relying on
-   `perf test` to detect. `perf test` remains relevant for checking
-   event encoding and actual metric use.
+--ikeVEW9yuYc//A+q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-2) The conversion to a string from the tree can minimize the
-   metric's string size, for example, preferring 1e6 over 1000000
-   and removing unnecessary whitespace. On x86 this reduces the
-   string size by 2,823bytes (0.06%).
+On Wed, Oct 12, 2022 at 09:49:26AM -0600, Jason A. Donenfeld wrote:
+> On Wed, Oct 12, 2022 at 07:18:27AM -0700, Guenter Roeck wrote:
+> > NIP [c000000000031630] .replay_soft_interrupts+0x60/0x300
+> > LR [c000000000031964] .arch_local_irq_restore+0x94/0x1c0
+> > Call Trace:
+> > [c000000007df3870] [c000000000031964] .arch_local_irq_restore+0x94/0x1c0 (unreliable)
+> > [c000000007df38f0] [c000000000f8a444] .__schedule+0x664/0xa50
+> > [c000000007df39d0] [c000000000f8a8b0] .schedule+0x80/0x140
+> > [c000000007df3a50] [c00000000092f0dc] .try_to_generate_entropy+0x118/0x174
+> > [c000000007df3b40] [c00000000092e2e4] .urandom_read_iter+0x74/0x140
+> > [c000000007df3bc0] [c0000000003b0044] .vfs_read+0x284/0x2d0
+> > [c000000007df3cd0] [c0000000003b0d2c] .ksys_read+0xdc/0x130
+> > [c000000007df3d80] [c00000000002a88c] .system_call_exception+0x19c/0x330
+> > [c000000007df3e10] [c00000000000c1d4] system_call_common+0xf4/0x258
+> 
+> Obviously the first couple lines of this concern me a bit. But I think
+> actually this might just be a catalyst for another bug. You could view
+> that function as basically just:
+> 
+>     while (something)
+>     	schedule();
+> 
+> And I guess in the process of calling the scheduler a lot, which toggles
+> interrupts a lot, something got wedged.
+> 
+> Curious, though, I did try to reproduce this, to no avail. My .config is
+> https://xn--4db.cc/rBvHWfDZ . What's yours?
+> 
 
-In future changes it would be possible to programmatically
-generate the json expressions (a single line of text and so a
-pain to write manually) for an architecture using the expression
-tree. This could avoid copy-pasting metrics for all architecture
-variants.
+Attached. My qemu command line is
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+qemu-system-ppc64 -M mac99 -cpu ppc64 \
+     -m 1G -kernel vmlinux -snapshot -device e1000,netdev=net0 \
+     -netdev user,id=net0 -device sdhci-pci -device sd-card,drive=d0 \
+     -drive file=/var/cache/buildbot/ppc64/rootfs.ext2,format=raw,if=none,id=d0 \
+     -nographic -vga none -monitor null -no-reboot \
+     --append "root=/dev/mmcblk0 rootwait console=tty console=ttyS0"
 
-v2. Improvements to type information.
----
- tools/perf/pmu-events/Build          |   2 +-
- tools/perf/pmu-events/jevents.py     |  11 +-
- tools/perf/pmu-events/metric.py      | 466 +++++++++++++++++++++++++++
- tools/perf/pmu-events/metric_test.py | 143 ++++++++
- 4 files changed, 618 insertions(+), 4 deletions(-)
- create mode 100644 tools/perf/pmu-events/metric.py
- create mode 100644 tools/perf/pmu-events/metric_test.py
+Qemu version is 7.0. The root file system is from
+https://github.com/groeck/linux-build-test/tree/master/rootfs/ppc64
 
-diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-index 04ef95174660..15b9e8fdbffa 100644
---- a/tools/perf/pmu-events/Build
-+++ b/tools/perf/pmu-events/Build
-@@ -21,7 +21,7 @@ $(OUTPUT)pmu-events/pmu-events.c: pmu-events/empty-pmu-events.c
- 	$(call rule_mkdir)
- 	$(Q)$(call echo-cmd,gen)cp $< $@
- else
--$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY)
-+$(OUTPUT)pmu-events/pmu-events.c: $(JSON) $(JSON_TEST) $(JEVENTS_PY) pmu-events/metric.py
- 	$(call rule_mkdir)
- 	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) pmu-events/arch $@
- endif
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 0daa3e007528..81bcbd15c962 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -4,6 +4,7 @@
- import argparse
- import csv
- import json
-+import metric
- import os
- import sys
- from typing import (Callable, Dict, Optional, Sequence, Set, Tuple)
-@@ -268,9 +269,9 @@ class JsonEvent:
-     self.metric_name = jd.get('MetricName')
-     self.metric_group = jd.get('MetricGroup')
-     self.metric_constraint = jd.get('MetricConstraint')
--    self.metric_expr = jd.get('MetricExpr')
--    if self.metric_expr:
--      self.metric_expr = self.metric_expr.replace('\\', '\\\\')
-+    self.metric_expr = None
-+    if 'MetricExpr' in jd:
-+       self.metric_expr = metric.ParsePerfJson(jd.get('MetricExpr'))
-     arch_std = jd.get('ArchStdEvent')
-     if precise and self.desc and '(Precise Event)' not in self.desc:
-       extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
-@@ -322,6 +323,10 @@ class JsonEvent:
-     s = ''
-     for attr in _json_event_attributes:
-       x = getattr(self, attr)
-+      if x and attr == 'metric_expr':
-+        # Convert parsed metric expressions into a string. Slashes
-+        # must be doubled in the file.
-+        x = x.ToPerfJson().replace('\\', '\\\\')
-       s += f'{x}\\000' if x else '\\000'
-     return s
- 
-diff --git a/tools/perf/pmu-events/metric.py b/tools/perf/pmu-events/metric.py
-new file mode 100644
-index 000000000000..542d13300e80
---- /dev/null
-+++ b/tools/perf/pmu-events/metric.py
-@@ -0,0 +1,466 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+"""Parse or generate representations of perf metrics."""
-+import ast
-+import decimal
-+import re
-+import json
-+from typing import (Optional, Set, Union)
-+
-+class Expression:
-+  """Abstract base class of elements in a metric expression."""
-+
-+  def ToPerfJson(self) -> str:
-+    """Returns a perf json file encoded representation."""
-+    raise NotImplementedError()
-+
-+  def ToPython(self) -> str:
-+    """Returns a python expr parseable representation."""
-+    raise NotImplementedError()
-+
-+  def Simplify(self):
-+    """Returns a simplified version of self."""
-+    raise NotImplementedError()
-+
-+  def Equals(self, other) -> bool:
-+    """Returns true when two expressions are the same."""
-+    raise NotImplementedError()
-+
-+  def __str__(self) -> str:
-+    return self.ToPerfJson()
-+
-+  def __or__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('|', self, other)
-+
-+  def __ror__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('|', other, self)
-+
-+  def __xor__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('^', self, other)
-+
-+  def __and__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('&', self, other)
-+
-+  def __lt__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('<', self, other)
-+
-+  def __gt__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('>', self, other)
-+
-+  def __add__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('+', self, other)
-+
-+  def __radd__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('+', other, self)
-+
-+  def __sub__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('-', self, other)
-+
-+  def __rsub__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('-', other, self)
-+
-+  def __mul__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('*', self, other)
-+
-+  def __rmul__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('*', other, self)
-+
-+  def __truediv__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('/', self, other)
-+
-+  def __rtruediv__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('/', other, self)
-+
-+  def __mod__(self, other: Union[int, float, 'Expression']) -> 'Operator':
-+    return Operator('%', self, other)
-+
-+
-+def _Constify(val: Union[bool, int, float, Expression]) -> Expression:
-+  """Used to ensure that the nodes in the expression tree are all Expression."""
-+  if isinstance(val, bool):
-+    return Constant(1 if val else 0)
-+  if isinstance(val, int) or isinstance(val, float):
-+    return Constant(val)
-+  return val
-+
-+
-+# Simple lookup for operator precedence, used to avoid unnecessary
-+# brackets. Precedence matches that of python and the simple expression parser.
-+_PRECEDENCE = {
-+    '|': 0,
-+    '^': 1,
-+    '&': 2,
-+    '<': 3,
-+    '>': 3,
-+    '+': 4,
-+    '-': 4,
-+    '*': 5,
-+    '/': 5,
-+    '%': 5,
-+}
-+
-+
-+class Operator(Expression):
-+  """Represents a binary operator in the parse tree."""
-+
-+  def __init__(self, operator: str, lhs: Union[int, float, Expression],
-+               rhs: Union[int, float, Expression]):
-+    self.operator = operator
-+    self.lhs = _Constify(lhs)
-+    self.rhs = _Constify(rhs)
-+
-+  def Bracket(self,
-+              other: Expression,
-+              other_str: str,
-+              rhs: bool = False) -> str:
-+    """Returns whether to bracket ``other``
-+
-+    ``other`` is the lhs or rhs, ``other_str`` is ``other`` in the
-+    appropriate string from. If ``other`` is an operator then a
-+    bracket is necessary when this/self operator has higher
-+    precedence. Consider: '(a + b) * c', ``other_str`` will be 'a +
-+    b'. A bracket is necessary as without the bracket 'a + b * c' will
-+    evaluate 'b * c' first. However, '(a * b) + c' doesn't need a
-+    bracket as 'a * b' will always be evaluated first. For 'a / (b *
-+    c)' (ie the same precedence level operations) then we add the
-+    bracket to best match the original input, but not for '(a / b) *
-+    c' where the bracket is unnecessary.
-+    """
-+    if isinstance(other, Operator):
-+      if _PRECEDENCE.get(self.operator, -1) > _PRECEDENCE.get(
-+          other.operator, -1):
-+        return f'({other_str})'
-+      if rhs and _PRECEDENCE.get(self.operator, -1) == _PRECEDENCE.get(
-+          other.operator, -1):
-+        return f'({other_str})'
-+    return other_str
-+
-+  def ToPerfJson(self):
-+    return f'{self.Bracket(self.lhs, self.lhs.ToPerfJson())} {self.operator} ' \
-+      f'{self.Bracket(self.rhs, self.rhs.ToPerfJson(), True)}'
-+
-+  def ToPython(self):
-+    return f'{self.Bracket(self.lhs, self.lhs.ToPython())} {self.operator} ' \
-+      f'{self.Bracket(self.rhs, self.rhs.ToPython(), True)}'
-+
-+  def Simplify(self) -> Expression:
-+    lhs = self.lhs.Simplify()
-+    rhs = self.rhs.Simplify()
-+    if isinstance(lhs, Constant) and isinstance(rhs, Constant):
-+      return Constant(eval(lhs + self.operator + rhs))
-+
-+    if isinstance(self.lhs, Constant):
-+      if (self.operator == '+' or self.operator == '|') and lhs.value == '0':
-+        return rhs
-+
-+      if self.operator == '*' and lhs.value == '0':
-+        return Constant(0)
-+
-+      if self.operator == '*' and lhs.value == '1':
-+        return rhs
-+
-+    if isinstance(rhs, Constant):
-+      if (self.operator == '+' or self.operator == '|') and rhs.value == '0':
-+        return lhs
-+
-+      if self.operator == '*' and rhs.value == '0':
-+        return Constant(0)
-+
-+      if self.operator == '*' and self.rhs.value == '1':
-+        return lhs
-+
-+    return Operator(self.operator, lhs, rhs)
-+
-+  def Equals(self, other: Expression) -> bool:
-+    if isinstance(other, Operator):
-+      return self.operator == other.operator and self.lhs.Equals(
-+          other.lhs) and self.rhs.Equals(other.rhs)
-+    return False
-+
-+class Select(Expression):
-+  """Represents a select ternary in the parse tree."""
-+
-+  def __init__(self, true_val: Union[int, float, Expression],
-+               cond: Union[int, float, Expression],
-+               false_val: Union[int, float, Expression]):
-+    self.true_val = _Constify(true_val)
-+    self.cond = _Constify(cond)
-+    self.false_val = _Constify(false_val)
-+
-+  def ToPerfJson(self):
-+    true_str = self.true_val.ToPerfJson()
-+    cond_str = self.cond.ToPerfJson()
-+    false_str = self.false_val.ToPerfJson()
-+    return f'({true_str} if {cond_str} else {false_str})'
-+
-+  def ToPython(self):
-+    return f'Select({self.true_val.ToPython()}, {self.cond.ToPython()}, ' \
-+      f'{self.false_val.ToPython()})'
-+
-+  def Simplify(self) -> Expression:
-+    cond = self.cond.Simplify()
-+    true_val = self.true_val.Simplify()
-+    false_val = self.false_val.Simplify()
-+    if isinstance(cond, Constant):
-+      return false_val if cond.value == '0' else true_val
-+
-+    if true_val.Equals(false_val):
-+      return true_val
-+
-+    return Select(true_val, cond, false_val)
-+
-+  def Equals(self, other: Expression) -> bool:
-+    if isinstance(other, Select):
-+      return self.cond.Equals(other.cond) and self.false_val.Equals(
-+          other.false_val) and self.true_val.Equals(other.true_val)
-+    return False
-+
-+class Function(Expression):
-+  """A function in an expression like min, max, d_ratio."""
-+
-+  def __init__(self,
-+               fn: str,
-+               lhs: Union[int, float, Expression],
-+               rhs: Optional[Union[int, float, Expression]] = None):
-+    self.fn = fn
-+    self.lhs = _Constify(lhs)
-+    self.rhs = _Constify(rhs)
-+
-+  def ToPerfJson(self):
-+    if self.rhs:
-+      return f'{self.fn}({self.lhs.ToPerfJson()}, {self.rhs.ToPerfJson()})'
-+    else:
-+      return f'{self.fn}({self.lhs.ToPerfJson()})'
-+
-+  def ToPython(self):
-+    if self.rhs:
-+      return f'{self.fn}({self.lhs.ToPython()}, {self.rhs.ToPython()})'
-+    else:
-+      return f'{self.fn}({self.lhs.ToPython()})'
-+
-+  def Simplify(self) -> Expression:
-+    lhs = self.lhs.Simplify()
-+    rhs = self.rhs.Simplify()
-+    if isinstance(lhs, Constant) and isinstance(rhs, Constant):
-+      if self.fn == 'd_ratio':
-+        if rhs.value == '0':
-+          return Constant(0)
-+        Constant(eval(f'{lhs} / {rhs}'))
-+      return Constant(eval(f'{self.fn}({lhs}, {rhs})'))
-+
-+    return Function(self.fn, lhs, rhs)
-+
-+  def Equals(self, other: Expression) -> bool:
-+    if isinstance(other, Function):
-+      return self.fn == other.fn and self.lhs.Equals(
-+          other.lhs) and self.rhs.Equals(other.rhs)
-+    return False
-+
-+
-+class Event(Expression):
-+  """An event in an expression."""
-+
-+  def __init__(self, name: str, legacy_name: str = ''):
-+    self.name = name
-+    self.legacy_name = legacy_name
-+
-+  def ToPerfJson(self):
-+    result = re.sub('/', '@', self.name)
-+    return result
-+
-+  def ToPython(self):
-+    return f'Event(r"{self.name}")'
-+
-+  def Simplify(self) -> Expression:
-+    return self
-+
-+  def Equals(self, other: Expression) -> bool:
-+    return isinstance(other, Event) and self.name == other.name
-+
-+class Constant(Expression):
-+  """A constant within the expression tree."""
-+
-+  def __init__(self, value: Union[float, str]):
-+    ctx = decimal.Context()
-+    ctx.prec = 20
-+    dec = ctx.create_decimal(repr(value) if isinstance(value, float) else value)
-+    self.value = dec.normalize().to_eng_string()
-+    self.value = self.value.replace('+', '')
-+    self.value = self.value.replace('E', 'e')
-+
-+  def ToPerfJson(self):
-+    return self.value
-+
-+  def ToPython(self):
-+    return f'Constant({self.value})'
-+
-+  def Simplify(self) -> Expression:
-+    return self
-+
-+  def Equals(self, other: Expression) -> bool:
-+    return isinstance(other, Constant) and self.value == other.value
-+
-+class Literal(Expression):
-+  """A runtime literal within the expression tree."""
-+
-+  def __init__(self, value: str):
-+    self.value = value
-+
-+  def ToPerfJson(self):
-+    return self.value
-+
-+  def ToPython(self):
-+    return f'Literal({self.value})'
-+
-+  def Simplify(self) -> Expression:
-+    return self
-+
-+  def Equals(self, other: Expression) -> bool:
-+    return isinstance(other, Literal) and self.value == other.value
-+
-+
-+def min(lhs: Union[int, float, Expression], rhs: Union[int, float,
-+                                                       Expression]) -> Function:
-+  return Function('min', lhs, rhs)
-+
-+
-+def max(lhs: Union[int, float, Expression], rhs: Union[int, float,
-+                                                       Expression]) -> Function:
-+  return Function('max', lhs, rhs)
-+
-+
-+def d_ratio(lhs: Union[int, float, Expression],
-+            rhs: Union[int, float, Expression]) -> Function:
-+  return Function('d_ratio', lhs, rhs)
-+
-+
-+def source_count(event: Event) -> Function:
-+  return Function('source_count', event)
-+
-+class Metric:
-+  """An individual metric that will specifiable on the perf command line."""
-+  groups: Set[str]
-+  expr: Expression
-+  scale_unit: str
-+  constraint: bool
-+
-+  def __init__(self,
-+               name: str,
-+               description: str,
-+               expr: Expression,
-+               scale_unit: str,
-+               constraint: bool = False):
-+    self.name = name
-+    self.description = description
-+    self.expr = expr.Simplify()
-+    # Workraound valid_only_metric hiding certain metrics based on unit.
-+    scale_unit = scale_unit.replace('/sec', ' per sec')
-+    if scale_unit[0].isdigit():
-+      self.scale_unit = scale_unit
-+    else:
-+      self.scale_unit = f'1{scale_unit}'
-+    self.constraint = constraint
-+    self.groups = set()
-+
-+  def __lt__(self, other):
-+    """Sort order."""
-+    return self.name < other.name
-+
-+  def AddToMetricGroup(self, group):
-+    """Callback used when being added to a MetricGroup."""
-+    self.groups.add(group.name)
-+
-+  def Flatten(self) -> set:
-+    """Return a leaf metric."""
-+    return set([self])
-+
-+  def ToPerfJson(self):
-+    result = {
-+        'MetricName': self.name,
-+        'MetricGroup': ';'.join(sorted(self.groups)),
-+        'BriefDescription': self.description,
-+        'MetricExpr': self.expr.ToPerfJson(),
-+        'ScaleUnit': self.scale_unit
-+    }
-+    if self.constraint:
-+      result['MetricConstraint'] = 'NO_NMI_WATCHDOG'
-+
-+    return result
-+
-+
-+class _MetricJsonEncoder(json.JSONEncoder):
-+  """Special handling for Metric objects."""
-+
-+  def default(self, obj):
-+    if isinstance(obj, Metric):
-+      return obj.ToPerfJson()
-+    return json.JSONEncoder.default(self, obj)
-+
-+
-+class MetricGroup:
-+  """A group of metrics.
-+
-+  Metric groups may be specificd on the perf command line, but within
-+  the json they aren't encoded. Metrics may be in multiple groups
-+  which can facilitate arrangements similar to trees.
-+  """
-+
-+  def __init__(self, name: str, metric_list: list[Union[Metric,
-+                                                        'MetricGroup']]):
-+    self.name = name
-+    self.metric_list = metric_list
-+    for metric in metric_list:
-+      metric.AddToMetricGroup(self)
-+
-+  def AddToMetricGroup(self, group):
-+    """Callback used when a MetricGroup is added into another."""
-+    for metric in self.metric_list:
-+      metric.AddToMetricGroup(group)
-+
-+  def Flatten(self) -> set:
-+    """Returns a set of all leaf metrics."""
-+    result = set()
-+    for x in self.metric_list:
-+      result = result.union(x.Flatten())
-+
-+    return result
-+
-+  def ToPerfJson(self) -> str:
-+    return json.dumps(sorted(self.Flatten()), indent=2, cls=_MetricJsonEncoder)
-+
-+  def __str__(self) -> str:
-+    return self.ToPerfJson()
-+
-+
-+class _RewriteIfExpToSelect(ast.NodeTransformer):
-+
-+  def visit_IfExp(self, node):
-+    call = ast.Call(
-+        func=ast.Name(id='Select', ctx=ast.Load()),
-+        args=[node.body, node.test, node.orelse],
-+        keywords=[])
-+    ast.copy_location(call, node.test)
-+    return call
-+
-+
-+def ParsePerfJson(orig: str) -> Expression:
-+  """A simple json metric expression decoder.
-+
-+  Converts a json encoded metric expression by way of python's ast and
-+  eval routine. First tokens are mapped to Event calls, then
-+  accidentally converted keywords or literals are mapped to their
-+  appropriate calls. Python's ast is used to match if-else that can't
-+  be handled via operator overloading. Finally the ast is evaluated.
-+  """
-+  py = orig.strip()
-+  py = re.sub(r'([a-zA-Z][^-+/\* \\\(\),]*(?:\\.[^-+/\* \\\(\),]*)*)',
-+              r'Event(r"\1")', py)
-+  py = re.sub(r'#Event\(r"([^"]*)"\)', r'Literal("#\1")', py)
-+  py = re.sub(r'([0-9]+)Event\(r"(e[0-9]+)"\)', r'\1\2', py)
-+  keywords = ['if', 'else', 'min', 'max', 'd_ratio', 'source_count']
-+  for kw in keywords:
-+    py = re.sub(f'Event\(r"{kw}"\)', kw, py)
-+
-+  parsed = ast.parse(py, mode='eval')
-+  _RewriteIfExpToSelect().visit(parsed)
-+  parsed = ast.fix_missing_locations(parsed)
-+  return _Constify(eval(compile(parsed, orig, 'eval')))
-diff --git a/tools/perf/pmu-events/metric_test.py b/tools/perf/pmu-events/metric_test.py
-new file mode 100644
-index 000000000000..3909ca773ca1
---- /dev/null
-+++ b/tools/perf/pmu-events/metric_test.py
-@@ -0,0 +1,143 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+import unittest
-+from metric import Constant, Event, ParsePerfJson
-+
-+
-+class TestMetricExpressions(unittest.TestCase):
-+
-+  def test_Operators(self):
-+    a = Event('a')
-+    b = Event('b')
-+    self.assertEqual((a | b).ToPerfJson(), 'a | b')
-+    self.assertEqual((a ^ b).ToPerfJson(), 'a ^ b')
-+    self.assertEqual((a & b).ToPerfJson(), 'a & b')
-+    self.assertEqual((a < b).ToPerfJson(), 'a < b')
-+    self.assertEqual((a > b).ToPerfJson(), 'a > b')
-+    self.assertEqual((a + b).ToPerfJson(), 'a + b')
-+    self.assertEqual((a - b).ToPerfJson(), 'a - b')
-+    self.assertEqual((a * b).ToPerfJson(), 'a * b')
-+    self.assertEqual((a / b).ToPerfJson(), 'a / b')
-+    self.assertEqual((a % b).ToPerfJson(), 'a % b')
-+
-+  def test_Brackets(self):
-+    a = Event('a')
-+    b = Event('b')
-+    c = Event('c')
-+    self.assertEqual((a * b + c).ToPerfJson(), 'a * b + c')
-+    self.assertEqual((a + b * c).ToPerfJson(), 'a + b * c')
-+    self.assertEqual(((a + a) + a).ToPerfJson(), 'a + a + a')
-+    self.assertEqual(((a + b) * c).ToPerfJson(), '(a + b) * c')
-+    self.assertEqual((a + (b * c)).ToPerfJson(), 'a + b * c')
-+    self.assertEqual(((a / b) * c).ToPerfJson(), 'a / b * c')
-+    self.assertEqual((a / (b * c)).ToPerfJson(), 'a / (b * c)')
-+
-+  def test_ParsePerfJson(self):
-+    # Based on an example of a real metric.
-+    before = '(a + b + c + d) / (2 * e)'
-+    after = before
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+    # Parsing should handle events with '-' in their name. Note, in
-+    # the json file the '\' are doubled to '\\'.
-+    before = r'topdown\-fe\-bound / topdown\-slots - 1'
-+    after = before
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+    # Parsing should handle escaped modifiers. Note, in the json file
-+    # the '\' are doubled to '\\'.
-+    before = 'arb@event\=0x81\,umask\=0x1@ + arb@event\=0x84\,umask\=0x1@'
-+    after = before
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+    # Parsing should handle exponents in numbers.
-+    before = r'a + 1e12 + b'
-+    after = before
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+  def test_IfElseTests(self):
-+    # if-else needs rewriting to Select and back.
-+    before = r'Event1 if #smt_on else Event2'
-+    after = f'({before})'
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+    before = r'Event1 if 0 else Event2'
-+    after = f'({before})'
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+    before = r'Event1 if 1 else Event2'
-+    after = f'({before})'
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+    # Ensure the select is evaluate last.
-+    before = r'Event1 + 1 if Event2 < 2 else Event3 + 3'
-+    after = (r'Select(Event(r"Event1") + Constant(1), Event(r"Event2") < '
-+             r'Constant(2), Event(r"Event3") + Constant(3))')
-+    self.assertEqual(ParsePerfJson(before).ToPython(), after)
-+
-+    before = r'Event1 > 1 if Event2 < 2 else Event3 > 3'
-+    after = (r'Select(Event(r"Event1") > Constant(1), Event(r"Event2") < '
-+             r'Constant(2), Event(r"Event3") > Constant(3))')
-+    self.assertEqual(ParsePerfJson(before).ToPython(), after)
-+
-+    before = r'min(a + b if c > 1 else c + d, e + f)'
-+    after = r'min((a + b if c > 1 else c + d), e + f)'
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-+  def test_ToPython(self):
-+    # Based on an example of a real metric.
-+    before = '(a + b + c + d) / (2 * e)'
-+    py = ParsePerfJson(before).ToPython()
-+    after = eval(py).ToPerfJson()
-+    self.assertEqual(before, after)
-+
-+  def test_Simplify(self):
-+    before = '1 + 2 + 3'
-+    after = '6'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a + 0'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = '0 + a'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a | 0'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = '0 | a'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a * 0'
-+    after = '0'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = '0 * a'
-+    after = '0'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a * 1'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = '1 * a'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a if 0 else b'
-+    after = 'b'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a if 1 else b'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+    before = 'a if b else a'
-+    after = 'a'
-+    self.assertEqual(ParsePerfJson(before).Simplify().ToPerfJson(), after)
-+
-+if __name__ == '__main__':
-+  unittest.main()
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+I used to have self tests enabled, but with that (specifically, with
+CONFIG_STRING_SELFTEST=y) I now get a different hang, so I disabled that
+for the time being.
 
+Guenter
+
+--ikeVEW9yuYc//A+q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename=defconfig
+
+CONFIG_SYSVIPC=y
+CONFIG_POSIX_MQUEUE=y
+CONFIG_HIGH_RES_TIMERS=y
+CONFIG_PREEMPT=y
+CONFIG_VIRT_CPU_ACCOUNTING_NATIVE=y
+CONFIG_BSD_PROCESS_ACCT=y
+CONFIG_BSD_PROCESS_ACCT_V3=y
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
+CONFIG_CGROUPS=y
+CONFIG_MEMCG=y
+CONFIG_BLK_CGROUP=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_RT_GROUP_SCHED=y
+CONFIG_CGROUP_FREEZER=y
+CONFIG_CPUSETS=y
+CONFIG_CGROUP_DEVICE=y
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_CGROUP_DEBUG=y
+CONFIG_NAMESPACES=y
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_EMBEDDED=y
+CONFIG_PROFILING=y
+CONFIG_PPC64=y
+# CONFIG_PPC_POWERNV is not set
+CONFIG_DTL=y
+# CONFIG_CPU_IDLE is not set
+CONFIG_MODULES=y
+CONFIG_MODULE_UNLOAD=y
+CONFIG_BINFMT_MISC=m
+CONFIG_NET=y
+CONFIG_PACKET=y
+CONFIG_UNIX=y
+CONFIG_XFRM_USER=m
+CONFIG_XFRM_SUB_POLICY=y
+CONFIG_NET_KEY=m
+CONFIG_NET_KEY_MIGRATE=y
+CONFIG_INET=y
+CONFIG_IP_MULTICAST=y
+CONFIG_IP_ADVANCED_ROUTER=y
+CONFIG_IP_MULTIPLE_TABLES=y
+CONFIG_IP_ROUTE_MULTIPATH=y
+CONFIG_IP_ROUTE_VERBOSE=y
+CONFIG_IP_PNP=y
+CONFIG_IP_PNP_BOOTP=y
+CONFIG_IP_PNP_RARP=y
+CONFIG_NET_IPIP=m
+CONFIG_IP_MROUTE=y
+CONFIG_IP_PIMSM_V1=y
+CONFIG_IP_PIMSM_V2=y
+CONFIG_SYN_COOKIES=y
+CONFIG_INET_AH=m
+CONFIG_INET_ESP=m
+CONFIG_INET_IPCOMP=m
+CONFIG_IPV6_ROUTER_PREF=y
+CONFIG_INET6_AH=y
+CONFIG_INET6_ESP=y
+CONFIG_INET6_IPCOMP=m
+CONFIG_IPV6_TUNNEL=m
+CONFIG_NETFILTER=y
+CONFIG_NF_CONNTRACK=m
+CONFIG_NF_CONNTRACK_AMANDA=m
+CONFIG_NF_CONNTRACK_FTP=m
+CONFIG_NF_CONNTRACK_H323=m
+CONFIG_NF_CONNTRACK_IRC=m
+CONFIG_NF_CONNTRACK_NETBIOS_NS=m
+CONFIG_NF_CONNTRACK_PPTP=m
+CONFIG_NF_CONNTRACK_SANE=m
+CONFIG_NF_CONNTRACK_SIP=m
+CONFIG_NF_CONNTRACK_TFTP=m
+CONFIG_NF_CT_NETLINK=m
+CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
+CONFIG_NETFILTER_XT_TARGET_DSCP=m
+CONFIG_NETFILTER_XT_TARGET_MARK=m
+CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+CONFIG_NETFILTER_XT_TARGET_NOTRACK=m
+CONFIG_NETFILTER_XT_TARGET_TRACE=m
+CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
+CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+CONFIG_NETFILTER_XT_MATCH_DCCP=m
+CONFIG_NETFILTER_XT_MATCH_DSCP=m
+CONFIG_NETFILTER_XT_MATCH_ESP=m
+CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+CONFIG_NETFILTER_XT_MATCH_HELPER=m
+CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+CONFIG_NETFILTER_XT_MATCH_MAC=m
+CONFIG_NETFILTER_XT_MATCH_MARK=m
+CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+CONFIG_NETFILTER_XT_MATCH_POLICY=m
+CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+CONFIG_NETFILTER_XT_MATCH_REALM=m
+CONFIG_NETFILTER_XT_MATCH_STATE=m
+CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+CONFIG_NETFILTER_XT_MATCH_STRING=m
+CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+CONFIG_NETFILTER_XT_MATCH_U32=m
+CONFIG_IP_NF_IPTABLES=m
+CONFIG_IP_NF_MATCH_AH=m
+CONFIG_IP_NF_MATCH_ECN=m
+CONFIG_IP_NF_MATCH_TTL=m
+CONFIG_IP_NF_FILTER=m
+CONFIG_IP_NF_TARGET_REJECT=m
+CONFIG_IP_NF_MANGLE=m
+CONFIG_IP_NF_TARGET_CLUSTERIP=m
+CONFIG_IP_NF_TARGET_ECN=m
+CONFIG_IP_NF_TARGET_TTL=m
+CONFIG_IP_NF_RAW=m
+CONFIG_IP_NF_ARPTABLES=m
+CONFIG_IP_NF_ARPFILTER=m
+CONFIG_IP_NF_ARP_MANGLE=m
+CONFIG_IP6_NF_IPTABLES=m
+CONFIG_IP6_NF_MATCH_EUI64=m
+CONFIG_IP6_NF_MATCH_FRAG=m
+CONFIG_IP6_NF_MATCH_OPTS=m
+CONFIG_IP6_NF_MATCH_HL=m
+CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+CONFIG_IP6_NF_MATCH_RT=m
+CONFIG_IP6_NF_FILTER=m
+CONFIG_IP6_NF_MANGLE=m
+CONFIG_IP6_NF_RAW=m
+CONFIG_IP_SCTP=m
+CONFIG_TIPC=m
+CONFIG_BRIDGE=m
+CONFIG_VLAN_8021Q=m
+CONFIG_NET_SCHED=y
+CONFIG_NET_SCH_CBQ=m
+CONFIG_NET_SCH_HTB=m
+CONFIG_NET_SCH_HFSC=m
+CONFIG_NET_SCH_PRIO=m
+CONFIG_NET_SCH_RED=m
+CONFIG_NET_SCH_SFQ=m
+CONFIG_NET_SCH_TEQL=m
+CONFIG_NET_SCH_TBF=m
+CONFIG_NET_SCH_GRED=m
+CONFIG_NET_SCH_DSMARK=m
+CONFIG_NET_SCH_NETEM=m
+CONFIG_NET_SCH_CODEL=m
+CONFIG_NET_SCH_INGRESS=m
+CONFIG_NET_CLS_BASIC=y
+CONFIG_NET_CLS_U32=y
+CONFIG_NET_CLS_CGROUP=y
+CONFIG_NET_CLS_ACT=y
+CONFIG_NET_ACT_MIRRED=m
+CONFIG_NET_PKTGEN=m
+CONFIG_DEVTMPFS=y
+CONFIG_DEVTMPFS_MOUNT=y
+# CONFIG_FW_LOADER is not set
+CONFIG_BLK_DEV_LOOP=m
+CONFIG_BLK_DEV_NBD=m
+CONFIG_BLK_DEV_RAM=y
+CONFIG_VIRTIO_BLK=y
+CONFIG_BLK_DEV_NVME=y
+CONFIG_BLK_DEV_SD=y
+CONFIG_BLK_DEV_SR=y
+CONFIG_MEGARAID_SAS=y
+CONFIG_SCSI_SYM53C8XX_2=y
+CONFIG_SCSI_DC395x=y
+CONFIG_SCSI_AM53C974=y
+CONFIG_SCSI_VIRTIO=y
+CONFIG_ATA=y
+CONFIG_SATA_SIL=y
+CONFIG_PATA_MACIO=y
+CONFIG_MD=y
+CONFIG_BLK_DEV_MD=y
+CONFIG_MD_LINEAR=y
+CONFIG_MD_RAID0=y
+CONFIG_MD_RAID1=y
+CONFIG_MD_RAID10=y
+CONFIG_MD_MULTIPATH=y
+CONFIG_MD_FAULTY=y
+CONFIG_BLK_DEV_DM=y
+CONFIG_DM_CRYPT=y
+CONFIG_DM_SNAPSHOT=y
+CONFIG_DM_MIRROR=y
+CONFIG_DM_ZERO=y
+CONFIG_FUSION=y
+CONFIG_FUSION_SAS=y
+CONFIG_NETDEVICES=y
+CONFIG_BONDING=m
+CONFIG_DUMMY=m
+CONFIG_NETCONSOLE=y
+CONFIG_TUN=m
+CONFIG_VIRTIO_NET=y
+CONFIG_PCNET32=y
+CONFIG_NET_TULIP=y
+CONFIG_TULIP=y
+CONFIG_E100=y
+CONFIG_E1000=y
+CONFIG_E1000E=y
+CONFIG_NE2K_PCI=y
+CONFIG_8139CP=y
+CONFIG_PPP=m
+CONFIG_PPP_BSDCOMP=m
+CONFIG_PPP_DEFLATE=m
+CONFIG_PPP_FILTER=y
+CONFIG_PPP_MULTILINK=y
+CONFIG_PPPOE=m
+CONFIG_PPP_ASYNC=m
+CONFIG_PPP_SYNC_TTY=m
+CONFIG_SLIP=m
+CONFIG_SLIP_COMPRESSED=y
+CONFIG_SLIP_SMART=y
+CONFIG_SLIP_MODE_SLIP6=y
+CONFIG_USB_USBNET=y
+CONFIG_INPUT_EVDEV=y
+CONFIG_INPUT_TABLET=y
+CONFIG_INPUT_MISC=y
+# CONFIG_SERIO_SERPORT is not set
+CONFIG_SERIAL_PMACZILOG=y
+CONFIG_SERIAL_PMACZILOG_TTYS=y
+CONFIG_SERIAL_PMACZILOG_CONSOLE=y
+CONFIG_POWER_SUPPLY=y
+CONFIG_WATCHDOG=y
+CONFIG_SOFT_WATCHDOG=m
+# CONFIG_DRM_DEBUG_MODESET_LOCK is not set
+CONFIG_FB=y
+CONFIG_FB_OF=y
+CONFIG_FRAMEBUFFER_CONSOLE=y
+CONFIG_USB=y
+CONFIG_USB_MON=y
+CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_OHCI_HCD=y
+CONFIG_USB_STORAGE=y
+CONFIG_USB_UAS=y
+CONFIG_MMC=y
+CONFIG_MMC_SDHCI=y
+CONFIG_MMC_SDHCI_PCI=y
+CONFIG_NEW_LEDS=y
+CONFIG_LEDS_CLASS=y
+CONFIG_VIRTIO_PCI=y
+CONFIG_VIRTIO_BALLOON=y
+CONFIG_VIRTIO_MMIO=y
+CONFIG_EXT2_FS=y
+CONFIG_EXT2_FS_XATTR=y
+CONFIG_EXT2_FS_POSIX_ACL=y
+CONFIG_EXT3_FS=y
+CONFIG_EXT3_FS_POSIX_ACL=y
+CONFIG_EXT3_FS_SECURITY=y
+CONFIG_REISERFS_FS=m
+CONFIG_REISERFS_FS_XATTR=y
+CONFIG_REISERFS_FS_POSIX_ACL=y
+CONFIG_BTRFS_FS=y
+CONFIG_BTRFS_FS_POSIX_ACL=y
+CONFIG_AUTOFS4_FS=y
+CONFIG_FUSE_FS=m
+CONFIG_CUSE=m
+CONFIG_ISO9660_FS=y
+CONFIG_PROC_KCORE=y
+CONFIG_TMPFS=y
+CONFIG_CONFIGFS_FS=m
+CONFIG_SQUASHFS=y
+CONFIG_SQUASHFS_XATTR=y
+CONFIG_SQUASHFS_4K_DEVBLK_SIZE=y
+CONFIG_MINIX_FS=m
+CONFIG_ROMFS_FS=m
+CONFIG_NFS_FS=y
+CONFIG_NFS_V4=y
+CONFIG_ROOT_NFS=y
+CONFIG_NFSD=m
+CONFIG_NFSD_V4=y
+CONFIG_CIFS=m
+CONFIG_CIFS_XATTR=y
+CONFIG_CIFS_POSIX=y
+CONFIG_NLS_CODEPAGE_437=m
+CONFIG_NLS_CODEPAGE_737=m
+CONFIG_NLS_CODEPAGE_775=m
+CONFIG_NLS_CODEPAGE_850=m
+CONFIG_NLS_CODEPAGE_852=m
+CONFIG_NLS_CODEPAGE_855=m
+CONFIG_NLS_CODEPAGE_857=m
+CONFIG_NLS_CODEPAGE_860=m
+CONFIG_NLS_CODEPAGE_861=m
+CONFIG_NLS_CODEPAGE_862=m
+CONFIG_NLS_CODEPAGE_863=m
+CONFIG_NLS_CODEPAGE_864=m
+CONFIG_NLS_CODEPAGE_865=m
+CONFIG_NLS_CODEPAGE_866=m
+CONFIG_NLS_CODEPAGE_869=m
+CONFIG_NLS_CODEPAGE_936=m
+CONFIG_NLS_CODEPAGE_950=m
+CONFIG_NLS_CODEPAGE_932=m
+CONFIG_NLS_CODEPAGE_949=m
+CONFIG_NLS_CODEPAGE_874=m
+CONFIG_NLS_ISO8859_8=m
+CONFIG_NLS_CODEPAGE_1250=m
+CONFIG_NLS_CODEPAGE_1251=m
+CONFIG_NLS_ASCII=m
+CONFIG_NLS_ISO8859_1=m
+CONFIG_NLS_ISO8859_2=m
+CONFIG_NLS_ISO8859_3=m
+CONFIG_NLS_ISO8859_4=m
+CONFIG_NLS_ISO8859_5=m
+CONFIG_NLS_ISO8859_6=m
+CONFIG_NLS_ISO8859_7=m
+CONFIG_NLS_ISO8859_9=m
+CONFIG_NLS_ISO8859_13=m
+CONFIG_NLS_ISO8859_14=m
+CONFIG_NLS_ISO8859_15=m
+CONFIG_NLS_KOI8_R=m
+CONFIG_NLS_KOI8_U=m
+CONFIG_NLS_UTF8=m
+CONFIG_SECURITY=y
+CONFIG_CRYPTO_TEST=m
+CONFIG_CRYPTO_BLOWFISH=m
+CONFIG_CRYPTO_CAMELLIA=m
+CONFIG_CRYPTO_CAST5=m
+CONFIG_CRYPTO_CAST6=m
+CONFIG_CRYPTO_SERPENT=m
+CONFIG_CRYPTO_TWOFISH=m
+CONFIG_CRYPTO_MICHAEL_MIC=m
+CONFIG_CRYPTO_WP512=m
+CONFIG_CRYPTO_XCBC=m
+CONFIG_DEBUG_INFO_DWARF5=y
+CONFIG_KGDB=y
+CONFIG_KGDB_KDB=y
+CONFIG_PANIC_ON_OOPS=y
+CONFIG_SOFTLOCKUP_DETECTOR=y
+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=30
+CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
+CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
+CONFIG_DEBUG_LOCKDEP=y
+CONFIG_DEBUG_ATOMIC_SLEEP=y
+CONFIG_DEBUG_LIST=y
+CONFIG_LATENCYTOP=y
+CONFIG_FUNCTION_TRACER=y
+CONFIG_FTRACE_SYSCALLS=y
+CONFIG_BLK_DEV_IO_TRACE=y
+
+--ikeVEW9yuYc//A+q--
