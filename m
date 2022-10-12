@@ -2,115 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989505FC20A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DA35FC20C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 10:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiJLIdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 04:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229751AbiJLIdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 04:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJLIc7 (ORCPT
+        with ESMTP id S229567AbiJLIdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 04:32:59 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A510B40CE;
-        Wed, 12 Oct 2022 01:32:29 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E4D293200ADD;
-        Wed, 12 Oct 2022 04:32:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 12 Oct 2022 04:32:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665563547; x=1665649947; bh=drXjAnf5EG
-        6LY0d4rMqtLwe0Q0qL+1NyMM0xSAeom8o=; b=kvJMB0HKsf3T3tnF246Uu0lBHE
-        H5IxuchGk+SXM+cfd/bySjSbJZs9MezJPl/fUeyJID4HJnwUCK3rWOCSjabi3Jsx
-        42SqO07dJ/dpkHQPqpfM1ErVkE/WvTkB6C94v0uAgCSBI38PsGcpLtBjZBozWJJS
-        WqL9I8qAEUXnvsXAnKzvlsJX9BOdThWd5F9R/ISsWgutlnYG3HPjGRyUwjvUSTCm
-        K/bglNEfdJSKVoE82TNxrTptEDCEVh8hdEoXdNHZwUyVPKxdRUxdbKXigfIhE0ma
-        408PwV+rDTsc0Vy1hKf8arqh8Ey9i3VrOunCiZzd6x2ldwWWY5W8xdgvbz+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665563547; x=1665649947; bh=drXjAnf5EG6LY0d4rMqtLwe0Q0qL
-        +1NyMM0xSAeom8o=; b=VbWX1YJ1vJxQ7Vl4OkXAnG94vCvudl/0SQGVEcRxBN2F
-        6a1isiyHEYlQ6d8EwOpJOWkKYjGKeWE4l7rrqIWesJDuPKQa+Aj4y0p/JsTef9Y8
-        muu+cTLCM04OA/B3cnHdV/DWzX6l64HlwheLqg/TCu/MLSVFN33jBjgjFCA0w1aC
-        9fVunCz4SVEhHxpHjLZurj1qWw80dN6q4l2a9fIfnk+lEWg6ByFhk318uGSGuCYQ
-        tWGZpF54HXQ1OYsR4/kOwbY+kuek4wV7+COiMELxczUL6eS/hk4PpDWVJezrEtJl
-        fMMk3B0x4e3ujf+U+ahoYUUOuAV7l9gaXPuuA2iGNA==
-X-ME-Sender: <xms:mntGY397JwN9UJtXR7rce5mX1q2K94oRw56NbOOb3ULnQEo7IYtjbQ>
-    <xme:mntGYzvLzRPy0Nq4soBbNWdktCppbu0EjcuK5q3QM8q5Dc9LN1ZlzM9_0b8C30iZC
-    HW2VrLjDkZs7MaFa9E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:mntGY1Di-s4erkgfLTBZzFQM0wZ62J7JEhi5y2i6phuNL2VJjtSryw>
-    <xmx:mntGYzeoyc5jOjJu0VUYYNtSZ1m8gUXHuUUwm_CPBtnYOBjAxkkXQw>
-    <xmx:mntGY8PN9Tm5EZHYCK06K4rFExmFvoiJcj-aT5J0rUfpB0lcJjxXVQ>
-    <xmx:m3tGY4mATT-vASwsyhylUrfNYRngSDvk23n0imsjp7-fLYT-aHO4Pw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CBF50B60086; Wed, 12 Oct 2022 04:32:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <60a2cb70-bde4-4423-9a54-7abc1ba466f8@app.fastmail.com>
-In-Reply-To: <20221012055602.1544944-2-uwu@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me>
- <20221012055602.1544944-2-uwu@icenowy.me>
-Date:   Wed, 12 Oct 2022 10:31:00 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Icenowy Zheng" <uwu@icenowy.me>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Chen-Yu Tsai" <wens@csie.org>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Andre Przywara" <andre.przywara@arm.com>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] mailmap: update Icenowy Zheng's mail address
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 12 Oct 2022 04:33:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BBFB56DA;
+        Wed, 12 Oct 2022 01:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665563556; x=1697099556;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=DuXD8ucJt2DdGp6CHFp73VpIU4Jxz4O81xCzRVaMxF4=;
+  b=Ni/0f077sS8TnmJITNOzW0VTPJQBvOUpoIxoIgI+qDfj9R53azu/yw2f
+   bxWw7k1x3Ut/oxAox23B0nwsD+UhFTnjspc/ObQ/h3Igo1x19E1Wiq2vu
+   HqpyDzsHA97bt32ZwukfXc6tA6NV9XNEAIMCNR7NjgI956G4K+/3ynPe9
+   FfaI0zpSUf3oQZ7so2ZpqgR3BF8BtS0B3UhdKMMA2ldOe+ul/KyWwzSE2
+   JzisXGLBwn/zg/SrP9YpENUuPC/XCrwemIoOfKwI4W1Ki7g3mvZ9fUvSy
+   RkCHkjlGK/H553kLANjW79lHAcxZqUSFWf7IVHoh7+qc0KxVhah86MmI5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="288003485"
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="288003485"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 01:32:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="626684693"
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="626684693"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga002.jf.intel.com with ESMTP; 12 Oct 2022 01:32:34 -0700
+Message-ID: <7df4a91d-6829-5ebf-18ca-c0783c03f443@linux.intel.com>
+Date:   Wed, 12 Oct 2022 11:34:01 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221010160022.647-1-mario.limonciello@amd.com>
+ <Y0T68lC6bUY7dg7D@black.fi.intel.com>
+ <7c08c4c8-562d-553f-e513-c925080300a7@linux.intel.com>
+ <MN0PR12MB6101ECEA1CCED9B65667031DE2239@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v3] xhci-pci: Set runtime PM as default policy on all xHC
+ 1.2 or later devices
+In-Reply-To: <MN0PR12MB6101ECEA1CCED9B65667031DE2239@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022, at 7:55 AM, Icenowy Zheng wrote:
-> Due to the SMTP provider adopted by AOSC applied some more restricted
-> rate limit that is not suitable for sending kernel patches, I switched
-> to a mailbox hosted on my own domain name now. In addition, there's a
-> single commit that is pushed to the mainline kernel tree during my
-> internship at Sipeed the last year.
->
-> Map two AOSC mail addresses (both aosc.io and aosc.xyz domain names) and
-> a defunct Sipeed mail address to the new mail address.
->
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+On 11.10.2022 19.46, Limonciello, Mario wrote:
+> [Public]
+> 
+>> -----Original Message-----
+>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Sent: Tuesday, October 11, 2022 08:16
+>> To: Mika Westerberg <mika.westerberg@linux.intel.com>; Limonciello,
+>> Mario <Mario.Limonciello@amd.com>
+>> Cc: Mathias Nyman <mathias.nyman@intel.com>; Mehta, Sanju
+>> <Sanju.Mehta@amd.com>; Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Subject: Re: [PATCH v3] xhci-pci: Set runtime PM as default policy on all xHC
+>> 1.2 or later devices
+>>
+>> On 11.10.2022 8.11, Mika Westerberg wrote:
+>>> On Mon, Oct 10, 2022 at 11:00:21AM -0500, Mario Limonciello wrote:
+>>>> For optimal power consumption of USB4 routers the XHCI PCIe endpoint
+>>>> used for tunneling must be in D3.  Historically this is accomplished
+>>>> by a long list of PCIe IDs that correspond to these endpoints because
+>>>> the xhci_hcd driver will not default to allowing runtime PM for all
+>>>> devices.
+>>>>
+>>>> As both AMD and Intel have released new products with new XHCI
+>> controllers
+>>>> this list continues to grow. In reviewing the XHCI specification v1.2 on
+>>>> page 607 there is already a requirement that the PCI power management
+>>>> states D3hot and D3cold must be supported.
+>>>>
+>>>> In the quirk list, use this to indicate that runtime PM should be allowed
+>>>> on XHCI controllers. The following controllers are known to be xHC 1.2 and
+>>>> dropped explicitly:
+>>>> * AMD Yellow Carp
+>>>> * Intel Alder Lake
+>>>> * Intel Meteor Lake
+>>>> * Intel Raptor Lake
+>>>>
+>>>> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>> Link:
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fww
+>> w.intel.com%2Fcontent%2Fdam%2Fwww%2Fpublic%2Fus%2Fen%2Fdocum
+>> ents%2Ftechnical-specifications%2Fextensible-host-controler-interface-usb-
+>> xhci.pdf&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7Cb286e9c
+>> 63e9e4c3a1a3708daab8a9b23%7C3dd8961fe4884e608e11a82d994e183d%7C0
+>> %7C0%7C638010909687542135%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
+>> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%
+>> 7C%7C%7C&amp;sdata=CetIs1VuAqj8nNBoLnXaGncw6Sl4JcImYY67JpVxyjg%
+>> 3D&amp;reserved=0
+>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>
+>>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>>
+>> Thanks, added to queue
+> 
+> Thanks!
+> For my own clarity - is this something you'll still take to 6.1, or are you meaning
+> 6.2 queue at this point?
 
-I don't see a patch for updating the MAINTAINERS file here, if you
-haven't already sent that another way, you should probably change
-both at the same time.
+Was planning on sending it to usb-next after 6.1-rc1 is out, so ending up in 6.2
+But if there's some benefit in having this already in 6.1 then I don't object that either.
 
-As a driver maintainer, you can also apply for a kernel.org account
-[https://korg.docs.kernel.org/accounts.html] and use that for
-sending patches and forwarding to another address.
+> 
+> This thread originated from enabling Pink Sardine.  Wherever it lands after it's
+> baked for $long_enough I would like to bring it back to stable eventually too.
+> If you think it's too risky for stable later on, can we do separate set of commits
+> that adds and then removes the IDs for pink sardine that can go to stable?  This
+> would at least mirror more closely what has been done historically for the other
+> USB4 products.
 
-     Arnd
+I think we can add this to stable. It's fine for Intel xHCI 1.2 hosts.
+
+Thanks
+-Mathias
