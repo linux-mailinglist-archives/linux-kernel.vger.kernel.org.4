@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAA75FCEEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67975FCEF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJLX0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S229662AbiJLXbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 19:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJLX0e (ORCPT
+        with ESMTP id S229544AbiJLXbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:26:34 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A154A10A;
-        Wed, 12 Oct 2022 16:26:33 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29CNJURK010887;
-        Wed, 12 Oct 2022 23:26:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CNPmxgW3pPlP+BkFNJfzz3SBIfQiNzpnFWL/syGAZ3w=;
- b=YYT8oAslM5mllwEzPfjAVavKxoQkuy0RtVdCtZS6GOzj3XH2NOG/Boj3T7pF7udzr5ts
- 7dNz3LZQqGpAZjIW8vEywLrhhlSalgDv+wFiKQjH8s1gKOG/8KrLOVmvDl6K6DJ09oR/
- fVh2VC33jxOy6FkcNd5q/qk16ZQ81zTNagEcO8XhAtluyeGeSVp5Mlmrz/jrpP2pSeKC
- tQVj2tdGtpb0nL6uYQ92/pos6XHgDE2wQQIor5XFTAW0C5pxbgXmRC9STMm+CtnIdPc8
- 8puUrlEd4npN7bKB92uV3WvShVvCzU5bgICbh2eLdouic7GYFuseEFKsMLeTUpEvef6r bA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5x7g1ptt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 23:26:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29CNQLq8014442
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Oct 2022 23:26:21 GMT
-Received: from [10.38.241.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 12 Oct
- 2022 16:26:17 -0700
-Message-ID: <e8d49510-4e1e-2327-2dcc-1274c2a70a2f@quicinc.com>
-Date:   Wed, 12 Oct 2022 16:26:15 -0700
+        Wed, 12 Oct 2022 19:31:34 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E31B792E8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:31:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id bu25so62194lfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 16:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oVfzjJywpJ4GYbFJMqXBRtUkuMRGMygdtzhfFYhaojo=;
+        b=aaH5lDtO91ywVHHYdmOfHL7xUWG7/eFKHgAbuU9PEmtFkFq+BxZRA4lv6oZLyvJWgQ
+         t9QVrtipWZY4+uvfZ6afTID3CMSX1CKpE9Te0lhopse702/QvnRrVP0bUwFVxNn6jCWS
+         DeseKmsgklxt0n5dUCYbyoJ8XQSzfJ3je2gYiQ7RnOycEvHcEgmmvLBD1nbefj9RP9Lh
+         FxpJuyTrztRapcwUaY0su4uFFZNJTyu22Ww28nB+WYpSmagGQADxgM1jRHKRQFM5w5Uv
+         8Tz9WORorRT++XkfYAUHK87VqBeTWV2LBscsxAk7rJAbP1MQjFkZTsFNF2A2Hln8gkGj
+         uyYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oVfzjJywpJ4GYbFJMqXBRtUkuMRGMygdtzhfFYhaojo=;
+        b=YJQgYeLt/sCA4N6NgGHWUBaFQU2kdMVGcvtFcw4iQpdFQGAI9spMlHk0Fu1yOKy5dI
+         qaFyxmybCu2iAikIzB/yQ7ioar5H1AxN9Esy8PMWCLPQEfi6XoDwRdoi18AKONUQqvTp
+         Je6gU+Kuzyus7ODpIEZPwjn7vJaKTsOYCNmbo27Sq8h7rn8BZSW+mucmJo+UZb3936vN
+         +xZA3iJN7dvhI25pd7R5AEBQdK/pZzdUjK1SVuQLIfeuIlSol/xNCWDKIZrNLZWytOiw
+         LZfjHCsQvujHlRu04jnRGXgy7oqaPQ3G27+MsKw0QJEOl4YSI3Crx4cxN7+z+t5IW6I4
+         /PMw==
+X-Gm-Message-State: ACrzQf0mz9If7vBEP42B/M8MpUKEY+vqXN55KCRwE6mP/nvX+g4I48Pj
+        IxrfhIgjCTygMpyXzxa3WyOtFTdq6LwXHT55lopaqg==
+X-Google-Smtp-Source: AMsMyM6mzIpOL6t7cpBb/jsaozpaiOS6m22ehW2HwHZdUf8YWU3nj/YGkK9OdeVi9hreGmmS0w5IorKfqw1Y8HjenwE=
+X-Received: by 2002:a05:6512:70d:b0:4a2:2bd5:4694 with SMTP id
+ b13-20020a056512070d00b004a22bd54694mr11666957lfs.313.1665617491441; Wed, 12
+ Oct 2022 16:31:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 10/10] drm/msm/dsi: Prevent signed BPG offsets from
- bleeding into adjacent bits
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20221009184824.457416-1-marijn.suijten@somainline.org>
- <20221009185316.462522-3-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221009185316.462522-3-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0whAIauxe-5GPU5WOKX9nvzxO4GX52Ed
-X-Proofpoint-ORIG-GUID: 0whAIauxe-5GPU5WOKX9nvzxO4GX52Ed
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-12_11,2022-10-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999
- impostorscore=0 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210120146
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221012002323.2015637-1-dionnaglaze@google.com>
+In-Reply-To: <20221012002323.2015637-1-dionnaglaze@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Wed, 12 Oct 2022 17:31:19 -0600
+Message-ID: <CAMkAt6qj-iHzk+FqCGh5z4EZHB9BzOfqES8RmjgYXs3CSg3CXQ@mail.gmail.com>
+Subject: Re: [PATCH] virt/coco/sev-guest: Initialize err in handle_guest_request
+To:     Dionna Glaze <dionnaglaze@google.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 11, 2022 at 6:23 PM Dionna Glaze <dionnaglaze@google.com> wrote:
+>
+> The err variable may not be set in the call to snp_issue_guest_request,
+> yet it is unconditionally written back to fw_err if fw_err is non-null.
+> This is undefined behavior, and currently returns uninitialized kernel
+> stack memory to user space.
 
+Should this be fixed in: snp_issue_guest_request()? Since other
+callers might make similar mistakes.
 
-On 10/9/2022 11:53 AM, Marijn Suijten wrote:
-> The bpg_offset array contains negative BPG offsets which fill the full 8
-> bits of a char thanks to two's complement: this however results in those
-> bits bleeding into the next field when the value is packed into DSC PPS
-> by the drm_dsc_helper function, which only expects range_bpg_offset to
-> contain 6-bit wide values.  As a consequence random slices appear
-> corrupted on-screen (tested on a Sony Tama Akatsuki device with sdm845).
-> 
-> Use AND operators to limit these two's complement values to 6 bits,
-> similar to the AMD and i915 drivers.
-> 
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+And currently we have:
+
+static long snp_guest_ioctl(...)
+{
+..
+  input.fw_err = 0xff;
+..
+}
+
+Which I think is an attempt to make fw_err make sense if the FW is
+never called, should we try to maintain that property?
+
+>
+> Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Joerg Roedel <jroedel@suse.de>
+> Cc: Peter Gonda <pgonda@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>
+> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 > ---
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 46032c576a59..c5c2d70ac27d 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -1804,7 +1804,11 @@ static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc
->   	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
->   		dsc->rc_range_params[i].range_min_qp = min_qp[i];
->   		dsc->rc_range_params[i].range_max_qp = max_qp[i];
-> -		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i];
-> +		/*
-> +		 * Range BPG Offset contains two's-complement signed values that fill
-> +		 * 8 bits, yet the registers and DCS PPS field are only 6 bits wide.
-> +		 */
-> +		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i] & DSC_RANGE_BPG_OFFSET_MASK;
->   	}
->   
->   	dsc->initial_offset = 6144;		/* Not bpp 12 */
+>  drivers/virt/coco/sevguest/sevguest.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/virt/coco/sevguest/sevguest.c b/drivers/virt/coco/sevguest/sevguest.c
+> index 112c0458cbda..7a62bfc063fc 100644
+> --- a/drivers/virt/coco/sevguest/sevguest.c
+> +++ b/drivers/virt/coco/sevguest/sevguest.c
+> @@ -307,7 +307,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+>                                 u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+>                                 u32 resp_sz, __u64 *fw_err)
+>  {
+> -       unsigned long err;
+> +       unsigned long err = 0;
+>         u64 seqno;
+>         int rc;
+>
+> --
+> 2.38.0.rc1.362.ged0d419d3c-goog
+>
