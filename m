@@ -2,267 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165245FC32D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AC95FC331
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 11:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiJLJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 05:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S229736AbiJLJk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 05:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJLJkL (ORCPT
+        with ESMTP id S229560AbiJLJkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:40:11 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25E5357C9;
-        Wed, 12 Oct 2022 02:40:09 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 70CB7580320;
-        Wed, 12 Oct 2022 05:40:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 12 Oct 2022 05:40:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665567607; x=
-        1665574807; bh=jIw1X1OWq80oU2H2+NRiXoIfwbXHEKKKboIcZC9PvE0=; b=F
-        gE06xXtIGl/CXdZ/hYvqQ3ivFNxdzi1khTxMRZfc43pIXIdYIhyKtMOrHh4B80ss
-        NnjqxmaiTBwL5IFtp2Re7QI+gTp2R+1WjAxdrYHzfWX4wJVd0UTwdcvQnPvyWyKA
-        h48aT27TDws2hy1lh8LkiLSkdIQNEccILZCb5To97hCDvTp2A0idUZdAEjM40vu0
-        ecgKzFxp1Px5LLQm+MD3xvuK7Qmcf8LRHJkmDOrgAAcMz/4arKqAasIHoAoQNm91
-        M9AHHJhmWRjL6ShjyKc1BfpzOdHRd/4Y1H/48hcIqigeWUAfnIpPpYcM+PF3Hwsj
-        ufPeM5ebRVtSqQjiY7nRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665567607; x=
-        1665574807; bh=jIw1X1OWq80oU2H2+NRiXoIfwbXHEKKKboIcZC9PvE0=; b=V
-        WiGVFXdVd0Dd/zto8rpPDKrniT+oGSjiT5TToUmPb3s2yCwiJUONhsWaRrCtLExZ
-        tOXR/LKwbj2TVeBrTEh3LJoClem2AVdH7q1Dak48wynGv8fJxi0gjmlTN8mDpK2O
-        eVAvWlJNE7xESEoC+Mb0vtI3jJgA6+I1oM3hlGbgIfCRK6LpVeReUI3bZEYbY9q2
-        vJrLcpqsNRaC5aLsVRaVKD4PqeRvBHmypNwfbeZjlwjlNJRdYm5Up+7lg0QqKODQ
-        +GngeDgTuv8QQJe1VNs6Q3fa2gMd+1P2dKikB7aX4wi7KgIC3HllrV/yNWwr0H1e
-        qhOT5oJxULVaBPutwnL6A==
-X-ME-Sender: <xms:dotGY-GvlhZotYDF22OxWd1rynwv8cqBYUlp3tPAfopsnLrcie_pNw>
-    <xme:dotGY_Ukj4mVbm_h2N844-w7OlP5qJcWAXvIslfm4KXiIt0U2I5lJKr2oQUcRXvel
-    FXIS-zHcI0q8vaWxoE>
-X-ME-Received: <xmr:dotGY4IyY6w4YgGrbxn7KYZLydtDgjrxzzsLLjFFOEc_aBkWv98tp7J1W8S4EMUlot1N7MNFyZFXKko0AAGe_eUHHJUkb_i0yCx4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepiedtueffveeiueeftdduvdffffffgeffgfekiefhleelkedtlefhvefh
-    udduhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:d4tGY4G5WBa42tjim1N_Mt_R5-O0VdB8TjSZ6s8Cvp8QaCVMXgd17g>
-    <xmx:d4tGY0WmoFfYn876J-XBkqpyPMn36acN3EbyU9oOrKXM_o6J80MLvg>
-    <xmx:d4tGY7NlS0PAFPfno4vmrdKGtkVmpYDB-mLLgW34lk_8u9N8jXWRAA>
-    <xmx:d4tGY529AaZHmTLWqHb1-eqoPQhNNFR1SsyDAbE0EDFWIfv3SlQrsw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Oct 2022 05:40:06 -0400 (EDT)
-Date:   Wed, 12 Oct 2022 11:40:04 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
-        chun-jie.chen@mediatek.com, miles.chen@mediatek.com,
-        wenst@chromium.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: mediatek: clk-mux: Add .determine_rate() callback
-Message-ID: <20221012094004.jgiyvmbgomiyedik@houat>
-References: <20221011135548.318323-1-angelogioacchino.delregno@collabora.com>
- <20221012085555.3nls7ja56vlnaz2w@houat>
- <c4a1eb9f-016d-c184-e494-c869038b87ff@collabora.com>
+        Wed, 12 Oct 2022 05:40:52 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6E6357C9;
+        Wed, 12 Oct 2022 02:40:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NntxNO8TIe+5VQYAE9JoZk4elUYET/HkZNB4f+1IDhVEeT5+tGfsyjRvnZybgSaANLi6VSZhEeR2Xg2Uw0zjs0ePomA4ELkAOWDFanF8IScgbyn0ezmumHMaWEgLu7QFIhh54pLWl4iUhg/96BX2WLtY966kWP8QuyfDAJP/5SFbqBJJrpAB91hk22Sg4qRLztrU6oBytBcHi+3Gx+OYZ9aYOBUPpLCR41ksDcxVgEzIIlbq4eFc9xpliiSnrrXyNGKJfNE99txEOU29KrPtjqOXxt8q9kFONlP1Cb6x5x8nLwUpJO1UPTnpCskS1ZphkRcWJHKWD42/zPKqAGEIqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IO3APibJx7aaA7a+/xRxMwOT+8HRO4lY0I4goHPpLcE=;
+ b=KTiH+cJEOCme2v3eJ/mPfeK1u3UIXY1z4W8fGZmp+zUeZBRyWjn/06CoSNQROK7fxqZUk4sEAcvwTIk7cYZmiAxIzKE1ItthqqOdgi8adXC9yrSIjkPmsDqsXIhZAizzUTINd/z6DYrbKm2ysKg5CUWKhQXIElh3Tp6XI6fftpBU3QD4GZZMC6yi9ChWZk0ZVF6hcK+crSuEVxqSdLg8HsmMhmFUaFtGf/tIYk+jEmuXJlqo1fSXvZWFeatUqhaX5wsBK5MhOrrSQpZ4pM+xPbPvyF03I2nhrnTICsuJ2KE/OrFNW76hFyvq7Cs2+Kfiywrbo5xqtAYP4LMLxrazCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IO3APibJx7aaA7a+/xRxMwOT+8HRO4lY0I4goHPpLcE=;
+ b=SCnyujzfc8GZD5kS8U+7qix2eDSVNjyajnzuia7Gpd2WpHhWC3BKW5n3NgDr1BgK6c3R1AnL4z7ksLzET9F2PlrJqz7SuyKy/C9SOAMs4j5y/98VK1rl63eYJ+8oPfVA7FndBT/Ma2m6NIXYQVOjL4uliZGxC7fAGUrwYKaSotQrsLM0e4DZJbTrE/noWILyoKcRHwammfU7aIf/y7OrOEUsvUtWqkkKiZY0RMpwLRbE+sG48gKTKJHjyu0pNLyHgN/ozglAMABC/HM1l8aztqgZ1oWtdRgMINM5xCRJyFlZU6I8h0WRTumTAGsgEkE1hV2aL2xdyWG88/gyRUL2aA==
+Received: from BN0PR04CA0139.namprd04.prod.outlook.com (2603:10b6:408:ed::24)
+ by CH2PR12MB5018.namprd12.prod.outlook.com (2603:10b6:610:6e::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Wed, 12 Oct
+ 2022 09:40:47 +0000
+Received: from BN8NAM11FT015.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::5f) by BN0PR04CA0139.outlook.office365.com
+ (2603:10b6:408:ed::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22 via Frontend
+ Transport; Wed, 12 Oct 2022 09:40:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT015.mail.protection.outlook.com (10.13.176.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Wed, 12 Oct 2022 09:40:47 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 12 Oct
+ 2022 02:40:33 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 12 Oct
+ 2022 02:40:32 -0700
+Received: from jilin-desktop.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Wed, 12 Oct 2022 02:40:31 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>
+CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jilin@nvidia.com>
+Subject: [PATCH v2] xhci: tegra: USB2 pad power controls
+Date:   Wed, 12 Oct 2022 17:40:20 +0800
+Message-ID: <20221012094020.2442-1-jilin@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <c4a1eb9f-016d-c184-e494-c869038b87ff@collabora.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT015:EE_|CH2PR12MB5018:EE_
+X-MS-Office365-Filtering-Correlation-Id: de533379-8a77-4f5c-4f19-08daac35d767
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i+wJhEBhlTMas6G+NIxK4WmX2d813pLOLC3KB12FHYTZZnLyNbrIZd81TS+YvJdkGcL9UxJI1RHwOSdpMb0Wzp7yjsmrV2IpvGcHadOa7KlTj/iTHfgtXCjfFLt75ml9+Kokk6TXLbZ8a4Oqt2OgdugiEKIIhqdoYj5RCtnB87Fc2nFkPccxTjy8G3RNLncA/yt8aOF7ruOIwfeitRdDSVlf/uR/vf7bYfm22WjOfcgqb7bWplbZQFMkVw9u7h8ODmKAaKNTT6PO/yUluw/srkrPmNaH1aDJ5i9GbkAIk4VZtNGk8M0uiPNe83iRKt6vBnLJNtibonPWgpx8LPgiXF4/hnUbqg3MLgt0OComX6QTsVkgVmf/Xdoac/rzyILvgaYJZOXTJ3kES3xfNkBOh/IP89xjAKhbb6QbMnsbLs6saePauIVEnQM794kbxBi2xH3Dy3fKAQ9KMPI275H0++tfPaQ7nLjS4TWJvmTJAK0QuPvMsnlnnSlIzdHHQjO7Jzf1avtqCFzYvduvrt+JQhyVZGPXOA8wm6hxgekR+li6gWdbY+CXHH1bq+x5O3EjXLQJnw8J/yYUzL6n2OInfq+F6WL+E6Ej+MmVGOPTZSt3OLWEehosolmapbDEkhGF82ytJGvXpsEwd3mBHgw1JkDx7vOsgi2pQ1fA/hte5iqvshXQttYyB1WQsFCrgqH6bFRYz+dBSc///nW2jIjcUzRKQQhREcnsGb+r+wieE0NvCqSWw3nbeos9LNCrJYU0LugN0UJtuyANf8M+ximzmw==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199015)(40470700004)(46966006)(36840700001)(47076005)(356005)(41300700001)(186003)(7636003)(82740400003)(86362001)(82310400005)(36860700001)(426003)(4326008)(8936002)(8676002)(6666004)(83380400001)(5660300002)(7696005)(40480700001)(54906003)(70586007)(26005)(478600001)(40460700003)(110136005)(336012)(107886003)(2616005)(316002)(70206006)(1076003)(2906002)(36756003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 09:40:47.1431
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: de533379-8a77-4f5c-4f19-08daac35d767
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5018
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:09:59AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 12/10/22 10:55, Maxime Ripard ha scritto:
-> > Hi,
-> >=20
-> > On Tue, Oct 11, 2022 at 03:55:48PM +0200, AngeloGioacchino Del Regno wr=
-ote:
-> > > Since commit 262ca38f4b6e ("clk: Stop forwarding clk_rate_requests
-> > > to the parent"), the clk_rate_request is .. as the title says, not
-> > > forwarded anymore to the parent:
-> >=20
-> > It's not entirely true, the rate request should still be forwarded, but
-> > we don't pass the same instance of clk_rate_request anymore.
-> >=20
-> > > this produces an issue with the MediaTek clock MUX driver during GPU
-> > > DVFS on MT8195, but not on MT8192 or others.
-> > >=20
-> > > This is because, differently from others, like MT8192 where all of
-> > > the clocks in the MFG parents tree are of mtk_mux type, but in the
-> > > parent tree of MT8195's MFG clock, we have one mtk_mux clock and
-> > > one (clk framework generic) mux clock, like so:
-> > >=20
-> > > names: mfg_bg3d -> mfg_ck_fast_ref -> top_mfg_core_tmp (or) mfgpll
-> > > types: mtk_gate ->      mux        ->     mtk_mux      (or) mtk_pll
-> > >=20
-> > > To solve this issue and also keep the GPU DVFS clocks code working
-> > > as expected, wire up a .determine_rate() callback for the mtk_mux
-> > > ops; for that, the standard clk_mux_determine_rate_flags() was used
-> > > as it was possible to.
-> >=20
-> > It probably fixes things indeed, but I'm a bit worried that it just
-> > works around the actual issue instead of fixing the actual bug...
-> >=20
-> > > This commit was successfully tested on MT6795 Xperia M5, MT8173 Elm,
-> > > MT8192 Spherion and MT8195 Tomato; no regressions were seen.
-> > >=20
-> > > For the sake of some more documentation about this issue here's the
-> > > trace of it:
-> > >=20
-> > > [   12.211587] ------------[ cut here ]------------
-> > > [   12.211589] WARNING: CPU: 6 PID: 78 at drivers/clk/clk.c:1462 clk_=
-core_init_rate_req+0x84/0x90
-> > > [   12.211593] Modules linked in: stp crct10dif_ce mtk_adsp_common ll=
-c rfkill snd_sof_xtensa_dsp
-> > >                 panfrost(+) sbs_battery cros_ec_lid_angle cros_ec_sen=
-sors snd_sof_of
-> > >                 cros_ec_sensors_core hid_multitouch cros_usbpd_logger=
- snd_sof gpu_sched
-> > >                 snd_sof_utils fuse ipv6
-> > > [   12.211614] CPU: 6 PID: 78 Comm: kworker/u16:2 Tainted: G        W=
-          6.0.0-next-20221011+ #58
-> > > [   12.211616] Hardware name: Acer Tomato (rev2) board (DT)
-> > > [   12.211617] Workqueue: devfreq_wq devfreq_monitor
-> > > [   12.211620] pstate: 40400009 (nZcv daif +PAN -UAO -TCO -DIT -SSBS =
-BTYPE=3D--)
-> > > [   12.211622] pc : clk_core_init_rate_req+0x84/0x90
-> > > [   12.211625] lr : clk_core_forward_rate_req+0xa4/0xe4
-> > > [   12.211627] sp : ffff80000893b8e0
-> > > [   12.211628] x29: ffff80000893b8e0 x28: ffffdddf92f9b000 x27: ffff4=
-6a2c0e8bc05
-> > > [   12.211632] x26: ffff46a2c1041200 x25: 0000000000000000 x24: 00000=
-000173eed80
-> > > [   12.211636] x23: ffff80000893b9c0 x22: ffff80000893b940 x21: 00000=
-00000000000
-> > > [   12.211641] x20: ffff46a2c1039f00 x19: ffff46a2c1039f00 x18: 00000=
-00000000000
-> > > [   12.211645] x17: 0000000000000038 x16: 000000000000d904 x15: 00000=
-00000000003
-> > > [   12.211649] x14: ffffdddf9357ce48 x13: ffffdddf935e71c8 x12: 00000=
-0000004803c
-> > > [   12.211653] x11: 00000000a867d7ad x10: 00000000a867d7ad x9 : ffffd=
-ddf90c28df4
-> > > [   12.211657] x8 : ffffdddf9357a980 x7 : 0000000000000000 x6 : 00000=
-00000000004
-> > > [   12.211661] x5 : ffffffffffffffc8 x4 : 00000000173eed80 x3 : ffff8=
-0000893b940
-> > > [   12.211665] x2 : 00000000173eed80 x1 : ffff80000893b940 x0 : 00000=
-00000000000
-> > > [   12.211669] Call trace:
-> > > [   12.211670]  clk_core_init_rate_req+0x84/0x90
-> > > [   12.211673]  clk_core_round_rate_nolock+0xe8/0x10c
-> > > [   12.211675]  clk_mux_determine_rate_flags+0x174/0x1f0
-> > > [   12.211677]  clk_mux_determine_rate+0x1c/0x30
-> > > [   12.211680]  clk_core_determine_round_nolock+0x74/0x130
-> > > [   12.211682]  clk_core_round_rate_nolock+0x58/0x10c
-> > > [   12.211684]  clk_core_round_rate_nolock+0xf4/0x10c
-> > > [   12.211686]  clk_core_set_rate_nolock+0x194/0x2ac
-> > > [   12.211688]  clk_set_rate+0x40/0x94
-> > > [   12.211691]  _opp_config_clk_single+0x38/0xa0
-> > > [   12.211693]  _set_opp+0x1b0/0x500
-> > > [   12.211695]  dev_pm_opp_set_rate+0x120/0x290
-> > > [   12.211697]  panfrost_devfreq_target+0x3c/0x50 [panfrost]
-> > > [   12.211705]  devfreq_set_target+0x8c/0x2d0
-> > > [   12.211707]  devfreq_update_target+0xcc/0xf4
-> > > [   12.211708]  devfreq_monitor+0x40/0x1d0
-> > > [   12.211710]  process_one_work+0x294/0x664
-> > > [   12.211712]  worker_thread+0x7c/0x45c
-> > > [   12.211713]  kthread+0x104/0x110
-> > > [   12.211716]  ret_from_fork+0x10/0x20
-> > > [   12.211718] irq event stamp: 7102
-> > > [   12.211719] hardirqs last  enabled at (7101): [<ffffdddf904ea5a0>]=
- finish_task_switch.isra.0+0xec/0x2f0
-> > > [   12.211723] hardirqs last disabled at (7102): [<ffffdddf91794b74>]=
- el1_dbg+0x24/0x90
-> > > [   12.211726] softirqs last  enabled at (6716): [<ffffdddf90410be4>]=
- __do_softirq+0x414/0x588
-> > > [   12.211728] softirqs last disabled at (6507): [<ffffdddf904171d8>]=
- ____do_softirq+0x18/0x24
-> > > [   12.211730] ---[ end trace 0000000000000000 ]---
-> >=20
-> > ... Indeed, you shouldn't hit that warning at all. It happens in
-> > clk_core_round_rate_nolock, which takes (before your patch) the
-> > CLK_SET_RATE_PARENT branch. This indeed has been changed by the patch
-> > you mentioned, and will call clk_core_forward_rate_req() now, that in
-> > turn calls clk_core_init_rate_nolock().
-> >=20
-> > I think the warning you hit is because core->parent is NULL, which is
-> > passed to clk_core_forward_rate_req() as the parent argument, and we'll
-> > call clk_core_init_rate_req() with parent set as the core argument.
-> >=20
-> > In clk_core_init_rate_req(), the first thing we do is a WARN_ON(!core),
-> > which is what you hit here I think.
-> >=20
-> > This is different to the previous behavior that was calling
-> > clk_core_round_rate_nolock() with core->parent directly, and
-> > clk_core_round_rate_nolock() if its core argument is NULL will set
-> > req->rate to 0 and bail out without returning an error.
-> >=20
-> > Now, your patch probably works because now that you provide a
-> > determine_rate implementation, clk_core_can_round() returns true and
-> > you'll take a different branch in clk_core_round_rate_nolock(), avoiding
-> > that issue entirely.
-> >=20
-> > Does that patch work better (on top of next-20221012)?
->
-> I admit I didn't go too deep in the research, as my brain processed that =
-as
-> "this is a mux clock, not really different from a standard mux, this call=
-back
-> is missing, that's not optimal"... then that fixed it and called it a day.
->=20
-> I should've prolonged my research for a better understanding of what was
-> actually going on.
+Program USB2 pad PD controls during port connect/disconnect, port
+suspend/resume, and test mode, to reduce power consumption on
+disconnect or suspend.
 
-No worries :)
+Signed-off-by: Jim Lin <jilin@nvidia.com>
+---
+v2: Fix issue that wrong tegra->phys[] may be accessed on tegra124
 
-> What you said actually opened my mind and, with little surprise, your pat=
-ch
-> works as good as mine - no warnings and the clock scales as expected!
 
-I'm actually wondering if you didn't encounter two issues. What kernel
-were you testing before? If it's older than today's next
-(next-20221012), you're likely missing
+ drivers/usb/host/xhci-tegra.c | 141 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 139 insertions(+), 2 deletions(-)
 
-https://lore.kernel.org/linux-clk/20221010-rpi-clk-fixes-again-v1-0-d87ba82=
-ac404@cerno.tech/
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index c8af2cd2216d..316585068ab5 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -2,7 +2,7 @@
+ /*
+  * NVIDIA Tegra xHCI host controller driver
+  *
+- * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
++ * Copyright (c) 2014-2022, NVIDIA CORPORATION. All rights reserved.
+  * Copyright (C) 2014 Google, Inc.
+  */
+ 
+@@ -189,6 +189,13 @@ struct tegra_xusb_context_soc {
+ 	} fpci;
+ };
+ 
++enum tegra_xhci_phy_type {
++	USB3_PHY,
++	USB2_PHY,
++	HSIC_PHY,
++	MAX_PHY_TYPES,
++};
++
+ struct tegra_xusb_soc {
+ 	const char *firmware;
+ 	const char * const *supply_names;
+@@ -274,9 +281,17 @@ struct tegra_xusb {
+ 
+ 	bool suspended;
+ 	struct tegra_xusb_context context;
++	u32 enable_utmi_pad_after_lp0_exit;
+ };
+ 
+ static struct hc_driver __read_mostly tegra_xhci_hc_driver;
++static int (*original_xhci_hub_control)(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
++	    char *buf, u16 wLength);
++
++static inline struct tegra_xusb *hcd_to_tegra_xusb(struct usb_hcd *hcd)
++{
++	return (struct tegra_xusb *) dev_get_drvdata(hcd->self.controller);
++}
+ 
+ static inline u32 fpci_readl(struct tegra_xusb *tegra, unsigned int offset)
+ {
+@@ -1949,12 +1964,30 @@ static void tegra_xhci_enable_phy_sleepwalk_wake(struct tegra_xusb *tegra)
+ static void tegra_xhci_disable_phy_wake(struct tegra_xusb *tegra)
+ {
+ 	struct tegra_xusb_padctl *padctl = tegra->padctl;
+-	unsigned int i;
++	unsigned int i, j;
+ 
+ 	for (i = 0; i < tegra->num_phys; i++) {
+ 		if (!tegra->phys[i])
+ 			continue;
++		if (tegra_xusb_padctl_remote_wake_detected(padctl, tegra->phys[i])) {
++			if (i < tegra->soc->phy_types[USB3_PHY].num) {
++				/* USB3 */
++				j = i;
++			} else if (i < (tegra->soc->phy_types[USB3_PHY].num +
++					tegra->soc->phy_types[USB2_PHY].num)) {
++				/* USB2 */
++				j = i - tegra->soc->phy_types[USB3_PHY].num;
++				tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++			} else {
++				/* HSIC */
++				j = i - (tegra->soc->phy_types[USB3_PHY].num +
++					 tegra->soc->phy_types[USB2_PHY].num);
++			}
++			dev_dbg(tegra->dev,
++				"%s port %u (0 based) remote wake detected\n",
++				dev_name(&tegra->phys[i]->dev), j);
+ 
++		}
+ 		tegra_xusb_padctl_disable_phy_wake(padctl, tegra->phys[i]);
+ 	}
+ }
+@@ -1972,6 +2005,23 @@ static void tegra_xhci_disable_phy_sleepwalk(struct tegra_xusb *tegra)
+ 	}
+ }
+ 
++static void tegra_xhci_program_utmi_power_lp0_exit(struct tegra_xusb *tegra)
++{
++	unsigned int i;
++
++	for (i = 0; i < tegra->soc->phy_types[USB2_PHY].num; i++) {
++		if (!is_host_mode_phy(tegra, USB2_PHY, i))
++			continue;
++		/* USB2 */
++		if (tegra->enable_utmi_pad_after_lp0_exit & BIT(i))
++			tegra_phy_xusb_utmi_pad_power_on(
++				tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++		else
++			tegra_phy_xusb_utmi_pad_power_down(
++				tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++	}
++}
++
+ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ {
+ 	struct xhci_hcd *xhci = hcd_to_xhci(tegra->hcd);
+@@ -1980,6 +2030,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 	unsigned int i;
+ 	int err;
+ 	u32 usbcmd;
++	u32 portsc;
+ 
+ 	dev_dbg(dev, "entering ELPG\n");
+ 
+@@ -1993,6 +2044,15 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 		goto out;
+ 	}
+ 
++	for (i = 0; i < tegra->soc->phy_types[USB2_PHY].num; i++) {
++		if (!xhci->usb2_rhub.ports[i])
++			continue;
++		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
++		tegra->enable_utmi_pad_after_lp0_exit &= ~BIT(i);
++		if (((portsc & PORT_PLS_MASK) == XDEV_U3) || ((portsc & DEV_SPEED_MASK) == XDEV_FS))
++			tegra->enable_utmi_pad_after_lp0_exit |= BIT(i);
++	}
++
+ 	err = xhci_suspend(xhci, wakeup);
+ 	if (err < 0) {
+ 		dev_err(tegra->dev, "failed to suspend XHCI: %d\n", err);
+@@ -2066,6 +2126,8 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
+ 
+ 		phy_power_on(tegra->phys[i]);
+ 	}
++	if (tegra->suspended)
++		tegra_xhci_program_utmi_power_lp0_exit(tegra);
+ 
+ 	tegra_xusb_config(tegra);
+ 	tegra_xusb_restore_context(tegra);
+@@ -2437,6 +2499,79 @@ static int tegra_xhci_setup(struct usb_hcd *hcd)
+ 	return xhci_gen_setup(hcd, tegra_xhci_quirks);
+ }
+ 
++static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
++				  char *buf, u16 length)
++{
++	struct tegra_xusb *tegra = hcd_to_tegra_xusb(hcd);
++	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct xhci_hub *rhub;
++	struct xhci_bus_state *bus_state;
++	int port = (index & 0xff) - 1;
++	int i;
++	struct xhci_port **ports;
++	u32 portsc;
++	int ret;
++
++	rhub = &xhci->usb2_rhub;
++	bus_state = &rhub->bus_state;
++	if (bus_state->resuming_ports && hcd->speed == HCD_USB2) {
++		ports = rhub->ports;
++		i = rhub->num_ports;
++		while (i--) {
++			if (!test_bit(i, &bus_state->resuming_ports))
++				continue;
++			portsc = readl(ports[i]->addr);
++			if ((portsc & PORT_PLS_MASK) == XDEV_RESUME)
++				tegra_phy_xusb_utmi_pad_power_on(
++					tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++		}
++	}
++
++	if (hcd->speed == HCD_USB2) {
++		i = tegra->soc->phy_types[USB3_PHY].num + port;
++		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_SUSPEND)) {
++			if (!index || index > rhub->num_ports)
++				return -EPIPE;
++			tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++		}
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_RESET)) {
++			if (!index || index > rhub->num_ports)
++				return -EPIPE;
++			ports = rhub->ports;
++			portsc = readl(ports[port]->addr);
++			if (portsc & PORT_CONNECT)
++				tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++		}
++	}
++
++	ret = (*original_xhci_hub_control)(hcd, type_req, value, index, buf, length);
++	if (ret < 0)
++		return ret;
++
++	if (hcd->speed == HCD_USB2) {
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_SUSPEND))
++			/* We don't suspend the PAD while HNP role swap happens on the OTG port */
++			if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
++				tegra_phy_xusb_utmi_pad_power_down(tegra->phys[i]);
++
++		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_C_CONNECTION)) {
++			ports = rhub->ports;
++			portsc = readl(ports[port]->addr);
++			if (!(portsc & PORT_CONNECT)) {
++				/* We don't suspend the PAD while HNP role swap happens on the OTG
++				 * port
++				 */
++				if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
++					tegra_phy_xusb_utmi_pad_power_down(tegra->phys[i]);
++			}
++		}
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_TEST))
++			tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++	}
++
++	return ret;
++}
++
+ static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+ 	.reset = tegra_xhci_setup,
+ };
+@@ -2444,6 +2579,8 @@ static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+ static int __init tegra_xusb_init(void)
+ {
+ 	xhci_init_driver(&tegra_xhci_hc_driver, &tegra_xhci_overrides);
++	original_xhci_hub_control = tegra_xhci_hc_driver.hub_control;
++	tegra_xhci_hc_driver.hub_control = tegra_xhci_hub_control;
+ 
+ 	return platform_driver_register(&tegra_xusb_driver);
+ }
+-- 
+2.17.1
 
-Which is likely to be what fixed the clock scaling. And my patch only
-fixed the warning. Could you test next-20221012? If I'm right, you
-should only get the warning.
-
-> I still think that the mtk-mux driver should get a determine_rate callbac=
-k but,
-> at this point, that's going to have an entirely different commit descript=
-ion...
-
-Yeah, it might, but as you said it's a separate discussion
-
-> Please go on and send your patch: if you want, please remember to add me =
-to
-> the Cc's, so that I can give you my R-b tag in a timely manner.
-
-Thanks!
-Maxime
