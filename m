@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938A45FC6BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878765FC6C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 15:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiJLNvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 09:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S229975AbiJLNv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 09:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiJLNvJ (ORCPT
+        with ESMTP id S229703AbiJLNv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 09:51:09 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4194461B11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:51:06 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id ot12so38167608ejb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5YUZj2preUeh9QTI6ueyx+iJV4FKrSrouAkmiMJdSE=;
-        b=JerlzHUNFpL509UfrBoY2mMGhtVuc6daN7sp4Gk+s2hlIIcsYbx8ygP60vLtgvRyWd
-         ZN0AJ4g2MaQIuvuGDCLBvji/aB51RrKDa8kl9XrIi0K61zMBbTV5T0aRPFfB5kmEpkAp
-         aqz03VOaOYuGDyJOuYZmgL2YEV0GrVfcQ9ybw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v5YUZj2preUeh9QTI6ueyx+iJV4FKrSrouAkmiMJdSE=;
-        b=mPoyrVsuCjOIqo3sdYcWfXYVgILPF1Z9wZlvyeTwacvsxMpZhfKN/vSXX0AnEa87yj
-         LAzpSzlESDaz+yXRArinKiXBwi20Hd3LeUpqz06WUgBjnYFDSC1d6O6y0SW9s2GqrEEO
-         4xiL38YeCSmZdTJuQh5a0kzT5L0SSIgafwAubktbQWPYODo0Wj6RT3G5e8mwH+pD1Zty
-         jzJm7Q4e3YrAHxzfVXIFWgp9FBAWxJ1PBwtHz26w2XHcJl/m39PtUzIMSt0aTgVKQt7n
-         9i+5m6AseMefe/8gnMHg5+UWmRwxb3y6iIq23JmcXkTK/DJlA1lfzwRGGVFWTTustK4Y
-         OvFA==
-X-Gm-Message-State: ACrzQf3mWmwm2MGf9eiIhitgHFE45PUv3Rj1sPUlQgXdSBV74ivSCtH5
-        9JGMPPW2r1ZehQM4Bqc/zlmQnHIKwYiyAlp8lrOKOg==
-X-Google-Smtp-Source: AMsMyM5PlsAdkYM7Hv6NTbG3Prb4EoPknhlg2TtlxfGkE9Y0vlB/NYqoumzLWAMVNZ6HIAtJpKMFAqBV2cv/+0kAmdA=
-X-Received: by 2002:a17:907:62a1:b0:781:b320:90c0 with SMTP id
- nd33-20020a17090762a100b00781b32090c0mr22056168ejc.255.1665582664889; Wed, 12
- Oct 2022 06:51:04 -0700 (PDT)
+        Wed, 12 Oct 2022 09:51:56 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D736C8204
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 06:51:53 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:3da6:62e6:8ab0:ff90])
+        by baptiste.telenet-ops.be with bizsmtp
+        id X1rp2800b32x5mf011rpTp; Wed, 12 Oct 2022 15:51:50 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oic9F-001OUZ-F4; Wed, 12 Oct 2022 15:51:49 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oic9E-00C2oi-Ui; Wed, 12 Oct 2022 15:51:48 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hai Pham <hai.pham.ud@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] dt-bindings: memory: renesas,rpc-if: Document R-Car V4H support
+Date:   Wed, 12 Oct 2022 15:51:46 +0200
+Message-Id: <c268cb4497cbe79773bb6568f36c37adc6fb5bbe.1665582645.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220928121934.3564-1-zhangjiachen.jaycee@bytedance.com>
-In-Reply-To: <20220928121934.3564-1-zhangjiachen.jaycee@bytedance.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 12 Oct 2022 15:50:54 +0200
-Message-ID: <CAJfpegsNeeuCoF8M9TuvG3YY_Tv1pgqasR5Av0xsa3jxsnJZqA@mail.gmail.com>
-Subject: Re: [PATCH] fuse: always revalidate rename target dentry
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Tianci <zhangtianci.1997@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sept 2022 at 14:20, Jiachen Zhang
-<zhangjiachen.jaycee@bytedance.com> wrote:
->
-> The previous commit df8629af2934 ("fuse: always revalidate if exclusive
-> create") ensures that the dentries are revalidated on O_EXCL creates. This
-> commit complements it by also performing revalidation for rename target
-> dentries. Otherwise, a rename target file that only exists in kernel dentry
-> cache but not in the filesystem may result in an EEXIST.
+From: Hai Pham <hai.pham.ud@renesas.com>
 
-"...will result in EEXIST if RENAME_NOREPLACE flag is used."
+Document support for the SPI Multi I/O Bus Controller (RPC-IF) in the
+R-Car V4H SoC.
 
-Applied with the above change.
+Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../bindings/memory-controllers/renesas,rpc-if.yaml          | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks,
-Miklos
+diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+index 645249ea21d19cd9..30a403b1b79a2c73 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+@@ -42,6 +42,11 @@ properties:
+               - renesas,r8a779a0-rpc-if       # R-Car V3U
+           - const: renesas,rcar-gen3-rpc-if   # a generic R-Car gen3 or RZ/G2{E,H,M,N} device
+ 
++      - items:
++          - enum:
++              - renesas,r8a779g0-rpc-if       # R-Car V4H
++          - const: renesas,rcar-gen4-rpc-if   # a generic R-Car gen4 device
++
+       - items:
+           - enum:
+               - renesas,r9a07g043-rpc-if      # RZ/G2UL
+-- 
+2.25.1
+
