@@ -2,261 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3E45FC069
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3915FC06F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 08:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiJLGFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 02:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S229603AbiJLGJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 02:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJLGFa (ORCPT
+        with ESMTP id S229469AbiJLGJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 02:05:30 -0400
-Received: from domac.alu.hr (domac.alu.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D0B6D9FC
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 23:05:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 09027604ED;
-        Wed, 12 Oct 2022 08:05:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1665554723; bh=xuoJSukhYj9ZILJWRFf+VGISYqH3FXP6oaibbbYodUo=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=YhYWF3O5OotSlrKXEsah9GCbDWvcSvycMgT52U+ho1gHqMA1PkLcjwiFWptdseQ78
-         OswWRAXLVdgHeQCEMj5IBkMp/lftpBP/gIMOj5u2CrMbNgG1FzXAQkbznqRcwUlj3/
-         XypW2i9omn8thwDoXWUE/XQ3+gLUWnjNWS9VOHjLEksmXTcMP9UY+GY9LMOM8MTjgt
-         3pbfN7f0nMuyDcoet6RyvVE9CZaiTKGjizRhJWMB2Dz2wofasBaQw1vkiLktM3vQqs
-         4eAqjq9Cxs/nhnRDsSeQqFmBg7LzMZUN2mU1+ACLxK3ny+MAjpxntOIyHstBxIbD05
-         03IGkQNFgZLQA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TOEZg7Z8QhJ5; Wed, 12 Oct 2022 08:05:19 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 423F9604EC;
-        Wed, 12 Oct 2022 08:05:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1665554719; bh=xuoJSukhYj9ZILJWRFf+VGISYqH3FXP6oaibbbYodUo=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=HNwUUce73fMm3g49fRXg/biKE+SkncvH7fXQp2QLVHnt4xDxwBvVIPCrsMch6url5
-         ygTwdbLQV2H5vBshmQ7G1Xbv51F6m6h5meC7jiLj57e7v5YjBF6RNn3bx6hYOJX3bI
-         4iguI991pjeLany8S3rS2NdR5p3ghq4wgMUS92d62psR/OmXgANW/lUvWtvNWRdWeT
-         ghlIdFc74mJvdjD+FCNxEQZTvOZlSB5N2bzp2OcjDvGyGtzY5YIMYFL0tebgeGfqnq
-         8lH3WFDuWKMXmhUfEb43edmnItRpBNHNCbxH7cBIiY60Y+cJu7ja9uu/gVJRZLxQJy
-         RRH5WeVzJTkiw==
-Message-ID: <e335e7cd-366f-7ced-2707-b6ef49cfe9eb@alu.unizg.hr>
-Date:   Wed, 12 Oct 2022 08:05:18 +0200
+        Wed, 12 Oct 2022 02:09:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9BD77EB0;
+        Tue, 11 Oct 2022 23:09:09 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C5t8d8011501;
+        Wed, 12 Oct 2022 06:09:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jQYrO476z41NopM/bcra25kVZpYW49EA2sUprgcs8ic=;
+ b=o+yvO1xx/RixIYUGAHU4qkfR+n/AQS5AI3T/JwQkUH637BLfSkOYVr3K61YJ5+E8bN4L
+ Pw9Az601SbMqwIDeulzV+ddGDnSLOo5K5AqBCRifAlw8Ef1LMVm8zAGphbTjtlUlBULD
+ 7v5XyG9j5rPn+sd4w4KGJq5LP75mhmmLL8d954/DkXnyZqc/cD0oFpFEfa9VOQ2rE546
+ LnbA1m10/G37RDfxG9pcZ3Nd7lIPFejhG2vtnUq0nwb3Ys/aZuUYZa09VelN+3XsxuSv
+ hXzNXoglRsLd/ATRzTxewEdH9UxOv6Y1uF233EpVcun+oXdd3PUaz0YC34dFJskjhOIM UQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5kar0m56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 06:09:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29C6911J009180
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 06:09:01 GMT
+Received: from [10.131.117.203] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 23:08:58 -0700
+Message-ID: <ea0d7156-972b-8ce7-6169-c49dd7cd03d1@quicinc.com>
+Date:   Wed, 12 Oct 2022 11:38:49 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: BUG reproduced: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
+ SC7280 CPU compatible
 Content-Language: en-US
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org
-Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Slade Watkins <srw@sladewatkins.net>
-References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
- <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
- <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
- <bdab45d3-c893-42ff-dbb9-5fa93d0dff55@alu.unizg.hr>
- <dd62210d-d095-f971-2b7b-0ec54fd189a9@leemhuis.info>
- <c05134cc-92fa-dac2-e738-cf6fae194521@alu.unizg.hr>
- <6ba15505-1c04-df2b-237f-b3060f26d2e6@leemhuis.info>
- <25cd0e21-ed8e-1836-b0ec-c052c2276cd8@alu.unizg.hr>
- <c40786ab-8b3b-9b64-683f-dac589c024df@alu.unizg.hr>
-In-Reply-To: <c40786ab-8b3b-9b64-683f-dac589c024df@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: u15rEIGE9huMAx7oLW2Sr8x_AlRq-uk3
+X-Proofpoint-GUID: u15rEIGE9huMAx7oLW2Sr8x_AlRq-uk3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_03,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ phishscore=0 suspectscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210120040
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/8/22 18:43, Mirsad Goran Todorovac wrote:
 
-> On 10/6/22 14:25, Thorsten Leemhuis wrote:
->>>>>>
->>>>>>> One more question:
->>>>>>>
->>>>>>> On 06.10.22 14:00, Thorsten Leemhuis wrote:
->>>>>>> Were those two vanilla kernels? I asked in #snappy on IRC and 
->>>>>>> was told
->>>>>>> that "snapd simply expects some ubuntu bit in patched into the 
->>>>>>> kernel if
->>>>>>> it detects that it runs on an official ubuntu install...". This 
->>>>>>> was also
->>>>>>> suggested "it probably makes sense to file a but in LP to make the
->>>>>>> kernel team aware".
->>>>>> Yes, last time I tried it with git clone from linux_stable on 
->>>>>> kernel.org
->>>>>> and
->>>>>> config-6.0.0-060000-generic from the official Ubuntu mainline build
->>>>> You don't want to do that. Better take the config used to build a
->>>>> working kernel (say 5.19.y) and then build 6.0 with it (after running
->>>>> "make olddefconfig"), because it might be a new kernel option (say 
->>>>> for a
->>>>> new security technique) that might cause the problem, as explained 
->>>>> here:
->>>>> https://docs.kernel.org/admin-guide/reporting-regressions.html
->>>> If I understood well, that would mean building www.kernel.org git
->>>> linux_stable
->>>> source with Ubuntu's config-5.9.13-051903?
->>> I meant "please download Linux 6.0 (ideally through git, that you have
->>> everything to perform a bisection), add the config from a working 
->>> kernel
->>> (if config-5.9.13-051903 is one, yeah, then take that) as .config and
->>> then run "make olddefconfig" before compiling and installing the kernel
->>> to see if 6.0 fails with that config that was working.
->>
->> Hi, Thorsten,
->>
->> Having done this build with mentioned config-5.19.13-051903-config from
->> Ubuntu's mainline build and your recommended make option
->> had produced a kernel that so far did not exhibit the Firefox snap
->> "tab crash/wrong Verneed record version" bug.
->>
->> However, the uptime is 1d 18h50min, so it might be too early to draw
->> a definite general conclusion.
->>
->> Now, the brave conlusion seems to be that the culprit is one of the 
->> modules
->> added in config-6.0.0-060000-generic.
->>
->> I am new to this, but is seems that we should look at some compiled-in
->> modules (147 loadable and 41 compiled-in):
 
-Hi, guys,
+On 10/11/2022 7:37 PM, Krzysztof Kozlowski wrote:
+> Two different compatibles for SC7280 CPU BWMON instance were used
+> in DTS and bindings.  Correct the bindings to use the same one as in
+> DTS, because it is more specific.
+> 
+> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I can also confirm the bug with the official RPM build from elrepo stock 
-mainline kernel:
+ah, thanks for the fixing this,
+Reviewed-by: Rajendra Nayak <quic_rjendra@quicinc.com>
 
-[marvin@pc-mtodorov linux_torvalds]$ uname -rms
-Linux 6.0.0-1.el8.elrepo.x86_64 x86_64
-[marvin@pc-mtodorov linux_torvalds]$ /snap/bin/firefox &
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/snap/firefox/1883/usr/lib/firefox/firefox: no version information 
-available (required by /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/snap/firefox/1883/usr/lib/firefox/firefox: no version information 
-available (required by /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/snap/firefox/1883/usr/lib/firefox/firefox: no version information 
-available (required by /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libpthread.so.0: version `' not found (required by 
-/snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libpthread.so.0: version `' not found (required by 
-/snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/librt.so.1: version `' not found (required by 
-/snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/librt.so.1: version `' not found (required by 
-/snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-Missing chrome or resource URL: 
-resource://gre/modules/UpdateListener.sys.mjs
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/firefox: error while loading shared 
-libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verneed record
-/snap/firefox/1883/usr/lib/firefox/pingsender: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/pingsender: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/snap/firefox/1883/usr/lib/firefox/pingsender: error while loading 
-shared libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 
-0 of Verneed record
-/snap/firefox/1883/usr/lib/firefox/firefox: symbol lookup error: 
-/snap/firefox/1883/usr/lib/firefox/libxul.so: undefined symbol: PL_strcmp
-
-[1]+  Done                    /snap/bin/firefox  (wd: ~/Downloads)
-(wd now: ~/linux/kernel/linux_torvalds)
-[marvin@pc-mtodorov linux_torvalds]$
-
-However, I haven't yet done informing the Ubuntu developers.
-
-I will try to do that later today.
-
--Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-
+> ---
+>   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> index 2684562df4d9..be29e0b80995 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> @@ -24,7 +24,7 @@ properties:
+>       oneOf:
+>         - items:
+>             - enum:
+> -              - qcom,sc7280-bwmon
+> +              - qcom,sc7280-cpu-bwmon
+>                 - qcom,sdm845-bwmon
+>             - const: qcom,msm8998-bwmon
+>         - const: qcom,msm8998-bwmon       # BWMON v4
