@@ -2,345 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9095FCD71
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 23:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124AC5FCD76
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 23:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiJLVoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 17:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S229755AbiJLVp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 17:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJLVoQ (ORCPT
+        with ESMTP id S229514AbiJLVpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 17:44:16 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C992E1217C5;
-        Wed, 12 Oct 2022 14:44:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id b2so27689191lfp.6;
-        Wed, 12 Oct 2022 14:44:11 -0700 (PDT)
+        Wed, 12 Oct 2022 17:45:24 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ADC29367
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 14:45:22 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g28so206226pfk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 14:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CEiZW2iaRRF1Xnni1Wn7TLcOGpK4/GyHe9lQ7NcrKsk=;
-        b=E+tXsKT3mCyZi+ZRh/X2QnI7/KodgFqDBXiHtyNxc5l1Z88XYXeQGCGpVqBxkj5mUx
-         BpxgG7z9anMq9z1qZqbpYCTBegc+vDUP7n80RdFSIZoxepCkcQGdm5H07N5NxHVnIfBt
-         KBdHEsoJTgEOC5xC4jC1tVsciEU9T84JxnByg09i6YfM4PBvRZ9IkGVVPfxOaL4/o0H5
-         7k06R/lfsnu7kWv3JkOJyaf9AsUiYbO/i0KuxZ3w3zPBRKJyBnYDJl65LTHD0HQdV1Yh
-         /9zuL04ux9MZcbyU3RY+hHUGL+uHmDOS1uBSTFQvEWDs+ggfaIM8ZO7s8BvH50PxlEF2
-         DO+w==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XnSNmVn3ksCv9S8MOdNsWwpNq6AQ/Pcm1KHOD5G+EMY=;
+        b=MGsnnOGYTmmJRtA8umlAumAHrBbfsJN0AzQcAOW94b1F1EZyLaMrEapXfxR+MbLt1F
+         W2dt3XXHj0SG4HooyYMQ9meAu/G8kNck5O2VrATPQ2cGiCcbfelZXmZx7q9pZXhrLgRd
+         IaBflRnpcnLpOFjCPjOR/w1kgyhbDdQPHbZko4MGBD5MyAVlVf2dG03HSSImTJSC/i9S
+         jCZWDLNzif5W+2yjoxkfY2WHUGV5rhNAHCDAvB+LWqLgdoicKE2bZkCabXNfDu2TyszF
+         jUbvzs7DEtjoSPUKBfYdNk3Q9L+iGArIxaCeNPJan3kmlNQbF0IkuahIa8meBvSEwLi6
+         D63Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CEiZW2iaRRF1Xnni1Wn7TLcOGpK4/GyHe9lQ7NcrKsk=;
-        b=OCTbQPzkt4t9tO1bS9F1QhORpS/cay26PWllJxqBe+ldFtevmuDgpgXt+uXvPmEaBc
-         Ho04Il1lZTpLqGlb0e7nX25oqrHlTHwqepKk/a3Y9yQtdYY+kTp8Gti/y2HiU5dyHQ73
-         U1yxQrSNcu31hYb7jr4IVACCVyjzVEebGAB+mL7HJXxr9TFXbRqBiNx92isreZ4vxbgv
-         8q3rWcy3QAvo309egkUzVgIIUGupZ1nrnSveJMxffRIQE83y4721xQ93To9CZmMdpRG2
-         ZU5haEz0phbocGPZc/+d2E2bpeSIa9+h9VfTZnYmIMwRxSkaiev9ZdiNZVYm4EnM6+D1
-         ycBQ==
-X-Gm-Message-State: ACrzQf1/Ni2KAyFj1BeduCX8/Xnu+huUHK014UsHUT1F0fLOvtPgsjId
-        Pes0rCue+pKbqPQHSFDWM+L4upE2GxjgFUFpUtI=
-X-Google-Smtp-Source: AMsMyM67oSnhRN+q3aenz7F+GSRjmB1k3E/vdDZ0lb8pbfU9azZLmhnSFeT6XObTwEVteFksrYltiyLdnAd/Qh5TMVI=
-X-Received: by 2002:a05:6512:108a:b0:4a2:7ec0:2fb7 with SMTP id
- j10-20020a056512108a00b004a27ec02fb7mr12316152lfg.553.1665611049731; Wed, 12
- Oct 2022 14:44:09 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XnSNmVn3ksCv9S8MOdNsWwpNq6AQ/Pcm1KHOD5G+EMY=;
+        b=J2cKrKbM21eVoULDcfVWW6aVeSTaij/KkkTbTuZ0sT9Rm8wWkQELNrYuF8Egzt3u4H
+         ahnigT6WpiRyy22YAblvYLntGVexnj3NzDCdaPpr0O3b2XQ6Uz03CLFBf3JY9HxeVBXl
+         9jJO4XPPwR0HqAMEZsHopixiD003sY1AZye6YOPF5piYZ0hG/+R6y03Nj3X2yp3dfFkf
+         Mbl9av+LZRgwWIyvoJgb1OnIQ67SQsXat9oSacdct1FkwxjFEIkcifJDNmkJ7zjvuWUn
+         1XzI67KwJNe5V5zLo13JEllC9LLJ4dzi4GRN4jOUn/iLm4ekGO+LpS6hA7l+rdj2ScSH
+         rkwQ==
+X-Gm-Message-State: ACrzQf221dKwMbltWmXMacv6iLDYeyJuMNk5uoEj+9s7LpoSLek2oFyE
+        TwD9TQ8YIWxwsY+hJWj+bbdXLw==
+X-Google-Smtp-Source: AMsMyM6HbXJvvwCvGKgvg48z9e4cYGEm947nwbG/SYEqqcBQ9dDCX+0Mato1F438T8S1GJHJ2ZdJxQ==
+X-Received: by 2002:a63:4b4c:0:b0:45a:5f8:b49d with SMTP id k12-20020a634b4c000000b0045a05f8b49dmr26997295pgl.490.1665611121849;
+        Wed, 12 Oct 2022 14:45:21 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id ik7-20020a170902ab0700b0016f8e8032c4sm11006457plb.129.2022.10.12.14.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 14:45:20 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 15:45:18 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V6 4/7] remoteproc: imx_rproc: support kicking Mcore from
+ Linux for i.MX8QXP
+Message-ID: <20221012214518.GB1196937@p14s>
+References: <20220929061704.1571746-1-peng.fan@oss.nxp.com>
+ <20220929061704.1571746-5-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
- <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
- <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com> <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
- <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com> <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
- <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
- <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com> <CAHQ1cqGSXoUTopwvrQtLww5M0Tf=6F505ziLn+wGHhW_8-JhFQ@mail.gmail.com>
- <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com>
-In-Reply-To: <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Wed, 12 Oct 2022 14:43:56 -0700
-Message-ID: <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-To:     Ferry Toth <fntoth@gmail.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929061704.1571746-5-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 2:30 AM Ferry Toth <fntoth@gmail.com> wrote:
->
-> Hi
->
-> On 11-10-2022 22:50, Andrey Smirnov wrote:
-> > On Tue, Oct 11, 2022 at 11:54 AM Ferry Toth <fntoth@gmail.com> wrote:
-> >> Hi,
-> >>
-> >> Op 10-10-2022 om 23:35 schreef Andrey Smirnov:
-> >>> On Mon, Oct 10, 2022 at 1:52 PM Ferry Toth <fntoth@gmail.com> wrote:
-> >>>> Hi
-> >>>>
-> >>>> Op 10-10-2022 om 13:04 schreef Ferry Toth:
-> >>>>> Hi
-> >>>>>
-> >>>>> On 10-10-2022 07:02, Andrey Smirnov wrote:
-> >>>>>> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
-> >>>>>>> On 07-10-2022 04:11, Thinh Nguyen wrote:
-> >>>>>>>> On Thu, Oct 06, 2022, Ferry Toth wrote:
-> >>>>>>>>> Hi
-> >>>>>>>>>
-> >>>>>>>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
-> >>>>>>>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
-> >>>>>>>>>>> Hi,
-> >>>>>>>>>>>
-> >>>>>>>>>>>          Thanks!
-> >>>>>>>>>>>
-> >>>>>>>>>>>          Does the failure only happen the first time host is
-> >>>>>>>>>>> initialized? Or can
-> >>>>>>>>>>>          it recover after switching to device then back to host mode?
-> >>>>>>>>>>>
-> >>>>>>>>>>> I can switch back and forth and device mode works each time,
-> >>>>>>>>>>> host mode remains
-> >>>>>>>>>>> dead.
-> >>>>>>>>>> Ok.
-> >>>>>>>>>>
-> >>>>>>>>>>>          Probably the failure happens if some step(s) in
-> >>>>>>>>>>> dwc3_core_init() hasn't
-> >>>>>>>>>>>          completed.
-> >>>>>>>>>>>
-> >>>>>>>>>>>          tusb1210 is a phy driver right? The issue is probably
-> >>>>>>>>>>> because we didn't
-> >>>>>>>>>>>          initialize the phy yet. So, I suspect placing
-> >>>>>>>>>>> dwc3_get_extcon() after
-> >>>>>>>>>>>          initializing the phy will probably solve the dependency
-> >>>>>>>>>>> problem.
-> >>>>>>>>>>>
-> >>>>>>>>>>>          You can try something for yourself or I can provide
-> >>>>>>>>>>> something to test
-> >>>>>>>>>>>          later if you don't mind (maybe next week if it's ok).
-> >>>>>>>>>>>
-> >>>>>>>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon()
-> >>>>>>>>>>> until after
-> >>>>>>>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU
-> >>>>>>>>>>> initially
-> >>>>>>>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode()
-> >>>>>>>>>>> but only for
-> >>>>>>>>>>> case USB_DR_MODE_OTG. So with this change order of events is
-> >>>>>>>>>>> more or less
-> >>>>>>>>>>> unchanged" solves the issue.
-> >>>>>>>>>>>
-> >>>>>>>>>> I saw the experiment you did from the link you provided. We want
-> >>>>>>>>>> to also
-> >>>>>>>>>> confirm exactly which step in dwc3_core_init() was needed.
-> >>>>>>>>> Ok. I first tried the code move suggested by Andrey (didn't work).
-> >>>>>>>>> Then
-> >>>>>>>>> after reading the actual code I moved a bit further.
-> >>>>>>>>>
-> >>>>>>>>> This move was on top of -rc6 without any reverts. I did not make
-> >>>>>>>>> additional
-> >>>>>>>>> changes to dwc3_core_init()
-> >>>>>>>>>
-> >>>>>>>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
-> >>>>>>>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
-> >>>>>>>>>
-> >>>>>>>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. -
-> >>>>>>>>> dwc3_core_init - ..
-> >>>>>>>>> - dwc3_core_init_mode (no change)
-> >>>>>>>>>
-> >>>>>>>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. -
-> >>>>>>>>> dwc3_get_extcon -
-> >>>>>>>>> dwc3_core_init_mode (works)
-> >>>>>>>>>
-> >>>>>>>>> .. are what I believe for this issue irrelevant calls to
-> >>>>>>>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
-> >>>>>>>>>
-> >>>>>>>> Right. Thanks for narrowing it down. There are still many steps in
-> >>>>>>>> dwc3_core_init(). We have some suspicion, but we still haven't
-> >>>>>>>> confirmed
-> >>>>>>>> the exact cause of the failure. We can write a proper patch once we
-> >>>>>>>> know
-> >>>>>>>> the reason.
-> >>>>>>> If you would like me to test your suspicion, just tell me what to do
-> >>>>>>> :-)
-> >>>>>> OK, Ferry, I think I'm going to need clarification on specifics on
-> >>>>>> your test setup. Can you share your kernel config, maybe your
-> >>>>>> "/proc/config.gz", somewhere? When you say you are running vanilla
-> >>>>>> Linux, do you mean it or do you mean vanilla tree + some patch delta?
-> >>>>> For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
-> >>>>>
-> >>>>> https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
-> >>>>>
-> >>>>>
-> >>>>> There are 2 patches referred in #67 and #68. One is related to the
-> >>>>> infinite loop. The other is I believe also needed to get dwc3 to work.
-> >>>>>
-> >>>>> All the kernel config are applied as .cfg.
-> >>>>>
-> >>>>> Patches and cfs's here:
-> >>>>>
-> >>>>> https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
-> >>>>>
-> >>>> Updated Yocto recipe for v6.0 here:
-> >>>>
-> >>>> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb
-> >>>>
-> >>>> #75-#77 are the 2 reverts from Andy, + one SOF revert (not related to
-> >>>> this thread).
-> >>> Please drop all of this
-> >>> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb#L69-L77
-> >>> and re do the testing. Assuming things are still broken, that's how
-> >>> you want to do the bisecting.
-> >> I removed 4 patches:
-> >> 0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
-> >> 0044-REVERTME-usb-dwc3-gadget-skip-endpoints-ep-18-in-out.patch
-> >> 0001-Revert-USB-fixup-for-merge-issue-with-usb-dwc3-Don-t.patch
-> >> 0001-Revert-usb-dwc3-Don-t-switch-OTG-peripheral-if-extco.patch
-> > Please remove all custom patches so we are on the same page. I don't
-> > suspect the 8250 related changes to affect anything, but I also would
-> > like to be testing the same thing. I'm testing vanilla v6.0
-> Alright, but don't expect any change. The 8250 patches are related to
-> using DMA for the serial ports (except the console). It may affect
-> bluetooth, the serial port on the arduino connector, but not the console.
+On Thu, Sep 29, 2022 at 02:17:01PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> When M4 is in the same hardware partition with Cortex-A, it
+> could be start/stop by Linux.
+> 
+> Added power domain to make sure M4 could run, it requires several power
+> domains to work. Make clk always optional for i.MX8QXP, because
+> SCFW handles it when power up M4 core.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/remoteproc/imx_rproc.c | 88 ++++++++++++++++++++++++++++++++--
+>  1 file changed, 85 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index a56aecae00c6..7d2e11aed0aa 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/regmap.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/workqueue.h>
+> @@ -79,6 +80,8 @@ struct imx_rproc_mem {
+>  #define ATT_OWN		BIT(1)
+>  #define ATT_IOMEM	BIT(2)
+>  
+> +static int imx_rproc_detach_pd(struct rproc *rproc);
+> +
+>  struct imx_rproc {
+>  	struct device			*dev;
+>  	struct regmap			*regmap;
+> @@ -96,6 +99,10 @@ struct imx_rproc {
+>  	struct notifier_block		rproc_nb;
+>  	u32				rproc_pt;	/* partition id */
+>  	u32				rsrc_id;	/* resource id */
+> +	u32				entry;		/* cpu start address */
+> +	int                             num_pd;
+> +	struct device                   **pd_dev;
+> +	struct device_link              **pd_dev_link;
+>  };
+>  
+>  static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+> @@ -335,6 +342,9 @@ static int imx_rproc_start(struct rproc *rproc)
+>  		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, 0, 0, 0, 0, 0, 0, &res);
+>  		ret = res.a0;
+>  		break;
+> +	case IMX_RPROC_SCU_API:
+> +		ret = imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc_id, true, priv->entry);
+> +		break;
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> @@ -364,6 +374,9 @@ static int imx_rproc_stop(struct rproc *rproc)
+>  		if (res.a1)
+>  			dev_info(dev, "Not in wfi, force stopped\n");
+>  		break;
+> +	case IMX_RPROC_SCU_API:
+> +		ret = imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc_id, false, priv->entry);
+> +		break;
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> @@ -713,8 +726,10 @@ static void imx_rproc_put_scu(struct rproc *rproc)
+>  	if (dcfg->method != IMX_RPROC_SCU_API)
+>  		return;
+>  
+> -	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
+> +	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
+> +		imx_rproc_detach_pd(rproc);
+>  		return;
+> +	}
+>  
+>  	imx_scu_irq_group_enable(IMX_SC_IRQ_GROUP_REBOOTED, BIT(priv->rproc_pt), false);
+>  	imx_scu_irq_unregister_notifier(&priv->rproc_nb);
+> @@ -736,6 +751,69 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
+>  	return 0;
+>  }
+>  
+> +static int imx_rproc_attach_pd(struct imx_rproc *priv)
+> +{
+> +	struct device *dev = priv->dev;
+> +	int ret, i;
+> +
+> +	priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
+> +						  "#power-domain-cells");
+> +	if (priv->num_pd <= 1)
 
-Yeah, I don't, but for the sake of thoroughness we may as well be
-building the same thing.
+What happens if we get 1 power domains?  How is it handled?  There should be a
+comment explaining what is happening here.
 
-> >> and indeed as you expect kernel boots (no infinite loop). However dwc3
-> >> host mode is not working as in your case, device mode works fine (Yocto
-> >> configures a set of gadgets for me).
-> > What do you do to test host mode working? lsusb? Something else?
-> > Asking to make sure I'm doing something equivalent on my end.
-> >
-> I have a smsc95xx 4p usb hub with 1 eth port continuously plugged. It
-> has leds on all ports so when it works it lights up like a Christmas tree.
->
-> But I also tried plugging a usb stick.
->
-> It maybe that lsusb is not enough. Iirc the root hub is there, but the
-> tusb1210 not and then device plugs are not detected. So in my case none
-> of the leds on the hub turn on.
->
+> +		return 0;
+> +
+> +	priv->pd_dev = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev), GFP_KERNEL);
+> +	if (!priv->pd_dev)
+> +		return -ENOMEM;
+> +
+> +	priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev_link),
+> +					       GFP_KERNEL);
+> +
+> +	if (!priv->pd_dev_link)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < priv->num_pd; i++) {
+> +		priv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
+> +		if (IS_ERR(priv->pd_dev[i])) {
+> +			ret = PTR_ERR(priv->pd_dev[i]);
+> +			goto detach_pd;
+> +		}
+> +
+> +		priv->pd_dev_link[i] = device_link_add(dev, priv->pd_dev[i], DL_FLAG_STATELESS |
+> +						       DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+> +		if (!priv->pd_dev_link[i]) {
+> +			dev_pm_domain_detach(priv->pd_dev[i], false);
+> +			ret = -EINVAL;
+> +			goto detach_pd;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +detach_pd:
+> +	while (--i >= 0) {
+> +		device_link_del(priv->pd_dev_link[i]);
+> +		dev_pm_domain_detach(priv->pd_dev[i], false);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int imx_rproc_detach_pd(struct rproc *rproc)
+> +{
+> +	struct imx_rproc *priv = rproc->priv;
+> +	int i;
+> +
+> +	if (priv->num_pd <= 1)
 
-Yeah, by lsusb I mean, "plug in a device" and make sure it enumerated
-and visible in "lsusb".
+Same here.
 
-> >> Just to be sure if I could have bisected without 0043a I added back the
-> >> 2 0001-Revert* and indeed I run into the infinite loop with the console
-> >> spitting out continuous:
-> >> debugfs: Directory 'dwc3.0.auto' with parent 'ulpi' already present!
-> >> tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
-> >>
-> >> so yes it seems either 0043b or your patch "usb: dwc3: Don't switch OTG
-> >> -> peripheral if extcon is present" is needed to boot (break the
-> >> infinite loop). But your patch is in my case not sufficient to make host
-> >> mode work.
-> >>
-> > Next step would be to establish if USB is working before my patch. You
-> > should be able to avoid the boot loop if you disable the
-> > "phy-tusb1210" driver. The driver fails to probe anyway, so it's not
-> > very likely to be crucial for functioning, so it should allow you to
-> > try things with my patch reverted:
->
-> You lost me here. With "boot loop" you mean "probe loop" right?
+With the above:
 
-Yep
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-> Why do
-> you think the tusb1210 driver is not crucial?
->
-> See "phy: ti: tusb1210: Don't check for write errors when powering on"
->
-
-My end goal here is to find a way to test vanilla v6.0 with the two
-patches reverted on your end. I thought that during my testing I saw
-tusb1210 print those timeout messages during its probe and that
-disabling the driver worked to break the loop, but I went back to
-double check and it doesn't work so scratch that idea. Configuring
-extcon as a built-in breaks host functionality with or without patches
-on my end, so I'm not sure it could be a path.
-
-I won't have time to try things with
-0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch until
-the weekend, meanwhile can you give this diff a try with vanilla (no
-reverts) v6.0:
-
-modified   drivers/phy/ti/phy-tusb1210.c
-@@ -127,6 +127,7 @@ static int tusb1210_set_mode(struct phy *phy, enum
-phy_mode mode, int submode)
-  u8 reg;
-
-  ret = tusb1210_ulpi_read(tusb, ULPI_OTG_CTRL, &reg);
-+ WARN_ON(ret < 0);
-  if (ret < 0)
-  return ret;
-
-@@ -152,7 +153,10 @@ static int tusb1210_set_mode(struct phy *phy,
-enum phy_mode mode, int submode)
-  }
-
-  tusb->otg_ctrl = reg;
-- return tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
-+ ret = tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
-+ WARN_ON(ret < 0);
-+ return ret;
-+
- }
-
- #ifdef CONFIG_POWER_SUPPLY
-
-? I'm curious to see if there's masked errors on your end since dwc3
-driver doesn't check for those.
-
-> It should not be failing to probe (and with Andy's "Break-infinite-loop"
-> patch is doesn't) as without the tusb1210 usb host mode won't work as
-> device plugs are not detected.
->
-> Earlier in this thread we had:
->
-> "The effect of the patch is that on Merrifield (I tested with Intel
-> Edison Arduino board which has a HW switch to select between host and
-> device mode) device mode works but in host mode USB is completely not
-> working.
->
-> Currently on host mode - when working - superfluous error messages from
-> tusb1210 appear. When host mode is not working there are no tusb1210
-> messages in the logs / on the console at all. Seemingly tusb1210 is not
-> probed, which points in the direction of a relation to extcon."
->
-> > git revert 8bd6b8c4b100 0f0101719138
-> >
-> > After that, if things start working, it'd make sense to re-do your
-> > function re-arranging experiment to re-validate it.
-> >
-> >> As I understand it depends a bit on the timing, I might have a different
-> >> initrd (built by Yocto vs. Buildroot). F.i. I see I have
-> >> extcon-intel-mrfld in initrd and dwc3 / phy-tusb1210 built-in.
-> >>
-> > You mentioned that your rootfs image does some gadget configuration
-> > for you. Can this be disabled? If yes, it'd make sense to check if
-> > this could be a variable explaining the difference.
-> This is done through configfs only when the switch is set to device mode.
-
-Sure, but can it be disabled? We are looking for unknown variables, so
-excluding this would be a reasonable thing to do.
-
-> > What U-Boot version are you running? AFACT U-Boot will touch that
-> > particular IP block, so this might be somewhat relevant.
-> IIRC if have v2022.04 but tested v2021.10 earlier (no difference).
-
-OK, sounds like we can tick that off the list.
+> +		return 0;
+> +
+> +	for (i = 0; i < priv->num_pd; i++) {
+> +		device_link_del(priv->pd_dev_link[i]);
+> +		dev_pm_domain_detach(priv->pd_dev[i], false);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int imx_rproc_detect_mode(struct imx_rproc *priv)
+>  {
+>  	struct regmap_config config = { .name = "imx-rproc" };
+> @@ -770,8 +848,12 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
+>  		 * If Mcore resource is not owned by Acore partition, It is kicked by ROM,
+>  		 * and Linux could only do IPC with Mcore and nothing else.
+>  		 */
+> -		if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
+> -			return 0;
+> +		if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
+> +			if (of_property_read_u32(dev->of_node, "fsl,entry-address", &priv->entry))
+> +				return -EINVAL;
+> +
+> +			return imx_rproc_attach_pd(priv);
+> +		}
+>  
+>  		priv->rproc->state = RPROC_DETACHED;
+>  		priv->rproc->recovery_disabled = true;
+> -- 
+> 2.37.1
+> 
