@@ -2,172 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55945FC521
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E635FC526
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 14:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiJLMRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 08:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S229747AbiJLMTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 08:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJLMRH (ORCPT
+        with ESMTP id S229676AbiJLMTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 08:17:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD5DB5146;
-        Wed, 12 Oct 2022 05:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=771q3x4hOnkGzc78SSiuR2Kc8F2eZjEEOxi50XFCd14=; b=E1drx2e5ov2RYK9oK5Zx5/KeJi
-        euNoevVzCIAtLYs/LZRRj1ulRyX2D/g1DoT/h6nJ8WHN4wg8v9l8zMHApB0wkPYhVKPO75VrWjbuZ
-        6MezWJMrWmFs+QNaXuL1ijf3KmKfIZqg2nux/9HZGvrJjKNQB4C3JgNYbiafLXR01Q7K+kpVkjcxl
-        yA/QkyrirVfJz1SUdljE2HM4DMFlxizmQa9C0Gij2voz7Mv8EFIszLrDBUY4ZHMnXzldcVLvtj55A
-        qfhTY8b4HbKz14NvEk9HXzGkBgibBW6NpB/P9lmwrLP9E63vjpm2kMHSQU/7f0TdNQivVL5jIjQlp
-        UsjTPjFA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oiaf1-002rHx-8r; Wed, 12 Oct 2022 12:16:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CCA95300023;
-        Wed, 12 Oct 2022 14:16:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A982F20E06FFE; Wed, 12 Oct 2022 14:16:29 +0200 (CEST)
-Date:   Wed, 12 Oct 2022 14:16:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Message-ID: <Y0awHa8oS5yal5M9@hirez.programming.kicks-ass.net>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
- <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
- <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
- <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
- <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
- <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
+        Wed, 12 Oct 2022 08:19:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB21BEFA0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 05:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665577147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NV9CicB0DRH4ogY4pUsl7yjoSLbllPXxF4kP6gpANzQ=;
+        b=ZkdFf4RSyplWIFAZsiTBd1eC38yxC4jqCcTmT2b2alQ3A3NN3PoyHHda7lfpms+UpCV42o
+        YinuqKnTn2KnnTI3pA1PMZ8gm6RDgUXPy9ShiVq+ARkciW4TcK1ASiuVoCZHFaP726PPqc
+        t1XN8hCIg5p+27MIUNYYcvPVvk6wOaQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-83-Mfy2mdPFOvymBf8YsiyteA-1; Wed, 12 Oct 2022 08:19:04 -0400
+X-MC-Unique: Mfy2mdPFOvymBf8YsiyteA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 526D8811E75;
+        Wed, 12 Oct 2022 12:19:02 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5D68C414A809;
+        Wed, 12 Oct 2022 12:18:54 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 23/39] x86: Introduce userspace API for CET enabling
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+        <20220929222936.14584-24-rick.p.edgecombe@intel.com>
+        <87v8os0wx5.fsf@oldenburg.str.redhat.com>
+        <8599719452d9615235f7fdd274a9b6ea04ab1f7c.camel@intel.com>
+Date:   Wed, 12 Oct 2022 14:18:52 +0200
+In-Reply-To: <8599719452d9615235f7fdd274a9b6ea04ab1f7c.camel@intel.com> (Rick
+        P. Edgecombe's message of "Mon, 10 Oct 2022 16:28:57 +0000")
+Message-ID: <87zge1z13n.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 02:09:00PM +0530, Ravi Bangoria wrote:
+* Rick P. Edgecombe:
 
-> > @@ -3366,6 +3370,14 @@ static void perf_event_sync_stat(struct
-> >  	}
-> >  }
-> >  
-> > +#define list_for_each_entry_double(pos1, pos2, head1, head2, member)	\
-> > +	for (pos1 = list_first_entry(head1, typeof(*pos1), member),	\
-> > +	     pos2 = list_first_entry(head2, typeof(*pos2), member);	\
-> > +	     !list_entry_is_head(pos1, head1, member) &&		\
-> > +	     !list_entry_is_head(pos2, head2, member);			\
-> > +	     pos1 = list_next_entry(pos1, member),			\
-> > +	     pos2 = list_next_entry(pos2, member))
-> > +
-> >  static void perf_event_swap_task_ctx_data(struct perf_event_context *prev_ctx,
-> >  					  struct perf_event_context *next_ctx)
-> >  {
-> > @@ -3374,16 +3386,9 @@ static void perf_event_swap_task_ctx_dat
-> >  	if (!prev_ctx->nr_task_data)
-> >  		return;
-> >  
-> > -	prev_epc = list_first_entry(&prev_ctx->pmu_ctx_list,
-> > -				    struct perf_event_pmu_context,
-> > -				    pmu_ctx_entry);
-> > -	next_epc = list_first_entry(&next_ctx->pmu_ctx_list,
-> > -				    struct perf_event_pmu_context,
-> > -				    pmu_ctx_entry);
-> > -
-> > -	while (&prev_epc->pmu_ctx_entry != &prev_ctx->pmu_ctx_list &&
-> > -	       &next_epc->pmu_ctx_entry != &next_ctx->pmu_ctx_list) {
-> > -
-> > +	list_for_each_entry_double(prev_epc, next_epc,
-> > +				   &prev_ctx->pmu_ctx_list, &next_ctx->pmu_ctx_list,
-> > +				   pmu_ctx_entry) {
-> 
-> There are more places which can use list_for_each_entry_double().
-> I'll fix those.
+> On Mon, 2022-10-10 at 12:56 +0200, Florian Weimer wrote:
+>> > +     /* Only support enabling/disabling one feature at a time. */
+>> > +     if (hweight_long(features) > 1)
+>> > +             return -EINVAL;
+>> 
+>> This means we'll soon need three extra system calls for x86-64
+>> process
+>> start: SHSTK, IBT, and switching off vsyscall emulation.  (The latter
+>> does not need any special CPU support.)
+>> 
+>> Maybe we can do something else instead to make the strace output a
+>> little bit cleaner?
+>
+> In previous versions it supported enabling multiple features in a
+> single syscall. Thomas Gleixner pointed out that (this was on the LAM
+> patchset that shared the interface at the time) it makes the behavior
+> of what to do when one feature fails to enable complicated:
+>
+> https://lore.kernel.org/lkml/87zgjjqico.ffs@tglx/
 
-I've gone and renamed it: double_list_for_each_entry(), but yeah, didn't
-look too hard for other users.
+Can we return the bits for the features that were actually enabled?
+Those three don't have cross-dependencies in the sense that you would
+only use X & Y together, but not X or Y alone.
 
-> > @@ -4859,7 +4879,14 @@ static void put_pmu_ctx(struct perf_even
-> >  	if (epc->ctx) {
-> >  		struct perf_event_context *ctx = epc->ctx;
-> >  
-> > -		// XXX ctx->mutex
-> > +		/*
-> > +		 * XXX
-> > +		 *
-> > +		 * lockdep_assert_held(&ctx->mutex);
-> > +		 *
-> > +		 * can't because of the call-site in _free_event()/put_event()
-> > +		 * which isn't always called under ctx->mutex.
-> > +		 */
-> 
-> Yes. I came across the same and could not figure out how to solve
-> this. So Just kept XXX as is.
+Thanks,
+Florian
 
-Yeah, I can sorta fix it, but it's ugly so there we are.
-
-> >  
-> >  		WARN_ON_ONCE(list_empty(&epc->pmu_ctx_entry));
-> >  		raw_spin_lock_irqsave(&ctx->lock, flags);
-
-> > @@ -12657,6 +12675,13 @@ perf_event_create_kernel_counter(struct
-> >  		goto err_unlock;
-> >  	}
-> >  
-> > +	pmu_ctx = find_get_pmu_context(pmu, ctx, event);
-> > +	if (IS_ERR(pmu_ctx)) {
-> > +		err = PTR_ERR(pmu_ctx);
-> > +		goto err_unlock;
-> > +	}
-> > +	event->pmu_ctx = pmu_ctx;
-> 
-> We should call find_get_pmu_context() with ctx->mutex held and thus
-> above perf_event_create_kernel_counter() change. Is my understanding
-> correct?
-
-That's the intent yeah. But due to not always holding ctx->mutex over
-put_pmu_ctx() this might be moot. I'm almost through auditing epc usage
-and I think ctx->lock is sufficient, fingers crossed.
-
-> > +
-> >  	if (!task) {
-> >  		/*
-> >  		 * Check if the @cpu we're creating an event for is online.
-
-> > @@ -12998,7 +13022,7 @@ void perf_event_free_task(struct task_st
-> >  	struct perf_event_context *ctx;
-> >  	struct perf_event *event, *tmp;
-> >  
-> > -	ctx = rcu_dereference(task->perf_event_ctxp);
-> > +	ctx = rcu_access_pointer(task->perf_event_ctxp);
-> 
-> We dereference ctx pointer but with mutex and lock held. And thus
-> rcu_access_pointer() is sufficient. Is my understanding correct?
-
-We do not in fact hold ctx->lock here IIRC; but this is a NULL test, if
-it is !NULL we know we have a reference on it and are good.
