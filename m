@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D435E5FDFA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089CE5FDFAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiJMR44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S230060AbiJMR5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJMR4U (ORCPT
+        with ESMTP id S230008AbiJMR4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:56:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECAF17E1F;
-        Thu, 13 Oct 2022 10:54:50 -0700 (PDT)
+        Thu, 13 Oct 2022 13:56:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00DC3A4AB;
+        Thu, 13 Oct 2022 10:54:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61FEB618D1;
-        Thu, 13 Oct 2022 17:54:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E192C433D6;
-        Thu, 13 Oct 2022 17:54:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC964B82026;
+        Thu, 13 Oct 2022 17:54:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375CDC43146;
+        Thu, 13 Oct 2022 17:54:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683661;
-        bh=koIdHHm+RAcdg+P8y3HCy0PZ6vMhhsEEGVCvN5v35k4=;
+        s=korg; t=1665683664;
+        bh=OEVHSmyP6ry9HP1rzqnCniac1P21E4uC7zWTb3gHzHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zYSBJDhem2QnnVy+0pjHqarrKxwC4hcqxS7PCwOZEbKRfzcIjmDBHqHbUXNUdOs3e
-         f+L4qcctJB4V6JLvemzlLwOSD7Yajo5L/RkmjLVxMVvqqgIUNIzLzIY+zjNOpDbXZi
-         Cc6DHqikeesBlB3THOkxCVagW9josRkm38mJnOig=
+        b=fbXUTaGXXlvaTdVPsC/IIwX3f1g+QcbOttriTCuRE6krHQyUIwy7e74NoMX8H9oFA
+         P/crnrM1QwY0WWsISa68tEJy1WJhm6Py78aVOTXvxyHQ/x6xTpXUOSQRYu/Nt6mNdT
+         Hyo27Tz45xHe/89FK7i1JYmy5S/0DZj5tFw0OMmw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 5.4 23/38] ALSA: hda: Fix position reporting on Poulsbo
-Date:   Thu, 13 Oct 2022 19:52:24 +0200
-Message-Id: <20221013175145.039231243@linuxfoundation.org>
+        stable@vger.kernel.org, Aditya Garg <gargaditya08@live.com>,
+        Samuel Jiang <chyishian.jiang@gmail.com>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.4 24/38] efi: Correct Macmini DMI match in uefi cert quirk
+Date:   Thu, 13 Oct 2022 19:52:25 +0200
+Message-Id: <20221013175145.067376295@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
 References: <20221013175144.245431424@linuxfoundation.org>
@@ -53,40 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Orlando Chamberlain <redecorating@protonmail.com>
 
-commit 56e696c0f0c71b77fff921fc94b58a02f0445b2c upstream.
+commit bab715bdaa9ebf28d99a6d1efb2704a30125e96d upstream.
 
-Hans reported that his Sony VAIO VPX11S1E showed the broken sound
-behavior at the start of the stream for a couple of seconds, and it
-turned out that the position_fix=1 option fixes the issue.  It implies
-that the position reporting is inaccurate, and very likely hitting on
-all Poulsbo devices.
+It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
+is inconsistent with other model line names.
 
-The patch applies the workaround for Poulsbo generically to switch to
-LPIB mode instead of the default position buffer.
+Correct the capitalisation of Macmini in the quirk for skipping loading
+platform certs on T2 Macs.
 
-Reported-and-tested-by: Hans de Goede <hdegoede@redhat.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/3e8697e1-87c6-7a7b-d2e8-b21f1d2f181b@redhat.com
-Link: https://lore.kernel.org/r/20221001142124.7241-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Currently users get:
+
+------------[ cut here ]------------
+[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
+WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x55/0xe0
+Modules linked in:
+CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3fc40fd08edab32a509fbf4c9bc52d111e
+Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
+Workqueue: efi_rts_wq efi_call_rts
+...
+---[ end trace 0000000000000000 ]---
+efi: Froze efi_rts_wq and disabled EFI Runtime Services
+integrity: Couldn't get size: 0x8000000000000015
+integrity: MODSIGN: Couldn't get UEFI db list
+efi: EFI Runtime Services are disabled!
+integrity: Couldn't get size: 0x8000000000000015
+integrity: Couldn't get UEFI dbx list
+
+Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot for T2 Macs")
+Cc: stable@vger.kernel.org
+Cc: Aditya Garg <gargaditya08@live.com>
+Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
+Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/hda_intel.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ security/integrity/platform_certs/load_uefi.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -2532,7 +2532,8 @@ static const struct pci_device_id azx_id
- 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
- 	/* Poulsbo */
- 	{ PCI_DEVICE(0x8086, 0x811b),
--	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
-+	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE |
-+	  AZX_DCAPS_POSFIX_LPIB },
- 	/* Oaktrail */
- 	{ PCI_DEVICE(0x8086, 0x080a),
- 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
+--- a/security/integrity/platform_certs/load_uefi.c
++++ b/security/integrity/platform_certs/load_uefi.c
+@@ -30,7 +30,7 @@ static const struct dmi_system_id uefi_s
+ 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
+ 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
+ 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
+-	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
++	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
+ 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
+ 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
+ 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
 
 
