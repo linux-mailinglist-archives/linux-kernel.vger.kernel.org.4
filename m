@@ -2,100 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE8E5FD81D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7CF5FD820
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJMLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
+        id S229665AbiJMLJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJMLI6 (ORCPT
+        with ESMTP id S229620AbiJMLJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:08:58 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEB3210CFB8;
-        Thu, 13 Oct 2022 04:08:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 3756880FC;
-        Thu, 13 Oct 2022 11:00:04 +0000 (UTC)
-Date:   Thu, 13 Oct 2022 14:08:54 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: Re: [PATCH 1/4] ARM: dts: omap3-n900: fix LCD reset line polarity
-Message-ID: <Y0fxxsk+e2o0wYZV@atomide.com>
-References: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
- <Y0UDEtQlN5Y9h7BU@atomide.com>
- <20221011123726.elsr53ue7nxzhvww@mercury.elektranox.org>
- <Y0V4cLGbYe4j+ls6@google.com>
- <Y0V99Agad6Ma+yTC@atomide.com>
- <Y0V/82JsRVZh6PlL@google.com>
- <Y0WCCw8k+KTuvdWX@atomide.com>
- <41373c20-3b97-ac47-81c8-75bf1bbe3a38@ideasonboard.com>
- <Y0cVw63d3+pAVbd2@google.com>
- <b56197a1-f23d-5f8a-b32d-f8787586364e@ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b56197a1-f23d-5f8a-b32d-f8787586364e@ideasonboard.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 07:09:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5257E110B0C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:09:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFDCAB81E1D
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:09:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A66EC433C1;
+        Thu, 13 Oct 2022 11:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665659343;
+        bh=mJSG3Ydey0D8JU11fE/SlVcGP6owZzI1lHl/NbqcfTo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=je2mEfiKTkOYfvV0MhUFOdagygdELrWt1GjDnOiWcenKEQ8XqOMCovkIG88IO+vYi
+         HcOakqRS0q8ILHHQrBqi/+hZ0LHgP+sgmXFSqqg7mcIppwSw16vyQ725u8YVH0jH//
+         GqHZLEHJSWYMFgNU6jN2M1xd0htll1Xry/lkRqUoTNDLIDR8M6DiNeAJtoZFqvN32j
+         51PszE1f0DxJnYeRyZ88CQSrfCesVlhcDPMOwivHfeywoXJXLivrEcxhqLojCfLcvj
+         RGkC51wFcwVyAxiaWLhabUvvHuTjOLr93siCuuz+3oyJEPCtV4wvHe97SX/Wf3ttGm
+         z5yw8AJkTXhoQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oiw5F-00GHc3-0t;
+        Thu, 13 Oct 2022 12:09:01 +0100
+Date:   Thu, 13 Oct 2022 12:09:00 +0100
+Message-ID: <86fsfsf0ab.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Denis Nikitin <denik@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Brazdil <dbrazdil@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, Manoj Gupta <manojgupta@google.com>
+Subject: Re: [PATCH v2] KVM: arm64: nvhe: Fix build with profile optimization
+In-Reply-To: <CADDJ8CVX5tZU9jL4FvTnvQxxVohhS76TVOoZAyy3k_Uit1efmA@mail.gmail.com>
+References: <20220920082005.2459826-1-denik@chromium.org>
+        <20220922053145.944786-1-denik@chromium.org>
+        <87h70zk83g.wl-maz@kernel.org>
+        <CADDJ8CW0QgHtp1rwk=ZqrcuWZ4_L8KQh26VaEfcBQS0Tx9+ZYg@mail.gmail.com>
+        <CAH=Qcsi3aQ51AsAE0WmAH9VmpqjOaQQt=ru5Nav4+d8F3fMPwQ@mail.gmail.com>
+        <CADDJ8CXObkhMvOx+L29awjtt7tiaTWxFrRxOmhUqvzku1wswHw@mail.gmail.com>
+        <CADDJ8CV83d4tYeLnQH-hHjzBfED6EBo4Z70q5A=9cwO+Lp1sNQ@mail.gmail.com>
+        <87sfjxhh4k.wl-maz@kernel.org>
+        <CADDJ8CVX5tZU9jL4FvTnvQxxVohhS76TVOoZAyy3k_Uit1efmA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: denik@chromium.org, catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, ndesaulniers@google.com, dbrazdil@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, manojgupta@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 11 Oct 2022 03:15:36 +0100,
+Denis Nikitin <denik@chromium.org> wrote:
+> 
+> On Sat, Oct 8, 2022 at 7:22 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Thu, 06 Oct 2022 17:28:17 +0100,
+> > Denis Nikitin <denik@chromium.org> wrote:
+> > >
+> > > Hi Mark,
+> >
+> > s/k/c/
+> >
+> > >
+> > > This problem currently blocks the PGO roll on the ChromeOS kernel and
+> > > we need some kind of a solution.
+> >
+> > I'm sorry, but I don't feel constrained by your internal deadlines. I
+> > have my own...
+> >
+> > > Could you please take a look?
+> >
+> > I have asked for a reproducer. All I got for an answer is "this is
+> > hard". Providing a profiling file would help, for example.
+> 
+> Could you please try the following profile on the 5.15 branch?
+> 
+> $ cat <<EOF > prof.txt
+> kvm_pgtable_walk:100:10
+>  2: 5
+>  3: 5
+>  5: 5
+>  6: 5
+>  10: 5
+>  10: _kvm_pgtable_walk:50
+>   5: 5
+>   7: 5
+>   10: 5
+>   13.2: 5
+>   14: 5
+>   16: 5 __kvm_pgtable_walk:5
+>   13: kvm_pgd_page_idx:30
+>    2: __kvm_pgd_page_idx:30
+>     2: 5
+>     3: 5
+>     5: 5
+>     2: kvm_granule_shift:5
+>      3: 5
+> EOF
+> 
+> $ make LLVM=1 ARCH=arm64 KCFLAGS=-fprofile-sample-use=prof.txt -j8 vmlinux
 
-* Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> [221013 06:13]:
-> I would just go with the above for the time being. It should be an easy
-> change, and as these omapfb and drm panel drivers are kind of copies of each
-> other, I think it makes sense to use the same code in both.
+Thanks, this was helpful, as I was able to reproduce the build failure.
 
-Maybe if a fix is needed, sure let's fix things first, then drop
-the unused panel drivers.
+FWIW, it seems pretty easy to work around by filtering out the
+offending option, making it consistent with the mechanism we already
+use for tracing and the like.
 
-We already have drivers/gpu/drm/panel driver for both of these two
-omapfb panels:
+I came up with the hack below, which does the trick and is IMHO better
+than dropping the section (extra work) or adding the negation of this
+option (which depends on the compiler option evaluation order).
 
-drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+	M.
 
-The compatible strings used translate to these dts files:
-
-arch/arm/boot/dts/motorola-mapphone-common.dtsi
-arch/arm/boot/dts/omap3-n900.dts
-arch/arm/boot/dts/omap3-n950.dts
-arch/arm/boot/dts/omap4-sdp.dts
-
-These devices work with omapdrm and there should not be any need to
-stick with the omapfb driver. We can just drop the omapfb panel
-drivers for panel-sony-acx565akm.c and panel-dsi-cm.c. Let's put
-the limited effort where there is activity instead :)
-
-The vrfb rotation work has been discussed on the lists, so seems
-like we will eventually have that for omapdrm. Meanwhile, software
-rotation is being used for postmarketos and leste with omapdrm
-AFAIK.
-
-> That said, I personally don't mind fixing the dts files and the drivers, and
-> even dropping the omapfb panel drivers. However, as I don't know if someone
-> needs the omapfb drivers or has to use an old dtb, I don't want to step on
-> that possible mine field. If someone else wants to go there (without my
-> involvement), fine for me =).
-
-I belive the only valid use case for omap2 omapfb is the n8x0 rfbi
-driver that has no omapdrm driver.
-
-Regards,
-
-Tony
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+index 48f6ae7cc6e6..7df1b6afca7f 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -91,7 +91,7 @@ quiet_cmd_hypcopy = HYPCOPY $@
+ 
+ # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
+ # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
+-KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
++KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI) -fprofile-sample-use=%, $(KBUILD_CFLAGS))
+ 
+ # KVM nVHE code is run at a different exception code with a different map, so
+ # compiler instrumentation that inserts callbacks or checks into the code may
 
 
+-- 
+Without deviation from the norm, progress is not possible.
