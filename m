@@ -2,76 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0205FE0D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F288E5FE050
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiJMSPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S231547AbiJMSHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbiJMSMR (ORCPT
+        with ESMTP id S230470AbiJMSEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:12:17 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8318A4DB0B;
-        Thu, 13 Oct 2022 11:08:54 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so2567929pjl.3;
-        Thu, 13 Oct 2022 11:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eg/F5GQr7kLj5OgnGhnCri7y548zIFtiHsw90JMrvRI=;
-        b=ZaJTZ+0JKI/fN8Q3sS6lyGzFzxvqwq4PFzfu5opiB62O095/RwOk8DhHgnwoEGc/3O
-         Rk2qJZHApobUN5JXSttpCFLuKEKbqPhhxRJye+4dovWI78ssqBnioDUZxjsbDrE+G/Pe
-         +FCjxIhwcJFqByll/Ej4Ol9G9f5jDDw7yBav49sbnauiis5ggDXIvMvsAKupui2nuFtE
-         rVrAdGCRojV6mIPelm4NaC6Tlz8cc6/Z7uCf481MnUBtbDpNraeZcV0CI+lpshamDrI7
-         U9wPcioqm6WtYFQq5YG3jlnnmEhm0X5uZxZ9vvp4yDVPAEckXEBakeJt66IntJmSrR6n
-         +e1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eg/F5GQr7kLj5OgnGhnCri7y548zIFtiHsw90JMrvRI=;
-        b=rogm6WBHYpiMwTik53dOmcCI5j0DVqb7og+OjkfAojgaj7/CT8CIUQsG7aX2LjCYFZ
-         jbypLDlvQ6p1DSH34DKp5CEo13Hav2+PMvwI/2bftNPGg0unapG8FD4tAWKmJdZTDJGd
-         w+1l1CjWH4KdNTDgm+u6XF7uw89Lsdf9hJKvEWMzfX8KxBHin/VbNPeCmCgx2qaP6y7q
-         aT6BsK+oUxj98K2iXqOsOhhReBUNKjR8HDj9TeGTDs7Qzb8DueR7qW+iRotPe6d7NSRX
-         cdoP08H1ZOUmx/ADyDT5ZzL6DcWF16P5sbkGMLt0zLSFCQeYqqmZkxrJ5Lu9h7Y1ZOcw
-         0U3A==
-X-Gm-Message-State: ACrzQf24qEvF7r0bzwUTRao/2n00oNxGZVQqmyFVK9rwAQ9FaDCR07FJ
-        slU+P01+tzsew6+2Jvj831Wyhdjn83ZKeOOfCtzM1xLF5Uk=
-X-Google-Smtp-Source: AMsMyM4Cws5OIwOAhD6dYa9EMZvHvUDm9AfOUDIbT6tlsR9FMqM+DY3DbGUDx4Z/H42gVTZpClRo75IviWihBbyWbjE=
-X-Received: by 2002:a05:6102:3351:b0:3a7:9d3c:496e with SMTP id
- j17-20020a056102335100b003a79d3c496emr889921vse.56.1665683851407; Thu, 13 Oct
- 2022 10:57:31 -0700 (PDT)
+        Thu, 13 Oct 2022 14:04:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393A816D8A8;
+        Thu, 13 Oct 2022 11:04:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FD7261931;
+        Thu, 13 Oct 2022 17:57:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF41C433D6;
+        Thu, 13 Oct 2022 17:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665683859;
+        bh=EyyroCt/Oi7NB05fM0Tdh01bogd28QcQYT/jhBM2tZc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qh8KP1LpxDd9TUgJSMPcjhYu2RX2yN/EuWuwwhWNEpTQxVyYH2G29uKONQhNvZueu
+         drL/zWdgT7Ah4yoolSji5CKEn/5dCf8tDuCOrtcUs93Me6bY260SjF0LSKSK8CaFgp
+         hSjRv+YKhmTSLfqvrLYpmmDy3NYLKO4g/BoB0GncLTaLllRG/hzM6TXkNzHlzR8DyP
+         2XV+rLUZM1CTE40Gsbn8hsFfz9dk/V2/3Q5yAAc4UrUymOi9RleMkTQLVRpywHz8RX
+         0dVEt1ltUrK/okgw58W4AV5IyaQXLtpd1aXmTCRg1E1nha9No+URmzXCf0VpL5DZkN
+         hntD4GirhZiZg==
+Date:   Thu, 13 Oct 2022 13:57:38 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>, peterz@infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 5.19 17/40] arm64: atomics: remove LL/SC
+ trampolines
+Message-ID: <Y0hRkupzzH785cju@sashalap>
+References: <20221011145129.1623487-1-sashal@kernel.org>
+ <20221011145129.1623487-17-sashal@kernel.org>
+ <Y0aAoQGH7lzqhv4F@arm.com>
 MIME-Version: 1.0
-References: <20221013163857.3086718-1-guoren@kernel.org> <CAJF2gTSu_SDGEYZxW7nfY8B=k_hkdxKy2TsK7C5v7cqM7qrKRA@mail.gmail.com>
-In-Reply-To: <CAJF2gTSu_SDGEYZxW7nfY8B=k_hkdxKy2TsK7C5v7cqM7qrKRA@mail.gmail.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Thu, 13 Oct 2022 10:57:20 -0700
-Message-ID: <CAAH8bW8FArQL=cVex=ZFOFhBC-9JvKNtdwCwjVYexe3qWehLKw@mail.gmail.com>
-Subject: Re: [PATCH] net: Fixup netif_attrmask_next_and warning
-To:     Guo Ren <guoren@kernel.org>
-Cc:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@rasmusvillemoes.dk, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y0aAoQGH7lzqhv4F@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Fixes: 944c417daeb6 ("net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}")
+On Wed, Oct 12, 2022 at 09:53:53AM +0100, Catalin Marinas wrote:
+>Hi Sasha,
 >
-> Sorry, the Fixes commit is 854701ba4c39.
+>On Tue, Oct 11, 2022 at 10:51:06AM -0400, Sasha Levin wrote:
+>> From: Mark Rutland <mark.rutland@arm.com>
+>>
+>> [ Upstream commit b2c3ccbd0011bb3b51d0fec24cb3a5812b1ec8ea ]
+>>
+>> When CONFIG_ARM64_LSE_ATOMICS=y, each use of an LL/SC atomic results in
+>> a fragment of code being generated in a subsection without a clear
+>> association with its caller. A trampoline in the caller branches to the
+>> LL/SC atomic with with a direct branch, and the atomic directly branches
+>> back into its trampoline.
+>>
+>> This breaks backtracing, as any PC within the out-of-line fragment will
+>> be symbolized as an offset from the nearest prior symbol (which may not
+>> be the function using the atomic), and since the atomic returns with a
+>> direct branch, the caller's PC may be missing from the backtrace.
+>>
+>> For example, with secondary_start_kernel() hacked to contain
+>> atomic_inc(NULL), the resulting exception can be reported as being taken
+>> from cpus_are_stuck_in_kernel():
+>>
+>> | Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>> | Mem abort info:
+>> |   ESR = 0x0000000096000004
+>> |   EC = 0x25: DABT (current EL), IL = 32 bits
+>> |   SET = 0, FnV = 0
+>> |   EA = 0, S1PTW = 0
+>> |   FSC = 0x04: level 0 translation fault
+>> | Data abort info:
+>> |   ISV = 0, ISS = 0x00000004
+>> |   CM = 0, WnR = 0
+>> | [0000000000000000] user address but active_mm is swapper
+>> | Internal error: Oops: 96000004 [#1] PREEMPT SMP
+>> | Modules linked in:
+>> | CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.19.0-11219-geb555cb5b794-dirty #3
+>> | Hardware name: linux,dummy-virt (DT)
+>> | pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> | pc : cpus_are_stuck_in_kernel+0xa4/0x120
+>> | lr : secondary_start_kernel+0x164/0x170
+>> | sp : ffff80000a4cbe90
+>> | x29: ffff80000a4cbe90 x28: 0000000000000000 x27: 0000000000000000
+>> | x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+>> | x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000000000
+>> | x20: 0000000000000001 x19: 0000000000000001 x18: 0000000000000008
+>> | x17: 3030383832343030 x16: 3030303030307830 x15: ffff80000a4cbab0
+>> | x14: 0000000000000001 x13: 5d31666130663133 x12: 3478305b20313030
+>> | x11: 3030303030303078 x10: 3020726f73736563 x9 : 726f737365636f72
+>> | x8 : ffff800009ff2ef0 x7 : 0000000000000003 x6 : 0000000000000000
+>> | x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000100
+>> | x2 : 0000000000000000 x1 : ffff0000029bd880 x0 : 0000000000000000
+>> | Call trace:
+>> |  cpus_are_stuck_in_kernel+0xa4/0x120
+>> |  __secondary_switched+0xb0/0xb4
+>> | Code: 35ffffa3 17fffc6c d53cd040 f9800011 (885f7c01)
+>> | ---[ end trace 0000000000000000 ]---
+>>
+>> This is confusing and hinders debugging, and will be problematic for
+>> CONFIG_LIVEPATCH as these cases cannot be unwound reliably.
+>>
+>> This is very similar to recent issues with out-of-line exception fixups,
+>> which were removed in commits:
+>>
+>>   35d67794b8828333 ("arm64: lib: __arch_clear_user(): fold fixups into body")
+>>   4012e0e22739eef9 ("arm64: lib: __arch_copy_from_user(): fold fixups into body")
+>>   139f9ab73d60cf76 ("arm64: lib: __arch_copy_to_user(): fold fixups into body")
+>>
+>> When the trampolines were introduced in commit:
+>>
+>>   addfc38672c73efd ("arm64: atomics: avoid out-of-line ll/sc atomics")
+>>
+>> The rationale was to improve icache performance by grouping the LL/SC
+>> atomics together. This has never been measured, and this theoretical
+>> benefit is outweighed by other factors:
+>>
+>> * As the subsections are collapsed into sections at object file
+>>   granularity, these are spread out throughout the kernel and can share
+>>   cachelines with unrelated code regardless.
+>>
+>> * GCC 12.1.0 has been observed to place the trampoline out-of-line in
+>>   specialised __ll_sc_*() functions, introducing more branching than was
+>>   intended.
+>>
+>> * Removing the trampolines has been observed to shrink a defconfig
+>>   kernel Image by 64KiB when building with GCC 12.1.0.
+>>
+>> This patch removes the LL/SC trampolines, meaning that the LL/SC atomics
+>> will be inlined into their callers (or placed in out-of line functions
+>> using regular BL/RET pairs). When CONFIG_ARM64_LSE_ATOMICS=y, the LL/SC
+>> atomics are always called in an unlikely branch, and will be placed in a
+>> cold portion of the function, so this should have minimal impact to the
+>> hot paths.
+>>
+>> Other than the improved backtracing, there should be no functional
+>> change as a result of this patch.
+>>
+>> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Link: https://lore.kernel.org/r/20220817155914.3975112-2-mark.rutland@arm.com
+>> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>I don't think we should back-port this. There is no functional change,
+>more of a clean-up in preparation for RELIABLE_STACKTRACE. The oops
+>message in the log is to show how reporting works rather than a real
+>bug.
 
-1. it doesn't fix my commit. There's nothing to fix. It fixes net code.
-2. https://lore.kernel.org/all/YznDSKbiDI99Om23@yury-laptop/t/#mf3a04206802c50ee7f5900e968aa03abdeb49c68
+I went by the "This breaks backtracing" line when backporting :)
+
+I'll drop it, thanks!
+
+-- 
+Thanks,
+Sasha
