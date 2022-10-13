@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058B55FDF87
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D285FDF8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiJMRzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S230108AbiJMRzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiJMRy1 (ORCPT
+        with ESMTP id S229936AbiJMRys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:54:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4606715201B;
-        Thu, 13 Oct 2022 10:53:52 -0700 (PDT)
+        Thu, 13 Oct 2022 13:54:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9372315B303;
+        Thu, 13 Oct 2022 10:53:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B97C9B82026;
-        Thu, 13 Oct 2022 17:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F790C433D6;
-        Thu, 13 Oct 2022 17:53:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8461861901;
+        Thu, 13 Oct 2022 17:53:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B18C433C1;
+        Thu, 13 Oct 2022 17:53:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683630;
-        bh=+hWHjzuNL4/uWC9zqXql+Q2XpFqifgfw5cukpFp5D5I=;
+        s=korg; t=1665683636;
+        bh=pOLv8B3166I/rKsvitiotq67NdZbWnlOIsHPBxJaJbw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dL2+05V5FlEPwL1rk5AmL8rtqNvPxMZ/P+XwlknWhJ/Ui9QclB6OIU8FSg9RobnIl
-         gTpxGdAolIbXR5r5/Bdj0ewZtBw7bXmiuydIRj5atBfNGSgZhbQG7yhQD7SdA9TMxN
-         Z8nU3FYCsBEfuMdzLPErZ3Mmrag09LaxEbMvf9kE=
+        b=DPCa+U7/FgwPB38T3TRo9sgnqRACYdtm13J6W6XxO6nyqvYj+w0rGQkn5AZJUbS92
+         cN2M+uI/TVn3GRXxBzLyDTUGG6l5fJI1wtmTTgCIfkC2GLhIACgoZN/WNTSFIS8+P/
+         vAUWjsDcuOVhoHlDipFQLdDdwqxWf5/6D4VEVh+g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
         Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 34/38] wifi: cfg80211: avoid nontransmitted BSS list corruption
-Date:   Thu, 13 Oct 2022 19:52:35 +0200
-Message-Id: <20221013175145.382242160@linuxfoundation.org>
+Subject: [PATCH 5.4 35/38] wifi: mac80211_hwsim: avoid mac80211 warning on bad rate
+Date:   Thu, 13 Oct 2022 19:52:36 +0200
+Message-Id: <20221013175145.415728357@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
 References: <20221013175144.245431424@linuxfoundation.org>
@@ -56,48 +56,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johannes Berg <johannes.berg@intel.com>
 
-commit bcca852027e5878aec911a347407ecc88d6fff7f upstream.
+commit 1833b6f46d7e2830251a063935ab464256defe22 upstream.
 
-If a non-transmitted BSS shares enough information (both
-SSID and BSSID!) with another non-transmitted BSS of a
-different AP, then we can find and update it, and then
-try to add it to the non-transmitted BSS list. We do a
-search for it on the transmitted BSS, but if it's not
-there (but belongs to another transmitted BSS), the list
-gets corrupted.
-
-Since this is an erroneous situation, simply fail the
-list insertion in this case and free the non-transmitted
-BSS.
-
-This fixes CVE-2022-42721.
+If the tool on the other side (e.g. wmediumd) gets confused
+about the rate, we hit a warning in mac80211. Silence that
+by effectively duplicating the check here and dropping the
+frame silently (in mac80211 it's dropped with the warning).
 
 Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
 Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
-Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/scan.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/wireless/mac80211_hwsim.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -386,6 +386,15 @@ cfg80211_add_nontrans_list(struct cfg802
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -3411,6 +3411,8 @@ static int hwsim_cloned_frame_received_n
  
- 	rcu_read_unlock();
+ 	rx_status.band = data2->channel->band;
+ 	rx_status.rate_idx = nla_get_u32(info->attrs[HWSIM_ATTR_RX_RATE]);
++	if (rx_status.rate_idx >= data2->hw->wiphy->bands[rx_status.band]->n_bitrates)
++		goto out;
+ 	rx_status.signal = nla_get_u32(info->attrs[HWSIM_ATTR_SIGNAL]);
  
-+	/*
-+	 * This is a bit weird - it's not on the list, but already on another
-+	 * one! The only way that could happen is if there's some BSSID/SSID
-+	 * shared by multiple APs in their multi-BSSID profiles, potentially
-+	 * with hidden SSID mixed in ... ignore it.
-+	 */
-+	if (!list_empty(&nontrans_bss->nontrans_list))
-+		return -EINVAL;
-+
- 	/* add to the list */
- 	list_add_tail(&nontrans_bss->nontrans_list, &trans_bss->nontrans_list);
- 	return 0;
+ 	hdr = (void *)skb->data;
 
 
