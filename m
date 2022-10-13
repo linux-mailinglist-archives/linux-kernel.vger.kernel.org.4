@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CC55FDDD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FFB5FDDDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJMP6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S229620AbiJMQBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJMP6w (ORCPT
+        with ESMTP id S229710AbiJMQBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:58:52 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E83EE8AA;
-        Thu, 13 Oct 2022 08:58:47 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id n83so2175436oif.11;
-        Thu, 13 Oct 2022 08:58:47 -0700 (PDT)
+        Thu, 13 Oct 2022 12:01:10 -0400
+Received: from mail-ot1-x349.google.com (mail-ot1-x349.google.com [IPv6:2607:f8b0:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F211A964
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:08 -0700 (PDT)
+Received: by mail-ot1-x349.google.com with SMTP id 104-20020a9d0371000000b00661c7c3f0beso186439otv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NqiBAv6+VkTIDngM0GJAXUgqa89MgZqUX29OFMPrrEM=;
+        b=kXLOth/pecVFm2kkZKFH1JceBXW7GEaN7oYMvWFruxc5a/HGs6T2gaf95D7KHrnKas
+         R3w3GsEGkShWBEUfpY/SDfb5IeBMQhnik0Sx4b1PE874TrT5rbtSpqdIo9tCHhjztKj8
+         7PgFuOA5ByVHVVRZkhqx5WJ812PRplpwgZA8CyFtoltx5d5uHPqxqa4+gt493nAWAnb0
+         W1z6O1R4mgK3ugYrq+jgWQFviEQFbUunYlR2/zh6dvhJ1Yq486bIfbjU2DNEtu9Q8jyH
+         i7fB1SpTJeHQry/ncZjRb2ViL0ppJDvViKiXBvwXyfrJ3YVKo4C8RI4Rba6xCRC3ITRy
+         6kTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ss+Jh5JtGloc7s5Wbx0ajnNwFMxqRKR8S3W84woq5d0=;
-        b=huS9p0nXQYIDA04DhHN43jASeJMXxjUBHsvF1las77K1M6XrgHb6IsaS2gzd88VKBN
-         Tp44E6D24lq3mX9/a9l3Bwzb/QBGcfdUANBknnfNhddjNnfxgAoncgXt83BwEveHO+5o
-         E5Z8AG0qjXj4nOJqLb6A+oriBPOeFimo5Ts1Zbl2/Vb2cGlEx1maDl1gARwhfpPd9iXV
-         RL6QobzoRw4tG/h/mBfo7cE78PkZ1k1c66vBkQUOjanHyECvhtp3U3G1xQncQVARmmIL
-         yk67ffPSBdLFJOI8/WvBdmC6A/o0uJITTAGFG8sCfyNexpudzHCEe3FqPVdsIzIsX/n/
-         0LjQ==
-X-Gm-Message-State: ACrzQf2OXDI9oQYQf5iTDoTZnobGsFYuCvNV7ekaDt1+hlNnKDm80Buq
-        q1l+AfqiRDSvht4BQii3Iw==
-X-Google-Smtp-Source: AMsMyM5iCHO0JebPra0Jg+Q6DZjAoX1inRqvj5SNPFERV5Md/M86KaJltPptRbNuIxKEmiNyrhO1Tg==
-X-Received: by 2002:a05:6808:f05:b0:354:b362:c5be with SMTP id m5-20020a0568080f0500b00354b362c5bemr228112oiw.136.1665676726181;
-        Thu, 13 Oct 2022 08:58:46 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e15-20020a4ada0f000000b0047f94375092sm2213226oou.40.2022.10.13.08.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 08:58:45 -0700 (PDT)
-Received: (nullmailer pid 388475 invoked by uid 1000);
-        Thu, 13 Oct 2022 15:58:47 -0000
-Date:   Thu, 13 Oct 2022 10:58:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     frowand.list@gmail.com
-Cc:     pantelis.antoniou@konsulko.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/1] MAINTAINERS: of: collapse overlay entry into main
- device tree entry
-Message-ID: <166567671481.388208.3399174487542913808.robh@kernel.org>
-References: <20221012220548.4163865-1-frowand.list@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012220548.4163865-1-frowand.list@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NqiBAv6+VkTIDngM0GJAXUgqa89MgZqUX29OFMPrrEM=;
+        b=aIUL3yoEpDmvmE0Ug8W3Ywqx8e9CjKaj0w/FrpDNJ1LmU+kTwBPz6i31cXGoiK30V6
+         R5S1+/44wcVPP+78LfWgPJjxSqP2vK+BYtiHzLbSONh7qSYUFfrRKhKVJpRYKLGHjubE
+         Q7zOVb2TA4ReBQv7mjz1kVPQ3pQ3qSofo/7PAswdGd8SPYsv6ALLgPlVDJFU5KZiM5no
+         p5auQVKGIv9l8q00dXJoaEbaWqgPFdXCrGtjN2HNqFoifWymJAM3VSaV6VfIehSc0dfF
+         N+HLFptms9fyBwoInUiYN2FZgFuf1bT+14i50uQIAqhZQNUwUWKJZpNKnH7gH8q7KNJv
+         QTNw==
+X-Gm-Message-State: ACrzQf3QvZv7lC/pz8OqWSJx+VaD5nKY8grylEuM2co3/rj4gMlo4Twe
+        jf+Sl82ovydosH28+8mNLXmAaP70hhBGJCshAyX7B+4TCZfvcg5JH8M0e4HKYS99jS8rgGbOCtm
+        v8wrnV2y1MwyDFXvzEMCkSiX2DqGx816Pppfu1diCAoz+jM4xr9Sz7H1350+L1vNjpc1Y2doNJs
+        dFzPO0msU=
+X-Google-Smtp-Source: AMsMyM501RMTCrdXeyN5TyTeWewWYCe8+uj+5aa3KRjLp/7Fwcg3IGhqQ1cefdtu/fEhDBRpPtLmCPLQ8M4v4y3vOg==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a17:90b:3850:b0:20d:54f2:a780 with
+ SMTP id nl16-20020a17090b385000b0020d54f2a780mr12078380pjb.115.1665676856516;
+ Thu, 13 Oct 2022 09:00:56 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 16:00:38 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221013160040.2858732-1-dionnaglaze@google.com>
+Subject: [PATCH 0/2] Add throttling detection to sev-guest
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Oct 2022 17:05:48 -0500, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
-> 
-> Pantelis has not been active in recent years so no need to maintain
-> a separate entry for device tree overlays.
-> 
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> ---
-> 
-> Based on Linus' top of tree, 676cb4957396 d0d51a97063d,
-> Wed Oct 12 11:16:58 2022 -0700
-> 
->  MAINTAINERS | 14 +++-----------
->  1 file changed, 3 insertions(+), 11 deletions(-)
-> 
+The guest request synchronous API from SEV-SNP VMs to the host's security
+processor consumes a global resource. For this reason, AMD's docs
+recommend that the host implements a throttling mechanism. In order for
+the guest to know it's been throttled and should try its request again,
+we need some good-faith communication from the host that the request
+has been throttled.
 
-Applied, thanks!
+These patches work with the existing /dev/sev-guest ABI to detect a
+throttling code.
+
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+
+Dionna Glaze (2):
+  x86/sev: Rename snp_guest_issue_request's fw_err
+  virt/coco/sev-guest: interpret VMM errors from guest request
+
+ arch/x86/include/asm/sev.h              |  4 +--
+ arch/x86/kernel/sev.c                   |  6 ++---
+ drivers/virt/coco/sev-guest/sev-guest.c | 34 +++++++++++++++++--------
+ include/uapi/linux/sev-guest.h          | 17 +++++++++++--
+ 4 files changed, 43 insertions(+), 18 deletions(-)
+
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
