@@ -2,232 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BB45FDDD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3579C5FDDDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJMQBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S229745AbiJMQBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJMQBC (ORCPT
+        with ESMTP id S229785AbiJMQBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:01:02 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C481A103DA8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:01 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id p24-20020a63f458000000b0043cd718c49dso1208377pgk.15
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7BIlHgNQlvppQZ+CGwKN1fA9G9Eb8Xq4ktO1Quy358=;
-        b=W7bVmX6RVPsZzOCX5yzg+9+z9D6fOazH4u8HtiPlmGwkDgHBCdyCbX+aKrFHKozu4I
-         0qAiaymzLZ7vUFoizZ0Cyo+vdMKsV3TDkw3EBe2ZKc7/skO48lcCISQNR15VShyQ6M/Y
-         RKQQ89vfC89cBdy3V5LyC/0Zzz2Dt+xF2CEhWLGVxxXmWwhLDsGx8ogQBLM7dt3vOUyo
-         rRpKUHCEfVjRUDPJouCQLPTliqHexJ7L82oYWzsBwrgv7fhaUrc9FcVHZx5AB5nSankc
-         Q5Sgf97YDzq3/IyCyS/0fP1AkrW6ert8DnEfASQxm0EdmT3kQLTBJ4j2jJUDKS7OX8kH
-         jb0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7BIlHgNQlvppQZ+CGwKN1fA9G9Eb8Xq4ktO1Quy358=;
-        b=4GbNTqrzw5W/vrdPuh/wQzmnPNSPAI7a8A0RodltGWxeTQ5g2IeuOI8X9NJItqX5oF
-         E8SW7epNCmpsgf0+pErkzTK3G3e0MpTxDavfD9ZCo2w/1po+5yUL1KXs1nBP0kkX36oQ
-         CMPJ9NSksrWrDdKTUCG6JIGlsjOP55hrggwLOXhkqaMCmaGEuhE1MHDH6TDcZHQz5gxS
-         KxRF5/uj7QFirG82EHni1/g2uvPvbiXszoVOHhoAP25BXhj6qgeHcQGZ9aa3OVJhHTvZ
-         Q1MsJs1VphlBDVyXs5lcJPOkjGuFeemaMPzgVhFmhieFZpdkVBZ6lLOwPW9waTg22BA1
-         T+Fw==
-X-Gm-Message-State: ACrzQf1yqeefNHt7MfGSMK2En3VdQpagH3JVSpcwrHfsilJ0HTxsyz8f
-        dH9aZqfpLn7PA+Jur/hbdzgOuFpjARLUX4lsOrrrm4IPMhsK9Eu+KFb4ZDM9LiVObjygWibEyBk
-        H0XRr1Akj9cDra/mMODXDdModeUyJXOkmcOgkkDBrDUT3xby4jk84FyKRVd032BSD6Hm1ofaSr4
-        lmA41aEXo=
-X-Google-Smtp-Source: AMsMyM4XU/8MvA7h3nQrVPvs7EiSDlHRc5b09reVv1Z/fyI3XJOgDbhqz9/LTDa0QpGVoemE95byvaQE/6tt0KrGuA==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a62:2985:0:b0:544:77d4:f43b with SMTP
- id p127-20020a622985000000b0054477d4f43bmr199173pfp.9.1665676861215; Thu, 13
- Oct 2022 09:01:01 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 16:00:40 +0000
-In-Reply-To: <20221013160040.2858732-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20221013160040.2858732-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221013160040.2858732-3-dionnaglaze@google.com>
-Subject: [PATCH 2/2] virt/coco/sev-guest: interpret VMM errors from guest request
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Thu, 13 Oct 2022 12:01:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3685513728D
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665676876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8zDpItjAu5ov3bsFW3VuwHkUUIWynjpwr1yozwTgapc=;
+        b=BzFGfbc890s7a6YNzFW6iL9DF/RCCswrjdMUgeZHOPeq87kqpml6JSUukZgIiDVq5c1XOH
+        WjinO/CRS/3kn5ug2LvXzZo5WWUHvpx3uAPY4WAoqzd4lANodIy+SPrjxNmHZRYPLWOU/e
+        ZCmc5COnuHpY/ruruHkyk6+4w265O/s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-d12DpK2UMWyMz9fvft9LNA-1; Thu, 13 Oct 2022 12:01:14 -0400
+X-MC-Unique: d12DpK2UMWyMz9fvft9LNA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFF16811E7A;
+        Thu, 13 Oct 2022 16:01:13 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A3D1840398B1;
+        Thu, 13 Oct 2022 16:01:12 +0000 (UTC)
+Date:   Thu, 13 Oct 2022 12:01:10 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     Stefan Hajnoczi <stefanha@gmail.com>,
+        "Richard W.M. Jones" <rjones@redhat.com>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kirill Tkhai <kirill.tkhai@openvz.org>,
+        Manuel Bentele <development@manuel-bentele.de>,
+        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+Message-ID: <Y0g2Rg9nAU5grjCV@fedora>
+References: <Yza1u1KfKa7ycQm0@T590>
+ <Yzs9xQlVuW41TuNC@fedora>
+ <YzwARuAZdaoGTUfP@T590>
+ <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
+ <20221006101400.GC7636@redhat.com>
+ <CAJSP0QXbnhkVgfgMfC=MAyvF63Oof_ZGDvNFhniDCvVY-f6Hmw@mail.gmail.com>
+ <Y0du/9K3II70tZTD@T590>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Dz5/1ZuMbMXxUtqp"
+Content-Disposition: inline
+In-Reply-To: <Y0du/9K3II70tZTD@T590>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GHCB specification states that the upper 32 bits of exitinfo2 are
-for the VMM's error codes. The sev-guest ABI has already locked in
-that the fw_err status of the input will be 64 bits, and that
-BIT_ULL(32) means that the extended guest request's data buffer was too
-small, so we have to keep that ABI. This patch deprecates the fw_err
-field name in the request to exitinfo2.
 
-We can still interpret the upper 32 bits of exitinfo2 for the user
-anyway in case the request gets throttled. That makes the interface more
-user-friendly.
+--Dz5/1ZuMbMXxUtqp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- drivers/virt/coco/sev-guest/sev-guest.c | 34 +++++++++++++++++--------
- include/uapi/linux/sev-guest.h          | 17 +++++++++++--
- 2 files changed, 38 insertions(+), 13 deletions(-)
+On Thu, Oct 13, 2022 at 09:50:55AM +0800, Ming Lei wrote:
+> On Wed, Oct 12, 2022 at 10:15:28AM -0400, Stefan Hajnoczi wrote:
+> > On Thu, 6 Oct 2022 at 06:14, Richard W.M. Jones <rjones@redhat.com> wro=
+te:
+> > >
+> > > On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi wrote:
+> > > > qemu-nbd doesn't use io_uring to handle the backend IO,
+> > >
+> > > Would this be fixed by your (not yet upstream) libblkio driver for
+> > > qemu?
+> >=20
+> > I was wrong, qemu-nbd has syntax to use io_uring:
+> >=20
+> >   $ qemu-nbd ... --image-opts driver=3Dfile,filename=3Dtest.img,aio=3Di=
+o_uring
+>=20
+> Yeah, I saw the option, previously when I tried io_uring via:
+>=20
+> qemu-nbd -c /dev/nbd11 -n --aio=3Dio_uring $my_file
+>=20
+> It complains that 'qemu-nbd: Invalid aio mode 'io_uring'' even though
+> that 'qemu-nbd --help' does say that io_uring is supported.
+>=20
+> Today just tried it on Fedora 37, looks it starts working with
+> --aio=3Dio_uring, but the IOPS is basically same with --aio=3Dnative, and
+> IO trace shows that io_uring is used by qemu-nbd.
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index f422f9c58ba7..8bc435cbd7e3 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -303,9 +303,10 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
- 
- static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
- 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
--				u32 resp_sz, __u64 *fw_err)
-+				u32 resp_sz, __u64 *exitinfo2)
- {
--	unsigned long err;
-+	unsigned long _exitinfo2 = 0;
-+	unsigned int vmm_err;
- 	u64 seqno;
- 	int rc;
- 
-@@ -322,9 +323,20 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 		return rc;
- 
- 	/* Call firmware to process the request */
--	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
--	if (fw_err)
--		*fw_err = err;
-+	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &_exitinfo2);
-+	if (exitinfo2)
-+		*exitinfo2 = _exitinfo2;
-+
-+	vmm_err = _exitinfo2 >> SNP_GUEST_VMM_ERR_SHIFT;
-+	/* The host may return EBUSY if the request has been throttled. */
-+	if (vmm_err == SNP_GUEST_VMM_ERR_BUSY)
-+		return -EAGAIN;
-+
-+	if (vmm_err && vmm_err != SNP_GUEST_VMM_ERR_INVALID_LEN) {
-+		pr_err("sev-guest: host returned unknown error code: %d\n",
-+		       vmm_err);
-+		return -EINVAL;
-+	}
- 
- 	if (rc)
- 		return rc;
-@@ -378,7 +390,7 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
- 
- 	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
- 				  SNP_MSG_REPORT_REQ, &req, sizeof(req), resp->data,
--				  resp_len, &arg->fw_err);
-+				  resp_len, &arg->exitinfo2);
- 	if (rc)
- 		goto e_free;
- 
-@@ -418,7 +430,7 @@ static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_reque
- 
- 	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
- 				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
--				  &arg->fw_err);
-+				  &arg->exitinfo2);
- 	if (rc)
- 		return rc;
- 
-@@ -480,10 +492,10 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 	snp_dev->input.data_npages = npages;
- 	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
- 				   SNP_MSG_REPORT_REQ, &req.data,
--				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
-+				   sizeof(req.data), resp->data, resp_len, &arg->exitinfo2);
- 
- 	/* If certs length is invalid then copy the returned length */
--	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
-+	if (arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
- 		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
- 
- 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
-@@ -518,7 +530,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 	if (copy_from_user(&input, argp, sizeof(input)))
- 		return -EFAULT;
- 
--	input.fw_err = 0xff;
-+	input.exitinfo2 = 0xff;
- 
- 	/* Message version must be non-zero */
- 	if (!input.msg_version)
-@@ -549,7 +561,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 
- 	mutex_unlock(&snp_cmd_mutex);
- 
--	if (input.fw_err && copy_to_user(argp, &input, sizeof(input)))
-+	if (input.exitinfo2 && copy_to_user(argp, &input, sizeof(input)))
- 		return -EFAULT;
- 
- 	return ret;
-diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
-index 256aaeff7e65..0654a652e4dc 100644
---- a/include/uapi/linux/sev-guest.h
-+++ b/include/uapi/linux/sev-guest.h
-@@ -12,6 +12,7 @@
- #ifndef __UAPI_LINUX_SEV_GUEST_H_
- #define __UAPI_LINUX_SEV_GUEST_H_
- 
-+#include <linux/errno.h>
- #include <linux/types.h>
- 
- struct snp_report_req {
-@@ -52,8 +53,15 @@ struct snp_guest_request_ioctl {
- 	__u64 req_data;
- 	__u64 resp_data;
- 
--	/* firmware error code on failure (see psp-sev.h) */
--	__u64 fw_err;
-+	/* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
-+	union {
-+		__u64 exitinfo2;
-+		__u64 fw_err; /* Name deprecated in favor of others */
-+		struct {
-+			__u32 fw_error;
-+			__u32 vmm_error;
-+		};
-+	};
- };
- 
- struct snp_ext_report_req {
-@@ -77,4 +85,9 @@ struct snp_ext_report_req {
- /* Get SNP extended report as defined in the GHCB specification version 2. */
- #define SNP_GET_EXT_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x2, struct snp_guest_request_ioctl)
- 
-+
-+#define SNP_GUEST_VMM_ERR_SHIFT		32
-+#define SNP_GUEST_VMM_ERR_INVALID_LEN	1
-+#define SNP_GUEST_VMM_ERR_BUSY		EBUSY
-+
- #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+Okay, similar performance to Linux AIO is expected. That's what we've
+seen with io_uring in QEMU. QEMU doesn't use io_uring in polling mode,
+so it's similar to what we get with Linux AIO.
+
+Stefan
+
+--Dz5/1ZuMbMXxUtqp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmNINkYACgkQnKSrs4Gr
+c8ib3Qf/Tgw+o0jMenLQv3Ye1i9s4Mg9WNyB6eTM6ksmacLnBLbt225EDtkqMEqS
+wRPgsH9kB6d7yKcgAg3HR4/NoZHS+LCkLH4KCw0SyJxzQdecuDazPPQUOMN2U1D3
+wBj7ZZDv1In33uW587li1IMtzAajS9BVGwbXSCRK7ZqtaDF0WR85RIDFPbjOMrYK
+q9fmplUuSVqxYfAQ0deUiO3pM04CoVWdMpdJorpiUDRD6fJdCZBvNNXAxYov8O+8
+4Hh7Eyt7MpCwhQUR3cKc/TguVTbbza/uVc8k5o5vBrK0eftv9cT7lUr3+35AnPE4
+y+FLbhkaGFOFn4Q0jZDOjcjMRJkdNg==
+=QYko
+-----END PGP SIGNATURE-----
+
+--Dz5/1ZuMbMXxUtqp--
 
