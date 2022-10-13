@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DC65FD3AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE3B5FD3B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiJMEGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S229496AbiJMEPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 00:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiJMEGF (ORCPT
+        with ESMTP id S229484AbiJMEPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:06:05 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A9FD100BCC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:06:02 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id F2E5C1E80D99;
-        Thu, 13 Oct 2022 12:06:04 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AfHexhvLqMdh; Thu, 13 Oct 2022 12:06:02 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 0E21A1E80D90;
-        Thu, 13 Oct 2022 12:06:02 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     hubcap@omnibond.com, martin@omnibond.com
-Cc:     devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] orangefs: inode: Optimized variable usage in orangefs_* correlation functions
-Date:   Thu, 13 Oct 2022 12:05:51 +0800
-Message-Id: <20221013040551.277251-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 00:15:20 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EFE7A4862;
+        Wed, 12 Oct 2022 21:15:15 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 25FD220F0F7B; Wed, 12 Oct 2022 21:15:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 25FD220F0F7B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1665634515;
+        bh=lBeQwqjXzN3pnjmug5AoUIgi34hiXvQZyQDaZ+yRCfE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n3ro9LxsrP1+3BsKlkmkvbeQMDu8Fxjlo2bSUWgnW8zm1yIv3zyfjVbFhYLcDdcq+
+         PCcBPKr/cQUUCXgSLWeOaX2kU7lVMCp3dDG4tixkKUdt8Y1by3/vVhE5APM194wffH
+         RM4gUmPfCUPXArhAMjgZ3tq0tJfMxj0v0NME8DAg=
+Date:   Wed, 12 Oct 2022 21:15:15 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        longli@microsoft.com, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mikelley@microsoft.com
+Subject: Re: [PATCH] uio_hv_generic: Enable support for slower vmbus device
+ channels
+Message-ID: <20221013041515.GA12822@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1665575806-27990-1-git-send-email-ssengar@linux.microsoft.com>
+ <Y0bipdisMbTNMYOq@kroah.com>
+ <Y0bjH+k3G6V45WRT@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0bjH+k3G6V45WRT@kroah.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These functions are optimized as follows.
-1. Remove some variables to initialize the assignment, they are assigned
-first.
-2. Removes the cast part of a variable assignment of type void*.
-3. The orangefs_inode variable is directly assigned at the definition.
+On Wed, Oct 12, 2022 at 05:54:07PM +0200, Greg KH wrote:
+> On Wed, Oct 12, 2022 at 05:52:05PM +0200, Greg KH wrote:
+> > On Wed, Oct 12, 2022 at 04:56:46AM -0700, Saurabh Sengar wrote:
+> > > This patch enables support for slower vmbus channels, which consist
+> > > of following 3 changes :
+> > > 	1. Support for hypercalls
+> > > 	2. Module params for recv/send buffer sizes
+> > > 	3. Module param for custom ring buffer sizes
+> > 
+> > Even if this all was ok, you are doing 3 things all in one change,
+> > that's not allowed at all, you all know this.
+> > 
+> > Anyway, no new module parameters, this is not the 1990's, we have much
+> > better ways to do this properly (hint, module parameters modify code,
+> > you want to modify the options of a specific device.)
+> 
+> Also, you give no good reason for why this is needed at all, nor how
+> anyone would use these options and why they would need to.
+> 
+> The kernel should "just work" and not require manual intervention by a
+> user.  Dynamically fix this based on the device, do NOT force a user to
+> have to attempt to "tune" anything, that will never work properly over
+> time, AND you are being lazy and forcing each individual user to do the
+> work, making more effort needed overall than just doing it properly in
+> the kernel.
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- fs/orangefs/inode.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+Let me find a method if we can avoid using module parameters, this may result
+in hardcoding values in the vmbus driver code for various devices, giving less
+flexibilty to user. Meanwhile I figure out this, we can go ahead with
+"support for hypercalls", I will send a new patch for it.
 
-diff --git a/fs/orangefs/inode.c b/fs/orangefs/inode.c
-index 7a8c0c6e698d..ea557b3b989e 100644
---- a/fs/orangefs/inode.c
-+++ b/fs/orangefs/inode.c
-@@ -719,7 +719,7 @@ static int orangefs_setattr_size(struct inode *inode, struct iattr *iattr)
- 	struct orangefs_inode_s *orangefs_inode = ORANGEFS_I(inode);
- 	struct orangefs_kernel_op_s *new_op;
- 	loff_t orig_size;
--	int ret = -EINVAL;
-+	int ret;
- 
- 	gossip_debug(GOSSIP_INODE_DEBUG,
- 		     "%s: %pU: Handle is %pU | fs_id %d | size is %llu\n",
-@@ -1021,7 +1021,7 @@ static inline ino_t orangefs_handle_hash(struct orangefs_object_kref *ref)
-  */
- static int orangefs_set_inode(struct inode *inode, void *data)
- {
--	struct orangefs_object_kref *ref = (struct orangefs_object_kref *) data;
-+	struct orangefs_object_kref *ref = data;
- 	ORANGEFS_I(inode)->refn.fs_id = ref->fs_id;
- 	ORANGEFS_I(inode)->refn.khandle = ref->khandle;
- 	ORANGEFS_I(inode)->attr_valid = 0;
-@@ -1036,10 +1036,9 @@ static int orangefs_set_inode(struct inode *inode, void *data)
-  */
- static int orangefs_test_inode(struct inode *inode, void *data)
- {
--	struct orangefs_object_kref *ref = (struct orangefs_object_kref *) data;
--	struct orangefs_inode_s *orangefs_inode = NULL;
-+	struct orangefs_object_kref *ref = data;
-+	struct orangefs_inode_s *orangefs_inode = ORANGEFS_I(inode);
- 
--	orangefs_inode = ORANGEFS_I(inode);
- 	/* test handles and fs_ids... */
- 	return (!ORANGEFS_khandle_cmp(&(orangefs_inode->refn.khandle),
- 				&(ref->khandle)) &&
-@@ -1056,7 +1055,7 @@ static int orangefs_test_inode(struct inode *inode, void *data)
- struct inode *orangefs_iget(struct super_block *sb,
- 		struct orangefs_object_kref *ref)
- {
--	struct inode *inode = NULL;
-+	struct inode *inode;
- 	unsigned long hash;
- 	int error;
- 
--- 
-2.18.2
+Regards,
+Saurabh
 
+> 
+> thanks,
+> 
+> greg k-h
