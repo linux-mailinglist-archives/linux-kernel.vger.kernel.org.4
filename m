@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D785FDB9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2192C5FDB85
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiJMNwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S229683AbiJMNvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiJMNvE (ORCPT
+        with ESMTP id S230052AbiJMNus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:51:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68EC4A83C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:50:09 -0700 (PDT)
+        Thu, 13 Oct 2022 09:50:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D94112FFAA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665669009; x=1697205009;
+  t=1665668967; x=1697204967;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qusXp1PE2YNM87mKa7hbGJmdGInY4MMPPNm11vY/HiM=;
-  b=eLrXHHjf4eDQKKRG2OFYiIB8nafk3E20wSvFA/zX4kXOBOV4Xfvjxevv
-   ixZNq9BLIvRWWX/x8jvdpR4pUMBmEuD9YTKK5nC4buXmj0zbyNscVomjn
-   aXo1cn0gBqzTFoQQ0/BWM6spfXkNSRMMuwYRX3fpS9kgiIlsYqgnLDND5
-   YH9nrJA3UVwUrRoOt4FeGdqTKrB5rdYELPnENS1vXAD9/KHaZL1iUtuUe
-   OKfqckUpIJrYNggN2K6QAKlSzblZ8MUhgAlEPaL1eunKh4+1fqgX61gvu
-   bIOetYLqKthQpGaVwC1k3/Fnraa9dpG+GQJbL4HYKFdmKc0SI9rOy1YJi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="331587933"
+  bh=b1eZcp9W/illxBu50ln/txkF7f5sAB9ZyVUa4o6JzZk=;
+  b=CzOopPi6mhfqv8c2Ew6ikzR7kq2NUd8BzMpnbK++ksKAlohfSVRuZYoj
+   rH9azHqC26/aEL9alOtpGpRmNd5w1Thi0tM7iecYZTbIMJkNQBUyecnl5
+   FvFwWxpSs/JavkBcag7iRQuf3UXQJ4WiGbj3pGar5Vk0E69yrWL6eRHAf
+   7Dp0MuNnlx8aGUwGHXZxayvmbCqRs/JLtG8n1+1ye5NruVfu9sVAT5vdr
+   1il3kg0w605sDAcbLmtXndailZpeA1sNQwhNsz2NylwCHP3pNANSgjnRp
+   T3+Lmx+UXxqNIbN2CpGkfNE7ZXqEzz7/QnyQ2wsyfJb+oSiYJEh/XrkNq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="306718265"
 X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="331587933"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 06:49:14 -0700
+   d="scan'208";a="306718265"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 06:49:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="629529493"
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="690117515"
 X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="629529493"
+   d="scan'208";a="690117515"
 Received: from lkp-server01.sh.intel.com (HELO 2af0a69ca4e0) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Oct 2022 06:49:12 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 13 Oct 2022 06:49:13 -0700
 Received: from kbuild by 2af0a69ca4e0 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oiyaF-00059f-33;
-        Thu, 13 Oct 2022 13:49:11 +0000
-Date:   Thu, 13 Oct 2022 21:49:01 +0800
+        id 1oiyaG-0005AZ-30;
+        Thu, 13 Oct 2022 13:49:12 +0000
+Date:   Thu, 13 Oct 2022 21:49:03 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:sched/core 14/15] kernel/sched/core.c:9815:43: error:
- passing argument 1 of 'zalloc_cpumask_var_node' from incompatible pointer
- type
-Message-ID: <202210132143.3ua042iu-lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/mm.pae 5/9] mm/khugepaged.c:865:16: error:
+ implicit declaration of function 'pmd_read_atomic'
+Message-ID: <202210132122.DnShsQeP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="RbzRhXfO3k+SN5GK"
+Content-Type: multipart/mixed; boundary="Ko8lFQBcef72+GXk"
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,20 +63,20 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---RbzRhXfO3k+SN5GK
+--Ko8lFQBcef72+GXk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-head:   e7c69e86e29590d8bacd63595f3a687d97288ccc
-commit: ecf44ad8a0325439035003643fd11725147fae18 [14/15] sched: Enforce user requested affinity
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/mm.pae
+head:   ce0487547e80c85cd1deec9bce726a58110457fe
+commit: 833e9fc96f63a8e37d78baad15362b5ad8baac3c [5/9] mm: Rename pmd_read_atomic()
 config: x86_64-randconfig-a013
 compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=ecf44ad8a0325439035003643fd11725147fae18
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=833e9fc96f63a8e37d78baad15362b5ad8baac3c
         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue sched/core
-        git checkout ecf44ad8a0325439035003643fd11725147fae18
+        git fetch --no-tags peterz-queue x86/mm.pae
+        git checkout 833e9fc96f63a8e37d78baad15362b5ad8baac3c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
@@ -88,117 +86,41 @@ If you fix the issue, kindly add following tag where applicable
 
 All errors (new ones prefixed by >>):
 
-   kernel/sched/core.c: In function 'sched_init':
->> kernel/sched/core.c:9815:43: error: passing argument 1 of 'zalloc_cpumask_var_node' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    9815 |                 zalloc_cpumask_var_node(rq->scratch_mask, GFP_KERNEL, cpu_to_node(i));
-         |                                         ~~^~~~~~~~~~~~~~
-         |                                           |
-         |                                           struct cpumask *
-   In file included from arch/x86/include/asm/cpumask.h:5,
-                    from arch/x86/include/asm/msr.h:11,
-                    from arch/x86/include/asm/processor.h:22,
-                    from arch/x86/include/asm/cpufeature.h:5,
-                    from arch/x86/include/asm/thread_info.h:53,
-                    from include/linux/thread_info.h:60,
-                    from arch/x86/include/asm/preempt.h:7,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/wait.h:9,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/highmem.h:5,
-                    from kernel/sched/core.c:9:
-   include/linux/cpumask.h:880:59: note: expected 'struct cpumask (*)[1]' but argument is of type 'struct cpumask *'
-     880 | static inline bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags,
-         |                                            ~~~~~~~~~~~~~~~^~~~
+   mm/khugepaged.c: In function 'find_pmd_or_thp_or_none':
+>> mm/khugepaged.c:865:16: error: implicit declaration of function 'pmd_read_atomic' [-Werror=implicit-function-declaration]
+     865 |         pmde = pmd_read_atomic(*pmd);
+         |                ^~~~~~~~~~~~~~~
+>> mm/khugepaged.c:865:16: error: incompatible types when assigning to type 'pmd_t' from type 'int'
    cc1: some warnings being treated as errors
 
 
-vim +/zalloc_cpumask_var_node +9815 kernel/sched/core.c
+vim +/pmd_read_atomic +865 mm/khugepaged.c
 
-  9767	
-  9768			rq->rt.rt_runtime = def_rt_bandwidth.rt_runtime;
-  9769	#ifdef CONFIG_RT_GROUP_SCHED
-  9770			init_tg_rt_entry(&root_task_group, &rq->rt, NULL, i, NULL);
-  9771	#endif
-  9772	#ifdef CONFIG_SMP
-  9773			rq->sd = NULL;
-  9774			rq->rd = NULL;
-  9775			rq->cpu_capacity = rq->cpu_capacity_orig = SCHED_CAPACITY_SCALE;
-  9776			rq->balance_callback = &balance_push_callback;
-  9777			rq->active_balance = 0;
-  9778			rq->next_balance = jiffies;
-  9779			rq->push_cpu = 0;
-  9780			rq->cpu = i;
-  9781			rq->online = 0;
-  9782			rq->idle_stamp = 0;
-  9783			rq->avg_idle = 2*sysctl_sched_migration_cost;
-  9784			rq->wake_stamp = jiffies;
-  9785			rq->wake_avg_idle = rq->avg_idle;
-  9786			rq->max_idle_balance_cost = sysctl_sched_migration_cost;
-  9787	
-  9788			INIT_LIST_HEAD(&rq->cfs_tasks);
-  9789	
-  9790			rq_attach_root(rq, &def_root_domain);
-  9791	#ifdef CONFIG_NO_HZ_COMMON
-  9792			rq->last_blocked_load_update_tick = jiffies;
-  9793			atomic_set(&rq->nohz_flags, 0);
-  9794	
-  9795			INIT_CSD(&rq->nohz_csd, nohz_csd_func, rq);
-  9796	#endif
-  9797	#ifdef CONFIG_HOTPLUG_CPU
-  9798			rcuwait_init(&rq->hotplug_wait);
-  9799	#endif
-  9800	#endif /* CONFIG_SMP */
-  9801			hrtick_rq_init(rq);
-  9802			atomic_set(&rq->nr_iowait, 0);
-  9803	
-  9804	#ifdef CONFIG_SCHED_CORE
-  9805			rq->core = rq;
-  9806			rq->core_pick = NULL;
-  9807			rq->core_enabled = 0;
-  9808			rq->core_tree = RB_ROOT;
-  9809			rq->core_forceidle_count = 0;
-  9810			rq->core_forceidle_occupation = 0;
-  9811			rq->core_forceidle_start = 0;
-  9812	
-  9813			rq->core_cookie = 0UL;
-  9814	#endif
-> 9815			zalloc_cpumask_var_node(rq->scratch_mask, GFP_KERNEL, cpu_to_node(i));
-  9816		}
-  9817	
-  9818		set_load_weight(&init_task, false);
-  9819	
-  9820		/*
-  9821		 * The boot idle thread does lazy MMU switching as well:
-  9822		 */
-  9823		mmgrab(&init_mm);
-  9824		enter_lazy_tlb(&init_mm, current);
-  9825	
-  9826		/*
-  9827		 * The idle task doesn't need the kthread struct to function, but it
-  9828		 * is dressed up as a per-CPU kthread and thus needs to play the part
-  9829		 * if we want to avoid special-casing it in code that deals with per-CPU
-  9830		 * kthreads.
-  9831		 */
-  9832		WARN_ON(!set_kthread_struct(current));
-  9833	
-  9834		/*
-  9835		 * Make us the idle thread. Technically, schedule() should not be
-  9836		 * called from this thread, however somewhere below it might be,
-  9837		 * but because we are the idle thread, we just pick up running again
-  9838		 * when this runqueue becomes "idle".
-  9839		 */
-  9840		init_idle(current, smp_processor_id());
-  9841	
-  9842		calc_load_update = jiffies + LOAD_FREQ;
-  9843	
+b46e756f5e47031 Kirill A. Shutemov 2016-07-26  854  
+507228044236804 Zach O'Keefe       2022-07-06  855  static int find_pmd_or_thp_or_none(struct mm_struct *mm,
+507228044236804 Zach O'Keefe       2022-07-06  856  				   unsigned long address,
+507228044236804 Zach O'Keefe       2022-07-06  857  				   pmd_t **pmd)
+507228044236804 Zach O'Keefe       2022-07-06  858  {
+507228044236804 Zach O'Keefe       2022-07-06  859  	pmd_t pmde;
+507228044236804 Zach O'Keefe       2022-07-06  860  
+507228044236804 Zach O'Keefe       2022-07-06  861  	*pmd = mm_find_pmd(mm, address);
+507228044236804 Zach O'Keefe       2022-07-06  862  	if (!*pmd)
+507228044236804 Zach O'Keefe       2022-07-06  863  		return SCAN_PMD_NULL;
+507228044236804 Zach O'Keefe       2022-07-06  864  
+507228044236804 Zach O'Keefe       2022-07-06 @865  	pmde = pmd_read_atomic(*pmd);
+507228044236804 Zach O'Keefe       2022-07-06  866  
+
+:::::: The code at line 865 was first introduced by commit
+:::::: 50722804423680488b8063f6cc9a451333bf6f9b mm/khugepaged: record SCAN_PMD_MAPPED when scan_pmd() finds hugepage
+
+:::::: TO: Zach O'Keefe <zokeefe@google.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---RbzRhXfO3k+SN5GK
+--Ko8lFQBcef72+GXk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -206,14 +128,14 @@ Content-Disposition: attachment; filename=config
 # Automatically generated file; DO NOT EDIT.
 # Linux/x86_64 6.0.0 Kernel Configuration
 #
-CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-8) 11.3.0"
+CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-5) 11.3.0"
 CONFIG_CC_IS_GCC=y
 CONFIG_GCC_VERSION=110300
 CONFIG_CLANG_VERSION=0
 CONFIG_AS_IS_GNU=y
-CONFIG_AS_VERSION=23900
+CONFIG_AS_VERSION=23890
 CONFIG_LD_IS_BFD=y
-CONFIG_LD_VERSION=23900
+CONFIG_LD_VERSION=23890
 CONFIG_LLD_VERSION=0
 CONFIG_CC_CAN_LINK=y
 CONFIG_CC_CAN_LINK_STATIC=y
@@ -4283,7 +4205,7 @@ CONFIG_CRYPTO_NHPOLY1305=y
 # AEAD (authenticated encryption with associated data) ciphers
 #
 # CONFIG_CRYPTO_AEGIS128 is not set
-# CONFIG_CRYPTO_CHACHA20POLY1305 is not set
+CONFIG_CRYPTO_CHACHA20POLY1305=y
 CONFIG_CRYPTO_CCM=y
 # CONFIG_CRYPTO_GCM is not set
 # CONFIG_CRYPTO_SEQIV is not set
@@ -4301,7 +4223,7 @@ CONFIG_CRYPTO_HMAC=y
 CONFIG_CRYPTO_MD4=y
 CONFIG_CRYPTO_MD5=y
 CONFIG_CRYPTO_MICHAEL_MIC=y
-# CONFIG_CRYPTO_POLY1305 is not set
+CONFIG_CRYPTO_POLY1305=y
 # CONFIG_CRYPTO_RMD160 is not set
 CONFIG_CRYPTO_SHA1=y
 CONFIG_CRYPTO_SHA256=y
@@ -4388,7 +4310,7 @@ CONFIG_CRYPTO_NHPOLY1305_SSE2=y
 CONFIG_CRYPTO_NHPOLY1305_AVX2=y
 # CONFIG_CRYPTO_BLAKE2S_X86 is not set
 # CONFIG_CRYPTO_POLYVAL_CLMUL_NI is not set
-# CONFIG_CRYPTO_POLY1305_X86_64 is not set
+CONFIG_CRYPTO_POLY1305_X86_64=y
 CONFIG_CRYPTO_SHA1_SSSE3=y
 # CONFIG_CRYPTO_SHA256_SSSE3 is not set
 CONFIG_CRYPTO_SHA512_SSSE3=y
@@ -4458,6 +4380,7 @@ CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=y
 CONFIG_CRYPTO_LIB_CURVE25519=y
 CONFIG_CRYPTO_LIB_DES=y
 CONFIG_CRYPTO_LIB_POLY1305_RSIZE=11
+CONFIG_CRYPTO_ARCH_HAVE_LIB_POLY1305=y
 CONFIG_CRYPTO_LIB_POLY1305_GENERIC=y
 CONFIG_CRYPTO_LIB_POLY1305=y
 # CONFIG_CRYPTO_LIB_CHACHA20POLY1305 is not set
@@ -4902,4 +4825,4 @@ CONFIG_ARCH_USE_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---RbzRhXfO3k+SN5GK--
+--Ko8lFQBcef72+GXk--
