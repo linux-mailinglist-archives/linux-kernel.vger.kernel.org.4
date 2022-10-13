@@ -2,160 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F7D5FD6C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF78F5FD6D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiJMJON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S229769AbiJMJQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJMJNg (ORCPT
+        with ESMTP id S229659AbiJMJQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:13:36 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E6F171CD5;
-        Thu, 13 Oct 2022 02:13:25 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9AB5E5C0088;
-        Thu, 13 Oct 2022 05:13:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 13 Oct 2022 05:13:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665652404; x=
-        1665738804; bh=VNQ+rzhIH5hRx9r2piVwTWvHL+idSBOUdFscI6rLzxE=; b=J
-        CA5Tta1qADmnwMO1RYaiaSS2ehgaXa7BsEORpl1pfzmZJLTokz8L92qW+AeWqt5E
-        HY7IzdfYmVnoSDrr8smGWFOHJMcUtm7QRVdCEyDmR96IS/kuVy5fWGNISI3bCnQA
-        Um2obI0kd/rJEzYDxVgPnvBokcbRCVXW3FFq8Xlu6ILAoj5fl9aexyTCUn9R2+v7
-        sncBr1xe+L5Zor1QFn4ixeWTnPPcKSVkkZKKfrK0TLsw+UaqbeooVuv8Rp7G9R8u
-        vtOsbf3l8eAJC7E1KCaPelWisDRzUk+7ZlHw+DIGyBFf1PjfASsbsSDrzeAsHayT
-        l6djrAxq0vo2r3gf/mKyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665652404; x=
-        1665738804; bh=VNQ+rzhIH5hRx9r2piVwTWvHL+idSBOUdFscI6rLzxE=; b=i
-        WWqbhiB0MM6zxO5lHeriMLEd4LsvsxL0XAAhd1eKb1wJ4ia+tFEdMTceGn5G532V
-        +kFhXvlyzgIQFMoHkWArUSHw6mZRFTHUJ8ZLxBPQEb5QHOxJOt5k9X5o7QN8b7Vj
-        egVmLwu4k57qQOEOPF3vzCuecTALE8IgWvdW75lwMRP2DhffnXLD4OiCngIHn6Me
-        BfWoKKc4Wqsp2PlIQVGOF8KIxxJs/tmV7/+J56Y5oh269ALQSONwEvo9qqAMkHS2
-        YNujalNYD6cPIjbeFPOvsVuTaGq2y9baNyJfNnCT2e57nRw4YveFnkc3wWAhg3DJ
-        0WFjNdV/qXndfolhb3ZnQ==
-X-ME-Sender: <xms:tNZHY5q3jWfMwIGBGd1k5daD_KcxlYwbJNxGidsbLRdUtbFnMilFlA>
-    <xme:tNZHY7qkOYDfqKUg0oOnSqHNnuDyBzzJ3eaB4rEUl9GdFl7bGXcJcbAibxVxyTuDm
-    QEt2k0vYBLwHZdECZ0>
-X-ME-Received: <xmr:tNZHY2OXYoE014XclLRhc7BIzTiHTchSXpryQyxQniSPfYK5p0AlpSCnLiQfdKf2R97pmiIwNXAklFjG4wrGIR4duQV8TADdjEM5>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:tNZHY07TJFnGdQ2GYLE_A4tnA_yXJXfroNAk2Mwl9PtpABz_oX0BMw>
-    <xmx:tNZHY47QsbbLWVvPNDm6s8Vkzo0MtC76Wjb8Ym39hEH2dGnyOSMHMw>
-    <xmx:tNZHY8j843JiquTWKHWkgdT_LpxSAaYrfVs3YyxoMoDZzUH1yisgig>
-    <xmx:tNZHY0qTbx4yVWt88oibjSm7646HdzT-VBe2uf0z8PelnJ992dh6pg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Oct 2022 05:13:24 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Thu, 13 Oct 2022 11:13:14 +0200
-Subject: [PATCH v3 7/7] drm/vc4: Make sure we don't end up with a core clock too high
+        Thu, 13 Oct 2022 05:16:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFA920BDB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665652586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c1PougXwFNeOBx9Qjbr5s56x+6pgJ2sjuaM5Urh09Fk=;
+        b=hi7Sxs3NUN5tw74/8sYvvgVIUK8SB5X2/LwQmwLLi28U1NhOwQUi8ykWVXfSUFBrXEJ/l8
+        xpxmpjd81gFK/6a/KiWWrDNc2mYmjUssfVDk3Lcclll7R6olcLfPAofB6bNHhb/ThLJOyS
+        LleJ1zdyp3vTSwPWCjpFeNXr+s6JT08=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-490-pkM7bIR4P-apPcPF99o78g-1; Thu, 13 Oct 2022 05:16:25 -0400
+X-MC-Unique: pkM7bIR4P-apPcPF99o78g-1
+Received: by mail-wm1-f70.google.com with SMTP id g8-20020a05600c4ec800b003b4bcbdb63cso835422wmq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:16:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c1PougXwFNeOBx9Qjbr5s56x+6pgJ2sjuaM5Urh09Fk=;
+        b=CYkXur2LydasAXtrtU8O1UkAKsctC7pi8ertSY8/FAAXH2gNpIR+A+CwHcajvEf+Mm
+         W0n7IJv14W475pGuVDb3Q/kXJrQl55karw2VXuVw8Ny9XSGpTKrkaOKEFz08eAwOjIbM
+         Q7XZtQDad5LDtXbLqzwEkcuwC3zY/rEpbtAb8FGVQjvnFOR+XhAmPBxRA67kp4o/LT/q
+         JQm/wQjCqymHI0C+ZJ/++j8C9OLE0Az2MIzyUK4PGP0N7lPHeT/fIhET/k9D1wWUi1gN
+         fuSOTr7M5xXwaFS+9n1QkObeDwLhbMKPFKzdbhkGlEYx6iz6ZX3N8flxLOf6EDaWIwEI
+         Nl9A==
+X-Gm-Message-State: ACrzQf1eZi6mbdOT3ZHNxEiLfA8KwpZP3qMahEyy3A9MQdIfEoTbMXc7
+        OnWXipTVDd6HQCKFonXzOO1ebuD6za1ySL0wf1NGcjy5hJDN/c3BaYCI3vWHsRr0W4OdHNNSAQG
+        63AalumwaYQ2FXafNgCg9WIn475yxXKL03X+LQ0FoLtpnYC2OsWgBF4yhxx3l3l2jTopfVbuZgO
+        CQ
+X-Received: by 2002:a05:600c:1e88:b0:3c3:ecf:ce3e with SMTP id be8-20020a05600c1e8800b003c30ecfce3emr5656953wmb.15.1665652584207;
+        Thu, 13 Oct 2022 02:16:24 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7lz0WlApvKFq530rS3Ksn4hAAN1MoaF0PVyZiyi2JurSmUe0qN78jbTg3xrD4n6KsUR0fbjQ==
+X-Received: by 2002:a05:600c:1e88:b0:3c3:ecf:ce3e with SMTP id be8-20020a05600c1e8800b003c30ecfce3emr5656930wmb.15.1665652583965;
+        Thu, 13 Oct 2022 02:16:23 -0700 (PDT)
+Received: from ovpn-194-196.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id g17-20020a05600c4ed100b003b4ac05a8a4sm5313583wmq.27.2022.10.13.02.16.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 02:16:23 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] KVM: selftests: Test Hyper-V invariant TSC control
+In-Reply-To: <Y0bwwfuO/iubQDPH@google.com>
+References: <20220922143655.3721218-1-vkuznets@redhat.com>
+ <20220922143655.3721218-7-vkuznets@redhat.com>
+ <Y0XGuk4vwJBTU9oN@google.com> <87v8op6wq3.fsf@ovpn-194-196.brq.redhat.com>
+ <Y0bwwfuO/iubQDPH@google.com>
+Date:   Thu, 13 Oct 2022 11:16:22 +0200
+Message-ID: <87pmew6q3d.fsf@ovpn-194-196.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220815-rpi-fix-4k-60-v3-7-fc56729d11fe@cerno.tech>
-References: <20220815-rpi-fix-4k-60-v3-0-fc56729d11fe@cerno.tech>
-In-Reply-To: <20220815-rpi-fix-4k-60-v3-0-fc56729d11fe@cerno.tech>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Emma Anholt <emma@anholt.net>, Stephen Boyd <sboyd@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Maxime Ripard <maxime@cerno.tech>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        Dom Cobley <popcornmix@gmail.com>,
-        dri-devel@lists.freedesktop.org
-X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1996; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=ld8ipA25nQnVtvJwO2QQQ+Hw9FjcRy6PgrDDJON91qg=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMnu15awBd7JOJN9WGGF/I1fsz+veZC6vuVV87XUim39X5P+
- FUws6ihlYRDjYpAVU2SJETZfEndq1utONr55MHNYmUCGMHBxCsBEbPgZ/if9c0o5cjY0bNOJWbaHGK
- 9unPOG7f3CKt/EQ4G/lF3M7woyMjy/He4seO3P07o7nRvy/9bNEWrpPrv292Gro99U7ziWPWcEAA==
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the clock rate range improvements to the clock framework,
-trying to set a disjoint range on a clock will now result in an error.
+Sean Christopherson <seanjc@google.com> writes:
 
-Thus, we can't set a minimum rate higher than the maximum reported by
-the firmware, or clk_set_min_rate() will fail.
+> On Wed, Oct 12, 2022, Vitaly Kuznetsov wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>> 
 
-Thus we need to clamp the rate we are about to ask for to the maximum
-rate possible on that clock.
+...
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_kms.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+>> > Aha!  Idea.  Assuming none of the MSRs are write-only, what about adding a prep
+>> > patch to rework this code so that it verifies RDMSR returns what was written when
+>> > a fault didn't occur.
+>> >
+>> 
+>> There is at least one read-only MSR which comes to mind:
+>> HV_X64_MSR_EOI.
+>
+> I assume s/read-only/write-only since it's EOI?
+>
 
-diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
-index b45dcdfd7306..d241620fd5a7 100644
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -397,8 +397,8 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
- 	if (vc4->is_vc5) {
- 		unsigned long state_rate = max(old_hvs_state->core_clock_rate,
- 					       new_hvs_state->core_clock_rate);
--		unsigned long core_rate = max_t(unsigned long,
--						500000000, state_rate);
-+		unsigned long core_rate = clamp_t(unsigned long, state_rate,
-+						  500000000, hvs->max_core_rate);
- 
- 		drm_dbg(dev, "Raising the core clock at %lu Hz\n", core_rate);
- 
-@@ -432,14 +432,17 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
- 	drm_atomic_helper_cleanup_planes(dev, state);
- 
- 	if (vc4->is_vc5) {
--		drm_dbg(dev, "Running the core clock at %lu Hz\n",
--			new_hvs_state->core_clock_rate);
-+		unsigned long core_rate = min_t(unsigned long,
-+						hvs->max_core_rate,
-+						new_hvs_state->core_clock_rate);
-+
-+		drm_dbg(dev, "Running the core clock at %lu Hz\n", core_rate);
- 
- 		/*
- 		 * Request a clock rate based on the current HVS
- 		 * requirements.
- 		 */
--		WARN_ON(clk_set_min_rate(hvs->core_clk, new_hvs_state->core_clock_rate));
-+		WARN_ON(clk_set_min_rate(hvs->core_clk, core_rate));
- 
- 		drm_dbg(dev, "Core clock actual rate: %lu Hz\n",
- 			clk_get_rate(hvs->core_clk));
+Yes, of course)
+
+>> Also, some of the MSRs don't preserve the written value,
+>> e.g. HV_X64_MSR_RESET which always reads as '0'.
+>
+> Hrm, that's annoying.
+
+'Slightly annoying'. In fact, the test never writes anything besides '0'
+to the MSR as the code is not ready to handle real vCPU reset. I'll
+leave a TODO note about that.
+
+...
+
+> static bool is_write_only_msr(uint32_t msr)
+> {
+> 	return msr == HV_X64_MSR_EOI;
+> }
+
+This is all we need, basically. I'll go with that.
 
 -- 
-b4 0.11.0-dev-7da52
+Vitaly
+
