@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73C25FD444
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099D35FD44F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiJMFhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 01:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S229459AbiJMFus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 01:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJMFho (ORCPT
+        with ESMTP id S229546AbiJMFuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 01:37:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5302C10CF82
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:37:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E190A616E3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:37:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F1CEC433C1;
-        Thu, 13 Oct 2022 05:37:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665639463;
-        bh=8aVZC45tzS5Xypj4wP6sxsCkOsmuarZG9AGJpu3SPco=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=F/D4d5YEo4S11Gj+F+xVctT+5me3AkVUXb2whtUfIS8fJ2mFuvUr8PySwMHqJDeAZ
-         b2NkTQDtu5CaRGkklBGxSm8sI7e0sfzKQs9O+ynrHay1wfBk3l89nFUEsU66zrPrFg
-         18ShVKVDCefbYGjeJYkNcpW4kNI2s4E8l2acQZ1t5DZGJBcjMK8ZdfNnaQhjsqmGye
-         An86ifLgD2CmtT+nU0bZV7B1MAhbFI87RXTyhsZDhv5+LYXvn3vc+f90B8uxlGYaDi
-         hGgxNoDjGA+p6gZQV4JMvoE0xUHL8zhimDiaqzRXHXzsslA+O0BwlTr/ZXlRqeYZIk
-         CBwcIQMlg90Ng==
-Date:   Thu, 13 Oct 2022 06:37:39 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_1/8=5D_riscv=3A_move_riscv=5Fnonc?= =?US-ASCII?Q?oherent=5Fsupported=28=29_out_of_ZICBOM_probe?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y0GCST9IQcKws9Yh@xhacker>
-References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-2-jszhang@kernel.org> <Y0F1uH71Ll7YGygB@spud> <Y0GCST9IQcKws9Yh@xhacker>
-Message-ID: <BBEFA528-0F84-41CB-A62F-ED4673947928@kernel.org>
+        Thu, 13 Oct 2022 01:50:46 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30181EE8AE;
+        Wed, 12 Oct 2022 22:50:45 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h185so701517pgc.10;
+        Wed, 12 Oct 2022 22:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZzglpC5mbRdLW9j3rb/103BSHrz15C42kGNA5aA2nE0=;
+        b=UKSPc/M1Lon+j3O3SOYw9MJ2zanPgvc02TQ5DNxZolQ3mvOy90PA1LQib0AfgFcu5E
+         GeY6zE+OP0Xrh9Zir+qY5XHsS0WUT/Onp0ON8sonvbUDhQM+uGxSYc6kATCNHLCc7wJ3
+         1GBVX0aB+Xjo6UDP/eqrEQ8tmA2IMicrsV0YinLaFLDAhInv7DiorCC/QTmkM44xruA9
+         ofPpkhBVufG0balWVBNZbnK6AAXKQGt3NVQn54oekSXuoXGth0pzyCYb5dyMz9sQ4oEJ
+         gx3E2gtIrH5t+oJeZAx6esgwLPy//+CT2KMUSnx8zIxtGcfenfxaWNvFkWzPVK/s8FFy
+         Gmng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZzglpC5mbRdLW9j3rb/103BSHrz15C42kGNA5aA2nE0=;
+        b=f9e/I5yz8EQHxPHVjJnNGL7D+QrgSbYH7n3TIZ8xcr6IHblYfqZOi9HMX//qAN9UGf
+         hVTicLNBE/D8gUyl/aarKhp7j096q5wCgO7ogjBfV0A7dqL1dcXQKs0tvqfa0hhI2l8K
+         uZQGGH9nHSj+5scfKeHJBf1FW+dqe7XArE5HYRrxPLNZUFr82LZr0K669ws5BcGHI8rO
+         H8BcLvI3nTKfrneGrvWxfhURv+kq0yG5p1CXq38US1/E0rXWbIYMr7yba6MggAoaU1Yy
+         Oow7k3gpx1xZK7eHV5cBky50kir7Gcwkve2+CJpcMbl0czj8cvVhf9fCl/D+2m0SZTX3
+         F7Tw==
+X-Gm-Message-State: ACrzQf3qPTGv0/XQ5fm91OcG6+ul2xrD59PPYjyRVTh5ztcKeUmOMaBk
+        u2S9vAei80rpUtPHJ06qEeYoBEeIOCyNQg==
+X-Google-Smtp-Source: AMsMyM7yzkp2mNyivgowhvxnV39yZ0+ISwIQHG8SkCbYC+HjbN4G6d7iiMoRC0YwNpjL9zq/I8mJfw==
+X-Received: by 2002:a63:ff1b:0:b0:43c:e4ee:e5e0 with SMTP id k27-20020a63ff1b000000b0043ce4eee5e0mr27532658pgi.540.1665640244405;
+        Wed, 12 Oct 2022 22:50:44 -0700 (PDT)
+Received: from localhost (ec2-3-6-129-254.ap-south-1.compute.amazonaws.com. [3.6.129.254])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b0017f7bef8cfasm11774337ple.281.2022.10.12.22.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 22:50:44 -0700 (PDT)
+From:   pmanank200502@gmail.com
+To:     rafael@kernel.org
+Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manank Patel <pmanank200502@gmail.com>
+Subject: [PATCH] ACPI: acpi_pcc.c: Fix unintentional integer overflow
+Date:   Thu, 13 Oct 2022 11:19:48 +0530
+Message-Id: <20221013054947.1355884-1-pmanank200502@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Manank Patel <pmanank200502@gmail.com>
 
+Fixed unintentional u32 overflow by casting it to u64 before multiplication.
 
-On 8 October 2022 14:59:37 IST, Jisheng Zhang <jszhang@kernel=2Eorg> wrote=
-:
->On Sat, Oct 08, 2022 at 02:06:00PM +0100, Conor Dooley wrote:
->> On Thu, Oct 06, 2022 at 03:08:11PM +0800, Jisheng Zhang wrote:
->> > It's a bit wired to call riscv_noncoherent_supported() once when
->> > insmod a module=2E Move the calling out of feature patch func=2E
->> >=20
->> > Signed-off-by: Jisheng Zhang <jszhang@kernel=2Eorg>
->> > ---
->> >  arch/riscv/kernel/cpufeature=2Ec | 7 +------
->> >  arch/riscv/kernel/setup=2Ec      | 4 ++++
->> >  2 files changed, 5 insertions(+), 6 deletions(-)
->> >=20
->> > diff --git a/arch/riscv/kernel/cpufeature=2Ec b/arch/riscv/kernel/cpu=
-feature=2Ec
->> > index 3b5583db9d80=2E=2E03611b3ef45e 100644
->> > --- a/arch/riscv/kernel/cpufeature=2Ec
->> > +++ b/arch/riscv/kernel/cpufeature=2Ec
->> > @@ -272,12 +272,7 @@ static bool __init_or_module cpufeature_probe_zi=
-cbom(unsigned int stage)
->> >  	case RISCV_ALTERNATIVES_EARLY_BOOT:
->> >  		return false;
->> >  	default:
->> > -		if (riscv_isa_extension_available(NULL, ZICBOM)) {
->> > -			riscv_noncoherent_supported();
->> > -			return true;
->> > -		} else {
->> > -			return false;
->> > -		}
->> > +		return riscv_isa_extension_available(NULL, ZICBOM);
->> >  	}
->> >  #endif
->> > =20
->> > diff --git a/arch/riscv/kernel/setup=2Ec b/arch/riscv/kernel/setup=2E=
-c
->> > index 2dfc463b86bb=2E=2E1a055c3f5d9d 100644
->> > --- a/arch/riscv/kernel/setup=2Ec
->> > +++ b/arch/riscv/kernel/setup=2Ec
->> > @@ -299,6 +299,10 @@ void __init setup_arch(char **cmdline_p)
->> >  	riscv_init_cbom_blocksize();
->> >  	riscv_fill_hwcap();
->> >  	apply_boot_alternatives();
->> > +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
->> > +	if (riscv_isa_extension_available(NULL, ZICBOM))
->> > +		riscv_noncoherent_supported();
->> > +#endif
->>=20
->> I have a personal bias against ifdefs where possible, maybe @Heiko
->> remembers why riscv_noncoherent_supported() was not defined as somethin=
-g
->> like `void riscv_noncoherent_support(void){}` for when that CONFIG is
->> not enabled? If it was this could become a an IS_ENABLED & we wouldn't
->> have to be so careful about wrapping it's usage in ifdefs=2E
->
->Good idea=2E Will do in newer version=2E
+Signed-off-by: Manank Patel <pmanank200502@gmail.com>
+---
+ drivers/acpi/acpi_pcc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Given this comment and the LKP report I've marked the series as changes re=
-quested in patchwork FYI=2E
+diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
+index ee4ce5ba1fb2..b929d2e5c622 100644
+--- a/drivers/acpi/acpi_pcc.c
++++ b/drivers/acpi/acpi_pcc.c
+@@ -112,7 +112,7 @@ acpi_pcc_address_space_handler(u32 function, acpi_physical_address addr,
+ 		 * processor could be much slower to reply. So add an arbitrary
+ 		 * amount of wait on top of Nominal.
+ 		 */
+-		usecs_lat = PCC_CMD_WAIT_RETRIES_NUM * data->pcc_chan->latency;
++		usecs_lat = PCC_CMD_WAIT_RETRIES_NUM * ((u64) data->pcc_chan->latency);
+ 		ret = wait_for_completion_timeout(&data->done,
+ 						  usecs_to_jiffies(usecs_lat));
+ 		if (ret == 0) {
+-- 
+2.38.0
 
-Thanks,
-Conor=2E
-
->
->>=20
->> Your change in isolation makes sense to me though, so:
->> Reviewed-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->>=20
->> Thanks,
->> Conor=2E
->>=20
->> >  }
->> > =20
->> >  static int __init topology_init(void)
->> > --=20
->> > 2=2E37=2E2
->> >=20
