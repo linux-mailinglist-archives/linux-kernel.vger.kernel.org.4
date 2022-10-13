@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56B95FD903
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773E75FD904
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJMMOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S229754AbiJMMOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJMMNx (ORCPT
+        with ESMTP id S229700AbiJMMOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:13:53 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73616FE76F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:13:51 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id il7-20020a17090b164700b0020d1029ceaaso3210873pjb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:13:51 -0700 (PDT)
+        Thu, 13 Oct 2022 08:14:02 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7244FDB62
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:13:54 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id c12-20020a170903234c00b0017f695bf8f0so1213633plh.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V0aWW8bYZcwHBD680JFtsAetqc8rikFJrjlci3PTsrQ=;
-        b=mrImrw9iRdZRmVVn3GynmwX3YCsy4SMTIdW1kb3OWriCm4QyX3xxUKJ3xPaqFRfIDZ
-         jD2YV7LE4SRRpOA/oDGRX2PdPM86tgj0I6I/Gd2KHSV6VyXKfb1VH1tfPDV/1ObiOxet
-         TiQpjp4DdTrfFB1AtaoTh6RO8iz31izgANRCSt+NWPB3PIvTQ4S9IJ2DVmhQ45pSoD8b
-         ZpkIASLfpDCIRPXdLiVljzCkFEHIAA9DInb4VjV9FdQY358XVAd0BFTva7kHYQ3Wl3Xu
-         fYGsJ1Mk6A9zbbD3tkJvTRyB/RDRKC79C/TCecFPpDwNzKXfncJ0UHkbbbRa1j9hhsIj
-         pjkw==
+        bh=H9SaswMeDVA0PXtGn+/RgF2ttyuiFbIBcmIgImTCEOc=;
+        b=Ii25z3y8bR8LKI7fL+IKrahfLIIcV3i2dTRT7mx45kXaZTqxy+AlAEJavNtwpa3Anw
+         FzlrCvqcIVsgqY5N/4i6RpGtHtnXrv/KT6iO8pgRcqZeKk0f08HQPZeixvrS75+Ucw5L
+         VV0Kp9LASJiH661+y+0zqS+0bi4Ge2wi5JIRdmc3Simtu4fnznbSA2LJuCQfxGGBNgOd
+         km5BGclc4f2DTtfQwUTKXBVv+e3Mc14iEnNDliLXhGJtJJ+t/Xt3wBj9OliaFx99xuMS
+         sLj0INBleT8YXIcOCau1ft0h9gLiAptL/Q5xHngJ5C8CySJVqOXuEHFcRnQWu/xLRthx
+         +jsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V0aWW8bYZcwHBD680JFtsAetqc8rikFJrjlci3PTsrQ=;
-        b=0mv/Gm+uYzE1IIDAWn7vOSzAEAvww1EmGlcVD5zxlnb8Yevqsc8y/SQ8pNw36IvH/s
-         7xulgQYfK3HTdB9UGkb4ELbDGEFk5K2gTAH8Gn5M/l9SS7sbZk7nVSYLRbjmj0+1K3Ao
-         HB/G+ISspxmzZGPfkmmPaX857AzrXdOXljknOglTtb19YAMwjNbDQgJp00cpzmY9rfWT
-         wTHxjjT2SGpCxyLQbOK+2naII7VMXML0uMt/GT5yHtgYbE57qSs/GyzFyHPjToVHeHlr
-         Ymio8YzwtdLS+ThqR9F0ojkJTqZ/SqsTstmL9sL+TEy+mZBPpBLsJpl2UA1YHUaKI5pR
-         ItEg==
-X-Gm-Message-State: ACrzQf2ufqwFieoiUIRB+5TZMHm3bkKLJfKKYZzyhWwB8FKCpLPnijI+
-        nwnedL+llBp19gR2S9Py2cg4P8ORDaoSZhzl
-X-Google-Smtp-Source: AMsMyM6S6FkRoIYnEPSy/CG4F3ryvwVLnb6dJUjttNHKuwroUYt7Ut4GOOdwDkpHgOznch9y8LBY8rLLkvRfqgv4
+        bh=H9SaswMeDVA0PXtGn+/RgF2ttyuiFbIBcmIgImTCEOc=;
+        b=kx5bs8SMo/JlRSkshW1ibiJ6Oo9XWpmGWCA/iPY863u18NoiNOzp0LqlyUX1evxTxw
+         EYIJ6jhB05p75UMB0ZfMkkuuOMeG2NilwzaYLgYqFUIQMTnz3UwNxRyJpn0/cPIoiMZ/
+         wbUn+6edUtYBKVQ5Bk6pK/77nVzmNiQ03LXTAK7SOYI0zaGynOimtNINGR1IZOq5lL03
+         5KkX2G7d9/Kfv7n5qNRKk2Hc7NhibwgXTbljRUAkRT1EFI/5MvDFGUy0HxrvF1Mr1Bqd
+         jzzgzFyUZlTa8iE8EGe7/ni1kdT/3NdRbNEb/SrllRpGii2mp7zn+3Fh4lANQA4TI0YS
+         IGZw==
+X-Gm-Message-State: ACrzQf2YGcQW/44Bf9GGgAEwo2s1e4GJMl8warSHOg3XX6upweBKfy2A
+        90y7+5bMOKG/AEVPpTACN3Kq+Xan9RDRMw7Y
+X-Google-Smtp-Source: AMsMyM4D8UD/snB7p//EsveGwAXY3dAujc5wCqE1XPJTo18Kkxmke1rbuc5ZoadCWIyta62qcE9Z4Z4GaauE7Vv5
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:902:64c2:b0:17b:6546:54be with SMTP
- id y2-20020a17090264c200b0017b654654bemr35968508pli.60.1665663230813; Thu, 13
- Oct 2022 05:13:50 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 12:13:18 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:8c8e:b0:202:883b:2644 with SMTP
+ id b14-20020a17090a8c8e00b00202883b2644mr10744181pjo.89.1665663233436; Thu,
+ 13 Oct 2022 05:13:53 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 12:13:19 +0000
 In-Reply-To: <20221013121319.994170-1-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20221013121319.994170-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221013121319.994170-4-vannapurve@google.com>
-Subject: [V3 PATCH 3/4] KVM: selftests: Add arch specific post vm creation hook
+Message-ID: <20221013121319.994170-5-vannapurve@google.com>
+Subject: [V3 PATCH 4/4] KVM: selftests: x86: Precompute the cpu type
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -63,7 +63,7 @@ Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,74 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add arch specific API kvm_arch_vm_post_create to perform any required setup
-after VM creation.
+Cache the vendor CPU type in a global variable so that multiple calls
+to is_amd/intel_cpu() do not need to re-execute CPUID.
 
-This API will be used in followup commit to convey cpu vendor type to the
-guest vm.
+Sync the global variable is_cpu_amd into the guest so the guest can also
+avoid executing CPUID instruction.
 
 Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 4 ++++
- tools/testing/selftests/kvm/lib/kvm_util.c          | 9 ++++++---
- tools/testing/selftests/kvm/lib/x86_64/processor.c  | 6 ++++++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index eec0e4898efe..1e7d3eae8c91 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -843,4 +843,8 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
-  */
- void kvm_selftest_arch_init(void);
- 
-+/*
-+ * API to execute architecture specific setup after creating the VM.
-+ */
-+void kvm_arch_vm_post_create(struct kvm_vm *vm);
- #endif /* SELFTEST_KVM_UTIL_BASE_H */
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index deb4c731b9fa..3ed72980c996 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -340,9 +340,8 @@ struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
- 
- 	kvm_vm_elf_load(vm, program_invocation_name);
- 
--#ifdef __x86_64__
--	vm_create_irqchip(vm);
--#endif
-+	kvm_arch_vm_post_create(vm);
-+
- 	return vm;
- }
- 
-@@ -2022,6 +2021,10 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
- 	}
- }
- 
-+__weak void kvm_arch_vm_post_create(struct kvm_vm *vm)
-+{
-+}
-+
- __weak void kvm_selftest_arch_init(void)
- {
- }
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 39c4409ef56a..fa65e8142c16 100644
+index fa65e8142c16..f508e58346e9 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1327,3 +1327,9 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+@@ -19,6 +19,7 @@
+ #define MAX_NR_CPUID_ENTRIES 100
  
+ vm_vaddr_t exception_handlers;
++static bool is_cpu_amd;
+ 
+ static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+ {
+@@ -1046,7 +1047,7 @@ static bool cpu_vendor_string_is(const char *vendor)
+ 
+ bool is_intel_cpu(void)
+ {
+-	return cpu_vendor_string_is("GenuineIntel");
++	return !is_cpu_amd;
+ }
+ 
+ /*
+@@ -1054,7 +1055,7 @@ bool is_intel_cpu(void)
+  */
+ bool is_amd_cpu(void)
+ {
+-	return cpu_vendor_string_is("AuthenticAMD");
++	return is_cpu_amd;
+ }
+ 
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+@@ -1328,8 +1329,13 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
  	return get_kvm_intel_param_bool("unrestricted_guest");
  }
-+
-+
-+void kvm_arch_vm_post_create(struct kvm_vm *vm)
+ 
++void kvm_selftest_arch_init(void)
 +{
-+	vm_create_irqchip(vm);
++	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
 +}
+ 
+ void kvm_arch_vm_post_create(struct kvm_vm *vm)
+ {
+ 	vm_create_irqchip(vm);
++	sync_global_to_guest(vm, is_cpu_amd);
+ }
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
