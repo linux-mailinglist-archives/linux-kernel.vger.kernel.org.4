@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38ABA5FE094
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2225FE001
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiJMSLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S230461AbiJMSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbiJMSKw (ORCPT
+        with ESMTP id S230350AbiJMSCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:10:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE03175789;
-        Thu, 13 Oct 2022 11:07:49 -0700 (PDT)
+        Thu, 13 Oct 2022 14:02:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65B613331D;
+        Thu, 13 Oct 2022 11:01:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 928F861901;
-        Thu, 13 Oct 2022 17:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2F5C433C1;
-        Thu, 13 Oct 2022 17:55:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C96961926;
+        Thu, 13 Oct 2022 17:58:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1933DC433C1;
+        Thu, 13 Oct 2022 17:58:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683758;
-        bh=/BBFd1SQJIVzrYnyx5GLc9XsD44ZqNGWi4W59Cfi7QQ=;
+        s=korg; t=1665683934;
+        bh=cUcTAyfiGD90tgpRNKHa/Zr0CnwqHXDM72pjPAcUCIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z+ukOMsTC9DTnGlCQMl9vGEE/Vf0CzuSY+Vhywl+f8HrXERAJ5Vo0DhlcpSi+fk2V
-         R9ex9MXc/MtbuQKEJBe9iHR4xWlYeO+3MDkTPb0hZ8djtBzEKYrmFqs1eiMmml3IQC
-         l6u+ABwsZkEv3J2/Mt8xRqG82XKu5K5+4a+ynAkw=
+        b=bW0RW2fev3ZHuTu/SVY/RXWmPwQb8eZu1fWRU21fxMY+4+1ROe0ksVXor/jlrQNEs
+         ur4JWYmOPOPspfRyFmeceviAsCh4PNT8UpBfcOl0Bwt3lzgfXo0tsJ0y1fEzYLQmva
+         Bq5T9KYXn1dti60pKyg9R0svDbL6uldeoYNmi3Sc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        hdthky <hdthky0@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 39/54] scsi: stex: Properly zero out the passthrough command structure
+        stable@vger.kernel.org,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.19 01/33] nilfs2: fix NULL pointer dereference at nilfs_bmap_lookup_at_level()
 Date:   Thu, 13 Oct 2022 19:52:33 +0200
-Message-Id: <20221013175148.290240304@linuxfoundation.org>
+Message-Id: <20221013175145.284122320@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
-References: <20221013175147.337501757@linuxfoundation.org>
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+References: <20221013175145.236739253@linuxfoundation.org>
 User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,68 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-commit 6022f210461fef67e6e676fd8544ca02d1bcfa7a upstream.
+commit 21a87d88c2253350e115029f14fe2a10a7e6c856 upstream.
 
-The passthrough structure is declared off of the stack, so it needs to be
-set to zero before copied back to userspace to prevent any unintentional
-data leakage.  Switch things to be statically allocated which will fill the
-unused fields with 0 automatically.
+If the i_mode field in inode of metadata files is corrupted on disk, it
+can cause the initialization of bmap structure, which should have been
+called from nilfs_read_inode_common(), not to be called.  This causes a
+lockdep warning followed by a NULL pointer dereference at
+nilfs_bmap_lookup_at_level().
 
-Link: https://lore.kernel.org/r/YxrjN3OOw2HHl9tx@kroah.com
-Cc: stable@kernel.org
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Reported-by: hdthky <hdthky0@gmail.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+This patch fixes these issues by adding a missing sanitiy check for the
+i_mode field of metadata file's inode.
+
+Link: https://lkml.kernel.org/r/20221002030804.29978-1-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com
+Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/stex.c      |   17 +++++++++--------
- include/scsi/scsi_cmnd.h |    2 +-
- 2 files changed, 10 insertions(+), 9 deletions(-)
+ fs/nilfs2/inode.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/scsi/stex.c
-+++ b/drivers/scsi/stex.c
-@@ -668,16 +668,17 @@ stex_queuecommand_lck(struct scsi_cmnd *
- 		return 0;
- 	case PASSTHRU_CMD:
- 		if (cmd->cmnd[1] == PASSTHRU_GET_DRVVER) {
--			struct st_drvver ver;
-+			const struct st_drvver ver = {
-+				.major = ST_VER_MAJOR,
-+				.minor = ST_VER_MINOR,
-+				.oem = ST_OEM,
-+				.build = ST_BUILD_VER,
-+				.signature[0] = PASSTHRU_SIGNATURE,
-+				.console_id = host->max_id - 1,
-+				.host_no = hba->host->host_no,
-+			};
- 			size_t cp_len = sizeof(ver);
+--- a/fs/nilfs2/inode.c
++++ b/fs/nilfs2/inode.c
+@@ -440,6 +440,8 @@ int nilfs_read_inode_common(struct inode
+ 	inode->i_atime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
+ 	inode->i_ctime.tv_nsec = le32_to_cpu(raw_inode->i_ctime_nsec);
+ 	inode->i_mtime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
++	if (nilfs_is_metadata_file_inode(inode) && !S_ISREG(inode->i_mode))
++		return -EIO; /* this inode is for metadata and corrupted */
+ 	if (inode->i_nlink == 0)
+ 		return -ESTALE; /* this inode is deleted */
  
--			ver.major = ST_VER_MAJOR;
--			ver.minor = ST_VER_MINOR;
--			ver.oem = ST_OEM;
--			ver.build = ST_BUILD_VER;
--			ver.signature[0] = PASSTHRU_SIGNATURE;
--			ver.console_id = host->max_id - 1;
--			ver.host_no = hba->host->host_no;
- 			cp_len = scsi_sg_copy_from_buffer(cmd, &ver, cp_len);
- 			cmd->result = sizeof(ver) == cp_len ?
- 				DID_OK << 16 | COMMAND_COMPLETE << 8 :
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -205,7 +205,7 @@ static inline unsigned int scsi_get_resi
- 	for_each_sg(scsi_sglist(cmd), sg, nseg, __i)
- 
- static inline int scsi_sg_copy_from_buffer(struct scsi_cmnd *cmd,
--					   void *buf, int buflen)
-+					   const void *buf, int buflen)
- {
- 	return sg_copy_from_buffer(scsi_sglist(cmd), scsi_sg_count(cmd),
- 				   buf, buflen);
 
 
