@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557245FE0C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F185FE059
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiJMSOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
+        id S231287AbiJMSHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiJMSMn (ORCPT
+        with ESMTP id S231345AbiJMSFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:12:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567F1DBE4C;
-        Thu, 13 Oct 2022 11:09:30 -0700 (PDT)
+        Thu, 13 Oct 2022 14:05:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3701B3C17C;
+        Thu, 13 Oct 2022 11:04:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56568B8203C;
-        Thu, 13 Oct 2022 17:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A147C433D6;
-        Thu, 13 Oct 2022 17:57:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D400361995;
+        Thu, 13 Oct 2022 18:00:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ACDDC433B5;
+        Thu, 13 Oct 2022 18:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683870;
-        bh=UKF8TMaennwEzj2kTNFiz0KGvFT3hjGwzvVddy+SOcg=;
+        s=korg; t=1665684055;
+        bh=9vKia5o5B4xGTx3eWxIf6VhmDOv6agctG3itO2HEjxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A3E07aXzG0ntnBrpvnFPDxASLylelmTEnaY94F7hy1+ZF5CdT1W4trDNVZnqjG+Rr
-         Ko2NUUY4kbuKcpdxnSKgrncU6M7tqw8P+uWoZ8oA/Pi2c2hFTib+qlrOLX+QtQRdLe
-         3E+SpGXqo5wsWHEfOm2731F2BWNA6tJ5lrULnAu4=
+        b=Euxm4PuAH2v5SDgDBgVvMJmPGvUaVxG5z3WLW0v2+fNG/g8S55XvxT0cjrfWytXmu
+         fc46i4oGNkMQPjyUzDi/jAODovZ9LveSLXLPrQtpE2pYftnEateGkT69oaLTl7m3h3
+         1kQ6B4QikVDVRU5kzLQkN/LlyqfE9xh7p5OdRAIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.15 19/27] wifi: cfg80211: fix BSS refcounting bugs
-Date:   Thu, 13 Oct 2022 19:52:48 +0200
-Message-Id: <20221013175144.261946484@linuxfoundation.org>
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 6.0 11/34] scsi: qla2xxx: Revert "scsi: qla2xxx: Fix response queue handler reading stale packets"
+Date:   Thu, 13 Oct 2022 19:52:49 +0200
+Message-Id: <20221013175146.815599374@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
-References: <20221013175143.518476113@linuxfoundation.org>
+In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
+References: <20221013175146.507746257@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,90 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Arun Easi <aeasi@marvell.com>
 
-commit 0b7808818cb9df6680f98996b8e9a439fa7bcc2f upstream.
+commit 6dc45a7322cb9db48a5b6696597a00ef7c778ef9 upstream.
 
-There are multiple refcounting bugs related to multi-BSSID:
- - In bss_ref_get(), if the BSS has a hidden_beacon_bss, then
-   the bss pointer is overwritten before checking for the
-   transmitted BSS, which is clearly wrong. Fix this by using
-   the bss_from_pub() macro.
+Reverting this commit so that a fixed up patch, without adding new module
+parameters, can be submitted.
 
- - In cfg80211_bss_update() we copy the transmitted_bss pointer
-   from tmp into new, but then if we release new, we'll unref
-   it erroneously. We already set the pointer and ref it, but
-   need to NULL it since it was copied from the tmp data.
+    Link: https://lore.kernel.org/stable/166039743723771@kroah.com/
 
- - In cfg80211_inform_single_bss_data(), if adding to the non-
-   transmitted list fails, we unlink the BSS and yet still we
-   return it, but this results in returning an entry without
-   a reference. We shouldn't return it anyway if it was broken
-   enough to not get added there.
+This reverts commit b1f707146923335849fb70237eec27d4d1ae7d62.
 
-This fixes CVE-2022-42720.
-
-Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
-Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
-Fixes: a3584f56de1c ("cfg80211: Properly track transmitting and non-transmitting BSS")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/r/20220826102559.17474-2-njavali@marvell.com
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/scan.c |   27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ drivers/scsi/qla2xxx/qla_gbl.h |    2 --
+ drivers/scsi/qla2xxx/qla_isr.c |   25 ++-----------------------
+ drivers/scsi/qla2xxx/qla_os.c  |   10 ----------
+ 3 files changed, 2 insertions(+), 35 deletions(-)
 
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -143,18 +143,12 @@ static inline void bss_ref_get(struct cf
- 	lockdep_assert_held(&rdev->bss_lock);
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -193,8 +193,6 @@ extern int ql2xsecenable;
+ extern int ql2xenforce_iocb_limit;
+ extern int ql2xabts_wait_nvme;
+ extern u32 ql2xnvme_queues;
+-extern int ql2xrspq_follow_inptr;
+-extern int ql2xrspq_follow_inptr_legacy;
  
- 	bss->refcount++;
--	if (bss->pub.hidden_beacon_bss) {
--		bss = container_of(bss->pub.hidden_beacon_bss,
--				   struct cfg80211_internal_bss,
--				   pub);
--		bss->refcount++;
--	}
--	if (bss->pub.transmitted_bss) {
--		bss = container_of(bss->pub.transmitted_bss,
--				   struct cfg80211_internal_bss,
--				   pub);
--		bss->refcount++;
--	}
-+
-+	if (bss->pub.hidden_beacon_bss)
-+		bss_from_pub(bss->pub.hidden_beacon_bss)->refcount++;
-+
-+	if (bss->pub.transmitted_bss)
-+		bss_from_pub(bss->pub.transmitted_bss)->refcount++;
- }
+ extern int qla2x00_loop_reset(scsi_qla_host_t *);
+ extern void qla2x00_abort_all_cmds(scsi_qla_host_t *, int);
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -3763,8 +3763,7 @@ void qla24xx_process_response_queue(stru
+ 	struct qla_hw_data *ha = vha->hw;
+ 	struct purex_entry_24xx *purex_entry;
+ 	struct purex_item *pure_item;
+-	u16 rsp_in = 0, cur_ring_index;
+-	int follow_inptr, is_shadow_hba;
++	u16 cur_ring_index;
  
- static inline void bss_ref_put(struct cfg80211_registered_device *rdev,
-@@ -1743,6 +1737,8 @@ cfg80211_bss_update(struct cfg80211_regi
- 		new->refcount = 1;
- 		INIT_LIST_HEAD(&new->hidden_list);
- 		INIT_LIST_HEAD(&new->pub.nontrans_list);
-+		/* we'll set this later if it was non-NULL */
-+		new->pub.transmitted_bss = NULL;
- 
- 		if (rcu_access_pointer(tmp->pub.proberesp_ies)) {
- 			hidden = rb_find_bss(rdev, tmp, BSS_CMP_HIDE_ZLEN);
-@@ -1983,10 +1979,15 @@ cfg80211_inform_single_bss_data(struct w
- 		spin_lock_bh(&rdev->bss_lock);
- 		if (cfg80211_add_nontrans_list(non_tx_data->tx_bss,
- 					       &res->pub)) {
--			if (__cfg80211_unlink_bss(rdev, res))
-+			if (__cfg80211_unlink_bss(rdev, res)) {
- 				rdev->bss_generation++;
-+				res = NULL;
-+			}
- 		}
- 		spin_unlock_bh(&rdev->bss_lock);
-+
-+		if (!res)
-+			return NULL;
+ 	if (!ha->flags.fw_started)
+ 		return;
+@@ -3774,25 +3773,7 @@ void qla24xx_process_response_queue(stru
+ 		qla_cpu_update(rsp->qpair, smp_processor_id());
  	}
  
- 	trace_cfg80211_return_bss(&res->pub);
+-#define __update_rsp_in(_update, _is_shadow_hba, _rsp, _rsp_in)		\
+-	do {								\
+-		if (_update) {						\
+-			_rsp_in = _is_shadow_hba ? *(_rsp)->in_ptr :	\
+-				rd_reg_dword_relaxed((_rsp)->rsp_q_in);	\
+-		}							\
+-	} while (0)
+-
+-	is_shadow_hba = IS_SHADOW_REG_CAPABLE(ha);
+-	follow_inptr = is_shadow_hba ? ql2xrspq_follow_inptr :
+-				ql2xrspq_follow_inptr_legacy;
+-
+-	__update_rsp_in(follow_inptr, is_shadow_hba, rsp, rsp_in);
+-
+-	while ((likely(follow_inptr &&
+-		       rsp->ring_index != rsp_in &&
+-		       rsp->ring_ptr->signature != RESPONSE_PROCESSED)) ||
+-		       (!follow_inptr &&
+-			rsp->ring_ptr->signature != RESPONSE_PROCESSED)) {
++	while (rsp->ring_ptr->signature != RESPONSE_PROCESSED) {
+ 		pkt = (struct sts_entry_24xx *)rsp->ring_ptr;
+ 		cur_ring_index = rsp->ring_index;
+ 
+@@ -3906,8 +3887,6 @@ process_err:
+ 				}
+ 				pure_item = qla27xx_copy_fpin_pkt(vha,
+ 							  (void **)&pkt, &rsp);
+-				__update_rsp_in(follow_inptr, is_shadow_hba,
+-						rsp, rsp_in);
+ 				if (!pure_item)
+ 					break;
+ 				qla24xx_queue_purex_item(vha, pure_item,
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -338,16 +338,6 @@ module_param(ql2xdelay_before_pci_error_
+ MODULE_PARM_DESC(ql2xdelay_before_pci_error_handling,
+ 	"Number of seconds delayed before qla begin PCI error self-handling (default: 5).\n");
+ 
+-int ql2xrspq_follow_inptr = 1;
+-module_param(ql2xrspq_follow_inptr, int, 0644);
+-MODULE_PARM_DESC(ql2xrspq_follow_inptr,
+-		 "Follow RSP IN pointer for RSP updates for HBAs 27xx and newer (default: 1).");
+-
+-int ql2xrspq_follow_inptr_legacy = 1;
+-module_param(ql2xrspq_follow_inptr_legacy, int, 0644);
+-MODULE_PARM_DESC(ql2xrspq_follow_inptr_legacy,
+-		 "Follow RSP IN pointer for RSP updates for HBAs older than 27XX. (default: 1).");
+-
+ static void qla2x00_clear_drv_active(struct qla_hw_data *);
+ static void qla2x00_free_device(scsi_qla_host_t *);
+ static int qla2xxx_map_queues(struct Scsi_Host *shost);
 
 
