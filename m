@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914475FD402
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883DA5FD405
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJME4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S229557AbiJMFBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 01:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJME40 (ORCPT
+        with ESMTP id S229547AbiJMFBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:56:26 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4670110B30
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:56:25 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id r18so611908pgr.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:56:25 -0700 (PDT)
+        Thu, 13 Oct 2022 01:01:00 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09965103D85
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:01:00 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id k9so397759pll.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:references
-         :in-reply-to:message-id:date:subject:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RBUW8W9IHpm/LsPPxDUBqPLclXqN19ToVh29BLs8YZk=;
-        b=OB11k6EzJwNvSCmIlAfMmIOJpHbpIOqkQWvUJ4Jvl8mr2f/Os4CyZ0nNb8BzO3KPNt
-         jHdnvy5LRvpx69LLOlPGddElGnjkCzNsuXHlPtwh4t88JPdjUBbTOFEv6b0hyRkb7lwU
-         2AsmsmLHTeeIxJqBIdODZ9zySeQOnkn7G8fqCaHVwL74dqt3YUWilHrxY38llh45qxUH
-         e0xvAPfRMUpu/iuyKnVludvj16BPlPkL7qq0oCRyNEhlUphB3aDDWrIro4FD+4rSCPUi
-         ZE6hOnFFlz1crUS3eng/zwaq8NOi+MdF+PcXGsbpDed6tJBy+UU12buSuRD3580JrY2S
-         Dpmw==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vo2vClF0viTyEV9dF3uXEQmi9DD+bFYaARDbiE673FY=;
+        b=bcFJXUHNzbEqQLUtO/5UnkbVjmKzQ+mDYMt0K89Rc/1Of0EdHQYXnHCqgkNNy81BNE
+         oZIBtnrnC9bZElluyBGBIRbZ2qzyqcR2OBCaHR80lxcIc43dp7ZP/yJGfwymLvJy+055
+         PsY5LMoboAg0kSIcjgPrzZdaTBSv5fTyyQHdns8R4q2gF74J+/jVUNisidxiZtABwJcW
+         A0OUqscxtNJzlSvWhb6YQ4W/aljdSUvafmjZ5vvBFhIcXmA2IsNrDw/W3MeIeufgJ+pc
+         xLq+YSWhCqEoG2BZH1gs5I9DF5kYTGCLmKueUHxDh1X79DeNaf/x7pp2rQsiyhk0iU6P
+         azUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:references
-         :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RBUW8W9IHpm/LsPPxDUBqPLclXqN19ToVh29BLs8YZk=;
-        b=WQaW4bC6eO7whFGhww67v3nSqqzBausPXXHSUWRz0PW7i7Cximb8FE8Nczpfc9Wbwo
-         7vYxyPBTjMShv16l30G/GMy0O17202AyD9/kiVv4o3xX1Rcyxdvsu5l/CHaOJkaJ2Y+9
-         ZreCFIS5A5/gcEwUKrw+J8kFVp/evwSjou30VMGj7Ywagy85Ezdf3VipdjVtJwTE/HOM
-         yXK6Lzi9Vt9vfm7lwLNyl6JTdJkOFT3VK6iSGmxPFO6GKqJNHA5N24sowkmwp/t7RHyg
-         V4yuCDNwmMbi8K3/zDKi/uS/716dE8gWtrpDnuNBN4sKlHXDqXEVbt9tpuvQqg9LGKpD
-         xdVQ==
-X-Gm-Message-State: ACrzQf3ogvYY2Mqb0X1H/8T/UFMXvLX+/GJb4W7dDjvjAncl2YqxynSN
-        k89gVNBwRvdh+dHFNZ+hJZsfDQ==
-X-Google-Smtp-Source: AMsMyM5HNnFq81l4RdSLltMaolIOGtBC4m30BJwmTpaAXLcTYknK/lnO0ieb/Avzudz+YE3F/RUOag==
-X-Received: by 2002:a05:6a00:2495:b0:562:c459:e327 with SMTP id c21-20020a056a00249500b00562c459e327mr30684563pfv.47.1665636985213;
-        Wed, 12 Oct 2022 21:56:25 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id i17-20020a170902cf1100b00177f25f8ab3sm11484255plg.89.2022.10.12.21.56.24
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vo2vClF0viTyEV9dF3uXEQmi9DD+bFYaARDbiE673FY=;
+        b=psgyXWgIfwoh8DKw2RlivuT7Hh+wVsu0FqdKT8S5pKyE4IMCg+54kWAWFiiwhidzf2
+         N0r8pjPHWPuArsPibEJo7FKZNOU3zifNnX0aADfYeyZwBOn+qF1mVP2E3H2X2vkBrPS0
+         L9qzWfLDhukOYXdN7U4agx6SXOcJJz4NVV4ilV2Ihd/GmyDjYx0NC/CpIDAQnYdmqOHL
+         Tqj5j0znY2uIylikGmnkiA7JMq7prlgKIxjolZ3LEtPUhYegcdnoxm7yyuF5ahQ6FWtv
+         waEk8C0AfTlTOKnPlBg+yT5qy+54iXiMG0Hb5nqXKACpgmSVsEA2xzq0TBwILU1/oTgd
+         eGew==
+X-Gm-Message-State: ACrzQf22mQ+FwjVi9GokMT/C6boOn+KOXzPKEyPUx3mYTq0MN6f3BHeX
+        Mv1hzND0az8eTHZrl9RJtpFnxjUT3DvG9Q==
+X-Google-Smtp-Source: AMsMyM7prQsv8d89ELhZC16iF907vgbbEkzq/tHxl8hNDtEPOBmor31gzGC8wSwsOIsGn0Nx+m3iVg==
+X-Received: by 2002:a17:90b:1806:b0:20d:3256:38 with SMTP id lw6-20020a17090b180600b0020d32560038mr8847987pjb.94.1665637259078;
+        Wed, 12 Oct 2022 22:00:59 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id v22-20020a17090abb9600b0020bfd6586c6sm2278518pjr.7.2022.10.12.22.00.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 21:56:24 -0700 (PDT)
-Subject: [PATCH 4/4] Documentation: RISC-V: patch-acceptance: s/implementor/implementer
-Date:   Wed, 12 Oct 2022 21:56:19 -0700
-Message-Id: <20221013045619.18906-5-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013045619.18906-1-palmer@rivosinc.com>
-References: <20221013045619.18906-1-palmer@rivosinc.com>
+        Wed, 12 Oct 2022 22:00:58 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH] e1000e: Fix TX dispatch condition
+Date:   Thu, 13 Oct 2022 14:00:44 +0900
+Message-Id: <20221013050044.11862-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Cc:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        conor.dooley@microchip.com, Atish Patra <atishp@rivosinc.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor@kernel.org>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Conor Dooley <conor@kernel.org>, Atish Patra <atishp@rivosinc.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+e1000_xmit_frame is expected to stop the queue and dispatch frames to
+hardware if there is not sufficient space for the next frame in the
+buffer, but sometimes it failed to do so because the estimated maxmium
+size of frame was wrong. As the consequence, the later invocation of
+e1000_xmit_frame failed with NETDEV_TX_BUSY, and the frame in the buffer
+remained forever, resulting in a watchdog failure.
 
-Implementor does appear to be a word, but it's not very common.
+This change fixes the estimated size by making it match with the
+condition for NETDEV_TX_BUSY. Apparently, the old estimation failed to
+account for the following lines which determines the space requirement
+for not causing NETDEV_TX_BUSY:
+>	/* reserve a descriptor for the offload context */
+>	if ((mss) || (skb->ip_summed == CHECKSUM_PARTIAL))
+>		count++;
+>	count++;
+>
+>	count += DIV_ROUND_UP(len, adapter->tx_fifo_limit);
 
-Suggested-by: Conor Dooley <conor@kernel.org>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+This issue was found with http-stress02 test included in Linux Test
+Project 20220930.
+
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 ---
- Documentation/riscv/patch-acceptance.rst | 4 ++--
+ drivers/net/ethernet/intel/e1000e/netdev.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/riscv/patch-acceptance.rst b/Documentation/riscv/patch-acceptance.rst
-index 9fed6b318b49..89c7d8abd4bb 100644
---- a/Documentation/riscv/patch-acceptance.rst
-+++ b/Documentation/riscv/patch-acceptance.rst
-@@ -26,7 +26,7 @@ specifications from the RISC-V foundation this means "Frozen" or
- ECR.  (Developers may, of course, maintain their own Linux kernel trees
- that contain code for any draft extensions that they wish.)
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index 321f2a95ae3a..da113f5011e9 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -5936,9 +5936,9 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
+ 		e1000_tx_queue(tx_ring, tx_flags, count);
+ 		/* Make sure there is space in the ring for the next send. */
+ 		e1000_maybe_stop_tx(tx_ring,
+-				    (MAX_SKB_FRAGS *
++				    ((MAX_SKB_FRAGS + 1) *
+ 				     DIV_ROUND_UP(PAGE_SIZE,
+-						  adapter->tx_fifo_limit) + 2));
++						  adapter->tx_fifo_limit) + 4));
  
--Additionally, the RISC-V specification allows implementors to create
-+Additionally, the RISC-V specification allows implementers to create
- their own custom extensions.  These custom extensions aren't required
- to go through any review or ratification process by the RISC-V
- Foundation.  To avoid the maintenance complexity and potential
-@@ -38,5 +38,5 @@ RISC-V extensions, we'll only accept patches for extensions that either:
-   for which a timeline for availability has been made public.
- 
- Hardware that does not meet its published timelines may have support
--removed.  (Implementors, may, of course, maintain their own Linux kernel
-+removed.  (Implementers, may, of course, maintain their own Linux kernel
- trees containing code for any custom extensions that they wish.)
+ 		if (!netdev_xmit_more() ||
+ 		    netif_xmit_stopped(netdev_get_tx_queue(netdev, 0))) {
 -- 
-2.38.0
+2.37.3
 
