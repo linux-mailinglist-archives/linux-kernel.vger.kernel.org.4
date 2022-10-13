@@ -2,84 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4555E5FD591
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B755FD597
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiJMHef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 03:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S229626AbiJMHi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiJMHec (ORCPT
+        with ESMTP id S229498AbiJMHix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 03:34:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E68911E45A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665646470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7+kkmXxqmOAqWpnEkFmH+PPx54SR+ImezPG4mMhIn2E=;
-        b=VVXbaHsjXika6IYd0uzKrUnsOX1LqHC5SUCg0RiKbVzs2Ud1HJ3abbYoYPxx3WxrCLWgoB
-        Eu0E+uy0IFgYSCFaDxjWpsUFQtIc8ec8tDV4+dW4sceVq4E7xfABGOAa9oCFOB7NqfBVUb
-        CJ/6pq7iIq8V4BRFduZOzaIfmat0H+U=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-468-Z7wUpwJpMqOpxgCe_XNI7g-1; Thu, 13 Oct 2022 03:34:29 -0400
-X-MC-Unique: Z7wUpwJpMqOpxgCe_XNI7g-1
-Received: by mail-wr1-f71.google.com with SMTP id e19-20020adfa453000000b0022e3608df56so222113wra.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:34:29 -0700 (PDT)
+        Thu, 13 Oct 2022 03:38:53 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17A122BCB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:38:52 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id c20so1287251ljj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JeTU9g7DODs0OvPIoiZ5PWNJ3O2Vyb2ZIWCixOTK2bU=;
+        b=fPQ9G05JalHFCVNyHNj4ZYEBAWJBPGcXqWiPKAT62Yw27sqEnyb5rH6nhH5+hMJfU3
+         9P9e74oVgEnlFmbnkZ8aw00g/zKVg/sRvA3y7YCeaBBbRBK+L8NWobeODTUiZTM6w/Xp
+         Ny34lZuZbgX5bltDphH6dPPUKNs97EHfFltXfowPEtr0fsYlkNlms0AbTcBX/5mJNiQf
+         dzfwJ/GPdgF3toU6TmZ+X+YhGi01uZipyX/R77Lt3pXexvAQemXf8iLNBQUQyln4qC++
+         awDdp9G/rZATcghHWWGOu3PSf/SKpCuZN/dB/KvIvGgxsl4JAnLS+BckXAHKpTb3IFgr
+         4hNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7+kkmXxqmOAqWpnEkFmH+PPx54SR+ImezPG4mMhIn2E=;
-        b=OxHYESKfohzuHMRv7CKMQMUziFRjkGt7/0DvZvFqhPCwQEY0ZTc64pScsqSraiXqlL
-         o4z6+GeoKJOmkDvDKjEvBUVmHlzEELnKst3Jzx9WtCZKyF21Xa04ddSfIC7djqBLh7CX
-         KWWcXYepfYlzwXlhLO2GkrcxTvyB+StwjpgOUGGU1+7k2VckzBZjdw8Qrrnm/aP+2O22
-         Qv6/q3M1cKIz0ON112Kk71t1fxblXW1Fcks0P8Xf6WIKy5q6xksv7+8umC1mysH/xp8N
-         zJgBiX80DujxQ/uCpdrEkBJnxaVAuvQuQxb/Ip/kP4gX5eV7lpsxjKpdFOW1tiK5y1Fl
-         Slrg==
-X-Gm-Message-State: ACrzQf2JRClxfncbIWEVbIajKVq00Cu+YaNu2FOG4Ix5NHb622RQVBN2
-        zTAtC1Byh5vl7OAdfeGfC6hCyT/hwApb/nCO3KR7uZquzkUib6TcNVig8r4mczh/bpoK3bA5dgM
-        EuRPDwCiu+6lQteA48PNS65ONoKLDOuMq5hNtlyArWn/GfklHodjx5KY9j192wfHMkvJIY8/x2S
-        M=
-X-Received: by 2002:a7b:c047:0:b0:3b4:adc7:1ecb with SMTP id u7-20020a7bc047000000b003b4adc71ecbmr5333952wmc.144.1665646467829;
-        Thu, 13 Oct 2022 00:34:27 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM76Bw6kTXCm8sc8B5hU+9qB/ACfIxlbJt65LXBIFUWuX5g23uiXeaQ5PngFBdE8Z+HpUzxeLA==
-X-Received: by 2002:a7b:c047:0:b0:3b4:adc7:1ecb with SMTP id u7-20020a7bc047000000b003b4adc71ecbmr5333929wmc.144.1665646467584;
-        Thu, 13 Oct 2022 00:34:27 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id b1-20020a05600c4e0100b003a3170a7af9sm3790192wmq.4.2022.10.13.00.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 00:34:27 -0700 (PDT)
-Message-ID: <b5e30da4-d958-4227-6e13-07f58ea0ccb8@redhat.com>
-Date:   Thu, 13 Oct 2022 09:34:25 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JeTU9g7DODs0OvPIoiZ5PWNJ3O2Vyb2ZIWCixOTK2bU=;
+        b=AbXvQ+2BenUBSxCmaG3Oy5LTJy4C892zt1aA/o5ymAAC/9M33qXAF4RY6x+sNl4M8e
+         LktCRbF9FSBfhMQC0HG/dZDWhw7KvaZOT68e+En49eVmI+yD+KgJ9HccI4g9apyeQlsm
+         T4+M88VbLoUQYq3IIUfudxszV0Yt5qPZrP0rfQqDAM+w91PhMOjZp+tgyBvjFgu/PwYW
+         rwkuw6Ipnf5ZErGqRuLITjWLHyH5VtnoaiMxUVrxuLBcPFlvnurK4ISWZ5s8G6X+aeKZ
+         hV5bcE/Nk4PWAkWh1ioJkqgSKDFFeLH4jThe2og8lUXjA6DYgZcHZ4so+UrJD8DqhorR
+         w2NQ==
+X-Gm-Message-State: ACrzQf170RARq2VjoEMQrGtYBRsz2NC5P6toIcLgp+LkIXZxMxPyjH6/
+        OZIvvFUFGlQYrsS99ylKaNPmQmM7MeQLitXPsxbV0A==
+X-Google-Smtp-Source: AMsMyM4vZL5B+eJo77MkwWxzCAnN7Qkp3w2XEGNKeO6OUhD9QagElyBIqQWvHKQq+mzMwdr7aYRlM8lcIOUcjJzg7mk=
+X-Received: by 2002:a2e:978e:0:b0:26e:8ad6:6d5b with SMTP id
+ y14-20020a2e978e000000b0026e8ad66d5bmr10536991lji.363.1665646730714; Thu, 13
+ Oct 2022 00:38:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 0/4] Add a drm_crtc_helper_atomic_check() helper
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-References: <20221011165136.469750-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221011165136.469750-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <0000000000002b89b205ead703ff@google.com> <Y0cEQbWsy7XAkyVZ@slm.duckdns.org>
+In-Reply-To: <Y0cEQbWsy7XAkyVZ@slm.duckdns.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 13 Oct 2022 09:38:37 +0200
+Message-ID: <CACT4Y+Z9ku-uZVGvAwDD9ajr3Sx_KQHmc5hRUOB0_S2Ctj_=+w@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in kernfs_walk_and_get_ns
+To:     Tejun Heo <tj@kernel.org>
+Cc:     syzbot <syzbot+9baaae5fc5795e2e6acf@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,28 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 18:51, Javier Martinez Canillas wrote:
-> Add a helper function and make drivers that have the same logic in their
-> struct drm_crtc_helper_funcs .atomic_check handler to use this instead.
-> 
-> Patch #1, #2 and #3 are just cleanups for the mgag200, simpledrm and
-> ssd130x drivers respectively. Finally patch #4 converts the last two
-> drivers to use a helper instead of open coding it the same logic.
-> 
-> The changes are inspired by a patch from Thomas Zimmermann for the ast
-> DRM driver:
-> 
-> https://patchwork.kernel.org/project/dri-devel/patch/20221010103625.19958-4-tzimmermann@suse.de/
-> 
-> This is a v2 that addresses issues pointed out also by Thomas in v1:
-> 
+On Wed, 12 Oct 2022 at 20:30, Tejun Heo <tj@kernel.org> wrote:
+>
+> On Wed, Oct 12, 2022 at 07:14:35AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    282342f2dc97 Add linux-next specific files for 20220830
+> > git tree:       linux-next
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=14b47c63080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c7b70bd555c649f4
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=9baaae5fc5795e2e6acf
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12acb375080000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1718658b080000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+9baaae5fc5795e2e6acf@syzkaller.appspotmail.com
+> >
+> > BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1498
+> > in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 3603, name: syz-executor323
+> > preempt_count: 1, expected: 0
+> > RCU nest depth: 0, expected: 0
+> > INFO: lockdep is turned off.
+> > irq event stamp: 0
+> > hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+> > hardirqs last disabled at (0): [<ffffffff814710e0>] copy_process+0x20f0/0x7120 kernel/fork.c:2199
+> > softirqs last  enabled at (0): [<ffffffff81471128>] copy_process+0x2138/0x7120 kernel/fork.c:2203
+> > softirqs last disabled at (0): [<0000000000000000>] 0x0
+> > Preemption disabled at:
+> > [<0000000000000000>] 0x0
+> > CPU: 1 PID: 3603 Comm: syz-executor323 Not tainted 6.0.0-rc3-next-20220830-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
+> >  down_read+0x71/0x450 kernel/locking/rwsem.c:1498
+> >  kernfs_walk_and_get_ns+0xcc/0x3a0 fs/kernfs/dir.c:897
+> >  kernfs_walk_and_get include/linux/kernfs.h:600 [inline]
+> >  cgroup_get_from_path+0x61/0x610 kernel/cgroup/cgroup.c:6647
+>
+> The fix for this one is already queued in cgroup/for-6.1-fixes. Will send
+> that to linus once rc1 drops.
 
-Pushed this to drm-misc (drm-misc-next). Thanks!
+Hi Tejun,
 
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+What is the fix?
+syzbot needs it to close the bug and report similarly looking issues in future.
