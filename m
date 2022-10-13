@@ -2,122 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C247D5FD6A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E94C5FD6CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJMJHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
+        id S229998AbiJMJOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiJMJHm (ORCPT
+        with ESMTP id S230001AbiJMJNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:07:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55FF120BDF;
-        Thu, 13 Oct 2022 02:07:41 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id b2so1246031plc.7;
-        Thu, 13 Oct 2022 02:07:41 -0700 (PDT)
+        Thu, 13 Oct 2022 05:13:44 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A88615E0F0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:13:37 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m15so1682052edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:13:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=fairphone.com; s=fair;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRGJpqFdbfE6yJesxokWxqFXp0bV66QSzDLdJwmnCDM=;
-        b=R58txszMESc+23Mv9odsA87SnlDiQrEpUg+n4maXgIT9iQ5NemaFExRIbaa/qv0UDG
-         HKXeBEnAfzKdkJ4RoqHW2gC9PwVY66CNS0cpG3dP0KwX1QjeeD8I/EWHdcYeVaSdIS98
-         n1Dg8ZOidv9ef1XlvMW6rgSpkPsxGJSkM8kO96uQcOeLH+sm/sq5sFn9TVPwm2qPOPGE
-         YI2BPU6ESPoPvb90iF8nxBoT/w6C+hFd8App/2IlzKuGCjAm0qe2uW6lrdX8jlKcrY7V
-         rrsjZaAt+p4JUDcHZ5B1HLKzj9kMmbyV02EUQt7/SikmUV8gRBvpMSqebztOmmJ84Utk
-         yiOw==
+        bh=+dzrAn+aBg/5KVcVy/4aX4joCWNIa7ky5mt/LVd7Cts=;
+        b=EpOkGGCsgHYv53DtFoFfROkk3L70Tad3Fr98hzdLPuGpB67l/RLNzEBfk6W4b2EshY
+         heegHPUgBEw1hcrGaYOATLKXTKvem4g5S6Lb3RMMoJufXUlAxAamcbyAY13lmYodkLeX
+         u6SHw0M8I7LxbQAztnvDt2hOo8zLTOKUeT3zGoM3n/MiiwU1TLm72iCfKo3Btj9qeuSr
+         SBtQffQhJawJuoSnXkJ1hYdSEIdN4zYqlp7AE4TyZ6Uby+P2Wr9cbdnQTBDBexZGQ/AZ
+         Jd7XJ53v38BYyjY0H+QHMPGtwcluNUpf4di0GT/wReLKc0mWX74+PHtfMGqv0efLG7Bo
+         t5yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YRGJpqFdbfE6yJesxokWxqFXp0bV66QSzDLdJwmnCDM=;
-        b=4d+XhL6LMT3YUh9hAEen30YJRu2obGt7QyS+T6OMoJcEKHlOjKGK/C8w1QQ1bGeJlQ
-         pMeepTLQNAQftiqRWrA6ybOHDo/H0T3Gwf0382LgOI5hsUA5uaiV5CSEq2JSZvScugZu
-         mWgxy7vyFuAKEUlbuaLKUyfBW2YU1cy/kAE/bfo90AzcGS1lLovFW9eIJJ6uDLayqjdN
-         33MclrBzu8ezftLUlInVHkbMKJmXK7uOeiGgBZUZ5Fxe/EatM1R+cLDgrUEkualbw2NI
-         kpyhkVNEqVUEftfESXdWgFM57r+ctGPRh9ivFzU731zxihSkeTmHyvyYoUQB1XppeaF8
-         Ydyw==
-X-Gm-Message-State: ACrzQf18H3AwGhOyWtPnd9Y0ZfDpmLxRoBaY71wZ6xKMRoNVosw+mTmj
-        bBid4ZYynGuboyxWt0ZGhPU=
-X-Google-Smtp-Source: AMsMyM7vZ//2NNlI1b2QH0QgSN2mTYPshPy+LJufwxwlgcqlBZqYz87kMipJoLdqGkCLZ+IO9f4dtg==
-X-Received: by 2002:a17:902:7c8a:b0:17b:6eaa:5da3 with SMTP id y10-20020a1709027c8a00b0017b6eaa5da3mr22759230pll.33.1665652061034;
-        Thu, 13 Oct 2022 02:07:41 -0700 (PDT)
-Received: from localhost.localdomain ([43.224.245.236])
-        by smtp.gmail.com with ESMTPSA id c17-20020a17090aa61100b0020063e7d63asm2785957pjq.30.2022.10.13.02.07.38
+        bh=+dzrAn+aBg/5KVcVy/4aX4joCWNIa7ky5mt/LVd7Cts=;
+        b=XUjyxDDBohJk/nUHZwFIX5FQkn59w0OYLhd/I6DT9NF7854H4RYIxY+kSQOn44vH96
+         9oRtEl4Zl0Ar06R5ey1wGkbhNK4Je1KquHjTk/c8v32uVbaQP/bzHEJR+h8No8YvFGk3
+         qLJmxRPPMS3dP6I0OtSqjHkALTHRLeHJeA9vgegvv0RrJjGcEEMC33viSTLgls4/3uBx
+         XS9NaKaYD829r067p68+02p4eEBgoegPn8MxM/g8GHrj+PDly6Nks8Bcc14GbsojQDJr
+         cjKQMPZAlF0ogThT6zuuBKJ7VAUROB1q0GvFfcS2yH5zwCNu8911e8jDrScSLd5J4jF2
+         Yyug==
+X-Gm-Message-State: ACrzQf2qTHwULmmQ4B7S7wsJn5oeDo4/VnJcs+6VuFVqkiaTfUoFAcl5
+        L54ZehPO7rSpAQVJ3znakrwGlA==
+X-Google-Smtp-Source: AMsMyM5p8hsyMuf8fEG6NDPh7dYuTrJBp5jGeer89w4o0UR99iwkf54abNti1vvH5DL5t0oMqY+4Dw==
+X-Received: by 2002:a05:6402:5510:b0:459:5ea:9bc0 with SMTP id fi16-20020a056402551000b0045905ea9bc0mr30068091edb.152.1665652416151;
+        Thu, 13 Oct 2022 02:13:36 -0700 (PDT)
+Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id ti5-20020a170907c20500b0073dd1ac2fc8sm2582725ejc.195.2022.10.13.02.13.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 02:07:40 -0700 (PDT)
-From:   Qibo Huang <huangqibo.tech@gmail.com>
-To:     lukasz.luba@arm.com
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Qibo Huang <huangqibo.tech@gmail.com>
-Subject: [PATCH] thermal/governors: Remove integral_cutoff parameter, IPA is more regulated
-Date:   Thu, 13 Oct 2022 17:07:33 +0800
-Message-Id: <20221013090733.28462-1-huangqibo.tech@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 13 Oct 2022 02:13:35 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: qcom,pdc: Add missing compatibles
+Date:   Thu, 13 Oct 2022 11:12:08 +0200
+Message-Id: <20221013091208.356739-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reason 1: If the integral_cutoff parameter is 0,
-the current temperature is greater than the control
-temperature, and err_integral continues to increase.
-If an abnormal situation occurs suddenly, the err_integral
-value will become very large. Even if the current
-temperature is lower than the control temperature,
-err_integral will always exist, which will cause the
-IPA to run out of control and cannot return to normal.
-This is the problem I'm actually having.
+Document the compatibles that are already in use in the upstream Linux
+kernel to resolve dtbs_check warnings.
 
-Reason 2: The integral_cutoff parameter is difficult to
-confirm the optimal, and can not bring good results.
-
-Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/thermal/gov_power_allocator.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml    | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 2bdf8d797e3c..87e87ce71ff3 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -221,6 +221,7 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- 	s64 p, i, d, power_range;
- 	s32 err, max_power_frac;
- 	u32 sustainable_power;
-+	s64 i_next;
- 	struct power_allocator_params *params = tz->governor_data;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+index b6f56cf5fbe3..94791e261c42 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
+@@ -28,11 +28,15 @@ properties:
+       - enum:
+           - qcom,sc7180-pdc
+           - qcom,sc7280-pdc
++          - qcom,sc8280xp-pdc
+           - qcom,sdm845-pdc
++          - qcom,sdx55-pdc
++          - qcom,sdx65-pdc
+           - qcom,sm6350-pdc
+           - qcom,sm8150-pdc
+           - qcom,sm8250-pdc
+           - qcom,sm8350-pdc
++          - qcom,sm8450-pdc
+       - const: qcom,pdc
  
- 	max_power_frac = int_to_frac(max_allocatable_power);
-@@ -241,13 +242,11 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- 	 */
- 	i = mul_frac(tz->tzp->k_i, params->err_integral);
- 
--	if (err < int_to_frac(tz->tzp->integral_cutoff)) {
--		s64 i_next = i + mul_frac(tz->tzp->k_i, err);
-+	i_next = i + mul_frac(tz->tzp->k_i, err);
- 
--		if (abs(i_next) < max_power_frac) {
--			i = i_next;
--			params->err_integral += err;
--		}
-+	if (abs(i_next) < max_power_frac) {
-+		i = i_next;
-+		params->err_integral += err;
- 	}
- 
- 	/*
+   reg:
 -- 
-2.37.1
+2.38.0
 
