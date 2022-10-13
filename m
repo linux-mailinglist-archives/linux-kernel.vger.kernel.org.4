@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831BC5FDD8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5125FDD92
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJMPua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S229799AbiJMPwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJMPuZ (ORCPT
+        with ESMTP id S229587AbiJMPww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:50:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB805E304;
-        Thu, 13 Oct 2022 08:50:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5818B81F20;
-        Thu, 13 Oct 2022 15:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 66D1BC433D7;
-        Thu, 13 Oct 2022 15:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665676217;
-        bh=6Jmi9yxaqUq0TiuKlx6pKicXoRk7Q06JDNLxaUfZ8A0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=H82fgKs74BZSHePBrCvnMYSm0Bh5prZWgg6ed88gOAuomxlkrxveqyA9VFfCJUbyd
-         HT6d55BqleSzMG446hj3FI7OnmjV29mEb0ZNIAvWsWROGf0yHduNLOmkMKZHzwTBBg
-         HD5dexYuEFu33hOvRq3+pCO5Exse0UiyhGJ2DR95V8am2bmXKazcDPdtIQ0hhWlvt2
-         Gwlc54cNJuzeo5Tnp9xTLDIRHnFFtOagH8NsWqA5WWhtQlG6DXxdEMd3nycIne5qgs
-         y9Yisy0Me5XQBkaynP1oNJ2XckxcT/BKxuWD1aHtp9ADacJys8eX6d3yyHcB10RV87
-         zx3dWGZeXyw6g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42D9BE29F30;
-        Thu, 13 Oct 2022 15:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Oct 2022 11:52:52 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1606CFF8D9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:52:50 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id g11so1623180qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bWMv3DmVinwzc+hnXTMc4Pdb2dwueFn5cUn33fiS298=;
+        b=Rx+1ixrOX8U/D56rpEjVFONZ4Eeos6N/Uzey9b3QCI6MuLHNJWdG1/VDtRTNfxrjWa
+         92kkEbL7E9wSYIkv82x/LHCoj+4DI9ApKdxnVkq6MQfKxeKoztUA+p0lF5Ihx0XylN/L
+         bux8C9DmEnYR/F6xLA4JU20Dj0n0F+KT9FD+wn3B8uc6UwbDbnaLFGEpaTa9/XmUu0N/
+         LBDNW2OZJ/GoqXGL1A//DFW67sjLo8L+mgEe7+fcf3IXfA1GrsFGMb934CbNDG0q6xgA
+         2qiSD+oQNwdg7z5bDC/kuJsRzzzdh3YeTUVOyBLZUGB+97fcOsTRS3+wyWYULWJhHbnX
+         BPYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bWMv3DmVinwzc+hnXTMc4Pdb2dwueFn5cUn33fiS298=;
+        b=RFyWVg8tGwF1w7Km1ekdbCPHxy3nKBwCQHRtIZDKPQ6IETJvTplWyHAoiqd4VevOYS
+         7OkUEuobsYTmqPCPShFjrk3GwbDHVkJ7bq2cP0aOKvv3toh875mormnIy/THAdBdLQcc
+         90PMN2zn9JKbEr4rKe8t5Id4pImIHkdhMxedjARqLM2T67H8Y2ozaswPRDd5SEb3Hfy4
+         xd4TT4yh0sTcxyG+1P3UMenJBG2N/6PeyeLY4BmbgYpTnicUPUnw6HhYF+LDmgleAy0I
+         wbXc173irxKeRrDFYylFltcnrzEnFkvIMHDHApyQmTJr3Pg/180/+hCopNaimRbhNflX
+         cHhQ==
+X-Gm-Message-State: ACrzQf0MLY8jSaddlKHrwKY2cyYiof/Vjry9Tuc+yOYL/VGGWgc3xJfS
+        jFXHGDnd78ex1zolg/rmVjNSMf0W1C/u9Q==
+X-Google-Smtp-Source: AMsMyM5iWTK3O5BxAWkm9T51P7VAdBDohzYZDDdQz8wTgoLFOdvsSFu/nWT7SJhKLK+LpLHBIzxv9w==
+X-Received: by 2002:a05:620a:6004:b0:6d4:56aa:430f with SMTP id dw4-20020a05620a600400b006d456aa430fmr392091qkb.579.1665676369885;
+        Thu, 13 Oct 2022 08:52:49 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::3a61])
+        by smtp.gmail.com with ESMTPSA id s19-20020a05620a0bd300b006bb8b5b79efsm5906qki.129.2022.10.13.08.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 08:52:49 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 11:52:48 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, quic_pkondeti@quicinc.com,
+        peterz@infradead.org, quic_charante@quicinc.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
+Message-ID: <Y0g0UAAJMhPczNm/@cmpxchg.org>
+References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+ <20221010104206.12184-1-zhouchengming@bytedance.com>
+ <CAJuCfpF7Z+CYhk-f_aaDTE232+m9z_n-QfjGfdLje7QrX9bFtw@mail.gmail.com>
+ <a73f58a3-9f96-2ce5-38a0-8abab27a2260@bytedance.com>
+ <CAJuCfpET+B3X-uX2vDp-2yH-+OVxOu3YXL7JWZrPuoh22P+5SQ@mail.gmail.com>
+ <dea56c22-ab5b-25e2-9819-cc598f9aad80@bytedance.com>
+ <CAJuCfpFTDyR1V+JYOY_uN6Xg1Nip5b=9dzkwm-CNd8vMWaQQFQ@mail.gmail.com>
+ <46c6e1cc-77d3-eac1-fa18-deed2bac4a0e@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/6] Fix bugs found by ASAN when running selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166567621726.30586.15920096866905291891.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Oct 2022 15:50:17 +0000
-References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
-In-Reply-To: <20221011120108.782373-1-xukuohai@huaweicloud.com>
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, memxor@gmail.com, alan.maguire@oracle.com,
-        delyank@fb.com, lorenzo@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46c6e1cc-77d3-eac1-fa18-deed2bac4a0e@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Oct 13, 2022 at 07:06:55PM +0800, Chengming Zhou wrote:
+> Should I still need to copy groupc->tasks[] out for the current_cpu as you
+> suggested before?
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+It'd be my preference as well. This way the resched logic can be
+consolidated into a single block of comment + code at the end of the
+function.
 
-On Tue, 11 Oct 2022 08:01:02 -0400 you wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
-> 
-> This series fixes bugs found by ASAN when running bpf selftests on arm64.
-> 
-> v4:
-> - Address Andrii's suggestions
-> 
-> [...]
+> @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
+>                              u32 *pchanged_states)
+>  {
+>         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
+> +       int current_cpu = raw_smp_processor_id();
+> +       bool reschedule;
+>         u64 now, state_start;
+>         enum psi_states s;
+>         unsigned int seq;
+> @@ -256,6 +258,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
+>                 memcpy(times, groupc->times, sizeof(groupc->times));
+>                 state_mask = groupc->state_mask;
+>                 state_start = groupc->state_start;
+> +               if (cpu == current_cpu)
+> +                       reschedule = groupc->tasks[NR_RUNNING] +
+> +                               groupc->tasks[NR_IOWAIT] +
+> +                               groupc->tasks[NR_MEMSTALL] > 1;
+>         } while (read_seqcount_retry(&groupc->seq, seq));
 
-Here is the summary with links:
-  - [bpf-next,v4,1/6] libbpf: Fix use-after-free in btf_dump_name_dups
-    https://git.kernel.org/bpf/bpf-next/c/02c1e5b0bbb8
-  - [bpf-next,v4,2/6] libbpf: Fix memory leak in parse_usdt_arg()
-    https://git.kernel.org/bpf/bpf-next/c/cd168cc6f685
-  - [bpf-next,v4,3/6] selftests/bpf: Fix memory leak caused by not destroying skeleton
-    https://git.kernel.org/bpf/bpf-next/c/fbca16071678
-  - [bpf-next,v4,4/6] selftest/bpf: Fix memory leak in kprobe_multi_test
-    https://git.kernel.org/bpf/bpf-next/c/159c69121102
-  - [bpf-next,v4,5/6] selftests/bpf: Fix error failure of case test_xdp_adjust_tail_grow
-    https://git.kernel.org/bpf/bpf-next/c/496848b47126
-  - [bpf-next,v4,6/6] selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
-    https://git.kernel.org/bpf/bpf-next/c/cafecc0e3df3
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+This also matches psi_show() and the poll worker. They don't currently
+use the flag, but it's somewhat fragile and confusing. Add a test for
+current_work() == &group->avgs_work?
