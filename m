@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723F45FD7EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 12:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F4C5FD7EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 12:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiJMKpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 06:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S229504AbiJMKrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 06:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiJMKpH (ORCPT
+        with ESMTP id S229459AbiJMKrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 06:45:07 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFA237FAF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 03:45:03 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id g28so1577028pfk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 03:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zY1ojGxBpTi2hn+yoQwCvHy/W57pGU8ECyExV1y6qnQ=;
-        b=1DWlgqusN67Nh/Lk0vXcd5QO3A5QObZkpdbC+9nCPpKZvveDt4EyVeNBhRLQ23AlXd
-         977ei/TEQ5w04x8QFrh9vK85nWyFHYCPiEaolBsaz7GeG7QFBSaY+dlNOHno6oOf32ts
-         4N1sMJ5aaflczzA2acYDlJXdK3LkQbBYEiT9SORWT0jpyBLLwva+RLXppJFiA7cwOt1D
-         xF/2Da+GoVl5CgdIHolQooeSsPun+ic5B1zrsYTlZLUun6fZZ6e/8p258fvfSQXeo8Fi
-         xapBep1B08oRiNU2KOTkkNovTrOeQUwNX8jUj6gAAp91QgWBOTQoKESwmKTfpuiawofo
-         inGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zY1ojGxBpTi2hn+yoQwCvHy/W57pGU8ECyExV1y6qnQ=;
-        b=ON5Cyjpq08Hb6thnaKTRavuFzBtbe/tuHRbOaPG8iHY0QFGep8eOypgRYrQQzY/l/r
-         FJiZGqh9jKYtLT6Gcfln4NHi9ZzfelgIYyjtfGlrKNtS3UaKtLJJyU09lBypFfD2bmiv
-         gn5LBcZSOvuE0H++lz6Aen2Zeqe+HxqnxQLtSmphz7AwlBTx216H8jED9Mvl37Xyd0e8
-         bKTZea5wDgF/O9htu+qFZ2dzjDXCL6+d2LUqXFXHKw0BM3kkOWfE3u11Pxctm3cA3ICJ
-         YidokHRWVN2AQ4RrniR9Q7TEOZiSjfGsXHOSpQtFJdr+ZYjD9hYxigpV89u6ULMPP9wZ
-         acFg==
-X-Gm-Message-State: ACrzQf1z+yA7VFANfhl8cr70WU78o204JYXKV2r/sPDvlvcmI0Fwggb1
-        W26RxOrCrKoKPIplzBi7Hk4YlVXLCJGU8g==
-X-Google-Smtp-Source: AMsMyM7MHYTMMEe0zkVoDtJLCO79Qh90HiVUU8OihvpobkC1CmBNEd2x4c1OtpT0T5YAID0rfu4/zw==
-X-Received: by 2002:a05:6a00:23d2:b0:565:84d7:64c3 with SMTP id g18-20020a056a0023d200b0056584d764c3mr11206898pfc.20.1665657902431;
-        Thu, 13 Oct 2022 03:45:02 -0700 (PDT)
-Received: from [10.68.76.92] ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b00538056de6ecsm1687688pfq.52.2022.10.13.03.44.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 03:45:01 -0700 (PDT)
-Message-ID: <e825a27a-646b-9723-f774-947501c04ec2@bytedance.com>
-Date:   Thu, 13 Oct 2022 18:44:55 +0800
+        Thu, 13 Oct 2022 06:47:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1833204C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 03:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665658041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q6GB/B4JNp1TxbUrS+fPKO1tu1+KnvBnyZ+rYl22l5I=;
+        b=KTk91H+tEr7txJ4UgUgyOMAe5p6O+UsCwEXkoXyExjnI81O5ZPFVu1/k/tcjZIBPzL+V3k
+        tekOZVhpmysm68nQThYgBQMhYLehmlk6U+XrbHCxTVwgcndvB6+oRIBUx5KxkOo6AAtRho
+        z68/qihWvPGhW+zTQFecAiDJJjUuKdc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-241-yo6PH1nlNbie3fsaqQq5hw-1; Thu, 13 Oct 2022 06:47:17 -0400
+X-MC-Unique: yo6PH1nlNbie3fsaqQq5hw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD5181C05EAD;
+        Thu, 13 Oct 2022 10:46:50 +0000 (UTC)
+Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C2C712011568;
+        Thu, 13 Oct 2022 10:46:39 +0000 (UTC)
+Date:   Thu, 13 Oct 2022 18:46:35 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     john.p.donnelly@oracle.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        "samasth.norway.ananda" <samasth.norway.ananda@oracle.com>
+Subject: Re: [PATCH v3 0/2] arm64: kdump: Function supplement and performance
+ optimization
+Message-ID: <Y0fsi4+T6k/OO0hx@MiWiFi-R3L-srv>
+References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+ <YueMyUqannVg7l9v@MiWiFi-R3L-srv>
+ <a80c2b7e-a510-8e45-1f3c-7e2ddf79bc37@huawei.com>
+ <1d89e2cb-de26-0f85-7a2a-f68599a1b143@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [External] Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
- <Y0WEbCqJHjnqsg8n@dhcp22.suse.cz>
- <582cf257-bc0d-c96e-e72e-9164cff4fce1@bytedance.com>
- <Y0aCiYMQ4liL2azT@dhcp22.suse.cz>
- <a0421769-c2b9-d59a-0358-3cc84b2cb2bd@bytedance.com>
- <Y0avztF7QU8P/OoB@dhcp22.suse.cz>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <Y0avztF7QU8P/OoB@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d89e2cb-de26-0f85-7a2a-f68599a1b143@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed 12-10-22 19:22:21, Zhongkun He wrote:
->>>
->>> Yes, this will require some refactoring and one potential way is to make
->>> mpol ref counting unconditional. The conditional ref. counting has
->>> already caused issues in the past and the code is rather hard to follow
->>> anyway. I am not really sure this optimization is worth it.
->>>
->>> Another option would be to block the pidfd side of things on completion
->>> which would wake it up from the task_work context but I would rather
->>> explore the ref counting approach first and only if this is proven to be
->>> too expensive to go with hacks like this.
->>
->> Hi Michal
->>
->> The counting approach means executing mpol_get/put() when start/finish using
->> mempolicy,right?
+On 10/06/22 at 09:55am, john.p.donnelly@oracle.com wrote:
+> On 8/1/22 9:47 PM, Leizhen (ThunderTown) wrote:
+......
+> > > Do you have plan to pick this series so that it can be taken into 5.20
+> > > rc-1~3?
+> > 
+> > Hi, Catalin:
+> >    Only function reserve_crashkernel() is modified in these two patches. The core
+> > process of the arm64 architecture is not affected. I remember you suggested that
+> > arm64 and x86 share the same kdump code, so these two subfeatures are needed.
+> > Maybe we can lay the foundation first for the people who build the road. Unifying
+> > the external interfaces of kdump on arm64 and x86 does not seem to hurt.
+> > 
+> > 
+> > > 
+> > > We have back ported the basic crashkernel=high, low, support into our
+> > > distros and have taken wide testing on arm64 servers, need this patchset
+> > > to back port for more testing.
+> > > 
+> > 
+> Hi ,
 > 
-> We already do that via mpol_{get,put} but there are cases where the
-> reference counting is ignored because it cannot be freed and also mpol_cond_put
-> resp. open coded versions of mpol_needs_cond_ref.
+> What is the progress of this series ?
+> 
+> Without this patch set we are seeing  larger crashkernel=896M failures on
+> Arm  with Linux-6.0.rc7.  This larger value is needed for
+> iSCSI booted systems with certain network adapters.
 
-Hi Michal
+This change is located in arch/arm64 folder, I have pinged arm64
+maintainer to consider merging this patchset. Not sure if they are
+still thinking, or ignore this.
 
-Could we try to change the MPOL_F_SHARED flag to MPOL_F_STATIC to
-mark static mempolicy which cannot be freed, and mpol_needs_cond_ref
-can use MPOL_F_STATIC to avoid freeing  the static mempolicy.
-MPOL_F_SHARED loses its original meaning in counting approach.
+Hi Catalin, Will,
 
-Thanks.
+Ping again!
+
+Do you have plan to accept this patchset? It's very important for
+crashkernel setting on arm64 with a simple and default syntax.
+
+Thanks
+Baoquan
+
