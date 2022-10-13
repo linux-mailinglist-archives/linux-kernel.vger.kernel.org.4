@@ -2,127 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766475FDD50
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5915FDD5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJMPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S230026AbiJMPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiJMPkI (ORCPT
+        with ESMTP id S230119AbiJMPnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:40:08 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03929140B9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:39:46 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id g11so1568096qts.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4bJGejV+5UqqoOtNX772kflH+cMijJELmWVNopKE40M=;
-        b=oE9CdTSv8+Xt0aYUhUqZN7FPDAmiV6BO2e5EUmbWXFQrvr/z970xWK2CqgaSd/+QYE
-         JrDRu7XINubTWtVhVtkHw/o1XXNuE0nfdOnd3s7vKkwMEjLHvC2Rrwy4Q+Lz7mK4jUnU
-         12pLlt9fkyYJofZE9hbVncfaACdNajt99AgAc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4bJGejV+5UqqoOtNX772kflH+cMijJELmWVNopKE40M=;
-        b=n4qMTGqmX5IBV2MSTLiDXulvOz7pIGFbU9fUWCsmGQiiAhfHv1mW4o3StluI6BGK2t
-         5ft+gmomWReh7urhWs+yQeFLgrsvYTt2nbkwedcq73eCVgwkOYplXePK/FhEOXc7FBwj
-         gDN9ImMXDmoi8aa53NZO/fvBRb6t039It1izliw1/mwzkzB+RiVosxqTxkb2BRJswVt/
-         /FqDXdYp6htWJUJnTOdGBzzCsv6fUR26zC9T2THBzheBLtii8mT5cpfnZ5gFdMi3Wgjr
-         BZd1cjg9LL0aTZdX5uoXUS0WBux4Y8WACS7+3uM/1fvp9xhFcosVW3jEDnxQWkIEgIJ0
-         0WXg==
-X-Gm-Message-State: ACrzQf2RdrshO0IKg59L6OOnvyOHDbgUE2kUlA2mp636KCVQZ6kl0K3d
-        VDeYD8rk4XOouG+IS99MveP7l+xQnuQdyA==
-X-Google-Smtp-Source: AMsMyM4B7MUwdK3YxoHiFpH/xe+SP1fPnidaSr32FseB7PRrcV0pHh5JH3sByK3Cx8tqonj+uPiLeQ==
-X-Received: by 2002:a05:622a:40d:b0:397:bd61:ef1d with SMTP id n13-20020a05622a040d00b00397bd61ef1dmr371643qtx.404.1665675586051;
-        Thu, 13 Oct 2022 08:39:46 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id d22-20020a376816000000b006ce0733caebsm42050qkc.14.2022.10.13.08.39.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 08:39:45 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 15:39:45 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Fix use __this_cpu_read() warning in preemptible
- code
-Message-ID: <Y0gxQQzLdJLOp7wI@google.com>
-References: <20221013044148.2894320-1-qiang1.zhang@intel.com>
+        Thu, 13 Oct 2022 11:43:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABC3144E07
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:42:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2560C61864
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 15:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67177C433D6;
+        Thu, 13 Oct 2022 15:41:47 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: BPF: Avoid declare variables in switch-case
+Date:   Thu, 13 Oct 2022 23:40:00 +0800
+Message-Id: <20221013154000.3462836-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013044148.2894320-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 12:41:48PM +0800, Zqiang wrote:
-> BUG: using __this_cpu_read() in preemptible [00000000]
-> code: rcu_torture_fqs/398
-> caller is __this_cpu_preempt_check+0x13/0x20
-> CPU: 3 PID: 398 Comm: rcu_torture_fqs Not tainted 6.0.0-rc1-yoctodev-standard+
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0x5b/0x86
-> dump_stack+0x10/0x16
-> check_preemption_disabled+0xe5/0xf0
-> __this_cpu_preempt_check+0x13/0x20
-> rcu_force_quiescent_state.part.0+0x1c/0x170
-> rcu_force_quiescent_state+0x1e/0x30
-> rcu_torture_fqs+0xca/0x160
-> ? rcu_torture_boost+0x430/0x430
-> kthread+0x192/0x1d0
-> ? kthread_complete_and_exit+0x30/0x30
-> ret_from_fork+0x22/0x30
-> </TASK>
-> 
-> When enable rcutorture.fqs_duration, the rcu_force_quiescent_state() be
-> invoked in rcu_torture_fqs task context, invoke __this_cpu_read() in
-> preemptible code section will trigger the above calltrace.
+Not all compilers support declare variables in switch-case, so move
+declarations to the beginning of a function. Otherwise we may get such
+build errors:
 
-Makes sense, so in theory the GP thread might get migrated after sampling
-rcu_data.mynode but that's Ok since it wont change the behavior of the code
-following it AFAICS.
+arch/loongarch/net/bpf_jit.c: In function ‘emit_atomic’:
+arch/loongarch/net/bpf_jit.c:362:3: error: a label can only be part of a statement and a declaration is not a statement
+   u8 r0 = regmap[BPF_REG_0];
+   ^~
+arch/loongarch/net/bpf_jit.c: In function ‘build_insn’:
+arch/loongarch/net/bpf_jit.c:727:3: error: a label can only be part of a statement and a declaration is not a statement
+   u8 t7 = -1;
+   ^~
+arch/loongarch/net/bpf_jit.c:778:3: error: a label can only be part of a statement and a declaration is not a statement
+   int ret;
+   ^~~
+arch/loongarch/net/bpf_jit.c:779:3: error: expected expression before ‘u64’
+   u64 func_addr;
+   ^~~
+arch/loongarch/net/bpf_jit.c:780:3: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+   bool func_addr_fixed;
+   ^~~~
+arch/loongarch/net/bpf_jit.c:784:11: error: ‘func_addr’ undeclared (first use in this function); did you mean ‘in_addr’?
+          &func_addr, &func_addr_fixed);
+           ^~~~~~~~~
+           in_addr
+arch/loongarch/net/bpf_jit.c:784:11: note: each undeclared identifier is reported only once for each function it appears in
+arch/loongarch/net/bpf_jit.c:814:3: error: a label can only be part of a statement and a declaration is not a statement
+   u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+   ^~~
 
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/net/bpf_jit.c | 31 +++++++++++++------------------
+ 1 file changed, 13 insertions(+), 18 deletions(-)
 
-thanks,
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 43f0a98efe38..2a9b590f47e6 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -279,6 +279,7 @@ static void emit_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	const u8 t1 = LOONGARCH_GPR_T1;
+ 	const u8 t2 = LOONGARCH_GPR_T2;
+ 	const u8 t3 = LOONGARCH_GPR_T3;
++	const u8 r0 = regmap[BPF_REG_0];
+ 	const u8 src = regmap[insn->src_reg];
+ 	const u8 dst = regmap[insn->dst_reg];
+ 	const s16 off = insn->off;
+@@ -359,8 +360,6 @@ static void emit_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		break;
+ 	/* r0 = atomic_cmpxchg(dst + off, r0, src); */
+ 	case BPF_CMPXCHG:
+-		u8 r0 = regmap[BPF_REG_0];
+-
+ 		move_reg(ctx, t2, r0);
+ 		if (isdw) {
+ 			emit_insn(ctx, lld, r0, t1, 0);
+@@ -390,8 +389,11 @@ static bool is_signed_bpf_cond(u8 cond)
+ 
+ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool extra_pass)
+ {
+-	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU ||
+-			  BPF_CLASS(insn->code) == BPF_JMP32;
++	u8 t0 = -1;
++	u64 func_addr;
++	bool func_addr_fixed;
++	int i = insn - ctx->prog->insnsi;
++	int ret, jmp_offset;
+ 	const u8 code = insn->code;
+ 	const u8 cond = BPF_OP(code);
+ 	const u8 t1 = LOONGARCH_GPR_T1;
+@@ -400,8 +402,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	const u8 dst = regmap[insn->dst_reg];
+ 	const s16 off = insn->off;
+ 	const s32 imm = insn->imm;
+-	int jmp_offset;
+-	int i = insn - ctx->prog->insnsi;
++	const u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
++	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
+ 
+ 	switch (code) {
+ 	/* dst = src */
+@@ -724,24 +726,23 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_JMP32 | BPF_JSGE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLT | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_K:
+-		u8 t7 = -1;
+ 		jmp_offset = bpf2la_offset(i, off, ctx);
+ 		if (imm) {
+ 			move_imm(ctx, t1, imm, false);
+-			t7 = t1;
++			t0 = t1;
+ 		} else {
+ 			/* If imm is 0, simply use zero register. */
+-			t7 = LOONGARCH_GPR_ZERO;
++			t0 = LOONGARCH_GPR_ZERO;
+ 		}
+ 		move_reg(ctx, t2, dst);
+ 		if (is_signed_bpf_cond(BPF_OP(code))) {
+-			emit_sext_32(ctx, t7, is32);
++			emit_sext_32(ctx, t0, is32);
+ 			emit_sext_32(ctx, t2, is32);
+ 		} else {
+-			emit_zext_32(ctx, t7, is32);
++			emit_zext_32(ctx, t0, is32);
+ 			emit_zext_32(ctx, t2, is32);
+ 		}
+-		if (emit_cond_jmp(ctx, cond, t2, t7, jmp_offset) < 0)
++		if (emit_cond_jmp(ctx, cond, t2, t0, jmp_offset) < 0)
+ 			goto toofar;
+ 		break;
+ 
+@@ -775,10 +776,6 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
+ 	/* function call */
+ 	case BPF_JMP | BPF_CALL:
+-		int ret;
+-		u64 func_addr;
+-		bool func_addr_fixed;
+-
+ 		mark_call(ctx);
+ 		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
+ 					    &func_addr, &func_addr_fixed);
+@@ -811,8 +808,6 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
+ 	/* dst = imm64 */
+ 	case BPF_LD | BPF_IMM | BPF_DW:
+-		u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+-
+ 		move_imm(ctx, dst, imm64, is32);
+ 		return 1;
+ 
+-- 
+2.31.1
 
- - Joel
-
-> This commit convert __this_cpu_read() to raw_cpu_read() to avoid
-> this warning.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 96d678c9cfb6..282002e62cf3 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2436,7 +2436,7 @@ void rcu_force_quiescent_state(void)
->  	struct rcu_node *rnp_old = NULL;
->  
->  	/* Funnel through hierarchy to reduce memory contention. */
-> -	rnp = __this_cpu_read(rcu_data.mynode);
-> +	rnp = raw_cpu_read(rcu_data.mynode);
->  	for (; rnp != NULL; rnp = rnp->parent) {
->  		ret = (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) ||
->  		       !raw_spin_trylock(&rnp->fqslock);
-> -- 
-> 2.25.1
-> 
