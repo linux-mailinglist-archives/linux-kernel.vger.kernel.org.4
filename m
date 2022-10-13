@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A935FD3D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2BE5FD3D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiJME3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S229572AbiJMEaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 00:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJME3I (ORCPT
+        with ESMTP id S229526AbiJMEaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:29:08 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD2110B02
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:29:07 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so1019217fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:29:07 -0700 (PDT)
+        Thu, 13 Oct 2022 00:30:16 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAC18BB96
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:30:14 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id 8so416452ilj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SYIIq0zO9axQJUK4FF0gEw5z0+wm+xs5xbHKpjK1nxE=;
-        b=aeRtqd2Sh3gnMbaYcXg+1q+5/bEdCg3LbB9VVrDjLOskPXni1TjtP+R2a1fMZ0D2xQ
-         5v+cLRSwJTv6bGpPDqXn72QFCQ1umXDphtFov4hsKy8L+fE2nsHpINSRlgB/7hP3M+WE
-         51FqSr1Ing7WnFu+YdZQ/wAoKOQlQbPnlNJ+E=
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OEJ4dYV4+wnU5uEbW0h8AeQr5ak0EOPYUwNNv98kTx4=;
+        b=hDyf5PTqfzZOS0iQSaSOP+bJeJY62qM0YAEy4HvFsViICUpwMUvBl+W4cNGFSO/T4f
+         kO3KAeh4PpljeJz5OPXOLW6DkXJGLPhtu5QGMX09ri6nh0OD8N7siAbYU3cLAD0tGkqu
+         EjJ9+lHfRK5VPxkonlRI2xP4zn+PnzKYNVHpI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SYIIq0zO9axQJUK4FF0gEw5z0+wm+xs5xbHKpjK1nxE=;
-        b=ohI1Z4cO/GHSa4Q2fx4cBvZuGMKtMSEMfCSr1B0ckoFoicEgeKk8yMmKnIC56kChuV
-         HJvF/TFyRNDwBdlY1OjAKGvwWYyDyyrBM43OG1fNTiAFfGHtiG6cPtZkPiuhIVQy3XVO
-         S4Zg6be6l51euV82zZ2FaZ7T2o1S5bAxIm90SfFV0jgxmyw6TY/iGcA8CuJuths0BItZ
-         FkNm11fwF8KEDLCgLiP/pKWirqEo8CqlRmm2RxlkhLlrMxx6QUHtCyao4XYO1qAPrm9e
-         1SLO9R5mz6aZcSa5Hua4AaC5lUI+/rlaUxb8Z2JHgyX5S5OBwd9DZ7oqQyw1hKYOUa7G
-         cygw==
-X-Gm-Message-State: ACrzQf2RmAoaBJdJ/yzLzAFhF/wd3zzug01ZLGP/c1A8Czt4ZupJkCnQ
-        jr+Kro48MJ06i2Nkg6yvIgBBvyw/sPRF+w==
-X-Google-Smtp-Source: AMsMyM5tQ1GyTxX06uD3t1+sqbC651364jK0uqQhGWVrM71qeTn5MmPhAZSAwzcCHj3V2k1YSnS5iQ==
-X-Received: by 2002:a05:6870:390b:b0:132:9ca3:8dc1 with SMTP id b11-20020a056870390b00b001329ca38dc1mr4387539oap.106.1665635345900;
-        Wed, 12 Oct 2022 21:29:05 -0700 (PDT)
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
-        by smtp.gmail.com with ESMTPSA id em37-20020a0568705ba500b00127ba61535fsm2080100oab.15.2022.10.12.21.29.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 21:29:04 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id c187-20020a4a4fc4000000b004808e2f7affso560233oob.13
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:29:04 -0700 (PDT)
-X-Received: by 2002:a4a:c11a:0:b0:480:6f49:51c8 with SMTP id
- s26-20020a4ac11a000000b004806f4951c8mr7835433oop.47.1665635343943; Wed, 12
- Oct 2022 21:29:03 -0700 (PDT)
-Received: from 190990251477 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 Oct 2022 21:29:03 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OEJ4dYV4+wnU5uEbW0h8AeQr5ak0EOPYUwNNv98kTx4=;
+        b=OLtF9zzlN3twtFsykjUcsXnK6p/BiY64mVXzfVWtI1PYdU9IcsVWStHBQ+JYZI0zUs
+         7uKytMWr4XAzfOge9NWMu8+G8PPQbnOeqC9YO6nd0oQyw5eH2+4c5zByKX4JV0iKr3Pc
+         JkwDIi6Ji2omq4/jYl0E4r5M8JDK7FTo49DQN9kX5jDV2s1w0HzBZ6+k5Gf1RiAngCq5
+         1Y50DQlu24lJ3S6Ps775y4C0c3ExXNVcBQGVc9xsqxqJsc4J7f1LBiapVmZvStdK+p8K
+         ixhwXSdDsic+z0qujYrG23/WP4FdWo5q2ldXzdOvQIVwr6K7MtpX99im1ROzQDCrWBsQ
+         WWxA==
+X-Gm-Message-State: ACrzQf056AjlhCzfX/eKQW0iwiszDKmjU/TgiR4VHq1RCZ76IeVq+Mrd
+        xus2sYRQWEvjFBO7HHvZwqj/akGquX3DysmnujW6vA==
+X-Google-Smtp-Source: AMsMyM67IZ2hPzQTKYm1SL8L/e900kvsm5LPmzDay94vl9GaRRn+cyqsDl3P7LX83wnpTXTRV/blSAvRPZUw9PhPbQE=
+X-Received: by 2002:a05:6e02:164c:b0:2fc:7179:bc41 with SMTP id
+ v12-20020a056e02164c00b002fc7179bc41mr7565468ilu.190.1665635413543; Wed, 12
+ Oct 2022 21:30:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Y0Z++9QUAOOUAQrj@google.com>
-References: <20221012040918.272582-1-dcallagh@chromium.org>
- <20221012040918.272582-2-dcallagh@chromium.org> <Y0Z++9QUAOOUAQrj@google.com>
-From:   Dan Callaghan <dcallagh@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 12 Oct 2022 21:29:03 -0700
-X-Gmail-Original-Message-ID: <CAL=kDigzLLfqxJyGCon3Tk6jHH0r=Zw9ZJDT0LL4Rcr8tmmppw@mail.gmail.com>
-Message-ID: <CAL=kDigzLLfqxJyGCon3Tk6jHH0r=Zw9ZJDT0LL4Rcr8tmmppw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] platform/chrome: add a driver for HPS
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     chrome-platform@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?U2FtaSBLecO2c3RpbMOk?= <skyostil@chromium.org>,
-        Benson Leung <bleung@chromium.org>
+References: <20221003214501.2050087-1-connoro@google.com> <20221003214501.2050087-5-connoro@google.com>
+In-Reply-To: <20221003214501.2050087-5-connoro@google.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 13 Oct 2022 00:30:02 -0400
+Message-ID: <CAEXW_YRSj3T7MY1qu=hy7+Wf=p34bBKnCLfE7vMJUmFbg0wCKA@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/11] locking/mutex: make mutex::wait_lock irq safe
+To:     "Connor O'Brien" <connoro@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,97 +78,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Tzung-Bi Shih=E2=80=99s message of 2022-10-12 19:46:51 +1100:
-> On Wed, Oct 12, 2022 at 03:09:18PM +1100, Dan Callaghan wrote:
-> > ---
+On Mon, Oct 3, 2022 at 5:45 PM Connor O'Brien <connoro@google.com> wrote:
 >
-> It doesn't need a cover letter if the series only has 1 patch in general.
-> Instead, it could put additional information (and changelogs) after "---"=
-.
-
-Understood, I'll omit the cover letter in future postings.
-
-> > diff --git a/drivers/platform/chrome/cros_hps_i2c.c b/drivers/platform/=
-chrome/cros_hps_i2c.c
-> [...]
-> > +static int hps_i2c_probe(struct i2c_client *client)
-> > +{
-> > +     struct hps_drvdata *hps;
-> > +     int ret;
-> > +
-> > +     hps =3D devm_kzalloc(&client->dev, sizeof(*hps), GFP_KERNEL);
-> > +     if (!hps)
-> > +             return -ENOMEM;
-> > +
-> > +     memset(&hps->misc_device, 0, sizeof(hps->misc_device));
+> From: Juri Lelli <juri.lelli@redhat.com>
 >
-> The memset can be dropped.  `hps` is z-allocated.
-
-I'll take this out.
-
-> > +     hps->misc_device.parent =3D &client->dev;
-> > +     hps->misc_device.minor =3D MISC_DYNAMIC_MINOR;
-> > +     hps->misc_device.name =3D "cros-hps";
-> > +     hps->misc_device.fops =3D &hps_fops;
-> > +
-> > +     i2c_set_clientdata(client, hps);
-> > +     hps->client =3D client;
+> mutex::wait_lock might be nested under rq->lock.
 >
-> To be neat, I would prefer to insert a blank line here.
+> Make it irq safe then.
 
-Sure, will add one.
+Hi Juri, can you give an example where not doing this is an issue?
 
-> > +     hps->enable_gpio =3D devm_gpiod_get(&client->dev, "enable", GPIOD=
-_OUT_HIGH);
-> > +     if (IS_ERR(hps->enable_gpio)) {
-> > +             ret =3D PTR_ERR(hps->enable_gpio);
-> > +             dev_err(&client->dev, "failed to get enable gpio: %d\n", =
-ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret =3D misc_register(&hps->misc_device);
-> > +     if (ret) {
-> > +             dev_err(&client->dev, "failed to initialize misc device: =
-%d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     hps_set_power(hps, false);
+When nested under rq->lock, interrupts should already be disabled,
+otherwise try_to_wake_up() from an interrupt can cause a deadlock no?
+Then, why do you need this patch?
+
+Thanks.
+
+
+
+> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Link: https://lkml.kernel.org/r/20181009092434.26221-7-juri.lelli@redhat.com
+> [rebase & fix {un,}lock_wait_lock helpers in ww_mutex.h]
+> Signed-off-by: Connor O'Brien <connoro@google.com>
+> ---
+>  kernel/locking/mutex.c    | 18 ++++++++++--------
+>  kernel/locking/ww_mutex.h | 22 ++++++++++++----------
+>  2 files changed, 22 insertions(+), 18 deletions(-)
 >
-> IIUC, the GPIO will raise to HIGH in the first place, and then fall
-> to LOW until here.  Is it an expected behavior?  How about gpiod_get()
-> with GPIOD_OUT_LOW?
-
-It might seem a little unusual, but it is intentional. The enable line is
-already high when we enter the kernel from firmware. Acquiring the GPIO
-line with GPIOD_OUT_HIGH preserves its existing state (high) in case later
-steps fail.
-
-We power off the periphal only once the driver is successfully bound and ha=
-s
-taken control of its power state.
-
-> > +static int hps_i2c_remove(struct i2c_client *client)
-> > +{
-> > +     struct hps_drvdata *hps =3D i2c_get_clientdata(client);
-> > +
-> > +     pm_runtime_disable(&client->dev);
-> > +     misc_deregister(&hps->misc_device);
-> > +     hps_set_power(hps, true);
+> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+> index 7800380219db..f39e9ee3c4d0 100644
+> --- a/kernel/locking/mutex.c
+> +++ b/kernel/locking/mutex.c
+> @@ -572,6 +572,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+>  {
+>         struct mutex_waiter waiter;
+>         struct ww_mutex *ww;
+> +       unsigned long flags;
+>         int ret;
 >
-> Why does it need to raise the GPIO again when removing the device?
-
-Similar to the above, we want to preserve the default power state
-(i.e. powered on) whenever the driver is not bound to the device.
-
-This behaviour made sense to us mainly because we were originally controlli=
-ng
-the peripheral entirely from userspace, so it was always powered on by defa=
-ult.
-
-Do you think this behaviour is acceptable, or do we need to change it?
-
---=20
-Dan Callaghan <dcallagh@chromium.org>
-Software Engineer, Google
+>         if (!use_ww_ctx)
+> @@ -614,7 +615,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+>                 return 0;
+>         }
+>
+> -       raw_spin_lock(&lock->wait_lock);
+> +       raw_spin_lock_irqsave(&lock->wait_lock, flags);
+>         /*
+>          * After waiting to acquire the wait_lock, try again.
+>          */
+> @@ -676,7 +677,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+>                                 goto err;
+>                 }
+>
+> -               raw_spin_unlock(&lock->wait_lock);
+> +               raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
+>                 if (ww_ctx)
+>                         ww_ctx_wake(ww_ctx);
+>                 schedule_preempt_disabled();
+> @@ -703,9 +704,9 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+>                         trace_contention_begin(lock, LCB_F_MUTEX);
+>                 }
+>
+> -               raw_spin_lock(&lock->wait_lock);
+> +               raw_spin_lock_irqsave(&lock->wait_lock, flags);
+>         }
+> -       raw_spin_lock(&lock->wait_lock);
+> +       raw_spin_lock_irqsave(&lock->wait_lock, flags);
+>  acquired:
+>         __set_current_state(TASK_RUNNING);
+>
+> @@ -732,7 +733,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+>         if (ww_ctx)
+>                 ww_mutex_lock_acquired(ww, ww_ctx);
+>
+> -       raw_spin_unlock(&lock->wait_lock);
+> +       raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
+>         if (ww_ctx)
+>                 ww_ctx_wake(ww_ctx);
+>         preempt_enable();
+> @@ -743,7 +744,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+>         __mutex_remove_waiter(lock, &waiter);
+>  err_early_kill:
+>         trace_contention_end(lock, ret);
+> -       raw_spin_unlock(&lock->wait_lock);
+> +       raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
+>         debug_mutex_free_waiter(&waiter);
+>         mutex_release(&lock->dep_map, ip);
+>         if (ww_ctx)
+> @@ -915,6 +916,7 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
+>         struct task_struct *next = NULL;
+>         DEFINE_WAKE_Q(wake_q);
+>         unsigned long owner;
+> +       unsigned long flags;
+>
+>         mutex_release(&lock->dep_map, ip);
+>
+> @@ -941,7 +943,7 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
+>                 }
+>         }
+>
+> -       raw_spin_lock(&lock->wait_lock);
+> +       raw_spin_lock_irqsave(&lock->wait_lock, flags);
+>         debug_mutex_unlock(lock);
+>         if (!list_empty(&lock->wait_list)) {
+>                 /* get the first entry from the wait-list: */
+> @@ -959,7 +961,7 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
+>                 __mutex_handoff(lock, next);
+>
+>         preempt_disable();
+> -       raw_spin_unlock(&lock->wait_lock);
+> +       raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
+>
+>         wake_up_q(&wake_q);
+>         preempt_enable();
+> diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
+> index dfc174cd96c6..7edd55d10f87 100644
+> --- a/kernel/locking/ww_mutex.h
+> +++ b/kernel/locking/ww_mutex.h
+> @@ -70,14 +70,14 @@ __ww_mutex_has_waiters(struct mutex *lock)
+>         return atomic_long_read(&lock->owner) & MUTEX_FLAG_WAITERS;
+>  }
+>
+> -static inline void lock_wait_lock(struct mutex *lock)
+> +static inline void lock_wait_lock(struct mutex *lock, unsigned long *flags)
+>  {
+> -       raw_spin_lock(&lock->wait_lock);
+> +       raw_spin_lock_irqsave(&lock->wait_lock, *flags);
+>  }
+>
+> -static inline void unlock_wait_lock(struct mutex *lock)
+> +static inline void unlock_wait_lock(struct mutex *lock, unsigned long flags)
+>  {
+> -       raw_spin_unlock(&lock->wait_lock);
+> +       raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
+>  }
+>
+>  static inline void lockdep_assert_wait_lock_held(struct mutex *lock)
+> @@ -144,14 +144,14 @@ __ww_mutex_has_waiters(struct rt_mutex *lock)
+>         return rt_mutex_has_waiters(&lock->rtmutex);
+>  }
+>
+> -static inline void lock_wait_lock(struct rt_mutex *lock)
+> +static inline void lock_wait_lock(struct rt_mutex *lock, unsigned long *flags)
+>  {
+> -       raw_spin_lock(&lock->rtmutex.wait_lock);
+> +       raw_spin_lock_irqsave(&lock->rtmutex.wait_lock, *flags);
+>  }
+>
+> -static inline void unlock_wait_lock(struct rt_mutex *lock)
+> +static inline void unlock_wait_lock(struct rt_mutex *lock, flags)
+>  {
+> -       raw_spin_unlock(&lock->rtmutex.wait_lock);
+> +       raw_spin_unlock_irqrestore(&lock->rtmutex.wait_lock, flags);
+>  }
+>
+>  static inline void lockdep_assert_wait_lock_held(struct rt_mutex *lock)
+> @@ -382,6 +382,8 @@ __ww_mutex_check_waiters(struct MUTEX *lock, struct ww_acquire_ctx *ww_ctx)
+>  static __always_inline void
+>  ww_mutex_set_context_fastpath(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
+>  {
+> +       unsigned long flags;
+> +
+>         ww_mutex_lock_acquired(lock, ctx);
+>
+>         /*
+> @@ -409,9 +411,9 @@ ww_mutex_set_context_fastpath(struct ww_mutex *lock, struct ww_acquire_ctx *ctx)
+>          * Uh oh, we raced in fastpath, check if any of the waiters need to
+>          * die or wound us.
+>          */
+> -       lock_wait_lock(&lock->base);
+> +       lock_wait_lock(&lock->base, &flags);
+>         __ww_mutex_check_waiters(&lock->base, ctx);
+> -       unlock_wait_lock(&lock->base);
+> +       unlock_wait_lock(&lock->base, flags);
+>  }
+>
+>  static __always_inline int
+> --
+> 2.38.0.rc1.362.ged0d419d3c-goog
+>
