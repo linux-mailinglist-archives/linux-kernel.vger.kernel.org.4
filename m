@@ -2,119 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F4C5FD7EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 12:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AB95FD7F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 12:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiJMKrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 06:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S229619AbiJMKwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 06:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJMKrX (ORCPT
+        with ESMTP id S229533AbiJMKvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 06:47:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1833204C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 03:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665658041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q6GB/B4JNp1TxbUrS+fPKO1tu1+KnvBnyZ+rYl22l5I=;
-        b=KTk91H+tEr7txJ4UgUgyOMAe5p6O+UsCwEXkoXyExjnI81O5ZPFVu1/k/tcjZIBPzL+V3k
-        tekOZVhpmysm68nQThYgBQMhYLehmlk6U+XrbHCxTVwgcndvB6+oRIBUx5KxkOo6AAtRho
-        z68/qihWvPGhW+zTQFecAiDJJjUuKdc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-241-yo6PH1nlNbie3fsaqQq5hw-1; Thu, 13 Oct 2022 06:47:17 -0400
-X-MC-Unique: yo6PH1nlNbie3fsaqQq5hw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD5181C05EAD;
-        Thu, 13 Oct 2022 10:46:50 +0000 (UTC)
-Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C2C712011568;
-        Thu, 13 Oct 2022 10:46:39 +0000 (UTC)
-Date:   Thu, 13 Oct 2022 18:46:35 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     john.p.donnelly@oracle.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        "samasth.norway.ananda" <samasth.norway.ananda@oracle.com>
-Subject: Re: [PATCH v3 0/2] arm64: kdump: Function supplement and performance
- optimization
-Message-ID: <Y0fsi4+T6k/OO0hx@MiWiFi-R3L-srv>
-References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
- <YueMyUqannVg7l9v@MiWiFi-R3L-srv>
- <a80c2b7e-a510-8e45-1f3c-7e2ddf79bc37@huawei.com>
- <1d89e2cb-de26-0f85-7a2a-f68599a1b143@oracle.com>
+        Thu, 13 Oct 2022 06:51:53 -0400
+Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DC6578BE;
+        Thu, 13 Oct 2022 03:51:32 -0700 (PDT)
+Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
+  by ironport.ite.com.tw with ESMTP; 13 Oct 2022 18:51:30 +0800
+Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
+        by mse.ite.com.tw with ESMTP id 29DApS05073240;
+        Thu, 13 Oct 2022 18:51:28 +0800 (GMT-8)
+        (envelope-from allen.chen@ite.com.tw)
+Received: from VirtualBox.internal.ite.com.tw (192.168.70.46) by
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Thu, 13 Oct 2022 18:51:27 +0800
+From:   allen <allen.chen@ite.com.tw>
+CC:     Allen Chen <allen.chen@ite.com.tw>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] *** IT6505 driver read dt properties ***
+Date:   Thu, 13 Oct 2022 18:51:12 +0800
+Message-ID: <20221013105116.180380-1-allen.chen@ite.com.tw>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1d89e2cb-de26-0f85-7a2a-f68599a1b143@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.70.46]
+X-ClientProxiedBy: CSBMAIL1.internal.ite.com.tw (192.168.65.58) To
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58)
+X-TM-SNTS-SMTP: 4F4220859199046EF6E099F2753DE83C4FB3EF8C63682397400F4872B8CE3F3C2002:8
+X-MAIL: mse.ite.com.tw 29DApS05073240
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/22 at 09:55am, john.p.donnelly@oracle.com wrote:
-> On 8/1/22 9:47 PM, Leizhen (ThunderTown) wrote:
-......
-> > > Do you have plan to pick this series so that it can be taken into 5.20
-> > > rc-1~3?
-> > 
-> > Hi, Catalin:
-> >    Only function reserve_crashkernel() is modified in these two patches. The core
-> > process of the arm64 architecture is not affected. I remember you suggested that
-> > arm64 and x86 share the same kdump code, so these two subfeatures are needed.
-> > Maybe we can lay the foundation first for the people who build the road. Unifying
-> > the external interfaces of kdump on arm64 and x86 does not seem to hurt.
-> > 
-> > 
-> > > 
-> > > We have back ported the basic crashkernel=high, low, support into our
-> > > distros and have taken wide testing on arm64 servers, need this patchset
-> > > to back port for more testing.
-> > > 
-> > 
-> Hi ,
-> 
-> What is the progress of this series ?
-> 
-> Without this patch set we are seeing  larger crashkernel=896M failures on
-> Arm  with Linux-6.0.rc7.  This larger value is needed for
-> iSCSI booted systems with certain network adapters.
+This series let driver can read properties from dt to restrict dp output
+bandwidth.
 
-This change is located in arch/arm64 folder, I have pinged arm64
-maintainer to consider merging this patchset. Not sure if they are
-still thinking, or ignore this.
+Changes in v3:
+-Rename property name.
 
-Hi Catalin, Will,
+Changes in v4:
+-Use data-lanes and link-frequencies instead of "ite,dp-output-data-lane-count" and "ite,dp-output-max-pixel-clock-mhz".
 
-Ping again!
+allen chen (2):
+  dt-bindings: it6505: add properties to restrict output bandwidth
+  drm/bridge: add it6505 driver to read data-lanes and link-frequencies
+    from dt
 
-Do you have plan to accept this patchset? It's very important for
-crashkernel setting on arm64 with a simple and default syntax.
+ .../bindings/display/bridge/ite,it6505.yaml   | 43 +++++++++++++++
+ drivers/gpu/drm/bridge/ite-it6505.c           | 54 +++++++++++++++++--
+ 2 files changed, 94 insertions(+), 3 deletions(-)
 
-Thanks
-Baoquan
+-- 
+2.25.1
 
