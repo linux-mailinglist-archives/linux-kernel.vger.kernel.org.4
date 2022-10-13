@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F2D5FDAE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAE45FDAE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiJMNbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S229656AbiJMNda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJMNbp (ORCPT
+        with ESMTP id S229565AbiJMNd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:31:45 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EAC357FD
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:31:44 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id f15-20020a056e020b4f00b002fa34db70f0so1474635ilu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:31:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=05yTZzt7l+nsO6UN+9J4a/o+4SSnUtyqkvsF9nkb/gc=;
-        b=h5aNivien4fbSMyjHMMyfiERuYp/LY7/838Psg51M3Sg+28ZFhVxTihaJDvcUtBjLj
-         IcuIvMCCtp0zPjfaF74QNqiSR0ne+gsvZ+yo/4Y4vYKd4TXvG+61eB7FXV2PtFS3lg14
-         wyGrRcI5iveXO9xoUeEeEi98JhcCNGynZtDH4yidzJSN4IRiBWgPx+AC78y5z+UdpbEE
-         tbQ8LJyo+Kgjc6igyYrV8awUXiJvVoz3rz+M96LDCNNat5hxyTXWUmpJ7Ta6/HMGD0xj
-         Pn/47IzJAnLxhFUWqHkn0kG8HzdiKi5vA7N1SZ+lTpEzUXph/aJITYXr3Qb3Ajcc9PXX
-         u9XA==
-X-Gm-Message-State: ACrzQf04NQHyplHoxpZ8iWJUbdWQo5ljdX2Sk9k3lvmr5tcI6dcOAiSN
-        j9sAPmx5KcKrChcdsE+iSV/o7AJIwmf0JeoVyj5xNXIBkXIf
-X-Google-Smtp-Source: AMsMyM4XaxRNNsRmTQWxF5QyVM6yJo9toIB6Bnk2r9GPyjBXzPWvYtqZ8qQakW1+jHGmNeGJe9Fe3rzblpg8L6ubn/I5Jizpgrnh
+        Thu, 13 Oct 2022 09:33:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D117E10692D
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665668005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9TlxHg1DEsmNT2KFP6zuBipJtjYUKYkAljx6KzxumBA=;
+        b=cxqedgHp54+VrlTLpJp3XKif3nkm7U297d8P6ZvVmPThR94XLUYQxzBDxmdNgZadfp43OR
+        q0uTxhOZiaDBaGLMlZg9LpSHlYfFs+9YdpgFaPLnzErjh4oI51FkhFycjMhn/qt433T0O2
+        4lm+uqI4bSk7I9d/CDgzHNRt8Fuufok=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-h3vKZ8-NOpyWz8tqG3AgxA-1; Thu, 13 Oct 2022 09:33:19 -0400
+X-MC-Unique: h3vKZ8-NOpyWz8tqG3AgxA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D4202999B5C;
+        Thu, 13 Oct 2022 13:33:18 +0000 (UTC)
+Received: from [10.22.17.27] (unknown [10.22.17.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DF15B1121314;
+        Thu, 13 Oct 2022 13:33:17 +0000 (UTC)
+Message-ID: <ee1ea64f-f4b3-15b2-b46c-9b8ad7217962@redhat.com>
+Date:   Thu, 13 Oct 2022 09:33:17 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a92:c0c9:0:b0:2f9:ae60:164c with SMTP id
- t9-20020a92c0c9000000b002f9ae60164cmr19046ilf.28.1665667903520; Thu, 13 Oct
- 2022 06:31:43 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 06:31:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b409e205eaea8714@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in gfs2_getbuf
-From:   syzbot <syzbot+87a187973530ac822e3c@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] locking/rwsem: Prevent non-first waiter from
+ spinning in down_write() slowpath
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221012133333.1265281-1-longman@redhat.com>
+ <20221012133333.1265281-2-longman@redhat.com>
+ <Y0fiIdxA+Jip1vve@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y0fiIdxA+Jip1vve@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 10/13/22 06:02, Peter Zijlstra wrote:
+> On Wed, Oct 12, 2022 at 09:33:32AM -0400, Waiman Long wrote:
+>> A non-first waiter can potentially spin in the for loop of
+>> rwsem_down_write_slowpath() without sleeping but fail to acquire the
+>> lock even if the rwsem is free if the following sequence happens:
+>>
+>>    Non-first waiter       First waiter      Lock holder
+>>    ----------------       ------------      -----------
+>>    Acquire wait_lock
+>>    rwsem_try_write_lock():
+>>      Set handoff bit if RT or
+>>        wait too long
+>>      Set waiter->handoff_set
+>>    Release wait_lock
+>>                           Acquire wait_lock
+>>                           Inherit waiter->handoff_set
+>>                           Release wait_lock
+>> 					   Clear owner
+>>                                             Release lock
+>>    if (waiter.handoff_set) {
+>>      rwsem_spin_on_owner(();
+>>      if (OWNER_NULL)
+>>        goto trylock_again;
+>>    }
+>>    trylock_again:
+>>    Acquire wait_lock
+>>    rwsem_try_write_lock():
+>>       if (first->handoff_set && (waiter != first))
+>>       	return false;
+>>    Release wait_lock
+>>
+>> It is especially problematic if the non-first waiter is an RT task and
+>> it is running on the same CPU as the first waiter as this can lead to
+>> live lock.
+>>
+> So why not do a better handoff? Specifically, have the owner set owner
+> to first-waiter instead of NULL ? (like the normal mutex code)
 
-syzbot found the following issue on:
+I understand your desire to make the rwsem handoff process more like 
+what mutex is currently doing. I certainly think it is doable and will 
+put this in my todo list. However, that needs to be done at unlock and 
+wakeup time. I expect that will require moderate amount of code changes 
+which will make it not that suitable for backporting to the stable releases.
 
-HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14620252880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=87a187973530ac822e3c
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+I would like to see these simple fixes get merged first and then we can 
+work on a major revamp of the handoff code. What do you think?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Cheers,
+Longman
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+87a187973530ac822e3c@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: shift-out-of-bounds in fs/gfs2/meta_io.c:128:16
-shift exponent 4294967293 is too large for 64-bit type 'u64' (aka 'unsigned long long')
-CPU: 0 PID: 10195 Comm: syz-executor.3 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x33d/0x3b0 lib/ubsan.c:322
- gfs2_getbuf+0x759/0x7d0 fs/gfs2/meta_io.c:128
- gfs2_meta_read+0x153/0x910 fs/gfs2/meta_io.c:265
- gfs2_meta_buffer+0x153/0x3a0 fs/gfs2/meta_io.c:491
- gfs2_meta_inode_buffer fs/gfs2/meta_io.h:72 [inline]
- gfs2_inode_refresh+0xab/0xe90 fs/gfs2/glops.c:472
- gfs2_instantiate+0x15e/0x220 fs/gfs2/glock.c:515
- gfs2_glock_holder_ready fs/gfs2/glock.c:1303 [inline]
- gfs2_glock_wait+0x1d9/0x2a0 fs/gfs2/glock.c:1323
- gfs2_glock_nq_init fs/gfs2/glock.h:263 [inline]
- gfs2_lookupi+0x40c/0x650 fs/gfs2/inode.c:306
- gfs2_lookup_simple+0xec/0x170 fs/gfs2/inode.c:258
- init_journal+0x19b/0x22c0 fs/gfs2/ops_fstype.c:739
- init_inodes+0xdc/0x340 fs/gfs2/ops_fstype.c:882
- gfs2_fill_super+0x1ad8/0x2610 fs/gfs2/ops_fstype.c:1240
- get_tree_bdev+0x400/0x620 fs/super.c:1323
- gfs2_get_tree+0x50/0x210 fs/gfs2/ops_fstype.c:1323
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0eed68cada
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0eee73cf88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0eed68cada
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f0eee73cfe0
-RBP: 00007f0eee73d020 R08: 00007f0eee73d020 R09: 0000000020000000
-R10: 0000000000000008 R11: 0000000000000202 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f0eee73cfe0 R15: 0000000020000080
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
