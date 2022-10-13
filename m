@@ -2,126 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26D15FD397
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EC25FD39A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJMDlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 23:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        id S229595AbiJMDm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 23:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJMDli (ORCPT
+        with ESMTP id S229459AbiJMDmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 23:41:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEBD102DC1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:41:37 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29D0QQZF027777;
-        Thu, 13 Oct 2022 03:41:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=mgyXLCoiiSx/Yh4HFM+raXZWjsQK3XYcd/JUJpwF8sU=;
- b=LnP/8+BR9uB43LXwgl12S6V8zFnoyrYpC8nR3RTawFz4fumc07FhUeXvHRQFle0H4WXi
- 7bhIXyeKYedeMAau4+j66tERPXvX9NFO71WQtGuR1w/s8/A8TochtKCMJ2bg3RHrJ9ly
- BNPt/yWHVx71GmCpRjzFLbi52Raje1qJNrygjKByDj5sE6DemmpGHL8QquK4FFCwqx3o
- nbGxjUexPFO5qxuVs0F1eqfFHAUPvKKtVwncU9WJ2k0iZP1LjsPE+cqTD+BxbRqSj44x
- wNhzf5ltvrO/+7UvhX6LlvOHXVeaq8/oPfwcJFCREdCif1twWnRf2EtQ2ZJvMbjTENxV xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k684jbr43-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Oct 2022 03:41:06 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29D3ZgmK024652;
-        Thu, 13 Oct 2022 03:41:06 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k684jbr3c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Oct 2022 03:41:06 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29D3b0hN014224;
-        Thu, 13 Oct 2022 03:41:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9ewt0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Oct 2022 03:41:03 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29D3f1OZ7275028
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Oct 2022 03:41:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7952A11C04C;
-        Thu, 13 Oct 2022 03:41:01 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB78111C04A;
-        Thu, 13 Oct 2022 03:41:00 +0000 (GMT)
-Received: from localhost (unknown [9.43.102.122])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Oct 2022 03:41:00 +0000 (GMT)
-Date:   Thu, 13 Oct 2022 09:10:59 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v4 00/16] objtool: Enable and implement --mcount option on
- powerpc
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     aik@ozlabs.ru, chenzhongjin@huawei.com, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mbenes@suse.cz, mingo@redhat.com, npiggin@gmail.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20221002104240.1316480-1-sv@linux.ibm.com>
-        <1665401892.qmrp2qjj9t.naveen@linux.ibm.com>
-        <notmuch-sha1-66fb111b87471c685a53b80a0502d959f90d07a7>
-In-Reply-To: <20221013000548.d2m65fozzdvdsj5u@treble>
+        Wed, 12 Oct 2022 23:42:23 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7510327C;
+        Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 63so674669ybq.4;
+        Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kUREQjpPEdgvuhuExp0E4HTAn8hHXIucVYJF+DvY/28=;
+        b=eQOynbmSukIacmiuHcsQ8uQsjRJUucO7eWLcfNxjTgfxBoqOGZ85uZbkE3sJfVyU5w
+         5zh6itPOSB4Kus8MC49yM/7q5oI4NoPKi1tviRI4a6QxIlVlSNWUea9wn8g6aaKg+97R
+         ZnSBSmq3d2/KtzT4i/rAMuqeZCUCpGd3GXpLgBYlvEOavW15FjqtYe4a4zhHQ+7+C7UJ
+         ug3Co1RWOfUq1fSC71Of/yBtIGxp5ogIZv88bgkQ19BdU3juEMYq+Icu+BtDiChp1orU
+         v302gJ0DMt6NeQ9a9cHE+TSlUofac0Yowx2vYJJntXSrf5HOkFgM7QyxRjzf9fiV9dVS
+         lRtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kUREQjpPEdgvuhuExp0E4HTAn8hHXIucVYJF+DvY/28=;
+        b=fCIfcpEKbrj1XI/BW3lI/xXXU4OmZfJy7MaPH6uk8KI68WpBdXgH6OZ90GFOAY146O
+         9gmMU1h9p92XEshUEPHPynlPEhmuoQ398ILHuP374x9CYQDodKzAj+7z3XKyyTFIQ9gX
+         MkkrnHudvBaoEP4EePJaFYhmXV8P9NnXe4G0pMBSYIy6LFBhsj5dM0SlXY38DFHNG2+Q
+         JV6enRKtUP37DDaWRO2C66W10hGnmV27F9r9LNv02p6DTLu85S7n2DIYhEeR81Ix2ZJi
+         d/x75RxR7Db5LkocMzuIC9hHvBS3h89R9aKVGCAnPea529ltQ1zRxsFNTxI/RDE/cMm4
+         yzIA==
+X-Gm-Message-State: ACrzQf0ajTxQKK4K77youABtrCgGyXH9nQts4eGiiNwu8CzoTl/gsxb/
+        FGUuWaSezxn8Mvrj1kEvTzZ4Q0xceRH9eMXIIo0tPaUJdmOP0Si6bfM=
+X-Google-Smtp-Source: AMsMyM7L7EnGLuoSGlaJtuZDv16rftyUMFwJrojwzpDqiToyn1fFFzBB0zTfOsbrWGhKQKUZSHwcnMBN1AEto2QW4B4=
+X-Received: by 2002:a25:6611:0:b0:6bd:2d:6992 with SMTP id a17-20020a256611000000b006bd002d6992mr31663237ybc.173.1665632542212;
+ Wed, 12 Oct 2022 20:42:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1665632217.kgyce54pc4.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hjQMm_07R5dNed5iEFJyZDHzQlcXNATv
-X-Proofpoint-GUID: MFeyBumg44kJLYJT8szIPsp7HQWhOgXT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-13_02,2022-10-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 phishscore=0
- mlxlogscore=787 impostorscore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210130020
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAAboHLVgQKzNVU6XDWGZmnxGK0DGvtgyzMsY9V+UiOJVq1JyTg@mail.gmail.com>
+ <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
+In-Reply-To: <085e90e5-d21e-9068-a2e1-6f7e07fa64df@roeck-us.net>
+From:   karthik gengan <gengankarthik@gmail.com>
+Date:   Thu, 13 Oct 2022 09:12:09 +0530
+Message-ID: <CAAboHLU8a9vztdM2b8+Y2ZUAs0+fD4HgwV2X_ASRa=SnWJXTwQ@mail.gmail.com>
+Subject: Re: [PATCH] [v1 1/1]hwmon:(pmbus) Validate the data for chip
+ supporting vout_mode (PMBUS_HAVE_VOUT) in the linear config.
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Josh Poimboeuf wrote:
-> On Tue, Oct 11, 2022 at 01:20:02PM -0700, Josh Poimboeuf wrote:
->> On Mon, Oct 10, 2022 at 05:19:02PM +0530, Naveen N. Rao wrote:
->> > All the above changes are down to compiler optimizations and shuffling=
- due
->> > to CONFIG_OBJTOOL being enabled and changing annotate_unreachable().
->> >=20
->> > As such, for this series:
->> > Reviewed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
->> > Tested-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
->> >=20
->> >=20
->> > Josh,
->> > Are you ok if this series is taken in through the powerpc tree?
->>=20
->> Yes, it looks ok to me.  Let me run it through a round of testing.
->=20
-> The testing looked good, so:
->=20
->   Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Hi Guenter,
 
-Thanks!
+Thanks for your response but I need some more valuable suggestions...
 
-FYI: your previous reply (that you would be testing it) didn't hit my=20
-inbox and it doesn't seem to have hit the list either.
+        In the pmbus_data structure, we are updating the vout_out mode
+value based on the config ( linear, vid .direct) and this structure is declared
+in pmbus_core.c .so the low-level driver could not able to access this
+structure.
 
+Guidance required,
+     1. Move the pumbus_data structure declaration to pmbus.h, so that low-level
+          the driver can check and update the vout_mode if the value
+is not proper.   (or)
+     2.  if the vout_mode attribute value is exposed in the sysfs, the
+user-level application
+          can modify the value. ( if the value is not proper).
+                               (or)
+      3. if an ioctl call is exposed for the vout_mode then the
+user-level application can
+           able to update the value. ( if the value is not proper).
 
-- Naveen
+(or)  guide me to a better approach to handle this issue.
+
+For reference,
+          UCD90xx vendor claims that vout_mode value should be present
+if the chip
+supports PMBUS_VOUT_MODE command. Hence the patch validated the vout_mode
+value for PMBUS_VOUT_MODE supported chip.
+
+Thanks & Regards,
+Karthik.G
+
+On Wed, Oct 12, 2022 at 7:05 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 10/11/22 16:59, karthik gengan wrote:
+> > Linear mode config calculation is based on the exponent value
+> > derived from vout_mode. So vout_mode value should be valid
+> > for PMBUS_VOUT_MODE command-supported chips.
+> >
+>
+> We can not do this. The operational word is "should". See comment
+> below "Not all chips support the VOUT_MODE command". It is what it is.
+> We can not just refuse to support such chips because they don't
+> support what we expect them to support.
+>
+> Sure, those chips will (likely) report wrong values since the
+> exponent will default to 0. That can be adjusted in user space,
+> or whoever finds such a chip can provide a back-end driver
+> with the appropriate values configured (for example by providing
+> a dummy VOUT_MODE command response). That is better than just
+> rejecting the chip entirely.
+>
+>  From a practical perspective, if you know about an affected chip
+> one that would refuse to instantiate after your patch is applied,
+> I would suggest to submit (or improve) a back-end driver with
+> an explanation instead.
+>
+> Thanks,
+> Guenter
+>
+> > Signed-off-by: karthik.gengan <gengankarthik@gmail.com <mailto:gengankarthik@gmail.com>>
+> > ---
+> >   drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > index 7ec04934747e..5f80c3b8f245 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -2507,9 +2507,17 @@ static int pmbus_identify_common(struct i2c_client *client,
+> >   {
+> >      int vout_mode = -1;
+> >
+> > -   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
+> > +   if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE)) {
+> >          vout_mode = _pmbus_read_byte_data(client, page,
+> >                            PMBUS_VOUT_MODE);
+> > +       /*
+> > +        * If the client page supports PMBUS_VOUT_MODE,
+> > +        * then the output of the VOUT_MODE command should
+> > +        * be a valid value for linear mode calculation.
+> > +        */
+> > +       if ((data->info->format[PSC_VOLTAGE_OUT] == linear) && (vout_mode < 0))
+> > +           return -ENODEV;
+> > +   }
+> >      if (vout_mode >= 0 && vout_mode != 0xff) {
+> >          /*
+> >           * Not all chips support the VOUT_MODE command,
+> > --
+> > 2.25.1
+> >
+>
+>
