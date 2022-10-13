@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54D65FE0E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE785FE281
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiJMSQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
+        id S229827AbiJMTMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 15:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiJMSN5 (ORCPT
+        with ESMTP id S229972AbiJMTMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:13:57 -0400
+        Thu, 13 Oct 2022 15:12:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0E9814C1;
-        Thu, 13 Oct 2022 11:10:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5D23A4AA;
+        Thu, 13 Oct 2022 12:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7658361949;
-        Thu, 13 Oct 2022 18:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E0BFC433D7;
-        Thu, 13 Oct 2022 18:00:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29D3C61938;
+        Thu, 13 Oct 2022 17:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C16CC433D7;
+        Thu, 13 Oct 2022 17:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684020;
-        bh=4rWjydFXyLLDqW4rzOLOSOJ8MSOKHrz5swor8EvZv0k=;
+        s=korg; t=1665683880;
+        bh=iSU4oNQTGikY1NG5fAAZBCNpZVckUY3c/pPdJ+jMIKs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pouIC8brJOISXS9+BiKw5sY0N7rL7qR0n14OlfxUAPYees0LHi2hmtYGWhKCiYToW
-         igmXLNECvLboxFwpgZA24DlAy8KYPoijlolP5TGD/Rp6CPc2NhL4Pf94umIXKrewO+
-         uX+hZGaEZ129kAfSwfKDTPgM6o/4L5t0k8EgjGrY=
+        b=Vyf1yqgZ+LTTc0hge2FYKEgVTJVDWaXcukYQvs01TEkxnlk6iCyAg6m9HpeVP1JYc
+         Ma5MH01/L13d62XJVom4TR9kvRnqod3XWjp7xAE8AMIbO1rO0b944CU8a4oU8l8HE4
+         0/+KyUL0bz/mv9SoaUmoQ6rJK7q5uRijbwfXBWwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Subject: [PATCH 5.19 17/33] Revert "crypto: qat - reduce size of mapped region"
-Date:   Thu, 13 Oct 2022 19:52:49 +0200
-Message-Id: <20221013175145.852098967@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.15 21/27] wifi: mac80211_hwsim: avoid mac80211 warning on bad rate
+Date:   Thu, 13 Oct 2022 19:52:50 +0200
+Message-Id: <20221013175144.324918092@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
-References: <20221013175145.236739253@linuxfoundation.org>
+In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
+References: <20221013175143.518476113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,98 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 9c5f21b198d259bfe1191b1fedf08e2eab15b33b upstream.
+commit 1833b6f46d7e2830251a063935ab464256defe22 upstream.
 
-This reverts commit e48767c17718067ba21fb2ef461779ec2506f845.
+If the tool on the other side (e.g. wmediumd) gets confused
+about the rate, we hit a warning in mac80211. Silence that
+by effectively duplicating the check here and dropping the
+frame silently (in mac80211 it's dropped with the warning).
 
-In an attempt to resolve a set of warnings reported by the static
-analyzer Smatch, the reverted commit improperly reduced the sizes of the
-DMA mappings used for the input and output parameters for both RSA and
-DH creating a mismatch (map size=8 bytes, unmap size=64 bytes).
-
-This issue is reported when CONFIG_DMA_API_DEBUG is selected, when the
-crypto self test is run. The function dma_unmap_single() reports a
-warning similar to the one below, saying that the `device driver frees
-DMA memory with different size`.
-
-    DMA-API: 4xxx 0000:06:00.0: device driver frees DMA memory with different size [device address=0x0000000123206c80] [map size=8 bytes] [unmap size=64 bytes]
-    WARNING: CPU: 0 PID: 0 at kernel/dma/debug.c:973 check_unmap+0x3d0/0x8c0\
-    ...
-    Call Trace:
-    <IRQ>
-    debug_dma_unmap_page+0x5c/0x60
-    qat_dh_cb+0xd7/0x110 [intel_qat]
-    qat_alg_asym_callback+0x1a/0x30 [intel_qat]
-    adf_response_handler+0xbd/0x1a0 [intel_qat]
-    tasklet_action_common.constprop.0+0xcd/0xe0
-    __do_softirq+0xf8/0x30c
-    __irq_exit_rcu+0xbf/0x140
-    common_interrupt+0xb9/0xd0
-    </IRQ>
-    <TASK>
-
-The original commit was correct.
-
-Cc: <stable@vger.kernel.org>
-Reported-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/qat/qat_common/qat_asym_algs.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/wireless/mac80211_hwsim.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
-@@ -333,13 +333,13 @@ static int qat_dh_compute_value(struct k
- 	qat_req->out.dh.out_tab[1] = 0;
- 	/* Mapping in.in.b or in.in_g2.xa is the same */
- 	qat_req->phy_in = dma_map_single(dev, &qat_req->in.dh.in.b,
--					 sizeof(qat_req->in.dh.in.b),
-+					 sizeof(struct qat_dh_input_params),
- 					 DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(dev, qat_req->phy_in)))
- 		goto unmap_dst;
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -3749,6 +3749,8 @@ static int hwsim_cloned_frame_received_n
  
- 	qat_req->phy_out = dma_map_single(dev, &qat_req->out.dh.r,
--					  sizeof(qat_req->out.dh.r),
-+					  sizeof(struct qat_dh_output_params),
- 					  DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(dev, qat_req->phy_out)))
- 		goto unmap_in_params;
-@@ -730,13 +730,13 @@ static int qat_rsa_enc(struct akcipher_r
- 	qat_req->in.rsa.in_tab[3] = 0;
- 	qat_req->out.rsa.out_tab[1] = 0;
- 	qat_req->phy_in = dma_map_single(dev, &qat_req->in.rsa.enc.m,
--					 sizeof(qat_req->in.rsa.enc.m),
-+					 sizeof(struct qat_rsa_input_params),
- 					 DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(dev, qat_req->phy_in)))
- 		goto unmap_dst;
+ 	rx_status.band = channel->band;
+ 	rx_status.rate_idx = nla_get_u32(info->attrs[HWSIM_ATTR_RX_RATE]);
++	if (rx_status.rate_idx >= data2->hw->wiphy->bands[rx_status.band]->n_bitrates)
++		goto out;
+ 	rx_status.signal = nla_get_u32(info->attrs[HWSIM_ATTR_SIGNAL]);
  
- 	qat_req->phy_out = dma_map_single(dev, &qat_req->out.rsa.enc.c,
--					  sizeof(qat_req->out.rsa.enc.c),
-+					  sizeof(struct qat_rsa_output_params),
- 					  DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(dev, qat_req->phy_out)))
- 		goto unmap_in_params;
-@@ -876,13 +876,13 @@ static int qat_rsa_dec(struct akcipher_r
- 		qat_req->in.rsa.in_tab[3] = 0;
- 	qat_req->out.rsa.out_tab[1] = 0;
- 	qat_req->phy_in = dma_map_single(dev, &qat_req->in.rsa.dec.c,
--					 sizeof(qat_req->in.rsa.dec.c),
-+					 sizeof(struct qat_rsa_input_params),
- 					 DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(dev, qat_req->phy_in)))
- 		goto unmap_dst;
- 
- 	qat_req->phy_out = dma_map_single(dev, &qat_req->out.rsa.dec.m,
--					  sizeof(qat_req->out.rsa.dec.m),
-+					  sizeof(struct qat_rsa_output_params),
- 					  DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(dev, qat_req->phy_out)))
- 		goto unmap_in_params;
+ 	hdr = (void *)skb->data;
 
 
