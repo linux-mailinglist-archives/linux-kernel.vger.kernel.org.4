@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D595FDD16
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B6C5FDD15
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiJMPWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
+        id S229846AbiJMPWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiJMPW3 (ORCPT
+        with ESMTP id S229806AbiJMPWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:22:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA0127905;
-        Thu, 13 Oct 2022 08:22:27 -0700 (PDT)
+        Thu, 13 Oct 2022 11:22:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA664120EE4;
+        Thu, 13 Oct 2022 08:22:28 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA99A6602370;
-        Thu, 13 Oct 2022 16:22:24 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06D6E660236E;
+        Thu, 13 Oct 2022 16:22:25 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665674545;
-        bh=OIVvm9eZZnDpMulbdkAjAXAZiIM5QtEjlxZKqlbUhN4=;
+        s=mail; t=1665674546;
+        bh=CSkWVd8BmDjVpIlk/S9C3R40X1S6a2cABTC54a3Nrtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KnNC2aRr1CuewZByFW/jeStIoRR+cQKvdAc1e4Nr2itAlV18cP5mtMa9/jxqaXSCk
-         sgucXlPqmUQ47m2fAIT7AQdgdzJBYjEhSb6x2GSRHfIAT8lqfkvfvOWpWWnqNbOX5R
-         HLnmKQp34796JcP+uEprJMy9hi1xfJ7XAxHvejEe38Azb+Dy3I337s0zFX+7Cx7bQ5
-         Vjoa+sBjwjdt3ceInjCKF7zVfYwrKY4sokMPBiWCfs10FIMwfxtOX3P/wTsQNaa1ou
-         hx84eKrCmDIiZq4AiXSoZGCiEsU/VhmpBDvsJpqFuIQGLm/DnMboJA9tC+valF/VmF
-         7Y+up0VvDk0rg==
+        b=j9tomOInvoFd2WsL9FZDBnDFc3BYU56eyEK4M5E5t9tjLdXIZ5/fLkUpb7HzuT7Tr
+         BEg7S4g854qW+WBohgIan9syw55r9hTvROfgbHeOQY0kQJvQzMe5nD/q38W+eRmLg+
+         2NtqMOs/qO4fzLEWj9IF619rsrsiZbwdem6dT/L71MgkIyVtMnr3jT07xqDtonD+HQ
+         wpJqnpuwL/dExzYTaqh8bYWmoAlTN1+JreemC5pwNmmzyW2BE660cAYcgqVPBu5+W3
+         FO7/PrdnBOi+OHQKj2CNlj+AzI4ZPkivflEBdw4o4FOgjcq8rHNmLBQRDK8h0q+I4a
+         BxGLneEMUMZ3g==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -45,9 +45,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 6/8] arm64: dts: mt2712-evb: Fix usb vbus regulators unit names
-Date:   Thu, 13 Oct 2022 17:22:10 +0200
-Message-Id: <20221013152212.416661-7-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 7/8] arm64: dts: mediatek: pumpkin-common: Fix devicetree warnings
+Date:   Thu, 13 Oct 2022 17:22:11 +0200
+Message-Id: <20221013152212.416661-8-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
 References: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
@@ -62,55 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the names to regulator-usb-p{0-3}-vbus to fix unit_address_vs_reg
-warnings for those.
+Fix the pinctrl submodes and optee node to remove unneeded unit address,
+fixing all unit_address_vs_reg warnings.
 
-Fixes: 1724f4cc5133 ("arm64: dts: Add USB3 related nodes for MT2712")
+Fixes: 9983822c8cf9 ("arm64: dts: mediatek: add pumpkin board dts")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt2712-evb.dts | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt2712-evb.dts b/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
-index 638908773706..d31a194124c9 100644
---- a/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
-@@ -50,7 +50,7 @@ extcon_usb1: extcon_iddig1 {
- 		id-gpio = <&pio 14 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
+index 8ee1529683a3..ec8dfb3d1c6d 100644
+--- a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
++++ b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
+@@ -17,7 +17,7 @@ chosen {
  	};
  
--	usb_p0_vbus: regulator@2 {
-+	usb_p0_vbus: regulator-usb-p0-vbus {
- 		compatible = "regulator-fixed";
- 		regulator-name = "p0_vbus";
- 		regulator-min-microvolt = <5000000>;
-@@ -59,7 +59,7 @@ usb_p0_vbus: regulator@2 {
- 		enable-active-high;
+ 	firmware {
+-		optee: optee@4fd00000 {
++		optee: optee {
+ 			compatible = "linaro,optee-tz";
+ 			method = "smc";
+ 		};
+@@ -209,7 +209,7 @@ pins_cmd_dat {
+ 		};
  	};
  
--	usb_p1_vbus: regulator@3 {
-+	usb_p1_vbus: regulator-usb-p1-vbus {
- 		compatible = "regulator-fixed";
- 		regulator-name = "p1_vbus";
- 		regulator-min-microvolt = <5000000>;
-@@ -68,7 +68,7 @@ usb_p1_vbus: regulator@3 {
- 		enable-active-high;
+-	i2c0_pins_a: i2c0@0 {
++	i2c0_pins_a: i2c0 {
+ 		pins1 {
+ 			pinmux = <MT8516_PIN_58_SDA0__FUNC_SDA0_0>,
+ 				 <MT8516_PIN_59_SCL0__FUNC_SCL0_0>;
+@@ -217,7 +217,7 @@ pins1 {
+ 		};
  	};
  
--	usb_p2_vbus: regulator@4 {
-+	usb_p2_vbus: regulator-usb-p2-vbus {
- 		compatible = "regulator-fixed";
- 		regulator-name = "p2_vbus";
- 		regulator-min-microvolt = <5000000>;
-@@ -77,7 +77,7 @@ usb_p2_vbus: regulator@4 {
- 		enable-active-high;
- 	};
- 
--	usb_p3_vbus: regulator@5 {
-+	usb_p3_vbus: regulator-usb-p3-vbus {
- 		compatible = "regulator-fixed";
- 		regulator-name = "p3_vbus";
- 		regulator-min-microvolt = <5000000>;
+-	i2c2_pins_a: i2c2@0 {
++	i2c2_pins_a: i2c2 {
+ 		pins1 {
+ 			pinmux = <MT8516_PIN_60_SDA2__FUNC_SDA2_0>,
+ 				 <MT8516_PIN_61_SCL2__FUNC_SCL2_0>;
 -- 
 2.37.2
 
