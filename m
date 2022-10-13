@@ -2,205 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9C35FE152
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC485FE156
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiJMSeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S232070AbiJMSeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiJMSd2 (ORCPT
+        with ESMTP id S232053AbiJMSeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:33:28 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849FE3686F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:29:51 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id h185so2245930pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:29:51 -0700 (PDT)
+        Thu, 13 Oct 2022 14:34:13 -0400
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75E3DAC75
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:30:25 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id r14so3793895edc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:30:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+BTHaUgYO9jMl/xNji3tXYK1xSdk1QlEpno0FrqGDuU=;
-        b=wDSSH+4FY0VpIbgiubC+64Ugh9mhNbjE9Cg9Bp/N8tGJTTJ6V8mvcqXc3CyPlmRCCj
-         LFDFS2a9w47KoDRWWSQYU6FJIRAy/Z9S6lVfTOhDQ9eEb8olV/1vYHXR5s01g6+eCLgW
-         HISdz4uUlbGkaZgYJqVyFzxGkgM/P9WtBoAbdlkUApj6MkvXK6Wb3UTytIReooPKnCr+
-         DLI5raWn+zRH49nxXIvUIm944qaMgAnJUr5mmylp+KraSaKHHL2EZGzZvN4Pdtuvj4wz
-         fNXv0wL0IkjcsVdal513BLNcaDO5fKovL3lp3PKaNUAV9fAgC/Wl2+sDjAdVAGQi/hHC
-         v/bQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=80yVJmDj5IDbUK+aqS6l/dUBm+Bwn69DEdWiolHKVEQ=;
+        b=FSJPenagde4qSchQNLIGuKH7m39FqdZYDX4cXscDrSd4DQs0L1KMc4rzYAQdelzOnj
+         UF6Ak0NK52yT8/8DfdNJEj9A6gPHnDn66V7+1VWIUqHsECMy3uBtxD1ZuMqhx07ZGxmH
+         JrBntFO5CY3UNA85w3OBtKxuhgF5e76Lt7ylZMABNDblsdysCHcDVS8mPFZv9H1JdZ/I
+         AKJH0uhU+XEyG10Nd+LEc8vJ0DUGh/1JFMAtnOsnuQLT22u523AH4mmuX/7Zqs6DzjRA
+         bG2+Qr5Isa0Tcz+PCt82cXW69Q2hRvI0SGZdd/KO1uPpP7a67dpLrTUV1TBOjvgtGohS
+         UKkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+BTHaUgYO9jMl/xNji3tXYK1xSdk1QlEpno0FrqGDuU=;
-        b=K3OXuwwYcsc1qpwE5dgLc30ytDjybFs1yqhES6OgNKEd9pqWaA0auCq+cxOcKasRM4
-         X31uYtKca7ZKf4+8BEb7vTYw0PvfEXtVXRtPVCxOzwZlcAjYUroJmVRHrkqdJI/Xkw7Z
-         HDfrTPnQhJkMZatrOiKkBTV0N9Uhs1zXJXmwC5ifrN7Q6Q16uKECVXJMUZVGmofWlzks
-         /8WupBR3RIqQpPRknLyVe7HInoTFiGkFIyC4HK+HbVjSEnQyr6B1W9QSZ6F/d9HVPJM9
-         dK9gmMKzsaR2i9QLoTQYMMSMHCzdWmK5l7R7Ctnv89qxF/HO0f+GjKG5uD5F15KYT7pT
-         q2Sg==
-X-Gm-Message-State: ACrzQf1pg1CnDChcMD6kJ8uABAs3zdSzQ6UaktukxeeJGSd9pIHZvAg8
-        TBvPqASoRL9Q3AeiuvLyURQY9/pBAHAToFi4sRmgCQ==
-X-Google-Smtp-Source: AMsMyM6vwqMcF79SgQmU96lUIhoknsg5lP1hG79RoUNhba0APdmzSzyBg6VnUlzHAK1CSgzO0HTJ4WoKCZ/dw6IcAmw=
-X-Received: by 2002:a63:f512:0:b0:460:35b5:14ed with SMTP id
- w18-20020a63f512000000b0046035b514edmr952445pgh.389.1665685415620; Thu, 13
- Oct 2022 11:23:35 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=80yVJmDj5IDbUK+aqS6l/dUBm+Bwn69DEdWiolHKVEQ=;
+        b=QI3aViSw24HDQyy44KXUFR10WUpg9dXahE55SXBIOPC4/HQpsstxlSr8KF51HQ2iA0
+         C0Fy6vt1ZC1BNhkWzKpO5uoCAbyGkGJRR8LJSMH2ZEG8Ze5An0qC8AIfmqzjgX6UCPqr
+         zVwDn1EsAEEYQVYExYEIGUqF1yH9jUzbU0HgABSHFQgR/AcZzyF3f1WejpzXnRhiGyIA
+         eHRkqPc2Zv19KDCXcIDCW425+8lnM+tH09oNFqsKC7y11eo6Wnnt2RbPdHU5V1pysBOT
+         v6cLF2N7nnp/3YACuz5ZEheBrsbSRpA5VTgAzEA8bgT1wWgMFLfn+4CoOfJ9PDE4jB9B
+         ygqA==
+X-Gm-Message-State: ACrzQf15YtuOAOgn7ehnq9X18jzpVJt5y8xj90tKk8yayi79TZASPJeR
+        CzaJEcjetOVWEZPd3UAnyQM=
+X-Google-Smtp-Source: AMsMyM7ssKdTrHDlPNauUb77WDG9zWLblYWKO18kRWRI7jkR1dhN23ZFAp3iq6h3HOsgFFKHyT7dhQ==
+X-Received: by 2002:a05:6402:b3c:b0:458:f680:6ab8 with SMTP id bo28-20020a0564020b3c00b00458f6806ab8mr923431edb.267.1665685433991;
+        Thu, 13 Oct 2022 11:23:53 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id e2-20020a170906314200b00730df07629fsm196329eje.174.2022.10.13.11.23.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 11:23:53 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Emma Anholt <emma@anholt.net>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Dom Cobley <dom@raspberrypi.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-sunxi@lists.linux.dev,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Noralf =?ISO-8859-1?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH v5 22/22] drm/sun4i: tv: Convert to the new TV mode property
+Date:   Thu, 13 Oct 2022 20:23:51 +0200
+Message-ID: <6482539.4vTCxPXJkl@kista>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v5-22-d841cc64fe4b@cerno.tech>
+References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech> <20220728-rpi-analog-tv-properties-v5-22-d841cc64fe4b@cerno.tech>
 MIME-Version: 1.0
-References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
- <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
- <ec599991-44da-7b83-9374-d0043b32f053@denx.de> <CAJ+vNU2g+e8_PBq0SJYOXsB6PKpMb3dmzDRA5Gyj=NJS3Ckc1g@mail.gmail.com>
-In-Reply-To: <CAJ+vNU2g+e8_PBq0SJYOXsB6PKpMb3dmzDRA5Gyj=NJS3Ckc1g@mail.gmail.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 13 Oct 2022 11:23:22 -0700
-Message-ID: <CAJ+vNU0mPt27PgheodNLcOk97OdD6TK+1us58jc=4DMHndQpvQ@mail.gmail.com>
-Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
-To:     Marek Vasut <marex@denx.de>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abelvesa@kernel.org, abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        Markus.Niebel@ew.tq-group.com, aford173@gmail.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:46 AM Tim Harvey <tharvey@gateworks.com> wrote:
->
-> On Tue, Oct 11, 2022 at 4:13 PM Marek Vasut <marex@denx.de> wrote:
-> >
-> > On 10/11/22 22:10, Tim Harvey wrote:
-> > > On Fri, Jul 8, 2022 at 1:57 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
-> > >>
-> > >> From: Peng Fan <peng.fan@nxp.com>
-> > >>
-> > >> V4:
-> > >>   Because the header is not included when adding NoC node, the fsl,imx8mp.h
-> > >>   needs be included in this patchset. So include it in patch 6
-> > >>
-> > >> V3:
-> > >>   Move adding NoC node patch to i.MX8MP ICC driver patchset
-> > >>   Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
-> > >>
-> > >> V2:
-> > >>   Use a low bandwidth value instead INT_MAX
-> > >>   Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
-> > >>   Add A-b tag from DT maintainer
-> > >>
-> > >> i.MX8MP NoC settings is invalid after related power domain up. So
-> > >> need to set valid values after power domain up.
-> > >>
-> > >> This patchset is to bind interconnect for each entry in blk ctrl.
-> > >>
-> > >> This patchset is not include DVFS DDRC feature.
-> > >>
-> > >> Peng Fan (7):
-> > >>    dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
-> > >>      ctrl
-> > >>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
-> > >>      ctrl
-> > >>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
-> > >>      ctrl
-> > >>    soc: imx: add icc paths for i.MX8MP media blk ctrl
-> > >>    soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
-> > >>    arm64: dts: imx8mp: add interconnects for media blk ctrl
-> > >>    arm64: dts: imx8mp: add interconnect for hsio blk ctrl
-> > >>
-> > >>   .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
-> > >>   .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
-> > >>   .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
-> > >>   arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
-> > >>   drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
-> > >>   drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
-> > >>   6 files changed, 125 insertions(+)
-> > >>
-> > >> --
-> > >> 2.25.1
-> > >>
-> > >
-> > > Hi Peng,
-> > >
-> > > I built origin/master from commit 041bc24d867a today for an imx8mp
-> > > board and am running into errors that appear to be introduced by this
-> > > series:
-> > > [   15.177372] platform 381f0040.usb-phy: deferred probe pending
-> > > [   15.183155] platform 382f0040.usb-phy: deferred probe pending
-> > > [   15.188928] platform 33800000.pcie: deferred probe pending
-> > > [   15.194439] platform 32ec0000.blk-ctrl: deferred probe pending
-> > > [   15.200287] platform 38330000.blk-ctrl: deferred probe pending
-> > > [   15.206129] platform 32f10000.blk-ctrl: deferred probe pending
-> > > [   15.211974] platform 32f10100.usb: deferred probe pending
-> > > [   15.217382] platform 32f10108.usb: deferred probe pending
-> > > [   15.222791] platform cpufreq-dt: deferred probe pending
-> > > # cat /sys/kernel/debug/devices_deferred
-> > > 381f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
-> > > 382f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
-> > > 33800000.pcie   platform: supplier 32f10000.blk-ctrl not ready
-> > > 32ec0000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
-> > > 38330000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
-> > > 32f10000.blk-ctrl       imx8mp-blk-ctrl: failed to get noc entries
-> > > 32f10100.usb    platform: supplier 32f10000.blk-ctrl not ready
-> > > 32f10108.usb    platform: supplier 32f10000.blk-ctrl not ready
-> > > cpufreq-dt
-> > >
-> > > Is there a driver I'm perhaps missing that is needed now or are there
-> > > some patches that come from a different unmerged tree needed?
-> >
-> > Do you have these enabled ?
-> >
-> > CONFIG_INTERCONNECT_IMX8MM=y
-> > CONFIG_INTERCONNECT_IMX8MN=y
-> > CONFIG_INTERCONNECT_IMX8MQ=y
-> > CONFIG_INTERCONNECT_IMX8MP=y
->
-> Marek,
->
-> Yes, I have those as well as CONFIG_ARCH_NXP which appears new for 6.1 enabled.
->
-> Best Regards,
->
-> Tim
+Hi Maxime,
 
-I see this issue on origin/master 1440f5760228 using
-arch/arm64/configs/defconfig.
+Dne =C4=8Detrtek, 13. oktober 2022 ob 15:19:06 CEST je Maxime Ripard napisa=
+l(a):
+> Now that the core can deal fine with analog TV modes, let's convert the
+> sun4i TV driver to leverage those new features.
+>=20
+> Acked-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>=20
+> ---
+> Changes in v5:
+> - Removed the count variable in get_modes
+> - Removed spurious vc4 change
+> ---
+>  drivers/gpu/drm/sun4i/sun4i_tv.c | 145
+> +++++++++++++-------------------------- 1 file changed, 48 insertions(+),
+> 97 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_tv.c
+> b/drivers/gpu/drm/sun4i/sun4i_tv.c index c65f0a89b6b0..4f07aff11551 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_tv.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_tv.c
+> @@ -141,23 +141,14 @@ struct resync_parameters {
+>  struct tv_mode {
+>  	char		*name;
+>=20
+> +	unsigned int	tv_mode;
+> +
+>  	u32		mode;
+>  	u32		chroma_freq;
+>  	u16		back_porch;
+>  	u16		front_porch;
+> -	u16		line_number;
+>  	u16		vblank_level;
 
-It seems to me that the imx8m*_blk_ctrl_probe will all defer now until
-perhaps all the drivers using interconnects can probe, such as
-g1/lcdif etc?
+isn't there a way to get or calculate back_porch, front_porch and vblank_le=
+vel=20
+from mode? From quick glance over removed values below, I would say that at=
+=20
+least back_porch can be removed too?
 
-Some added debugging shows me:
-[   14.951371] of_icc_bulk_get path lcdif-rd err=-517
-[   14.956205] devm_of_icc_bulk_get ret=-517
-[   14.960562] imx8m_blk_ctrl_probe failed -517
-[   14.967191] of_icc_bulk_get path g1 err=-517
-[   14.971487] devm_of_icc_bulk_get ret=-517
-[   14.975614] imx8m_blk_ctrl_probe failed -517
-[   14.982200] of_icc_bulk_get path usb1 err=-517
-[   14.986680] devm_of_icc_bulk_get ret=-517
-[   14.990709] imx8mp_blk_ctrl_probe 0:usb1
-[   14.994641] imx8mp_blk_ctrl_probe 1:usb2
-[   15.002086] platform 381f0040.usb-phy: deferred probe pending
-[   15.007875] platform 382f0040.usb-phy: deferred probe pending
-[   15.013636] platform 32f00000.pcie-phy: deferred probe pending
-[   15.019480] platform 33800000.pcie: deferred probe pending
-[   15.024975] platform 32ec0000.blk-ctrl: deferred probe pending
-[   15.030819] platform 38330000.blk-ctrl: deferred probe pending
-[   15.036662] platform 32f10000.blk-ctrl: deferred probe pending
-[   15.042503] platform 32f10100.usb: deferred probe pending
-[   15.047912] platform 32f10108.usb: deferred probe pending
+Otherwise this patch looks ok.
 
-Best Regards,
+Best regards,
+Jernej
 
-Tim
+>=20
+> -	u32		hdisplay;
+> -	u16		hfront_porch;
+> -	u16		hsync_len;
+> -	u16		hback_porch;
+> -
+> -	u32		vdisplay;
+> -	u16		vfront_porch;
+> -	u16		vsync_len;
+> -	u16		vback_porch;
+> -
+>  	bool		yc_en;
+>  	bool		dac3_en;
+>  	bool		dac_bit25_en;
+> @@ -213,7 +204,7 @@ static const struct resync_parameters
+> pal_resync_parameters =3D {
+>=20
+>  static const struct tv_mode tv_modes[] =3D {
+>  	{
+> -		.name		=3D "NTSC",
+> +		.tv_mode	=3D DRM_MODE_TV_MODE_NTSC,
+>  		.mode		=3D SUN4I_TVE_CFG0_RES_480i,
+>  		.chroma_freq	=3D 0x21f07c1f,
+>  		.yc_en		=3D true,
+> @@ -222,17 +213,6 @@ static const struct tv_mode tv_modes[] =3D {
+>=20
+>  		.back_porch	=3D 118,
+>  		.front_porch	=3D 32,
+> -		.line_number	=3D 525,
+> -
+> -		.hdisplay	=3D 720,
+> -		.hfront_porch	=3D 18,
+> -		.hsync_len	=3D 2,
+> -		.hback_porch	=3D 118,
+> -
+> -		.vdisplay	=3D 480,
+> -		.vfront_porch	=3D 26,
+> -		.vsync_len	=3D 2,
+> -		.vback_porch	=3D 17,
+>=20
+>  		.vblank_level	=3D 240,
+>=20
+> @@ -242,23 +222,12 @@ static const struct tv_mode tv_modes[] =3D {
+>  		.resync_params	=3D &ntsc_resync_parameters,
+>  	},
+>  	{
+> -		.name		=3D "PAL",
+> +		.tv_mode	=3D DRM_MODE_TV_MODE_PAL,
+>  		.mode		=3D SUN4I_TVE_CFG0_RES_576i,
+>  		.chroma_freq	=3D 0x2a098acb,
+>=20
+>  		.back_porch	=3D 138,
+>  		.front_porch	=3D 24,
+> -		.line_number	=3D 625,
+> -
+> -		.hdisplay	=3D 720,
+> -		.hfront_porch	=3D 3,
+> -		.hsync_len	=3D 2,
+> -		.hback_porch	=3D 139,
+> -
+> -		.vdisplay	=3D 576,
+> -		.vfront_porch	=3D 28,
+> -		.vsync_len	=3D 2,
+> -		.vback_porch	=3D 19,
+>=20
+>  		.vblank_level	=3D 252,
+>=20
+> @@ -276,63 +245,21 @@ drm_encoder_to_sun4i_tv(struct drm_encoder *encoder)
+>  			    encoder);
+>  }
+>=20
+> -/*
+> - * FIXME: If only the drm_display_mode private field was usable, this
+> - * could go away...
+> - *
+> - * So far, it doesn't seem to be preserved when the mode is passed by
+> - * to mode_set for some reason.
+> - */
+> -static const struct tv_mode *sun4i_tv_find_tv_by_mode(const struct
+> drm_display_mode *mode) +static const struct tv_mode *
+> +sun4i_tv_find_tv_by_mode(unsigned int mode)
+>  {
+>  	int i;
+>=20
+> -	/* First try to identify the mode by name */
+>  	for (i =3D 0; i < ARRAY_SIZE(tv_modes); i++) {
+>  		const struct tv_mode *tv_mode =3D &tv_modes[i];
+>=20
+> -		DRM_DEBUG_DRIVER("Comparing mode %s vs %s",
+> -				 mode->name, tv_mode->name);
+> -
+> -		if (!strcmp(mode->name, tv_mode->name))
+> -			return tv_mode;
+> -	}
+> -
+> -	/* Then by number of lines */
+> -	for (i =3D 0; i < ARRAY_SIZE(tv_modes); i++) {
+> -		const struct tv_mode *tv_mode =3D &tv_modes[i];
+> -
+> -		DRM_DEBUG_DRIVER("Comparing mode %s vs %s (X: %d vs=20
+%d)",
+> -				 mode->name, tv_mode->name,
+> -				 mode->vdisplay, tv_mode-
+>vdisplay);
+> -
+> -		if (mode->vdisplay =3D=3D tv_mode->vdisplay)
+> +		if (tv_mode->tv_mode =3D=3D mode)
+>  			return tv_mode;
+>  	}
+>=20
+>  	return NULL;
+>  }
+>=20
+> -static void sun4i_tv_mode_to_drm_mode(const struct tv_mode *tv_mode,
+> -				      struct drm_display_mode=20
+*mode)
+> -{
+> -	DRM_DEBUG_DRIVER("Creating mode %s\n", mode->name);
+> -
+> -	mode->type =3D DRM_MODE_TYPE_DRIVER;
+> -	mode->clock =3D 13500;
+> -	mode->flags =3D DRM_MODE_FLAG_INTERLACE;
+> -
+> -	mode->hdisplay =3D tv_mode->hdisplay;
+> -	mode->hsync_start =3D mode->hdisplay + tv_mode->hfront_porch;
+> -	mode->hsync_end =3D mode->hsync_start + tv_mode->hsync_len;
+> -	mode->htotal =3D mode->hsync_end  + tv_mode->hback_porch;
+> -
+> -	mode->vdisplay =3D tv_mode->vdisplay;
+> -	mode->vsync_start =3D mode->vdisplay + tv_mode->vfront_porch;
+> -	mode->vsync_end =3D mode->vsync_start + tv_mode->vsync_len;
+> -	mode->vtotal =3D mode->vsync_end  + tv_mode->vback_porch;
+> -}
+> -
+>  static void sun4i_tv_disable(struct drm_encoder *encoder,
+>  			    struct drm_atomic_state *state)
+>  {
+> @@ -356,7 +283,11 @@ static void sun4i_tv_enable(struct drm_encoder
+> *encoder, struct drm_crtc_state *crtc_state =3D
+>  		drm_atomic_get_new_crtc_state(state, encoder->crtc);
+>  	struct drm_display_mode *mode =3D &crtc_state->mode;
+> -	const struct tv_mode *tv_mode =3D sun4i_tv_find_tv_by_mode(mode);
+> +	struct drm_connector *connector =3D &tv->connector;
+> +	struct drm_connector_state *conn_state =3D
+> +		drm_atomic_get_new_connector_state(state, connector);
+> +	const struct tv_mode *tv_mode =3D
+> +		sun4i_tv_find_tv_by_mode(conn_state->tv.mode);
+>=20
+>  	DRM_DEBUG_DRIVER("Enabling the TV Output\n");
+>=20
+> @@ -404,7 +335,7 @@ static void sun4i_tv_enable(struct drm_encoder *encod=
+er,
+> /* Set the lines setup */
+>  	regmap_write(tv->regs, SUN4I_TVE_LINE_REG,
+>  		     SUN4I_TVE_LINE_FIRST(22) |
+> -		     SUN4I_TVE_LINE_NUMBER(tv_mode->line_number));
+> +		     SUN4I_TVE_LINE_NUMBER(mode->vtotal));
+>=20
+>  	regmap_write(tv->regs, SUN4I_TVE_LEVEL_REG,
+>  		     SUN4I_TVE_LEVEL_BLANK(tv_mode->video_levels-
+>blank) |
+> @@ -467,35 +398,43 @@ static const struct drm_encoder_helper_funcs
+> sun4i_tv_helper_funcs =3D {
+>=20
+>  static int sun4i_tv_comp_get_modes(struct drm_connector *connector)
+>  {
+> -	int i;
+> +	struct drm_display_mode *mode;
+>=20
+> -	for (i =3D 0; i < ARRAY_SIZE(tv_modes); i++) {
+> -		struct drm_display_mode *mode;
+> -		const struct tv_mode *tv_mode =3D &tv_modes[i];
+> -
+> -		mode =3D drm_mode_create(connector->dev);
+> -		if (!mode) {
+> -			DRM_ERROR("Failed to create a new display=20
+mode\n");
+> -			return 0;
+> -		}
+> +	mode =3D drm_mode_analog_ntsc_480i(connector->dev);
+> +	if (!mode) {
+> +		DRM_ERROR("Failed to create a new display mode\n");
+> +		return -ENOMEM;
+> +	}
+>=20
+> -		strcpy(mode->name, tv_mode->name);
+> +	mode->type |=3D DRM_MODE_TYPE_PREFERRED;
+> +	drm_mode_probed_add(connector, mode);
+>=20
+> -		sun4i_tv_mode_to_drm_mode(tv_mode, mode);
+> -		drm_mode_probed_add(connector, mode);
+> +	mode =3D drm_mode_analog_pal_576i(connector->dev);
+> +	if (!mode) {
+> +		DRM_ERROR("Failed to create a new display mode\n");
+> +		return -ENOMEM;
+>  	}
+>=20
+> -	return i;
+> +	drm_mode_probed_add(connector, mode);
+> +
+> +	return 2;
+>  }
+>=20
+>  static const struct drm_connector_helper_funcs
+> sun4i_tv_comp_connector_helper_funcs =3D { +	.atomic_check	=3D
+> drm_atomic_helper_connector_tv_check,
+>  	.get_modes	=3D sun4i_tv_comp_get_modes,
+>  };
+>=20
+> +static void sun4i_tv_connector_reset(struct drm_connector *connector)
+> +{
+> +	drm_atomic_helper_connector_reset(connector);
+> +	drm_atomic_helper_connector_tv_reset(connector);
+> +}
+> +
+>  static const struct drm_connector_funcs sun4i_tv_comp_connector_funcs =
+=3D {
+>  	.fill_modes		=3D drm_helper_probe_single_connector_modes,
+>  	.destroy		=3D drm_connector_cleanup,
+> -	.reset			=3D=20
+drm_atomic_helper_connector_reset,
+> +	.reset			=3D sun4i_tv_connector_reset,
+>  	.atomic_duplicate_state	=3D=20
+drm_atomic_helper_connector_duplicate_state,
+>  	.atomic_destroy_state	=3D=20
+drm_atomic_helper_connector_destroy_state,
+>  };
+> @@ -587,8 +526,20 @@ static int sun4i_tv_bind(struct device *dev, struct
+> device *master,
+>=20
+>  	drm_connector_attach_encoder(&tv->connector, &tv->encoder);
+>=20
+> +	ret =3D drm_mode_create_tv_properties(drm,
+> +					   =20
+BIT(DRM_MODE_TV_MODE_NTSC) |
+> +					   =20
+BIT(DRM_MODE_TV_MODE_PAL));
+> +	if (ret)
+> +		goto err_cleanup_connector;
+> +
+> +	drm_object_attach_property(&tv->connector.base,
+> +				   drm-
+>mode_config.tv_mode_property,
+> +				   DRM_MODE_TV_MODE_NTSC);
+> +
+>  	return 0;
+>=20
+> +err_cleanup_connector:
+> +	drm_connector_cleanup(&tv->connector);
+>  err_cleanup_encoder:
+>  	drm_encoder_cleanup(&tv->encoder);
+>  err_disable_clk:
+>=20
+> --
+> b4 0.11.0-dev-7da52
+
+
