@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87E15FD233
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276F25FD22E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiJMBIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 21:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S230122AbiJMBGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 21:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiJMBHy (ORCPT
+        with ESMTP id S230307AbiJMBGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 21:07:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D86112A83
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 18:05:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B23BFB81B25
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:59:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E951BC433B5;
-        Thu, 13 Oct 2022 00:59:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Iy/AYTo5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665622743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LLZPzR6FpxXb2UjkWbmCa6BeY3D9NujyGzr+mb7ntJw=;
-        b=Iy/AYTo5iQ2flekuaJRQLrRy8V+Jv3LGB1cMvCBrJlckPyPgVetCvijh8XWrkqsBSvGIhv
-        5KRBtNHvgHu2j8SIWTIcW0XcqNos5G0lPzuF1sJjSebZFJ86NEN2t4N8Nq4RKh+e0L/CH4
-        1KWkKDlpW4950bLHwQehrs4P8t0NWC8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a0bedde7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 13 Oct 2022 00:59:03 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] random number generator updates for 6.1-rc1, part 2
-Date:   Wed, 12 Oct 2022 18:58:45 -0600
-Message-Id: <20221013005845.1325870-1-Jason@zx2c4.com>
+        Wed, 12 Oct 2022 21:06:05 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BC910CFB7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 18:03:49 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id fy4so752106ejc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 18:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f5ZmeOrNRxVSdEs7wj3cmQBKG+t/B2W0NUATSDD3gSw=;
+        b=J/NycGcrdiTqo/XljHd+9KZjgUiAYm0uWAEoNrhmlV4LxzHOpIYRETVS+GdoCnqH+b
+         N0jY+TdEk8jmVwce3L3Nh8UM7zG7rTIgLhowKgqMveHiyJ0zMmPXKr+Fdvir7bZK5CVW
+         tGE5BITfHUr+YJyXV0UtLE1V88a99e0Md28UNo83N6WtQJ+PmjFEMjdgh9yciNxrQPKe
+         NiTSTwMFxc1lQU9Mf+86o+4ozh6AQtMEPAc0bAcRKeZi/hT5V0o83/Vq8ksiAg6xHNyn
+         OYvJsSVmZisV6IetombbYqi+c/kJSCzAOJ8LmBed8oXxUUUBg7+7uUOK0w9y6GvnWHya
+         UPGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f5ZmeOrNRxVSdEs7wj3cmQBKG+t/B2W0NUATSDD3gSw=;
+        b=bm+Cq1sn/5XE1TOUtLFfYy40Ou63Ly8Y4irH8GrLzOXtWKFs7AHewe6HHnd8D0h5IR
+         9E76XPlAAoV+UNk3xF86WrHPfqAChtiBs3az1gjBwy8knVWuEO+BTkIsSRWDCVbymLOq
+         8li7flW7JyrfPHds146NN6kLQA7xGG/oG701/XjFn3MlKDlbcGE6ag8DnpMMY8BgSkfX
+         Hrw30RTJ/UHhzBH54W2vgQzpyj7lsjvRJGxNGCURVhIcRzB2UI1XC+r0DvU0nirpNju6
+         rNdCvBhCQNaeEKoebMiwXn8FioLwMHh7OGo4N275dMTQC3P87ZrcWva43C2km44gfKxG
+         KjOA==
+X-Gm-Message-State: ACrzQf2xX09KOFkCAElksaCLzhHDCU3GUFJQvQjBZqy3jLW+48fso+Zo
+        m2zQKKGoKoSvwy93FW7EQ+aL64Y8G0jN3rAmZK1KBLC6/qQ=
+X-Google-Smtp-Source: AMsMyM6acAuS/QhwPAJT34l2+m20AmcKih0Fi0tmvSIsO3GxqwpNAHOC4DOiz4sAceqQwWVHspjhkRBZUuVR9VpmwPE=
+X-Received: by 2002:a17:907:2c44:b0:78d:4e67:ca5d with SMTP id
+ hf4-20020a1709072c4400b0078d4e67ca5dmr24564212ejc.397.1665622932198; Wed, 12
+ Oct 2022 18:02:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220902000439.875476-1-dionnaglaze@google.com>
+ <669cedbc-e127-92ba-2e98-e0460b45bd4d@amd.com> <554407c3-197b-0e52-fc92-9c383a37175b@amd.com>
+In-Reply-To: <554407c3-197b-0e52-fc92-9c383a37175b@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Wed, 12 Oct 2022 18:02:01 -0700
+Message-ID: <CAAH4kHacW+hd8vB8QgkTjdw6+z-0ngjCqgr=zuGTwqqRnqUPQw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86/sev: Add KVM commands for instance certs
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,268 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+> >> +    /* Page-align the length */
+> >> +    length = (params.certs_len + PAGE_SIZE - 1) & PAGE_MASK;
+> >
+> > Probably can use PAGE_ALIGN() here.
+> >
 
-As mentioned earlier this week, here is part 2 of the RNG fixes for 6.1, this
-time with some large scale treewide cleanups. Hopefully sending this to you at
-this point in the merge window takes care of any potential conflicts. As of
-about 10 minutes ago, this should merge cleanly.
+Ah, thanks. Will add in v2.
 
-The intent of this pull is to cleanup the way callers fetch random integers.
-The current rules for doing this right are:
+>
+> Though, one thing i don't understand is that why do we need to issue
+> the SNP_GUEST_REQUEST to FW if we are going to return the VMM
+> overriden certs back to the guest ?
+>
+> Thanks,
+> Ashish
 
-- If you want a secure or an insecure random u64, use get_random_u64().
-- If you want a secure or an insecure random u32, use get_random_u32().
-  * The old function prandom_u32() has been deprecated for a while now
-    and is just a wrapper around get_random_u32(). Same for
-    get_random_int().
-- If you want a secure or an insecure random u16, use get_random_u16().
-- If you want a secure or an insecure random u8, use get_random_u8().
-- If you want secure or insecure random bytes, use get_random_bytes().
-  * The old function prandom_bytes() has been deprecated for a while now
-    and has long been a wrapper around get_random_bytes().
-- If you want a non-uniform random u32, u16, or u8 bounded by a certain
-  open interval maximum, use prandom_u32_max().
-  * I say "non-uniform", because it doesn't do any rejection sampling or
-    divisions. Hence, it stays within the prandom_*() namespace, not the
-    get_random_*() namespace.
-  * I'm currently investigating a "uniform" function for 6.2. We'll see
-    what comes of that.
+If I'm reading the spec right, certs are supposed to come along with
+the guest request when the user issues an extended guest request. If
+the length is correct, we issue the command to get the report and we
+simply override what the psp returns for the certs.
 
-By applying these rules uniformly, we get several benefits:
+Is that your understanding too? If so, are you saying there's a bug in
+this implementation?
 
-- By using prandom_u32_max() with an upper-bound that the compiler can
-  prove at compile-time is ≤65536 or ≤256, internally get_random_u16()
-  or get_random_u8() is used, which wastes fewer batched random bytes,
-  and hence has higher throughput.
 
-- By using prandom_u32_max() instead of %, when the upper-bound is not a
-  constant, division is still avoided, because prandom_u32_max() uses
-  a faster multiplication-based trick instead.
-
-- By using get_random_u16() or get_random_u8() in cases where the return
-  value is intended to indeed be a u16 or a u8, we waste fewer batched
-  random bytes, and hence have higher throughput.
-
-This series was originally done by hand while I was on an airplane without
-Internet. Later, Kees and I worked on retroactively figuring out what could be
-done with Coccinelle and what had to be done manually, and then we split
-things up based on that. So, while this touches a lot of files, the actual
-amount of code that's hand fiddled is comfortably small.
-
-Please pull.
-
-Thanks,
-Jason
-
-The following changes since commit d465bff130bf4ca17b6980abe51164ace1e0cba4:
-
-  Merge tag 'perf-tools-for-v6.1-1-2022-10-07' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux (2022-10-11 15:02:25 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-6.1-rc1-for-linus
-
-for you to fetch changes up to de492c83cae0af72de370b9404aacda93dafcad5:
-
-  prandom: remove unused functions (2022-10-11 17:42:58 -0600)
-
-----------------------------------------------------------------
-Random number generator fixes for Linux 6.1-rc1.
-----------------------------------------------------------------
-
-Jason A. Donenfeld (7):
-      treewide: use prandom_u32_max() when possible, part 1
-      treewide: use prandom_u32_max() when possible, part 2
-      treewide: use get_random_{u8,u16}() when possible, part 1
-      treewide: use get_random_{u8,u16}() when possible, part 2
-      treewide: use get_random_u32() when possible
-      treewide: use get_random_bytes() when possible
-      prandom: remove unused functions
-
- Documentation/networking/filter.rst                |  2 +-
- arch/arm/kernel/process.c                          |  2 +-
- arch/arm/kernel/signal.c                           |  2 +-
- arch/arm64/kernel/process.c                        |  2 +-
- arch/arm64/kernel/syscall.c                        |  2 +-
- arch/loongarch/kernel/process.c                    |  2 +-
- arch/loongarch/kernel/vdso.c                       |  2 +-
- arch/mips/kernel/process.c                         |  2 +-
- arch/mips/kernel/vdso.c                            |  2 +-
- arch/parisc/kernel/process.c                       |  2 +-
- arch/parisc/kernel/sys_parisc.c                    |  4 +-
- arch/parisc/kernel/vdso.c                          |  2 +-
- arch/powerpc/crypto/crc-vpmsum_test.c              |  2 +-
- arch/powerpc/kernel/process.c                      |  2 +-
- arch/s390/kernel/process.c                         |  4 +-
- arch/s390/kernel/vdso.c                            |  2 +-
- arch/s390/mm/mmap.c                                |  2 +-
- arch/sparc/vdso/vma.c                              |  2 +-
- arch/um/kernel/process.c                           |  2 +-
- arch/x86/entry/vdso/vma.c                          |  2 +-
- arch/x86/kernel/cpu/amd.c                          |  2 +-
- arch/x86/kernel/module.c                           |  2 +-
- arch/x86/kernel/process.c                          |  2 +-
- arch/x86/mm/pat/cpa-test.c                         |  4 +-
- block/blk-crypto-fallback.c                        |  2 +-
- crypto/async_tx/raid6test.c                        |  2 +-
- crypto/testmgr.c                                   | 94 +++++++++++-----------
- drivers/block/drbd/drbd_receiver.c                 |  4 +-
- drivers/char/random.c                              | 11 ++-
- drivers/dma/dmatest.c                              |  2 +-
- drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |  2 +-
- drivers/gpu/drm/i915/i915_gem_gtt.c                |  6 +-
- drivers/gpu/drm/i915/selftests/i915_selftest.c     |  2 +-
- drivers/gpu/drm/tests/drm_buddy_test.c             |  2 +-
- drivers/gpu/drm/tests/drm_mm_test.c                |  2 +-
- drivers/infiniband/core/cma.c                      |  2 +-
- drivers/infiniband/hw/cxgb4/cm.c                   |  4 +-
- drivers/infiniband/hw/cxgb4/id_table.c             |  4 +-
- drivers/infiniband/hw/hfi1/tid_rdma.c              |  2 +-
- drivers/infiniband/hw/hns/hns_roce_ah.c            |  5 +-
- drivers/infiniband/hw/mlx4/mad.c                   |  2 +-
- drivers/infiniband/ulp/ipoib/ipoib_cm.c            |  2 +-
- drivers/infiniband/ulp/rtrs/rtrs-clt.c             |  3 +-
- drivers/md/bcache/request.c                        |  2 +-
- drivers/md/raid5-cache.c                           |  2 +-
- drivers/media/common/v4l2-tpg/v4l2-tpg-core.c      |  2 +-
- drivers/media/test-drivers/vivid/vivid-radio-rx.c  |  4 +-
- drivers/media/test-drivers/vivid/vivid-touch-cap.c |  6 +-
- drivers/misc/habanalabs/gaudi2/gaudi2.c            |  2 +-
- drivers/mmc/core/core.c                            |  4 +-
- drivers/mmc/host/dw_mmc.c                          |  2 +-
- drivers/mtd/nand/raw/nandsim.c                     |  8 +-
- drivers/mtd/tests/mtd_nandecctest.c                | 12 +--
- drivers/mtd/tests/speedtest.c                      |  2 +-
- drivers/mtd/tests/stresstest.c                     | 19 ++---
- drivers/mtd/ubi/debug.c                            |  2 +-
- drivers/mtd/ubi/debug.h                            |  6 +-
- drivers/net/bonding/bond_main.c                    |  2 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  2 +-
- drivers/net/ethernet/broadcom/cnic.c               |  5 +-
- .../chelsio/inline_crypto/chtls/chtls_cm.c         |  4 +-
- .../chelsio/inline_crypto/chtls/chtls_io.c         |  4 +-
- drivers/net/ethernet/rocker/rocker_main.c          |  8 +-
- drivers/net/hamradio/baycom_epp.c                  |  2 +-
- drivers/net/hamradio/hdlcdrv.c                     |  2 +-
- drivers/net/hamradio/yam.c                         |  2 +-
- drivers/net/phy/at803x.c                           |  2 +-
- drivers/net/wireguard/selftest/allowedips.c        | 16 ++--
- .../net/wireless/broadcom/brcm80211/brcmfmac/p2p.c |  2 +-
- .../net/wireless/broadcom/brcm80211/brcmfmac/pno.c |  2 +-
- drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c  |  2 +-
- drivers/net/wireless/marvell/mwifiex/cfg80211.c    |  4 +-
- drivers/net/wireless/microchip/wilc1000/cfg80211.c |  2 +-
- drivers/net/wireless/quantenna/qtnfmac/cfg80211.c  |  2 +-
- drivers/net/wireless/st/cw1200/wsm.c               |  2 +-
- drivers/net/wireless/ti/wlcore/main.c              |  2 +-
- drivers/nvme/common/auth.c                         |  2 +-
- drivers/scsi/cxgbi/cxgb4i/cxgb4i.c                 |  4 +-
- drivers/scsi/fcoe/fcoe_ctlr.c                      |  4 +-
- drivers/scsi/lpfc/lpfc_hbadisc.c                   |  6 +-
- drivers/scsi/qedi/qedi_main.c                      |  2 +-
- drivers/target/iscsi/cxgbit/cxgbit_cm.c            |  2 +-
- drivers/thunderbolt/xdomain.c                      |  2 +-
- drivers/video/fbdev/uvesafb.c                      |  2 +-
- fs/ceph/inode.c                                    |  2 +-
- fs/ceph/mdsmap.c                                   |  2 +-
- fs/exfat/inode.c                                   |  2 +-
- fs/ext2/ialloc.c                                   |  3 +-
- fs/ext4/ialloc.c                                   |  7 +-
- fs/ext4/ioctl.c                                    |  4 +-
- fs/ext4/mmp.c                                      |  2 +-
- fs/ext4/super.c                                    |  7 +-
- fs/f2fs/gc.c                                       |  2 +-
- fs/f2fs/namei.c                                    |  2 +-
- fs/f2fs/segment.c                                  |  8 +-
- fs/fat/inode.c                                     |  2 +-
- fs/nfsd/nfs4state.c                                |  4 +-
- fs/ntfs3/fslog.c                                   |  6 +-
- fs/ubifs/debug.c                                   | 10 +--
- fs/ubifs/journal.c                                 |  2 +-
- fs/ubifs/lpt_commit.c                              | 14 ++--
- fs/ubifs/tnc_commit.c                              |  2 +-
- fs/xfs/libxfs/xfs_alloc.c                          |  2 +-
- fs/xfs/libxfs/xfs_ialloc.c                         |  4 +-
- fs/xfs/xfs_error.c                                 |  2 +-
- fs/xfs/xfs_icache.c                                |  2 +-
- fs/xfs/xfs_log.c                                   |  2 +-
- include/linux/nodemask.h                           |  2 +-
- include/linux/prandom.h                            | 12 ---
- include/linux/random.h                             |  5 --
- include/net/netfilter/nf_queue.h                   |  2 +-
- include/net/red.h                                  |  2 +-
- include/net/sock.h                                 |  2 +-
- kernel/bpf/bloom_filter.c                          |  2 +-
- kernel/bpf/core.c                                  |  6 +-
- kernel/bpf/hashtab.c                               |  2 +-
- kernel/bpf/verifier.c                              |  2 +-
- kernel/kcsan/selftest.c                            |  4 +-
- kernel/locking/test-ww_mutex.c                     |  4 +-
- kernel/time/clocksource.c                          |  2 +-
- lib/cmdline_kunit.c                                |  4 +-
- lib/fault-inject.c                                 |  2 +-
- lib/find_bit_benchmark.c                           |  4 +-
- lib/kobject.c                                      |  2 +-
- lib/random32.c                                     |  4 +-
- lib/reed_solomon/test_rslib.c                      | 12 +--
- lib/sbitmap.c                                      |  4 +-
- lib/test-string_helpers.c                          |  2 +-
- lib/test_fprobe.c                                  |  2 +-
- lib/test_hexdump.c                                 | 10 +--
- lib/test_kprobes.c                                 |  2 +-
- lib/test_list_sort.c                               |  2 +-
- lib/test_min_heap.c                                |  6 +-
- lib/test_objagg.c                                  |  2 +-
- lib/test_rhashtable.c                              |  6 +-
- lib/test_vmalloc.c                                 | 19 ++---
- lib/uuid.c                                         |  2 +-
- mm/kasan/kasan_test.c                              |  6 +-
- mm/shmem.c                                         |  2 +-
- mm/slab.c                                          |  2 +-
- mm/slub.c                                          |  2 +-
- net/802/garp.c                                     |  2 +-
- net/802/mrp.c                                      |  2 +-
- net/ceph/mon_client.c                              |  2 +-
- net/ceph/osd_client.c                              |  2 +-
- net/core/neighbour.c                               |  2 +-
- net/core/pktgen.c                                  | 47 ++++++-----
- net/core/stream.c                                  |  2 +-
- net/dccp/ipv4.c                                    |  4 +-
- net/ipv4/datagram.c                                |  2 +-
- net/ipv4/igmp.c                                    |  6 +-
- net/ipv4/inet_connection_sock.c                    |  2 +-
- net/ipv4/inet_hashtables.c                         |  2 +-
- net/ipv4/ip_output.c                               |  2 +-
- net/ipv4/route.c                                   |  4 +-
- net/ipv4/tcp_cdg.c                                 |  2 +-
- net/ipv4/tcp_ipv4.c                                |  4 +-
- net/ipv4/udp.c                                     |  2 +-
- net/ipv6/addrconf.c                                |  8 +-
- net/ipv6/ip6_flowlabel.c                           |  2 +-
- net/ipv6/mcast.c                                   | 10 +--
- net/ipv6/output_core.c                             |  2 +-
- net/mac80211/rc80211_minstrel_ht.c                 |  2 +-
- net/mac80211/scan.c                                |  2 +-
- net/netfilter/ipvs/ip_vs_conn.c                    |  2 +-
- net/netfilter/ipvs/ip_vs_twos.c                    |  4 +-
- net/netfilter/nf_nat_core.c                        |  4 +-
- net/netfilter/xt_statistic.c                       |  2 +-
- net/openvswitch/actions.c                          |  2 +-
- net/packet/af_packet.c                             |  2 +-
- net/rds/bind.c                                     |  2 +-
- net/sched/act_gact.c                               |  2 +-
- net/sched/act_sample.c                             |  2 +-
- net/sched/sch_cake.c                               |  8 +-
- net/sched/sch_netem.c                              | 22 ++---
- net/sched/sch_pie.c                                |  2 +-
- net/sched/sch_sfb.c                                |  2 +-
- net/sctp/socket.c                                  |  4 +-
- net/sunrpc/auth_gss/gss_krb5_wrap.c                |  4 +-
- net/sunrpc/cache.c                                 |  2 +-
- net/sunrpc/xprt.c                                  |  2 +-
- net/sunrpc/xprtsock.c                              |  2 +-
- net/tipc/socket.c                                  |  2 +-
- net/unix/af_unix.c                                 |  2 +-
- net/xfrm/xfrm_state.c                              |  2 +-
- 185 files changed, 378 insertions(+), 421 deletions(-)
+-- 
+-Dionna Glaze, PhD (she/her)
