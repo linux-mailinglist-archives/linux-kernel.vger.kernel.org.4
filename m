@@ -2,121 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543765FDC52
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 16:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C105FDC54
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 16:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJMOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 10:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S229581AbiJMOVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 10:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJMOVX (ORCPT
+        with ESMTP id S230139AbiJMOVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 10:21:23 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306F57CE2F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 07:21:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id f140so2096958pfa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 07:21:22 -0700 (PDT)
+        Thu, 13 Oct 2022 10:21:32 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78733DCAEE;
+        Thu, 13 Oct 2022 07:21:30 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 204so2059067pfx.10;
+        Thu, 13 Oct 2022 07:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QslV9665L65zG9Gm0pYGNEWgIRNaVZVdsPZkFFyGy6w=;
-        b=U4YGN8frK0VJYapVchJEbRJh7BaYK/HQN944aQ0aZ1KGomEe7i8SVtXuhsBAedZfHt
-         k25aAxLxmqdWdLib1XPs9wAw9Xrqyz6yUPwfmK7x5EMfIouXr2pUn0PfQfO+zAnXoh4/
-         UhZ5P5IJr1JUs9EkGoaPukz4Wn4NYDQnQ+JTvLzGeQzPl1/BAMiZ/dwv7yVau17+W4U3
-         lUuqWuChBXmTrAM2d+53GfW0dVP9X7jdypxW/jD8YHZyAupchs1gUokUO5ZuHUucR9mM
-         1eIDlPDyGiMjeHHlmzoUbqqr3pNgP7mVv9VaVbPwbSdMLPPadB4H1CGgyl87dmfWID0O
-         UKfg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VcOtwnIKDIYhDLNa+tjdb7hspR/G57m1UnHPm7nh87c=;
+        b=Sg9P0zLb9j4BU/7R6DGShqJLgQ4ld7/cew4KUXy4Tj0p1wM8y2Q5FEjLwM4wiZoMU1
+         j2QmZSfDfw846N6CakwAqYSXTjBNYBsrMAL3Lf2iujHeWhCgxugLopjWKT33oUKRCNfJ
+         FuaVzroHoFdbsnFfr47qOBW/YKs8gAdl/x8fP4PAg6cNAybD542eOCtvG8T+hawk1yLw
+         ij2K20AUQgWdj6eQNStls1CvB90pF9t980QJ2Y0oZOinszfnhhvGRzhfzvg6dMXQQ5EC
+         vsPkSTGh0K+g7gjvMucYbij/Wr6FrFMsWbmq14a3BamLVtln5paDxmRW3P2a+yhnXA76
+         nrGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QslV9665L65zG9Gm0pYGNEWgIRNaVZVdsPZkFFyGy6w=;
-        b=GKUOAgAfaXvSRWOHEipv7pt2JmobeSJpE0Ej0+ULFcxDE6gaHCk2Ur2/LnMMQLSOFu
-         M/WaJGuTUbp7fngq3HlmnpF8tjxz21gFTblEFZxckI77QWgyZdHaCNM4GKuW2BGmLVgo
-         76TP5ioiTVVZHTMFFOQIbruA8IOKw30MQKUqA27LmS265j0furNFSL6nWK/qcqXfEbaZ
-         jkP2NFiAfyEukdkoemInMtSNs4cH4zotGPBnvufgL7KhMfgcwFDxrzdVjbXOsjFNUfXN
-         P9FNX/a+x/aXkcMdli22PCCSeB5jtHmkERwQiauAgDx5bus2UhjaWHEXRhY2gcByuAHr
-         ATTw==
-X-Gm-Message-State: ACrzQf0mSd+4MCiqgL+eU1arSsa48+I0171m0TNMQvJaIB747M41w4Ju
-        YuK0anD9nyk/WwDLizFU40VUcMvpx3al3HPyCMuydw==
-X-Google-Smtp-Source: AMsMyM6luYJp9htQXndrF1SxY/62xT+d6WKet202Lamm5hl8r1j1Aw7jo0GNlj13Y81bRQDZ5c76LYwvC9OI6BYFI50=
-X-Received: by 2002:a63:90c4:0:b0:45f:c571:67eb with SMTP id
- a187-20020a6390c4000000b0045fc57167ebmr64326pge.541.1665670881622; Thu, 13
- Oct 2022 07:21:21 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcOtwnIKDIYhDLNa+tjdb7hspR/G57m1UnHPm7nh87c=;
+        b=qevlyPtADjPoC16LDvbnnYe0pD3lyNBHSXDV9kFBu9IFXcWVOQZgSRDIGxUIiXH58d
+         kQHkpf/CYTXifHE7uv1wf1fbdh9d2EXl3yYU8QW1dsDGPMY+sbSQu45puQvsVirgU4C3
+         VCtEjNgHeROAQn0MkKACXOi1GtIXNSd0oxqPcQuSKMMdvN31WvzvkfbXVubIWW9fbGdC
+         ELosy8+jT/LgxhAY+6/BTS+s+gdZMTB7rygheP4h3UwNBgYFdJv9owY69JUSgrLTiTMm
+         4FpTq0XUNVN8d5cvk/Wyw/UHNjCXWePu0dZF2LaGIWBR4+hmSyOFsQJvoUILwW+a20tF
+         H6WQ==
+X-Gm-Message-State: ACrzQf0eFrqtG7WW8MjNZMQQCctCUWXYWZr2eh14RKNiz7uCNgsSHJNk
+        boYSE9Ggt1TlwFj1Ktb+uBs=
+X-Google-Smtp-Source: AMsMyM5ESnJ1JrQczDW0yQRD/dOUJfZnh9/0VlsUVCm8pyVJc6gIkpMp1ylsMCwOI31HHd7iF1LG5g==
+X-Received: by 2002:a65:580a:0:b0:439:befc:d2b0 with SMTP id g10-20020a65580a000000b00439befcd2b0mr121704pgr.302.1665670889890;
+        Thu, 13 Oct 2022 07:21:29 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id r18-20020a170902e3d200b0017f75bc7a61sm12591253ple.166.2022.10.13.07.21.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 07:21:29 -0700 (PDT)
+Message-ID: <89120a24-f622-eb9b-fde9-635caaabb67f@gmail.com>
+Date:   Thu, 13 Oct 2022 23:21:26 +0900
 MIME-Version: 1.0
-References: <c865c0c9789d428494b67b820a78923e@hyperstone.com>
-In-Reply-To: <c865c0c9789d428494b67b820a78923e@hyperstone.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 13 Oct 2022 16:20:45 +0200
-Message-ID: <CAPDyKFoKZbY456VF9hwvyNSsuZ-H2Lh-BfaPreK7PfFkGDWWzQ@mail.gmail.com>
-Subject: Re: [PATCHv2 2/2] mmc: queue: Cancel recovery work on cleanup
-To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     bagasdotme@gmail.com, jani.nikula@linux.intel.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, Randy Dunlap <rdunlap@infradead.org>
+References: <87h709md2c.fsf@meer.lwn.net>
+Subject: Re: [PATCH v2 0/6] docs: Improvements to our HTML output
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <87h709md2c.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Oct 2022 at 17:43, Christian L=C3=B6hle <CLoehle@hyperstone.com> =
-wrote:
->
-> To prevent any recovery work running after the queue cleanup cancel it.
-> Any recovery running post-cleanup dereferenced mq->card as NULL
-> and was not meaningful to begin with.
->
-> Cc: stable@vger.kernel.org
->
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+Hi Jon,
 
-Applied for fixes, thanks!
+On Wed, 12 Oct 2022 06:38:51 -0600, Jonathan Corbet wrote:
+> Bagas Sanjaya <bagasdotme@gmail.com> writes:
+> 
+>> Hmm, I can't cleanly apply this patch series on top of either Linus's tree
+>> or linux-next due to conflicts on [1/6]. On what commit this series is based
+>> on?
+> 
+> docs-next, which is still running off the pre-6.0 base until after the
+> merge window closes.
+Hmm...
 
-Kind regards
-Uffe
+Actually, I can't apply 1/6 cleanly on docs-next, either.
+As I have your tree in my local repo, "git am -3" worked and pointed
+out there is a merge conflict.
 
+It turns out that one of the hunks in 1/6 doesn't match what could be
+applied cleanly.
 
-> ---
-> -v2: Use cancel instead of flush
->
->  drivers/mmc/core/queue.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
-> index fefaa901b50f..86be55d7cf55 100644
-> --- a/drivers/mmc/core/queue.c
-> +++ b/drivers/mmc/core/queue.c
-> @@ -493,6 +493,13 @@ void mmc_cleanup_queue(struct mmc_queue *mq)
->         if (blk_queue_quiesced(q))
->                 blk_mq_unquiesce_queue(q);
->
-> +       /*
-> +        * If the recovery completes the last (and only remaining) reques=
-t in
-> +        * the queue, and the card has been removed, we could end up here=
- with
-> +        * the recovery not quite finished yet, so cancel it.
-> +        */
-> +       cancel_work_sync(&mq->recovery_work);
-> +
->         blk_mq_free_tag_set(&mq->tag_set);
->
->         /*
-> --
-> 2.37.3
->
-> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-> Managing Director: Dr. Jan Peter Berns.
-> Commercial register of local courts: Freiburg HRB381782
->
+[From 1/6]:
+
+------------------------------------------------------
+@@ -371,7 +393,7 @@ html_use_smartypants = False
+ 
+ # Custom sidebar templates, maps document names to template names.
+ # Note that the RTD theme ignores this
+-html_sidebars = { '**': ['searchbox.html', 'localtoc.html', 'sourcelink.html']}
++html_sidebars = { '**': ["about.html", 'searchbox.html', 'localtoc.html', 'sourcelink.html']}
+ 
+ # Additional templates that should be rendered to pages, maps page names to
+ # template names.
+------------------------------------------------------
+
+What can be cleanly applied:
+
+------------------------------------------------------
+@@ -371,7 +393,7 @@ html_use_smartypants = False
+ 
+ # Custom sidebar templates, maps document names to template names.
+ # Note that the RTD theme ignores this.
+-html_sidebars = { '**': ['searchbox.html', 'localtoc.html', 'sourcelink.html']}
++html_sidebars = { '**': ["about.html", 'searchbox.html', 'localtoc.html', 'sourcelink.html']}
+ 
+ # Additional templates that should be rendered to pages, maps page names to
+ # template names.
+------------------------------------------------------
+
+There is an additional period at the comment of:
+
+> # Note that the RTD theme ignores this.
+                                        ^
+So if you remove the period first, you should be able to apply the
+patch set cleanly starting from docs-next or linux-next, I guess.
+
+Sidenote: I see this warning when applying 5/6:
+
+  .git/rebase-apply/patch:18: trailing whitespace.
+      margin: 20px 10px 0 10px; 
+  warning: 1 line adds whitespace errors.
+
+Hope this helps.
+
+Akira
+
+> 
+> If I need to post another round before merging I'll drag everything
+> forward to a more current base.
+> 
+> Thanks,
+> 
+> jon
+
