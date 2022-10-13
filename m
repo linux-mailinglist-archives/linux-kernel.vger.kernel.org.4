@@ -2,165 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AFE5FDED8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B3B5FDED9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJMRVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S229755AbiJMRVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiJMRVb (ORCPT
+        with ESMTP id S229656AbiJMRVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:21:31 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B2CD8EF0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:21:30 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3573ed7cc15so24056177b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QuAPrq7fg7n5xtr2Tt6KkaaUEeLuu+jNnvfbI0TJOvQ=;
-        b=TcbfAV+G20cD+j8MXhlBXVZ6475WoerOXjRAY/TZ78ZBxROpWGFW7BdXnDll3LaO9N
-         XQdOKl8y1MWP2bMGTEFHXLc0bdGKtpAPEhP8qmAlEleBjK+L+e7hLO7YabSdLMmdB23i
-         duN3DXmq35Pze0amNomz6pGO6SuLtDj9K86YpB7i+ZB8bw7AxIFTpxMOAsgltOB5pjIJ
-         x9m4eDjS+y5RiuL/nBIJ6lvytzuccgJROuVcaOK34QSeSVUi/Jf9PnTBY/ZO58tBHih0
-         u0H2gF9auA/tZvvqm/CACMFf3GiKsOr67MJb5a3DEUS9gEHJNd/E+9ktazTwsGG2Hswc
-         4ESg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QuAPrq7fg7n5xtr2Tt6KkaaUEeLuu+jNnvfbI0TJOvQ=;
-        b=aNA8rAa7/AL6amkB5vmi6VYp8RVb+SIBCcRb3DOBzBbnInTZNbq+r2n2fj/FzBsNY9
-         V3kNL/2UQRZ8sgBty6B/E0q8EOQtr7SVDF5rJcQcZWRRClrOE2d0+cKohSupXR6H7KMd
-         nuymvr28KkNnd6NpTL+WHi2N9vMhrtGkQ4vGHYt1nApioUlnoSOhl4sQdeEOa2gr/z2R
-         kahLY2mEDYWJ+8fo99v7yvOqWcQSkDD2ZrPivN57I6iMKYt0PEUm6X4A3rk3JyhaUOvJ
-         yk2dhPjPsMIk68fsl7rgOLGgq5mYBaSveGPuzMcVaXGnYJM+miZrP1kKQerRIPJ43dEa
-         UZfQ==
-X-Gm-Message-State: ACrzQf2hpMBlYuiZ/wrpA4I4iB3zHYyL35d7dVwOOLy5OY0y8+yvvVjU
-        hfFhPSg6K0sCzCzFNtXnEcbApvnQoKGc7DAO7dm43g==
-X-Google-Smtp-Source: AMsMyM7EYOPAqQtv3tYWi/iflfKvVcuZlSSnM/7DH525UefT2YqiASBW2R2cOnQ8OvVCMuzlp1djkiUueSzgoa6C2PE=
-X-Received: by 2002:a81:9204:0:b0:358:89e9:cff9 with SMTP id
- j4-20020a819204000000b0035889e9cff9mr973200ywg.168.1665681689194; Thu, 13 Oct
- 2022 10:21:29 -0700 (PDT)
+        Thu, 13 Oct 2022 13:21:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE127E0986
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665681699; x=1697217699;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oLJ+o0oAH5MFeN5yUjW7hBZIGAyvQOvhPgb6VSY7qag=;
+  b=AIKD27RJvMmKMThhH1sdogV1xBft9QfLMR4JHEeuJDjV5ws9+AJdGqYo
+   1vBrO7IoqFvtY62Em9I6djoRAeDws2ptQdRoXJc7OpZGETWDd2L88hAgF
+   tksPulurs4eEdESUzBV0F0HaNUYAjGPTbpPhR5uf5yraE8DFso9VRb67H
+   4qjARWvl9nxC7QNdFAyOzx7/uL7JtyhCaiaHFUAbcYUc5MTE2snhvc+vh
+   tWXPfzZgM6lXQTIqAKvIezTx7Bf6uqT0vGrSZk/8MxDqIL3IyRUAflshI
+   a8EFlVkHYAiz2tn8WaMkuJha8gFe/kLPcozi/7xlPYZ5nGwz8y75yJpYM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="292493499"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="292493499"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 10:21:38 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="578322416"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="578322416"
+Received: from mkucejko-mobl.ger.corp.intel.com (HELO [10.213.24.166]) ([10.213.24.166])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 10:21:34 -0700
+Message-ID: <78f2021e-339f-9dfb-2aee-51f58ea77ec9@intel.com>
+Date:   Thu, 13 Oct 2022 10:21:28 -0700
 MIME-Version: 1.0
-References: <20221012181702.3663607-1-seanjc@google.com>
-In-Reply-To: <20221012181702.3663607-1-seanjc@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Thu, 13 Oct 2022 10:21:02 -0700
-Message-ID: <CALzav=fZvNttbXSZfCCaFym8cNHYmFZX7286CW_zTZA1CTr3kA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] KVM: x86/mmu: Make tdp_mmu a read-only parameter
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86/fpu: Remove dynamic features from xcomp_bv for
+ init_fpstate
+Content-Language: en-US
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20221011222425.866137-1-dave.hansen@linux.intel.com>
+ <BYAPR11MB3717EDEF2351C958F2C86EED95259@BYAPR11MB3717.namprd11.prod.outlook.com>
+ <9b198ed3-4b2d-c857-710b-3f7115bbcf74@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <9b198ed3-4b2d-c857-710b-3f7115bbcf74@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:17 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> This is a variation of David's series to change tdp_mmu to a RO param[*].
-> The key difference is that instead of moving the TDP MMU page fault handler
-> to its own function, use static branches to make TDP MMU page faults (and
-> a few other paths) effectively branch free.
->
-> I'm not dead set against having a dedicated TDP MMU page fault handler, but
-> IMO it's not really better once the TDP MMU vs. shadow MMU is reduced to a
-> static branch, just different.  The read vs. write mmu_lock is the most
-> visible ugliness, and that can be buried in helpers if we really want to
-> make the page fault handler easier on the eyes, e.g.
->
->         direct_page_fault_mmu_lock(vcpu);
->
->         if (is_page_fault_stale(vcpu, fault))
->                 goto out_unlock;
->
->         if (is_tdp_mmu_enabled()) {
->                 r = kvm_tdp_mmu_map(vcpu, fault);
->         } else {
->                 r = make_mmu_pages_available(vcpu);
->                 if (r)
->                         goto out_unlock;
->
->                 r = __direct_map(vcpu, fault);
->         }
->
-> out_unlock:
->         direct_page_fault_mmu_unlock(vcpu);
+On 10/13/22 09:23, Chang S. Bae wrote:
+> 
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1127,8 +1127,12 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
+> struct fpstate *fpstate,
+>          * non-compacted format disabled features still occupy state space,
+>          * but there is no state to copy from in the compacted
+>          * init_fpstate. The gap tracking will zero these states.
+> +        *
+> +        * In the case of guest fpstate, this user_xfeatures does not
+> +        * dynamically reflect the capacity of the XSAVE buffer but
+> +        * xfeatures does. So AND them together.
+>          */
+> -       mask = fpstate->user_xfeatures;
+> +       mask = fpstate->user_xfeatures & fpstate->xfeatures;
 
-Thanks for the respin.
+I'm not sure this is quite right either.
 
-My preference is still separate handlers. When I am reading this code,
-I only care about one path (TDP MMU or Shadow MMU, usually TDP MMU).
-Having separate handlers makes it easy to read since I don't have to
-care about the implementation details of the other MMU.
-
-And more importantly (but less certain), the TDP MMU fault handler is
-going to diverge further from the Shadow MMU fault handler in the near
-future. i.e. There will be more and more branches in a common fault
-handler, and the value of having a common fault handler diminishes.
-Specifically, to support moving the TDP MMU to common code, the TDP
-MMU is no longer going to topup the same mem caches as the Shadow MMU
-(TDP MMU is not going to use struct kvm_mmu_page), and the TDP MMU
-will probably have its own fast_page_fault() handler eventually.
-
-If we do go the common handler route, I don't prefer the
-direct_page_fault_mmu_lock/unlock() wrapper since it further obscures
-the differences between the 2 MMUs.
-
->
-> v4:
->   - Keep is_tdp_mmu_page() in patch 1.
->   - Collect reviews. [Isaku]
->   - Skip "make MMU pages available" for root allocations.
->   - Rework "is TDP MMU" checks to take advantage of read-only param.
->   - Use a static key to track TDP MMU enabling.
->
-> [*] https://lkml.kernel.org/r/20220921173546.2674386-1-dmatlack@google.com
->
-> David Matlack (7):
->   KVM: x86/mmu: Change tdp_mmu to a read-only parameter
->   KVM: x86/mmu: Move TDP MMU VM init/uninit behind tdp_mmu_enabled
->   KVM: x86/mmu: Grab mmu_invalidate_seq in kvm_faultin_pfn()
->   KVM: x86/mmu: Handle error PFNs in kvm_faultin_pfn()
->   KVM: x86/mmu: Avoid memslot lookup during KVM_PFN_ERR_HWPOISON
->     handling
->   KVM: x86/mmu: Handle no-slot faults in kvm_faultin_pfn()
->   KVM: x86/mmu: Stop needlessly making MMU pages available for TDP MMU
->
-> Sean Christopherson (4):
->   KVM: x86/mmu: Pivot on "TDP MMU enabled" when handling direct page
->     faults
->   KVM: x86/mmu: Pivot on "TDP MMU enabled" to check if active MMU is TDP
->     MMU
->   KVM: x86/mmu: Replace open coded usage of tdp_mmu_page with
->     is_tdp_mmu_page()
->   KVM: x86/mmu: Use static key/branches for checking if TDP MMU is
->     enabled
->
->  arch/x86/include/asm/kvm_host.h |   9 --
->  arch/x86/kvm/mmu.h              |  14 ++-
->  arch/x86/kvm/mmu/mmu.c          | 212 ++++++++++++++++++++------------
->  arch/x86/kvm/mmu/mmu_internal.h |   1 +
->  arch/x86/kvm/mmu/paging_tmpl.h  |  12 +-
->  arch/x86/kvm/mmu/tdp_mmu.c      |  13 +-
->  arch/x86/kvm/mmu/tdp_mmu.h      |  25 +---
->  7 files changed, 149 insertions(+), 137 deletions(-)
->
->
-> base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
-> --
-> 2.38.0.rc1.362.ged0d419d3c-goog
->
+Doesn't kvm expect that all of the ->user_xfeatures will end up being
+copied out?  We surely can't copy them from 'fpstate' if the feature
+isn't there, but we can't skip them entirely, can we?
