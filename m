@@ -2,194 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0C45FE521
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 00:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5B55FE528
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 00:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiJMWQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 18:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S229572AbiJMWTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 18:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJMWQX (ORCPT
+        with ESMTP id S229502AbiJMWTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 18:16:23 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A496D186D7C;
-        Thu, 13 Oct 2022 15:16:21 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id bb5so2639112qtb.11;
-        Thu, 13 Oct 2022 15:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B08O5vwoKAJbTDyb43gOoo2mIFVMU55F9hrLLIxw+10=;
-        b=VLVRsF2N1UXUWLgAMwUAgkS9Mf7eQVzIjTfbntypnWe6qm9Z3KtDDy39b6vD8jkr5P
-         IZE5itc/aOKHJ0oCcd98+bLOAh+Q8M30A1VZfAxrt7zUfyI/B2uj5aSDOWcDgD6us0y2
-         Bzv4L7bktYmJ/xs11x6JC1RkS1oxtPS7bOzixFr8Ok6/0+YpH2jYPC8QB4eDuCq63SAD
-         L+j4sBpFxMSXyFtooXcBT4Y9FksrAkNo2LPcCvBtPY2qRfUf28ge4FWUH1Oz47nA/SoJ
-         S+eDEBNFqEpJhHn0a0VO5j2D90rRMTtkQ+yS9EsDGlkLzYvBNbgfviHXqzbYWPGlzNlN
-         npPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B08O5vwoKAJbTDyb43gOoo2mIFVMU55F9hrLLIxw+10=;
-        b=NVtPYXPvKexs6nEXqmyXv9rMRSZfGMffRiCtJRwb+dsieZObJMxs67Zz6gRiugj2lm
-         HcnQyrrSfwEJIBDkpk76APLEVDSYDUnDuEV1+drVsFspBOgYvBvygt3vMPIwBp/ritL8
-         6aSS8G7HwruSYW7mxBF9I7xEOVJW4axJpvI7btqPL4UQXvLKSJo0bCKGWcOBnlwW0CsH
-         6/DfzKTli5jq8V2XzuBn5eqb0nV8gIsyo48YMMDEEMMcWlNNQyKEvHuOaZb3FQwmjhiN
-         g99ZxSFBy1oK0Ljmaj7yvCVuO57Y5CPz68t3DOFgjX3+IC6Fh5DjdTWoiad78PD+Aavd
-         fvCw==
-X-Gm-Message-State: ACrzQf2sLqj/09iQgO2ZlDOHKN79+hDowhCcXwsjeYbgJOxvpr/zArH3
-        4F4dP6urfBj1h62JE32gl0X975DJOK9L7LFeY5k=
-X-Google-Smtp-Source: AMsMyM769HQeJFCDkh2T1f1/le40tAoPrylONceFcsK+2+j6T/7xU/RnZ3TRzR+Xcg+PeuGRCvx3ugsugve0JzdB/Ks=
-X-Received: by 2002:ac8:6794:0:b0:39c:d44e:3682 with SMTP id
- b20-20020ac86794000000b0039cd44e3682mr1809700qtp.437.1665699380716; Thu, 13
- Oct 2022 15:16:20 -0700 (PDT)
+        Thu, 13 Oct 2022 18:19:09 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EE318983B;
+        Thu, 13 Oct 2022 15:19:06 -0700 (PDT)
+Message-ID: <fe9527d5-af84-7de5-a24e-361fa3af245a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1665699544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sSrWsBcfdKDJH8qnymjvS87FYDs49d89ABlzKZlQTyA=;
+        b=WK24Fu5Hh7I9FrdRjYi7OmmgVVC73L0kMos8973zd6nwuH/9jE4Vw9HELWeLUR3o2D5TbT
+        E5lxAT4XIEvFIFZuwtIpf8WcaREh4hYsC0tj6eTOvvCFPfz2Kf7P0y2ODyFp13cXKK49E+
+        oyz6DkNmf1FeP6QwdeP9tcnTDLYin0I=
+Date:   Thu, 13 Oct 2022 16:19:01 -0600
 MIME-Version: 1.0
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com> <87ilkr27nv.fsf@oldenburg.str.redhat.com>
- <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
- <87v8opz0me.fsf@oldenburg.str.redhat.com> <cc1838888e9da64415331e6f7d83965b553daae7.camel@intel.com>
-In-Reply-To: <cc1838888e9da64415331e6f7d83965b553daae7.camel@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Thu, 13 Oct 2022 15:15:44 -0700
-Message-ID: <CAMe9rOo5LkmCRhkWQW5FMCrs2VtCuw8mWdppyx_3K2hshTqJQA@mail.gmail.com>
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "fweimer@redhat.com" <fweimer@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+Subject: Re: [PATCH 2/2] md/bitmap: Add chunk-count-based bitmap flushing
+To:     Song Liu <song@kernel.org>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jonathan.derrick@solidigm.com, jonathanx.sk.derrick@intel.com,
+        Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
+References: <20221006220840.275-1-jonathan.derrick@linux.dev>
+ <20221006220840.275-4-jonathan.derrick@linux.dev>
+ <CAPhsuW6Ur8ic_u3nj9-TSpZ96jWqBa3GLEnw207sN8eJECYwZg@mail.gmail.com>
+ <226b8745-6406-070a-6b08-a265b57a7242@linux.dev>
+ <CAPhsuW4Sxr3b=aZye_drJL+sqcwkQceQ-CEZMNjCwV-bquvZ9A@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAPhsuW4Sxr3b=aZye_drJL+sqcwkQceQ-CEZMNjCwV-bquvZ9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 2:28 PM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Wed, 2022-10-12 at 14:29 +0200, Florian Weimer wrote:
-> > The ABI was finalized around four years ago, and we have shipped
-> > several
-> > Fedora and Red Hat Enterprise Linux versions with it.  Other
-> > distributions did as well.  It's a bit late to make changes now, and
-> > certainly not for such trivialities.  In the case of the IBT ABI, it
-> > may
-> > be tempting to start over in a less trivial way, to radically reduce
-> > the
-> > amount of ENDBR instructions.  But that doesn't concern SHSTK, and
-> > there's no actual implementation anyway.
-> >
-> > But as H.J. implied, you would have to do rather nasty things in the
-> > kernel to prevent us from achieving ABI compatibility in userspace,
-> > like
-> > parsing property notes on the main executable and disabling the new
-> > arch_prctl calls if you see something there that you don't like. 8-)
-> > Of course no one is going to implement that.
-> >
-> > (We are fine with swapping out glibc and its dynamic loader to enable
-> > CET with the appropriate kernel mechanism, but we wouldn't want to
-> > change the way all other binaries are marked up.)
->
-> So we have these compatibility issues with existing binaries. We know
-> some apps are totally broken. It sounds like you are proposing to
-> ignore this and let people who hit the issues work through it
-> themselves. This was also proposed by other glibc developers as a
-> solution for past CET compatibility issues that broke boot on kernel
-> upgrade. I have to say, as the person pushing these patches, I=E2=80=99m
-> uncomfortable with this approach. I don=E2=80=99t think users will like t=
-he
-> results. Basically, do they want to upgrade and run a bunch of untested
-> integration with known failures? I also don=E2=80=99t want to get this fe=
-ature
-> reverted and I=E2=80=99m not exactly sure how this scenario would be take=
-n.
->
-> But I hear the point about it not being ideal to abandon the existing
-> CET userspace. I think there is also a point about how userspace chose
-> to do this optimistic and early wide enabling, even if it was a bad
-> idea, and so how much should the kernel try to save userspace from
-> itself. So what do you think about this instead:
->
-> The current psABI spec talks about the binary being compatible with
-> shadow stack. It doesn=E2=80=99t say much about what should happen after =
-the
-> loader. Since the greater ecosystem has used this bit with a more
-> cavalier attitude, glibc could treat it as a request for a warn and
-> continue mode. In the meantime we could have a new bit shstk_strict,
-> that requests behavior like these patches implement, and kills the
-> process on violation. Glibc/tools could add support for this strict bit
-> and anyone that wants to more carefully compile with it could finally
-> get shadow stack today. Then the implementation of the warn and
-> continue mode could follow that, and glibc could map the original shstk
-> bit to that kernel mode. So the old binaries would get there
-> eventually, which is better than the continuing nothing they have
-> today.
->
-> And speaking of having nothing today, there are people that really want
-> to use shadow stack and do not care at all about having CET support for
-> existing binaries. Neither glibc or elf bits are required to use kernel
-> shadow stack support. So if it comes to it, I don=E2=80=99t want to hold
-> support back for other users because the elf note bit enabling path
-> grew some issues.
->
-> Please let me know about what you think of that plan.
 
-The kernel CET description
 
-+The kernel does not process these applications directly. Applications must
-+enable them using the interface descriped in section 4. Typically this
-+would be done in dynamic loader or static runtime objects, as is the case
-+in glibc.
+On 10/10/2022 12:18 PM, Song Liu wrote:
+> On Fri, Oct 7, 2022 at 11:58 AM Jonathan Derrick
+> <jonathan.derrick@linux.dev> wrote:
+>>
+>>
+>>
+>> On 10/7/2022 11:50 AM, Song Liu wrote:
+>>> On Thu, Oct 6, 2022 at 3:09 PM Jonathan Derrick
+>>> <jonathan.derrick@linux.dev> wrote:
+>>>
+>>> [...]
+>>>
+>>>> diff --git a/drivers/md/md-bitmap.h b/drivers/md/md-bitmap.h
+>>>> index cfd7395de8fd..e0aeedbdde17 100644
+>>>> --- a/drivers/md/md-bitmap.h
+>>>> +++ b/drivers/md/md-bitmap.h
+>>>> @@ -11,10 +11,12 @@
+>>>>  /* version 4 insists the bitmap is in little-endian order
+>>>>   * with version 3, it is host-endian which is non-portable
+>>>>   * Version 5 is currently set only for clustered devices
+>>>> ++ * Version 6 supports the flush-chunks threshold
+>>>>   */
+>>>>  #define BITMAP_MAJOR_HI 4
+>>>>  #define BITMAP_MAJOR_CLUSTERED 5
+>>>>  #define        BITMAP_MAJOR_HOSTENDIAN 3
+>>>> +#define BITMAP_MAJOR_CHUNKFLUSH 6
+>>>>
+>>>>  /*
+>>>>   * in-memory bitmap:
+>>>> @@ -135,7 +137,8 @@ typedef struct bitmap_super_s {
+>>>>                                   * reserved for the bitmap. */
+>>>>         __le32 nodes;        /* 68 the maximum number of nodes in cluster. */
+>>>>         __u8 cluster_name[64]; /* 72 cluster name to which this md belongs */
+>>>> -       __u8  pad[256 - 136]; /* set to zero */
+>>>> +       __le32 daemon_flush_chunks; /* 136 dirty chunks between flushes */
+>>>> +       __u8  pad[256 - 140]; /* set to zero */
+>>>>  } bitmap_super_t;
+>>>
+>>> Do we really need this to be persistent? How about we configure it at run
+>>> time via a sysfs file?
+>>>
+>>> Also, please share more data on the performance benefit of the set.
+>>>
+>>> Thanks,
+>>> Song
+>>>
+>> Hi Song,
+>>
+>> Patch 1/2 changes default behavior, which patch 2/2 tries to address.
+> 
+> Have you tried to evaluate the impact on the accuracy of the bitmap?
+> Specifically, if we power off the system during writes, do we see data
+> or parity mismatch that is not covered by the bitmap?
+Fair. I'm assuming this has to do with md_bitmap_init_from_disk()'s
+outofdate BITMAP_STALE check? And my patch 1/2 would likely guarantee
+a full resync unless the system was lost just after during the daemon
+wake time. However patch 2/2 increases the likelihood of reading a good
+bitmap.
 
-may leave an impression that each application needs to use the kernel
-interface to enable CET itself.  This is an option.  But the updated glibc
-will enable CET automatically on behalf of the CET enabled application.
-If the glibc isn't updated to use the new CET kernel interface, the existin=
-g
-CET enabled binaries will run correctly under the new CET enabled
-kernel without CET enabled.
 
---=20
-H.J.
+> 
+>> I can change it to be configurable via sysfs instead.
+>> Should there be a default?
+> 
+> If there is any impact on bitmap accuracy. I think the default should
+> work identical as before the set. IOW, we should not delay the bitmap
+> update.
+With results like mine, I'm under the impression bitmap=internal is not
+regularly used for write-heavy workloads [1]. 
+
+The thing is, is that it's not very consistent right now. I've had runs
+where the bitmap isn't updated for minutes until the run ends, and then
+I have most runs where it's doing it every other I/O or so. And it seems
+to depend on the number of chunks relative to the device size (if it can
+fit in a single page.)
+
+I have v2 coming which should help fix a few of these inconsistencies.
+
+[1] Similar results https://blog.liw.fi/posts/write-intent-bitmaps/
+
+> 
+> Thanks,
+> Song
+> 
+>>
+>>
+>> Here are my observations via biosnoop and RAID1, 4M chunksize, 238436 chunks, bitmap=internal
+>> fio --name=test --direct=1 --filename=/dev/md0 --rw=randwrite --runtime=60
+>>  --percentile_list=1.0:25.0:50.0:75.0:90.0:95.0:99.0:99.9:99.99:99..999999:100.0
+>>
+>>
+>> Default, bitmap updates happened concurrently with I/O:
+>>    bw (  KiB/s): min=18690, max=30618, per=99.94%, avg=23822.07, stdev=2522.73, samples=119
+>>    iops        : min= 4672, max= 7654, avg=5955.20, stdev=630.71, samples=119
+>>
+>> TIME(s)     COMM           PID     DISK      T SECTOR     BYTES  LAT(ms)
+>> 38.090366   md0_raid1      4800    nvme6n1   W 40         4096      0.01
+>> 38.090423   md0_raid1      4800    nvme3n1   W 40         4096      0.07
+>> 38.090442   md0_raid1      4800    nvme3n1   W 1016633184 4096      0.01
+>> 38.090439   md0_raid1      4800    nvme6n1   W 1016633184 4096      0.01
+>> 38.090479   md0_raid1      4800    nvme6n1   W 56         4096      0.01
+>> 38.090493   md0_raid1      4800    nvme6n1   W 1449894256 4096      0.01
+>> 38.090477   md0_raid1      4800    nvme3n1   W 56         4096      0.01
+>> 38.090496   md0_raid1      4800    nvme3n1   W 1449894256 4096      0.01
+>> 38.090530   md0_raid1      4800    nvme3n1   W 16         4096      0.01
+>> 38.090555   md0_raid1      4800    nvme3n1   W 110493568  4096      0.01
+>> 38.090538   md0_raid1      4800    nvme6n1   W 16         4096      0.01
+>> 38.090551   md0_raid1      4800    nvme6n1   W 110493568  4096      0.01
+>> 38.090596   md0_raid1      4800    nvme6n1   W 56         4096      0.01
+>> 38.090647   md0_raid1      4800    nvme3n1   W 56         4096      0.06
+>> 38.090666   md0_raid1      4800    nvme3n1   W 1455846976 4096      0.01
+>> 38.090663   md0_raid1      4800    nvme6n1   W 1455846976 4096      0.01
+>> 38.090707   md0_raid1      4800    nvme6n1   W 64         4096      0.01
+>> 38.090699   md0_raid1      4800    nvme3n1   W 64         4096      0.01
+>> 38.090723   md0_raid1      4800    nvme3n1   W 1665013728 4096      0.01
+>> 38.090720   md0_raid1      4800    nvme6n1   W 1665013728 4096      0.01
+>> 38.090764   md0_raid1      4800    nvme6n1   W 64         4096      0.01
+>> 38.090812   md0_raid1      4800    nvme3n1   W 64         4096      0.06
+>> 38.090832   md0_raid1      4800    nvme3n1   W 1637994296 4096      0.01
+>> 38.090828   md0_raid1      4800    nvme6n1   W 1637994296 4096      0.01
+>>
+>>
+>>
+>>
+>> With patch 1/2, bitmaps only update on the 'delay' parameter (default 5s):
+>>    bw (  KiB/s): min=135712, max=230938, per=100.00%, avg=209308.56, stdev=29254.31, samples=119
+>>    iops        : min=33928, max=57734, avg=52326.78, stdev=7313.57, samples=119
+>>
+>> TIME(s)     COMM           PID     DISK      T SECTOR     BYTES  LAT(ms)
+>> 16.292235   md0_raid1      4841    nvme6n1   W 297367432  4096      0.01
+>> 16.292258   md0_raid1      4841    nvme6n1   W 16         4096      0.01
+>> 16.292266   md0_raid1      4841    nvme6n1   W 24         4096      0.01
+>> 16.292277   md0_raid1      4841    nvme6n1   W 32         4096      0.01
+>> 16.292259   md0_raid1      4841    nvme3n1   W 16         4096      0.01
+>> 16.292280   md0_raid1      4841    nvme3n1   W 32         4096      0.01
+>> 16.292305   md0_raid1      4841    nvme3n1   W 56         4096      0.01
+>> 16.292286   md0_raid1      4841    nvme6n1   W 40         4096      0.01
+>> 16.292295   md0_raid1      4841    nvme6n1   W 48         4096      0.01
+>> 16.292326   md0_raid1      4841    nvme3n1   W 72         1536      0.01
+>> 16.292323   md0_raid1      4841    nvme6n1   W 64         4096      0.02
+>> 16.292326   md0_raid1      4841    nvme6n1   W 56         4096      0.03
+>> 16.292334   md0_raid1      4841    nvme6n1   W 72         1536      0.02
+>> 16.300697   md0_raid1      4841    nvme3n1   W 1297533744 4096      0.01
+>> 16.300702   md0_raid1      4841    nvme6n1   W 1297533744 4096      0.01
+>> 16.300803   md0_raid1      4841    nvme6n1   W 1649080856 4096      0.01
+>> 16.300798   md0_raid1      4841    nvme3n1   W 1649080856 4096      0.01
+>> 16.300823   md0_raid1      4841    nvme3n1   W 1539317792 4096      0.01
+>> 16.300845   md0_raid1      4841    nvme3n1   W 1634570232 4096      0.01
+>> 16.300867   md0_raid1      4841    nvme3n1   W 579232208  4096      0.01
+>> 16.300889   md0_raid1      4841    nvme3n1   W 1818140424 4096      0.01
+>> 16.300922   md0_raid1      4841    nvme3n1   W 412971920  4096      0.02
+>> ...
+>> 21.293225   md0_raid1      4841    nvme3n1   W 1279122360 4096      0.01
+>> 21.293242   md0_raid1      4841    nvme3n1   W 40326272   4096      0.01
+>> 21.293223   md0_raid1      4841    nvme6n1   W 1279122360 4096      0.01
+>> 21.293243   md0_raid1      4841    nvme6n1   W 40326272   4096      0.01
+>> 21.293261   md0_raid1      4841    nvme6n1   W 16         4096      0.01
+>> 21.293266   md0_raid1      4841    nvme6n1   W 24         4096      0.01
+>> 21.293271   md0_raid1      4841    nvme6n1   W 32         4096      0.01
+>> 21.293275   md0_raid1      4841    nvme3n1   W 32         4096      0.01
+>> 21.293292   md0_raid1      4841    nvme3n1   W 48         4096      0.01
+>> 21.293296   md0_raid1      4841    nvme3n1   W 56         4096      0.01
+>> 21.293309   md0_raid1      4841    nvme3n1   W 72         1536      0.01
+>> 21.293266   md0_raid1      4841    nvme3n1   W 24         4096      0.01
+>> 21.293326   md0_raid1      4841    nvme6n1   W 48         4096      0.05
+>> 21.293328   md0_raid1      4841    nvme6n1   W 40         4096      0.06
+>> 21.293331   md0_raid1      4841    nvme6n1   W 72         1536      0.03
+>> 21.293333   md0_raid1      4841    nvme6n1   W 64         4096      0.04
+>> 21.293334   md0_raid1      4841    nvme6n1   W 56         4096      0.05
+>> 21.298526   md0_raid1      4841    nvme3n1   W 681973000  4096      0.01
+>>
+>>
+>>
+>>
+>> Good, but with the granularity of N seconds, it might be too infrequent.
+>> Here is chunk-flush=512 (2GB threshold in 4MB chunk size):
+>>    bw (  KiB/s): min=92692, max=134904, per=100.00%, avg=125127.43, stdev=6758.51, samples=119
+>>    iops        : min=23173, max=33726, avg=31281.55, stdev=1689.63, samples=119
+>>
+>> TIME(s)     COMM           PID     DISK      T SECTOR     BYTES  LAT(ms)
+>> 13.193339   md0_raid1      5972    nvme6n1   W 16         4096      0.01
+>> 13.193344   md0_raid1      5972    nvme6n1   W 32         4096      0.01
+>> 13.193346   md0_raid1      5972    nvme6n1   W 24         4096      0.01
+>> 13.193350   md0_raid1      5972    nvme6n1   W 40         4096      0.01
+>> 13.193356   md0_raid1      5972    nvme6n1   W 48         4096      0.01
+>> 13.193361   md0_raid1      5972    nvme6n1   W 64         4096      0.01
+>> 13.193363   md0_raid1      5972    nvme6n1   W 56         4096      0.01
+>> 13.193555   md0_raid1      5972    nvme6n1   W 72         1536      0.20
+>> 13.193289   md0_raid1      5972    nvme3n1   W 1912285848 4096      0.01
+>> 13.193306   md0_raid1      5972    nvme3n1   W 836455896  4096      0.01
+>> 13.193323   md0_raid1      5972    nvme3n1   W 233728136  4096      0.01
+>> 13.193339   md0_raid1      5972    nvme3n1   W 16         4096      0.01
+>> 13.193344   md0_raid1      5972    nvme3n1   W 24         4096      0.01
+>> 13.193362   md0_raid1      5972    nvme3n1   W 48         4096      0.01
+>> 13.193365   md0_raid1      5972    nvme3n1   W 64         4096      0.01
+>> 13.193366   md0_raid1      5972    nvme3n1   W 56         4096      0.01
+>> 13.193574   md0_raid1      5972    nvme3n1   W 72         1536      0.21
+>> 13.196759   md0_raid1      5972    nvme3n1   W 89571592   4096      0.01
+>> 13.196810   md0_raid1      5972    nvme6n1   W 89571592   4096      0.06
+>> 13.196913   md0_raid1      5972    nvme6n1   W 16         4096      0.01
+>> 13.196910   md0_raid1      5972    nvme3n1   W 16         4096      0.01
+>> 13.199444   md0_raid1      5972    nvme3n1   W 64         4096      0.01
+>> 13.199447   md0_raid1      5972    nvme3n1   W 137126232  4096      0.01
+>> 13.199515   md0_raid1      5972    nvme6n1   W 137126232  4096      0.08
+>> 13.199519   md0_raid1      5972    nvme6n1   W 64         4096      0.08
+>> 13.199617   md0_raid1      5972    nvme6n1   W 1216062808 4096      0.01
+>> ... (508 ios later)
+>> 13.208764   md0_raid1      5972    nvme6n1   W 16         4096      0.01
+>> 13.208768   md0_raid1      5972    nvme6n1   W 32         4096      0.01
+>> 13.208770   md0_raid1      5972    nvme6n1   W 24         4096      0.01
+>> 13.208775   md0_raid1      5972    nvme6n1   W 40         4096      0.01
+>> 13.208781   md0_raid1      5972    nvme6n1   W 48         4096      0.01
+>> 13.208786   md0_raid1      5972    nvme6n1   W 56         4096      0.01
+>> 13.208790   md0_raid1      5972    nvme6n1   W 64         4096      0.01
+>> 13.208729   md0_raid1      5972    nvme3n1   W 1607847808 4096      0.01
+>> 13.208747   md0_raid1      5972    nvme3n1   W 371214368  4096      0.01
+>> 13.208770   md0_raid1      5972    nvme3n1   W 32         4096      0.01
+>> 13.208789   md0_raid1      5972    nvme3n1   W 64         4096      0.01
+>> 13.208952   md0_raid1      5972    nvme6n1   W 72         1536      0.17
+>> 13.209079   md0_raid1      5972    nvme3n1   W 72         1536      0.29
+>> 13.212216   md0_raid1      5972    nvme3n1   W 1146106480 4096      0.01
+>> 13.212269   md0_raid1      5972    nvme6n1   W 1146106480 4096      0.06
+>> 13.212368   md0_raid1      5972    nvme6n1   W 16         4096      0.01
+>> 13.212365   md0_raid1      5972    nvme3n1   W 16         4096      0.01
+>>
+>>
+>> Without 1/2: 6k iops
+>> With 1/2: 52k iops
+>> With 2/2 params as above: 31k iops
+>>
+>> The count calculation could use some improvement to close the iops gap to delay-based flushing
+>>
+>>>>
+>>>>  /* notes:
+>>>> diff --git a/drivers/md/md.h b/drivers/md/md.h
+>>>> index b4e2d8b87b61..d25574e46283 100644
+>>>> --- a/drivers/md/md.h
+>>>> +++ b/drivers/md/md.h
+>>>> @@ -497,6 +497,7 @@ struct mddev {
+>>>>                 struct mutex            mutex;
+>>>>                 unsigned long           chunksize;
+>>>>                 unsigned long           daemon_sleep; /* how many jiffies between updates? */
+>>>> +               unsigned int            daemon_flush_chunks; /* how many dirty chunks between updates */
+>>>>                 unsigned long           max_write_behind; /* write-behind mode */
+>>>>                 int                     external;
+>>>>                 int                     nodes; /* Maximum number of nodes in the cluster */
+>>>> --
+>>>> 2.31.1
+>>>>
