@@ -2,164 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2AC5FDB56
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBB65FDB57
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJMNpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S229924AbiJMNp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJMNph (ORCPT
+        with ESMTP id S229733AbiJMNpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:45:37 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56792CD5DF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:45:32 -0700 (PDT)
-Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com [209.85.221.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 411FA3F462
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1665668730;
-        bh=oZ6CYTlr9nmUWE7+jRrggJImi8t0ASm4Ymm/aHcOngU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=FuxOBTZvfPYRD4b9DW6Z0gIWw2h8Nxd4Hm1Lvaiq8n5MhUS4sV6O7RyVfZMH/zoJF
-         p3oI76FMTpag0hEqCi63j6biHT1oesowp+Yu65sU3DfCgjuqhkV8Msp0pyVNfwMHNa
-         UuRMd6/dX0u9UoBuwwqM9pa6baiUIHZX+p7OzAM3VxGg2fGHwltBpfocnQ1i0HoGbM
-         aOe6MCXUzZK18meLy4alz6MZwQCNuF8n2JUUSK/2aXKIKNwIY3K8yoNt7D0XzlYzBg
-         jwGz0aLT1570xmU0DcgyFhiQAMPir3pJqxM6TNeCk8kVQtoEB03cmWHbmYNX1FaiPp
-         Y6GrNISN5qPpw==
-Received: by mail-vk1-f198.google.com with SMTP id a78-20020a1f9851000000b003a7ed513454so293163vke.18
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:45:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oZ6CYTlr9nmUWE7+jRrggJImi8t0ASm4Ymm/aHcOngU=;
-        b=K+F/nboNSgkBFRijyBWR6w2u1qlov0K7L3tyCkF+lcbJXcG1/BsBD1/osbidFqsn+J
-         uHyKyFnkiP6v3+xZrSf9SAOH38kA7SA2ENyiv/7axEg+gC7TWDF/hZAHYvydNSYKCYFM
-         +1FtGfx3qvrlL901j7UB7Eb/YsRC09OTd1CH1CKMsTOhH3w3rZPGVmjzhgv29xp9S7e/
-         p86aHXs5RstIYAn2juY2BhiIueLxYwA+xW9Jja/62h6vBamX5qzSpY/knL9PaKg4XmEh
-         jP4qjjJqCGwVRr2vbFfmyDSldrUvefbrYgKdoqKvs29z+1fIMowaKIb/W1CIehEshw8z
-         KSOg==
-X-Gm-Message-State: ACrzQf3W1mLbPqMBMoaQIHaXh0DmWgzARMGRx+IXtf3u0+8xds8s6v7s
-        YbX3urq6EBdqJWZlTd+2FT1Jq3+9j/E4Dt+edRLb9uFRf+0QauhsRSo8o56V2NYoqa1Hwmt+730
-        K/srP7JHVG8Kj9x2mWWpMDALC7vt1zxbOiuaEtHn2IJ+qXojYnBUcVTiQsg==
-X-Received: by 2002:a17:902:e547:b0:178:2aee:ab1d with SMTP id n7-20020a170902e54700b001782aeeab1dmr34472936plf.29.1665668718317;
-        Thu, 13 Oct 2022 06:45:18 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM78ePohGhlrfbrYkXpKivNlFC+CQIg8yVU6ZbPumGZajp4N0UnQTsqgfJE8Lxw5R7/it6j1tWtvQQpctBkLJMY=
-X-Received: by 2002:a17:902:e547:b0:178:2aee:ab1d with SMTP id
- n7-20020a170902e54700b001782aeeab1dmr34472899plf.29.1665668717972; Thu, 13
- Oct 2022 06:45:17 -0700 (PDT)
+        Thu, 13 Oct 2022 09:45:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC53F037C;
+        Thu, 13 Oct 2022 06:45:52 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29DDQfJQ007609;
+        Thu, 13 Oct 2022 13:45:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9df1l835pqYKy+lXFefaact9uEcWxkSfavAdNlkiPYU=;
+ b=Pdoruq1QEO/8uUCqmfX3l1WpPp1zw8ry5CKIgDjDvhSvRyIeuY6CzJ0QgDkrp/VPfRT8
+ mH/ocUzsIPh9p5BeItxJDW1FsIaZIXn4H+9s62M9d7813OkhCdu2x5L6k7Vmmg4i0uEi
+ KQITt+hcYwIkK3AE/q9gpcgRBuMqDX9k5fi9i4pps4q+n/VJKxJT/HYw68IJEZdYRTn4
+ bzFHfTaqQFrvMlTCrrEHS7BI6urCuJ+J7oJBXpwu+RbXthQcTsAXIQHcWYknMbX/Rp7E
+ gB3eaZ4SkaNoT91H0pCelrm9w0ZGFqBmPUhTQMiQBAbgDE5IXu+N15uLAdJYjK3PiA5E ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6kjk8qxs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Oct 2022 13:45:38 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29DDSmui017837;
+        Thu, 13 Oct 2022 13:45:37 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6kjk8qwh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Oct 2022 13:45:37 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29DDZDwH023446;
+        Thu, 13 Oct 2022 13:45:34 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3k30u9nsnq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Oct 2022 13:45:34 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29DDjWno66978298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Oct 2022 13:45:32 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41425A405C;
+        Thu, 13 Oct 2022 13:45:32 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 962A4A405F;
+        Thu, 13 Oct 2022 13:45:31 +0000 (GMT)
+Received: from [9.171.10.158] (unknown [9.171.10.158])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Oct 2022 13:45:31 +0000 (GMT)
+Message-ID: <f1f8c436-68ce-b4cb-1347-62fb0638e35e@linux.ibm.com>
+Date:   Thu, 13 Oct 2022 15:45:31 +0200
 MIME-Version: 1.0
-References: <20221012221028.4817-1-mario.limonciello@amd.com> <20221012221028.4817-2-mario.limonciello@amd.com>
-In-Reply-To: <20221012221028.4817-2-mario.limonciello@amd.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 13 Oct 2022 21:45:06 +0800
-Message-ID: <CAAd53p4sKdFL-DcPet2srtisiX_Qr9qpiV159Xj9YSUM9yiLPw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] pinctrl: amd: Add dynamic debugging for active GPIOs
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mark Pearson <mpearson@lenovo.com>,
-        Pananchikkal Renjith <Renjith.Pananchikkal@amd.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: arm coresight txt triggers build warning: (was [PATCH] perf test: Fix
+ test_arm_coresight.sh failures on Juno)
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        acme@kernel.org
+Cc:     suzuki.poulose@arm.com, linux-perf-users@vger.kernel.org,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221005140508.1537277-1-james.clark@arm.com>
+Content-Language: en-US
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20221005140508.1537277-1-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: t41qLAN63QaOK2vpJyK_wcnMYBaxOR2k
+X-Proofpoint-GUID: BELpoLIXBxo6leKDxrtLSTu78vV0Nc7k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-13_08,2022-10-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 clxscore=1011 mlxscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 mlxlogscore=626 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210130081
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 6:10 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Some laptops have been reported to wake up from s2idle when plugging
-> in the AC adapter or by closing the lid.  This is a surprising
-> behavior that is further clarified by commit cb3e7d624c3ff ("PM:
-> wakeup: Add extra debugging statement for multiple active IRQs").
->
-> With that commit in place the following interaction can be seen
-> when the lid is closed:
->
-> [   28.946038] PM: suspend-to-idle
-> [   28.946083] ACPI: EC: ACPI EC GPE status set
-> [   28.946101] ACPI: PM: Rearming ACPI SCI for wakeup
-> [   28.950152] Timekeeping suspended for 3.320 seconds
-> [   28.950152] PM: Triggering wakeup from IRQ 9
-> [   28.950152] ACPI: EC: ACPI EC GPE status set
-> [   28.950152] ACPI: EC: ACPI EC GPE dispatched
-> [   28.995057] ACPI: EC: ACPI EC work flushed
-> [   28.995075] ACPI: PM: Rearming ACPI SCI for wakeup
-> [   28.995131] PM: Triggering wakeup from IRQ 9
-> [   28.995271] ACPI: EC: ACPI EC GPE status set
-> [   28.995291] ACPI: EC: ACPI EC GPE dispatched
-> [   29.098556] ACPI: EC: ACPI EC work flushed
-> [   29.207020] ACPI: EC: ACPI EC work flushed
-> [   29.207037] ACPI: PM: Rearming ACPI SCI for wakeup
-> [   29.211095] Timekeeping suspended for 0.739 seconds
-> [   29.211095] PM: Triggering wakeup from IRQ 9
-> [   29.211079] PM: Triggering wakeup from IRQ 7
-> [   29.211095] ACPI: PM: ACPI non-EC GPE wakeup
-> [   29.211095] PM: resume from suspend-to-idle
->
-> * IRQ9 on this laptop is used for the ACPI SCI.
-> * IRQ7 on this laptop is used for the GPIO controller.
->
-> What has occurred is when the lid was closed the EC woke up the
-> SoC from it's deepest sleep state and the kernel's s2idle loop
-> processed all EC events.  When it was finished processing EC events,
-> it checked for any other reasons to wake (break the s2idle loop).
->
-> The IRQ for the GPIO controller was active so the loop broke, and
-> then this IRQ was processed.  This is not a kernel bug but it is
-> certainly a surprising behavior, and to better debug it we should
-> have a dynamic debugging message that we can enact to catch it.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Probably not related to this patch set, but tools/perf/Documentation/perf-arm-coresight.txt
 
-This is very useful, thanks for the patch!
+results in
+cd tools/perf/Documentation/
+make man
+   ASCIIDOC perf-arm-coresight.xml
+asciidoc: ERROR: perf-arm-coresight.txt: line 2: malformed manpage title
+asciidoc: ERROR: perf-arm-coresight.txt: line 3: name section expected
+asciidoc: FAILED: perf-arm-coresight.txt: line 3: section title expected
 
-Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+in linux-next.
 
-> ---
->  drivers/pinctrl/pinctrl-amd.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
-> index 4691a33bc374f..8378b4115ec0d 100644
-> --- a/drivers/pinctrl/pinctrl-amd.c
-> +++ b/drivers/pinctrl/pinctrl-amd.c
-> @@ -628,13 +628,16 @@ static bool do_amd_gpio_irq_handler(int irq, void *dev_id)
->                 /* Each status bit covers four pins */
->                 for (i = 0; i < 4; i++) {
->                         regval = readl(regs + i);
-> -                       /* caused wake on resume context for shared IRQ */
-> -                       if (irq < 0 && (regval & BIT(WAKE_STS_OFF))) {
-> +
-> +                       if (regval & BIT(WAKE_STS_OFF) ||
-> +                           regval & BIT(INTERRUPT_STS_OFF))
->                                 dev_dbg(&gpio_dev->pdev->dev,
-> -                                       "Waking due to GPIO %d: 0x%x",
-> +                                       "GPIO %d is active: 0x%x",
->                                         irqnr + i, regval);
-> +
-> +                       /* caused wake on resume context for shared IRQ */
-> +                       if (irq < 0 && (regval & BIT(WAKE_STS_OFF)))
->                                 return true;
-> -                       }
->
->                         if (!(regval & PIN_IRQ_PENDING) ||
->                             !(regval & BIT(INTERRUPT_MASK_OFF)))
-> --
-> 2.34.1
->
