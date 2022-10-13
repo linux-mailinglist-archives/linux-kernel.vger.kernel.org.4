@@ -2,170 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1135FDF18
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C745FDF22
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJMRfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S229679AbiJMRjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJMRex (ORCPT
+        with ESMTP id S229459AbiJMRjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:34:53 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941AC14D3D;
-        Thu, 13 Oct 2022 10:34:49 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id C73EA3200926;
-        Thu, 13 Oct 2022 13:34:47 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 13 Oct 2022 13:34:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665682487; x=1665768887; bh=DsLRBe3Kqg
-        11qxqyD8iEafKn/j01pfzBRrrJqScyfLo=; b=f7SZBH7WjhSQGZCuMHebwkT2sd
-        +viFn0CR3SIjXI2JL5ZQkUqV72KbP8lssa0nGl9NnHFp3u8dM930zmbj+k1EKXGT
-        dmyWSUG4ThZuPjlJzsmMhWssQ/vk336zYPL3SGF8Bp7sntMNHw3Ra/VplQWA/ya8
-        OKnug9TsNQ7E2PIb6gsn+kN/4HXcnz4b51MJcU3dkshI5SZPtiJEGDmZZlcVi/t6
-        eAf0w6otCS9bbAl3cs6kSBJqxwMVNMW8utR3tWMkT8cyla2zeMjuYBTHhA9LEvmy
-        lsUzNHN3yTXwi7wocJ7n5OeJgSLf2fkm5/wu49LM3w6BF5QZ49mFbE7EtW/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665682487; x=1665768887; bh=DsLRBe3Kqg11qxqyD8iEafKn/j01
-        pfzBRrrJqScyfLo=; b=L76Ve5FJL9Iz4Zy1s4a7laS8w+dlLAmgusGwE5w5DYvV
-        2XGZQabRX9k2/MsXSvu/J2Jp0UZcTvJcVcD2pFibsv8AfptxG+CzLmYPouydKWtm
-        Sw3rXl/TJAIAnTgEE9Hz7UYJ7MdKnIGC0/sHeWMyu/Ut8L8RPE4TMd91QnIxQn4l
-        cJ6G9095f3wEOWX1U9xYDB+HAOnSmMUCX72fd73OEVbAYXqCDKy51IphGcyvOjpa
-        JqOEdx9+lGEs1RZZHxO8+DlvnHjDLh6b0KXwNh9TT0DaaHvnTn3MQaoFNMtSJswY
-        sPsAUN5uEoEWtsM4hs3TjaXDtiOTwcqIdU6d+AkBFA==
-X-ME-Sender: <xms:NkxIYz1JAXnchSoQ40X737hlRnuXoNfxof9Q4CtPc8BjK0pf1PcEpQ>
-    <xme:NkxIYyEZi1_PbHefB_3ZLGDU7N94iA7oP-3F2ygeHHcnIVL12Qf-i0-DEBbRo6iJK
-    mjvq__qyxPMeAgMwA>
-X-ME-Received: <xmr:NkxIYz6xmWbheEiUBU1cQbfkZD6HSj4KAtfwr5vnikiWEeWBGRoLmN9Nesunp2js4s9fOEMkMyDXjIa5>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredt
-    tddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeffffdvfefhudfhfeejjedvieduiefgvdfghfejkeehueeu
-    hfdvieeftdeugfffhfenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdr
-    giihii
-X-ME-Proxy: <xmx:NkxIY42XuTKWSZPHKVCQDb6xQaYhp_x6WhDTrjBTHll6i_UoFT-qAw>
-    <xmx:NkxIY2H5bY_aJ91LAFSvfx0au0buKEIf3AXPLGAD312EnB2WbBUZ1g>
-    <xmx:NkxIY5_wMmQnIQh6eLuK0z_ECfmqVZjhi8bgaHlQfRSVdjbs4UhXog>
-    <xmx:N0xIY5C1R_0VE1OGECV3gCtROmkpxajr9K8vkdh2Fn_H255jVCFhSw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Oct 2022 13:34:46 -0400 (EDT)
-Date:   Thu, 13 Oct 2022 11:34:48 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     pablo@netfilter.org, fw@strlen.de, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        bpf@vger.kernel.org, memxor@gmail.com
-Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: Add connmark read test
-Message-ID: <20221013173448.aprptjs5qq777342@k2>
-References: <cover.1660254747.git.dxu@dxuuu.xyz>
- <d3bc620a491e4c626c20d80631063922cbe13e2b.1660254747.git.dxu@dxuuu.xyz>
- <43bf4a5f-dac9-4fe9-1eba-9ab9beb650aa@linux.dev>
- <20221012220953.i2xevhu36kxyxscl@k2>
- <16bcda3b-989e-eadf-b6c3-803470b0afd6@linux.dev>
+        Thu, 13 Oct 2022 13:39:12 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EF1D77F0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:39:11 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso2522917pjk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BOJAES6tNu6Y/rEU3NZMbDi0UCSM39vMiEfPAnDU2yQ=;
+        b=hqMNGhsAO1Gb8GaQkHCXoY5euH9kqlooRcX7lMwFx2RvH90BkvATWR2BqMdGC5Wqvx
+         MTfM3bPDi2Gz3qzbwsIuUa6Fu6oD+cPUxUgdfZxNBR4UTaipUshWY9GGGNh91V8b0SRA
+         FApTTqURY8cHXtBRwwtEVyjW+HtgYBQLxX9W/DRWXH2SzcNrmpfPwTXiTiGPOJw7Okg+
+         7ujuMpqR0rhHZwP2wDKZWHFxT1ow8hOrC1SkRMUVwO7wmIneyWAFFoiY640ajLohcUAe
+         1uZLOWuDZ/zy98Z3/GL9qJIADWZsQEdkkewbXxwSMI4H/QF9Hc4OWZ9COPBgBD2I26mK
+         AR9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BOJAES6tNu6Y/rEU3NZMbDi0UCSM39vMiEfPAnDU2yQ=;
+        b=TPyDz2E6ydO89jADWG4p/8ICxSprg3Qs3RiV4I3JvzFeZSPgzYJY/YZVMa3EUI96ov
+         OjUNg+I4dr2JwZe65Pu9tKxV2XKHeVbgm7K7rog+chqDdqPK6uRmBrx/tmnct0L3WQ+f
+         uOKtexYfNwsSZVqGrZKTYt0XDhgEI7135c4ZSs1v0RKiUxvRnVXtzWq5mzz6Gry2QIOy
+         QYK5dcXgMTXGq1Fsp+Yhox4oyBqYsMXz/BtFout187y4dkX+1daJ99SGywyUYcvY1Gf3
+         1bmieM8oGSzN0hdnP62DD/n/s5kAJSy/cetG4Yy334Pd/cWGQNfhE0ctqQXyu3SGv8ul
+         QiWQ==
+X-Gm-Message-State: ACrzQf159BwogIzBOb/rpAvmeF/zoin2Ww7+LMGS7YkQCu6tQP2dVglw
+        +/QwJ6eLug3iGbEGLGgFO58=
+X-Google-Smtp-Source: AMsMyM6Pwwj1EjhSnByt5dcTN1pcj5GeOJQJvswZ4TxAF89Dt8b/fSdi0P0ZtEUxWzfpApkpPv+uxQ==
+X-Received: by 2002:a17:90a:dc05:b0:20a:d73b:53a3 with SMTP id i5-20020a17090adc0500b0020ad73b53a3mr1003054pjv.67.1665682751152;
+        Thu, 13 Oct 2022 10:39:11 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id f206-20020a6238d7000000b005624e9b3e10sm2280130pfa.210.2022.10.13.10.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 10:39:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 13 Oct 2022 07:39:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+9baaae5fc5795e2e6acf@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ kernfs_walk_and_get_ns
+Message-ID: <Y0hNPf+00n26OanO@slm.duckdns.org>
+References: <0000000000002b89b205ead703ff@google.com>
+ <Y0cEQbWsy7XAkyVZ@slm.duckdns.org>
+ <CACT4Y+Z9ku-uZVGvAwDD9ajr3Sx_KQHmc5hRUOB0_S2Ctj_=+w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <16bcda3b-989e-eadf-b6c3-803470b0afd6@linux.dev>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACT4Y+Z9ku-uZVGvAwDD9ajr3Sx_KQHmc5hRUOB0_S2Ctj_=+w@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 03:20:01PM -0700, Martin KaFai Lau wrote:
-> On 10/12/22 3:09 PM, Daniel Xu wrote:
-> > Hi Martin,
-> > 
-> > On Tue, Oct 11, 2022 at 10:49:32PM -0700, Martin KaFai Lau wrote:
-> > > On 8/11/22 2:55 PM, Daniel Xu wrote:
-> > > > Test that the prog can read from the connection mark. This test is nice
-> > > > because it ensures progs can interact with netfilter subsystem
-> > > > correctly.
-> > > > 
-> > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > > ---
-> > > >    tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
-> > > >    tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
-> > > >    2 files changed, 5 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-> > > > index 88a2c0bdefec..544bf90ac2a7 100644
-> > > > --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-> > > > @@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
-> > > >    static void test_bpf_nf_ct(int mode)
-> > > >    {
-> > > > -	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
-> > > > +	const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
-> > > Hi Daniel Xu, this test starts failing recently in CI [0]:
-> > > 
-> > > Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
-> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
-> > > Invalid argument
-> > > 
-> > >    Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
-> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
-> > > Invalid argument
-> > > 
-> > >    Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
-> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
-> > > Invalid argument
-> > > 
-> > >    Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
-> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
-> > > Invalid argument
-> > > 
-> > >    test_bpf_nf_ct:PASS:test_bpf_nf__open_and_load 0 nsec
-> > >    test_bpf_nf_ct:FAIL:iptables unexpected error: 1024 (errno 0)
-> > > 
-> > > Could you help to take a look? Thanks.
-> > > 
-> > > [0]: https://github.com/kernel-patches/bpf/actions/runs/3231598391/jobs/5291529292
-> > 
-> > [...]
-> > 
-> > Thanks for letting me know. I took a quick look and it seems that
-> > synproxy selftest is also failing:
-> > 
-> >      2022-10-12T03:14:20.2007627Z test_synproxy:FAIL:iptables -t raw -I PREROUTING      -i tmp1 -p tcp -m tcp --syn --dport 8080 -j CT --notrack unexpected error: 1024 (errno 2)
-> > 
-> > Googling the "Could not fetch rule set generation id" yields a lot of
-> > hits. Most of the links are from downstream projects recommending user
-> > downgrade iptables (nftables) to iptables-legacy.
-> 
-> Thanks for looking into it!  We have been debugging a bit today also.  I
-> also think iptables-legacy is the one to use.  I posted a patch [0].  Let
-> see how the CI goes.
-> 
-> The rules that the selftest used is not a lot.  I wonder what it takes to
-> remove the iptables command usage from the selftest?
+On Thu, Oct 13, 2022 at 09:38:37AM +0200, Dmitry Vyukov wrote:
+> What is the fix?
+> syzbot needs it to close the bug and report similarly looking issues in future.
 
-At least the conntrack mark stuff, it would've been easier to write the
-selftests _without_ iptables. But I thought it was both good and
-necessary to test interop between BPF and netfilter. B/c that is
-what the user is doing (at least for me).
+46307fd6e27a ("cgroup: Reorganize css_set_lock and kernfs path processing")
 
-However if it's causing maintenance trouble, I'll leave that call to
-you.
+Thanks.
 
-Thanks,
-Daniel
+-- 
+tejun
