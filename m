@@ -2,97 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE5A5FD75F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CAB5FD763
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJMJyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S229595AbiJMJ5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJMJys (ORCPT
+        with ESMTP id S229590AbiJMJ5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:54:48 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7309411C11;
-        Thu, 13 Oct 2022 02:54:46 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id h10so1363881plb.2;
-        Thu, 13 Oct 2022 02:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o1yqNAVn037IZuwd1cSJvfpEqCBUbSaG0FfXXsU7E7k=;
-        b=PT2ZApPV9lhgRCbrO1+GjOlvi3zKlAmL75I1oIfVMJhVPIt3eDXMA3cmYi5oitz8e4
-         qWm/LUImy49JANTFUvqOAkEjrVI9PZeq16YUv4cLYEelgVjQgvuDl54scedzhblUJUPp
-         j/Iw8qQrLo0pY2Y9+kZBRQ/fg5A5f10msH+nvv12SowLmo7U1Z7VkqoX2KouMG7EMFPZ
-         ++1OD6DVsyNKGIN7xK07V02ig5AyndyXc7FaTad+OI/dDBuVFNileTxqWuYHatFUZCXF
-         DJDr31K7bYLk+HAMJvMYCSUChf/J6aoFJoRauCOCUKDrrC2M6ERuKlj6jEsGV8C06uFF
-         RqYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o1yqNAVn037IZuwd1cSJvfpEqCBUbSaG0FfXXsU7E7k=;
-        b=Pu/bVvsgs0yLKU4qm0u6IIo+ZtMC3599Za/5ZJnCXzAg9tlUDnJDhBM6j/oDTebPhY
-         3S0PSDuDG33pVc6tm1eZdDnhqwp3KXlm+2Cf65fJjd3eHYqdAQcTseAsrdjS7Rp1rMzN
-         RhlqR+/9vdu40bWSKCMkIs6cUu3tFVqUxFwf4x4fzL0O7cvP8gmraPIB6r+62gAO/7G2
-         2mpOaLvgoSE7NalIx8dAsV4nbyotbZUc2VtzM8Rylsiqj2chnFkhxhPFGoAFRT4o+IqO
-         VF4XSS2E7Sj9dKEmTuqElSgKBQjWOA+eSERBsjSl5wujTvhtWzofsG+xrHCIlqrCGfd4
-         DTAA==
-X-Gm-Message-State: ACrzQf13FjXflLv9O+wZYz7ionF5ny9/6eX0Oa1uutPhVK78zlfCkk5i
-        xWErvAc8FTpeP+3buGvKCzM=
-X-Google-Smtp-Source: AMsMyM5G5VmQzPETVse+/R1+X+z5v8zBeBRc11dFHxSAc8uARnm6u/iJBbwWvQj0Bzxj60rNWAUl8w==
-X-Received: by 2002:a17:90b:4a51:b0:20d:4ded:3c26 with SMTP id lb17-20020a17090b4a5100b0020d4ded3c26mr10063350pjb.23.1665654885937;
-        Thu, 13 Oct 2022 02:54:45 -0700 (PDT)
-Received: from localhost (ec2-3-6-129-254.ap-south-1.compute.amazonaws.com. [3.6.129.254])
-        by smtp.gmail.com with ESMTPSA id i19-20020a63cd13000000b004582e25a595sm11076472pgg.41.2022.10.13.02.54.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 02:54:45 -0700 (PDT)
-From:   Manank Patel <pmanank200502@gmail.com>
-To:     linux@roeck-us.net
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manank Patel <pmanank200502@gmail.com>
-Subject: [PATCH] drivers: watchdog: exar_wdt.c fix use after free
-Date:   Thu, 13 Oct 2022 15:24:39 +0530
-Message-Id: <20221013095439.1425108-1-pmanank200502@gmail.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 13 Oct 2022 05:57:07 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCB111879C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:57:05 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id DC8775C007F;
+        Thu, 13 Oct 2022 05:57:04 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 13 Oct 2022 05:57:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665655024; x=1665741424; bh=ElrFCOQYz9
+        811QjA+EhljWQJuhopMm0PAtIt4Y0PiLk=; b=iH2vj+1AVMLQNpZSN3QgFdI8in
+        C40uzS6P9OGiTyC9cMNYtDhbpHHqe8bv9mhp4/MLs5+efc2saoFLxfDDGybR8mDI
+        nu6hReuNGs1ZUS3GRpzt1iwOMWNVlISaxcMA0XzmmKmb0iqbhq+MzGC244ZWm/VQ
+        h6PdsqJEuoNGI6O3Ix2aHcD+caqUITm/JTj4TREAR02wriG2RctIHH8MrA9LUuLQ
+        kFQRd5Y6Xs8MzSiLVBdXS+QLjMMU8trB3WeQNDPwV/wsY/dCD5XjsbGF1o3zBWlT
+        Zv9426I+pm60L9woeIgpCFIQL4nIgzk0lOGIRaXZKR5Rm/k/YEV2l9ByyK3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1665655024; x=1665741424; bh=ElrFCOQYz9811
+        QjA+EhljWQJuhopMm0PAtIt4Y0PiLk=; b=Y4teWWMceoV4F1I7ZuUd+/WDAP/4V
+        kARrTUAl0vvYdaNnkfp0DXHbouVSO9pf8AQTP/oYQwrFpIZJEeS3VmyoxGy8tnD7
+        Q9w4bu4otB7Hbtsj7Dyr0baFn+dXlTnsrXhdusg21qoVnHXzyVMOQlzCmsahIQDE
+        rHX351Qg/ieyfVvLETq0gNLPYBO+Zv0GpgMoSoSU6EQgu/wKPp3aabDLp8RNmXHM
+        XQ7qnMoKbIY6PJ5h2QCRQx/1O/XQlz96jrCNDEiWOyph7ZHp202fof5Xfxw8wi+V
+        z5aV2rdu26mv53rH1NvFDVZhooSKCBovYgAXNT7LQy3LGtYFgdmCln7MA==
+X-ME-Sender: <xms:8OBHYxg_CHC8TNkEsY_PK2T1_5OITwwNcQPk-UpeuzsroTeOgoN7qQ>
+    <xme:8OBHY2CJSF4ZGCRLp7sdFb7ly0l-uXyBE47O1KycAi-ez_hMwwlxADCcJvkTMT8eq
+    rwqwXS1wPAZ7W8bRK4>
+X-ME-Received: <xmr:8OBHYxEWLyx55AQX6wCrDiYDtnVYKHl-q-NRzRGc1JZZp6tweDc8yCPwsdfz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepvdehfeejtefhgeegudegveejieetfeeugeehveffteejkedufeeltedutdeu
+    geehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:8OBHY2QXb3jnZ8y1g6Bj-zDF66BYHvMb96Jc_eGqCWk6M_-rlndj4Q>
+    <xmx:8OBHY-yRxJp3u_KobENmMx9Fo3cOqcZ90y06SnHOZ4BuqyozeKEWiw>
+    <xmx:8OBHY87FQi_YXKz5g5C5lKPU1fmFqsF9qV6mleJoVl9RwbVPF-sykA>
+    <xmx:8OBHYw7obaVWRX8T79IH2OidkN3EFF_oBKqgoi3PuJpl79ueLQ71kw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Oct 2022 05:57:03 -0400 (EDT)
+Subject: [PATCH 0/7] drm/vc4: dpi: Various improvements
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIANzgR2MC/w3LQQqEMAxA0atI1gZsSxG9TW3DGNAoiboR7z5Z/MVb/BeMlMlg7l5Qetj4EEfoO6
+ hrkR8hNzfEIcYwhIR6MjaP91OPh3aSy7CmNuacU6hpAl+XYoSLFqmrz3Jv2/f9AQtg5JhrAAAA
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Thu, 13 Oct 2022 11:56:44 +0200
+Message-Id: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
+To:     Maxime Ripard <mripard@kernel.org>, Eric Anholt <eric@anholt.net>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
+        Emma Anholt <emma@anholt.net>
+Cc:     dri-devel@lists.freedesktop.org,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+X-Mailer: b4 0.11.0-dev-7da52
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1493; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=mBzc73alVw2h+DQ2TtBLxfsGXPDhw2QfH578ZOwcUoQ=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMnuD9666/w6fjWoe4066wn7iN2893YEhfEH/smT27zvX0Ni
+ z3fhjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAExkiiAjw4rrpROdRQ8IN9770r8l/G
+ 7pA+UFPz/MKtQxfHnOZMsBcx1Ghmcrv2bXxbmkX3y32Svmfw3fnjOcvfze6lvPbPJfeNt8GQMA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix use after free by storing the result of PTR_ERR(n->pdev)
-to a local variable before returning.
+Hi,
 
-Signed-off-by: Manank Patel <pmanank200502@gmail.com>
+Those patches have been in the downstream RaspberryPi tree for a while and help
+to support more DPI displays.
+
+Let me know what you think,
+Maxime
+
+To: Emma Anholt <emma@anholt.net>
+To: Maxime Ripard <mripard@kernel.org>
+To: David Airlie <airlied@linux.ie>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Eric Anholt <eric@anholt.net>
+To: Rob Herring <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Chris Morgan <macromorgan@hotmail.com>
+Cc: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
 ---
- drivers/watchdog/exar_wdt.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Chris Morgan (2):
+      media: uapi: add MEDIA_BUS_FMT_RGB565_1X24_CPADHI
+      drm/vc4: dpi: Support RGB565 format
 
-diff --git a/drivers/watchdog/exar_wdt.c b/drivers/watchdog/exar_wdt.c
-index 35058d8b21bc..7c61ff343271 100644
---- a/drivers/watchdog/exar_wdt.c
-+++ b/drivers/watchdog/exar_wdt.c
-@@ -355,8 +355,10 @@ static int __init exar_wdt_register(struct wdt_priv *priv, const int idx)
- 						    &priv->wdt_res, 1,
- 						    priv, sizeof(*priv));
- 	if (IS_ERR(n->pdev)) {
-+		int err = PTR_ERR(n->pdev);
-+
- 		kfree(n);
--		return PTR_ERR(n->pdev);
-+		return err;
- 	}
- 
- 	list_add_tail(&n->list, &pdev_list);
+Dave Stevenson (2):
+      drm/vc4: dpi: Change the default DPI format to being 18bpp, not 24.
+      drm/vc4: dpi: Fix format mapping for RGB565
+
+Joerg Quinten (3):
+      media: uapi: add MEDIA_BUS_FMT_BGR666_1X18
+      media: uapi: add MEDIA_BUS_FMT_BGR666_1X24_CPADHI
+      drm/vc4: dpi: Support BGR666 formats
+
+ drivers/gpu/drm/vc4/vc4_dpi.c         | 16 +++++++++++++---
+ include/uapi/linux/media-bus-format.h |  5 ++++-
+ 2 files changed, 17 insertions(+), 4 deletions(-)
+---
+base-commit: c9b48b91e2fbb74fb981aa616a6ef3c78194077f
+change-id: 20221013-rpi-dpi-improvements-c3d755531c39
+
+Best regards,
 -- 
-2.38.0
-
+Maxime Ripard <maxime@cerno.tech>
