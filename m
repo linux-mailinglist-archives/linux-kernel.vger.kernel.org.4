@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D405FE03A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CB65FE069
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiJMSFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S231177AbiJMSJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiJMSDg (ORCPT
+        with ESMTP id S231603AbiJMSIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:03:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87992157F58;
-        Thu, 13 Oct 2022 11:03:22 -0700 (PDT)
+        Thu, 13 Oct 2022 14:08:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1F3160EDA;
+        Thu, 13 Oct 2022 11:05:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1379861943;
-        Thu, 13 Oct 2022 18:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7464AC433C1;
-        Thu, 13 Oct 2022 18:00:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E10356194A;
+        Thu, 13 Oct 2022 18:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4FD0BC433D6;
+        Thu, 13 Oct 2022 18:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665684009;
-        bh=Fe7d0Zn2chLLmPzOexN099gWKHr/nuc+bPn9sa6xGrE=;
+        s=k20201202; t=1665684015;
+        bh=iqd+0wKdSoxapJMe/zP/C6J5LQt/EdnYeEbMixztd+s=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MJwKEsc2KYYmKxjxm9JoAcOBVauyxTd/2m5uQkwKthdphd5Xzj/1AClF9tYju8D/D
-         ziw2YWuyhDW45WBiXi3QMsZzAFKB1M+NRJ0yLY8u7mvm5l09yiMnY5jrMstjHwAu/0
-         FiM8p5SbdDIPyiAFaeW91lHGcQHr4lakW7vB6L2BMVEFWMff+liyYi/JXP7Qi1FpEN
-         SJ/qWbv+BONbGA74qF93cjeRIVbty2GnYEp8coy4wwJZ88qSOYnJrTiBZp9q7v2R6e
-         Ka30mIntngJurdepbjH9HIo8FdFFfpyHVHRCG/Pk6Xr/XWeFwG/zLEkw7WmEFOo15d
-         cZvBapYzLv+2A==
+        b=pn6/Qs5QRe6KYIsgE605CFxvz07+3SCjk/QQKy1GQjohcWWksPeGD0GNohFsfPsy8
+         dFv99qZdO7di9aUzPFFT+p7pdE/LSbonAOybQPI9gV5WlM99YnwRUBe0y8618vVJ7/
+         FQJdGN6nPSddPxdOKebGuXoAWay0S9DjvX8cW6tAT7UWfRJSw049oGaHWt44T515Wh
+         unH8kfBgePyFLCdF8FUgbRmCPMz80P1dfk1bdxwjh3J3cXA4ZOcg6sUtt+nRODgcra
+         9CcKUmsDcheSgODGix2/StRbOMCobOpkG6+Y3hB50JFpvq8o8wlBEHdBHVdxwdypfB
+         gNKg+0BbNzA8g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57F3AE29F31;
-        Thu, 13 Oct 2022 18:00:09 +0000 (UTC)
-Subject: Re: [GIT PULL] virtio: bugfix, reviewer
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39ED6E29F30;
+        Thu, 13 Oct 2022 18:00:15 +0000 (UTC)
+Subject: Re: [GIT PULL] Documentation fixes
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221013094021-mutt-send-email-mst@kernel.org>
-References: <20221013094021-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221013094021-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: be8ddea9e75e65b05837f6d51dc5774b866d0bcf
+In-Reply-To: <87pmevism5.fsf@meer.lwn.net>
+References: <87pmevism5.fsf@meer.lwn.net>
+X-PR-Tracked-List-Id: <linux-doc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <87pmevism5.fsf@meer.lwn.net>
+X-PR-Tracked-Remote: git://git.lwn.net/linux.git tags/docs-6.1-2
+X-PR-Tracked-Commit-Id: 877d95dcfd0a56102d4b97a9691115f5fb5e9ea3
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d6f04f26e25242898959b1758432e4076fabc0c0
-Message-Id: <166568400929.7515.1599489627533192092.pr-tracker-bot@kernel.org>
-Date:   Thu, 13 Oct 2022 18:00:09 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
+X-PR-Merge-Commit-Id: f2b220ef93ea34ff6ce48fec382689cf02099f39
+Message-Id: <166568401523.7515.10351019015327844274.pr-tracker-bot@kernel.org>
+Date:   Thu, 13 Oct 2022 18:00:15 +0000
+To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        angus.chen@jaguarmicro.com, jasowang@redhat.com,
-        lingshan.zhu@intel.com, mpe@ellerman.id.au, mst@redhat.com
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 13 Oct 2022 09:40:21 -0400:
+The pull request you sent on Thu, 13 Oct 2022 10:41:06 -0600:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+> git://git.lwn.net/linux.git tags/docs-6.1-2
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d6f04f26e25242898959b1758432e4076fabc0c0
+https://git.kernel.org/torvalds/c/f2b220ef93ea34ff6ce48fec382689cf02099f39
 
 Thank you!
 
