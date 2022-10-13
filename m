@@ -2,156 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016385FDEB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198AA5FDEBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiJMRNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
+        id S229704AbiJMROG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJMRNI (ORCPT
+        with ESMTP id S229659AbiJMROE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:13:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDE3BE53F;
-        Thu, 13 Oct 2022 10:13:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Oct 2022 13:14:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3327DC14A0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665681242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8s3KGOW/x47AXQqRtNVo08ENHFJpOeTFNmDe/kC77fg=;
+        b=NvveRDIMh4bPghMbUlTek8pS1UvG+Vjy5Dt7tYAhvX/mTB8wT2hSsDNRx5GdINeoXWFV55
+        6501sJ1nczZ6+aqslNmELls02JrM4mYkiEZo0IPghsoKYn3bNyX6m4Miuuw7Oe7PxLXQ0Y
+        TYuiIBNu2zxZ6zL1cg5c9cXmtoo9uLE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-103-Sl8oP7QVPCqWYXKqLj-3Sw-1; Thu, 13 Oct 2022 13:13:59 -0400
+X-MC-Unique: Sl8oP7QVPCqWYXKqLj-3Sw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77967B81FCD;
-        Thu, 13 Oct 2022 17:13:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331EAC43140;
-        Thu, 13 Oct 2022 17:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665681184;
-        bh=qtUj4HOZkI60Q9GjVY9brGrEXkMR3EQ8UgD83vxXH5w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A9CJ00bqKbjgthG0ZqvCoar3VNkmpwv4SscAW/S9JY8LUyrqncfulmYD+O7JqR0yg
-         ygCwPVvC79lvUBIawSMZc1WCdzp3AhQzwJZfdhWJJF0+BbvH2GcLtej5603oab4q2a
-         6dmH9Uu36g+Whb4snZL2WE3/r8qzQ53wm3TDdT+2kE0Df/8Tm61YdW7bce6soPq/i7
-         +zXD8e6rxNLZlaqMCuEtuQ7J5aZiJaR+E75W2oolYbxOZMetLINW9riADie0TYOdI1
-         LuhLUBEnl8GdKK+YJ+F7hcxwwumaJAjXvNROqoVwBBSKt6Tj1Tvp0B5B7Vxrnu0bAZ
-         1zf4IDM+BN38Q==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-136b5dd6655so3057645fac.3;
-        Thu, 13 Oct 2022 10:13:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf39M1CDwGMG6eVWVjB456T0cCkD1qvb2FieR4bDfFVauf8WsGkg
-        Mg6G+GVYcdogt/e/KBSXUu6NLEXeGm6JQ6coPJE=
-X-Google-Smtp-Source: AMsMyM7DQbyVVn9lSwhHQzzI4CguO+SXqSphIbQfVREHxCAuibjZh6Kn8I+5xZ4lObB09Jy9FhCU5LPHq3lbCFDEMkw=
-X-Received: by 2002:a05:6870:4413:b0:136:66cc:6af8 with SMTP id
- u19-20020a056870441300b0013666cc6af8mr6177186oah.112.1665681183189; Thu, 13
- Oct 2022 10:13:03 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6ED3D804184;
+        Thu, 13 Oct 2022 17:13:59 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.57])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 14E8C84425;
+        Thu, 13 Oct 2022 17:13:58 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2] iommu: Add sanity check to iommu_sva_bind_device()
+Date:   Thu, 13 Oct 2022 10:13:57 -0700
+Message-Id: <20221013171357.2379415-1-jsnitsel@redhat.com>
+In-Reply-To: <20221013153355.2365865-1-jsnitsel@redhat.com>
+References: <20221013153355.2365865-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-References: <20221013163857.3086718-1-guoren@kernel.org>
-In-Reply-To: <20221013163857.3086718-1-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 14 Oct 2022 01:12:51 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSu_SDGEYZxW7nfY8B=k_hkdxKy2TsK7C5v7cqM7qrKRA@mail.gmail.com>
-Message-ID: <CAJF2gTSu_SDGEYZxW7nfY8B=k_hkdxKy2TsK7C5v7cqM7qrKRA@mail.gmail.com>
-Subject: Re: [PATCH] net: Fixup netif_attrmask_next_and warning
-To:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@rasmusvillemoes.dk, yury.norov@gmail.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 12:39 AM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Don't pass nr_bits as arg1, cpu_max_bits_warn would cause warning
-> now.
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 2 PID: 1 at include/linux/cpumask.h:110 __netif_set_xps_queue+0x14e/0x770
-> Modules linked in:
-> CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc4-00018-g854701ba4c39 #324
-> Hardware name: riscv-virtio,qemu (DT)
-> epc : __netif_set_xps_queue+0x14e/0x770
->  ra : __netif_set_xps_queue+0x552/0x770
-> epc : ffffffff806fe448 ra : ffffffff806fe84c sp : ff600000023279d0
->  gp : ffffffff815fff88 tp : ff600000023a0000 t0 : ff6000000308ab40
->  t1 : 0000000000000003 t2 : 0000000000000000 s0 : ff60000002327a90
->  s1 : 0000000000000000 a0 : ff6000000308ab00 a1 : ff6000000308ab00
->  a2 : ff6000000308a8e8 a3 : 0000000000000004 a4 : 0000000000000000
->  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
->  s2 : 0000000000000000 s3 : 0000000000000000 s4 : ff60000002327aa0
->  s5 : ffffffff816031c8 s6 : 0000000000000000 s7 : 0000000000000001
->  s8 : 0000000000000000 s9 : 0000000000000004 s10: ff6000000308a8c0
->  s11: 0000000000000004 t3 : 0000000000000000 t4 : 0000000000000014
->  t5 : 0000000000000000 t6 : 0000000000000000
-> status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-> [<ffffffff805e5824>] virtnet_set_affinity+0x14a/0x1c0
-> [<ffffffff805e7b04>] virtnet_probe+0x7fc/0xee2
-> [<ffffffff8050e120>] virtio_dev_probe+0x164/0x2de
-> [<ffffffff8055b69e>] really_probe+0x82/0x224
-> [<ffffffff8055b89a>] __driver_probe_device+0x5a/0xaa
-> [<ffffffff8055b916>] driver_probe_device+0x2c/0xb8
-> [<ffffffff8055bf34>] __driver_attach+0x76/0x108
-> [<ffffffff805597c0>] bus_for_each_dev+0x4a/0x8e
-> [<ffffffff8055b072>] driver_attach+0x1a/0x28
-> [<ffffffff8055ab8c>] bus_add_driver+0x13c/0x1a6
-> [<ffffffff8055c722>] driver_register+0x4a/0xfc
-> [<ffffffff8050dc34>] register_virtio_driver+0x1c/0x2c
-> [<ffffffff80a2bae4>] virtio_net_driver_init+0x7a/0xb0
-> [<ffffffff80002840>] do_one_initcall+0x66/0x2e4
-> [<ffffffff80a01212>] kernel_init_freeable+0x28a/0x304
-> [<ffffffff808b21e2>] kernel_init+0x1e/0x110
-> [<ffffffff80003c46>] ret_from_exception+0x0/0x10
-> ---[ end trace 0000000000000000 ]---
->
-> Fixes: 944c417daeb6 ("net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}")
+iommu_sva_bind_device() should only be called if
+iommu_dev_enable_feature() succeeded. There has been one case already
+where that hasn't been the case, which resulted in a null pointer
+deref in dev_iommu_ops(). To avoid that happening in the future if
+another driver makes that mistake, sanity check dev->iommu and
+dev->iommu->iommu_dev prior to calling dev_iommu_ops().
 
-Sorry, the Fixes commit is 854701ba4c39.
-----
-commit 854701ba4c39afae2362ba19a580c461cb183e4f
-Author: Yury Norov <yury.norov@gmail.com>
-Date:   Mon Sep 19 14:05:54 2022 -0700
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+v2: Fix summary, and typo in dev_warn()
 
-    net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}
+drivers/iommu/iommu.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-    The functions require to be passed with a cpu index prior to one that is
-    the first to start search, so the valid input range is [-1, nr_cpu_ids-1).
-    However, the code checks against [-1, nr_cpu_ids).
-
-    Acked-by: Jakub Kicinski <kuba@kernel.org>
-    Signed-off-by: Yury Norov <yury.norov@gmail.com>
-
-
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
->  net/core/dev.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index fa53830d0683..9ec8b10ae329 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -2589,8 +2589,8 @@ int __netif_set_xps_queue(struct net_device *dev, const unsigned long *mask,
->                 copy = true;
->
->         /* allocate memory for queue storage */
-> -       for (j = -1; j = netif_attrmask_next_and(j, online_mask, mask, nr_ids),
-> -            j < nr_ids;) {
-> +       for (j = -1; j < nr_ids;
-> +            j = netif_attrmask_next_and(j, online_mask, mask, nr_ids)) {
->                 if (!new_dev_maps) {
->                         new_dev_maps = kzalloc(maps_sz, GFP_KERNEL);
->                         if (!new_dev_maps) {
-> --
-> 2.36.1
->
-
-
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 4893c2429ca5..c745e935f26a 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2746,7 +2746,15 @@ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+ {
+ 	struct iommu_group *group;
+ 	struct iommu_sva *handle = ERR_PTR(-EINVAL);
+-	const struct iommu_ops *ops = dev_iommu_ops(dev);
++	const struct iommu_ops *ops;
++
++	if (!dev->iommu || !dev->iommu->iommu_dev) {
++		dev_warn(dev, "%s called without checking success of iommu_dev_enable_feature?\n",
++			__func__);
++		return ERR_PTR(-ENODEV);
++	}
++
++	ops = dev_iommu_ops(dev);
+ 
+ 	if (!ops->sva_bind)
+ 		return ERR_PTR(-ENODEV);
 -- 
-Best Regards
- Guo Ren
+2.37.2
+
