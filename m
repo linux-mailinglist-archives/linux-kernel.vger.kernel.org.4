@@ -2,72 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E935FDDCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C925FDDCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJMP6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S229686AbiJMP6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJMP6L (ORCPT
+        with ESMTP id S229620AbiJMP6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:58:11 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31B61119D0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:58:08 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id d142so1696433iof.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v79oRHQ8P4UWXgqco62J/VgW844TcdiRLfWhoSyGC2I=;
-        b=EfqKQFm8ZqwJM82aId8NlOA+oShapgR0n82u1hbpesOfm1q1uFZ55l+OzyhQUilb9/
-         1FfMU3K1f3bjOzR0TU/+IY36400v7dvyB4mJypc0mnHJQpCl4khtV3XYtmEjjvM770qe
-         lSq2Z5GIXsG3FOWbWodvAWzL5J9jaZp5UJz0c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v79oRHQ8P4UWXgqco62J/VgW844TcdiRLfWhoSyGC2I=;
-        b=GArSErcJcBnrx1XUweNapMqeoZUooa1fb9JvSWb/wu1hhW4qAqKthQMijjH+3+eDSF
-         bAPYu/h8WPuORYw8Iat7+FAL/7tYo568d7PKSWwKF/VlixJsMNDAVr9wOB9CRccTfyP6
-         yexbK57BGkdDMdn3mz6WadnSapY2lchzXOZeMEUuNKl56h12fyN1gRwWddTGF0cZkICv
-         Kfg6thYdfBrDXMYFswy0O9mMYLTlF60hEsEHdCYMYBUDPSwiCBCAtDpVKMY6ijNpFEGX
-         G1RN6rQpAPT4XQKQEbD5XW5lgpJs6ThXl5HM3DISjVoaV0nL5U4DCJ8QxhYE6KjFMyq8
-         6TGg==
-X-Gm-Message-State: ACrzQf2C8jeGgYHf+ncUa6jl94rF4nfhnLuYEKVopRhiGqNCvo2cGYQJ
-        Xa/9KeKMKGwNR9jH6Ze6IsrSuw==
-X-Google-Smtp-Source: AMsMyM7Mpp1byJNsJ9CPaV7eyLQpRs+xbqaiFWa+fQEY6cpN+gPhC7ct/mz/VEIazTXgUOuVAwesGw==
-X-Received: by 2002:a05:6602:2d08:b0:6bc:15d8:3445 with SMTP id c8-20020a0566022d0800b006bc15d83445mr271073iow.96.1665676687595;
-        Thu, 13 Oct 2022 08:58:07 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id w13-20020a92d2cd000000b002e939413e83sm28113ilg.48.2022.10.13.08.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 08:58:07 -0700 (PDT)
-Message-ID: <7e2043b9-c7fa-236e-de19-5e290deebbdf@linuxfoundation.org>
-Date:   Thu, 13 Oct 2022 09:58:06 -0600
+        Thu, 13 Oct 2022 11:58:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C320DAC7B;
+        Thu, 13 Oct 2022 08:58:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C1C813D5;
+        Thu, 13 Oct 2022 08:58:19 -0700 (PDT)
+Received: from [10.57.5.87] (unknown [10.57.5.87])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A70873F67D;
+        Thu, 13 Oct 2022 08:58:11 -0700 (PDT)
+Message-ID: <77cfc218-0c87-7dd7-6f60-2c2c12f9f892@arm.com>
+Date:   Thu, 13 Oct 2022 16:58:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] power: cpupower: utils: Optimize print_online_cpus and
- print_offline_cpus function
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal/governors: Remove integral_cutoff parameter, IPA
+ is more regulated
 Content-Language: en-US
-To:     kunyu@nfschina.com
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        ray.huang@amd.com, shuah@kernel.org, trenn@suse.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <14d690a4-d2d5-01db-b2a2-e3c87b4a6394@linuxfoundation.org>
- <20221013020121.2874-1-kunyu@nfschina.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221013020121.2874-1-kunyu@nfschina.com>
+To:     Qibo Huang <huangqibo.tech@gmail.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com
+References: <20221013090733.28462-1-huangqibo.tech@gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20221013090733.28462-1-huangqibo.tech@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,27 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/22 20:01, Li kunyu wrote:
+Hi Qibo,
+
+On 10/13/22 10:07, Qibo Huang wrote:
+> Reason 1: If the integral_cutoff parameter is 0,
+> the current temperature is greater than the control
+> temperature, and err_integral continues to increase.
+> If an abnormal situation occurs suddenly, the err_integral
+> value will become very large. Even if the current
+> temperature is lower than the control temperature,
+> err_integral will always exist, which will cause the
+> IPA to run out of control and cannot return to normal.
+> This is the problem I'm actually having.
 > 
-> I'm glad to get your reply. In previous tests, it was found that variable initialization and assignment use mov related instructions. Therefore, when I analyze the code and find that removing some variable initialization and assignment does not affect the function and security, I will try to remove variable initialization.
-> 
-> Find the malloc function and find that its return value is void * type, so it does not need to cast.
-> 
-> thanks,
-> kunyu
-> 
+> Reason 2: The integral_cutoff parameter is difficult to
+> confirm the optimal, and can not bring good results.
 
-I am not seeing any reasons for removing the initialization.
-There is no need to do that.
+Have you tired different 'k_i', 'k_po', 'k_pu' settings,
+not the default from binding estimation?
 
-Missing error handling after malloc() call is the real problem
-that can be fixed in this code path.
+These coefficients help to control the behavior of IPA
+and how good the control loop could work.
 
-If you would like to fix that, send me a patch for that.
+The integral cutoff in default is set to 0, which means
+we account the error when we overshoot the temperature
+vs our desired control temperature value.
 
-Hmm. Your reply to list looks strange - please double check and fix it
+Please also pay attention to the type for those variables:
+err, i, p and how they are treated (and when).
+In current implementation we account 'err' negative, so we
+reduce the power budget. Next time, even when we are below
+control temperature, we still 'remember' those
+overshoot mistakes, so we upfront shrink the possible
+budget (to avoid overshooting). We clean the accumulated
+error when the temperature drops below 'enable' trip point.
 
-"Re:[PATCH]"@lists.nfsmail.com etc...
+Could you describe a bit more what kind of problems you
+observe, please?
 
-thanks,
--- Shuah
+Regards,
+Lukasz
