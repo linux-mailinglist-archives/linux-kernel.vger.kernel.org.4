@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C5E5FE2F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14E75FE2F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJMTso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 15:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S229792AbiJMTuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 15:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiJMTsf (ORCPT
+        with ESMTP id S229648AbiJMTuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 15:48:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B2518B497;
-        Thu, 13 Oct 2022 12:48:33 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B70521EC0662;
-        Thu, 13 Oct 2022 21:48:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665690507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AQTsN58dqUBa4kccfsq8CI7L28beVehD34GLLpg/uVc=;
-        b=AmiWO7JHwt9MRtIisXFnueA6sDdHqexmuRNDepSGd+d93yeoUVOPU4f1DbvEWzz7EjDfra
-        4FPPbxLDsT41p+Zh/zUV3Zn6bh1uFDGcPjPGrX2DMGu1JJf8RZbLVT0gx8e6j5cUOiDUhL
-        z+IYAah5BFbT7jNkEze8Rktk+M2UcMo=
-Date:   Thu, 13 Oct 2022 21:48:23 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
-        dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-Subject: Re: [PATCH v9 0/9] x86: Show in sysfs if a memory node is able to do
- encryption
-Message-ID: <Y0hrhzprPFTK+VWV@zn.tnic>
-References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
+        Thu, 13 Oct 2022 15:50:05 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2ED03AE40;
+        Thu, 13 Oct 2022 12:50:03 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id g10so2871357oif.10;
+        Thu, 13 Oct 2022 12:50:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zZvNjVbW4zowPy3Z/cAsr56lUs0ewtVKh94UUwuwhmA=;
+        b=zXuCWNUzjKY5lXlQfE4wGOP5C0Hc0hpRZNhJ392roq/K8ZP0wot0VsWv3q1Rup3OS8
+         XsNVtaAwtrO2ivaTYernMmAePHe5x4h3aukZVmejbgVCfFrv2KLjTelZvm4VZNHXr45L
+         BuEPQop+EvCrcsPKevgD2SmdptjjECG5eaymNcbs2e0rIQ+3IbTFxMPgPOJEIfl2JKfh
+         3tlbbyD/Jaj544gqH4ozALq9+zQor6ep7kJMe07Fv4ks2oQxKfV57JEkHivWD2E7q69/
+         oR4IAKnPaBk4GSxBhf3s2J+mEJcbchknvdxpvLVCXKqynlFZj5srrZJ0m3Ks4g3qoRuU
+         dYnw==
+X-Gm-Message-State: ACrzQf3E5dgcuE+jndXqRyylGx2atqO2IbkUWwH7AdJnJ3S0eaHRL7J7
+        K+R9y1C3NhOlDkKedIDdpQ==
+X-Google-Smtp-Source: AMsMyM55LbRP2E0YJcAZc7Ufq9gCBsA12TsQGbf58KBfsqxY0ISPmjy8+9HI4HKCzOMeF8uSp7WLww==
+X-Received: by 2002:a05:6808:1208:b0:351:9ff:795f with SMTP id a8-20020a056808120800b0035109ff795fmr703115oil.231.1665690603233;
+        Thu, 13 Oct 2022 12:50:03 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bb18-20020a056808169200b00354d732ed87sm234339oib.36.2022.10.13.12.50.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 12:50:02 -0700 (PDT)
+Received: (nullmailer pid 150868 invoked by uid 1000);
+        Thu, 13 Oct 2022 19:50:03 -0000
+Date:   Thu, 13 Oct 2022 14:50:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Cixi Geng <cixi.geng1@unisoc.com>, linux-gpio@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH V3 2/3] dt-bindings: gpio: Convert Unisoc EIC controller
+ binding to yaml
+Message-ID: <166569060298.150817.4539198070843655655.robh@kernel.org>
+References: <20221010053338.22580-1-zhang.lyra@gmail.com>
+ <20221010053338.22580-3-zhang.lyra@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221010053338.22580-3-zhang.lyra@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 10:58:24AM -0300, Martin Fernandez wrote:
-> If all nodes are capable of encryption and if the system have tme/sme
-> on we can pretty confidently say that the device is actively
-> encrypting all its memory.
+On Mon, 10 Oct 2022 13:33:37 +0800, Chunyan Zhang wrote:
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> 
+> Convert the Unisoc EIC controller binding to DT schema format.
+> Update the maxItems of 'reg' property, since the current gpio-eic-sprd
+> driver supports 3 reg items. Also removed a few similar examples.
+> 
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> ---
+>  .../bindings/gpio/gpio-eic-sprd.txt           |  97 -----------------
+>  .../bindings/gpio/sprd,gpio-eic.yaml          | 103 ++++++++++++++++++
+>  2 files changed, 103 insertions(+), 97 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+>  create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
+> 
 
-Wait, what?
-
-If all memory is crypto capable and I boot with mem_encrypt=off, then
-the device is certainly not encrypting any memory.
-
-dhansen says TME cannot be controlled this way and if you turn it off in
-the BIOS, EFI_MEMORY_CPU_CRYPTO attr should not be set either. But that
-marking won't work on AMD.
-
-You really need to be able to check whether memory encryption is also
-enabled.
-
-And I believe I've said this before but even if encryption is on, it is
-never "all its memory": the machine can decide to decrypt a page or a
-bunch of them for whatever reason. And then they're plaintext.
-
-> It's planned to make this check part of an specification that can be
-> passed to people purchasing hardware
-
-How is that supposed to work?
-
-People would boot a Linux on that hardware and fwupd would tell them
-whether it can encrypt memory or not?
-
-But if that were the only use case, why can't EFI simply say that in its
-fancy GUI?
-
-Because all the kernel seems to be doing here is parrot further
-EFI_MEMORY_CPU_CRYPTO.
-
-And that attribute gets set by EFI so it goes and picks apart whether
-the underlying hw can encrypt memory. So EFI could report it too.
-
-Hmmm?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Rob Herring <robh@kernel.org>
