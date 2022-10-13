@@ -2,70 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDAD5FD638
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84E35FD63E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJMIaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S229659AbiJMIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiJMIa1 (ORCPT
+        with ESMTP id S229492AbiJMIdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:30:27 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1929DD83
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:30:26 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so650633ioa.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:30:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RCfRBkrrNMRK19v311kWSWOmZyezCZ5TsQNU9jK1WPs=;
-        b=35MCDm19xVz7OKOPaenUjPJOcZExB1maHgkxPOjbv+EeNu4VspBql/iNV8u8NPKFpw
-         XM3o3GNQQpIMlL8kDf1QC1tiq61R+lVl21Y0As5H4bz/ZQYM0f4BIy3j59o8g6ajRgA8
-         mA6lBl3OH1cQnkClOIdddPnLms4XKU1JEmhm0ercacO8TJ/ZYMY3D31Hhtr4UF+GAFHA
-         ImRFE7B6o2ZmHjK2swD2g4zHONin68qmF8cR0e0jG53rDPGHXD7dQrY5sG/QUdNLJRzN
-         13CV/eAm7YGlllX8WnRL7F22XUjgEuWZd/SPX9WSnOuZuGCjtfKF9Xv0nsxh6zFeTmkJ
-         NKww==
-X-Gm-Message-State: ACrzQf39x+oJ9fVSUuvlenPKYAIghSxBdQXE4uGOdln11tN+7p9Bkchb
-        fSg8P6ZT2dWY0Q/coQ2PTbVLWWCfuqqR40YXS+bEgXlpGrCB
-X-Google-Smtp-Source: AMsMyM7k6/9AD14vBsPc4TY6v/uhwtYqAUGIdVoyfvsNLy06yTlJWYcH1pPUieL+9pxpX0fJHx+uSu0CbSbNbFFSFePqs/gM9EIW
+        Thu, 13 Oct 2022 04:33:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543BD285
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:33:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5FAF4219FD;
+        Thu, 13 Oct 2022 08:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665650028; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UykCCyJppeIUxswHlrvpiYaqBuU5BdEdPSbdjTJa47Q=;
+        b=Rc9cWLzaN+2mBDp03fYhJKtCItFrzeHJFnUVYf/Chm/uom0tNUiP2Lz39xyu4OVfXQ0/FU
+        m/XNh6OM+2z3ZbWkTTicNTczAN4rs7rls45qwp9bXENDOSNJJCPXq1W7Ba//E98zJq3Sms
+        5oRCjPDXxwwhVRzEqfTpczbVYTdTQzo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665650028;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UykCCyJppeIUxswHlrvpiYaqBuU5BdEdPSbdjTJa47Q=;
+        b=c1bxmZqV6zA4PCXwr2Duu/z5BawMYC/UfhCr+2HxsFxCuVQHps+0xYxUJN1aHhJf3Pj2Vy
+        bPMMnH6yK4064oDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0C2013AAA;
+        Thu, 13 Oct 2022 08:33:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id asdNJGvNR2OrbAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Thu, 13 Oct 2022 08:33:47 +0000
+Date:   Thu, 13 Oct 2022 10:33:45 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] mm/hwpoison: introduce per-memory_block hwpoison
+ counter
+Message-ID: <Y0fNaYGvnMdwHkg1@localhost.localdomain>
+References: <20221007010706.2916472-1-naoya.horiguchi@linux.dev>
+ <20221007010706.2916472-5-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a307:0:b0:363:bd76:17fd with SMTP id
- q7-20020a02a307000000b00363bd7617fdmr9775450jai.248.1665649825465; Thu, 13
- Oct 2022 01:30:25 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 01:30:25 -0700
-In-Reply-To: <CAJfpegtyWgdZDxPoYgwE=LekX1bNi8x0+Odvh-KYthSVxZMx7Q@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002acbb605eae652b1@google.com>
-Subject: Re: [syzbot] memory leak in vfs_tmpfile_open
-From:   syzbot <syzbot+fd749a7ea127a84e0ffd@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007010706.2916472-5-naoya.horiguchi@linux.dev>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Oct 07, 2022 at 10:07:06AM +0900, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> Currently PageHWPoison flag does not behave well when experiencing memory
+> hotremove/hotplug.  Any data field in struct page is unreliable when the
+> associated memory is offlined, and the current mechanism can't tell whether
+> a memory block is onlined because a new memory devices is installed or
+> because previous failed offline operations are undone.  Especially if
+> there's a hwpoisoned memory, it's unclear what the best option is.
+> 
+> So introduce a new mechanism to make struct memory_block remember that
+> a memory block has hwpoisoned memory inside it. And make any online event
+> fail if the onlining memory block contains hwpoison.  struct memory_block
+> is freed and reallocated over ACPI-based hotremove/hotplug, but not over
+> sysfs-based hotremove/hotplug.  So the new counter can distinguish these
+> cases.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-syzbot tried to test the proposed patch but the build/boot failed:
+I glanzed over it and looks good overall.
+Have a small question though:
 
-kernel clean failed: failed to start /usr/bin/make [make -j 64 ARCH=x86_64]: fork/exec /usr/bin/make: no such file or directory
+> @@ -864,6 +878,7 @@ void remove_memory_block_devices(unsigned long start, unsigned long size)
+>  		mem = find_memory_block_by_id(block_id);
+>  		if (WARN_ON_ONCE(!mem))
+>  			continue;
+> +		num_poisoned_pages_sub(-1UL, memblk_nr_poison(mem));
+
+Why does num_poisoned_pages_sub() have to make this distinction (!-1 == -1)
+for the hot-remove stage?
 
 
-Tested on:
-
-commit:         a185a099 Merge tag 'linux-kselftest-kunit-6.1-rc1-2' o..
-git tree:       upstream
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd749a7ea127a84e0ffd
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1452718a880000
-
+-- 
+Oscar Salvador
+SUSE Labs
