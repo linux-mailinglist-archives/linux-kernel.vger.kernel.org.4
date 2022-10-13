@@ -2,120 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99AB5FDEBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4945FDEC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJMROs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S229658AbiJMRPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJMROq (ORCPT
+        with ESMTP id S229493AbiJMRPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:14:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B8A13EAD;
-        Thu, 13 Oct 2022 10:14:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D73618C9;
-        Thu, 13 Oct 2022 17:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 491F1C433D7;
-        Thu, 13 Oct 2022 17:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665681283;
-        bh=pDxmcYjitaHRhnAhlXahfQJzdt1gN1EjmnneIPOHL7Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YrAaq/Wowtqb7O5Ox6ZHbYdFMzgxDEvdfQ3A9I6RaMVtRIdkz+MduySRi56ir+yU2
-         g3FjJYq6cQxkRBWEFQLDwGfg/XJ5mKxAEVtPr2rM23b9Jg5Q7PoYvxxSqxOl+WLrjx
-         C84qLg7iV2I8iVFNwRrIfATm9l0Cog5IrIR8e/Z7ED2cGWF8u3j1Xlh3whb3Kkczf3
-         zl8vbW6M/YZPwdr1IKsPBzoVx21LqJSKWl3MA2N69PcK+wLxAVoB9JtZDjnQsqrQ9I
-         TOznswK7IGqhJJqVVndrkId/dTuzfGdooOLmY5tuDVegUrb0jjVtrrAg37gJudXHQt
-         pPWM7ycGnDbSA==
-From:   guoren@kernel.org
-To:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@rasmusvillemoes.dk, yury.norov@gmail.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
-Subject: [PATCH] net: Fixup virtnet_set_affinity() cause cpumask warning
-Date:   Thu, 13 Oct 2022 13:14:34 -0400
-Message-Id: <20221013171434.3132854-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Thu, 13 Oct 2022 13:15:50 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B850CA882
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:15:50 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1322d768ba7so3056275fac.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AL8GgYhdRbFAY1I/WaSvEhOgWlWOIlrmNR+qKwfbbA8=;
+        b=sZzF6YeDDqPexzDlerU/y2iM/SsYbZQlakRSWiK8Tzj+LZablOYaNgr7UT9v9twhQY
+         N8iFhmS7wLi9JnDGQkT8BVHP40pjXN6GrTmccYLaOvu4wlsylXCa7N5AQ8jWUB+vnVCj
+         IaLxzjGrqHa3VJng/xuw4y6IGrx6WgRuqnI8BS2UbyuQ6Be8weh3PW6TsG9b0zo/uZU8
+         WUft3JV+1uBQ2mEXfP5WiFxg1cidYc5HPVw8zUa0GNuL+monA99cRTyKX/LajrG+my8n
+         mzOA16Wce97HXrvefJOwiIAYoLESZpo/GsnbNqvdxxZea8Er1b+ke+QeFgtx4jI1mFhD
+         ZG2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AL8GgYhdRbFAY1I/WaSvEhOgWlWOIlrmNR+qKwfbbA8=;
+        b=gCVEGXPwWg1vUNEOBlSUX5BKBo7Lt6skRB7zbIuB36hX4I9bZraW1sZEotFl0dSfH6
+         xsImr+ekJo5G7ao1nT5tQXNHpFzxrRiMh50V0zggBc5o53VPfJT0e9zlXDUPp1c+3ZoN
+         sbSZNtArXF/6WbQAVTXs9y/9Gt4W57tEz4cVSzyk0k/ehDb+hUwvTV8oVlXGCY5K6U5/
+         EYOj7qq65Lf0tqT23fQsZYo00ZcIXxpu2gCIn8fiiS/DchKhhbGDzR9+OkLioTb2Ifgm
+         JEaPyRg3J2JGtIwFQNMO0J8qcR2ZxLCv7MwDvWQQVSkjmCmP7/YV+w6d7dtNdstv7AsJ
+         yeLQ==
+X-Gm-Message-State: ACrzQf1oL6cFIoHj/rth/ar3u+/sygkbhg9i0jvJNZqazlw4m/mAsUIW
+        /rUvBEqIXF+tq1Qi+109jnUTAQEe1Z2kML6axOlMaxRBKTs=
+X-Google-Smtp-Source: AMsMyM40pcn43Afc/INQuWsfimSqp6ScPvV9jk8gZtST/j2paeNWTCEFvWp9RTkoTB8udAdLoTGcr4WnsXP0r3hpAxU=
+X-Received: by 2002:a05:6870:7023:b0:132:538:43e7 with SMTP id
+ u35-20020a056870702300b00132053843e7mr405372oae.123.1665681349180; Thu, 13
+ Oct 2022 10:15:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <202210132122.DnShsQeP-lkp@intel.com>
+In-Reply-To: <202210132122.DnShsQeP-lkp@intel.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Thu, 13 Oct 2022 10:15:13 -0700
+Message-ID: <CAAa6QmTMa76hsaN_RDkkQRpEcH8VV-RqHY=MXWjk36eMX49Ppg@mail.gmail.com>
+Subject: Re: [peterz-queue:x86/mm.pae 5/9] mm/khugepaged.c:865:16: error:
+ implicit declaration of function 'pmd_read_atomic'
+To:     kernel test robot <lkp@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
-
-Don't pass nr_bits-1 as arg1 for cpumask_next_wrap, which would
-cause warning now.
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x5c/0x80
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-11659-ge7e38f6cce55-dirty #328
-Hardware name: riscv-virtio,qemu (DT)
-epc : cpumask_next_wrap+0x5c/0x80
- ra : virtnet_set_affinity+0x1ba/0x1fc
-epc : ffffffff808992ca ra : ffffffff805d84ca sp : ff60000002327a50
- gp : ffffffff81602390 tp : ff600000023a0000 t0 : 5f74656e74726976
- t1 : 0000000000000000 t2 : 735f74656e747269 s0 : ff60000002327a90
- s1 : 0000000000000003 a0 : 0000000000000003 a1 : ffffffff816051c0
- a2 : 0000000000000004 a3 : 0000000000000000 a4 : 0000000000000000
- a5 : 0000000000000004 a6 : 0000000000000000 a7 : 0000000000000000
- s2 : 0000000000000000 s3 : ffffffff816051c0 s4 : ffffffff8160224c
- s5 : 0000000000000004 s6 : 0000000000000004 s7 : 0000000000000000
- s8 : 0000000000000003 s9 : ffffffff810aa398 s10: ffffffff80e97d20
- s11: 0000000000000004 t3 : ffffffff819acc97 t4 : ffffffff819acc97
- t5 : ffffffff819acc98 t6 : ff60000002327878
-status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-[<ffffffff805d84ca>] virtnet_set_affinity+0x1ba/0x1fc
-[<ffffffff805da7ac>] virtnet_probe+0x832/0xf1e
-[<ffffffff804fe61c>] virtio_dev_probe+0x164/0x2de
-[<ffffffff8054c4c4>] really_probe+0x82/0x224
-[<ffffffff8054c6c0>] __driver_probe_device+0x5a/0xaa
-[<ffffffff8054c73c>] driver_probe_device+0x2c/0xb8
-[<ffffffff8054cd66>] __driver_attach+0x76/0x108
-[<ffffffff8054a482>] bus_for_each_dev+0x52/0x9a
-[<ffffffff8054be8c>] driver_attach+0x1a/0x28
-[<ffffffff8054b996>] bus_add_driver+0x154/0x1c2
-[<ffffffff8054d592>] driver_register+0x52/0x108
-[<ffffffff804fe120>] register_virtio_driver+0x1c/0x2c
-[<ffffffff80a29142>] virtio_net_driver_init+0x7a/0xb0
-[<ffffffff80002854>] do_one_initcall+0x66/0x2e4
-[<ffffffff80a01222>] kernel_init_freeable+0x28a/0x304
-[<ffffffff808cb1be>] kernel_init+0x1e/0x110
-[<ffffffff80003c4e>] ret_from_exception+0x0/0x10
----[ end trace 0000000000000000 ]---
-
-Fixes: 78e5a3399421 ("cpumask: fix checking valid cpu range")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- drivers/net/virtio_net.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 7106932c6f88..e4b56523b2b5 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2300,6 +2300,8 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
- 
- 		for (j = 0; j < group_size; j++) {
- 			cpumask_set_cpu(cpu, mask);
-+			if (cpu == (nr_cpu_ids - 1))
-+				break;
- 			cpu = cpumask_next_wrap(cpu, cpu_online_mask,
- 						nr_cpu_ids, false);
- 		}
--- 
-2.36.1
-
+Seems like this was just due to local "mm: Rename pmd_read_atomic()"
+conflict after merging Linus's tree (which introduced another
+pmd_read_atomic() callsite). Peter already seems to have rebased and
+made the fix - thanks Peter.
