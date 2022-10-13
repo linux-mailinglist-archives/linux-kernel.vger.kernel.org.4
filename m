@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278145FD809
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205945FD80B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJMLE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S229511AbiJMLEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJMLEU (ORCPT
+        with ESMTP id S229554AbiJMLEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:04:20 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D69C10B785
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:04:19 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id c20so1490517plc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:04:19 -0700 (PDT)
+        Thu, 13 Oct 2022 07:04:24 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF4610B7B3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:04:23 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id bh13so1264707pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:04:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NvbS/I8HlQoCFmjUFv0JtyT8eokdGYfA7wkL/lpFTWg=;
-        b=Ay0J5G8NHLTOS6rXjLmiS8l9zTWmvHczbyNjwYRvR1qHrImNmrH1jY3wMiBONvPwm7
-         7d61qgwf98/EqlwVd/mq+mqym9Goz9iqrqsVaezDsWE0Sljlcf7xwaCfGf4hUL/eN6ZW
-         uaj9TlPhDqmQaOXG3ZBWqgI3oiS7Fns5x968k=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BptX1vlVcNHP5LWvhu8S2NjiO9ee4jWe/KGbor9Uaxo=;
+        b=IjO7mPYpHNOk7l0IwChYojbxdMe0w7AtfsioruRTxng85gyCJNgkqJnFCxndp4y7CF
+         LmqkG0MoozuBvOalP282o4s4e+MTQ5av6B5oaw8LvDe0Sbi6JKY3IsvlYNw+/irSHaoK
+         /rpzoM8YRjbt815iGMAdUlEYWZVUMlSH94ac8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NvbS/I8HlQoCFmjUFv0JtyT8eokdGYfA7wkL/lpFTWg=;
-        b=jBgusorhBXkX8flwAjBBKLUSEnIKGzG+AWWBEmGFBrLqdbpuLmb/MzHmA1nY2iVV+z
-         0hOhs8GJpW80+lDdU9c3f6SS2CB5FYo7mJ1DxtelI+D/jMShMhuG6VnUIRy2h6UWjRkl
-         tm34kJtxaPStPOz08/vHwnJxMe46bIHH0shw6oFPM3PnHfmlftJ58EjbFA6FXubNC+KS
-         Fz8nMaHF6yc9D9cJbPotRj29zS+ASERsWeSYM9I6LenQI1tnvnvbUyEkStKCyU1OWKMu
-         6SS8WpMeHv8Gbl1rLLKyGsbWTGt0pk76mAwaPIJ6p/1ID9X+JdsFfSmEu5HdFr9/QGFI
-         wW+w==
-X-Gm-Message-State: ACrzQf23r1/5YofOKYNaDh+TLxdFPVlkWMdI6NTdDJH9UgJCXjqWrDEh
-        2afVSdy059o6ugBL+JbZZNkhNg==
-X-Google-Smtp-Source: AMsMyM6lUXvMM5tpyfSOIQtS1+CZpp68m5DYgKdzV5fiouCWtlb7eX/ojNAakZQwNCRsgJS2BE/c2Q==
-X-Received: by 2002:a17:90b:23c5:b0:20b:1cb4:2ca9 with SMTP id md5-20020a17090b23c500b0020b1cb42ca9mr10755124pjb.139.1665659058897;
-        Thu, 13 Oct 2022 04:04:18 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BptX1vlVcNHP5LWvhu8S2NjiO9ee4jWe/KGbor9Uaxo=;
+        b=xiR6Gn6qG9yvvqWtA+PpkF8zKMcYB7Zo8iMNt4MxrfCug8kDozlTiYfRSqKhE2z/rW
+         aH5xyGBIbZT3wy8Y7GokzoC0s4c+UgYvbY4vnbKmMrX+qJfJecVbuXglBrwLkXka19MK
+         6v/dBEr0c9MQiR3f/80JvTxondxkSslUt+BMBKVG1XO8uF1GYcooYwI0HL/+7B997GiP
+         7QcXsxYloxWSXPyWWNO7QdnwEH7hA4tbIq/HWteyuWcJsrDVnigJCXr+/O03pAHaNV79
+         awVkwyWdfpn14LRa5UdZ6Banq1XNjCU1pc+b1CXKMPGKUwzmr397254Km5mjvCsH0XX4
+         O+TA==
+X-Gm-Message-State: ACrzQf11jbjLa8rOR5kJkyX02QjAWCg7m7YFNidUGNbrM8szcV79TgoM
+        2+l0JBXfNH5ULtj1hEHMAPBSBABJVOeFgg==
+X-Google-Smtp-Source: AMsMyM5vi2Tzg/9fz7+9dffyUUr9Nbvyb5LJ1k3XC6DE7+11qMdHRvhWoVcFLb8QoWkWqqE58Gk15w==
+X-Received: by 2002:a63:2cc2:0:b0:41c:681d:60d2 with SMTP id s185-20020a632cc2000000b0041c681d60d2mr28700706pgs.502.1665659062636;
+        Thu, 13 Oct 2022 04:04:22 -0700 (PDT)
 Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:4b90:18ed:8d41:7622])
-        by smtp.gmail.com with ESMTPSA id o11-20020a17090ab88b00b0020af2411721sm2914794pjr.34.2022.10.13.04.04.16
+        by smtp.gmail.com with ESMTPSA id o11-20020a17090ab88b00b0020af2411721sm2914794pjr.34.2022.10.13.04.04.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 04:04:18 -0700 (PDT)
+        Thu, 13 Oct 2022 04:04:22 -0700 (PDT)
 From:   Pin-yen Lin <treapking@chromium.org>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
@@ -61,10 +62,12 @@ Cc:     Pin-yen Lin <treapking@chromium.org>,
         <angelogioacchino.delregno@collabora.com>,
         Hermes Wu <hermes.wu@ite.com.tw>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/3] Clean up it6505 driver and improve synchronization
-Date:   Thu, 13 Oct 2022 19:04:07 +0800
-Message-Id: <20221013110411.1674359-1-treapking@chromium.org>
+Subject: [PATCH v2 1/3] drm/bridge: it6505: Initialize AUX channel in it6505_i2c_probe
+Date:   Thu, 13 Oct 2022 19:04:08 +0800
+Message-Id: <20221013110411.1674359-2-treapking@chromium.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+In-Reply-To: <20221013110411.1674359-1-treapking@chromium.org>
+References: <20221013110411.1674359-1-treapking@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -76,23 +79,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The main purpose of this series is to improve the synchronizations of
-it6505 driver. The first two patches are required for the third one, but
-they alone can be clean ups to the driver.
+During device boot, the HPD interrupt could be triggered before the DRM
+subsystem registers it6505 as a DRM bridge. In such cases, the driver
+tries to access AUX channel and causes NULL pointer dereference.
+Initializing the AUX channel earlier to prevent such error.
 
-Changes in v2:
-- Remove redundant spaces in it6505_detect
-- Read sink count in it6505_irq_hpd
-- Add the empty line back
+Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+---
 
-Pin-yen Lin (3):
-  drm/bridge: it6505: Initialize AUX channel in it6505_i2c_probe
-  drm/bridge: it6505: Setup links in it6505_irq_hpd
-  drm/bridge: it6505: Improve synchronization between extcon subsystem
+(no changes since v1)
 
- drivers/gpu/drm/bridge/ite-it6505.c | 106 +++++++++++++---------------
- 1 file changed, 51 insertions(+), 55 deletions(-)
+ drivers/gpu/drm/bridge/ite-it6505.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+index a4302492cf8d..f7f6c3e20fae 100644
+--- a/drivers/gpu/drm/bridge/ite-it6505.c
++++ b/drivers/gpu/drm/bridge/ite-it6505.c
+@@ -2871,10 +2871,7 @@ static int it6505_bridge_attach(struct drm_bridge *bridge,
+ 	}
+ 
+ 	/* Register aux channel */
+-	it6505->aux.name = "DP-AUX";
+-	it6505->aux.dev = dev;
+ 	it6505->aux.drm_dev = bridge->dev;
+-	it6505->aux.transfer = it6505_aux_transfer;
+ 
+ 	ret = drm_dp_aux_register(&it6505->aux);
+ 
+@@ -3354,6 +3351,11 @@ static int it6505_i2c_probe(struct i2c_client *client,
+ 	debugfs_init(it6505);
+ 	pm_runtime_enable(dev);
+ 
++	it6505->aux.name = "DP-AUX";
++	it6505->aux.dev = dev;
++	it6505->aux.transfer = it6505_aux_transfer;
++	drm_dp_aux_init(&it6505->aux);
++
+ 	it6505->bridge.funcs = &it6505_bridge_funcs;
+ 	it6505->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+ 	it6505->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
