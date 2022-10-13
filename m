@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0465FD36F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DF95FD372
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiJMDHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 23:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S229572AbiJMDJN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Oct 2022 23:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJMDHi (ORCPT
+        with ESMTP id S229563AbiJMDJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 23:07:38 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E928111E47B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:07:36 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id r22so751962ljn.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=teT7jLlxzN4i1te1sVTA7XA7K2s0Bo1np+U79OkEZds=;
-        b=a3jtqMpOOhZuTY4QC3PGfEN5pY3L8lvp+y4QJXVoPWwdAg8nWFqubN5gCcMHFj+U7u
-         /U4/C7JlWhypXP/uFWVDxoGFkLis1AlnRMQNo5p+C+O4QKiHfuFsVyXl53WoeMk3CGhF
-         uCpfIFnlJVrOOjBQR0ivHRe/u0a7GAzHhoKjGgNytEaApQ/A8hY5onwOQzz/UtRpbFXz
-         0FmMLTIfxjXfvrXRb8h5L3UGqyFrcybPMzsZh89h1xW+/21xBctI88STKhaxCXvRMsiK
-         x9N6lWATu3oWk7M3YRoTlw+BQ7bpOx8gzprxBSCVuno6agoDAoyG5IiyXH5Ag4tXUVX9
-         /CMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=teT7jLlxzN4i1te1sVTA7XA7K2s0Bo1np+U79OkEZds=;
-        b=3MkngF9NUZ9x4OXnEu8FlO9P5VzAK4Lj24ZwkbEstOrhr3BXe0Kpi6/wchSSTZfe6e
-         uD1dfgNagSRx9RUtp912L0V+jggQUF0iLmuxXETwOJjh0kamXXZrqOhOCJ3VxhV0gnh1
-         Sio3vXf4lDRsRaJHbsZkhBZLTL2mH+7eZflEIC6manJy2UGsdiMNjA2iJEYPblseA083
-         i0MfNBlwPUGXrv5+O4FFt36MvYBi3pNRgbG5vpA1TSx7dJeMTGNsOl8MY/cCLDUfsr12
-         B64kIzFPYcwOSXexcOF9cW5HLaIXgTTKaP2U58KA/2Z9l9ctI4nO1hrBrFoChsuSpcjI
-         AG0g==
-X-Gm-Message-State: ACrzQf332RhREfQJ///6sseUoDU0w+9ABVf3TjuN7DviSRepq6rb9T+6
-        UiMq3EWmMh2louXR+jzQ6tTEqb6hCpHAm+G+1kv8gqfEeA==
-X-Google-Smtp-Source: AMsMyM7s0RTDvuj/pVbsqF6Qfr5bg4a5tCwlZtc9rgBRuqFwjYDX/FMk9gCwQg3cQJyt4Yzkaw/Mfm9BdH75puFTuQY=
-X-Received: by 2002:a2e:9e50:0:b0:261:e3fd:cdc5 with SMTP id
- g16-20020a2e9e50000000b00261e3fdcdc5mr11728293ljk.56.1665630455163; Wed, 12
- Oct 2022 20:07:35 -0700 (PDT)
+        Wed, 12 Oct 2022 23:09:07 -0400
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5F7122BCD;
+        Wed, 12 Oct 2022 20:09:06 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 4CC78160D39;
+        Thu, 13 Oct 2022 03:09:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 1916C20024;
+        Thu, 13 Oct 2022 03:08:29 +0000 (UTC)
+Message-ID: <60af3294445ba2d2289a32ef7e429111ff476b44.camel@perches.com>
+Subject: Re: [PATCH AUTOSEL 5.19 01/63] staging: r8188eu: do not spam the
+ kernel log
+From:   Joe Perches <joe@perches.com>
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Michael Straube <straube.linux@gmail.com>,
+        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk, martin@kaiser.cx,
+        paskripkin@gmail.com, gszymaszek@short.pl, fmdefrancesco@gmail.com,
+        makvihas@gmail.com, saurav.girepunje@gmail.com,
+        linux-staging@lists.linux.dev
+Date:   Wed, 12 Oct 2022 20:08:58 -0700
+In-Reply-To: <20221013001842.1893243-1-sashal@kernel.org>
+References: <20221013001842.1893243-1-sashal@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
- <CANDhNCrrM58vmWCos5kd7_V=+NimW-5sU7UFtjxX0C+=mqW2KQ@mail.gmail.com>
-In-Reply-To: <CANDhNCrrM58vmWCos5kd7_V=+NimW-5sU7UFtjxX0C+=mqW2KQ@mail.gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 12 Oct 2022 20:07:23 -0700
-Message-ID: <CANDhNCojzuCW2Udx_CssLvnY9DunEqVBSxnC5D6Rz0oX-r2-7g@mail.gmail.com>
-Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: uz6rxyxkf4cx3t8jwgm77puediit9i54
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 1916C20024
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+zvIBb+G3uLRkzWAgvUwCViVSfV01oEU4=
+X-HE-Tag: 1665630509-244581
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 8:02 PM John Stultz <jstultz@google.com> wrote:
-> On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> So I think it reasonable to say its bounded by approximately  2 *
-> NSEC_PER_SEC/HZ +/- 11%.
+On Wed, 2022-10-12 at 20:17 -0400, Sasha Levin wrote:
+> From: Michael Straube <straube.linux@gmail.com>
+> 
+> [ Upstream commit 9a4d0d1c21b974454926c3b832b4728679d818eb ]
+> 
+> Drivers should not spam the kernel log if they work properly. Convert
+> the functions Hal_EfuseParseIDCode88E() and _netdev_open() to use
+> netdev_dbg() instead of pr_info() so that developers can still enable
+> it if they want to see this information.
 
-Sorry, this should be 2*NSEC_PER_SEC/HZ * 0.11
+Why should this be backported?
 
-thanks
--john
+> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+[]
+> @@ -676,6 +676,7 @@ Hal_EfuseParseIDCode88E(
+>  	)
+>  {
+>  	struct eeprom_priv *pEEPROM = &padapter->eeprompriv;
+> +	struct net_device *netdev = padapter->pnetdev;
+>  	u16			EEPROMId;
+>  
+>  	/*  Check 0x8129 again for making sure autoload status!! */
+> @@ -687,7 +688,7 @@ Hal_EfuseParseIDCode88E(
+>  		pEEPROM->bautoload_fail_flag = false;
+>  	}
+>  
+> -	pr_info("EEPROM ID = 0x%04x\n", EEPROMId);
+> +	netdev_dbg(netdev, "EEPROM ID = 0x%04x\n", EEPROMId);
+>  }
+>  
+>  static void Hal_ReadPowerValueFromPROM_8188E(struct txpowerinfo24g *pwrInfo24G, u8 *PROMContent, bool AutoLoadFail)
+> diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+[]
+> @@ -636,7 +636,7 @@ int _netdev_open(struct net_device *pnetdev)
+>  		if (status == _FAIL)
+>  			goto netdev_open_error;
+>  
+> -		pr_info("MAC Address = %pM\n", pnetdev->dev_addr);
+> +		netdev_dbg(pnetdev, "MAC Address = %pM\n", pnetdev->dev_addr);
+>  
+>  		status = rtw_start_drv_threads(padapter);
+>  		if (status == _FAIL) {
+
