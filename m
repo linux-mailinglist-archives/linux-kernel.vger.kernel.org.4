@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC5A5FD58B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A4D5FD590
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiJMHad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 03:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S229683AbiJMHdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJMHab (ORCPT
+        with ESMTP id S229620AbiJMHdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 03:30:31 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CC583F13;
-        Thu, 13 Oct 2022 00:30:28 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D0DF0124C;
-        Thu, 13 Oct 2022 09:30:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1665646225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dWQKMf8oHDqlDBjs4uvnl/JyggLVUs+DUCx52N0nFiw=;
-        b=kL2zuzA841Gbro7E/MV5Hnc+MBh4x6rWFCvJG8mSs4adpOKrPhTzq8OmGqPy+NEajTTcgx
-        t0yWlg/5hPQf+tLiK+a36I2qxMQsXjxKzkFAC95i2fXDmp6eg+zbB+uOA+NW0uTfFSd7fr
-        Be97bJCZoEiGlLakaUNzw0yxKAYx/2PTxVjSJFx0aLkwNW6nVn4WOxa+pg0RyHWTx/euaf
-        w1XmwW4Ix0ZcoWEJ9hVwREsjKwVVAjqks6hkHczFL0AF5paulhLmi7yaxedIA9b4MkD9MA
-        2pX9zmx/hcE6B5ABO5GWbP8fLUUcSSgb1metZBsBPXwPhYHRSoP5KgKsJgpocA==
-MIME-Version: 1.0
-Date:   Thu, 13 Oct 2022 09:30:25 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     UNGLinuxDriver@microchip.com, andy.shevchenko@gmail.com,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        Thu, 13 Oct 2022 03:33:53 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE1D11B2D9;
+        Thu, 13 Oct 2022 00:33:52 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 703CD5C0053;
+        Thu, 13 Oct 2022 03:33:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 13 Oct 2022 03:33:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665646430; x=1665732830; bh=U1GPnkRrOj
+        kf2h2kttART7uQoH4bT9tLh5te/qCpI+o=; b=cHtQwd9I5W94IzjzEzR++OrLUa
+        /K0YDDLS7ehqqkoybsUc0UsumaUTccHhFbzbaZqpNJFmzj1fB5e6N1FpQsi8ZFpy
+        xPp4pMA0KSeiq6GBl1fo/ZRalNTGvkLzCK8spU2iUzZXhswITDQxZJ8khTWFd7oY
+        6pqNrJaC1jkDA1ow55aktOckeyFbY7geHVJ7nnY3JYBEzyaPhJAiGK5tHLhq1zki
+        LEmpXcxJIe3XvJpDi15lRLIFkd9FWqV5iSCISIAP9JbR+jOqe4lv/AnOtyasTOwg
+        /mj6U/7LiK8KyoTe5IrtCljzuE5FcX3LHKLc3AJffYpj5BjbeIHa5jeYdfGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665646430; x=1665732830; bh=U1GPnkRrOjkf2h2kttART7uQoH4b
+        T9tLh5te/qCpI+o=; b=KcJSeLHQ+n4uGifWV4UjtNCf4iDZr3aAZ+PyH7eBCuMO
+        rvY+12wZHpDlAfHyYbGkRFD4EQhOvnFIquG4gnrp6xo0RIypjRH1/ntHC5e+WJwL
+        7sM/Y129UyXPD9TwheCV3XUDJs9QXj81rYUziOjEMAplC+rhO1bdGbfppI9q3QaM
+        OAdvyDPMdLlZ9b/Q2Qy9IuFHhZ/hllP++Fm5JxuAGO/uw2RtyCth1rcWsOuBnYam
+        CdpTyICsF04maZeq7Ve0vT0xZijsn3TTBvWZdcXxuijvtDzH0udxWAtXhrAfjBRf
+        JoZlH8ynixW2lCBKqRra+WXsXIq03ythDF19zJ906Q==
+X-ME-Sender: <xms:Xb9HYwb4mLkR2CMod27VCnBV2LR1R4KnJlT5RCqMg4T2a9yXLbS_Mw>
+    <xme:Xb9HY7YadZaJuPnSpw4leAMrDtnsCz9N3EPY_tigTBGq6ncvIjToz9_7zrWrbUcBe
+    CxtszzZd_UvyRjYltk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejledguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Xb9HY687BLEQYUv1p0HkI46dLgAiSaTynTSrdFeR8WUTkTZSu7Wtuw>
+    <xmx:Xb9HY6oPpDjlfmQ4grw2tp0i0UDJfg9St0X_zFoYJb4oG_CCr5h-uw>
+    <xmx:Xb9HY7or6Zz4BImMuC8xDvxnaCTZeYNet00DDVgaPgwDQfDn7HuFPw>
+    <xmx:Xr9HY6WIUpC8-Cgyuu41Hd4H8ziUDxjKlaagoBF04gTPoECVqf6-tw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C2FA3B60086; Thu, 13 Oct 2022 03:33:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <4429d1ec-579e-4b0d-a8d8-06b9a5877a9c@app.fastmail.com>
+In-Reply-To: <4517c95f-1dad-5a8c-5202-073d0a7eff29@opensource.wdc.com>
+References: <202210121422.MJsXaw1M-lkp@intel.com>
+ <4517c95f-1dad-5a8c-5202-073d0a7eff29@opensource.wdc.com>
+Date:   Thu, 13 Oct 2022 09:33:29 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
-In-Reply-To: <20221007094938.qqf7exuthvz5gkdq@soft-dev3-1.localhost>
-References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
- <20220920120642.690340-1-michael@walle.cc>
- <20220920193033.bpmyt6pdob5b45id@soft-dev3-1.localhost>
- <683fc322fddebe39a93a46aefcd5e2dd@walle.cc>
- <20221007094938.qqf7exuthvz5gkdq@soft-dev3-1.localhost>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <994b3dfd8d5d2c0c11c2bf6f299564c1@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Subject: Re: drivers/ata/ahci_st.c:229:34: warning: unused variable 'st_ahci_match'
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,103 +86,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horatiu,
+On Thu, Oct 13, 2022, at 8:13 AM, Damien Le Moal wrote:
+> On 10/12/22 15:37, kernel test robot wrote:
 
-Am 2022-10-07 11:49, schrieb Horatiu Vultur:
-> The 10/06/2022 13:43, Michael Walle wrote:
-> 
-> Hi Walle,
-> 
->> Seeing 20 was definitely fishy, seeing two instead of one maybe not
->> so much. I guess it will create one spurious interrupt if none of
->> the registered handlers will care.
->> 
->> OTOH, the code below won't work in all cases anyway, right? It's just
->> best effort.
-> 
-> I was expecting to work in all cases, but if you found some cases that
-> would not work, please point them out.
-> 
->> 
->> > Below I have a diff that I tried with LAN8814 PHYs and I could see that
->> > count in /proc/interrupts is increasing correctly.
->> >
->> > > I've verified that there is only one low pulse on the interrupt line.
->> > > I've
->> > > noticed though, that the number of interrupts seem to be correlating
->> > > with
->> > > the length of the low pulse.
->> > ---
->> > diff --git a/drivers/pinctrl/pinctrl-ocelot.c
->> > b/drivers/pinctrl/pinctrl-ocelot.c
->> > index c7df8c5fe5854..105771ff82e62 100644
->> > --- a/drivers/pinctrl/pinctrl-ocelot.c
->> > +++ b/drivers/pinctrl/pinctrl-ocelot.c
->> > @@ -1863,19 +1863,28 @@ static void ocelot_irq_unmask_level(struct
->> > irq_data *data)
->> >       if (val & bit)
->> >               ack = true;
->> >
->> > +     /* Try to clear any rising edges */
->> > +     if (!active && ack)
->> > +             regmap_write_bits(info->map, REG(OCELOT_GPIO_INTR, info, gpio),
->> > +                               bit, bit);
->> 
->> Might we lose interrupts here, if the line would go active again right
->> after the read of the line state and before reading the "ack" bit?
-> 
-> We lose the interrupt here, as the HW will not generate another one
-> but at later point we read again the line status. And if the line is
-> active then we kick again the interrupt handler again.
+> I am at a loss with this one... There are plenty of patterns similar to
+> drivers/ata/ahci_st.c doing something like:
+>
+> static const struct of_device_id st_ahci_match[] = {
+>
+>         { .compatible = "st,ahci", },
+>
+>         { /* sentinel */ }
+>
+> };
+>
+> MODULE_DEVICE_TABLE(of, st_ahci_match);
+>
+> For instance, in drivers/pwm/pwm-sti.c, we have:
+>
+>
+> And countless others like this for STI and other arch too.
+>
+> So if CONFIG_MODULE is not enabled, how come we are not submerged with
+> warnings about unused variables ? Is mips arch special in this regard ?
+> Or am I missing something ?
 
-Ahh, thanks for explaining. That also explains the read below.
+It has nothing to do with MIPS, the problem is
 
-Will you send a proper patch?
+                .of_match_table = of_match_ptr(st_ahci_match),
 
--michael
+The 'of_match_ptr()' sets the pointer to NULL when CONFIG_OF is
+disabled, which avoids a build failure when st_ahci_match[]
+itself is in an #ifdef.
 
-> 
->> 
->> > +
->> >       /* Enable the interrupt now */
->> >       gpiochip_enable_irq(chip, gpio);
->> >       regmap_update_bits(info->map, REG(OCELOT_GPIO_INTR_ENA, info, gpio),
->> >                          bit, bit);
->> >
->> >       /*
->> > -      * In case the interrupt line is still active and the interrupt
->> > -      * controller has not seen any changes in the interrupt line, then it
->> > -      * means that there happen another interrupt while the line was
->> > active.
->> > +      * In case the interrupt line is still active then it means that
->> > +      * there happen another interrupt while the line was active.
->> >        * So we missed that one, so we need to kick the interrupt again
->> >        * handler.
->> >        */
->> > -     if (active && !ack) {
->> > +     regmap_read(info->map, REG(OCELOT_GPIO_IN, info, gpio), &val);
->> > +     if ((!(val & bit) && trigger_level == IRQ_TYPE_LEVEL_LOW) ||
->> > +           (val & bit && trigger_level == IRQ_TYPE_LEVEL_HIGH))
->> > +             active = true;
->> 
->> Why do you read the line state twice? What happens if the line state
->> changes right after you've read it?
-> 
-> Here we need to read again the status because we might have clear the
-> ack of interrupt.
-> If the line becomes active right after this read, then the HW will
-> generate another interrupt as the interrupt is enabled and ack is
-> cleared.
-> 
->> 
->> > +
->> > +     if (active) {
->> >               struct ocelot_irq_work *work;
->> >
->> >               work = kmalloc(sizeof(*work), GFP_ATOMIC);
->> 
->> So yes, maybe the trade-off that there will be two interrupts are
->> better than this additional patch. But it should be documented
->> somewhere, even if it's just a comment in this driver.
->> 
->> -michael
+In this driver, there is no #ifdef around st_ahci_match[], so we
+simply want
+
+                .of_match_table = st_ahci_match,
+
+The thing with the MODULE_DEVICE_TABLE() is that it would
+create another reference if CONFIG_MODULE is enabled, but not
+for a built-in driver, so you only get this type of warning
+for randconfig builds that have the driver built-in and OF
+disabled.
+
+It's a common mistake, and we should probably remove most
+of the of_match_ptr() references as you rarely have drivers
+that optionally use OF support but benefit from compiling
+that support out on kernels without OF.
+
+     Arnd
