@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C5C5FD73C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3265FD748
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiJMJnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S229485AbiJMJrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJMJnh (ORCPT
+        with ESMTP id S229505AbiJMJrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:43:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E512014639B;
-        Thu, 13 Oct 2022 02:43:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Oct 2022 05:47:46 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57963102DE0;
+        Thu, 13 Oct 2022 02:47:45 -0700 (PDT)
+Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83396B80DFB;
-        Thu, 13 Oct 2022 09:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876F9C433D6;
-        Thu, 13 Oct 2022 09:43:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665654214;
-        bh=1Wk/QwX861ZXRIsXyj/MtxL7hcOYvbboclUBxQXQ+gA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DyT3rESoSjtLAbY+trFdqeCZvhvg6UgB4I30nZMMVC/8n87iu+UzlDysgiyQklp5D
-         fEAgah3z2TmDEpR3XQ+rbkxtfxTBekBMELjMkTSjooh95vZgOMJ219/aTe0yevqOud
-         1XebXGWpc4CfUAHWByVeVdAe89P8FAuU59iaCjh+kJmUt/7/8ET+fxOJZYvNIwSCl1
-         OSgJfO0R0gdK5XbwVLi2BssbD+1XisSZaiCM2aaLZeWwNQC/IhkcEVz5ebl9mLY9sE
-         RBhA/143ZWa8RyVH8vHK6U2TZfijSGrb9wzX0gS4Z93xlnxvn0ylP1eEydre8KAIlw
-         Kmhwv0RylfF/Q==
-Date:   Thu, 13 Oct 2022 12:43:29 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4] net/sock: Introduce trace_sk_data_ready()
-Message-ID: <Y0fdwSkyoFI2SDuw@unreal>
-References: <20221011195856.13691-1-yepeilin.cs@gmail.com>
- <20221012232121.27374-1-yepeilin.cs@gmail.com>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 7E1383F270;
+        Thu, 13 Oct 2022 11:47:43 +0200 (CEST)
+Date:   Thu, 13 Oct 2022 11:47:42 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 10/16] arm64: dts: qcom: sm6125: align TLMM pin
+ configuration with DT schema
+Message-ID: <20221013094742.fftcbdkjipkw3pub@SoMainline.org>
+References: <20220930192954.242546-1-krzysztof.kozlowski@linaro.org>
+ <20220930192954.242546-11-krzysztof.kozlowski@linaro.org>
+ <20221011074512.anifehocqjnxuf35@SoMainline.org>
+ <112ada96-f742-8d06-dc90-a422d3636e06@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221012232121.27374-1-yepeilin.cs@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <112ada96-f742-8d06-dc90-a422d3636e06@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 04:21:21PM -0700, Peilin Ye wrote:
-> From: Peilin Ye <peilin.ye@bytedance.com>
+On 2022-10-11 08:06:55, Krzysztof Kozlowski wrote:
+> On 11/10/2022 03:45, Marijn Suijten wrote:
+> > On 2022-09-30 21:29:48, Krzysztof Kozlowski wrote:
+> >> DT schema expects TLMM pin configuration nodes to be named with
+> >> '-state' suffix and their optional children with '-pins' suffix.
+> >>
+> >> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Thanks!
+> > 
+> > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > 
+> > Perhaps mention more clearly that this is fixing up an earlier patch
+> > that tried to address missing `-pins`?
 > 
-> As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
-> callback implementations.  For example:
-> 
-> <...>
->   ksoftirqd/0-16  [000] ..s..  99.784482: sk_data_ready: family=10 protocol=58 func=sock_def_readable
->   ksoftirqd/0-16  [000] ..s..  99.784819: sk_data_ready: family=10 protocol=58 func=sock_def_readable
-> <...>
-> 
-> Suggested-by: Cong Wang <cong.wang@bytedance.com>
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-> ---
-> changes since v3:
->   - Avoid using __func__ everywhere (Leon Romanovsky)
->   - No need to trace iscsi_target_sk_data_ready() (Leon Romanovsky)
+> It is not fixing only that patch, but also nodes added later without suffix.
 
-I meant no need both trace point and debug print and suggested to remove
-debug print.
+Afaik the node was already there when [1] was applied, it just
+accidentally added -pins to cmd twice instead of once to clk and cmd
+separately.  But feel free to stick to a generic commit message.
 
-Thanks
+[1]: https://lore.kernel.org/all/20220912061746.6311-35-krzysztof.kozlowski@linaro.org/
+
+- Marijn
