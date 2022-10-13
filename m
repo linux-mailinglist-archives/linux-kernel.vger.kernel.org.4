@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66455FDB61
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62245FDB64
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiJMNsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S229484AbiJMNsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiJMNrz (ORCPT
+        with ESMTP id S229993AbiJMNsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:47:55 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2048.outbound.protection.outlook.com [40.107.92.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FBCE6F5F;
-        Thu, 13 Oct 2022 06:47:52 -0700 (PDT)
+        Thu, 13 Oct 2022 09:48:03 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2091.outbound.protection.outlook.com [40.92.98.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5BA11B2C6;
+        Thu, 13 Oct 2022 06:47:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i2E1ODONkWum9XOFgPnhCObnUYHU95leJG9w/J8K1j2MT/7DXt4kpbpq2ltBVXiAr11muTi9BmlFMyj9sC7JLZH4Zs/vfvfgZtIOhjfG9Rkee2BDpbeEKI35oO0IlCr7ssVDoTRhWBdWcZgZtY6nZyHULQjYIWD0pQfvVpYygBAiZj6JmO7W7J2NS7OveCVGW5Qo9yIfDhhPjMq1+AkfxyTkAdeHGcs6uDP0ks603toYU1nTvbrObuLRelSJXuFvr6BaMDbvAVla9D3be6i54jGTXAXmlQXo8UCHOtLEN0PBfbMd8jI0PbgntV/XRuyVbOqDDJzox9NNRNTlYqFtOQ==
+ b=F+8v32CNFZHVfbWflig5NqmZqnmSGKlRxdBCQv3r3AnsEUNceTY4FzoLV+vKzkCAETLS9SWLckjxiwi3Axc/l9A0d07ZPs1Si2FddtVPoieNNYVwcaKDdGmmo6jhgnsLpyzF3QAjGafg9SbmP2dMo0QuZUxpliW7NMMIEKWCV8mudXJBMwmDo2CUYjyR1G/rdnA0vqf0iw4cwoMlKfg0z03RjQ2GjeaZq7RR+WR0gAsOq2TcbCj5faROFrtjySot0B3HkoHfVImTr5Z/oipNYmxsSJzdFIXQIfDXKZLxIT8w8ySIL4O1tqgGolrD4eqotO9Id3AyMjvOEFSxDizj9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gcTSJOCErw05dBb8YoQJXcPpmQ0xqB47IZW1+fQDyrc=;
- b=GPIlyXL0LcVafB4N3TwudOg93iFIAlmx3HydFR2svU1hVJ3WBLQUrhdXNCdGZRhA5Z51uoRxfCXFPoRWldDZs1tG7DOXdwUXJaXGypIGqPcEsOsGVwiNo6iHU0VQYUJvLNcgYYHCXBSttlarUONpjl3qwAcDvCSXwGbF2VRYJOh6hg9uZesShGkZxu28ZXgpEBKWFjRQ/vxWG0cCuYwtQ79Q19p5H1iwXVKNSHkS9F+qwLKFI5v31hyUMeFU8DTlplHuNAdG5CUsczDXLdx4CK4KQ5Z9yOguXd8DzPChFyBxk+DfElSM6irTrvFeKAMGfJt71CDW7WVgTQTrH/Kwbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=p+3EvavTsoWN6VaBVcrcI4IN20boKXa/gkD+3f3mW9A=;
+ b=Gf6FTyvOjlJB5HgEUpF4XLpjQsNVyWT5fb+DGi4mxqAK/raytUzYQs0Y3qlKXRPaNDEWwh0ERJenZ8QkRnSz4oDSyyIPH/8daXM021znHYfKmV0ZfcDlFLGLeuiu55Z2IF0yHBENSSnt2QO8w0hZfv/xtzNpYh60eCAilVdoDjoo7A8q1nIRCXCiKXdzt2dCb6E/JX4/FfnF188z3RrOPTkpaZncyQG/fi2hM73KdooDtzapa9tqHlLBBNEarlrnJ/8BRReQtYDMxFQdGQSj4141ZKT49WoilSLpu11V0pGux49UfriZUUlgKqIC5eY6fqbaOrDNboG+F+aUrszEEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gcTSJOCErw05dBb8YoQJXcPpmQ0xqB47IZW1+fQDyrc=;
- b=x0TAAgrUxPdouPotk2gYxQkEnjAgrrYBhffJSTVf+KhY0zDq31KdRjvAnnEtEbH44X8ffNifRZ4gCCsMHSuUJeBtqY8MWe10z4+po70kLcokFndgxiurMvOONqyHkGUnsPkIAuNaAk/GZPDVTIy0MLHje0f7Oy1TJ5jYb+cXC9U=
-Received: from BN9PR03CA0424.namprd03.prod.outlook.com (2603:10b6:408:113::9)
- by IA1PR12MB7757.namprd12.prod.outlook.com (2603:10b6:208:422::17) with
+ bh=p+3EvavTsoWN6VaBVcrcI4IN20boKXa/gkD+3f3mW9A=;
+ b=r4CYRI5AE+kI30U+tSFDmBIFKSNjERPjMpMsvZn9dYitB5Ho/7LgxJkwwwNEyKjJVXdqPMUQSHwPfifPuWyCRJPQFS2YdYW5kN+Xs1Kp9H31pT6C/i2IdzuFUNNoDj5pLeWcoJHHTea+2kAZigD4uCCo0QjAu1anpzGF8At3YAYP1AjUiN4KXHe2T714kB5un8+FqpBabBxOIhww1rLhQpLHNLkrO0MViI0vR29HPZgDbfaO3FqVcM6ag+a+P6hOp3/4Pqg3WhEPWSoOo6O7X9AP94EW2/kZq4cQNflOdCtuViBDoBkfjGEEL2nRZrD1+hNESNBlGcgetTs9StfhYg==
+Received: from OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:82::12)
+ by OSZP286MB2412.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1c4::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Thu, 13 Oct
- 2022 13:47:48 +0000
-Received: from BN8NAM11FT071.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::78) by BN9PR03CA0424.outlook.office365.com
- (2603:10b6:408:113::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22 via Frontend
- Transport; Thu, 13 Oct 2022 13:47:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT071.mail.protection.outlook.com (10.13.177.92) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Thu, 13 Oct 2022 13:47:48 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 13 Oct
- 2022 08:47:47 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-CC:     Mark Pearson <mpearson@lenovo.com>,
-        Pananchikkal Renjith <Renjith.Pananchikkal@amd.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/1] pinctrl: amd: Add dynamic debugging for active GPIOs
-Date:   Thu, 13 Oct 2022 08:47:29 -0500
-Message-ID: <20221013134729.5592-2-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221013134729.5592-1-mario.limonciello@amd.com>
-References: <20221013134729.5592-1-mario.limonciello@amd.com>
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Thu, 13 Oct
+ 2022 13:47:52 +0000
+Received: from OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::7fa1:f154:53ce:939a]) by OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::7fa1:f154:53ce:939a%8]) with mapi id 15.20.5709.024; Thu, 13 Oct 2022
+ 13:47:52 +0000
+From:   Jinlong Chen <chenjinlong2016@outlook.com>
+To:     yukuai1@huaweicloud.com
+Cc:     axboe@kernel.dk, chenjinlong2016@outlook.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com
+Subject: Re: [PATCH] blk-mq: put the reference of the io scheduler module after switching back
+Date:   Thu, 13 Oct 2022 21:47:33 +0800
+Message-ID: <OSYP286MB0344F8B1AC5F35BEA990B593BE259@OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <b79a8187-5342-8ff3-73fc-0324bdfb67fb@huaweicloud.com>
+References: <b79a8187-5342-8ff3-73fc-0324bdfb67fb@huaweicloud.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
+X-TMN:  [zefX+bJQrlArnJKRaAzuiB9p+6uFwRJk]
+X-ClientProxiedBy: SGAP274CA0003.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::15)
+ To OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:82::12)
+X-Microsoft-Original-Message-ID: <20221013134733.21207-1-chenjinlong2016@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT071:EE_|IA1PR12MB7757:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6080ff0b-8b4d-46dd-69bd-08daad2183fb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: OSYP286MB0344:EE_|OSZP286MB2412:EE_
+X-MS-Office365-Filtering-Correlation-Id: 34d3608c-c138-4411-70e9-08daad218587
+X-MS-Exchange-SLBlob-MailProps: C/ir7cSdGltGXZ5hP6IVfgoZ9qi9retvdSL+iY+H6YskAd2sUnFzx0JGQNJEJqOn0dER4ZMCybef0xTsyhhdgv47IttuQ2wFnHQ1QDooflwrsiuHcLmxxOtHxDic/aPRZM1PrkeAvQzRp6IPnhWmfzwu4kIpBSOn4a3nAnJteHYfYfxGiB5VXl/NWTh6ARg5vUmZg+ExPkWobktJhkS0NTRgK4xNmYTrLeA5eE4mQTo/e3KXpHbS9CRqoK874Kku1ehUSDqPZgfVm/V2jWvPkB0dP4pxGkzUz8Kxm2yhMF/G1//prp6C1RmMu3Oc+jxArHQdhk7hbMDm8SKXD0y2pdgeIdsuZaf3LiLbvW5Eg1FOxhiaq4K/ygn0KdhGdhOmhhJvcaqrgwydCnnmGX6zlJmBlkIVKe9ARGPLQhp9nM6oe6L1wXc3wjGe0yMXi6EOYjxrurHb27FxiT0xvvk5OmHhds2/ELxsOYjiqdVrc3kZu8Le6USlrjbebLlax3hZCtCkvhIge5Hc6+drPTjeYvooKwsU3hs5n/TAsqW0s64BpmcK/N6ow1VO7BgvsxoBGuGZXWDTaneJY74EzfXOrxOSUFytLMcqnijkbi1Be8niESxxUaWuiECz44INDH6iNwo8f631GmnDXb1q161F7bfpIMhtuM8feD7/Tzfyl3w48wFalM4ENKMn0KsILI6WlhvP63KmRCH5WG1RhwhM6cmgPyHw1ehE/+NXmLAwTl/88NiARYk2OQyGF0gzK63j
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t0BzV2ILwPQ3bIJzPAhVwKJAyIIHho12FGeQ2cI4SQBbBm3eAEVFz+ThBDGRfmpKrICh2BdEuNLr0yQSHb8bF4lwvFZdPd5QAIqBx3+dSc/GCQKxzfPiczaOioCwIrc6djdsd/hPU/3LFzL5+Mh0V+xbCXlkdtGMeTxzHKWpc1eyl4tmFCgO+cQSZcJ7rlZSTpMxg7v/pWy9kXouoaNvUvy87TVhQ7Ayr/uyb185KSNwKIK2RyULdELSo9WQe7ErwcZm9ACFobFGMpVux7vjiWw+jv6Rxi4uVr7J3qaGT9Mtoo70lC5fH6yJEpJSUKFsPBLqOprJ1DrZzawtd8T1LG5XXdh5vHG4IuZO3Wiz6EEYPUJ6NxIp0cu8QFht1UmiQrN+p42V9s+UB0itJPKyCzVBIfguNdh9jeJAArQjjaqk57gq76rhEbKfx6gwPGqRXIgQOtYnG/+QPEF6pZ2jUEF9m6Kspugk/QvfrRYFCzdm3f1maniDzcYD+r28msPQK4RQ/KIEihcSHhEaqCClGQ+R/vnhrEM+sPFeEC2JFAn0/3ugd+ivVQSvIWvN8J3WtYYXNJ5oUe3i0gCEAEXWDArp6inQlGtowKUSNde2m3WnuOXJIarqybkLfR2g+s59vjfakNhLxJaf3ItwTqLD0+Mk+t0BlmzsrpA1RaPTuqsA3aUdVDHBXDgcxIhSRIvKJWDHQ1cTZmx+CbaVNWbypw/50z6mOQDzufqFxDNIjO3jEAbifR8gytwUgtZTnRrFqlSojqDGQs/dRd8AGNW3iakHYJRDznbfDRrHVLyiYekZg+PdIhs8288TDMMErmFH
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(346002)(136003)(451199015)(46966006)(36840700001)(40470700004)(47076005)(8936002)(356005)(426003)(5660300002)(186003)(4326008)(8676002)(41300700001)(2616005)(478600001)(44832011)(70206006)(1076003)(6666004)(70586007)(83380400001)(81166007)(336012)(36860700001)(86362001)(36756003)(7696005)(82740400003)(26005)(54906003)(6636002)(16526019)(316002)(110136005)(2906002)(40460700003)(82310400005)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 13:47:48.5695
+X-Microsoft-Antispam-Message-Info: SZ+962e+jPGff3+MVLz90ZBHfwOwXZE2C/7SahWgHlQIldYAXeIiIdpSUmBaqmtfH591DT7EJhVQme0NBI81dKsoaV2EQCMkUjQQZTqCx0+chBiTXQUJSNpu9W82RcSzPubponMoyPVtwAjZn29MMCBA+LlpoMd+ykkF3rVuQvsZT8Xe3Ql5Ra6c1sTWgZFB6mxhtjXUDvYyHyuEhMT5DUDPe6kd17Su+hTnkXF4+QTonzWT9i2u9LrWS8CnsTJHkxbh5fdfi79/dR3+6xt18ymzRsp5Fc0MFsF1kXkIwCIlHdkowFyLYRoOoLX6nLTA/Wu8m1brghwiiz6T30qmxS2IS79eFsFEPrb70q41uSTwh+1+hM8KfCYL18VOtzKAQb91OVDxUMcB/y8QOCq/g6F3r6OfGQRF8HW9FOBp8xHsYOpHFZhUxOaLhWHQgVEPqbfJjeHST/Qn9Yng1iPCDzkInDByI5ktRJiCgKAcEc3VsfXlsPuVHqs7mzLyWyihPHrKKiu7OtJKvbSRV8oa9shaW6NOZbiJnowO9xbbKmMHtrlxyqpiS4NrNyJSXQcjKTGPzBwx38CSD310FjGt+z7hYb5q9kWKmwUoiXM6Idtk0CPWDz7fxpPupgeOeDCFeydjwNYWaQMEi6fUtJoxrb7iTSkuDeXoq4hsNPy4+3ljoyKOj9LqTaDC/111yzB5lOhz0ormBnnOr0jNrSBps/Veg2OsEQhLHZdtbUpTRrE=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PjjOVqnXPGuiFnyCPYeEtund//XbXFXDp0dZ7+92CB8H+798l5I9V52gvrpc?=
+ =?us-ascii?Q?GVRKmBI1RrgfxatgnGVd/QFiIq0yXpb7J96RBe8CBjrqL+1R/K+hc/11LD7R?=
+ =?us-ascii?Q?O010Fts55OmuViW7hjTqL+maGP7UnafJ+YJ7SMr1/4nreOk8Rs5klqnPTpta?=
+ =?us-ascii?Q?LIkz++0QVYn/JBw+Zq/DKgQDj9m8CEM4utiS3GkGuyTdB2D5nUFlPGp/GS/O?=
+ =?us-ascii?Q?/pbYtQqMgBBjS7qIPssR3ONn3VcDmSEQJLSYyALjPW9vJjZ/N80CAoc7JPgM?=
+ =?us-ascii?Q?Iqaq/etiBl13L1kB+xFgeQ7FfU7E/5V+wzXZ82ch8+mG3Dv4q02SuHrSMht2?=
+ =?us-ascii?Q?Uxn8uiO+YFocQA6kpsiNFBKUIRX4nIeb4/YQMr+Wkac2s77vgNE+RB278H1+?=
+ =?us-ascii?Q?UK4RLJOxpv1wqnYCAaBXOWieSUCUQJ0tpY9CIZFJcxglTik1tekRbJncyMOu?=
+ =?us-ascii?Q?Be6VRo2yWDMu8LIwx2I+IOqQt2sVKyJUHZJekSebQUVaOi+zdM/mEXkG8dlw?=
+ =?us-ascii?Q?QSLMzO6/k0maLITraxFjgeK8mogWgZ0o8eH4Z2vVlLFSfdv083x/kPEINTUt?=
+ =?us-ascii?Q?cf72VdpCmfBQxvf40tZ5uXJeYY0knKkM2wEDgYUryjmsBLjTEj0VwI9t3Zf6?=
+ =?us-ascii?Q?eyQjb4pAUncCBbOkzPOnImSFBvYcvyuR03CY8NB0TORA4dzl5QwTleoo3QLJ?=
+ =?us-ascii?Q?0HGbSdH/Vfdb160QovCBXiz3UVzVHzs5VRf8PLHxoG9R7eoJBei20nPOiCdd?=
+ =?us-ascii?Q?eExThUVkJRFPyZAO3QZ7NF5WdEfnILbLDyGreiR/IZiTv03s7cYncXe8aVrJ?=
+ =?us-ascii?Q?RGvO1NZYIohqB1A7tEUeHD1n2fNeEAHjQCw1mDF/TLfYRpvivXahkpBFuky/?=
+ =?us-ascii?Q?mTvSKEYQmQ2lr4ZXgPUaS55eSd4wWZjnVn5lGcONadHkt63ewps0W0sfRrCZ?=
+ =?us-ascii?Q?jFY+eBPply10ftwlrSBSchVEALkbXKQpQ+TzfC4/zUwKcqJJxtt1p2F1BHId?=
+ =?us-ascii?Q?YUafIJRll4sODXnYxs3QUq0PB0awt7IWAOJZyWlc0IdRBPQbowMSog5R/6gv?=
+ =?us-ascii?Q?nZoiEkMXs4XyhyCPYkWCbjTFdLnIDvRu1trapLAVI3ct6jgcE46TZNMxa49y?=
+ =?us-ascii?Q?YoyEuWk7YhEX59MrG/E7Kc9Qo/6WUyaMzy70DALkXS1ipOXeDLLRodu/j4D5?=
+ =?us-ascii?Q?zZruYnMFlo/9p/dLrVex3M1UYVbwPW0LC5DZ240bJ3kOeHDPyUv6ZN5QDURa?=
+ =?us-ascii?Q?++VF1dalJ1ZufCMX4D+Lt0rljTQr+oqlcbznsZ0JP3xo3+Rs2Qbbi/UviQX4?=
+ =?us-ascii?Q?SEM=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34d3608c-c138-4411-70e9-08daad218587
+X-MS-Exchange-CrossTenant-AuthSource: OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 13:47:52.6659
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6080ff0b-8b4d-46dd-69bd-08daad2183fb
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT071.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7757
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB2412
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,83 +107,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some laptops have been reported to wake up from s2idle when plugging
-in the AC adapter or by closing the lid.  This is a surprising
-behavior that is further clarified by commit cb3e7d624c3ff ("PM:
-wakeup: Add extra debugging statement for multiple active IRQs").
+Hi, Yu Kuai!
 
-With that commit in place the following interaction can be seen
-when the lid is closed:
+> 
+> I'm confused here, cause I do think this patch make sense.
+> 
+> blk_mq_update_nr_hw_queues
+>   // for each queue using the tagset
+>   blk_mq_freeze_queue
+>   // if current elevator is not none, swith to none
+>   blk_mq_elv_switch_none
+>    // elevator need to be switched back, got a reference to
+>    // prevent module to be removed.
+>    __module_get
+>    elevator_switch(q, NULL);
+> 
+>   // switch back from none elevator
+>   blk_mq_elv_switch_back
+>    -> should release the module reference here
+>   blk_mq_unfreeze_queue
+> 
 
-[   28.946038] PM: suspend-to-idle
-[   28.946083] ACPI: EC: ACPI EC GPE status set
-[   28.946101] ACPI: PM: Rearming ACPI SCI for wakeup
-[   28.950152] Timekeeping suspended for 3.320 seconds
-[   28.950152] PM: Triggering wakeup from IRQ 9
-[   28.950152] ACPI: EC: ACPI EC GPE status set
-[   28.950152] ACPI: EC: ACPI EC GPE dispatched
-[   28.995057] ACPI: EC: ACPI EC work flushed
-[   28.995075] ACPI: PM: Rearming ACPI SCI for wakeup
-[   28.995131] PM: Triggering wakeup from IRQ 9
-[   28.995271] ACPI: EC: ACPI EC GPE status set
-[   28.995291] ACPI: EC: ACPI EC GPE dispatched
-[   29.098556] ACPI: EC: ACPI EC work flushed
-[   29.207020] ACPI: EC: ACPI EC work flushed
-[   29.207037] ACPI: PM: Rearming ACPI SCI for wakeup
-[   29.211095] Timekeeping suspended for 0.739 seconds
-[   29.211095] PM: Triggering wakeup from IRQ 9
-[   29.211079] PM: Triggering wakeup from IRQ 7
-[   29.211095] ACPI: PM: ACPI non-EC GPE wakeup
-[   29.211095] PM: resume from suspend-to-idle
+We need to release the reference only if blk_mq_elv_switch_back got its own
+ reference. However, blk_mq_elv_switch_back (precisely elevator_switch_mq)
+ does not increase the reference of the module it is switching to. 
+ Hence, the reference got in blk_mq_elv_switch_none does not need to be released,
+ or we'll have to re-increase the reference count manually.
 
-* IRQ9 on this laptop is used for the ACPI SCI.
-* IRQ7 on this laptop is used for the GPIO controller.
+> 
+> By the way, I do not test yet, but I think problem can be reporduced:
+> 
+> 
+> 1. modprobe bfq
+> 2. switch elevator to bfq
+> 3. trigger blk_mq_update_nr_hw_queues
+> 4. switch elevator to none
+> 5. rmmod bfq will fail
+> 
 
-What has occurred is when the lid was closed the EC woke up the
-SoC from it's deepest sleep state and the kernel's s2idle loop
-processed all EC events.  When it was finished processing EC events,
-it checked for any other reasons to wake (break the s2idle loop).
+I tried to reproduce the problem but failed, so I found my mistake.
 
-The IRQ for the GPIO controller was active so the loop broke, and
-then this IRQ was processed.  This is not a kernel bug but it is
-certainly a surprising behavior, and to better debug it we should
-have a dynamic debugging message that we can enact to catch it.
-
-Acked-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * Use PIN_IRQ_PENDING instead
- * Add Acks
----
- drivers/pinctrl/pinctrl-amd.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
-index 4691a33bc374f..82480d9e4819c 100644
---- a/drivers/pinctrl/pinctrl-amd.c
-+++ b/drivers/pinctrl/pinctrl-amd.c
-@@ -628,13 +628,15 @@ static bool do_amd_gpio_irq_handler(int irq, void *dev_id)
- 		/* Each status bit covers four pins */
- 		for (i = 0; i < 4; i++) {
- 			regval = readl(regs + i);
--			/* caused wake on resume context for shared IRQ */
--			if (irq < 0 && (regval & BIT(WAKE_STS_OFF))) {
-+
-+			if (regval & PIN_IRQ_PENDING)
- 				dev_dbg(&gpio_dev->pdev->dev,
--					"Waking due to GPIO %d: 0x%x",
-+					"GPIO %d is active: 0x%x",
- 					irqnr + i, regval);
-+
-+			/* caused wake on resume context for shared IRQ */
-+			if (irq < 0 && (regval & BIT(WAKE_STS_OFF)))
- 				return true;
--			}
- 
- 			if (!(regval & PIN_IRQ_PENDING) ||
- 			    !(regval & BIT(INTERRUPT_MASK_OFF)))
--- 
-2.34.1
-
+Sincerely,
+Jinlong Chen
