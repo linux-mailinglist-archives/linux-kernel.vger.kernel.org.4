@@ -2,80 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA19C5FE363
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DA95FE364
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJMUfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 16:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S229533AbiJMUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 16:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiJMUfg (ORCPT
+        with ESMTP id S229701AbiJMUgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 16:35:36 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51404D4A07;
-        Thu, 13 Oct 2022 13:35:28 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id j188so3025085oih.4;
-        Thu, 13 Oct 2022 13:35:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C+yYI+YkWGMsZNFt+MhjFu97fBBw4KO6BqLDbO0bxT8=;
-        b=NUl5Ak4a95Fg0BJlqhMwC+C4miFcmwLqEzIhwCgab6iyi0IKt42/51EZd/Zk8yOiix
-         gHLHGGu0msLbu8sfV9VyoTT37sjj02+4Ae9RMIBciskLa8zcOLK16u5BrFt5Nv6+0MIw
-         3ob5hVxWK2pJsAWG34JHR62Glv/AoStNRNyAYObUaE8h2zbd+Eh0RyuYrS5n/gmLpGdu
-         ltezqPy9k6aDCE3/WIwk1v43TNKbniATL6w1/osgpgUBRaerOWt0xAEbvVK6Ue3X+E9g
-         0idncA/MEX1gS372VnAiwYAVYX2dxKU7bDziGfDMHgqLSHCrWIJfLh2Y06ibOZy3Y6uf
-         ZDhg==
-X-Gm-Message-State: ACrzQf3oiDDMijw7E94E6Zk46uze9cqqT72FtW8e3zLXVtVY1Wb2jggs
-        DLSuGsIeBVsu0q0YN9xYGA==
-X-Google-Smtp-Source: AMsMyM6osB5ziZBg2XIkk2WpQvAiOPVKrXDjYQRCfGWBA/VJh2nGEgfqyNrKu1upnPHQi4wzvDgKWw==
-X-Received: by 2002:a05:6808:1496:b0:350:4640:5462 with SMTP id e22-20020a056808149600b0035046405462mr5556666oiw.47.1665693327535;
-        Thu, 13 Oct 2022 13:35:27 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056830204a00b00661b019accbsm420062otp.3.2022.10.13.13.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 13:35:27 -0700 (PDT)
-Received: (nullmailer pid 183993 invoked by uid 1000);
-        Thu, 13 Oct 2022 20:35:28 -0000
-Date:   Thu, 13 Oct 2022 15:35:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 2/4] dt-bindings: arm: qcom: Document IPQ4018 boards
-Message-ID: <166569332720.183944.3878915082187494148.robh@kernel.org>
-References: <20221013155418.47577-1-krzysztof.kozlowski@linaro.org>
- <20221013155418.47577-2-krzysztof.kozlowski@linaro.org>
+        Thu, 13 Oct 2022 16:36:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE57166980
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:36:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC0E9B8207A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:36:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6178C433D6;
+        Thu, 13 Oct 2022 20:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665693369;
+        bh=Lv/xeU7pcPzUnADyJpxL1Q+e8T9Z+tXL2sat6MNFhmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T++5dAXRzVNF1OW2pF85FIJJlqMidkZWYucIauD8/vv+tA2SJG+p5+Gnn5MTOXrS+
+         15WVByQODgUU/PuesapfgVZsAnQDwtqPgJLnMk8ka90B5PKGA03bISCEFfFRiSdP59
+         0sDsV0wvJhDpC6KZzko1Aw2IIxl4WsgvyyURf9I3OxQFhhpGwIEvWcyfqKiqiNpoIT
+         sLp90DMMpXwADBfxUUxPuFiyrUYDS0oB+GT77PtaFL0hCUArd5FWJMWVlVyVb77XT7
+         yQGoCcw1jNLvFXv4p7f0q0JtOYVks0k7CQCP1XWsu3iTJxggd3C+r8izdaHichPTab
+         XxfTgBdRF+RFA==
+Date:   Thu, 13 Oct 2022 13:36:06 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>,
+        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH 1/2] riscv: fix detection of toolchain Zicbom support
+Message-ID: <Y0h2ttpShmMbJFp5@dev-arch.thelio-3990X>
+References: <20221006173520.1785507-1-conor@kernel.org>
+ <20221006173520.1785507-2-conor@kernel.org>
+ <Y0hzl75d11uWC+f3@dev-arch.thelio-3990X>
+ <Y0h2GVhYwj8UEJV2@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013155418.47577-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y0h2GVhYwj8UEJV2@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 11:54:16 -0400, Krzysztof Kozlowski wrote:
-> Add compatibles for existing boards with IPQ4018 SoC: ALFA Network
-> AP120C-AC and 8devices Jalapeno.
+On Thu, Oct 13, 2022 at 09:33:29PM +0100, Conor Dooley wrote:
+> On Thu, Oct 13, 2022 at 01:22:47PM -0700, Nathan Chancellor wrote:
+> > On Thu, Oct 06, 2022 at 06:35:20PM +0100, Conor Dooley wrote:
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > > 
+> > > It is not sufficient to check if a toolchain supports a particular
+> > > extension without checking if the linker supports that extension too.
+> > > For example, Clang 15 supports Zicbom but GNU bintutils 2.35.2 does
+> > > not, leading build errors like so:
+> > > 
+> > > riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicbom1p0_zihintpause2p0: Invalid or unknown z ISA extension: 'zicbom'
+> > > 
+> > > Convert CC_HAS_ZICBOM to TOOLCHAIN_HAS_ZICBOM & check if the linker
+> > > also supports Zicbom.
+> > > 
+> > > Reported-by: Kevin Hilman <khilman@baylibre.com>
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1714
+> > > Link: https://storage.kernelci.org/next/master/next-20220920/riscv/defconfig+CONFIG_EFI=n/clang-16/logs/kernel.log
+> > > Fixes: 1631ba1259d6 ("riscv: Add support for non-coherent devices using zicbom extension")
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > The versions look correct to me. I see the LLVM zicbom commit [1] in
+> > llvmorg-15.0.0 and I see the binutils zicbom commit [2] in
+> > binutils-2_39.
+> > 
+> > FWIW, if we are adding explicit tool versions to the Kconfig, could you
+> > not also drop the cc-option checks? Typically, cc-option is only used
+> > when dynamically checking for a feature, in lieu of statically checking
+> > a version. No strong opinion though.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Ehh, the explicit version checks are for linker support, but it could be
+> that your linker supports it but other things do not. The compilers
+> support can still be checked with cc-option, no?
 > 
+> This error here happens when the compiler does support it, so the string
+> containing zicbom is emitted in the object files. That can't be checked
+> dynamically. For the opposite situation, dynamic checking is possible so
+> I tried retained them. If it's convention to do one or the other, I can
+> easily switch.
+> 
+> I'm out of my comfort zone when it comes to kbuild plumbing so please,
+> please lmk if I'm missing something...
 
-Acked-by: Rob Herring <robh@kernel.org>
+No, you are absolutely correct. That's what I get for reviewing changes
+right after being off for a week ;) the cc-option checks should remain
+in addition to the new linker checks, so please disregard that feedback
+on both changes.
+
+> > 
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > 
+> > [1]: https://github.com/llvm/llvm-project/commit/4f40ca53cefb725aca6564585d0ec4836a79e21a
+> > [2]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=41d6ac5da655a2e78109848f2db47e53552fd61a
+> > 
+> > > ---
+> > >  arch/riscv/Kconfig  | 10 ++++++----
+> > >  arch/riscv/Makefile |  3 +--
+> > >  2 files changed, 7 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index d557cc50295d..6da36553158b 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -401,14 +401,16 @@ config RISCV_ISA_SVPBMT
+> > >  
+> > >  	   If you don't know what to do here, say Y.
+> > >  
+> > > -config CC_HAS_ZICBOM
+> > > +config TOOLCHAIN_HAS_ZICBOM
+> > >  	bool
+> > > -	default y if 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
+> > > -	default y if 32BIT && $(cc-option,-mabi=ilp32 -march=rv32ima_zicbom)
+> > > +	default y
+> > > +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
+> > > +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zicbom)
+> > > +	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+> > >  
+> > >  config RISCV_ISA_ZICBOM
+> > >  	bool "Zicbom extension support for non-coherent DMA operation"
+> > > -	depends on CC_HAS_ZICBOM
+> > > +	depends on TOOLCHAIN_HAS_ZICBOM
+> > >  	depends on !XIP_KERNEL && MMU
+> > >  	select RISCV_DMA_NONCOHERENT
+> > >  	select RISCV_ALTERNATIVE
+> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> > > index 3fa8ef336822..3607d38edb4f 100644
+> > > --- a/arch/riscv/Makefile
+> > > +++ b/arch/riscv/Makefile
+> > > @@ -57,8 +57,7 @@ toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zi
+> > >  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
+> > >  
+> > >  # Check if the toolchain supports Zicbom extension
+> > > -toolchain-supports-zicbom := $(call cc-option-yn, -march=$(riscv-march-y)_zicbom)
+> > > -riscv-march-$(toolchain-supports-zicbom) := $(riscv-march-y)_zicbom
+> > > +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICBOM) := $(riscv-march-y)_zicbom
+> > >  
+> > >  # Check if the toolchain supports Zihintpause extension
+> > >  toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
+> > > -- 
+> > > 2.37.3
+> > > 
+> > > 
