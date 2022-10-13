@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946E95FDB40
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357995FDB50
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJMNms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S229865AbiJMNoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiJMNmm (ORCPT
+        with ESMTP id S229989AbiJMNoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:42:42 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C279114DE3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:42:37 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h12so2061724pjk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:42:37 -0700 (PDT)
+        Thu, 13 Oct 2022 09:44:02 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58323108DFE
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:43:56 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id l4so1835997plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NOLoQjm6lEWHmulfqFpQ7MDS9fPvqNaIDPSIxB0GFo8=;
-        b=AvHPQ5/wcBFLkRUYUUmEVMR4gBWtumKwj8eJQTXJ6itkibd81unu/Z4MZdHkHxmlv2
-         moQQBzzXt4AybwebklULodcvG7oheLdkbNh4CoEDNi0c1l8rb5fxynNbIshI9zHNWQNj
-         KLhmeb+LxE53o8VjCLGoaOvA0ihmkRPh0P1vrfU+pNA9QBOjgFJW4FC+zNUFnm1C8Tld
-         2thzHhVW1H5No+n518ILMuXmeOv4ETfBFX/i9kpNFCEC5n9xBh7GScNuVKaRAwVU56hc
-         0UZ1CaCCrjsl3aYFT6Z8Fruo3zs4xovnP1oL93Q0oGyVYjeBZr+wBFFFp9UZrgb6va/G
-         Wudw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O81+P58FUqUzFvyhgNRSmI+OPkunmpM/swl0Z9C3YBg=;
+        b=ioli8x3yHwDJN+q9To8poYslymiA7VxYi3Vcv85dQquOoUzOU/2j0K+Kf2Xm4ZZtNR
+         8D6d8etpktGLMcSegOxQ44t05jwy4RhL4K99PLeSJpPLfdkHrIf9LD6351WljHQnGt0C
+         MFhidHsfCw0XJue8oOiAO1lu1DLfkCyKZP1fY/yVSJGCOH6lHoTbZ0REtbExaDkOXotk
+         8cGVtPC/Ezmyv76OCZUKrUSk9u6URw5Souuv0wjyM8Sfbqiz0YANIlD7tFRizm4pbCdL
+         2Fzb70j48sC4xtdTi8rOIuniTFGudO7T6CZkoZsht9vosfI1Wfxuxm42VrBHx7SKQlEa
+         5gtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NOLoQjm6lEWHmulfqFpQ7MDS9fPvqNaIDPSIxB0GFo8=;
-        b=fzQHe4QFDLuX/cR5JjZc/IKG/b6mkvayK7/mkkDPsyZqEVgGLfyOiow0XxEjlgTYAC
-         Cq67smayB1QoX99UtiuWPK2U8HMM+KtW0UgriC03CEnYGYbNHr92BwKxlj1snur9baGx
-         ZkL7/QcDR0ZZIynsTS4euYij1Upj7Z/7sZhvs4l4hBUVBu63TKwzL7iXQYmN0iT9Xd8J
-         mjqOpW9dAP+P7iDiuQOl6U6Vifeg44n0gkQqiWsHMMIZlTcpA+WQRRx/+TRJnLlfDbqY
-         eS/Mmoz1Bd63otCQQ2NC54IyqJfJJaxUTQ6mzgbRkMJswGfgEIkAWOVmKYnDEg3NUb+e
-         4mrQ==
-X-Gm-Message-State: ACrzQf1QybM+Y5jhNLvtAitiybtHOjLsxGpByDh7xxwu1YS5YHcNHOFb
-        DNQ9P+iSJczM8Ky1H5fgFEqUgQ==
-X-Google-Smtp-Source: AMsMyM6FkIPSzrfH5vm5egxoGzAlEomfBe9Ic3Qi2U3S4jqkZ9v4n/W5IbztJfqkilvpnPObUtKyvg==
-X-Received: by 2002:a17:90a:bd91:b0:20d:2add:96a4 with SMTP id z17-20020a17090abd9100b0020d2add96a4mr11384510pjr.195.1665668556405;
-        Thu, 13 Oct 2022 06:42:36 -0700 (PDT)
-Received: from [10.4.223.70] ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id i66-20020a626d45000000b00562a71d719fsm1974504pfc.155.2022.10.13.06.42.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 06:42:36 -0700 (PDT)
-Message-ID: <a401c9a3-026c-9695-d339-24347965cd20@bytedance.com>
-Date:   Thu, 13 Oct 2022 21:42:30 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O81+P58FUqUzFvyhgNRSmI+OPkunmpM/swl0Z9C3YBg=;
+        b=rp+LNMkPg9PKeyUtV9tP+8GbRrnkhS6mgh7YNVbG+JpIX+d9JRNHh8i1tw03bI+2a6
+         fcc3jNwa7YVFapZyswVXlzt3NdoR/7PH0Tra3h4m1DqAp/ZWZ8Bsq4fyqWtRko5aMnpE
+         M3lOh70tkmiHA2Q3/eODm0/pRrY23YBfL5uxXwUM7yZew3bbcZSgZWoReFg51qrQhM5N
+         2+ntfJUNOiPuS30vBVfgfLysujcrwVC44uHS1tHCQbMPib31gSVq6fv/jk2/O5Ou3Eel
+         MV9pjdxQk8OfUxwjH6afdf2sIzfxS3bU7XKaan60HJxCBKH7dX1kRQTNXg7nnGTHooWy
+         bcMg==
+X-Gm-Message-State: ACrzQf3E2cDF+pMYo2HURu8fsiwu+h6NcjUBwZfOb/w7HeJwwAakffOb
+        MRoBtcWTHZZIQdrEtcE7KNhBkq6lWgITjbgeOUUnEQ==
+X-Google-Smtp-Source: AMsMyM5iw0c63ZR4dpISN3UmFSzHp5mi5fer3iRlq8DDZ7XJmTyUQktu+UCO6+i1ktquI1thkVrEtWSlAnxyQ9zbA20=
+X-Received: by 2002:a17:90a:7b8c:b0:20b:1f3b:f6fd with SMTP id
+ z12-20020a17090a7b8c00b0020b1f3bf6fdmr11160768pjc.202.1665668635466; Thu, 13
+ Oct 2022 06:43:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [External] Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
- <Y0WEbCqJHjnqsg8n@dhcp22.suse.cz>
- <582cf257-bc0d-c96e-e72e-9164cff4fce1@bytedance.com>
- <Y0aCiYMQ4liL2azT@dhcp22.suse.cz>
- <a0421769-c2b9-d59a-0358-3cc84b2cb2bd@bytedance.com>
- <Y0avztF7QU8P/OoB@dhcp22.suse.cz>
- <e825a27a-646b-9723-f774-947501c04ec2@bytedance.com>
- <Y0f17v1c3aAszlbk@dhcp22.suse.cz>
- <db41c662-19ce-fc1a-21ba-38ecda7d09c8@bytedance.com>
- <Y0gP9i8KZKt4/EcG@dhcp22.suse.cz>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <Y0gP9i8KZKt4/EcG@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yz6zfrVq9cP/wrJb@orome> <20221006130622.22900-1-pshete@nvidia.com>
+ <20221006130622.22900-2-pshete@nvidia.com> <CAPDyKFr_Yi2EgrBUzsORnM4mOkf25WR8+7_dfF2h4XzRDPm9-w@mail.gmail.com>
+ <DM5PR12MB2406610AB26183BACB19EED6B7239@DM5PR12MB2406.namprd12.prod.outlook.com>
+ <CAPDyKFqn2jMVQ5BAOZPFx2OOyMRQvsQ1E7mGAQp82x5+v6aSGQ@mail.gmail.com> <DM5PR12MB2406405CE44A7606B5A28203B7259@DM5PR12MB2406.namprd12.prod.outlook.com>
+In-Reply-To: <DM5PR12MB2406405CE44A7606B5A28203B7259@DM5PR12MB2406.namprd12.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 13 Oct 2022 15:43:18 +0200
+Message-ID: <CAPDyKFq5hNTdwT7CMvsxG=_5u+xvG2k3-PfbGhAbHfHbGqK81w@mail.gmail.com>
+Subject: Re: [PATCH v7 2/4] mmc: sdhci-tegra: Add support to program MC stream ID
+To:     Prathamesh Shete <pshete@nvidia.com>
+Cc:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Aniruddha Tvs Rao <anrao@nvidia.com>,
+        Suresh Mangipudi <smangipudi@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu 13-10-22 20:50:48, Zhongkun He wrote:
->>>> Hi Michal
->>>>
->>>> Could we try to change the MPOL_F_SHARED flag to MPOL_F_STATIC to
->>>> mark static mempolicy which cannot be freed, and mpol_needs_cond_ref
->>>> can use MPOL_F_STATIC to avoid freeing  the static mempolicy.
->>>
->>> Wouldn't it make more sense to get rid of a different treatment and
->>> treat all memory policies the same way?
->>
->> I found a case, not sure if it makes sense. If there is no policy
->> in task->mempolicy, the use of atomic_{inc,dec} can be skiped
->> according  to MPOL_F_STATIC. Atomic_{inc,dec} in hot path may reduces
->> performance.
-> 
-> I would start with a simple conversion and do any potential
-> optimizations on top of that based on actual numbers. Maybe we can
-> special case default_policy to avoid reference counting a default (no
-> policy case). A simple check for pol == &default_policy should be
-> negligible.
+On Thu, 13 Oct 2022 at 08:33, Prathamesh Shete <pshete@nvidia.com> wrote:
+>
+> Hi Ulf,
+>
+> >> In that case, perhaps we can add a "depends on IOMMU_API" in the Kconfig
+> >> instead? Or is the tegra driver used on platforms where IOMMU_API could be
+> >> unset?
+> Yes it can/will work with IOMMU disabled so its not recommended to add a "depends on" condition in Kconfig.
 
-Got it, thanks for your reply and suggestions.
+Alright, in that case it looks to me that there are two other options
+to move forward.
+
+1) Add proper definitions of the struct iommu_fwspec in
+include/linux/iommu.h even when CONFIG_IOMMU_API is unset. In a way it
+seems a bit silly to me, to have the iommu stubs around, unless those
+can be used for cases like this, right!?
+
+2) Move the code within the "ifdef CONFIG_IOMMU_API" sections into
+separate functions - and add stubs for these functions too. In this
+way the functions can be called, independently of whether
+CONFIG_IOMMU_API is set/unse, which would make the code in
+drivers/mmc/host/sdhci-tegra.c cleaner and thus easier to maintain.
 
 
+>
+> Thanks
+> Prathamesh
+>
+> > -----Original Message-----
+> > From: Ulf Hansson <ulf.hansson@linaro.org>
+> > Sent: Tuesday, October 11, 2022 6:04 PM
+> > To: Prathamesh Shete <pshete@nvidia.com>
+> > Cc: adrian.hunter@intel.com; thierry.reding@gmail.com; Jonathan Hunter
+> > <jonathanh@nvidia.com>; p.zabel@pengutronix.de; linux-
+> > mmc@vger.kernel.org; linux-tegra@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Aniruddha Tvs Rao <anrao@nvidia.com>; Suresh
+> > Mangipudi <smangipudi@nvidia.com>; Krishna Yarlagadda
+> > <kyarlagadda@nvidia.com>
+> > Subject: Re: [PATCH v7 2/4] mmc: sdhci-tegra: Add support to program MC
+> > stream ID
+> >
+> > External email: Use caution opening links or attachments
+> >
+> >
+> > On Tue, 11 Oct 2022 at 13:44, Prathamesh Shete <pshete@nvidia.com> wrote:
+> > >
+> > > Hi Ulf
+> > >
+> > > The initial patches were without the #ifdef. #ifdef is being added as per review
+> > comments and kernel robot errors.
+> > > Following error was detected by kernel robot
+> > > >>
+> > > All errors (new ones prefixed by >>):
+> > >
+> > >    drivers/mmc/host/sdhci-tegra.c: In function 'sdhci_tegra_probe':
+> > > >> drivers/mmc/host/sdhci-tegra.c:1794:54: error: 'struct iommu_fwspec' has
+> > no member named 'ids'
+> > >     1794 |                         tegra_host->streamid = fwspec->ids[0] & 0xffff;
+> > >          |                                                      ^~
+> > >
+> > >
+> > > vim +1794 drivers/mmc/host/sdhci-tegra.c
+> > > >>
+> > > Adrian also pointed out this issue so to address these issues #ifdef
+> > > was added
+> >
+> > I see!
+> >
+> > In that case, perhaps we can add a "depends on IOMMU_API" in the Kconfig
+> > instead? Or is the tegra driver used on platforms where IOMMU_API could be
+> > unset?
+> >
+> > [...]
+
+Kind regards
+Uffe
