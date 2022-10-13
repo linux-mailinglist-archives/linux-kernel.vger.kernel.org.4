@@ -2,115 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8BC5FD423
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B2F5FD428
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJMFPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 01:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S229650AbiJMFQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 01:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiJMFPw (ORCPT
+        with ESMTP id S229589AbiJMFQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 01:15:52 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42560DBE74
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:15:50 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id cl1so882067pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8jjzSbquCGIpZBdOT7nOgHDr2hdlUw8WRIsF1vsL4Nk=;
-        b=UKqxWkfM/aMOqDYiA3dhhALbROWYdi3V8SUNyNVkCs0PTqmV52wr8cxoold1Ip2j70
-         njd8Rq9HVQ1M6N4IJJj3lh1ZGnFJekZ0LqTJYq6odww9cAWdgqs8aNs1BwLvtH2jD68a
-         UFjMmiUXXyDntoXChizYt9EfaT+oVLKmOQrS4H/IxbGj4yu6QhHnDV4Tb0tbIhMOZBGq
-         +XB4Gw4YMwWBqMDS7PeTnlVTsqil42mhqHIDek3b4/uJC8SDS2x1yRWenHwmrpyxl482
-         6tnDZ8GmiKAI6/wm4fXhUTwSXyfg6J6T+cS8eWTeM7dAmkh9ScweSoudEiHi21BFahja
-         MTNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8jjzSbquCGIpZBdOT7nOgHDr2hdlUw8WRIsF1vsL4Nk=;
-        b=wkXd8TsidFhDNkVlouGsagH/6vgJDRAJFtZiODPl6FzXFSlcgHN1KsOufmOW96rCuw
-         cnW3ketsA8iGFAlyoasELsV75iec8zFcRL/ElZpOIL7s+toW5Z7TWBwIdf+Z6FtEVzAG
-         wbqC6wRijGYIhKZEz1iAk4tFYVWqUOpRo/C4J63gcaOiJHuPXvZSR4mMYt8qL+LmH9M3
-         sctbJOh8sq6MbZOeIMuQRM3erjERlMZDnVagsib3aj7fPxzZSTCBN1N7YogQ5oJK/KAV
-         fKPFJkivWDlgWmj5PiFm7j2WKihT2sc9v3QbIh4C2/Rce4qw462qnW1FJ7USFMVgYA3k
-         SQ/g==
-X-Gm-Message-State: ACrzQf2GZ+nj1vgb5igqpKOhCWxodm6Q/Gk7ZtFAtfHzKoagh67uLaP8
-        ELdZMK1xUu7Zz54RwnH5yyM9bw==
-X-Google-Smtp-Source: AMsMyM7n13PJvUAYFtfq5Tw2ZISk2AiYMgqsFCw4SHVk4/QZn3nYBJI6UNk4g+wo3EqfDTnMhqMd4w==
-X-Received: by 2002:a17:902:ef51:b0:180:7922:ce40 with SMTP id e17-20020a170902ef5100b001807922ce40mr28773522plx.8.1665638149701;
-        Wed, 12 Oct 2022 22:15:49 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id 24-20020a631558000000b0045feab454f6sm8632449pgv.51.2022.10.12.22.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 22:15:49 -0700 (PDT)
-In-Reply-To: <20220823183319.3314940-1-mail@conchuod.ie>
-References: <20220823183319.3314940-1-mail@conchuod.ie>
-Subject: Re: (subset) [PATCH v4 0/4] Fix dt-validate issues on qemu dtbdumps due to dt-bindings
-Message-Id: <166563815015.20405.16941289599227550003.b4-ty@rivosinc.com>
-Date:   Wed, 12 Oct 2022 22:15:50 -0700
+        Thu, 13 Oct 2022 01:16:47 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B3A129086;
+        Wed, 12 Oct 2022 22:16:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=clTkJSl+79+lkDhe0WSqS3bmIG2dTcxGkKTTgKqmOHKUKczHawO2ckncV10T2ttubEvG0k1BEpRYpLvblIMoxlYICT/2ooVysWuripBx7qcQjlKXtI/pXpCFuZiynumaCXduk6QctwhgdVP7BRUZ2mr3HDye60zCN50IrdefLN+Omsx3+1lNQR1NFmc6uoV17knTfg8jmZMaZnQ/DK6bpT95YtST2HRHOMcxakOjVHByv24mHwGWQ33UjjWTcwRbfKkui0UxwIFK1wfoFMFueQ3/Y7RdquNFwX1QTcFaypy54JHdgXpt/5gZI9U2yNz4g2rhXNfbenO+V82BIGUeEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PY7nI+QMNraDT3O5d6qhR58VBCs/tbPWLvxPHkBxHw4=;
+ b=aYfmh5JIe3n1eycyB+EKiLNgT2ZlZVvUU0NpMAM7a7h9OnLGBM283aCI00HfE0HWX26uzIceNnRpDe0qPBzYqKArFpQKNyTyAMuf/xxox0ZgK3gRnp8StUOGX85znSc+NxNZxPSgY6KqYvkoAxPRdMEbCM08WbQ/tM/MOOekBDFG7PQuvXBPoNYq05/NQNyS1JOdqSy9/Cp+pGa2hmcSuoDc/3YrVykXbj2j4JoxavZPY2BOLO6/pNWU4aKwpN36BX8tT8s1lsop5mCViNcFnq+9TFCpjNngqG47lj87wB0MHMDw/FoF1H5viA6Gba8ObVf5E/AybWtrdJrrltQYsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PY7nI+QMNraDT3O5d6qhR58VBCs/tbPWLvxPHkBxHw4=;
+ b=cD5iDtvJPTH6XdbB2XRzSOmRfutckBUM9oIz55C0OaMsark2mJVtiAeV95jbsk0556n7bxz/CQbQ66e1k5mznDHo6hsWqJWRD2KNkPT9dcl/aq8ro4OPXy2XGhqPwsdrTeesenFwvaPsG2ockm/b9obIs1Dk4R02JElSz+5l7SJs1jNbHZcP74FLfywkNk+x/QmqA2jA8hbA/Rbn47R+Lg+7JvVInwZ+XVP8exfA4AtvOLynZ+N5p1M1tYC2FHIvxhj5bDB1kNATkXJ+9d/XrRdvRf/ZHNxNTfwk+PKAIlIHdGUhr4KfH8c6vlY/xzBuMguLf//n3y7MXo6CNW4Qlg==
+Received: from BN0PR04CA0175.namprd04.prod.outlook.com (2603:10b6:408:eb::30)
+ by BL1PR12MB5969.namprd12.prod.outlook.com (2603:10b6:208:398::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Thu, 13 Oct
+ 2022 05:16:41 +0000
+Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:eb:cafe::90) by BN0PR04CA0175.outlook.office365.com
+ (2603:10b6:408:eb::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22 via Frontend
+ Transport; Thu, 13 Oct 2022 05:16:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Thu, 13 Oct 2022 05:16:41 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 12 Oct
+ 2022 22:16:30 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 12 Oct 2022 22:16:30 -0700
+Received: from thinkpad-t480.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Wed, 12 Oct 2022 22:16:28 -0700
+From:   Johnny Liu <johnliu@nvidia.com>
+To:     <cwchoi00@gmail.com>
+CC:     <cw00.choi@samsung.com>, <johnliu@nvidia.com>,
+        <kyungmin.park@samsung.com>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <myungjoo.ham@samsung.com>
+Subject: Re: [PATCH v2] devfreq: Support device update function
+Date:   Thu, 13 Oct 2022 13:16:27 +0800
+Message-ID: <20221013051627.17171-1-johnliu@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <24e701e9-b560-5350-a2f7-89e2a4a1c97a@gmail.com>
+References: <24e701e9-b560-5350-a2f7-89e2a4a1c97a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-2a85d
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Anup Patel <anup@brainfault.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>, qemu-riscv@nongnu.org,
-        devicetree@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <mail@conchuod.ie>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT004:EE_|BL1PR12MB5969:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c8e3882-d6b2-4b1d-69b7-08daacda1ce7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +wHnwPR1CueVBbBs0t3Gq/te6ZP8cBNb9HpzGFbE3J/zCD+mr/rSmY4hjujatWAaV2NLrCLBhev92lWIjEpnaCHNNZ8YuBQ83UeiCKN1Yg92a/xZBZ4Jb3Pk8W8TTHKQ1DmA8GKy/qduWoPVj+SdP1A04KHVjbPNA0iAOFNyKzLBTNTKqHinxc4siepiCSyxifgecUsFcYCwgqF7I63EpdRYQ5e9BMyM4fq8DX5RRx9nd5/IzSOVc/Fea4iZnAOQYFxN1p2F6/dFZBfeSoAQ/dLvF6vd2rZz5MsLqELRVdCbl9aNtehu75rX5k9YId3gbpB6t00Rxn4j0NG27C5z8e4D9FWL+o4J4EQOU1SUd4WzGqj6SA1tUFzy+0Kp10L0Le/BIIn+L6/IriP1gYEieDjVzXoj4erpIodTWQTAE6E/VWgRlT2YjHHSrHXF7OP2tWzpMkDNaY/YrhFKPhpEXY0+YCrCH9xLpqEmkVtY6gFQ+jFYkSwzt4Vmd8+Fx2ofoU0gC/MYVO36ZczDePL58iD7PtokPSBDue1+uL9scQxeXcsM9LxQGWnvVTaV7+P3/lZphrfj1RCm+5iGLVZOel2qwGx2rwVWz9VORLs46JnV058AxFAaBv0+RV/iBlMtsvNYceQd3ABQyT3JFMW1FPHm34eYNcniTlgHUMH3N/TFMXqAw2+qvW+NKX8w1bCV7P5qXxB5Uy1zpiadcn/DSa7o07DzZYS8+WnNCiBSmd93DbFwrMSAvybxZOcK1Z07c9zLTB1G6+QNf7UXCDYo9A==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199015)(40470700004)(46966006)(36840700001)(2616005)(7696005)(36756003)(26005)(40460700003)(5660300002)(82310400005)(15650500001)(316002)(6916009)(2906002)(8676002)(40480700001)(186003)(478600001)(8936002)(41300700001)(54906003)(356005)(4326008)(70206006)(70586007)(1076003)(7636003)(36860700001)(82740400003)(426003)(86362001)(83380400001)(336012)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 05:16:41.1935
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c8e3882-d6b2-4b1d-69b7-08daacda1ce7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5969
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 19:33:16 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The device trees produced automatically for the virt and spike machines
-> fail dt-validate on several grounds. Some of these need to be fixed in
-> the linux kernel's dt-bindings, but others are caused by bugs in QEMU.
-> 
-> Patches been sent that fix the QEMU issues [0], but a couple of them
-> need to be fixed in the kernel's dt-bindings. The first patches add
-> compatibles for "riscv,{clint,plic}0" which are present in drivers and
-> the auto generated QEMU dtbs. The final patch should be ignored for all
-> serious purposes unless you want to wash your eyes out afterwards, but
-> JIC the versioned extensions ever come up, it's there.
-> 
-> [...]
+Thanks for your quick response and detailed comments. I will prepare a new patch
+series to include the user of the proposed function. But still I answer your
+concerns in the following sections.
 
-Applied, thanks!
+On Thu, 13 Oct 2022 04:44, Chanwoo Choi wrote:
+> Hi,
+>
+> Basically, struct devfreq_dev_profile is used to pass the devfreq device data
+> from devfreq driver to governor. But, This means that it passes
+> the data from governor to devfreq driver reversely?
 
-[1/4] dt-bindings: timer: sifive,clint: add legacy riscv compatible
-      https://git.kernel.org/palmer/c/826249942679
-[2/4] dt-bindings: interrupt-controller: sifive,plic: add legacy riscv compatible
-      https://git.kernel.org/palmer/c/6e965c9bd738
-[3/4] dt-bindings: riscv: add new riscv,isa strings for emulators
-      https://git.kernel.org/palmer/c/299824e68bd0
+Yes, it means that governor can pass data to devfreq driver reversely.
 
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+> On 22. 10. 3. 15:02, Johnny Liu wrote:
+> > To realize interrupt-driven closed-loop governors, governors need to be
+>
+> Could you explain the detailed means of 'interrupt-driven closed-loop governors'?
+
+For term "interrupt-driven", it means the DFS logic is triggered by interrupts
+rather than performing DFS in a polling fashion. This can reduce the CPU load.
+
+For term "closed-loop", it means that there is a target metric the governor will
+try to keep it at certain value/level. For example, if the target metric means
+device utilization, then the governor should perform DFS so that it will keep
+device utilization at certain level specified by the user.
+
+> > able to send data to the underlying devfreq driver to ask for updating
+> > the device settings, such as hardware registers for frequency limits,
+>
+> I think that governor is not able to get the hardware information direclty
+> instead of devfreq driver. Usually, the devfreq driver should get the
+> h/w info and then passed to governor if required.
+
+Yes, governor should not be able to the HW info directly. From my perspective,
+I think governor should be able to pass down hint, such as device utilization
+specified by the user in the governor, to the devfreq driver. Then, the
+devfreq driver can configure the device accordingly so that interrupts get
+triggered when device utilization exceeds or drops by certain amount.
+
+> Lastly, this patch doesn't contain the any use-case of devfreq_update_dev().
+> I prefer to post the real use-case of this patch.
+
+I will include the user of it in a new patch series.
+
+> > which are compared against the device frequency to generate interrupts
+> >
+> > Since governors might export several tunable parameters, users can
+> > enforce different policies for the control logics. Under different
+> > policies, governors need to send different information to inform the
+> > devfreq driver to configure the device accordingly.
+> >
+> > The introduced update function improves the flexibility of governors
+> > and acts as a communication interface between governors and devfreq
+> > drivers.
+> >
+> > Signed-off-by: Johnny Liu <johnliu@nvidia.com>
+> > ---
+> > v2: Correct the function signature of devfreq_update_dev
+> >
+> >  drivers/devfreq/governor.h | 8 ++++++++
+> >  include/linux/devfreq.h    | 8 ++++++++
+> >  2 files changed, 16 insertions(+)
+> >
+> > diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+> > index 0adfebc0467a..b5781fa549c7 100644
+> > --- a/drivers/devfreq/governor.h
+> > +++ b/drivers/devfreq/governor.h
+> > @@ -124,4 +124,12 @@ static inline int devfreq_update_stats(struct devfreq *df)
+> >
+> >  	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
+> >  }
+> > +
+> > +static inline int devfreq_update_dev(struct devfreq *df, void *data)
+> > +{
+> > +	if (!df->profile->update)
+> > +		return -EINVAL;
+> > +
+> > +	return df->profile->update(df->dev.parent, data);
+> > +}
+> >  #endif /* _GOVERNOR_H */
+> > diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> > index 34aab4dd336c..91648e8f8d76 100644
+> > --- a/include/linux/devfreq.h
+> > +++ b/include/linux/devfreq.h
+> > @@ -92,6 +92,8 @@ struct devfreq_dev_status {
+> >   *			devfreq.last_status.
+> >   * @get_cur_freq:	The device should provide the current frequency
+> >   *			at which it is operating.
+> > + * @update:		An optional function to allow governors send data back
+> > + *			to the devfreq driver to update the device settings.
+>
+> IMO, 'update' word is too generic. I think that 'update_device_data' is better
+> to improve the readability.
+
+Yes, "update_device_data" has better readability compared to "update".
+
+> >   * @exit:		An optional callback that is called when devfreq
+> >   *			is removing the devfreq object due to error or
+> >   *			from devfreq_remove_device() call. If the user
+> > @@ -114,6 +116,7 @@ struct devfreq_dev_profile {
+> >  	int (*get_dev_status)(struct device *dev,
+> >  			      struct devfreq_dev_status *stat);
+> >  	int (*get_cur_freq)(struct device *dev, unsigned long *freq);
+> > +	int (*update)(struct device *dev, void *data);
+> >  	void (*exit)(struct device *dev);
+> >
+> >  	unsigned long *freq_table> @@ -451,6 +454,11 @@ static inline int devfreq_update_stats(struct devfreq *df)
+> >  {
+> >  	return -EINVAL;
+> >  }
+> > +
+> > +static inline int devfreq_update_dev(struct devfreq *df, void *data)
+> > +{
+> > +	return -EINVAL;
+> > +}
+> >  #endif /* CONFIG_PM_DEVFREQ */
+> >
+> >  #endif /* __LINUX_DEVFREQ_H__ */
+
+--
+Best Regards,
+Johnny Liu
