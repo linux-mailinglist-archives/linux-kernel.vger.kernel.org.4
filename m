@@ -2,151 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1D65FDA3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F348A5FD9BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJMNSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S229826AbiJMNAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJMNSE (ORCPT
+        with ESMTP id S229797AbiJMNAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:18:04 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Oct 2022 06:18:00 PDT
-Received: from smtp-out-06.comm2000.it (smtp-out-06.comm2000.it [212.97.32.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210AF197F80;
-        Thu, 13 Oct 2022 06:17:59 -0700 (PDT)
-Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        Thu, 13 Oct 2022 09:00:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E9326F0;
+        Thu, 13 Oct 2022 05:59:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-06.comm2000.it (Postfix) with ESMTPSA id 7572E5639DE;
-        Thu, 13 Oct 2022 14:58:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1665665911;
-        bh=VwMyq6K/Y20d9lPOV/FUqg1ALLGkcp+OHNu++vwyun4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-        b=QAqrBZjY6/M2FLKYEVmxD4MKm7EQg1D0jqIdhgEI1P8ccnfsqSqXeHM6WVovzq1yP
-         KRtea5CqX4ChN/TgzTzuU9iRtVj8/HQO8teNsnQ1KV9sR8PFAMwH4vpq4Hb2Z3mC1O
-         U5GhOXdkgvgGO6Qk3N8douYN7JKsqXJ3vCLIxogJM8FbRXq5KNYUMBurrcacwUTyRC
-         vqDd6ylWojGksPmsNpmBqEqINd9fei3HTHHo09DvKfOv6kx/f/mDlYOyKh6wGlknVg
-         5JmGazYqiepBMQLw60hiiDM6DaedyBt1Xi/erFxc0kAwPYtZv9lQVt3jOqqw5XvAf3
-         QxsuuxG1N2a0g==
-Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
-        id CF3D87F83D; Thu, 13 Oct 2022 14:58:29 +0200 (CEST)
-Date:   Thu, 13 Oct 2022 14:58:29 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Max Krummenacher <max.oss.09@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Marek Vasut <marex@denx.de>
-Cc:     max.krummenacher@toradex.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] dt-bindings: display: add new bus-format property
- for panel-dpi
-Message-ID: <Y0gLdQleE64FQgn9@gaggiata.pivistrello.it>
-Reply-To: francesco.dolcini@toradex.com
-References: <20220628181838.2031-1-max.oss.09@gmail.com>
- <20220628181838.2031-3-max.oss.09@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AD2B61791;
+        Thu, 13 Oct 2022 12:59:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4942C433D6;
+        Thu, 13 Oct 2022 12:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665665998;
+        bh=ty4DVOvK4AGDUGTtZoOUbJX9Ux5kvrzSPuUsAB0rHC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JAJebx8Ie/kcBEpP4FPEtyz2oh2jGF//ZUn0k/4310cOiSsdTyE0Nl0ieQcmcSK9W
+         JdqYCDYZYDNybmxiiKFBQyHwM2AJIuQtUy7VVO6P2wpcVGnWiZf/2G7zSXZW+D6nt+
+         dNG8r/u4IfbBRuNt0QPQlk3lFUMRSCDWCRnN3JBk+jO002WNW4okR9W8lpYrc3iuJb
+         zZSdANS/Y1rsaUbh9fR32Ty8uQ/slVhtxf7KVsxbLkew9geodPdFQIcHUmIITlCS6a
+         e61Gof24sdGMtsLl2Z93L9ZB5eE5zH8OKv5YrtRPNtv2W3bo7nzYzV3nmx4rcrZ9m3
+         O2FyJhphl8a4w==
+Date:   Thu, 13 Oct 2022 13:59:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-toolchains@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: gcc 5 & 6 & others already out of date?
+Message-ID: <Y0gLyLbdOCetX5LN@sirena.org.uk>
+References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="48OdjAggKb0Ho9wZ"
 Content-Disposition: inline
-In-Reply-To: <20220628181838.2031-3-max.oss.09@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+X-Cookie: Do you like "TENDER VITTLES"?
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Max, Marek, Dave et al.
 
-On Tue, Jun 28, 2022 at 08:18:36PM +0200, Max Krummenacher wrote:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
-> 
-> The property is used to set the enum bus_format and infer the bpc
-> for a panel defined by 'panel-dpi'.
-> This specifies how the panel is connected to the display interface.
-> 
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> 
+--48OdjAggKb0Ho9wZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-<snip>
+On Wed, Oct 12, 2022 at 07:36:40PM -0600, Jason A. Donenfeld wrote:
 
-> diff --git a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> index dae0676b5c6e..52f5db03b6a8 100644
-> --- a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> +++ b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> @@ -26,7 +26,28 @@ properties:
->    height-mm: true
->    label: true
->    panel-timing: true
-> -  port: true
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    description:
-> +      Input port node, receives the panel data.
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> +
-> +        properties:
-> +          bus-format:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            minimum: 0x1001
-> +            maximum: 0x1fff
-> +            description: |
-> +              Describes how the display panel is connected to the display interface.
-> +              Valid values are defined in <dt-bindings/display/dt-media-bus-format.h>.
-> +              The mapping between the color/significance of the panel lines to the
-> +              parallel data lines are defined in:
-> +              https://www.kernel.org/doc/html/v5.17/userspace-api/media/v4l/subdev-formats.html#packed-rgb-formats
-> +
+> But also, it's not just Rust. Clang support has been an incremental
+> thing, and the kernel has dropped old Clang versions as they no longer
+> make sense. Heck, the new KCFI implementation requires bleeding edge
 
-Last month I had the chance to talk in person about this topic with
-Dave, Marek and Max in Dublin.
+I suspect that if clang starts being the default system compiler for one
+of the distros with longer support windows we'll start treating it more
+like GCC, right now clang is in the position where for the most part
+people using clang are actively seeking it out and explicitly picking a
+clang version rather than just trying to build the kernel with whatever
+compiler they got by default.
 
-My understanding is that this change is addressing a general need, Dave
-confirmed me they have a downstream patch for raspberrypi [1].
+> And then there's old trusty gcc. Gcc also improves according to a nice
+> cadence, and we know people are using later gccs because nobody is
+> catching the build errors from old gccs. So let's stop pretending we
+> support old compilers. We clearly don't. Maybe some subset of code
+> does, but by and large, I doubt many developers are actually daily
+> driving gcc 5.1 and doing allyesconfig builds with it. Yes, many are
+> rightfully cautious of gcc 12 and stick with gcc 11 still, and that's
+> reasonable, but 11 or even 10 is still way larger than 5.1.
 
-From what I could tell the only concern is about the actual encoding of
-this `bus-format` property.
+> The truth is, people tend to use more recent toolchains. And if Clang
+> hasn't broken the will of the stranglers, then surely Rust will.
 
-I am personally convinced that a simple enum is the way to go, I think
-that Marek proposal is adding complexity and not flexibility (from my
-understanding Dave is on the same page, just correct me if I
-misunderstood you).
+The expected users for old toolchains was always users doing something
+like building a newer kernel on an old enterprise distro rather than
+people actually developing anything AIUI.
 
-The current proposal is already encoding the exact bit placing as
-described in Documentation/userspace-api/media/v4l/subdev-formats.rst [2],
-this enumeration can be extended to address any future needs
-and I would not invent a new one to define the exact same
-things (and using the same enum was also suggested by Rob).
+> So, what are your thoughts on just abandoning this charade all
+> together, and saying that we support the last 2 or 3 releases of a
+> compiler (and related toolchain - binutils and such) at the time of
 
-Marek: you told me that you had some concern about some valid use case
-not covered by this solution, would you mind explaining why that would
-not be covered with an addition on this enumeration?
+Two or three releases seems a bit ambitious, I'm sitting here in front
+of a Debian stable system which probably has another year or so of being
+the latest release left and it's sitting at GCC 10.2 with the latest
+release of GCC being 12.2.  Probably also worth noting that GCC did a
+9.5 release in May this year as it went out of their support window.
 
-Any other opinion on this topic? How can we move this forward?
+> the kernel's release, and admit that our C is a moving target, just as
+> our Rust inevitably will be. Then we don't have to have these tortured
+> conversations every few years about 4.9 or 5.1 or 6.3 or whatever
+> enterprise [il-]logic has tended to dictate how things have worked
+> until now.
 
-Francesco
+> As usual, feel free to chase me off with pitchforks. I'm sure some
+> RHEL folks hate this. But I think it's at least worth consideration.
 
-[1] https://github.com/raspberrypi/linux/commit/8e43f1898191b43aa7ed6e6ca3a4cd28709af86d
-[2] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/subdev-formats.html
+I do think it would be helpful to track where the choices of baseline
+versions are coming from, if nothing else that'd probably make the
+conversations about upgrading them easier even if we don't actually bump
+them until we run into trouble.
 
+A quick look suggests that RHEL 7 is at GCC 4.8 (so running into trouble
+anyway), RHEL 8 at 8.x, SLES looks like it makes newer compilers
+available even for the old releases (eg, there's GCCs up to 10 available
+for SLES 12 AFAICT).  Ubuntu 16.04 does seem to use GCC 5 but it's on
+extended security support at this point, their 18.04 is at GCC 7.4 from
+the looks of it.
+
+--48OdjAggKb0Ho9wZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNIC8cACgkQJNaLcl1U
+h9BCgAf6A/5E2Ut+JiGZPdR9DndRFlci8g8GrHdWfZDlttljHH5HSNF7ilQOpsCC
+Bm39Np/tfXRXbu4dfoiF7hRNj2zPj2gV2hkWCWjZ/G9OznYMo1QgQDdyi+2LPsnR
+LDkXm5x4glf85lCvNGZZNaHoIg+8kePe6el9EavPTa+PUemZ2fAcG1p5va6IM8sR
+JiJarlReyfYIeeUukbDlm4jCt+cjLZjCr9sDtnBpLPorABOH84Nb2lTAmmFYcwAs
+ECQt/lJPlZnus15TmNPAadU3jVJHzE3HDlwRJq6a14PRT2hevExVTUUErBGz0bh5
+yKiP+H4wEoCTgdyjQnvSs0aq+pPyxw==
+=6G3B
+-----END PGP SIGNATURE-----
+
+--48OdjAggKb0Ho9wZ--
