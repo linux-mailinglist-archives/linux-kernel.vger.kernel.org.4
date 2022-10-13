@@ -2,261 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0E75FD702
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E982F5FD708
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiJMJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
+        id S229594AbiJMJ0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJMJZa (ORCPT
+        with ESMTP id S229513AbiJMJ0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:25:30 -0400
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0753ED7E03
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:25:27 -0700 (PDT)
-Received: (qmail 7803 invoked from network); 13 Oct 2022 09:25:01 -0000
-Received: from p200300cf070ada0076d435fffeb7be92.dip0.t-ipconnect.de ([2003:cf:70a:da00:76d4:35ff:feb7:be92]:60562 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:25:01 +0200
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Westphal <fw@strlen.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Graf <tgraf@suug.ch>, kasan-dev@googlegroups.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
-Date:   Thu, 13 Oct 2022 11:25:11 +0200
-Message-ID: <3026360.ZldQQBzMgz@eto.sf-tec.de>
-In-Reply-To: <20221010230613.1076905-6-Jason@zx2c4.com>
-References: <20221010230613.1076905-1-Jason@zx2c4.com> <20221010230613.1076905-6-Jason@zx2c4.com>
+        Thu, 13 Oct 2022 05:26:39 -0400
+Received: from out199-18.us.a.mail.aliyun.com (out199-18.us.a.mail.aliyun.com [47.90.199.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571B39AC0D;
+        Thu, 13 Oct 2022 02:26:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0VS37q9T_1665653188;
+Received: from 30.221.98.246(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VS37q9T_1665653188)
+          by smtp.aliyun-inc.com;
+          Thu, 13 Oct 2022 17:26:30 +0800
+Message-ID: <f296f028-522a-7a1e-7082-c11377e0af12@linux.alibaba.com>
+Date:   Thu, 13 Oct 2022 17:26:28 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart3480752.mCL07Ym2y3"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V6 0/6] RISC-V fixups to work with crash tool
+To:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
+ <f8d3ae66-73a8-db89-c4c4-918610fb5f35@linux.alibaba.com>
+ <Y0aOcsf06a2+ExrU@wendy>
+ <55606b89-13f2-5e3b-9176-bacbec8c36d1@linux.alibaba.com>
+ <22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart3480752.mCL07Ym2y3
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"; protected-headers="v1"
-From: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Date: Thu, 13 Oct 2022 11:25:11 +0200
-Message-ID: <3026360.ZldQQBzMgz@eto.sf-tec.de>
-In-Reply-To: <20221010230613.1076905-6-Jason@zx2c4.com>
-MIME-Version: 1.0
 
-Am Dienstag, 11. Oktober 2022, 01:06:11 CEST schrieb Jason A. Donenfeld:
-> The prandom_u32() function has been a deprecated inline wrapper around
-> get_random_u32() for several releases now, and compiles down to the
-> exact same code. Replace the deprecated wrapper with a direct call to
-> the real function. The same also applies to get_random_int(), which is
-> just a wrapper around get_random_u32(). This was done as a basic find
-> and replace.
->=20
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Yury Norov <yury.norov@gmail.com>
-> Acked-by: Toke H=F8iland-J=F8rgensen <toke@toke.dk> # for sch_cake
-> Acked-by: Chuck Lever <chuck.lever@oracle.com> # for nfsd
-> Reviewed-by: Jan Kara <jack@suse.cz> # for ext4
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> # for
-> thunderbolt Acked-by: Darrick J. Wong <djwong@kernel.org> # for xfs
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  Documentation/networking/filter.rst            |  2 +-
->  arch/parisc/kernel/process.c                   |  2 +-
->  arch/parisc/kernel/sys_parisc.c                |  4 ++--
->  arch/s390/mm/mmap.c                            |  2 +-
->  arch/x86/kernel/cpu/amd.c                      |  2 +-
->  drivers/gpu/drm/i915/i915_gem_gtt.c            |  6 +++---
->  drivers/gpu/drm/i915/selftests/i915_selftest.c |  2 +-
->  drivers/gpu/drm/tests/drm_buddy_test.c         |  2 +-
->  drivers/gpu/drm/tests/drm_mm_test.c            |  2 +-
->  drivers/infiniband/hw/cxgb4/cm.c               |  4 ++--
->  drivers/infiniband/hw/hfi1/tid_rdma.c          |  2 +-
->  drivers/infiniband/hw/mlx4/mad.c               |  2 +-
->  drivers/infiniband/ulp/ipoib/ipoib_cm.c        |  2 +-
->  drivers/md/raid5-cache.c                       |  2 +-
->  .../media/test-drivers/vivid/vivid-touch-cap.c |  4 ++--
->  drivers/misc/habanalabs/gaudi2/gaudi2.c        |  2 +-
->  drivers/net/bonding/bond_main.c                |  2 +-
->  drivers/net/ethernet/broadcom/cnic.c           |  2 +-
->  .../chelsio/inline_crypto/chtls/chtls_cm.c     |  2 +-
->  drivers/net/ethernet/rocker/rocker_main.c      |  6 +++---
->  .../wireless/broadcom/brcm80211/brcmfmac/pno.c |  2 +-
->  .../net/wireless/marvell/mwifiex/cfg80211.c    |  4 ++--
->  .../net/wireless/microchip/wilc1000/cfg80211.c |  2 +-
->  .../net/wireless/quantenna/qtnfmac/cfg80211.c  |  2 +-
->  drivers/net/wireless/ti/wlcore/main.c          |  2 +-
->  drivers/nvme/common/auth.c                     |  2 +-
->  drivers/scsi/cxgbi/cxgb4i/cxgb4i.c             |  4 ++--
->  drivers/target/iscsi/cxgbit/cxgbit_cm.c        |  2 +-
->  drivers/thunderbolt/xdomain.c                  |  2 +-
->  drivers/video/fbdev/uvesafb.c                  |  2 +-
->  fs/exfat/inode.c                               |  2 +-
->  fs/ext4/ialloc.c                               |  2 +-
->  fs/ext4/ioctl.c                                |  4 ++--
->  fs/ext4/mmp.c                                  |  2 +-
->  fs/f2fs/namei.c                                |  2 +-
->  fs/fat/inode.c                                 |  2 +-
->  fs/nfsd/nfs4state.c                            |  4 ++--
->  fs/ntfs3/fslog.c                               |  6 +++---
->  fs/ubifs/journal.c                             |  2 +-
->  fs/xfs/libxfs/xfs_ialloc.c                     |  2 +-
->  fs/xfs/xfs_icache.c                            |  2 +-
->  fs/xfs/xfs_log.c                               |  2 +-
->  include/net/netfilter/nf_queue.h               |  2 +-
->  include/net/red.h                              |  2 +-
->  include/net/sock.h                             |  2 +-
->  kernel/bpf/bloom_filter.c                      |  2 +-
->  kernel/bpf/core.c                              |  2 +-
->  kernel/bpf/hashtab.c                           |  2 +-
->  kernel/bpf/verifier.c                          |  2 +-
->  kernel/kcsan/selftest.c                        |  2 +-
->  lib/random32.c                                 |  2 +-
->  lib/reed_solomon/test_rslib.c                  |  6 +++---
->  lib/test_fprobe.c                              |  2 +-
->  lib/test_kprobes.c                             |  2 +-
->  lib/test_min_heap.c                            |  6 +++---
->  lib/test_rhashtable.c                          |  6 +++---
->  mm/shmem.c                                     |  2 +-
->  mm/slab.c                                      |  2 +-
->  net/core/pktgen.c                              |  4 ++--
->  net/ipv4/route.c                               |  2 +-
->  net/ipv4/tcp_cdg.c                             |  2 +-
->  net/ipv4/udp.c                                 |  2 +-
->  net/ipv6/ip6_flowlabel.c                       |  2 +-
->  net/ipv6/output_core.c                         |  2 +-
->  net/netfilter/ipvs/ip_vs_conn.c                |  2 +-
->  net/netfilter/xt_statistic.c                   |  2 +-
->  net/openvswitch/actions.c                      |  2 +-
->  net/sched/sch_cake.c                           |  2 +-
->  net/sched/sch_netem.c                          | 18 +++++++++---------
->  net/sunrpc/auth_gss/gss_krb5_wrap.c            |  4 ++--
->  net/sunrpc/xprt.c                              |  2 +-
->  net/unix/af_unix.c                             |  2 +-
->  72 files changed, 101 insertions(+), 101 deletions(-)
->=20
-
-> diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
-> index 5a1dd4736b56..b358a74ed7ed 100644
-> --- a/lib/test_rhashtable.c
-> +++ b/lib/test_rhashtable.c
-> @@ -291,7 +291,7 @@ static int __init test_rhltable(unsigned int entries)
->  	if (WARN_ON(err))
->  		goto out_free;
->=20
-> -	k =3D prandom_u32();
-> +	k =3D get_random_u32();
->  	ret =3D 0;
->  	for (i =3D 0; i < entries; i++) {
->  		rhl_test_objects[i].value.id =3D k;
-
-This one looks ok.
-
-> @@ -369,12 +369,12 @@ static int __init test_rhltable(unsigned int entrie=
-s)
->  	pr_info("test %d random rhlist add/delete operations\n", entries);
->  	for (j =3D 0; j < entries; j++) {
->  		u32 i =3D prandom_u32_max(entries);
-> -		u32 prand =3D prandom_u32();
-> +		u32 prand =3D get_random_u32();
->=20
->  		cond_resched();
->=20
->  		if (prand =3D=3D 0)
-> -			prand =3D prandom_u32();
-> +			prand =3D get_random_u32();
->=20
->  		if (prand & 1) {
->  			prand >>=3D 1;
-
-But this doesn't make any sense to me. It needs a bit more context:
-
->			continue;
->		}
-
-Why would one change prand wen it will be overwritten in the next loop anyw=
-ay?
-
->		err =3D rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_=
-params);
->		if (test_bit(i, obj_in_table)) {
->			clear_bit(i, obj_in_table);
->			if (WARN(err, "cannot remove element at slot %d", i))
->				continue;
->		} else {
->			if (WARN(err !=3D -ENOENT, "removed non-existent element %d, error %d n=
-ot %d",
->			     i, err, -ENOENT))
->				continue;
->		}
+在 2022/10/13 下午1:24, Conor Dooley 写道:
 >
->		if (prand & 1) {
->			prand >>=3D 1;
->			continue;
->		}
+> On 13 October 2022 03:28:09 IST, Xianting Tian <xianting.tian@linux.alibaba.com> wrote:
+>> 在 2022/10/12 下午5:52, Conor Dooley 写道:
+>>> On Wed, Oct 12, 2022 at 05:42:37PM +0800, Xianting Tian wrote:
+>>>> 在 2022/8/12 上午12:17, Palmer Dabbelt 写道:
+>>>>> On Thu, 11 Aug 2022 00:41:44 PDT (-0700),
+>>>>> xianting.tian@linux.alibaba.com wrote:
+>>>>>> I ever sent the patch 1 in the link:
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>> And patch 2,3 in the link:
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>>
+>>>>>> This patch set just put these patches together, and with three new
+>>>>>> patch 4, 5, 6.
+>>>>>> these six patches are the fixups for machine_kexec, kernel mode PC
+>>>>>> for vmcore
+>>>>>> and improvements for vmcoreinfo, memory layout dump and fixup
+>>>>>> schedule out issue
+>>>>>> in machine_crash_shutdown().
+>>>>>>
+>>>>>> The main changes in the six patchs as below,
+>>>>>> Patch 1: Fixup use of smp_processor_id() in preemptible context, to
+>>>>>> cleanup
+>>>>>>            the console prints.
+>>>>>> Patch 2: Fixup to get correct kernel mode PC for kernel mode regs
+>>>>>> for vmcore.
+>>>>>> Patch 3: Fixup schedule out issue in machine_crash_shutdown()
+>>>>>> Patch 4: Add modules to virtual kernel memory layout dump.
+>>>>>> Patch 5: Add VM layout, va bits, ram base to vmcoreinfo, which can
+>>>>>> simplify
+>>>>>>            the development of crash tool as ARM64 already did
+>>>>>>            (arch/arm64/kernel/crash_core.c).
+>>>>>> Patch 6: Updates vmcoreinfo.rst for vmcoreinfo export for RISCV64.
+>>>>>>
+>>>>>> With these six patches(patch 2 is must), crash tool can work well to
+>>>>>> analyze
+>>>>>> a vmcore. The patches for crash tool for RISCV64 is in the link:
+>>>>>> https://lore.kernel.org/linux-riscv/20220801043040.2003264-1-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>>
+>>>>>> ------
+>>>>>> Changes v1 -> v2:
+>>>>>>     1, remove the patch "Add a fast call path of crash_kexec()" from
+>>>>>> this series
+>>>>>>        of patches, as it already applied to riscv git.
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
+>>>>>>     2, add 'Reviewed-by' based on the comments of v1.
+>>>>>> Changes v2 -> v3:
+>>>>>>     use "riscv" instead of "riscv64" in patch 5 subject line.
+>>>>>> Changes v3 -> v4:
+>>>>>>     use "riscv" instead of "riscv64" in the summary of patch 5 subject
+>>>>>> line.
+>>>>>> Changes v4 -> v5:
+>>>>>>     add a new patch "RISC-V: Fixup schedule out issue in
+>>>>>> machine_crash_shutdown()"
+>>>>>> Changes v5 -> v6:
+>>>>>>     1, move "fixup" patches to the start of the patch set.
+>>>>>>     2, change patch 1, 2, 6's subject to make it tell more what it's
+>>>>>> about.
+>>>>>>     3, add Fixes for patch 3.
+>>>>>>     4, adjuest the changes format for patch 6.
+>>>>>>
+>>>>>>
+>>>>>> Xianting Tian (6):
+>>>>>>     RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+>>>>>>     RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+>>>>>>     RISC-V: Fixup schedule out issue in machine_crash_shutdown()
+>>>>>>     RISC-V: Add modules to virtual kernel memory layout dump
+>>>>>>     RISC-V: Add arch_crash_save_vmcoreinfo support
+>>>>>>     Documentation: kdump: describe VMCOREINFO export for RISCV64
+>>>>>>
+>>>>>>    .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
+>>>>>>    arch/riscv/kernel/Makefile                    |  1 +
+>>>>>>    arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+>>>>>>    arch/riscv/kernel/crash_save_regs.S           |  2 +-
+>>>>>>    arch/riscv/kernel/machine_kexec.c             | 28 ++++++++++++++---
+>>>>>>    arch/riscv/mm/init.c                          |  4 +++
+>>>>>>    6 files changed, 89 insertions(+), 6 deletions(-)
+>>>>>>    create mode 100644 arch/riscv/kernel/crash_core.c
+>>>>> Thank.  I've taken the first 4 onto for-next, which is still targeted
+>>>>> for 5.20, as they're fixes.  I'm not opposed to taking the documentation
+>>>>> patch for this cycle as well, it just needs some going-over as the
+>>>>> wording looks very odd (or at least it does to me right now, maybe I'm
+>>>>> just still half asleep).  Patch 5 is a new feature, and given that it's
+>>>>> being spun during the merge window it's too late.
+>>>> Hi Palmer
+>>>>
+>>>> Do you plan to merge the two patch to Linux 6.1 to support crash tool work?
+>>>> thanks
+>>>>
+>>>>     RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+>>> 357628e68f5c ("RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context"
+>>>
+>>>>     RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+>>> 59c026c359c3 ("RISC-V: Fixup get incorrect user mode PC for kernel mode regs")
+>>>
+>>> Hey Xianting, those two commits already seem to have been applied, do
+>>> you perhaps instead mean the documentation patch and the addition of
+>>> support for arch_crash_save_vmcoreinfo? I recalled asking if you needed
+>>> to respin at the time, but do not see a response:
+>>> https://lore.kernel.org/linux-riscv/39fdc85e-b2d5-863c-4878-4b3380d76bc4@microchip.com/
+>>> IIRC Bagas had some outstanding comments on the documentation change
+>>> too. Was I incorrect?
+>> Sorry, It is the two patches:
+>>
+>>    RISC-V: Add arch_crash_save_vmcoreinfo support
+>>    Documentation: kdump: describe VMCOREINFO export for RISCV64
+>>
+>> I saw Palmer already merged the two patches to his riscv-crash branch, it means they are OK?
+> Dunno, but no harm in resending given it's been a while cycle since then.
+I checked the Documentation patch,  the only comment I missed from Bagas is:
 
-The same code again, and in this case it is impossible to reach, as the che=
-ck=20
-already returned false before.
+Use "Document these RISCV64 exports above" instead of "This patch just 
+add the description of VMCOREINFO export for RISCV64" in commit message.
 
-Should these have been something like this in the first place:
+Unfortunately, my patch sending env is broken, I can't send new patch now:(
 
-	if (prand & 1)
-		prand >>=3D1;
-	else
-		continue;
-
-At least as the code looks now this only ever needs a single bit of randomn=
-ess,
-and the later checks and the shift can go away, but I suspect that somethin=
-g=20
-else was meant with that code.
-
-=46lorian, can you comment and maybe fix it? When possible use prandom_u8()=
- as=20
-it seems to me that you only need 3 bytes of randomness here anyway.
-
-Or you wanted to move the variable before the loop and keep the random state
-between the loops and only reseed when all '1' bits have been consumed. But=
-=20
-even in this case the later checks seem wrong as the value has not changed =
-in=20
-between.
-
-Eike
---nextPart3480752.mCL07Ym2y3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCY0fZeAAKCRBcpIk+abn8
-TntwAJ9xzxWkK3p1U0eDZrP7KBVqifG2qQCfX+QJlO38O9/0GmN/6UVEEt2C1l8=
-=+1Dc
------END PGP SIGNATURE-----
-
---nextPart3480752.mCL07Ym2y3--
-
-
-
+>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-crash
+>>
+>> I saw Bagas's comments, I will send new version patch for the two patches, thanks for the reminder.
+>>
+>>> Thanks,
+>>> Conor.
