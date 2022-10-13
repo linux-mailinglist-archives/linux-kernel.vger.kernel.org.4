@@ -2,131 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773E75FD904
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D0F5FD908
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiJMMOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S229736AbiJMMOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJMMOC (ORCPT
+        with ESMTP id S229803AbiJMMOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:14:02 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7244FDB62
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:13:54 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id c12-20020a170903234c00b0017f695bf8f0so1213633plh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H9SaswMeDVA0PXtGn+/RgF2ttyuiFbIBcmIgImTCEOc=;
-        b=Ii25z3y8bR8LKI7fL+IKrahfLIIcV3i2dTRT7mx45kXaZTqxy+AlAEJavNtwpa3Anw
-         FzlrCvqcIVsgqY5N/4i6RpGtHtnXrv/KT6iO8pgRcqZeKk0f08HQPZeixvrS75+Ucw5L
-         VV0Kp9LASJiH661+y+0zqS+0bi4Ge2wi5JIRdmc3Simtu4fnznbSA2LJuCQfxGGBNgOd
-         km5BGclc4f2DTtfQwUTKXBVv+e3Mc14iEnNDliLXhGJtJJ+t/Xt3wBj9OliaFx99xuMS
-         sLj0INBleT8YXIcOCau1ft0h9gLiAptL/Q5xHngJ5C8CySJVqOXuEHFcRnQWu/xLRthx
-         +jsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H9SaswMeDVA0PXtGn+/RgF2ttyuiFbIBcmIgImTCEOc=;
-        b=kx5bs8SMo/JlRSkshW1ibiJ6Oo9XWpmGWCA/iPY863u18NoiNOzp0LqlyUX1evxTxw
-         EYIJ6jhB05p75UMB0ZfMkkuuOMeG2NilwzaYLgYqFUIQMTnz3UwNxRyJpn0/cPIoiMZ/
-         wbUn+6edUtYBKVQ5Bk6pK/77nVzmNiQ03LXTAK7SOYI0zaGynOimtNINGR1IZOq5lL03
-         5KkX2G7d9/Kfv7n5qNRKk2Hc7NhibwgXTbljRUAkRT1EFI/5MvDFGUy0HxrvF1Mr1Bqd
-         jzzgzFyUZlTa8iE8EGe7/ni1kdT/3NdRbNEb/SrllRpGii2mp7zn+3Fh4lANQA4TI0YS
-         IGZw==
-X-Gm-Message-State: ACrzQf2YGcQW/44Bf9GGgAEwo2s1e4GJMl8warSHOg3XX6upweBKfy2A
-        90y7+5bMOKG/AEVPpTACN3Kq+Xan9RDRMw7Y
-X-Google-Smtp-Source: AMsMyM4D8UD/snB7p//EsveGwAXY3dAujc5wCqE1XPJTo18Kkxmke1rbuc5ZoadCWIyta62qcE9Z4Z4GaauE7Vv5
-X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:90a:8c8e:b0:202:883b:2644 with SMTP
- id b14-20020a17090a8c8e00b00202883b2644mr10744181pjo.89.1665663233436; Thu,
- 13 Oct 2022 05:13:53 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 12:13:19 +0000
-In-Reply-To: <20221013121319.994170-1-vannapurve@google.com>
-Mime-Version: 1.0
-References: <20221013121319.994170-1-vannapurve@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221013121319.994170-5-vannapurve@google.com>
-Subject: [V3 PATCH 4/4] KVM: selftests: x86: Precompute the cpu type
-From:   Vishal Annapurve <vannapurve@google.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
-        seanjc@google.com, oupton@google.com, peterx@redhat.com,
-        vkuznets@redhat.com, dmatlack@google.com,
-        Vishal Annapurve <vannapurve@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 08:14:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E42FFFA6;
+        Thu, 13 Oct 2022 05:14:28 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.26.208])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB3786600368;
+        Thu, 13 Oct 2022 13:14:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665663255;
+        bh=S+BNjC705jMWNIoRpFbauuWJfWYy/25S3l4WLgp8d7s=;
+        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+        b=R02fEA9lIFS+CGwB4Dhu1zlIYvMUEp9NcoMhHFhfZXxhSCZsdsmSgwdDg3fEkVR5H
+         UG9UHdS4prrx5bA+qZOUpr/uD65Hjqnkbh7t9HjzfmCkTTJKIkA9MzWqrnn53F8nak
+         FKNccQwlFJblMVfWJW7mXJXTSb/fzmZRKrbpacSGsCnYa7Ltn705bLjxjjvpgXTqEo
+         YbkkY+XTkjLgFWr+Va+7ETGijytbjmZGNnfXq4RHpFGwwkj/ZzV4e1R9/tXubrM/hD
+         rFbFH7I/x1GJIpIKb6i9xO+Vjd5NK8QNggb0zDFLEgA27Oi36MNWc4238b8xUqst2z
+         QWuSqabFEVgog==
+Message-ID: <c8d135f8-8fbf-2314-9efc-ec172233150f@collabora.com>
+Date:   Thu, 13 Oct 2022 17:14:09 +0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH RFC v2 00/16] btrfs: add fscrypt integration
+Content-Language: en-US
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+References: <cover.1658623319.git.sweettea-kernel@dorminy.me>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, osandov@osandov.com,
+        kernel-team@fb.com
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <cover.1658623319.git.sweettea-kernel@dorminy.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cache the vendor CPU type in a global variable so that multiple calls
-to is_amd/intel_cpu() do not need to re-execute CPUID.
+Hello,
 
-Sync the global variable is_cpu_amd into the guest so the guest can also
-avoid executing CPUID instruction.
+I see no comment on this RFC. Is there any next version?
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vishal Annapurve <vannapurve@google.com>
----
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Thanks,
+Usama
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index fa65e8142c16..f508e58346e9 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -19,6 +19,7 @@
- #define MAX_NR_CPUID_ENTRIES 100
- 
- vm_vaddr_t exception_handlers;
-+static bool is_cpu_amd;
- 
- static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
- {
-@@ -1046,7 +1047,7 @@ static bool cpu_vendor_string_is(const char *vendor)
- 
- bool is_intel_cpu(void)
- {
--	return cpu_vendor_string_is("GenuineIntel");
-+	return !is_cpu_amd;
- }
- 
- /*
-@@ -1054,7 +1055,7 @@ bool is_intel_cpu(void)
-  */
- bool is_amd_cpu(void)
- {
--	return cpu_vendor_string_is("AuthenticAMD");
-+	return is_cpu_amd;
- }
- 
- void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
-@@ -1328,8 +1329,13 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
- 	return get_kvm_intel_param_bool("unrestricted_guest");
- }
- 
-+void kvm_selftest_arch_init(void)
-+{
-+	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
-+}
- 
- void kvm_arch_vm_post_create(struct kvm_vm *vm)
- {
- 	vm_create_irqchip(vm);
-+	sync_global_to_guest(vm, is_cpu_amd);
- }
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+On 7/24/22 5:53 AM, Sweet Tea Dorminy wrote:
+> This is a draft set of changes adding fscrypt integration to btrfs.
+> 
+> Last October, Omar sent out a design document for having fscrypt
+> integration with btrfs [1]. In summary, it proposes btrfs storing its
+> own encryption IVs on a per-file-extent basis. fscrypt usually encrypts
+> files using an IV derived from per-inode information; this would prevent
+> snapshotting or reflinking or data relocation for btrfs, but by using an
+> IV associated with each file extent, all the inodes sharing a particular
+> key and file extent may decrypt successfully.
+> 
+> This series starts implementing it on the kernel side for the simple
+> case, non-compressed data extents. My goal in sending out this RFC is to
+> get feedback on whether these are going in a reasonable direction; while
+> there are a couple of additional parts, they're fundamentally minor
+> compared to this.
+> 
+> Not included are a couple of minor changes to btrfs-progs; additionally,
+> none of the fscrypt tool changes needed to use the new encryption policy
+> are included. Obviously, additional fstests will be needed. Also not yet
+> included are encryption for inline data extents, verity items, and
+> compressed data.
+> 
+> [1]
+> https://lore.kernel.org/linux-btrfs/YXGyq+buM79A1S0L@relinquished.localdomain/
+> 
+> Changelog:
+> 
+> v2:
+>   - Fixed all warnings and known incorrectnesses.
+>   - Split fscrypt changes into their own patchset:
+>      https://lore.kernel.org/linux-fscrypt/cover.1658623235.git.sweettea-kernel@dorminy.me
+>   - Combined and reordered changes so that enabling fscrypt is the last change.
+>   - Removed unnecessary factoring.
+>   - Split a cleanup change off.
+> 
+> v1:
+>   - https://lore.kernel.org/linux-btrfs/cover.1657707686.git.sweettea-kernel@dorminy.me
+> 
+> Omar Sandoval (13):
+>    btrfs: store directories' encryption state
+>    btrfs: factor a fscrypt_name matching method
+>    btrfs: disable various operations on encrypted inodes
+>    btrfs: add fscrypt operation table to superblock
+>    btrfs: start using fscrypt hooks.
+>    btrfs: add a subvolume flag for whole-volume encryption
+>    btrfs: translate btrfs encryption flags and encrypted inode flag.
+>    btrfs: store an IV per encrypted normal file extent
+>    btrfs: Add new FEATURE_INCOMPAT_FSCRYPT feature flag.
+>    btrfs: reuse encrypted filename hash when possible.
+>    btrfs: adapt directory read and lookup to potentially encrypted
+>      filenames
+>    btrfs: encrypt normal file extent data if appropriate
+>    btrfs: implement fscrypt ioctls
+> 
+> Sweet Tea Dorminy (3):
+>    btrfs: use fscrypt_name's instead of name/len everywhere.
+>    btrfs: setup fscrypt_names from dentrys using helper
+>    btrfs: add iv generation function for fscrypt
+> 
+>   fs/btrfs/Makefile               |   1 +
+>   fs/btrfs/btrfs_inode.h          |   3 +
+>   fs/btrfs/ctree.h                | 113 +++++--
+>   fs/btrfs/delayed-inode.c        |  48 ++-
+>   fs/btrfs/delayed-inode.h        |   9 +-
+>   fs/btrfs/dir-item.c             | 120 ++++---
+>   fs/btrfs/extent_io.c            |  93 +++++-
+>   fs/btrfs/extent_io.h            |   2 +
+>   fs/btrfs/extent_map.h           |   8 +
+>   fs/btrfs/file-item.c            |  20 +-
+>   fs/btrfs/file.c                 |  11 +-
+>   fs/btrfs/fscrypt.c              | 224 +++++++++++++
+>   fs/btrfs/fscrypt.h              |  49 +++
+>   fs/btrfs/inode-item.c           |  84 ++---
+>   fs/btrfs/inode-item.h           |  14 +-
+>   fs/btrfs/inode.c                | 547 ++++++++++++++++++++++++--------
+>   fs/btrfs/ioctl.c                |  80 ++++-
+>   fs/btrfs/ordered-data.c         |  12 +-
+>   fs/btrfs/ordered-data.h         |   3 +-
+>   fs/btrfs/print-tree.c           |   4 +-
+>   fs/btrfs/props.c                |  11 +-
+>   fs/btrfs/reflink.c              |   8 +
+>   fs/btrfs/root-tree.c            |  20 +-
+>   fs/btrfs/send.c                 | 141 ++++----
+>   fs/btrfs/super.c                |   8 +-
+>   fs/btrfs/transaction.c          |  43 ++-
+>   fs/btrfs/tree-checker.c         |  56 +++-
+>   fs/btrfs/tree-log.c             | 261 ++++++++-------
+>   fs/btrfs/tree-log.h             |   4 +-
+>   fs/btrfs/xattr.c                |  21 +-
+>   include/uapi/linux/btrfs.h      |   1 +
+>   include/uapi/linux/btrfs_tree.h |  26 ++
+>   32 files changed, 1525 insertions(+), 520 deletions(-)
+>   create mode 100644 fs/btrfs/fscrypt.c
+>   create mode 100644 fs/btrfs/fscrypt.h
+> 
