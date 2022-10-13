@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755F15FDFB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BE85FDF63
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiJMR52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S229812AbiJMRxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiJMR4r (ORCPT
+        with ESMTP id S229598AbiJMRxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:56:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC723A8CC8;
-        Thu, 13 Oct 2022 10:55:22 -0700 (PDT)
+        Thu, 13 Oct 2022 13:53:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0B414FD2D;
+        Thu, 13 Oct 2022 10:53:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DCF0618DE;
-        Thu, 13 Oct 2022 17:54:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B381C4347C;
-        Thu, 13 Oct 2022 17:54:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 633DFB82022;
+        Thu, 13 Oct 2022 17:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C99C433D6;
+        Thu, 13 Oct 2022 17:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683675;
-        bh=1NO7INAh9t/nqLkNlb48OrRHodPX0iieToKEAO8MS5s=;
+        s=korg; t=1665683585;
+        bh=C51fN9Flo2zCAj2jCaWdZGHnkUxwUijWwOrzoNiedtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YdJvLLLQzIe7Zs495sVDoK/q6b++D2d7Ukpc6cs+/J1CmzUBq6VGjUmytBuXfG0FK
-         Wk75whIqbzj25LwxQp2UjPjsq/SympkSHxQP8KMYSiBnrlF3N2tDxph8pNsvuka9Fm
-         TCaPE5ogOzGpK7WQqCoSyjFytsJ8vsRAihpytW6U=
+        b=LKXRfTevz1UKvjta1+q/nqUNjojqBvEJbUJs9P6vWB6wBkawajnd03X3ksk7DTpM0
+         5OLdiU+fr9S4RsXTMjApYIejjramzMn1v6yr43phbQPjrF4r4g4Am0L5cv94GQS4wn
+         WtzxI9iMh/kQ9l5ZSbAT9QRIDiC3gPQxxPNjhon0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 11/54] mm: gup: fix the fast GUP race against THP collapse
-Date:   Thu, 13 Oct 2022 19:52:05 +0200
-Message-Id: <20221013175147.639795471@linuxfoundation.org>
+        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 05/38] dmaengine: xilinx_dma: cleanup for fetching xlnx,num-fstores property
+Date:   Thu, 13 Oct 2022 19:52:06 +0200
+Message-Id: <20221013175144.449468561@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
-References: <20221013175147.337501757@linuxfoundation.org>
+In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
+References: <20221013175144.245431424@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,145 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Shi <shy828301@gmail.com>
+From: Swati Agarwal <swati.agarwal@xilinx.com>
 
-commit 70cbc3cc78a997d8247b50389d37c4e1736019da upstream.
+[ Upstream commit 462bce790e6a7e68620a4ce260cc38f7ed0255d5 ]
 
-Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
-introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
-sufficient to handle concurrent GUP-fast in all cases, it only handles
-traditional IPI-based GUP-fast correctly.  On architectures that send an
-IPI broadcast on TLB flush, it works as expected.  But on the
-architectures that do not use IPI to broadcast TLB flush, it may have the
-below race:
+Free the allocated resources for missing xlnx,num-fstores property.
 
-   CPU A                                          CPU B
-THP collapse                                     fast GUP
-                                              gup_pmd_range() <-- see valid pmd
-                                                  gup_pte_range() <-- work on pte
-pmdp_collapse_flush() <-- clear pmd and flush
-__collapse_huge_page_isolate()
-    check page pinned <-- before GUP bump refcount
-                                                      pin the page
-                                                      check PTE <-- no change
-__collapse_huge_page_copy()
-    copy data to huge page
-    ptep_clear()
-install huge pmd for the huge page
-                                                      return the stale page
-discard the stale page
-
-The race can be fixed by checking whether PMD is changed or not after
-taking the page pin in fast GUP, just like what it does for PTE.  If the
-PMD is changed it means there may be parallel THP collapse, so GUP should
-back off.
-
-Also update the stale comment about serializing against fast GUP in
-khugepaged.
-
-Link: https://lkml.kernel.org/r/20220907180144.555485-1-shy828301@gmail.com
-Fixes: 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()")
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
+Link: https://lore.kernel.org/r/20220817061125.4720-3-swati.agarwal@xilinx.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/gup.c        |   34 ++++++++++++++++++++++++++++------
- mm/khugepaged.c |   10 ++++++----
- 2 files changed, 34 insertions(+), 10 deletions(-)
+ drivers/dma/xilinx/xilinx_dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -2128,8 +2128,28 @@ static void __maybe_unused undo_dev_page
- }
- 
- #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
--static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
--			 unsigned int flags, struct page **pages, int *nr)
-+/*
-+ * Fast-gup relies on pte change detection to avoid concurrent pgtable
-+ * operations.
-+ *
-+ * To pin the page, fast-gup needs to do below in order:
-+ * (1) pin the page (by prefetching pte), then (2) check pte not changed.
-+ *
-+ * For the rest of pgtable operations where pgtable updates can be racy
-+ * with fast-gup, we need to do (1) clear pte, then (2) check whether page
-+ * is pinned.
-+ *
-+ * Above will work for all pte-level operations, including THP split.
-+ *
-+ * For THP collapse, it's a bit more complicated because fast-gup may be
-+ * walking a pgtable page that is being freed (pte is still valid but pmd
-+ * can be cleared already).  To avoid race in such condition, we need to
-+ * also check pmd here to make sure pmd doesn't change (corresponds to
-+ * pmdp_collapse_flush() in the THP collapse code path).
-+ */
-+static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-+			 unsigned long end, unsigned int flags,
-+			 struct page **pages, int *nr)
- {
- 	struct dev_pagemap *pgmap = NULL;
- 	int nr_start = *nr, ret = 0;
-@@ -2169,7 +2189,8 @@ static int gup_pte_range(pmd_t pmd, unsi
- 		if (!head)
- 			goto pte_unmap;
- 
--		if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-+		if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
-+		    unlikely(pte_val(pte) != pte_val(*ptep))) {
- 			put_compound_head(head, 1, flags);
- 			goto pte_unmap;
+diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
+index 7729b8d22553..792776c86ee8 100644
+--- a/drivers/dma/xilinx/xilinx_dma.c
++++ b/drivers/dma/xilinx/xilinx_dma.c
+@@ -2683,7 +2683,7 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+ 		if (err < 0) {
+ 			dev_err(xdev->dev,
+ 				"missing xlnx,num-fstores property\n");
+-			return err;
++			goto disable_clks;
  		}
-@@ -2214,8 +2235,9 @@ pte_unmap:
-  * get_user_pages_fast_only implementation that can pin pages. Thus it's still
-  * useful to have gup_huge_pmd even if we can't operate on ptes.
-  */
--static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
--			 unsigned int flags, struct page **pages, int *nr)
-+static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-+			 unsigned long end, unsigned int flags,
-+			 struct page **pages, int *nr)
- {
- 	return 0;
- }
-@@ -2522,7 +2544,7 @@ static int gup_pmd_range(pud_t *pudp, pu
- 			if (!gup_huge_pd(__hugepd(pmd_val(pmd)), addr,
- 					 PMD_SHIFT, next, flags, pages, nr))
- 				return 0;
--		} else if (!gup_pte_range(pmd, addr, next, flags, pages, nr))
-+		} else if (!gup_pte_range(pmd, pmdp, addr, next, flags, pages, nr))
- 			return 0;
- 	} while (pmdp++, addr = next, addr != end);
  
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1144,10 +1144,12 @@ static void collapse_huge_page(struct mm
- 
- 	pmd_ptl = pmd_lock(mm, pmd); /* probably unnecessary */
- 	/*
--	 * After this gup_fast can't run anymore. This also removes
--	 * any huge TLB entry from the CPU so we won't allow
--	 * huge and small TLB entries for the same virtual address
--	 * to avoid the risk of CPU bugs in that area.
-+	 * This removes any huge TLB entry from the CPU so we won't allow
-+	 * huge and small TLB entries for the same virtual address to
-+	 * avoid the risk of CPU bugs in that area.
-+	 *
-+	 * Parallel fast GUP is fine since fast GUP will back off when
-+	 * it detects PMD is changed.
- 	 */
- 	_pmd = pmdp_collapse_flush(vma, address, pmd);
- 	spin_unlock(pmd_ptl);
+ 		err = of_property_read_u32(node, "xlnx,flush-fsync",
+-- 
+2.35.1
+
 
 
