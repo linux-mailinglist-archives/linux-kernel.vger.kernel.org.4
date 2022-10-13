@@ -2,655 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7FE5FDDEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E239E5FDDFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJMQEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S229890AbiJMQIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiJMQEU (ORCPT
+        with ESMTP id S229587AbiJMQIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:04:20 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ED41119C4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:04:17 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-333a4a5d495so21678597b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7PvKL+cC4XDcWCLURErQKRAF5TTv0BPoXGUUYT7YMKw=;
-        b=aWWnILNJXrjEN+x0TmWHKtD1URc8hTo9iahJTs1v3QUfpi+dhHGMmuPzgl/Q0m+/kD
-         LBZ1MQ4dNW25xRY6hrnh2FDuhR2R492gyIVaBrCETtuy5Znt2Za6lhZVA98JmNMDws3/
-         KAd6O4ZAq7llJqoKqBLvC9fIPpePvCEgO4zlsI3y21EkUFebLe4QLgpZ+7lO2YKwA3WT
-         UiEgHh0bCdFPeSn2klNrEiuNwg5c0zebWVYimAlMO339BQ+AxbOYwvjCUAi22YcCll2w
-         H7h6J1oz2LFQK6+qvgSH1lXqKI63dZ3jkDL0DNFeCK0zc/vM0iVrRF34f4h6wQa2JedW
-         Qf/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7PvKL+cC4XDcWCLURErQKRAF5TTv0BPoXGUUYT7YMKw=;
-        b=SCiOk27JTZaPgms+3o30PEF5VluThMAnc18ED2BAeCh1EF6svHSLBqG2ZgH44c9s4C
-         n362uUxq5yT8b1+io14O11AOayZ8k6nPJH/uKyZLs8GqCobw3yUd0yCavhHuvpSBvqGs
-         zY6l0D+mkDXKDV4OsY6HUmflt8IPIcrJmGmdhQhXMtPV+rqzezIXf8fK6Y0vy3DEZHwM
-         Hb8R0IndSgc/copWnRy0nWTUNuEt95rFDOEgDygbcmRTdAbE+yO+YlZNUvTQC/c7cDk9
-         IYbNTRIaxSm7E3RovWqiWQHbx5FEp0HOxmTOLlEknlNnTlTFeTMgwqeuspueTLI/5/cO
-         gWxQ==
-X-Gm-Message-State: ACrzQf3gwBkoP1Mz0lG81O+yuzwW64TVnN/I/b5AoAHTl7XGmCPjBI6P
-        7bLUQJZZWNH8q8EJsWZAZgv9WhVKEknn1Nwago4QJdCvpSY=
-X-Google-Smtp-Source: AMsMyM5/TExuea3uaPp4MyIpEt/HQBoEf3LnXBB6EpsV1NG3giJpVfo9hxHfO3ky8FnO+ot7qj3aByTr7A7p++PmwDg=
-X-Received: by 2002:a0d:d807:0:b0:356:851e:b8eb with SMTP id
- a7-20020a0dd807000000b00356851eb8ebmr600654ywe.489.1665677055924; Thu, 13 Oct
- 2022 09:04:15 -0700 (PDT)
+        Thu, 13 Oct 2022 12:08:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4540013332B;
+        Thu, 13 Oct 2022 09:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665677289; x=1697213289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OPQmeZ5uzAfg/Yu3vsd+t3FuvAOQsHliIP9WOqPYQKw=;
+  b=SoZ6M8rz0w4z3tqVEyO+XsZ4LpzrSB+j4psBjwxxkGr7ZlvtlxbeZnOr
+   cH34D89cSJvtC0Tw4UD++MXu8FsT/uvqY8KhCDGhMdPPMCEIr0yJYUp0/
+   /rjZ5me0OzZW1Pd9jDrUcECkiX2WROEzlzIg4TuT86UMTv9Z1NqmiheM1
+   P9UHM8zb2/Kg19M+1TXwiYu2WFmcpC+NYZeAHWUMclTlMEy4ISS0Nguqd
+   Ob0eoReheIzChHZZJGmpD4qMulHNYBjjrK7bTOIkSRF0eXuq6yHUikDN7
+   kjRunC/rEc1Hw1vmhf8+ai//880HxGdovPSIqDnCmvqVrZXlAVGNIsLJU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="306770460"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="306770460"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 09:05:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="802296581"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="802296581"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2022 09:05:20 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oj0hv-006V2r-0F;
+        Thu, 13 Oct 2022 19:05:15 +0300
+Date:   Thu, 13 Oct 2022 19:05:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Rafa?? Mi??ecki <rafal@milecki.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Andreas F??rber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 35/36] pinctrl: intel: Add missed header(s)
+Message-ID: <Y0g3OiL/9oQlcovJ@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-36-andriy.shevchenko@linux.intel.com>
+ <Y0gma4fmhWISrKHe@black.fi.intel.com>
 MIME-Version: 1.0
-References: <000000000000c8900705ead19e41@google.com> <CACT4Y+Zuoo_rgf=DP90wgSVm909Qboj5kdYQjZELPDfdkQWJqA@mail.gmail.com>
- <CANn89iLkk75vy6fKMzwQXFEBdyTrQghnFKSxR3HPaeWS4oT+8g@mail.gmail.com> <f22f16ec-e78b-bf9e-ea43-5232b2403fa1@gmail.com>
-In-Reply-To: <f22f16ec-e78b-bf9e-ea43-5232b2403fa1@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 13 Oct 2022 09:04:04 -0700
-Message-ID: <CANn89iKF=fw8kWFGWH_RHOh_j52Sh3Pe_Ed9Pqsqs6USkCQtkg@mail.gmail.com>
-Subject: Re: [syzbot] kernel panic: kernel stack overflow
-To:     Taehee Yoo <ap420073@gmail.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com>,
-        =?UTF-8?B?SmnFmcOtIFDDrXJrbw==?= <jiri@resnulli.us>,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <xiyou.wangcong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0gma4fmhWISrKHe@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 8:00 AM Taehee Yoo <ap420073@gmail.com> wrote:
->
-> Hi,
->
-> On 10/12/22 21:19, Eric Dumazet wrote:
->  > On Wed, Oct 12, 2022 at 12:53 AM Dmitry Vyukov <dvyukov@google.com>
-> wrote:
->  >>
->  >> On Wed, 12 Oct 2022 at 09:48, syzbot
->  >> <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com> wrote:
->  >>>
->  >>> Hello,
->  >>>
->  >>> syzbot found the following issue on:
->  >>>
->  >>> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into
-> for-kernelci
->  >>> git tree:
-> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
->  >>> console output:
-> https://syzkaller.appspot.com/x/log.txt?x=14a03a2a880000
->  >>> kernel config:
-> https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
->  >>> dashboard link:
-> https://syzkaller.appspot.com/bug?extid=60748c96cf5c6df8e581
->  >>> compiler:       Debian clang version
-> 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld
-> (GNU Binutils for Debian) 2.35.2
->  >>> userspace arch: arm64
->  >>>
->  >>> Unfortunately, I don't have any reproducer for this issue yet.
->  >>>
->  >>> Downloadable assets:
->  >>> disk image:
-> https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
->  >>> vmlinux:
-> https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
->  >>>
->  >>> IMPORTANT: if you fix the issue, please add the following tag to
-> the commit:
->  >>> Reported-by: syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com
->  >>
->  >> +Jiri
->  >>
->  >> It looks like the issue is with the team device. It seems to call
->  >> itself infinitely.
->  >> team_device_event was mentioned in stack overflow bugs in the past:
->  >>
-> https://groups.google.com/g/syzkaller-bugs/search?q=%22team_device_event%22
->  >>
->  >
->  >
->  > Taehee Yoo, can you take a look ?
->  >
->  > Patch series of yours was supposed to limit max nest level to 8
->  >
->  >
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=65921376425fc9c8b7ce647e1f7989f7cdf5dd70
->  >
->
-> I found a reproducer.
->
-> #test_team.sh
-> ip link add dummy0 type dummy
-> ip link set dummy0 up
-> for a1 in {0..1}
-> do
->          ip link add team$a1 type team
->          for a2 in {0..1}
->          do
->                  ip link add team$a1$a2 master team$a1 type team
->                  for a3 in {0..1}
->                  do
->                          ip link add team$a1$a2$a3 master team$a1$a2
-> type team
->                          for a4 in {0..1}
->                          do
->                                  ip link add team$a1$a2$a3$a4 master
-> team$a1$a2$a3 type team
->                                  for a5 in {0..1}
->                                  do
->                                          ip link add team$a1$a2$a3$a4$a5
-> master team$a1$a2$a3$a4 type team
->                                          for a6 in {0..1}
->                                          do
->                                                  ip link add
-> team$a1$a2$a3$a4$a5$a6 master team$a1$a2$a3$a4$a5 type team
->                                                  ip link add
-> macvlan$a1$a2$a3$a4$a5$a6 link dummy0 master team$a1$a2$a3$a4$a5$a6 type
-> macvlan
->                                                  ip link set
-> macvlan$a1$a2$a3$a4$a5$a6 up
->                                                  ip link set
-> team$a1$a2$a3$a4$a5$a6 up
->                                          done
->                                          ip link set team$a1$a2$a3$a4$a5 up
->                                  done
->                                  ip link set team$a1$a2$a3$a4 up
->                          done
->                          ip link set team$a1$a2$a3 up
->                  done
->                  ip link set team$a1$a2 up
->          done
->          ip link set team$a1 up
-> done
->
-> #test_ethtool.sh
-> for a1 in {0..1}
-> do
->          ethtool -K team$a1 lro $1
->          for a2 in {0..1}
->          do
->                  ethtool -K team$a1$a2 lro $1
->                  for a3 in {0..1}
->                  do
->                          ethtool -K team$a1$a2$a3 lro $1
->                          for a4 in {0..1}
->                          do
->                                  ethtool -K team$a1$a2$a3$a4 lro $1
->                                  for a5 in {0..1}
->                                  do
->                                          ethtool -K team$a1$a2$a3$a4$a5
-> lro $1
->                                          for a6 in {0..1}
->                                          do
->                                                  ethtool -K
-> team$a1$a2$a3$a4$a5$a6 lro $1
->                                                  ethtool -K
-> macvlan$a1$a2$a3$a4$a5$a6 lro $1
->                                          done
->                                  done
->                          done
->                  done
->          done
-> done
->
-> shell#1
-> bash test_team.sh
-> while :
-> do
-> bash test_ethtool.sh on
-> done
-> shell#2
-> while :
-> do
-> bash test_ethtool.sh off
-> done
->
-> We can see a very similar call trace with the above reproducer.
-> I think it is the same issue.
+On Thu, Oct 13, 2022 at 05:53:31PM +0300, Mika Westerberg wrote:
+> On Mon, Oct 10, 2022 at 11:14:51PM +0300, Andy Shevchenko wrote:
+> > Do not imply that some of the generic headers may be always included.
+> > Instead, include explicitly what we are direct user of.
+> > 
+> > While at it, sort headers alphabetically.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> 
+> For all the intel pinctrl changes.
 
-Nice repro !
+Thank you, I have added it to the 4 Intel related patches.
 
-> Could you please test it?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Not sure who is supposed to test it :)
 
->
-> And, I found the fixed same issue too.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0&id=dd912306ff008891c82cd9f63e8181e47a9cb2fb
-> https://groups.google.com/g/syzkaller-bugs/c/-5OV1OW-dS4/m/o2Oq6AYSAwAJ
->
->  >
->  >
->  >
->  >>
->  >>> x8 : 00000000000c008e x7 : ffff80000818cfc0 x6 : 0000000000000000
->  >>> x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
->  >>> x2 : 0000000000000008 x1 : ffff00013e520a60 x0 : ffff00013e520000
->  >>> Kernel panic - not syncing: kernel stack overflow
->  >>> CPU: 1 PID: 16874 Comm: syz-executor.3 Not tainted
-> 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
->  >>> Hardware name: Google Google Compute Engine/Google Compute Engine,
-> BIOS Google 09/30/2022
->  >>> Call trace:
->  >>>   dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
->  >>>   show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
->  >>>   __dump_stack lib/dump_stack.c:88 [inline]
->  >>>   dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
->  >>>   dump_stack+0x1c/0x58 lib/dump_stack.c:113
->  >>>   panic+0x218/0x50c kernel/panic.c:274
->  >>>   nmi_panic+0xbc/0xf0 kernel/panic.c:169
->  >>>   panic_bad_stack+0x134/0x154 arch/arm64/kernel/traps.c:906
->  >>>   handle_bad_stack+0x34/0x48 arch/arm64/kernel/entry-common.c:848
->  >>>   __bad_stack+0x78/0x7c arch/arm64/kernel/entry.S:549
->  >>>   mark_lock+0x4/0x1b4 kernel/locking/lockdep.c:4593
->  >>>   lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
->  >>>   do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
->  >>>   do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
->  >>>   psi_group_change+0x128/0x3d0 kernel/sched/psi.c:705
->  >>>   psi_task_switch+0x9c/0x310 kernel/sched/psi.c:851
->  >>>   psi_sched_switch kernel/sched/stats.h:194 [inline]
->  >>>   __schedule+0x554/0x5a0 kernel/sched/core.c:6489
->  >>>   preempt_schedule_irq+0x64/0x110 kernel/sched/core.c:6806
->  >>>   arm64_preempt_schedule_irq arch/arm64/kernel/entry-common.c:265
-> [inline]
->  >>>   __el1_irq arch/arm64/kernel/entry-common.c:473 [inline]
->  >>>   el1_interrupt+0x4c/0x68 arch/arm64/kernel/entry-common.c:485
->  >>>   el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
->  >>>   el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
->  >>>   arch_local_irq_restore+0x8/0x10 arch/arm64/include/asm/irqflags.h:122
->  >>>   lock_is_held include/linux/lockdep.h:283 [inline]
->  >>>   __might_resched+0x7c/0x218 kernel/sched/core.c:9854
->  >>>   __might_sleep+0x48/0x78 kernel/sched/core.c:9821
->  >>>   might_alloc include/linux/sched/mm.h:274 [inline]
->  >>>   slab_pre_alloc_hook mm/slab.h:700 [inline]
->  >>>   slab_alloc_node mm/slub.c:3162 [inline]
->  >>>   kmem_cache_alloc_node+0x80/0x370 mm/slub.c:3298
->  >>>   __alloc_skb+0xf8/0x378 net/core/skbuff.c:422
->  >>>   alloc_skb include/linux/skbuff.h:1257 [inline]
->  >>>   nlmsg_new include/net/netlink.h:953 [inline]
->  >>>   genlmsg_new include/net/genetlink.h:410 [inline]
->  >>>   ethnl_default_notify+0x16c/0x320 net/ethtool/netlink.c:640
->  >>>   ethtool_notify+0xb4/0x178 net/ethtool/netlink.c:704
->  >>>   ethnl_notify_features net/ethtool/netlink.c:715 [inline]
->  >>>   ethnl_netdev_event+0x44/0x60 net/ethtool/netlink.c:723
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_compute_features drivers/net/team/team.c:1031 [inline]
->  >>>   team_device_event+0x1a8/0x25c drivers/net/team/team.c:3024
->  >>>   notifier_call_chain kernel/notifier.c:87 [inline]
->  >>>   raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
->  >>>   call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
->  >>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
->  >>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
->  >>>   netdev_features_change net/core/dev.c:1315 [inline]
->  >>>   netdev_sync_lower_features+0x13c/0x21c net/core/dev.c:9599
->  >>>   __netdev_update_features+0x284/0xa88 net/core/dev.c:9751
->  >>>   netdev_change_features+0x30/0xfc net/core/dev.c:9823
->  >>>   team_add_slave+0x7c/0x98 drivers/net/team/team.c:1988
->  >>>   do_set_master net/core/rtnetlink.c:2577 [inline]
->  >>>   do_setlink+0x5f8/0x17a4 net/core/rtnetlink.c:2787
->  >>>   __rtnl_newlink net/core/rtnetlink.c:3546 [inline]
->  >>>   rtnl_newlink+0x988/0xa04 net/core/rtnetlink.c:3593
->  >>>   rtnetlink_rcv_msg+0x484/0x82c net/core/rtnetlink.c:6090
->  >>>   netlink_rcv_skb+0xe4/0x1d0 net/netlink/af_netlink.c:2501
->  >>>   rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6108
->  >>>   netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
->  >>>   netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
->  >>>   netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
->  >>>   sock_sendmsg_nosec net/socket.c:714 [inline]
->  >>>   sock_sendmsg net/socket.c:734 [inline]
->  >>>   ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
->  >>>   ___sys_sendmsg net/socket.c:2536 [inline]
->  >>>   __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
->  >>>   __do_sys_sendmsg net/socket.c:2574 [inline]
->  >>>   __se_sys_sendmsg net/socket.c:2572 [inline]
->  >>>   __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
->  >>>   __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  >>>   invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
->  >>>   el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
->  >>>   do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
->  >>>   el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
->  >>>   el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
->  >>>   el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
->  >>> SMP: stopping secondary CPUs
->  >>> Kernel Offset: disabled
->  >>> CPU features: 0x00000,02070084,26017203
->  >>> Memory Limit: none
->  >>>
->  >>>
->  >>> ---
->  >>> This report is generated by a bot. It may contain errors.
->  >>> See https://goo.gl/tpsmEJ for more information about syzbot.
->  >>> syzbot engineers can be reached at syzkaller@googlegroups.com.
->  >>>
->  >>> syzbot will keep track of this issue. See:
->  >>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->  >>>
->  >>> --
->  >>> You received this message because you are subscribed to the Google
-> Groups "syzkaller-bugs" group.
->  >>> To unsubscribe from this group and stop receiving emails from it,
-> send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
->  >>> To view this discussion on the web visit
-> https://groups.google.com/d/msgid/syzkaller-bugs/000000000000c8900705ead19e41%40google.com.
