@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F125B5FE3C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC285FE3C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiJMVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
+        id S229717AbiJMVIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJMVH5 (ORCPT
+        with ESMTP id S229769AbiJMVIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:07:57 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21684183DBE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:07:54 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1321a1e94b3so3795235fac.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:07:54 -0700 (PDT)
+        Thu, 13 Oct 2022 17:08:35 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A62C188AA0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:08:34 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s196so1307435pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AVEUKlqWo2ttd10gQh3gawam9X0cvCfnEg2BZkSEor0=;
-        b=HJeySj+BDWcYJMKmqAj4xZ2JSfBiTiBaTnEUBFY83WIfVa+3LzILeNtjf8pXD9kyJW
-         RvoW3x3MlFnSKRB6GfX2xAKb4mEQKOZFvsVq2Dr6ZzPnSSMdDSIix9tVpECs37Wr/UEW
-         wyWklMlNOJCzxr4ZdW2EC+DkqBcPiic1kh/JQ=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tRiTLwAuwPYUgBPKA1FJZY2eXZvOzFOFrZPEJVwL26o=;
+        b=ZX0Pz3OHWIBikjl2nin8p8bzMVA7qsaOOx+VSaA0VKLo+/pf0qHeeQl3K5fxn0rdTZ
+         r9qMgMOk8s0AmblqGYuF2UbJRtlRQbBXjtkbtMfd8sdrEdYG/v8ZQ4XmM7+Mzzbbqeh2
+         ipvwHZDHRwmHrSZlicLhTGIPfoYcEv3iN8EgWNCvBotWji5BFRklZYqQvTPgqZHr+QQp
+         mN+h5iNP0y80aYsn9p6ZeHY6LgoDvXns2/3KGUmkS4ky9DUxtW8aSUfGvgmH7ZxWMl8B
+         RzuRZm5fw9FJwG48IIlTDzo8JIow8l32ibjXd0H6+zLBuS2QSjjLQVuxseheI+gn7qDk
+         Luxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AVEUKlqWo2ttd10gQh3gawam9X0cvCfnEg2BZkSEor0=;
-        b=ETBi52BRcxhH5IvXyfYkKFllR9DGzwZvfdotiezJYIWX9KOU8ZRTsTHMaewyxTclBk
-         lyc+Ko5PGa+6uXCg1KWJyilH97tUDJ9NI1elxqiNlhkBLXl5LJNPIGkmHtBOGTeYUWr/
-         zBLJKvwUDoRc9t5I0NsVuEhiO+fcmZPVBRWdl/1mCeGs1af0Pc+e0JHScfqn1t12Urra
-         dHXuu8GV13LQskj3yumZRXv/9hc5MuSMKg0vJM+m3AhEHOnDQ9+5Ct6lxVqpakHqycQ3
-         7SI0pWHnGxiRgM5i1VteYHSrKDujOVLO7OMoZxW0JyHDNt2fr6HWF7wvkTepvNn0tSjp
-         q4IA==
-X-Gm-Message-State: ACrzQf1ANXcI1mz49PYoxb3QSlj96Ka+rIK/+YJL6L0Tkm/oGrIlDGXm
-        Hn11CphqINAJW+cuzlW5DNB3Gg==
-X-Google-Smtp-Source: AMsMyM4xBIf6fZEPKvGGyT4fORjzrVpM0TNb/dbjVSNAoLpFpy/MJCYEdG2B8VpeArgPwDqIuBOzAw==
-X-Received: by 2002:a05:6870:d1cb:b0:12a:e232:688e with SMTP id b11-20020a056870d1cb00b0012ae232688emr6604562oac.24.1665695273421;
-        Thu, 13 Oct 2022 14:07:53 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id e24-20020a544f18000000b003436fa2c23bsm352449oiy.7.2022.10.13.14.07.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 14:07:52 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Thu, 13 Oct 2022 16:07:50 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.19 00/33] 5.19.16-rc1 review
-Message-ID: <Y0h+JnZVQ3Fk3UTw@fedora64.linuxtx.org>
-References: <20221013175145.236739253@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tRiTLwAuwPYUgBPKA1FJZY2eXZvOzFOFrZPEJVwL26o=;
+        b=lkQH5QeWZClGz9UeDmULMmeFSqBcPf9VctLrYco1TUSN+SE/hMoa3o7cohPDoozb5d
+         b8LhDXbHaoBGrkfFNEjv7HhSZtN7p9UeliHKMyGhY283cWqgStm/ztWfRc2Ks93VwZ8B
+         3SwlbEZWgzBkMNZEW2kmvF0rhNvMEGmOOhq+hkXMe4rpO0attciGPptCJwksSjgPhriU
+         ZGUrrK/LpwlLdmjIENWsyFHBi9LO8lza3CqqHQL/Ohq2mdFK3yTifiyfk/gZdahmTKwv
+         LKsXZMm9mz0zVNa5kSgjGu0eln9WJ067ujQUJJJEp5ChR04KkKk3UwxoadCnLUNrtkQE
+         XGOw==
+X-Gm-Message-State: ACrzQf1kN9earFmjdtmTb8AqLUseutZpKD6rg0n0EZqW9kidK528vHDj
+        gvMN4XNCCeUTkyif3Uo7ZZ2DueLS3SB+O9fbQ+zMFA==
+X-Google-Smtp-Source: AMsMyM7snGxVrR2t3EbMMIs4TvcOoMOGRD6Tu7kzSv5Zv/o49eR/+vqSHdC2ZvT4bGguSviHW8LS/+p9WBJplynpf4U=
+X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id
+ a145-20020a621a97000000b00562558712d6mr1606541pfa.37.1665695313619; Thu, 13
+ Oct 2022 14:08:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+In-Reply-To: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 13 Oct 2022 14:08:22 -0700
+Message-ID: <CAKwvOd=_gfTD24zEh9YpoNuBr_D+xjsefeb8sNXnSaU_UgnVRw@mail.gmail.com>
+Subject: Re: gcc 5 & 6 & others already out of date?
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-toolchains@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 07:52:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.16 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.16-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Wed, Oct 12, 2022 at 6:37 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi,
+>
+> I've been working on a (still in development) patch that tries to
+> apply a few compile-time constant folding tricks to a widely used
+> library function, so I wanted to make sure my trickery worked across
+> all supported gcc versions for as many call sites as possible.
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+I'd imagine the kernel's inconsistent use of -ffreestanding per
+architecture would be a blocker, if by library function you're
+referring to a symbol that would typically be provided by the libc?
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Do you have more info about what the specific issue you've observed is?
+
+> Naturally, this means allyesconfig builds on the monster box.
+>
+> So all went well with a recent gcc and with clang. Then I tried gcc 5
+> and gcc 6, and it wasn't fine. But it wasn't not fine because of my
+> new code -- that all compiled just fine. Rather, it wasn't fine
+> because of a modicum of other odd errors and fatal warnings
+> throughout. I tried this with gcc 5 and gcc 6 and then got bored. I
+> could test more versions need be. And I guess I could submit bug
+> reports or write patches or work on fixing all those, if I actually
+> cared about it. But I don't really care about it, and apparently
+> neither does anybody else, because this isn't brand new breakage. And
+> this all got me thinking...
+
+Are the defconfigs totally broken with gcc-5 and gcc-6 and no one has noticed?
+
+I wonder what versions of GCC KernelCI and linux kernel robot are testing with?
+
+We have to maintain CI for all supported clang versions. You can see a
+2D slice of our 5D build matrix: https://clangbuiltlinux.github.io/.
+"I've never seen so much red in the galaxy!" "Hey, get back to work!"
+
+We'd like to have the large window of supported versions that GCC
+currently has; Clang's release cycle is also different from GCC's
+though.  I wouldn't point to clang's smaller version support window as
+justification for GCC; we'd rather be more like GCC in that sense, not
+the other way round!
+-- 
+Thanks,
+~Nick Desaulniers
