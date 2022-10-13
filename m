@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F835FDF53
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D6D5FDFD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJMRwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        id S230248AbiJMR6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJMRwo (ORCPT
+        with ESMTP id S230096AbiJMR51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:52:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AA414D1CF;
-        Thu, 13 Oct 2022 10:52:43 -0700 (PDT)
+        Thu, 13 Oct 2022 13:57:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1956C153822;
+        Thu, 13 Oct 2022 10:56:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91D1DB8201C;
-        Thu, 13 Oct 2022 17:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F19C433D6;
-        Thu, 13 Oct 2022 17:52:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B701B82020;
+        Thu, 13 Oct 2022 17:56:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E682FC433D7;
+        Thu, 13 Oct 2022 17:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683561;
-        bh=Oo5dzfgUvi7RFuvhID2RTEtBjZh0y9xtz/tZcCFnyi8=;
+        s=korg; t=1665683772;
+        bh=m70n2N51v/QEnM8AKO7qBTm28P5G0sjeuCrtu2kY804=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=exr4gMM5hmcE0SgFOcXvz2+F9SDRrPGJXPHy3WxH0LVYLcEYNIEyP545PjGCfIdU2
-         Y4O9od5kwd8XbU+XjuVMRHXieDJMQfdgUhRmXlA0gHyepHJwkMHkesNwCr8/T+E5Ud
-         XOW/8MHa8ls6kYivy6KI0Cq63wWqV2HwVDndgMkw=
+        b=i0PUM2dhGE4O0ca/L4epfznUKsQe5X53qzVXclD65PLtVoaIsAya9Xv2V0uysnqUf
+         +Z0FHwrHWMfGi5tHMVjlVUkA/665juR8/tE6D6/Lv+QJNQCKjzOgmv6xuhsXdcwDaU
+         aqElA9LRZgqutavdl34veyLCQ8uGciduLtODY+SY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Straub <lukasstraub2@web.de>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 5.4 10/38] um: Cleanup syscall_handler_t cast in syscalls_32.h
-Date:   Thu, 13 Oct 2022 19:52:11 +0200
-Message-Id: <20221013175144.611796545@linuxfoundation.org>
+        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 18/54] dmaengine: xilinx_dma: Report error in case of dma_set_mask_and_coherent API failure
+Date:   Thu, 13 Oct 2022 19:52:12 +0200
+Message-Id: <20221013175147.807202567@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+References: <20221013175147.337501757@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Straub <lukasstraub2@web.de>
+From: Swati Agarwal <swati.agarwal@xilinx.com>
 
-[ Upstream commit 61670b4d270c71219def1fbc9441debc2ac2e6e9 ]
+[ Upstream commit 8f2b6bc79c32f0fa60df000ae387a790ec80eae9 ]
 
-Like in f4f03f299a56ce4d73c5431e0327b3b6cb55ebb9
-"um: Cleanup syscall_handler_t definition/cast, fix warning",
-remove the cast to to fix the compiler warning.
+The driver does not handle the failure case while calling
+dma_set_mask_and_coherent API.
 
-Signed-off-by: Lukas Straub <lukasstraub2@web.de>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Signed-off-by: Richard Weinberger <richard@nod.at>
+In case of failure, capture the return value of API and then report an
+error.
+
+Addresses-coverity: Unchecked return value (CHECKED_RETURN)
+
+Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Link: https://lore.kernel.org/r/20220817061125.4720-4-swati.agarwal@xilinx.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/um/shared/sysdep/syscalls_32.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/dma/xilinx/xilinx_dma.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/um/shared/sysdep/syscalls_32.h b/arch/x86/um/shared/sysdep/syscalls_32.h
-index 68fd2cf526fd..f6e9f84397e7 100644
---- a/arch/x86/um/shared/sysdep/syscalls_32.h
-+++ b/arch/x86/um/shared/sysdep/syscalls_32.h
-@@ -6,10 +6,9 @@
- #include <asm/unistd.h>
- #include <sysdep/ptrace.h>
+diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
+index b91378fb891c..e76adc31ab66 100644
+--- a/drivers/dma/xilinx/xilinx_dma.c
++++ b/drivers/dma/xilinx/xilinx_dma.c
+@@ -3071,7 +3071,11 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+ 		xdev->ext_addr = false;
  
--typedef long syscall_handler_t(struct pt_regs);
-+typedef long syscall_handler_t(struct syscall_args);
+ 	/* Set the dma mask bits */
+-	dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
++	err = dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
++	if (err < 0) {
++		dev_err(xdev->dev, "DMA mask error %d\n", err);
++		goto disable_clks;
++	}
  
- extern syscall_handler_t *sys_call_table[];
- 
- #define EXECUTE_SYSCALL(syscall, regs) \
--	((long (*)(struct syscall_args)) \
--	 (*sys_call_table[syscall]))(SYSCALL_ARGS(&regs->regs))
-+	((*sys_call_table[syscall]))(SYSCALL_ARGS(&regs->regs))
+ 	/* Initialize the DMA engine */
+ 	xdev->common.dev = &pdev->dev;
 -- 
 2.35.1
 
