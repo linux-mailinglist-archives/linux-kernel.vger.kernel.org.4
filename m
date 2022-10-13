@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FBB5FE3A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2015FE3A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiJMVBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S229991AbiJMVBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiJMVBC (ORCPT
+        with ESMTP id S229986AbiJMVB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:01:02 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0C175787
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:01:00 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id 3so3064244vsh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:01:00 -0700 (PDT)
+        Thu, 13 Oct 2022 17:01:26 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170C61793A8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:01:25 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id z20so2894315plb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vl6cdceIfSLEAxmLwC9m2TMbI2mgFoDktXj4qb4IX6M=;
-        b=JyzGe36jN6a44ks51OsthNFBJoCn0S0eWNzB1CMybLAkSSAAL3Bkjb6rebwGsX+WGu
-         qDEOWY9nxLULNYzg0QNGNqkb1XiLkf1ql/qbqPZo+V3ys3LrpwEE+DjHvTIT0qAcWUD9
-         GDP7H4/7phBjIWi0LA5XCDPPxpydhhZhmB53CUVih21EDcNl8JDAnnq3pRQq3YuWi0S9
-         IgXJukKX0ZbkBsL1JTIvJhXzfz8kbBT6r/wG2yHnme/YYOd7J5sJloY1FRTzC4uIabAA
-         kxtCVM5Z3tB2ymoQ6lTNfGHqxQAzxcc5MUsKVAHcbt9bfPuzPtcSk2dYtKohOt/bWM67
-         ZzEw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jdu8CDhPFUGuuqJLB1hm8uRgcdUvFaGH3LFEE7wY72E=;
+        b=t3NB2tnT0mOyQNL9SqfMc3Y7GNvuenW4Yj9HqN57Y/yVtpYG8bqNmlprt00zkcnvli
+         Obq7zW1RMHD9vOWjVQ3IKBcRS/3+J2JS40IujCdx+lxEzQrysdaZ+PekVHybVUDZ61rv
+         HaBQNyAMXTPC78lu4kmOOyS5eypmwPQGVzg4djhqYBXV+5JNfXI9wQsQLMS0ywa9zMMx
+         GAqg8GtUZGLgvq5Chtb3MjkGhS2Hxuk6nvFLsFTbq9ZeB8G/5nQa3/q/ogVb5PTHJP+o
+         585fZTcCdT0YWiI1q5FI2p+cZs7xjz6ZI0ziP/Q7AVKlhYyDTOPvXzrtvCVoCicSxFEc
+         axkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vl6cdceIfSLEAxmLwC9m2TMbI2mgFoDktXj4qb4IX6M=;
-        b=y/ZkaQSuxF6NCWw5WYVWDD2D4eRQB2dat6BgxOORo8++XyqtIw3PlrCt7/0Tqpysef
-         vS3CBjrj76rThqzpBpSEv5zkjjPA/UOHU5FOq6MWLRJqPVfx2pXkRcc3HzTvYF/iWGWW
-         DZJ93s9j6c82dGdXAzBuy/od3/bIemk8k+Y7AL1bgSZzo9unEGrMv/krZb/66HLzv1BE
-         FCdIoHVn0cfxYeer7FZNf85+QgVxMTyLfV7390g7aNGy5KQpVTr3R+9y4WAdT16vHIJe
-         pc64ZWCtj0llSsZ9y5mq2pdyQtI46PgA8EQy6Nhj3zgqKp88GBweJpqcTQ+B+jHyk91r
-         iQ4Q==
-X-Gm-Message-State: ACrzQf0Wli49Vl7w/dEWCuEJ8C4UIjKcM9XEEtaKI2yXQpBqnXN7uPgw
-        vGsn2ib44UiAuNUzWsfN05YbYAsr/lhB4wD04LRX2w==
-X-Google-Smtp-Source: AMsMyM745IH36YDPS78240aSd5ih8VEEqLheErzdCP96kDnzeFZDtidSehtNqirERd6mNNyNjGgVTcshfQletGvsk+k=
-X-Received: by 2002:a67:ee85:0:b0:38a:bb8e:d04e with SMTP id
- n5-20020a67ee85000000b0038abb8ed04emr1424360vsp.26.1665694859658; Thu, 13 Oct
- 2022 14:00:59 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab0:136f:0:b0:3d2:4916:f286 with HTTP; Thu, 13 Oct 2022
- 14:00:58 -0700 (PDT)
-In-Reply-To: <Y0hrhzprPFTK+VWV@zn.tnic>
-References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com> <Y0hrhzprPFTK+VWV@zn.tnic>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Thu, 13 Oct 2022 18:00:58 -0300
-Message-ID: <CAKgze5ajp-z0+F+8Qo2z=834=i=HNa5=s54MLyrk16wQVnxCzQ@mail.gmail.com>
-Subject: Re: [PATCH v9 0/9] x86: Show in sysfs if a memory node is able to do encryption
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
-        dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jdu8CDhPFUGuuqJLB1hm8uRgcdUvFaGH3LFEE7wY72E=;
+        b=jWE4z075/y/tXNCUxmgUYu7vC26Uqyh0Lf0unrphgiLDAx315s3Eb/WQtcd1t8C+WB
+         VHETMYZVplms/DhAXz6KJM82giH5RvQZ9uKtEC72D7q8tJItdXAywLbEnNQlLsmRryEF
+         KS7vi4WNR0T0PBR+n1qrzcDauE3toGKfvPE9UFat7aqG4zMRsTmESnEVBdBa+yfjYD9z
+         YfUGu1suLbvJ3VmfCkrCamRKmH38ec9JhtEo4/gw5JpaNm7IYSXXDyJKHi/7d/cGxO9U
+         rn/FELh88GI9w/34emznR0JGmaVFvc9VR4uaPIMmkZgELDDwwPdIumdgZK43EZ+y2pCS
+         7gLg==
+X-Gm-Message-State: ACrzQf3Gn6Bl4K05dS5YXRHG53d8QjDq+py2lngfArZYMi9hPpxPerA+
+        l/toxIzkcYdB7e+jvqbZRb0hUg==
+X-Google-Smtp-Source: AMsMyM6ItHsqYSboXb3Wt1sovvrB2QN7DJyWgsIfBNru+f2ZODqJjgkDFgWAMD/t9jyKG7ENUEuGpA==
+X-Received: by 2002:a17:902:e549:b0:184:5c4a:fad0 with SMTP id n9-20020a170902e54900b001845c4afad0mr1659214plf.6.1665694884466;
+        Thu, 13 Oct 2022 14:01:24 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c20c00b001750361f430sm274955pll.155.2022.10.13.14.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 14:01:23 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 14:01:23 -0700 (PDT)
+X-Google-Original-Date: Thu, 13 Oct 2022 12:51:26 PDT (-0700)
+Subject:     Re: [PATCH v4 0/2] Make mmap() with PROT_WRITE imply PROT_READ
+In-Reply-To: <20220915193702.2201018-1-abrestic@rivosinc.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, coelacanthus@outlook.com,
+        dramforever@live.com, c141028@gmail.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        abrestic@rivosinc.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     abrestic@rivosinc.com
+Message-ID: <mhng-389708b4-d3b4-46a5-a56c-6ea59c8e322d@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/22, Borislav Petkov <bp@alien8.de> wrote:
-> On Mon, Jul 04, 2022 at 10:58:24AM -0300, Martin Fernandez wrote:
->> If all nodes are capable of encryption and if the system have tme/sme
->> on we can pretty confidently say that the device is actively
->> encrypting all its memory.
+On Thu, 15 Sep 2022 12:37:00 PDT (-0700), abrestic@rivosinc.com wrote:
+> Commit 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is
+> invalid") made mmap() reject mappings with only PROT_WRITE set in an
+> attempt to fix an observed inconsistency in behavior when attempting
+> to read from a PROT_WRITE-only mapping. The root cause of this behavior
+> was actually that while RISC-V's protection_map maps VM_WRITE to
+> readable PTE permissions (since write-only PTEs are considered reserved
+> by the privileged spec), the page fault handler considered loads from
+> VM_WRITE-only VMAs illegal accesses. Fix the underlying cause by
+> handling faults in VM_WRITE-only VMAs (patch 1) and then re-enable
+> use of mmap(PROT_WRITE) (patch 2), making RISC-V's behavior consistent
+> with all other architectures that don't support write-only PTEs.
 >
-> Wait, what?
+> Both patches are tagged as fixes for the aforementioned commit since that
+> commit made a userspace visible change that will break any software relying
+> on mmap(PROT_WRITE). (Also cc: stable since the offending commit was
+> itself backported to stable).
 >
-> If all memory is crypto capable and I boot with mem_encrypt=off, then
-> the device is certainly not encrypting any memory.
+> v1 -> v2: Allow handling of load faults in VM_WRITE VMAs
+> v2 -> v3: Split into two pathces
+> v3 -> v4: Fixes tags (+ this cover letter)
 >
-> dhansen says TME cannot be controlled this way and if you turn it off in
-> the BIOS, EFI_MEMORY_CPU_CRYPTO attr should not be set either.
+> Andrew Bresticker (2):
+>   riscv: Make VM_WRITE imply VM_READ
+>   riscv: Allow PROT_WRITE-only mmap()
+>
+>  arch/riscv/kernel/sys_riscv.c | 3 ---
+>  arch/riscv/mm/fault.c         | 3 ++-
+>  2 files changed, 2 insertions(+), 4 deletions(-)
 
-That's bad, because it would be nice if that attribute only depended
-on the hardware and not on some setting.
-
-The plan of this patch was, as you mentioned just to report
-EFI_MEMORY_CPU_CRYPTO in a per node level.
-
-Now, I think I will need to check for tme/sme and only if those are
-active then show the file in sysfs, otherwise not show it at all,
-because it would be misleading. Any other idea?
-
-> But that
-> marking won't work on AMD.
-
-You mean that EFI_MEMORY_CPU_CRYPTO means nothing on an AMD system?
+Thanks, these are on for-next.
