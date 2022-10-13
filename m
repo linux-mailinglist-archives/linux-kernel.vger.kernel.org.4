@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F5A5FE38C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5E55FE38E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJMUxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 16:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S229971AbiJMUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 16:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJMUxW (ORCPT
+        with ESMTP id S229888AbiJMUxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 16:53:22 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D341530569;
-        Thu, 13 Oct 2022 13:53:21 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id h15so2538772qtu.2;
-        Thu, 13 Oct 2022 13:53:21 -0700 (PDT)
+        Thu, 13 Oct 2022 16:53:33 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663FB1757B2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:53:32 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id g28so3014021pfk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lYFDP/p0oDmvmHQzvKjGd+SXW0/wWau3FYCTmUlV558=;
-        b=KBmTScRRcD5XphURomWbvY1DA1JiMtDQ622RPyVyyW1qY3zxg6abue21jN1WbTuDzB
-         estr7MbrQq6CdWx7DylQSH8WMmCvphEPIb6IPskYx/1X4lSI+WDyYZGMepkqqQgSTRrq
-         LFlP1tengzcs5xkWXTbKzaL1jqg/4di8JIzK4jiwRdj3sCknids4iQpRweDCf3pkLJBT
-         FWrVN2a1x38wWchC5o4rtdlvGVcl7HFH+bCzF/rkaOCsySMPI47HE28mB7tdfT28otbl
-         q6UDyYeKETBuALRryKDDXgXdInG45SiNG6ZSWQv2BrYtN8OFHaFq9nJcQrcIyV1aP5KY
-         WuSg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4r17VGc1y0KI+bsRJPcWxnYDIeONL0hh/0Ayx7wHqTQ=;
+        b=Q9B4O1ctEjN7cMG74XnwM0jKKYbnZlrj4HJMvK1b8AsU+QZn9QUqhC6KbwKlwHsD4X
+         1TjIAAcZA+LuPGpMXi+dt8PxUUV5SEVsrdU6njChdq2240vx92CX2NvfViUN0/YNJD+6
+         pIWcIvXrdPRTK4G3rHXvJp3S15M7JdgOdG9DzTK+/WhyG5D7N+/Ls8feRoQ9LdasENnm
+         4/0bYqXYJbp2Aud9Xs2jL842QvCPuVyUaJf4LeaU+1yAT+MrSqF7qmn9+c4tf4ECwibh
+         3JnJvNKUIU8eIzuBBgkYJzrUrbk2gR9WPL2TYaaviaGI5fiJUglRzZByWwcqIiFvXjpJ
+         P02A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lYFDP/p0oDmvmHQzvKjGd+SXW0/wWau3FYCTmUlV558=;
-        b=yWY0NrlNodFUkOkCTfH1bQ6KZNdlRGEsinsyJTqADhHiLltmaSmS9Ju3xaVbEUrtZo
-         7PkxKbYnfA7ylPxqjySQ+gsSKLvnf3N5kncLfcneIik8pDzO+uIXbSLlzF6K34Fz60YT
-         fMx1NulbGSYHrA/NUxcvV8QsB7BwuOy38xFPRJEYN8YDiPU7tx2GZVsxUX6R3d5ZsmfG
-         aFiBqsoubJApGNOgbtAupUFGCi1An0BcOvjT4S+JgvZQVlin/NI1lX4FGM1JXbiagUsu
-         khgzIxct6r65Ki7AME4uOJMcJ5q8r7m/iHdTHvy6wnsAIpmXDYwasuxZza6q89kciHt2
-         OGSw==
-X-Gm-Message-State: ACrzQf0KMzPOjAihKL/qsrJ0K84zI2bTn7UUIyOkVUCB57SLtC2Fcp/f
-        l8rPnVnL/UwUxUnAZ9Q1SaY=
-X-Google-Smtp-Source: AMsMyM6Bcwqzloi8IqpId4CQ8IbCa4ngymOT+4M2jos8pnbEQnC2Crg/VDmMPiKOEn9gnN/J/iqPwg==
-X-Received: by 2002:a05:622a:409:b0:35d:5a1e:888d with SMTP id n9-20020a05622a040900b0035d5a1e888dmr1576695qtx.561.1665694400946;
-        Thu, 13 Oct 2022 13:53:20 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ez4-20020a05622a4c8400b00398a7c860c2sm737799qtb.4.2022.10.13.13.53.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 13:53:20 -0700 (PDT)
-Message-ID: <a9c43deb-b553-baa4-85b3-edd38ebf2f0f@gmail.com>
-Date:   Thu, 13 Oct 2022 13:53:17 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4r17VGc1y0KI+bsRJPcWxnYDIeONL0hh/0Ayx7wHqTQ=;
+        b=bWxDZm944KgL8O/uA8hXjshsVQEfrTtj3phChP/4qI3ZMiEMrxXJokTv8n2xcNSxQN
+         /fJJAPjf8V/LuuYciOy3x9ziuiXpGx7SLpbrnSPL1LBXqxmpvUERG2O5m3Qb27a+nBrx
+         JogBII967qLlrZWHNMbGi1+Zu3nH899OlMRN6BJ5PR2gwcSU9Ynu+P/9e41sLkqU8W79
+         tRvOyNYXaS9m2lm1DEEhQNL9ynzTBJZ8VLQgg1zh6SNGiBu4GDt3COPjRh7EIZLxElHq
+         Z2zKhp/KyfCw9R3TUzO+dU3yO1ollY+frrK7TqmRzUsYx/aJdiDkkpAmGTm8noVmtwHb
+         vDvw==
+X-Gm-Message-State: ACrzQf2NiDADo5RshQybni9oXbsVgeAtr8GoY3VVqJGF01JfU9/HudQS
+        KLXa/lCHw7KYtyREEh9zfOHl2Q==
+X-Google-Smtp-Source: AMsMyM4F/9k8UYWTyBvmUTdMe8JQKDRWp680cP73rA9yvR46/Op9hloMq78n5nExLvTc7h696WznUA==
+X-Received: by 2002:a63:2bd4:0:b0:451:5df1:4b15 with SMTP id r203-20020a632bd4000000b004515df14b15mr1554887pgr.518.1665694411830;
+        Thu, 13 Oct 2022 13:53:31 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s22-20020a170902b19600b00172f6726d8esm246974plr.277.2022.10.13.13.53.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 13:53:30 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 20:53:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Like Xu <likexu@tencent.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 1/4] KVM: x86/pmu: Force reprogramming of all counters on
+ PMU filter change
+Message-ID: <Y0h6x0ZJWYH56Z88@google.com>
+References: <20220923001355.3741194-1-seanjc@google.com>
+ <20220923001355.3741194-2-seanjc@google.com>
+ <86d88222-a70f-49ef-71f3-a7d15ae17d7d@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.15 00/27] 5.15.74-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221013175143.518476113@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86d88222-a70f-49ef-71f3-a7d15ae17d7d@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +78,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/22 10:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.74 release.
-> There are 27 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Oct 13, 2022, Like Xu wrote:
+> Firstly, thanks for your comments that spewed out around vpmu.
 > 
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
+> On 23/9/2022 8:13 am, Sean Christopherson wrote:
+> > Force vCPUs to reprogram all counters on a PMU filter change to provide
+> > a sane ABI for userspace.  Use the existing KVM_REQ_PMU to do the
+> > programming, and take advantage of the fact that the reprogram_pmi bitmap
+> > fits in a u64 to set all bits in a single atomic update.  Note, setting
+> > the bitmap and making the request needs to be done _after_ the SRCU
+> > synchronization to ensure that vCPUs will reprogram using the new filter.
+> > 
+> > KVM's current "lazy" approach is confusing and non-deterministic.  It's
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.74-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> The resolute lazy approach was introduced in patch 03, right after this change.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+This is referring to the lazy recognition of the filter, not the deferred
+reprogramming of the counters.  Regardless of whether reprogramming is handled
+via request or in-line, KVM is still lazily recognizing the new filter as vCPUs
+won't picke up the new filter until the _guest_ triggers a refresh.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> > @@ -613,9 +615,18 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
+> >   	mutex_lock(&kvm->lock);
+> >   	filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter,
+> >   				     mutex_is_locked(&kvm->lock));
+> > -	mutex_unlock(&kvm->lock);
+> > -
+> >   	synchronize_srcu_expedited(&kvm->srcu);
+> 
+> The relative order of these two operations has been reversed
+> 	mutex_unlock() and synchronize_srcu_expedited()
+> , extending the execution window of the critical area of "kvm->lock)".
+> The motivation is also not explicitly stated in the commit message.
+
+I'll add a blurb, after I re-convince myself that the sync+request needs to be
+done under kvm->lock.
+
+> > +	BUILD_BUG_ON(sizeof(((struct kvm_pmu *)0)->reprogram_pmi) >
+> > +		     sizeof(((struct kvm_pmu *)0)->__reprogram_pmi));
+> > +
+> > +	kvm_for_each_vcpu(i, vcpu, kvm)
+> > +		atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi, -1ull);
+> 
+> How about:
+> 	bitmap_copy(pmu->reprogram_pmi, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX);
+> to avoid further cycles on calls of
+> "static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, bit)" ?
+
+bitmap_copy() was my first choice too, but unfortunately it's doesn't guarantee
+atomicity and could lead to data corruption if the target vCPU is concurrently
+modifying the bitmap.
