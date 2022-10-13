@@ -2,147 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3845FD283
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D99D5FD269
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJMBZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 21:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S229963AbiJMBOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 21:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJMBZr (ORCPT
+        with ESMTP id S232439AbiJMBNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 21:25:47 -0400
-X-Greylist: delayed 1368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 18:25:39 PDT
-Received: from novek.ru (unknown [213.148.174.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD9EB56D0;
-        Wed, 12 Oct 2022 18:25:35 -0700 (PDT)
-Received: from [192.168.0.18] (unknown [37.228.234.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 12 Oct 2022 21:13:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E415DFA2;
+        Wed, 12 Oct 2022 18:12:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id 0C40B500669;
-        Thu, 13 Oct 2022 03:39:49 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 0C40B500669
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1665621591; bh=ixeQ2bDkrFAa8j/pTu1c+7sHh9CHcjnL5tH54cA/vxQ=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=nNqBOu7ZDGDxqH9tfsCbrwz7rXz1l7hHXzk36zIfKtpuY1gEBuBaOki31jYTQX615
-         Fg02vMEUXHeY+QFkoh/RniWBKNhxOhjbJHlOO8aOxQ/rVQxkgvfpTe9qxFg5E7kIl0
-         3W7MTxA0M6HonqILxQZHA5vPMQrfuMcUXShqmGY0=
-Message-ID: <f87d7615-a978-4f9e-f124-635789fa5874@novek.ru>
-Date:   Thu, 13 Oct 2022 01:43:17 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA498616D1;
+        Thu, 13 Oct 2022 00:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03566C43470;
+        Thu, 13 Oct 2022 00:44:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665621886;
+        bh=DKXGPgqaiPkIBCBB26ELdj+CVTTMyMJ9i/fnIjLcUSQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Dd8sa6U0NOxibXKaQPEphZ/krmhRr7n/v6yTSTggiHzhkANlzBGhvELS7Lc0sh0xC
+         QVq0tY3jJIkGA72yx9C//YeMqqngoNAyhC/IBtyDk9akrtRxupxyB6/3thQHA/ICRn
+         mvll3qWTTRY9TXaUhroH0/6ctovHTbOsRPHqNdVTZhGHJygefMwtlstZQEp5XaqebW
+         w9i5JInzE1jJx7D3ZXzvda+TPBDV85RLS3EJGfhe/K23HkKbQukeC0sQ30+segWurZ
+         P1jXEFp17hWIh3cW2D8XmvBlSvrfAmpBeteq9pN1Ul4mFn4P2U3YkCsuAmmpOq0D8X
+         D6CeUf8YcsmdA==
+Date:   Wed, 12 Oct 2022 19:44:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Kevin Rowland <kevin.p.rowland@gmail.com>
+Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
+Message-ID: <20221013004444.GA3135316@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: bridge:fragmented packets dropped by bridge
-Content-Language: en-US
-To:     Vyacheslav Salnikov <snordicstr16@gmail.com>,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <CACzz7uzbSVpLu8iqBYXTULr2aUW_9FDdkEVozK+r-BiM2rMukw@mail.gmail.com>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-In-Reply-To: <CACzz7uzbSVpLu8iqBYXTULr2aUW_9FDdkEVozK+r-BiM2rMukw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04ace1ae-26d0-4157-b7eb-8dff29895180@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.10.2022 12:21, Vyacheslav Salnikov wrote:
-> Hi.
-> 
-> I switched from kernel versions 4.9 to 5.15 and found that the MTU on
-> the interfaces in the bridge does not change.
-> For example:
-> I have the following bridge:
-> bridge      interface
-> br0          sw1
->                 sw2
->                 sw3
-> 
-> And I change with ifconfig MTU.
-> I see that br0 sw1..sw3 has changed MTU from 1500 -> 1982.
-> 
-> But if i send a ping through these interfaces, I get 1500(I added
-> prints for output)
-> I investigated the code and found the reason:
-> The following commit came in the new kernel:
-> https://github.com/torvalds/linux/commit/ac6627a28dbfb5d96736544a00c3938fa7ea6dfb
-> 
-> And the behavior of the MTU setting has changed:
->>
->> Kernel 4.9:
->> if (net->ipv4.sysctl_ip_fwd_use_pmtu ||
->>     ip_mtu_locked(dst) ||
->>     !forwarding)  <--- True
->> return dst_mtu(dst) <--- 1982
->>
->>
->> / 'forwarding = true' case should always honour route mtu /
->> mtu = dst_metric_raw(dst, RTAX_MTU);
->> if (mtu)
->> return mtu;
-> 
-> 
-> 
-> Kernel 5.15:
->>
->> if (READ_ONCE(net->ipv4.sysctl_ip_fwd_use_pmtu) ||
->>     ip_mtu_locked(dst) ||
->>     !forwarding) { <--- True
->> mtu = rt->rt_pmtu;  <--- 0
->> if (mtu && time_before(jiffies, rt->dst.expires)) <-- False
->> goto out;
->> }
->>
->> / 'forwarding = true' case should always honour route mtu /
->> mtu = dst_metric_raw(dst, RTAX_MTU); <---- 1500
->> if (mtu) <--- True
->> goto out;
-> 
-> As I see from the code in the end takes mtu from br_dst_default_metrics
->> static const u32 br_dst_default_metrics[RTAX_MAX] = {
->> [RTAX_MTU - 1] = 1500,
->> };
-> 
-> Why is rt_pmtu now used instead of dst_mtu?
-> Why is forwarding = False called with dst_metric_raw?
-> Maybe we should add processing when mtu = rt->rt_pmtu == 0?
-> Could this be an error?
-> 
-If you compare ipv4_mtu code from 4.9 you will see that the very first mtu value 
-is filled by rt->rt_pmtu value. I believe there were changes to the bridge code 
-where rt_pmtu value got empty or cleared.
+[+cc Marc, Kevin]
 
-I'm still looking for the root cause of the problem, will update you once I find it.
+On Wed, Oct 12, 2022 at 07:36:52PM +0530, Krishna Chaitanya Chundru wrote:
+> On 10/6/2022 2:43 AM, Bjorn Helgaas wrote:
 
+[I'm declaring quote text bankruptcy and dropping the huge wall of
+text.  The IRQ affinity change you mention seems to be the critical
+issue :)]
 
+> > The PCIe spec clearly envisions Refclk being turned off
+> > (sec 5.5.3.3.1) and PHYs being powered off (sec 5.5.3.2) while in
+> > L1.2.
+> > 
+> > I've been assuming L1.2 exit (which includes Refclk being turned on
+> > and PHYs being powered up) is completely handled by hardware, but it
+> > sounds like the Qcom controller needs software assistance which fields
+> > an interrupt when CLKREQ# is asserted and turns on Refclk and the
+> > PHYs?
+> > 
+> > 5.5.3 does say "All Link and PHY state must be maintained during L1.2,
+> > or must be restored upon exit using implementation specific means",
+> > and maybe Qcom counts as using implementation specific means.
+> > 
+> > I *am* concerned about whether software can do the L1.2 exit fast
+> > enough, but the biggest reason I'm struggling with this is because
+> > using the syscore framework to work around IRQ affinity changes that
+> > happen late in suspend just seems kind of kludgy and it doesn't seem
+> > like it fits cleanly in the power management model.
 > 
-> I found a thread discussing a similar problem. It suggested porting
-> the next patch:
-> Signed-off-by: Rundong Ge <rdong.ge@gmail.com>
-> ---
->   include/net/ip.h | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/net/ip.h b/include/net/ip.h
-> index 29d89de..0512de3 100644
-> --- a/include/net/ip.h
-> +++ b/include/net/ip.h
-> @@ -450,6 +450,8 @@ static inline unsigned int
-> ip_dst_mtu_maybe_forward(const struct dst_entry *dst,
->   static inline unsigned int ip_skb_dst_mtu(struct sock *sk,
->      const struct sk_buff *skb)
->   {
-> + if ((skb_dst(skb)->flags & DST_FAKE_RTABLE) && skb->dev)
-> + return min(skb->dev->mtu, IP_MAX_MTU);
->    if (!sk || !sk_fullsock(sk) || ip_sk_use_pmtu(sk)) {
->    bool forwarding = IPCB(skb)->flags & IPSKB_FORWARDED;
-> 
-> 
-> Why was this patch not accepted in the end?
+> Can you please suggest any another way to work around IRQ affinity
+> changes.
 
+One of your earlier patches [1] made dw_msi_mask_irq() look like this:
+
+  static void dw_msi_mask_irq(struct irq_data *d)
+  {
+    struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
+    struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+
+    if (dw_pcie_link_up(pci))
+	    pci_msi_mask_irq(d);
+
+    irq_chip_mask_parent(d);
+  }
+
+That was an awful lot like Marc's suggestion [2] that the
+pci_msi_mask_irq() should be redundant.
+
+If it's truly redundant, maybe pci_msi_mask_irq() can be removed
+from dw_msi_mask_irq() (and other similar *_mask_irq()
+implementations) completely?
+
+Bjorn
+
+[1] https://lore.kernel.org/r/1659526134-22978-3-git-send-email-quic_krichai@quicinc.com
+[2] https://lore.kernel.org/linux-pci/86k05m7dkr.wl-maz@kernel.org/
