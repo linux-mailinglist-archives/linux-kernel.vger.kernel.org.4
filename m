@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2CE5FDEF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D535FDEF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiJMR3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
+        id S229496AbiJMR35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiJMR33 (ORCPT
+        with ESMTP id S229861AbiJMR3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:29:29 -0400
+        Thu, 13 Oct 2022 13:29:30 -0400
 Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611CDC3541;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E61D038E;
         Thu, 13 Oct 2022 10:29:28 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        by ms.lwn.net (Postfix) with ESMTPA id E49D9845;
-        Thu, 13 Oct 2022 17:29:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E49D9845
+        by ms.lwn.net (Postfix) with ESMTPA id 44F0C7DE;
+        Thu, 13 Oct 2022 17:29:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 44F0C7DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665682168; bh=0opHrZqvXrL6VtcOxiAU4dw/b0sguVWD5kn6y9m/afo=;
+        t=1665682168; bh=keh3BAATlkR8yDL2srU6MNeKVExwzXPbSFhQxtmEIdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CzbjjyF5THDuiifk7pwCcR2BT3lwHJ1v5ySNvbHfr+iosLF/ruylselyA+DC2cr7k
-         weO48FqSQpscOjHUOaMT0rande9wdUNRhRwmwrfsuyNC61y2XEgDygTxApMMj73Xv3
-         YTx5SpYKE1hI0hkKu6n31+T8rKqr0JJ0uLHVelp+xg7qFM07Sc3WnKvUHbWf7VK38d
-         KXVvscZ1f3llbQC9dVR6YS+LrcL7+bVd6Xmm9HmocARTEiEIOriAgKhD2GYGrddIJ/
-         DdcHJCEcCo0eizwMAXzE0CpwT/e7OBGYCcxU5bvrZZ4j4pFXPVhxBPx7wqkEAvFw1K
-         6PVo4JdcFzIXQ==
+        b=s332vN68n3jqb2xYS+ZyYgEsAFrNsqsWuUvhcbLuNPL0CzQXC+PVGOSKII3104BSk
+         l1SzFbQdQGXojU0xubGNluP7x9pCPqnCpf9x2Jf2wuSs9ucB951+ByUhA6n65n6Yge
+         bZJYhrg7rgIKOPue9b882fj8UBGLN1Ll52ZEXq+2WFy1KQgJ6JrWWsJ1vBwf6ByQYU
+         aB4HswMJiJfBXIG6ipVKRzmEEgR5lsQxC0mrOtbFX4UUrs6Tk/HOi3BxXLN2Bs/ad3
+         3yBSA5XOvk4gRhiKgA5ZXHnA/YJobyYqpmQWa4/krZ4VRu8ULQJNuJsJtTR+Yyc22B
+         1InmJOhTu3B5w==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/6] docs: improve the HTML formatting of kerneldoc comments
-Date:   Thu, 13 Oct 2022 11:29:17 -0600
-Message-Id: <20221013172918.846856-6-corbet@lwn.net>
+Subject: [PATCH v3 6/6] docs: decruft Documentation/conf.py
+Date:   Thu, 13 Oct 2022 11:29:18 -0600
+Message-Id: <20221013172918.846856-7-corbet@lwn.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221013172918.846856-1-corbet@lwn.net>
 References: <20221013172918.846856-1-corbet@lwn.net>
@@ -48,188 +48,255 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make a few changes to cause functions documented by kerneldoc to stand out
-better in the rendered documentation.  Specifically, change kernel-doc to
-put the description section into a ".. container::" section, then add a bit
-of CSS to indent that section relative to the function prototype (or struct
-or enum definition).  Tweak a few other CSS parameters while in the
-neighborhood to improve the formatting.
+Remove the ancient support for the Sphinx "classic" theme; everybody will
+have alabaster, so that fallback is no longer needed.
 
+While in the neighborhood: get rid of lots of useless comment lines.  They
+describe the state of Sphinx options when we first created that file and
+are just clutter now.
+
+Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 ---
- Documentation/sphinx-static/custom.css | 16 +++++++-
- scripts/kernel-doc                     | 52 ++++++++++++++++----------
- 2 files changed, 47 insertions(+), 21 deletions(-)
+ Documentation/conf.py | 181 +-----------------------------------------
+ 1 file changed, 2 insertions(+), 179 deletions(-)
 
-diff --git a/Documentation/sphinx-static/custom.css b/Documentation/sphinx-static/custom.css
-index 6b0e554cea0a..9b36f7abd24f 100644
---- a/Documentation/sphinx-static/custom.css
-+++ b/Documentation/sphinx-static/custom.css
-@@ -10,5 +10,19 @@ div.body h3 { font-size: 130%; }
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 1dbf3d6a55de..6ab47833ab6c 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -297,7 +297,7 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
+                 html_css_files.append('theme_rtd_colors.css')
  
- /* Tighten up the layout slightly */
- div.body { padding: 0 15px 0 10px; }
--div.document { margin: 20px 10px 0 10px; }
- div.sphinxsidebarwrapper { padding: 1em 0.4em; }
-+/* Tweak document margins and don't force width */
-+div.document {
-+    margin: 20px 10px 0 10px; 
-+    width: auto;
-+}
-+
-+/*
-+ * Parameters for the display of function prototypes and such included
-+ * from C source files.
-+ */
-+dl.function, dl.struct, dl.enum { margin-top: 2em; background-color: #ecf0f3; }
-+/* indent lines 2+ of multi-line function prototypes */
-+dl.function dt { margin-left: 10em; text-indent: -10em; }
-+dt.sig-object { font-size: larger; }
-+div.kernelindent { margin-left: 2em; margin-right: 4em; }
-diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index aea04365bc69..85ea80fb5154 100755
---- a/scripts/kernel-doc
-+++ b/scripts/kernel-doc
-@@ -866,48 +866,53 @@ sub output_function_rst(%) {
- 	print "\n";
-     }
+     except ImportError:
+-        html_theme = 'classic'
++        html_theme = 'alabaster'
  
--    print "**Parameters**\n\n";
-+    #
-+    # Put our descriptive text into a container (thus an HTML <div>) to help
-+    # set the function prototypes apart.
-+    #
-+    print ".. container:: kernelindent\n\n";
-     $lineprefix = "  ";
-+    print $lineprefix . "**Parameters**\n\n";
-     foreach $parameter (@{$args{'parameterlist'}}) {
- 	my $parameter_name = $parameter;
- 	$parameter_name =~ s/\[.*//;
- 	$type = $args{'parametertypes'}{$parameter};
+ if "DOCS_CSS" in os.environ:
+     css = os.environ["DOCS_CSS"].split(" ")
+@@ -313,36 +313,7 @@ if major <= 1 and minor < 8:
+     for l in html_css_files:
+         html_context['css_files'].append('_static/' + l)
  
- 	if ($type ne "") {
--	    print "``$type``\n";
-+	    print $lineprefix . "``$type``\n";
- 	} else {
--	    print "``$parameter``\n";
-+	    print $lineprefix . "``$parameter``\n";
- 	}
- 
-         print_lineno($parameterdesc_start_lines{$parameter_name});
- 
-+	$lineprefix = "    ";
- 	if (defined($args{'parameterdescs'}{$parameter_name}) &&
- 	    $args{'parameterdescs'}{$parameter_name} ne $undescribed) {
- 	    output_highlight_rst($args{'parameterdescs'}{$parameter_name});
- 	} else {
--	    print "  *undescribed*\n";
-+	    print $lineprefix . "*undescribed*\n";
- 	}
-+	$lineprefix = "  ";
- 	print "\n";
-     }
- 
--    $lineprefix = $oldprefix;
-     output_section_rst(@_);
-+    $lineprefix = $oldprefix;
- }
- 
- sub output_section_rst(%) {
-     my %args = %{$_[0]};
-     my $section;
-     my $oldprefix = $lineprefix;
--    $lineprefix = "";
- 
-     foreach $section (@{$args{'sectionlist'}}) {
--	print "**$section**\n\n";
-+	print $lineprefix . "**$section**\n\n";
-         print_lineno($section_start_lines{$section});
- 	output_highlight_rst($args{'sections'}{$section});
- 	print "\n";
-     }
-     print "\n";
--    $lineprefix = $oldprefix;
- }
- 
- sub output_enum_rst(%) {
-@@ -915,6 +920,7 @@ sub output_enum_rst(%) {
-     my ($parameter);
-     my $oldprefix = $lineprefix;
-     my $count;
-+    my $outer;
- 
-     if ($sphinx_major < 3) {
- 	my $name = "enum " . $args{'enum'};
-@@ -924,14 +930,17 @@ sub output_enum_rst(%) {
- 	print "\n\n.. c:enum:: " . $name . "\n\n";
-     }
-     print_lineno($declaration_start_line);
--    $lineprefix = "   ";
-+    $lineprefix = "  ";
-     output_highlight_rst($args{'purpose'});
-     print "\n";
- 
--    print "**Constants**\n\n";
--    $lineprefix = "  ";
-+    print ".. container:: kernelindent\n\n";
-+    $outer = $lineprefix . "  ";
-+    $lineprefix = $outer . "  ";
-+    print $outer . "**Constants**\n\n";
-     foreach $parameter (@{$args{'parameterlist'}}) {
--	print "``$parameter``\n";
-+	print $outer . "``$parameter``\n";
-+
- 	if ($args{'parameterdescs'}{$parameter} ne $undescribed) {
- 	    output_highlight_rst($args{'parameterdescs'}{$parameter});
- 	} else {
-@@ -939,7 +948,7 @@ sub output_enum_rst(%) {
- 	}
- 	print "\n";
-     }
+-if  html_theme == 'classic':
+-    html_theme_options = {
+-        'rightsidebar':        False,
+-        'stickysidebar':       True,
+-        'collapsiblesidebar':  True,
+-        'externalrefs':        False,
 -
-+    print "\n";
-     $lineprefix = $oldprefix;
-     output_section_rst(@_);
- }
-@@ -982,18 +991,19 @@ sub output_struct_rst(%) {
- 	}
-     }
-     print_lineno($declaration_start_line);
--    $lineprefix = "   ";
-+    $lineprefix = "  ";
-     output_highlight_rst($args{'purpose'});
-     print "\n";
+-        'footerbgcolor':       "white",
+-        'footertextcolor':     "white",
+-        'sidebarbgcolor':      "white",
+-        'sidebarbtncolor':     "black",
+-        'sidebartextcolor':    "black",
+-        'sidebarlinkcolor':    "#686bff",
+-        'relbarbgcolor':       "#133f52",
+-        'relbartextcolor':     "white",
+-        'relbarlinkcolor':     "white",
+-        'bgcolor':             "white",
+-        'textcolor':           "black",
+-        'headbgcolor':         "#f2f2f2",
+-        'headtextcolor':       "#20435c",
+-        'headlinkcolor':       "#c60f0f",
+-        'linkcolor':           "#355f7c",
+-        'visitedlinkcolor':    "#355f7c",
+-        'codebgcolor':         "#3f3f3f",
+-        'codetextcolor':       "white",
+-
+-        'bodyfont':            "serif",
+-        'headfont':            "sans-serif",
+-    }
+-else:
++if  html_theme == 'alabaster':
+     html_theme_options = {
+         'description': get_cline_version(),
+         'font_size': '10pt',
+@@ -352,44 +323,11 @@ else:
  
--    print "**Definition**\n\n";
--    print "::\n\n";
-+    print ".. container:: kernelindent\n\n";
-+    print $lineprefix . "**Definition**::\n\n";
-     my $declaration = $args{'definition'};
--    $declaration =~ s/\t/  /g;
--    print "  " . $args{'type'} . " " . $args{'struct'} . " {\n$declaration  };\n\n";
-+    $lineprefix = $lineprefix . "  ";
-+    $declaration =~ s/\t/$lineprefix/g;
-+    print $lineprefix . $args{'type'} . " " . $args{'struct'} . " {\n$declaration" . $lineprefix . "};\n\n";
+ sys.stderr.write("Using %s theme\n" % html_theme)
  
--    print "**Members**\n\n";
-     $lineprefix = "  ";
-+    print $lineprefix . "**Members**\n\n";
-     foreach $parameter (@{$args{'parameterlist'}}) {
- 	($parameter =~ /^#/) && next;
+-# Theme options are theme-specific and customize the look and feel of a theme
+-# further.  For a list of options available for each theme, see the
+-# documentation.
+-#html_theme_options = {}
+-
+-# Add any paths that contain custom themes here, relative to this directory.
+-#html_theme_path = []
+-
+-# The name for this set of Sphinx documents.  If None, it defaults to
+-# "<project> v<release> documentation".
+-#html_title = None
+-
+-# A shorter title for the navigation bar.  Default is the same as html_title.
+-#html_short_title = None
+-
+-# The name of an image file (relative to this directory) to place at the top
+-# of the sidebar.
+-#html_logo = None
+-
+-# The name of an image file (within the static path) to use as favicon of the
+-# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+-# pixels large.
+-#html_favicon = None
+-
+ # Add any paths that contain custom static files (such as style sheets) here,
+ # relative to this directory. They are copied after the builtin static files,
+ # so a file named "default.css" will overwrite the builtin "default.css".
+ html_static_path = ['sphinx-static']
  
-@@ -1003,8 +1013,10 @@ sub output_struct_rst(%) {
- 	($args{'parameterdescs'}{$parameter_name} ne $undescribed) || next;
- 	$type = $args{'parametertypes'}{$parameter};
-         print_lineno($parameterdesc_start_lines{$parameter_name});
--	print "``" . $parameter . "``\n";
-+	print $lineprefix . "``" . $parameter . "``\n";
-+	$lineprefix = "    ";
- 	output_highlight_rst($args{'parameterdescs'}{$parameter_name});
-+	$lineprefix = "  ";
- 	print "\n";
-     }
-     print "\n";
+-# Add any extra paths that contain custom files (such as robots.txt or
+-# .htaccess) here, relative to this directory. These files are copied
+-# directly to the root of the documentation.
+-#html_extra_path = []
+-
+-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+-# using the given strftime format.
+-#html_last_updated_fmt = '%b %d, %Y'
+-
+ # If true, SmartyPants will be used to convert quotes and dashes to
+ # typographically correct entities.
+ html_use_smartypants = False
+@@ -398,50 +336,6 @@ html_use_smartypants = False
+ # Note that the RTD theme ignores this
+ html_sidebars = { '**': ["about.html", 'searchbox.html', 'localtoc.html', 'sourcelink.html']}
+ 
+-# Additional templates that should be rendered to pages, maps page names to
+-# template names.
+-#html_additional_pages = {}
+-
+-# If false, no module index is generated.
+-#html_domain_indices = True
+-
+-# If false, no index is generated.
+-#html_use_index = True
+-
+-# If true, the index is split into individual pages for each letter.
+-#html_split_index = False
+-
+-# If true, links to the reST sources are added to the pages.
+-#html_show_sourcelink = True
+-
+-# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+-#html_show_sphinx = True
+-
+-# If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
+-#html_show_copyright = True
+-
+-# If true, an OpenSearch description file will be output, and all pages will
+-# contain a <link> tag referring to it.  The value of this option must be the
+-# base URL from which the finished HTML is served.
+-#html_use_opensearch = ''
+-
+-# This is the file name suffix for HTML files (e.g. ".xhtml").
+-#html_file_suffix = None
+-
+-# Language to be used for generating the HTML full-text search index.
+-# Sphinx supports the following languages:
+-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'h', 'it', 'ja'
+-#   'nl', 'no', 'pt', 'ro', 'r', 'sv', 'tr'
+-#html_search_language = 'en'
+-
+-# A dictionary with options for the search language support, empty by default.
+-# Now only 'ja' uses this config value
+-#html_search_options = {'type': 'default'}
+-
+-# The name of a javascript file (relative to the configuration directory) that
+-# implements a search results scorer. If empty, the default will be used.
+-#html_search_scorer = 'scorer.js'
+-
+ # Output file base name for HTML help builder.
+ htmlhelp_basename = 'TheLinuxKerneldoc'
+ 
+@@ -583,19 +477,6 @@ texinfo_documents = [
+      'Miscellaneous'),
+ ]
+ 
+-# Documents to append as an appendix to all manuals.
+-#texinfo_appendices = []
+-
+-# If false, no module index is generated.
+-#texinfo_domain_indices = True
+-
+-# How to display URL addresses: 'footnote', 'no', or 'inline'.
+-#texinfo_show_urls = 'footnote'
+-
+-# If true, do not generate a @detailmenu in the "Top" node's menu.
+-#texinfo_no_detailmenu = False
+-
+-
+ # -- Options for Epub output ----------------------------------------------
+ 
+ # Bibliographic Dublin Core info.
+@@ -604,67 +485,9 @@ epub_author = author
+ epub_publisher = author
+ epub_copyright = copyright
+ 
+-# The basename for the epub file. It defaults to the project name.
+-#epub_basename = project
+-
+-# The HTML theme for the epub output. Since the default themes are not
+-# optimized for small screen space, using the same theme for HTML and epub
+-# output is usually not wise. This defaults to 'epub', a theme designed to save
+-# visual space.
+-#epub_theme = 'epub'
+-
+-# The language of the text. It defaults to the language option
+-# or 'en' if the language is not set.
+-#epub_language = ''
+-
+-# The scheme of the identifier. Typical schemes are ISBN or URL.
+-#epub_scheme = ''
+-
+-# The unique identifier of the text. This can be a ISBN number
+-# or the project homepage.
+-#epub_identifier = ''
+-
+-# A unique identification for the text.
+-#epub_uid = ''
+-
+-# A tuple containing the cover image and cover page html template filenames.
+-#epub_cover = ()
+-
+-# A sequence of (type, uri, title) tuples for the guide element of content.opf.
+-#epub_guide = ()
+-
+-# HTML files that should be inserted before the pages created by sphinx.
+-# The format is a list of tuples containing the path and title.
+-#epub_pre_files = []
+-
+-# HTML files that should be inserted after the pages created by sphinx.
+-# The format is a list of tuples containing the path and title.
+-#epub_post_files = []
+-
+ # A list of files that should not be packed into the epub file.
+ epub_exclude_files = ['search.html']
+ 
+-# The depth of the table of contents in toc.ncx.
+-#epub_tocdepth = 3
+-
+-# Allow duplicate toc entries.
+-#epub_tocdup = True
+-
+-# Choose between 'default' and 'includehidden'.
+-#epub_tocscope = 'default'
+-
+-# Fix unsupported image types using the Pillow.
+-#epub_fix_images = False
+-
+-# Scale large images.
+-#epub_max_image_width = 0
+-
+-# How to display URL addresses: 'footnote', 'no', or 'inline'.
+-#epub_show_urls = 'inline'
+-
+-# If false, no index is generated.
+-#epub_use_index = True
+-
+ #=======
+ # rst2pdf
+ #
 -- 
 2.37.2
 
