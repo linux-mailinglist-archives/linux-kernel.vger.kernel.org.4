@@ -2,79 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E07F5FE150
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C935FE136
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbiJMSdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S229773AbiJMS3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiJMSdb (ORCPT
+        with ESMTP id S232138AbiJMS2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:33:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00333ECE4;
-        Thu, 13 Oct 2022 11:29:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F8A26188A;
-        Thu, 13 Oct 2022 18:16:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C935EC433C1;
-        Thu, 13 Oct 2022 18:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665684998;
-        bh=oCQNci6QkcHEdVyUUCpGDjibQhR/MN8r4Pz+yko1DuI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XKMw1vKkr3wH0bIEr5EHUCdy9UYdw5WjLPuN7oT/EK+NNlLaJ7gUmrOHKldj4c84j
-         9ZWUkK0HGF5OTERHq1TMG6sQjJUfV9CLBFJSTCpcDHaTZkBDyPX2Bi/7bOLqjMO1pE
-         VxY5dZCdKCR2rGzbaqSuUb9DfLdFUk8a9TZXhnF4qIGZQq+KUCempCIFrewAzVIhtx
-         hdUILzmDtHhs3udsclTSR9cgY9oCkd++SY1ajOUbIcGYSKJs9b9zu8X/hV97T0/gHt
-         cEzRbmeWPVA4cb5RFBIVNTV6qtHC9jBDuknaWecWRAd8WCFOOeMOLmMjAIakaQ2NIR
-         kj89yIpH18OsA==
-Date:   Thu, 13 Oct 2022 14:16:36 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.0 16/77] wifi: mac80211: fix control port frame
- addressing
-Message-ID: <Y0hWBJs1y9DyHpCu@sashalap>
-References: <20221009220754.1214186-1-sashal@kernel.org>
- <20221009220754.1214186-16-sashal@kernel.org>
- <8acb94e9bd6d580f739e81e5f203cb93028adf4e.camel@sipsolutions.net>
+        Thu, 13 Oct 2022 14:28:43 -0400
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D84BC472
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:24:15 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id z97so3762438ede.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:24:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f7qwPUEZ1ZhfA+wANlCjEKHD1jlsyDHPilB/I6xGaZA=;
+        b=OwfkBRBgr2PFFLhPYms8BwxXSG4Fc/fK8EqoqLMWxXrxwEZH0zChQpuSzaJVWYum/F
+         EWYmiYq6Hh1IlFL04YmRQRLZ8SCSU3l9AlL5NDc5LzM9kvEGaYBXnhegk5/Q0E1OUZko
+         MnphSpSgbFutzcpwWwyxMmJjA9d9m+d/zCpfxzmvEZzce+tVvPdGp7fcdyZq1dM33ry6
+         Ur1QrDlMMv6P/i17YtvM+PtLl/wjMlPc5OmIsMoUpbnE/TiXYxrpIIpb9j8JBLWyXOVC
+         ZpI6fmspp6+uOtN6tYPSkl3/Vt/ztk3Z8LpFlx43HtrhhTudENtKQjlBd8yE7z43pn6D
+         4JsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f7qwPUEZ1ZhfA+wANlCjEKHD1jlsyDHPilB/I6xGaZA=;
+        b=cow91v6ln6yrSnOFeF8jRbxpgVqOVZXp8+geaGmVnuHsV9/qu2y8R7D2DgoTHfnQM1
+         K6CYV3l+3WylAdsdYxPhIRrKFG45356s3NmoxStAWvR4ms5yXPsPwhrBab3gy4YDrDX1
+         Q7G7D1hgtLUiFmm/IlqVRsiSf23I+Tl2/izghuUozwVUlJ8QjmpEe0OezedTdX218ccH
+         VWcWP0Fz9ToPlCp3TOXiDanVsxxHYPduSaLQg+QAK0LsQ4ZjWdZuNdegu64llZNwgZ/q
+         8OskdiUapW3AN0SgNaLJd00fce32LLh8TwtaR9Ak2bibHG7RTEB3q6BhgpbAB4HJA8EH
+         G2tg==
+X-Gm-Message-State: ACrzQf1z8K2Ms+rXpPmxN+lTjXWyQPzlZYoQ0e9nr2xcJarUC6AZ02g5
+        Fl+2jFm62UYCi+K9tnONv7s=
+X-Google-Smtp-Source: AMsMyM4tW50WsdxGOymGeUSqnL5oRfzwxkZiFV1zFdsjDVrLwel/HsNrBGerF0BdB9iwstFH+FQueA==
+X-Received: by 2002:a05:6402:5252:b0:45d:d1a:fe7d with SMTP id t18-20020a056402525200b0045d0d1afe7dmr815908edd.323.1665685058029;
+        Thu, 13 Oct 2022 11:17:38 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id v25-20020aa7dbd9000000b00456c6b4b777sm222778edt.69.2022.10.13.11.17.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 11:17:37 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     maxime@cerno.tech, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, wens@csie.org, samuel@sholland.org
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] iommu/sun50i: Invalidate iova at map and unmap
+Date:   Thu, 13 Oct 2022 20:17:36 +0200
+Message-ID: <3161965.AJdgDx1Vlc@kista>
+In-Reply-To: <20221013181221.3247429-6-jernej.skrabec@gmail.com>
+References: <20221013181221.3247429-1-jernej.skrabec@gmail.com> <20221013181221.3247429-6-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <8acb94e9bd6d580f739e81e5f203cb93028adf4e.camel@sipsolutions.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 09:03:52AM +0200, Johannes Berg wrote:
->On Sun, 2022-10-09 at 18:06 -0400, Sasha Levin wrote:
->> From: Johannes Berg <johannes.berg@intel.com>
->>
->> [ Upstream commit a6ba64d0b187109dc252969c1fc9e2525868bd49 ]
->>
->> For an AP interface, when userspace specifieds the link ID to
->> transmit the control port frame on (in particular for the
->> initial 4-way-HS), due to the logic in ieee80211_build_hdr()
->> for a frame transmitted from/to an MLD
->
->FWIW, I don't mind this being backported, but it doesn't make all that
->much sense since the only driver "supporting" all this MLO/MLD/link_id
->stuff upstream is hwsim, and it's not really finished anyway.
+Dne =C4=8Detrtek, 13. oktober 2022 ob 20:12:20 CEST je Jernej Skrabec napis=
+al(a):
+> Mapped and unmapped iova addresses needs to be invalidated immediately
+> or otherwise they might or might not work when used by master device.
+>=20
+> This was discovered when running video decoder conformity test with
+> Cedrus. Some videos were now and then decoded incorrectly and generated
+> page faults.
+>=20
+> Fixes: 4100b8c229b3 ("iommu: Add Allwinner H6 IOMMU driver")
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Happy to drop it, thanks.
+Please ignore this patch. It's same as next one, with slightly different co=
+mmit=20
+message.
 
--- 
-Thanks,
-Sasha
+
