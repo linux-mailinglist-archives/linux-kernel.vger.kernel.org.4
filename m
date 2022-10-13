@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E1A5FD98D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF895FD991
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiJMMuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S229617AbiJMMvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiJMMue (ORCPT
+        with ESMTP id S229671AbiJMMvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:50:34 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C6220181;
-        Thu, 13 Oct 2022 05:50:32 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 9bd3522237f0ea1e; Thu, 13 Oct 2022 14:50:30 +0200
-Received: from kreacher.localnet (unknown [213.134.183.5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8BF6B6667B9;
-        Thu, 13 Oct 2022 14:50:29 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH] thermal: intel_powerclamp: Use first online CPU as control_cpu
-Date:   Thu, 13 Oct 2022 14:50:28 +0200
-Message-ID: <5633735.DvuYhMxLoT@kreacher>
+        Thu, 13 Oct 2022 08:51:09 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1356BC4D99
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:51:05 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id y10so1170434qvo.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:51:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E2cH3XkUWNLmNpwPQYLhtWACtStFj+VXNiGHkNXCbo0=;
+        b=XxwCvmQ1OfqgGGbTHrcRTCqJQWsDbCAQaVv1lDeA+U/bZDTMcdIsls3Z9siap5rSd2
+         hvneGkBQHEedy2YDOcb9hXvo33bTwqgMS5dmPvBRasi2lr/hp7IeptFLeUIqjRU0lFTI
+         uizc1YvsBhmHDhetspqPlCknQqP4Y3kZs9h5lfpRI3voVtOcm2ljtlxXREaNF+6Hcny6
+         v5tVRgHfAhPBy4SrwxfCP0wHcZ1F1lev3ymv1oSe0Q4+FAFq1GJS/oLSrrFxEDRoepS+
+         3rCqFR/1Y3jQ7FGzes2cKVlq5c8J6p84PORSkId4LuLMZV3rR1Rnsagi/dMrZj/dHMcx
+         UPbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=E2cH3XkUWNLmNpwPQYLhtWACtStFj+VXNiGHkNXCbo0=;
+        b=t2yhK3wqOFF/k9S+/cWA4pg9kHSgKjR8iX/EnkMJE96x+L+Zxcl8YcyJzHKJTkfZ6B
+         eU+xZALiuoffBGn+3H8HEYid3UJ23O7Sb5WIUyi+L7C88UXbHsazrRryPJ50YjllikrU
+         pOmDNl31ZDywLWlZ9zcAU61+t3ce0xz7s3JoYtxJG6Lpw8PLj3fd8dQN6LdQweLx8l5H
+         3+OgHCXoNOj3vWUilcgFgVl1Cl0xQnI13mQ4FptcB6A1MqxqY6MTxloTHFFtId3NSpnr
+         ecYPHw53XVQV+xqARGZAqRAzuFEwtHOqfEbnMjbcNFwbA+o8Q31/VJfPS8uE7YxfZJI3
+         jkrg==
+X-Gm-Message-State: ACrzQf0jzKAHmKTY47iEKYmsWZFBqucGlWd71eUuUr/r3ctGV467HvRr
+        +jgpfDOSRAUGD+okpUXWNQ9MUrE2eIN3yQ==
+X-Google-Smtp-Source: AMsMyM5wWXDn76e8mvrqcBBxuxQMpTsIi+Sda1mv26vttJb13vgAl0Xcx57FAQYYbgMIO1+VqhQeeQ==
+X-Received: by 2002:a17:902:da8a:b0:180:6f4f:beee with SMTP id j10-20020a170902da8a00b001806f4fbeeemr30972033plx.82.1665665454343;
+        Thu, 13 Oct 2022 05:50:54 -0700 (PDT)
+Received: from [10.68.76.92] ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id c72-20020a621c4b000000b00561c179e17dsm1934281pfc.76.2022.10.13.05.50.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 05:50:53 -0700 (PDT)
+Message-ID: <db41c662-19ce-fc1a-21ba-38ecda7d09c8@bytedance.com>
+Date:   Thu, 13 Oct 2022 20:50:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.183.5
-X-CLIENT-HOSTNAME: 213.134.183.5
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgheelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekfedrheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrdehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihurdgtrdgthhgvnhesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhht
- vghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgrtghosgdrjhhunhdrphgrnheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehprghvvghlsehutgifrdgtii
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [External] Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, wuyun.abel@bytedance.com
+References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
+ <Y0WEbCqJHjnqsg8n@dhcp22.suse.cz>
+ <582cf257-bc0d-c96e-e72e-9164cff4fce1@bytedance.com>
+ <Y0aCiYMQ4liL2azT@dhcp22.suse.cz>
+ <a0421769-c2b9-d59a-0358-3cc84b2cb2bd@bytedance.com>
+ <Y0avztF7QU8P/OoB@dhcp22.suse.cz>
+ <e825a27a-646b-9723-f774-947501c04ec2@bytedance.com>
+ <Y0f17v1c3aAszlbk@dhcp22.suse.cz>
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+In-Reply-To: <Y0f17v1c3aAszlbk@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Hi Michal
+>>
+>> Could we try to change the MPOL_F_SHARED flag to MPOL_F_STATIC to
+>> mark static mempolicy which cannot be freed, and mpol_needs_cond_ref
+>> can use MPOL_F_STATIC to avoid freeing  the static mempolicy.
+> 
+> Wouldn't it make more sense to get rid of a different treatment and
+> treat all memory policies the same way?
 
-Commit 68b99e94a4a2 ("thermal: intel_powerclamp: Use get_cpu() instead
-of smp_processor_id() to avoid crash") fixed an issue related to using
-smp_processor_id() in preemptible context by replacing it with a pair
-of get_cpu()/put_cpu(), but what is needed there really is any online
-CPU and not necessarily the one currently running the code.  Arguably,
-getting the one that's running the code in there is confusing.
+I found a case, not sure if it makes sense. If there is no policy
+in task->mempolicy, the use of atomic_{inc,dec} can be skiped
+according  to MPOL_F_STATIC. Atomic_{inc,dec} in hot path may reduces 
+performance.
 
-For this reason, simply give the control CPU role to the first online
-one which automatically will be CPU0 if it is online, so one check
-can be dropped from the code for an added benefit.
-
-Link: https://lore.kernel.org/linux-pm/20221011113646.GA12080@duo.ucw.cz/
-Fixes: 68b99e94a4a2 ("thermal: intel_powerclamp: Use get_cpu() instead of smp_processor_id() to avoid crash")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_powerclamp.c |    6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/intel_powerclamp.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_powerclamp.c
-+++ linux-pm/drivers/thermal/intel/intel_powerclamp.c
-@@ -516,11 +516,7 @@ static int start_power_clamp(void)
- 	cpus_read_lock();
- 
- 	/* prefer BSP */
--	control_cpu = 0;
--	if (!cpu_online(control_cpu)) {
--		control_cpu = get_cpu();
--		put_cpu();
--	}
-+	control_cpu = cpumask_first(cpu_online_mask);
- 
- 	clamping = true;
- 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
-
-
-
+Thanks.
