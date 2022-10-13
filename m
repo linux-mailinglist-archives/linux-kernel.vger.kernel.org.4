@@ -2,108 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5E65FE186
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6005FE1D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbiJMSlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S232158AbiJMSoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbiJMSlR (ORCPT
+        with ESMTP id S232201AbiJMSni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:41:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE301793A7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665686291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NG69KUQLGA9z81hwdboaz/+6KNpRRfBl8D7k454xSQo=;
-        b=GSSKu96IUa/CpDbVL/nL/oPZNF08Gsx7mDWweY0HDjmVaR09gkqtAz5GMUbJ8dCmJPQt7P
-        f8gqzHFBiQeHQ60IkWDd6Sb0Nwh8sKfYkZrIt3hF1/YitxrypAc3HKxamdJfM7xTn1K0Tt
-        DbwqwOzXbG8ndxxqUYProJnB0npVmE4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-42TCTuw4NJCjZjL9e3PG6g-1; Thu, 13 Oct 2022 14:38:06 -0400
-X-MC-Unique: 42TCTuw4NJCjZjL9e3PG6g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E01061C00147;
-        Thu, 13 Oct 2022 18:38:05 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.73])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A438B477F60;
-        Thu, 13 Oct 2022 18:38:04 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-toolchains@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: gcc 5 & 6 & others already out of date?
-References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
-        <Y0gLyLbdOCetX5LN@sirena.org.uk> <Y0gteD0QYVlYxSZh@zx2c4.com>
-        <Y0g8HEYHZYHGdwlf@sirena.org.uk> <Y0g+wTTJmlaFVLzr@zx2c4.com>
-        <Y0hH5NelZ03yfQuU@sirena.org.uk>
-Date:   Thu, 13 Oct 2022 20:38:02 +0200
-In-Reply-To: <Y0hH5NelZ03yfQuU@sirena.org.uk> (Mark Brown's message of "Thu,
-        13 Oct 2022 18:16:20 +0100")
-Message-ID: <87o7ufwovp.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Thu, 13 Oct 2022 14:43:38 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D4786FF;
+        Thu, 13 Oct 2022 11:41:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CbGOtxfIKjblZY9w6t+3wdlhy1ViJZ97qVNYMssRbar4fA2pxyLQU6PQpKrb1Pwu+ZCAvakmKX7ewC6YPHi61QgTmFXgAwWIcJWPwc7bgL6AG585r/0Tu3kbVFB/EBEMwIFju+A6UY8VmmEuqxEL05uyKTJXBe4RZvfC1wrzZ29XFPfkxUaz8n/GhZL175IrLtW/qX345mOTOs70eN0xu/HmQx70ULWx00o/GhEiuSyS4uLXU/Ct1r5Uvnr98m8MeZj5xs/hvWrrZx5CiJOI/UhDZi841CL5J/Vp9b+NlhpTjX27sBSEZDonpzuPIYIWL4DGZc++2BxRYQ3Ej9R4jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T9y8LOnq54r3hVY4gU2YFAX39OX7oDRTKUOHceIjFYA=;
+ b=eaHtCEdM8Ucj1VhfkrCnBAXjDjSYlE6OrhSNsLMua6grfi5orpTjQ+0G7jTYwaS7NxjA5HONGh/oQqpUTHcQmD7tBfYDCwauQI/e8v/sTBqnNBIxCe/eub1Oa8xefDNykfzUDDDVlOlLNpThZ2jjxM9l0z6iOyR57CohyThWTV+GP09NMrBgsD4WeADVSbk7rQAWytdjJyd3FEFwiQaNyeDZrTtG2Ewv2kvYjSXj4hk8BtQUzCog6XDNqIYiIprgVcECRC9UkoW1fbvOJ0FHKbR9j7nPkz3c/wP6IqGgPfpXnIC5LhmOvAhxyYXfsShmWK0nfkN7w8N49ouv99nBPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T9y8LOnq54r3hVY4gU2YFAX39OX7oDRTKUOHceIjFYA=;
+ b=KuP81ARSY9n4TkwcJz/zvfBuCHk8j6HjZa67F+7lcsjA4/2yj8Ykja5JpqS6BLvYOBJLrtzN3FrhOyLzbrDZbstWpWUfcbSuxoSRAX7PtpjmsWNfsyWoa3NmCsmTHlBfFOnFMevcL97bRktQEzWbKWvGgop5BywkGlx/OYQ/Qd72QVE3uMo1bVtw6K3CTv8m5KKFYznAKOMU2gC9NNN7K5jDstII13qDqkeqZDmcCfckpQz1MaacjZ1Un3t92F3UgGbEh5rtCCY6h2Y0aR0vM7tsPc4PqnNJR41+Lh31h7RpHgP2kGJOpnY3QhB5wunrVDJVjnEBxjkGMoj2seznmA==
+Received: from BN1PR14CA0026.namprd14.prod.outlook.com (2603:10b6:408:e3::31)
+ by MN0PR12MB6103.namprd12.prod.outlook.com (2603:10b6:208:3c9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22; Thu, 13 Oct
+ 2022 18:39:15 +0000
+Received: from BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e3:cafe::60) by BN1PR14CA0026.outlook.office365.com
+ (2603:10b6:408:e3::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21 via Frontend
+ Transport; Thu, 13 Oct 2022 18:39:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT108.mail.protection.outlook.com (10.13.176.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Thu, 13 Oct 2022 18:39:15 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Thu, 13 Oct
+ 2022 11:39:04 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 13 Oct 2022 11:39:03 -0700
+Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Thu, 13 Oct 2022 11:38:59 -0700
+From:   Vidya Sagar <vidyas@nvidia.com>
+To:     <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <mani@kernel.org>, <Sergey.Semin@baikalelectronics.ru>,
+        <ffclaire1224@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
+        <sagar.tv@gmail.com>
+Subject: [PATCH V3 00/21] Enhancements to pcie-tegra194 driver
+Date:   Fri, 14 Oct 2022 00:08:33 +0530
+Message-ID: <20221013183854.21087-1-vidyas@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT108:EE_|MN0PR12MB6103:EE_
+X-MS-Office365-Filtering-Correlation-Id: fd245d28-8fa2-437d-9234-08daad4a3b22
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FnugxFfod2wsuJBpvo2enQtQsz2FDdYCXqYjs+Tj7++0EYxgdKEKNZA3uk5Oztjix7nexvEYlx0ceWB2twdcdCPamUSzawj5so5UxAv7lKLBxIR3lwBxE8OFDB2sv7m04G02I9dRuKpegZc0pWXlvul1IbsKczhlpGIIvNcD71nzKXbtH37uc7uR33ER+v8VP3eXPOlu5uqIr8ZiKI9zdk96MWvF7QJgrOhZj8pio8NHRk9pklE/e1BFzP1z04o9BeF/ZnHgFy1BVsgtOj6CnH8KNOTK42I4V9WoLLyAR+n3s+fd8lzNYZL7eK6dDpoHUZ6A7E92uL+yh4OIzhfOwgW9ZC6T3eYrAVFnuveQir2IdIMgoup2gxzRWlmP2h66qEtCr4Rqa8eA7SsAgrH8vGOBvlD5VB0bgvtgylkFLlxPVrjJHyUalSS3bSXGNC1+gcDE/iHMQyWVlBBepSrvsaH+AIWD2p7nzS55DhSzIiFxtyn+YZmkAI3Np2OIUpA7SbdgXv16Ay1xgzSLMobtHys/Y1J8VBfAE+jgpLR0sroApZ/iSPcbCQRs+uRpdm8FGkCT504B9vy4NamPf+2wRtoL86Cj5Kf82xXiMcc15oSpA5CJgK1X+ICOlacperisue0HtxKIA0hkhO6ZCoUDKemaXU9iM3dMzVPxSxUTMy9C7CNh74V6Xr3QlL6FoTz03U9//hTcu7qt30UNMMfS96/6qyxClLxY7bE6GjFaWKuyBiBEJtdrO3Weo2ET/0L4Zp3jnZvMQjFsTNnFYLVn0OkfcMLtirO0HgNZhcVOnPxMl6R5aIdg4aKyx19Fc3BbFC1gDRiH4zfYDts18Q/yoD4kt9KBEs8xsR+Ue+Gg2LQmPAYiLXGhhL1/uokF2Vec7Ky+6e/PBWrAP9MxoUsXPyfOOTDPwjA8mkDUUulw7iw=
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199015)(40470700004)(46966006)(36840700001)(36860700001)(40460700003)(86362001)(40480700001)(36756003)(921005)(82740400003)(356005)(7636003)(316002)(8676002)(4326008)(70206006)(110136005)(70586007)(54906003)(2906002)(426003)(8936002)(5660300002)(7416002)(41300700001)(47076005)(186003)(1076003)(2616005)(82310400005)(83380400001)(336012)(966005)(6666004)(478600001)(26005)(7696005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 18:39:15.5778
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd245d28-8fa2-437d-9234-08daad4a3b22
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6103
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Mark Brown:
+This patch series contains enhancements to the pcie-tegra194.c driver
+that works for both Tegra194 and Tegra234 SoCs and for both RootPort
+and Endpoint modes.
 
-> On Thu, Oct 13, 2022 at 10:37:21AM -0600, Jason A. Donenfeld wrote:
->
->> Regarding "one extreme to the other", I suspect that in spite of my
->> arguments, which would seem to justify an extreme, the actual thing I
->> suggested is a bit more moderate: let's support the latest 2 or 3 gccs
->> at the time of kernel release. If we choose 3, that's roughly 3 years of
->> gccs, right? 3 years seems like a fairly long amount of time.
->
-> I was looking at your suggestion there - as a Debian user that feels a
-> touch enthusiastic (though practically probably not actually a problem)
-> since it's not too far off the release cadence, current Debian is at GCC
-> 10 and we're not due for another release till sometime next year which
-> will be right on the three years.
+This patch series depends on the following series in the same order
 
-Debian also has Clang 13, presumably for building Rust and Firefox.
+PCI: designware-ep: Fix DBI access before core init
+https://patchwork.ozlabs.org/project/linux-pci/list/?series=322681
 
-> There does also seem to be a contingent of people running enterprise
-> distros managed by an IT department or whatever who may take a while
-> to get round to pushing out new versions so for example might still
-> for example be running Ubuntu 20.04 rather than 22.04 (never mind the
-> people I know are sitting on 18.04 but that's another thing).
+PCI: endpoint: Rework the EPC to EPF notification
+https://patchwork.kernel.org/project/linux-pci/list/?series=683493
 
-The enterprise distributions have toolchain modules or toolsets that you
-can install, all nicely integrated.  You'd probably consider those
-versions too new. 8-/   I expect it's mostly an education issue, raising
-awareness of what's available from vendors.   (glibc versions are a
-different matter, but I don't think dropping support for historic
-versions on build hosts is on the table, so that should be relevant.)
+Add DeInit support in the PCIe Endpoint framework
+https://patchwork.kernel.org/project/linux-pci/list/?series=685157
 
-Compiler version requirements probably impact the people most who build
-their own toolchains for whatever reason.  There must be unusual targets
-where the upstream toolchain currently cannot build a booting kernel,
-for instance.  If you require newer toolchain features in generic code,
-it could bring some temporary suffering to those people: they need to
-fix their toolchain before they can contribute again to the mainline
-kernel.
+V3:
+* Addressed review comments from Bjorn
+* Added new patches to the series
 
-Thanks,
-Florian
+V2:
+* Addressed review comments from test bot and Vinod
+
+Vidya Sagar (21):
+  PCI: tegra194: Use devm_gpiod_get_optional() to parse
+    "nvidia,refclk-select"
+  PCI: tegra194: Drive CLKREQ signal low explicitly
+  PCI: tegra194: Fix polling delay for L2 state
+  PCI: tegra194: Handle errors in BPMP response
+  PCI: tegra194: Apply pinctrl settings for both PCIe RP and EP
+  PCI: tegra194: Refactor LTSSM state polling on surprise down
+  PCI: tegra194: Disable direct speed change for EP
+  phy: tegra: p2u: Set ENABLE_L2_EXIT_RATE_CHANGE in calibration
+  PCI: tegra194: Calibrate P2U for endpoint mode
+  PCI: tegra194: Free resources during controller deinitialization
+  PCI: tegra194: Remove IRQF_ONESHOT flag during Endpoint interrupt
+    registration
+  PCI: tegra194: Enable DMA interrupt
+  PCI: tegra194: Enable hardware hot reset mode in Endpoint
+  PCI: tegra194: Allow system suspend when the Endpoint link is not up
+  PCI: tegra194: Disable L1.2 capability of Tegra234 EP
+  PCI: tegra194: Set LTR message request before PCIe link up
+  PCI: tegra194: Reduce AXI slave timeout value
+  PCI: tegra194: Don't force the device into the D0 state before L2
+  PCI: tegra194: Free up EP resources during remove()
+  dt-bindings: PCI: tegra194: Add monitor clock support
+  PCI: tegra194: Add core monitor clock support
+
+ .../bindings/pci/nvidia,tegra194-pcie-ep.yaml |   6 +-
+ .../bindings/pci/nvidia,tegra194-pcie.yaml    |   6 +-
+ drivers/pci/controller/dwc/pcie-tegra194.c    | 261 ++++++++++++------
+ drivers/phy/tegra/phy-tegra194-p2u.c          |  14 +
+ 4 files changed, 194 insertions(+), 93 deletions(-)
+
+-- 
+2.17.1
 
