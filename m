@@ -2,167 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CCE5FD392
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E583F5FD396
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJMDf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 23:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
+        id S229617AbiJMDhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 23:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiJMDfw (ORCPT
+        with ESMTP id S229619AbiJMDh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 23:35:52 -0400
+        Wed, 12 Oct 2022 23:37:29 -0400
 Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87BFD03B8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:35:50 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id l22so900550edj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:35:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD2B6003
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:37:28 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r14so894032edc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/RnWDHakvB3xqyl8HlC7PmuXWjiVUyJfu/0aj+YTdo=;
-        b=aGBoVakhLLIHUk8QdHR4T57YVtaIBGYYB3kdNqKVJ3NCk1ZufQbWtDd9840Nm4KnhB
-         BGnqR0QsDGr3nGgJZ8Ph68uTcpBtfQ3a3pApKGfn4/mzYzJB6fyYtx47fppOq+cINLpA
-         l7BRUmKDNgjm3wqgCRXsmbhNnkfgVDTufbcp0=
+        bh=km/x4dNbpSXiQbScfZULHzvpKPxUFqn2RX0kYro9dnY=;
+        b=G+ijyw+YElgHkz9u0HrJK28v0DxiI72ImZDb0r4hO9PN3coaRP2XfA8ZfAl/8ZZ4AL
+         lsFDquibhSUs5NuGplp+wmb/kBY34E9kFVU5p56slsfiU9GVNRw6+OTBtW41bqNqypUY
+         1ipXiOtH4yore9LZw99lbA0Zdwcsf7jyfjVvE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e/RnWDHakvB3xqyl8HlC7PmuXWjiVUyJfu/0aj+YTdo=;
-        b=x/UbmnCpweByAe81km+ugWD0+9Jmxe5xlmn/jAhzcu0WRIO1Ro3src9SaD6FoWHOtP
-         WywJzAehWiJrB9GX/4iPHD1GKE0ZLSnDjZxaaU60QZcVcTMSi8FxCpeg6UFloKmhQtgr
-         xLNlaJtDIRzETIPz44AepbiRcIsLp+nT9Gkj/8aUTCKkmaXZUvyejnqzkiB1zcrACHtI
-         opIggZO1282PchhXcxvvAk+uZTIIy6vTWPs1CKpowVMFzES5XjAI/6xZ70ED+XiBpYqC
-         vRZi8oZvcO7F9pj7Ogs4OP3lTAQwkRWQlM79ITa2n7fwCD5PqgZexrqvf4S4hRxbOEbe
-         Xd6A==
-X-Gm-Message-State: ACrzQf1bletCx1z8dlaaBrmj2CSBBMcHKj6IWNCYYfydbUPopYyrwej0
-        hhKFNakBoYHGQ3eFdxDWSsC/rAz2/Lm50b5PM9I+vw==
-X-Google-Smtp-Source: AMsMyM5vH6zf1A6cPcPxyCBpJslErrSoPJQuSdL3BNZHZ2RrgtwxqgI5k8R3y5zXlRd+rqDyNqGwET0nhN21GDKrGYw=
-X-Received: by 2002:a05:6402:1604:b0:458:b2b7:bd5a with SMTP id
- f4-20020a056402160400b00458b2b7bd5amr29067970edv.73.1665632149352; Wed, 12
- Oct 2022 20:35:49 -0700 (PDT)
+        bh=km/x4dNbpSXiQbScfZULHzvpKPxUFqn2RX0kYro9dnY=;
+        b=O/K+3aweJMssvlCDkjsFsf0S+om5sVob0sQpl5EWMpXk+0w24AodGnq4GBjxAkblm7
+         /cLqickkjaEWBfIuuu8EysgJoX8gH7jMQMraW3RX15gX096+WXEyLZWEvaXmQz4ZOYjQ
+         XEIjOgstx8EwzwCI2L2CojvBUGhoIVjVsi3IzYVFzwewMuguvpN5UYTnH8Q0a9tlVoWJ
+         6fT4a965rnpodS2+rncEjhFVsq4pV5aJC6yc2VfVsMqAvuMdWVp+lrFCz3hfHSGRcynF
+         xIjKz0mG+noGwZTOjPLo8ElVVLcnYmqj9xOZmb8XRr9kbOlcY10CTNWoYT+bm9QXxavZ
+         YDsQ==
+X-Gm-Message-State: ACrzQf0Fm5/56u7zcKAgNgQqBZa3OCbqA0VFQlvYHPBezAiYLd0bWWFj
+        5X57rJ6Y5W83BNYp7lQSsFdeDkk29JvdZ1APWp1gjw==
+X-Google-Smtp-Source: AMsMyM5/cBj9U6Vdv/D7aVLYS1aJOy0vaa6E+V2MaYc8d7mEX7XjtYVDUAeN82NYnkMRxUFJGC4tqxwz5hhVNs84ZDM=
+X-Received: by 2002:a05:6402:22ef:b0:458:bfe5:31a3 with SMTP id
+ dn15-20020a05640222ef00b00458bfe531a3mr29802577edb.6.1665632247137; Wed, 12
+ Oct 2022 20:37:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621091854.1904372-1-treapking@chromium.org>
- <de6412d4-732c-79cf-ac00-e0fccee44270@gmail.com> <CAEXTbpf=w6qB1X3dYSR=kdJgqNAFW-pRYuiOGuv9WWEtuY47Cw@mail.gmail.com>
- <CAEXTbpdxj3Yd3dbyAd0Yc+8adCtK1bi=UXt+j7Fbtx6q8xd0RQ@mail.gmail.com>
-In-Reply-To: <CAEXTbpdxj3Yd3dbyAd0Yc+8adCtK1bi=UXt+j7Fbtx6q8xd0RQ@mail.gmail.com>
+References: <20220729053254.220585-1-treapking@chromium.org> <9d1d8831-844f-f30f-6c8a-fac052f8699b@collabora.com>
+In-Reply-To: <9d1d8831-844f-f30f-6c8a-fac052f8699b@collabora.com>
 From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Thu, 13 Oct 2022 11:35:38 +0800
-Message-ID: <CAEXTbpchG0=ofGnzT=nTud24apND1qN6dabBN3z=CVw0oSb2_A@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: dts: mt8173: Fix elm panel DT node
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Date:   Thu, 13 Oct 2022 11:37:15 +0800
+Message-ID: <CAEXTbpdE6JumX0ecP+LtDXnfR5E0VeaxU5N5_nVxVVNGRHATjQ@mail.gmail.com>
+Subject: Re: [PATCH v5] arm64: dts: mt8173-elm: Switch to SMC watchdog
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Evan Benn <evanbenn@chromium.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Eizan Miyamoto <eizan@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping again on this thread.
+Friendly ping on this patch.
 
-On Mon, Jul 25, 2022 at 4:25 PM Pin-yen Lin <treapking@chromium.org> wrote:
+On Fri, Jul 29, 2022 at 4:36 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Hi Matthias.
+> Il 29/07/22 07:32, Pin-yen Lin ha scritto:
+> > Switch to SMC watchdog because we need direct control of HW watchdog
+> > registers from kernel. The corresponding firmware was uploaded in
+> > https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
+> >
+> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 >
-> Gentle ping on this thread. Any feedback or suggestions?
->
-> Regards,
-> Pin-yen
->
-> On Mon, Jul 11, 2022 at 11:09 AM Pin-yen Lin <treapking@chromium.org> wrote:
-> >
-> > All we know is that the functions mentioned in the commit message were
-> > working in 4.19 kernel, but not in the latest kernel tree.
-> >
-> > Unfortunately, we don't know which patch breaks the driver.
-> >
-> > Best regards,
-> > Pin-yen
-> >
-> > On Thu, Jul 7, 2022 at 10:50 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
-> > >
-> > >
-> > >
-> > > On 21/06/2022 11:18, Pin-Yen Lin wrote:
-> > > > Move the panel DT node under `aux-bus` node, so it won't use the buggy
-> > > > `ps8640_bridge_get_edid` to get the display modes. Also, change the
-> > > > compatible string from "lg,lp120up1" to "edp-panel", so the panel-edp
-> > > > driver gets the displays modes from the EDID instead of using the
-> > > > predefined display mode (`lg_lp129qe_mode`) in the driver, which is
-> > > > actually not working.
-> > > >
-> > >
-> > > Do we need a fixes tag here? I'm not quite sure if we fix an upstream bug here,
-> > > to be honest.
-> > >
-> > > Regards,
-> > > Matthias
-> > >
-> > > > Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> > > > ---
-> > > >
-> > > > Changes in v3:
-> > > > - Include more details in the commit message.
-> > > >
-> > > > Changes in v2:
-> > > > - Remove the Fixes tag because this change is not compatible with the
-> > > >    old kernel versions.
-> > > >
-> > > >   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 26 +++++++++++---------
-> > > >   1 file changed, 14 insertions(+), 12 deletions(-)
-> > > >
-> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> > > > index 9c75fbb31f98..1e0802a6f6d2 100644
-> > > > --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> > > > +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> > > > @@ -90,18 +90,6 @@ volume_up {
-> > > >               };
-> > > >       };
-> > > >
-> > > > -     panel: panel {
-> > > > -             compatible = "lg,lp120up1";
-> > > > -             power-supply = <&panel_fixed_3v3>;
-> > > > -             backlight = <&backlight>;
-> > > > -
-> > > > -             port {
-> > > > -                     panel_in: endpoint {
-> > > > -                             remote-endpoint = <&ps8640_out>;
-> > > > -                     };
-> > > > -             };
-> > > > -     };
-> > > > -
-> > > >       panel_fixed_3v3: regulator1 {
-> > > >               compatible = "regulator-fixed";
-> > > >               regulator-name = "PANEL_3V3";
-> > > > @@ -282,6 +270,20 @@ ps8640_out: endpoint {
-> > > >                               };
-> > > >                       };
-> > > >               };
-> > > > +
-> > > > +             aux-bus {
-> > > > +                     panel {
-> > > > +                             compatible = "edp-panel";
-> > > > +                             power-supply = <&panel_fixed_3v3>;
-> > > > +                             backlight = <&backlight>;
-> > > > +
-> > > > +                             port {
-> > > > +                                     panel_in: endpoint {
-> > > > +                                             remote-endpoint = <&ps8640_out>;
-> > > > +                                     };
-> > > > +                             };
-> > > > +                     };
-> > > > +             };
-> > > >       };
-> > > >   };
-> > > >
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
