@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079E05FE264
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658ED5FE061
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiJMTGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 15:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
+        id S231652AbiJMSIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJMTGA (ORCPT
+        with ESMTP id S231555AbiJMSHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 15:06:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430D763D7;
-        Thu, 13 Oct 2022 12:05:59 -0700 (PDT)
+        Thu, 13 Oct 2022 14:07:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6404DD03A8;
+        Thu, 13 Oct 2022 11:05:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7330B8207B;
-        Thu, 13 Oct 2022 18:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180E2C433D6;
-        Thu, 13 Oct 2022 18:00:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F0B619B3;
+        Thu, 13 Oct 2022 18:01:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2838C433D6;
+        Thu, 13 Oct 2022 18:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684058;
-        bh=bOidcKm6QKaIaWqZXsQBrCRpaMrW7PXqT/0Sgh+sGxk=;
+        s=korg; t=1665684061;
+        bh=u3wOX1M1rrknB6ZGLhBuFpeKJ4/JbNruxTQnEpNP1yA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MjEktAbfju8ST3GDa4mG/2vBcepggl7VLHD5fOZZbaHtCGGAeDKsES7EW1bV1Q6I/
-         h87Lfj8yHlAXREhXk2dv1gUsxcyvmwYJMVuRKBz2isxYUVpEy3Jl2MJhucb70IaNZh
-         9lgjkIixO6vorY7gAzCqGy2vtihc4b9HXOTJCmIQ=
+        b=sCrZPGQ2ld41hFQer0IQUKNgxk7IY+nHQyWYlVlWzkfhCr8nDUtTQSCBL+x6Zs1n4
+         7O68Sge8PnTD2T5CybXWClI7bMdacg0dMy7T4n4WjIPeX3+2RvB0Oh4E3WuKBmm9F9
+         ca/yv0yK2ye9YN7QlB7oyA9PxDEoiVRN7oMnJssA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Arun Easi <aeasi@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 6.0 12/34] scsi: qla2xxx: Fix response queue handler reading stale packets
-Date:   Thu, 13 Oct 2022 19:52:50 +0200
-Message-Id: <20221013175146.840895989@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        hdthky <hdthky0@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 6.0 13/34] scsi: stex: Properly zero out the passthrough command structure
+Date:   Thu, 13 Oct 2022 19:52:51 +0200
+Message-Id: <20221013175146.865642668@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
 References: <20221013175146.507746257@linuxfoundation.org>
@@ -56,65 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit e4f8a29deb3ba30e414dfb6b09e3ae3bf6dbe74a upstream.
+commit 6022f210461fef67e6e676fd8544ca02d1bcfa7a upstream.
 
-On some platforms, the current logic of relying on finding new packet
-solely based on signature pattern can lead to driver reading stale
-packets. Though this is a bug in those platforms, reduce such exposures by
-limiting reading packets until the IN pointer.
+The passthrough structure is declared off of the stack, so it needs to be
+set to zero before copied back to userspace to prevent any unintentional
+data leakage.  Switch things to be statically allocated which will fill the
+unused fields with 0 automatically.
 
-Link: https://lore.kernel.org/r/20220826102559.17474-3-njavali@marvell.com
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Arun Easi <aeasi@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Link: https://lore.kernel.org/r/YxrjN3OOw2HHl9tx@kroah.com
+Cc: stable@kernel.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Reported-by: hdthky <hdthky0@gmail.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_isr.c |   17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/scsi/stex.c      |   17 +++++++++--------
+ include/scsi/scsi_cmnd.h |    2 +-
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -3763,7 +3763,8 @@ void qla24xx_process_response_queue(stru
- 	struct qla_hw_data *ha = vha->hw;
- 	struct purex_entry_24xx *purex_entry;
- 	struct purex_item *pure_item;
--	u16 cur_ring_index;
-+	u16 rsp_in = 0, cur_ring_index;
-+	int is_shadow_hba;
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -665,16 +665,17 @@ static int stex_queuecommand_lck(struct
+ 		return 0;
+ 	case PASSTHRU_CMD:
+ 		if (cmd->cmnd[1] == PASSTHRU_GET_DRVVER) {
+-			struct st_drvver ver;
++			const struct st_drvver ver = {
++				.major = ST_VER_MAJOR,
++				.minor = ST_VER_MINOR,
++				.oem = ST_OEM,
++				.build = ST_BUILD_VER,
++				.signature[0] = PASSTHRU_SIGNATURE,
++				.console_id = host->max_id - 1,
++				.host_no = hba->host->host_no,
++			};
+ 			size_t cp_len = sizeof(ver);
  
- 	if (!ha->flags.fw_started)
- 		return;
-@@ -3773,7 +3774,18 @@ void qla24xx_process_response_queue(stru
- 		qla_cpu_update(rsp->qpair, smp_processor_id());
- 	}
+-			ver.major = ST_VER_MAJOR;
+-			ver.minor = ST_VER_MINOR;
+-			ver.oem = ST_OEM;
+-			ver.build = ST_BUILD_VER;
+-			ver.signature[0] = PASSTHRU_SIGNATURE;
+-			ver.console_id = host->max_id - 1;
+-			ver.host_no = hba->host->host_no;
+ 			cp_len = scsi_sg_copy_from_buffer(cmd, &ver, cp_len);
+ 			if (sizeof(ver) == cp_len)
+ 				cmd->result = DID_OK << 16;
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -201,7 +201,7 @@ static inline unsigned int scsi_get_resi
+ 	for_each_sg(scsi_sglist(cmd), sg, nseg, __i)
  
--	while (rsp->ring_ptr->signature != RESPONSE_PROCESSED) {
-+#define __update_rsp_in(_is_shadow_hba, _rsp, _rsp_in)			\
-+	do {								\
-+		_rsp_in = _is_shadow_hba ? *(_rsp)->in_ptr :		\
-+				rd_reg_dword_relaxed((_rsp)->rsp_q_in);	\
-+	} while (0)
-+
-+	is_shadow_hba = IS_SHADOW_REG_CAPABLE(ha);
-+
-+	__update_rsp_in(is_shadow_hba, rsp, rsp_in);
-+
-+	while (rsp->ring_index != rsp_in &&
-+		       rsp->ring_ptr->signature != RESPONSE_PROCESSED) {
- 		pkt = (struct sts_entry_24xx *)rsp->ring_ptr;
- 		cur_ring_index = rsp->ring_index;
- 
-@@ -3887,6 +3899,7 @@ process_err:
- 				}
- 				pure_item = qla27xx_copy_fpin_pkt(vha,
- 							  (void **)&pkt, &rsp);
-+				__update_rsp_in(is_shadow_hba, rsp, rsp_in);
- 				if (!pure_item)
- 					break;
- 				qla24xx_queue_purex_item(vha, pure_item,
+ static inline int scsi_sg_copy_from_buffer(struct scsi_cmnd *cmd,
+-					   void *buf, int buflen)
++					   const void *buf, int buflen)
+ {
+ 	return sg_copy_from_buffer(scsi_sglist(cmd), scsi_sg_count(cmd),
+ 				   buf, buflen);
 
 
