@@ -2,95 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D415FD9AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB395FD9A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiJMM5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S229590AbiJMM4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiJMM5d (ORCPT
+        with ESMTP id S229540AbiJMM4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:57:33 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF3E139E45
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:57:32 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id c23so896453qtw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:57:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=irrtQDfSNa+nC82dDhEaw7oZ22ZAh6yjPzt5Hm4L+Ic=;
-        b=Fj5rDDj7PQ7oUI1hLh8p6yFL6xGALiAMy9JzznQtqTgctaUKUuzyaJ8fxOP6/LkOiL
-         1fzQT4A/5SUeHf2s1lmYsLn8T/EqcC1WbvwJDWZZRrZDaBP17BMfogRRtzD0IMTLE3dl
-         MsuQSwjezBCxn7Eg9AmYY8LV+VmNiySJULroMrirN0oiyX6DNJ5ZWU/bAdw0AzE2RSlq
-         nr1tcMWGYrWGyY2d5lDqOKfjxM/5I9t04rxRsaprdavUSfce7tPX1+LatAkKtx7Biqcl
-         2jLvbd19LooIE7s3ZeU5/Sfgg19qLqt4uvMBBe20N1oF201swKY82HqkRVw44Uw4jqMw
-         tkjg==
-X-Gm-Message-State: ACrzQf2jK5/qOILvbIHrLajg+MF2XA6lU8ZhDHi80fH93Fv1XYQPV9Gp
-        zydfd1HeshDM9b/eI9ZqVuAQz95WRBIgAw==
-X-Google-Smtp-Source: AMsMyM4HJC2ZulcaFqq1jnJK2H2IQEyGP6gyEe/eb79e9Vy3GpHxqoc2CRbR323JoYWdSNiRbpnP5A==
-X-Received: by 2002:ac8:5a07:0:b0:39c:1de3:e75c with SMTP id n7-20020ac85a07000000b0039c1de3e75cmr11430830qta.49.1665665851886;
-        Thu, 13 Oct 2022 05:57:31 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b006b95b0a714esm19185694qki.17.2022.10.13.05.57.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 05:57:31 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id e62so1921748yba.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:57:30 -0700 (PDT)
-X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr31953207ybx.543.1665665850700;
- Thu, 13 Oct 2022 05:57:30 -0700 (PDT)
+        Thu, 13 Oct 2022 08:56:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F7AD18EA;
+        Thu, 13 Oct 2022 05:56:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5939E61792;
+        Thu, 13 Oct 2022 12:56:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C46AC433D6;
+        Thu, 13 Oct 2022 12:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665665803;
+        bh=D1v+v+p5tviS9W5Hx32wORn2qM5TjPZ0dBTOY15LvWE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NehBH+mRFL5rjnTuJ8qx3tVjdQy9wFMupEbhtY9d5m10nyRxka6uBNqyfk1RczjBT
+         3ZeaZx2kp7crwP8avFqPp/fm+rGgOaNhtfn6rdBjLXHqa8zzFFbmr3ymPGIKaJI3Cr
+         6ZuLwCbQoORPNPTzRc/8WhcYJmmrJgcCXmK2lEGI=
+Date:   Thu, 13 Oct 2022 14:57:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Starke, Daniel" <daniel.starke@siemens.com>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] tty: n_gsm: make n_gsm line number configurable
+Message-ID: <Y0gLN5b4TH43NhtZ@kroah.com>
+References: <20221012061715.4823-1-daniel.starke@siemens.com>
+ <Y0Zjqxl/MAivtf02@kroah.com>
+ <DB9PR10MB58818736388F209396CEA749E0259@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20221012191142.GA3109265@bhelgaas> <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
- <f57d954a-b565-9bfa-b8eb-ce608e168f1a@cambridgegreys.com> <2135037685.24273.1665665172126.JavaMail.zimbra@nod.at>
- <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Oct 2022 14:57:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU=TurB14tkAbqb9nWYvCOcr0UUScdga25h3-oWjYfzTg@mail.gmail.com>
-Message-ID: <CAMuHMdU=TurB14tkAbqb9nWYvCOcr0UUScdga25h3-oWjYfzTg@mail.gmail.com>
-Subject: Re: Add linux-um archives to lore.kernel.org?
-To:     Richard Weinberger <richard@nod.at>
-Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        helpdesk <helpdesk@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB9PR10MB58818736388F209396CEA749E0259@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard.
+On Thu, Oct 13, 2022 at 11:09:02AM +0000, Starke, Daniel wrote:
+> > > --- a/include/uapi/linux/gsmmux.h
+> > > +++ b/include/uapi/linux/gsmmux.h
+> > > @@ -19,7 +19,9 @@ struct gsm_config
+> > >  	unsigned int mtu;
+> > >  	unsigned int k;
+> > >  	unsigned int i;
+> > > -	unsigned int unused[8];		/* Padding for expansion without
+> > > +	unsigned short numValid;
+> > > +	unsigned short num;
+> > 
+> > This would never work anyway (hint "short" is not a valid uapi data
+> > type...)
+> 
+> I am surprised about this as gsm_netconfig already uses unsigned short.
 
-> > >>> https://korg.docs.kernel.org/lore.html says pipermail archives like
-> > >>> infradead has are not ideal, but I don't have any archives at all, and
-> > >>> I don't know how to get even pipermail archives out of infradead.
+How does netconfig pass data to/from userspace?  Through ioctls or
+netlink?
 
-The first step is
-https://korg.docs.kernel.org/lore.html#requesting-archival-of-an-existing-list
+thanks,
 
-It doesn't make much sense to start collecting archives if the lore
-collector hasn't been activated yet.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h
