@@ -2,149 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC375FD32D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 04:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A845FD318
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 04:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiJMCHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 22:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S229976AbiJMCDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 22:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiJMCHD (ORCPT
+        with ESMTP id S229612AbiJMCDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 22:07:03 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A576E13B8ED;
-        Wed, 12 Oct 2022 19:06:58 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A151A211006;
-        Thu, 13 Oct 2022 04:06:56 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 343E021100B;
-        Thu, 13 Oct 2022 04:06:56 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 86D081802204;
-        Thu, 13 Oct 2022 10:06:54 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     vkoul@kernel.org, a.fatoum@pengutronix.de, p.zabel@pengutronix.de,
-        l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, shawnguo@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [RESEND v12 4/4] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY support
-Date:   Thu, 13 Oct 2022 09:47:02 +0800
-Message-Id: <1665625622-20551-5-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 12 Oct 2022 22:03:43 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A228212347C;
+        Wed, 12 Oct 2022 19:03:37 -0700 (PDT)
+X-UUID: 2b5b41e0139b41d7a3805d4fda9d314f-20221013
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=C8wm3yLrwDSBy/YD/5HZYd/rnp1fP4/PtO8SvC4ftvg=;
+        b=hsHi3OdVnUFBmi5QudMhFFEyk8od/3ROVuJLTL0bDafduk+h35/+EornxQk2tgcn2AAuF4rylaY6MxpT+bgOIW94gggaYb6V30hMG6CJUCF3hu2EB1/pr9AHuVY7/hAJBX1zD86lgSUCUqrjOSaBd3fxAjAUmIxPu/RG2tLHw0Y=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:e381452c-f63b-4cae-ad93-8fdd3a063cae,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:e381452c-f63b-4cae-ad93-8fdd3a063cae,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:d6975101-cdeb-479d-93af-53f947adce9d,B
+        ulkID:221013100332BB4934TV,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: 2b5b41e0139b41d7a3805d4fda9d314f-20221013
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 493461172; Thu, 13 Oct 2022 10:03:31 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 13 Oct 2022 10:03:30 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 13 Oct 2022 10:03:30 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v3 0/8] add support for MT8195 VPPSYS on MMSYS and MUTEX
+Date:   Thu, 13 Oct 2022 10:03:21 +0800
+Message-ID: <20221013020329.8800-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8MP PCIe PHY support.
+Changes since v2:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+- Split dts settings into two patches based on belonging to MMSYS or MUTEX.
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Tested-by: Marek Vasut <marex@denx.de>
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 25 ++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+Changes since v1:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+- Add compatible names to VPPSYS0 and VPPSYS1 in MMSYS binding file.
+- Fix VPPSYS's MMSYS and MUTEX dts to pass the dtsb_check.
+- Rename mtk_mmsys_merge_config() and mtk_mmsys_rsz_dcm_config() to
+  mtk_mmsys_vpp_rsz_merge_config() and mtk_mmsys_vpp_rsz_dcm_config().
+- Clean up mtk_mmsys_vpp_rsz_dcm_config().
+- Add a comment to mtk_mutex_write_mod() and clean it up for use in more
+  than 32 mods.
 
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index 3e494612db3c..7585e8080b77 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -48,6 +48,7 @@
- 
- enum imx8_pcie_phy_type {
- 	IMX8MM,
-+	IMX8MP,
- };
- 
- struct imx8_pcie_phy_drvdata {
-@@ -60,6 +61,7 @@ struct imx8_pcie_phy {
- 	struct clk		*clk;
- 	struct phy		*phy;
- 	struct regmap		*iomuxc_gpr;
-+	struct reset_control	*perst;
- 	struct reset_control	*reset;
- 	u32			refclk_pad_mode;
- 	u32			tx_deemph_gen1;
-@@ -74,11 +76,11 @@ static int imx8_pcie_phy_power_on(struct phy *phy)
- 	u32 val, pad_mode;
- 	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
- 
--	reset_control_assert(imx8_phy->reset);
--
- 	pad_mode = imx8_phy->refclk_pad_mode;
- 	switch (imx8_phy->drvdata->variant) {
- 	case IMX8MM:
-+		reset_control_assert(imx8_phy->reset);
-+
- 		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
- 		if (imx8_phy->tx_deemph_gen1)
- 			writel(imx8_phy->tx_deemph_gen1,
-@@ -87,6 +89,8 @@ static int imx8_pcie_phy_power_on(struct phy *phy)
- 			writel(imx8_phy->tx_deemph_gen2,
- 			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
- 		break;
-+	case IMX8MP: /* Do nothing. */
-+		break;
- 	}
- 
- 	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
-@@ -141,6 +145,9 @@ static int imx8_pcie_phy_power_on(struct phy *phy)
- 			   IMX8MM_GPR_PCIE_CMN_RST);
- 
- 	switch (imx8_phy->drvdata->variant) {
-+	case IMX8MP:
-+		reset_control_deassert(imx8_phy->perst);
-+		fallthrough;
- 	case IMX8MM:
- 		reset_control_deassert(imx8_phy->reset);
- 		usleep_range(200, 500);
-@@ -181,8 +188,14 @@ static const struct imx8_pcie_phy_drvdata imx8mm_drvdata = {
- 	.variant = IMX8MM,
- };
- 
-+static const struct imx8_pcie_phy_drvdata imx8mp_drvdata = {
-+	.gpr = "fsl,imx8mp-iomuxc-gpr",
-+	.variant = IMX8MP,
-+};
-+
- static const struct of_device_id imx8_pcie_phy_of_match[] = {
- 	{.compatible = "fsl,imx8mm-pcie-phy", .data = &imx8mm_drvdata, },
-+	{.compatible = "fsl,imx8mp-pcie-phy", .data = &imx8mp_drvdata, },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-@@ -238,6 +251,14 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(imx8_phy->reset);
- 	}
- 
-+	if (imx8_phy->drvdata->variant == IMX8MP) {
-+		imx8_phy->perst =
-+			devm_reset_control_get_exclusive(dev, "perst");
-+		if (IS_ERR(imx8_phy->perst))
-+			dev_err_probe(dev, PTR_ERR(imx8_phy->perst),
-+				      "Failed to get PCIE PHY PERST control\n");
-+	}
-+
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	imx8_phy->base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(imx8_phy->base))
+Hi,
+
+This series add support for MT8195's two VPPSYS(Video Processor Pipe Subsystem),
+under which there will be corresponding MMSYS and MUTEX settings that
+need to be configured.
+
+Moudy Ho (2):
+  dt-bindings: arm: mediatek: mmsys: Add support for MT8195 VPPSYS
+  arm64: dts: mediatek: mt8195: add MUTEX configuration for VPPSYS
+
+Roy-CW.Yeh (6):
+  dt-bindings: soc: mediatek: Add support for MT8195 VPPSYS
+  arm64: dts: mediatek: mt8195: add MMSYS configuration for VPPSYS
+  soc: mediatek: mmsys: add support for MT8195 VPPSYS
+  soc: mediatek: mmsys: add config api for RSZ switching and DCM
+  soc: mediatek: mutex: Add mtk_mutex_set_mod support to set MOD1
+  soc: mediatek: mutex: support MT8195 VPPSYS
+
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |   5 +-
+ .../bindings/soc/mediatek/mediatek,mutex.yaml |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  28 +++-
+ drivers/soc/mediatek/mt8195-mmsys.h           |  13 ++
+ drivers/soc/mediatek/mtk-mmsys.c              |  64 +++++++++
+ drivers/soc/mediatek/mtk-mmsys.h              |   1 +
+ drivers/soc/mediatek/mtk-mutex.c              | 135 +++++++++++++++++-
+ include/linux/soc/mediatek/mtk-mmsys.h        |   4 +
+ include/linux/soc/mediatek/mtk-mutex.h        |  35 +++++
+ 9 files changed, 274 insertions(+), 12 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 
