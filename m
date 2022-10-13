@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4735FE238
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E52C5FE205
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJMS50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S231253AbiJMSvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiJMS4a (ORCPT
+        with ESMTP id S231708AbiJMSub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:56:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFCA2DF0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:54:49 -0700 (PDT)
+        Thu, 13 Oct 2022 14:50:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3457541517
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665687243;
+        s=mimecast20190719; t=1665686821;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8pkajZPOZxDkGw1RxC1xTCn1Bly76di5EaF0TtIpiUE=;
-        b=ZrIZrt/cok8LxprCcBtg2yGW2vtd8KXrDoVzqe2XxfBZSaQRIAlIn5aHkyrfkm6obTjMKH
-        Gl6xoqdoOsR0sRfb+uwVlahRghc4UXcIBobJWansWEL42thTIDO/pWhD8f1H38bw8EdIWA
-        9+O5xYZxAhdTmEWqL0Vlu/m5u5GvehQ=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8VBqJ4dzJjbnYynK7jkYTYjysfbRi2UUuxGT40j6Ev4=;
+        b=bO0AtJSt49RUg3fghf9eKgPSfRuuBrAHb47oPBMDd2qItIX0AuzVeMrp32wtykSJumDYg+
+        V5PE36mbWRJm0RJ4kKaMxiagpZOlPKgvNVE+SAw2OZJdBG4CO13bXSu3FRLPHvljkXqLOP
+        OD05vAjnHqnS4QCsFLtKCg1M30vxaM0=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-193-uIv25s3KPhiYRpgz8R5BLA-1; Thu, 13 Oct 2022 14:40:50 -0400
-X-MC-Unique: uIv25s3KPhiYRpgz8R5BLA-1
-Received: by mail-oo1-f72.google.com with SMTP id n27-20020a4a611b000000b0048067b2a6f7so1269031ooc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:40:50 -0700 (PDT)
+ us-mta-651-f-Y6KQlEPpWj25aVtK0HAg-1; Thu, 13 Oct 2022 14:40:56 -0400
+X-MC-Unique: f-Y6KQlEPpWj25aVtK0HAg-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-13631a68551so1493048fac.22
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:40:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8pkajZPOZxDkGw1RxC1xTCn1Bly76di5EaF0TtIpiUE=;
-        b=g0DpTnl/tKLICrfWXmth1HZUGSUGB0WazRwwPhr7R9rCD8IL+vNupK5vhqBUcus8M8
-         KcEnPSloB5UxYrWolFbvDmPyrEBf8T7rZEkzpbxpnrSYOtlJjS4lVG5EhTDXMY0im5h7
-         mAIpD1Ive/Aau1+vPdjCFxOIXuk1LIr4AY1MbQbE1xouuUvjfA6TgoxtXP4iGCYvvIQi
-         gQK7uwSgRkHMRHSo4jRpXTrAbEVcLAJsyXot4HYHIsiU4o9xZiFVRV095sBQC2xt1Ie/
-         gVthc7ATfFNo/TgisVnbIEgwYoU4KYho4JMTIZDPwCCAWQGd8gxUUFTNWNMK/KG5GlW9
-         342A==
-X-Gm-Message-State: ACrzQf043gZ95a3CCVYR5w64qzUaOFfy43ikheGsxGPyTybl3/8Y2DJt
-        BqQkb9aDPgN3dFAqRHg7uxXszpvfkb7pD1+FVVsZWMSJkBrha4JL1P7vN7r6sBk5SXiiZxswxxs
-        Jx5Ls5Z4/Zy1rssBl9yvVgHMi
-X-Received: by 2002:a05:6830:2647:b0:659:edd8:3fcd with SMTP id f7-20020a056830264700b00659edd83fcdmr681876otu.344.1665686449485;
-        Thu, 13 Oct 2022 11:40:49 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5zsqe12qXgtGqOG3X4aAkxg5HN1AkA2/2fmrv6WsfdypDLxNxz0oYk6/aTlQR85OUwZLjPpA==
-X-Received: by 2002:a05:6830:2647:b0:659:edd8:3fcd with SMTP id f7-20020a056830264700b00659edd83fcdmr681866otu.344.1665686449258;
-        Thu, 13 Oct 2022 11:40:49 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8VBqJ4dzJjbnYynK7jkYTYjysfbRi2UUuxGT40j6Ev4=;
+        b=ittnvjktDOz43Z6jeQGx0d4GGNvdI+1Pb0E6/c7oCIfIh+shDn8Xwg4/dMo/vKgSjJ
+         +oQUFWtmP5TcWpSBvvpyYC0WsL8BfMOYUzG6b3wwLv6F4RmUOYh5sAeOi/1ySOByMiHS
+         gPyzRdXnJaCPEdTkzDNceTr7Akq+Hpgoh0IwbOUJvByv7tmFzy6Ln7Y+bgtOnN4PXt5o
+         PpMvham3tORMljiR7IfGBPgwrTREE0dccKJWOYV3U5nWOejvK0jI2J81e0nosT6nZ+W2
+         HabgzWXe966iJr90BqAGp2avA1GIG6tZlkRcuenKibZuKRvYaqw2d5tzx8yENovW9Rz4
+         0AAg==
+X-Gm-Message-State: ACrzQf33aI3/LSD1KK8z0rqanW+a4i7o1PZnsM3AgD3MDGAQ+leyD3gk
+        cHayFzPg3ol7ly8IlqHAixXBYFaJcb9guSxYKRygH/HfvwPpG171n9BjuvJOQbSogP1wityF6j1
+        aH/BhkmVa7XmdRk4nqH2+j1XN
+X-Received: by 2002:a05:6830:3152:b0:661:ceb9:9272 with SMTP id c18-20020a056830315200b00661ceb99272mr667842ots.149.1665686455893;
+        Thu, 13 Oct 2022 11:40:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4nJIAmq9Hq+46Kh8sn9us3gulZMoSvouw/Iy6ORtvgE9Z/MyjjjsC/KzgV7OOt2CYFqnSHDA==
+X-Received: by 2002:a05:6830:3152:b0:661:ceb9:9272 with SMTP id c18-20020a056830315200b00661ceb99272mr667806ots.149.1665686455653;
+        Thu, 13 Oct 2022 11:40:55 -0700 (PDT)
 Received: from localhost.localdomain ([2804:1b3:a801:9473:d360:c737:7c9c:d52b])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05683024ad00b006618ad77a63sm244521ots.74.2022.10.13.11.40.42
+        by smtp.gmail.com with ESMTPSA id v13-20020a05683024ad00b006618ad77a63sm244521ots.74.2022.10.13.11.40.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 11:40:48 -0700 (PDT)
+        Thu, 13 Oct 2022 11:40:55 -0700 (PDT)
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Steffen Klassert <steffen.klassert@secunet.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -82,10 +83,12 @@ To:     Steffen Klassert <steffen.klassert@secunet.com>,
         Wang Yufen <wangyufen@huawei.com>, mtosatti@redhat.com
 Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pci@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 0/4] CPU isolation improvements
-Date:   Thu, 13 Oct 2022 15:40:25 -0300
-Message-Id: <20221013184028.129486-1-leobras@redhat.com>
+Subject: [PATCH v2 1/4] sched/isolation: Fix style issues reported by checkpatch
+Date:   Thu, 13 Oct 2022 15:40:26 -0300
+Message-Id: <20221013184028.129486-2-leobras@redhat.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221013184028.129486-1-leobras@redhat.com>
+References: <20221013184028.129486-1-leobras@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -98,42 +101,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch 1 removes some noise from isolation.c
+scripts/checkpatch.pl warns about:
+- extern prototypes should be avoided in .h files
+- Missing or malformed SPDX-License-Identifier tag in line 1
 
-Patch 2 adds some information about the housekeeping flags and a short
-description on what to expect from the HK functions. I would really like 
-some feedback on this one, since I got all that from the flags usage, and 
-maybe I am misreading stuff.
+Fix those issues to avoid extra noise.
 
-In patch 3, I am suggesting making isolcpus have both the _DOMAIN flag and 
-the _WQ flag, so the _DOMAIN flag is not responsible for isolating cpus on 
-workqueue operations anymore. This will avoid AND'ing both those bitmaps 
-every time we need to check for Workqueue isolation, simplifying code and 
-avoiding cpumask allocation in most cases. 
+Signed-off-by: Leonardo Bras <leobras@redhat.com>
+---
+ include/linux/sched/isolation.h | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Maybe I am missing something in this move, so please provide feedback.
-
-In patch 4 I use the results from patch 3 and I disallow pcrypt to schedule 
-work in cpus that are not enabled for workqueue housekeeping, meaning there 
-will be less work done in those isolated cpus.
-
-Best regards,
-Leo
-
-Leonardo Bras (4):
-  sched/isolation: Fix style issues reported by checkpatch
-  sched/isolation: Improve documentation
-  sched/isolation: Add HK_TYPE_WQ to isolcpus=domain
-  crypto/pcrypt: Do not use isolated CPUs for callback
-
- crypto/pcrypt.c                 |  9 +++++---
- drivers/pci/pci-driver.c        | 13 +----------
- include/linux/sched/isolation.h | 38 ++++++++++++++++++++-------------
- kernel/sched/isolation.c        |  4 ++--
- kernel/workqueue.c              |  1 -
- net/core/net-sysfs.c            |  1 -
- 6 files changed, 32 insertions(+), 34 deletions(-)
-
+diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+index 8c15abd67aed9..762701f295d1c 100644
+--- a/include/linux/sched/isolation.h
++++ b/include/linux/sched/isolation.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef _LINUX_SCHED_ISOLATION_H
+ #define _LINUX_SCHED_ISOLATION_H
+ 
+@@ -20,12 +21,12 @@ enum hk_type {
+ 
+ #ifdef CONFIG_CPU_ISOLATION
+ DECLARE_STATIC_KEY_FALSE(housekeeping_overridden);
+-extern int housekeeping_any_cpu(enum hk_type type);
+-extern const struct cpumask *housekeeping_cpumask(enum hk_type type);
+-extern bool housekeeping_enabled(enum hk_type type);
+-extern void housekeeping_affine(struct task_struct *t, enum hk_type type);
+-extern bool housekeeping_test_cpu(int cpu, enum hk_type type);
+-extern void __init housekeeping_init(void);
++int housekeeping_any_cpu(enum hk_type type);
++const struct cpumask *housekeeping_cpumask(enum hk_type type);
++bool housekeeping_enabled(enum hk_type type);
++void housekeeping_affine(struct task_struct *t, enum hk_type type);
++bool housekeeping_test_cpu(int cpu, enum hk_type type);
++void __init housekeeping_init(void);
+ 
+ #else
+ 
 -- 
 2.38.0
 
