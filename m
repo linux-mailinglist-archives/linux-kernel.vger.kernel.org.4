@@ -2,106 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F6F5FDE65
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EB25FDE6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJMQmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S229621AbiJMQnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiJMQmC (ORCPT
+        with ESMTP id S229794AbiJMQnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:42:02 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B057D14D1F6;
-        Thu, 13 Oct 2022 09:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PB0menPbE3/zpDuGtrrHUqPCxD+sXvFiKDjJnOk3le0=; b=mHw1gOFheyKaRkh11BkNeEkj4m
-        5m0sxDMQ+cxlq3OgFmnoyU6NCtpU/ZvPzEvrDusPtCMElc2PJdltTrsRV9fBcr/nWM4k8a/3b1Eel
-        pc8tsCDDGf7E7yhVGUwqttVQssDY1b64+3G6AOJ7fJ9dPAmEYhFdMdscOO1B82eLA1FIZmHT0USrV
-        SJR1g0RbO41LuS2zPkirQNgmVoo841IgISVUjyXQna7/FVOtVzEuNIsRm6QfdjPx7uecnzsiouaie
-        IGDK8IrzekdhFNh5DWu/zafmjBmVEkWzGs4wdi9i+t9loRcY2ge5XxHV3UM366yky/TsD4BLDGfVo
-        dSZmkaog==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oj1Gz-003A4G-3k; Thu, 13 Oct 2022 16:41:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA50B3001CB;
-        Thu, 13 Oct 2022 18:41:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 700722BDAF0D5; Thu, 13 Oct 2022 18:41:26 +0200 (CEST)
-Date:   Thu, 13 Oct 2022 18:41:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Justin He <Justin.He@arm.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Len Brown <lenb@kernel.org>,
-        James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-Message-ID: <Y0g/tkm3a3Rm2RlK@hirez.programming.kicks-ass.net>
-References: <20221010023559.69655-1-justin.he@arm.com>
- <20221010023559.69655-7-justin.he@arm.com>
- <Y0VGkUxpqiIzIFzB@zn.tnic>
- <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0WBklS1XpB5as+m@zn.tnic>
- <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
+        Thu, 13 Oct 2022 12:43:04 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B4514D1F0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1665679378; bh=VdEyN+tgdUlXG37ETOs7UhKMPsgrVlwHgJepyB9XIko=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Mb2RoOJ809JJaZ5fRcTK6qzxB1uVF8w0AaJ770+zcsFiHbygVA9MPlGpogDopxE03
+         PH5Qo5ajZ83+WVaMCzT3AXUsECjlpdeJaZu4z6n2qU3HsEj7MgOzLL7QG0eXtbMWne
+         UQu+2oXfKsdWjEK0ZRX3Jm1nFLaLiDtEhGVCjXkA=
+Received: from [192.168.9.172] (unknown [101.88.135.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id AE2916009B;
+        Fri, 14 Oct 2022 00:42:58 +0800 (CST)
+Message-ID: <8a8fa581-94a9-649d-8c01-f1afd4bc9514@xen0n.name>
+Date:   Fri, 14 Oct 2022 00:42:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:107.0) Gecko/20100101
+ Thunderbird/107.0a1
+Subject: Re: [PATCH] LoongArch: BPF: Avoid declare variables in switch-case
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+References: <20221013154000.3462836-1-chenhuacai@loongson.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20221013154000.3462836-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 12:04:57PM +0000, Justin He wrote:
+On 10/13/22 23:40, Huacai Chen wrote:
+> Not all compilers support declare variables in switch-case, so move
+> declarations to the beginning of a function. Otherwise we may get such
+> build errors:
+>
+> arch/loongarch/net/bpf_jit.c: In function ‘emit_atomic’:
+> arch/loongarch/net/bpf_jit.c:362:3: error: a label can only be part of a statement and a declaration is not a statement
+>     u8 r0 = regmap[BPF_REG_0];
+>     ^~
+> arch/loongarch/net/bpf_jit.c: In function ‘build_insn’:
+> arch/loongarch/net/bpf_jit.c:727:3: error: a label can only be part of a statement and a declaration is not a statement
+>     u8 t7 = -1;
+>     ^~
+> arch/loongarch/net/bpf_jit.c:778:3: error: a label can only be part of a statement and a declaration is not a statement
+>     int ret;
+>     ^~~
+> arch/loongarch/net/bpf_jit.c:779:3: error: expected expression before ‘u64’
+>     u64 func_addr;
+>     ^~~
+> arch/loongarch/net/bpf_jit.c:780:3: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+>     bool func_addr_fixed;
+>     ^~~~
+> arch/loongarch/net/bpf_jit.c:784:11: error: ‘func_addr’ undeclared (first use in this function); did you mean ‘in_addr’?
+>            &func_addr, &func_addr_fixed);
+>             ^~~~~~~~~
+>             in_addr
+> arch/loongarch/net/bpf_jit.c:784:11: note: each undeclared identifier is reported only once for each function it appears in
+> arch/loongarch/net/bpf_jit.c:814:3: error: a label can only be part of a statement and a declaration is not a statement
+>     u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+>     ^~~
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
+> ---
+>   arch/loongarch/net/bpf_jit.c | 31 +++++++++++++------------------
+>   1 file changed, 13 insertions(+), 18 deletions(-)
+>
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 43f0a98efe38..2a9b590f47e6 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -279,6 +279,7 @@ static void emit_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+>   	const u8 t1 = LOONGARCH_GPR_T1;
+>   	const u8 t2 = LOONGARCH_GPR_T2;
+>   	const u8 t3 = LOONGARCH_GPR_T3;
+> +	const u8 r0 = regmap[BPF_REG_0];
+>   	const u8 src = regmap[insn->src_reg];
+>   	const u8 dst = regmap[insn->dst_reg];
+>   	const s16 off = insn->off;
+> @@ -359,8 +360,6 @@ static void emit_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+>   		break;
+>   	/* r0 = atomic_cmpxchg(dst + off, r0, src); */
+>   	case BPF_CMPXCHG:
+> -		u8 r0 = regmap[BPF_REG_0];
+> -
+>   		move_reg(ctx, t2, r0);
+>   		if (isdw) {
+>   			emit_insn(ctx, lld, r0, t1, 0);
+> @@ -390,8 +389,11 @@ static bool is_signed_bpf_cond(u8 cond)
+>   
+>   static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool extra_pass)
+>   {
+> -	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU ||
+> -			  BPF_CLASS(insn->code) == BPF_JMP32;
+> +	u8 t0 = -1;
+Here "t0" seems to be a versatile temp value, while the "t1" below is 
+the actual GPR $t1. What about renaming "t0" to something like "tmp" to 
+reduce confusion? I believe due to things like "t0 = LOONGARCH_GPR_ZERO" 
+the "t0" is 100% not an actual mapping to $t0.
+> +	u64 func_addr;
+> +	bool func_addr_fixed;
+> +	int i = insn - ctx->prog->insnsi;
+> +	int ret, jmp_offset;
+>   	const u8 code = insn->code;
+>   	const u8 cond = BPF_OP(code);
+>   	const u8 t1 = LOONGARCH_GPR_T1;
+> @@ -400,8 +402,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>   	const u8 dst = regmap[insn->dst_reg];
+>   	const s16 off = insn->off;
+>   	const s32 imm = insn->imm;
+> -	int jmp_offset;
+> -	int i = insn - ctx->prog->insnsi;
+> +	const u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+> +	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
+Please consider reducing diff damage and not touching parts not directly 
+affected by this change. For example this "is32" declaration and 
+initialization was moved although not related to this change.
+>   
+>   	switch (code) {
+>   	/* dst = src */
+> @@ -724,24 +726,23 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>   	case BPF_JMP32 | BPF_JSGE | BPF_K:
+>   	case BPF_JMP32 | BPF_JSLT | BPF_K:
+>   	case BPF_JMP32 | BPF_JSLE | BPF_K:
+> -		u8 t7 = -1;
+>   		jmp_offset = bpf2la_offset(i, off, ctx);
+>   		if (imm) {
+>   			move_imm(ctx, t1, imm, false);
+> -			t7 = t1;
+> +			t0 = t1;
+>   		} else {
+>   			/* If imm is 0, simply use zero register. */
+> -			t7 = LOONGARCH_GPR_ZERO;
+> +			t0 = LOONGARCH_GPR_ZERO;
+>   		}
+>   		move_reg(ctx, t2, dst);
+>   		if (is_signed_bpf_cond(BPF_OP(code))) {
+> -			emit_sext_32(ctx, t7, is32);
+> +			emit_sext_32(ctx, t0, is32);
+>   			emit_sext_32(ctx, t2, is32);
+>   		} else {
+> -			emit_zext_32(ctx, t7, is32);
+> +			emit_zext_32(ctx, t0, is32);
+>   			emit_zext_32(ctx, t2, is32);
+>   		}
+> -		if (emit_cond_jmp(ctx, cond, t2, t7, jmp_offset) < 0)
+> +		if (emit_cond_jmp(ctx, cond, t2, t0, jmp_offset) < 0)
+>   			goto toofar;
+>   		break;
+>   
+> @@ -775,10 +776,6 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>   
+>   	/* function call */
+>   	case BPF_JMP | BPF_CALL:
+> -		int ret;
+> -		u64 func_addr;
+> -		bool func_addr_fixed;
+> -
+>   		mark_call(ctx);
+>   		ret = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
+>   					    &func_addr, &func_addr_fixed);
+> @@ -811,8 +808,6 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>   
+>   	/* dst = imm64 */
+>   	case BPF_LD | BPF_IMM | BPF_DW:
+> -		u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+> -
+>   		move_imm(ctx, dst, imm64, is32);
+>   		return 1;
+>   
 
-> > This is a combined diff - do a second patch which does only remove the
-> > smp_wmb(). The smp_wmb() there is not needed as the cmpxchg() already
-> > implies a smp_mb() so there's no need for that separate, explicit one.
-> > 
-> I have a concern about what if cmpxchg failed? Do we have to still
-> guarantee the ordering since cmpxchg will not imply a smp_mb if it
-> failed.
-> 
-> Besides, I didn't find the paired smp_mb or smp_rmb
-> for this smp_wmb. Do you have any ideas?
+-- 
+WANG "xen0n" Xuerui
 
-failed cmpxchg does indeed not imply smp_mb; but in that case I can't
-find a store it orders against; and the comment is utterly shite since
-it doesn't spell out the ordering in any case.
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
-The way I read that code is that the cmpxchg effectively publishes the
-data and all it wants to ensure is that if the pointer is publised the
-object is complete -- in which case the cpmxchg() is sufficient, on
-success the object is published and you get the ordering, on failure the
-object isn't published and nobody cares about the ordering anyway.
-
-If there's anything else, the comment is in dire need of fixing anyway.
