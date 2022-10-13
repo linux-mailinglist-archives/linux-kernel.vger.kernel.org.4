@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D017C5FD76F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D564F5FD777
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJMJ5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S229700AbiJMJ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJMJ52 (ORCPT
+        with ESMTP id S229703AbiJMJ65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:57:28 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E380120072
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:57:18 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CB8C45C00FC;
-        Thu, 13 Oct 2022 05:57:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 13 Oct 2022 05:57:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665655036; x=
-        1665741436; bh=MQ066bDfliOyaWbJBRc3Sb4MdlZldWl5D7wyoX+CGZo=; b=x
-        81AffMZCH+CvgwcgB4t5iYYaUopenUM7qCfoFaHlEyZlWqeObBhKMrzyZtd3pi6h
-        /LBHzx4gDs6VRP44xtKrhelGrH35CGlmCWGWXE8yXZnH+aKqMMhX56bQPcHM+jNX
-        gE/YFKyOsNMlP9XkvvR68z4yfLu2jdibvkSLv136GOFSq5o8JGtrJ3+8d5Jo4xVu
-        k39UsJTrTbr1cgvKbNUMjqw6nZkOJPWzUmYiFDSsZVVT/Owz0Sk/r3tTLhk4Ba9U
-        wW3uwmXS1mFOXeiLR77Nj1S5wbPEaRYrAIJBk37mX/qhawgjVmU3JE3djbAuelvP
-        WVoX500KXMYxswItFd7XQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665655036; x=
-        1665741436; bh=MQ066bDfliOyaWbJBRc3Sb4MdlZldWl5D7wyoX+CGZo=; b=U
-        KrmIqrHP2GXOaMsc5KVl3D/YTRp190ljJV6KkiAwhn77qMs+H5hep7EK2U9sUWWn
-        qBS94O2LkLePEGPCFPOLfQEy7TfUwTgOcIAM3CMZ7MEPTCJHcS8IXIpYX8DYr6ZK
-        rQ6EhnHMatr30ESN2m+g3FZ4hTgJEncb3y2Rg3KobZZA+Al3pjZpijFvIyPPPSEK
-        Oil4L62avqqrBUnoVkUnFlZRdW1brRBVqdAG/TEBRNMgBTquLIplL1DRXMHNhDhk
-        vQvE3x5ctjWYUBL8M93ndOeCrfWMdmKN+guxr46njwzbYQrdstfOthkC6IbIe8n+
-        Q56JQoRzx2676gD3cebvw==
-X-ME-Sender: <xms:_OBHYxscKkip3OQOCnNUAUX68xxo8SU4qy8g2dDuOcbBcyWAq62kgQ>
-    <xme:_OBHY6dVCCqpiKQxPLY1FKiCzw62gIV6cFmsSB55VVv45fzxSsXW1vEKMez4aD2e-
-    MiPsM9bRoYHVEMOMWw>
-X-ME-Received: <xmr:_OBHY0za1CGPYzQr7fSQoBfW57p40zHwKmxn7AIw78zKHPewNxbWDrHX6kek>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:_OBHY4OmtA5ux_ZN8NVDkGN3txBeiZ0Gp9wskMSrl2iqhow5PkCZBg>
-    <xmx:_OBHYx9cjOfXW4OL_GUw0NshC1ELewkhmes2IQioJF9rmg8DAEQqyg>
-    <xmx:_OBHY4WvAQGB-rNhsZ83yKxc5SLs4zSnfq8CuTZPwqV2tNv6omfp2Q>
-    <xmx:_OBHY4WtpuuMDMfvbV3qGxI7OmBsFLYA4KGz-JxLpPpfq7hrC7nFSA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Oct 2022 05:57:16 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Thu, 13 Oct 2022 11:56:51 +0200
-Subject: [PATCH 7/7] drm/vc4: dpi: Fix format mapping for RGB565
+        Thu, 13 Oct 2022 05:58:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0386AF9848
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665655135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gYxJpUZHmyKC80uPxIoHuIFfPUSzpQt5TX3nlakaHIg=;
+        b=aR62nCEBPuKecNM2v7Y2CKmV+7cBta9Nf0O0Go+h0vjg8JOilVd3xlHA7EZT1Oyf7gmb9M
+        IiJh6jESiTimkdbc3TfDdzoIrxG7jDYYZV40lE2LTpw8s++NvKzOlXajvy6TY3NulSzDhr
+        yAWPdQOIlqdSetWX8LOV95Nypt+bIo0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-48-VHKHGMaUPeSTH3j1n_rTJw-1; Thu, 13 Oct 2022 05:58:53 -0400
+X-MC-Unique: VHKHGMaUPeSTH3j1n_rTJw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26175858F17;
+        Thu, 13 Oct 2022 09:58:53 +0000 (UTC)
+Received: from ovpn-194-196.brq.redhat.com (ovpn-194-196.brq.redhat.com [10.40.194.196])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AEA0347505F;
+        Thu, 13 Oct 2022 09:58:50 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/7] KVM: x86: Hyper-V invariant TSC control feature
+Date:   Thu, 13 Oct 2022 11:58:42 +0200
+Message-Id: <20221013095849.705943-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221013-rpi-dpi-improvements-v1-7-8a7a96949cb0@cerno.tech>
-References: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
-In-Reply-To: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
-To:     Maxime Ripard <mripard@kernel.org>, Eric Anholt <eric@anholt.net>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
-        Emma Anholt <emma@anholt.net>
-Cc:     dri-devel@lists.freedesktop.org,
-        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=965; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=Bfa8b+T0qwe2ry6WQDaIcHsRajSivGlVAl/5p4IUcxg=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMnuD96e/7H/+CrrHeVva3cZWF1YfCg5aYbU5YxDujWlSrLr
- mKpedZSyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAiXucY/lkV6ZqeCg1OO/Lk4ILN97
- OmLitbkCjYk/yQo1639KGS6yZGhr65R1brnv661ffvY5Untyy//O1fMimxlJW582vQYd9VIiwA
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Changes since v4:
+- s,HV_INVARIANT_TSC_EXPOSED,HV_EXPOSE_INVARIANT_TSC, [Michael]
+- Add Michael's R-b to PATCH1
+- Use 'KVM-only' instead of 'scattered' in PATCH2's subject [Sean, Jim]
+- Do not set CPUID_8000_0007_EDX to 'NCAPINTS + 1' explicitly [Sean]
+- Use the opportunity and switch to 'true'/'false' for 'msr->write'/
+  'msr->fault_exepected' in 'hyperv_features' test [Sean]
+- Fix HVCALL_NOTIFY_LONG_SPIN_WAIT test breakage by setting 
+  HYPERV_CPUID_ENLIGHTMENT_INFO.EBX.
+- "KVM: selftests: Test that values written to Hyper-V MSRs are
+  preserved" patch added [Sean]
 
-The mapping is incorrect for RGB565_1X16 as it should be
-DPI_FORMAT_18BIT_666_RGB_1 instead of DPI_FORMAT_18BIT_666_RGB_3.
+Original description:
 
-Fixes: 08302c35b59d ("drm/vc4: Add DPI driver")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_dpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Normally, genuine Hyper-V doesn't expose architectural invariant TSC
+(CPUID.80000007H:EDX[8]) to its guests by default. A special PV MSR
+(HV_X64_MSR_TSC_INVARIANT_CONTROL, 0x40000118) and corresponding CPUID
+feature bit (CPUID.0x40000003.EAX[15]) were introduced. When bit 0 of the
+PV MSR is set, invariant TSC bit starts to show up in CPUID. When the 
+feature is exposed to Hyper-V guests, reenlightenment becomes unneeded.
 
-diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
-index fdae02760b6d..a7bebfa5d5b0 100644
---- a/drivers/gpu/drm/vc4/vc4_dpi.c
-+++ b/drivers/gpu/drm/vc4/vc4_dpi.c
-@@ -185,7 +185,7 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
- 						       DPI_FORMAT);
- 				break;
- 			case MEDIA_BUS_FMT_RGB565_1X16:
--				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_3,
-+				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_1,
- 						       DPI_FORMAT);
- 				break;
- 			case MEDIA_BUS_FMT_RGB565_1X24_CPADHI:
+Note: strictly speaking, KVM doesn't have to have the feature as exposing
+raw invariant TSC bit (CPUID.80000007H:EDX[8]) also seems to work for
+modern Windows versions. The feature is, however, tiny and straitforward
+and gives additional flexibility so why not.
+
+Vitaly Kuznetsov (7):
+  x86/hyperv: Add HV_EXPOSE_INVARIANT_TSC define
+  KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
+  KVM: x86: Hyper-V invariant TSC control
+  KVM: selftests: Rename 'msr->available' to 'msr->fault_exepected' in
+    hyperv_features test
+  KVM: selftests: Convert hyperv_features test to using
+    KVM_X86_CPU_FEATURE()
+  KVM: selftests: Test that values written to Hyper-V MSRs are preserved
+  KVM: selftests: Test Hyper-V invariant TSC control
+
+ arch/x86/include/asm/hyperv-tlfs.h            |   3 +
+ arch/x86/include/asm/kvm_host.h               |   1 +
+ arch/x86/kernel/cpu/mshyperv.c                |   2 +-
+ arch/x86/kvm/cpuid.c                          |  11 +-
+ arch/x86/kvm/hyperv.c                         |  19 +
+ arch/x86/kvm/hyperv.h                         |  27 ++
+ arch/x86/kvm/reverse_cpuid.h                  |   7 +
+ arch/x86/kvm/x86.c                            |   4 +-
+ .../selftests/kvm/include/x86_64/hyperv.h     | 144 +++++---
+ .../selftests/kvm/include/x86_64/processor.h  |   1 +
+ .../selftests/kvm/x86_64/hyperv_features.c    | 330 +++++++++++-------
+ 11 files changed, 366 insertions(+), 183 deletions(-)
 
 -- 
-b4 0.11.0-dev-7da52
+2.37.3
+
