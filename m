@@ -2,191 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76585FD91A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCB55FD923
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJMMTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S229518AbiJMMWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJMMTS (ORCPT
+        with ESMTP id S229470AbiJMMWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:19:18 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034634B0E8;
-        Thu, 13 Oct 2022 05:19:17 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mp7nb3dCxz6H7LH;
-        Thu, 13 Oct 2022 20:17:39 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Thu, 13 Oct 2022 14:19:14 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 13 Oct
- 2022 13:19:14 +0100
-Date:   Thu, 13 Oct 2022 13:19:13 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-CC:     <dan.j.williams@intel.com>, <ira.weiny@intel.com>,
-        <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <bwidawsk@kernel.org>, <a.manzanares@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH] cxl: Add generic MSI/MSI-X interrupt support
-Message-ID: <20221013131913.0000038b@huawei.com>
-In-Reply-To: <20221012180432.473373-1-dave@stgolabs.net>
-References: <20221012180432.473373-1-dave@stgolabs.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Thu, 13 Oct 2022 08:22:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B176118747
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:22:41 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-221-fYkKU98OO8mGbD5J_5kNzA-1; Thu, 13 Oct 2022 13:22:38 +0100
+X-MC-Unique: fYkKU98OO8mGbD5J_5kNzA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 13 Oct
+ 2022 13:22:37 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Thu, 13 Oct 2022 13:22:37 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        "Linux Kbuild mailing list" <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: RE: gcc 5 & 6 & others already out of date?
+Thread-Topic: gcc 5 & 6 & others already out of date?
+Thread-Index: AQHY3qRO7iEL7dtsYEaMGjvDqAFL8a4MPngQ
+Date:   Thu, 13 Oct 2022 12:22:37 +0000
+Message-ID: <8e31925d92e9496dad35290bad1c3dd3@AcuMS.aculab.com>
+References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+In-Reply-To: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Oct 2022 11:04:32 -0700
-Davidlohr Bueso <dave@stgolabs.net> wrote:
-
-> Introduce a generic irq table for CXL components/features that can have
-> standard irq support - DOE requires dynamic vector sizing and is not
-> considered here.
-> 
-> Create an infrastructure to query the max vectors required for the CXL
-> device.
-> 
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-
-Hi Davidlohr,
-
-Basically good, but a few comments inline.
-
-I'll role this onto front of the v2 of the CPMU set as well.
-
-> ---
->  drivers/cxl/pci.c | 63 +++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
-> 
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..467f2d568e3e 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -428,6 +428,66 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->  	}
->  }
->  
-> +/**
-> + * struct cxl_irq_cap - CXL feature that is capable of receiving MSI/MSI-X irqs.
-> + *
-> + * @name: Name of the device generating this interrupt.
-> + * @get_max_msgnum: Get the feature's largest interrupt message number.  If the
-> + *		    feature does not have the Interrupt Supported bit set, then
-> + *		    return -1.
-> + */
-> +struct cxl_irq_cap {
-> +	const char *name;
-> +	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
-
-For the CPMU case I need to walk the register locator dvsec block so need
-the callback to take the pci_dev not the cxl_dev_state.
-
-Also need it later to map the resulting register blocks to go find the irq before
-then dropping them mappings so that the resulting CPMU device can grab them
-later.
-
-> +};
-> +
-> +static const struct cxl_irq_cap cxl_irq_cap_table[] = {
-> +	{ "isolation", NULL },
-> +	{ "pmu_overflow", NULL },
-> +	{ "mailbox", NULL },
-> +	{ "event", NULL },
-
-Fill these in as we provide them, not upfront. I'd rather see this
-attached to one (or possibly several) of the series that are coming along
-than stand alone.  so start off with an empty table.
-
-
-
-> +};
-> +
-> +static void cxl_pci_free_irq_vectors(void *data)
-> +{
-> +	pci_free_irq_vectors(data);
-> +}
-> +
-> +static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	int rc, i, vectors = -1;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
-> +		int irq;
-> +
-> +		if (!cxl_irq_cap_table[i].get_max_msgnum)
-> +			continue;
-> +
-> +		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
-> +		vectors = max_t(int, irq, vectors);
-> +	}
-> +
-> +	if (vectors == -1)
-> +		return -EINVAL; /* no irq support whatsoever */
-
-return 0 in this case.  No irqs present is a 'good' result if there
-aren't any.  Will be up to the consumers of the interrupts to get
-their own interrupt vector numbers and they should get the same
-answers!
-
-> +
-> +	vectors++;
-> +	rc = pci_alloc_irq_vectors(pdev, vectors, vectors,
-> +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	if (rc != vectors) {
-> +		dev_err(dev, "Not enough interrupts; use polling where supported\n");
-> +		/* Some got allocated; clean them up */
-> +		cxl_pci_free_irq_vectors(pdev);
-> +		return -ENOSPC;
-> +	}
-> +
-> +	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct cxl_register_map map;
-> @@ -498,6 +558,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
->  
-> +	/* TODO: When there are users, this return value must be checked */
-> +	cxl_pci_alloc_irq_vectors(cxlds);
-> +
-
-Gut feeling is this will end up moving ahead of any of the sub device creation
-because many of them end up needing interrupts.
-
-Also check response from the start - can't see a reason to not do so as we
-won't be registering any at all if no callbacks provided.
-
-So I'd move it above the devm_cxl_add_memdev() call.
-
-
-
->  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
->  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
->  
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDEzIE9jdG9iZXIgMjAyMiAwMjozNw0K
+Li4uDQo+IEFuZCB0aGVuIHRoZXJlJ3Mgb2xkIHRydXN0eSBnY2MuIEdjYyBhbHNvIGltcHJvdmVz
+IGFjY29yZGluZyB0byBhIG5pY2UNCj4gY2FkZW5jZSwgYW5kIHdlIGtub3cgcGVvcGxlIGFyZSB1
+c2luZyBsYXRlciBnY2NzIGJlY2F1c2Ugbm9ib2R5IGlzDQo+IGNhdGNoaW5nIHRoZSBidWlsZCBl
+cnJvcnMgZnJvbSBvbGQgZ2Njcy4gU28gbGV0J3Mgc3RvcCBwcmV0ZW5kaW5nIHdlDQo+IHN1cHBv
+cnQgb2xkIGNvbXBpbGVycy4gV2UgY2xlYXJseSBkb24ndC4gTWF5YmUgc29tZSBzdWJzZXQgb2Yg
+Y29kZQ0KPiBkb2VzLCBidXQgYnkgYW5kIGxhcmdlLCBJIGRvdWJ0IG1hbnkgZGV2ZWxvcGVycyBh
+cmUgYWN0dWFsbHkgZGFpbHkNCj4gZHJpdmluZyBnY2MgNS4xIGFuZCBkb2luZyBhbGx5ZXNjb25m
+aWcgYnVpbGRzIHdpdGggaXQuIFllcywgbWFueSBhcmUNCj4gcmlnaHRmdWxseSBjYXV0aW91cyBv
+ZiBnY2MgMTIgYW5kIHN0aWNrIHdpdGggZ2NjIDExIHN0aWxsLCBhbmQgdGhhdCdzDQo+IHJlYXNv
+bmFibGUsIGJ1dCAxMSBvciBldmVuIDEwIGlzIHN0aWxsIHdheSBsYXJnZXIgdGhhbiA1LjEuDQo+
+IA0KPiBUaGUgdHJ1dGggaXMsIHBlb3BsZSB0ZW5kIHRvIHVzZSBtb3JlIHJlY2VudCB0b29sY2hh
+aW5zLiBBbmQgaWYgQ2xhbmcNCj4gaGFzbid0IGJyb2tlbiB0aGUgd2lsbCBvZiB0aGUgc3RyYW5n
+bGVycywgdGhlbiBzdXJlbHkgUnVzdCB3aWxsLg0KDQpEZXZlbG9wZXJzIG1pZ2h0IHVzZSByZWNl
+bnQgdG9vbGNoYWlucywgYnV0IHVzZXJzIGFyZSBtdWNoDQptb3JlIGxpa2VseSB0byB1c2UgdGhl
+IG9uZSBpbiB0aGUgZGlzdHJpYnV0aW9uIHRoZXkgaGF2ZSBpbnN0YWxsZWQuDQoNCldvcmtpbmcg
+b3V0IGhvdyB0byBidWlsZCBhIGtlcm5lbCBpcyBoYXJkIGVub3VnaC4NClJlcXVpcmluZyBub24t
+c3RhbmRhcmQgdmVyc2lvbnMgb2YgZ2NjIGlzIGEgUElUQS4NClJlbWVtYmVyIHRoYXQgeW91IGNh
+biBsb2FkIGEgY3VycmVudCBrZXJuZWwgb24gcXVpdGUNCm9sZCB1c2Vyc3BhY2UuDQpUaGVyZSBj
+YW4gYmUgYWxsIHNvcnRzIG9mIHJlYXNvbnMgZm9yIHdhbnRpbmcgdG8ga2VlcCBidWlsZGluZw0K
+bm9uLWtlcm5lbCAnc3R1ZmYnIHdpdGggdGhlIGRlZmF1bHQgdG9vbGNoYWluLg0KDQpBbnlvbmUg
+dXNpbmcgY2xhbmcgYWxtb3N0IGNlcnRhaW5seSBoYXMgdG8gZG93bmxvYWQgYSByZWNlbnQNCnZl
+cnNpb24gLSBidXQgdGhpcyBpcyBub3QgdHJ1ZSBvZiBnY2MuDQoNCglEYXZpZA0KDQotDQpSZWdp
+c3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9u
+IEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
