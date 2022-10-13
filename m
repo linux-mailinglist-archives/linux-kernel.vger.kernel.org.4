@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5395FE45E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CAD5FE474
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiJMVs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S230197AbiJMVtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJMVs5 (ORCPT
+        with ESMTP id S230071AbiJMVtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:48:57 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDFF17C54B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:48:56 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id m6so3185215pfb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:48:56 -0700 (PDT)
+        Thu, 13 Oct 2022 17:49:35 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3564E36BCD
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:49:07 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c24so2997908pls.9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
          :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1XYeyGTNJN3qIh07qU6q0EJWggKUkP1oRUyRbAR2H8=;
-        b=fOjjYk751S+BTh4xYtHjJLQVIZlytrafEHObrPf7zNZjgdWcl90AMg54MVROaN6Txg
-         PX+a23fSq3YH88JaCLwR+vmkWWhqDBAqeLt8iXqImeilpBmGLQWwh4s7vnt4yp2+9n+m
-         HDL/CyGCmosTROL7OLsZzrirEzxzs0nvZewEgCbcidlW252S+FcNbJTt/T2HjWmP1JKz
-         l4HuwthzaMd2hJPF/98qWkxatl5RFxemMf34niHUpnQ9A8KxSmYlfrZbDk6cDCoqWggK
-         h2hX3BtbB7wljQTRRdjptTG5YtpM4d6vHVrjD+RH1h1W6kM4Q5b/z7wRaO47hSf0c3Bo
-         5D1A==
+        bh=i3K43ojbMq8isMbqFxDt+PzOi1qTNmeGQ4/NX2/+N0s=;
+        b=m4GpdrZWyUxvcdlQIiSLdarZ/8f06jvKA5NbPKwsGtQy8/PzXJLAdpV0Iqq8ic3i/+
+         ALBxWhsGIv7/agd3mSgUwanDeWl+OwHsWOOmyV6ujoSPkONdtO9HicQ9mAiH0Bsjspow
+         s90v2642xpaknJej8cUEg8abEalRdK4fRxcA0fyeiqu/7Tp7Uk+C7uAtbm47WyTkGr87
+         YaBZAY0uBXSUTLc1BcQoW/RxlmQ48lOEkHlculPPDMH8mbstu/Z5q6gO1LQ5mioaKxOJ
+         51ehanKyth51rAduNNDu6GYTh1hIpyWJaFt/XCybvEnWgLgEQRiNqJ0G+YCA8CsmCeb3
+         uf0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
          :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b1XYeyGTNJN3qIh07qU6q0EJWggKUkP1oRUyRbAR2H8=;
-        b=GE4iP3RfFpRgWrNvVfMcUgK1XkBHd2++y3nSvIUcyuyAHVgQHK4eEWt0OaHb8g5GSs
-         2YAukix7zRxwIgFPGw6mySML8W2u4ElEB+NqKdi8ZsAH8h7HL4kDr29aqSSakG3OiDai
-         PuJYn5kZS58ntfzx3JLfd76GbTT3HxHZnZKkKSstXVvXHzZHZO2uHp3XUIc6HUw4XFs6
-         Cp2CBDvfD3Av7A94fFjdZXB7Ma38FjCHewnFf2v4+Yk8i+bRI71KbPgHILuEHTs9khId
-         ubD1pqRHSmhWizFb9CFBPab4cFAo2ZsDakq2zoSj/t4NQXsqaSwdmUPlXN+NCcL+J47v
-         N+fg==
-X-Gm-Message-State: ACrzQf2wzYD66dkxLFMdmVIaPIX8XGeKSl9Q8T5TnxewboDSV5wV+J8+
-        GKxgxr0gMM8ABafwe2io0J6k4oS6mKLA4A==
-X-Google-Smtp-Source: AMsMyM5dlekhqku2hsIGY9X/o0ZiJHMYcP99z2hMdjly9aMR3sZBp0WrhMbXLTzVBpKP7AuC4t+/HA==
-X-Received: by 2002:a63:6c01:0:b0:429:ea6e:486d with SMTP id h1-20020a636c01000000b00429ea6e486dmr1643771pgc.247.1665697735392;
-        Thu, 13 Oct 2022 14:48:55 -0700 (PDT)
+        bh=i3K43ojbMq8isMbqFxDt+PzOi1qTNmeGQ4/NX2/+N0s=;
+        b=psYi5gbgmEyhqp3C5mPL0gJ6zFquiIF/L5agTWVrT465loRh/Pa2nQE3bO7aX/0RtU
+         q/X12Uc3RtOfIIDiIO6cyyE3F+Lfr1GZBrVcCEk7lO6mQ/VRqbvrk4VzBwsgkrfMW0/d
+         f74Ptj1VDD0rHGxIh3FFgzj/ks3GDSrC7rk26O9y19QkZGScL20UTyAWu0k7AvDcwUs8
+         OrIAv9vSOoFQfosA52e+KWxaO2tVe/mikatuHgS0eyb/+SPjB60YRUq7NPRYLbJKj1kE
+         VItkpU9KCD0VY37s1G3Q8M/vT3+OJ3vfhNqmwVcrfRUyvXohB40BCT3cwe2hMYpQWjWb
+         aIUg==
+X-Gm-Message-State: ACrzQf2xQX4CEH1skzqUMNGdoHcRZmTw8QSlHC2mNGFRVSJSo66SF558
+        PZn0yx78Dt0oru/oZNn39TUafHTr+6B5qNS5
+X-Google-Smtp-Source: AMsMyM733KNeybflC+If1obbzWxANjLNj7Zgxv/5gM6kA2Oko04lczn0Q0lcUQrsWOwUH9yVmaymeQ==
+X-Received: by 2002:a17:903:240d:b0:183:9bab:9c3 with SMTP id e13-20020a170903240d00b001839bab09c3mr1849051plo.48.1665697745345;
+        Thu, 13 Oct 2022 14:49:05 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id e15-20020a17090a118f00b0020a61d0e4eesm3705240pja.30.2022.10.13.14.48.54
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902db0900b00182d25a1e4bsm285318plx.259.2022.10.13.14.49.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 14:48:54 -0700 (PDT)
-Subject: [PATCH] MAINTAINERS: git://github -> https://github.com for terrelln
-Date:   Thu, 13 Oct 2022 14:46:36 -0700
-Message-Id: <20221013214636.30701-1-palmer@rivosinc.com>
+        Thu, 13 Oct 2022 14:49:04 -0700 (PDT)
+Subject: [PATCH] MAINTAINERS: git://github -> https://github.com for intel
+Date:   Thu, 13 Oct 2022 14:46:37 -0700
+Message-Id: <20221013214637.30873-1-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,10 +59,10 @@ Cc:        linux-kernel@vger.kernel.org,
            Palmer Dabbelt <palmer@rivosinc.com>,
            Conor Dooley <conor.dooley@microchip.com>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     terrelln@fb.com
+To:     todd.e.brandt@linux.intel.com, linux-pm@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,18 +84,18 @@ thus need more than just a sed to fix them.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 41a925931cc3..748f9aaffdf2 100644
+index 9a9ca93b63fd..7b5e1953b718 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -22528,7 +22528,7 @@ ZSTD
- M:	Nick Terrell <terrelln@fb.com>
- S:	Maintained
- B:	https://github.com/facebook/zstd/issues
--T:	git git://github.com/terrelln/linux.git
-+T:	git https://github.com/terrelln/linux.git
- F:	include/linux/zstd*
- F:	lib/zstd/
- F:	lib/decompress_unzstd.c
+@@ -16211,7 +16211,7 @@ L:	linux-pm@vger.kernel.org
+ S:	Supported
+ W:	https://01.org/pm-graph
+ B:	https://bugzilla.kernel.org/buglist.cgi?component=pm-graph&product=Tools
+-T:	git git://github.com/intel/pm-graph
++T:	git https://github.com/intel/pm-graph
+ F:	tools/power/pm-graph
+ 
+ PMBUS HARDWARE MONITORING DRIVERS
 -- 
 2.38.0
 
