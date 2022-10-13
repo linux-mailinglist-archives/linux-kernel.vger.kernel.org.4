@@ -2,137 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A4D5FD590
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4555E5FD591
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJMHdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 03:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S229694AbiJMHef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiJMHdx (ORCPT
+        with ESMTP id S229579AbiJMHec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 03:33:53 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE1D11B2D9;
-        Thu, 13 Oct 2022 00:33:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 703CD5C0053;
-        Thu, 13 Oct 2022 03:33:50 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 13 Oct 2022 03:33:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665646430; x=1665732830; bh=U1GPnkRrOj
-        kf2h2kttART7uQoH4bT9tLh5te/qCpI+o=; b=cHtQwd9I5W94IzjzEzR++OrLUa
-        /K0YDDLS7ehqqkoybsUc0UsumaUTccHhFbzbaZqpNJFmzj1fB5e6N1FpQsi8ZFpy
-        xPp4pMA0KSeiq6GBl1fo/ZRalNTGvkLzCK8spU2iUzZXhswITDQxZJ8khTWFd7oY
-        6pqNrJaC1jkDA1ow55aktOckeyFbY7geHVJ7nnY3JYBEzyaPhJAiGK5tHLhq1zki
-        LEmpXcxJIe3XvJpDi15lRLIFkd9FWqV5iSCISIAP9JbR+jOqe4lv/AnOtyasTOwg
-        /mj6U/7LiK8KyoTe5IrtCljzuE5FcX3LHKLc3AJffYpj5BjbeIHa5jeYdfGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665646430; x=1665732830; bh=U1GPnkRrOjkf2h2kttART7uQoH4b
-        T9tLh5te/qCpI+o=; b=KcJSeLHQ+n4uGifWV4UjtNCf4iDZr3aAZ+PyH7eBCuMO
-        rvY+12wZHpDlAfHyYbGkRFD4EQhOvnFIquG4gnrp6xo0RIypjRH1/ntHC5e+WJwL
-        7sM/Y129UyXPD9TwheCV3XUDJs9QXj81rYUziOjEMAplC+rhO1bdGbfppI9q3QaM
-        OAdvyDPMdLlZ9b/Q2Qy9IuFHhZ/hllP++Fm5JxuAGO/uw2RtyCth1rcWsOuBnYam
-        CdpTyICsF04maZeq7Ve0vT0xZijsn3TTBvWZdcXxuijvtDzH0udxWAtXhrAfjBRf
-        JoZlH8ynixW2lCBKqRra+WXsXIq03ythDF19zJ906Q==
-X-ME-Sender: <xms:Xb9HYwb4mLkR2CMod27VCnBV2LR1R4KnJlT5RCqMg4T2a9yXLbS_Mw>
-    <xme:Xb9HY7YadZaJuPnSpw4leAMrDtnsCz9N3EPY_tigTBGq6ncvIjToz9_7zrWrbUcBe
-    CxtszzZd_UvyRjYltk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejledguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Xb9HY687BLEQYUv1p0HkI46dLgAiSaTynTSrdFeR8WUTkTZSu7Wtuw>
-    <xmx:Xb9HY6oPpDjlfmQ4grw2tp0i0UDJfg9St0X_zFoYJb4oG_CCr5h-uw>
-    <xmx:Xb9HY7or6Zz4BImMuC8xDvxnaCTZeYNet00DDVgaPgwDQfDn7HuFPw>
-    <xmx:Xr9HY6WIUpC8-Cgyuu41Hd4H8ziUDxjKlaagoBF04gTPoECVqf6-tw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C2FA3B60086; Thu, 13 Oct 2022 03:33:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <4429d1ec-579e-4b0d-a8d8-06b9a5877a9c@app.fastmail.com>
-In-Reply-To: <4517c95f-1dad-5a8c-5202-073d0a7eff29@opensource.wdc.com>
-References: <202210121422.MJsXaw1M-lkp@intel.com>
- <4517c95f-1dad-5a8c-5202-073d0a7eff29@opensource.wdc.com>
-Date:   Thu, 13 Oct 2022 09:33:29 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: drivers/ata/ahci_st.c:229:34: warning: unused variable 'st_ahci_match'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 03:34:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E68911E45A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665646470;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7+kkmXxqmOAqWpnEkFmH+PPx54SR+ImezPG4mMhIn2E=;
+        b=VVXbaHsjXika6IYd0uzKrUnsOX1LqHC5SUCg0RiKbVzs2Ud1HJ3abbYoYPxx3WxrCLWgoB
+        Eu0E+uy0IFgYSCFaDxjWpsUFQtIc8ec8tDV4+dW4sceVq4E7xfABGOAa9oCFOB7NqfBVUb
+        CJ/6pq7iIq8V4BRFduZOzaIfmat0H+U=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-468-Z7wUpwJpMqOpxgCe_XNI7g-1; Thu, 13 Oct 2022 03:34:29 -0400
+X-MC-Unique: Z7wUpwJpMqOpxgCe_XNI7g-1
+Received: by mail-wr1-f71.google.com with SMTP id e19-20020adfa453000000b0022e3608df56so222113wra.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:34:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7+kkmXxqmOAqWpnEkFmH+PPx54SR+ImezPG4mMhIn2E=;
+        b=OxHYESKfohzuHMRv7CKMQMUziFRjkGt7/0DvZvFqhPCwQEY0ZTc64pScsqSraiXqlL
+         o4z6+GeoKJOmkDvDKjEvBUVmHlzEELnKst3Jzx9WtCZKyF21Xa04ddSfIC7djqBLh7CX
+         KWWcXYepfYlzwXlhLO2GkrcxTvyB+StwjpgOUGGU1+7k2VckzBZjdw8Qrrnm/aP+2O22
+         Qv6/q3M1cKIz0ON112Kk71t1fxblXW1Fcks0P8Xf6WIKy5q6xksv7+8umC1mysH/xp8N
+         zJgBiX80DujxQ/uCpdrEkBJnxaVAuvQuQxb/Ip/kP4gX5eV7lpsxjKpdFOW1tiK5y1Fl
+         Slrg==
+X-Gm-Message-State: ACrzQf2JRClxfncbIWEVbIajKVq00Cu+YaNu2FOG4Ix5NHb622RQVBN2
+        zTAtC1Byh5vl7OAdfeGfC6hCyT/hwApb/nCO3KR7uZquzkUib6TcNVig8r4mczh/bpoK3bA5dgM
+        EuRPDwCiu+6lQteA48PNS65ONoKLDOuMq5hNtlyArWn/GfklHodjx5KY9j192wfHMkvJIY8/x2S
+        M=
+X-Received: by 2002:a7b:c047:0:b0:3b4:adc7:1ecb with SMTP id u7-20020a7bc047000000b003b4adc71ecbmr5333952wmc.144.1665646467829;
+        Thu, 13 Oct 2022 00:34:27 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM76Bw6kTXCm8sc8B5hU+9qB/ACfIxlbJt65LXBIFUWuX5g23uiXeaQ5PngFBdE8Z+HpUzxeLA==
+X-Received: by 2002:a7b:c047:0:b0:3b4:adc7:1ecb with SMTP id u7-20020a7bc047000000b003b4adc71ecbmr5333929wmc.144.1665646467584;
+        Thu, 13 Oct 2022 00:34:27 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b1-20020a05600c4e0100b003a3170a7af9sm3790192wmq.4.2022.10.13.00.34.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 00:34:27 -0700 (PDT)
+Message-ID: <b5e30da4-d958-4227-6e13-07f58ea0ccb8@redhat.com>
+Date:   Thu, 13 Oct 2022 09:34:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 0/4] Add a drm_crtc_helper_atomic_check() helper
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org
+References: <20221011165136.469750-1-javierm@redhat.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221011165136.469750-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022, at 8:13 AM, Damien Le Moal wrote:
-> On 10/12/22 15:37, kernel test robot wrote:
+On 10/11/22 18:51, Javier Martinez Canillas wrote:
+> Add a helper function and make drivers that have the same logic in their
+> struct drm_crtc_helper_funcs .atomic_check handler to use this instead.
+> 
+> Patch #1, #2 and #3 are just cleanups for the mgag200, simpledrm and
+> ssd130x drivers respectively. Finally patch #4 converts the last two
+> drivers to use a helper instead of open coding it the same logic.
+> 
+> The changes are inspired by a patch from Thomas Zimmermann for the ast
+> DRM driver:
+> 
+> https://patchwork.kernel.org/project/dri-devel/patch/20221010103625.19958-4-tzimmermann@suse.de/
+> 
+> This is a v2 that addresses issues pointed out also by Thomas in v1:
+> 
 
-> I am at a loss with this one... There are plenty of patterns similar to
-> drivers/ata/ahci_st.c doing something like:
->
-> static const struct of_device_id st_ahci_match[] = {
->
->         { .compatible = "st,ahci", },
->
->         { /* sentinel */ }
->
-> };
->
-> MODULE_DEVICE_TABLE(of, st_ahci_match);
->
-> For instance, in drivers/pwm/pwm-sti.c, we have:
->
->
-> And countless others like this for STI and other arch too.
->
-> So if CONFIG_MODULE is not enabled, how come we are not submerged with
-> warnings about unused variables ? Is mips arch special in this regard ?
-> Or am I missing something ?
+Pushed this to drm-misc (drm-misc-next). Thanks!
 
-It has nothing to do with MIPS, the problem is
+-- 
+Best regards,
 
-                .of_match_table = of_match_ptr(st_ahci_match),
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-The 'of_match_ptr()' sets the pointer to NULL when CONFIG_OF is
-disabled, which avoids a build failure when st_ahci_match[]
-itself is in an #ifdef.
-
-In this driver, there is no #ifdef around st_ahci_match[], so we
-simply want
-
-                .of_match_table = st_ahci_match,
-
-The thing with the MODULE_DEVICE_TABLE() is that it would
-create another reference if CONFIG_MODULE is enabled, but not
-for a built-in driver, so you only get this type of warning
-for randconfig builds that have the driver built-in and OF
-disabled.
-
-It's a common mistake, and we should probably remove most
-of the of_match_ptr() references as you rarely have drivers
-that optionally use OF support but benefit from compiling
-that support out on kernels without OF.
-
-     Arnd
