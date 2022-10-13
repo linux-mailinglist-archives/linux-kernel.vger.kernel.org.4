@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834725FDCF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E8D5FDCF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiJMPRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S229807AbiJMPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJMPRu (ORCPT
+        with ESMTP id S229436AbiJMPTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:17:50 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7F810F8AB;
-        Thu, 13 Oct 2022 08:17:45 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E44781884C4B;
-        Thu, 13 Oct 2022 15:17:42 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id B029F2500015;
-        Thu, 13 Oct 2022 15:17:42 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 74E139EC000A; Thu, 13 Oct 2022 15:17:42 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 13 Oct 2022 11:19:17 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13B8E09B2;
+        Thu, 13 Oct 2022 08:19:16 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id b5so1822550pgb.6;
+        Thu, 13 Oct 2022 08:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3muxJhNWv1hg7XONepRN26NwBDFTg3vZFivnKP3G+hw=;
+        b=F8jmyvQukbGYiASMQsZRXYBAgV0Gnw2M5nkuujeTetPf3rsaauv9xqFMQYUT5FQ9Ud
+         Kzm0YATZRoKU5vKU9gHFXBPOg/rD6S1vhqv6hIGfuZ5kcBrh5w6IZ1bhSSzfKiOObQNs
+         UMP6K5+2vUvly2DoPvsBAZPTKeTBWcakE49W3hgUx0wDOWxMeujG93vUGfR/2vPwxihL
+         glDzsN22bDxXHParQbQfmUPIxzQ9MwKrKB2doeaqcqTfN1AHs0Ug/bw/R+8scqA8scOF
+         OPyhkNNPjjHd0G2cEEHkktgDhX8FLhEX05vFqHnfXkoPY5X7RhhgLUPRx+nOr1bA73L7
+         naew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3muxJhNWv1hg7XONepRN26NwBDFTg3vZFivnKP3G+hw=;
+        b=owAIRCTwM6A/D/NIdjOS7XreUu6WAg/mKstc/IVC7VTfG9nCbvsDog6IKYRbdZrEpp
+         SabhYpETPM/GQLuCjcA693pH43KpnZ43w333ZU6zHwn+lgpYJQ2HLNRHPpsBJsBjdE/P
+         D9hx2A6teVfQShYSyrnLa6HRMk/7HBXCBnnPa5OXX48PEoGfkd+0pPIq2U3aCOtqVjiU
+         ykY6+3L06vZo6jlDKZprari0/YD5YmWMj3PsPEkb86I+6atqHdeHxv/RUfv9G3O84/pC
+         M4YkqpNkC8hoi4qnWMiB2+uYAen/Uu2ftN1F0brLehcY2RGwOVVIyFfKy3d2R93PdPgK
+         zaNw==
+X-Gm-Message-State: ACrzQf3AQUrw9XP4OxlkAup5XVOF1VopfjkkjWaPcO55ftmphEB6soFG
+        7FLpHkBdyspC20PVjHUfLFg=
+X-Google-Smtp-Source: AMsMyM7KzUH6zyRCq0rjPfxSwxmRq5ml7euKx/4M8cKfmc6iy6SK4ugTZjvTtd+gJ7hAo2SCwSXXFQ==
+X-Received: by 2002:a65:5688:0:b0:3c2:1015:988e with SMTP id v8-20020a655688000000b003c21015988emr349335pgs.280.1665674356367;
+        Thu, 13 Oct 2022 08:19:16 -0700 (PDT)
+Received: from localhost.localdomain (67.230.176.239.16clouds.com. [67.230.176.239])
+        by smtp.gmail.com with ESMTPSA id j63-20020a625542000000b00562e9f636e0sm2260596pfb.10.2022.10.13.08.19.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Oct 2022 08:19:15 -0700 (PDT)
+From:   Xiaobo Liu <cppcoffee@gmail.com>
+To:     davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaobo Liu <cppcoffee@gmail.com>
+Subject: [PATCH] net/atm: fix proc_mpc_write 1 byte less calculated
+Date:   Thu, 13 Oct 2022 23:19:01 +0800
+Message-Id: <20221013151901.29368-1-cppcoffee@gmail.com>
+X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
 MIME-Version: 1.0
-Date:   Thu, 13 Oct 2022 17:17:42 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <Y0ggn5SZnw+4SGLC@shredder>
-References: <20221009174052.1927483-1-netdev@kapio-technology.com>
- <20221009174052.1927483-10-netdev@kapio-technology.com>
- <21f799c5a7a79e2e4b111a95fff6fe3d@kapio-technology.com>
- <Y0ggn5SZnw+4SGLC@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <46112084313969f9a6dfdea9fe52b4b1@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-13 16:28, Ido Schimmel wrote:
-> On Wed, Oct 12, 2022 at 11:46:55AM +0200, netdev@kapio-technology.com 
-> wrote:
->> Ido, have you had time to look at this patch set, and do I need to 
->> release a
->> v8 to fix those two forgotten statics and maybe also this new 
->> switchcore
->> driver that was not there when I posted this patch set?
-> 
-> I don't know which changes you are referring to, but v8 should
-> incorporate all the changes requested so far. Do not post it as long as
-> net-next is closed (unless marked as RFC):
+Then the input contains '\0' or '\n', proc_mpc_write has read them,
+so the return value needs +1.
 
-Ohh, I missed declaring two functions as static in chip.c, and 
-unfortunately my compiler did not give me any warnings...
+Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
+---
+ net/atm/mpoa_proc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-What is the schedule for net-next to be open (I guess that it is closed 
-as of now)?
+diff --git a/net/atm/mpoa_proc.c b/net/atm/mpoa_proc.c
+index 829db9eba..444ceda60 100755
+--- a/net/atm/mpoa_proc.c
++++ b/net/atm/mpoa_proc.c
+@@ -224,8 +224,11 @@ static ssize_t proc_mpc_write(struct file *file, const char __user *buff,
+ 			free_page((unsigned long)page);
+ 			return -EFAULT;
+ 		}
+-		if (*p == '\0' || *p == '\n')
++
++		if (*p == '\0' || *p == '\n') {
++			len += 1
+ 			break;
++		}
+ 	}
+ 
+ 	*p = '\0';
+-- 
+2.21.0 (Apple Git-122.2)
 
-> 
-> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#how-often-do-changes-from-these-trees-make-it-to-the-mainline-linus-tree
