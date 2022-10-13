@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FFB5FDDDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E595FDDD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiJMQBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S229694AbiJMQBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJMQBK (ORCPT
+        with ESMTP id S229513AbiJMQBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:01:10 -0400
-Received: from mail-ot1-x349.google.com (mail-ot1-x349.google.com [IPv6:2607:f8b0:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F211A964
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:08 -0700 (PDT)
-Received: by mail-ot1-x349.google.com with SMTP id 104-20020a9d0371000000b00661c7c3f0beso186439otv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:08 -0700 (PDT)
+        Thu, 13 Oct 2022 12:01:00 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5012EFE927
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:00:59 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id o1-20020a170902d4c100b00177f59a9889so1549758plg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NqiBAv6+VkTIDngM0GJAXUgqa89MgZqUX29OFMPrrEM=;
-        b=kXLOth/pecVFm2kkZKFH1JceBXW7GEaN7oYMvWFruxc5a/HGs6T2gaf95D7KHrnKas
-         R3w3GsEGkShWBEUfpY/SDfb5IeBMQhnik0Sx4b1PE874TrT5rbtSpqdIo9tCHhjztKj8
-         7PgFuOA5ByVHVVRZkhqx5WJ812PRplpwgZA8CyFtoltx5d5uHPqxqa4+gt493nAWAnb0
-         W1z6O1R4mgK3ugYrq+jgWQFviEQFbUunYlR2/zh6dvhJ1Yq486bIfbjU2DNEtu9Q8jyH
-         i7fB1SpTJeHQry/ncZjRb2ViL0ppJDvViKiXBvwXyfrJ3YVKo4C8RI4Rba6xCRC3ITRy
-         6kTQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MFIZXP+0RvRDVkccAAekEgFLUK+lQGqw03T8y+VqePQ=;
+        b=MAazyoS2V7THRiFDYYrrOq38Kf4Z8t7qlDLZXLyAdEelxB2juuPZPHrgmYaXI7/l09
+         cC9pivN4wW60IymPa9roTYnEkbv7Lw8k42QPDv6xI+aIwyoXgjCe5dchPx5XvtE5dazN
+         NSeoxzxNxRSohb2VJoENXopTKZiZ3LGN95Cs8eRVA/feFNHmkJ547gOMu0aqiynUoAUs
+         Ac6j35o9lmhM1rWlUuPtmqQhZwCD3UxlJotuiAOHxXsOY4QbNO2N6KlyXV0y9TDWZPJ1
+         eisp1tLqUa8QAjs1IxZSSXTTLY169aJPJPVdF+tor5cdtnZ6WHZRXvJ9zNZ6leYmjXao
+         +u3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NqiBAv6+VkTIDngM0GJAXUgqa89MgZqUX29OFMPrrEM=;
-        b=aIUL3yoEpDmvmE0Ug8W3Ywqx8e9CjKaj0w/FrpDNJ1LmU+kTwBPz6i31cXGoiK30V6
-         R5S1+/44wcVPP+78LfWgPJjxSqP2vK+BYtiHzLbSONh7qSYUFfrRKhKVJpRYKLGHjubE
-         Q7zOVb2TA4ReBQv7mjz1kVPQ3pQ3qSofo/7PAswdGd8SPYsv6ALLgPlVDJFU5KZiM5no
-         p5auQVKGIv9l8q00dXJoaEbaWqgPFdXCrGtjN2HNqFoifWymJAM3VSaV6VfIehSc0dfF
-         N+HLFptms9fyBwoInUiYN2FZgFuf1bT+14i50uQIAqhZQNUwUWKJZpNKnH7gH8q7KNJv
-         QTNw==
-X-Gm-Message-State: ACrzQf3QvZv7lC/pz8OqWSJx+VaD5nKY8grylEuM2co3/rj4gMlo4Twe
-        jf+Sl82ovydosH28+8mNLXmAaP70hhBGJCshAyX7B+4TCZfvcg5JH8M0e4HKYS99jS8rgGbOCtm
-        v8wrnV2y1MwyDFXvzEMCkSiX2DqGx816Pppfu1diCAoz+jM4xr9Sz7H1350+L1vNjpc1Y2doNJs
-        dFzPO0msU=
-X-Google-Smtp-Source: AMsMyM501RMTCrdXeyN5TyTeWewWYCe8+uj+5aa3KRjLp/7Fwcg3IGhqQ1cefdtu/fEhDBRpPtLmCPLQ8M4v4y3vOg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MFIZXP+0RvRDVkccAAekEgFLUK+lQGqw03T8y+VqePQ=;
+        b=c4XQRTK3HT63HgGsw2MWquFpWxRh9Lr7TpETBOd4bgYTtjCVnn7K7OVxRlGWUizhYt
+         O/TDnNAMs+/TVBP49J91yNV/4AvWOYeSSdgkqhnX4zLv4caRS8TKMs2OG+09ttcfGyCR
+         IDWgQNgkBZsdyo3nErzHABWhBttIrEBrGrjpHaTbulWClduDlmkqGQI8zhMpRrEm+g7l
+         HQA3GGjt03luBjUSJ8SryLyQUxx/7WAx3fDnP7gWZrabjhc0kxWTU7wLg2iX3PQIBbgL
+         u7HL0rStmuDQgsnmc8+9pxN1Xm62So627MFpVJO+JjdruoFEq122YaHYejxrq2vpXdKM
+         i78w==
+X-Gm-Message-State: ACrzQf2p8cDJ0/74ZcLW5O1437zxl0qvs6RlOT7ysubXiUrSH7leOPqb
+        1PbyvmCup9wXIwRfwTCCqcZTv8q6D+R2pDpi+ggp3ELrcKviacbCvm6yWpuxQlGG3InPgv+zPdh
+        iCRg06vS47ayXjUsU/69Xw3Aj4Z7C3Sd1phFeF/kRfidxi2Kj0eFI2Bs0qqpL1qKELDx7TpJdAF
+        HshHU7nm0=
+X-Google-Smtp-Source: AMsMyM4PUVo7Xol1CSaEtsAq0hrjEyv1xy8leks5fVsOnLmK8rlbfda9JnmQ+bNpX50kiCQTyT2R9J9WwcveH1r2nA==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:90b:3850:b0:20d:54f2:a780 with
- SMTP id nl16-20020a17090b385000b0020d54f2a780mr12078380pjb.115.1665676856516;
- Thu, 13 Oct 2022 09:00:56 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 16:00:38 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a05:6a00:17a9:b0:563:3255:8601 with
+ SMTP id s41-20020a056a0017a900b0056332558601mr288210pfg.12.1665676858718;
+ Thu, 13 Oct 2022 09:00:58 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 16:00:39 +0000
+In-Reply-To: <20221013160040.2858732-1-dionnaglaze@google.com>
 Mime-Version: 1.0
+References: <20221013160040.2858732-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221013160040.2858732-1-dionnaglaze@google.com>
-Subject: [PATCH 0/2] Add throttling detection to sev-guest
+Message-ID: <20221013160040.2858732-2-dionnaglaze@google.com>
+Subject: [PATCH 1/2] x86/sev: Rename snp_guest_issue_request's fw_err
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
@@ -73,15 +75,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The guest request synchronous API from SEV-SNP VMs to the host's security
-processor consumes a global resource. For this reason, AMD's docs
-recommend that the host implements a throttling mechanism. In order for
-the guest to know it's been throttled and should try its request again,
-we need some good-faith communication from the host that the request
-has been throttled.
-
-These patches work with the existing /dev/sev-guest ABI to detect a
-throttling code.
+The GHCB specification declares that the firmware error value for a
+guest request will be stored in the lower 32 bits of EXIT_INFO_2.
+The upper 32 bits are for the VMM's own error code. The fw_err argument
+is thus a misnomer, and callers will need access to all 64 bits.
 
 Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
@@ -91,17 +88,64 @@ Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+---
+ arch/x86/include/asm/sev.h | 4 ++--
+ arch/x86/kernel/sev.c      | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Dionna Glaze (2):
-  x86/sev: Rename snp_guest_issue_request's fw_err
-  virt/coco/sev-guest: interpret VMM errors from guest request
-
- arch/x86/include/asm/sev.h              |  4 +--
- arch/x86/kernel/sev.c                   |  6 ++---
- drivers/virt/coco/sev-guest/sev-guest.c | 34 +++++++++++++++++--------
- include/uapi/linux/sev-guest.h          | 17 +++++++++++--
- 4 files changed, 43 insertions(+), 18 deletions(-)
-
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index ebc271bb6d8e..4312d6be129f 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
+ void snp_set_wakeup_secondary_cpu(void);
+ bool snp_init(struct boot_params *bp);
+ void __init __noreturn snp_abort(void);
+-int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
++int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *exitinfo2);
+ #else
+ static inline void sev_es_ist_enter(struct pt_regs *regs) { }
+ static inline void sev_es_ist_exit(void) { }
+@@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
+ static inline bool snp_init(struct boot_params *bp) { return false; }
+ static inline void snp_abort(void) { }
+ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
+-					  unsigned long *fw_err)
++					  unsigned long *exitinfo2)
+ {
+ 	return -ENOTTY;
+ }
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index a428c62330d3..a4eca63e8b90 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -2175,7 +2175,7 @@ static int __init init_sev_config(char *str)
+ }
+ __setup("sev=", init_sev_config);
+ 
+-int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
++int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *exitinfo2)
+ {
+ 	struct ghcb_state state;
+ 	struct es_em_ctxt ctxt;
+@@ -2186,7 +2186,7 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+ 		return -ENODEV;
+ 
+-	if (!fw_err)
++	if (!exitinfo2)
+ 		return -EINVAL;
+ 
+ 	/*
+@@ -2218,7 +2218,7 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
+ 			input->data_npages = ghcb_get_rbx(ghcb);
+ 
+-		*fw_err = ghcb->save.sw_exit_info_2;
++		*exitinfo2 = ghcb->save.sw_exit_info_2;
+ 
+ 		ret = -EIO;
+ 	}
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
