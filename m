@@ -2,73 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5B95FD1EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 02:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3845FD283
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJMA4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 20:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        id S229696AbiJMBZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 21:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbiJMA41 (ORCPT
+        with ESMTP id S229468AbiJMBZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 20:56:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BCDFAA7F;
-        Wed, 12 Oct 2022 17:53:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Oct 2022 21:25:47 -0400
+X-Greylist: delayed 1368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 18:25:39 PDT
+Received: from novek.ru (unknown [213.148.174.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD9EB56D0;
+        Wed, 12 Oct 2022 18:25:35 -0700 (PDT)
+Received: from [192.168.0.18] (unknown [37.228.234.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E07FB616C2;
-        Thu, 13 Oct 2022 00:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D289C433D7;
-        Thu, 13 Oct 2022 00:42:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="c+qkRwcv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665621760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j7iZS76qLB4/W9rx4TIV+v+RwhBtEPQjc2lWus9dwRc=;
-        b=c+qkRwcvbWT+fd/TLlyAsH4ndXksGM7Hc9/K1Gdk7r/LEkx5ZdIWKUWHXqRBW0BRNN5sq9
-        Np4NQ9+yabCSrYIojm18Yy+2L0pNJdUrEr8KIf+c3nNFa3r3aSKaHIz7wfp6xAq+XSjQkv
-        ehnt1OpIhGTKi0gWB7A0xw9Z4MkjzIo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0e99f50a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 13 Oct 2022 00:42:40 +0000 (UTC)
-Date:   Wed, 12 Oct 2022 18:42:34 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 18/19] crypto: x86 - standardize not loaded prints
-Message-ID: <Y0de+gl0irG+eNpT@zx2c4.com>
-References: <20221006223151.22159-1-elliott@hpe.com>
- <20221012215931.3896-1-elliott@hpe.com>
- <20221012215931.3896-19-elliott@hpe.com>
+        by novek.ru (Postfix) with ESMTPSA id 0C40B500669;
+        Thu, 13 Oct 2022 03:39:49 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 0C40B500669
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
+        t=1665621591; bh=ixeQ2bDkrFAa8j/pTu1c+7sHh9CHcjnL5tH54cA/vxQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=nNqBOu7ZDGDxqH9tfsCbrwz7rXz1l7hHXzk36zIfKtpuY1gEBuBaOki31jYTQX615
+         Fg02vMEUXHeY+QFkoh/RniWBKNhxOhjbJHlOO8aOxQ/rVQxkgvfpTe9qxFg5E7kIl0
+         3W7MTxA0M6HonqILxQZHA5vPMQrfuMcUXShqmGY0=
+Message-ID: <f87d7615-a978-4f9e-f124-635789fa5874@novek.ru>
+Date:   Thu, 13 Oct 2022 01:43:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221012215931.3896-19-elliott@hpe.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: bridge:fragmented packets dropped by bridge
+Content-Language: en-US
+To:     Vyacheslav Salnikov <snordicstr16@gmail.com>,
+        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <CACzz7uzbSVpLu8iqBYXTULr2aUW_9FDdkEVozK+r-BiM2rMukw@mail.gmail.com>
+From:   Vadim Fedorenko <vfedorenko@novek.ru>
+In-Reply-To: <CACzz7uzbSVpLu8iqBYXTULr2aUW_9FDdkEVozK+r-BiM2rMukw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 04:59:30PM -0500, Robert Elliott wrote:
-> Standardize the prints that additional required CPU features are not
-> present along with the main CPU features (e.g., OSXSAVE is not
-> present along with AVX).
+On 07.10.2022 12:21, Vyacheslav Salnikov wrote:
+> Hi.
 > 
-> Although modules are not supposed to print unless loaded and
-> active, these are existing exceptions.
+> I switched from kernel versions 4.9 to 5.15 and found that the MTU on
+> the interfaces in the bridge does not change.
+> For example:
+> I have the following bridge:
+> bridge      interface
+> br0          sw1
+>                 sw2
+>                 sw3
+> 
+> And I change with ifconfig MTU.
+> I see that br0 sw1..sw3 has changed MTU from 1500 -> 1982.
+> 
+> But if i send a ping through these interfaces, I get 1500(I added
+> prints for output)
+> I investigated the code and found the reason:
+> The following commit came in the new kernel:
+> https://github.com/torvalds/linux/commit/ac6627a28dbfb5d96736544a00c3938fa7ea6dfb
+> 
+> And the behavior of the MTU setting has changed:
+>>
+>> Kernel 4.9:
+>> if (net->ipv4.sysctl_ip_fwd_use_pmtu ||
+>>     ip_mtu_locked(dst) ||
+>>     !forwarding)  <--- True
+>> return dst_mtu(dst) <--- 1982
+>>
+>>
+>> / 'forwarding = true' case should always honour route mtu /
+>> mtu = dst_metric_raw(dst, RTAX_MTU);
+>> if (mtu)
+>> return mtu;
+> 
+> 
+> 
+> Kernel 5.15:
+>>
+>> if (READ_ONCE(net->ipv4.sysctl_ip_fwd_use_pmtu) ||
+>>     ip_mtu_locked(dst) ||
+>>     !forwarding) { <--- True
+>> mtu = rt->rt_pmtu;  <--- 0
+>> if (mtu && time_before(jiffies, rt->dst.expires)) <-- False
+>> goto out;
+>> }
+>>
+>> / 'forwarding = true' case should always honour route mtu /
+>> mtu = dst_metric_raw(dst, RTAX_MTU); <---- 1500
+>> if (mtu) <--- True
+>> goto out;
+> 
+> As I see from the code in the end takes mtu from br_dst_default_metrics
+>> static const u32 br_dst_default_metrics[RTAX_MAX] = {
+>> [RTAX_MTU - 1] = 1500,
+>> };
+> 
+> Why is rt_pmtu now used instead of dst_mtu?
+> Why is forwarding = False called with dst_metric_raw?
+> Maybe we should add processing when mtu = rt->rt_pmtu == 0?
+> Could this be an error?
+> 
+If you compare ipv4_mtu code from 4.9 you will see that the very first mtu value 
+is filled by rt->rt_pmtu value. I believe there were changes to the bridge code 
+where rt_pmtu value got empty or cleared.
 
-Another comma splice. But also, don't do this. No need to clutter dmesg.
-`lsmod` is the job for this.
+I'm still looking for the root cause of the problem, will update you once I find it.
 
-Jason
+
+> 
+> I found a thread discussing a similar problem. It suggested porting
+> the next patch:
+> Signed-off-by: Rundong Ge <rdong.ge@gmail.com>
+> ---
+>   include/net/ip.h | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/net/ip.h b/include/net/ip.h
+> index 29d89de..0512de3 100644
+> --- a/include/net/ip.h
+> +++ b/include/net/ip.h
+> @@ -450,6 +450,8 @@ static inline unsigned int
+> ip_dst_mtu_maybe_forward(const struct dst_entry *dst,
+>   static inline unsigned int ip_skb_dst_mtu(struct sock *sk,
+>      const struct sk_buff *skb)
+>   {
+> + if ((skb_dst(skb)->flags & DST_FAKE_RTABLE) && skb->dev)
+> + return min(skb->dev->mtu, IP_MAX_MTU);
+>    if (!sk || !sk_fullsock(sk) || ip_sk_use_pmtu(sk)) {
+>    bool forwarding = IPCB(skb)->flags & IPSKB_FORWARDED;
+> 
+> 
+> Why was this patch not accepted in the end?
+
