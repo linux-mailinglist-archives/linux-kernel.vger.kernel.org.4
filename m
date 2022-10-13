@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815AF5FD496
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B88A5FD49B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJMGQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 02:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S229749AbiJMGS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJMGQh (ORCPT
+        with ESMTP id S229471AbiJMGS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:16:37 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6252257575;
-        Wed, 12 Oct 2022 23:16:36 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 896392052E;
-        Thu, 13 Oct 2022 08:16:34 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tbJE7XzYVTHr; Thu, 13 Oct 2022 08:16:34 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        Thu, 13 Oct 2022 02:18:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDBC11C6C2;
+        Wed, 12 Oct 2022 23:18:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 0FDB02050A;
-        Thu, 13 Oct 2022 08:16:34 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 016E680004A;
-        Thu, 13 Oct 2022 08:16:34 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 13 Oct 2022 08:16:33 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 13 Oct
- 2022 08:16:33 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 244673180C45; Thu, 13 Oct 2022 08:16:33 +0200 (CEST)
-Date:   Thu, 13 Oct 2022 08:16:33 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     Christian Langrock <christian.langrock@secunet.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH ipsec v6] xfrm: replay: Fix ESN wrap around for GSO
-Message-ID: <20221013061633.GS2950045@gauss3.secunet.de>
-References: <6810817b-e6b7-feac-64f8-c83c517ae9a5@secunet.com>
- <Y0aI2bGb24M5vA7B@gondor.apana.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A29761703;
+        Thu, 13 Oct 2022 06:18:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FFA1C433C1;
+        Thu, 13 Oct 2022 06:18:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665641904;
+        bh=TSm77JhHSOI5WJHsFYrU+vCm1pZiDiibejvje9KTRUo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BoC8ZOb3DSCXhEsKSNLk2/bq9Fz7i5hehIkn0E1+3l7nKXMlF5nve+yIRUOp0Y0QT
+         gJ2xNTPsWE0Gz83R4LgWjwUZi4ZvJaccBtoxZHDwLb7i5ewCZXnWqMXerM/KcpfgX8
+         A4Xt3ulFsjeDCSGVWKJ9ED5/XD7LdXihkAL7GWu3DYq4jmxzrTOmxwirX98P1ITa5C
+         vtfFcx1Bm7fsWmyXWCXxInKhjL+EYLdhNPQEP7MVAOT7Sgx1lelF/3jO6g1WQXwn2g
+         kcGi2GHBbuofi7NEpopFk0ig17VZ/iNoQXw81lLwcih98xmrA97Ma/WnftQF4AA5DA
+         Ayw6TFTC3qEnw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C340A5C0B2D; Wed, 12 Oct 2022 23:18:20 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 23:18:20 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Yunjae Lee <lyj7694@gmail.com>
+Cc:     SeongJae Park <sj@kernel.org>, corbet@lwn.net,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] docs/memory-barriers/kokr: Update the content
+Message-ID: <20221013061820.GW4221@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221011025809.25821-1-sj@kernel.org>
+ <CAE+zRGXBOyyvDsPYVAVwuKT1NzAKgoR939SUu6X5LnhXOUzqyA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y0aI2bGb24M5vA7B@gondor.apana.org.au>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE+zRGXBOyyvDsPYVAVwuKT1NzAKgoR939SUu6X5LnhXOUzqyA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 05:28:57PM +0800, Herbert Xu wrote:
-> On Fri, Oct 07, 2022 at 04:50:15PM +0200, Christian Langrock wrote:
-> > When using GSO it can happen that the wrong seq_hi is used for the last
-> > packets before the wrap around. This can lead to double usage of a
-> > sequence number. To avoid this, we should serialize this last GSO
-> > packet.
-> > 
-> > Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for offloading")
-> > Co-developed-by: Steffen Klassert <steffen.klassert@secunet.com>
-> > Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
-> > ---
-> > Changes in v6:
-> >  - move overflow check to offloading path to avoid locking issues
-> > 
-> > Changes in v5:
-> >  - Fix build
-> > 
-> > Changes in v4:
-> >  - move changelog within comment
-> >  - add reviewer
-> > 
-> > Changes in v3:
-> > - fix build
-> > - remove wrapper function
-> > 
-> > Changes in v2:
-> > - switch to bool as return value
-> > - remove switch case in wrapper function
-> > ---
-> >  net/ipv4/esp4_offload.c |  3 +++
-> >  net/ipv6/esp6_offload.c |  3 +++
-> >  net/xfrm/xfrm_device.c  | 15 ++++++++++++++-
-> >  net/xfrm/xfrm_replay.c  |  2 +-
-> >  4 files changed, 21 insertions(+), 2 deletions(-)
+On Thu, Oct 13, 2022 at 08:30:29AM +0900, Yunjae Lee wrote:
+> Hi, the new patchset looks fine to me.
 > 
-> Could you please explain how this code restructure makes it safe
-> with respect to multiple users of the same xfrm_state?
+> Reviewed-by: Yunjae Lee <lyj7694@gmail.com>
 
-That is because with this patch, the sequence number from the xfrm_state
-is assigned to the skb and advanced by the number of segments while
-holding the state lock, as it was before. The sequence numbers this
-patch operates on are exclusive and private to that skb (and its
-segments). The next skb will checkout the correct number from the
-xfrm_state regardless on which cpu it comes.
+Applied, thank you both!
+
+							Thanx, Paul
+
+> Regards,
+> Yunjae
+> 
+> On Tue, Oct 11, 2022 at 11:58 SeongJae Park <sj@kernel.org> wrote:
+> 
+> > There are updates to memory-barriers.txt that not applied to the Korean
+> > translation.  This patchset applies the changes.
+> >
+> > Changes from v1
+> > (https://lore.kernel.org/all/20221008174928.13479-1-sj@kernel.org/)
+> > - Drop first one, which is not for translation and already pulled
+> > - Use better expressions for Korean (Yunjae Lee)
+> > - Fix a typo (Yunjae Lee)
+> >
+> > SeongJae Park (3):
+> >   docs/memory-barriers.txt/kokr: introduce io_stop_wc() and add
+> >     implementation for ARM64
+> >   docs/memory-barriers.txt/kokr: Add memory barrier dma_mb()
+> >   docs/memory-barriers.txt/kokr: Fix confusing name of 'data dependency
+> >     barrier'
+> >
+> >  .../translations/ko_KR/memory-barriers.txt    | 149 ++++++++++--------
+> >  1 file changed, 85 insertions(+), 64 deletions(-)
+> >
+> > --
+> > 2.17.1
+> >
+> > --
+> 감사합니다.
+> 이윤재 드림
