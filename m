@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4EC5FE478
+	by mail.lfdr.de (Postfix) with ESMTP id B30E65FE47A
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJMVuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S230140AbiJMVtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiJMVtj (ORCPT
+        with ESMTP id S229827AbiJMVtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:49:39 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A457194F96
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:49:11 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 129so2678144pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:49:11 -0700 (PDT)
+        Thu, 13 Oct 2022 17:49:32 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080E036BF6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:49:09 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id i3so3115359pfc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
          :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aa6ranh9iRasjoS2Kj2d4o4SlgNu10NUJ0u0bZB5AJA=;
-        b=z+ZeS+/L8+VqUgwiDIehsX9N9VLyDedAyAIe9dyZO68zr4geeyQgp/cSkSRkJ7WwTy
-         DziaL0vIrHiVaFPHTreK5VNRZWuR2aWHC69R/vKHyrNOisAsULcaL0Uh4aCs/wYok1mc
-         u1B6JmNNR5Y9t9pj0ZqrrOeg8M/To6gerZuwuwXsRRjZVUIfBPp2hkXP7UClELKm7DGD
-         00+SVuuH/0fBpgk1/vxp9g1p5mdoDG1IZ1zuljO8iPzArMbQHJAZsvzUaRWpk9S1oZo3
-         kp/5sRDM+D5NaRPngKdJeHu+DrdoGlBvnTHXGy/W2YTf7kHkTJWwuIV3nFDHk3aCibKX
-         F6EA==
+        bh=HU/Gcb/2UahetsVrfFKFSRpifT9WH9AovTUmej45BRM=;
+        b=SXetiZgzOZy/gRXhaW1c45RlvPilcMDdnFIzQYxFCkLqDpOjY0zv/u+xapn1G9pin8
+         x0aKVLobV7U3pIoDH4luAyRfpGtgJ8G+DbIhypSGdzj2+L9m858860OyjsDJzk4g6yHc
+         6Fat5EM06SW6JlueCAJml+Pbsm+KE7dl4WPx2/rhe1trQXOESw3l03tBAABzupHfz+iX
+         h4sQ8Ev5HFUYF6pH7RILs1nAGJD72ttEpKbqW6x47Hb7LDpoKY6zKpF6rpSLovkrEn5N
+         DmfiV/pupk3XlkkHfh0/bB+7sICDbVsf1h610RdYVs7HHE8zEvkncyoLlVNHQRbTs/1E
+         Sq1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
          :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Aa6ranh9iRasjoS2Kj2d4o4SlgNu10NUJ0u0bZB5AJA=;
-        b=vp7nKoxU1Z62m2s3KITGOOk7KlWK0HumGY7sSSC8VYLkGTMyP8gvbEXLPWjGFdLHZW
-         HDyIuLPLXDpvJxVQ7hpc0vKTWXHiO6WoUoFtg6Z8BSs4+3kt+QTXJBqFViHJd+GeaM5i
-         Py4URixmrAXPFwKmTu61TUo1coiYZuuMYmvk9iRjHf2U18Ut6eeoh/Q+4396RUqiG9yw
-         b6Ry8HHuUfkU6idU4xeVfu/zP3tB0P62C2kwZJOJoATgcuPyP9A25axnZvavwo2mQRGf
-         y24fKXffZPOUsGZClm0yAfZWXHvg+u3CTjEBv7aKdw4pJ2/i7FMZeKsoTTBMtGyAkvIU
-         +Y0Q==
-X-Gm-Message-State: ACrzQf2XKf5BX/QNG7Sn5hC72uLgaywSGA2DLN7kiovngKDNMF2TZp8V
-        nSGBCnc6bYmeePaEDjkFKENgsyM5nzQaJqOi
-X-Google-Smtp-Source: AMsMyM782X7VQKQ3S/uMDUknqfy6gLUd7HvQlOYTMdVueAFzZtFrRi+2avOl9MF8Li1JSC2vK1XZvw==
-X-Received: by 2002:a63:c06:0:b0:439:9b18:8574 with SMTP id b6-20020a630c06000000b004399b188574mr1693470pgl.608.1665697749025;
-        Thu, 13 Oct 2022 14:49:09 -0700 (PDT)
+        bh=HU/Gcb/2UahetsVrfFKFSRpifT9WH9AovTUmej45BRM=;
+        b=T5sujewslUl1DePycdCF++p25TqDs+yjyaT/YaNjVTBEIQt7wYKRy9A9m5GVPi2X8Z
+         SDtBwbm62DCFHmFoKgf26eYsOqQbpukwM7bDdmuE1NJYH+K09vchkrWqWADzKXTzDQNp
+         b+juV9D5aLFCmXnLXiYoiDHcQcWMAiAWx381thowpwXX5B5m2FMiP5GvXHrX3EFv0sgs
+         K5d036kdFGkG4GeQ4DGkQWR2upVGJzbmnsjzm2Dhd+oo7xFTuS3U8rD1/kxBT7guNUKI
+         VxDj/aCFUzzX59vXGISTBC+zkyL0gQr/5B6n+bNfniDfPkidcm60aLogehRvZLZ/w9uf
+         aCIA==
+X-Gm-Message-State: ACrzQf2gsx1Yi6J+AIa9nieRzPUB8oaaqh2MshabI+OUBiF2aY+4f4ZM
+        ca2EaQXdBsYS2fEmQHP8XpCOgvwQLUdAp0vQ
+X-Google-Smtp-Source: AMsMyM60OkHIOwoPqQ6hTn09WuntLhSe+6TG9sOifv9QZgzwwhSqU+qtIUu+gCz5eCx/9FtHd8DBew==
+X-Received: by 2002:a65:4585:0:b0:464:4538:c0bc with SMTP id o5-20020a654585000000b004644538c0bcmr1701513pgq.455.1665697747885;
+        Thu, 13 Oct 2022 14:49:07 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id p189-20020a625bc6000000b00562e9f636e0sm196610pfb.10.2022.10.13.14.49.08
+        by smtp.gmail.com with ESMTPSA id z188-20020a6233c5000000b00561c3ec5346sm164607pfz.129.2022.10.13.14.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 14:49:08 -0700 (PDT)
-Subject: [PATCH] MAINTAINERS: git://github -> https://github.com for konis
+        Thu, 13 Oct 2022 14:49:07 -0700 (PDT)
+Subject: [PATCH] MAINTAINERS: git://github -> https://github.com for jonmason
 Date:   Thu, 13 Oct 2022 14:46:38 -0700
-Message-Id: <20221013214638.30933-1-palmer@rivosinc.com>
+Message-Id: <20221013214638.30913-1-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,10 +59,11 @@ Cc:        linux-kernel@vger.kernel.org,
            Palmer Dabbelt <palmer@rivosinc.com>,
            Conor Dooley <conor.dooley@microchip.com>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     konishi.ryusuke@gmail.com, linux-nilfs@vger.kernel.org
+To:     jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        ntb@lists.linux.dev
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,18 +85,18 @@ thus need more than just a sed to fix them.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index d118acdce8b8..c9c396e2d8a0 100644
+index c9c396e2d8a0..796ba37dd4ff 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -14363,7 +14363,7 @@ L:	linux-nilfs@vger.kernel.org
+@@ -14465,7 +14465,7 @@ M:	Allen Hubbe <allenbh@gmail.com>
+ L:	ntb@lists.linux.dev
  S:	Supported
- W:	https://nilfs.sourceforge.io/
- W:	https://nilfs.osdn.jp/
--T:	git git://github.com/konis/nilfs2.git
-+T:	git https://github.com/konis/nilfs2.git
- F:	Documentation/filesystems/nilfs2.rst
- F:	fs/nilfs2/
- F:	include/trace/events/nilfs2.h
+ W:	https://github.com/jonmason/ntb/wiki
+-T:	git git://github.com/jonmason/ntb.git
++T:	git https://github.com/jonmason/ntb.git
+ F:	drivers/net/ntb_netdev.c
+ F:	drivers/ntb/
+ F:	drivers/pci/endpoint/functions/pci-epf-*ntb.c
 -- 
 2.38.0
 
