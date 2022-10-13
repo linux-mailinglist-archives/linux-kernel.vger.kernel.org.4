@@ -2,110 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2808A5FD802
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 12:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C245FD804
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJMK67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 06:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S229616AbiJMLA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJMK6z (ORCPT
+        with ESMTP id S229547AbiJMLAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 06:58:55 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34CFFC1FF;
-        Thu, 13 Oct 2022 03:58:54 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id 13so3088279ejn.3;
-        Thu, 13 Oct 2022 03:58:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8Lph9QewdspU86uTpI642hBsrAlRtNCeQ+DaqfFhG9U=;
-        b=wNormfg4f1ueuirBSjKx/TFRXPF5OMadrsxrRlu4uXpK6cakYwVhGd1LsKfiCUZqGM
-         unZTn+6+Lf3l00XQcMlddvJwg+KVriFyt6A+lTa1yce/mPQVYiMtG6SqEjgsEHogJDkI
-         8bXkfCHvAJzCEysoJvAzHxWj3Bb28xiB2g+wz5LZ5AEBUz5UVIlC8LoTDQlMsGkFGXRK
-         PFCU1gdg2Vso/iZr9dhFIXnVfoYnyRWg7aB88MgibZ+wc62O94kanDdNzEf2ZNzj7R/U
-         3CUwAETEeqE4Y378UQvWdMAVArH1evzxsB5lWea4o8xxTLJ5kCt+beabyK0QXVIj8/gl
-         AaNw==
-X-Gm-Message-State: ACrzQf2FHDE6DFcwp9AkCfFY3ZiKUcQyePPdeKnPXq9QwEZTNqit0ZFB
-        YYfRyGwyJVot2ocP2iM4Za+WXJrS9eBLzNJqz/0=
-X-Google-Smtp-Source: AMsMyM7batjO0NidwoBTmwYpBKA6THbna2UbS/u8Aj+2m7wZ7toM20QkeWYdXlu49EO/uyOyf238l4rwr5YFgfq5zSA=
-X-Received: by 2002:a17:907:2c59:b0:78d:8e03:134 with SMTP id
- hf25-20020a1709072c5900b0078d8e030134mr21769639ejc.310.1665658733244; Thu, 13
- Oct 2022 03:58:53 -0700 (PDT)
+        Thu, 13 Oct 2022 07:00:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67160C9D;
+        Thu, 13 Oct 2022 04:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1kt3Nt1T71dSHeBMzhW3EUeOzPlxOUDZLoubcBCIwV8=; b=sGG1MCa6hZQMG59So6zoxk0b3y
+        MPNgF7h6vElznfKaZefWySoFCwCy9MeJvjGyqJKlUahKRcHH2zWU/HL5nmF49JHtKOoRdH5UPvHGr
+        V0fMjATm/E/JaTWiYG9IKXFxuWfy35cFuQS9WA/Fit2ixtVJFw1tkrzk0K0j+2I9P2S/+fE1fBJPy
+        zycy4+djRv7LW0h4qZjCl7e/IR2a2+QhB8GN1bCzdMohAsJxhtV7F5qmf1gfn0sPxJE4/AWk+v8QL
+        L/WNd0IEAK+Bblx2F1+phbZTCeBpt99TDmviSxSg587+4Y+g9HoMTT2IUu9Gx1kffFyCVRC26Fkhc
+        MdASJ0Bg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oivwR-006ekn-JJ; Thu, 13 Oct 2022 10:59:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0CC96300446;
+        Thu, 13 Oct 2022 12:59:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EB92B2BB8B0C7; Thu, 13 Oct 2022 12:59:49 +0200 (CEST)
+Date:   Thu, 13 Oct 2022 12:59:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        will@kernel.org, robh@kernel.org, mingo@redhat.com,
+        catalin.marinas@arm.com, ndesaulniers@google.com,
+        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v2] perf: Rewrite core context handling
+Message-ID: <Y0fvpQEEl/tK6mJ5@hirez.programming.kicks-ass.net>
+References: <20221008062424.313-1-ravi.bangoria@amd.com>
+ <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
+ <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
+ <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
+ <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
+ <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
+ <Y0awHa8oS5yal5M9@hirez.programming.kicks-ass.net>
+ <Y0cn1xazYpNmqhRo@hirez.programming.kicks-ass.net>
+ <99caec5f-dcdf-70c6-8909-11552ce42a20@amd.com>
 MIME-Version: 1.0
-References: <20220922133800.12918-1-rui.zhang@intel.com> <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
- <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
-In-Reply-To: <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Thu, 13 Oct 2022 12:58:41 +0200
-Message-ID: <CAJvTdKkYTQzY1UsH_o2QdN1bS4gVfT87bEwMvgUXYwd+VFD+=w@mail.gmail.com>
-Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-hwmon@vger.kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, corbet@lwn.net,
-        fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
-        len.brown@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99caec5f-dcdf-70c6-8909-11552ce42a20@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series of BUG FIXES needs to be marked for -stable.
+On Thu, Oct 13, 2022 at 03:37:23PM +0530, Ravi Bangoria wrote:
 
-What testing is it waiting for?
-I don't see upstream, in linux-next or in tip -- which means that
-nobody is testing it.
+> > -	refcount_t			refcount;
+> > +	refcount_t			refcount; /* event <-> ctx */
+> 
+> Ok. We need to remove all those // XXX get/put_ctx() from code
+> which we added to make refcount a pmu_ctx <-> ctx.
 
-Are we supposed to be pulling from the URL below to get the latest???
+Them already gone :-) I've not yet fixed up the typoes, but current
+version should be here:
 
-The latest Intel Hybrid CPUs are sort of a mess without this series.
-Distros will need to back-port it.
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=perf/core
 
-thanks,
--Len
-
-On Fri, Sep 23, 2022 at 10:40 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Hi, Dave,
->
-> On Thu, 2022-09-22 at 09:53 -0700, Dave Hansen wrote:
-> > > Changes since V2:
-> > >  - changelog improvements based on Peter' feedback
-> > >  - Remove combined tags
-> >
-> > I fixed those up and started testing your v2 yesterday.
->
-> Thanks for doing this.
->
-> >   Can you
-> > double-check that this:
-> >
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=cpuid1f
-> >
-> > Looks the same as your v3?
->
-> There is no code difference.
-> Just that I have updated the subject and changelog of patch 1/8 per
-> Peter' suggestion
-> https://lore.kernel.org/lkml/8496afee057d63b83a7ff02ec7f1de8c2d0e97ae.camel@intel.com/
->
-> thanks,
-> rui
->
-
-
--- 
-Len Brown, Intel
+Thanks!
