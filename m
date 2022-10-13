@@ -2,140 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC1C5FD935
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61B75FD94E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJMMaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S229726AbiJMMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiJMMav (ORCPT
+        with ESMTP id S229513AbiJMMjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:30:51 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A2AD258B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:30:49 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id o67so1130712qvo.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=390wRPD9oe0xd/uU6WvHiSqS/MuVjNl5zczVPfqBsBg=;
-        b=yNPj4OaJGCY11Uif7Ct3WjVbag7S3DlIvdhknbtIL6sUVINs6EKBi46FfRYAhsLrdN
-         X1crCWv0aa80GCQdmRyjSdvzQM1U5utSgYP6yIPukzj7myYEfhm6UsBnizr+hJ2ibEPA
-         2mEcEU4miIkLLuHJg5It4JvUIdEXEAT5bV7FoF98N8w1gCXN8pegmEDvKkk/CoUhD4Jm
-         QadoMCni0eNEzRxie4ReRhY8fiD5cRsEW9SDw/UwKj2u+BT1gDEY9HjoC8uVqy9HN85O
-         2pitzE3eElslji7v1gfRy4RhqoccuD4LaWdPi/Z/O3J8s8kzEQUP4YgSaiyK2xmCwlhT
-         tSDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=390wRPD9oe0xd/uU6WvHiSqS/MuVjNl5zczVPfqBsBg=;
-        b=5ju7ffoMq9i0h0Xf9NbZqQ4Acx8UwsQiTHThaJgnS1X3B3uv+sBtixXCjxITIhd96q
-         nZjlFCPQl6j/2MOBnoeAEcB1l6A1Ice22nS8crq/K3+E4mbiwmBUPunCm7xCYRs97uu6
-         jDB6g4PHONTXls2OvweO4FYZaeloMjvdEOSvYzovTqZHiA8aqW5/DM48legETyQRiqvS
-         vEO6rwGquvx6sI92SoYCLseqC5eoy3M6V1gOHPzyzum4+5Y9nVdmQiR3IlENalThvk4A
-         18jwAkhs8zSSEhXx2tmxwIrZ68XarHPnMnq4sydHAIiPsggZl9g7XT3rPpHRYCcaKnuG
-         baFQ==
-X-Gm-Message-State: ACrzQf2XlAJKKho/cKhH1DJP398kjU6KzQPGQwcuYbt+IjhmleJGfWtf
-        FcWrhrSmBbfL2BCVCh6yOz/oWQ==
-X-Google-Smtp-Source: AMsMyM7i9FnSn4FHPOjamLwitqnVbZj6hoNBEAuS60cFFO20v9rF1UmJBF12yB2i3drGw2XYFsFnlw==
-X-Received: by 2002:a05:6214:1d24:b0:4b1:8acb:b3bc with SMTP id f4-20020a0562141d2400b004b18acbb3bcmr26794446qvd.126.1665664248312;
-        Thu, 13 Oct 2022 05:30:48 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id dt39-20020a05620a47a700b006ec59941acasm13206478qkb.11.2022.10.13.05.30.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 05:30:47 -0700 (PDT)
-Message-ID: <84dee7a6-f8f7-75ee-b0a2-5c1516e7c0fd@linaro.org>
-Date:   Thu, 13 Oct 2022 08:28:37 -0400
+        Thu, 13 Oct 2022 08:39:40 -0400
+X-Greylist: delayed 472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Oct 2022 05:39:36 PDT
+Received: from wilbur.contactoffice.com (wilbur.contactoffice.com [212.3.242.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A271D6;
+        Thu, 13 Oct 2022 05:39:36 -0700 (PDT)
+Received: from smtpauth1.co-bxl (smtpauth1.co-bxl [10.2.0.15])
+        by wilbur.contactoffice.com (Postfix) with ESMTP id CC4AF1207;
+        Thu, 13 Oct 2022 14:31:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665664302;
+        s=20220911-jt8y; d=wired4ever.net; i=sndanailov@wired4ever.net;
+        h=From:Cc:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
+        l=1945; bh=M9N/7nWDqlxLQOR6V0NKYvTK2UrdV1FKuUtNqKoS8Os=;
+        b=iSdfME4dI2biXPD3Zob+E/iABuqzlwyLdEGcO+gCLGr9jseukiO8u8SYFxC3N9IC
+        H+r2KL8tniACXYw4oSoe3yoFFIuYhnloytJaRGlY9EJfqhVVHImnKKdif86dOO3CcWr
+        X3gRTIzMYYVJwIOwhaZdISIsFjsjNvSBaQQZSsIR+IHUwdGCqjG1UEhpwyPvAsWifb3
+        v9XkgPdCVgeDz8FP5nkPGalHy4e8KgbbCk0cln5I1iSZuLSLrRAzV+vEcLitqShft7V
+        lND4cyuhC4B8/mkfInIBYyY1u6VjJCml0Up9r9OwkacYl5jWL9R2Y4v8o5haSUJ11pS
+        fiCpimHfgA==
+Received: by smtp.mailfence.com with ESMTPSA ; Thu, 13 Oct 2022 14:31:40 +0200 (CEST)
+From:   sndanailov@wired4ever.net
+To:     corbet@lwn.net
+Cc:     rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sotir Danailov <sndanailov@wired4ever.net>
+Subject: [PATCH] doc: process: add privacy warning when using some SMTP servers
+Date:   Thu, 13 Oct 2022 14:31:15 +0200
+Message-Id: <20221013123115.17419-1-sndanailov@wired4ever.net>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: msm8996: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     konrad.dybcio@somainline.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221012151545.39061-1-krzysztof.kozlowski@linaro.org>
- <20221012151545.39061-2-krzysztof.kozlowski@linaro.org>
- <99ae66c725776f110272cdc2359241f7@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <99ae66c725776f110272cdc2359241f7@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ContactOffice-Account: com:378009619
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 14:32, konrad.dybcio@somainline.org wrote:
-> On 2022-10-12 17:15, Krzysztof Kozlowski wrote:
->> DT schema expects TLMM pin configuration nodes to be named with
->> '-state' suffix and their optional children with '-pins' suffix.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/apq8096-db820c.dts   |  96 ++++------
->>  arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts  |  68 ++------
->>  .../dts/qcom/msm8996-sony-xperia-tone.dtsi    |  26 +--
->>  .../boot/dts/qcom/msm8996-xiaomi-common.dtsi  |  10 +-
->>  .../boot/dts/qcom/msm8996-xiaomi-gemini.dts   |   8 +-
->>  .../boot/dts/qcom/msm8996-xiaomi-natrium.dts  |   4 +-
->>  .../boot/dts/qcom/msm8996-xiaomi-scorpio.dts  |   8 +-
->>  arch/arm64/boot/dts/qcom/msm8996.dtsi         | 164 +++++++++---------
->>  8 files changed, 153 insertions(+), 231 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
->> b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
->> index 5cdc7ac1a9c0..a3d1ff1aba8f 100644
->> --- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
->> +++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
->> @@ -422,82 +422,46 @@ &tlmm {
->>  		"NC", /* GPIO_148 */
->>  		"NC"; /* GPIO_149 */
->>
->> -	sdc2_cd_on: sdc2_cd_on {
->> -		mux {
->> -			pins = "gpio38";
->> -			function = "gpio";
->> -		};
->> -
->> -		config {
->> -			pins = "gpio38";
->> -			bias-pull-up;		/* pull up */
->> -			drive-strength = <16>;	/* 16 MA */
->> -		};
->> +	sdc2_cd_on: sdc2-cd-on-state {
->> +		pins = "gpio38";
->> +		function = "gpio";
->> +		bias-pull-up;
->> +		drive-strength = <16>;
-> How about drive-strength before bias- properties? I think most DTs have 
-> it like that.
+From: Sotir Danailov <sndanailov@wired4ever.net>
 
-Sure, I can move it.
+Warn the user about "Received" headers and how some
+SMTP servers use them by attaching the user's IP addresses,
+when using some email clients. Add suggestion on how to
+test this behavior and how to avoid it.
 
-> 
-> Other than that,
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Sotir Danailov <sndanailov@wired4ever.net>
+---
+ Documentation/process/email-clients.rst | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/process/email-clients.rst b/Documentation/process/email-clients.rst
+index fc2c46f3f82d..9c49f9b33fdb 100644
+--- a/Documentation/process/email-clients.rst
++++ b/Documentation/process/email-clients.rst
+@@ -350,3 +350,24 @@ although tab2space problem can be solved with external editor.
+ 
+ Another problem is that Gmail will base64-encode any message that has a
+ non-ASCII character. That includes things like European names.
++
++Privacy/Security
++----------------
++
++Keep in mind, that even if you're using a working email client, the SMTP
++server might have configurations you don't like.
++
++For example, if you decide to use the Gmail SMTP server with the Thunderbird
++client, the server will add your private and public IPs into "Received"
++headers, which are attached to all of your sent emails. This is done
++to avoid spam and to check where in the routing path an error might have
++occurred. Gmail's web GUI client doesn't add your IPs, because it's sent from
++Google's servers directly, not an external machine. Unfortunately the web
++client is not good for sending patches. You can check if your IPs are present
++in the headers by reading the raw email source.
++
++If you do not wish this behavior, you need to find a provider which doesn't
++do it or configure and host a SMTP server yourself.
++
++If you're concerned, always first send an email to yourself, read the email
++source and if you see no issues, continue to the mailing lists!
+-- 
+2.37.3
 
