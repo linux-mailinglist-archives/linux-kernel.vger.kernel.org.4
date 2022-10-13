@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D565FDEF6
+	by mail.lfdr.de (Postfix) with ESMTP id 10F195FDEF5
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJMR3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S229883AbiJMR3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJMR31 (ORCPT
+        with ESMTP id S229618AbiJMR31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Oct 2022 13:29:27 -0400
 Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7292C34E3;
-        Thu, 13 Oct 2022 10:29:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E805C3541;
+        Thu, 13 Oct 2022 10:29:27 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        by ms.lwn.net (Postfix) with ESMTPA id 78173845;
+        by ms.lwn.net (Postfix) with ESMTPA id CAB5A7DE;
         Thu, 13 Oct 2022 17:29:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 78173845
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CAB5A7DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665682166; bh=GPZZbukyBGUR5a86BzVdFY5tNFwcRKGUe05DCy1zk04=;
+        t=1665682167; bh=sf2YcBaC8BulfV1gLC66FnN/Vr7mvopLL1hXvmP/Wiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iGsJwX2B2cftuZzw4pvOPmwBZ3A6w9DXtitUXVKpb9s/Qfj0kXgL8JzdDaGQ3iD2u
-         W/KhRS6FQzv2ff2tkeZoYhT1MsLOJVEUYv/h3zChui0WEe1felJ7R4o+FMde4vDurV
-         XLdNCZLqfC6v9MUg1YkXF/vHnQOE58AmsBK+wR9adKPjHcZ6D6CV3Cgn1BviuOeOaG
-         gxrbqpD3aWinED2Edjp+xW/UipN+Gmd78L0gh9erHbaPlgxi91xRwahxXbmU0EOSu6
-         q1R2ita4AvqnubQmmUnb+eFSBEbZK3dISPacuFbI+GLkItM1xDFvgcvSvQOVQjAisQ
-         caDFkNchGG60g==
+        b=FqTyH8aSX2v/yn/lGIScRydi6QzAMazqsuDtDXFp4Tlpbs9GQggtulozm8WAnRhpR
+         XVHtJwd1uAP6kBb1CGSe91z/O8NRNhy/4jbeyKTK2+8oF6v8WVmwIxqxnC2+CZdVQR
+         E+UZcJyCDPWbj+VcnjnFlS0bWVWNY7wyafOXuA9B3CBpkTdehkbbvC8td7lSRf6Dgi
+         doW6lPY/TXPwq57q9mw3ll4k8eP/wz+4Z7T0jPEeq9IVD8PJBF86aAQ6ToGozzlB24
+         3OiTsbGTpMH4KRAGzD8lI0zYBpy0vlbGFBp7sAGOGqBegzAhdgyktKAoPNQEwfwa3q
+         /YvJYPTHWkNdA==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/6] docs: Switch the default HTML theme to alabaster
-Date:   Thu, 13 Oct 2022 11:29:13 -0600
-Message-Id: <20221013172918.846856-2-corbet@lwn.net>
+Subject: [PATCH v3 2/6] docs: tweak some Alabaster style parameters
+Date:   Thu, 13 Oct 2022 11:29:14 -0600
+Message-Id: <20221013172918.846856-3-corbet@lwn.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221013172918.846856-1-corbet@lwn.net>
 References: <20221013172918.846856-1-corbet@lwn.net>
@@ -48,79 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The read-the-docs theme is not entirely attractive and doesn't give us
-control over the left column.  "Alabaster" is deemed the default Sphinx
-theme, it is currently maintained and shipped bundled with Sphinx itself,
-so there is no need to install it separately.  Switch over to this theme as
-the default for building kernel documentation; the DOCS_THEME environment
-variable can still be used to select a different theme.
+This is just the beginning: tighten up the layout a bit to improve the
+information density in the browser.  Also reconfigure the page width in
+terms of character units (em) rather than pixels, making it more
+display-independent.  To that end, add a custom.css file to
+tweak Alabaster CSS settings.
 
 Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 ---
- Documentation/conf.py | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ Documentation/conf.py                  |  3 +++
+ Documentation/sphinx-static/custom.css | 14 ++++++++++++++
+ 2 files changed, 17 insertions(+)
+ create mode 100644 Documentation/sphinx-static/custom.css
 
 diff --git a/Documentation/conf.py b/Documentation/conf.py
-index b50c85083149..629f4afeb0eb 100644
+index 629f4afeb0eb..1dbf3d6a55de 100644
 --- a/Documentation/conf.py
 +++ b/Documentation/conf.py
-@@ -194,6 +194,24 @@ finally:
-     else:
-         version = release = "unknown version"
- 
-+#
-+# HACK: there seems to be no easy way for us to get at the version and
-+# release information passed in from the makefile...so go pawing through the
-+# command-line options and find it for ourselves.
-+#
-+def get_cline_version():
-+    c_version = c_release = ''
-+    for arg in sys.argv:
-+        if arg.startswith('version='):
-+            c_version = arg[8:]
-+        elif arg.startswith('release='):
-+            c_release = arg[8:]
-+    if c_version:
-+        if c_release:
-+            return c_version + '-' + c_release
-+        return c_version
-+    return version # Whatever we came up with before
-+
- # The language for content autogenerated by Sphinx. Refer to documentation
- # for a list of supported languages.
- #
-@@ -247,7 +265,7 @@ highlight_language = 'none'
- # a list of builtin themes.
- 
- # Default theme
--html_theme = 'sphinx_rtd_theme'
-+html_theme = 'alabaster'
- html_css_files = []
- 
- if "DOCS_THEME" in os.environ:
-@@ -324,6 +342,10 @@ if  html_theme == 'classic':
-         'bodyfont':            "serif",
-         'headfont':            "sans-serif",
+@@ -345,6 +345,9 @@ if  html_theme == 'classic':
+ else:
+     html_theme_options = {
+         'description': get_cline_version(),
++        'font_size': '10pt',
++        'page_width': '65em',
++        'sidebar_width': '15em',
      }
-+else:
-+    html_theme_options = {
-+        'description': get_cline_version(),
-+    }
  
  sys.stderr.write("Using %s theme\n" % html_theme)
- 
-@@ -370,8 +392,8 @@ html_static_path = ['sphinx-static']
- html_use_smartypants = False
- 
- # Custom sidebar templates, maps document names to template names.
--# Note that the RTD theme ignores this.
--html_sidebars = { '**': ['searchbox.html', 'localtoc.html', 'sourcelink.html']}
-+# Note that the RTD theme ignores this
-+html_sidebars = { '**': ["about.html", 'searchbox.html', 'localtoc.html', 'sourcelink.html']}
- 
- # Additional templates that should be rendered to pages, maps page names to
- # template names.
+diff --git a/Documentation/sphinx-static/custom.css b/Documentation/sphinx-static/custom.css
+new file mode 100644
+index 000000000000..6b0e554cea0a
+--- /dev/null
++++ b/Documentation/sphinx-static/custom.css
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * CSS tweaks for the Alabaster theme
++ */
++
++/* Shrink the headers a bit */
++div.body h1 { font-size: 180%; }
++div.body h2 { font-size: 150%; }
++div.body h3 { font-size: 130%; }
++
++/* Tighten up the layout slightly */
++div.body { padding: 0 15px 0 10px; }
++div.document { margin: 20px 10px 0 10px; }
++div.sphinxsidebarwrapper { padding: 1em 0.4em; }
 -- 
 2.37.2
 
