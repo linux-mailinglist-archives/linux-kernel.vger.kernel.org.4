@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA025FDDBF
+	by mail.lfdr.de (Postfix) with ESMTP id BA5605FDDC0
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiJMP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S229947AbiJMP4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiJMP40 (ORCPT
+        with ESMTP id S229595AbiJMP41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:56:26 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D23DAC42
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:25 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id mx8so1533016qvb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:25 -0700 (PDT)
+        Thu, 13 Oct 2022 11:56:27 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C404DAC50
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:26 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id i9so1554686qvu.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=peBZ+o0SLeYqd+DX9yqHCLT12xT6rkAjixZ0RNiZfhk=;
-        b=gDCuiFor8HhpbWp9fp3uVoGYcrxvCuN30wL3ycpmtQUhgOfaKOHfQAfWRFQQvOjXRD
-         s2HaYMgTL9/mXuok+k2EVgRwDTohpx5U4qSC/4ZtacdmJf4x8/wcprMXcH8I6e1N19A3
-         yuchYZfusaAiKjfw400t9C1NEm25tcpaZfI+YAijRONZBFq1u7CfuJXonKHmO5Qg3P4S
-         7LG4LUL0ew63UGj9EfwOeKKuAKKx4GFvImk/ZzGw8NtfPYiFm5tiBq0H/talcKb1ESD1
-         alKCkoDemzduw+Y90xJRgzNqAzY2mGl1sk8fK2cFnA4jYjuyPrkhAyQQw2j7dCSlDATs
-         0X4w==
+        bh=k+GrD2PrV67UCcsk4Pt7+1kDoXwEsRN5rKhHYf0ad34=;
+        b=et3GbpP1oeXGYPRlPyaevePbl6W3ecrIY3gkxK1UJhCweRfBuNGA2W1UMEIZ1vDsxf
+         CdLB0MOly9yoFRIRMpdQdRMvOVb9vVFVGSikngN5PC7Z9qk8FNUBMCphLBrM7HAREos7
+         SuTOKfNiPS0Jg+JX/yEGZEK75cF9TE4YloE8JF6LM8Lmff4+hZOV/UswDwkgIk0vjBig
+         8y96M6l4e3aKwHPVleZWyFrgNHT2mz/y2J61x+J+TMm93w2QaE9O/0Lq4tj9QwRVlgLU
+         RThHIK8Oh+aK3EGBm/pYIz0WWL7ang6UG4eUBcQ8zC5C2YUKEHJE14iVzEgf9NTkzLtU
+         eHig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=peBZ+o0SLeYqd+DX9yqHCLT12xT6rkAjixZ0RNiZfhk=;
-        b=KYU8pyKSh165TQA7H6TDL7YCDIZcjaRwMgpJlFRvL/BZO+AfSICOHcEDNibek5cnCA
-         sa/9m9ktWx7bm/hzLsoQz9JNi3qUzVTp907JX0sZiMlFqcyt4VhC1bmvxX6uwsmI/nq3
-         qXEodMqzHocO3m3gaI/2Xni4ihbvGhTvn9WlU0yUkRgTeD3lm5dEJ9HXXtKVVhnT0K12
-         W0MK5qCJwNIVwLgFA2sd+ti36WX3tBHQujHp5YahpAfT1QYLSD6XMHwZ8VwGmxus8eFH
-         SIKqtaHvKEt7zMehIXy3i2daMpH5w2OK47olLgdt60aiekz4AtrHFKcW3rHyUgHJC5Ot
-         KBew==
-X-Gm-Message-State: ACrzQf1nD8v9n7tpzfjXnEAKC2vqIEpEIRBtxqgivWRRNh89ntnqfAL1
-        m0WF2LvuNm4RrE+/6XRSRL4lGg==
-X-Google-Smtp-Source: AMsMyM4XRJrleKDViEuaZRBXI1jBxAocsRDssr0ijqLzj3jQlNSUTePImEmO8W2wY2lZWQg2nXW4cw==
-X-Received: by 2002:a0c:e552:0:b0:4b1:86f0:89d5 with SMTP id n18-20020a0ce552000000b004b186f089d5mr456508qvm.97.1665676584224;
-        Thu, 13 Oct 2022 08:56:24 -0700 (PDT)
+        bh=k+GrD2PrV67UCcsk4Pt7+1kDoXwEsRN5rKhHYf0ad34=;
+        b=acFn0K+mBXv+G1Al24bojzCD36mCIGPk4ik4k7XdkQtVYwhMb/EeaTn//+0wpxUUxg
+         JpYJJ1KCrgZJEb9IvumvIOH8UBanlk8GXqP0KyptN9kfgvdI6kU56Carr5vZ8bLlfR1M
+         +M8UNCLr30SJ76O01MpioM2YNC257UydhISa4s4W1mIAXLTTHghVAtpj7ULBBdBey3qU
+         6wBfY392tLhDiRLNGqojynTAmYz/MKCKXd7UyLgHIQyTjIYUceHN5EA7TCf3eFrlB0kb
+         mHeKZxYgagL5f9vsrW1pyWN4yNRsTbjOQVUnTxZcq9JfJpoUPf4ANkBbzKBiPOQpuPBv
+         bCwA==
+X-Gm-Message-State: ACrzQf0b5B+fygOAPsnG7XBFXFMNuJ8Nt6sGiAT8iP/sdM8wqele27VK
+        EuNLinA1JK1SwJxKDUH2KcHTKw==
+X-Google-Smtp-Source: AMsMyM63NiWTHbyLDuAOn0Cb3ag3YgZOt0hJXOnrZUPSiR4/sTaduzc14OF/dJ1LBV0GowuWHaDE5Q==
+X-Received: by 2002:a05:6214:2464:b0:4b3:6cce:9860 with SMTP id im4-20020a056214246400b004b36cce9860mr499889qvb.120.1665676585351;
+        Thu, 13 Oct 2022 08:56:25 -0700 (PDT)
 Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a0c4600b006cec8001bf4sm65280qki.26.2022.10.13.08.56.23
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a0c4600b006cec8001bf4sm65280qki.26.2022.10.13.08.56.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 08:56:23 -0700 (PDT)
+        Thu, 13 Oct 2022 08:56:24 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/4] ARM: dts: qcom: ipq4018-ap120c-ac: Add SoC compatible
-Date:   Thu, 13 Oct 2022 11:54:17 -0400
-Message-Id: <20221013155418.47577-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/4] ARM: dts: qcom: ipq4018-jalapeno: Add SoC compatible
+Date:   Thu, 13 Oct 2022 11:54:18 -0400
+Message-Id: <20221013155418.47577-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221013155418.47577-1-krzysztof.kozlowski@linaro.org>
 References: <20221013155418.47577-1-krzysztof.kozlowski@linaro.org>
@@ -80,22 +80,22 @@ Add qcom,ipq4018 compatible fallback for the SoC.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-ipq4018-jalapeno.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-index af9a26fb5d4a..a5a6f3ebb274 100644
---- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-@@ -6,7 +6,7 @@
+diff --git a/arch/arm/boot/dts/qcom-ipq4018-jalapeno.dts b/arch/arm/boot/dts/qcom-ipq4018-jalapeno.dts
+index 394412619894..365fbac417fd 100644
+--- a/arch/arm/boot/dts/qcom-ipq4018-jalapeno.dts
++++ b/arch/arm/boot/dts/qcom-ipq4018-jalapeno.dts
+@@ -7,7 +7,7 @@
  
  / {
- 	model = "ALFA Network AP120C-AC";
--	compatible = "alfa-network,ap120c-ac";
-+	compatible = "alfa-network,ap120c-ac", "qcom,ipq4018";
+ 	model = "8devices Jalapeno";
+-	compatible = "8dev,jalapeno";
++	compatible = "8dev,jalapeno", "qcom,ipq4018";
+ };
  
- 	keys {
- 		compatible = "gpio-keys";
+ &tlmm {
 -- 
 2.34.1
 
