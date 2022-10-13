@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420AA5FD56A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16525FD577
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiJMHMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 03:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S229683AbiJMHOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiJMHLj (ORCPT
+        with ESMTP id S229491AbiJMHOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 03:11:39 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3269FF8CF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:11:37 -0700 (PDT)
+        Thu, 13 Oct 2022 03:14:18 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A9510564E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1665645097; x=1697181097;
+  t=1665645257; x=1697181257;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=s9hcQcdAlAzyhKMWI+wdGejeFtAk0WjChyhpIcsu+pQ=;
-  b=T3KLFSSARrqph+8e7qiuwflm3PsBE/VfC0ekr063ccGfAXL17bFMg6SC
-   /IprtXk682UEWjGe6M5lTs/CwpZpnuXyMa/ueuk55JJnMnSXpvI10qfi6
-   ZOoAoVhagyJUJvdjQhbbmYIumyGt4Lt6OU4XoxHNfZL7RCie/+eU87WTh
-   CTuwpy2FJ2idpujal0mUiuK1H8xyjkWlNaz5lWlJaH12EKk9ihs/RM1nC
-   SyfC+bARG9lBnSffdh5bFgNOSDsr6UCIk+1YtkLtGY36KDhl0peYHiK9X
-   G5gGIxcY2C+Xj98a8H8ns8+Y1qyWHjrChfETQ/xrmjzRuWtRgOlydVR26
-   g==;
+  bh=/H86QmdHmNqw9rbRkUgsYpbYqQK00hT21Dz7RUHM52A=;
+  b=GgEJtK5DpH1YZljIE2fAgZwT1tgBW38n9Zre3FkhzG6JbMqV368xhFtn
+   ZmZErvOB6Wkh/FvXzK/LVnUcXhY37OS3Xtdafm0xRUB3hH2ucz0t9k6sf
+   xzmDils76VeTMFfjpi1dYQW0PpySaHZMCCIyaBdrHEvA2CbnOm92oKsxN
+   VBGsx8ifMDrI7NC1JT+3DJ7KLjfMUSl9qtwtDqH2ADS3ymfcwIFJ2+hDX
+   Sju2gjibHl5Q9o5+F7uAfdT89eDQSW+PleAUZrRSENJ4DTh+WA5YlWay6
+   L6G7yjLaM4PGwpc+EdfmL0MijIFIGKm6IpTQkRSVBmCrSX+t6oy4Pfps7
+   A==;
 X-IronPort-AV: E=Sophos;i="5.95,180,1661788800"; 
-   d="scan'208";a="214073743"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 13 Oct 2022 15:11:34 +0800
-IronPort-SDR: RYmeNHFQAVEqJOQiWq2OpHt2Dxa3eiGwOgxMkkthtCr33t0kbp/0dukxOfZHzxgSjtLxgTKKNk
- lvf0bb30D+sImErhZNJo6WjGsguHueNZ+8B4dpFKeCgYkFGNH38pQT50lcnsjPtSCcx4PcUJ5o
- rRrzipvb/TOeUmCi2PetG269rMQxKD5mte9dsgMG3RpnT7EY3j9QrjWeR+3CZEoSnu4mmUtf8R
- BrkEo8JVQNXF5TT+XmG5rymQ4H8qhu7kDHoliim8jyWkTVRRpnhTLzet+Vcs1X/eTIRArgONQ1
- CFiPEYcZJPmo7zJk785NYgqo
+   d="scan'208";a="218864040"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Oct 2022 15:14:16 +0800
+IronPort-SDR: mE8guRoek435iQ2RZfnSi+386z6z6X+c+NJzJQTFGfIDfSEZhH7K04Iqbs8rL1xvVlTti+8B6C
+ Bh0JiYUy3g73dZO/UUMFvOyTpL7wJPVefDP1ewxGAumkREQEF8abhiT5e9Cj301Eb26jX55vvY
+ cM9ywL4o+a9Quaor2VkppEeLGNt15K599BYRVBdN/jf08KfXDn4z03PXabrNGOYNhi/1b5U8Yk
+ IYd3yJ5KVWs2Ww8G9T31fDM6WvmvFRWck9YvvmIDTFUjyG7nLhk0ATxEev9TfquM3C5UYkbMJ3
+ QveSU9EGTnPeMB+SsES2pmMk
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Oct 2022 23:31:12 -0700
-IronPort-SDR: 4DUMB+IG5eBsDI5M6gEjADNH5Y3mknq0Sp8wZeLKNR4KyKJV2CaxLITCDjC2VADM7tIlnA9Mhe
- SuHPAKHENLnidfce/xP0ErHWNnc60yWsen2PtHrjr2cmYWsSxNcdJ8iQg/FfJzEKrpKX9dRDEq
- JJwb9dA+tkn6AKqtT2eDLXVwWnOaTcqUh8jjQx24CXsspid8inmF/2e5Gx2pk34gtUmHniyVJJ
- L9QqmcJq/eDLQLQBR4NwRChPo+1OFViFe8uCsF3upyjkmS63x0Bm+gCcPNh//XCwrYsdxfC55t
- bYc=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Oct 2022 23:28:16 -0700
+IronPort-SDR: DsPGD5IPYik3zERSPK9gyjc+VlUjjG8UuxEwjyphibhWXUkPn0TFFeYlDKAb1/cv1a2DIv6h11
+ feY8U7NXSN4m30thVOhO4+/cxfNmhY8jymBaixttYx6IqQmNqREqFfFvd7r870CZ+EmVIgEy2V
+ 62rUtUE3HdLymzfZpZTBdHl7SaokNHUcXo0ARsIMFc8G1H6bknMnigVHkfmktqTktjIPdAwNdR
+ fCdjX4yG02trRCBckKIxB9ZUDwBulcn3HlqP8lciplIVfcmjGzApTniGdFJHycxqz/vg9Teqk8
+ Rqc=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Oct 2022 00:11:35 -0700
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Oct 2022 00:14:15 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mp10Q0Tmrz1Rwtl
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:11:34 -0700 (PDT)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mp13W2Lwfz1RvTr
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:14:15 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -57,44 +57,39 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1665645093; x=1668237094; bh=s9hcQcdAlAzyhKMWI+wdGejeFtAk0WjChyh
-        pIcsu+pQ=; b=Jm7BAZerxx5v6gHfitNpZQJpv8yhR8Yz+0aNTdhqXMIfV0gn4TG
-        6+TBqREYVmRm0fsOf0P2tPfEbnuwWfT7OVo/a3Bbek/+s9jvrMUa2Xb2i10ghc/Y
-        HFWYEqvsVOeYJWY2tZ8/R2Sh3akv0gAH71JKPx1JTJ/I7nZemiHrqVJfvTGM4hwS
-        Jkm2agszLuKjBjr501zMV0icXH2rwWiypS9DcibKSZ9VOj/9eHQuglwkEfOoYfoM
-        P2aCHTQjerUy1B+jtxYnRrCfHKPvQwjr+IBSz8OnG/kCXGua9nxsTjPX0CsC713S
-        wQZo94NGIjDp/m31PhwSDq664N5zNeu7fRg==
+        1665645254; x=1668237255; bh=/H86QmdHmNqw9rbRkUgsYpbYqQK00hT21Dz
+        7RUHM52A=; b=PP/cd2e5X+uSfh7pqBtFW9X+DlWKKF3owepGazTqGjnpaxH3CwN
+        u2ahcALZ3BXEIrnixNLL7wwXAVd4+j4aQGlcD8E7j4dR2lj9N1j/FgX801wxeJ3d
+        7+kwrBX/w4eg9j9/L7Gv9KxFndH/hDe4JTMEGfoyDFJTGoaSujvM3gtYsGLV9n6i
+        2XK5u2vckt4tF8Tqe7/TXCoqXa/tSmL76YCHzTAK7C61TWg+ETgLjBiYJEmUxoTa
+        04iYubo+9/KdQ52mV7OacD9ijl2xgWg4FTHBsfIzJnupedfC844OeLc1tHjfJnJj
+        +M7BFRXuKD3m0eUQNXzNZ8ZMD7g92qDq4uQ==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TK3DhZNtA3fw for <linux-kernel@vger.kernel.org>;
-        Thu, 13 Oct 2022 00:11:33 -0700 (PDT)
+        with ESMTP id N0QeD3hNQQZ2 for <linux-kernel@vger.kernel.org>;
+        Thu, 13 Oct 2022 00:14:14 -0700 (PDT)
 Received: from [10.89.85.169] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.85.169])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mp10L5vWSz1RvLy;
-        Thu, 13 Oct 2022 00:11:30 -0700 (PDT)
-Message-ID: <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
-Date:   Thu, 13 Oct 2022 16:11:29 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mp13T5f0Tz1RvLy;
+        Thu, 13 Oct 2022 00:14:13 -0700 (PDT)
+Message-ID: <4fc8207d-0851-3b38-339d-de1452f6ee4d@opensource.wdc.com>
+Date:   Thu, 13 Oct 2022 16:14:12 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
- tag
+Subject: Re: [PATCH 4.19] scsi: sd: Fix 'sdkp' in sd_first_printk
 Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Niklas Cassel <niklas.cassel@wdc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+To:     Jason Yan <yanaijie@huawei.com>, Li kunyu <kunyu@nfschina.com>
+Cc:     jejb@linux.vnet.ibm.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com
+References: <0e67aa4d-f66e-f392-5950-31b1c90c287b@opensource.wdc.com>
+ <20221013044927.278854-1-kunyu@nfschina.com>
+ <badf255f-df60-fbc7-0f61-c69b99ebbaa6@huawei.com>
+ <45f33e3e-c1a7-7183-bf04-83649af8ac04@opensource.wdc.com>
+ <7baa5eb6-95f7-a0cb-6aef-157cf43866e7@huawei.com>
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital Research
-In-Reply-To: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+In-Reply-To: <7baa5eb6-95f7-a0cb-6aef-157cf43866e7@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -107,50 +102,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/12 16:24, Naresh Kamboju wrote:
-> On TI beagle board x15 the connected SSD is not detected on linux next
-> 20221006 tag.
+On 2022/10/13 16:02, Jason Yan wrote:
 > 
-> + export STORAGE_DEV=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> + STORAGE_DEV=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> + test -n /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> + echo y
-> + mkfs.ext4 /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> mke2fs 1.46.5 (30-Dec-2021)
-> The file /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 does
-> not exist and no size was specified.
-> + lava-test-raise 'mkfs.ext4
-> /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 failed; job
-> exit'
+> On 2022/10/13 14:39, Damien Le Moal wrote:
+>> On 2022/10/13 15:26, Jason Yan wrote:
+>>>
+>>> On 2022/10/13 12:49, Li kunyu wrote:
+>>>>
+>>>> This is defined in the 4.19 kernel:
+>>>>
+>>>> #define sd_printk(prefix, sdsk, fmt, a...)                              \
+>>>>           (sdsk)->disk ?                                                  \
+>>>>                 sdev_prefix_printk(prefix, (sdsk)->device,                \
+>>>>                                    (sdsk)->disk->disk_name, fmt, ##a) :   \
+>>>>                 sdev_printk(prefix, (sdsk)->device, fmt, ##a)
+>>>>
+>>>> #define sd_first_printk(prefix, sdsk, fmt, a...)                        \
+>>>>           do {                                                            \
+>>>>                   if ((sdkp)->first_scan)                                 \
+>>>>                           sd_printk(prefix, sdsk, fmt, ##a);              \
+>>>>           } while (0)
+>>>>
+>>>>
+>>>>
+>>>> Most of the sdsk used in the macro definition has only one sdkp.
+>>>>
+>>>>
+>>>> This is defined in the v6.0-rc7 kernel:
+>>>>
+>>>> #define sd_printk(prefix, sdsk, fmt, a...)                              \
+>>>>           (sdsk)->disk ?                                                  \
+>>>>                 sdev_prefix_printk(prefix, (sdsk)->device,                \
+>>>>                                    (sdsk)->disk->disk_name, fmt, ##a) :   \
+>>>>                 sdev_printk(prefix, (sdsk)->device, fmt, ##a)
+>>>>
+>>>> #define sd_first_printk(prefix, sdsk, fmt, a...)                        \
+>>>>           do {                                                            \
+>>>>                   if ((sdsk)->first_scan)                                 \
+>>>>                           sd_printk(prefix, sdsk, fmt, ##a);              \
+>>>>           } while (0)
+>>>>
+>>>> Use sdsk in macro definition.
+>>>>
+>>>>
+>>>> I did report an error when compiling sd. o in the 4.19 kernel. It was modified to say that no more errors were reported in sdsk. Can I continue the 6.0-rc7 writing method here.
+>>>>
+>>>
+>>> You should backport the mainline patch to 4.19, not create a new one.
+>>
+>> Yes, but since the mainline patch has a typo, better fix it and backport the fix
+>> too with a "Fixes" tag.
+>>
 > 
-> Test log:
->  - https://lkft.validation.linaro.org/scheduler/job/5634743#L2580
+> What typo in the patch? I did not see it.
+
+I meant the weird variable name sdsk in the original patch instead of the more
+natural sdkp.
+
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>> My point about the proposed patch was to make the reverse change to fix the
+>> macro: use sdkp instead of sdsk since the former is used everywhere and clear.
+>> But sure, since this is not causing any issue, no strong need to fix the macro.
+>> It is really ugly as-is though :)
+>>
 > 
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: 7da9fed0474b4cd46055dd92d55c42faf32c19ac
->   git_describe: next-20221006
->   kernel_version: 6.0.0
->   kernel-config: https://builds.tuxbuild.com/2FkkkZ51ZYhBL1G8D69YX8Pkt5F/config
->   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/659754170
->   artifact-location: https://builds.tuxbuild.com/2FkkkZ51ZYhBL1G8D69YX8Pkt5F
->   toolchain: gcc-10
+> I agree that there is no need to backport it.
 
-The kernel messages that are shown in the links above do not show any "libata
-version 3.00 loaded." message nor any ata/ahci message that I can see. So I
-think the eSATA adapter is not even being detected and libata/ahci driver not used.
+Yes. Beside using that strange variable name, no problem.
 
-Was this working before ? If yes, can you try with the following patches reverted ?
-
-d3243965f24a ("ata: make PATA_PLATFORM selectable only for suitable architectures")
-3ebe59a54111 ("ata: clean up how architectures enable PATA_PLATFORM and
-PATA_OF_PLATFORM")
-
-If reverting these patches restores the eSATA port on this board, then you need
-to fix the defconfig for that board.
+> 
+> Thanks,
+> Jason
+> 
+>>>
+>>> commit df46cac3f71c57e0b23f6865651629aaa54f8ca9
+>>> Author: Dietmar Hahn <dietmar.hahn@ts.fujitsu.com>
+>>> Date:   Tue Feb 5 11:10:48 2019 +0100
+>>>
+>>>       scsi: sd: Fix typo in sd_first_printk()
+>>>
+>>>       Commit b2bff6ceb61a9 ("[SCSI] sd: Quiesce mode sense error messages")
+>>>       added the macro sd_first_printk(). The macro takes "sdsk" as argument
+>>>       but dereferences "sdkp". This hasn't caused any real issues since all
+>>>       callers of sd_first_printk() have an sdkp. But fix the typo.
+>>>
+>>>       [mkp: Turned this into a real patch and tweaked commit description]
+>>>
+>>>       Signed-off-by: Dietmar Hahn <dietmar.hahn@ts.fujitsu.com>
+>>>       Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+>>>
+>>> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
+>>> index 1080c85d97f8..5796ace76225 100644
+>>> --- a/drivers/scsi/sd.h
+>>> +++ b/drivers/scsi/sd.h
+>>> @@ -132,7 +132,7 @@ static inline struct scsi_disk *scsi_disk(struct
+>>> gendisk *disk)
+>>>
+>>>    #define sd_first_printk(prefix, sdsk, fmt, a...)                       \
+>>>           do {                                                            \
+>>> -               if ((sdkp)->first_scan)                                 \
+>>> +               if ((sdsk)->first_scan)                                 \
+>>>                           sd_printk(prefix, sdsk, fmt, ##a);              \
+>>>           } while (0)
+>>>
+>>>
+>>>
+>>>>
+>>>> .
+>>>>
+>>
 
 -- 
 Damien Le Moal
