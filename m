@@ -2,154 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C615FE2BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D336D5FE2CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJMTfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 15:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S229798AbiJMTg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 15:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJMTfr (ORCPT
+        with ESMTP id S229749AbiJMTgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 15:35:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421AE11A94B;
-        Thu, 13 Oct 2022 12:35:45 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s30so4051117eds.1;
-        Thu, 13 Oct 2022 12:35:45 -0700 (PDT)
+        Thu, 13 Oct 2022 15:36:21 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9112417C564;
+        Thu, 13 Oct 2022 12:36:19 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id f193so2455083pgc.0;
+        Thu, 13 Oct 2022 12:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aO2wfG6mESBWLGmiEHQ/ZdlLgCSrGemWpKlaxBdIPR0=;
-        b=o5lciPHuBpfNXx8hNY1aLi0CZ+Abid9rsHTB9XFMYj89oqMFRO8p6XzrvS4TfNF12o
-         6UKFmCDbZltjXmxRtE49G+2TF8xVk0q9sKQfuzoITV9JnvL+V9MJ53PSJxDnRpR9uweR
-         BU+ibr/x67bZ9uUSH+B01Uf1J43sRE3VaViE4/2NPeqKTxz9HwHqvxu7Gpw5GadsLi5i
-         s+ccQXCF1CC5oifE+sVvEKgydkiKTHkcwsGfn6zLJSgvZsHPg1Ahz/BhPs07qQKIKBgp
-         M7qE/32g5jVvTOe7U9AQtEf4hmL0p6LIdNz8X+LesRVm6dpYBYOCx7Hypv8xWRcqGD/a
-         B2UQ==
+        bh=9zEp8WwVcb7daZG+SSD+C887fYzwYL9krvYTpGgFmms=;
+        b=gEu0spplDzZ/2nsJojKXpG+pCBMVN0/ZUPWwFsYdV+afFOkrOAUoOVZ9w6zB+sXmPs
+         laq223fc8S4ZmpOX7YweHLCgWdTuZm3mVBj37wqqBimUiO9GfW3k9j5tBhcul/LEbmO6
+         qzDrxZAEvyeBizRSSyBgnfnxb8eXqvzPb9bFwZno5TLn0DmjSBY3vk6lZVtTLf0XxE8S
+         qCjEzifGMoPi0ov6GwtVlPsGLof8Q8kTM2bC5wd7x1VJxHmGPlqpyqYFCT+fPoGKPkFe
+         Zfs3vdHZEzBIKDc117QTyfnhO+/SSh08WmFQtkhpvvQOxsVpUtnXTkmaTkQVx3Nc6Yj2
+         yUlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aO2wfG6mESBWLGmiEHQ/ZdlLgCSrGemWpKlaxBdIPR0=;
-        b=RsmEjNhTWMWUcHAuvL0rZ2KClkR/VT+7/fpcOyAR/oYDIjpSZczCJ07tQt9G/bpEO8
-         xf6OifhfNvH5fnCluAUkR6f2hWsks18ctFvkkbq8+2UImZ417WUl0zz2BspZnNuTso02
-         jwOPWyEN7oay3OQuOUZBiYJtg1lJKh2wJJYm2Syn0Oowy0wblzsVrbesDz/TNHZhgWUK
-         nXpUwPLNMu1JwHPg7U7multVrMYQu+4n/rzPad2YArU+SYZTL0n9f22p7fembA/QFvzR
-         kS2gAY0yM11tFzoCpnEd5i3tlfVxL4x8QoGTTeFMd5jMPjn2idWhFEG9ZNhj/Ry4uaBD
-         PjwA==
-X-Gm-Message-State: ACrzQf31dZ2Luvbe6SSMa/TzMglG9ArRbv5AU4GqCmOtWGNvZ9KmYV7F
-        7rfuvCIcbZNJRfC1Zjm4WVs=
-X-Google-Smtp-Source: AMsMyM65qyeNcU4PvNmavUCDHZm9SKmVc8HvmmyP2Gv5Ldhs3DrGZeVkMG/dIS1GKx7DX99zL079Pw==
-X-Received: by 2002:a05:6402:50cf:b0:45c:dfce:66ae with SMTP id h15-20020a05640250cf00b0045cdfce66aemr1118400edb.370.1665689743723;
-        Thu, 13 Oct 2022 12:35:43 -0700 (PDT)
-Received: from ?IPV6:2a02:a466:68ed:1:2509:9d4b:f4db:684d? (2a02-a466-68ed-1-2509-9d4b-f4db-684d.fixed6.kpn.net. [2a02:a466:68ed:1:2509:9d4b:f4db:684d])
-        by smtp.gmail.com with ESMTPSA id md9-20020a170906ae8900b0078defb88b0dsm316281ejb.73.2022.10.13.12.35.42
+        bh=9zEp8WwVcb7daZG+SSD+C887fYzwYL9krvYTpGgFmms=;
+        b=TpkoUIymxWQt9vvPRyfe0ETKIn2Ta37QW6cLL+3Vu5DHvkKqrM7mvGg0aHoq43kLG8
+         vfJ0lzBRn/uyYhjbac59bAwWwtClW8AJprETFzhnL8lZ7iDqLaVWeW5cj/5t3ALw6aq9
+         EwOh5gG67JCWJVLC/O67GTAyEQzq5pbvJ2McElcUCWs7ID57t56DZw6ucUwYCAjRW1Bu
+         fm01T3smPSc0Pvko5nHQvzXaz5zWcg6sXvBU9pM53g3an5w74TiJydHbS0pFm17FzSOK
+         1J8q7i/1F+XmNQigb9wcbXd5ivxzP0BytsO9EcNSWy2DuRWFGoz63mkco2avMcVbER19
+         iSgQ==
+X-Gm-Message-State: ACrzQf0JO6S/Kb6zSfsdbqr08/K5/GOkwfBtvhvfA2gZPqcoFGCG6iG+
+        IwTMwfT+e79u/6K0zf8eG3I=
+X-Google-Smtp-Source: AMsMyM42xNNOoa0aywh+nto1bQ8rkdSsbrgXj2FYIcADmDX+K8BEkO+SwD6jigr6y0b7vFWtcy2CvA==
+X-Received: by 2002:a63:8bc9:0:b0:45f:afa8:e686 with SMTP id j192-20020a638bc9000000b0045fafa8e686mr1267288pge.219.1665689778314;
+        Thu, 13 Oct 2022 12:36:18 -0700 (PDT)
+Received: from [172.30.1.63] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id x32-20020a634a20000000b00456891e1dacsm80787pga.68.2022.10.13.12.36.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 12:35:43 -0700 (PDT)
-Message-ID: <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com>
-Date:   Thu, 13 Oct 2022 21:35:42 +0200
+        Thu, 13 Oct 2022 12:36:17 -0700 (PDT)
+Message-ID: <ab67f2aa-64c2-8b58-20b4-ee797c9e0a19@gmail.com>
+Date:   Fri, 14 Oct 2022 04:36:13 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH] clk: samsung: exynos7885: Correct "div4" clock
+ parents
 Content-Language: en-US
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
- <YzvusOI89ju9e5+0@smile.fi.intel.com>
- <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
- <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
- <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
- <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
- <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
- <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
- <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
- <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
- <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com>
- <CAHQ1cqGSXoUTopwvrQtLww5M0Tf=6F505ziLn+wGHhW_8-JhFQ@mail.gmail.com>
- <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com>
- <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221013151341.151208-1-virag.david003@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20221013151341.151208-1-virag.david003@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<SNIP>
-> My end goal here is to find a way to test vanilla v6.0 with the two
-> patches reverted on your end. I thought that during my testing I saw
-> tusb1210 print those timeout messages during its probe and that
-> disabling the driver worked to break the loop, but I went back to
-> double check and it doesn't work so scratch that idea. Configuring
-> extcon as a built-in breaks host functionality with or without patches
-> on my end, so I'm not sure it could be a path.
->
-> I won't have time to try things with
-> 0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch until
-> the weekend, meanwhile can you give this diff a try with vanilla (no
-> reverts) v6.0:
->
-> modified   drivers/phy/ti/phy-tusb1210.c
-> @@ -127,6 +127,7 @@ static int tusb1210_set_mode(struct phy *phy, enum
-> phy_mode mode, int submode)
->    u8 reg;
->
->    ret = tusb1210_ulpi_read(tusb, ULPI_OTG_CTRL, &reg);
-> + WARN_ON(ret < 0);
->    if (ret < 0)
->    return ret;
->
-> @@ -152,7 +153,10 @@ static int tusb1210_set_mode(struct phy *phy,
-> enum phy_mode mode, int submode)
->    }
->
->    tusb->otg_ctrl = reg;
-> - return tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
-> + ret = tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
-> + WARN_ON(ret < 0);
-> + return ret;
-> +
->   }
->
->   #ifdef CONFIG_POWER_SUPPLY
->
-> ? I'm curious to see if there's masked errors on your end since dwc3
-> driver doesn't check for those.
-root@yuna:~# dmesg | grep -i -E 'warn|assert|error|tusb|dwc3'
-8250_mid: probe of 0000:00:04.0 failed with error -16
-platform regulatory.0: Direct firmware load for regulatory.db failed 
-with error -2
-brcmfmac mmc2:0001:1: Direct firmware load for 
-brcm/brcmfmac43340-sdio.Intel Corporation-Merrifield.bin failed with 
-error -2
-sof-audio-pci-intel-tng 0000:00:0d.0: error: I/O region is too small.
-sof-audio-pci-intel-tng 0000:00:0d.0: error: failed to probe DSP -19
+On 22. 10. 14. 00:13, David Virag wrote:
+> "div4" DIVs which divide PLLs by 4 are actually dividing "div2" DIVs by
+> 2 to achieve a by 4 division, thus their parents are the respective
+> "div2" DIVs. These DIVs were mistakenly set to have the PLLs as parents.
+> This leads to the kernel thinking "div4"s and everything under them run
+> at 2x the clock speed. Fix this.
+> 
+> Fixes: 45bd8166a1d8 ("clk: samsung: Add initial Exynos7885 clock driver")
+> Signed-off-by: David Virag <virag.david003@gmail.com>
+> ---
+>  drivers/clk/samsung/clk-exynos7885.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/samsung/clk-exynos7885.c b/drivers/clk/samsung/clk-exynos7885.c
+> index a7b106302706..368c50badd15 100644
+> --- a/drivers/clk/samsung/clk-exynos7885.c
+> +++ b/drivers/clk/samsung/clk-exynos7885.c
+> @@ -182,7 +182,7 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
+>  	    CLK_CON_DIV_PLL_SHARED0_DIV2, 0, 1),
+>  	DIV(CLK_DOUT_SHARED0_DIV3, "dout_shared0_div3", "fout_shared0_pll",
+>  	    CLK_CON_DIV_PLL_SHARED0_DIV3, 0, 2),
+> -	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "fout_shared0_pll",
+> +	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "dout_shared0_div2",
+>  	    CLK_CON_DIV_PLL_SHARED0_DIV4, 0, 1),
+>  	DIV(CLK_DOUT_SHARED0_DIV5, "dout_shared0_div5", "fout_shared0_pll",
+>  	    CLK_CON_DIV_PLL_SHARED0_DIV5, 0, 3),
+> @@ -190,7 +190,7 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
+>  	    CLK_CON_DIV_PLL_SHARED1_DIV2, 0, 1),
+>  	DIV(CLK_DOUT_SHARED1_DIV3, "dout_shared1_div3", "fout_shared1_pll",
+>  	    CLK_CON_DIV_PLL_SHARED1_DIV3, 0, 2),
+> -	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "fout_shared1_pll",
+> +	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "dout_shared1_div2",
+>  	    CLK_CON_DIV_PLL_SHARED1_DIV4, 0, 1),
+>  
+>  	/* CORE */
 
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
->> This is done through configfs only when the switch is set to device mode.
-> Sure, but can it be disabled? We are looking for unknown variables, so
-> excluding this would be a reasonable thing to do.
-It's not enabled until I flip the switch to device mode.
+Thanks for fix-up.
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
