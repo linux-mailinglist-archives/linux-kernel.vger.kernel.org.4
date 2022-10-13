@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7EE5FDA60
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396FE5FDAA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiJMNT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S229651AbiJMNVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiJMNTY (ORCPT
+        with ESMTP id S229545AbiJMNVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:19:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB1C4E182;
-        Thu, 13 Oct 2022 06:19:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 13 Oct 2022 09:21:38 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CDA24F1E;
+        Thu, 13 Oct 2022 06:21:33 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6791D617A7;
-        Thu, 13 Oct 2022 13:19:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E08FC433B5;
-        Thu, 13 Oct 2022 13:19:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665667161;
-        bh=TF5evexQCaWAnM8YqzbvcWgQx5Wx+FEnE7540Ug803s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TaWO7ScmXh3c3WWSOR26mewtnUfpG9v/itOPFv6aRGbb7g3Hpc4WhqbqB+TRGr83p
-         LrT8uuESh3245oABML5gTUadnj6sD4Ek26FkkiWhv9Qnxg5PEGR9+cKvzA8J6ScZm0
-         vX3z7oNQaKI4XutNSDVa0LXQRj8HoAIe3LHiXg/Y=
-Date:   Thu, 13 Oct 2022 15:20:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        isdn@linux-pingi.de, kuba@kernel.org, andrii@kernel.org,
-        davem@davemloft.net, axboe@kernel.dk
-Subject: Re: [PATCH] mISDN: hfcpci: Fix use-after-free bug in hfcpci_Timer
-Message-ID: <Y0gQhe6EL6nDstlL@kroah.com>
-References: <20221013125729.105652-1-duoming@zju.edu.cn>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5E0EC1EC054C;
+        Thu, 13 Oct 2022 15:21:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665667287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Qo6+8FjdF5OYwlAv7WYxwDWRkLYYDkW4CdaVk0AWBlc=;
+        b=ez4+evfAyCw8CJwXC5ithv3jA4BbyEI7l/tCwIJvkT3uhCyrd0+xmhFSMG5zvCM/DR1FMA
+        TREUZN2tS4EDk9uZyP0qz+3/DKDCNOel8C3mT1lXjJEY6jvMXwbXuneET1Y2j/egGB/nvH
+        JYvjVOJIdBLEKZk5Mk96dk7NJujljEg=
+Date:   Thu, 13 Oct 2022 15:21:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v14 2/3] virt: Add TDX guest driver
+Message-ID: <Y0gQ03m7xT96pg69@zn.tnic>
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220928215535.26527-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y0bhkVYfYhzkmrjp@zn.tnic>
+ <adc0987a-70f5-4203-c741-978d7d89cf76@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221013125729.105652-1-duoming@zju.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <adc0987a-70f5-4203-c741-978d7d89cf76@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 08:57:29PM +0800, Duoming Zhou wrote:
-> If the timer handler hfcpci_Timer() is running, the
-> del_timer(&hc->hw.timer) in release_io_hfcpci() could
-> not stop it. As a result, the use-after-free bug will
-> happen. The process is shown below:
-> 
->     (cleanup routine)          |        (timer handler)
-> release_card()                 | hfcpci_Timer()
->   release_io_hfcpci            |
->     del_timer(&hc->hw.timer)   |
->   ...                          |  ...
->   kfree(hc) //[1]FREE          |
->                                |   hc->hw.timer.expires //[2]USE
-> 
-> The hfc_pci is deallocated in position [1] and used in
-> position [2].
-> 
-> Fix by changing del_timer() in release_io_hfcpci() to
-> del_timer_sync(), which makes sure the hfcpci_Timer()
-> have finished before the hfc_pci is deallocated.
-> 
-> Fixes: 1700fe1a10dc ("Add mISDN HFC PCI driver")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->  drivers/isdn/hardware/mISDN/hfcpci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
-> index af17459c1a5..5cf37fe7de2 100644
-> --- a/drivers/isdn/hardware/mISDN/hfcpci.c
-> +++ b/drivers/isdn/hardware/mISDN/hfcpci.c
-> @@ -157,7 +157,7 @@ release_io_hfcpci(struct hfc_pci *hc)
->  {
->  	/* disable memory mapped ports + busmaster */
->  	pci_write_config_word(hc->pdev, PCI_COMMAND, 0);
-> -	del_timer(&hc->hw.timer);
-> +	del_timer_sync(&hc->hw.timer);
+On Wed, Oct 12, 2022 at 04:01:31PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> I am fine with adding an error message here. What about the above -EINVAL
+> case? Do you suggest adding it there as well?
 
-Nice, how did you test that this will work properly?  Do you have this
-hardware for testing?  How was this issue found and verified that this
-is the correct resolution?
+Right, you could dump the req.* fields it read from luserspace so that
+one staring at the error message can actually see which of the fields
+failed the check.
 
-thanks,
+Thx.
 
-greg k-h
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
