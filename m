@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0A95FD4D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8AB5FD4E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJMGan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 02:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S229641AbiJMGg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJMGal (ORCPT
+        with ESMTP id S229507AbiJMGgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:30:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6499A7C325
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 23:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665642639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=I39cZ3LRJVOkJAwJsydduYsdnQpl71cDmGrmMmwlFkQ=;
-        b=U9DHg1mGX2FE/vi689cmw07Xdqeh6qz4iHQAHxQ8lvgHESb+uLwARd15B7A7MJNUrIOnow
-        SE0B0Za7ifidch3k8ni5taxBag+tDhJcCJc0Hq7uqCHlv8o8DKZ4SY0gB5WUOcgD8nusul
-        hvDucO9TzpRwUzHCr5ueb0RiZO3MzLA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-106-hwQ87wOKN_eioJhbGOgOBw-1; Thu, 13 Oct 2022 02:30:34 -0400
-X-MC-Unique: hwQ87wOKN_eioJhbGOgOBw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EDD83C0D84A;
-        Thu, 13 Oct 2022 06:30:34 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-52.bne.redhat.com [10.64.54.52])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4FF87C15BB5;
-        Thu, 13 Oct 2022 06:30:29 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     kvmarm@lists.linux.dev
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org,
-        oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org,
-        dmatlack@google.com, peterx@redhat.com, venkateshs@chromium.org,
-        seanjc@google.com, shan.gavin@gmail.com, ajones@ventanamicro.com
-Subject: [PATCH] KVM: selftests: Fix number of pages for memory slot in memslot_modification_stress_test
-Date:   Thu, 13 Oct 2022 14:30:20 +0800
-Message-Id: <20221013063020.201856-1-gshan@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 13 Oct 2022 02:36:55 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970D5110B0B;
+        Wed, 12 Oct 2022 23:36:52 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id 182681CCF; Thu, 13 Oct 2022 08:36:46 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 13 Oct 2022 08:31:39 +0200
+Subject: [PATCH v3] KEYS: encrypted: fix key instantiation with user-provided
+ data
+Message-Id: <20221013063646.182681CCF@mail.steuer-voss.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's required by vm_userspace_mem_region_add() that memory size
-should be aligned to host page size. However, one guest page is
-provided by memslot_modification_stress_test. It triggers failure
-in the scenario of 64KB-page-size-host and 4KB-page-size-guest,
-as the following messages indicate.
+Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+decrypted data") added key instantiation with user provided decrypted data.
+The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+Fix this to use hex2bin instead.
 
- # ./memslot_modification_stress_test
- Testing guest mode: PA-bits:40,  VA-bits:48,  4K pages
- guest physical test memory: [0xffbfff0000, 0xffffff0000)
- Finished creating vCPUs
- Started all vCPUs
- ==== Test Assertion Failure ====
-   lib/kvm_util.c:824: vm_adjust_num_guest_pages(vm->mode, npages) == npages
-   pid=5712 tid=5712 errno=0 - Success
-      1	0x0000000000404eeb: vm_userspace_mem_region_add at kvm_util.c:822
-      2	0x0000000000401a5b: add_remove_memslot at memslot_modification_stress_test.c:82
-      3	 (inlined by) run_test at memslot_modification_stress_test.c:110
-      4	0x0000000000402417: for_each_guest_mode at guest_modes.c:100
-      5	0x00000000004016a7: main at memslot_modification_stress_test.c:187
-      6	0x0000ffffb8cd4383: ?? ??:0
-      7	0x0000000000401827: _start at :?
-   Number of guest pages is not compatible with the host. Try npages=16
+Old keys created from user provided decrypted data saved with "keyctl pipe"
+are still valid, however if the key is recreated from decrypted data the
+old key must be converted to the correct format. This can be done with a
+small shell script, e.g.:
 
-Fix the issue by providing 16 guest pages to the memory slot for this
-particular combination of 64KB-page-size-host and 4KB-page-size-guest
-on aarch64.
+BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
+keyctl add user masterkey "$(cat masterkey.bin)" @u
+keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
 
-Fixes: ef4c9f4f65462 ("KVM: selftests: Fix 32-bit truncation of vm_get_max_gfn()")
-Signed-off-by: Gavin Shan <gshan@redhat.com>
+It is encouraged to switch to a new key because the effective key size
+of the old keys is only half of the specified size.
+
+The corresponding test for the Linux Test Project ltp has also been
+fixed (see link below).
+
+Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+Cc: stable <stable@kernel.org>
+Link: https://lists.linux.it/pipermail/ltp/2022-October/031060.html
+Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
 ---
- tools/testing/selftests/kvm/memslot_modification_stress_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes
+=======
+v3: - use generated random key in example, reformat commit message
+v2: - clarify commit message, add example to recover old/broken keys
+    - improve example in Documentation/security/keys/trusted-encrypted.rst
+    - add link to ltp patch
+---
+ Documentation/security/keys/trusted-encrypted.rst | 3 ++-
+ security/keys/encrypted-keys/encrypted.c          | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index 6ee7e1dde404..bb1d17a1171b 100644
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@ -67,7 +67,7 @@ struct memslot_antagonist_args {
- static void add_remove_memslot(struct kvm_vm *vm, useconds_t delay,
- 			       uint64_t nr_modifications)
- {
--	const uint64_t pages = 1;
-+	uint64_t pages = max_t(int, vm->page_size, getpagesize()) / vm->page_size;
- 	uint64_t gpa;
- 	int i;
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 0bfb4c339748..9bc9db8ec651 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -350,7 +350,8 @@ Load an encrypted key "evm" from saved blob::
  
+ Instantiate an encrypted key "evm" using user-provided decrypted data::
+ 
+-    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm_decrypted_data.blob`" @u
++    $ evmkey=$(dd if=/dev/urandom bs=1 count=32 | xxd -c32 -p)
++    $ keyctl add encrypted evm "new default user:kmk 32 $evmkey" @u
+     794890253
+ 
+     $ keyctl print 794890253
+diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+index e05cfc2e49ae..1e313982af02 100644
+--- a/security/keys/encrypted-keys/encrypted.c
++++ b/security/keys/encrypted-keys/encrypted.c
+@@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+ 			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+-		if (strlen(decrypted_data) != decrypted_datalen) {
++		if (strlen(decrypted_data) != decrypted_datalen * 2) {
+ 			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
+ 			return ERR_PTR(-EINVAL);
+ 		}
+@@ -791,8 +791,8 @@ static int encrypted_init(struct encrypted_key_payload *epayload,
+ 		ret = encrypted_key_decrypt(epayload, format, hex_encoded_iv);
+ 	} else if (decrypted_data) {
+ 		get_random_bytes(epayload->iv, ivsize);
+-		memcpy(epayload->decrypted_data, decrypted_data,
+-				   epayload->decrypted_datalen);
++		ret = hex2bin(epayload->decrypted_data, decrypted_data,
++			      epayload->decrypted_datalen);
+ 	} else {
+ 		get_random_bytes(epayload->iv, ivsize);
+ 		get_random_bytes(epayload->decrypted_data, epayload->decrypted_datalen);
 -- 
-2.23.0
+2.34.1
 
