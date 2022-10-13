@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E515FD8B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080015FD8BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJMMBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S229559AbiJMMFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiJMMBn (ORCPT
+        with ESMTP id S229459AbiJMMFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:01:43 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44CBDED33;
-        Thu, 13 Oct 2022 05:01:42 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y8so1711118pfp.13;
-        Thu, 13 Oct 2022 05:01:42 -0700 (PDT)
+        Thu, 13 Oct 2022 08:05:00 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE7B303F2;
+        Thu, 13 Oct 2022 05:04:58 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a25so2098591ljk.0;
+        Thu, 13 Oct 2022 05:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ElBYTgFlxjWs/MeokXyE9WiTAY9kACvPyV78ldgqQ0I=;
-        b=BNvSx3+biHAzmMQ0IwB+wNmj7oDhUd30T5z20pi+MYtPsJqTYGm0SigZ1UJ4sCfoYU
-         7phTYl6Wx5eJWe/0/Pslb196lExabN9Tt8xgT/wIsmtNS3itk+rwgbwKhK9G+y5CgUD0
-         nKP2Kk12ZOHwFGiugg9w8B3fjedJmBbztIQzBEztZTEYol+SuhXHyTKbotRwQD+vpyXh
-         X3yaDZ50lwaQnJq8DzBO6NV6Z3/pvvH1PEvmgwsSz5Om3tG1j7FxJ5MydKDQR+zCGTCA
-         NtTe5FWXlBPxa29okQGQgKChv5eW/UScZF68L5PTV2WnQSKbEbhMyJGw8ZofdNChhnj7
-         NFLQ==
+        bh=xKC63qt3cm6YXRHgcntnH0PvtZLR9kcs/isijApz+ls=;
+        b=e7XsURb1RcZi3Nh/LAiEeEg1Ck5uv1klfPu0FDyuB+c6O2VvSpgaaaR+rWiLHAG98D
+         medPItFI58F6F31FmgihXNuTasYDNf56dI6AzsHI5SzsmVqJfjhBbkeMdVnuhsiZIjAB
+         aZsgwozFcen0t9cIFS4LOwv3ruR9/c8eXRo7Xd3QETCc5zhJxQO+0TJKHQ/wNS14A2N6
+         WfDWq0E9Lk6OIPJOwim2h1UvUWGmzc3nlvA4qxW5+FcPDgY/aLJX8C+cZUMJGmf5UWkO
+         WbFPiMBYtJv7xkYSfJ0Ey1BP01eOv4pMqNK78on2wWupxrFn3F7UulxFyChavfJThCzg
+         qN+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ElBYTgFlxjWs/MeokXyE9WiTAY9kACvPyV78ldgqQ0I=;
-        b=hTsbq/AfrJszr3l8HRJngQz3d2KrMf1vrwrobjW7HS6BZ67vocP/r33XEHmGGuJ8Dv
-         jO5IVBhat/PBthxjelW/qUgCRtdAFYti2deyMg7aOPmWs7gjEzVgslNWs3jKomHeLk+M
-         o4Ue6t7TubnEItRAXx25tqsMemzbmN/sk3NvrVr121//CMl6g8tuAUPo52iOsCPj4Fic
-         3xPQjCe6DrDrCqgc8LoG/XNT/17eCTjjHUFb7Con40qAD6et84NyLROBQngW2fHUUE89
-         wpyHyeiYoTBiqHUjP/Y1Zhxh/AvoOJxeFXoKHCfjjzE2K84JgvScQTWu+qQb7KS0BjCo
-         D7hA==
-X-Gm-Message-State: ACrzQf1R61cs4TR0BhOp3k8D0X2ksDR2Rg6YAyThk4ltHFPPuaFOlKRR
-        HZHRt7QcTm0PYMaTtZz8BZo=
-X-Google-Smtp-Source: AMsMyM4ByYmuC11mk7RUBGIjVJ4rKO/Ymm2irbDGkd6KZkB/DnpPA4JQ8chyE6ZAo9Vo2mOydBCE6A==
-X-Received: by 2002:aa7:8f12:0:b0:565:cb1e:bd7f with SMTP id x18-20020aa78f12000000b00565cb1ebd7fmr5853111pfr.86.1665662502067;
-        Thu, 13 Oct 2022 05:01:42 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056a00212300b005625d6d2999sm1779709pfj.187.2022.10.13.05.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 05:01:41 -0700 (PDT)
-Message-ID: <86d88222-a70f-49ef-71f3-a7d15ae17d7d@gmail.com>
-Date:   Thu, 13 Oct 2022 20:01:33 +0800
+        bh=xKC63qt3cm6YXRHgcntnH0PvtZLR9kcs/isijApz+ls=;
+        b=RtSEBqjWyoEGvG/XrjsO4BH+vi7ghkDd5lypKUC7VAsuX+pG5eKVZbv1r/GJ0jwbcl
+         IacNpuKdV2ngnyfC/iAOi17Xef+SDP2G9BRcoGlxTpe8O7nzduY0vPytvOd76Rq9zaJ1
+         rSpDVrqNb3C/U6sTikYuk6poyo3TJd/p1Jkp4wez7DJ+NL+1hVN/LKdEkqumqcHdkicG
+         snntjgxbSq6WNEGAt4SYTJn2jmYQT5dRIUeFAHfKbWd1Smcsg/ImEjW5O7Ti8CM2f1/i
+         gquw6KZBdMMrcrGiqUKwEavNgUhls2z92vzJqwNbP0eristv2W/GzE7xIg+1zkwjbNKR
+         GYGw==
+X-Gm-Message-State: ACrzQf28deBbWtZqHL2Tl2vukNWUrsSG4C4gHZMcMRUTotEeRRWUQViz
+        p+00VLMsxtQya9KtsDJVUtM=
+X-Google-Smtp-Source: AMsMyM5JU59fwYy1esJ9Glo11YJMsAj/PzOiJ4OmVTqXxu80LcZQflZHyLPKeCV6+9mrR94wlku0GQ==
+X-Received: by 2002:a2e:6d02:0:b0:26a:cf02:40c4 with SMTP id i2-20020a2e6d02000000b0026acf0240c4mr13103360ljc.513.1665662665868;
+        Thu, 13 Oct 2022 05:04:25 -0700 (PDT)
+Received: from dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::4])
+        by smtp.gmail.com with ESMTPSA id 5-20020ac25f05000000b0049d83646ce7sm378761lfq.110.2022.10.13.05.04.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 05:04:24 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 15:04:04 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Hartmut Knaack <knaack.h@gmx.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tools: iio: iio_utils: fix digit calculation
+Message-ID: <Y0f+tKCz+ZAIoroQ@dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH 1/4] KVM: x86/pmu: Force reprogramming of all counters on
- PMU filter change
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Like Xu <likexu@tencent.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220923001355.3741194-1-seanjc@google.com>
- <20220923001355.3741194-2-seanjc@google.com>
-Content-Language: en-US
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220923001355.3741194-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="AeOA1JcKrLrt2PA9"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,108 +72,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firstly, thanks for your comments that spewed out around vpmu.
 
-On 23/9/2022 8:13 am, Sean Christopherson wrote:
-> Force vCPUs to reprogram all counters on a PMU filter change to provide
-> a sane ABI for userspace.  Use the existing KVM_REQ_PMU to do the
-> programming, and take advantage of the fact that the reprogram_pmi bitmap
-> fits in a u64 to set all bits in a single atomic update.  Note, setting
-> the bitmap and making the request needs to be done _after_ the SRCU
-> synchronization to ensure that vCPUs will reprogram using the new filter.
-> 
-> KVM's current "lazy" approach is confusing and non-deterministic.  It's
+--AeOA1JcKrLrt2PA9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The resolute lazy approach was introduced in patch 03, right after this change.
+The iio_utils uses a digit calculation in order to know length of the
+file name containing a buffer number. The digit calculation does not
+work for number 0.
 
-> confusing because, from a developer perspective, the code is buggy as it
-> makes zero sense to let userspace modify the filter but then not actually
-> enforce the new filter.  The lazy approach is non-deterministic because
-> KVM enforces the filter whenever a counter is reprogrammed, not just on
-> guest WRMSRs, i.e. a guest might gain/lose access to an event at random
-> times depending on what is going on in the host.
-> 
-> Note, the resulting behavior is still non-determinstic while the filter
-> is in flux.  If userspace wants to guarantee deterministic behavior, all
-> vCPUs should be paused during the filter update.
-> 
-> Fixes: 66bb8a065f5a ("KVM: x86: PMU Event Filter")
-> Cc: Aaron Lewis <aaronlewis@google.com>
-> Jim Mattson <jmattson@google.com>
+This leads to allocation of one character too small buffer for the
+file-name when file name contains value '0'. (Eg. buffer0).
 
-miss "Cc:" ?
+Fix digit calculation by returning one digit to be present for number
+'0'.
 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/include/asm/kvm_host.h | 11 ++++++++++-
->   arch/x86/kvm/pmu.c              | 15 +++++++++++++--
->   2 files changed, 23 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index b3ce723efb43..462f041ede9f 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -519,7 +519,16 @@ struct kvm_pmu {
->   	struct kvm_pmc gp_counters[INTEL_PMC_MAX_GENERIC];
->   	struct kvm_pmc fixed_counters[KVM_PMC_MAX_FIXED];
->   	struct irq_work irq_work;
-> -	DECLARE_BITMAP(reprogram_pmi, X86_PMC_IDX_MAX);
-> +
-> +	/*
-> +	 * Overlay the bitmap with a 64-bit atomic so that all bits can be
-> +	 * set in a single access, e.g. to reprogram all counters when the PMU
-> +	 * filter changes.
-> +	 */
-> +	union {
-> +		DECLARE_BITMAP(reprogram_pmi, X86_PMC_IDX_MAX);
-> +		atomic64_t __reprogram_pmi;
-> +	};
->   	DECLARE_BITMAP(all_valid_pmc_idx, X86_PMC_IDX_MAX);
->   	DECLARE_BITMAP(pmc_in_use, X86_PMC_IDX_MAX);
->   
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index d9b9a0f0db17..4504987cbbe2 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -577,6 +577,8 @@ EXPORT_SYMBOL_GPL(kvm_pmu_trigger_event);
->   int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
->   {
->   	struct kvm_pmu_event_filter tmp, *filter;
-> +	struct kvm_vcpu *vcpu;
-> +	unsigned long i;
->   	size_t size;
->   	int r;
->   
-> @@ -613,9 +615,18 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
->   	mutex_lock(&kvm->lock);
->   	filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter,
->   				     mutex_is_locked(&kvm->lock));
-> -	mutex_unlock(&kvm->lock);
-> -
->   	synchronize_srcu_expedited(&kvm->srcu);
+Fixes: 096f9b862e60 ("tools:iio:iio_utils: implement digit calculation")
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+ tools/iio/iio_utils.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-The relative order of these two operations has been reversed
-	mutex_unlock() and synchronize_srcu_expedited()
-, extending the execution window of the critical area of "kvm->lock)".
-The motivation is also not explicitly stated in the commit message.
+diff --git a/tools/iio/iio_utils.c b/tools/iio/iio_utils.c
+index aadee6d34c74..8d35893b2fa8 100644
+--- a/tools/iio/iio_utils.c
++++ b/tools/iio/iio_utils.c
+@@ -547,6 +547,10 @@ static int calc_digits(int num)
+ {
+ 	int count =3D 0;
+=20
++	/* It takes a digit to represent zero */
++	if (!num)
++		return 1;
++
+ 	while (num !=3D 0) {
+ 		num /=3D 10;
+ 		count++;
 
-> +
-> +	BUILD_BUG_ON(sizeof(((struct kvm_pmu *)0)->reprogram_pmi) >
-> +		     sizeof(((struct kvm_pmu *)0)->__reprogram_pmi));
-> +
-> +	kvm_for_each_vcpu(i, vcpu, kvm)
-> +		atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi, -1ull);
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+--=20
+2.37.3
 
-How about:
-	bitmap_copy(pmu->reprogram_pmi, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX);
-to avoid further cycles on calls of 
-"static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, bit)" ?
 
-> +
-> +	kvm_make_all_cpus_request(kvm, KVM_REQ_PMU);
-> +
-> +	mutex_unlock(&kvm->lock);
-> +
->   	r = 0;
->   cleanup:
->   	kfree(filter);
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--AeOA1JcKrLrt2PA9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNH/qQACgkQeFA3/03a
+ocWOFAgAwiW7uYbSJ2Q68k9t5UV7f8QSoBscJBXXNQJxnpIJMQgGPHMkwHdXw71u
+ICNrglVe+pTZw96rEoOAXrng4L1Z5Ce4rw9q1V2AQ3ROjDK2pXf+eGlhvzxy9KYI
+pMc3x5AcsJ6QtCWRyZAaZVAW9LvIXuqpiUvC8Pay4V02kw8fwkeyMMZEqDv3Y8b0
+naCEM6Y0kJG+oxDrPQWQeD6QgXYLhjgoHGiHaLet3Rcia+JA975DCW/pxpNO1jeX
+ijhiLYUXOf1ZS/ZpjBnFv+UwEtxdn8211l1MV/Gm6LW2SoFBwIsroEHidTnCKFzk
+ERhGgqlRszhEv7lQsXpeCpR52Sj/hw==
+=U0FS
+-----END PGP SIGNATURE-----
+
+--AeOA1JcKrLrt2PA9--
