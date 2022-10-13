@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5585FDF7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26835FDFDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiJMRyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S230283AbiJMR7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiJMRyO (ORCPT
+        with ESMTP id S229958AbiJMR6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:54:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9511578A7;
-        Thu, 13 Oct 2022 10:53:43 -0700 (PDT)
+        Thu, 13 Oct 2022 13:58:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2CF786FB;
+        Thu, 13 Oct 2022 10:57:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BB0F618F4;
-        Thu, 13 Oct 2022 17:53:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A779C433C1;
-        Thu, 13 Oct 2022 17:53:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB118B82049;
+        Thu, 13 Oct 2022 17:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54FCAC433D7;
+        Thu, 13 Oct 2022 17:57:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683621;
-        bh=dJKQV479mGlFMVR1hzi8I2tjgh9+4htqItrDF5VQ4ek=;
+        s=korg; t=1665683877;
+        bh=4/0gbWRoGgXhcpCItadg29FCqoOIDIWdJPHkOeinRzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v2+3Zs1IkmC1nJT4fgWWe9u1oeoahODz34pUpCO0c6yqVHhdr2I0+LS2WwraeaQfD
-         OyN2fJWu398ydWVLFc5Me9cE264SGl/DX1znOyHXHn7n3hs1Vyiea2el5g1kOVGYhA
-         SLCacRSOBqgEn5doFm3ZnMQqmwN+pGFnNxOCop7Q=
+        b=Uu6Z791wqe4g26G/Zjx4yFKFpQfBeekyhVZukkqOZ92SWnRWH4KGvwNkMrCNqcW77
+         nG7ZNIfhsCRIEfN6AtqDEjKmjy3r8byBfPOde95lymedRRyprilRPInuwLvwGOlt9w
+         qhKh8CZs96hybsRXoYYhqrjG7qePKCT1M7O9b7Rc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 31/38] wifi: cfg80211/mac80211: reject bad MBSSID elements
+        stable@vger.kernel.org,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 03/27] nilfs2: fix leak of nilfs_root in case of writer thread creation failure
 Date:   Thu, 13 Oct 2022 19:52:32 +0200
-Message-Id: <20221013175145.279415764@linuxfoundation.org>
+Message-Id: <20221013175143.653197774@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
+References: <20221013175143.518476113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,54 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-commit 8f033d2becc24aa6bfd2a5c104407963560caabc upstream.
+commit d0d51a97063db4704a5ef6bc978dddab1636a306 upstream.
 
-Per spec, the maximum value for the MaxBSSID ('n') indicator is 8,
-and the minimum is 1 since a multiple BSSID set with just one BSSID
-doesn't make sense (the # of BSSIDs is limited by 2^n).
+If nilfs_attach_log_writer() failed to create a log writer thread, it
+frees a data structure of the log writer without any cleanup.  After
+commit e912a5b66837 ("nilfs2: use root object to get ifile"), this causes
+a leak of struct nilfs_root, which started to leak an ifile metadata inode
+and a kobject on that struct.
 
-Limit this in the parsing in both cfg80211 and mac80211, rejecting
-any elements with an invalid value.
+In addition, if the kernel is booted with panic_on_warn, the above
+ifile metadata inode leak will cause the following panic when the
+nilfs2 kernel module is removed:
 
-This fixes potentially bad shifts in the processing of these inside
-the cfg80211_gen_new_bssid() function later.
+  kmem_cache_destroy nilfs2_inode_cache: Slab cache still has objects when
+  called from nilfs_destroy_cachep+0x16/0x3a [nilfs2]
+  WARNING: CPU: 8 PID: 1464 at mm/slab_common.c:494 kmem_cache_destroy+0x138/0x140
+  ...
+  RIP: 0010:kmem_cache_destroy+0x138/0x140
+  Code: 00 20 00 00 e8 a9 55 d8 ff e9 76 ff ff ff 48 8b 53 60 48 c7 c6 20 70 65 86 48 c7 c7 d8 69 9c 86 48 8b 4c 24 28 e8 ef 71 c7 00 <0f> 0b e9 53 ff ff ff c3 48 81 ff ff 0f 00 00 77 03 31 c0 c3 53 48
+  ...
+  Call Trace:
+   <TASK>
+   ? nilfs_palloc_freev.cold.24+0x58/0x58 [nilfs2]
+   nilfs_destroy_cachep+0x16/0x3a [nilfs2]
+   exit_nilfs_fs+0xa/0x1b [nilfs2]
+    __x64_sys_delete_module+0x1d9/0x3a0
+   ? __sanitizer_cov_trace_pc+0x1a/0x50
+   ? syscall_trace_enter.isra.19+0x119/0x190
+   do_syscall_64+0x34/0x80
+   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+   ...
+   </TASK>
+  Kernel panic - not syncing: panic_on_warn set ...
 
-I found this during the investigation of CVE-2022-41674 fixed by the
-previous patch.
+This patch fixes these issues by calling nilfs_detach_log_writer() cleanup
+function if spawning the log writer thread fails.
 
-Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
-Fixes: 78ac51f81532 ("mac80211: support multi-bssid")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lkml.kernel.org/r/20221007085226.57667-1-konishi.ryusuke@gmail.com
+Fixes: e912a5b66837 ("nilfs2: use root object to get ifile")
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/util.c |    2 ++
- net/wireless/scan.c |    2 ++
- 2 files changed, 4 insertions(+)
+ fs/nilfs2/segment.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/net/mac80211/util.c
-+++ b/net/mac80211/util.c
-@@ -1289,6 +1289,8 @@ static size_t ieee802_11_find_bssid_prof
- 	for_each_element_id(elem, WLAN_EID_MULTIPLE_BSSID, start, len) {
- 		if (elem->datalen < 2)
- 			continue;
-+		if (elem->data[0] < 1 || elem->data[0] > 8)
-+			continue;
+--- a/fs/nilfs2/segment.c
++++ b/fs/nilfs2/segment.c
+@@ -2786,10 +2786,9 @@ int nilfs_attach_log_writer(struct super
+ 	inode_attach_wb(nilfs->ns_bdev->bd_inode, NULL);
  
- 		for_each_element(sub, elem->data + 1, elem->datalen - 1) {
- 			u8 new_bssid[ETH_ALEN];
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -1582,6 +1582,8 @@ static void cfg80211_parse_mbssid_data(s
- 	for_each_element_id(elem, WLAN_EID_MULTIPLE_BSSID, ie, ielen) {
- 		if (elem->datalen < 4)
- 			continue;
-+		if (elem->data[0] < 1 || (int)elem->data[0] > 8)
-+			continue;
- 		for_each_element(sub, elem->data + 1, elem->datalen - 1) {
- 			u8 profile_len;
+ 	err = nilfs_segctor_start_thread(nilfs->ns_writer);
+-	if (err) {
+-		kfree(nilfs->ns_writer);
+-		nilfs->ns_writer = NULL;
+-	}
++	if (unlikely(err))
++		nilfs_detach_log_writer(sb);
++
+ 	return err;
+ }
  
 
 
