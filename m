@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EDC5FDDBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA025FDDBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiJMP4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S229945AbiJMP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJMP4Z (ORCPT
+        with ESMTP id S229702AbiJMP40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:56:25 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D487BDAC52
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:23 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id f22so1633648qto.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:23 -0700 (PDT)
+        Thu, 13 Oct 2022 11:56:26 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D23DAC42
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:25 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id mx8so1533016qvb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:56:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j3PRQnLRvfXqNUkcNjmJu/EoFGR8mRPqRK0FF4Uwz8U=;
-        b=eYzcVw8ZgCzx5XLSQ6jYuII+9/Ff4AP8xavQYz/H5BEw7uFsY3Ohk5mTl8Ia2+GTz+
-         2+Hisu5X0ta1CJfmFfKmXAIkjaNNKXfaZgimSa3b2phH2ny0KP1s+QMuf6Mpr6xkJ+Mv
-         tzcd3llLvybWcO2Z9K42Btd/XB9q2WOMb8z16kpFYAmxdd8shqtUalqNvBvysuRQ2ZZv
-         uVfjx/2PIv4s+eO6MQPSQUg2hsLoveT8a07+OppdWcqGjnqVXvZI+IGCWbPfOA/M+Fnj
-         atf87vF/UAJosAxN3n35vJyU/WmTmyrQgYc77bG05EAVcOivwAKkiIZKlqDWKvFLOoxD
-         8gNg==
+        bh=peBZ+o0SLeYqd+DX9yqHCLT12xT6rkAjixZ0RNiZfhk=;
+        b=gDCuiFor8HhpbWp9fp3uVoGYcrxvCuN30wL3ycpmtQUhgOfaKOHfQAfWRFQQvOjXRD
+         s2HaYMgTL9/mXuok+k2EVgRwDTohpx5U4qSC/4ZtacdmJf4x8/wcprMXcH8I6e1N19A3
+         yuchYZfusaAiKjfw400t9C1NEm25tcpaZfI+YAijRONZBFq1u7CfuJXonKHmO5Qg3P4S
+         7LG4LUL0ew63UGj9EfwOeKKuAKKx4GFvImk/ZzGw8NtfPYiFm5tiBq0H/talcKb1ESD1
+         alKCkoDemzduw+Y90xJRgzNqAzY2mGl1sk8fK2cFnA4jYjuyPrkhAyQQw2j7dCSlDATs
+         0X4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j3PRQnLRvfXqNUkcNjmJu/EoFGR8mRPqRK0FF4Uwz8U=;
-        b=WtmJ1T8gSHnpCcEWdU11GF42iMa2edxeRc3MEkpV8nez8OFbRB9H6Wk3DzBQcnazp8
-         kuwbE3oKZZ6cfkm4DmCrXLKR+aFno0tJDfUQqm6FtXra8jymPr1FraH0kgk6QAt0I4At
-         fDI79D40TwxmdH8anu1PW5cWvIl4shGhWOU8DfzskEaEqztS/cyAduEeU+rvUgYaQECp
-         UN/7oO5d/3MkBgK5bFCTxEUDcvM6jjaiZMQJWVU5KbpKp6HONaMqvfttdyBJfgi2vq+7
-         FmjLon/xXFrGdElrfghjn0Y1K6eEStVjZqFYZ3rO8Zu/REZjKYVWKj2JqU3Mes2szO/u
-         exVQ==
-X-Gm-Message-State: ACrzQf0dRXcEjL6vxcv9m7hW7quFGtT1tnAdQBTO32tJArPmSv81TOe7
-        kbNE5bl7H3h4R7hb+DTaav26hA==
-X-Google-Smtp-Source: AMsMyM6fkg8M4mnN25X+2FtDvmjE+eEeFlBLVN1yds4O9/Ex2cNkwqzvP+2nU1KVC+RfhWxyOdik7Q==
-X-Received: by 2002:ac8:7c43:0:b0:35c:cd8f:3da5 with SMTP id o3-20020ac87c43000000b0035ccd8f3da5mr395117qtv.61.1665676582952;
-        Thu, 13 Oct 2022 08:56:22 -0700 (PDT)
+        bh=peBZ+o0SLeYqd+DX9yqHCLT12xT6rkAjixZ0RNiZfhk=;
+        b=KYU8pyKSh165TQA7H6TDL7YCDIZcjaRwMgpJlFRvL/BZO+AfSICOHcEDNibek5cnCA
+         sa/9m9ktWx7bm/hzLsoQz9JNi3qUzVTp907JX0sZiMlFqcyt4VhC1bmvxX6uwsmI/nq3
+         qXEodMqzHocO3m3gaI/2Xni4ihbvGhTvn9WlU0yUkRgTeD3lm5dEJ9HXXtKVVhnT0K12
+         W0MK5qCJwNIVwLgFA2sd+ti36WX3tBHQujHp5YahpAfT1QYLSD6XMHwZ8VwGmxus8eFH
+         SIKqtaHvKEt7zMehIXy3i2daMpH5w2OK47olLgdt60aiekz4AtrHFKcW3rHyUgHJC5Ot
+         KBew==
+X-Gm-Message-State: ACrzQf1nD8v9n7tpzfjXnEAKC2vqIEpEIRBtxqgivWRRNh89ntnqfAL1
+        m0WF2LvuNm4RrE+/6XRSRL4lGg==
+X-Google-Smtp-Source: AMsMyM4XRJrleKDViEuaZRBXI1jBxAocsRDssr0ijqLzj3jQlNSUTePImEmO8W2wY2lZWQg2nXW4cw==
+X-Received: by 2002:a0c:e552:0:b0:4b1:86f0:89d5 with SMTP id n18-20020a0ce552000000b004b186f089d5mr456508qvm.97.1665676584224;
+        Thu, 13 Oct 2022 08:56:24 -0700 (PDT)
 Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a0c4600b006cec8001bf4sm65280qki.26.2022.10.13.08.56.21
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a0c4600b006cec8001bf4sm65280qki.26.2022.10.13.08.56.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 08:56:22 -0700 (PDT)
+        Thu, 13 Oct 2022 08:56:23 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/4] dt-bindings: arm: qcom: Document IPQ4018 boards
-Date:   Thu, 13 Oct 2022 11:54:16 -0400
-Message-Id: <20221013155418.47577-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/4] ARM: dts: qcom: ipq4018-ap120c-ac: Add SoC compatible
+Date:   Thu, 13 Oct 2022 11:54:17 -0400
+Message-Id: <20221013155418.47577-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221013155418.47577-1-krzysztof.kozlowski@linaro.org>
 References: <20221013155418.47577-1-krzysztof.kozlowski@linaro.org>
@@ -76,39 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatibles for existing boards with IPQ4018 SoC: ALFA Network
-AP120C-AC and 8devices Jalapeno.
+Add qcom,ipq4018 compatible fallback for the SoC.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 1b5ac6b02bc5..9ae0e7c675b3 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -29,6 +29,7 @@ description: |
-         apq8074
-         apq8084
-         apq8096
-+        ipq4018
-         ipq6018
-         ipq8074
-         mdm9615
-@@ -244,6 +245,12 @@ properties:
-               - sony,xperia-poplar
-           - const: qcom,msm8998
+diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
+index af9a26fb5d4a..a5a6f3ebb274 100644
+--- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
+@@ -6,7 +6,7 @@
  
-+      - items:
-+          - enum:
-+              - 8dev,jalapeno
-+              - alfa-network,ap120c-ac
-+          - const: qcom,ipq4018
-+
-       - items:
-           - enum:
-               - qcom,ipq4019-ap-dk01.1-c1
+ / {
+ 	model = "ALFA Network AP120C-AC";
+-	compatible = "alfa-network,ap120c-ac";
++	compatible = "alfa-network,ap120c-ac", "qcom,ipq4018";
+ 
+ 	keys {
+ 		compatible = "gpio-keys";
 -- 
 2.34.1
 
