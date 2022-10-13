@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F945FD739
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C5C5FD73C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJMJnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S229462AbiJMJnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJMJnW (ORCPT
+        with ESMTP id S229658AbiJMJnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:43:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B914639B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665654199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eRHBo5SUeLCV/E2K6kx3b4+ZRZldTZk3UWnaaDGNeBs=;
-        b=IZ0P4ZL3N0N1dGgsnjpik20U5UARDmcMJGw4/8TbfQv/hFnD5xdofyeZJknwVzkmrS51Qg
-        q2B0yDwv2fSpdWnx5kMgOpddwztgXlGu51+Zx90JmQKpve4f2HczxsHP48bjUQZ5uEVuZk
-        Rl8jBuTZLa89Afqkw9KYJFUcs2ZW+7Y=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-90-s53JVzkEMsOFNM3JhPxH8Q-1; Thu, 13 Oct 2022 05:43:19 -0400
-X-MC-Unique: s53JVzkEMsOFNM3JhPxH8Q-1
-Received: by mail-wm1-f71.google.com with SMTP id l1-20020a7bc341000000b003bfe1273d6cso600496wmj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:43:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRHBo5SUeLCV/E2K6kx3b4+ZRZldTZk3UWnaaDGNeBs=;
-        b=BUtQwxXzVgQ4NFZfBI4uPepaVUQoU0GFCcTOV2oVDDBaNNoyao6ZPQ3XsT71QfCcAh
-         31RF/X39Bpg3KMtXmslZgeuogSQoqSneEL44ynIyZuQOBJLj/M8xkMuYMaM7qD39raAf
-         jEWL/6RBPWCmKtcsSKwLtFXC1qm7DUq5RY72dhbQ6YUA0BOwfkKAggzIXROrBLA1WoW2
-         sWd23HD8fvPU4UbR/fpnNmJqbG9WZoAzi+myw4+uf96+5krWgXIXSOHwRv2W0iL7+feK
-         VfeeY+268Xc4NbdUJ7h9NwXRSVOzbFfnrDDM6LCHUb0cWu0GJVkfS7b3HG1zgnqm00MD
-         CPFA==
-X-Gm-Message-State: ACrzQf1zUWAToQiPkxQZQ9OscaccfbWExMG/rZlS7oo3nNscxMV6XNqz
-        PyZfFqqms+LPzFZ5T/0Xev1Inthq6VTIpHXrLLwlUu5KvBVLqTZKtAvFd1vDUOEuIVnKgm2VkJK
-        wu+XFL9pWFYf/IyyfiRzshzHH
-X-Received: by 2002:a05:600c:19c7:b0:3c6:dd03:2b26 with SMTP id u7-20020a05600c19c700b003c6dd032b26mr1846732wmq.37.1665654197398;
-        Thu, 13 Oct 2022 02:43:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM42THVg7nhaB7qLqF5GFVCwFxBO1/Ueag57fTSguAHHm0uXxPyMwk7RcOINk5grnJLE3KuYrw==
-X-Received: by 2002:a05:600c:19c7:b0:3c6:dd03:2b26 with SMTP id u7-20020a05600c19c700b003c6dd032b26mr1846717wmq.37.1665654197222;
-        Thu, 13 Oct 2022 02:43:17 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e14-20020adffc4e000000b002301c026acasm1570167wrs.85.2022.10.13.02.43.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 02:43:16 -0700 (PDT)
-Message-ID: <44ac29ea-7836-1cd6-fced-9ffd88a7f056@redhat.com>
-Date:   Thu, 13 Oct 2022 11:43:15 +0200
+        Thu, 13 Oct 2022 05:43:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E512014639B;
+        Thu, 13 Oct 2022 02:43:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83396B80DFB;
+        Thu, 13 Oct 2022 09:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876F9C433D6;
+        Thu, 13 Oct 2022 09:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665654214;
+        bh=1Wk/QwX861ZXRIsXyj/MtxL7hcOYvbboclUBxQXQ+gA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DyT3rESoSjtLAbY+trFdqeCZvhvg6UgB4I30nZMMVC/8n87iu+UzlDysgiyQklp5D
+         fEAgah3z2TmDEpR3XQ+rbkxtfxTBekBMELjMkTSjooh95vZgOMJ219/aTe0yevqOud
+         1XebXGWpc4CfUAHWByVeVdAe89P8FAuU59iaCjh+kJmUt/7/8ET+fxOJZYvNIwSCl1
+         OSgJfO0R0gdK5XbwVLi2BssbD+1XisSZaiCM2aaLZeWwNQC/IhkcEVz5ebl9mLY9sE
+         RBhA/143ZWa8RyVH8vHK6U2TZfijSGrb9wzX0gS4Z93xlnxvn0ylP1eEydre8KAIlw
+         Kmhwv0RylfF/Q==
+Date:   Thu, 13 Oct 2022 12:43:29 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4] net/sock: Introduce trace_sk_data_ready()
+Message-ID: <Y0fdwSkyoFI2SDuw@unreal>
+References: <20221011195856.13691-1-yepeilin.cs@gmail.com>
+ <20221012232121.27374-1-yepeilin.cs@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 2/2] drm/vc4: hdmi: Check the HSM rate at runtime_resume
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
- <20220929-rpi-pi3-unplugged-fixes-v1-2-cd22e962296c@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220929-rpi-pi3-unplugged-fixes-v1-2-cd22e962296c@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012232121.27374-1-yepeilin.cs@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 11:21, Maxime Ripard wrote:
-> If our HSM clock has not been properly initialized, any register access
-> will silently lock up the system.
+On Wed, Oct 12, 2022 at 04:21:21PM -0700, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
 > 
-> Let's check that this can't happen by adding a check for the rate before
-> any register access, and error out otherwise.
+> As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
+> callback implementations.  For example:
 > 
-> Link: https://lore.kernel.org/dri-devel/20220922145448.w3xfywkn5ecak2et@pengutronix.de/
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> <...>
+>   ksoftirqd/0-16  [000] ..s..  99.784482: sk_data_ready: family=10 protocol=58 func=sock_def_readable
+>   ksoftirqd/0-16  [000] ..s..  99.784819: sk_data_ready: family=10 protocol=58 func=sock_def_readable
+> <...>
+> 
+> Suggested-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 > ---
+> changes since v3:
+>   - Avoid using __func__ everywhere (Leon Romanovsky)
+>   - No need to trace iscsi_target_sk_data_ready() (Leon Romanovsky)
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+I meant no need both trace point and debug print and suggested to remove
+debug print.
 
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Thanks
