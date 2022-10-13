@@ -2,143 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3ECF5FD47B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45FE5FD47D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiJMGHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 02:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S229746AbiJMGH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiJMGHd (ORCPT
+        with ESMTP id S229776AbiJMGHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:07:33 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B412412C89B;
-        Wed, 12 Oct 2022 23:07:31 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665641249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3B/9bB/v/kAeYOKjb5xUPdKaOHUVHWVCa/ERpWp/sGA=;
-        b=GNZ/NbOcaAEkjTxmespwlg1bD3ilJEw93QUxGMxPhdRw9uML+Dz1nee8CiJaRVbj/Sut9K
-        vt61V6yMlsC2GbHv71hYiy4GPZdknDfK6NmHqpZ2Ym0QmBZtY0ujRlQJqBasTP83z/zzYz
-        Z+URyC7gk03IOY4qm+YB7cwvwhXCr6Y=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     shaozhengchao@huawei.com
-Cc:     caihuoqing <caihuoqing@baidu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qiao Ma <mqaio@linux.alibaba.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] net: hinic: Set max_mtu/min_mtu directly to simplify the code.
-Date:   Thu, 13 Oct 2022 14:07:08 +0800
-Message-Id: <20221013060723.7306-1-cai.huoqing@linux.dev>
+        Thu, 13 Oct 2022 02:07:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB4612D831;
+        Wed, 12 Oct 2022 23:07:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60BE2B81CAA;
+        Thu, 13 Oct 2022 06:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A81C433C1;
+        Thu, 13 Oct 2022 06:07:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665641266;
+        bh=Ymnia1WPOGeu1Ff6synlWOcYTJSKP3sMwC6ULsVsBPc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dlehKBZSBL1mlIXmtQcegbAMYXgWheW/aUdCPkt+xblP9aog3CLMPgFlVPnOxLgY2
+         7yOI0f/02Wsn8S38RNhDRABy3605+rhQQ7nxr6rXEfOtQ5yssF2j/uL2Y4wefEbMOc
+         ueRbPU2Vo3IeEwrAqRztTDJ02I70sv9GW0RhpTJUQzHuYlK7c5scdngv9TrWYvv4Lr
+         j4M6rmzMplm/fInTc6vA4lanb9iQoBXfkq+b1eUHIqp4OVUh1rvCDIk7CYTjU+NDek
+         AVm+FGCQbZeBq4bjqOL0BRgNf0aI6eoepeQqRIgzXLBrzoQEwLL0kSrqneuLQE37Mm
+         hCmv5SAFrvjXw==
+Date:   Wed, 12 Oct 2022 23:07:43 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Robert Elliott <elliott@hpe.com>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 19/19] crypto: x86/sha - register only the best
+ function
+Message-ID: <Y0erL2k1PGVN4qme@sol.localdomain>
+References: <20221006223151.22159-1-elliott@hpe.com>
+ <20221012215931.3896-1-elliott@hpe.com>
+ <20221012215931.3896-20-elliott@hpe.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012215931.3896-20-elliott@hpe.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: caihuoqing <caihuoqing@baidu.com>
+On Wed, Oct 12, 2022 at 04:59:31PM -0500, Robert Elliott wrote:
+> Don't register and unregister each of the functions from least-
+> to most-optimized (SSSE3 then AVX then AVX2); determine the
+> most-optimized function and load only that version.
+> 
+> Suggested-by: Tim Chen <tim.c.chen@linux.intel.com>
+> Signed-off-by: Robert Elliott <elliott@hpe.com>
 
-Set max_mtu/min_mtu directly to avoid making the validity judgment
-when set mtu, because the judgment is made in net/core: dev_validate_mtu,
-so to simplify the code.
+I thought that it's done the way it is so that it's easy to run the self-tests
+for all the different variants.
 
-Signed-off-by: caihuoqing <caihuoqing@baidu.com>
----
-v1->v2:
-	1.Update changelog.
-	2.Reverse MAX_MTU to max jumbo frame size.
-
-	v1 link: https://lore.kernel.org/lkml/20221012082945.10353-1-cai.huoqing@linux.dev/
-
- drivers/net/ethernet/huawei/hinic/hinic_dev.h  |  4 ++++
- drivers/net/ethernet/huawei/hinic/hinic_main.c |  3 ++-
- drivers/net/ethernet/huawei/hinic/hinic_port.c | 17 +----------------
- 3 files changed, 7 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
-index a4fbf44f944c..2bbc94c0a9c1 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_dev.h
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
-@@ -22,6 +22,10 @@
- 
- #define LP_PKT_CNT		64
- 
-+#define HINIC_MAX_JUMBO_FRAME_SIZE		15872
-+#define HINIC_MAX_MTU_SIZE		(HINIC_MAX_JUMBO_FRAME_SIZE - ETH_HLEN - ETH_FCS_LEN)
-+#define HINIC_MIN_MTU_SIZE		256
-+
- enum hinic_flags {
- 	HINIC_LINK_UP = BIT(0),
- 	HINIC_INTF_UP = BIT(1),
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-index c23ee2ddbce3..41e52f775aae 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
-@@ -1189,7 +1189,8 @@ static int nic_dev_init(struct pci_dev *pdev)
- 	else
- 		netdev->netdev_ops = &hinicvf_netdev_ops;
- 
--	netdev->max_mtu = ETH_MAX_MTU;
-+	netdev->max_mtu = HINIC_MAX_MTU_SIZE;
-+	netdev->min_mtu = HINIC_MIN_MTU_SIZE;
- 
- 	nic_dev = netdev_priv(netdev);
- 	nic_dev->netdev = netdev;
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
-index 28ae6f1201a8..0a39c3dffa9a 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
-@@ -17,9 +17,6 @@
- #include "hinic_port.h"
- #include "hinic_dev.h"
- 
--#define HINIC_MIN_MTU_SIZE              256
--#define HINIC_MAX_JUMBO_FRAME_SIZE      15872
--
- enum mac_op {
- 	MAC_DEL,
- 	MAC_SET,
-@@ -147,24 +144,12 @@ int hinic_port_get_mac(struct hinic_dev *nic_dev, u8 *addr)
-  **/
- int hinic_port_set_mtu(struct hinic_dev *nic_dev, int new_mtu)
- {
--	struct net_device *netdev = nic_dev->netdev;
- 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
- 	struct hinic_port_mtu_cmd port_mtu_cmd;
- 	struct hinic_hwif *hwif = hwdev->hwif;
- 	u16 out_size = sizeof(port_mtu_cmd);
- 	struct pci_dev *pdev = hwif->pdev;
--	int err, max_frame;
--
--	if (new_mtu < HINIC_MIN_MTU_SIZE) {
--		netif_err(nic_dev, drv, netdev, "mtu < MIN MTU size");
--		return -EINVAL;
--	}
--
--	max_frame = new_mtu + ETH_HLEN + ETH_FCS_LEN;
--	if (max_frame > HINIC_MAX_JUMBO_FRAME_SIZE) {
--		netif_err(nic_dev, drv, netdev, "mtu > MAX MTU size");
--		return -EINVAL;
--	}
-+	int err;
- 
- 	port_mtu_cmd.func_idx = HINIC_HWIF_FUNC_IDX(hwif);
- 	port_mtu_cmd.mtu = new_mtu;
--- 
-2.25.1
-
+- Eric
