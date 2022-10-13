@@ -2,147 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D52D5FD66B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7BE5FD673
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiJMIqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S229826AbiJMIuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJMIqp (ORCPT
+        with ESMTP id S229491AbiJMIuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:46:45 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8897F15FD96;
-        Thu, 13 Oct 2022 01:46:40 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29D8kR7U037725;
-        Thu, 13 Oct 2022 03:46:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665650787;
-        bh=ZqAvK0Bo9tuPdjUmWHMjOdEYetr/nCxAujiZNOn+ZdA=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=gpzRAdshxB8Jq1SvJX2TQUrWu8Ddg+vfb8VR3uyY3ayKQGtQkSw72IYeD3r2S5KwZ
-         u5Dw+QG0zOfFIr7hPL0Tp0oj4VKEVwsgfGFUh6qbcRYeVvGStVwNhbJ9GcAyT/qbDt
-         mP3KacX4qOtP51MKXEB0EOkPyHTKbxvO4mGtjVic=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29D8kRdh036671
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 13 Oct 2022 03:46:27 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 13
- Oct 2022 03:46:26 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 13 Oct 2022 03:46:27 -0500
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29D8kL0a002875;
-        Thu, 13 Oct 2022 03:46:22 -0500
-Message-ID: <531c3974-d4db-c2eb-62b6-0e74eee5f0c4@ti.com>
-Date:   Thu, 13 Oct 2022 14:16:21 +0530
+        Thu, 13 Oct 2022 04:50:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83C65A3C0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:50:02 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id w18so2356063ejq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eq/ww/61kF7UEYUJquz3gQawyeedcnVNs9ttspn+Jxg=;
+        b=MzFESBng0hz0sPP1i7MX53IRdqo+s6IANrM+UXWer47SlyA2kws0MuA1VCNXNVKA4u
+         grEBzayKCCC67pUYT2xAxT5v4PNSTLtH+7tvrD+PzW4NhzO5In05Q9zc84BGpc54IRwD
+         v1REmL5X2zSk0vLYmZZjJkC4/KM/5ImJ1gDOA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Eq/ww/61kF7UEYUJquz3gQawyeedcnVNs9ttspn+Jxg=;
+        b=DTdlj5luam7AnY62RUVXWBbwCmI8oBKbb2kRVkaflvldcd6EBy6vnhXXm4QroILY2n
+         vndn4UeMJGpEk9FMhHyYS+nk3j0KQqEsJKvPgF7+DWEu2+FeJ3XX5tOk0e985Yg6mIKz
+         TONy1lEidhAllzN9zKjlesDZ+S9vV8gqeJAAK3aeT86TOMjepiopvDD0uVVFxzpQDc4a
+         bL2XW8WmwZnc4Qnk2W0xml/bMwXRg4xDOQwoqKRrukPcyGPc14EsiYMGyHYwF6NgvSw9
+         8Xim7B0Nwa1FEJy9mHR4+lhx0B5sNk1G6MpuP2sFfLtDbqJFuvYy68HvGmQI3dmh8dXg
+         h1Bg==
+X-Gm-Message-State: ACrzQf1rgYnVHRgfKdQ0BqIzCOIw8wo50z8lBEzayZj7xqchBByTeUL5
+        h0nMPB773MiqauGIth/R5kT0imJzlXq4EIFPoSZtFrb2c80=
+X-Google-Smtp-Source: AMsMyM7GhWNCiU4Xw0H6JLxXS6xUxkVE10ALtrZFVSH2+Giufp5J4ESRyyRvIziMdJO/0OnJasP0RYiFjlaMcOE56fE=
+X-Received: by 2002:a17:907:b07:b0:78d:ce2b:1999 with SMTP id
+ h7-20020a1709070b0700b0078dce2b1999mr12044586ejl.267.1665651001242; Thu, 13
+ Oct 2022 01:50:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [EXTERNAL] Re: [PATCH v6 1/5] dt-bindings: remoteproc: Add PRU
- consumer bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, MD Danish Anwar <danishanwar@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <srk@ti.com>,
-        Suman Anna <s-anna@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>, <nm@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Tero Kristo <t-kristo@ti.com>, <vigneshr@ti.com>
-References: <20221012114429.2341215-1-danishanwar@ti.com>
- <20221012114429.2341215-2-danishanwar@ti.com>
- <166558063092.1936865.1773120279875751081.robh@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-In-Reply-To: <166558063092.1936865.1773120279875751081.robh@kernel.org>
+References: <20221013101528.4afacfe3@canb.auug.org.au>
+In-Reply-To: <20221013101528.4afacfe3@canb.auug.org.au>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 13 Oct 2022 10:49:50 +0200
+Message-ID: <CAJfpegs85WbrJ8sQ5Y3XCwtSdSwjK+m5GCAkTBOEUBc1-=h0xg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the fuse tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, 13 Oct 2022 at 01:15, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the fuse tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> ERROR: modpost: ".delete_from_page_cache" [fs/fuse/fuse.ko] undefined!
+>
+> Caused by commit
+>
+>   0d659ac83481 ("fuse: fix readdir cache race")
+>
+> delete_from_page_cache has not been exported to modules since commit
+>
+>   452e9e6992fe ("filemap: Add filemap_remove_folio and __filemap_remove_folio")
+>
+> Which was merged into Linus tree in v5.17-rc1.
+>
+> I have used the fuse tree from next-20221012 for today.
+>
+> Is this really destined for v6.1?
 
-On 12/10/22 18:49, Rob Herring wrote:
-> On Wed, 12 Oct 2022 17:14:25 +0530, MD Danish Anwar wrote:
->> From: Suman Anna <s-anna@ti.com>
->>
->> Add a YAML binding document for PRU consumers. The binding includes
->> all the common properties that can be used by different PRU consumer
->> or application nodes and supported by the PRU remoteproc driver.
->> These are used to configure the PRU hardware for specific user
->> applications.
->>
->> The application nodes themselves should define their own bindings.
->>
->> Co-developed-by: Tero Kristo <t-kristo@ti.com>
->> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->> Signed-off-by: Suman Anna <s-anna@ti.com>
->> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->> ---
->>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 132 ++++++++++++++++++
->>  1 file changed, 132 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.example.dtb:0:0: /example-0/icssg2-eth: failed to match any schema with compatible: ['ti,am654-icssg-prueth']
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
+This particular patch, yes.   I posted the patch and asked Willy about
+delete_from_page_cache().
 
-This error is coming as this dt-schema has 'ti,am654-icssg-prueth' as
-compatible in the example section, which is introduced in [1] patch series.
-Including the full example section in this dt schema binding is causing this error.
+Rebased my for-next branch on HEAD and re-added the EXPORT_SYMBOL to
+fix this for now.
 
-In v5 [2] of this series, only the 'ti,prus', 'firmware-name' and
-'ti,pruss-gp-mux-sel' properties were included in the example section. Mathieu
-had asked to include full example in the dt binding document.
-
-So I added full example section. But in full example I included compatible
-property as well which is not introduced in this series thus creating dt check
-binding error.
-
-I will remove the example section from here and add it to dt-schema binding of
-icssg-prueth.
-
-[1] https://lore.kernel.org/all/20220531095108.21757-2-p-mohan@ti.com/
-[2] https://lore.kernel.org/all/20220607045650.4999-2-p-mohan@ti.com/
-
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+Thanks,
+Miklos
