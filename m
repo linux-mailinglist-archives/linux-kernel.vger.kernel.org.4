@@ -2,163 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420345FDCE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415995FDCEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJMPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S229613AbiJMPPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJMPMK (ORCPT
+        with ESMTP id S229671AbiJMPPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:12:10 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F7110F882
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:12:08 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ot12so4657042ejb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jztp4lg3b2xKFx2QMEAmueYlDHz1ngS/iTxMN5MMQKI=;
-        b=BzrrUqdowfxFsgNus7ZHX0WuY+Ai1wcUKWh6xCffhziV8sE3wopDACnnjMhxtCGOoU
-         i/3k+OLLlJOHe2bPXTH65OS7DTjfkpnXF0keXt5fBgLbraRCbtjQyIZsxsB4sGiAPyqF
-         eSeyN0ArXOiSI2tnEFa/Wvld7vIzKK+SVCtiM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jztp4lg3b2xKFx2QMEAmueYlDHz1ngS/iTxMN5MMQKI=;
-        b=ZTnkSY31aBmv1u0y+dH5/tP/vayASjGNXOes5Q8Qe82O3k1sgqC3CNvw2cEpiuzHFQ
-         AXagbHK5KSCBPyPajkNMLZPlnkzQR9Lif466vOQ+DtGDFRUiaop1RYwmnCfiemL0vHR0
-         aCJlNyXw4ed+QQ52uZWe1KM2Q0WUeAvoSmdifBcm4KwHvYXoBMOGk/tYfSyqGNwi7VbD
-         D/4P6ENNxYz/Iw16AIGzdiydrfEyulzR+00jztQEgHMWXZXHFCwzv8GzJcVOiTZ+pnyu
-         7JAtwHPR0im6QjiEzJQ3P5liRdJ75GCaI6XtT8rKuTPZoqEc4k/nowLjqH94jzu6YuBF
-         1Gog==
-X-Gm-Message-State: ACrzQf0B2exrsxSqLZ/t+hFJyis4GKXKoZavuyYz/3Fk35CiPx4P559w
-        InfhIAYrL/E3o53weKBD93WgG2EPefujvLIh
-X-Google-Smtp-Source: AMsMyM74tm84a6GfiqvmXg/fGr5lxjPyIN+IKjgUYQk+SPmAH95sEpLYJnXPFs0gPt0ei151buc23g==
-X-Received: by 2002:a17:907:782:b0:740:7120:c6e7 with SMTP id xd2-20020a170907078200b007407120c6e7mr163446ejb.313.1665673926724;
-        Thu, 13 Oct 2022 08:12:06 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id h2-20020a50ed82000000b00458dda85495sm24374edr.0.2022.10.13.08.12.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 08:12:05 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id n12so3303997wrp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:12:04 -0700 (PDT)
-X-Received: by 2002:adf:dd0c:0:b0:22e:4bf6:6c08 with SMTP id
- a12-20020adfdd0c000000b0022e4bf66c08mr298544wrm.617.1665673924157; Thu, 13
- Oct 2022 08:12:04 -0700 (PDT)
+        Thu, 13 Oct 2022 11:15:32 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43541BC62B;
+        Thu, 13 Oct 2022 08:15:28 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CF5B01EC064E;
+        Thu, 13 Oct 2022 17:15:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665674122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BxnWw47WYQ2Rd0ryZEoZGtMXC47/yHMYat/iIrPgZcw=;
+        b=afoCRuEWH+GTymUBeY2g6XheR8ovjS20OpCNHyMXhtOOr0NLl4oHSxCq6HnUtLkdAxg9zf
+        GHDQQ2HadRqEIdaMl3VtOQKtHzKaIoPY7Pk1Hp4F/7Y/4BA+z2YbWUwg16pSniaeTsYX6c
+        ZfNiSxF6r9SRNWZOAaxx48DAJASLFT0=
+Date:   Thu, 13 Oct 2022 17:15:18 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+Message-ID: <Y0grhk1sq2tf/tUl@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-References: <20221007145116.46554-1-krzysztof.kozlowski@linaro.org>
- <CAD=FV=UAcn=yeCZ_jum9kGgqsdKsPpya-FPumYUWO=iyp-kKYw@mail.gmail.com> <4aa8450f-4504-c65e-56f1-0625584fb8cd@linaro.org>
-In-Reply-To: <4aa8450f-4504-c65e-56f1-0625584fb8cd@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 13 Oct 2022 08:11:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Va6xUtVEd0jgQF3+5OM6tQ=nW6xZeRatXULY3SUqAKBQ@mail.gmail.com>
-Message-ID: <CAD=FV=Va6xUtVEd0jgQF3+5OM6tQ=nW6xZeRatXULY3SUqAKBQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc7180: align TLMM pin
- configuration with DT schema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jun 20, 2022 at 11:05:01PM +0000, Ashish Kalra wrote:
+> +static void snp_leak_pages(unsigned long pfn, unsigned int npages)
 
-On Thu, Oct 13, 2022 at 7:59 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> >> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-> >> index 1bd6c7dcd9e9..c66568a882b3 100644
-> >> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-> >> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-> >> @@ -180,30 +180,19 @@ &wifi {
-> >>  /* PINCTRL - modifications to sc7180-trogdor.dtsi */
-> >>
-> >>  &en_pp3300_dx_edp {
-> >> -       pinmux {
-> >> -               pins = "gpio67";
-> >> -       };
-> >> -
-> >> -       pinconf {
-> >> -               pins = "gpio67";
-> >> -       };
-> >> +       pins = "gpio67";
-> >>  };
-> >>
-> >>  &sec_mi2s_active{
-> >> -       pinmux {
-> >> -               pins = "gpio49", "gpio50", "gpio51", "gpio52";
-> >> -               function = "mi2s_1";
-> >> -       };
-> >> +       pins = "gpio49", "gpio50", "gpio51", "gpio52";
-> >
-> > Looks like the point of the homestar override is to add an extra pin
-> > (gpio52) but it forgot to update the list in the "pinconf" as well so
-> > gpio52 wasn't getting a drive strength and bias set. Your patch
-> > has the side effect of fixing this. That looks right to me (match
-> > GPIO51) given that the name of GPIO51 is AMP_DIN and GPIO52 AMP_DIN2.
->
-> I miss here something... There was no pinconf in
-> sc7180.dtsi/sc7180-trogdor-homestar.dtsi/homestar.dts
->
-> Where do you see the drive strength and bias set for the gpio49-51?
+That function name looks wrong.
 
-Let's see. I think you're missing "sc7180-trogdor.dtsi". So looking at
-mainline today without applying your patches.
+> +{
+> +	WARN(1, "psc failed, pfn 0x%lx pages %d (leaking)\n", pfn, npages);
+> +	while (npages--) {
+> +		memory_failure(pfn, 0);
+		^^^^^^^^^^^^^^^^^^^^^^
 
-In sc7180.dtsi:
+Why?
 
-  sec_mi2s_active: sec-mi2s-active {
-    pinmux {
-      pins = "gpio49", "gpio50", "gpio51";
-      function = "mi2s_1";
-    };
-  };
+ * This function is called by the low level machine check code
+ * of an architecture when it detects hardware memory corruption
+ * of a page. It tries its best to recover, which includes
+ * dropping pages, killing processes etc.
 
-Then in sc7180-trogdor.dtsi:
+I don't think you wanna do that.
 
-  &sec_mi2s_active {
-    pinconf {
-      pins = "gpio49", "gpio50", "gpio51";
-      drive-strength = <2>;
-      bias-pull-down;
-    };
-  };
+It looks like you want to prevent the page from being used again but not
+mark it as PG_hwpoison and whatnot. PG_reserved perhaps?
 
-Then in sc7180-trogdor-homestar.dtsi:
+> +		dump_rmpentry(pfn);
+> +		pfn++;
+> +	}
+> +}
+> +
+> +static int snp_reclaim_pages(unsigned long pfn, unsigned int npages, bool locked)
+> +{
+> +	struct sev_data_snp_page_reclaim data;
+> +	int ret, err, i, n = 0;
+> +
+> +	for (i = 0; i < npages; i++) {
+> +		memset(&data, 0, sizeof(data));
+> +		data.paddr = pfn << PAGE_SHIFT;
 
-  &sec_mi2s_active{
-    pinmux {
-      pins = "gpio49", "gpio50", "gpio51", "gpio52";
-      function = "mi2s_1";
-    };
-  };
+Oh wow, this is just silly. A struct for a single u64. Just use a
 
-The end result of those snippets ought to be something where, on
-homestar, the pinmux gets set to "mi2s_1" for gpio49 - 52 but the
-pinconf only gets set for gpio49 - 51 (missing 52).
+	u64 paddr;
 
-Your patch fixes this oversight because it combines the muxing and
-configuration into one node.
+directly. But we had this topic already...
 
--Doug
+> +
+> +		if (locked)
+
+Ew, that's never a good design - conditional locking.
+
+> +			ret = __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
+> +		else
+> +			ret = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
+
+<---- newline here.
+
+> +		if (ret)
+> +			goto cleanup;
+> +
+> +		ret = rmp_make_shared(pfn, PG_LEVEL_4K);
+> +		if (ret)
+> +			goto cleanup;
+> +
+> +		pfn++;
+> +		n++;
+> +	}
+> +
+> +	return 0;
+> +
+> +cleanup:
+> +	/*
+> +	 * If failed to reclaim the page then page is no longer safe to
+> +	 * be released, leak it.
+> +	 */
+> +	snp_leak_pages(pfn, npages - n);
+
+So this looks real weird: we go and reclaim pages, we hit an error
+during reclaiming a page X somewhere in-between and then we go and mark
+the *remaining* pages as not to be used?!
+
+Why?
+
+Why not only that *one* page which failed and then we continue with the
+rest?!
+
+> +	return ret;
+> +}
+> +
+> +static inline int rmp_make_firmware(unsigned long pfn, int level)
+> +{
+> +	return rmp_make_private(pfn, 0, level, 0, true);
+> +}
+
+That's a silly wrapper used only once. Just do at the callsite:
+
+	/* Mark this page as belonging to firmware */
+	rc = rmp_make_private(pfn, 0, level, 0, true);
+
+> +
+> +static int snp_set_rmp_state(unsigned long paddr, unsigned int npages, bool to_fw, bool locked,
+> +			     bool need_reclaim)
+
+Tangential to the above, this is just nuts with those bool arguments.
+Just look at the callsites: do you understand what they do?
+
+	snp_set_rmp_state(paddr, npages, true, locked, false);
+
+what does that do? You need to go up to the definition of the function,
+count the arguments and see what that "true" arg stands for.
+
+What you should do instead is, have separate helpers which do only one
+thing:
+
+	rmp_mark_pages_firmware();
+	rmp_mark_pages_shared();
+	rmp_mark_pages_...
+
+and then have the *callers* issue snp_reclaim_pages() when needed. So you'd have
+
+	rmp_mark_pages_firmware();
+	rmp_mark_pages_shared()
+
+and __snp_free_firmware_pages() would do
+
+	rmp_mark_pages_shared();
+	snp_reclaim_pages();
+
+and so on.
+
+And then if you need locking, the callers can decide which sev_do_cmd
+variant to issue.
+
+And then if you have common code fragments which you can unify into a
+bigger helper function, *then* you can do that.
+
+Instead of multiplexing it this way. Which makes it really hard to
+follow what the code does.
+
+
+> +	unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT; /* Cbit maybe set in the paddr */
+
+No side comments pls.
+
+> +	int rc, n = 0, i;
+> +
+> +	for (i = 0; i < npages; i++) {
+> +		if (to_fw)
+> +			rc = rmp_make_firmware(pfn, PG_LEVEL_4K);
+> +		else
+> +			rc = need_reclaim ? snp_reclaim_pages(pfn, 1, locked) :
+> +					    rmp_make_shared(pfn, PG_LEVEL_4K);
+> +		if (rc)
+> +			goto cleanup;
+> +
+> +		pfn++;
+> +		n++;
+> +	}
+> +
+> +	return 0;
+> +
+> +cleanup:
+> +	/* Try unrolling the firmware state changes */
+> +	if (to_fw) {
+> +		/*
+> +		 * Reclaim the pages which were already changed to the
+> +		 * firmware state.
+> +		 */
+> +		snp_reclaim_pages(paddr >> PAGE_SHIFT, n, locked);
+> +
+> +		return rc;
+> +	}
+> +
+> +	/*
+> +	 * If failed to change the page state to shared, then its not safe
+> +	 * to release the page back to the system, leak it.
+> +	 */
+> +	snp_leak_pages(pfn, npages - n);
+> +
+> +	return rc;
+> +}
+
+...
+
+> +void snp_free_firmware_page(void *addr)
+> +{
+> +	if (!addr)
+> +		return;
+> +
+> +	__snp_free_firmware_pages(virt_to_page(addr), 0, false);
+> +}
+> +EXPORT_SYMBOL(snp_free_firmware_page);
+
+EXPORT_SYMBOL_GPL() ofc.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
