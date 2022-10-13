@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB0C5FD468
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C0B5FD471
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJMF7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 01:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
+        id S229741AbiJMGDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiJMF7E (ORCPT
+        with ESMTP id S229546AbiJMGDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 01:59:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5D612B342;
-        Wed, 12 Oct 2022 22:59:03 -0700 (PDT)
+        Thu, 13 Oct 2022 02:03:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52AE10566D;
+        Wed, 12 Oct 2022 23:03:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30EE2616E9;
-        Thu, 13 Oct 2022 05:59:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF91C433C1;
-        Thu, 13 Oct 2022 05:59:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 659F7B81CAA;
+        Thu, 13 Oct 2022 06:03:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD38EC433D6;
+        Thu, 13 Oct 2022 06:03:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665640742;
-        bh=DK64fl751xVY8Ub8Pzwk0LwN2a/+JSruWUsDadJ0ANk=;
+        s=k20201202; t=1665640996;
+        bh=F1785BOSplLzR4WTfp2dJKZ1diabrk2YQw2XRMSDRVU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vi/Mg5di5NC3MyXp+85YQfB/46sEBKlvxvTO6WHWlGUy+yuktgN+kKPbLRhdYMun6
-         s1pmi1xwUbvsJmBKCwz+q7vO5gsUSw32g2NDRUJJME23LY6t3NkHP0lbQy7iDEcaGk
-         qRuYjAJXSq4a1IEHdyO9z5W9VdSRCWnzYGIgRXBK2WiOg7TYTakkyxu8TbxgGuiiG2
-         +etiyAmuQR1KfN0n1cwhiNajj73CleaXfNDU1nTLWKZrf3dp/8knkd1WgGgkByE1D6
-         xAm8wluSM9K92pgS7m+5BU/4sneI4v5aqqH8kBQa/K7QSC1E5iFs1aAe3GKK215Ied
-         IpylxptBEAlEg==
-Date:   Wed, 12 Oct 2022 22:59:00 -0700
+        b=JJj1gDIPPnPFO9tP5GU0QFleMWK0fJYTSPjnzIDUJ6eSgGCUr1GCqmkFGTObnOgio
+         pEt4h6Tdt37JaJWAvJLM2UwuPTnUa5Ef1GrPb4PETBSLyWs7nWzXofhBd6f9kHb1Ne
+         w6mip2sJjSaAfoGrgzysgpPS1jWj9ZBW/5fS2psP4UgduSZT2aKyhYSQzmnDcD+0Ls
+         V1/CHnTXdlzfDCpslYS7QjsSoHA9x8e2/vWWsbeiosGBhgXLiOJT5KHWwK9YdT0daQ
+         uPu194T70QgXrD/oZ8Zv81TEPSMeDbgoCxwU0W0V4+nEa1zc/5CRg+f16DMZdmHFg3
+         Ksv8sOMdpav9w==
+Date:   Wed, 12 Oct 2022 23:03:13 -0700
 From:   Eric Biggers <ebiggers@kernel.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+104c2a89561289cec13e@syzkaller.appspotmail.com>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-fscrypt@vger.kernel.org, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] memory leak in crypto_create_tfm_node
-Message-ID: <Y0epJNEHusJWKE51@sol.localdomain>
-References: <0000000000009aad5e05eac85f36@google.com>
- <Y0aHieBUF+CY2rTT@gondor.apana.org.au>
- <CACT4Y+bATweY=FD-9+FN3nyTjuN7mNy6QM8y6GeSzPdjzo4R-w@mail.gmail.com>
- <Y0dwVfoSE4igPtMW@gondor.apana.org.au>
+To:     Robert Elliott <elliott@hpe.com>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/19] crypto: x86/ghash - limit FPU preemption
+Message-ID: <Y0eqIQ9PC3Edd+D/@sol.localdomain>
+References: <20221006223151.22159-1-elliott@hpe.com>
+ <20221012215931.3896-1-elliott@hpe.com>
+ <20221012215931.3896-9-elliott@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0dwVfoSE4igPtMW@gondor.apana.org.au>
+In-Reply-To: <20221012215931.3896-9-elliott@hpe.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,25 +56,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 09:56:37AM +0800, Herbert Xu wrote:
-> On Wed, Oct 12, 2022 at 12:26:09PM +0200, Dmitry Vyukov wrote:
-> > On Wed, 12 Oct 2022 at 11:23, Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> > >
-> > > Hi:
-> > >
-> > > I presume this is a leak in fscrypt (or perhaps something at an
-> > > even higher level).
-> > 
-> > Eric sent this:
-> > 
-> > [PATCH] fscrypt: fix keyring memory leak on mount failure
-> > https://lore.kernel.org/all/20221011213838.209879-1-ebiggers@kernel.org/
-> 
-> Oh I missed that.
-> 
-> Thanks,
+On Wed, Oct 12, 2022 at 04:59:20PM -0500, Robert Elliott wrote:
+> -	kernel_fpu_begin();
+> -	clmul_ghash_update(dst, src, srclen, &ctx->shash);
+> -	kernel_fpu_end();
+> +	while (srclen >= GHASH_BLOCK_SIZE) {
+> +		unsigned int fpulen = min(srclen, FPU_BYTES);
+> +
+> +		kernel_fpu_begin();
+> +		while (fpulen >= GHASH_BLOCK_SIZE) {
+> +			int n = min_t(unsigned int, fpulen, GHASH_BLOCK_SIZE);
+> +
+> +			clmul_ghash_update(dst, src, n, &ctx->shash);
+> +
+> +			srclen -= n;
+> +			fpulen -= n;
+> +			src += n;
+> +		}
+> +		kernel_fpu_end();
+> +	}
 
-Yes, and I used 'git format-patch --in-reply-to=$messageId' with the message ID
-of the syzbot email, so it should show up in this same thread.
+Another loop that doesn't make sense.  Why is this only passing 16 bytes at a
+time into the assembly code?  There shouldn't be an inner loop here at all.
 
 - Eric
