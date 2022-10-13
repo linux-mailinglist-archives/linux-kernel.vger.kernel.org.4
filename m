@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1F65FDF89
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6AC5FDFC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiJMRzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S230273AbiJMR6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJMRyY (ORCPT
+        with ESMTP id S230165AbiJMR5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:54:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF9114FD27;
-        Thu, 13 Oct 2022 10:53:47 -0700 (PDT)
+        Thu, 13 Oct 2022 13:57:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C0B43E77;
+        Thu, 13 Oct 2022 10:56:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A476AB82022;
-        Thu, 13 Oct 2022 17:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B77C433C1;
-        Thu, 13 Oct 2022 17:53:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C9D461913;
+        Thu, 13 Oct 2022 17:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64898C433C1;
+        Thu, 13 Oct 2022 17:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683624;
-        bh=4i4bGpQbrfxPFjyQlwZKPo4OoBFe09RvpTK42I5SAjU=;
+        s=korg; t=1665683760;
+        bh=xm4dJk+a4xXbTCFuEdRLmVRDxS983Q+yBTlQeFFvqXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0XbWywXVsN+Gf1BTrUCoUCFtlATFigIIt3bAMi1/I2MszT+5PS0js8qLk3MwhbzX/
-         Xb4kaw5H8l7L4zA9ckR+o10iR8K/WGS/WwPgCHdxhQwqNQQ6aRVqohaD+KbWxCLt1C
-         ItCgd6VIGlMFwoG7RLIiXDb8XSNAasUZYbeZvr5A=
+        b=HlJHNtdjdicrwcNlOHt93h90hOZS9tMBXJMXH/s3OpXpYUEoI/cHBHIj2klViu3c1
+         lSQ6jiAEOxj/vxB4ZRjaQmHY//7fmP+eCB95CZ2Ti7rf0ZisMQ39HA2iUqTZGRnyZo
+         d4LCuJ4t2nTywZ2YMQqmNCMYXQYfEVregOjMaHGw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Soenke Huster <shuster@seemoo.tu-darmstadt.de>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 32/38] wifi: cfg80211: ensure length byte is present before access
-Date:   Thu, 13 Oct 2022 19:52:33 +0200
-Message-Id: <20221013175145.309108696@linuxfoundation.org>
+        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 40/54] USB: serial: qcserial: add new usb-id for Dell branded EM7455
+Date:   Thu, 13 Oct 2022 19:52:34 +0200
+Message-Id: <20221013175148.313009411@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+References: <20221013175147.337501757@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Frank Wunderlich <frank-w@public-files.de>
 
-commit 567e14e39e8f8c6997a1378bc3be615afca86063 upstream.
+commit eee48781ea199e32c1d0c4732641c494833788ca upstream.
 
-When iterating the elements here, ensure the length byte is
-present before checking it to see if the entire element will
-fit into the buffer.
+Add support for Dell 5811e (EM7455) with USB-id 0x413c:0x81c2.
 
-Longer term, we should rewrite this code using the type-safe
-element iteration macros that check all of this.
-
-Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
-Reported-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/scan.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/usb/serial/qcserial.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -265,7 +265,8 @@ static size_t cfg80211_gen_new_ie(const
- 	tmp_old = cfg80211_find_ie(WLAN_EID_SSID, ie, ielen);
- 	tmp_old = (tmp_old) ? tmp_old + tmp_old[1] + 2 : ie;
- 
--	while (tmp_old + tmp_old[1] + 2 - ie <= ielen) {
-+	while (tmp_old + 2 - ie <= ielen &&
-+	       tmp_old + tmp_old[1] + 2 - ie <= ielen) {
- 		if (tmp_old[0] == 0) {
- 			tmp_old++;
- 			continue;
-@@ -325,7 +326,8 @@ static size_t cfg80211_gen_new_ie(const
- 	 * copied to new ie, skip ssid, capability, bssid-index ie
- 	 */
- 	tmp_new = sub_copy;
--	while (tmp_new + tmp_new[1] + 2 - sub_copy <= subie_len) {
-+	while (tmp_new + 2 - sub_copy <= subie_len &&
-+	       tmp_new + tmp_new[1] + 2 - sub_copy <= subie_len) {
- 		if (!(tmp_new[0] == WLAN_EID_NON_TX_BSSID_CAP ||
- 		      tmp_new[0] == WLAN_EID_SSID)) {
- 			memcpy(pos, tmp_new, tmp_new[1] + 2);
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -177,6 +177,7 @@ static const struct usb_device_id id_tab
+ 	{DEVICE_SWI(0x413c, 0x81b3)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
+ 	{DEVICE_SWI(0x413c, 0x81b5)},	/* Dell Wireless 5811e QDL */
+ 	{DEVICE_SWI(0x413c, 0x81b6)},	/* Dell Wireless 5811e QDL */
++	{DEVICE_SWI(0x413c, 0x81c2)},	/* Dell Wireless 5811e */
+ 	{DEVICE_SWI(0x413c, 0x81cb)},	/* Dell Wireless 5816e QDL */
+ 	{DEVICE_SWI(0x413c, 0x81cc)},	/* Dell Wireless 5816e */
+ 	{DEVICE_SWI(0x413c, 0x81cf)},   /* Dell Wireless 5819 */
 
 
