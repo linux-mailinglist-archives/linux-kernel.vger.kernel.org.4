@@ -2,118 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2495FDE18
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9EE5FDE1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJMQSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S229865AbiJMQUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJMQS1 (ORCPT
+        with ESMTP id S229766AbiJMQUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:18:27 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE0C0D0396;
-        Thu, 13 Oct 2022 09:18:25 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 29DGID8o018795;
-        Thu, 13 Oct 2022 18:18:13 +0200
-Date:   Thu, 13 Oct 2022 18:18:13 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-toolchains@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: gcc 5 & 6 & others already out of date?
-Message-ID: <20221013161813.GI16609@1wt.eu>
-References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
- <Y0gLyLbdOCetX5LN@sirena.org.uk>
- <Y0gteD0QYVlYxSZh@zx2c4.com>
+        Thu, 13 Oct 2022 12:20:44 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A1C7C758
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:20:41 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sc25so4984607ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oe+qcm/PeDU+N6DKOzPNoq0R6lraKt7XT7JYVGPicCk=;
+        b=dU6DDiJS3KATjyTwxYnnqe1e3pSXmti7gfPF1hRPvo80QB7/94M+1V4ZbT9KpjWLHa
+         7K30CxBz4iJaAUHZQud/XSCDLlbebrFo+UmMAvKzSavYda19Y3C4+azTB1qPhDNzvb2w
+         D3gO8IApfyYlbgR03kpc5iobxijl6FpE5FPVg3cMHJXvoMWg05GuRRbFM4ds8xPVeFWv
+         K9c3cpT9gGg5WdRUvX7O8r200KM/GWUMvmJn3GXPyDVffpo8EwjKxbrKlrQnJGzViPlW
+         GUEVeCent4sYDYyGK2BAqc3VE29z7/qlqk/WUG4kVU8IQ4AQAY2feLULAU/4bumyf0A8
+         rkHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oe+qcm/PeDU+N6DKOzPNoq0R6lraKt7XT7JYVGPicCk=;
+        b=VXtUwCdDJhiVoLFlPWIDwy/Cgd82Y2E7pQNgAMUEMPMzkyIJ0yZJD/XzfoDWNbBVeR
+         KYf3yra8TxqWwe1nxCMZvAyVFNlJ7hBMu+U+ow+6XcI8R+BAsjpRPL2g4R6Hajv3vX5L
+         JWwXKAcAjIIftiI+leI+t0MR1rHx1eBtLvk9dEzGXUfUf0ryO2LF0eNK+thdPPdEJOYt
+         lSRc+YXsf05XG/i23hRrm4pKuvW5VOqGse/BB/U5bOAzcPDMr+iikSkaQbCQl+KQK07V
+         pGDYvDYUM2mpiciwlGSLvck7jvMD4+wqMWuCInjQLq6es+2IJqoq5F1x0tnB1un0Ik7m
+         Vekg==
+X-Gm-Message-State: ACrzQf1VenARnMYhElqZwkIjce6+VQa/sW4yBb7wTwoNcauZ1E6dDWFv
+        rjMyKFxVr59yA6N69taKrQwWKA==
+X-Google-Smtp-Source: AMsMyM6TQsm0jAFDWeOa0K25dqufGBQqbnTfJUZpgBInYPUQ7lJ0E71e+lbcS3jq4i/FQq4vysCQCA==
+X-Received: by 2002:a17:907:2e0b:b0:78d:387d:1579 with SMTP id ig11-20020a1709072e0b00b0078d387d1579mr352263ejc.761.1665678039938;
+        Thu, 13 Oct 2022 09:20:39 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id t29-20020a056402241d00b0045ce419ecffsm80529eda.58.2022.10.13.09.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 09:20:39 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 18:20:38 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>
+Subject: Re: [PATCH 0/8] riscv: improve boot time isa extensions handling
+Message-ID: <20221013162038.ehseju2neic2xu5z@kamzik>
+References: <20221006070818.3616-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0gteD0QYVlYxSZh@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221006070818.3616-1-jszhang@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Thu, Oct 06, 2022 at 03:08:10PM +0800, Jisheng Zhang wrote:
+> Generally, riscv ISA extensions are fixed for any specific hardware
+> platform, that's to say, the hart features won't change any more
+> after booting, this chacteristic make it straightforward to use
+> static branch to check one specific ISA extension is supported or not
+> to optimize performance.
+> 
+> However, some ISA extensions such as SVPBMT and ZICBOM are handled
+> via. the alternative sequences.
+> 
+> Basically, for ease of maintenance, we prefer to use static branches
+> in C code, but recently, Samuel found that the static branch usage in
+> cpu_relax() breaks building with CONFIG_CC_OPTIMIZE_FOR_SIZE[1]. As
+> Samuel pointed out, "Having a static branch in cpu_relax() is
+> problematic because that function is widely inlined, including in some
+> quite complex functions like in the VDSO. A quick measurement shows
+> this static branch is responsible by itself for around 40% of the jump
+> table."
+> 
+> Samuel's findings pointed out one of a few downsides of static branches
+> usage in C code to handle ISA extensions detected at boot time:
+> static branch's metadata in the __jump_table section, which is not
+> discarded after ISA extensions are finalized, wastes some space.
+> 
+> I want to try to solve the issue for all possible dynamic handling of
+> ISA extensions at boot time. Inspired by Mark[2], this patch introduces
+> riscv_has_extension_*() helpers, which work like static branches but
+> are patched using alternatives, thus the metadata can be freed after
+> patching.
+> 
+> [1]https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+> [2]https://lore.kernel.org/linux-arm-kernel/20220912162210.3626215-8-mark.rutland@arm.com/
+> 
+> 
+> Jisheng Zhang (8):
+>   riscv: move riscv_noncoherent_supported() out of ZICBOM probe
+>   riscv: cpufeature: detect RISCV_ALTERNATIVES_EARLY_BOOT earlier
+>   riscv: hwcap: make ISA extension ids can be used in asm
+>   riscv: cpufeature: extend riscv_cpufeature_patch_func to all ISA
+>     extensions
+>   riscv: introduce riscv_has_extension_[un]likely()
+>   riscv: fpu: switch has_fpu() to riscv_has_extension_likely()
+>   riscv: cpu_relax: switch to riscv_has_extension_likely()
+>   riscv: remove riscv_isa_ext_keys[] array and related usage
+> 
+>  arch/riscv/include/asm/errata_list.h    |  9 +--
+>  arch/riscv/include/asm/hwcap.h          | 94 ++++++++++++++-----------
+>  arch/riscv/include/asm/switch_to.h      |  3 +-
+>  arch/riscv/include/asm/vdso/processor.h |  2 +-
+>  arch/riscv/kernel/cpufeature.c          | 78 +++-----------------
+>  arch/riscv/kernel/setup.c               |  4 ++
+>  6 files changed, 71 insertions(+), 119 deletions(-)
+> 
+> -- 
+> 2.37.2
+>
 
-On Thu, Oct 13, 2022 at 09:23:36AM -0600, Jason A. Donenfeld wrote:
-> On Thu, Oct 13, 2022 at 01:59:52PM +0100, Mark Brown wrote:
-> The thing is, do we really want to be catering to this? In the first
-> place, enterprise users and enterprise kernels are already doing freaky
-> things, forked to no end.
+This series also needs a KVM patch like below.
 
-It's important not to confuse enterprise users and enterprise distros.
-The users are precisely not forking things to death, they're using
-solely what they're being fed by the distro (and possibly other vendors).
+Thanks,
+drew
 
-> But moreover, do we actually want to support
-> people building the kernel with a different compiler than most of us
-> develop with? In a basic way, that just seems like a recipe for
-> disaster.
+From 7069a6fa488ec4efad190884fe5fcf4a1c37753a Mon Sep 17 00:00:00 2001
+From: Andrew Jones <ajones@ventanamicro.com>
+Date: Thu, 13 Oct 2022 18:16:10 +0200
+Subject: [PATCH] riscv: KVM: Switch has_svinval() to
+ riscv_has_extension_unlikely()
+Content-type: text/plain
 
-I think it's important to make *reasonable efforts* for this, yes.
-For example at work we're building appliances for which we test and
-validate working combinations of gcc+binutils+glibc+kernel, and once
-we've found a sane working combination that doesn't break userspace
-too much, we stick to it and we use it for both kernel AND userland.
+Switch has_svinval() from static branch to the new helper
+riscv_has_extension_unlikely().
 
-I must confess that having had to upgrade the toolchain in the past
-*only* for the kernel was annoying. It's never wasted since it forces
-to do some of the update work, and there could be pretty valid reasons
-for this. However being forced to patch userland code to please gcc
-just because kernel developers decided to switch again based on what
-their distro ship is a needless pain.
+Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+---
+ arch/riscv/kvm/tlb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Another thing, kernels can take time to build, and people do setup
-some distributed toolchains. You may remember the presentation of
-my build farm at Kernel Recipes. Once you've spent quite some time
-on canadian cross builds and your setup is fine, you cross fingers
-for it to last as long as possible. And typically when I worked on
-the floppy fixes a few years ago that was when my compiler stopped
-being supported. I started by spending several week-ends trying to
-update my setup before going back to real work. Again I know that
-sometimes this is need and it was my task to devote some time to
-this. But let's not have to do this too often unless really needed.
+diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
+index 309d79b3e5cd..aa3da18ad873 100644
+--- a/arch/riscv/kvm/tlb.c
++++ b/arch/riscv/kvm/tlb.c
+@@ -15,8 +15,7 @@
+ #include <asm/hwcap.h>
+ #include <asm/insn-def.h>
+ 
+-#define has_svinval()	\
+-	static_branch_unlikely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_SVINVAL])
++#define has_svinval()	riscv_has_extension_unlikely(RISCV_ISA_EXT_SVINVAL)
+ 
+ void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
+ 					  gpa_t gpa, gpa_t gpsz,
+-- 
+2.37.3
 
-Usually it's considered fair to drop support for a compiler when the
-build issues that pop up are too difficult to fix, and/or when they
-require quite some work and you figure that if nobody complained for
-a long time it definitely means nobody's using it anymore.
-
-But even on personal projects I continue to support older compilers
-because once in a while someone asks me if I can help them build on
-$RANDOM_OLD_SYSTEM, and I figured that the diversity provided by
-exotic environments sometimes uncover interesting issues.
-
-So I'd really suggest to stick to the good old "as long as it works
-and doesn't involve unreasonable effort, let's consider it still
-works".
-
-> Plus, as I mentioned earlier, this is already the model we're going
-> toward by virtue of Rust (and to a small extent, Clang) invading.
-
-That's also the model where people routinely do:
-
-    $ curl github.com/blah | sudo sh
-
-that makes everything very hardly reproducible and is not necessarily
-a good approach all the time.
-
-It might be reasonable to reduce the compiler spectrum a bit but losing
-users on the way and making it more painful to them to occasionally test
-a kernel is neither nice nor profitable to get reports.
-
-I do still remember the days where one needed to build a kernel using
-kgcc because the distro's one didn't work, and quite frankly, that was
-a total mess and it did discourage quite a few people I knew.
-
-Just my two cents,
-Willy
