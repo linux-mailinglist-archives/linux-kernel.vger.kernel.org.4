@@ -2,160 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F9D5FD362
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 04:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8635FD369
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 05:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiJMC5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 22:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S229639AbiJMDC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 23:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJMC5y (ORCPT
+        with ESMTP id S229583AbiJMDCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 22:57:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CB2112AA0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 19:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665629872;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8r6RnStRQqo5NB/KrjFNVz2NdBUb9m52H/iX7wovmR8=;
-        b=BMWF0OCRfC9A8hJsbasqrl9I1SWyWTLnBj6itb7UVnQ56y/dc3Sf4FWSWVjzVE4fd6jbHs
-        Q2zsG9uKSiYY2M80g+NY4g9z3vh44DYfJ3YxOox34prF6teeGLAN4XlOMapVC3RCswx29u
-        o1adleVwI5BzjzmsQz5gBcceoLi1J04=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-177-XLfnMYOyMX6ON2Jqjhde1Q-1; Wed, 12 Oct 2022 22:57:49 -0400
-X-MC-Unique: XLfnMYOyMX6ON2Jqjhde1Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21B381C05AF3;
-        Thu, 13 Oct 2022 02:57:43 +0000 (UTC)
-Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8432F492B0F;
-        Thu, 13 Oct 2022 02:57:37 +0000 (UTC)
-Date:   Thu, 13 Oct 2022 10:57:28 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Eric DeVolder <eric.devolder@oracle.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>, david@redhat.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        sourabhjain@linux.ibm.com, linux-mm@kvack.org
-Subject: Re: [PATCH v12 7/7] x86/crash: Add x86 crash hotplug support
-Message-ID: <Y0d+mFivS+88+Chr@MiWiFi-R3L-srv>
-References: <cb343eef-46be-2d67-b93a-84c75be86325@oracle.com>
- <YzRxPAoN+XmOfJzV@zn.tnic>
- <fd08c13d-a917-4cd6-85ec-267e0fe74c41@oracle.com>
- <Yzceb/y3SSFMuALR@zn.tnic>
- <d6386653-eb71-188c-8a09-5db46b4e42d4@oracle.com>
- <YzcqE1RVtPcuLlxN@zn.tnic>
- <Y0Dh4ieUUZ4oXa1/@MiWiFi-R3L-srv>
- <Y0b9apyIs+RpSo1e@zn.tnic>
- <53aed03e-2eed-09b1-9532-fe4e497ea47d@oracle.com>
- <Y0cmaPTKQuWtwIRh@zn.tnic>
+        Wed, 12 Oct 2022 23:02:23 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF9012D805
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:02:21 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id r14so562770lfm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 20:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OzWBQgSdxcEtl1H2Nkqa4ju8p59AJdEo00LZPrM6Tb4=;
+        b=XdJwOXAJC3sMMgyMnIuR8MXZzYjvaSU1+3Eddpyj7i4ad0O6n5haGDL6oFpzGKOiGT
+         5ZcZo/IVjZHodOmbXrnfruiEbnWcXoeu8saTKi952/AsZUlw3G9WTEyVoKVEiQgm3Lho
+         gVi85FE8AgBOEv91SanHwxQCKc+vcuYXlviNNYrMlsPjpMzLHSIHE0+qkASBtO/ncjAX
+         b6xe+x2YwJvGjAYl4dqG3dFVxbOlpO7MzVyO3yWvrXCZJ1Sx+E8WRXtEZIE2+o6Ka+cM
+         aPY4ja3yFliCxQC1CcRhZv1m1IP9s+zNuyx+pvYKezlayvALRW9GaXCe2UK9ZQo6tRWb
+         sp0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OzWBQgSdxcEtl1H2Nkqa4ju8p59AJdEo00LZPrM6Tb4=;
+        b=gS/wJDJK03oTa66Y7h4shd2UaKKNCap+Bn564o8mfX1JMdxaDdOxbLYU2mZ7yyaQty
+         /6apD4GfeWnwItlwenTuLK/gpk4mBUeQxQnmZQZDnw9koeOfIDTcOgO118Z9Jzg/xh1C
+         uoG3gzKNubFFUneBT/JKRTUvJCrXxZC90zG8Zkm4hOBBrm759NpeC4u1h0/4+AbLdxZ8
+         0/4oAwmLyfJp/iFiN94PkmEHv4vDfLi82mRmH4QEZ77gVAMzSplsoEHSKI2Jb1GIRwpc
+         X32/BT4ml13AhU54jlN/r63p7LJCURbKoxUMMaP2pCy6R1wU0XrJNQf+oVaMsA2OTJn6
+         6Diw==
+X-Gm-Message-State: ACrzQf2yGmAbjnU9cLjuoMZ09Yit9vIUjWSAK5RTNKCS6S6B3KSzO1W7
+        3iV6jj+pd/txwjYcicrvpQCaq17LPb58iLb5tmKV
+X-Google-Smtp-Source: AMsMyM5NLnWv7HM9iRTINCcxaiashvksrjXoFrcUuGgJf8Szpzb/WL4lqmqoRdpzf7rS6YNE0cNAFMWHIsC26WFP8EM=
+X-Received: by 2002:a05:6512:110f:b0:4a2:697f:c39a with SMTP id
+ l15-20020a056512110f00b004a2697fc39amr10687652lfg.685.1665630140035; Wed, 12
+ Oct 2022 20:02:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0cmaPTKQuWtwIRh@zn.tnic>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+In-Reply-To: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 12 Oct 2022 20:02:07 -0700
+Message-ID: <CANDhNCrrM58vmWCos5kd7_V=+NimW-5sU7UFtjxX0C+=mqW2KQ@mail.gmail.com>
+Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     tglx@linutronix.de, sboyd@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/22 at 10:41pm, Borislav Petkov wrote:
-> On Wed, Oct 12, 2022 at 03:19:19PM -0500, Eric DeVolder wrote:
-> > We run here QEMU with the ability for 1024 DIMM slots.
-> 
-> QEMU, haha.
-> 
-> What is the highest count of DIMM slots which are hotpluggable on a
-> real, *physical* system today? Are you saying you can have 1K DIMM slots
-> on a board?
+On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> Hey everyone,
+>
+> I have a question about ktime_get_mono_fast_ns(), which is used by the
+> BPF helper bpf_ktime_get_ns() among other use cases. The comment above
+> this function specifies that there are cases where the observed clock
+> would not be monotonic.
 
-The concern to range number mainly is on Virt guest systems. On
-baremetal system, basically only very high end server support memory hotplug.
-I ever visited customer's lab and saw one server, it owns 8 slots, on
-each slot a box containing about 20 cpus and 2T memory at most can be
-plugged in at one time. So people won't make too many slots for
-hotplugging since it's too expensive.
+Sorry for the slow response.
 
-I checked user space kexec code, the maximum memory range number is
-honored to x86_64 because of a HPE SGI system. After that, nobody
-complains about it. Please see below user space kexec-tools commit in
-https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git
+> I had 2 beginner questions:
+>
+> 1) Is there a (rough) bound as to how much the clock can go backwards?
+> My understanding is that it is bounded by (slope update * delta), but
+> I don't know what's the bound of either of those (if any).
 
-The memory ranges may be not all made by different DIMM slots, could be
-firmware reservatoin, e.g efi/BIOS diggged out physical memory, or the
-cpu logical address space is occupied by pci or other stuffs. I don't
-have a HPE SGI system at hand to check.
+So, it's been awhile since I was deep in this code, and I'd not call
+these beginner questions :)
+But from my memory your understanding is right.
 
-commit 4a6d67d9e938a7accf128aff23f8ad4bda67f729
-Author: Xunlei Pang <xlpang@redhat.com>
-Date:   Thu Mar 23 19:16:59 2017 +0800
+If I recall, the standard adjustment limit from NTP is usually +/-
+512ppm but additional adjustments (~10% via the tick adjustment) can
+be made.  There isn't a hard limit in the code, as there's clocksource
+mult granularity, and other considerations, but the kernel warns when
+it's over 11%.
 
-    x86: Support large number of memory ranges
-    
-    We got a problem on one SGI 64TB machine, the current kexec-tools
-    failed to work due to the insufficient ranges(MAX_MEMORY_RANGES)
-    allowed which is defined as 1024(less than the ranges on the machine).
-    The kcore header is insufficient due to the same reason as well.
-    
-    To solve this, this patch simply doubles "MAX_MEMORY_RANGES" and
-    "KCORE_ELF_HEADERS_SIZE".
-    
-    Signed-off-by: Xunlei Pang <xlpang@redhat.com>
-    Tested-by: Frank Ramsay <frank.ramsay@hpe.com>
-    Signed-off-by: Simon Horman <horms@verge.net.au>
+For the discontinuity issue, we accumulate time with cycle_interval
+granularity which is basically HZ, and so when we adjust the frequency
+we only have to compensate the base xtime_nsec to offset for the freq
+change against the unaccumulated cycles (which are less then
+cycle_interval - see the logic in timekeeping_apply_adjustment()).
 
-diff --git a/kexec/arch/i386/kexec-x86.h b/kexec/arch/i386/kexec-x86.h
-index 33df3524f4e2..51855f8db762 100644
---- a/kexec/arch/i386/kexec-x86.h
-+++ b/kexec/arch/i386/kexec-x86.h
-@@ -1,7 +1,7 @@
- #ifndef KEXEC_X86_H
- #define KEXEC_X86_H
- 
--#define MAX_MEMORY_RANGES 1024
-+#define MAX_MEMORY_RANGES 2048
+Then it's just the issue of how far after the update that you end up
+reading the clocksource (how long of a delay you hit). I think the
+assumption is you can't be delayed by more than a tick (as you the
+stale base could become the active one again), but its been awhile
+since I've stewed on this bit.
 
-> 
-> I hardly doubt that.
+So I think it reasonable to say its bounded by approximately  2 *
+NSEC_PER_SEC/HZ +/- 11%.
 
-The questioning is reasonable. 32K truly looks too much. 
 
-Now CONFIG_NR_CPUS has the maximum number as 8192. And user space 
-kexec-tools has maximum memory range number as 2048. We can take
-the current 8192 + 2048  = 10K as default value conservatively. Or
-take 8192 + 2048 * 2 = 12K which has two times of maximum memory range
-bumber in kexec-tools. What do you think?
 
-> 
-> > So, for example, 1TiB requires 1024 DIMMs of 1GiB each with 128MiB
-> > memblocks, that results in 8K possible memory regions. So just going
-> > to 4TiB reaches 32K memory regions.
-> 
-> Lemme see if I understand this correctly: when a system like that
-> crashes, you want to kdump *all* those 4TiB in a vmcore? How long would
-> that dump take to complete? A day?
+> 2) The comment specifies that for a single cpu, the only way for this
+> behavior to happen is when observing the time in the context of an NMI
+> that happens during an update.
+> For observations across different cpus, are the scenarios where the
+> non-monotonic behavior happens also tied to observing time within NMI
+> contexts? or is it something that can happen outside of NMI contexts
+> as well?
 
-That is not a problem. The time of vmcore dumping mainly depends on the
-actual memory size, not on memory range numbers. when dumping vmcore,
-people use makedumpfile to filter zero page, free page, cache page, or user
-date page according to configuration. If memory is huge, they can use
-nr_cpus=x to enable multiple cpu to do multi-thread dumping. Kdump now
-support more than 10 TB vmcore dumping.
+Yes, I believe it can happen outside of NMI contexts as well.  The
+read is effectively lock-free so if you are preempted or interrupted
+in the middle of the read (before fast_tk_get_delta_ns), you may end
+up using the old tk_fast base with a later clocksource cycle value,
+which can cause the same issue.
 
+thanks
+-john
