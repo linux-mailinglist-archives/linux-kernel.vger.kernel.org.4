@@ -2,260 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8205FD824
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343855FD826
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJMLM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S229680AbiJMLMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJMLMT (ORCPT
+        with ESMTP id S229513AbiJMLMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:12:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BA711E440
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665659537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j29ngQCSFDZIffbvLhxq5+79cMSaVQV90U1dHeLGPXo=;
-        b=Hkv4JVjvIM+UwZelyNL1ngYDhR1BcvB7bLI9pFRFTpDQmn+Ca9MdvVjX3/eKIimy9HAwxz
-        qK5dQAGFg3mIh5UTUc4ay+2g6Q81p/HBa+1boPLoB7CMYR6JJJePARp5anoUlxxnkbAOZU
-        +l7mHLyqzZexwn16R0W+MgaO/x6lH38=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-437-MJDZCpj6PpiuTxJ5nBPzgQ-1; Thu, 13 Oct 2022 07:12:16 -0400
-X-MC-Unique: MJDZCpj6PpiuTxJ5nBPzgQ-1
-Received: by mail-wr1-f69.google.com with SMTP id s30-20020adfa29e000000b002302b9671feso415233wra.20
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:12:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j29ngQCSFDZIffbvLhxq5+79cMSaVQV90U1dHeLGPXo=;
-        b=u1VrlFLSQ0V9lT4D1TD+eQcHbyMw0WcHuTsOWz06sEp/I2HI1jVpaSJcuzakJsPrgx
-         MFLatq3W8xfSrpCRQvRNcW7BeN9BTlM89QziL50R4C1occ47OJ7jyHG+aznc8DIHPPtS
-         XGxl1Z9krAYTZHPXlID8OqR6uZEufgykACpm2P1juBxtU6t2qEjE2rm+H/EIkfPYRsSO
-         8BcEPetZL0G2VbxbJdzGTNbUle4rj37ryg53TaCX8GxfF2SruoVDVjeQpjXAcGO8X+bM
-         CnhXQqZPaTmULen1XJZ70pQw2rlwgqInbhQm3/enDW3QL1miwQnV9VVc/NuvCV6r9nWt
-         XNnA==
-X-Gm-Message-State: ACrzQf1NjrF0snLSxt4owzaJGPlBjma/1YGfFdxR1KDwOvfTkWpq/3Ek
-        4am90oodB+HfD27CcNStfh7tKOHNNCREPz0H5ck7MCRO26bB1W5EVOOMJ6/6kPA+Io78tWykUyF
-        Sxw5+weMfVtsMxxFWDo0kkPOb
-X-Received: by 2002:a5d:456b:0:b0:230:9e5b:c64c with SMTP id a11-20020a5d456b000000b002309e5bc64cmr12453717wrc.211.1665659535079;
-        Thu, 13 Oct 2022 04:12:15 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7TMnkAJEZK04ydHgvaR+DRC62l8THeSaACAhcd9VIxam120HTXjq9N2q/IRUv5oiirD/Diog==
-X-Received: by 2002:a5d:456b:0:b0:230:9e5b:c64c with SMTP id a11-20020a5d456b000000b002309e5bc64cmr12453690wrc.211.1665659534756;
-        Thu, 13 Oct 2022 04:12:14 -0700 (PDT)
-Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
-        by smtp.gmail.com with ESMTPSA id t1-20020adff041000000b0022ac38fb20asm1780424wro.111.2022.10.13.04.12.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 04:12:13 -0700 (PDT)
-Message-ID: <12ac9bf1-bcd6-d684-d265-1ad524b99feb@redhat.com>
-Date:   Thu, 13 Oct 2022 13:12:12 +0200
+        Thu, 13 Oct 2022 07:12:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE39111E45A;
+        Thu, 13 Oct 2022 04:12:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF46315A1;
+        Thu, 13 Oct 2022 04:12:50 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.65.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F9463F792;
+        Thu, 13 Oct 2022 04:12:42 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 12:12:25 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        kajetan.puchalski@arm.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
+ util-awareness
+Message-ID: <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+ <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-References: <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
- <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
- <YzIZhn47brWBfQah@google.com>
- <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
- <YzMdjSkKaJ8HyWXh@google.com>
- <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
- <YzRvMZDoukMbeaxR@google.com>
- <8534dfe4-bc71-2c14-b268-e610a3111d14@redhat.com>
- <YzSxhHzgNKHL3Cvm@google.com>
- <d8d2bd39-cbb3-010d-266a-4e967765a382@redhat.com>
- <YzYQe2Lc+l2KpLBl@google.com>
- <261aff0b-874e-0644-e0c8-97e0a9bfbe04@redhat.com>
- <a412085f-9391-8a4c-916c-513c800c35b1@redhat.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-In-Reply-To: <a412085f-9391-8a4c-916c-513c800c35b1@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
+> <kajetan.puchalski@arm.com> wrote:
+> >
+> > Hi,
+> >
+> > At the moment, all the available idle governors operate mainly based on their own past performance
+> 
+> Not true, at least for the menu and teo governors that use the
+> information on the distribution of CPU wakeups that is available to
+> them and try to predict the next idle duration with the help of it.
+> This has a little to do with their performance.
+
+You're right of course, I should have written "their own past
+correctness" as that's what I was referring to. I just meant that for
+instance with TEO the initial timer-based choice is only adjusted using
+the governor's own metrics and not any information from anywhere else in
+the system.
+
+> > without taking into account any scheduling information. Especially on interactive systems, this
+> > results in them frequently selecting a deeper idle state and then waking up before its target
+> > residency is hit, thus leading to increased wakeup latency and lower performance with no power
+> > saving. For 'menu' while web browsing on Android for instance, those types of wakeups ('too deep')
+> > account for over 24% of all wakeups.
+> 
+> How is this measured?
+
+Using the cpu_idle_miss trace event. Over the course of a benchmark run
+I collect all cpu_idle and cpu_idle_miss trace events. Then I divide the
+number of too deep misses by the total number of cpu_idle wakeup events
+which gives me the percentage. Those are the percentages described as
+'gmean too deep %' in the tables included in the cover letter. Gmean
+because I run the benchmarks for many iterations and then take an
+average of those percentages to account for outliers.
+PCMark Web Browsing is a 'benchmark' that just amounts to browsing the
+web on Android, hence I can use data from it to talk about what the
+system behaviour under normal usage would be.
+
+> > At the same time, on some platforms C0 can be power efficient enough to warrant wanting to prefer
+> > it over C1.
+> 
+> Well, energy-efficiency is relative, so strictly speaking it is
+> invalid to say "power efficient enough".
+
+Yes, by 'enough' I meant that the power savings of C0 vs C1 on arm are
+fairly comparable as opposed to other platforms. From Doug's data
+collected on an Intel CPU, the power usage difference of only-C0
+compared to only-C1 was over 20-fold ie 46w vs 2.6w. With only C0
+enabled on Pixel 6 that difference is closer to something like 4%. It's
+just fundamentally different hardware. With 4% being your ceiling you
+can talk about performance/latency tradeoffs etc, if you're talking
+about potential over 1700% increases, not so much.
+
+> Also, as far as idle CPUs are concerned, we are talking about the
+> situation in which no useful work is done at all, so the state drawing
+> less power is always more energy-efficient than the one drawing more
+> power.
+
+Yes, assuming the CPU is woken up after the target residency of the
+state has been met. If the wakeup happens too early then for that
+situation C0 would've been more power efficient than C1 even though C1
+technically draws less power, right? That's what we're trying to fix
+here, we just noticed that for mobile interactive workloads at least
+we're getting this situation way too often.
+
+The result being that this util-aware TEO variant while using much less
+C1 and decreasing the percentage of too deep sleeps from ~24% to ~3% in
+PCMark Web Browsing also uses almost 2% less power. Clearly the power is
+being wasted on not hitting C1 residency over and over.
+
+> You may argue that predicting idle durations that are too long too
+> often leads to both excessive task wakeup latency and excessive energy
+> usage at the same time, but this may very well mean that the target
+> residency value for C1 is too low.
+
+We get residency values from DT and they're meant to be the descriptions
+of each CPU's hardware so I don't think tweaking them to get better
+results would be a good idea. Unless I'm misunderstanding what you mean?
+
+> > Currently the best available governor under this metric is TEO which on average results in less than
+> > half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
+> > increased performance in the process.
+> 
+> Well, good to hear that, but some numbers in support of that claim
+> would be nice to have too.
+
+Those are the numbers I included in the cover letter for the two
+benchmarks, they've been very consistent in terms of the pattern
+across all the runs and workloads I've seen. For too deep % for
+instance in GB5 we had on average menu 16.6%, TEO 9.6%, TEO+util 4.19%.
+For PCMark Web Browsing menu 24.15%, TEO 10.32%, TEO+util 3.2%. The
+values differ per-workload but every dataset I've seen had that same
+'staircase' pattern.
+
+> > This proposed optional extension to TEO would specifically tune it for minimising too deep
+> > sleeps and minimising latency to achieve better performance. To this end, before selecting the next
+> > idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
+> > CPU is being utilized.
+> 
+> Which has no bearing on what the CPU idle time governors have to do
+> which is (1) to predict the next idle duration as precisely as
+> reasonably possible and (2) to minimise the cost in terms of task
+> wakeup latencies associated with using deep idle states.
+> 
+> The avg_util value tells us nothing about how much the CPU is going to
+> be idle this time and it also tells us nothing about the
+> latency-sensitivity of the workload.
+> 
+> Yes, it tells us how much idle time there was on the given CPU in the
+> past, on the average, but there is zero information about the
+> distribution of that idle time in it.
+> 
+> So in the first place please tell me why it fundamentally makes sense
+> to use avg_util in CPU idle time management at all.
+
+Right, the idea here is slightly similar to that of temporal locality.
+We obviously can't predict the future which is sort of what an idle
+governor tries to achieve. Focusing on timer events makes a lot of sense
+and is probably close to as good as it gets in estimating future
+behaviour.
+
+The observation we're relying on here is simply that if the
+CPU was doing enough work in the recent past for its avg_util to still
+be raised while going into idle, it is very likely that the same CPU
+might be needed again soon. From my tests that assumption tends to be
+correct quite often. In those situations, when avg_util is high and the
+next timer event is far enough for C1 to be selected, a lot of the time
+the CPU does actually get woken up before the residency is hit leading
+to all the issues described above.
+
+I don't think using avg_util as the *only* input for idle management
+would be a good idea at all. The way I see it, it serves as a very good hint
+to determine if we are likely to get a wakeup between now and the next
+timer event and provides an additional dimension for decision making.
+While the current metrics only adjust themselves after making a certain
+number of mistakes and are a "trailing" adjusting mechanism, using
+avg_util this way provides a "leading" mechanism that potentially lets
+us not make those mistakes in the first place. It's not just theory
+either, it very clearly works and gets results, at least on the
+platforms/workloads we've been looking at.
 
 
-Am 13/10/2022 um 10:44 schrieb David Hildenbrand:
-> On 13.10.22 09:43, Emanuele Giuseppe Esposito wrote:
->>
->>
->> Am 29/09/2022 um 23:39 schrieb Sean Christopherson:
->>> If we really want to provide a better experience for userspace, why
->>> not provide
->>> more primitives to address those specific use cases?  E.g. fix KVM's
->>> historic wart
->>> of disallowing toggling of KVM_MEM_READONLY, and then add one or more
->>> ioctls to:
->>>
->>>    - Merge 2+ memory regions that are contiguous in GPA and HVA
->>>    - Split a memory region into 2+ memory regions
->>>    - Truncate a memory region
->>>    - Grow a memory region
->>
->> I looked again at the code and specifically the use case that triggers
->> the crash in bugzilla. I *think* (correct me if I am wrong), that the
->> only operation that QEMU performs right now is "grow/shrink".
-> 
-> I remember that there were BUG reports where we'd actually split and run
-> into that problem. Just don't have them at hand. I think they happened
-> during early boot when the OS re-configured some PCI thingies.
+On the Intel & power usage angle you might have seen in the discussion,
+Doug sent me some interesting data privately. As far as I can tell the
+main issue there is that C0 on Intel doesn't actually do power saving so
+moving the state selection down to it is a pretty bad idea because C1
+could be very close in terms of latency and save much more power.
 
-If you could point me where this is happening, it would be nice. So far
-I could not find or see any split/merge operation.
+A potential solution could be altering the v2 to only decrease the state
+selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
+because arm systems with 2 states use the early exit path anyway. It'd
+just amount to changing this hunk:
 
-> 
->>
->> So *if* we want to go this way, we could start with a simple grow/shrink
->> API.
->>
->> Even though we need to consider that this could bring additional
->> complexity in QEMU. Currently, DELETE+CREATE (grow/shrink) is not
->> performed one after the other (in my innocent fantasy I was expecting to
->> find 2 subsequent ioctls in the code), but in QEMU's
->> address_space_set_flatview(), which seems to first remove all regions
->> and then add them when changing flatviews.
->>
->> address_space_update_topology_pass(as, old_view2, new_view,
->> adding=false);
->> address_space_update_topology_pass(as, old_view2, new_view, adding=true);
->>
->> I don't think we can change this, as other listeners also rely on such
->> ordering, but we can still batch all callback requests like I currently
->> do and process them in kvm_commit(), figuring there which operation is
->> which.
->>
->> In other words, we would have something like:
->>
->> region_del() --> DELETE memslot X -> add it to the queue of operations
->> region_del() --> DELETE memslot Y -> add it to the queue of operations
->> region_add() --> CREATE memslot X (size doubled) -> add it to the queue
->> of operations
->> region_add() --> CREATE memslot Y (size halved) -> add it to the queue
->> of operations
->> ...
->> commit() --> scan QUEUE and figure what to do -> GROW X (+size), SHRINK
->> Y (-size) -> issue 2 ioctls, GROW and SHRINK.
-> 
-> I communicated resizes (region_resize()) to the notifier in patch #3 of
-> https://lore.kernel.org/qemu-devel/20200312161217.3590-1-david@redhat.com/
-> 
-> You could use that independently of the remainder. It should be less
-> controversial ;)
-> 
-> But I think it only tackles part of the more generic problem (split/merge).
++       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
++               idx--;
 
-Yes, very useful! Using that patch we would have a single place where to
-issue grow/shrink ioctls. I don't think we need to inhibit ioctls, since
-the operation will be atomic (this time in the true meaning, since we
-don't need INVALIDATE.
+to:
 
-> 
->>
->>> That would probably require more KVM code overall, but each operation
->>> would be more
->>> tightly bounded and thus simpler to define.  And I think more precise
->>> APIs would
->>> provide other benefits, e.g. growing a region wouldn't require first
->>> deleting the
->>> current region, and so could avoid zapping SPTEs and destroying
->>> metadata.  Merge,
->>> split, and truncate would have similar benefits, though they might be
->>> more
->>> difficult to realize in practice.
->>
->> So essentially grow would not require INVALIDATE. Makes sense, but would
->> it work also with shrink? I guess so, as the memslot is still present
->> (but shrinked) right?
->>
->> Paolo, would you be ok with this smaller API? Probably just starting
->> with grow and shrink first.
->>
->> I am not against any of the two approaches:
->> - my approach has the disadvantage that the list could be arbitrarily
->> long, and it is difficult to rollback the intermediate changes if
->> something breaks during the request processing (but could be simplified
->> by making kvm exit or crash).
->>
->> - Sean approach could potentially provide more burden to the userspace,
->> as we need to figure which operation is which. Also from my
->> understanding split and merge won't be really straightforward to
->> implement, especially in userspace.
->>
->> David, any concern from userspace prospective on this "CISC" approach?
-> 
-> In contrast to resizes in QEMU that only affect a single memory
-> region/slot, splitting/merging is harder to factor out and communicate
-> to a notifier. As an alternative, we could handle it in the commit stage
-> in the notifier itself, similar to what my prototype does, and figure
-> out what needs to be done in there and how to call the proper KVM
-> interface (and which interface to call).
-> 
-> With virtio-mem (in the future) we might see merges of 2 slots into a
-> single one, by closing a gap in-between them. In "theory" we could
-> combine some updates into a single transaction. But it won't be 100s ...
-> 
-> I think I'd prefer an API that doesn't require excessive ad-hoc
-> extensions later once something in QEMU changes.
-> 
-> 
-> I think in essence, all we care about is performing atomic changes that
-> *have to be atomic*, because something we add during a transaction
-> overlaps with something we remove during a transaction. Not necessarily
-> all updates in a transaction!
-> 
-> My prototype essentially detects that scenario, but doesn't call new KVM
-> interfaces to deal with these.
++       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
++               idx--;
 
-With "prototype" I assume you mean the patch linked above
-(region_resize), not the userspace-only proposal you sent initially right?
+What would you think about that? Should make it much less intense for
+Intel systems.
 
-> 
-> I assume once we take that into consideration, we can mostly assume that
-> any such atomic updates (only of the regions that really have to be part
-> of an atomic update) won't involve more than a handful of memory
-> regions. We could add a sane KVM API limit.
-> 
-> And if we run into that API limit in QEMU, we can print a warning and do
-> it non-atomically.
-> 
-If we implement single operations (split/merge/grow/shrink), we don't
-even need that limit. Except for merge, maybe.
-
-Ok, if it'ok for you all I can try to use David patch and implement some
-simple grow/shrink. Then we need to figure where and when exactly QEMU
-performs split and merge operations, and maybe implement something
-similar to what you did in your proposal?
-
-Thank you,
-Emanuele
-
+Thanks a lot for your interest,
+Kajetan
