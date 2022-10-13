@@ -2,274 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2345FE5BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 00:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3CC5FE5C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 01:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJMW6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 18:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S229635AbiJMXAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 19:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiJMW6E (ORCPT
+        with ESMTP id S229485AbiJMXAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 18:58:04 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2901F1781CF;
-        Thu, 13 Oct 2022 15:57:41 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id f23so3135178plr.6;
-        Thu, 13 Oct 2022 15:57:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N9bFubddI7+LphibKGGsyeFrDKSrtJVqH6WoZiz/0OA=;
-        b=izj+aFrM2A2YLCP8N2Z1OeEPjJ3QDtEAYp3/EAZxWX84usO2nGiTCNwPOiEljhuObH
-         GT8PZO9wo+C0EyBnKLTSwja7tYV0oUy39jQjvPjZcZrlpZdvh1AUvw47wgTod2EV1O4A
-         Q6l91qtcBv3ko1ZYGIBptB3q4weFCVJAh9/Ft/SPwRBv/CrXPsVeAgBy1AzvRGxBYRnm
-         f4lF2st1UCtoh7vPNM512wR2oK64S1kRtc7ZbkHaJWWhlkw9uo2CPiklkzNZ4waG5O9b
-         gYoLljt/LHA1LuLDXW1tyRh637U72Kb9ZTpV2yXjrNfw4t+Y/rRgYOWFSTxkBYm9vM5S
-         LI0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N9bFubddI7+LphibKGGsyeFrDKSrtJVqH6WoZiz/0OA=;
-        b=kghgYM2Cm9oiwv2aPGLXZlZ2DcBLFh95BCPWW/VuiMyVikJ1RCDsVkKADJTzz5vLqJ
-         KKv+lyspvsd/pueD1FSgVp6JjUE7/FATEhBm8F663o+e3umhr2thp8hy3+hfG6PHb+qy
-         ApH1ezYPZYWoFhF6NUi7fHM2PmitqGf/GD624sbIX6dy/SfTHRh4lisSBMQVXyVPlZvP
-         4ExpbRQkmGD6/A7ZKtOcEDKj/PulidtglhlHMwGyoORIGGLgHTHOdf+zDYGUSWglulCw
-         RJOioI7zKQWF3FB3HVXaU6z0S2QBGYg30nuDm1ED9jtcT75UCC4RC3xq6r0tETGH9emE
-         Ndhw==
-X-Gm-Message-State: ACrzQf01d0RFbCgGbsjQDM2jED2zoLkUX2Hp0LiSyyy0APuja2GFurjJ
-        wpkni0bm3df12PnT9ODlaHHhS1Glsn4qOg==
-X-Google-Smtp-Source: AMsMyM4+mX8wZ+lqkAPXL//k45qm7r2YiR8F+rJTouER/FcREWcnYsnlEXuxCOR0dVytZN+0gT0GjQ==
-X-Received: by 2002:a17:90b:384:b0:20d:aa78:92da with SMTP id ga4-20020a17090b038400b0020daa7892damr5173642pjb.159.1665701851641;
-        Thu, 13 Oct 2022 15:57:31 -0700 (PDT)
-Received: from vmfolio.. (c-76-102-73-225.hsd1.ca.comcast.net. [76.102.73.225])
-        by smtp.googlemail.com with ESMTPSA id lx4-20020a17090b4b0400b001fde655225fsm7480269pjb.2.2022.10.13.15.57.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 15:57:30 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, hughd@google.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH v2 2/2] filemap: find_get_entries() now updates start offset
-Date:   Thu, 13 Oct 2022 15:57:08 -0700
-Message-Id: <20221013225708.1879-3-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221013225708.1879-1-vishal.moola@gmail.com>
-References: <20221013225708.1879-1-vishal.moola@gmail.com>
+        Thu, 13 Oct 2022 19:00:04 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D739413DE2;
+        Thu, 13 Oct 2022 16:00:01 -0700 (PDT)
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29DJ21wx010798;
+        Thu, 13 Oct 2022 22:59:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=W7WAWxEfrxaKiOj1UJv1Yfnk7gbXWkIagp6JIcoMh1w=;
+ b=Y1HrsxyuqyTgB1IIkkXoq7VAKOBdA4iJxPNeafqOgjIzrXuqOzJzFXg9GfVUiuaCTlVO
+ 5lVrX9h+BvM+feuJvxzZ1VNHaFpbh9eKTzO+XI6dYJF6OTKi0GdGxNX0u2ExKdlOCD4p
+ V4M+y19PwSDviD0NHhKbtucwJuM2adw8r8BUJdMsgMCCHWmJc3VYghVG0Ie9KYoJSmpQ
+ bKxEH/Opy/wMLUDI2LwDJ9ClE8IgrV7jt3G5eH5ct+jVMcVlZSJyTDOuPR4mLC3w2qoc
+ x3T46M44E3szarrSMX7f48Rc1B5AYwYsW+OHiX3NQVQb3NNtVTU2Nt0PZRnoQyvNBzyN Pg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3k6r4nhuy5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Oct 2022 22:59:46 +0000
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 5F7F2D268;
+        Thu, 13 Oct 2022 22:59:45 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 13 Oct 2022 10:59:09 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Thu, 13 Oct 2022 10:59:09 -1200
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 13 Oct 2022 22:59:09 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XEIuXHj3r4qOhwWSo0PPNhjUfJo/ZX+I4aArbTuJEXSuWqYiBMiTAWFqIInHFLH00o43F9FX7D3NlW/SQk9+u1sPWchE3uNSHdpGnzGM7erjAjv1nWlq7g/ykn4aljJF0OLJBFjQzhpdh9uCm6Qce8lVgLTyJ/XuTLuqDoVwFtUcgAwqp5OoeQ9vyUTRoQwDmGyk4HdWD8RKS18TE+ccW4IHOwijbF7Y28kXvTM0ff6HBwJFfME23S2OTye5mGuMVaFC0ZIF2EX9Hfids89BiLFafsZyuQmmupSpKn0Z1DcXJmRMpEFuNhJp/Rwf3do9RpR/oiK6sLiiBP/eKKijbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W7WAWxEfrxaKiOj1UJv1Yfnk7gbXWkIagp6JIcoMh1w=;
+ b=jthhDV6yORIoBsGL9lq1qhEo9M4m3w1Pjqlj1+eVZc3wlB6UkvcLsoYvqLZhYHd2BYwxURTYuW/dwUcTOAWodesGKjcvRN24SFUszzODI0pZXmNZ7xttouDwxJane8Yxn2UNo1f3J3DD+9MT3GZb1HtdrGhqvFOQzfkc2HqS3sfgJ8//7tRVkKlpvNZgQl7v0FzzwpHlJHVKsVTMfBvyyCHHFD5seMveBdRU9Bxi07vQMJyDVjOKiXBrd/CpL19eejb7GsTg3b+G4P9Ie1J1GDQLqiqwBEcEfwx7EG0EKa0HIEhPP82xOZ0/bwI1qKopaJ2GcTqhbN2Zn5Cv60Qz2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
+ by PH0PR84MB1479.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:172::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Thu, 13 Oct
+ 2022 22:59:08 +0000
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c023:cb9a:111f:a1b2]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c023:cb9a:111f:a1b2%5]) with mapi id 15.20.5723.026; Thu, 13 Oct 2022
+ 22:59:08 +0000
+From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Eric Biggers <ebiggers@kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 19/19] crypto: x86/sha - register only the best
+ function
+Thread-Topic: [PATCH v2 19/19] crypto: x86/sha - register only the best
+ function
+Thread-Index: AQHY3oYZWhwetsqvHEyoRk+vwsij2q4L1yqAgAAdJoCAAPumkA==
+Date:   Thu, 13 Oct 2022 22:59:08 +0000
+Message-ID: <MW5PR84MB184271D5A2BAE2F2DFBA7463AB259@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20221006223151.22159-1-elliott@hpe.com>
+ <20221012215931.3896-1-elliott@hpe.com>
+ <20221012215931.3896-20-elliott@hpe.com> <Y0erL2k1PGVN4qme@sol.localdomain>
+ <Y0fDo/VaEB8Gx4Ee@gondor.apana.org.au>
+In-Reply-To: <Y0fDo/VaEB8Gx4Ee@gondor.apana.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR84MB1842:EE_|PH0PR84MB1479:EE_
+x-ms-office365-filtering-correlation-id: 7d0d1993-8692-45f8-ecef-08daad6e88f9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GvAKbQ6U9+Sdgg3sNOJ6wiGYXPXM/w4OsXTu4HQ++slGrIBIypSH/GwwoVk3IzVgSEvWQGDQeGydQvZtjRpJUBBgUZ6Neh2V4jVPovyfyxAq33V+GonoYiiGqLNWU+vEIE9UD9AkVPRUJQ4/pSBeaF2//dLy3xSLsN4HYQ+NixJr/42f6pD1rKQS5g2R/qS2ijARtM6Uq3gkO0pi0NPNOTURAmCw3LcTJkzEWj6s+X4MXSps04p8KOSpVqvZ2c8xyWjVCY+AmIDfvUpPTibcvuGhaXgDScJYAir2D8dWU5/wTEr8B/WeISNL4jgOT0yLmMdpo2nUHwlBP8hztEzct8bYsw1yuxYiCBej8BJJpo8VTa9OpuqE/gSRcuqdvA4sGyn29yP9oR/fO+Ln6+Sg6lXdMIjzuEVLCUpmiPc7TrAsNHUXt/yLd46WHJi4OwW89+tjYIwhaV7vRafEQXBNix9aC87et0SNesAdqmcuVgpCtp0cPwJAIhLuh6Kje4OBQSyxkGMhVOaLbcxbTcvsEFEh13sV3s+nMmVVzrySWUUU/G2YNv88oChZAs/YVF/bwIhP7NePHQJFPCdWVq6VE+zaWeA6aedBWCwcUFFbrjSo7d7ugJLbKERd/PuM0kvldOiRscsC3pI3GEbpDUIcdO8hSG7tAY5o6l4HA33bEVjFmlc7LM3u6PcZI66fhFiY585KXZTiArLQWXgP/aYRyc4bwbYbmP1QGp3QyDwPvjIUtsViFpw/GEZhRf0WQ+RcujKuQUdAA3FrvkYlw9Negg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(396003)(136003)(376002)(346002)(451199015)(41300700001)(122000001)(316002)(76116006)(8936002)(110136005)(66556008)(54906003)(4326008)(66476007)(8676002)(66446008)(2906002)(64756008)(66946007)(52536014)(5660300002)(9686003)(82960400001)(26005)(71200400001)(83380400001)(86362001)(33656002)(38100700002)(7696005)(6506007)(478600001)(55016003)(38070700005)(53546011)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DUqz2YIkWcCwZPOWp2BQHyPjqE7/O9U+oWUPZZTLXB9FZXcqIbS17+eAxR5R?=
+ =?us-ascii?Q?F7kbKnW4wG7rd+L6SHKRupc1lmq3vdoFk0jNqRsfT3Cif3hog1O//vQK2AjI?=
+ =?us-ascii?Q?a76TM42i6jXa1VHQsYN223tBBs1PqIECr08yoBPy5luVfFWgx1rmQE7WOZNU?=
+ =?us-ascii?Q?EQchGoTof37K+5Dj1SFI2q7nPfqZROOecvwyywgggaR7CbuvMjU9EnpXfL1t?=
+ =?us-ascii?Q?v3Mj7YnhDEPYrEtZFcEzDJ+sr53Hjxg3YfgtM4LAmfZWSBuZlpOtAEY/XWqK?=
+ =?us-ascii?Q?qPIzU+SXtRYDeAdXaf9Cz0bjJ/0yTwp23SOzToPq+GKwGhcFUwTjFhQnI/Rv?=
+ =?us-ascii?Q?JoHuk+VnPKigp60tJVAnhszVJKdjWqdqOAZlgzyqfYMnG7E6wgp5YdgZbJx5?=
+ =?us-ascii?Q?9dqj6HN5EbmHGtbXuPypq8+HpwERDqDU9XRyFadSv9Dsy1I7/GUn/nMni6CZ?=
+ =?us-ascii?Q?kyqxNdgQGuGcYgLuEt4nsRKGE9nopOX3jqMcJ8wLvaKi1U4voSv39MsLi40T?=
+ =?us-ascii?Q?vjcvznNT6kxrQpqdXgnZGFRamXwb6gM5umFWLWIiXd3BuG4ejvv1yiiDgI6e?=
+ =?us-ascii?Q?rob72BeDP8VlscnW4lcIuwWQaAYiVyYzCwHqQLxwIGrza/3JQHtgvYREBTcp?=
+ =?us-ascii?Q?uGkFs3FLMPVemRMJoO1rJiKx8TX1F9pONOZ55RoZbfwTZ/UshZAedcDE6QQd?=
+ =?us-ascii?Q?Am6GHi0WfBCk3Oq5a3zOFuOxoKfEeLdJYVpwGQVDnIzQMG5kS/XIecOiKSZD?=
+ =?us-ascii?Q?TisRfzhChkjLL/oAgYNBln6GFNBmRBb/yDo4AU8Iy2JQAz8L0V2jIOW6N0y1?=
+ =?us-ascii?Q?2NJawXFcRQj1CDSaYcehLRDhlDV7t+7lg+vaJWFmuQZuKVmGD7Mpr/IQvUsx?=
+ =?us-ascii?Q?d1SO08dho9+Kv+KrcEHjK2iVX12HEl0zCCp/7nU3QdFunUWSwji4e1JiduFz?=
+ =?us-ascii?Q?ksIze42+x3OHHhnLYcSS3MWUwWwVw7hU59+yBSWW//TuUPteM7/q4wEvVmgc?=
+ =?us-ascii?Q?9lmuav7SD2WLpxGiG3iZXG/FfmkzbYAIcZDd/X2pIreHOT6EBO/2DT2dO3SE?=
+ =?us-ascii?Q?X+l9q54FNO1TVOvQKXcaNxH4dRF+yYGV0mnvDUsCXl2kSBSxogu2ur3Y/yJn?=
+ =?us-ascii?Q?UhNoe22LOOZvc6B+SO9voGg7BzAfIUu0FX19rgkbxTMn//PAIYIA1WltmRmg?=
+ =?us-ascii?Q?dltWYj/TwCTViqxPRk37TGCxIXboeMV66yN3bEOYWSYyzWnRbh/Xe2mfoGOv?=
+ =?us-ascii?Q?bXblF+ipx7texGAcmQyV+cASaRE4oOpUM+2CWXWNjnlXNoX9AAvun6VqGpHD?=
+ =?us-ascii?Q?0i1f1LCdyxKKUUAEPJP+NHY6i8Tcp8Dsr5tUwANin8CFNT4rODrmfgxtzAC/?=
+ =?us-ascii?Q?stT7nPGENnN017/qH+3NUzkKFKW9Txeb/tN/zLsl/GEK2Suv5MRtPnf/9jpA?=
+ =?us-ascii?Q?sCOezO3jm6de6biZpU97Fpu9AfK8mvyuoxLYpp3aPoZi5Vry3VZolagPHjUz?=
+ =?us-ascii?Q?kFB0tCW9fHMWF6WEU+9Ya/19fYMimq6i0c+zSGJAMhbz+MhmVj2UiSklDmdq?=
+ =?us-ascii?Q?JFe5g+e2I2Pevl/DfDg=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d0d1993-8692-45f8-ecef-08daad6e88f9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2022 22:59:08.1809
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CdOlCJVsOJtB73RGOH5/tng8DVIOtLV+ok53nIz84snQm9xyJ7gi72/TA4QQObai
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR84MB1479
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: OZGk7mkqf2nH7nPy-TYq5E_HMTIhQvqe
+X-Proofpoint-ORIG-GUID: OZGk7mkqf2nH7nPy-TYq5E_HMTIhQvqe
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-13_08,2022-10-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ suspectscore=0 mlxlogscore=925 lowpriorityscore=0 clxscore=1015
+ phishscore=0 bulkscore=0 priorityscore=1501 adultscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210130128
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initially, find_get_entries() was being passed in the start offset as a
-value. That left the calculation of the offset to the callers. This led
-to complexity in the callers trying to keep track of the index.
 
-Now find_get_entires() takes in a pointer to the start offset and
-updates the value to be directly after the last entry found. If no entry is
-found, the offset is not changed. This gets rid of multiple hacky
-calculations that kept track of the start offset.
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- mm/filemap.c  | 15 ++++++++++++---
- mm/internal.h |  2 +-
- mm/shmem.c    | 11 ++++-------
- mm/truncate.c | 19 +++++++------------
- 4 files changed, 24 insertions(+), 23 deletions(-)
+> -----Original Message-----
+> From: Herbert Xu <herbert@gondor.apana.org.au>
+> Sent: Thursday, October 13, 2022 2:52 AM
+> To: Eric Biggers <ebiggers@kernel.org>
+> Cc: Elliott, Robert (Servers) <elliott@hpe.com>; davem@davemloft.net;
+> tim.c.chen@linux.intel.com; ap420073@gmail.com; ardb@kernel.org; linux-
+> crypto@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v2 19/19] crypto: x86/sha - register only the best
+> function
+>=20
+> On Wed, Oct 12, 2022 at 11:07:43PM -0700, Eric Biggers wrote:
+> >
+> > I thought that it's done the way it is so that it's easy to run the sel=
+f-
+> tests
+> > for all the different variants.
+>=20
+> Yes, we should keep it that way so that it's easy to test the
+> different code paths for correctness and/or speed.
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index b6aaded95132..ed66fecf06d9 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2053,10 +2053,10 @@ static inline struct folio *find_get_entry(struct xa_state *xas, pgoff_t max,
-  *
-  * Return: The number of entries which were found.
-  */
--unsigned find_get_entries(struct address_space *mapping, pgoff_t start,
-+unsigned find_get_entries(struct address_space *mapping, pgoff_t *start,
- 		pgoff_t end, struct folio_batch *fbatch, pgoff_t *indices)
- {
--	XA_STATE(xas, &mapping->i_pages, start);
-+	XA_STATE(xas, &mapping->i_pages, *start);
- 	struct folio *folio;
- 
- 	rcu_read_lock();
-@@ -2065,8 +2065,17 @@ unsigned find_get_entries(struct address_space *mapping, pgoff_t start,
- 		if (!folio_batch_add(fbatch, folio))
- 			break;
- 	}
--	rcu_read_unlock();
- 
-+	if (folio_batch_count(fbatch)) {
-+		unsigned long nr = 1;
-+		int idx = folio_batch_count(fbatch) - 1;
-+
-+		folio = fbatch->folios[idx];
-+		if (!xa_is_value(folio) && !folio_test_hugetlb(folio))
-+			nr = folio_nr_pages(folio);
-+		*start = indices[idx] + nr;
-+	}
-+	rcu_read_unlock();
- 	return folio_batch_count(fbatch);
- }
- 
-diff --git a/mm/internal.h b/mm/internal.h
-index 14625de6714b..e87982cf1d48 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -106,7 +106,7 @@ static inline void force_page_cache_readahead(struct address_space *mapping,
- 
- unsigned find_lock_entries(struct address_space *mapping, pgoff_t *start,
- 		pgoff_t end, struct folio_batch *fbatch, pgoff_t *indices);
--unsigned find_get_entries(struct address_space *mapping, pgoff_t start,
-+unsigned find_get_entries(struct address_space *mapping, pgoff_t *start,
- 		pgoff_t end, struct folio_batch *fbatch, pgoff_t *indices);
- void filemap_free_folio(struct address_space *mapping, struct folio *folio);
- int truncate_inode_folio(struct address_space *mapping, struct folio *folio);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 9e17a2b0dc43..8c3c2ac15759 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -983,7 +983,7 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
- 	while (index < end) {
- 		cond_resched();
- 
--		if (!find_get_entries(mapping, index, end - 1, &fbatch,
-+		if (!find_get_entries(mapping, &index, end - 1, &fbatch,
- 				indices)) {
- 			/* If all gone or hole-punch or unfalloc, we're done */
- 			if (index == start || end != -1)
-@@ -995,13 +995,12 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
- 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
- 			folio = fbatch.folios[i];
- 
--			index = indices[i];
- 			if (xa_is_value(folio)) {
- 				if (unfalloc)
- 					continue;
--				if (shmem_free_swap(mapping, index, folio)) {
-+				if (shmem_free_swap(mapping, indices[i], folio)) {
- 					/* Swap was replaced by page: retry */
--					index--;
-+					index = indices[i];
- 					break;
- 				}
- 				nr_swaps_freed++;
-@@ -1014,19 +1013,17 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, loff_t lend,
- 				if (folio_mapping(folio) != mapping) {
- 					/* Page was replaced by swap: retry */
- 					folio_unlock(folio);
--					index--;
-+					index = indices[i];
- 					break;
- 				}
- 				VM_BUG_ON_FOLIO(folio_test_writeback(folio),
- 						folio);
- 				truncate_inode_folio(mapping, folio);
- 			}
--			index = folio->index + folio_nr_pages(folio) - 1;
- 			folio_unlock(folio);
- 		}
- 		folio_batch_remove_exceptionals(&fbatch);
- 		folio_batch_release(&fbatch);
--		index++;
- 	}
- 
- 	spin_lock_irq(&info->lock);
-diff --git a/mm/truncate.c b/mm/truncate.c
-index 9fbe282e70ba..faeeca45d4ed 100644
---- a/mm/truncate.c
-+++ b/mm/truncate.c
-@@ -400,7 +400,7 @@ void truncate_inode_pages_range(struct address_space *mapping,
- 	index = start;
- 	while (index < end) {
- 		cond_resched();
--		if (!find_get_entries(mapping, index, end - 1, &fbatch,
-+		if (!find_get_entries(mapping, &index, end - 1, &fbatch,
- 				indices)) {
- 			/* If all gone from start onwards, we're done */
- 			if (index == start)
-@@ -414,21 +414,18 @@ void truncate_inode_pages_range(struct address_space *mapping,
- 			struct folio *folio = fbatch.folios[i];
- 
- 			/* We rely upon deletion not changing page->index */
--			index = indices[i];
- 
- 			if (xa_is_value(folio))
- 				continue;
- 
- 			folio_lock(folio);
--			VM_BUG_ON_FOLIO(!folio_contains(folio, index), folio);
-+			VM_BUG_ON_FOLIO(!folio_contains(folio, indices[i]), folio);
- 			folio_wait_writeback(folio);
- 			truncate_inode_folio(mapping, folio);
- 			folio_unlock(folio);
--			index = folio_index(folio) + folio_nr_pages(folio) - 1;
- 		}
- 		truncate_folio_batch_exceptionals(mapping, &fbatch, indices);
- 		folio_batch_release(&fbatch);
--		index++;
- 	}
- }
- EXPORT_SYMBOL(truncate_inode_pages_range);
-@@ -636,16 +633,15 @@ int invalidate_inode_pages2_range(struct address_space *mapping,
- 
- 	folio_batch_init(&fbatch);
- 	index = start;
--	while (find_get_entries(mapping, index, end, &fbatch, indices)) {
-+	while (find_get_entries(mapping, &index, end, &fbatch, indices)) {
- 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
- 			struct folio *folio = fbatch.folios[i];
- 
- 			/* We rely upon deletion not changing folio->index */
--			index = indices[i];
- 
- 			if (xa_is_value(folio)) {
- 				if (!invalidate_exceptional_entry2(mapping,
--						index, folio))
-+						indices[i], folio))
- 					ret = -EBUSY;
- 				continue;
- 			}
-@@ -655,13 +651,13 @@ int invalidate_inode_pages2_range(struct address_space *mapping,
- 				 * If folio is mapped, before taking its lock,
- 				 * zap the rest of the file in one hit.
- 				 */
--				unmap_mapping_pages(mapping, index,
--						(1 + end - index), false);
-+				unmap_mapping_pages(mapping, indices[i],
-+						(1 + end - indices[i]), false);
- 				did_range_unmap = 1;
- 			}
- 
- 			folio_lock(folio);
--			VM_BUG_ON_FOLIO(!folio_contains(folio, index), folio);
-+			VM_BUG_ON_FOLIO(!folio_contains(folio, indices[i]), folio);
- 			if (folio->mapping != mapping) {
- 				folio_unlock(folio);
- 				continue;
-@@ -684,7 +680,6 @@ int invalidate_inode_pages2_range(struct address_space *mapping,
- 		folio_batch_remove_exceptionals(&fbatch);
- 		folio_batch_release(&fbatch);
- 		cond_resched();
--		index++;
- 	}
- 	/*
- 	 * For DAX we invalidate page tables after invalidating page cache.  We
--- 
-2.36.1
+I have done some testing with extra patches that do that for
+that very reason. Is there much overhead from having a module
+loaded and registered in the crypto system, but not being
+chosen for use?
+
+The current sha modules register SSSE3, then register AVX and
+unregister SSSE3, then register AVX2 and unregister AVX...
+good testing for the unregister function, but not real helpful
+for users.
+
 
