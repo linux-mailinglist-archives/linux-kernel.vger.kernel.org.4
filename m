@@ -2,212 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343855FD826
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C8D5FD82E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJMLMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S229577AbiJMLQp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Oct 2022 07:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJMLMq (ORCPT
+        with ESMTP id S229513AbiJMLQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:12:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE39111E45A;
-        Thu, 13 Oct 2022 04:12:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF46315A1;
-        Thu, 13 Oct 2022 04:12:50 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.65.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F9463F792;
-        Thu, 13 Oct 2022 04:12:42 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 12:12:25 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        kajetan.puchalski@arm.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
- util-awareness
-Message-ID: <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+        Thu, 13 Oct 2022 07:16:42 -0400
+Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B85120044;
+        Thu, 13 Oct 2022 04:16:40 -0700 (PDT)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 906243A1924;
+        Thu, 13 Oct 2022 13:16:38 +0200 (CEST)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 745233A17F5;
+        Thu, 13 Oct 2022 13:16:38 +0200 (CEST)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (sbdeex04.sbitdom.lan [10.149.2.42])
+        by mail5.swissbit.com (Postfix) with ESMTPS;
+        Thu, 13 Oct 2022 13:16:38 +0200 (CEST)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 13 Oct
+ 2022 13:16:37 +0200
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Thu, 13 Oct 2022 13:16:37 +0200
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Adrian Hunter <adrian.hunter@intel.com>
+Subject: [PATCHv5 1/2] mmc: block: Remove error check of hw_reset on reset
+Thread-Topic: [PATCHv5 1/2] mmc: block: Remove error check of hw_reset on
+ reset
+Thread-Index: Adje8+ttHfHV80CJTqaaNKWQWqaf3w==
+Date:   Thu, 13 Oct 2022 11:16:37 +0000
+Message-ID: <e91be6199d04414a91e20611c81bfe1d@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.242.2.2]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27198.007
+X-TMASE-Result: 10-0.521300-10.000000
+X-TMASE-MatchedRID: dc8Jy61QoRpgljMcj2tyXt5x7RpGJf1a4SkIdSwphgahLh9e7qvSIg2V
+        4b0zHULvGgn/HW4MjTmKoat5I/Uj/worSvYb1VTuKsurITpSv+M2LwvzxRX0gMC5DTEMxpeQfiq
+        1gj2xET9dBLSzNqCHg1o4rfBbwEORvvHAd28bGMe5x7uAXGEprfWr7HvOSElar4YC4lUEmf2Ypu
+        G7kpoKR5p6VbtqvFM0+WatSktubmiel3N+gDvB54knvYO5kHScNUSduuqYHDuZtziFUn+D+UzAk
+        Vmkw08mi/rJKndm3e8gE0bHoPl2Aq+/EguYor8cEzQnFLEeMUndB/CxWTRRu/558CedkGIvqcoA
+        hihTwviYPPIGKI9LSplNS0wJuvcSHXU/7YOpZJDHQadHeF1BN7liudJTCnnh
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 836db844-50eb-4e6e-9298-7b44347260d8-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
-> <kajetan.puchalski@arm.com> wrote:
-> >
-> > Hi,
-> >
-> > At the moment, all the available idle governors operate mainly based on their own past performance
-> 
-> Not true, at least for the menu and teo governors that use the
-> information on the distribution of CPU wakeups that is available to
-> them and try to predict the next idle duration with the help of it.
-> This has a little to do with their performance.
+Before switching back to the right partition in mmc_blk_reset there used
+to be a check if hw_reset was even supported. This return value
+was removed, so there is no reason to check. Furthermore ensure
+part_curr is not falsely set to a valid value on reset or
+partition switch error.
 
-You're right of course, I should have written "their own past
-correctness" as that's what I was referring to. I just meant that for
-instance with TEO the initial timer-based choice is only adjusted using
-the governor's own metrics and not any information from anywhere else in
-the system.
+As part of this change the code paths of mmc_blk_reset calls were checked
+to ensure no commands are issued after a failed mmc_blk_reset directly
+without going through the block layer.
 
-> > without taking into account any scheduling information. Especially on interactive systems, this
-> > results in them frequently selecting a deeper idle state and then waking up before its target
-> > residency is hit, thus leading to increased wakeup latency and lower performance with no power
-> > saving. For 'menu' while web browsing on Android for instance, those types of wakeups ('too deep')
-> > account for over 24% of all wakeups.
-> 
-> How is this measured?
+Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|sw_reset()")
+Cc: stable@vger.kernel.org
 
-Using the cpu_idle_miss trace event. Over the course of a benchmark run
-I collect all cpu_idle and cpu_idle_miss trace events. Then I divide the
-number of too deep misses by the total number of cpu_idle wakeup events
-which gives me the percentage. Those are the percentages described as
-'gmean too deep %' in the tables included in the cover letter. Gmean
-because I run the benchmarks for many iterations and then take an
-average of those percentages to account for outliers.
-PCMark Web Browsing is a 'benchmark' that just amounts to browsing the
-web on Android, hence I can use data from it to talk about what the
-system behaviour under normal usage would be.
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+-v5: Remove nested if
+-v4: Only partition switch if necessary and fix one mmc_blk_reset call
+-v3: Ensure invalid part_curr on error
+-v2: Do not attempt to switch partitions if reset failed
 
-> > At the same time, on some platforms C0 can be power efficient enough to warrant wanting to prefer
-> > it over C1.
-> 
-> Well, energy-efficiency is relative, so strictly speaking it is
-> invalid to say "power efficient enough".
+ drivers/mmc/core/block.c | 44 ++++++++++++++++++++++++----------------
+ 1 file changed, 26 insertions(+), 18 deletions(-)
 
-Yes, by 'enough' I meant that the power savings of C0 vs C1 on arm are
-fairly comparable as opposed to other platforms. From Doug's data
-collected on an Intel CPU, the power usage difference of only-C0
-compared to only-C1 was over 20-fold ie 46w vs 2.6w. With only C0
-enabled on Pixel 6 that difference is closer to something like 4%. It's
-just fundamentally different hardware. With 4% being your ceiling you
-can talk about performance/latency tradeoffs etc, if you're talking
-about potential over 1700% increases, not so much.
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index ce89611a136e..0be7ab6ce1c8 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -134,6 +134,7 @@ struct mmc_blk_data {
+ 	 * track of the current selected device partition.
+ 	 */
+ 	unsigned int	part_curr;
++#define MMC_BLK_PART_INVALID	UINT_MAX	/* Unknown partition active */
+ 	int	area_type;
+ 
+ 	/* debugfs files (only in main mmc_blk_data) */
+@@ -987,33 +988,39 @@ static unsigned int mmc_blk_data_timeout_ms(struct mmc_host *host,
+ 	return ms;
+ }
+ 
++/*
++ * Attempts to reset the card and get back to the requested partition.
++ * Therefore any error here must result in cancelling the block layer
++ * request, it must not be reattempted without going through the mmc_blk
++ * partition sanity checks.
++ */
+ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
+ 			 int type)
+ {
+ 	int err;
++	struct mmc_blk_data *main_md = dev_get_drvdata(&host->card->dev);
+ 
+ 	if (md->reset_done & type)
+ 		return -EEXIST;
+ 
+ 	md->reset_done |= type;
+ 	err = mmc_hw_reset(host->card);
++	/*
++	 * A successful reset will leave the card in the main partition, but
++	 * upon failure it might not be, so set it to MMC_BLK_PART_INVALID
++	 * in that case.
++	 */
++	main_md->part_curr = err ? MMC_BLK_PART_INVALID : main_md->part_type;
++	if (err)
++		return err;
+ 	/* Ensure we switch back to the correct partition */
+-	if (err) {
+-		struct mmc_blk_data *main_md =
+-			dev_get_drvdata(&host->card->dev);
+-		int part_err;
+-
+-		main_md->part_curr = main_md->part_type;
+-		part_err = mmc_blk_part_switch(host->card, md->part_type);
+-		if (part_err) {
+-			/*
+-			 * We have failed to get back into the correct
+-			 * partition, so we need to abort the whole request.
+-			 */
+-			return -ENODEV;
+-		}
+-	}
+-	return err;
++	if (mmc_blk_part_switch(host->card, md->part_type))
++		/*
++		 * We have failed to get back into the correct
++		 * partition, so we need to abort the whole request.
++		 */
++		return -ENODEV;
++	return 0;
+ }
+ 
+ static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int type)
+@@ -1867,8 +1874,9 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue *mq, struct request *req)
+ 		return;
+ 
+ 	/* Reset before last retry */
+-	if (mqrq->retries + 1 == MMC_MAX_RETRIES)
+-		mmc_blk_reset(md, card->host, type);
++	if (mqrq->retries + 1 == MMC_MAX_RETRIES &&
++	    mmc_blk_reset(md, card->host, type))
++		return;
+ 
+ 	/* Command errors fail fast, so use all MMC_MAX_RETRIES */
+ 	if (brq->sbc.error || brq->cmd.error)
+-- 
+2.37.3
 
-> Also, as far as idle CPUs are concerned, we are talking about the
-> situation in which no useful work is done at all, so the state drawing
-> less power is always more energy-efficient than the one drawing more
-> power.
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
-Yes, assuming the CPU is woken up after the target residency of the
-state has been met. If the wakeup happens too early then for that
-situation C0 would've been more power efficient than C1 even though C1
-technically draws less power, right? That's what we're trying to fix
-here, we just noticed that for mobile interactive workloads at least
-we're getting this situation way too often.
-
-The result being that this util-aware TEO variant while using much less
-C1 and decreasing the percentage of too deep sleeps from ~24% to ~3% in
-PCMark Web Browsing also uses almost 2% less power. Clearly the power is
-being wasted on not hitting C1 residency over and over.
-
-> You may argue that predicting idle durations that are too long too
-> often leads to both excessive task wakeup latency and excessive energy
-> usage at the same time, but this may very well mean that the target
-> residency value for C1 is too low.
-
-We get residency values from DT and they're meant to be the descriptions
-of each CPU's hardware so I don't think tweaking them to get better
-results would be a good idea. Unless I'm misunderstanding what you mean?
-
-> > Currently the best available governor under this metric is TEO which on average results in less than
-> > half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
-> > increased performance in the process.
-> 
-> Well, good to hear that, but some numbers in support of that claim
-> would be nice to have too.
-
-Those are the numbers I included in the cover letter for the two
-benchmarks, they've been very consistent in terms of the pattern
-across all the runs and workloads I've seen. For too deep % for
-instance in GB5 we had on average menu 16.6%, TEO 9.6%, TEO+util 4.19%.
-For PCMark Web Browsing menu 24.15%, TEO 10.32%, TEO+util 3.2%. The
-values differ per-workload but every dataset I've seen had that same
-'staircase' pattern.
-
-> > This proposed optional extension to TEO would specifically tune it for minimising too deep
-> > sleeps and minimising latency to achieve better performance. To this end, before selecting the next
-> > idle state it uses the avg_util signal of a CPU's runqueue in order to determine to what extent the
-> > CPU is being utilized.
-> 
-> Which has no bearing on what the CPU idle time governors have to do
-> which is (1) to predict the next idle duration as precisely as
-> reasonably possible and (2) to minimise the cost in terms of task
-> wakeup latencies associated with using deep idle states.
-> 
-> The avg_util value tells us nothing about how much the CPU is going to
-> be idle this time and it also tells us nothing about the
-> latency-sensitivity of the workload.
-> 
-> Yes, it tells us how much idle time there was on the given CPU in the
-> past, on the average, but there is zero information about the
-> distribution of that idle time in it.
-> 
-> So in the first place please tell me why it fundamentally makes sense
-> to use avg_util in CPU idle time management at all.
-
-Right, the idea here is slightly similar to that of temporal locality.
-We obviously can't predict the future which is sort of what an idle
-governor tries to achieve. Focusing on timer events makes a lot of sense
-and is probably close to as good as it gets in estimating future
-behaviour.
-
-The observation we're relying on here is simply that if the
-CPU was doing enough work in the recent past for its avg_util to still
-be raised while going into idle, it is very likely that the same CPU
-might be needed again soon. From my tests that assumption tends to be
-correct quite often. In those situations, when avg_util is high and the
-next timer event is far enough for C1 to be selected, a lot of the time
-the CPU does actually get woken up before the residency is hit leading
-to all the issues described above.
-
-I don't think using avg_util as the *only* input for idle management
-would be a good idea at all. The way I see it, it serves as a very good hint
-to determine if we are likely to get a wakeup between now and the next
-timer event and provides an additional dimension for decision making.
-While the current metrics only adjust themselves after making a certain
-number of mistakes and are a "trailing" adjusting mechanism, using
-avg_util this way provides a "leading" mechanism that potentially lets
-us not make those mistakes in the first place. It's not just theory
-either, it very clearly works and gets results, at least on the
-platforms/workloads we've been looking at.
-
-
-On the Intel & power usage angle you might have seen in the discussion,
-Doug sent me some interesting data privately. As far as I can tell the
-main issue there is that C0 on Intel doesn't actually do power saving so
-moving the state selection down to it is a pretty bad idea because C1
-could be very close in terms of latency and save much more power.
-
-A potential solution could be altering the v2 to only decrease the state
-selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
-because arm systems with 2 states use the early exit path anyway. It'd
-just amount to changing this hunk:
-
-+       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
-+               idx--;
-
-to:
-
-+       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
-+               idx--;
-
-What would you think about that? Should make it much less intense for
-Intel systems.
-
-Thanks a lot for your interest,
-Kajetan
