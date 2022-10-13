@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C925FDDCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CC55FDDD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiJMP6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S229621AbiJMP6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiJMP6P (ORCPT
+        with ESMTP id S229513AbiJMP6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:58:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C320DAC7B;
-        Thu, 13 Oct 2022 08:58:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C1C813D5;
-        Thu, 13 Oct 2022 08:58:19 -0700 (PDT)
-Received: from [10.57.5.87] (unknown [10.57.5.87])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A70873F67D;
-        Thu, 13 Oct 2022 08:58:11 -0700 (PDT)
-Message-ID: <77cfc218-0c87-7dd7-6f60-2c2c12f9f892@arm.com>
-Date:   Thu, 13 Oct 2022 16:58:10 +0100
+        Thu, 13 Oct 2022 11:58:52 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E83EE8AA;
+        Thu, 13 Oct 2022 08:58:47 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id n83so2175436oif.11;
+        Thu, 13 Oct 2022 08:58:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ss+Jh5JtGloc7s5Wbx0ajnNwFMxqRKR8S3W84woq5d0=;
+        b=huS9p0nXQYIDA04DhHN43jASeJMXxjUBHsvF1las77K1M6XrgHb6IsaS2gzd88VKBN
+         Tp44E6D24lq3mX9/a9l3Bwzb/QBGcfdUANBknnfNhddjNnfxgAoncgXt83BwEveHO+5o
+         E5Z8AG0qjXj4nOJqLb6A+oriBPOeFimo5Ts1Zbl2/Vb2cGlEx1maDl1gARwhfpPd9iXV
+         RL6QobzoRw4tG/h/mBfo7cE78PkZ1k1c66vBkQUOjanHyECvhtp3U3G1xQncQVARmmIL
+         yk67ffPSBdLFJOI8/WvBdmC6A/o0uJITTAGFG8sCfyNexpudzHCEe3FqPVdsIzIsX/n/
+         0LjQ==
+X-Gm-Message-State: ACrzQf2OXDI9oQYQf5iTDoTZnobGsFYuCvNV7ekaDt1+hlNnKDm80Buq
+        q1l+AfqiRDSvht4BQii3Iw==
+X-Google-Smtp-Source: AMsMyM5iCHO0JebPra0Jg+Q6DZjAoX1inRqvj5SNPFERV5Md/M86KaJltPptRbNuIxKEmiNyrhO1Tg==
+X-Received: by 2002:a05:6808:f05:b0:354:b362:c5be with SMTP id m5-20020a0568080f0500b00354b362c5bemr228112oiw.136.1665676726181;
+        Thu, 13 Oct 2022 08:58:46 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e15-20020a4ada0f000000b0047f94375092sm2213226oou.40.2022.10.13.08.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 08:58:45 -0700 (PDT)
+Received: (nullmailer pid 388475 invoked by uid 1000);
+        Thu, 13 Oct 2022 15:58:47 -0000
+Date:   Thu, 13 Oct 2022 10:58:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     frowand.list@gmail.com
+Cc:     pantelis.antoniou@konsulko.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/1] MAINTAINERS: of: collapse overlay entry into main
+ device tree entry
+Message-ID: <166567671481.388208.3399174487542913808.robh@kernel.org>
+References: <20221012220548.4163865-1-frowand.list@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/governors: Remove integral_cutoff parameter, IPA
- is more regulated
-Content-Language: en-US
-To:     Qibo Huang <huangqibo.tech@gmail.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com
-References: <20221013090733.28462-1-huangqibo.tech@gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221013090733.28462-1-huangqibo.tech@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012220548.4163865-1-frowand.list@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qibo,
-
-On 10/13/22 10:07, Qibo Huang wrote:
-> Reason 1: If the integral_cutoff parameter is 0,
-> the current temperature is greater than the control
-> temperature, and err_integral continues to increase.
-> If an abnormal situation occurs suddenly, the err_integral
-> value will become very large. Even if the current
-> temperature is lower than the control temperature,
-> err_integral will always exist, which will cause the
-> IPA to run out of control and cannot return to normal.
-> This is the problem I'm actually having.
+On Wed, 12 Oct 2022 17:05:48 -0500, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> Reason 2: The integral_cutoff parameter is difficult to
-> confirm the optimal, and can not bring good results.
+> Pantelis has not been active in recent years so no need to maintain
+> a separate entry for device tree overlays.
+> 
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+> 
+> Based on Linus' top of tree, 676cb4957396 d0d51a97063d,
+> Wed Oct 12 11:16:58 2022 -0700
+> 
+>  MAINTAINERS | 14 +++-----------
+>  1 file changed, 3 insertions(+), 11 deletions(-)
+> 
 
-Have you tired different 'k_i', 'k_po', 'k_pu' settings,
-not the default from binding estimation?
-
-These coefficients help to control the behavior of IPA
-and how good the control loop could work.
-
-The integral cutoff in default is set to 0, which means
-we account the error when we overshoot the temperature
-vs our desired control temperature value.
-
-Please also pay attention to the type for those variables:
-err, i, p and how they are treated (and when).
-In current implementation we account 'err' negative, so we
-reduce the power budget. Next time, even when we are below
-control temperature, we still 'remember' those
-overshoot mistakes, so we upfront shrink the possible
-budget (to avoid overshooting). We clean the accumulated
-error when the temperature drops below 'enable' trip point.
-
-Could you describe a bit more what kind of problems you
-observe, please?
-
-Regards,
-Lukasz
+Applied, thanks!
