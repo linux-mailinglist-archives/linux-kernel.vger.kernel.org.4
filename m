@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02995FE0E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA575FE027
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiJMSPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
+        id S231147AbiJMSEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiJMSMx (ORCPT
+        with ESMTP id S230456AbiJMSDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:12:53 -0400
+        Thu, 13 Oct 2022 14:03:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF619B1C8;
-        Thu, 13 Oct 2022 11:09:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233DD152C5A;
+        Thu, 13 Oct 2022 11:02:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A1A9B82020;
-        Thu, 13 Oct 2022 17:57:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6F0C433C1;
-        Thu, 13 Oct 2022 17:57:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13A71B8204D;
+        Thu, 13 Oct 2022 17:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364FBC43140;
+        Thu, 13 Oct 2022 17:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683861;
-        bh=r9PM8b6YrYqEAMH8Yyhr2eZC2Q2EKssexz0N1yrdbq8=;
+        s=korg; t=1665683947;
+        bh=xm4dJk+a4xXbTCFuEdRLmVRDxS983Q+yBTlQeFFvqXU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aurWYMP6g4VvU3Io4HXTAzU1l49APAKD1xZjBunXOnPGWFarBkvlqiCVx6XQEH9cz
-         Wfw+wj2h4n2zzqFL0I/RHBEMd8GlPCe8+6yq8xgBNt4HKejm+gaBVKasNnswnCDqIh
-         5QgCPW1d1vU/ZKBurEEthSMpIsTC5PiV9zEkVdGk=
+        b=kHQZZ3ud0OVJa/DzL9/AlRrdzff+jwVcDc2PlVU5AewSCtIM5UeBebAssT/K1bOtx
+         c/tNFcUzRuM+68n25/+KIDY1saBkZPCYL1IrCt8bU9eWq1Of6tMFHUEQSt/B3w6TnT
+         JXLTn+aZ5CHoYY3u1EDbnHf4K55FSpRKDPMsQUYI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Soenke Huster <shuster@seemoo.tu-darmstadt.de>,
-        Kees Cook <keescook@chromium.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.15 16/27] wifi: cfg80211: fix u8 overflow in cfg80211_update_notlisted_nontrans()
+        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.19 13/33] USB: serial: qcserial: add new usb-id for Dell branded EM7455
 Date:   Thu, 13 Oct 2022 19:52:45 +0200
-Message-Id: <20221013175144.139483450@linuxfoundation.org>
+Message-Id: <20221013175145.707906746@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
-References: <20221013175143.518476113@linuxfoundation.org>
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+References: <20221013175145.236739253@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Frank Wunderlich <frank-w@public-files.de>
 
-commit aebe9f4639b13a1f4e9a6b42cdd2e38c617b442d upstream.
+commit eee48781ea199e32c1d0c4732641c494833788ca upstream.
 
-In the copy code of the elements, we do the following calculation
-to reach the end of the MBSSID element:
+Add support for Dell 5811e (EM7455) with USB-id 0x413c:0x81c2.
 
-	/* copy the IEs after MBSSID */
-	cpy_len = mbssid[1] + 2;
-
-This looks fine, however, cpy_len is a u8, the same as mbssid[1],
-so the addition of two can overflow. In this case the subsequent
-memcpy() will overflow the allocated buffer, since it copies 256
-bytes too much due to the way the allocation and memcpy() sizes
-are calculated.
-
-Fix this by using size_t for the cpy_len variable.
-
-This fixes CVE-2022-41674.
-
-Reported-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
-Tested-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
-Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/scan.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/serial/qcserial.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -2238,7 +2238,7 @@ cfg80211_update_notlisted_nontrans(struc
- 	size_t new_ie_len;
- 	struct cfg80211_bss_ies *new_ies;
- 	const struct cfg80211_bss_ies *old;
--	u8 cpy_len;
-+	size_t cpy_len;
- 
- 	lockdep_assert_held(&wiphy_to_rdev(wiphy)->bss_lock);
- 
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -177,6 +177,7 @@ static const struct usb_device_id id_tab
+ 	{DEVICE_SWI(0x413c, 0x81b3)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
+ 	{DEVICE_SWI(0x413c, 0x81b5)},	/* Dell Wireless 5811e QDL */
+ 	{DEVICE_SWI(0x413c, 0x81b6)},	/* Dell Wireless 5811e QDL */
++	{DEVICE_SWI(0x413c, 0x81c2)},	/* Dell Wireless 5811e */
+ 	{DEVICE_SWI(0x413c, 0x81cb)},	/* Dell Wireless 5816e QDL */
+ 	{DEVICE_SWI(0x413c, 0x81cc)},	/* Dell Wireless 5816e */
+ 	{DEVICE_SWI(0x413c, 0x81cf)},   /* Dell Wireless 5819 */
 
 
