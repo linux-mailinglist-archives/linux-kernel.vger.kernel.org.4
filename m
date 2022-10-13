@@ -2,178 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEDE5FD5B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6978B5FD5B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJMHnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 03:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S229754AbiJMHsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJMHnR (ORCPT
+        with ESMTP id S229655AbiJMHse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 03:43:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D06212587D
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665646995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SXWdlgPiKZdtloajnM9kce+ffCg7auTKtNFzfsnZZt0=;
-        b=XYfKQEq9amdBwzIqqjTmSqz6IBmv/xhyWtramVOb/cPwiBb9PmKJ1ZFhFv1Ph13o5/baZy
-        Y1SjB31gv+TsHVB1IpLQ8T2KpGFt1g5ZPkeWXXKMeGbYwW8cjy2LmgfdqT7OR7Ci1e12kt
-        W1ALFR0fatoQz6rdFBYcggCRTTz2RCs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-411-JWrVrItoMLSVoW4NsubX2Q-1; Thu, 13 Oct 2022 03:43:14 -0400
-X-MC-Unique: JWrVrItoMLSVoW4NsubX2Q-1
-Received: by mail-wm1-f70.google.com with SMTP id 2-20020a05600c268200b003c4290989e1so473751wmt.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:43:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SXWdlgPiKZdtloajnM9kce+ffCg7auTKtNFzfsnZZt0=;
-        b=hK5YFdguASjFL3dj0YE4qC/zFQRBRLMavlzOCQUgj/RQKV1ZNOTdq2tAFWynafzh/M
-         ZQNavPo1O4lSkjxUigXFzI26LvjC+YwyINwYmI4BbClxUw3jpzmfkyoj/thcITFxo7UG
-         M9egu0qmnzOlGuTMn0dbWoSlmgg3zaJaTIVggy75xIbDyrGvzFWlXjarmaX1JgqVpq6T
-         dERBi1+bX/afYqhS9Cg0Rkh5COD3My8ZPDNLdB5Us1rIwvLJpSuZkhN/BaB2vrcVJKVJ
-         r0B4T6sbLNdf7sBOOl26PLvATTyvHwW758XpOvO/8tcCs1ShFRDrpcMRDWFjPKy4P/jg
-         cWrA==
-X-Gm-Message-State: ACrzQf3Jkvfh45t4IFW2cZXj56GqIGWzFYQFeQdBN5XOi0LnwI7mWfaD
-        cqlJIreO8JA9If30aA0EoeASGk0fQdnaBkMz7K6shDqU7Z6Fa0GXjAa4S8gAHjufVmZCRDNUIqm
-        8Fb+mDydZFXJgvU+ca0EhanKp
-X-Received: by 2002:a5d:4535:0:b0:232:3648:7771 with SMTP id j21-20020a5d4535000000b0023236487771mr3614229wra.342.1665646993065;
-        Thu, 13 Oct 2022 00:43:13 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7u3l5fwviJkxhnWoyRDVIgzzas3DGCD8aBAIrgJcW2Qz/UfWuNQCeZOp0IQZhhlxWjJcOcaQ==
-X-Received: by 2002:a5d:4535:0:b0:232:3648:7771 with SMTP id j21-20020a5d4535000000b0023236487771mr3614216wra.342.1665646992852;
-        Thu, 13 Oct 2022 00:43:12 -0700 (PDT)
-Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
-        by smtp.gmail.com with ESMTPSA id p8-20020a5d6388000000b00228da845d4dsm1324871wru.94.2022.10.13.00.43.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 00:43:12 -0700 (PDT)
-Message-ID: <261aff0b-874e-0644-e0c8-97e0a9bfbe04@redhat.com>
-Date:   Thu, 13 Oct 2022 09:43:09 +0200
+        Thu, 13 Oct 2022 03:48:34 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC8E122BE3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1665647313; x=1697183313;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TW6SOpQjxf8WZxrXeW9B+zZiJfs42MWqJ6VpceHM6xc=;
+  b=WtrsBv6Yqda2L4o2juVd+kM78dx/d/ubbM51Z1qJRGON8uCNEWjfV42P
+   C8YEdM4lHNT5tt1+sX+OpXtL1dBwnZlZhSmKVsl5hygOVBsETTWjsUxHT
+   UQ7GLdwCHkXeNcDdBPUSOsVrv213urwXBzc2E8XJvSlbThKxqNfoW4BUv
+   xsndptcWNJKYrVPY5ykLXhu8dlcWQWdgSw14Gt0Hk+paEbT9r+klEm8mm
+   IiRMVxpKLiN9cRqkKAY//twiqG/uVMRqFjj4bBbPHAsqDJkDbb28m6M/7
+   UWn0X8inbkEsE9mzB6+2xrymLVvPLXHTWKitpZODtIRfFSKnOgwr1+6OV
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,180,1661788800"; 
+   d="scan'208";a="218866584"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Oct 2022 15:48:33 +0800
+IronPort-SDR: fL8o9pz4JoZ+/oeUlviJD8QXgQq51Ef9Tb5kpgxUQ4RhYfSD4Vp7iY1OjYYI7ciCSzBl84+Igf
+ I6PWU09CvnQQcFenYyGUHn11wCTsICfu0Q/dcCYN3IWDpEfAK25QlMyNG1cxT6k/aynQ5zewbi
+ MeXbNXwdsTWG2pRfElDS5Hd8t7mjqdFzV0WM4WCABRq9xDFsjcKBIN1yfoAoPSpAAkLLIA0VV0
+ 9mGxDlyM8y+DlLSGHEhktNusX6hbix9TI9fXpFAVwEnJPJ+qGR23Ekb4DRwXBDO+pujDOABB5s
+ o544kdZmTIxO3uNNVewOsOqY
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Oct 2022 00:08:11 -0700
+IronPort-SDR: /MTyb5SK1Devk8VmExcPkmpNNKI/CY+9Ln4ZwwuwD2SDkvFeyTQsGDtIxUpacAhtvCeQztfGzr
+ L/xjLHjcnIxIq/53IL7dvQ777qwejFiSrS06U74RO/bHQBMp52oGgHGEopPVCHJz06mbILQf6d
+ uileSyrr4XCIBWjom4Ij8pqbkp/I0Y/6TiDjPtxp49cWwuYsT1memJuTlmNl9U1zoleBP8LW1r
+ Jis1QVw/Q8F/C/aLSaXm6CgHv+VGa7H/pHzm4+R9fB1DLKi4xnZaSaKCX2/1jFBeZOglU+PI+E
+ MBU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Oct 2022 00:48:34 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mp1q522QDz1RvTr
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:48:33 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1665647312; x=1668239313; bh=TW6SOpQjxf8WZxrXeW9B+zZiJfs42MWqJ6V
+        pceHM6xc=; b=O1XznsEJI5uxiWZLiyx9twftJFXWvzo8MQP88H6XIKXwRe47gDd
+        4+BWjL7JXL60mkkxmQuIOrwDNdq5+5BVJrMCMPWizFh1RPvq276+WG3eyR0Hwv8X
+        1APOUdPtqqyLdHNdzNfh55XmST0Sm+flYBFvVyeJqDlUEBJTv5g+CCZ1emDgd9m2
+        cuULYJJXQ6XHan4cusFKyq1kEnxLoF4VNaGBcgvi4hwyZcPo7V2vum0F7VOvfJhq
+        t9C7V8XdpbLDNaV/rEIKluZBCsxDk0ty5wlzzyzF0vL1OExxo00cd+dtdCRrO7TU
+        5PYKFBoWQ9ivxcsAXKwtftD6ceuDxxCRNsA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id fML3buQawjGj for <linux-kernel@vger.kernel.org>;
+        Thu, 13 Oct 2022 00:48:32 -0700 (PDT)
+Received: from [10.89.85.169] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.85.169])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mp1q36JJGz1RvLy;
+        Thu, 13 Oct 2022 00:48:31 -0700 (PDT)
+Message-ID: <8f9304d0-5f28-7378-626b-d734fa7a39a0@opensource.wdc.com>
+Date:   Thu, 13 Oct 2022 16:48:30 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: drivers/ata/ahci_st.c:229:34: warning: unused variable
+ 'st_ahci_match'
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-References: <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
- <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
- <YzIZhn47brWBfQah@google.com>
- <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
- <YzMdjSkKaJ8HyWXh@google.com>
- <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
- <YzRvMZDoukMbeaxR@google.com>
- <8534dfe4-bc71-2c14-b268-e610a3111d14@redhat.com>
- <YzSxhHzgNKHL3Cvm@google.com>
- <d8d2bd39-cbb3-010d-266a-4e967765a382@redhat.com>
- <YzYQe2Lc+l2KpLBl@google.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-In-Reply-To: <YzYQe2Lc+l2KpLBl@google.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+References: <202210121422.MJsXaw1M-lkp@intel.com>
+ <4517c95f-1dad-5a8c-5202-073d0a7eff29@opensource.wdc.com>
+ <4429d1ec-579e-4b0d-a8d8-06b9a5877a9c@app.fastmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <4429d1ec-579e-4b0d-a8d8-06b9a5877a9c@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 29/09/2022 um 23:39 schrieb Sean Christopherson:
-> If we really want to provide a better experience for userspace, why not provide
-> more primitives to address those specific use cases?  E.g. fix KVM's historic wart
-> of disallowing toggling of KVM_MEM_READONLY, and then add one or more ioctls to:
+On 2022/10/13 16:33, Arnd Bergmann wrote:
+> On Thu, Oct 13, 2022, at 8:13 AM, Damien Le Moal wrote:
+>> On 10/12/22 15:37, kernel test robot wrote:
 > 
->   - Merge 2+ memory regions that are contiguous in GPA and HVA
->   - Split a memory region into 2+ memory regions
->   - Truncate a memory region
->   - Grow a memory region
+>> I am at a loss with this one... There are plenty of patterns similar to
+>> drivers/ata/ahci_st.c doing something like:
+>>
+>> static const struct of_device_id st_ahci_match[] = {
+>>
+>>         { .compatible = "st,ahci", },
+>>
+>>         { /* sentinel */ }
+>>
+>> };
+>>
+>> MODULE_DEVICE_TABLE(of, st_ahci_match);
+>>
+>> For instance, in drivers/pwm/pwm-sti.c, we have:
+>>
+>>
+>> And countless others like this for STI and other arch too.
+>>
+>> So if CONFIG_MODULE is not enabled, how come we are not submerged with
+>> warnings about unused variables ? Is mips arch special in this regard ?
+>> Or am I missing something ?
+> 
+> It has nothing to do with MIPS, the problem is
+> 
+>                 .of_match_table = of_match_ptr(st_ahci_match),
+> 
+> The 'of_match_ptr()' sets the pointer to NULL when CONFIG_OF is
+> disabled, which avoids a build failure when st_ahci_match[]
+> itself is in an #ifdef.
+> 
+> In this driver, there is no #ifdef around st_ahci_match[], so we
+> simply want
+> 
+>                 .of_match_table = st_ahci_match,
+> 
+> The thing with the MODULE_DEVICE_TABLE() is that it would
+> create another reference if CONFIG_MODULE is enabled, but not
+> for a built-in driver, so you only get this type of warning
+> for randconfig builds that have the driver built-in and OF
+> disabled.
+> 
+> It's a common mistake, and we should probably remove most
+> of the of_match_ptr() references as you rarely have drivers
+> that optionally use OF support but benefit from compiling
+> that support out on kernels without OF.
 
-I looked again at the code and specifically the use case that triggers
-the crash in bugzilla. I *think* (correct me if I am wrong), that the
-only operation that QEMU performs right now is "grow/shrink".
+Got it. Thanks for the info !
 
-So *if* we want to go this way, we could start with a simple grow/shrink
-API.
+Will patch this and check other ata drivers for the same issue.
 
-Even though we need to consider that this could bring additional
-complexity in QEMU. Currently, DELETE+CREATE (grow/shrink) is not
-performed one after the other (in my innocent fantasy I was expecting to
-find 2 subsequent ioctls in the code), but in QEMU's
-address_space_set_flatview(), which seems to first remove all regions
-and then add them when changing flatviews.
 
-address_space_update_topology_pass(as, old_view2, new_view, adding=false);
-address_space_update_topology_pass(as, old_view2, new_view, adding=true);
-
-I don't think we can change this, as other listeners also rely on such
-ordering, but we can still batch all callback requests like I currently
-do and process them in kvm_commit(), figuring there which operation is
-which.
-
-In other words, we would have something like:
-
-region_del() --> DELETE memslot X -> add it to the queue of operations
-region_del() --> DELETE memslot Y -> add it to the queue of operations
-region_add() --> CREATE memslot X (size doubled) -> add it to the queue
-of operations
-region_add() --> CREATE memslot Y (size halved) -> add it to the queue
-of operations
-...
-commit() --> scan QUEUE and figure what to do -> GROW X (+size), SHRINK
-Y (-size) -> issue 2 ioctls, GROW and SHRINK.
-
-> That would probably require more KVM code overall, but each operation would be more
-> tightly bounded and thus simpler to define.  And I think more precise APIs would
-> provide other benefits, e.g. growing a region wouldn't require first deleting the
-> current region, and so could avoid zapping SPTEs and destroying metadata.  Merge,
-> split, and truncate would have similar benefits, though they might be more
-> difficult to realize in practice.
-
-So essentially grow would not require INVALIDATE. Makes sense, but would
-it work also with shrink? I guess so, as the memslot is still present
-(but shrinked) right?
-
-Paolo, would you be ok with this smaller API? Probably just starting
-with grow and shrink first.
-
-I am not against any of the two approaches:
-- my approach has the disadvantage that the list could be arbitrarily
-long, and it is difficult to rollback the intermediate changes if
-something breaks during the request processing (but could be simplified
-by making kvm exit or crash).
-
-- Sean approach could potentially provide more burden to the userspace,
-as we need to figure which operation is which. Also from my
-understanding split and merge won't be really straightforward to
-implement, especially in userspace.
-
-David, any concern from userspace prospective on this "CISC" approach?
-
-Thank you,
-Emanuele
+-- 
+Damien Le Moal
+Western Digital Research
 
