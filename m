@@ -2,156 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3141F5FD5DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987FE5FD5DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiJMIBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S229773AbiJMIB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJMIBu (ORCPT
+        with ESMTP id S229624AbiJMIBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:01:50 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDA9FC1C0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:01:49 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id i4-20020a056e02152400b002fa876e95b3so914622ilu.17
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:01:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5tyGVMnECA3wWyWqGy8dFnwc4HRs2yeTj/5aiMiOJ64=;
-        b=siX/3i3dLKkNuTsZv0iYpKOmvnCRAMbzCDDUeEvqs8QAyzCCGL6rxHGb1lS6oRCaPp
-         ILcx7Gn7qdkxNVb03f7tXhjV5tgPzOAd95IyqZ+mq8PI2DXzHa6rlZfv1z6A+WyCn3yo
-         20BafRaXjAyhaBAGO2wXdIfBh97pztNXKI4yV2oTyeL3UoxEzlduTlfEf7A4yXq4wbJD
-         2A0RzTK84EjmQF187UykwTzx0AhjGAbSolQ6l/ipNeyIG8oGCJaNvZb5BXPKszWj/MoR
-         FzbxqoxgKf5GgoujAbnbC2N4w1rZjDlLOTWl7I00CB+OqXmJcqlmmUr7I8elHlrxScC9
-         Q0vw==
-X-Gm-Message-State: ACrzQf2t10Yf9nDjS5L8B+wg7jOwBp01xA7vnZRkxm3viQwX9RjkzpJj
-        jUnCzDgN8T06wCPUqs7SFXiSZ6u9aE6geFIAOi7erlsn7llf
-X-Google-Smtp-Source: AMsMyM6amQad36+UbgWoUTL+SJ1LBojpAequ4ZbVdAi++eGm+30anfSxBXn40Il+BqVIO3Zi9GU6Z/137tUUMaEjqqEk23q/R8cw
+        Thu, 13 Oct 2022 04:01:25 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057CC7F262;
+        Thu, 13 Oct 2022 01:01:22 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0A1CCFF816;
+        Thu, 13 Oct 2022 08:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665648078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l6aR3+3rfdAF7vB9eEvTfewDxBVIcWtX5nWe2mtu88A=;
+        b=J0cPL5LbOImtVP/oYDZgcufrAlVac8Bs1mjmDnKZeJjnf7SbXSwsGiefrNC49jgvPUnW0I
+        QkQNlAvFvAXiQWJs9VZZ3v2OwTySwMOKU4P3DUAoUEwAIE0l1nXuVoQjE5WrqhPYRz2ywN
+        uiLkxLR6SBWPWC6PCarWJ1pSplnMFZlxycFBrvXumOhH16xQ2TapWUrf0dQ4w8UmGoq9G/
+        OrfIJRoUhT26PWi1mlxJKwgASyFkcY5abhoZmDq2UF34wUVJRfQT+AXKxbXBO+SJmhAeLQ
+        jdFcCTGse7Ww7J9rBMqR4hBc2M/HTE5WYJpbQ493SXywr74MUHey0Z0+yadisA==
+Date:   Thu, 13 Oct 2022 10:02:45 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh@kernel.org, helgaas@kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devicesgain,
+Message-ID: <20221013100245.14c509ec@fixe.home>
+In-Reply-To: <0d571d21-507d-fcc5-bf58-d02f958de28a@gmail.com>
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
+        <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
+        <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
+        <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
+        <20221010104210.68edf825@fixe.home>
+        <0d571d21-507d-fcc5-bf58-d02f958de28a@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:160c:b0:68a:9ed3:e6ff with SMTP id
- x12-20020a056602160c00b0068a9ed3e6ffmr14967679iow.207.1665648108435; Thu, 13
- Oct 2022 01:01:48 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 01:01:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d2fe6805eae5ebff@google.com>
-Subject: [syzbot] kernel BUG in truncate_inode_pages_range
-From:   syzbot <syzbot+67418a97d2c47464ca17@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Le Thu, 13 Oct 2022 01:05:26 -0500,
+Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
 
-syzbot found the following issue on:
+> > This would also require two different descriptions of the same card
+> > (for ACPI and device-tree) and would require the final user to create a
+> > specific overlay for its device based on the PCI slots the card is
+> > plugged in. =20
+>=20
+> One of the many missing pieces of overlay support.  There have been sever=
+al
+> discussion of how to describe a "socket" in a device tree that a device
+> could be plugged into, where a single device tree subtree .dtb could be
+> relocated to one or more different socket locations.  Thus in this
+> case a single overlay could be relocated to various PCI slots.
+>=20
+> I don't expect be getting involved in any future efforts around sockets
+> (see my following comment for why).
+>=20
+> >=20
+> > The solution we proposed (Lizhi and I) allows to overcome these
+> > problems and is way easier to use. Fixing the potential bugs that might
+> > exists in the overlay layer seems a way better idea that just pushing =
+=20
+>=20
+> It is not potential bugs.  The current run time overlay implementation is
+> proof of concept quality and completeness.  It is not production ready.
+>=20
+> I got an opportunity for early retirement a couple of weeks ago.  My first
+> inclination was to continue the same level of device tree maintainership,
+> but I am quickly realizing that there are other activities that I would
+> like to devote my time and energy to.  I will continue to support Rob with
+> minor patch reviews and testing, and potentially finishing up some
+> improvements to unittest.  On the other hand, bringing run time overlay
+> support to product quality would be a major investment of my time that I
+> am not willing to continue.
 
-HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15d3b31a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=67418a97d2c47464ca17
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Hi Frank,
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This explains your position on the overlay support and I can
+certainly understand it ! Regarding the fact that it would enter
+"production", the devices we are talking about are not really
+widespread yet? This would be a good opportunity to gather feedback
+early and improve the support gradually. We could probably even be able
+to support improvements in the overlay code if needed I guess.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+Thanks for your honest answer,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+67418a97d2c47464ca17@syzkaller.appspotmail.com
+Cl=C3=A9ment
 
- sb_set_blocksize block/bdev.c:161 [inline]
- sb_min_blocksize+0xc0/0x180 block/bdev.c:177
- isofs_fill_super+0xa28/0x28d0 fs/isofs/inode.c:658
- mount_bdev+0x26c/0x3a0 fs/super.c:1400
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-------------[ cut here ]------------
-kernel BUG at mm/truncate.c:424!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 27836 Comm: syz-executor.2 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:truncate_inode_pages_range+0x1548/0x1780 mm/truncate.c:424
-Code: e8 ad 0e ce ff 4c 89 ff 48 c7 c6 20 50 98 8a e8 de 24 0a 00 0f 0b e8 97 0e ce ff 4c 89 ff 48 c7 c6 80 4f 98 8a e8 c8 24 0a 00 <0f> 0b e8 e1 96 6d 08 e8 7c 0e ce ff 4c 89 e7 48 c7 c6 20 50 98 8a
-RSP: 0018:ffffc9000916f7c0 EFLAGS: 00010246
-RAX: 0d16a9ba1ff17c00 RBX: fffffffffffff880 RCX: 0000000000040000
-RDX: ffffc9000a999000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: ffffc9000916f9f0 R08: ffffffff81e2ae1b R09: ffffed10173667f1
-R10: ffffed10173667f1 R11: 1ffff110173667f0 R12: 00000000000007ff
-R13: 0000000000000002 R14: 0000000000000001 R15: ffffea0001e08c00
-FS:  00007f3cf4838700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c0247f4320 CR3: 00000000268a5000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kill_bdev block/bdev.c:76 [inline]
- set_blocksize+0x2ec/0x360 block/bdev.c:152
- sb_set_blocksize block/bdev.c:161 [inline]
- sb_min_blocksize+0xc0/0x180 block/bdev.c:177
- isofs_fill_super+0xa28/0x28d0 fs/isofs/inode.c:658
- mount_bdev+0x26c/0x3a0 fs/super.c:1400
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f3cf368cada
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f3cf4837f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f3cf368cada
-RDX: 0000000020000100 RSI: 00000000200001c0 RDI: 00007f3cf4837fe0
-RBP: 00007f3cf4838020 R08: 00007f3cf4838020 R09: 0000000020000100
-R10: 0000000000000001 R11: 0000000000000202 R12: 0000000020000100
-R13: 00000000200001c0 R14: 00007f3cf4837fe0 R15: 0000000020000080
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:truncate_inode_pages_range+0x1548/0x1780 mm/truncate.c:424
-Code: e8 ad 0e ce ff 4c 89 ff 48 c7 c6 20 50 98 8a e8 de 24 0a 00 0f 0b e8 97 0e ce ff 4c 89 ff 48 c7 c6 80 4f 98 8a e8 c8 24 0a 00 <0f> 0b e8 e1 96 6d 08 e8 7c 0e ce ff 4c 89 e7 48 c7 c6 20 50 98 8a
-RSP: 0018:ffffc9000916f7c0 EFLAGS: 00010246
-RAX: 0d16a9ba1ff17c00 RBX: fffffffffffff880 RCX: 0000000000040000
-RDX: ffffc9000a999000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: ffffc9000916f9f0 R08: ffffffff81e2ae1b R09: ffffed10173667f1
-R10: ffffed10173667f1 R11: 1ffff110173667f0 R12: 00000000000007ff
-R13: 0000000000000002 R14: 0000000000000001 R15: ffffea0001e08c00
-FS:  00007f3cf4838700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c023176000 CR3: 00000000268a5000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>=20
+> So I am leaving major overlay issues in the capable hands of Rob.  I may
+> chime in from time to time when I can do so without requiring too much of
+> my time.
+>=20
+> -Frank
+>=20
+> > that away to the bootloader level. Moreover, this kind of devices is
+> > likely to be more common with the increasing popularity of FPGA and a
+> > proper solution must be found.
+> >  =20
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
