@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99005FDF73
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAA15FDFC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiJMRyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S230138AbiJMR6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJMRxx (ORCPT
+        with ESMTP id S230008AbiJMR5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:53:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBDD1578A5;
-        Thu, 13 Oct 2022 10:53:37 -0700 (PDT)
+        Thu, 13 Oct 2022 13:57:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD08072B4C;
+        Thu, 13 Oct 2022 10:56:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8364B8202A;
-        Thu, 13 Oct 2022 17:53:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18306C433D6;
-        Thu, 13 Oct 2022 17:53:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE223B8203E;
+        Thu, 13 Oct 2022 17:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462B3C433B5;
+        Thu, 13 Oct 2022 17:55:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683613;
-        bh=HvNQLbDFpQyKb6hj8OG6baMZ1QDProYxanDCjhbgJvM=;
+        s=korg; t=1665683749;
+        bh=TAFAzVRcT8iWyQmsYbtgwKU6lJ4PGejfBM6+WyQv08c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LYpzQvrHqKKswL1ykGZbffQ/vLIZRRRQrBwgzn52fw0E8sqzGWDLPwQinKYo7eRNO
-         YBiMMUf4rNTYit62e7Alrv91POQOq4UIlYd/ItUHhQSsrT4m+JcwCMXmRYgIKPdgRV
-         FDGiLBW2NpuGhGOpHwGJft9Z610RsvezVxS+P86M=
+        b=s1ThOCGQ628SNGIK5YnR8W0JA+oXIFsljjGj1ujC0B83l5aKHOoEG80lRstKyP+Ve
+         +kDhJPAPX5L3c5N7tRPSDgZ4H/5tRlupNPujP/7qvUVH9/+qtAIqDqCcEKjTdS8MVv
+         gZOCLEJjuUFvhBRUlrYbfoQKxcfz5fpeWB8ylhF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 28/38] random: avoid reading two cache lines on irq randomness
-Date:   Thu, 13 Oct 2022 19:52:29 +0200
-Message-Id: <20221013175145.189973572@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 36/54] random: clamp credited irq bits to maximum mixed
+Date:   Thu, 13 Oct 2022 19:52:30 +0200
+Message-Id: <20221013175148.222281332@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+References: <20221013175147.337501757@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,17 +54,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 9ee0507e896b45af6d65408c77815800bce30008 upstream.
+commit e78a802a7b4febf53f2a92842f494b01062d85a8 upstream.
 
-In order to avoid reading and dirtying two cache lines on every IRQ,
-move the work_struct to the bottom of the fast_pool struct. add_
-interrupt_randomness() always touches .pool and .count, which are
-currently split, because .mix pushes everything down. Instead, move .mix
-to the bottom, so that .pool and .count are always in the first cache
-line, since .mix is only accessed when the pool is full.
+Since the most that's mixed into the pool is sizeof(long)*2, don't
+credit more than that many bytes of entropy.
 
-Fixes: 58340f8e952b ("random: defer fast pool mixing to worker")
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Fixes: e3e33fc2ea7f ("random: do not use input pool from hard IRQs")
+Cc: stable@vger.kernel.org
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -75,17 +69,14 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -890,10 +890,10 @@ void __init add_bootloader_randomness(co
+@@ -981,7 +981,7 @@ static void mix_interrupt_randomness(str
+ 	local_irq_enable();
+ 
+ 	mix_pool_bytes(pool, sizeof(pool));
+-	credit_init_bits(max(1u, (count & U16_MAX) / 64));
++	credit_init_bits(clamp_t(unsigned int, (count & U16_MAX) / 64, 1, sizeof(pool) * 8));
+ 
+ 	memzero_explicit(pool, sizeof(pool));
  }
- 
- struct fast_pool {
--	struct work_struct mix;
- 	unsigned long pool[4];
- 	unsigned long last;
- 	unsigned int count;
-+	struct work_struct mix;
- };
- 
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
 
 
