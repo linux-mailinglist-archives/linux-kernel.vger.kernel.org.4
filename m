@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B6C5FDD15
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A2D5FDD17
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJMPWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S229939AbiJMPWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiJMPWa (ORCPT
+        with ESMTP id S229847AbiJMPWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:22:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA664120EE4;
-        Thu, 13 Oct 2022 08:22:28 -0700 (PDT)
+        Thu, 13 Oct 2022 11:22:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C78127905;
+        Thu, 13 Oct 2022 08:22:29 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06D6E660236E;
-        Thu, 13 Oct 2022 16:22:25 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 161016602373;
+        Thu, 13 Oct 2022 16:22:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665674546;
-        bh=CSkWVd8BmDjVpIlk/S9C3R40X1S6a2cABTC54a3Nrtg=;
+        s=mail; t=1665674548;
+        bh=+rfRhqviBfuKmOoLPSppiW+1QAksWGIE/oQLWXDdMpo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j9tomOInvoFd2WsL9FZDBnDFc3BYU56eyEK4M5E5t9tjLdXIZ5/fLkUpb7HzuT7Tr
-         BEg7S4g854qW+WBohgIan9syw55r9hTvROfgbHeOQY0kQJvQzMe5nD/q38W+eRmLg+
-         2NtqMOs/qO4fzLEWj9IF619rsrsiZbwdem6dT/L71MgkIyVtMnr3jT07xqDtonD+HQ
-         wpJqnpuwL/dExzYTaqh8bYWmoAlTN1+JreemC5pwNmmzyW2BE660cAYcgqVPBu5+W3
-         FO7/PrdnBOi+OHQKj2CNlj+AzI4ZPkivflEBdw4o4FOgjcq8rHNmLBQRDK8h0q+I4a
-         BxGLneEMUMZ3g==
+        b=nGkad3uGwfKnQvfXW+y3PBWPg9rcKm6x2zLEgBvyT06kcJCscitnyG0H18rYVm22I
+         QeCwMM+Ik2q9hpcHaXPwaIxoCzScAnvfaiM99GORX+2pkOblr9poP4E8LU3aq679FD
+         +JDMAu3YFukRHXYaBJPb8o62hXF8fZrg/dA+djWt8f/1pkwGgQKOpbLA/EyYBmlXcZ
+         IJxY0l/pt1LKU9hinIaUEAUNug9fXAjLzHGp9L+qqOIQCcFtcWBRegaypUjtV/ymKC
+         k3hzIzak1WfGf7SjC/AOmnwF0pH+xspBt4gyWydItU+wBj7s1r7yPZONeuPaTdSWDN
+         gfV12YXT9w8wQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -45,9 +45,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 7/8] arm64: dts: mediatek: pumpkin-common: Fix devicetree warnings
-Date:   Thu, 13 Oct 2022 17:22:11 +0200
-Message-Id: <20221013152212.416661-8-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 8/8] arm64: dts: mediatek: mt6797: Fix 26M oscillator unit name
+Date:   Thu, 13 Oct 2022 17:22:12 +0200
+Message-Id: <20221013152212.416661-9-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
 References: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
@@ -62,46 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the pinctrl submodes and optee node to remove unneeded unit address,
-fixing all unit_address_vs_reg warnings.
+Update its unit name to oscillator-26m and remove the unneeded unit
+address to fix a unit_address_vs_reg warning.
 
-Fixes: 9983822c8cf9 ("arm64: dts: mediatek: add pumpkin board dts")
+Fixes: 464c510f60c6 ("arm64: dts: mediatek: add mt6797 support")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt6797.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
-index 8ee1529683a3..ec8dfb3d1c6d 100644
---- a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
-@@ -17,7 +17,7 @@ chosen {
- 	};
- 
- 	firmware {
--		optee: optee@4fd00000 {
-+		optee: optee {
- 			compatible = "linaro,optee-tz";
- 			method = "smc";
- 		};
-@@ -209,7 +209,7 @@ pins_cmd_dat {
+diff --git a/arch/arm64/boot/dts/mediatek/mt6797.dtsi b/arch/arm64/boot/dts/mediatek/mt6797.dtsi
+index 15616231022a..c3677d77e0a4 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6797.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6797.dtsi
+@@ -95,7 +95,7 @@ cpu9: cpu@201 {
  		};
  	};
  
--	i2c0_pins_a: i2c0@0 {
-+	i2c0_pins_a: i2c0 {
- 		pins1 {
- 			pinmux = <MT8516_PIN_58_SDA0__FUNC_SDA0_0>,
- 				 <MT8516_PIN_59_SCL0__FUNC_SCL0_0>;
-@@ -217,7 +217,7 @@ pins1 {
- 		};
- 	};
- 
--	i2c2_pins_a: i2c2@0 {
-+	i2c2_pins_a: i2c2 {
- 		pins1 {
- 			pinmux = <MT8516_PIN_60_SDA2__FUNC_SDA2_0>,
- 				 <MT8516_PIN_61_SCL2__FUNC_SCL2_0>;
+-	clk26m: oscillator@0 {
++	clk26m: oscillator-26m {
+ 		compatible = "fixed-clock";
+ 		#clock-cells = <0>;
+ 		clock-frequency = <26000000>;
 -- 
 2.37.2
 
