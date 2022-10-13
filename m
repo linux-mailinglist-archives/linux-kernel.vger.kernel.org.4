@@ -2,206 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6650B5FDECB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C377B5FDECF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiJMRSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S229694AbiJMRTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJMRSf (ORCPT
+        with ESMTP id S229665AbiJMRTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:18:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2799D2CE5;
-        Thu, 13 Oct 2022 10:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665681514; x=1697217514;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=EuXBDDNFsYSkbNTHcq2sGGeItRNtdLE2toEebqp1/dA=;
-  b=cNOcErOiuoq9Kw7jPU6wYUrKH+eMuCboPgTGNh3C2gxdc9RKOh9tg98+
-   EEOrllI9AO5cIS/7eFi2TiiHckpSit2nHQqkKVRQjJEdGg0h9gm2ufxxb
-   RmAG11B74ahXohLpk383FibpUI6dnczGM1bIyir7y8DGlkXZmrjv/NI3T
-   xbsyhFC/ajpAk9mzzeWFJThakyYvluNW8P4tCW3XVSMVA0gFhW9iA0fji
-   x4xtNDtgXmkc5reQAhnZ4kyZ7nqD5u8rxhLnFPf0Av7Eo1d2xbNS9hjkf
-   G9o1unZXfzqmoL4uVjKnZiGZFwMI66G0BCRBQttu3g3T16DMJtxnHGmDA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="288431882"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="288431882"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 10:18:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="731956214"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="731956214"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Oct 2022 10:18:33 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 13 Oct 2022 10:18:33 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 13 Oct 2022 10:18:30 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 13 Oct 2022 10:18:30 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 13 Oct 2022 10:18:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=STV700XLH23HAOpmVa+guFlvbdxG4mJkRAHEYutJI973PmVJKXuJURpDP1IAgzD9/ZkE/u7t69a9hkpzzngmCnyPtw+HYx/gu15GRZQfa9Z1bOWnlJBQhaKriMHmK+3xKVVxk60FtzxDDpL5QdP24ZZwVqnrR7qSTYYTiQOG5bHjNeAtPsreo07BL6p3EmNDjRaJSfLizBJ8EKNcYWqlfrL1qhc6cWoE8SRDlM6WPdNeJVOQCU0Goz9pCJcocbhm/q1Rfk6yhi431CaZP8kXlUZDtlsy8SV6NYGnG0SPvbxSzMaEDvfN1tmEVmy9TEHuSLCidI+hmxeiEsPIRivcMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EuXBDDNFsYSkbNTHcq2sGGeItRNtdLE2toEebqp1/dA=;
- b=AtnpLTLrHmQun+7CSMQpQUmGEhu6P1ZmGApHDBfgHeQ2QNJfVaJZugk/BmeoaLMZb5LyLaZdrp7NayAm2Y2wCzI/WVjdZeoUDLn4rHRmRiBcytyiWqyr2UWvhVCYsHw5cfUkNHH9cNGTw2GDJbzv3DnVq6UaaA0IEII22RMa1nDmATPkhpZnQnNlCeQhy6/dTih+7NGpcWj7h0vCn6xGjndoTO2c+3iOJC6smYOPMQP8uodZ9ktCgtnuSHMzgTz+mpqNaFvjG27NfAyMgkX3WWLHEKuZvz83wF6vus5RThOfy9tvu15YDyks45n3dZLtHZQWSX5HmL7nv8w6UKVEhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by BN9PR11MB5323.namprd11.prod.outlook.com (2603:10b6:408:118::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.28; Thu, 13 Oct
- 2022 17:18:28 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60%5]) with mapi id 15.20.5612.022; Thu, 13 Oct 2022
- 17:18:27 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-CC:     Len Brown <lenb@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stable <stable@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "cuibixuan@linux.alibaba.com" <cuibixuan@linux.alibaba.com>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
-Subject: RE: [PATCH v2] ACPI: APEI: do not add task_work to kernel thread to
- avoid memory leak
-Thread-Topic: [PATCH v2] ACPI: APEI: do not add task_work to kernel thread to
- avoid memory leak
-Thread-Index: AQHYz+pWnxyJgYboZk+A8TiiA+I2Ca3u0zyAgALE/YCAAD4LsIAA0nMAgBlb5oCAAKghQA==
-Date:   Thu, 13 Oct 2022 17:18:27 +0000
-Message-ID: <SJ1PR11MB6083F89F430B664FC10270C6FC259@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20220916050535.26625-1-xueshuai@linux.alibaba.com>
- <20220924074953.83064-1-xueshuai@linux.alibaba.com>
- <CAJZ5v0jAZC81Peowy0iKuq+cy68tyn0OK3a--nW=wWMbRojcxg@mail.gmail.com>
- <f0735218-7730-c275-8cee-38df9bec427d@linux.alibaba.com>
- <SJ1PR11MB6083FC6B8D64933C573CAB64FC529@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <79cb9aee-9ad5-00f4-3f7a-9c409f502685@linux.alibaba.com>
- <8313d192-f103-35fc-2931-de0a8eb927ff@linux.alibaba.com>
-In-Reply-To: <8313d192-f103-35fc-2931-de0a8eb927ff@linux.alibaba.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|BN9PR11MB5323:EE_
-x-ms-office365-filtering-correlation-id: 254abb71-4a65-445f-2e28-08daad3ef198
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: efEGbBPZv4ofp+DiMu4UbbbqIc/isvWHSxSTBqKlffTg2FZDy/FJHkgIqRZ40Q5Y/aZVjsLAJn7vgdr9BA+T53Smsh0euPXjcl5e5hxZUcwQmLJCiw1N4NMZJSnjxzoUyMoKLFqjJPS4HfypS31e7oK1B8AiHfWzhHpBtTXyOWTdNmH9K258IWsiVZoExO48ysYK8N/41TpAEA6NSYnaWFDavi7cHf3+n17kRyH2/xzFkdU8o49ERwDbw/dqvvOABEilraGz93TzFSP4IV3oVKho/Yc3NNQH7S6Iu8vUeEBFb+TOXndzmtIEujA6xgduWit20zpeaDjfDQTII0ZXN8OnA9ZTHKkF0Dj//hp9FQIkRYwCSq3NDINMVM0UeM2YrsmSiWYolGItJELDGp8WpcX/dyL2gXv40l08CgnpMxACf2Me3EQqavAwaLLNEoa9tKSZPljhFP/Mhk6ISKO1ZDbepuV0MyjnokCmNJKSIvDrq7uWMNB61EYaRmIFqlPXQbUWtYDL5pwxP5CQvN52RwZsulZU9i3nox/laGryzdDLiYqC77yTLEk15tpyVpZqeXcMIZQzxi4ffTNuPj7D5+X52HzAnHwpwv7dI/m6YtfwFjc6DZ1MnPrGxV48SK4TDAIm/epvSbwScuYgO4xFmEa9ufVD6dHte6rX7WLpc75bUQUYCQYQmMqNiYzk206Z5bdf4uov30SxEq8wET4RvYTA/AGdbPsIFlnkIMW6ZXeQGXhIPlTuF10KjuFTGFuQe8uShDBJf4kHbYfX9QCIvbBGCbe9QXcEhsF1FnuHBdU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(396003)(39860400002)(136003)(376002)(451199015)(83380400001)(33656002)(66476007)(52536014)(8936002)(316002)(66446008)(86362001)(66946007)(8676002)(76116006)(54906003)(6916009)(66556008)(64756008)(186003)(9686003)(2906002)(55016003)(122000001)(26005)(4326008)(41300700001)(966005)(38100700002)(71200400001)(5660300002)(7416002)(38070700005)(7696005)(82960400001)(478600001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V2c2dkk1UW9qeDM2WUtmQk03dHo0L1NLTE13Z0R2SStoUE5tbTBPallMYkhk?=
- =?utf-8?B?RWpFYXRlS3dBRDRMaFBDWVZqa2oxL01INnoxN05EdzNka1JaYXRVcS84aUxF?=
- =?utf-8?B?bytlWlZ4MEZDU2l5czEvMnFadEVEWEpBT0NEWkM0Rm5USFhseEtJd3Iza3R5?=
- =?utf-8?B?blQrZUNFc09UbDRpSC9YM1drelk3NXpjc0J6cDQ3cmsvZVBpbERLajFFckMr?=
- =?utf-8?B?VWFDUFFpUjZnMXVyc3YrSERPQlZEUEhUeGpHMUJOR3ErOWZ1ZHdIdlB5d1FP?=
- =?utf-8?B?b0ZJMjRXaStrM0RmWkFmK1lyQ0NZL1R4c3prSFZybTlQbFFQeUM1T1NPUW44?=
- =?utf-8?B?TTVvSW51MTIvSk1kdU4xQUJ6Q2x6VXg5eDR4SW5Rdko3YlljVDIwdnRYSlJ6?=
- =?utf-8?B?TFN1SU15cGhUZ2s5VnRlWUdBSm5oMDh5ZGZ0SS9UdFYwSlJBWjJpdUpuRGtH?=
- =?utf-8?B?RDFEY3VGUnkzK3JIdFBlTzcvYWdGbVNKMVNLa2ZKVjkxcW4wMmU5UzFWZE1q?=
- =?utf-8?B?UjhaQ1BzWE5QeEtYNVdodGFwcjdaTmt3eUxaNGZTMzdDUEx1WGMwZzdmY09h?=
- =?utf-8?B?U256RjVzODZMaUJLMHR6UlBZM09JVkpBeVNBclBoVGJvbDltSHBTM0kwVWg4?=
- =?utf-8?B?bmlQQmIydU95YmxEcnprSW9oWStLZnZrL3VOLzRXdnc3NEJ1WWZPa1ltdGhn?=
- =?utf-8?B?WURraXQ3VzNtbmNLelNmdTUvL1ZqY0F2VDN0WE1XU3NGZUl6czk1bGhBWUxq?=
- =?utf-8?B?Y3llNjdhRW5XTkJPai9JU2ZnWDlqMHhmbFErbUM3b2s0MGk3c0tTd3E3UjFn?=
- =?utf-8?B?QmI5VXdXa25qSEJwWjgzSTBQL1V5VHVwamFIZ1huR013WkNPUnhGY2txY2Uv?=
- =?utf-8?B?SWZXQnFUOE4zWU92djErUXZTaENzTE1TT25XdVpjUGJZVHAzQWxLSlV6MXdr?=
- =?utf-8?B?NUNsZG1YNVJBN3pITndyTzhEb1Rva254K3Bja3luTnNncUg0dnk4Rk5JNGM5?=
- =?utf-8?B?Qlhvdm0wN1p2MU80YkVhekJneEdZWVRCZFlzNzhKSkIvRUxTWHorelNPYm93?=
- =?utf-8?B?bUdZTUtEejFDS1crWW0zYzRuZG9uWW9JcS9laXpyNVRZdE9iR3M3ZW5xMWw1?=
- =?utf-8?B?N2FZZVlOZFhYV2xVNWlUVTF5MyszM3o1Ky8rQW1KYUozTlQrREtJWjBtcHJZ?=
- =?utf-8?B?THZUN1FyQ0NHZm15azgvd251cVpZUmtQVXY4a1F2SFJLdTNONGh3N0ptQVBO?=
- =?utf-8?B?OC9jbjRVOCtFWUlPcXlzUFprdUJpcDBvQWRpS3h3MmYvOFI3OXNmc0NQTEJh?=
- =?utf-8?B?RC9nekxMUCt1L3dvZGZRS0FUSWF1Y2c3NVo0WDhDZnduN25icFptQjVRaDFm?=
- =?utf-8?B?RjBRYlZoZUJVTFhjUVkxNm1SQlQ1OTl3OG13V21YYWZSSDFDc0k5R0dWNUJa?=
- =?utf-8?B?SFZtaTFpWFZ2djZ1S09aZ01WcGloU1lxWXRFa2ZyUW44SXpUeWtydGF6VENX?=
- =?utf-8?B?WG1hb05WcEtZWm5aMTVGc0ZkSU00TVl1MUgraTNDeUtZN3MzR2pVbUFxWmFs?=
- =?utf-8?B?OVZEM2hRaUhkSk9UTVpNZ0hRYlhjcVFSQW9tSnBqVmw5NHdPbnQ4VjIwcGkz?=
- =?utf-8?B?eVIyWjF6VUh0Sm5rangwRGNoRnBSK2VzS2RMcURjTllhbGFoQ0QwY0s3Wmpa?=
- =?utf-8?B?aXVGVVVEWitwNkkzVHZZeVQ2ejN2YzlFRklDVU54eUEveTEzZkE1aEFSZHB2?=
- =?utf-8?B?ZnZNUGY5eTcvT3Fta1FCcEVlam5lNkpycE83aERpOWtkTlZKTTN3TzJFVHlR?=
- =?utf-8?B?aUVka2QrdXUveCtvT09DWFpRaDh4RDJjSmJHWE9LbFZQYVlGWlpDenFwQnI3?=
- =?utf-8?B?bDZ4c1VoY3pWRlZKdW0yMmVVR1lKYS9jZzdQQ0k2a2Q5dTZib1RpZVphcjJE?=
- =?utf-8?B?NnRuUHQ0bFltcnBhYmtiRVB3ZVBhR08reEVTOUhhMC9aMG1lVGVTUy9JamVn?=
- =?utf-8?B?WFV6Nlh0RWVHU1RHcmN1YUN1V21xVVFsajN3VDdrQ0thSzNkT0Y0TGwzNGtZ?=
- =?utf-8?B?WEk2UmRlQnRQa1ZoOXlzZTI3elNoTTVVNStmSG00NW0wZkJYcnlTbFhjRUZ6?=
- =?utf-8?Q?dmOOJX1LOB5WrHjxY/JAwp+wS?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 13 Oct 2022 13:19:22 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217F3D4A39
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:19:22 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id l5so2438233oif.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j1qTz+oYugF8Lf770mKCIrdepvqmBbCEzwy+EaukMrM=;
+        b=RwP93R0i/58OL7LRD+//xbsGSpXEvsNfrhi2GXL/rRnIR0fEBr1hhf0AxtH9ySaIuq
+         fxnBUs5tBFF0nv+sS5fXPWTFdyDQIQyfW3oaIHCHCny57nHo+jkN3VT1oW56ATf0pSAn
+         /cXKnAs4MWRb/mczWEGT2NYOdgosHqzbcK1Ec=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j1qTz+oYugF8Lf770mKCIrdepvqmBbCEzwy+EaukMrM=;
+        b=01/qR3lzyghl3B2HVRxBv6IAVrPZNspb9xw00kdBd/bqcfqfTmrQwkW2O3Iocw2cBq
+         zgcqD4u+iBrZHv0HgVdQcR2rREiMTgIFVUF6aG3sfSax9iKfNPFBL7xb48CFTpoqYtAB
+         ZMzAQnzS2ili1TGqyWMNOYhKOxBLvay40YArYqWYBRto1pmtaYAU9PW1aXUI6scHp3sJ
+         4suQl5mqOhWztADX0PxsX0C6ZOfYOFVlOrSV7+3mxMqsFwqqj9DdGGmhBCiYoI+qCZ7e
+         mE1FaF9l4CYI7qL0HD5UQIk9agyH31o+sUbkS2k8xjApLVH2op+7SXetLe5wTGV4Wt/m
+         S1EQ==
+X-Gm-Message-State: ACrzQf3dUyYbv9yoFEqlE6jkfgt0pP1uDahg08mxET2lnn2xf/tDnyGi
+        p5FWpq1PKuQuh253OS86LHIVQH62lVsL0Q==
+X-Google-Smtp-Source: AMsMyM6Q8DxSGIFYQmIOyxBWwEtE8LPfDCiWCYhKZO9EPeIuExhT6Ga7cEDqEJCe0D65ZKG9Z7RCDg==
+X-Received: by 2002:aca:3e56:0:b0:355:afb:cdb1 with SMTP id l83-20020aca3e56000000b003550afbcdb1mr416552oia.81.1665681560780;
+        Thu, 13 Oct 2022 10:19:20 -0700 (PDT)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id b11-20020a9d6b8b000000b00661a30ea0d4sm217869otq.2.2022.10.13.10.19.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 10:19:19 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id t4-20020a9d7f84000000b00661c3d864f9so425121otp.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:19:19 -0700 (PDT)
+X-Received: by 2002:a05:6830:4421:b0:661:8fdd:81e9 with SMTP id
+ q33-20020a056830442100b006618fdd81e9mr528782otv.69.1665681558964; Thu, 13 Oct
+ 2022 10:19:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 254abb71-4a65-445f-2e28-08daad3ef198
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2022 17:18:27.8737
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hS4G9p0dYEai+bKhepUltt1khWOYbbOeHgO8AofNcfd/bgBMGRS7nkJKlH+0jVjHSeNmMsyoZyUOWXzhubDOrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5323
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221010132030-mutt-send-email-mst@kernel.org>
+ <87r0zdmujf.fsf@mpe.ellerman.id.au> <20221012070532-mutt-send-email-mst@kernel.org>
+ <87mta1marq.fsf@mpe.ellerman.id.au> <87edvdm7qg.fsf@mpe.ellerman.id.au>
+ <20221012115023-mutt-send-email-mst@kernel.org> <CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com>
+ <38893b2e-c7a1-4ad2-b691-7fbcbbeb310f@app.fastmail.com> <20221012180806-mutt-send-email-mst@kernel.org>
+ <a35fd31b-0658-4ac1-8340-99cdf4c75bb7@app.fastmail.com>
+In-Reply-To: <a35fd31b-0658-4ac1-8340-99cdf4c75bb7@app.fastmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 13 Oct 2022 10:19:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whLv3MO0Tvc62zJ+=4yvSfKMK17C0wfpbXBwUJqSjKbYA@mail.gmail.com>
+Message-ID: <CAHk-=whLv3MO0Tvc62zJ+=4yvSfKMK17C0wfpbXBwUJqSjKbYA@mail.gmail.com>
+Subject: Re: [GIT PULL] virtio: fixes, features
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, xiujianfeng@huawei.com,
+        kvm@vger.kernel.org, alvaro.karsz@solid-run.com,
+        Jason Wang <jasowang@redhat.com>, angus.chen@jaguarmicro.com,
+        wangdeming@inspur.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Netdev <netdev@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, lingshan.zhu@intel.com,
+        linuxppc-dev@lists.ozlabs.org, gavinl@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBUaGFuayB5b3UgZm9yIHlvdXIgcmV2aWV3LCBidXQgSSBhbSBzdGlsbCBoYXZpbmcgcHJvYmxl
-bXMgd2l0aCB0aGlzIHF1ZXN0aW9uLg0KPg0KPiBEbyB5b3UgaGF2ZSBhbnkgaW50ZXJlc3QgdG8g
-ZXh0ZW5kIHJhcy10b29scyB0byBBcm0gcGxhdGZvcm0/IEkgZm9ya2VkIGEgYXJtLWRldmVsIGJy
-YW5jaFsxXQ0KPiBmcm9tIHlvdXIgcmVwbzoNCj4NCj4gLSBwb3J0IFg4NiBhcmNoIHNwZWNpZmlj
-IGNhc2VzIHRvIEFybSBwbGF0Zm9ybQ0KPiAtIGFkZCBzb21lIGNvbW1vbiBjYXNlcyBsaWtlIGh1
-Z2V0bGIsIHRocmVhZCBhbmQgQXJtIHNwZWNpZmljIGNhc2VzIGxpa2UgcHJlZmV0Y2gsIHN0cmIs
-IGV0Yywgd2hpY2gNCj4gICBhcmUgaGVscGZ1bCB0byB0ZXN0IGhhcmR3YXJlIGFuZCBmaXJtd2Fy
-ZSBSQVMgcHJvYmxlbXMgd2UgZW5jb3VudGVyZWQuDQo+DQo+IEkgYW0gcGxlYXN1cmUgdG8gY29u
-dHJpYnV0ZSB0aGVzZSBjb2RlIHRvIHlvdXIgdXBzdHJlYW0gcmVwbyBhbmQgbG9va2luZyBmb3J3
-YXJkIHRvIHNlZSBhIG1vcmUNCj4gcG93ZXJmdWwgYW5kIGNyb3NzIHBsYXRmb3JtIHRvb2xzIHRv
-IGluamVjdCBhbmQgZGVidWcgUkFTIGFiaWxpdHkgb24gYm90aCBYODYgYW5kIEFybSBwbGF0Zm9y
-bS4NCj4NCj4gSSByZWFsbHkgYXBwcmVjaWF0ZSB5b3VyIGdyZWF0IHdvcmssIGFuZCBsb29rIGZv
-cndhcmQgdG8geW91ciByZXBseS4gVGhhbmsgeW91Lg0KPg0KPiBCZXN0IFJlZ2FyZHMsDQo+IFNo
-dWFpDQo+DQo+ID4gWzFdIGh0dHBzOi8vZ2l0ZWUuY29tL2Fub2xpcy9yYXMtdG9vbHMvdHJlZS9h
-cm0tZGV2ZWwNCg0KU2hhdWksDQoNClNvcnJ5IEkgZGlkbid0IGZvbGxvdyB1cCBvbiB0aGlzIHBh
-cnQuICBZZXMsIEknbSBoYXBweSB0byB0YWtlIHlvdXIgKGV4Y2VsbGVudCkgY2hhbmdlcy4NCg0K
-SSBkaWQgYSAiZ2l0IGZldGNoIiBmcm9tIHlvdXIgcmVwbyBhbmQgdGhlIGEgImdpdCBtZXJnZSIg
-b2YgYWxsIGV4Y2VwdCB0aGUgUkVBRE1FIGFuZCBMSUNFTlNFDQpjb21taXRzIGF0IHRoZSB0aXAg
-b2YgeW91ciByZXBvLiBUaG9zZSBJIG1hbnVhbGx5IGNoZXJyeS1waWNrZWQgKHNpbmNlIHRoZSBs
-YXN0IHNlY3Rpb24gb2YgeW91cg0KUkVBRE1FIHNhaWQgImNsb25lIG9mIFRvbnkncyByZXBvIiAu
-Li4gd2hpY2ggbWFrZXMgbm8gc2Vuc2UgaW4gbXkgcmVwbykuDQoNClJlc3VsdGluZyB0cmVlIGhh
-cyBiZWVuIHB1c2hlZCBvdXQgdG8gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9r
-ZXJuZWwvZ2l0L2FlZ2wvcmFzLXRvb2xzLmdpdA0KDQpQbGVhc2UgY2hlY2sgdGhhdCBJIGRpZG4n
-dCBicmVhayBhbnl0aGluZy4NCg0KLVRvbnkNCg==
+On Wed, Oct 12, 2022 at 11:29 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Oct 13, 2022, at 12:08 AM, Michael S. Tsirkin wrote:
+> >
+> > Do these two boxes even have pci?
+>
+> Footbridge/netwinder has PCI and PC-style ISA on-board devices
+> (floppy, ps2 mouse/keyboard, parport, soundblaster, ...), RiscPC
+> has neither.
+
+It's worth noting that changing a driver that does
+
+        if (dev->irq == NO_IRQ)
+                return -ENODEV;
+
+to use
+
+        if (!dev->irq)
+                return -ENODEV;
+
+should be pretty much always fine.
+
+Even *if* that driver is then compiled and used on an architecture
+where NO_IRQ is one of the odd values, you end up having only two
+cases
+
+ (a) irq 0 was actually a valid irq after all
+
+ (b) you just get the error later when actually trying to use the odd
+NO_IRQ interrupt with request_irq() and friends
+
+and here (a) basically never happens - certainly not for any PCI setup
+- and (b) is harmless unless the driver was already terminally broken
+anyway.
+
+The one exception for (a) might be some platform irq code. On x86,
+that would be the legacy timer interrupt, of course.
+
+So if some odd platform actually has a "real" interrupt on irq0, that
+platform should either just fix the irq number mapping, or should
+consider that interrupt to be a platform-specific thing and handle it
+very very specially.
+
+On x86, for example, we do
+
+        if (request_irq(0, timer_interrupt, flags, "timer", NULL))
+
+early in boot, and that's basically what then makes sure that no
+driver can get that irq. It's done through the platform "timer_init"
+code at the "late_time_init()" call.
+
+(And that "late_time_init()" - despite the name - isn't very late at
+all. It's just later than the very early timekeeping init - after
+interrupts have been enabled at all.
+
+             Linus
