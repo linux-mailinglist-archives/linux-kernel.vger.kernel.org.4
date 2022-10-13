@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1F05FE058
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557245FE0C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiJMSHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S232096AbiJMSOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiJMSFo (ORCPT
+        with ESMTP id S231670AbiJMSMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:05:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790C2A1A8;
-        Thu, 13 Oct 2022 11:04:41 -0700 (PDT)
+        Thu, 13 Oct 2022 14:12:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567F1DBE4C;
+        Thu, 13 Oct 2022 11:09:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FFFB61986;
-        Thu, 13 Oct 2022 18:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAA7C43142;
-        Thu, 13 Oct 2022 18:00:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56568B8203C;
+        Thu, 13 Oct 2022 17:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A147C433D6;
+        Thu, 13 Oct 2022 17:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684052;
-        bh=R56tc7ab5Ae7BCl75vsYTgnxuRRQc6ZCGNdTc3leahg=;
+        s=korg; t=1665683870;
+        bh=UKF8TMaennwEzj2kTNFiz0KGvFT3hjGwzvVddy+SOcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DSFy6EThkuQcemc6QUcfiEdRBFm9Io31tLS7zZ1hmulAOqGkiFhffUHuvhtofIDLN
-         BOHjLmnlVMEV0k5HJsJ3jZAgHJ6DA3d4YHSR5rPr2yGVUSfuj1ZLu5EJhcaC8qPFm5
-         XESj73HZg/4haWA717Wv9twlRDwfUO3RGVT2sL2c=
+        b=A3E07aXzG0ntnBrpvnFPDxASLylelmTEnaY94F7hy1+ZF5CdT1W4trDNVZnqjG+Rr
+         Ko2NUUY4kbuKcpdxnSKgrncU6M7tqw8P+uWoZ8oA/Pi2c2hFTib+qlrOLX+QtQRdLe
+         3E+SpGXqo5wsWHEfOm2731F2BWNA6tJ5lrULnAu4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aditya Garg <gargaditya08@live.com>,
-        Samuel Jiang <chyishian.jiang@gmail.com>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 6.0 10/34] efi: Correct Macmini DMI match in uefi cert quirk
+        stable@vger.kernel.org,
+        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.15 19/27] wifi: cfg80211: fix BSS refcounting bugs
 Date:   Thu, 13 Oct 2022 19:52:48 +0200
-Message-Id: <20221013175146.789102926@linuxfoundation.org>
+Message-Id: <20221013175144.261946484@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-References: <20221013175146.507746257@linuxfoundation.org>
+In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
+References: <20221013175143.518476113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +54,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Orlando Chamberlain <redecorating@protonmail.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit bab715bdaa9ebf28d99a6d1efb2704a30125e96d upstream.
+commit 0b7808818cb9df6680f98996b8e9a439fa7bcc2f upstream.
 
-It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
-is inconsistent with other model line names.
+There are multiple refcounting bugs related to multi-BSSID:
+ - In bss_ref_get(), if the BSS has a hidden_beacon_bss, then
+   the bss pointer is overwritten before checking for the
+   transmitted BSS, which is clearly wrong. Fix this by using
+   the bss_from_pub() macro.
 
-Correct the capitalisation of Macmini in the quirk for skipping loading
-platform certs on T2 Macs.
+ - In cfg80211_bss_update() we copy the transmitted_bss pointer
+   from tmp into new, but then if we release new, we'll unref
+   it erroneously. We already set the pointer and ref it, but
+   need to NULL it since it was copied from the tmp data.
 
-Currently users get:
+ - In cfg80211_inform_single_bss_data(), if adding to the non-
+   transmitted list fails, we unlink the BSS and yet still we
+   return it, but this results in returning an entry without
+   a reference. We shouldn't return it anyway if it was broken
+   enough to not get added there.
 
-------------[ cut here ]------------
-[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
-WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x55/0xe0
-Modules linked in:
-CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3fc40fd08edab32a509fbf4c9bc52d111e
-Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
-Workqueue: efi_rts_wq efi_call_rts
-...
----[ end trace 0000000000000000 ]---
-efi: Froze efi_rts_wq and disabled EFI Runtime Services
-integrity: Couldn't get size: 0x8000000000000015
-integrity: MODSIGN: Couldn't get UEFI db list
-efi: EFI Runtime Services are disabled!
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get UEFI dbx list
+This fixes CVE-2022-42720.
 
-Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot for T2 Macs")
-Cc: stable@vger.kernel.org
-Cc: Aditya Garg <gargaditya08@live.com>
-Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
-Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Fixes: a3584f56de1c ("cfg80211: Properly track transmitting and non-transmitting BSS")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/platform_certs/load_uefi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/wireless/scan.c |   27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -31,7 +31,7 @@ static const struct dmi_system_id uefi_s
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
--	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -143,18 +143,12 @@ static inline void bss_ref_get(struct cf
+ 	lockdep_assert_held(&rdev->bss_lock);
+ 
+ 	bss->refcount++;
+-	if (bss->pub.hidden_beacon_bss) {
+-		bss = container_of(bss->pub.hidden_beacon_bss,
+-				   struct cfg80211_internal_bss,
+-				   pub);
+-		bss->refcount++;
+-	}
+-	if (bss->pub.transmitted_bss) {
+-		bss = container_of(bss->pub.transmitted_bss,
+-				   struct cfg80211_internal_bss,
+-				   pub);
+-		bss->refcount++;
+-	}
++
++	if (bss->pub.hidden_beacon_bss)
++		bss_from_pub(bss->pub.hidden_beacon_bss)->refcount++;
++
++	if (bss->pub.transmitted_bss)
++		bss_from_pub(bss->pub.transmitted_bss)->refcount++;
+ }
+ 
+ static inline void bss_ref_put(struct cfg80211_registered_device *rdev,
+@@ -1743,6 +1737,8 @@ cfg80211_bss_update(struct cfg80211_regi
+ 		new->refcount = 1;
+ 		INIT_LIST_HEAD(&new->hidden_list);
+ 		INIT_LIST_HEAD(&new->pub.nontrans_list);
++		/* we'll set this later if it was non-NULL */
++		new->pub.transmitted_bss = NULL;
+ 
+ 		if (rcu_access_pointer(tmp->pub.proberesp_ies)) {
+ 			hidden = rb_find_bss(rdev, tmp, BSS_CMP_HIDE_ZLEN);
+@@ -1983,10 +1979,15 @@ cfg80211_inform_single_bss_data(struct w
+ 		spin_lock_bh(&rdev->bss_lock);
+ 		if (cfg80211_add_nontrans_list(non_tx_data->tx_bss,
+ 					       &res->pub)) {
+-			if (__cfg80211_unlink_bss(rdev, res))
++			if (__cfg80211_unlink_bss(rdev, res)) {
+ 				rdev->bss_generation++;
++				res = NULL;
++			}
+ 		}
+ 		spin_unlock_bh(&rdev->bss_lock);
++
++		if (!res)
++			return NULL;
+ 	}
+ 
+ 	trace_cfg80211_return_bss(&res->pub);
 
 
