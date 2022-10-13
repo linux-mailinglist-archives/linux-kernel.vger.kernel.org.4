@@ -2,76 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB395FD9A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4DA5FD9B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJMM4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S229616AbiJMM5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJMM4p (ORCPT
+        with ESMTP id S229627AbiJMM5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:56:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F7AD18EA;
-        Thu, 13 Oct 2022 05:56:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5939E61792;
-        Thu, 13 Oct 2022 12:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C46AC433D6;
-        Thu, 13 Oct 2022 12:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665665803;
-        bh=D1v+v+p5tviS9W5Hx32wORn2qM5TjPZ0dBTOY15LvWE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NehBH+mRFL5rjnTuJ8qx3tVjdQy9wFMupEbhtY9d5m10nyRxka6uBNqyfk1RczjBT
-         3ZeaZx2kp7crwP8avFqPp/fm+rGgOaNhtfn6rdBjLXHqa8zzFFbmr3ymPGIKaJI3Cr
-         6ZuLwCbQoORPNPTzRc/8WhcYJmmrJgcCXmK2lEGI=
-Date:   Thu, 13 Oct 2022 14:57:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Starke, Daniel" <daniel.starke@siemens.com>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] tty: n_gsm: make n_gsm line number configurable
-Message-ID: <Y0gLN5b4TH43NhtZ@kroah.com>
-References: <20221012061715.4823-1-daniel.starke@siemens.com>
- <Y0Zjqxl/MAivtf02@kroah.com>
- <DB9PR10MB58818736388F209396CEA749E0259@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB9PR10MB58818736388F209396CEA749E0259@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 08:57:52 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27E3A139E45;
+        Thu, 13 Oct 2022 05:57:49 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.162.98.155])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDXWLU6C0hjcwbVBw--.25275S2;
+        Thu, 13 Oct 2022 20:57:37 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, isdn@linux-pingi.de, kuba@kernel.org,
+        gregkh@linuxfoundation.org, andrii@kernel.org, davem@davemloft.net,
+        axboe@kernel.dk, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] mISDN: hfcpci: Fix use-after-free bug in hfcpci_Timer
+Date:   Thu, 13 Oct 2022 20:57:29 +0800
+Message-Id: <20221013125729.105652-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgDXWLU6C0hjcwbVBw--.25275S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrW8JFW7AF18ur48tF48Crg_yoW8Gw13pF
+        W5WF42yrWqqF1jya1UZan8uF93Aa1vyrWrKFWqk39xZ3Z3XFy5AF1Ut3yv9FWfGr93W39x
+        XF40qw1YkF9rAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgECAVZdtb56rwASsH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 11:09:02AM +0000, Starke, Daniel wrote:
-> > > --- a/include/uapi/linux/gsmmux.h
-> > > +++ b/include/uapi/linux/gsmmux.h
-> > > @@ -19,7 +19,9 @@ struct gsm_config
-> > >  	unsigned int mtu;
-> > >  	unsigned int k;
-> > >  	unsigned int i;
-> > > -	unsigned int unused[8];		/* Padding for expansion without
-> > > +	unsigned short numValid;
-> > > +	unsigned short num;
-> > 
-> > This would never work anyway (hint "short" is not a valid uapi data
-> > type...)
-> 
-> I am surprised about this as gsm_netconfig already uses unsigned short.
+If the timer handler hfcpci_Timer() is running, the
+del_timer(&hc->hw.timer) in release_io_hfcpci() could
+not stop it. As a result, the use-after-free bug will
+happen. The process is shown below:
 
-How does netconfig pass data to/from userspace?  Through ioctls or
-netlink?
+    (cleanup routine)          |        (timer handler)
+release_card()                 | hfcpci_Timer()
+  release_io_hfcpci            |
+    del_timer(&hc->hw.timer)   |
+  ...                          |  ...
+  kfree(hc) //[1]FREE          |
+                               |   hc->hw.timer.expires //[2]USE
 
-thanks,
+The hfc_pci is deallocated in position [1] and used in
+position [2].
 
-greg k-h
+Fix by changing del_timer() in release_io_hfcpci() to
+del_timer_sync(), which makes sure the hfcpci_Timer()
+have finished before the hfc_pci is deallocated.
+
+Fixes: 1700fe1a10dc ("Add mISDN HFC PCI driver")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/isdn/hardware/mISDN/hfcpci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
+index af17459c1a5..5cf37fe7de2 100644
+--- a/drivers/isdn/hardware/mISDN/hfcpci.c
++++ b/drivers/isdn/hardware/mISDN/hfcpci.c
+@@ -157,7 +157,7 @@ release_io_hfcpci(struct hfc_pci *hc)
+ {
+ 	/* disable memory mapped ports + busmaster */
+ 	pci_write_config_word(hc->pdev, PCI_COMMAND, 0);
+-	del_timer(&hc->hw.timer);
++	del_timer_sync(&hc->hw.timer);
+ 	dma_free_coherent(&hc->pdev->dev, 0x8000, hc->hw.fifos,
+ 			  hc->hw.dmahandle);
+ 	iounmap(hc->hw.pci_io);
+-- 
+2.17.1
+
