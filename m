@@ -1,190 +1,104 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6A95FDB27
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:41:31 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id D47835FDB30
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJMNlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S229927AbiJMNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJMNlQ (ORCPT
+        with ESMTP id S229890AbiJMNln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:41:16 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B644341D0C;
-        Thu, 13 Oct 2022 06:41:14 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id a10so2857169wrm.12;
-        Thu, 13 Oct 2022 06:41:14 -0700 (PDT)
+        Thu, 13 Oct 2022 09:41:43 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6135FF58
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:41:42 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id w3so1046355qtv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3c07vJu9MleTx0FO2FYKdcJ7U0JEh0AX+F17VGxRSZ0=;
-        b=nFSahUpINIlv8N7joE+sCuWGp8l94HE86NAtPyhjz3HrpgqD6m/OMXC2Ri1dIczVuF
-         j0RoXq5MLGGUdox5L7ekW2VmIFIBu+poV2PCrObT24Rubln9mnznIoBkkpuJevfCvPdq
-         gsO3bHoa29N//4Kzb6XATHyli3MQ68/yhvJGsorWe8VQx3xb2Nyy+ks+Iob084fd0UZU
-         Zfyy2+Idjsl22o9DYiRA2YfX0E6mKLx5rdFpE9aJZeN8HP22C5wMEZsuPJ5XCadJyA+6
-         9Q3B1spgMESrtXC8vqWAQkK16PQAl+T7LIFQV5KlfiGuhIZc49l+tMDgCjQxfR0EsR8C
-         /nEA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OkTxdOquiAi5I+vuMel1T/4RhRbtpcgEF0HcWwU+BAo=;
+        b=dxPnKWjhdOCY1p/3NAsVMqmZ/k0Nyp54mbcCwSwCXUsbzY1uxmv1O4iq/j6YAgVyXw
+         VGJWoqgSbm0rMivNEeLINjUainAwyhAbW5+GxliRJJbeu3OqkD+p03xfAiSGMm1ejVAS
+         eAl5SZE6X6uMy6yge0kqw+IhvRV7qgEgIU9A/lAjWS3pGPCgvWfdCtf+X98gYzaZpqh6
+         7Oo5aQP/pqqWowBMeB+O4fHmCJw5j1su7qUwuh0J9EgZVGIW02HWiUTpxFFY7CTWm8hn
+         brLKVSa5jG1sHGnYdbSJKIFOiTeFTBlV3uAI+r9hsUlw8lns93j8fLhG3Sc81ZaRrD4+
+         8Udg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3c07vJu9MleTx0FO2FYKdcJ7U0JEh0AX+F17VGxRSZ0=;
-        b=3/4kEsXIEP8uWq/TAc9p9QfwBita/JafjA8IHsTjYKtaxaIGpnS+++L6vrLgnvm5QW
-         mv0Dew9gVtVbpQ/4DWgjnqJjPbQAubbguwXezQU4ju6rlTpf2/m5OVtwn68Yc8D2ql2j
-         m4hbMhWq9JJN/Gvhj5bpV5prKonkNiBmUc9Mq1Q4n1dGb0TYa+yDfsnhyo3H0iq8VUON
-         /Q2rQCV8HAPHFfJV0ZNEFwDUQSaZwKGjNWalJax13Gjm+0nWN/Bb4iTmP3mw+sM1vYOm
-         s8E//Tt6Gl38npMV5hXqf/MDoMwsUKrPkOkD9j0eKxaNmKNfwwspHeBry4Nfygj77zbl
-         sh4A==
-X-Gm-Message-State: ACrzQf1oL97po3ZLSWDcTutjrAXYIWjYPJ8mCkVS8ZrPfbKq4LfnDbzR
-        TBNqdV+i2sf5+BPyZX86G4raqmIYnkgudyQM
-X-Google-Smtp-Source: AMsMyM5AZ7lMxC2zPbhB2ubvYxLN6ZftzCHi1rbiBbuIl6BEMwdMytZGQ/RCkdPHn6yFMy+03CmYXw==
-X-Received: by 2002:adf:e305:0:b0:22e:6b55:3ed9 with SMTP id b5-20020adfe305000000b0022e6b553ed9mr22300wrj.684.1665668473154;
-        Thu, 13 Oct 2022 06:41:13 -0700 (PDT)
-Received: from rivendell (static.167.156.21.65.clients.your-server.de. [65.21.156.167])
-        by smtp.gmail.com with ESMTPSA id r5-20020a5d6945000000b0022cc0a2cbecsm2054921wrw.15.2022.10.13.06.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 06:41:12 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 15:41:10 +0200 (CEST)
-From:   Enrico Mioso <mrkiko.rs@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-cc:     Matthew Wilcox <willy@infradead.org>,
-        syzbot <syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
-        ntfs3@lists.linux.dev
-Subject: Re: [syzbot] BUG: scheduling while atomic in
- exit_to_user_mode_loop
-In-Reply-To: <b1f87233-58ae-0a41-8b0e-2e61cb9b70e1@paragon-software.com>
-Message-ID: <733c69dc-835b-d6ac-e459-d063bf59a21f@gmail.com>
-References: <00000000000006aa2405ea93b166@google.com> <Y0OWBChTBr86DdNv@casper.infradead.org> <b1f87233-58ae-0a41-8b0e-2e61cb9b70e1@paragon-software.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OkTxdOquiAi5I+vuMel1T/4RhRbtpcgEF0HcWwU+BAo=;
+        b=k2bVy9/1uzLZiQvfHcqcKCyQKuoqiwRoyEsO9TOWWHxGPW+TdUgdVnTsmRjSCflW+Z
+         qm7cp+O1rFgbgghuC9uZYzKqkhvtwf0IySbc06zWy0pbEBLWXIkOrZcW9IVWhWubph+R
+         8K9wAO2qyqns2P1UPXBZW+lHB05+gE76/XzIj9ukIVILaBKpRzRdiZEZf3+r6/jdCVUE
+         rVpLL04qQGcHmiMVs1eb2iS50UXYZWbMEeUZ0hpCdkFj4+QYI20FR3CiTLVD+9dJ4z3P
+         p3mlIyICTq6ZXe8/yY5zlMuw9aQGD2BIJq/RUykxIf7FpBNtA/1MUJ23JtZBn10LajSZ
+         12nA==
+X-Gm-Message-State: ACrzQf29gW55HOpKpUwqHnS+7nDgz2ocs24GTWOJEHPzAxtcm5M8N8rg
+        LEE+q+YM+OOuh5trJAJMpMVJ4Q==
+X-Google-Smtp-Source: AMsMyM5rtgxeDmnURZbGAhdih10u6/L3PE9MvIASJRPGxn+jjxYUx91Hl0Jns6M7KNIQx+5G+6evZQ==
+X-Received: by 2002:a05:622a:64b:b0:394:d7c7:b938 with SMTP id a11-20020a05622a064b00b00394d7c7b938mr27498893qtb.283.1665668501953;
+        Thu, 13 Oct 2022 06:41:41 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05620a408e00b006bb83c2be40sm9725523qko.59.2022.10.13.06.41.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 06:41:41 -0700 (PDT)
+Message-ID: <e1e8b136-4be4-bebb-71af-fa3eed02272f@linaro.org>
+Date:   Thu, 13 Oct 2022 09:41:40 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v9 0/2] add device Xiaomi Mi 6 (codename sagit) and board
+ binding
+Content-Language: en-US
+To:     konrad.dybcio@somainline.org,
+        Dzmitry Sankouski <dsankouski@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221012185245.1282599-1-dsankouski@gmail.com>
+ <82891b0026f8f43b266245c7c0c85a98@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <82891b0026f8f43b266245c7c0c85a98@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will these tests be resumed after the fixes are merged?
-I think they are really great in point out problems - and to this end I would like to say thank you to the syzkaller project developers.
-And all involved parties for the work, the patience and continued effort in developing the VSF and all the filesystems.
+On 12/10/2022 15:25, konrad.dybcio@somainline.org wrote:
+> On 2022-10-12 20:52, Dzmitry Sankouski wrote:
+>> Add initial support for Xiaomi Mi 6 phone (codename sagit)
+>>
+>> Dzmitry Sankouski (2):
+>>   dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
+>>   arm64: dts: qcom: sagit: add initial device tree for sagit
+>>
+> Looks like you resent this series just to add the A-b on the dt-bindings 
+> patch?
+> If that's the case, you don't have to do it, the maintainer will pick up 
+> the tags
+> when applying your patch and an essentially empty revision just adds 
+> confusion.
 
-Enrico
+The ack was ignored in last two previous revisions, so the resend was
+needed. Maintainer would not find that ack...
 
+Best regards,
+Krzysztof
 
-On Wed, 12 Oct 2022, Konstantin Komarov wrote:
-
-> Date: Wed, 12 Oct 2022 19:24:08
-> From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-> To: Matthew Wilcox <willy@infradead.org>,
->     syzbot <syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com>
-> Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
->     syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
->     ntfs3@lists.linux.dev
-> Subject: Re: [syzbot] BUG: scheduling while atomic in exit_to_user_mode_loop
-> 
->
->
-> On 10/10/22 06:48, Matthew Wilcox wrote:
->> 
->> Yet another ntfs bug.  It's getting really noisy.  Maybe stop testing
->> ntfs until some more bugs get fixed?
->> 
->
-> Hello
-> I think, that we can stop testing ntfs3 because there are several fixes in
-> development. Until they are pulled in kernel I think it is not necessary
-> to run these tests.
->
->> On Sat, Oct 08, 2022 at 10:55:34PM -0700, syzbot wrote:
->>> Hello,
->>> 
->>> syzbot found the following issue on:
->>> 
->>> HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of 
->>> git://git.kernel...
->>> git tree:       upstream
->>> console output: https://syzkaller.appspot.com/x/log.txt?x=15b1382a880000
->>> kernel config:  https://syzkaller.appspot.com/x/.config?x=d323d85b1f8a4ed7
->>> dashboard link: 
->>> https://syzkaller.appspot.com/bug?extid=cceb1394467dba9c62d9
->>> compiler:       Debian clang version 
->>> 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU 
->>> Binutils for Debian) 2.35.2
->>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1755e8b2880000
->>> 
->>> Downloadable assets:
->>> disk image: 
->>> https://storage.googleapis.com/syzbot-assets/c40d70ae7512/disk-0326074f.raw.xz
->>> vmlinux: 
->>> https://storage.googleapis.com/syzbot-assets/3603ce065271/vmlinux-0326074f.xz
->>> mounted in repro: 
->>> https://storage.googleapis.com/syzbot-assets/738016e3c6ba/mount_1.gz
->>> 
->>> IMPORTANT: if you fix the issue, please add the following tag to the 
->>> commit:
->>> Reported-by: syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com
->>> 
->>> ntfs3: loop2: Different NTFS' sector size (1024) and media sector size 
->>> (512)
->>> BUG: scheduling while atomic: syz-executor.2/9901/0x00000002
->>> 2 locks held by syz-executor.2/9901:
->>>   #0: ffff888075f880e0 (&type->s_umount_key#47/1){+.+.}-{3:3}, at: 
->>> alloc_super+0x212/0x920 fs/super.c:228
->>>   #1: ffff8880678e78f0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: 
->>> spin_lock include/linux/spinlock.h:349 [inline]
->>>   #1: ffff8880678e78f0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: 
->>> _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
->>> Modules linked in:
->>> Preemption disabled at:
->>> [<0000000000000000>] 0x0
->>> Kernel panic - not syncing: scheduling while atomic
->>> CPU: 1 PID: 9901 Comm: syz-executor.2 Not tainted 
->>> 6.0.0-syzkaller-02734-g0326074ff465 #0
->>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS 
->>> Google 09/22/2022
->>> Call Trace:
->>>   <TASK>
->>>   __dump_stack lib/dump_stack.c:88 [inline]
->>>   dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
->>>   panic+0x2d6/0x715 kernel/panic.c:274
->>>   __schedule_bug+0x1ff/0x250 kernel/sched/core.c:5725
->>>   schedule_debug+0x1d3/0x3c0 kernel/sched/core.c:5754
->>>   __schedule+0xfb/0xdf0 kernel/sched/core.c:6389
->>>   schedule+0xcb/0x190 kernel/sched/core.c:6571
->>>   exit_to_user_mode_loop+0xe5/0x150 kernel/entry/common.c:157
->>>   exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
->>>   irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:307
->>>   asm_sysvec_apic_timer_interrupt+0x16/0x20 
->>> arch/x86/include/asm/idtentry.h:649
->>> RIP: 000f:lock_acquire+0x1e1/0x3c0
->>> RSP: 0018:ffffc9000563f900 EFLAGS: 00000206
->>> RAX: 1ffff92000ac7f28 RBX: 0000000000000001 RCX: ffff8880753be2f0
->>> RDX: dffffc0000000000 RSI: ffffffff8a8d9060 RDI: ffffffff8aecb5e0
->>> RBP: ffffc9000563fa28 R08: dffffc0000000000 R09: fffffbfff1fc4229
->>> R10: fffffbfff1fc4229 R11: 1ffffffff1fc4228 R12: dffffc0000000000
->>> R13: 1ffff92000ac7f24 R14: ffffc9000563f940 R15: 0000000000000246
->>>   </TASK>
->>> Kernel Offset: disabled
->>> Rebooting in 86400 seconds..
->>> 
->>> 
->>> ---
->>> This report is generated by a bot. It may contain errors.
->>> See https://goo.gl/tpsmEJ for more information about syzbot.
->>> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>> 
->>> syzbot will keep track of this issue. See:
->>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->>> syzbot can test patches for this issue, for details see:
->>> https://goo.gl/tpsmEJ#testing-patches
->
->
