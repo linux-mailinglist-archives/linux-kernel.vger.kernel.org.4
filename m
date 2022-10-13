@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381705FDD4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50555FDD4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJMPhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S229771AbiJMPiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJMPhg (ORCPT
+        with ESMTP id S229459AbiJMPiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:37:36 -0400
+        Thu, 13 Oct 2022 11:38:03 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE22C6958
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:37:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF409C58B1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:38:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665675454;
+        s=mimecast20190719; t=1665675481;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZC8ZhODybW3HN+Dzjja+AX4is7YURzcPSRS/gTWg/mU=;
-        b=Xy+nmoRWYQjINjAENClEbpyAnaeXmP/ywdJWAw2sSU9diMnoyQAtRQYGBSAypwB/eXuTo/
-        goJiyo8MB1D0BtnFoi3Wv0cLj8mTInxJHjthkWC4+CgmfpfGcle2+JPICmGC+ms43adPKR
-        TUJeeroLct29OeTkFK7yjSY/lcsSRYg=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-39-c8gP-XhMOXyB0WAmpdOjkQ-1; Thu, 13 Oct 2022 11:37:32 -0400
-X-MC-Unique: c8gP-XhMOXyB0WAmpdOjkQ-1
-Received: by mail-oo1-f69.google.com with SMTP id m13-20020a4a390d000000b004809df50243so995061ooa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:37:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZC8ZhODybW3HN+Dzjja+AX4is7YURzcPSRS/gTWg/mU=;
-        b=cTXhkE4WIiVkA0jJPJqqHwdkfRHYkaeMS5kw2yz0mwgDpgtO6SawEnsK7sZ+NuUwCc
-         ZptMQM1t3xl9GZ7U83e+RcnhzuMOvZVCnCyudC2MothZYbFAImn+d2q7tR1j9w/j6zIh
-         KYJ0YUKfaS2BVbWRdpr9ZkvIshj6wQx5cc2Lxux/6dcJbwsqq+Ri2wwKKktOP6fxVRJ2
-         ITRGXaz2eCCAHpZH73zzNTUqAYpWJmsfuT5oKnGYaBx7wSpotQ1NgwPgE9qrMhBoPZD9
-         PlTVMAHUGn5cdwN6F7Vm6dpN1BuNq3dXSxbm/4IeSxy9eB6HzPj+ocMg0qi7r5mSnXHz
-         V+HA==
-X-Gm-Message-State: ACrzQf2/bKJmGbQ1+WCjGJYI0jFZZrtKqLHwRkMcyBEIOodMgPdKwpy2
-        W45QPkyPB+3Zi0BLWjrahkCvt2EKoDdxOXUIru47SPb+R5YcXT/5EgaHgFcOYtDA8gAG5Mi+XKw
-        aZ9Wa5GCJXX0zvocIzFDJy2RA
-X-Received: by 2002:a05:6808:1b12:b0:354:a089:1998 with SMTP id bx18-20020a0568081b1200b00354a0891998mr150713oib.9.1665675452095;
-        Thu, 13 Oct 2022 08:37:32 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6yjHx5WKkTxDmnf9BkOTj1JV+8H3boJ42+MTYhu1d27xRvNYYoqWqfZtJP/7wopOxXoTlmHw==
-X-Received: by 2002:a05:6808:1b12:b0:354:a089:1998 with SMTP id bx18-20020a0568081b1200b00354a0891998mr150697oib.9.1665675451855;
-        Thu, 13 Oct 2022 08:37:31 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id r2-20020a4a83c2000000b004809c78083asm872774oog.25.2022.10.13.08.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 08:37:31 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 08:37:30 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [RFC PATCH] iommu/vt-d: Add sanity check to
- iommu_sva_bind_device()
-Message-ID: <20221013153730.rwtukjgpdgwgfodv@cantor>
-References: <20221013153355.2365865-1-jsnitsel@redhat.com>
+        bh=8FglV2hEiVF1FMKvRG3wYfrJNDdbdOZrWruHYlhJav4=;
+        b=BE/qkphoQnAuuMRelozRHn5BX8Z82KKfsRNhQcRxrhUW5SwhIbawKWUwFrOmhUaES557aS
+        FcKY0BjB87z+ykoJezr5HD/k8mRiaVl3BKWyWhjpt6bfFODU1HUTfWQaNa1zCNb1MWLty+
+        JBodw0ZqpvVIrLwBjSJBKj6qWvDjg2Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-571-JuWYSfdnPAyk3C62-oWJ9Q-1; Thu, 13 Oct 2022 11:37:59 -0400
+X-MC-Unique: JuWYSfdnPAyk3C62-oWJ9Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 530E9802541;
+        Thu, 13 Oct 2022 15:37:48 +0000 (UTC)
+Received: from [10.22.17.27] (unknown [10.22.17.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 54454C47E15;
+        Thu, 13 Oct 2022 15:37:44 +0000 (UTC)
+Message-ID: <70523e24-755f-f6ae-f665-78e6f5eef575@redhat.com>
+Date:   Thu, 13 Oct 2022 11:37:43 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013153355.2365865-1-jsnitsel@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] locking/rwsem: Prevent non-first waiter from
+ spinning in down_write() slowpath
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221012133333.1265281-1-longman@redhat.com>
+ <20221012133333.1265281-2-longman@redhat.com>
+ <Y0fiIdxA+Jip1vve@hirez.programming.kicks-ass.net>
+ <ee1ea64f-f4b3-15b2-b46c-9b8ad7217962@redhat.com>
+In-Reply-To: <ee1ea64f-f4b3-15b2-b46c-9b8ad7217962@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 08:33:55AM -0700, Jerry Snitselaar wrote:
-> iommu_sva_bind_device() should only be called if
-> iommu_dev_enable_feature() succeeded. There has been one case already
-> where that hasn't been the case, which resulted in a null pointer
-> deref in dev_iommu_ops(). To avoid that happening in the future if
-> another driver makes that mistake, sanity check dev->iommu and
-> dev->iommu->iommu_dev prior to calling dev_iommu_ops().
-> 
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> ---
+On 10/13/22 09:33, Waiman Long wrote:
+> On 10/13/22 06:02, Peter Zijlstra wrote:
+>> On Wed, Oct 12, 2022 at 09:33:32AM -0400, Waiman Long wrote:
+>>> A non-first waiter can potentially spin in the for loop of
+>>> rwsem_down_write_slowpath() without sleeping but fail to acquire the
+>>> lock even if the rwsem is free if the following sequence happens:
+>>>
+>>>    Non-first waiter       First waiter      Lock holder
+>>>    ----------------       ------------      -----------
+>>>    Acquire wait_lock
+>>>    rwsem_try_write_lock():
+>>>      Set handoff bit if RT or
+>>>        wait too long
+>>>      Set waiter->handoff_set
+>>>    Release wait_lock
+>>>                           Acquire wait_lock
+>>>                           Inherit waiter->handoff_set
+>>>                           Release wait_lock
+>>>                        Clear owner
+>>>                                             Release lock
+>>>    if (waiter.handoff_set) {
+>>>      rwsem_spin_on_owner(();
+>>>      if (OWNER_NULL)
+>>>        goto trylock_again;
+>>>    }
+>>>    trylock_again:
+>>>    Acquire wait_lock
+>>>    rwsem_try_write_lock():
+>>>       if (first->handoff_set && (waiter != first))
+>>>           return false;
+>>>    Release wait_lock
+>>>
+>>> It is especially problematic if the non-first waiter is an RT task and
+>>> it is running on the same CPU as the first waiter as this can lead to
+>>> live lock.
+>>>
+>> So why not do a better handoff? Specifically, have the owner set owner
+>> to first-waiter instead of NULL ? (like the normal mutex code)
+>
+> I understand your desire to make the rwsem handoff process more like 
+> what mutex is currently doing. I certainly think it is doable and will 
+> put this in my todo list. However, that needs to be done at unlock and 
+> wakeup time. I expect that will require moderate amount of code 
+> changes which will make it not that suitable for backporting to the 
+> stable releases.
+>
+> I would like to see these simple fixes get merged first and then we 
+> can work on a major revamp of the handoff code. What do you think?
+>
+I am planning to post additional patches on top to rework the handoff 
+code sometimes next week, but I will keep these fix patches for the 
+stable releases.
 
-I don't know how many other drivers there will be in the future,
-so quite possibly a non-issue. It did happen with the idxd driver
-though, and I was thinking about that this morning so thought I
-would send a patch to avoid it in the future.
-
-Regards,
-Jerry
-
-> drivers/iommu/iommu.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 4893c2429ca5..20ec75667529 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -2746,7 +2746,15 @@ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
->  {
->  	struct iommu_group *group;
->  	struct iommu_sva *handle = ERR_PTR(-EINVAL);
-> -	const struct iommu_ops *ops = dev_iommu_ops(dev);
-> +	const struct iommu_ops *ops;
-> +
-> +	if (!dev->iommu || !dev->iommu->iommu_dev) {
-> +		dev_warn(dev, "%s called without checking succes of iommu_dev_enable_feature?\n",
-> +			__func__);
-> +		return ERR_PTR(-ENODEV);
-> +	}
-> +
-> +	ops = dev_iommu_ops(dev);
->  
->  	if (!ops->sva_bind)
->  		return ERR_PTR(-ENODEV);
-> -- 
-> 2.37.2
-> 
+Cheers,
+Longman
 
