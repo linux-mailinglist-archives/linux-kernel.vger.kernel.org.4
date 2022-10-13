@@ -2,65 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245F75FDC2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 16:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298695FDC2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 16:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiJMONy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 10:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S229970AbiJMON6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 10:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiJMONt (ORCPT
+        with ESMTP id S230106AbiJMONu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 10:13:49 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044B850B80
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 07:13:38 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id m19so2678276lfq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 07:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s4+2YBnku99YzzIsQ7nejlO8E//x75qWW99ifL1XicY=;
-        b=b756TPkB0v/sj7TeR9iEobafqj/mqe52e96i9Uo4mVUlEpArfd3BFuonxZdSWTfQwm
-         1WbF7BJanZBo+0xFo2kaxw4PUr9Hzzns1PquChY53JCehRqvqQab4lBFlVZKm7onlC5i
-         tKVyN4e0Rz3ATQwuUPC8yZg42ChnA0e5o0xi1RalBsvWPHtwQJezxoXAa9jCK/U4UwLt
-         CwoKouPo4uMFNvcIMYFjTb+DpQO5BkYc985o4jnfY/NSFwVL4iVMJsa5DJXgf1X5x0ZW
-         ZVBols6++HXNbvWG0hMn8vA+21XBafFyQwOOw0g/DYOd3HNfKxzrmRLCmrADNQ25bXG+
-         kd0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s4+2YBnku99YzzIsQ7nejlO8E//x75qWW99ifL1XicY=;
-        b=GVld0HT+z27mVF2liMLLlfXI9JQEDkWnDiidbhIM+D5WRzcuOETab3vAV1AlBh3PzP
-         peG4xQ90eE3lWjuaMZYcouaOvrZOFX48W/2EdIILEN4WPvTIQamD6kP1J1hW41tfjjBR
-         N4Q9Sx2TCvyabrYbRtaVIwka55gHQpCfBEvFft6120SNNxg1MoOU7UkQiVvlmEZBndvp
-         kWHcUqecXBJGiZcjhDfeGmHE2CCkKNXkRh4t4LAjIa/GQvyPpm/TwWaakXe3B+RZgPf7
-         Me4RdW5GUqhrIu0aM1X+3gYttfr1CWljJ93bwyY5C3Eb96F4C58ASgCqVe1aPJHF4MgQ
-         EsmQ==
-X-Gm-Message-State: ACrzQf3+kmGXjVLTr/w6h7Ei6Q5PZihF/U5QHsnNLJ92BiEPMjGhu9kF
-        J0syf1AW3SqOQIarTKGV2shuJg==
-X-Google-Smtp-Source: AMsMyM6Pwh1Vdyx2Zh+wARiDcb8ZqJ7C5Df2hJuUaCeicB0JWCCxDRazlI+TpOb8KVWbyRSGKH9N9A==
-X-Received: by 2002:a05:6512:2256:b0:4a2:7e9a:576d with SMTP id i22-20020a056512225600b004a27e9a576dmr12571054lfu.58.1665670416386;
-        Thu, 13 Oct 2022 07:13:36 -0700 (PDT)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id v5-20020ac258e5000000b0049473593f2csm415121lfo.182.2022.10.13.07.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 07:13:35 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        Thu, 13 Oct 2022 10:13:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0FD50B83;
+        Thu, 13 Oct 2022 07:13:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38886617EC;
+        Thu, 13 Oct 2022 14:13:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63ACAC433D6;
+        Thu, 13 Oct 2022 14:13:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665670423;
+        bh=AQduuDPRz+ukUglRpLevsrSLIjIFqtofoE9q13bN9RE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=sySmIm6XLPp6Pfii6YNdD9JseogsLPgRTdlGNgJ22u/LSa+8ujFDEDCxLLK6APMdO
+         oh8fuSrnqg/abevO3IIUO/dqpEubc6JZFfKbM/ov7dFZ6ue4/yALXQjCBQArwFvY8n
+         P3KBd6xY8jIN9Vb3/lbpIlDyrO7BQCmqnHwtNRT1NG/WRnI/Ns9pJAiweAPI5OzLjD
+         gxOZHsLlLlS+P4/Nx7UHHkFBUOlnJtTSURuUBREOcsZ6F2XOKXu1A3yJYA6g/vqTa4
+         wqcKAhKhiDpnUwuFFrS4H4m6tA0BT7J+RyVWz6oTrR7dqut8h3/2ezVbR2IfF93Jbz
+         BldUK+8qEIdRw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C876D5C32BF; Thu, 13 Oct 2022 07:13:39 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 07:13:39 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v6.1-rc1
-Date:   Thu, 13 Oct 2022 16:13:34 +0200
-Message-Id: <20221013141334.511005-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] rcu: Fix use __this_cpu_read() warning in preemptible
+ code
+Message-ID: <20221013141339.GY4221@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221013044148.2894320-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013044148.2894320-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,56 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Oct 13, 2022 at 12:41:48PM +0800, Zqiang wrote:
+> BUG: using __this_cpu_read() in preemptible [00000000]
+> code: rcu_torture_fqs/398
+> caller is __this_cpu_preempt_check+0x13/0x20
+> CPU: 3 PID: 398 Comm: rcu_torture_fqs Not tainted 6.0.0-rc1-yoctodev-standard+
+> Call Trace:
+> <TASK>
+> dump_stack_lvl+0x5b/0x86
+> dump_stack+0x10/0x16
+> check_preemption_disabled+0xe5/0xf0
+> __this_cpu_preempt_check+0x13/0x20
+> rcu_force_quiescent_state.part.0+0x1c/0x170
+> rcu_force_quiescent_state+0x1e/0x30
+> rcu_torture_fqs+0xca/0x160
+> ? rcu_torture_boost+0x430/0x430
+> kthread+0x192/0x1d0
+> ? kthread_complete_and_exit+0x30/0x30
+> ret_from_fork+0x22/0x30
+> </TASK>
+> 
+> When enable rcutorture.fqs_duration, the rcu_force_quiescent_state() be
+> invoked in rcu_torture_fqs task context, invoke __this_cpu_read() in
+> preemptible code section will trigger the above calltrace.
+> 
+> This commit convert __this_cpu_read() to raw_cpu_read() to avoid
+> this warning.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Here's a PR with a couple of MMC fixes intended for v6.1-rc1. Details about the
-highlights are as usual found in the signed tag.
+Good eyes!  Queued, thank you!
 
-Please pull this in!
+							Thanx, Paul
 
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit 833477fce7a14d43ae4c07f8ddc32fa5119471a2:
-
-  Merge tag 'sound-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound (2022-10-05 12:02:07 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.1-2
-
-for you to fetch changes up to 6e141772e6465f937458b35ddcfd0a981b6f5280:
-
-  mmc: sdhci-sprd: Fix minimum clock limit (2022-10-11 15:48:51 +0200)
-
-----------------------------------------------------------------
-MMC core:
- - Add SD card quirk for broken discard
-
-MMC host:
- - renesas_sdhi: Fix clock rounding errors
- - sdhci-sprd: Fix minimum clock limit to detect cards
- - sdhci-tegra: Use actual clock rate for SW tuning correction
-
-----------------------------------------------------------------
-Avri Altman (1):
-      mmc: core: Add SD card quirk for broken discard
-
-Biju Das (1):
-      mmc: renesas_sdhi: Fix rounding errors
-
-Prathamesh Shete (1):
-      mmc: sdhci-tegra: Use actual clock rate for SW tuning correction
-
-Wenchao Chen (1):
-      mmc: sdhci-sprd: Fix minimum clock limit
-
- drivers/mmc/core/block.c             |  6 +++++-
- drivers/mmc/core/card.h              |  6 ++++++
- drivers/mmc/core/quirks.h            |  6 ++++++
- drivers/mmc/host/renesas_sdhi_core.c | 21 ++++++++++++++++++---
- drivers/mmc/host/sdhci-sprd.c        |  2 +-
- drivers/mmc/host/sdhci-tegra.c       |  2 +-
- include/linux/mmc/card.h             |  1 +
- 7 files changed, 38 insertions(+), 6 deletions(-)
+> ---
+>  kernel/rcu/tree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 96d678c9cfb6..282002e62cf3 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2436,7 +2436,7 @@ void rcu_force_quiescent_state(void)
+>  	struct rcu_node *rnp_old = NULL;
+>  
+>  	/* Funnel through hierarchy to reduce memory contention. */
+> -	rnp = __this_cpu_read(rcu_data.mynode);
+> +	rnp = raw_cpu_read(rcu_data.mynode);
+>  	for (; rnp != NULL; rnp = rnp->parent) {
+>  		ret = (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) ||
+>  		       !raw_spin_trylock(&rnp->fqslock);
+> -- 
+> 2.25.1
+> 
