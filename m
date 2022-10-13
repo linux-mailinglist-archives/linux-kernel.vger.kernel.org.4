@@ -2,56 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6895FD726
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7989A5FD729
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiJMJgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S229563AbiJMJhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiJMJgw (ORCPT
+        with ESMTP id S229454AbiJMJhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:36:52 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0412E9F8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:36:50 -0700 (PDT)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id CE7933F757;
-        Thu, 13 Oct 2022 11:36:47 +0200 (CEST)
-Date:   Thu, 13 Oct 2022 11:36:46 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     phone-devel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        linux-arm-msm@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        dri-devel@lists.freedesktop.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Daniel Vetter <daniel@ffwll.ch>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Freedreno] [PATCH v3 06/10] drm/msm/dsi: Migrate to
- drm_dsc_compute_rc_parameters()
-Message-ID: <20221013093646.c65mbjc6oekd7gha@SoMainline.org>
-References: <20221009184824.457416-1-marijn.suijten@somainline.org>
- <20221009185058.460688-1-marijn.suijten@somainline.org>
- <5c178d7e-5022-f5e5-791d-d3800114b42b@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c178d7e-5022-f5e5-791d-d3800114b42b@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Thu, 13 Oct 2022 05:37:12 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348841217F9;
+        Thu, 13 Oct 2022 02:37:11 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0685F320070D;
+        Thu, 13 Oct 2022 05:37:09 -0400 (EDT)
+Received: from imap49 ([10.202.2.99])
+  by compute5.internal (MEProxy); Thu, 13 Oct 2022 05:37:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665653829; x=1665740229; bh=94gmUViEmx
+        ZNAoGT1K6i8LMnLlUOVqZvX3qw2bZpGzY=; b=496j8BpNYVYjDufuizPiYKuK3u
+        AFk7ktnw6wQnoDLEKjDkcNGmuWlWcDxewSLhGSSZLDFk8NErcPItc5YCF7qB0FyE
+        tTRKyUDJcBK7Pg9aCrAH46wsvFSKpTXa8Qjv3C6B7m2IwaXSHkCEWSyN0ind1kn6
+        JB+LmF04WTczVcPEv+RpANhPLC48EMp10n9isEkyTJDukuDLSV02MSFQiUOS1j3Q
+        zn/hUIb87RCiLyZA0pzZmjKqO9wA2QWMiM+ChflG0DXBcTE4DuLzByHoZTjJrBgq
+        t9lwjeV5+urXcw4o6tDCIQHxYGgWcmwUov29VuddB8AsJ/M7DqesqiyqmD8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665653829; x=1665740229; bh=94gmUViEmxZNAoGT1K6i8LMnLlUO
+        VqZvX3qw2bZpGzY=; b=dbMuSmN402f2sHIAl0/VYJcMHc5fvNrMERwwxLxZdVpt
+        wKPpp8t3x3pLpgae4oGgfs6XPtOcnw7KZAZFCeDAAL/65tzbTQDZLiiOPDZTSvKr
+        Av+icqEeRXzzNfAmQpZtu9WzCeggc3BQvRGWcRtIcPBWTPgHWJd5nH7ehdoaWs06
+        XhKZumqXSQaSeabp7JWpCCkuxnW8tzwk8Lo+WjWGa+kmD7cXU4+yyE8bmh1J2gQW
+        M0GbdXXnlRqPcRHb2Q3EZ7D8YhNtClTn+KPx4KCnYDCv+L8r/qFtA0TfPLyV5UxG
+        QT54CpUEmR7BYRqMxTGh5z6Z9WbTb9fQxBoTS41+Pg==
+X-ME-Sender: <xms:RdxHY18eLI9tsLljB4YXHWHV2-KVmfVFJfk2irG2m35y9xbh6jdxNw>
+    <xme:RdxHY5tknEKBXzDZkmkCO2GArUg0MpeDvL4jf8eUQkESjjHlVe-BGmVq3ALGOOb4A
+    PTCinl_pvN8KvBs6w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfho
+    rhgvnhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnh
+    epffetgeffgfffffeuudeihfffueffgfelheegtdelleeggfffgfevfeekfedtffelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohhssheslh
+    hmsgdrihho
+X-ME-Proxy: <xmx:RdxHYzBwPv8ro9NwVIwnOwJaDY0-v1jvaNn2arbixoo8d5PB-EjfoA>
+    <xmx:RdxHY5dQhBcvsnXhi9QqvDqGwmrXVcOJtk-hYps_4UoXiqgBeseQ9Q>
+    <xmx:RdxHY6O-NV3cmEmc-WF3O1lc1BCjFiBP-_EZJdlQLPCfqj1XSV-p9w>
+    <xmx:RdxHY3ronHjIDFTt22ku2L4JA5rwtoF-miW8kadUIGpeQVcAAy-lTg>
+Feedback-ID: icd3146c6:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4EA7E15A0087; Thu, 13 Oct 2022 05:37:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <bc69e8a3-d474-451f-853e-1c936f776ef9@app.fastmail.com>
+In-Reply-To: <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com>
+References: <20220715115559.139691-1-shaozhengchao@huawei.com>
+ <20220914111936.19881-1-oss@lmb.io>
+ <CAKH8qBujKnFh8_g+npxHpo7RGFshus3N0iysmVBohTtG1X2yow@mail.gmail.com>
+ <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com>
+ <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
+ <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com>
+Date:   Thu, 13 Oct 2022 10:36:49 +0100
+From:   "Lorenz Bauer" <oss@lmb.io>
+To:     shaozhengchao <shaozhengchao@huawei.com>,
+        "Stanislav Fomichev" <sdf@google.com>
+Cc:     "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuehaibing@huawei.com
+Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,59 +89,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-12 16:03:06, Abhinav Kumar wrote:
-> 
-> 
-> On 10/9/2022 11:50 AM, Marijn Suijten wrote:
-> > As per the FIXME this code is entirely duplicate with what is already
-> > provided inside drm_dsc_compute_rc_parameters(), and it is yet unknown
-> > why this comment was put in place instead of resolved from the get-go.
-> > Not only does it save on duplication, it would have also spared certain
-> > issues.
-> > 
-> > For example, this code from downstream assumed dsc->bits_per_pixel to
-> > contain an integer value, whereas the upstream drm_dsc_config struct has
-> > it with 4 fractional bits.  drm_dsc_compute_rc_parameters() already
-> > accounts for this feat, and the sole remaining use of
-> > dsc->bits_per_pixel inside dsi_populate_dsc_params() will be addressed
-> > in a separate patch.
-> > 
-> 
-> This is a nice cleanup! Thanks for doing this. I would actually like to 
-> move towards the drm_dsc_compute_rc_parameters() API.
-> 
-> But I would like to hold back this change till Vinod clarifies because 
-> Vinod had mentioned that with drm_dsc_compute_rc_parameters() he was 
-> seeing a mismatch in the computation of two values.
-> 
-> slice_bpg_offset and the final_offset.
+On Wed, 21 Sep 2022, at 09:48, shaozhengchao wrote:
+> Hi Lorenz
+> 	Sorry. But how does the rejection of the 0 length affect the
+> test case? Is the return value abnormal, send packet failure or some
+> others?
 
-Unsurprisingly so because final_offset, and slice_bpg_offset through
-initial_offset depend directly on bits_per_pixel.  The main takeaway of
-this series is that Vinod was interpreting this field as integer instead
-of containing 4 fractional bits.  If he updates his the panel driver [1]
-to set bits_per_pixel = 8 << 4 instead of just 8 to account for this,
-the values should check out once again.
+Hi Zhengchao,
 
-[1]: https://git.linaro.org/people/vinod.koul/kernel.git/commit/?h=topic/pixel3_5.18-rc1&id=1d7d98ad564f1ec69e7525e07418918d90f247a1
+Did you get around to submitting another fix for this?
 
-Once Vinod (or someone else in the posession of a Pixel 3) confirms
-this, I can respin this series and more explicitly explain why the FIXME
-was put in place, instead of being resolved outright?
-
-- Marijn
-
-> 
-> The difference between the upstream drm_dsc_compute_rc_parameters() and 
-> dsi_populate_dsc_params() causing this was not clear to me from his 
-> explanation earlier.
-> 
-> So this was left as a to-do item.
-> 
-> I would like this to be re-tested on pixel3 and check if this works for 
-> vinod. If not, i think its the right time to debug why and not delay 
-> this more.
-> 
-> Thanks
-> 
-> Abhinav
+Best
+Lorenz
