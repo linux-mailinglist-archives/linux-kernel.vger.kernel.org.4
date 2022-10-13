@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513B75FDBCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0609E5FDBC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJMN7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S229746AbiJMN7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiJMN6i (ORCPT
+        with ESMTP id S229638AbiJMN6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:58:38 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B398FE09B5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:57:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso1494689wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:57:59 -0700 (PDT)
+        Thu, 13 Oct 2022 09:58:34 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F2082D18;
+        Thu, 13 Oct 2022 06:57:54 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id l6so1611280pgu.7;
+        Thu, 13 Oct 2022 06:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OuLUBYXAOcE8pcq9/e9z3dyHvBPYPaNaSxybWb4IeQ=;
-        b=iJPtJicN43I7vYtiBLEK061Z6o6nwoCYq95m9GtczXMd7MAZcAFqIwsQwmWIP2Om8h
-         /k/wPtyoqztOS4XTz5bylrSJhmBEaWDkv9GRW2h0x2iiOpcbWozDnFkhJ2B6K1UbPIRP
-         70yqwfG1Hl1LT6j76lVgmop9o+MO5IpUxW8CYGq07zLXfMhXxl5G2zCcqE3YKrZK/jJJ
-         Ln0DSURFTkBeV/v9jX19Ol2tJzl9T9VMk90FXtr6aJOCY8UbtylOQVDkjosFGsBMd6Or
-         WOVMfySpraUzGk3NDnmVVBA7Yvji7SGqmEpQUmyW+23u/9VwxuGMgLYvSUOvhHLwOpUe
-         qa+w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sGCbtoZq8xW4BBmJD2BEfn6t+q0YI6YvtbXTTyy1Hmg=;
+        b=UYnj+gymmvoScgVRFsb1PbkuongBvFu8ViIlnB5PjY+maxFwN1+uRES1RT/tV4Rxjt
+         a+hVclk3CYldUXokamV8PRaEfhLNfUD0+eALszPYucB7VsNml+yJJegS+EcySTJk9n/p
+         Bg/bkxZGpENHcpVrU+Xva0O+Cn85LBCpHXsisk/bKLo3qzW55Ithj61nzdFCIS1Onr8M
+         KO6tWTd4qSTahlHWlUjpZtfr72NshYpzhL9u0X92eGPUEnIis4ejiYAMIAz1mR4/VqBT
+         fOWWFR51JMmzX1daLh0lF8NSaTlus5jZhOtcsatrEg9bgAKmDIDnrdmGBcjl7HrjryMt
+         GCww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7OuLUBYXAOcE8pcq9/e9z3dyHvBPYPaNaSxybWb4IeQ=;
-        b=WtocWYUTBSwb22elo9E4InZHJm/Ez2ett9/vD5djnEU27M5rUHTJfWmwvk1Kmfwb/Z
-         N8Q2nUG5ZHmUBB1OuZ49We+y+usfXfP9wdAHYOCTZwLN7vlctIgmv5aGuGmneEMqTRCD
-         v/P6uurX2ClMI6mmAl6YPjHlCCsVUIMYf2bXBQKM2tAB0/V04dzgZyLvGAum1akVaa4+
-         DyVYisJNKHXbsC5X/4wqMBZLb/UBXslvhxZinJUxRmo/dNdq6yLhawrfLV8ozxMd0Cs5
-         T7oQnWlx2Z0YGqYGyD6zagY1BTz2FII3pb/hsRRyPetCHxkkFY1+m9XdoInRB9VOLDVE
-         wnYw==
-X-Gm-Message-State: ACrzQf2GEIAGkyEPOSi/vz1WGN0O+hdTUWofv3/piItMihh0T5jHRGDi
-        UkX1MnXslxlgZtfWU/MdoMPWyQ==
-X-Google-Smtp-Source: AMsMyM52nVzzf4JOMmR6/TA1aaThQ5YQ0URZybqKJb7Gldw54fnhQqj6kQv1Xev0LuxgOj2y5Zciww==
-X-Received: by 2002:a05:600c:314a:b0:3c6:d75e:1abe with SMTP id h10-20020a05600c314a00b003c6d75e1abemr5342045wmo.71.1665669199953;
-        Thu, 13 Oct 2022 06:53:19 -0700 (PDT)
-Received: from localhost.localdomain (089144213149.atnat0022.highway.a1.net. [89.144.213.149])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05600c021400b003b4c979e6bcsm4473769wmi.10.2022.10.13.06.53.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 06:53:19 -0700 (PDT)
-From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-To:     Jens Axboe <abxoe@kernel.dk>
-Cc:     Philipp Reisner <philipp.reisner@linbit.com>,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Joel Colledge <joel.colledge@linbit.com>
-Subject: [PATCH] drbd: only clone bio if we have a backing device
-Date:   Thu, 13 Oct 2022 15:53:02 +0200
-Message-Id: <20221013135302.933372-1-christoph.boehmwalder@linbit.com>
-X-Mailer: git-send-email 2.37.3
+        bh=sGCbtoZq8xW4BBmJD2BEfn6t+q0YI6YvtbXTTyy1Hmg=;
+        b=QbqoavSY3usJNYaMlWY4WsWgiGPdnNWh/sL+LMnbCYRgzzOCQECScbzSkyODS32VrL
+         CTvK+ptHmwlRriaDw/smlyQn+CSG2gUVc6Cg3KijOti3b1LIKllt+sYKshhxQ2vjlSFb
+         m/d5XFFUlE+dAQpybgK/7qa0dCuvN3MP4AHQ6MYIsTpCY+X0J7A65P7zA8F2r6BkrsB4
+         VcTB7/e0vDuY+MuaJPFzkSwQjqGuSVqxZnnZCKl7lyLskxbsQXN/XQbCwUte9Yu1ZdVa
+         Hcrf1JW2mhL19xRXQdgUKcrJckMdH+Phhe5m2kcfILNwgk91+hLzmVBxI0JU7bqEPCWf
+         8x8Q==
+X-Gm-Message-State: ACrzQf36Fv+oUdjhKxyn06qWf6B3V5OT7mQpCIXx/k9s4lBjj1+kmd34
+        64gd/p1zx3bV4wlGmKdu1GITRuK5jGU=
+X-Google-Smtp-Source: AMsMyM4LjSCoI19v1XmUSYkhwWFIO0pn2oRii409dEnca/pF5rbqf1z/h6ZWGEZoY4f6vfFJtqLWGg==
+X-Received: by 2002:a05:6a00:7ce:b0:562:b271:9854 with SMTP id n14-20020a056a0007ce00b00562b2719854mr35435951pfu.46.1665669198242;
+        Thu, 13 Oct 2022 06:53:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h9-20020a17090a054900b0020adf65cebbsm3295915pjf.8.2022.10.13.06.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 06:53:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <29536273-4cd5-5530-083a-c8b8e42e1eb1@roeck-us.net>
+Date:   Thu, 13 Oct 2022 06:53:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drivers: watchdog: exar_wdt.c fix use after free
+Content-Language: en-US
+To:     Manank Patel <pmanank200502@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221013095439.1425108-1-pmanank200502@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221013095439.1425108-1-pmanank200502@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c347a787e34cb (drbd: set ->bi_bdev in drbd_req_new) moved a
-bio_set_dev call (which has since been removed) to "earlier", from
-drbd_request_prepare to drbd_req_new.
+On 10/13/22 02:54, Manank Patel wrote:
+> fix use after free by storing the result of PTR_ERR(n->pdev)
+> to a local variable before returning.
+> 
+> Signed-off-by: Manank Patel <pmanank200502@gmail.com>
 
-The problem is that this accesses device->ldev->backing_bdev, which is
-not NULL-checked at this point. When we don't have an ldev (i.e. when
-the DRBD device is diskless), this leads to a null pointer deref.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-So, only allocate the private_bio if we actually have a disk. This is
-also a small optimization, since we don't clone the bio to only to
-immediately free it again in the diskless case.
-
-Fixes: c347a787e34cb ("drbd: set ->bi_bdev in drbd_req_new")
-Co-developed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-Co-developed-by: Joel Colledge <joel.colledge@linbit.com>
-Signed-off-by: Joel Colledge <joel.colledge@linbit.com>
----
- drivers/block/drbd/drbd_req.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
-index 8f7f144e54f3..5b9e025c2bc5 100644
---- a/drivers/block/drbd/drbd_req.c
-+++ b/drivers/block/drbd/drbd_req.c
-@@ -30,11 +30,6 @@ static struct drbd_request *drbd_req_new(struct drbd_device *device, struct bio
- 		return NULL;
- 	memset(req, 0, sizeof(*req));
- 
--	req->private_bio = bio_alloc_clone(device->ldev->backing_bdev, bio_src,
--					   GFP_NOIO, &drbd_io_bio_set);
--	req->private_bio->bi_private = req;
--	req->private_bio->bi_end_io = drbd_request_endio;
--
- 	req->rq_state = (bio_data_dir(bio_src) == WRITE ? RQ_WRITE : 0)
- 		      | (bio_op(bio_src) == REQ_OP_WRITE_ZEROES ? RQ_ZEROES : 0)
- 		      | (bio_op(bio_src) == REQ_OP_DISCARD ? RQ_UNMAP : 0);
-@@ -1219,9 +1214,11 @@ drbd_request_prepare(struct drbd_device *device, struct bio *bio)
- 	/* Update disk stats */
- 	req->start_jif = bio_start_io_acct(req->master_bio);
- 
--	if (!get_ldev(device)) {
--		bio_put(req->private_bio);
--		req->private_bio = NULL;
-+	if (get_ldev(device)) {
-+		req->private_bio = bio_alloc_clone(device->ldev->backing_bdev,
-+						   bio, GFP_NOIO, &drbd_io_bio_set);
-+		req->private_bio->bi_private = req;
-+		req->private_bio->bi_end_io = drbd_request_endio;
- 	}
- 
- 	/* process discards always from our submitter thread */
--- 
-2.37.3
+> ---
+>   drivers/watchdog/exar_wdt.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/exar_wdt.c b/drivers/watchdog/exar_wdt.c
+> index 35058d8b21bc..7c61ff343271 100644
+> --- a/drivers/watchdog/exar_wdt.c
+> +++ b/drivers/watchdog/exar_wdt.c
+> @@ -355,8 +355,10 @@ static int __init exar_wdt_register(struct wdt_priv *priv, const int idx)
+>   						    &priv->wdt_res, 1,
+>   						    priv, sizeof(*priv));
+>   	if (IS_ERR(n->pdev)) {
+> +		int err = PTR_ERR(n->pdev);
+> +
+>   		kfree(n);
+> -		return PTR_ERR(n->pdev);
+> +		return err;
+>   	}
+>   
+>   	list_add_tail(&n->list, &pdev_list);
 
