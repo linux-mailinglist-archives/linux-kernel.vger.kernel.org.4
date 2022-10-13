@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CAB5FD763
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771815FD765
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiJMJ5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S229640AbiJMJ5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJMJ5H (ORCPT
+        with ESMTP id S229605AbiJMJ5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:57:07 -0400
+        Thu, 13 Oct 2022 05:57:08 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCB111879C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:57:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5683A188
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:57:07 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id DC8775C007F;
-        Thu, 13 Oct 2022 05:57:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 13 Oct 2022 05:57:04 -0400
+        by mailout.nyi.internal (Postfix) with ESMTP id 9130D5C0153;
+        Thu, 13 Oct 2022 05:57:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 13 Oct 2022 05:57:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1665655024; x=1665741424; bh=ElrFCOQYz9
-        811QjA+EhljWQJuhopMm0PAtIt4Y0PiLk=; b=iH2vj+1AVMLQNpZSN3QgFdI8in
-        C40uzS6P9OGiTyC9cMNYtDhbpHHqe8bv9mhp4/MLs5+efc2saoFLxfDDGybR8mDI
-        nu6hReuNGs1ZUS3GRpzt1iwOMWNVlISaxcMA0XzmmKmb0iqbhq+MzGC244ZWm/VQ
-        h6PdsqJEuoNGI6O3Ix2aHcD+caqUITm/JTj4TREAR02wriG2RctIHH8MrA9LUuLQ
-        kFQRd5Y6Xs8MzSiLVBdXS+QLjMMU8trB3WeQNDPwV/wsY/dCD5XjsbGF1o3zBWlT
-        Zv9426I+pm60L9woeIgpCFIQL4nIgzk0lOGIRaXZKR5Rm/k/YEV2l9ByyK3g==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665655026; x=
+        1665741426; bh=62GXbMiFTt9uaw64RKnyb4grN73sPghENIMkyLwxD+g=; b=F
+        wtIX81xMp6WHCqpoNNFqN/eMHR3eggHU/XoJWPo/HdG8a90TbH5Z+oaAdOZ45Qpe
+        yoX7sjThT/XrAHYJVPHWb2BCXQ9gn+8VXyInPGlQ819wxP7DrZh4FB4GuDP3n5FE
+        mUhvHhccgwYCq+Mklas9g0750rMvMRC+ZdHbqskEGE3nw9yLbVQPO5kuaVp3slJo
+        fEjaJPfVGVBR5vIwrbpPjsbA0E2K54bUY+mb6d6zeoNIMmITMsjD3gupjtopTkcU
+        2IRqe7PKcJBByBRfiBRRA4i1JvtOCsXTB0Iojwt5bl6xyU1XifTcrz2uiW9HQbQZ
+        4mlzPpZhy6wVqFqX708NA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1665655024; x=1665741424; bh=ElrFCOQYz9811
-        QjA+EhljWQJuhopMm0PAtIt4Y0PiLk=; b=Y4teWWMceoV4F1I7ZuUd+/WDAP/4V
-        kARrTUAl0vvYdaNnkfp0DXHbouVSO9pf8AQTP/oYQwrFpIZJEeS3VmyoxGy8tnD7
-        Q9w4bu4otB7Hbtsj7Dyr0baFn+dXlTnsrXhdusg21qoVnHXzyVMOQlzCmsahIQDE
-        rHX351Qg/ieyfVvLETq0gNLPYBO+Zv0GpgMoSoSU6EQgu/wKPp3aabDLp8RNmXHM
-        XQ7qnMoKbIY6PJ5h2QCRQx/1O/XQlz96jrCNDEiWOyph7ZHp202fof5Xfxw8wi+V
-        z5aV2rdu26mv53rH1NvFDVZhooSKCBovYgAXNT7LQy3LGtYFgdmCln7MA==
-X-ME-Sender: <xms:8OBHYxg_CHC8TNkEsY_PK2T1_5OITwwNcQPk-UpeuzsroTeOgoN7qQ>
-    <xme:8OBHY2CJSF4ZGCRLp7sdFb7ly0l-uXyBE47O1KycAi-ez_hMwwlxADCcJvkTMT8eq
-    rwqwXS1wPAZ7W8bRK4>
-X-ME-Received: <xmr:8OBHYxEWLyx55AQX6wCrDiYDtnVYKHl-q-NRzRGc1JZZp6tweDc8yCPwsdfz>
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665655026; x=
+        1665741426; bh=62GXbMiFTt9uaw64RKnyb4grN73sPghENIMkyLwxD+g=; b=k
+        ae4Wv4keAAVLuHfUSrV+HO8sMO5VVAnpbdMitqNbgM6OJSXWbxCaxGFEWp59RHhu
+        mNCfrt9zAqYGpU+mQfAQqxwJT91lNJ8qx29/ero2kwxWwQ05bVb56/1IFTdEMgsv
+        Ye5JqubX4+MjF8pg6f/mBdpWzCo8UnXEZOx+otoic7Qs7NG+ap5pCymy0W1bq8YY
+        nxseS2KFDrpMY3LEJN3Z+coIA/QsBLHvDv2lYrEHFqvV/+k6Su/FGHzLLsukNT2q
+        8rG1SNOnYG3fDaDh08DrnZDDTkjmLqT//4iVAL6Te3CSWaAj3Aq39RPkjtQDQdKF
+        3Nc05Lx9+ZwGFvoYqa9vA==
+X-ME-Sender: <xms:8uBHY-rqxwHvqaJmfObl0-pryxJoQIW9Nfys7eNglif2ypg7R4dRkQ>
+    <xme:8uBHY8pd2yL69iRqA5qFclvoxtln59Q0R-NazvbPg4Caiqm92JXe1Y_Ie1h8ABWHn
+    TjYfIV7ojjHlf9-kVU>
+X-ME-Received: <xmr:8uBHYzPDQoeKgRzWCFhiW7QznHa_IEqEVlSr8DErhh7dG7XM4Tx9wfM5U4mi>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgvdefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepvdehfeejtefhgeegudegveejieetfeeugeehveffteejkedufeeltedutdeu
-    geehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:8OBHY2QXb3jnZ8y1g6Bj-zDF66BYHvMb96Jc_eGqCWk6M_-rlndj4Q>
-    <xmx:8OBHY-yRxJp3u_KobENmMx9Fo3cOqcZ90y06SnHOZ4BuqyozeKEWiw>
-    <xmx:8OBHY87FQi_YXKz5g5C5lKPU1fmFqsF9qV6mleJoVl9RwbVPF-sykA>
-    <xmx:8OBHYw7obaVWRX8T79IH2OidkN3EFF_oBKqgoi3PuJpl79ueLQ71kw>
+    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
+    jeeltdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:8uBHY95atASrAzPkXLqDpOPriyRoqxaYbB0A7cTmtz4pe9a0PV33sQ>
+    <xmx:8uBHY97oWY8ZDqJub2JHX9eLyfMTIIdUnS80WSEtBmtyBr5A_wJAVA>
+    <xmx:8uBHY9g2DoLoDHc0fQ-aXTUS1xpGsEzqulIhpJ50noOAyEw5iKogLg>
+    <xmx:8uBHY5ivfzrD2TSKKnwqnmWt5o4GIjXWGZLIf4XqjnXVZKGnjPUbDQ>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Oct 2022 05:57:03 -0400 (EDT)
-Subject: [PATCH 0/7] drm/vc4: dpi: Various improvements
+ 13 Oct 2022 05:57:06 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Thu, 13 Oct 2022 11:56:45 +0200
+Subject: [PATCH 1/7] media: uapi: add MEDIA_BUS_FMT_RGB565_1X24_CPADHI
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIANzgR2MC/w3LQQqEMAxA0atI1gZsSxG9TW3DGNAoiboR7z5Z/MVb/BeMlMlg7l5Qetj4EEfoO6
- hrkR8hNzfEIcYwhIR6MjaP91OPh3aSy7CmNuacU6hpAl+XYoSLFqmrz3Jv2/f9AQtg5JhrAAAA
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Thu, 13 Oct 2022 11:56:44 +0200
-Message-Id: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
+Message-Id: <20221013-rpi-dpi-improvements-v1-1-8a7a96949cb0@cerno.tech>
+References: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
+In-Reply-To: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
 To:     Maxime Ripard <mripard@kernel.org>, Eric Anholt <eric@anholt.net>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
@@ -82,11 +84,11 @@ Cc:     dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1493; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=mBzc73alVw2h+DQ2TtBLxfsGXPDhw2QfH578ZOwcUoQ=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMnuD9666/w6fjWoe4066wn7iN2893YEhfEH/smT27zvX0Ni
- z3fhjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAExkiiAjw4rrpROdRQ8IN9770r8l/G
- 7pA+UFPz/MKtQxfHnOZMsBcx1Ghmcrv2bXxbmkX3y32Svmfw3fnjOcvfze6lvPbPJfeNt8GQMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1172; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=AXDxrrKOwTJMNRx7phkeG0zUY8vfY+S2ctdZLJRv9aM=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMnuD95O5Xs+oWVNfcLMGSeXvZio5TD5woXsLOVlq2+3Ltvs
+ 3H4uoaOUhUGMi0FWTJElRth8SdypWa872fjmwcxhZQIZwsDFKQATCdvHyLBx8TqxdQ9W24d8ZGz87H
+ ryjP69delOy+/91b/mLjbb8l8Ew/+sHZ3tByRLN3SyvKw8yzDhHrvhvh9WnvtuzlCty/+nLcAMAA==
 X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -99,49 +101,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Those patches have been in the downstream RaspberryPi tree for a while and help
-to support more DPI displays.
+Add the MEDIA_BUS_FMT_RGB565_1X24_CPADHI format used by the Geekworm
+MZP280 panel for the Raspberry Pi.
 
-Let me know what you think,
-Maxime
-
-To: Emma Anholt <emma@anholt.net>
-To: Maxime Ripard <mripard@kernel.org>
-To: David Airlie <airlied@linux.ie>
-To: Daniel Vetter <daniel@ffwll.ch>
-To: Eric Anholt <eric@anholt.net>
-To: Rob Herring <robh@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: Chris Morgan <macromorgan@hotmail.com>
-Cc: Joerg Quinten <aBUGSworstnightmare@gmail.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-
 ---
-Chris Morgan (2):
-      media: uapi: add MEDIA_BUS_FMT_RGB565_1X24_CPADHI
-      drm/vc4: dpi: Support RGB565 format
+ include/uapi/linux/media-bus-format.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Dave Stevenson (2):
-      drm/vc4: dpi: Change the default DPI format to being 18bpp, not 24.
-      drm/vc4: dpi: Fix format mapping for RGB565
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index ec3323dbb927..b0a945eb7040 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -34,13 +34,14 @@
+ 
+ #define MEDIA_BUS_FMT_FIXED			0x0001
+ 
+-/* RGB - next is	0x1022 */
++/* RGB - next is	0x1023 */
+ #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+ #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+ #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+ #define MEDIA_BUS_FMT_RGB555_2X8_PADHI_BE	0x1003
+ #define MEDIA_BUS_FMT_RGB555_2X8_PADHI_LE	0x1004
+ #define MEDIA_BUS_FMT_RGB565_1X16		0x1017
++#define MEDIA_BUS_FMT_RGB565_1X24_CPADHI	0x1022
+ #define MEDIA_BUS_FMT_BGR565_2X8_BE		0x1005
+ #define MEDIA_BUS_FMT_BGR565_2X8_LE		0x1006
+ #define MEDIA_BUS_FMT_RGB565_2X8_BE		0x1007
 
-Joerg Quinten (3):
-      media: uapi: add MEDIA_BUS_FMT_BGR666_1X18
-      media: uapi: add MEDIA_BUS_FMT_BGR666_1X24_CPADHI
-      drm/vc4: dpi: Support BGR666 formats
-
- drivers/gpu/drm/vc4/vc4_dpi.c         | 16 +++++++++++++---
- include/uapi/linux/media-bus-format.h |  5 ++++-
- 2 files changed, 17 insertions(+), 4 deletions(-)
----
-base-commit: c9b48b91e2fbb74fb981aa616a6ef3c78194077f
-change-id: 20221013-rpi-dpi-improvements-c3d755531c39
-
-Best regards,
 -- 
-Maxime Ripard <maxime@cerno.tech>
+b4 0.11.0-dev-7da52
