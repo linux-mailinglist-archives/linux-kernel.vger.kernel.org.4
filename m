@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587BE5FE287
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD555FE28D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 21:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJMTNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 15:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S229576AbiJMTRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 15:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiJMTMw (ORCPT
+        with ESMTP id S229437AbiJMTRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 15:12:52 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1F5DCADA;
-        Thu, 13 Oct 2022 12:12:51 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1324e7a1284so3415548fac.10;
-        Thu, 13 Oct 2022 12:12:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NvmLPN93NfeChb0w/5z2OoxfJl3mK9CvpEnFPiEEs9U=;
-        b=GF9VxDVZ+PiFMI5at6MVKntBr4Xr7ICReWIATw8ORB0fV35X7FGmg/myHQEIbA8zOb
-         aRCs4fxyHfMxGnkahdDl7RjY7yisRBw0voCfOj3uvPZ055KLj02n/CQp/dQMff8QuFy0
-         x3mW3h3XRr3epXh1I1dV/Na9a9lNYkWYpZCs5nl1BFD3KjMNYOzwxSsgV2rnLRisS8wn
-         YeVoc7qMAMqzjlKZs8nv/jzgfdpaeAI0/v1xpohvgjylP0uXmPntO8dVsUjTlfBNiicR
-         ChKMwH+u+yPUtl6Oxe4fqIR3YjFiZVy/d0/kYzrQ9SvA9+X8dZb3UiRBHHZ9rSI86gFK
-         /IaQ==
-X-Gm-Message-State: ACrzQf1v3W6JxVE0pDuxVK8JgV077AFuANlO0AbiIZbEmtSSX1jWqONH
-        m+VTSoF5QmqTvucriLGdqw==
-X-Google-Smtp-Source: AMsMyM5/4v34VXqkJgTLfj8HVFqk28z3MMw69mGHEpX6fWU990QrSM4bLDCozBV/m0BU3AHt9fR4IQ==
-X-Received: by 2002:a05:6870:608e:b0:12b:c0de:bc9d with SMTP id t14-20020a056870608e00b0012bc0debc9dmr731014oae.52.1665688370538;
-        Thu, 13 Oct 2022 12:12:50 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x3-20020a4ae783000000b004807de5c302sm107810oov.17.2022.10.13.12.12.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 12:12:49 -0700 (PDT)
-Received: (nullmailer pid 92150 invoked by uid 1000);
-        Thu, 13 Oct 2022 19:12:49 -0000
-Date:   Thu, 13 Oct 2022 14:12:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dominic Rath <dominic.rath@ibv-augsburg.de>
-Cc:     krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
-        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
-        vigneshr@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Alexander Bahle <bahle@ibv-augsburg.de>,
-        Dominic Rath <rath@ibv-augsburg.de>
-Subject: Re: [PATCH 1/3] dt-bindings: PCI: cdns: Add PHY latency properties
-Message-ID: <20221013191249.GA38183-robh@kernel.org>
-References: <20221013062649.303184-1-dominic.rath@ibv-augsburg.de>
- <20221013062649.303184-2-dominic.rath@ibv-augsburg.de>
+        Thu, 13 Oct 2022 15:17:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03195DFE2;
+        Thu, 13 Oct 2022 12:17:22 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A375A6602368;
+        Thu, 13 Oct 2022 20:17:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665688640;
+        bh=XPnR4eQV28aEp36A+Rnv4iyGHE4Pd9SCoAN03pw58P0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nzWBMXxdFMBv5H+c45VXabjDnKOzjvHL4QRrFhyXiy5wnTgM+9+VM9ZWIWwPcWT8h
+         VrENFQyS4lyQEmPUZIPBgxi/UAQZJFLamwPugjkTDfja/5l/5U5q9RNKxcp0CiZ7Ej
+         R+Cv/uaCmYaUDtiPk7Q3FW/5QhWxSyfpCw+hrXbeCzTnOZ46FXH3mSwHSreSR4nl0O
+         KbNY653iWHEmxX6hAT1Suk/TYvW61gyRaAdCcZkaPSGw4cXp6uu/k/NZlC7xC5e7wx
+         Xr0dLwJqzHCBh4H8NkRClQOukrcs20LpwVJPuc4iWH4rz2Ft/LbD2F3vcnU6u12AWS
+         h9o6glcq2689w==
+Date:   Thu, 13 Oct 2022 15:17:15 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 4/5] arm64: dts: mediatek: asurada: Enable audio
+ support
+Message-ID: <20221013191715.5dyqunog2qj4z3fh@notapiano>
+References: <20221006212528.103790-1-nfraprado@collabora.com>
+ <20221006212528.103790-5-nfraprado@collabora.com>
+ <CAGXv+5F684=hFa42vSuN24eBTGjj7LEQNzog9U8dEQffz0JZMw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221013062649.303184-2-dominic.rath@ibv-augsburg.de>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGXv+5F684=hFa42vSuN24eBTGjj7LEQNzog9U8dEQffz0JZMw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 08:26:47AM +0200, Dominic Rath wrote:
-> From: Alexander Bahle <bahle@ibv-augsburg.de>
+On Fri, Oct 07, 2022 at 02:53:24PM +0800, Chen-Yu Tsai wrote:
+> On Fri, Oct 7, 2022 at 5:25 AM Nícolas F. R. A. Prado
+> <nfraprado@collabora.com> wrote:
+> >
+> > Enable audio support for the Asurada platform. This consists of the
+> > machine sound card, the rt1015p codec for the speakers, the rt5682 codec
+> > for the headset, and the dmic codec for the internal microphone.
+> >
+> > HDMI audio support is left out for now since the DisplayPort chip
+> > required isn't enabled yet.
+> >
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
-> Add "cdns,tx-phy-latency-ps" and "cdns,rx-phy-latency-ps" DT bindings for
-> setting the PCIe PHY latencies.
-> The properties expect a list of uint32 PHY latencies in picoseconds for
-> every supported speed starting at PCIe Gen1, e.g.:
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 > 
->   max-link-speed = <2>;
->   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
->   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
+> However the UCM you linked to in the cover letter didn't seem to work
+> correctly.
 
-These are a property of the PHY or PCI host? Sounds like PHY to me and 
-that should be in the PHY node. No reason the PCI driver can't go read 
-PHY node properties.
+Did you comment out the HDMI section in the UCM? This series doesn't add support
+for HDMI but the UCM already configures it.
 
-If PTM is a standard PCIe thing, then I don't think these should be 
-Cadence specific. IOW, drop 'cdns'. 
+I sent the UCM with HDMI support since I have it working locally and was hoping
+that the HDMI support would be merged shortly on the kernel side, but on second
+thought it makes more sense to have a working though incomplete UCM merged for
+now and add the HDMI support later when it's ready on the kernel side, so I'll
+update the UCM to go this route.
 
-Rob
+Thanks,
+Nícolas
