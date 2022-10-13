@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152C25FDEA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788DD5FDEB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiJMRES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
+        id S229695AbiJMRKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJMREP (ORCPT
+        with ESMTP id S229436AbiJMRKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:04:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D1EF53CC
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:04:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 704EB618C8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 17:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163F6C433D6;
-        Thu, 13 Oct 2022 17:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665680653;
-        bh=zqOuGPwa/tbxCln5Vk/B7tJrtXrhT4FfMEgYWQ0zc2M=;
+        Thu, 13 Oct 2022 13:10:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDD71900E;
+        Thu, 13 Oct 2022 10:10:42 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.97.193]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N7zJl-1pElmK1yvz-014zSo; Thu, 13 Oct 2022 19:07:47 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id B53E93C186; Thu, 13 Oct 2022 19:07:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1665680865; bh=nYzni+L9VyrG5x0Rm0GekVqt+5sAuaP0Uw0wWRtznbs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kxkBFjZ9yx1EkrjGwoOmLrOJbSez+G02Qx4igiM6FEScURddkjIotAnbByplsRJ+m
-         NIPVRgSQM9v3QhHMR6t3ceR9vEznkv4i8JLgPgBTDv1mz0/RzJHUy7PkYeG/ncEOQ8
-         3Jhx0704ENuzSUevRD9rM7TDNjU8JOCeLSzreGdzdN5vmiizVdBHTkKr66SwqiIzBT
-         B8nxctR2iXhO8YmDtFTA4ExfXPwdzdc0kMQM89ykZwlTtVFNRprUoh2/+s3TEf6iZg
-         kBRFWV8wJPoq16RnHWGpt2sIP7sujrKjZNxvxl3fdSvvlh6lc8s01bSTTJsIaCd1Qm
-         eWKTrmpCDFEtw==
-Date:   Thu, 13 Oct 2022 10:04:11 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Tom Rix <trix@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Gary Guo <gary@garyguo.net>,
-        Craig Topper <craig.topper@sifive.com>,
-        Philip Reames <listmail@philipreames.com>, jh@jhauser.us
-Subject: Re: [PATCH] ARM: NWFPE: avoid compiler-generated __aeabi_uldivmod
-Message-ID: <Y0hFCzVck/zBFwiX@dev-arch.thelio-3990X>
-References: <CAKwvOdnQ-tWa0oY0CKAwJD5WQDgVBvxDtf6=E3hS8Ytz5J1OKg@mail.gmail.com>
- <20221010225342.3903590-1-ndesaulniers@google.com>
+        b=YybbEip1ziptyerFZW5x4mHETsrpJ3v3H7/cNimPA9plNumzlqdDT+4GgSMkIrxrI
+         YiSjrA7SbDK6Co+Ar4RZP8WqwKv9LSa6jpUtfcvlB/KnUGlPC8UMg7XYEGNLrvOo7W
+         mFbducFtcLs8gz7GPbuFq9KttC/1RQYe6LLySJGg=
+Date:   Thu, 13 Oct 2022 19:07:45 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+Message-ID: <Y0hF4XfsgKxevNzj@fjasle.eu>
+References: <20221012233500.156764-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221010225342.3903590-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221012233500.156764-1-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:nNax0N1B61G4QZH1bsIn90CO6far/9fS9B2aw4JVF3yySGv09F8
+ htH/J6uXUBR/KxIOEg++8HQ/B7UxLWVhLs/LtTXBEUpNIj413gwcD6jauODM82IybtVrC8a
+ B6+D6kxAVA6xOlngSyPWaL/9YeChjJm7xZ13aeoANMDFqRrs6mQR7hKOX6+7mnebE1Q1RwA
+ w1s5qCIrJ1+xko0c0wGFg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:62mvNxEj8YQ=:l8rqU7jgDxoy/CFAQjc5Gc
+ OU8VTF5vkXhHKJQ5iXYvU1F80n7vU96GDUQ3cXHJfHCnpFzNzJoRtz18EICY+CpsghJ7qoghU
+ R46AF6zlBWqe6AXkzEo3qKApUqsdkZTJhX14Ao51hv5UPnrsjh5WXMTmi+/rcK+3wpUPXmf51
+ Ara0DAXguWqUIZyCmm5KfSdRciw01FyKeoClJxAjTDZegJL937KqQTkt3fbcWWflSkcKNS86e
+ 7bKgWDTLm5FJ8GT83pA2wZTz8+EvkpSxhm3tvrbS2NI4ITtDTCUIMMNZcmoh+1jkaBh/PYy0P
+ rmyduLA87e4f0sFwY1Z3VAspcFJb4wwCi30SoHGqqSnOun5H+yowP474wBWj6RAJpoqYla4Vw
+ +oYg3r8vi0Q10uJmTq4Y2J14fw1DaVF5JPJkUNpNESATSgiaEsyF5vMGA+PqfF6cDs0s3+9/T
+ SvJHps014cUh2OUmGlgy39CqHHkegpxLQKjWlQymbxBBRpz7o+UBShlQDIelCPECiNtiY1MiA
+ DPPnOLWgxJWc8e/Qt8JTULMhw2aSijtdxWnpKikCdaVO6goAxWQGPia4CXoDCnCki3sEflNVW
+ 1t/KAZEhQKVZ4DJX+vZZg+Q0iwnKO8fUbveQPhxtBMRLa+VtLrKLYLdC/B4l28xAuD6qZaN42
+ OZ7thCbeCa1B/MIr8UcEtVABekioyb3XNfdm5ov6q0WhLEpM7YD/ZbDo/Li1Syyt+9T0RSOU6
+ 5Urh+G+k9qpYXp+vY1ASa3csUNz3ZkaEar2J8EIquDcSoe7G4CWgwOZaZB3D6TTVq4D+HZH3o
+ hz3zoAb
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 03:53:42PM -0700, Nick Desaulniers wrote:
-> clang-15's ability to elide loops completely became more aggressive when
-> it can deduce how a variable is being updated in a loop. Counting down
-> one variable by an increment of another can be replaced by a modulo
-> operation.
+On Thu, Oct 13, 2022 at 08:35:00AM +0900, Masahiro Yamada wrote:
+> Date: Thu, 13 Oct 2022 08:35:00 +0900
+> From: Masahiro Yamada <masahiroy@kernel.org>
+> To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+>  <will@kernel.org>, linux-arm-kernel@lists.infradead.org
+> Cc: linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, Masahiro
+>  Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+>  linux-kernel@vger.kernel.org
+> Subject: [PATCH] arm64: remove special treatment for the link order of
+>  head.o
+> Message-Id: <20221012233500.156764-1-masahiroy@kernel.org>
+> X-Mailer: git-send-email 2.34.1
 > 
-> For 64b variables on 32b ARM EABI targets, this can result in the
-> compiler generating calls to __aeabi_uldivmod, which it does for a do
-> while loop in float64_rem().
+> In the previous discussion (see the Link tag), Ard pointed out that
+> arm/arm64/kernel/head.o does not need any special treatment - the only
+> piece that must appear right at the start of the binary image is the
+> image header which is emitted into .head.text.
 > 
-> For the kernel, we'd generally prefer that developers not open code 64b
-> division via binary / operators and instead use the more explicit
-> helpers from div64.h. On arm-linux-gnuabi targets, failure to do so can
-> result in linkage failures due to undefined references to
-> __aeabi_uldivmod().
+> The linker script does the right thing to do. The build system does
+> not need to manipulate the link order of head.o.
 > 
-> While developers can avoid open coding divisions on 64b variables, the
-> compiler doesn't know that the Linux kernel has a partial implementation
-> of a compiler runtime (--rtlib) to enforce this convention.
-> 
-> It's also undecidable for the compiler whether the code in question
-> would be faster to execute the loop vs elide it and do the 64b division.
-> 
-> While I actively avoid using the internal -mllvm command line flags, I
-> think we get better code than using barrier() here, which will force
-> reloads+spills in the loop for all toolchains.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1666
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-
-I built ARCH=arm allmodconfig + CONFIG_WERROR=n without this patch and
-saw the link failure then applied it and the error went away. Thanks for
-all the investigation done into fixing this! I think you put this in the
-patch tracker already but just for posterity:
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
+> Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  arch/arm/nwfpe/Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
+
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+
+>  scripts/head-object-list.txt | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/arch/arm/nwfpe/Makefile b/arch/arm/nwfpe/Makefile
-> index 303400fa2cdf..2aec85ab1e8b 100644
-> --- a/arch/arm/nwfpe/Makefile
-> +++ b/arch/arm/nwfpe/Makefile
-> @@ -11,3 +11,9 @@ nwfpe-y				+= fpa11.o fpa11_cpdo.o fpa11_cpdt.o \
->  				   entry.o
->  
->  nwfpe-$(CONFIG_FPE_NWFPE_XP)	+= extended_cpdo.o
-> +
-> +# Try really hard to avoid generating calls to __aeabi_uldivmod() from
-> +# float64_rem() due to loop elision.
-> +ifdef CONFIG_CC_IS_CLANG
-> +CFLAGS_softfloat.o	+= -mllvm -replexitval=never
-> +endif
+> diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+> index b16326a92c45..f226e45e3b7b 100644
+> --- a/scripts/head-object-list.txt
+> +++ b/scripts/head-object-list.txt
+> @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+>  arch/arc/kernel/head.o
+>  arch/arm/kernel/head-nommu.o
+>  arch/arm/kernel/head.o
+> -arch/arm64/kernel/head.o
+>  arch/csky/kernel/head.o
+>  arch/hexagon/kernel/head.o
+>  arch/ia64/kernel/head.o
 > -- 
-> 2.38.0.rc2.412.g84df46c1b4-goog
-> 
+> 2.34.1
+
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
