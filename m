@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DD45FDF77
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3395FDFC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiJMRyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S230267AbiJMR56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiJMRyJ (ORCPT
+        with ESMTP id S229968AbiJMR5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:54:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A019B15789C;
-        Thu, 13 Oct 2022 10:53:34 -0700 (PDT)
+        Thu, 13 Oct 2022 13:57:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A27636852;
+        Thu, 13 Oct 2022 10:55:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04A89B82022;
-        Thu, 13 Oct 2022 17:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BCF5C433D6;
-        Thu, 13 Oct 2022 17:53:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCEDE61929;
+        Thu, 13 Oct 2022 17:55:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B94C43146;
+        Thu, 13 Oct 2022 17:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683610;
-        bh=JaS9pWfJgg7MfTSQcs82nTtNJD73Ta9aTXlVgOCy1lo=;
+        s=korg; t=1665683746;
+        bh=M5SrNn6tCD5tcFZF4wuvpfkO48LGdOWAVq54mYIk304=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ej8ydLtDB5txaQ02C8CIW6BuniItj2L4ubeSx+0QKm1Fd/O1SFTxqJke4+RAkzAb9
-         jsE+poKjuslRyutaRunVBQGA2hUPrZp+0QvGTJVaoh6C782Gv2gWO/Fulwz3uUkJdC
-         3mAcVJoBMQ3Fwoz3AzQbS/7mGYqjicPYrSycAf6o=
+        b=jXxKt23bDA8hOLhPTkgQoP0DSPFef1/rERF+2/KUDQZEY0X7lOCUOoeRnq/D7qK3H
+         JLNsgvKy4av2+TeCkpESPrQ/i/ucN/AMD6StSNdYEsJ6WATxqUW7SAIy5Kml+inkBQ
+         1eY9mQVej4zGX8pa/NSeh0HAeRFegInzsH2ZhO7c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Theodore Tso <tytso@mit.edu>,
         Andrew Lutomirski <luto@kernel.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 27/38] random: restore O_NONBLOCK support
-Date:   Thu, 13 Oct 2022 19:52:28 +0200
-Message-Id: <20221013175145.161005886@linuxfoundation.org>
+Subject: [PATCH 5.10 35/54] random: restore O_NONBLOCK support
+Date:   Thu, 13 Oct 2022 19:52:29 +0200
+Message-Id: <20221013175148.199914089@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+References: <20221013175147.337501757@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -92,7 +92,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/char/mem.c
 +++ b/drivers/char/mem.c
-@@ -953,8 +953,8 @@ static const struct memdev {
+@@ -981,8 +981,8 @@ static const struct memdev {
  #endif
  	 [5] = { "zero", 0666, &zero_fops, 0 },
  	 [7] = { "full", 0666, &full_fops, 0 },
@@ -105,12 +105,12 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  #endif
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1294,6 +1294,11 @@ static ssize_t random_read_iter(struct k
+@@ -1299,6 +1299,11 @@ static ssize_t random_read_iter(struct k
  {
  	int ret;
  
 +	if (!crng_ready() &&
-+	    ((kiocb->ki_flags & IOCB_NOWAIT) ||
++	    ((kiocb->ki_flags & (IOCB_NOWAIT | IOCB_NOIO)) ||
 +	     (kiocb->ki_filp->f_flags & O_NONBLOCK)))
 +		return -EAGAIN;
 +
