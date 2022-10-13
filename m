@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A1F5FD884
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1853B5FD889
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJMLkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S229800AbiJMLk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJMLkH (ORCPT
+        with ESMTP id S229540AbiJMLkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:40:07 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC1F26AC1;
-        Thu, 13 Oct 2022 04:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1665661206; x=1697197206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qwBNvrTGhKx7haBmbfNDVoNRn8CE3KTouJoIXdepuVk=;
-  b=uxALg9MfiogGkx1Jk0Jk08w4QKYCn/e5Q1OqtPQO+Gi2Nao2cGrcv0CL
-   B9pm12p3d08zY1CK2rd4RAghRp4s0QaK5rbvN0hbGeGtoZbo1p2iVjsQd
-   t8BhNsRWsQeqYVZWBIxCbpJZS8ystAe9wXvtXN9jbh5dS5+HTvBjjWN9y
-   4poyG/e1XHZhXtjstj/mSMc7zIC30o1LBz67Z5yDNnGZqJs9LoJjn4Pqa
-   S4obbkeULGb+1ETyTYhJtmNmr11pndvytRROKVOnJEEy4cE6Z2fhFbpEQ
-   No4mDhkLfd+y6Q//itk78lDJMVx0e1NHMbCfdE7QLYZ/xuqxmkBWSUrVX
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="178539448"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Oct 2022 04:40:05 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 13 Oct 2022 04:40:03 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Thu, 13 Oct 2022 04:40:02 -0700
-Date:   Thu, 13 Oct 2022 12:39:39 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-CC:     Conor Dooley <conor@kernel.org>, Atish Patra <atishp@rivosinc.com>,
-        <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux@rivosinc.com>
-Subject: Re: [PATCH 4/4] Documentation: RISC-V: patch-acceptance:
- s/implementor/implementer
-Message-ID: <Y0f4+xfKls4qB1Ea@wendy>
-References: <20221013045619.18906-1-palmer@rivosinc.com>
- <20221013045619.18906-5-palmer@rivosinc.com>
+        Thu, 13 Oct 2022 07:40:53 -0400
+Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5C2B3B0E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:40:51 -0700 (PDT)
+Received: (qmail 12515 invoked from network); 13 Oct 2022 11:40:25 -0000
+Received: from p200300cf070ada0076d435fffeb7be92.dip0.t-ipconnect.de ([2003:cf:70a:da00:76d4:35ff:feb7:be92]:49034 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
+        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
+        for <fw@strlen.de>; Thu, 13 Oct 2022 13:40:25 +0200
+From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Westphal <fw@strlen.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Graf <tgraf@suug.ch>, kasan-dev@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
+Date:   Thu, 13 Oct 2022 13:40:40 +0200
+Message-ID: <11986571.xaOnivgMc4@eto.sf-tec.de>
+In-Reply-To: <20221013101635.GB11818@breakpoint.cc>
+References: <20221010230613.1076905-1-Jason@zx2c4.com> <3026360.ZldQQBzMgz@eto.sf-tec.de> <20221013101635.GB11818@breakpoint.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221013045619.18906-5-palmer@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart22512332.f9tG50R4rC"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 09:56:19PM -0700, Palmer Dabbelt wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> Implementor does appear to be a word, but it's not very common.
-> 
-> Suggested-by: Conor Dooley <conor@kernel.org>
+--nextPart22512332.f9tG50R4rC
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Rolf Eike Beer <eike-kernel@sf-tec.de>
+To: Florian Westphal <fw@strlen.de>
+Date: Thu, 13 Oct 2022 13:40:40 +0200
+Message-ID: <11986571.xaOnivgMc4@eto.sf-tec.de>
+In-Reply-To: <20221013101635.GB11818@breakpoint.cc>
+MIME-Version: 1.0
 
-The overlords would probably rather this email got the credit but
-doesn't really matter for S-b tags.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Am Donnerstag, 13. Oktober 2022, 12:16:35 CEST schrieb Florian Westphal:
+> Rolf Eike Beer <eike-kernel@sf-tec.de> wrote:
+> > Florian, can you comment and maybe fix it?
+> 
+> Can't comment, do not remember -- this was 5 years ago.
+> 
+> > Or you wanted to move the variable before the loop and keep the random
+> > state between the loops and only reseed when all '1' bits have been
+> > consumed.
+> Probably.  No clue, best to NOT change it to not block Jasons series and
+> then just simplify this and remove all the useless shifts.
 
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->  Documentation/riscv/patch-acceptance.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/riscv/patch-acceptance.rst b/Documentation/riscv/patch-acceptance.rst
-> index 9fed6b318b49..89c7d8abd4bb 100644
-> --- a/Documentation/riscv/patch-acceptance.rst
-> +++ b/Documentation/riscv/patch-acceptance.rst
-> @@ -26,7 +26,7 @@ specifications from the RISC-V foundation this means "Frozen" or
->  ECR.  (Developers may, of course, maintain their own Linux kernel trees
->  that contain code for any draft extensions that they wish.)
->  
-> -Additionally, the RISC-V specification allows implementors to create
-> +Additionally, the RISC-V specification allows implementers to create
->  their own custom extensions.  These custom extensions aren't required
->  to go through any review or ratification process by the RISC-V
->  Foundation.  To avoid the maintenance complexity and potential
-> @@ -38,5 +38,5 @@ RISC-V extensions, we'll only accept patches for extensions that either:
->    for which a timeline for availability has been made public.
->  
->  Hardware that does not meet its published timelines may have support
-> -removed.  (Implementors, may, of course, maintain their own Linux kernel
-> +removed.  (Implementers, may, of course, maintain their own Linux kernel
->  trees containing code for any custom extensions that they wish.)
-> -- 
-> 2.38.0
-> 
+Sure. Jason, just in case you are going to do a v7 this could move to u8 then.
+
+--nextPart22512332.f9tG50R4rC
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCY0f5OAAKCRBcpIk+abn8
+TncNAKCia3h4AG/9IzqybWbLcwE6uVgTqACfRr3dPUK8JMrKIqGzYOiL96isZhg=
+=zppL
+-----END PGP SIGNATURE-----
+
+--nextPart22512332.f9tG50R4rC--
+
+
+
