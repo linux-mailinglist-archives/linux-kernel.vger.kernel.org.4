@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614225FE45A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262C35FE463
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJMVpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S229772AbiJMVtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJMVpT (ORCPT
+        with ESMTP id S229526AbiJMVs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:45:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDD16A496
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:45:17 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3521c1a01b5so28483117b3.23
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:45:17 -0700 (PDT)
+        Thu, 13 Oct 2022 17:48:59 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67A116F40D
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:48:58 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso3071518pjk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:48:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OC2TRA3RaKZigj+gmSjzr1uEQcbYSV2Diu4v9YA/yVc=;
-        b=Jvauj2Q8iA9kDTzQWwJBKr0DPFzDpCVXLD9hYoQepUDDEB1Pcjr9WF6SSuCE0VhizD
-         VDPJcwpU5AwyBpUWvY0drVpP4zS6ILIfXzmj8qUTV+03IFJwb+AVAwHRDoPx6BVlJuVs
-         Sa044RS7mErdfOSGrjDUfsSgxPCxhxDA7qIEv3lTeuyZm6WT6cWlnXOzXNwhkYrWGKAd
-         R4pCjTV4Iq+Zc8ULAR8mM7W5r3xGZ1A4o2AnB6XddaaCv/bIQYc1/ul2AckiFUZrTxK3
-         s85kK+WkMfKX1SYEjBFVpk4f+KGUSDYSlO5iItD8px/jVuFIAosl+jLeqCEEmUCGXZMl
-         +q4w==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKlD2Mcc6dt1mqt7ZvNDmGn19DoM+ztOLAKStgJjo3o=;
+        b=GCCXHvCPbnzd/uh8c41H76YI1Hbdg9mDhLyz3H5wJf7sx4FYDx2h+0UmRlXplcJeeH
+         uU66ytFmEFLWqFJViQoHw4CdjjlZ5tBqEvxAtkUQJbgcuCb2n4wa82j12e+4U16FeBhT
+         ZIXpIy/cn3aPKf8ZDJBW85Cjl89rkIE5XOu4CvK1geobv3QjQfqfwxFsqZlawJgBlNYR
+         AMtBMUThNBeGV1sMt041vBZ4P6ypCOhxCwSOZuc/hvstg+vIfJySXMy/QekzfwNch+TP
+         c9PZfJOojyKtYOIJSk5phAr42A8uPD5yV2R6tBSjCDiWMk5JyrYaywgccKsvTEEwk9ID
+         uYjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OC2TRA3RaKZigj+gmSjzr1uEQcbYSV2Diu4v9YA/yVc=;
-        b=a7/0p/hl7eDjpHID7yUaiVmTVw/dhyjI/BxEHQ/DzCSXi5aT8WJOneYvxRRev300No
-         zHf3V8wrUOD3PgV2PEwnE/fEOHlorui9TjSguS4am7f+CfZOC9sWwxIlRHR2GkXMwcRY
-         FZf2mvEfanaZ1IIaQAABcO9nM+yyQfIPY8gUJ0O9M/5iI+u79vF8hnr2+a8kGAxUGvbT
-         +kX++CjLGU7sID6M0Gre8WCA3RqZhYjenxvsKNC4Rzax1QbbCs86mz5zyWTysNAzJnlg
-         OKMUjKfrbF8Qvgd6yZeawCxSRkh4MGc3oxY3LjiairFhY+5QqFDL8ud7oz6zHoeYAzkr
-         JWKw==
-X-Gm-Message-State: ACrzQf0nam0qeV4LnMWf4XQQt8N91i7gEdOv5juqqdgjUJD2CSUB+hBL
-        y+XgyWIVw1GqHpQ1+jjXXi43M7WXIhPU
-X-Google-Smtp-Source: AMsMyM4AJHKhvfkmvHItxuzNajgyI8OQNsNSRQ+SRT+HvEQTaurv0wK9KSgha+RuRm7FSJewIibC+DbXofiW
-X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a0d:c942:0:b0:337:5cf9:1c04 with SMTP id
- l63-20020a0dc942000000b003375cf91c04mr1907615ywd.39.1665697517001; Thu, 13
- Oct 2022 14:45:17 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 14:45:08 -0700
-In-Reply-To: <20221013214508.2195347-1-jiangzp@google.com>
-Mime-Version: 1.0
-References: <20221013214508.2195347-1-jiangzp@google.com>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221013144431.v1.1.I47f1918a2786b34e7649387233377c57a8bdcdac@changeid>
-Subject: [PATCH v1 1/1] Bluetooth: hci_qca: only assign wakeup with serial
- port support
-From:   Zhengping Jiang <jiangzp@google.com>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com
-Cc:     Zhengping Jiang <jiangzp@google.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dKlD2Mcc6dt1mqt7ZvNDmGn19DoM+ztOLAKStgJjo3o=;
+        b=pu+I1b0z/AVCmypSswuzocn4xtVgd9Rx0ReLIAg6XJs3GTmnNcNiI0QqaAqHct0yyo
+         DI7YESBUyd6mKbK12VRMx8b4xk6fYMjxeE7xwoWxXglNIbONt7bTGzvxgSF8Azq4zUvi
+         azE2rUyFCjurEu15yq9aOO9QrmtUWjJ7IzA8uchPVzYKD+aGA6VmqP/1cSt5wGJbuOr4
+         p2RXhw+nepF86Z/E4/59r3LWjBvvedy563vAg7XYInm8o0kndAh6d8L/D0WzWpGiwSp8
+         KGSYhknD4uXJG/tdv3AVbGNS2l5tZ3S05yMRERGQ/2wEpSXbbr/DR0akYqQ5QEZQt+8r
+         8afg==
+X-Gm-Message-State: ACrzQf3f6pseNCu4ocA+H6eH0CnPElya84iy+39YauEbdIBnBA9JM85M
+        J3XIi1Ux+CW3pjcuJqDzdyozgaCcTywlKmDy
+X-Google-Smtp-Source: AMsMyM4fPFc/1FWGHD0Yj6s/PltanesGHTpHAg8a3f8v/HyLccdRGcJ3YIncH2LaSwsgJTci5h0muA==
+X-Received: by 2002:a17:90a:a088:b0:20d:67b7:546d with SMTP id r8-20020a17090aa08800b0020d67b7546dmr2137835pjp.6.1665697737917;
+        Thu, 13 Oct 2022 14:48:57 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id 8-20020a630308000000b0043c80e53c74sm179817pgd.28.2022.10.13.14.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 14:48:57 -0700 (PDT)
+Subject: [PATCH] MAINTAINERS: git://github -> https://github.com for petkan
+Date:   Thu, 13 Oct 2022 14:46:36 -0700
+Message-Id: <20221013214636.30741-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.38.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Cc:        linux-kernel@vger.kernel.org,
+           Palmer Dabbelt <palmer@rivosinc.com>,
+           Conor Dooley <conor.dooley@microchip.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     petkan@nucleusys.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only assign hdev->wakeup if the serial port supports wakeup. Otherwise
-it will fall back to the hci_uart_wakeup or the behavior that can be
-overridden before calling the hci_uart_register_device().
+Github deprecated the git:// links about a year ago, so let's move to
+the https:// URLs instead.
 
-Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
+I've split these up by github username so folks can take them
+independently, as some of these repos have been renamed at github and
+thus need more than just a sed to fix them.
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes in v1:
-- Check serial port support before assigning wakeup callback
-
- drivers/bluetooth/hci_qca.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 8df11016fd51..dacb6f5efd29 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1765,7 +1765,8 @@ static int qca_setup(struct hci_uart *hu)
- 		qca_debugfs_init(hdev);
- 		hu->hdev->hw_error = qca_hw_error;
- 		hu->hdev->cmd_timeout = qca_cmd_timeout;
--		hu->hdev->wakeup = qca_wakeup;
-+		if (device_can_wakeup(hu->serdev->ctrl->dev.parent))
-+			hu->hdev->wakeup = qca_wakeup;
- 	} else if (ret == -ENOENT) {
- 		/* No patch/nvm-config found, run with original fw/config */
- 		set_bit(QCA_ROM_FW, &qca->flags);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4f5e5c152d3c..3705c487450b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21047,7 +21047,7 @@ L:	linux-usb@vger.kernel.org
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ W:	https://github.com/petkan/pegasus
+-T:	git git://github.com/petkan/pegasus.git
++T:	git https://github.com/petkan/pegasus.git
+ F:	drivers/net/usb/pegasus.*
+ 
+ USB PHY LAYER
+@@ -21084,7 +21084,7 @@ L:	linux-usb@vger.kernel.org
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ W:	https://github.com/petkan/rtl8150
+-T:	git git://github.com/petkan/rtl8150.git
++T:	git https://github.com/petkan/rtl8150.git
+ F:	drivers/net/usb/rtl8150.c
+ 
+ USB SERIAL SUBSYSTEM
 -- 
-2.38.0.413.g74048e4d9e-goog
+2.38.0
 
