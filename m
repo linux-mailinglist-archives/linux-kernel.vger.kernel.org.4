@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269435FE17C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5E65FE186
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiJMSk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S232051AbiJMSlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiJMSjv (ORCPT
+        with ESMTP id S231822AbiJMSlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:39:51 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524E7CBFEA;
-        Thu, 13 Oct 2022 11:37:49 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id h15so2283454qtu.2;
-        Thu, 13 Oct 2022 11:37:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CZmvxazc2sXXNdPho7QU50pFfOmoWil5WJIRMNVjEqw=;
-        b=2y7Tj4TdF4OVWkIvv1oU5YVa2okYkUNOucAgqK+mvA0PdBomdmEcfRpNNOd1xYDBKT
-         jQ++U+nXf4JJ7WDU83qFW3sxnhyEcB2/ZJP6V+P8ssymJ8sFEPZqVJgn1e3LLjle77PH
-         QXFnfvBbCajf6xbvhQtVzZ1lqtNi33H/DBwMidSw1/gH+O7wbfEbwqA4Fzt9nrG2ESaH
-         IvvEYIn0GXwRSBnAz/Yoi195eGIttaPIkH80Kntw4KeYPH17aPhAbobJGUWz/8Tyai3i
-         1LFXCDYWUHlVy/TTErZh57eE7hOh03T/PSFi9QvNza0M9kFRb/WHLUN3wW31D6QRrYee
-         I14g==
-X-Gm-Message-State: ACrzQf1ADNnko6UtqMFPhdDWrBmQC2leS0NsXBWysnbooIMzn29laa1M
-        xbtnPyGmMHRMsPRLy/1ZbFxwemPZ0zs2WPXUCnzI40pW
-X-Google-Smtp-Source: AMsMyM6N+rqJd383wNo0tTFwOWxlQOUXB+NdPnp+xo591oKu26Yb32t9/qC65lbULR/MeM3lMDHuw+Bkc7qA6i6cb8w=
-X-Received: by 2002:a05:620a:468c:b0:6ec:5c7f:8a3d with SMTP id
- bq12-20020a05620a468c00b006ec5c7f8a3dmr978896qkb.285.1665686194490; Thu, 13
- Oct 2022 11:36:34 -0700 (PDT)
+        Thu, 13 Oct 2022 14:41:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE301793A7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665686291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NG69KUQLGA9z81hwdboaz/+6KNpRRfBl8D7k454xSQo=;
+        b=GSSKu96IUa/CpDbVL/nL/oPZNF08Gsx7mDWweY0HDjmVaR09gkqtAz5GMUbJ8dCmJPQt7P
+        f8gqzHFBiQeHQ60IkWDd6Sb0Nwh8sKfYkZrIt3hF1/YitxrypAc3HKxamdJfM7xTn1K0Tt
+        DbwqwOzXbG8ndxxqUYProJnB0npVmE4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-512-42TCTuw4NJCjZjL9e3PG6g-1; Thu, 13 Oct 2022 14:38:06 -0400
+X-MC-Unique: 42TCTuw4NJCjZjL9e3PG6g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E01061C00147;
+        Thu, 13 Oct 2022 18:38:05 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A438B477F60;
+        Thu, 13 Oct 2022 18:38:04 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-toolchains@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: gcc 5 & 6 & others already out of date?
+References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+        <Y0gLyLbdOCetX5LN@sirena.org.uk> <Y0gteD0QYVlYxSZh@zx2c4.com>
+        <Y0g8HEYHZYHGdwlf@sirena.org.uk> <Y0g+wTTJmlaFVLzr@zx2c4.com>
+        <Y0hH5NelZ03yfQuU@sirena.org.uk>
+Date:   Thu, 13 Oct 2022 20:38:02 +0200
+In-Reply-To: <Y0hH5NelZ03yfQuU@sirena.org.uk> (Mark Brown's message of "Thu,
+        13 Oct 2022 18:16:20 +0100")
+Message-ID: <87o7ufwovp.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20221011122600.620690-1-bagasdotme@gmail.com>
-In-Reply-To: <20221011122600.620690-1-bagasdotme@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 13 Oct 2022 20:36:23 +0200
-Message-ID: <CAJZ5v0jCX=+XwWRwyVv+VxHQHR2buRNLH5Fw19pR4mVpzi95bQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: ACPI: Prune DSDT override documentation
- from index
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 2:26 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> Commit d206cef03c4827 ("ACPI: docs: Drop useless DSDT override documentation")
-> removes useless DSDT override documentation. However, the commit forgets
-> to prune the documentation entry from table of contents of ACPI admin
-> guide documentation, hence triggers Sphinx warning:
->
-> Documentation/admin-guide/acpi/index.rst:8: WARNING: toctree contains reference to nonexisting document 'admin-guide/acpi/dsdt-override'
->
-> Prune the entry to fix the warning.
->
-> Fixes: d206cef03c4827 ("ACPI: docs: Drop useless DSDT override documentation")
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/admin-guide/acpi/index.rst | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/Documentation/admin-guide/acpi/index.rst b/Documentation/admin-guide/acpi/index.rst
-> index 71277689ad97f4..b078fdb8f4c934 100644
-> --- a/Documentation/admin-guide/acpi/index.rst
-> +++ b/Documentation/admin-guide/acpi/index.rst
-> @@ -9,7 +9,6 @@ the Linux ACPI support.
->     :maxdepth: 1
->
->     initrd_table_override
-> -   dsdt-override
->     ssdt-overlays
->     cppc_sysfs
->     fan_performance_states
->
-> base-commit: 27bc50fc90647bbf7b734c3fc306a5e61350da53
-> --
+* Mark Brown:
 
-Applied as 6.1-rc material, thanks!
+> On Thu, Oct 13, 2022 at 10:37:21AM -0600, Jason A. Donenfeld wrote:
+>
+>> Regarding "one extreme to the other", I suspect that in spite of my
+>> arguments, which would seem to justify an extreme, the actual thing I
+>> suggested is a bit more moderate: let's support the latest 2 or 3 gccs
+>> at the time of kernel release. If we choose 3, that's roughly 3 years of
+>> gccs, right? 3 years seems like a fairly long amount of time.
+>
+> I was looking at your suggestion there - as a Debian user that feels a
+> touch enthusiastic (though practically probably not actually a problem)
+> since it's not too far off the release cadence, current Debian is at GCC
+> 10 and we're not due for another release till sometime next year which
+> will be right on the three years.
+
+Debian also has Clang 13, presumably for building Rust and Firefox.
+
+> There does also seem to be a contingent of people running enterprise
+> distros managed by an IT department or whatever who may take a while
+> to get round to pushing out new versions so for example might still
+> for example be running Ubuntu 20.04 rather than 22.04 (never mind the
+> people I know are sitting on 18.04 but that's another thing).
+
+The enterprise distributions have toolchain modules or toolsets that you
+can install, all nicely integrated.  You'd probably consider those
+versions too new. 8-/   I expect it's mostly an education issue, raising
+awareness of what's available from vendors.   (glibc versions are a
+different matter, but I don't think dropping support for historic
+versions on build hosts is on the table, so that should be relevant.)
+
+Compiler version requirements probably impact the people most who build
+their own toolchains for whatever reason.  There must be unusual targets
+where the upstream toolchain currently cannot build a booting kernel,
+for instance.  If you require newer toolchain features in generic code,
+it could bring some temporary suffering to those people: they need to
+fix their toolchain before they can contribute again to the mainline
+kernel.
+
+Thanks,
+Florian
+
