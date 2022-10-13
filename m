@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33C25FE0B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C7F5FE0AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiJMSN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S231401AbiJMSNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiJMSMe (ORCPT
+        with ESMTP id S231751AbiJMSM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:12:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3827D175784;
+        Thu, 13 Oct 2022 14:12:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384FE1757A1;
         Thu, 13 Oct 2022 11:09:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 631D7B820C1;
-        Thu, 13 Oct 2022 18:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87564C4314B;
-        Thu, 13 Oct 2022 18:02:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D2F96192A;
+        Thu, 13 Oct 2022 17:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 317D7C433D7;
+        Thu, 13 Oct 2022 17:59:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684125;
-        bh=Sp7xcLmkYsm+Np+1uTluGtZlEhRASHATTWD+iC/6Kg4=;
+        s=korg; t=1665683944;
+        bh=u3wOX1M1rrknB6ZGLhBuFpeKJ4/JbNruxTQnEpNP1yA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dgs3YniivfqcskZLkD8wOxc+U7ymu3j4bCExsREVSm9xhycB+aWZhzKkYg21fF5YP
-         6joIl0b6uXNfhDJf8RcUBh2WsnLOgniOviDIenix54WWRDhD4PaCDd11AlyOT5ZxHr
-         RLT17kf+/vRar5uNeqb7zbgEmN6GqLKi0YhvuNFI=
+        b=PdZz7uRw5uik7ZlLHGARjXQU7Zwrzx8NxUnH4rGCu8qaiqPNZn8Z6Ga9aCqVHhNP4
+         BLSznxnfCXPIyRW00N+aDeGV9aPaunp8xuB5HbFS+jy4u8RMBkzCr7wAPS0d9IIIU3
+         B84BgjEssHXys9J5qM+CQdPeMMGDqkGpp0XvrgJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guozihua <guozihua@huawei.com>,
-        Zhongguohua <zhongguohua1@huawei.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Theodore Tso <tytso@mit.edu>,
-        Andrew Lutomirski <luto@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 6.0 06/34] random: restore O_NONBLOCK support
+        stable@vger.kernel.org, stable@kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        hdthky <hdthky0@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.19 12/33] scsi: stex: Properly zero out the passthrough command structure
 Date:   Thu, 13 Oct 2022 19:52:44 +0200
-Message-Id: <20221013175146.686620479@linuxfoundation.org>
+Message-Id: <20221013175145.670977674@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-References: <20221013175146.507746257@linuxfoundation.org>
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+References: <20221013175145.236739253@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,65 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit cd4f24ae9404fd31fc461066e57889be3b68641b upstream.
+commit 6022f210461fef67e6e676fd8544ca02d1bcfa7a upstream.
 
-Prior to 5.6, when /dev/random was opened with O_NONBLOCK, it would
-return -EAGAIN if there was no entropy. When the pools were unified in
-5.6, this was lost. The post 5.6 behavior of blocking until the pool is
-initialized, and ignoring O_NONBLOCK in the process, went unnoticed,
-with no reports about the regression received for two and a half years.
-However, eventually this indeed did break somebody's userspace.
+The passthrough structure is declared off of the stack, so it needs to be
+set to zero before copied back to userspace to prevent any unintentional
+data leakage.  Switch things to be statically allocated which will fill the
+unused fields with 0 automatically.
 
-So we restore the old behavior, by returning -EAGAIN if the pool is not
-initialized. Unlike the old /dev/random, this can only occur during
-early boot, after which it never blocks again.
-
-In order to make this O_NONBLOCK behavior consistent with other
-expectations, also respect users reading with preadv2(RWF_NOWAIT) and
-similar.
-
-Fixes: 30c08efec888 ("random: make /dev/random be almost like /dev/urandom")
-Reported-by: Guozihua <guozihua@huawei.com>
-Reported-by: Zhongguohua <zhongguohua1@huawei.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Andrew Lutomirski <luto@kernel.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Link: https://lore.kernel.org/r/YxrjN3OOw2HHl9tx@kroah.com
+Cc: stable@kernel.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Reported-by: hdthky <hdthky0@gmail.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/mem.c    |    4 ++--
- drivers/char/random.c |    5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/scsi/stex.c      |   17 +++++++++--------
+ include/scsi/scsi_cmnd.h |    2 +-
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -712,8 +712,8 @@ static const struct memdev {
- #endif
- 	 [5] = { "zero", 0666, &zero_fops, FMODE_NOWAIT },
- 	 [7] = { "full", 0666, &full_fops, 0 },
--	 [8] = { "random", 0666, &random_fops, 0 },
--	 [9] = { "urandom", 0666, &urandom_fops, 0 },
-+	 [8] = { "random", 0666, &random_fops, FMODE_NOWAIT },
-+	 [9] = { "urandom", 0666, &urandom_fops, FMODE_NOWAIT },
- #ifdef CONFIG_PRINTK
- 	[11] = { "kmsg", 0644, &kmsg_fops, 0 },
- #endif
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1347,6 +1347,11 @@ static ssize_t random_read_iter(struct k
- {
- 	int ret;
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -665,16 +665,17 @@ static int stex_queuecommand_lck(struct
+ 		return 0;
+ 	case PASSTHRU_CMD:
+ 		if (cmd->cmnd[1] == PASSTHRU_GET_DRVVER) {
+-			struct st_drvver ver;
++			const struct st_drvver ver = {
++				.major = ST_VER_MAJOR,
++				.minor = ST_VER_MINOR,
++				.oem = ST_OEM,
++				.build = ST_BUILD_VER,
++				.signature[0] = PASSTHRU_SIGNATURE,
++				.console_id = host->max_id - 1,
++				.host_no = hba->host->host_no,
++			};
+ 			size_t cp_len = sizeof(ver);
  
-+	if (!crng_ready() &&
-+	    ((kiocb->ki_flags & (IOCB_NOWAIT | IOCB_NOIO)) ||
-+	     (kiocb->ki_filp->f_flags & O_NONBLOCK)))
-+		return -EAGAIN;
-+
- 	ret = wait_for_random_bytes();
- 	if (ret != 0)
- 		return ret;
+-			ver.major = ST_VER_MAJOR;
+-			ver.minor = ST_VER_MINOR;
+-			ver.oem = ST_OEM;
+-			ver.build = ST_BUILD_VER;
+-			ver.signature[0] = PASSTHRU_SIGNATURE;
+-			ver.console_id = host->max_id - 1;
+-			ver.host_no = hba->host->host_no;
+ 			cp_len = scsi_sg_copy_from_buffer(cmd, &ver, cp_len);
+ 			if (sizeof(ver) == cp_len)
+ 				cmd->result = DID_OK << 16;
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -201,7 +201,7 @@ static inline unsigned int scsi_get_resi
+ 	for_each_sg(scsi_sglist(cmd), sg, nseg, __i)
+ 
+ static inline int scsi_sg_copy_from_buffer(struct scsi_cmnd *cmd,
+-					   void *buf, int buflen)
++					   const void *buf, int buflen)
+ {
+ 	return sg_copy_from_buffer(scsi_sglist(cmd), scsi_sg_count(cmd),
+ 				   buf, buflen);
 
 
