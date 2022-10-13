@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DF35FE008
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788805FE06A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiJMSC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S231205AbiJMSJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiJMSC3 (ORCPT
+        with ESMTP id S231680AbiJMSIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:02:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780C611465;
-        Thu, 13 Oct 2022 11:02:26 -0700 (PDT)
+        Thu, 13 Oct 2022 14:08:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689DF169129;
+        Thu, 13 Oct 2022 11:06:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98879B82050;
-        Thu, 13 Oct 2022 17:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A31C433D6;
-        Thu, 13 Oct 2022 17:58:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FAF561939;
+        Thu, 13 Oct 2022 17:59:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61ED7C433D6;
+        Thu, 13 Oct 2022 17:59:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683919;
-        bh=SzjUWlrxdx6dSBn+CgiQOoaJon3rIv0huAMKubMWhmc=;
+        s=korg; t=1665683971;
+        bh=Z8sVtd3LR/Wlz+vDZJp0UhS6gX76XtrAS7OWntiXtaM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LS2mzlz/b5Kdya9N8IqyEurfMDytA4edDfDeSbIDYL3REvu4ea7HDWrPj8vFLd6Sn
-         TdOXRbLBTAF1LUTA/HjeeiuBSMt2+4of6iUHoPJRV6dIZVdMLa2FfYkkd7p2JzbDMS
-         bsC1whr5v7gOQELPhVJfCWdhmlmAMs0XB2H/xyfk=
+        b=UEKGKLjrFSbH+2RpIQqW7gyxYfk+s/is5cxtaAWhAQuvK8lC65rW/hXH87OwEZ8Rt
+         40sRTCkypWuyElgr1+3IHQUTlTCS+BL7ncrlPs7mD6Vv16TmaycCOWKf+uJrGwHYi9
+         NMWPTj7oZT7ZkAG2LpuHsBlnn+vOcybLYr3JiaUc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 07/27] random: clamp credited irq bits to maximum mixed
-Date:   Thu, 13 Oct 2022 19:52:36 +0200
-Message-Id: <20221013175143.791866092@linuxfoundation.org>
+        stable@vger.kernel.org, Hu Weiwen <sehuww@mail.scut.edu.cn>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Subject: [PATCH 5.19 05/33] ceph: dont truncate file in atomic_open
+Date:   Thu, 13 Oct 2022 19:52:37 +0200
+Message-Id: <20221013175145.405997424@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
-References: <20221013175143.518476113@linuxfoundation.org>
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+References: <20221013175145.236739253@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,31 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Hu Weiwen <sehuww@mail.scut.edu.cn>
 
-commit e78a802a7b4febf53f2a92842f494b01062d85a8 upstream.
+commit 7cb9994754f8a36ae9e5ec4597c5c4c2d6c03832 upstream.
 
-Since the most that's mixed into the pool is sizeof(long)*2, don't
-credit more than that many bytes of entropy.
+Clear O_TRUNC from the flags sent in the MDS create request.
 
-Fixes: e3e33fc2ea7f ("random: do not use input pool from hard IRQs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+`atomic_open' is called before permission check. We should not do any
+modification to the file here. The caller will do the truncation
+afterward.
+
+Fixes: 124e68e74099 ("ceph: file operations")
+Signed-off-by: Hu Weiwen <sehuww@mail.scut.edu.cn>
+Reviewed-by: Xiubo Li <xiubli@redhat.com>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+[Xiubo: fixed a trivial conflict for 5.19 backport]
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ceph/file.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -980,7 +980,7 @@ static void mix_interrupt_randomness(str
- 	local_irq_enable();
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -740,6 +740,12 @@ int ceph_atomic_open(struct inode *dir,
+ 	if (dentry->d_name.len > NAME_MAX)
+ 		return -ENAMETOOLONG;
  
- 	mix_pool_bytes(pool, sizeof(pool));
--	credit_init_bits(max(1u, (count & U16_MAX) / 64));
-+	credit_init_bits(clamp_t(unsigned int, (count & U16_MAX) / 64, 1, sizeof(pool) * 8));
++	/*
++	 * Do not truncate the file, since atomic_open is called before the
++	 * permission check. The caller will do the truncation afterward.
++	 */
++	flags &= ~O_TRUNC;
++
+ 	if (flags & O_CREAT) {
+ 		if (ceph_quota_is_max_files_exceeded(dir))
+ 			return -EDQUOT;
+@@ -807,9 +813,7 @@ retry:
+ 	}
  
- 	memzero_explicit(pool, sizeof(pool));
- }
+ 	set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
+-	err = ceph_mdsc_do_request(mdsc,
+-				   (flags & (O_CREAT|O_TRUNC)) ? dir : NULL,
+-				   req);
++	err = ceph_mdsc_do_request(mdsc, (flags & O_CREAT) ? dir : NULL, req);
+ 	if (err == -ENOENT) {
+ 		dentry = ceph_handle_snapdir(req, dentry);
+ 		if (IS_ERR(dentry)) {
 
 
