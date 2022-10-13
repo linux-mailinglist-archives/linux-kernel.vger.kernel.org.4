@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883DA5FD405
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7706F5FD409
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiJMFBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 01:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S229552AbiJMFDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 01:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiJMFBA (ORCPT
+        with ESMTP id S229504AbiJMFDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 01:01:00 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09965103D85
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:01:00 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k9so397759pll.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:01:00 -0700 (PDT)
+        Thu, 13 Oct 2022 01:03:30 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D30E104D13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:03:29 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d7-20020a17090a2a4700b0020d268b1f02so3930995pjg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:03:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vo2vClF0viTyEV9dF3uXEQmi9DD+bFYaARDbiE673FY=;
-        b=bcFJXUHNzbEqQLUtO/5UnkbVjmKzQ+mDYMt0K89Rc/1Of0EdHQYXnHCqgkNNy81BNE
-         oZIBtnrnC9bZElluyBGBIRbZ2qzyqcR2OBCaHR80lxcIc43dp7ZP/yJGfwymLvJy+055
-         PsY5LMoboAg0kSIcjgPrzZdaTBSv5fTyyQHdns8R4q2gF74J+/jVUNisidxiZtABwJcW
-         A0OUqscxtNJzlSvWhb6YQ4W/aljdSUvafmjZ5vvBFhIcXmA2IsNrDw/W3MeIeufgJ+pc
-         xLq+YSWhCqEoG2BZH1gs5I9DF5kYTGCLmKueUHxDh1X79DeNaf/x7pp2rQsiyhk0iU6P
-         azUw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kOUHW4edaDPc30w4Q72U75HlzxLHjOv/NovN59CFHDo=;
+        b=bcVimODQIkTzmBZATGN+HUNmrIPW7jl5u2ZoEq4MhJfe2NQPUGrsODGTaliEVfn120
+         ZiEX6ziSF71cpeL2ySmyQh2tnptI2QyBdbEqMjpMVlkVKOPB9TR87Fts6VMHefDWMcY8
+         Z/MRIRJxs6TCoEjbVcfXVElblf/eiWrdOgXRLTfKu6NPe7IKRIEt7TKoZnSZ4EGh0d+/
+         2m/vRr55Y9IGqZJQMn3tp/61yExuABpZ6waSytwyxjs958AHydI8QUiT1nr7lV4axcL+
+         YIu2DdTu1gAGoZ3jAQ2oii+TNrWZvNgczw2ZFVo11hkEsTs3SHLzxHryOJic7KEi8xOs
+         eJEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vo2vClF0viTyEV9dF3uXEQmi9DD+bFYaARDbiE673FY=;
-        b=psgyXWgIfwoh8DKw2RlivuT7Hh+wVsu0FqdKT8S5pKyE4IMCg+54kWAWFiiwhidzf2
-         N0r8pjPHWPuArsPibEJo7FKZNOU3zifNnX0aADfYeyZwBOn+qF1mVP2E3H2X2vkBrPS0
-         L9qzWfLDhukOYXdN7U4agx6SXOcJJz4NVV4ilV2Ihd/GmyDjYx0NC/CpIDAQnYdmqOHL
-         Tqj5j0znY2uIylikGmnkiA7JMq7prlgKIxjolZ3LEtPUhYegcdnoxm7yyuF5ahQ6FWtv
-         waEk8C0AfTlTOKnPlBg+yT5qy+54iXiMG0Hb5nqXKACpgmSVsEA2xzq0TBwILU1/oTgd
-         eGew==
-X-Gm-Message-State: ACrzQf22mQ+FwjVi9GokMT/C6boOn+KOXzPKEyPUx3mYTq0MN6f3BHeX
-        Mv1hzND0az8eTHZrl9RJtpFnxjUT3DvG9Q==
-X-Google-Smtp-Source: AMsMyM7prQsv8d89ELhZC16iF907vgbbEkzq/tHxl8hNDtEPOBmor31gzGC8wSwsOIsGn0Nx+m3iVg==
-X-Received: by 2002:a17:90b:1806:b0:20d:3256:38 with SMTP id lw6-20020a17090b180600b0020d32560038mr8847987pjb.94.1665637259078;
-        Wed, 12 Oct 2022 22:00:59 -0700 (PDT)
-Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id v22-20020a17090abb9600b0020bfd6586c6sm2278518pjr.7.2022.10.12.22.00.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 22:00:58 -0700 (PDT)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH] e1000e: Fix TX dispatch condition
-Date:   Thu, 13 Oct 2022 14:00:44 +0900
-Message-Id: <20221013050044.11862-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kOUHW4edaDPc30w4Q72U75HlzxLHjOv/NovN59CFHDo=;
+        b=uluUPVPyycsVtisTEsW1p7DgAKpMjAWwaHCJZNlXTkr407fRRuRUqALiIo2zf+tgra
+         /Vf1qpwXV04Ixc4JC4qCY9D6k4Qlhi8ClG2OKsi6zdPaSZUkPWDi+xBgMn3pvCQP92Y9
+         lem7y01dtDC+Lh2kflpb3XEjSX0hKDQLRogYy1z1fx6xsM1g5hFdbd5CmRueVKXFB0WN
+         x5XbUYcc7gn4OZnXf//oTWqWWfsX5v/NP3iN1oRWwo9qDnfRD14xpXZphtip30mONtUz
+         cos2AsGi/I6rwjPx+d3TCOWqPrZMxr3RfeyFOcRYk56SFqwWh1Emg0HUPzwjTQeJzw6/
+         iKEw==
+X-Gm-Message-State: ACrzQf0WWUzjDrBqKqUCAbo/4W6/bUI5vpy0VzBzxGjb9A8/9A+wg1Jc
+        wcfL18vMpRxzXXZho8gBmSs=
+X-Google-Smtp-Source: AMsMyM5HrtXYYUPeglv/QrNpQaQjSDvfseDShdHPPKEKELYYob599hfe6Dl7LoTscUY+VaieU/EMZQ==
+X-Received: by 2002:a17:902:f707:b0:184:e44f:88cc with SMTP id h7-20020a170902f70700b00184e44f88ccmr4206961plo.42.1665637408464;
+        Wed, 12 Oct 2022 22:03:28 -0700 (PDT)
+Received: from localhost ([202.173.165.98])
+        by smtp.gmail.com with ESMTPSA id b3-20020a62cf03000000b005625ef68eecsm833834pfg.31.2022.10.12.22.03.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 22:03:27 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 13 Oct 2022 15:03:14 +1000
+Message-Id: <CNKJ6FE6U35I.3ERMDQR9MHRLX@bobo>
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        <ajd@linux.ibm.com>, <aneesh.kumar@linux.ibm.com>,
+        <atrajeev@linux.vnet.ibm.com>, <christophe.leroy@csgroup.eu>,
+        <cuigaosheng1@huawei.com>, <david@redhat.com>,
+        <farosas@linux.ibm.com>, <geoff@infradead.org>,
+        <gustavoars@kernel.org>, <haren@linux.ibm.com>,
+        <hbathini@linux.ibm.com>, <joel@jms.id.au>, <lihuafei1@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <lukas.bulwahn@gmail.com>, <mikey@neuling.org>,
+        <nathan@kernel.org>, <nathanl@linux.ibm.com>,
+        <nicholas@linux.ibm.com>, <pali@kernel.org>, <paul@paul-moore.com>,
+        <rmclure@linux.ibm.com>, <ruscur@russell.cc>, <windhl@126.com>,
+        <wsa+renesas@sang-engineering.com>, <ye.xingchen@zte.com.cn>,
+        <yuanjilin@cdjrlc.com>, <zhengyongjun3@huawei.com>
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
+X-Mailer: aerc 0.11.0
+References: <87edvhntv0.fsf@mpe.ellerman.id.au>
+ <20221012141827.GA2405914@roeck-us.net> <Y0biBtCUtc2mowbQ@zx2c4.com>
+ <20221012164452.GA2990467@roeck-us.net> <Y0b3ZsTRHWG6jGK8@zx2c4.com>
+ <20221012221615.GA364143@roeck-us.net> <87bkqgmvxl.fsf@mpe.ellerman.id.au>
+ <20221013002148.GA535574@roeck-us.net>
+In-Reply-To: <20221013002148.GA535574@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-e1000_xmit_frame is expected to stop the queue and dispatch frames to
-hardware if there is not sufficient space for the next frame in the
-buffer, but sometimes it failed to do so because the estimated maxmium
-size of frame was wrong. As the consequence, the later invocation of
-e1000_xmit_frame failed with NETDEV_TX_BUSY, and the frame in the buffer
-remained forever, resulting in a watchdog failure.
-
-This change fixes the estimated size by making it match with the
-condition for NETDEV_TX_BUSY. Apparently, the old estimation failed to
-account for the following lines which determines the space requirement
-for not causing NETDEV_TX_BUSY:
->	/* reserve a descriptor for the offload context */
->	if ((mss) || (skb->ip_summed == CHECKSUM_PARTIAL))
->		count++;
->	count++;
+On Thu Oct 13, 2022 at 10:21 AM AEST, Guenter Roeck wrote:
+> On Thu, Oct 13, 2022 at 11:03:34AM +1100, Michael Ellerman wrote:
+> > Guenter Roeck <linux@roeck-us.net> writes:
+> > > On Wed, Oct 12, 2022 at 11:20:38AM -0600, Jason A. Donenfeld wrote:
+> > >>=20
+> > >> I've also managed to not hit this bug a few times. When it triggers,
+> > >> after "kprobes: kprobe jump-optimization is enabled. All kprobes are
+> > >> optimized if possible.", there's a long hang - tens seconds before i=
+t
+> > >> continues. When it doesn't trigger, there's no hang at that point in=
+ the
+> > >> boot process.
+> > >>=20
+> > >
+> > > I managed to bisect the problem. See below for results. Reverting the
+> > > offending patch fixes the problem for me.
+> >=20
+> > Thanks.
+> >=20
+> > This is probably down to me/us not testing with PREEMPT enabled enough.
+> >=20
+> Not sure. My configuration has
 >
->	count += DIV_ROUND_UP(len, adapter->tx_fifo_limit);
+> CONFIG_PREEMPT_NONE=3Dy
+> # CONFIG_PREEMPT_VOLUNTARY is not set
+> # CONFIG_PREEMPT is not set
 
-This issue was found with http-stress02 test included in Linux Test
-Project 20220930.
+Thanks very much for helping with this. The config snippet you posted here
+https://lists.ozlabs.org/pipermail/linuxppc-dev/2022-October/249758.html
+has CONFIG_PREEMPT=3Dy. How do you turn that into a .config, olddefconfig?
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- drivers/net/ethernet/intel/e1000e/netdev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I can't reproduce this so far using your config and qemu command line,
+but the patch you've bisected it to definitely could cause this. I'll
+keep trying...
 
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index 321f2a95ae3a..da113f5011e9 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -5936,9 +5936,9 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
- 		e1000_tx_queue(tx_ring, tx_flags, count);
- 		/* Make sure there is space in the ring for the next send. */
- 		e1000_maybe_stop_tx(tx_ring,
--				    (MAX_SKB_FRAGS *
-+				    ((MAX_SKB_FRAGS + 1) *
- 				     DIV_ROUND_UP(PAGE_SIZE,
--						  adapter->tx_fifo_limit) + 2));
-+						  adapter->tx_fifo_limit) + 4));
- 
- 		if (!netdev_xmit_more() ||
- 		    netif_xmit_stopped(netdev_get_tx_queue(netdev, 0))) {
--- 
-2.37.3
+Thanks,
+Nick
+
+[...]
+> > > # first bad commit: [e485f6c751e0a969327336c635ca602feea117f0] powerp=
+c/64/interrupt: Fix return to masked context after hard-mask irq becomes pe=
+nding
 
