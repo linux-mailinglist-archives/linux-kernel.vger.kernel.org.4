@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7342A5FD2AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E4F5FD2AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiJMBhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 21:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
+        id S229727AbiJMBhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 21:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJMBg5 (ORCPT
+        with ESMTP id S229646AbiJMBg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Oct 2022 21:36:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64571127BE2;
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728741285C6;
         Wed, 12 Oct 2022 18:36:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 005216166F;
-        Thu, 13 Oct 2022 01:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED071C433C1;
-        Thu, 13 Oct 2022 01:36:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OvC9QjQ3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665625013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=CdJNHtmpZMNfTRWGpsUKx/dxqK7UGMQPCI1rVsE6I7s=;
-        b=OvC9QjQ3eMXC1bp5TmJ450iqLPVm3LyQhBpt7HOiZZPlH6xL3QkXRR6zSCF4S1yx4hNo2+
-        mMYK2YPXvUbeqVHec5fXzr5JoNruYlL+IbYzwaMDSYP+rAZXkAu1AAsnbZudd+/a6vgEMj
-        t7GWHjdRlFQfuGQ14tdfI3MqYxaiBxk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6f9987c8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 13 Oct 2022 01:36:53 +0000 (UTC)
-Received: by mail-ua1-f46.google.com with SMTP id x20so238201ual.6;
-        Wed, 12 Oct 2022 18:36:53 -0700 (PDT)
-X-Gm-Message-State: ACrzQf31etQBqMuCfp3YA4+4O9kwNAFpz6l303gnY94QRaxfmKhpH76A
-        qoEczDJqxCHfesVxng93czFSC9lmJAY2xpwb9SM=
-X-Google-Smtp-Source: AMsMyM7ribEkLBQ9TJMxAiZGfVq5iMGx98cCy/+nya4OvvDKV6noD1SKxwLBTXN4tvI33pdHAjxnKgRyuBfsn+zPU30=
-X-Received: by 2002:ab0:6413:0:b0:3e1:b113:2dfa with SMTP id
- x19-20020ab06413000000b003e1b1132dfamr12353897uao.102.1665625011875; Wed, 12
- Oct 2022 18:36:51 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MnsSy47YjzlVlT;
+        Thu, 13 Oct 2022 09:32:18 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 13 Oct 2022 09:36:53 +0800
+Message-ID: <cda0bc3d-9587-6b5e-e676-4e3bd11e95da@huawei.com>
+Date:   Thu, 13 Oct 2022 09:36:52 +0800
 MIME-Version: 1.0
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 12 Oct 2022 19:36:40 -0600
-X-Gmail-Original-Message-ID: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
-Message-ID: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
-Subject: gcc 5 & 6 & others already out of date?
-To:     linux-toolchains@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v4 6/6] selftest/bpf: Fix error usage of
+ ASSERT_OK in xdp_adjust_tail.c
+Content-Language: en-US
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Xu Kuohai <xukuohai@huaweicloud.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
+ <20221011120108.782373-7-xukuohai@huaweicloud.com>
+ <33d17f23-03cb-9bff-2e50-06ab0f597640@linux.dev>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <33d17f23-03cb-9bff-2e50-06ab0f597640@linux.dev>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,64 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 10/13/2022 7:26 AM, Martin KaFai Lau wrote:
+> On 10/11/22 5:01 AM, Xu Kuohai wrote:
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> xdp_adjust_tail.c calls ASSERT_OK() to check the return value of
+>> bpf_prog_test_load(), but the condition is not correct. Fix it.
+>>
+>> Fixes: 791cad025051 ("bpf: selftests: Get rid of CHECK macro in xdp_adjust_tail.c")
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>   tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+>> index 009ee37607df..39973ea1ce43 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+>> @@ -18,7 +18,7 @@ static void test_xdp_adjust_tail_shrink(void)
+>>       );
+>>       err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+>> -    if (ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
+>> +    if (!ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
+>>           return;
+>>       err = bpf_prog_test_run_opts(prog_fd, &topts);
+>> @@ -53,7 +53,7 @@ static void test_xdp_adjust_tail_grow(void)
+>>       );
+>>       err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+>> -    if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
+>> +    if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
+> 
+> Ouch... ic.  It is why this test has been passing.
+> 
 
-I've been working on a (still in development) patch that tries to
-apply a few compile-time constant folding tricks to a widely used
-library function, so I wanted to make sure my trickery worked across
-all supported gcc versions for as many call sites as possible.
-Naturally, this means allyesconfig builds on the monster box.
+Well, it's because the value of err is zero, so ASSERT_OK passed.
 
-So all went well with a recent gcc and with clang. Then I tried gcc 5
-and gcc 6, and it wasn't fine. But it wasn't not fine because of my
-new code -- that all compiled just fine. Rather, it wasn't fine
-because of a modicum of other odd errors and fatal warnings
-throughout. I tried this with gcc 5 and gcc 6 and then got bored. I
-could test more versions need be. And I guess I could submit bug
-reports or write patches or work on fixing all those, if I actually
-cared about it. But I don't really care about it, and apparently
-neither does anybody else, because this isn't brand new breakage. And
-this all got me thinking...
+> 
+>>           return;
+>>       err = bpf_prog_test_run_opts(prog_fd, &topts);
+>> @@ -90,7 +90,7 @@ static void test_xdp_adjust_tail_grow2(void)
+>>       );
+>>       err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+>> -    if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
+>> +    if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
+>>           return;
+>>       /* Test case-64 */
+> 
+> .
 
-Linus merged Rust for 6.1, and this relies on unstable features. We're
-in for a world of pain, I'm sure, and who knows where this is going to
-lead. But what seems clear is that as we figure out how to make Rust
-work with the kernel (if we can manage to figure that out, that is),
-we're going to likely be bumping the minimum compiler version as the
-upstream Rust people implement things we need. And while Rust is used
-for nothing today, soon it'll be used for things not exactly optional
-for certain segments of users - for example, that Apple GPU driver.
-The slow stable days of C are coming to an end, it would seem.
-
-But also, it's not just Rust. Clang support has been an incremental
-thing, and the kernel has dropped old Clang versions as they no longer
-make sense. Heck, the new KCFI implementation requires bleeding edge
-Clang, and the kernel dropped support for the old implementation. So
-clearly, the people that use Clang want to use new Clang, not crusty
-Clang, and that's sort of the whole point of that being there.
-
-And then there's old trusty gcc. Gcc also improves according to a nice
-cadence, and we know people are using later gccs because nobody is
-catching the build errors from old gccs. So let's stop pretending we
-support old compilers. We clearly don't. Maybe some subset of code
-does, but by and large, I doubt many developers are actually daily
-driving gcc 5.1 and doing allyesconfig builds with it. Yes, many are
-rightfully cautious of gcc 12 and stick with gcc 11 still, and that's
-reasonable, but 11 or even 10 is still way larger than 5.1.
-
-The truth is, people tend to use more recent toolchains. And if Clang
-hasn't broken the will of the stranglers, then surely Rust will.
-
-So, what are your thoughts on just abandoning this charade all
-together, and saying that we support the last 2 or 3 releases of a
-compiler (and related toolchain - binutils and such) at the time of
-the kernel's release, and admit that our C is a moving target, just as
-our Rust inevitably will be. Then we don't have to have these tortured
-conversations every few years about 4.9 or 5.1 or 6.3 or whatever
-enterprise [il-]logic has tended to dictate how things have worked
-until now.
-
-As usual, feel free to chase me off with pitchforks. I'm sure some
-RHEL folks hate this. But I think it's at least worth consideration.
-
-Jason
