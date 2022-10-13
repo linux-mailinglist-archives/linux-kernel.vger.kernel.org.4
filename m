@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93A35FD93D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421B75FD94B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJMMeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S229727AbiJMMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJMMef (ORCPT
+        with ESMTP id S229513AbiJMMi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:34:35 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA39DED1D
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:34:34 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id h13so1812682pfr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:34:34 -0700 (PDT)
+        Thu, 13 Oct 2022 08:38:57 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A44811D998
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:38:56 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id hh9so853310qtb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=APvObyH7Yxci3JC4nOwMrJjuBylthay0v3CgCOkmbX8=;
-        b=B+ibmN/g+mZp20zCK5FLPpxB9fs1HPP+TPkGjqE2JglZgP79Rk8ZKknxxkYqaYv3n2
-         mhnO3P4lIrXR1nPrzJ0TD5FjGIMMXmrbfzPsuHVrEi0DRVgA+IpqTsgJIQSVlEQPeoP2
-         ao7mZQzNQZXUVAShA1RddUFD9znh89ueyXXGo=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5kz9tUsFqTbeOstAmkjMnqXNuAGfE9Jg+Fa6WSlHaXY=;
+        b=ZK8VDKTZB/G6KzUx18/x7iGXsNCnhmsEUHjFq/DOGq3C+2rzQ/onKPlyoiLxY3kr6u
+         vmvmQTeAHzrP7zl8Cq8dRTULBmrnfhxqFAi2p74AvAI/iw89aODcguStpcU8iM0RAC4l
+         i0WtaMk1sA7rak0Go/GCe7uQYyXkVU3nJ39s17YsxyblW0OHO6ltbHSHwTc+0QaH0iNL
+         XFap/X+b5TxlTZPpUzZcWR1leFsj6UF0ApCD11XqHYW5BDM4tJdzENUx1dnvo+NaDHhW
+         9YCg/g6zV/tYFGch21jEvfbTGotqlXqbVKw2ZUxtF98WTzs7jx3k7tqe8qvZxama4pi7
+         zJdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=APvObyH7Yxci3JC4nOwMrJjuBylthay0v3CgCOkmbX8=;
-        b=RE8NkwAjtIQ4maKZZcD6HJuPtqawKDsn1m8OWqyxi6C+FtjHEK/tXCMVrhhZWqgtiD
-         ET2+cILMdasrLblv3UXManLDfmN09uUEaLyLILxAdNS8JSjaanFcJ6WgUyM5GrtQF4zt
-         SszQjIFMcYQxqGGlRvXpCc7SAj50EmyH7zqcdn/XtK5yQz0cpW1AYu6A4ysC5S5/yQh3
-         wRYgHEYV/IR8z34Vuk0QXFytCqkZvRNGD8FGz7Nx9OL3dM98rv670p5N+gX/ogVR56yb
-         ys9bcMFgwThisNB6IpGAf1A6A2v+T1B0fayFYpooBqftn9+JKtol+qB1aVp87K+Ocnk8
-         9rhQ==
-X-Gm-Message-State: ACrzQf2H5kXv5KiuvSuu67Do5zPZedzR8H7bY3ELjUc64efoNqWsRr7a
-        xpambHBIxVH+na+Huj3ighEcRg==
-X-Google-Smtp-Source: AMsMyM6zFl7HUELQyzdf5QZKzojt2du14cXdUpm68Yb20UupNgFgDxw29LoiBbzZN0gIA2+kbmatXA==
-X-Received: by 2002:a63:1326:0:b0:439:40b5:77cc with SMTP id i38-20020a631326000000b0043940b577ccmr30621188pgl.473.1665664474025;
-        Thu, 13 Oct 2022 05:34:34 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:633d:4747:63f5:81b6])
-        by smtp.gmail.com with ESMTPSA id u3-20020a170902e5c300b0017f592a7eccsm12498152plf.298.2022.10.13.05.34.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 05:34:33 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 21:34:29 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>
-Cc:     minchan@kernel.org, senozhatsky@chromium.org, ngupta@vflare.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru
-Subject: Re: [PATCH v1] zsmalloc: zs_destroy_pool: add size_class NULL check
-Message-ID: <Y0gF1S4bjjNIE/68@google.com>
-References: <20221013112825.61869-1-avromanov@sberdevices.ru>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5kz9tUsFqTbeOstAmkjMnqXNuAGfE9Jg+Fa6WSlHaXY=;
+        b=fLysUpKcGra9hLSTSPIY3CEjEDDjvWouEWICLH76xJD2MbCflnggIq8zhur6uYb+Uu
+         D4PhXJHfLeu3aU4RjErlWVIj8j84AUpe+BOTIMJ8BWctwYfmi+rv//p3UQ5rJd+VV/Gn
+         YpXW5imQujLzlgEuMSZ4l3OBQ3+1ZuXRM/XZWlwALzYjiUBD/TNdvm32TVqEQALXJHiN
+         pKxsqgfAFR+Xlo6b5h1aanMRFbNSqfUdxZq+uaXzLvDD7RgkDaZduuTPXWxrvd+rgDhm
+         m0NdZLNOOJ8pErCv3XSo5UMKt2v29cHrGhcNF0cWL1OKXJDyrBLfmIZcdZcJ7c4bMGe8
+         2/kA==
+X-Gm-Message-State: ACrzQf2GgBJ5qPNKOSnjDi3oH/Ch8eTCINhC6G0Aix+EkicHv2wJoRff
+        jXEO0fFJPgv+9isZPC1/vPhU+A==
+X-Google-Smtp-Source: AMsMyM7QGWwq2TvteduWwhCjLEthvj2mVj02Nsr1AAZ/3O3uzKlIbcCYr5JBhY8RY7/i+vnIKYW/Sg==
+X-Received: by 2002:ac8:7d45:0:b0:396:ce08:4b49 with SMTP id h5-20020ac87d45000000b00396ce084b49mr25163847qtb.650.1665664734315;
+        Thu, 13 Oct 2022 05:38:54 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05620a2a0f00b006ce40fbb8f6sm18877024qkp.21.2022.10.13.05.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 05:38:53 -0700 (PDT)
+Message-ID: <ee305dbb-0714-4d7c-437f-66b66842370f@linaro.org>
+Date:   Thu, 13 Oct 2022 08:36:42 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013112825.61869-1-avromanov@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: qcom,sc7180: convert to
+ dtschema
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221007145116.46554-1-krzysztof.kozlowski@linaro.org>
+ <20221007145116.46554-2-krzysztof.kozlowski@linaro.org>
+ <CAD=FV=WN+9DJp-3Ny04NmOLau2RYibeJayEtB7x0uT-YoizFQA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=WN+9DJp-3Ny04NmOLau2RYibeJayEtB7x0uT-YoizFQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/10/13 14:28), Alexey Romanov wrote:
-> Inside the zs_destroy_pool() function, there can still
-> be NULL size_class pointers: if when the next size_class is
-> allocated, inside zs_create_pool() function, kzalloc will
-> return NULL and handling the error condition, zs_create_pool()
-> will call zs_destroy_pool().
+On 12/10/2022 13:42, Doug Anderson wrote:
+> Hi,
 > 
-> Fixes: f24263a5a076 ("zsmalloc: remove unnecessary size_class NULL check")
-> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-> ---
->  mm/zsmalloc.c | 3 +++
->  1 file changed, 3 insertions(+)
+> On Fri, Oct 7, 2022 at 7:51 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> +      drive-strength:
+>> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
+>> +        default: 2
+>> +        description:
+>> +          Selects the drive strength for the specified pins, in mA.
 > 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 525758713a55..d03941cace2c 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -2311,6 +2311,9 @@ void zs_destroy_pool(struct zs_pool *pool)
->  		int fg;
->  		struct size_class *class = pool->size_class[i];
->  
-> +		if (!class)
-> +			continue;
-> +
->  		if (class->index != i)
->  			continue;
+> The "default" of 2 is not correct. Please see commit 768f8d8e45f9
+> ("dt-bindings: pinctrl: drive-strength doesn't default to 2 if
+> unspecified")
 
-Yeah, OK... And totally my fault! I think, I, personally, am done
-with the "remove if" patches at this point, they are too painful.
+Uh, you're right. This was copied to one binding and then I copied to
+another, and another...
 
-Alexey, is there anything else we missed?
+> 
+> In fact, are you sure this even needs to be replicated here? This is
+> part of the common "qcom,tlmm-common.yaml" bindings file, isn't it?
 
-FWIW,
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+If the value was correct, it might be per-SoC specific, but that's
+another question. The default value is actually unknown, so I'll remove it.
 
-Andrew,
-The allocation in question should be of a "too small to fail"
-size, below PAGE_ALLOC_COSTLY_ORDER. So unless that unspoken
-rule has changed, we should be "fine", since that kmalloc()
-simply should not fail. It still makes sense to have that
-particular check in place, just in case. Can you please pull
-this patch in? And, like I said, I'm going to NAK all future
-micro-optimizations.
+Best regards,
+Krzysztof
+
