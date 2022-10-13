@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CEF5FD99C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C296A5FD99F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiJMMwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S229648AbiJMMxG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Oct 2022 08:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiJMMv6 (ORCPT
+        with ESMTP id S229579AbiJMMxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:51:58 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BEB123464
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:51:56 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1379789wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QF0PqOehg1Uzod+E+BZuMuy8LI8b3uRczxR//Iq0qL0=;
-        b=R5rNXsqlYEe7NcGlvbpqFH9PS0839eRD/ziELLqTPLpyUdNd6KnGWM/S/twY8QO0ZC
-         Ny56/TND0tvJKeczUL/vGgVlehC5JI1BK7GAddzbuM3oSIRTSR5OLOQP+IRRvlWGCFk6
-         gmGuN2gq5QeqnmspvYXaaloWLlbq/ReYnPZJf5CGhEP2WnLURThOMnyUS6ydB3dPMWvG
-         MbyuTEbjVgZ74aBlTeW+zlaffwYJVnCBSW7Hhf/ljbhnX2OvJULXLxk7+ur1fj9cyx6T
-         ondP8DKnYgIsPwx9VKmeZGAFYLOquHCrgQKYTmNPEWpcxua7HiV9My4U13Js+mjzDyHU
-         8yPw==
+        Thu, 13 Oct 2022 08:53:04 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAEC12790B
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:53:03 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id bb5so878347qtb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:53:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QF0PqOehg1Uzod+E+BZuMuy8LI8b3uRczxR//Iq0qL0=;
-        b=uD4SSUKbsDD+/AvXf1DoH21wN4CdlfjyQ4gkdxiXJiXKSXjF2VadH13pi4NgD9rS1w
-         H4O3H3knNIv/Qv27KQVgIg6fVcXFNyTvNSn6/9s2xtTn8C28ot+mgiXWBrZQRYdpH0yF
-         FfHA4C/KNqyDqGWXTjQ3JwUB0ZAPWm0z1x6G+y8SFHBs9tRg5vZggQB9NLeJu2615XDz
-         2Zp4lj+9yWJzVcIbz4yclnJNlCVH81AjbLnDz3T9bDosEAgm6eRITuzhd+2/f5SOGOwu
-         aw2qiOYS2ko+jcZM6mRdHfrZo5uCygG5dvgXlpyO2vooN2rOyFc3XWZoUL/5qnbIHh0u
-         Y/rw==
-X-Gm-Message-State: ACrzQf0Bt442OnX4F8L+RhC69aH+S+v63hvS6KSEkPa4pQnM7iw+/o/T
-        IZUb5QDC1u/IiugmK1h8MCQlSQ==
-X-Google-Smtp-Source: AMsMyM752iGLYstxsWPWYYibiBDkVJj6eCQDYekYZjxIQvbDDqubYBQSDZ2MweIVgMVb564mnXa/4w==
-X-Received: by 2002:a05:600c:4e91:b0:3b4:bcbd:b641 with SMTP id f17-20020a05600c4e9100b003b4bcbdb641mr6575982wmq.59.1665665514687;
-        Thu, 13 Oct 2022 05:51:54 -0700 (PDT)
-Received: from planet9.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m3-20020a056000024300b0022e3e7813f0sm1332292wrz.107.2022.10.13.05.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 05:51:54 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     sakari.ailus@iki.fi, dave.stevenson@raspberrypi.com,
-        jacopo@jmondi.org, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Cc:     bryan.odonoghue@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] media: i2c: imx412: Add new compatible strings
-Date:   Thu, 13 Oct 2022 13:51:42 +0100
-Message-Id: <20221013125142.3321405-4-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221013125142.3321405-1-bryan.odonoghue@linaro.org>
-References: <20221013125142.3321405-1-bryan.odonoghue@linaro.org>
+        bh=rdvJ1Rh5b+NEMidgBT/38v5acoxFTItHtJsRGjoiEKA=;
+        b=kYhdGdbTUw3biKdIeY3NCtD9VOggy8wwq5DIoKTLoTicYeZ/2vDRRAcF0o9QWWqwZ2
+         76igoxFPnVLpTwpsoCDtm5Uf19cl4MLMjusVe3tSCbYLvxwNctfKxH8DYpacOPHY4Dj6
+         mDMApEQNoOgdYKGwDuRGQnCw8kUEX1RlMNMXNropNKHn+jIhc67rIm4e9MQHQAgGFoHG
+         YArA/PD3oIrRlcPA4BI8e0qX0bkq08qj36+AvScPAZkCzNJUP8eTjF3rs/CekS3CSnoh
+         Wn7fTcNx3xkHB4jVokjrir3oEElygZq1cR0jyMEyPeJC5752xhFvd+Ale8UzRnsbuBTa
+         lVOw==
+X-Gm-Message-State: ACrzQf3888mCA/lnrpnHC5oy2NEbiWh8MNsxouqhova4bkQZPg+gtSbn
+        7oI5R78qI/nmf9Qic3RshG0T0memCMOm6g==
+X-Google-Smtp-Source: AMsMyM5K5uR7QtEC/GN1U8YAf1feB2pc9nCTVx1tp9ryPFqXUTm1JfkBJmqe1x5D0lFzpiQUTYjW/A==
+X-Received: by 2002:a05:622a:58e:b0:398:23db:964 with SMTP id c14-20020a05622a058e00b0039823db0964mr21287477qtb.664.1665665582337;
+        Thu, 13 Oct 2022 05:53:02 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id k15-20020a05620a414f00b006e6a7c2a269sm18275854qko.22.2022.10.13.05.53.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 05:53:02 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 203so1891552ybc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:53:01 -0700 (PDT)
+X-Received: by 2002:a05:6902:563:b0:6be:5f26:b9b7 with SMTP id
+ a3-20020a056902056300b006be5f26b9b7mr33449769ybt.36.1665665581616; Thu, 13
+ Oct 2022 05:53:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221012191142.GA3109265@bhelgaas> <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
+ <f57d954a-b565-9bfa-b8eb-ce608e168f1a@cambridgegreys.com> <2135037685.24273.1665665172126.JavaMail.zimbra@nod.at>
+In-Reply-To: <2135037685.24273.1665665172126.JavaMail.zimbra@nod.at>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Oct 2022 14:52:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
+Message-ID: <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
+Subject: Re: Add linux-um archives to lore.kernel.org?
+To:     Richard Weinberger <richard@nod.at>
+Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        helpdesk <helpdesk@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Sony imx577 uses the same silicon enabling reference code in the
-available examples provided as the imx412.
+Hi Richard,
 
-Add in compatible strings to enable and differentiate the parts.
+On Thu, Oct 13, 2022 at 2:46 PM Richard Weinberger <richard@nod.at> wrote:
+> ----- Ursprüngliche Mail -----
+> > Von: "anton ivanov" <anton.ivanov@cambridgegreys.com>
+> > On 12/10/2022 20:15, Johannes Berg wrote:
+> >> On Wed, 2022-10-12 at 14:11 -0500, Bjorn Helgaas wrote:
+> >>> The linux-um@lists.infradead.org mailing list is listed in MAINTAINERS
+> >>> and is quite active [1].  Once in a while a commit links to the
+> >>> infradead pipermail archive [2] (the link in that commit appears
+> >>> broken).
+> >>>
+> >>> I propose that we add linux-um to the lore.kernel.org archives so
+> >>> future commits can use lore.kernel.org links that don't depend on
+> >>> infradead.
+> >>>
+> >>> https://korg.docs.kernel.org/lore.html says pipermail archives like
+> >>> infradead has are not ideal, but I don't have any archives at all, and
+> >>> I don't know how to get even pipermail archives out of infradead.
+> >>
+> >> I think we talked about this before, but I also don't have any archives
+> >> worth talking about (only since mid 2019 with a small gap in mid 2020).
+> >>
+> >> If anyone wants to collect the archives from all people, I'm sure it
+> >> could be done. I can contribute what I have ...
+> >>
+> >
+> > I am not keeping any (only some of the discussion on my own patches) - I relied
+> > on the mailing list archive.
+> >
+> >> The tooling makes that pretty simple, actually.
+> >>
+> >> I think lists.infradead.org mostly got lost though, right dwmw2? So that
+> >> way I don't think we'll find much (old) archives either.
+>
+> Geert, IIRC you have excellent archives. Maybe you can help us?
 
-Cc: sakari.ailus@iki.fi
-Cc: dave.stevenson@raspberrypi.com
-Cc: jacopo@jmondi.org
-Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>
-Cc: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: linux-media@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/i2c/imx412.c | 1 +
- 1 file changed, 1 insertion(+)
+/me wondered how long he could keep on ignoring this thread ;-)
 
-diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
-index 9f854a1a4c2f..88e6fc78106b 100644
---- a/drivers/media/i2c/imx412.c
-+++ b/drivers/media/i2c/imx412.c
-@@ -1288,6 +1288,7 @@ static const struct dev_pm_ops imx412_pm_ops = {
- 
- static const struct of_device_id imx412_of_match[] = {
- 	{ .compatible = "sony,imx412", .data = "imx412" },
-+	{ .compatible = "sony,imx577", .data = "imx577" },
- 	{ }
- };
- 
--- 
-2.34.1
+Mine date back to 2003 (at sourceforge.net).
+I'll increase the priority of that task...
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
