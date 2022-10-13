@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15ECF5FE1DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47775FE1DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbiJMSpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S229513AbiJMSpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiJMSoE (ORCPT
+        with ESMTP id S232211AbiJMSow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:44:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6810C2B601
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:42:15 -0700 (PDT)
+        Thu, 13 Oct 2022 14:44:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6D95A14E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665686464;
+        s=mimecast20190719; t=1665686471;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6JjDK3twE+pSMUDp2i+4iId8FgNp8eHanR+PXksbbJA=;
-        b=PmgopVZ4uhKK4wWaSfryKMT76m03M070tT68+3KxMtDYn0HuT9mq5hjrPHBa1RMrWMfh/G
-        Y/84zmWGDccMZD8uXk3ThcS5Z4uEnNVt7VjvoEB1KcZbPJc0Bp4M5+zJgzWiedWNwRjQ0S
-        LKsEnPaNhFQsa+GYeWFNxcHm9Pnc/V4=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vsO4hYJKt+wtVYN9Zqac/Tunho9CLrg8yUdRp7WUlZA=;
+        b=YemYfWVYWdoYcieLZd7Ad7PNsZt7CJgWMiosvUNRoifEEFllLpSVeIuRj2R/+ECH5BRDvK
+        pwfmOSbv3+btry+zbS2aNGZwOjyfN/czZx49rxJOukNs+quZSrifH9l8VkQNawkzPyKVT5
+        UnBXH1L+S7RIBLFf5Xh6M6Y7q4iu5hs=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-331-3l9a5KStOp6pNqlx61X7Vw-1; Thu, 13 Oct 2022 14:41:03 -0400
-X-MC-Unique: 3l9a5KStOp6pNqlx61X7Vw-1
-Received: by mail-oo1-f70.google.com with SMTP id n5-20020a4a3445000000b004728fe7a331so1267361oof.23
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:41:02 -0700 (PDT)
+ us-mta-22-25EcX6d8PoagtUEumReSPg-1; Thu, 13 Oct 2022 14:41:09 -0400
+X-MC-Unique: 25EcX6d8PoagtUEumReSPg-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-132ac95c2abso1490962fac.23
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:41:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6JjDK3twE+pSMUDp2i+4iId8FgNp8eHanR+PXksbbJA=;
-        b=pAj0vEImqIQyGigHfnDg8Xr0V16uDz3Rtc0U70lDMkULng4RBXhRgg9/NPVrQhcn+i
-         isMZC1UQGxVqnms6THGEZdJT+XoZptMl7ejErMmGreSlS89zyx0mWtSycSk9fsLWLHxy
-         ZSdlRp/9SmX8gKqb/BsLcCA3JPbJRnPRYm2BEXYBX7glmndIumRFBjXTrq2LAtfE4+2N
-         zeUmaDS+sm1ERHFqO4oFTGykyKevu7uFNrd4HUoKPMW6VNZOeB7PSKBxO2p20N7oQxq2
-         c2exS4CwrL8eCUo2kNnRpNzbLfZA3sBbgCrrsodxkVnX8x+a+zsSIh5Kyjvxzb2ySdRI
-         HY7A==
-X-Gm-Message-State: ACrzQf1PN9sSyG3WHY0jgrFQsL/4tnAB3O6wCcCe9ZpJZ1cy5xiKOBgs
-        3LNLFVurqbQfDMPVf7drQroBJi5WFs9SoiVeH7CFbjKNQtLlRy9IMUdFtSxr2uBIn3L3k9RSh1r
-        ht7JfGpzTx6P6XwTGCyrbt7Mm
-X-Received: by 2002:a9d:2d81:0:b0:658:accf:2adf with SMTP id g1-20020a9d2d81000000b00658accf2adfmr688467otb.334.1665686462129;
-        Thu, 13 Oct 2022 11:41:02 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7TiIyrwXPFplLjLvX4+bEb60ttonBBZ0lr/zrMURi69WbZIZ4juK0apaIljHzLOixeLkyFDw==
-X-Received: by 2002:a9d:2d81:0:b0:658:accf:2adf with SMTP id g1-20020a9d2d81000000b00658accf2adfmr688432otb.334.1665686461891;
-        Thu, 13 Oct 2022 11:41:01 -0700 (PDT)
+        bh=vsO4hYJKt+wtVYN9Zqac/Tunho9CLrg8yUdRp7WUlZA=;
+        b=pRBw7rt+rr/4+7ugYtCEpD2vQ3Ka/KLKfgO3FYqJ7SkL4OVCkXChXXLpFkjuWmuJ39
+         qP1FMw+DrYQqpVt2WpztG3/eYhGGpjW8feWDLltFA2+4N8I977/8Lr9ZrB8ENvUf3K9E
+         CnW/c/VAgoJzQF1ixdwNYcqDUE/S6f/wy+SEbZZDvm+aav1tXeMSFiDphZyT6cBmkuvN
+         RpdLym7RDSVqR4wDrWRwsBHQQAFwPEfXneRRMNX7JOOelzcLwqDLCBxYI7o9F/SjaZOT
+         loSkBqQtAbVOnVcsxtj3aAgCVsN+c3BS85BsLmgzd6jdDHWpdkjdN+ja6TIDfM/VzZjF
+         aIFg==
+X-Gm-Message-State: ACrzQf16Of/SC8lGbERzGxjbH4JljX/FjTxMyadlY4FSXKiFyMiuo1rB
+        12M3kdqj2NcOXRt7gKBu8WzVr7Sh0uXiuIaA9Td1iLo5FhAiepwH1LLc/T29reJojoqcoSL/R/X
+        sZ+X4Q1rn1H704jT8KyjkqsLa
+X-Received: by 2002:a05:6808:10c3:b0:350:e563:7c4a with SMTP id s3-20020a05680810c300b00350e5637c4amr598502ois.182.1665686468380;
+        Thu, 13 Oct 2022 11:41:08 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7GzHFdCUGCQhqNsosJjZKt8Eeu2wVwQ9Do3KHBGqH13o0NNm/9FKqwNNjhBy1g53fEGrBUSA==
+X-Received: by 2002:a05:6808:10c3:b0:350:e563:7c4a with SMTP id s3-20020a05680810c300b00350e5637c4amr598464ois.182.1665686468134;
+        Thu, 13 Oct 2022 11:41:08 -0700 (PDT)
 Received: from localhost.localdomain ([2804:1b3:a801:9473:d360:c737:7c9c:d52b])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05683024ad00b006618ad77a63sm244521ots.74.2022.10.13.11.40.55
+        by smtp.gmail.com with ESMTPSA id v13-20020a05683024ad00b006618ad77a63sm244521ots.74.2022.10.13.11.41.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 11:41:01 -0700 (PDT)
+        Thu, 13 Oct 2022 11:41:07 -0700 (PDT)
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Steffen Klassert <steffen.klassert@secunet.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -83,9 +83,9 @@ To:     Steffen Klassert <steffen.klassert@secunet.com>,
         Wang Yufen <wangyufen@huawei.com>, mtosatti@redhat.com
 Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pci@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 2/4] sched/isolation: Improve documentation
-Date:   Thu, 13 Oct 2022 15:40:27 -0300
-Message-Id: <20221013184028.129486-3-leobras@redhat.com>
+Subject: [PATCH v2 3/4] sched/isolation: Add HK_TYPE_WQ to isolcpus=domain
+Date:   Thu, 13 Oct 2022 15:40:28 -0300
+Message-Id: <20221013184028.129486-4-leobras@redhat.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221013184028.129486-1-leobras@redhat.com>
 References: <20221013184028.129486-1-leobras@redhat.com>
@@ -93,61 +93,109 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve documentation on housekeeping types and what to expect from
-housekeeping functions.
+Housekeeping code keeps multiple cpumasks in order to keep track of which
+cpus can perform given housekeeping category.
+
+Every time the HK_TYPE_WQ cpumask is checked before queueing work at a cpu
+WQ it also happens to check for HK_TYPE_DOMAIN. So It can be assumed that
+the Domain isolation also ends up isolating work queues.
+
+Delegating current HK_TYPE_DOMAIN's work queue isolation to HK_TYPE_WQ
+makes it simpler to check if a cpu can run a task into an work queue, since
+code just need to go through a single HK_TYPE_* cpumask.
+
+Make isolcpus=domain aggregate both HK_TYPE_DOMAIN and HK_TYPE_WQ, and
+remove a lot of cpumask_and calls.
+
+Also, remove a unnecessary '|=' at housekeeping_isolcpus_setup() since we
+are sure that 'flags == 0' here.
 
 Signed-off-by: Leonardo Bras <leobras@redhat.com>
 ---
- include/linux/sched/isolation.h | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ drivers/pci/pci-driver.c | 13 +------------
+ kernel/sched/isolation.c |  4 ++--
+ kernel/workqueue.c       |  1 -
+ net/core/net-sysfs.c     |  1 -
+ 4 files changed, 3 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
-index 762701f295d1c..9333c28153a7a 100644
---- a/include/linux/sched/isolation.h
-+++ b/include/linux/sched/isolation.h
-@@ -7,18 +7,25 @@
- #include <linux/tick.h>
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 107d77f3c8467..550bef2504b8d 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -371,19 +371,8 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
+ 	    pci_physfn_is_probed(dev)) {
+ 		cpu = nr_cpu_ids;
+ 	} else {
+-		cpumask_var_t wq_domain_mask;
+-
+-		if (!zalloc_cpumask_var(&wq_domain_mask, GFP_KERNEL)) {
+-			error = -ENOMEM;
+-			goto out;
+-		}
+-		cpumask_and(wq_domain_mask,
+-			    housekeeping_cpumask(HK_TYPE_WQ),
+-			    housekeeping_cpumask(HK_TYPE_DOMAIN));
+-
+ 		cpu = cpumask_any_and(cpumask_of_node(node),
+-				      wq_domain_mask);
+-		free_cpumask_var(wq_domain_mask);
++				      housekeeping_cpumask(HK_TYPE_WQ));
+ 	}
  
- enum hk_type {
--	HK_TYPE_TIMER,
--	HK_TYPE_RCU,
--	HK_TYPE_MISC,
--	HK_TYPE_SCHED,
--	HK_TYPE_TICK,
--	HK_TYPE_DOMAIN,
--	HK_TYPE_WQ,
--	HK_TYPE_MANAGED_IRQ,
--	HK_TYPE_KTHREAD,
-+	HK_TYPE_TIMER,		/* Timer interrupt, watchdogs */
-+	HK_TYPE_RCU,		/* RCU callbacks */
-+	HK_TYPE_MISC,		/* Minor housekeeping categories */
-+	HK_TYPE_SCHED,		/* Scheduling and idle load balancing */
-+	HK_TYPE_TICK,		/* See isolcpus=nohz boot parameter */
-+	HK_TYPE_DOMAIN,		/* See isolcpus=domain boot parameter*/
-+	HK_TYPE_WQ,		/* Work Queues*/
-+	HK_TYPE_MANAGED_IRQ,	/* See isolcpus=managed_irq boot parameter */
-+	HK_TYPE_KTHREAD,	/* kernel threads */
- 	HK_TYPE_MAX
- };
+ 	if (cpu < nr_cpu_ids)
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index 373d42c707bc5..ced4b78564810 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -204,7 +204,7 @@ static int __init housekeeping_isolcpus_setup(char *str)
  
-+/* Kernel parameters like nohz_full and isolcpus allow passing cpu numbers
-+ * for disabling housekeeping types.
-+ *
-+ * The functions bellow work the opposite way, by referencing which cpus
-+ * are able to perform the housekeeping type in parameter.
-+ */
-+
- #ifdef CONFIG_CPU_ISOLATION
- DECLARE_STATIC_KEY_FALSE(housekeeping_overridden);
- int housekeeping_any_cpu(enum hk_type type);
+ 		if (!strncmp(str, "domain,", 7)) {
+ 			str += 7;
+-			flags |= HK_FLAG_DOMAIN;
++			flags |= HK_FLAG_DOMAIN | HK_FLAG_WQ;
+ 			continue;
+ 		}
+ 
+@@ -234,7 +234,7 @@ static int __init housekeeping_isolcpus_setup(char *str)
+ 
+ 	/* Default behaviour for isolcpus without flags */
+ 	if (!flags)
+-		flags |= HK_FLAG_DOMAIN;
++		flags = HK_FLAG_DOMAIN | HK_FLAG_WQ;
+ 
+ 	return housekeeping_setup(str, flags);
+ }
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1b..b557daa571f17 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -6004,7 +6004,6 @@ void __init workqueue_init_early(void)
+ 
+ 	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
+ 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
+-	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+ 
+ 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+ 
+diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+index 8409d41405dfe..7b6fb62a118ab 100644
+--- a/net/core/net-sysfs.c
++++ b/net/core/net-sysfs.c
+@@ -852,7 +852,6 @@ static ssize_t store_rps_map(struct netdev_rx_queue *queue,
+ 	}
+ 
+ 	if (!cpumask_empty(mask)) {
+-		cpumask_and(mask, mask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+ 		cpumask_and(mask, mask, housekeeping_cpumask(HK_TYPE_WQ));
+ 		if (cpumask_empty(mask)) {
+ 			free_cpumask_var(mask);
 -- 
 2.38.0
 
