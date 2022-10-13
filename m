@@ -2,80 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0B35FDE51
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2275FDE55
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJMQhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
+        id S229794AbiJMQhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJMQh3 (ORCPT
+        with ESMTP id S229621AbiJMQhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:37:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6415D147077;
-        Thu, 13 Oct 2022 09:37:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 13 Oct 2022 12:37:33 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A520B14D1C1;
+        Thu, 13 Oct 2022 09:37:32 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F32296188A;
-        Thu, 13 Oct 2022 16:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84E9C433C1;
-        Thu, 13 Oct 2022 16:37:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FCV2oPJp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665679045;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D88E01EC0391;
+        Thu, 13 Oct 2022 18:37:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665679046;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UmeCPn/fxSK1XcuXoft40rN7Z/AJPRNDXC688MYJmxU=;
-        b=FCV2oPJpb15o3hlo9A+6Es+zOLTFKhZ2otGoyP9woQHyI85LVU+6TPxQkgcjHrw62Dm1yu
-        tTUPN8EBYqbVzoMx0YW4LVCnzE3LyUsHwjXt6B4+NbdlLLaolS4yNbcfP60EG1liprulMP
-        rKY8gpxnkXfE1tydTDRV3u+yNKF8NNs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 11f654bd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 13 Oct 2022 16:37:25 +0000 (UTC)
-Date:   Thu, 13 Oct 2022 10:37:21 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-toolchains@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: gcc 5 & 6 & others already out of date?
-Message-ID: <Y0g+wTTJmlaFVLzr@zx2c4.com>
-References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
- <Y0gLyLbdOCetX5LN@sirena.org.uk>
- <Y0gteD0QYVlYxSZh@zx2c4.com>
- <Y0g8HEYHZYHGdwlf@sirena.org.uk>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ou/w9ynQ8Hs436Zn7PItbkcwWscVTMHrkNZyvmJlkKg=;
+        b=b16OvKxS6nFv4P6D6rO7xcQbf48MjBhz3p0YWPJok6KxcLL8+usXnjKA4d6l9VtVuJv57L
+        uu0HJcca4bqjpUqqheTapGrQU3OM4Fsbzjc91lsSuAbnWo8c8G1mVtSyCf2aGe/kOOJAXs
+        nit+G9l4sstD+IlkPYXRilTZxD8Vck4=
+Date:   Thu, 13 Oct 2022 18:37:22 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Justin He <Justin.He@arm.com>, Len Brown <lenb@kernel.org>,
+        James Morse <James.Morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        nd <nd@arm.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
+Message-ID: <Y0g+wv1AB1dHhvq+@zn.tnic>
+References: <20221010023559.69655-1-justin.he@arm.com>
+ <20221010023559.69655-7-justin.he@arm.com>
+ <Y0VGkUxpqiIzIFzB@zn.tnic>
+ <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
+ <Y0WBklS1XpB5as+m@zn.tnic>
+ <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
+ <Y0gUpoaUBKw/jjaD@zn.tnic>
+ <CAMj1kXGtTRaKCKJnsJ9XcRus+H16mO3TGsz+TFJLraOyvfciCA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y0g8HEYHZYHGdwlf@sirena.org.uk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXGtTRaKCKJnsJ9XcRus+H16mO3TGsz+TFJLraOyvfciCA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 05:26:04PM +0100, Mark Brown wrote:
-> Note that I'm not saying we shouldn't upgrade our requirements at all,
-> just that I'm worrying about going from one extreme to the other in
-> terms of version requirements - it feels like there's a step change when
-> you move from things you can get in current release distros people are
-> likely to be using to things that will require a large proportion of
-> people to install extra stuff.  At the minute we're more at the other
-> end where it can be hard to figure out who'd even have the oldest
-> versions we support without deliberately seeking them out and keeping
-> them going is noticably making work for people.
+On Thu, Oct 13, 2022 at 05:41:06PM +0200, Ard Biesheuvel wrote:
+> No it definitely does not imply that. A memory clobber is a codegen
+> construct, and the hardware could still complete the writes in a way
+> that could result in another observer seeing a mix of old and new
+> values that is inconsistent with the ordering of the stores as issued
+> by the compiler.
 
-Regarding "one extreme to the other", I suspect that in spite of my
-arguments, which would seem to justify an extreme, the actual thing I
-suggested is a bit more moderate: let's support the latest 2 or 3 gccs
-at the time of kernel release. If we choose 3, that's roughly 3 years of
-gccs, right? 3 years seems like a fairly long amount of time.
+Yes, but look at the code. There's a:
 
-Jason
+	smp_wmb();
+
+which on x86 is
+
+	#define smp_wmb() barrier()
+
+which is
+
+	#define barrier() __asm__ __volatile__("": : :"memory")
+
+so there wasn't a hardware memory barrier there in the first place.
+
+Unless ARM does something else in those primitives...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
