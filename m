@@ -2,216 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3615FD5E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921ED5FD5ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJMIGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S229777AbiJMIHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJMIF4 (ORCPT
+        with ESMTP id S229841AbiJMIGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:05:56 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B8146393
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:05:51 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id y26-20020a5d9b1a000000b006bc71505e97so621122ion.16
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:05:51 -0700 (PDT)
+        Thu, 13 Oct 2022 04:06:47 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6406D14BB73
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:06:18 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id q63-20020a632a42000000b0045724b1dfb9so647896pgq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0C6s+MNUKUyiE+/v2qK38FP6EUh65MnvoFXMGNDXtt8=;
+        b=LFmej4FtWtIw+ACUmCkBCvNhPT5OE+ghqTanmbl0BbWy+m7ISQZb20JgrgxyFPdEE3
+         7UCbQwC7Vn0e+YeertLEaR0iPnrT+nUULrtjTi9do6eHuaN6K1+EZnydHD/9uUIAJg0Q
+         oI0AKC4efh2WQzZ7mUR5l44vVnVRkLJnLSyw/Pq+2OBiIVDY+8EZFmF//lz1sM8EA5VR
+         40mGlJOI34LUTdr4G6rw4QacZQ6VPAmY6gLjfuo8U+k6VRtnV/aP/gX8R48E/CrfIyea
+         BmUTweXILgGIzEDPq6QDk2mQoYRi6KRH/YSfId4WGkMsUjBH8NRfaY46Y9O1afiqTIry
+         ds0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jUnRaxqYqXkrwerVTp/d6txF1b+SFIRn9usC1sP0gUY=;
-        b=vGObdplUzpT/d4ossntG/Fgj4VNZBFBfKwSFKIt+IenX748Ez6L8Xg3SG5oQjRHIuU
-         F/Rx5OMxKOkz8mHOI9GxcYSv+YEcd2/lbyG8TUrojsQMPnNy8R8y+bELU7d2xHZLJIaX
-         npOJQIQw/w4MKNE4YCdUXPxyut3gHnpxeEXxJvvj/sT2ODG3XG7G/wc8nhUe+3VAin3R
-         gPHS4fyL0gE+4tIaXbM6BzhhxJLRNseq0Y7EaAzzWKGR/jc8XVOMoqjS8//IwFirBJVU
-         kgizxVM8jUOcCUc8fX0EPRdKmuhPq1rmGavtOVDxAMW4C7jLgqdBsdNFh1uXjgMGjsIQ
-         JfbA==
-X-Gm-Message-State: ACrzQf13BlhXU34J2sku9gNaULwL7S9fpwyKAciorCc7+hcGUJ8QEffv
-        K1//b2VoW360v1WLdXAMMBSjRu6qmnkzeaQaD87WgCJB9Mld
-X-Google-Smtp-Source: AMsMyM7S5Wxx2NdDC0TJUQONdXOwZSfkepQnHZCzbFebSVRfkOJy6nqoPIgG+dmmK89MDZmemf5850EIbjhasl5MGncY4qn3aJhQ
-MIME-Version: 1.0
-X-Received: by 2002:a02:aa8a:0:b0:363:b24c:d2c7 with SMTP id
- u10-20020a02aa8a000000b00363b24cd2c7mr11689456jai.126.1665648340991; Thu, 13
- Oct 2022 01:05:40 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 01:05:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000af835305eae5f974@google.com>
-Subject: [syzbot] WARNING: locking bug in ext4_es_lookup_extent
-From:   syzbot <syzbot+c07a3726c89b814d58f1@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0C6s+MNUKUyiE+/v2qK38FP6EUh65MnvoFXMGNDXtt8=;
+        b=K3Xduhprr5mElBcWovnHGPW334xtofXQ4ccSMEoZmvM1dv1t0nLdwKgTdbHEgRXDH8
+         WoN4qW6ONaSmXZscZ3KhVjdloY9r8EoWN9UpVHui7m+Sti3uJB4fptECNAzt/jkgBI8B
+         EEgn/S6JrIIcbPMpTYcCagZo8ALV8jJda+I8Vz2Cqs+k8UbZgXXKUgNtvHkGLTtQ3GuP
+         T5K/fpMnUPp1hW8chg4AL74BktaXPl65lQxZ6piX5bEsnu40eP9jyj/KcXXPFR53b0Yk
+         F0Z8Y1xifudVrNKwv8H35G5IzowhDVAkd6JeQmoplGonPNgJ6zJ0fnwVjo2jSRxeS3aV
+         0iig==
+X-Gm-Message-State: ACrzQf0/2vzrqtnFmEC7zo5d8M9W6DdC3Hzb/ZRLJa7iwNmCx/PXkHHb
+        piOdZN6fyEVqGToWNteuWrTOLhn68q8TDt7G
+X-Google-Smtp-Source: AMsMyM6cdohpJOw0dU+5OtiEXdVBkLltK/MrBtcua6pxb/KCPsQWsBedZjQwDw2n1xK4MbpqJw/ZFHS4JhQq92XJ
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a17:902:d50f:b0:178:6505:fae3 with SMTP
+ id b15-20020a170902d50f00b001786505fae3mr34564172plg.54.1665648378508; Thu,
+ 13 Oct 2022 01:06:18 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 08:05:46 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20221013080545.1552573-1-sadiyakazi@google.com>
+Subject: [PATCH v2] Documentation: Kunit: Update architecture.rst for minor fixes
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, bagasdotme@gmail.com
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Updated the architecture.rst page with the following changes:
+-Add missing article _the_ across the document.
+-Reword content across for style and standard.
+-Update all occurrences of Command Line to
+ Command-line across the document.
+-Correct grammatical issues, for example, added _it_
+ wherever missing.
+-Update all occurrences of =E2=80=9Cvia" to either
+ use =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
+-Update the text preceding the external links and pushed
+the full link to a new line for better readability.
+-Reword content under the config command to make it
+ more clear and concise.
 
-syzbot found the following issue on:
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
+Thank you David and Bagas for reviewing the doc. I have added the feedback.
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1527787c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=c07a3726c89b814d58f1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c07a3726c89b814d58f1@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 1 PID: 22100 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4727 [inline]
-WARNING: CPU: 1 PID: 22100 at kernel/locking/lockdep.c:231 __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
-Modules linked in:
-CPU: 1 PID: 22100 Comm: syz-executor.2 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-pc : __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-lr : __lock_acquire+0x298/0x30a4 kernel/locking/lockdep.c:5003
-sp : ffff80001355b760
-x29: ffff80001355b840 x28: 0000000000000001 x27: ffff00011ab9b528
-x26: ffff00010f3a0d20 x25: ffff00011ab9bf58 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000001 x19: aaaaab5555430f42 x18: 0000000000000060
-x17: ffff80000bffd6bc x16: ffff80000db49158 x15: ffff00011ab9b500
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d5ef920
-x11: ff808000081c0d5c x10: ffff80000dd0b198 x9 : 12b67c41ea08a500
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000819545c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
-Call trace:
- check_wait_context kernel/locking/lockdep.c:4727 [inline]
- __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_read_lock include/linux/rwlock_api_smp.h:150 [inline]
- _raw_read_lock+0x68/0x84 kernel/locking/spinlock.c:228
- ext4_es_lookup_extent+0x64/0x25c fs/ext4/extents_status.c:933
- ext4_map_blocks+0xb4/0xaec fs/ext4/inode.c:528
- ext4_protect_reserved_inode fs/ext4/block_validity.c:168 [inline]
- ext4_setup_system_zone+0x3bc/0x76c fs/ext4/block_validity.c:251
- __ext4_fill_super+0x2e74/0x36d4 fs/ext4/super.c:5274
- ext4_fill_super+0x100/0x2d8 fs/ext4/super.c:5517
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ext4_get_tree+0x28/0x38 fs/ext4/super.c:5547
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-irq event stamp: 953
-hardirqs last  enabled at (953): [<ffff80000bfc89b4>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (953): [<ffff80000bfc89b4>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (952): [<ffff80000bfc87f0>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (952): [<ffff80000bfc87f0>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
-softirqs last  enabled at (858): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (845): [<ffff800008017c14>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
----[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000000000b8
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000160bbe000
-[00000000000000b8] pgd=080000015cbc6003, p4d=080000015cbc6003, pud=0800000165248003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 22100 Comm: syz-executor.2 Tainted: G        W          6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-pc : __lock_acquire+0x2d0/0x30a4 kernel/locking/lockdep.c:5003
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-lr : __lock_acquire+0x298/0x30a4 kernel/locking/lockdep.c:5003
-sp : ffff80001355b760
-x29: ffff80001355b840 x28: 0000000000000001 x27: ffff00011ab9b528
-x26: ffff00010f3a0d20 x25: ffff00011ab9bf58 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000001 x19: aaaaab5555430f42 x18: 0000000000000060
-x17: ffff80000bffd6bc x16: ffff80000db49158 x15: ffff00011ab9b500
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d5ef920
-x11: ff808000081c0d5c x10: ffff80000dd0b198 x9 : 0000000000050f42
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000819545c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
-Call trace:
- hlock_class kernel/locking/lockdep.c:222 [inline]
- check_wait_context kernel/locking/lockdep.c:4728 [inline]
- __lock_acquire+0x2d0/0x30a4 kernel/locking/lockdep.c:5003
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_read_lock include/linux/rwlock_api_smp.h:150 [inline]
- _raw_read_lock+0x68/0x84 kernel/locking/spinlock.c:228
- ext4_es_lookup_extent+0x64/0x25c fs/ext4/extents_status.c:933
- ext4_map_blocks+0xb4/0xaec fs/ext4/inode.c:528
- ext4_protect_reserved_inode fs/ext4/block_validity.c:168 [inline]
- ext4_setup_system_zone+0x3bc/0x76c fs/ext4/block_validity.c:251
- __ext4_fill_super+0x2e74/0x36d4 fs/ext4/super.c:5274
- ext4_fill_super+0x100/0x2d8 fs/ext4/super.c:5517
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ext4_get_tree+0x28/0x38 fs/ext4/super.c:5547
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: b002db8a 91056210 9106614a b9400329 (3942e114) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	b002db8a 	adrp	x10, 0x5b71000
-   4:	91056210 	add	x16, x16, #0x158
-   8:	9106614a 	add	x10, x10, #0x198
-   c:	b9400329 	ldr	w9, [x25]
-* 10:	3942e114 	ldrb	w20, [x8, #184] <-- trapping instruction
-
+Changes since V1:
+https://lore.kernel.org/linux-kselftest/20221010171353.1106166-1-sadiyakazi=
+@google.com/
+- Corrected the typo in the commit message.
+- Followed the style for links as suggested by Bagas throughout the documen=
+t.
+- Updated the links for latest versions whereever applicable
+  (Note: Links having no changes between 5.15 and 6.0 have been retained).
+- Updated the KTAP spec link to point to Documentation/dev-tools/ktap.rst.
+- Reworded content as per David and Bagas's feedback.
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../dev-tools/kunit/architecture.rst          | 114 +++++++++---------
+ 1 file changed, 57 insertions(+), 57 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation=
+/dev-tools/kunit/architecture.rst
+index 8efe792bdcb9..b8ee0fa8afc3 100644
+--- a/Documentation/dev-tools/kunit/architecture.rst
++++ b/Documentation/dev-tools/kunit/architecture.rst
+@@ -4,16 +4,17 @@
+ KUnit Architecture
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The KUnit architecture can be divided into two parts:
++The KUnit architecture is divided into two parts:
+=20
+ - `In-Kernel Testing Framework`_
+-- `kunit_tool (Command Line Test Harness)`_
++- `kunit_tool (Command-line Test Harness)`_
+=20
+ In-Kernel Testing Framework
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+=20
+ The kernel testing library supports KUnit tests written in C using
+-KUnit. KUnit tests are kernel code. KUnit does several things:
++KUnit. These KUnit tests are kernel code. KUnit performs the following
++tasks:
+=20
+ - Organizes tests
+ - Reports test results
+@@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does several =
+things:
+ Test Cases
+ ----------
+=20
+-The fundamental unit in KUnit is the test case. The KUnit test cases are
+-grouped into KUnit suites. A KUnit test case is a function with type
+-signature ``void (*)(struct kunit *test)``.
+-These test case functions are wrapped in a struct called
+-struct kunit_case.
++The test case is the fundamental unit in KUnit. KUnit test cases are organ=
+ised
++into suites. A KUnit test case is a function with type signature
++``void (*)(struct kunit *test)``. These test case functions are wrapped in=
+ a
++struct called struct kunit_case.
+=20
+ .. note:
+ 	``generate_params`` is optional for non-parameterized tests.
+=20
+-Each KUnit test case gets a ``struct kunit`` context
+-object passed to it that tracks a running test. The KUnit assertion
+-macros and other KUnit utilities use the ``struct kunit`` context
+-object. As an exception, there are two fields:
++Each KUnit test case receives a ``struct kunit`` context object that track=
+s a
++running test. The KUnit assertion macros and other KUnit utilities use the
++``struct kunit`` context object. As an exception, there are two fields:
+=20
+ - ``->priv``: The setup functions can use it to store arbitrary test
+   user data.
+@@ -77,12 +76,12 @@ Executor
+=20
+ The KUnit executor can list and run built-in KUnit tests on boot.
+ The Test suites are stored in a linker section
+-called ``.kunit_test_suites``. For code, see:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
+clude/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
++called ``.kunit_test_suites``. For the full code, see
++`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux/k=
+ernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv6.=
+0#n950>`_ .
+ The linker section consists of an array of pointers to
+ ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
+-macro. To run all tests compiled into the kernel, the KUnit executor
+-iterates over the linker section array.
++macro. The KUnit executor iterates over the linker section array in order =
+to
++run all the tests that are compiled into the kernel.
+=20
+ .. kernel-figure:: kunit_suitememorydiagram.svg
+ 	:alt:	KUnit Suite Memory
+@@ -90,17 +89,16 @@ iterates over the linker section array.
+ 	KUnit Suite Memory Diagram
+=20
+ On the kernel boot, the KUnit executor uses the start and end addresses
+-of this section to iterate over and run all tests. For code, see:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
+b/kunit/executor.c
+-
++of this section to iterate over and run all tests. For the full code, see
++`executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
+x.git/tree/lib/kunit/executor.c>`_.
+ When built as a module, the ``kunit_test_suites()`` macro defines a
+ ``module_init()`` function, which runs all the tests in the compilation
+ unit instead of utilizing the executor.
+=20
+ In KUnit tests, some error classes do not affect other tests
+ or parts of the kernel, each KUnit case executes in a separate thread
+-context. For code, see:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
+b/kunit/try-catch.c?h=3Dv5.15#n58
++context. For the full code, see
++`try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/lin=
+ux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
+=20
+ Assertion Macros
+ ----------------
+@@ -111,37 +109,36 @@ All expectations/assertions are formatted as:
+=20
+ - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
+   expectation.
++  In the event of a failure, the testing flow differs as follows:
+=20
+-	- For an expectation, if the check fails, marks the test as failed
+-	  and logs the failure.
++	- For expectations, the test is marked as failed and the failure is logge=
+d.
+=20
+-	- An assertion, on failure, causes the test case to terminate
+-	  immediately.
++	- Failing assertions, on the other hand, result in the test case being
++	  terminated immediately.
+=20
+-		- Assertions call function:
++		- Assertions call the function:
+ 		  ``void __noreturn kunit_abort(struct kunit *)``.
+=20
+-		- ``kunit_abort`` calls function:
++		- ``kunit_abort`` calls the function:
+ 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_ca=
+tch)``.
+=20
+-		- ``kunit_try_catch_throw`` calls function:
++		- ``kunit_try_catch_throw`` calls the function:
+ 		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn=
+;``
+ 		  and terminates the special thread context.
+=20
+ - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
+-  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied prop=
+erties are
++  has the boolean value "true"), ``EQ`` (two supplied properties are
+   equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
+-  contain an =E2=80=9Cerr=E2=80=9D value).
++  contain an "err" value).
+=20
+ - ``[_MSG]`` prints a custom message on failure.
+=20
+ Test Result Reporting
+ ---------------------
+-KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
+-https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14=
+-specification.md.
+-KTAP (yet to be standardized format) works with KUnit and Kselftest.
+-The KUnit executor prints KTAP results to dmesg, and debugfs
+-(if configured).
++KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
++Documentation/dev-tools/ktap.rst.
++KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP result=
+s to
++dmesg, and debugfs (if configured).
+=20
+ Parameterized Tests
+ -------------------
+@@ -150,33 +147,33 @@ Each KUnit parameterized test is associated with a co=
+llection of
+ parameters. The test is invoked multiple times, once for each parameter
+ value and the parameter is stored in the ``param_value`` field.
+ The test case includes a KUNIT_CASE_PARAM() macro that accepts a
+-generator function.
+-The generator function is passed the previous parameter and returns the ne=
+xt
+-parameter. It also provides a macro to generate common-case generators bas=
+ed on
+-arrays.
++generator function. The generator function is passed the previous paramete=
+r
++and returns the next parameter. It also includes a macro for generating
++array-based common-case generators.
+=20
+-kunit_tool (Command Line Test Harness)
++kunit_tool (Command-line Test Harness)
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
+-that can be used to configure, build, exec, parse and run (runs other
+-commands in order) test results. You can either run KUnit tests using
+-kunit_tool or can include KUnit in kernel and parse manually.
++``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py=
+``. It
++is used to configure, build, execute, parse test results and run all of th=
+e
++previous commands in correct order (i.e., configure, build, execute and pa=
+rse).
++You have two options for running KUnit tests: either use KUnit
++directly through the kernel and parse manually, or use the ``kunit_tool``.
+=20
+ - ``configure`` command generates the kernel ``.config`` from a
+   ``.kunitconfig`` file (and any architecture-specific options).
+-  For some architectures, additional config options are specified in the
+-  ``qemu_config`` Python script
+-  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
++  The Python scripts available in ``qemu_configs`` folder
++  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
++  additional configuration options for specific architectures.
+   It parses both the existing ``.config`` and the ``.kunitconfig`` files
+-  and ensures that ``.config`` is a superset of ``.kunitconfig``.
+-  If this is not the case, it will combine the two and run
+-  ``make olddefconfig`` to regenerate the ``.config`` file. It then
+-  verifies that ``.config`` is now a superset. This checks if all
+-  Kconfig dependencies are correctly specified in ``.kunitconfig``.
+-  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
+-  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
+-  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
++  to ensure that ``.config`` is a superset of ``.kunitconfig``.
++  If not, it will combine the two and run ``make olddefconfig`` to regener=
+ate
++  the ``.config`` file. It then checks to see if ``.config`` has become a =
+superset.
++  This verifies that all the Kconfig dependencies are correctly specified =
+in the file
++  ``.kunitconfig``. The ``kunit_config.py`` script contains the code for p=
+arsing
++  Kconfigs. The code which runs ``make olddefconfig`` is part of the
++  ``kunit_kernel.py`` script. You can invoke this command through:
++  ``./tools/testing/kunit/kunit.py config`` and
+   generate a ``.config`` file.
+ - ``build`` runs ``make`` on the kernel tree with required options
+   (depends on the architecture and some options, for example: build_dir)
+@@ -184,8 +181,8 @@ kunit_tool or can include KUnit in kernel and parse man=
+ually.
+   To build a KUnit kernel from the current ``.config``, you can use the
+   ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
+ - ``exec`` command executes kernel results either directly (using
+-  User-mode Linux configuration), or via an emulator such
+-  as QEMU. It reads results from the log via standard
++  User-mode Linux configuration), or through an emulator such
++  as QEMU. It reads results from the log using standard
+   output (stdout), and passes them to ``parse`` to be parsed.
+   If you already have built a kernel with built-in KUnit tests,
+   you can run the kernel and display the test results with the ``exec``
+@@ -193,3 +190,6 @@ kunit_tool or can include KUnit in kernel and parse man=
+ually.
+ - ``parse`` extracts the KTAP output from a kernel log, parses
+   the test results, and prints a summary. For failed tests, any
+   diagnostic output will be included.
++
++For more information on kunit_tool, see
++Documentation/dev-tools/kunit/run_wrapper.rst.
+--=20
+2.38.0.rc1.362.ged0d419d3c-goog
+
