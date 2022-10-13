@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002AD5FDF88
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1F75FDFCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiJMRzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S230234AbiJMR60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiJMRyY (ORCPT
+        with ESMTP id S230230AbiJMR51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:54:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1651115380F;
-        Thu, 13 Oct 2022 10:53:49 -0700 (PDT)
+        Thu, 13 Oct 2022 13:57:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380E8659EF;
+        Thu, 13 Oct 2022 10:56:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5AB4B82025;
-        Thu, 13 Oct 2022 17:53:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1CD3C433D6;
-        Thu, 13 Oct 2022 17:53:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18BB6B81CF4;
+        Thu, 13 Oct 2022 17:56:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF15C433D6;
+        Thu, 13 Oct 2022 17:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683627;
-        bh=1Ll6/7ocjbBrCFkgVE7FHQn8nDSrcLDqlbjznr3zqsM=;
+        s=korg; t=1665683763;
+        bh=NP1XPEhn7jtkvGePO/ii4tg8z2O0BgSRceDNFGGZJbk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N3CEH3Ud/FqaCW7otzq54DeAQqg02A6VJUkwRg8/zaUp8YlUMjTbA3Ttsgu26Q0GR
-         t1K8nopVwPWDaAKid8dRiSpkbPcB6PJaKsfSs566eEHDzgKjjo/zef/x86FMqfLlzz
-         K4HmwBYiLPGpbpLshsozM/WvfAQDU8sBaTQoRzY0=
+        b=JXwH/mBoenPXO1zXVoUy4hPIxLn1+pEHD7viMJz/6opnDQaXqqYxHt2ZS/xOc4+5p
+         shgUamLT44+1qZV/Pz9J/McBavNugFAb6SllJMQDX3PMXeqVwP0Oqh4tiJKjHLio72
+         I1+mTSNOdpnfKprSIRfG3qXxBY5iyqhNIos7CIl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 33/38] wifi: cfg80211: fix BSS refcounting bugs
-Date:   Thu, 13 Oct 2022 19:52:34 +0200
-Message-Id: <20221013175145.345782325@linuxfoundation.org>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 41/54] random: avoid reading two cache lines on irq randomness
+Date:   Thu, 13 Oct 2022 19:52:35 +0200
+Message-Id: <20221013175148.335434415@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+References: <20221013175147.337501757@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,90 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 0b7808818cb9df6680f98996b8e9a439fa7bcc2f upstream.
+commit 9ee0507e896b45af6d65408c77815800bce30008 upstream.
 
-There are multiple refcounting bugs related to multi-BSSID:
- - In bss_ref_get(), if the BSS has a hidden_beacon_bss, then
-   the bss pointer is overwritten before checking for the
-   transmitted BSS, which is clearly wrong. Fix this by using
-   the bss_from_pub() macro.
+In order to avoid reading and dirtying two cache lines on every IRQ,
+move the work_struct to the bottom of the fast_pool struct. add_
+interrupt_randomness() always touches .pool and .count, which are
+currently split, because .mix pushes everything down. Instead, move .mix
+to the bottom, so that .pool and .count are always in the first cache
+line, since .mix is only accessed when the pool is full.
 
- - In cfg80211_bss_update() we copy the transmitted_bss pointer
-   from tmp into new, but then if we release new, we'll unref
-   it erroneously. We already set the pointer and ref it, but
-   need to NULL it since it was copied from the tmp data.
-
- - In cfg80211_inform_single_bss_data(), if adding to the non-
-   transmitted list fails, we unlink the BSS and yet still we
-   return it, but this results in returning an entry without
-   a reference. We shouldn't return it anyway if it was broken
-   enough to not get added there.
-
-This fixes CVE-2022-42720.
-
-Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
-Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
-Fixes: a3584f56de1c ("cfg80211: Properly track transmitting and non-transmitting BSS")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: 58340f8e952b ("random: defer fast pool mixing to worker")
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/scan.c |   27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -104,18 +104,12 @@ static inline void bss_ref_get(struct cf
- 	lockdep_assert_held(&rdev->bss_lock);
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -895,10 +895,10 @@ void __cold add_bootloader_randomness(co
+ EXPORT_SYMBOL_GPL(add_bootloader_randomness);
  
- 	bss->refcount++;
--	if (bss->pub.hidden_beacon_bss) {
--		bss = container_of(bss->pub.hidden_beacon_bss,
--				   struct cfg80211_internal_bss,
--				   pub);
--		bss->refcount++;
--	}
--	if (bss->pub.transmitted_bss) {
--		bss = container_of(bss->pub.transmitted_bss,
--				   struct cfg80211_internal_bss,
--				   pub);
--		bss->refcount++;
--	}
-+
-+	if (bss->pub.hidden_beacon_bss)
-+		bss_from_pub(bss->pub.hidden_beacon_bss)->refcount++;
-+
-+	if (bss->pub.transmitted_bss)
-+		bss_from_pub(bss->pub.transmitted_bss)->refcount++;
- }
+ struct fast_pool {
+-	struct work_struct mix;
+ 	unsigned long pool[4];
+ 	unsigned long last;
+ 	unsigned int count;
++	struct work_struct mix;
+ };
  
- static inline void bss_ref_put(struct cfg80211_registered_device *rdev,
-@@ -1233,6 +1227,8 @@ cfg80211_bss_update(struct cfg80211_regi
- 		new->refcount = 1;
- 		INIT_LIST_HEAD(&new->hidden_list);
- 		INIT_LIST_HEAD(&new->pub.nontrans_list);
-+		/* we'll set this later if it was non-NULL */
-+		new->pub.transmitted_bss = NULL;
- 
- 		if (rcu_access_pointer(tmp->pub.proberesp_ies)) {
- 			hidden = rb_find_bss(rdev, tmp, BSS_CMP_HIDE_ZLEN);
-@@ -1462,10 +1458,15 @@ cfg80211_inform_single_bss_data(struct w
- 		spin_lock_bh(&rdev->bss_lock);
- 		if (cfg80211_add_nontrans_list(non_tx_data->tx_bss,
- 					       &res->pub)) {
--			if (__cfg80211_unlink_bss(rdev, res))
-+			if (__cfg80211_unlink_bss(rdev, res)) {
- 				rdev->bss_generation++;
-+				res = NULL;
-+			}
- 		}
- 		spin_unlock_bh(&rdev->bss_lock);
-+
-+		if (!res)
-+			return NULL;
- 	}
- 
- 	trace_cfg80211_return_bss(&res->pub);
+ static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
 
 
