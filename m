@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8355FD4A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143405FD4A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiJMGVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 02:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S229533AbiJMGWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJMGVo (ORCPT
+        with ESMTP id S229437AbiJMGWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:21:44 -0400
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01507123457;
-        Wed, 12 Oct 2022 23:21:43 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id u10so1274790wrq.2;
-        Wed, 12 Oct 2022 23:21:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uTg4h0yMza3o/vrO4K70GOGER7dHNLxEuY4nmy9ggyQ=;
-        b=JdEwDyfO2rpNBIb93V8Iwn51o4rZDh8iUwFC25SCtMjT75K21fGIgvkGmb72aFsYhx
-         uqOUjHwnSRClwp0ux2gDD9j1lb6k64mPCRd2q7M+N3qguwgN9AJdGSaW0tRzPVocsCFV
-         Z7z5kHr9NlHPkcbY46jF36t9UZUwWdyeelrJAKCtMkRVvFkB6d0d/741LCOlRideH3CY
-         aC/KZFC2uZ4oNBEBxwDjpTink1Heop6Pb/AyPDxNmnJIyf3c/MnP6eip682TGCd08TkF
-         bjkVdiQfxO8MGNmvSbpP3K4EO+czKIK92C7HHA0Ug1J69u6otFJJMQQPmJBXanRc5Y8H
-         p3Xw==
-X-Gm-Message-State: ACrzQf12Wf4xCG3gYdrlWoTIwk3rOGdbOD9P6srLiwF6NI+Uvnx8imof
-        rzyL+4K2jGEgWZR+qWTg9x4=
-X-Google-Smtp-Source: AMsMyM6dKtfMuzrm0jaUVmfY40rRrt0MnPCBK3OCxUz0bwOyKMCYuGW+SZIWW5GnvEDjIgZqUZ6OyQ==
-X-Received: by 2002:a5d:668a:0:b0:22e:470:174e with SMTP id l10-20020a5d668a000000b0022e0470174emr20749277wru.131.1665642099740;
-        Wed, 12 Oct 2022 23:21:39 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b003c452678025sm3639746wmm.4.2022.10.12.23.21.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 23:21:39 -0700 (PDT)
-Message-ID: <df8b824a-5479-0593-4f87-7ac8317584fa@kernel.org>
-Date:   Thu, 13 Oct 2022 08:21:37 +0200
+        Thu, 13 Oct 2022 02:22:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B802E122BD6;
+        Wed, 12 Oct 2022 23:22:39 -0700 (PDT)
+Received: from [192.168.1.15] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8DB94492;
+        Thu, 13 Oct 2022 08:22:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1665642157;
+        bh=rZBDZR7MZOuIelDaywoffQzbCi2SBztFLeybeY1iFms=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=J2N2e5jmaqPq8FTEoqcSws3JE0J4/SzyThWGE9m+GBNvrZBlinotfty3KQ7c/oLY+
+         8GYtKV8+vhYIW+khhV3kX8sUjyAE+9SUfAcoGb02oVan529TBbN3xKcx5+Rkl8VIJn
+         nMvmBcuBzM++0M+sCSln/2n1Ed6ueTH1/ZoyeYA8=
+Message-ID: <b56197a1-f23d-5f8a-b32d-f8787586364e@ideasonboard.com>
+Date:   Thu, 13 Oct 2022 09:22:33 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH AUTOSEL 5.15 34/47] tty: n_gsm: replace use of
- gsm_read_ea() with gsm_read_ea_val()
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/4] ARM: dts: omap3-n900: fix LCD reset line polarity
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004213503.848262-1-dmitry.torokhov@gmail.com>
+ <Y0UDEtQlN5Y9h7BU@atomide.com>
+ <20221011123726.elsr53ue7nxzhvww@mercury.elektranox.org>
+ <Y0V4cLGbYe4j+ls6@google.com> <Y0V99Agad6Ma+yTC@atomide.com>
+ <Y0V/82JsRVZh6PlL@google.com> <Y0WCCw8k+KTuvdWX@atomide.com>
+ <41373c20-3b97-ac47-81c8-75bf1bbe3a38@ideasonboard.com>
+ <Y0cVw63d3+pAVbd2@google.com>
 Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Daniel Starke <daniel.starke@siemens.com>,
-        kernel test robot <lkp@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221013002124.1894077-1-sashal@kernel.org>
- <20221013002124.1894077-34-sashal@kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221013002124.1894077-34-sashal@kernel.org>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y0cVw63d3+pAVbd2@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,179 +59,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 10. 22, 2:21, Sasha Levin wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
+On 12/10/2022 22:30, Dmitry Torokhov wrote:
+> On Wed, Oct 12, 2022 at 01:58:15PM +0300, Tomi Valkeinen wrote:
+>> Hi,
+>>
+>> On 11/10/2022 17:47, Tony Lindgren wrote:
+>>> * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221011 14:30]:
+>>>> On Tue, Oct 11, 2022 at 05:30:12PM +0300, Tony Lindgren wrote:
+>>>>> * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221011 13:57]:
+>>>>>> Hi Sebastian,
+>>>>>>
+>>>>>> On Tue, Oct 11, 2022 at 02:37:26PM +0200, Sebastian Reichel wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On Tue, Oct 11, 2022 at 08:45:54AM +0300, Tony Lindgren wrote:
+>>>>>>>> * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221004 21:26]:
+>>>>>>>>> The LCD driver (panel-sony-acx565akm), when probing, starts with line
+>>>>>>>>> driven low, and then toggles it to high and keeps it there. Also, the
+>>>>>>>>> line is driven low when powering off the device, and ls released when
+>>>>>>>>> powering it back on. This means that the reset line should be described
+>>>>>>>>> as "active low" in DTS. This will be important when the driver is
+>>>>>>>>> converted to gpiod API which respects the polarity declared in DTS.
+>>>>>>>>
+>>>>>>>> We should ensure these patches get merged together with the driver
+>>>>>>>> change to avoid breaking LCD for booting. Probably no need to have
+>>>>>>>> the driver quirk handling for inverted polartity in this case.
+>>>>>>>>
+>>>>>>>> It's probably easiest to have an immutable branch for the driver
+>>>>>>>> changes I can base the dts changes on. Or I can ack the dts changes
+>>>>>>>> if they get merged with the driver.
+>>>>>>>
+>>>>>>> Both drivers are already using gpiod API:
+>>>>>>>
+>>>>>>> drivers/gpu/drm/panel/panel-sony-acx565akm.c
+>>>>>>> drivers/gpu/drm/panel/panel-dsi-cm.c
+>>>>>>
+>>>>>> I was looking at
+>>>>>>
+>>>>>> drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
+>>>>>> drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+>>>>>
+>>>>> Ah OK that explains :)
+>>>>>
+>>>>>> which are not using gpiod. Should they be retired?
+>>>>>
+>>>>> Yes we should just get rid of them with omapdrm working just fine.
+>>>>
+>>>> Will you be submitting such patches? I'd like to get rid of
+>>>> of_get_named_gpio() and friends if I can...
+>>>
+>>> Adding Tomi to Cc, my guess is he already has such patches and knows
+>>> better which ones can go :)
+>>
+>> To be honest, I haven't really even had a glance towards fbdev for a long
+>> time.
+>>
+>> There is one thing that omapdrm doesn't support, which is VRFB rotation. I
+>> cannot say if the users of those above-mentioned panels require VRFB.
+>>
+>>>>>>> So this just breaks things.
+>>>>>>
+>>>>>> I missed the drivers in drivers/gpu/... and I see that they essentially
+>>>>>> abuse gpiod API as gpiod_set_value() operates on logical level
+>>>>>> (active/inactive) and not absolute (high/low). They should either use
+>>>>>> the gpiod_*_raw() variants, or they should be adjusted to do the proper
+>>>>>> thing together with the accompanying DTS change.
+>>>>>>
+>>>>>> What are your preferences?
+>>>>>
+>>>>> Seems like high/low at the connected device end is what we should use,
+>>>>> right? Otherwise things will misbehave if the panel is connected to
+>>>>> some other SoC possibly.
+>>>>
+>>>> It is exactly because of this case the driver should use active/inactive
+>>>> and follow polarity described in DTS. If the driver does:
+>>>>
+>>>> 	gpiod_set_value_cansleep(d->reset, 1);
+>>>>
+>>>> then if DTS is saying that the reset line is active low, under the wraps
+>>>> the line will be driven to "0", but if DTS is saying that the line is
+>>>> active high, then the very same call will drive the line to "1".
+>>>>
+>>>> This allows accommodating different designs without having to change the
+>>>> driver code.
+>>
+>> Isn't breaking an old dts file quite a bad thing? Why not just add a comment
+>> to the .dts and to the driver about the situation. I don't quite see that
+>> the fixing the dts (And, if done properly, adding a boot time fixup for old
+>> dtbs) and changing the drivers is worth the hassle.
+>>
+>> Unless we see new users for these drivers, which would require the new users
+>> to write broken dts files.
 > 
-> [ Upstream commit 669609cea1d294f43efdd8d57ab65927df90e6df ]
+> Or maybe there are devices with fixed DTSes and fixed up kernels but the
+> fixes have not been contributed upstream. I don't know...
 > 
-> Replace the use of gsm_read_ea() with gsm_read_ea_val() where applicable to
-> improve code readability and avoid errors like in the past. See first link
-> below for reference.
-
-I don't think this warrants for stable. It's only a cleanup, not a fix. 
-And it's quite intrusive.
-
-> Link: https://lore.kernel.org/all/20220504081733.3494-1-daniel.starke@siemens.com/
-> Link: https://lore.kernel.org/all/202208222147.WfFRmf1r-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> Link: https://lore.kernel.org/r/20220831073800.7459-3-daniel.starke@siemens.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   drivers/tty/n_gsm.c | 95 ++++++++++++++++++++++-----------------------
->   1 file changed, 47 insertions(+), 48 deletions(-)
+> My personal opinion is that we pay too much attention to DTS
+> compatibility in cases when it is not totally clear if there are devices
+> that use DTSes that are not bundled with the kernel and also have a
+> chance to have their kernel updated (and be lucky enough for the
+> upstream kernel to work on such device without extensive work).
 > 
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index 154697be11b0..d27247a84aab 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -1297,18 +1297,12 @@ static void gsm_control_modem(struct gsm_mux *gsm, const u8 *data, int clen)
->   	unsigned int modem = 0;
->   	struct gsm_dlci *dlci;
->   	int len = clen;
-> -	int slen;
-> +	int cl = clen;
->   	const u8 *dp = data;
->   	struct tty_struct *tty;
->   
-> -	while (gsm_read_ea(&addr, *dp++) == 0) {
-> -		len--;
-> -		if (len == 0)
-> -			return;
-> -	}
-> -	/* Must be at least one byte following the EA */
-> -	len--;
-> -	if (len <= 0)
-> +	len = gsm_read_ea_val(&addr, data, cl);
-> +	if (len < 1)
->   		return;
->   
->   	addr >>= 1;
-> @@ -1317,15 +1311,20 @@ static void gsm_control_modem(struct gsm_mux *gsm, const u8 *data, int clen)
->   		return;
->   	dlci = gsm->dlci[addr];
->   
-> -	slen = len;
-> -	while (gsm_read_ea(&modem, *dp++) == 0) {
-> -		len--;
-> -		if (len == 0)
-> -			return;
-> -	}
-> -	len--;
-> +	/* Must be at least one byte following the EA */
-> +	if ((cl - len) < 1)
-> +		return;
-> +
-> +	dp += len;
-> +	cl -= len;
-> +
-> +	/* get the modem status */
-> +	len = gsm_read_ea_val(&modem, dp, cl);
-> +	if (len < 1)
-> +		return;
-> +
->   	tty = tty_port_tty_get(&dlci->port);
-> -	gsm_process_modem(tty, dlci, modem, slen - len);
-> +	gsm_process_modem(tty, dlci, modem, cl);
->   	if (tty) {
->   		tty_wakeup(tty);
->   		tty_kref_put(tty);
-> @@ -1819,11 +1818,10 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
->   	struct tty_port *port = &dlci->port;
->   	struct tty_struct *tty;
->   	unsigned int modem = 0;
-> -	int len = clen;
-> -	int slen = 0;
-> +	int len;
->   
->   	if (debug & 16)
-> -		pr_debug("%d bytes for tty\n", len);
-> +		pr_debug("%d bytes for tty\n", clen);
->   	switch (dlci->adaption)  {
->   	/* Unsupported types */
->   	case 4:		/* Packetised interruptible data */
-> @@ -1831,24 +1829,22 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
->   	case 3:		/* Packetised uininterruptible voice/data */
->   		break;
->   	case 2:		/* Asynchronous serial with line state in each frame */
-> -		while (gsm_read_ea(&modem, *data++) == 0) {
-> -			len--;
-> -			slen++;
-> -			if (len == 0)
-> -				return;
-> -		}
-> -		len--;
-> -		slen++;
-> +		len = gsm_read_ea_val(&modem, data, clen);
-> +		if (len < 1)
-> +			return;
->   		tty = tty_port_tty_get(port);
->   		if (tty) {
-> -			gsm_process_modem(tty, dlci, modem, slen);
-> +			gsm_process_modem(tty, dlci, modem, len);
->   			tty_wakeup(tty);
->   			tty_kref_put(tty);
->   		}
-> +		/* Skip processed modem data */
-> +		data += len;
-> +		clen -= len;
->   		fallthrough;
->   	case 1:		/* Line state will go via DLCI 0 controls only */
->   	default:
-> -		tty_insert_flip_string(port, data, len);
-> +		tty_insert_flip_string(port, data, clen);
->   		tty_flip_buffer_push(port);
->   	}
->   }
-> @@ -1869,24 +1865,27 @@ static void gsm_dlci_command(struct gsm_dlci *dlci, const u8 *data, int len)
->   {
->   	/* See what command is involved */
->   	unsigned int command = 0;
-> -	while (len-- > 0) {
-> -		if (gsm_read_ea(&command, *data++) == 1) {
-> -			int clen = *data++;
-> -			len--;
-> -			/* FIXME: this is properly an EA */
-> -			clen >>= 1;
-> -			/* Malformed command ? */
-> -			if (clen > len)
-> -				return;
-> -			if (command & 1)
-> -				gsm_control_message(dlci->gsm, command,
-> -								data, clen);
-> -			else
-> -				gsm_control_response(dlci->gsm, command,
-> -								data, clen);
-> -			return;
-> -		}
-> -	}
-> +	unsigned int clen = 0;
-> +	unsigned int dlen;
-> +
-> +	/* read the command */
-> +	dlen = gsm_read_ea_val(&command, data, len);
-> +	len -= dlen;
-> +	data += dlen;
-> +
-> +	/* read any control data */
-> +	dlen = gsm_read_ea_val(&clen, data, len);
-> +	len -= dlen;
-> +	data += dlen;
-> +
-> +	/* Malformed command? */
-> +	if (clen > len)
-> +		return;
-> +
-> +	if (command & 1)
-> +		gsm_control_message(dlci->gsm, command, data, clen);
-> +	else
-> +		gsm_control_response(dlci->gsm, command, data, clen);
->   }
->   
->   /**
+> Anyway, my goal is to stop exposing of_get_named_gpio() and its
+> derivatives, so please let me know your preference. Should I:
+> 
+> - mirror in omapfb drivers what gpu drivers do and use inverted
+>    polarity
 
--- 
-js
-suse labs
+I would just go with the above for the time being. It should be an easy 
+change, and as these omapfb and drm panel drivers are kind of copies of 
+each other, I think it makes sense to use the same code in both.
+
+That said, I personally don't mind fixing the dts files and the drivers, 
+and even dropping the omapfb panel drivers. However, as I don't know if 
+someone needs the omapfb drivers or has to use an old dtb, I don't want 
+to step on that possible mine field. If someone else wants to go there 
+(without my involvement), fine for me =).
+
+  Tomi
 
