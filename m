@@ -2,158 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46615FD478
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3ECF5FD47B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiJMGFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 02:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S229698AbiJMGHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJMGF3 (ORCPT
+        with ESMTP id S229746AbiJMGHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:05:29 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED65C22B1F;
-        Wed, 12 Oct 2022 23:05:28 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id u2so479661ilv.6;
-        Wed, 12 Oct 2022 23:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DDj4+uRODjMr45xNf5pLX6OxTEFFbTj3Pj7jweavBZ0=;
-        b=kfyDKIfq0/UXndb7SbP3gaHrwAylkoI9zsC4F1QAe6tR9hx5djcgf4lnCSH/cHOyVa
-         f70TBwbfsS6kRnsxjRrOR5qS4I0UG6Qc629O/I0QZwgQ9UC7t3zmMljELIvsEridOC6z
-         IvgTE1LqAjTJ+xw2EHQj0T7pkqNsNSoQevlqS74KC2ZwLmRwKNDcwAR0HoJ7nRIn040g
-         dppmvfzGKaMiZbvosBbkxPnAo8ByYbcx/JLXBI4021HPujdz/zvsUiudFBl663j1wsbj
-         LI/57Bsurpb8HNPwCp6S7aQ+S+bStpp5E7P9+LpMcuVkp5DNlKT3r52cRe3LUQYfrPP4
-         FVCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DDj4+uRODjMr45xNf5pLX6OxTEFFbTj3Pj7jweavBZ0=;
-        b=imJ10IHZEp0qaZKTPXke6EWwVa186qigRhhQ2Ci83DRFGmzmZ1ARSoREhNy4wYyvDX
-         kOusDVyBYc/g+lyLjijHxTH9CaOX61r/NVKuzfufCQVkOOpAUVwzjM+HAA+YPv0SZTgV
-         ogSiIqWMjwrCWcv+Z1i4ZHsp3MsBNpKU+0dicC1N7aurjJ+69CnoNZPqaIsPX5TX8Co3
-         hrH4FyGOGfaiXF19aXr90n4XbRyjvaVQnRgwFR99MHqqZuppJ+xoH7oU1gSLnZrAUklM
-         P0/z2RgWKChP8xooRoRzox6ozv2aj1l2J5lUw0AHEKKTFrpwpDOErGurwboYaXjL22DP
-         2wCg==
-X-Gm-Message-State: ACrzQf1+rrlWFo4cBrf4DYFDhccDdlxAPJzphhbfOcHHgznF0Jv+TIaO
-        FIt6z5RTbvafYd4GVQUPbek=
-X-Google-Smtp-Source: AMsMyM6oNwKP1DHKsPbdJNJ5Qmy7dnImH5E9N9HvRQGLTT+J6m/lx6L0kNC3FXg2uni2RnCEigVdFg==
-X-Received: by 2002:a92:d484:0:b0:2fc:3a29:f8a9 with SMTP id p4-20020a92d484000000b002fc3a29f8a9mr9298488ilg.235.1665641128259;
-        Wed, 12 Oct 2022 23:05:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:9085:f814:ae2e:a9b4? ([2600:1700:2442:6db0:9085:f814:ae2e:a9b4])
-        by smtp.gmail.com with ESMTPSA id d6-20020a05663802a600b00363781b551csm7087606jaq.146.2022.10.12.23.05.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 23:05:27 -0700 (PDT)
-Message-ID: <0d571d21-507d-fcc5-bf58-d02f958de28a@gmail.com>
-Date:   Thu, 13 Oct 2022 01:05:26 -0500
+        Thu, 13 Oct 2022 02:07:33 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B412412C89B;
+        Wed, 12 Oct 2022 23:07:31 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1665641249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3B/9bB/v/kAeYOKjb5xUPdKaOHUVHWVCa/ERpWp/sGA=;
+        b=GNZ/NbOcaAEkjTxmespwlg1bD3ilJEw93QUxGMxPhdRw9uML+Dz1nee8CiJaRVbj/Sut9K
+        vt61V6yMlsC2GbHv71hYiy4GPZdknDfK6NmHqpZ2Ym0QmBZtY0ujRlQJqBasTP83z/zzYz
+        Z+URyC7gk03IOY4qm+YB7cwvwhXCr6Y=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     shaozhengchao@huawei.com
+Cc:     caihuoqing <caihuoqing@baidu.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qiao Ma <mqaio@linux.alibaba.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: hinic: Set max_mtu/min_mtu directly to simplify the code.
+Date:   Thu, 13 Oct 2022 14:07:08 +0800
+Message-Id: <20221013060723.7306-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devicesgain,
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org, helgaas@kernel.org, max.zhen@amd.com,
-        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
-        stefano.stabellini@xilinx.com, trix@redhat.com
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
- <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
- <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
- <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
- <20221010104210.68edf825@fixe.home>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20221010104210.68edf825@fixe.home>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 03:42, Clément Léger wrote:
-> Le Tue, 13 Sep 2022 12:41:28 -0500,
-> Frank Rowand <frowand.list@gmail.com> a écrit :
-> 
->>>> I am not positive what part of what I wrote above is correct and would appreciate
->>>> some confirmation of what is correct or incorrect.  
->>>
->>> There are 2 series devices rely on this patch:
->>>
->>>     1) Xilinx Alveo Accelerator cards (FPGA based device)
->>>
->>>     2) lan9662 PCIe card
->>>
->>>           please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/  
->>
->> Thanks.  Please include this information in future versions of the patch series.
->>
->> For device 2 I have strongly recommended using pre-boot apply of the overlay to the base
->> device tree.  I realize that this suggestion is only a partial solution if one wants to
->> use hotplug to change system configuration (as opposed to using hotplug only to replace
->> an existing device (eg a broken device) with another instance of the same device).  I
->> also realize that this increased the system administration overhead.  On the other hand
->> an overlay based solution is likely to be fragile and possibly flaky.
-> 
-> Again, applying overlays pre-boot is not an acceptable solution. Some
-> systems are not based on device-tree (x86 platforms with ACPI based
-> description, and I'm not even sure this is doable by modifying ACPI
-> tables). PCI is meant to be plug-and-play, so patching the ACPI
-> tables or device-tree pre-boot is likely not the correct answer to this
-> problem.
-> 
+From: caihuoqing <caihuoqing@baidu.com>
 
+Set max_mtu/min_mtu directly to avoid making the validity judgment
+when set mtu, because the judgment is made in net/core: dev_validate_mtu,
+so to simplify the code.
 
-> This would also require two different descriptions of the same card
-> (for ACPI and device-tree) and would require the final user to create a
-> specific overlay for its device based on the PCI slots the card is
-> plugged in.
+Signed-off-by: caihuoqing <caihuoqing@baidu.com>
+---
+v1->v2:
+	1.Update changelog.
+	2.Reverse MAX_MTU to max jumbo frame size.
 
-One of the many missing pieces of overlay support.  There have been several
-discussion of how to describe a "socket" in a device tree that a device
-could be plugged into, where a single device tree subtree .dtb could be
-relocated to one or more different socket locations.  Thus in this
-case a single overlay could be relocated to various PCI slots.
+	v1 link: https://lore.kernel.org/lkml/20221012082945.10353-1-cai.huoqing@linux.dev/
 
-I don't expect be getting involved in any future efforts around sockets
-(see my following comment for why).
+ drivers/net/ethernet/huawei/hinic/hinic_dev.h  |  4 ++++
+ drivers/net/ethernet/huawei/hinic/hinic_main.c |  3 ++-
+ drivers/net/ethernet/huawei/hinic/hinic_port.c | 17 +----------------
+ 3 files changed, 7 insertions(+), 17 deletions(-)
 
-> 
-> The solution we proposed (Lizhi and I) allows to overcome these
-> problems and is way easier to use. Fixing the potential bugs that might
-> exists in the overlay layer seems a way better idea that just pushing
-
-It is not potential bugs.  The current run time overlay implementation is
-proof of concept quality and completeness.  It is not production ready.
-
-I got an opportunity for early retirement a couple of weeks ago.  My first
-inclination was to continue the same level of device tree maintainership,
-but I am quickly realizing that there are other activities that I would
-like to devote my time and energy to.  I will continue to support Rob with
-minor patch reviews and testing, and potentially finishing up some
-improvements to unittest.  On the other hand, bringing run time overlay
-support to product quality would be a major investment of my time that I
-am not willing to continue.
-
-So I am leaving major overlay issues in the capable hands of Rob.  I may
-chime in from time to time when I can do so without requiring too much of
-my time.
-
--Frank
-
-> that away to the bootloader level. Moreover, this kind of devices is
-> likely to be more common with the increasing popularity of FPGA and a
-> proper solution must be found.
-> 
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
+index a4fbf44f944c..2bbc94c0a9c1 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_dev.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_dev.h
+@@ -22,6 +22,10 @@
+ 
+ #define LP_PKT_CNT		64
+ 
++#define HINIC_MAX_JUMBO_FRAME_SIZE		15872
++#define HINIC_MAX_MTU_SIZE		(HINIC_MAX_JUMBO_FRAME_SIZE - ETH_HLEN - ETH_FCS_LEN)
++#define HINIC_MIN_MTU_SIZE		256
++
+ enum hinic_flags {
+ 	HINIC_LINK_UP = BIT(0),
+ 	HINIC_INTF_UP = BIT(1),
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+index c23ee2ddbce3..41e52f775aae 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+@@ -1189,7 +1189,8 @@ static int nic_dev_init(struct pci_dev *pdev)
+ 	else
+ 		netdev->netdev_ops = &hinicvf_netdev_ops;
+ 
+-	netdev->max_mtu = ETH_MAX_MTU;
++	netdev->max_mtu = HINIC_MAX_MTU_SIZE;
++	netdev->min_mtu = HINIC_MIN_MTU_SIZE;
+ 
+ 	nic_dev = netdev_priv(netdev);
+ 	nic_dev->netdev = netdev;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+index 28ae6f1201a8..0a39c3dffa9a 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+@@ -17,9 +17,6 @@
+ #include "hinic_port.h"
+ #include "hinic_dev.h"
+ 
+-#define HINIC_MIN_MTU_SIZE              256
+-#define HINIC_MAX_JUMBO_FRAME_SIZE      15872
+-
+ enum mac_op {
+ 	MAC_DEL,
+ 	MAC_SET,
+@@ -147,24 +144,12 @@ int hinic_port_get_mac(struct hinic_dev *nic_dev, u8 *addr)
+  **/
+ int hinic_port_set_mtu(struct hinic_dev *nic_dev, int new_mtu)
+ {
+-	struct net_device *netdev = nic_dev->netdev;
+ 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
+ 	struct hinic_port_mtu_cmd port_mtu_cmd;
+ 	struct hinic_hwif *hwif = hwdev->hwif;
+ 	u16 out_size = sizeof(port_mtu_cmd);
+ 	struct pci_dev *pdev = hwif->pdev;
+-	int err, max_frame;
+-
+-	if (new_mtu < HINIC_MIN_MTU_SIZE) {
+-		netif_err(nic_dev, drv, netdev, "mtu < MIN MTU size");
+-		return -EINVAL;
+-	}
+-
+-	max_frame = new_mtu + ETH_HLEN + ETH_FCS_LEN;
+-	if (max_frame > HINIC_MAX_JUMBO_FRAME_SIZE) {
+-		netif_err(nic_dev, drv, netdev, "mtu > MAX MTU size");
+-		return -EINVAL;
+-	}
++	int err;
+ 
+ 	port_mtu_cmd.func_idx = HINIC_HWIF_FUNC_IDX(hwif);
+ 	port_mtu_cmd.mtu = new_mtu;
+-- 
+2.25.1
 
