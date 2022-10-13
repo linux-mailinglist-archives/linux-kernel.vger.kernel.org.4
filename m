@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597175FDC48
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 16:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF595FDC51
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 16:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiJMOTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 10:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S230012AbiJMOVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 10:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJMOTm (ORCPT
+        with ESMTP id S229865AbiJMOVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 10:19:42 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1086E1176;
-        Thu, 13 Oct 2022 07:19:36 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29DCmDDs019560;
-        Thu, 13 Oct 2022 14:19:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=aJUHKCeMONPiBv7qlHCAOXHfax7cF/SDLjjQwEaq4Y4=;
- b=Uvxx1SCL3EKf+l5Vo465umT20Yj4c9oRV3x0jIijFiDbAlwgUghlkz9289dK5xAdzm9B
- AaJ0VYAk6OWzIH5dBBoYozkkpMZ5mQbmqunjJxtBRC+QFBeyRbNCqMZl0VItAFg1erwF
- 9DQ0nyQ0ums405O8ZHev43ddIrcPyENONUNiqOFq0aqgBlNr6Oos/P1Az4f9f7AZj9hQ
- RODm19kEeYouHIaybgFcjEdnVyTVPeIsyU0PzH2OYE/JdNFI1AQEgXKw0wHkZbJoOnUY
- qbDXcQR9erXKL6IDM3EGykQJLUCvQb0cWqa8akkgzQIvjulsVGuwCmp1zSZHK+xxnjb3 ng== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k6fpsrm65-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Oct 2022 14:19:28 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29DEJSpL023015
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Oct 2022 14:19:28 GMT
-Received: from [10.216.35.42] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 13 Oct
- 2022 07:19:25 -0700
-Message-ID: <9662bcef-f901-fac6-1dff-dc2a2da216fe@quicinc.com>
-Date:   Thu, 13 Oct 2022 19:49:22 +0530
+        Thu, 13 Oct 2022 10:21:20 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4984F15704
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 07:21:18 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id bh13so1695175pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 07:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HEaxIuyCG3WsLoSdoUnVtXPlTNpmJVIanbXAU2uLHoM=;
+        b=wBD/RpAnt0c8boN6pfPV8EuZS3PY1Y/elBxsY0mM3M5kHOihhy0vI/C8Ts0SgH110M
+         DR4IcTHI4d+QMTSyHQk6H+YkdZ8paq5U+7Z8RHY3SG770VscaZq7BLN5zpePZWJcWnzT
+         r2sqW+YTHewzSxLNAYV4AXsrDeEMxAVRKnwakT8YtoGHSZF0U96TS2ABh1/JAxoMjI9n
+         3i8LFQ/khfK0F1F1gEWGhKQsM+QnlPBK/wB+qiS1zh2u8dSDzj2wLH7N4TmdChn+bms4
+         dRR7QMg9H8DQLIF6So1rXZsNGfvAA9kvEuKq3Gb+JJlJq3Fq0BKO3e7YJEg0E49ygVF/
+         fvqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HEaxIuyCG3WsLoSdoUnVtXPlTNpmJVIanbXAU2uLHoM=;
+        b=Fl2LKaFgMoOzNLEKlHwQe5VoaHqiu8uZ03OoYBcAnHp/p2g2YxHiTPBajNRVmDsm+e
+         uNnT7py9OFpG3nSXd6u07IdZH2/UfItGGSmQrDwpCJKpCJNKJuTy0AIpQD6Urfw0FJI2
+         XSNVYIoeDpqyGYWa5coU7nIBeypsjiIqcIW0EpkGF+oJAbXUwBDPC2Qsp6f1I/4hH0wC
+         vnftu0YEyuu5ry1D0jAqIpH2Uq0o1nZj26Ty/8rcA4CHYKL6OZo9C3M7WqhR1kZbSkMb
+         nIpwbezldc/bKNRcov6BcIhhiaq3ReNzThTbaiI83/RomypCzigR+Wo0rD4ew48r0YIR
+         h1Mg==
+X-Gm-Message-State: ACrzQf134GcT0OnbC/84z36OVqELufBo7iJBVuv+zjqL2trs1B0bxcgB
+        Z7wIl6geKISYyIBlNyTYmODyks56Ga5kQ8Wf+xpSGqMor/Y=
+X-Google-Smtp-Source: AMsMyM41cPwmE7AuNLVf6OZQWB2ATlJ9ZhZWhaWhTkS2i/fhC22M9i/iI2PnRGSPujlJ+rgGAI/xzGWpdCEpKxeJtQc=
+X-Received: by 2002:a63:1612:0:b0:461:4180:d88b with SMTP id
+ w18-20020a631612000000b004614180d88bmr114831pgl.434.1665670877702; Thu, 13
+ Oct 2022 07:21:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2] blk-cgroup: Fix typo in comment
-Content-Language: en-US
-To:     Kemeng Shi <shikemeng@huawei.com>, <tj@kernel.org>,
-        <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221013141659.24032-1-shikemeng@huawei.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20221013141659.24032-1-shikemeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ZL7xVFvJtL-SnHbmHImiKG9L5Y5jg5M7
-X-Proofpoint-GUID: ZL7xVFvJtL-SnHbmHImiKG9L5Y5jg5M7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-13_08,2022-10-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210130085
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <e91be6199d04414a91e20611c81bfe1d@hyperstone.com>
+In-Reply-To: <e91be6199d04414a91e20611c81bfe1d@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 13 Oct 2022 16:20:40 +0200
+Message-ID: <CAPDyKFoNJNSsuCDShxUH43v=yjvNEpUq_x7_hFOFO3A4eO+K5Q@mail.gmail.com>
+Subject: Re: [PATCHv5 1/2] mmc: block: Remove error check of hw_reset on reset
+To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
+Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,47 +69,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 13 Oct 2022 at 13:16, Christian L=C3=B6hle <CLoehle@hyperstone.com>=
+ wrote:
+>
+> Before switching back to the right partition in mmc_blk_reset there used
+> to be a check if hw_reset was even supported. This return value
+> was removed, so there is no reason to check. Furthermore ensure
+> part_curr is not falsely set to a valid value on reset or
+> partition switch error.
+>
+> As part of this change the code paths of mmc_blk_reset calls were checked
+> to ensure no commands are issued after a failed mmc_blk_reset directly
+> without going through the block layer.
+>
+> Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|s=
+w_reset()")
+> Cc: stable@vger.kernel.org
+>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-On 10/13/2022 7:46 PM, Kemeng Shi wrote:
-> Replace assocating with associating.
-> Replace intiailized with initialized.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
-> Acked-by: Tejun Heo <tj@kernel.org>
+Applied for fixes, thanks!
+
+Kind regards
+Uffe
+
+
 > ---
-> Changes in v2:
->   -based on current mainline code
->   -add acked-by
-> 
->   block/blk-cgroup.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> index 6a5c849ee061..4c4bc874bd95 100644
-> --- a/block/blk-cgroup.c
-> +++ b/block/blk-cgroup.c
-> @@ -577,7 +577,7 @@ EXPORT_SYMBOL_GPL(blkcg_print_blkgs);
->    * @pd: policy private data of interest
->    * @v: value to print
->    *
-> - * Print @v to @sf for the device assocaited with @pd.
-> + * Print @v to @sf for the device associated with @pd.
->    */
->   u64 __blkg_prfill_u64(struct seq_file *sf, struct blkg_policy_data *pd, u64 v)
->   {
-> @@ -765,7 +765,7 @@ EXPORT_SYMBOL_GPL(blkg_conf_prep);
->   
->   /**
->    * blkg_conf_finish - finish up per-blkg config update
-> - * @ctx: blkg_conf_ctx intiailized by blkg_conf_prep()
-> + * @ctx: blkg_conf_ctx initialized by blkg_conf_prep()
->    *
->    * Finish up after per-blkg config update.  This function must be paired
->    * with blkg_conf_prep().
-
-
-LGTM.
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-
--Mukesh
+> -v5: Remove nested if
+> -v4: Only partition switch if necessary and fix one mmc_blk_reset call
+> -v3: Ensure invalid part_curr on error
+> -v2: Do not attempt to switch partitions if reset failed
+>
+>  drivers/mmc/core/block.c | 44 ++++++++++++++++++++++++----------------
+>  1 file changed, 26 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index ce89611a136e..0be7ab6ce1c8 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -134,6 +134,7 @@ struct mmc_blk_data {
+>          * track of the current selected device partition.
+>          */
+>         unsigned int    part_curr;
+> +#define MMC_BLK_PART_INVALID   UINT_MAX        /* Unknown partition acti=
+ve */
+>         int     area_type;
+>
+>         /* debugfs files (only in main mmc_blk_data) */
+> @@ -987,33 +988,39 @@ static unsigned int mmc_blk_data_timeout_ms(struct =
+mmc_host *host,
+>         return ms;
+>  }
+>
+> +/*
+> + * Attempts to reset the card and get back to the requested partition.
+> + * Therefore any error here must result in cancelling the block layer
+> + * request, it must not be reattempted without going through the mmc_blk
+> + * partition sanity checks.
+> + */
+>  static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
+>                          int type)
+>  {
+>         int err;
+> +       struct mmc_blk_data *main_md =3D dev_get_drvdata(&host->card->dev=
+);
+>
+>         if (md->reset_done & type)
+>                 return -EEXIST;
+>
+>         md->reset_done |=3D type;
+>         err =3D mmc_hw_reset(host->card);
+> +       /*
+> +        * A successful reset will leave the card in the main partition, =
+but
+> +        * upon failure it might not be, so set it to MMC_BLK_PART_INVALI=
+D
+> +        * in that case.
+> +        */
+> +       main_md->part_curr =3D err ? MMC_BLK_PART_INVALID : main_md->part=
+_type;
+> +       if (err)
+> +               return err;
+>         /* Ensure we switch back to the correct partition */
+> -       if (err) {
+> -               struct mmc_blk_data *main_md =3D
+> -                       dev_get_drvdata(&host->card->dev);
+> -               int part_err;
+> -
+> -               main_md->part_curr =3D main_md->part_type;
+> -               part_err =3D mmc_blk_part_switch(host->card, md->part_typ=
+e);
+> -               if (part_err) {
+> -                       /*
+> -                        * We have failed to get back into the correct
+> -                        * partition, so we need to abort the whole reque=
+st.
+> -                        */
+> -                       return -ENODEV;
+> -               }
+> -       }
+> -       return err;
+> +       if (mmc_blk_part_switch(host->card, md->part_type))
+> +               /*
+> +                * We have failed to get back into the correct
+> +                * partition, so we need to abort the whole request.
+> +                */
+> +               return -ENODEV;
+> +       return 0;
+>  }
+>
+>  static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int ty=
+pe)
+> @@ -1867,8 +1874,9 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue=
+ *mq, struct request *req)
+>                 return;
+>
+>         /* Reset before last retry */
+> -       if (mqrq->retries + 1 =3D=3D MMC_MAX_RETRIES)
+> -               mmc_blk_reset(md, card->host, type);
+> +       if (mqrq->retries + 1 =3D=3D MMC_MAX_RETRIES &&
+> +           mmc_blk_reset(md, card->host, type))
+> +               return;
+>
+>         /* Command errors fail fast, so use all MMC_MAX_RETRIES */
+>         if (brq->sbc.error || brq->cmd.error)
+> --
+> 2.37.3
+>
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
+>
