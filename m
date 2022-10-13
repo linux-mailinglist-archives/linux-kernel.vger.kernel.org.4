@@ -2,103 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E165FD3E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B518C5FD3EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiJMEn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S229567AbiJMEpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 00:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJMEnU (ORCPT
+        with ESMTP id S229529AbiJMEpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:43:20 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FD5115421
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:43:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso4803875pjq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JsHC8swQSZ5Fh6XAG3L1qnH+ruxn+bGz4WF3nlLiN14=;
-        b=rBIFU4eRo/WpDg/QEh2oJxLGHZQB9RyNylwSEeOmWfhmViWkXHPnzgt/ooxvQxMAdB
-         4W2jp6szEyHadTa3hJSosN09WQZEQc0IrUW8Sk/Z+FX4YQrACflpk8kBbzXMMz7rXFUE
-         TR9LRp1pI/NezJm76CcNgizpKkFgBNXpYcTO/jXG+8f9dGkq4Fs6ki3Nz3zhULbKe5cW
-         r78h5BfBMwBwvrre2/Bg0mWlECKuTreAMREvAChPAfdB9/cDzVqQmeTOwZJ46754QNiP
-         f9Eq3xnYy03TPYl5CYuzv0q6sO26Ix2HgHqLv1VUAVE1VFNE3WrCRZjsBtm2MzOMDLQP
-         +lAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JsHC8swQSZ5Fh6XAG3L1qnH+ruxn+bGz4WF3nlLiN14=;
-        b=ZU9T7hZKauy9EoqFJ4ICnD6cfdMOor3ah2HWN1UZoyfwEwWN5SErIFkhH49vfR0BLY
-         /1r15kg+iUQQ9kn7cdM/slfujP83pr35UjlQiIRLxoyl4ogwdAbb92cP7PXRh347CIOe
-         pfnzv5D3k8Z5D6GMOwDIBWWjlNmHUTpwkTjf8+ttOR7uPJg6tl3kYv/6Ie7ktWDN58ec
-         qSV5vohJaw+40eCFutnuejbeirq02aRSDQGrqXAbcCSI/IVNJV4ge7FUPV8CCL2R5kAi
-         QhaH9qVz/OozXKL0yCniiEr24am51Biogswc8UewLr+mauqzNxTXg2IiNombuMsmx0l+
-         oIVA==
-X-Gm-Message-State: ACrzQf3b38OAi1g2nG9yNHtsWroGiI6kMCHykLUEfRTLbCMpi8zCWPDw
-        b/mwCWszS5yCLK4F+tGRqEu+rA==
-X-Google-Smtp-Source: AMsMyM5XRtwhaYB95jGH35Dz5kPov+mIJZSO8TpKLW4k/dJ2ZMmZudjH0qpr+vXhFbRgPhkDeVK6pw==
-X-Received: by 2002:a17:90a:5308:b0:20b:1eae:c94e with SMTP id x8-20020a17090a530800b0020b1eaec94emr9018473pjh.88.1665636198670;
-        Wed, 12 Oct 2022 21:43:18 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id w68-20020a626247000000b00537eacc8fa6sm782238pfb.40.2022.10.12.21.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 21:43:17 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 04:43:13 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the mm-stable
- tree
-Message-ID: <Y0eXYYG4FXbdNbYO@google.com>
-References: <20221013104234.11e88852@canb.auug.org.au>
+        Thu, 13 Oct 2022 00:45:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EF8C784D;
+        Wed, 12 Oct 2022 21:45:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FED2616BC;
+        Thu, 13 Oct 2022 04:45:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C47C43470;
+        Thu, 13 Oct 2022 04:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665636328;
+        bh=1zZPtIczMxHjAq3MHY4iIJHG2cg65zT4AQmHABsQBxs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PMwzx8bHOLCUrPk0zwfK0H+l/+olN2ERx/pzrS9PTBvvMoAoIjgZfQVIx0zR4yeIf
+         jDUScsaLzyhmFnZwaOiwDXtemJC1cLXIwGeCCVm7NWt7U1QWqDqdJAskL3HQPp/cRm
+         ovyboyUo1i5KeD25WvTBJGXANCj7IWpfPTJn6qZ4=
+Date:   Thu, 13 Oct 2022 06:46:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Michael Straube <straube.linux@gmail.com>,
+        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk, martin@kaiser.cx,
+        paskripkin@gmail.com, gszymaszek@short.pl, fmdefrancesco@gmail.com,
+        makvihas@gmail.com, saurav.girepunje@gmail.com,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH AUTOSEL 5.19 01/63] staging: r8188eu: do not spam the
+ kernel log
+Message-ID: <Y0eYFF7Wl7Cb2hfK@kroah.com>
+References: <20221013001842.1893243-1-sashal@kernel.org>
+ <60af3294445ba2d2289a32ef7e429111ff476b44.camel@perches.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013104234.11e88852@canb.auug.org.au>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <60af3294445ba2d2289a32ef7e429111ff476b44.camel@perches.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 10:42:34AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Wed, Oct 12, 2022 at 08:08:58PM -0700, Joe Perches wrote:
+> On Wed, 2022-10-12 at 20:17 -0400, Sasha Levin wrote:
+> > From: Michael Straube <straube.linux@gmail.com>
+> > 
+> > [ Upstream commit 9a4d0d1c21b974454926c3b832b4728679d818eb ]
+> > 
+> > Drivers should not spam the kernel log if they work properly. Convert
+> > the functions Hal_EfuseParseIDCode88E() and _netdev_open() to use
+> > netdev_dbg() instead of pr_info() so that developers can still enable
+> > it if they want to see this information.
 > 
-> Commit
-> 
->   db24ef4e6b0a ("mm/mmap: undo ->mmap() when arch_validate_flags() fails")
-> 
-> is missing a Signed-off-by from its author.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> Why should this be backported?
 
-Sorry this was my fault as I used a three-dash line to comment a code
-section in the commit message. Which instead just cuts the commit log
-short when applying the patch. Sigh.
+I agree, Sasha please drop this from all branches.
 
-You can see this in the original post:
-https://lkml.kernel.org/r/20220930003844.1210987-1-cmllamas@google.com
+thanks,
 
-I believe Andrew noticed this error and fixed the patch. However, the
-Signed-off-by tag probably got dropped in the process. I'm unsure if
-this can be amended in the mm tree?
-
-Thanks Stephen for flagging this and apologies Andrew for the trouble.
-
---
-Carlos Llamas
+greg k-h
