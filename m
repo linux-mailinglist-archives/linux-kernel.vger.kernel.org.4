@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF78F5FD6D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660B45FD6DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJMJQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S229741AbiJMJRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiJMJQb (ORCPT
+        with ESMTP id S229513AbiJMJRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:16:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFA920BDB
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665652586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 13 Oct 2022 05:17:22 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E925FBC;
+        Thu, 13 Oct 2022 02:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1665652637; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c1PougXwFNeOBx9Qjbr5s56x+6pgJ2sjuaM5Urh09Fk=;
-        b=hi7Sxs3NUN5tw74/8sYvvgVIUK8SB5X2/LwQmwLLi28U1NhOwQUi8ykWVXfSUFBrXEJ/l8
-        xpxmpjd81gFK/6a/KiWWrDNc2mYmjUssfVDk3Lcclll7R6olcLfPAofB6bNHhb/ThLJOyS
-        LleJ1zdyp3vTSwPWCjpFeNXr+s6JT08=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-490-pkM7bIR4P-apPcPF99o78g-1; Thu, 13 Oct 2022 05:16:25 -0400
-X-MC-Unique: pkM7bIR4P-apPcPF99o78g-1
-Received: by mail-wm1-f70.google.com with SMTP id g8-20020a05600c4ec800b003b4bcbdb63cso835422wmq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:16:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c1PougXwFNeOBx9Qjbr5s56x+6pgJ2sjuaM5Urh09Fk=;
-        b=CYkXur2LydasAXtrtU8O1UkAKsctC7pi8ertSY8/FAAXH2gNpIR+A+CwHcajvEf+Mm
-         W0n7IJv14W475pGuVDb3Q/kXJrQl55karw2VXuVw8Ny9XSGpTKrkaOKEFz08eAwOjIbM
-         Q7XZtQDad5LDtXbLqzwEkcuwC3zY/rEpbtAb8FGVQjvnFOR+XhAmPBxRA67kp4o/LT/q
-         JQm/wQjCqymHI0C+ZJ/++j8C9OLE0Az2MIzyUK4PGP0N7lPHeT/fIhET/k9D1wWUi1gN
-         fuSOTr7M5xXwaFS+9n1QkObeDwLhbMKPFKzdbhkGlEYx6iz6ZX3N8flxLOf6EDaWIwEI
-         Nl9A==
-X-Gm-Message-State: ACrzQf1eZi6mbdOT3ZHNxEiLfA8KwpZP3qMahEyy3A9MQdIfEoTbMXc7
-        OnWXipTVDd6HQCKFonXzOO1ebuD6za1ySL0wf1NGcjy5hJDN/c3BaYCI3vWHsRr0W4OdHNNSAQG
-        63AalumwaYQ2FXafNgCg9WIn475yxXKL03X+LQ0FoLtpnYC2OsWgBF4yhxx3l3l2jTopfVbuZgO
-        CQ
-X-Received: by 2002:a05:600c:1e88:b0:3c3:ecf:ce3e with SMTP id be8-20020a05600c1e8800b003c30ecfce3emr5656953wmb.15.1665652584207;
-        Thu, 13 Oct 2022 02:16:24 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7lz0WlApvKFq530rS3Ksn4hAAN1MoaF0PVyZiyi2JurSmUe0qN78jbTg3xrD4n6KsUR0fbjQ==
-X-Received: by 2002:a05:600c:1e88:b0:3c3:ecf:ce3e with SMTP id be8-20020a05600c1e8800b003c30ecfce3emr5656930wmb.15.1665652583965;
-        Thu, 13 Oct 2022 02:16:23 -0700 (PDT)
-Received: from ovpn-194-196.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c4ed100b003b4ac05a8a4sm5313583wmq.27.2022.10.13.02.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 02:16:23 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] KVM: selftests: Test Hyper-V invariant TSC control
-In-Reply-To: <Y0bwwfuO/iubQDPH@google.com>
-References: <20220922143655.3721218-1-vkuznets@redhat.com>
- <20220922143655.3721218-7-vkuznets@redhat.com>
- <Y0XGuk4vwJBTU9oN@google.com> <87v8op6wq3.fsf@ovpn-194-196.brq.redhat.com>
- <Y0bwwfuO/iubQDPH@google.com>
-Date:   Thu, 13 Oct 2022 11:16:22 +0200
-Message-ID: <87pmew6q3d.fsf@ovpn-194-196.brq.redhat.com>
+        bh=QfKF6P//aPtt3yXkddZGb8gQhNXBSYeBQmboxbZCJlU=;
+        b=Ip0NSVDD1AM8ZgtvW/VD87fTHoRfAC5ZKR4g5vCDTryKzaGimlZJoh+FC5CRuxEyrYuyOV
+        zFio5aFohd39Q+mWiqCJyJxM7qdFhkFObmPHLG9/o7LYmzxzlFG4La4/m47ImlJB8FwZ5u
+        kKRpu9SSwogossEIyH7SeLGOjn8wS2U=
+Date:   Thu, 13 Oct 2022 10:17:04 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 7/8] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755 SoCs
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        kbuild-all@lists.01.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        GPIO SUBSYSTEM <linux-gpio@vger.kernel.org>
+Message-Id: <GSPOJR.M4XZ4D03G60F@crapouillou.net>
+In-Reply-To: <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com>
+References: <20221009181338.2896660-8-lis8215@gmail.com>
+        <202210100607.YdxoR0tD-lkp@intel.com>
+        <CAKNVLfaFvge4A8-QUzeq-JManpuYMGvyHXCJi-ew==CWN8-M=A@mail.gmail.com>
+        <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi,
 
-> On Wed, Oct 12, 2022, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> 
+Le jeu., oct. 13 2022 at 08:46:39 +0200, Arnd Bergmann <arnd@arndb.de>=20
+a =C3=A9crit :
+> On Thu, Oct 13, 2022, at 8:37 AM, Siarhei Volkau wrote:
+>>  =D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 01:29, kernel =
+test robot=20
+>> <lkp@intel.com>:
+>>>  config: ia64-allyesconfig
+>>>  config: arm64-randconfig-r035-20221010
+>>=20
+>>>   > 142  #define CGU_REG_CPCCR   ((void *)CKSEG1ADDR(0x10000000))
+>>=20
+>>>  0-DAY CI Kernel Test Service
+>>=20
+>>  I know CKSEG1ADDR is MIPS specific, might be it needed to disable=20
+>> COMPILE_TEST
+>>  on the driver?
+>>  Since early syscon isn't mainlined yet I don't see any other way at=20
+>> the moment.
+>>=20
+>>  Any suggestions on that, folks?
+>=20
+> This looks like some setup that belongs into the bootloader. If you=20
+> are
+> handing over the console from bootloader to kernel, the hardware=20
+> should
+> already be in a working state, with no need to touch it during early
+> boot.
+>=20
+> If you are dealing with broken bootloaders that are not under your=20
+> control,
+> having this code in the architecture specific early boot as a fixup
+> would be better than putting it into the driver.
 
-...
+Agreed. I am not fond of having a driver poking into an unrelated=20
+subsystem's memory area.
 
->> > Aha!  Idea.  Assuming none of the MSRs are write-only, what about adding a prep
->> > patch to rework this code so that it verifies RDMSR returns what was written when
->> > a fault didn't occur.
->> >
->> 
->> There is at least one read-only MSR which comes to mind:
->> HV_X64_MSR_EOI.
->
-> I assume s/read-only/write-only since it's EOI?
->
+Just disable the divider in ingenic_fixup_fdt() in=20
+arch/mips/generic/board-ingenic.c.
 
-Yes, of course)
+Cheers,
+-Paul
 
->> Also, some of the MSRs don't preserve the written value,
->> e.g. HV_X64_MSR_RESET which always reads as '0'.
->
-> Hrm, that's annoying.
-
-'Slightly annoying'. In fact, the test never writes anything besides '0'
-to the MSR as the code is not ready to handle real vCPU reset. I'll
-leave a TODO note about that.
-
-...
-
-> static bool is_write_only_msr(uint32_t msr)
-> {
-> 	return msr == HV_X64_MSR_EOI;
-> }
-
-This is all we need, basically. I'll go with that.
-
--- 
-Vitaly
 
