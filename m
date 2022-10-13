@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FC55FE458
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614225FE45A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiJMVpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
+        id S229660AbiJMVpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJMVpQ (ORCPT
+        with ESMTP id S229586AbiJMVpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:45:16 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463AC53A66
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:45:14 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-352e29ff8c2so28650257b3.21
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:45:14 -0700 (PDT)
+        Thu, 13 Oct 2022 17:45:19 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDD16A496
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:45:17 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3521c1a01b5so28483117b3.23
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:45:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=q2R/hsm49uk88OerGE7g+BdKMkZvbcCHzaGf+dnABps=;
-        b=Zm4JNi59McSgtrZO3mTQE5c795q2xbejWFdsYn2FLal8WgYRezz4RsjUb9EegTCKF4
-         1+NnxEFTQgcvq29EQpQ8XxZnLIDXWY4Gbc1yUAa+0e9WrWHGaLztknyIUeOfsCEVjJzO
-         6MelgFtufgP93wq3/AYgv+NfsuBT+9Gmy/m4w6E8jlds9Dgy6E8CKdG9/zRn4cZ+jg/a
-         E3KBJoheGEd4rtN2YtBXFyMUkD8xm82haWrPa9yAcxU0a1Nu0yCLUeR2EToqlf9qfjtM
-         6oKWfRCm38QN92WUPgaKVL9vZRBsUcTZeO2i6CcVh8uq5QptXvsPWlCkRG/iKED0Fh+A
-         tZYw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OC2TRA3RaKZigj+gmSjzr1uEQcbYSV2Diu4v9YA/yVc=;
+        b=Jvauj2Q8iA9kDTzQWwJBKr0DPFzDpCVXLD9hYoQepUDDEB1Pcjr9WF6SSuCE0VhizD
+         VDPJcwpU5AwyBpUWvY0drVpP4zS6ILIfXzmj8qUTV+03IFJwb+AVAwHRDoPx6BVlJuVs
+         Sa044RS7mErdfOSGrjDUfsSgxPCxhxDA7qIEv3lTeuyZm6WT6cWlnXOzXNwhkYrWGKAd
+         R4pCjTV4Iq+Zc8ULAR8mM7W5r3xGZ1A4o2AnB6XddaaCv/bIQYc1/ul2AckiFUZrTxK3
+         s85kK+WkMfKX1SYEjBFVpk4f+KGUSDYSlO5iItD8px/jVuFIAosl+jLeqCEEmUCGXZMl
+         +q4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q2R/hsm49uk88OerGE7g+BdKMkZvbcCHzaGf+dnABps=;
-        b=Qm3xphV+O0Imk4IupztroMNHRm4fyvVuSzfp0sT4+T/XkpeIJ21hB7wKA/75aZUh+6
-         bjlPuy6L8WdG96M2zlQ4B9p4wVZOBXVno1itd2LLRtt95M8nPxgp0RaaZeAS5VS1qpIg
-         mwILfN/bdveqebhQILvAJSAQoe20XYKH34txaeurc+mIKJcPg7qFNXDdibaeK99lVS8j
-         fAqH2eNhWDjKwHFFsKcXePVFYU2+Y1uzYTuqxoZNeuam19Zc+CHHeJq4BkXn0Yh1GfJ8
-         x+sK+xin+PHjhcJI7laaLxu/p7O1ItB9VQKfqSuZ5sbu0r1dWcHtzn34wK6iy2mr6Sn4
-         HthA==
-X-Gm-Message-State: ACrzQf00I5TcghDQHpRn9AFVhepMoOoDNNtseul8oD83SGHc5kA8pJ+x
-        Myy8k3nr565rYdZqkxWE5///QCZw9bD0
-X-Google-Smtp-Source: AMsMyM6A+6LUVQQdIiV2XphAdHir7CheNdf1l8TPeEh1HPXHTo6V9a4uDUfdS5Oi1nF0vQP8MwWXn9lR2rEO
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OC2TRA3RaKZigj+gmSjzr1uEQcbYSV2Diu4v9YA/yVc=;
+        b=a7/0p/hl7eDjpHID7yUaiVmTVw/dhyjI/BxEHQ/DzCSXi5aT8WJOneYvxRRev300No
+         zHf3V8wrUOD3PgV2PEwnE/fEOHlorui9TjSguS4am7f+CfZOC9sWwxIlRHR2GkXMwcRY
+         FZf2mvEfanaZ1IIaQAABcO9nM+yyQfIPY8gUJ0O9M/5iI+u79vF8hnr2+a8kGAxUGvbT
+         +kX++CjLGU7sID6M0Gre8WCA3RqZhYjenxvsKNC4Rzax1QbbCs86mz5zyWTysNAzJnlg
+         OKMUjKfrbF8Qvgd6yZeawCxSRkh4MGc3oxY3LjiairFhY+5QqFDL8ud7oz6zHoeYAzkr
+         JWKw==
+X-Gm-Message-State: ACrzQf0nam0qeV4LnMWf4XQQt8N91i7gEdOv5juqqdgjUJD2CSUB+hBL
+        y+XgyWIVw1GqHpQ1+jjXXi43M7WXIhPU
+X-Google-Smtp-Source: AMsMyM4AJHKhvfkmvHItxuzNajgyI8OQNsNSRQ+SRT+HvEQTaurv0wK9KSgha+RuRm7FSJewIibC+DbXofiW
 X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
- (user=jiangzp job=sendgmr) by 2002:a81:9e42:0:b0:361:4dad:7a95 with SMTP id
- n2-20020a819e42000000b003614dad7a95mr1959497ywj.256.1665697513640; Thu, 13
- Oct 2022 14:45:13 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 14:45:07 -0700
+ (user=jiangzp job=sendgmr) by 2002:a0d:c942:0:b0:337:5cf9:1c04 with SMTP id
+ l63-20020a0dc942000000b003375cf91c04mr1907615ywd.39.1665697517001; Thu, 13
+ Oct 2022 14:45:17 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 14:45:08 -0700
+In-Reply-To: <20221013214508.2195347-1-jiangzp@google.com>
 Mime-Version: 1.0
+References: <20221013214508.2195347-1-jiangzp@google.com>
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221013214508.2195347-1-jiangzp@google.com>
-Subject: [PATCH v1 0/1] Bluetooth: hci_qca: only assign wakeup with serial
+Message-ID: <20221013144431.v1.1.I47f1918a2786b34e7649387233377c57a8bdcdac@changeid>
+Subject: [PATCH v1 1/1] Bluetooth: hci_qca: only assign wakeup with serial
  port support
 From:   Zhengping Jiang <jiangzp@google.com>
 To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
@@ -69,22 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Only assign hdev->wakeup if the serial port supports wakeup. Otherwise
+it will fall back to the hci_uart_wakeup or the behavior that can be
+overridden before calling the hci_uart_register_device().
 
-This patch will check if the serial port supports wakeup before assigning
-the hdev->wakeup callback. After landing the 'commit c1a74160eaf1a
-("Bluetooth: hci_qca: Add device_may_wakeup support")', the wake-on-bt
-was broken in Jacuzzi because the qca_wakeup returns false. In this case
-it will fall back to the default hci_uart_wakeup.
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+---
 
 Changes in v1:
 - Check serial port support before assigning wakeup callback
 
-Zhengping Jiang (1):
-  Bluetooth: hci_qca: only assign wakeup with serial port support
-
  drivers/bluetooth/hci_qca.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 8df11016fd51..dacb6f5efd29 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -1765,7 +1765,8 @@ static int qca_setup(struct hci_uart *hu)
+ 		qca_debugfs_init(hdev);
+ 		hu->hdev->hw_error = qca_hw_error;
+ 		hu->hdev->cmd_timeout = qca_cmd_timeout;
+-		hu->hdev->wakeup = qca_wakeup;
++		if (device_can_wakeup(hu->serdev->ctrl->dev.parent))
++			hu->hdev->wakeup = qca_wakeup;
+ 	} else if (ret == -ENOENT) {
+ 		/* No patch/nvm-config found, run with original fw/config */
+ 		set_bit(QCA_ROM_FW, &qca->flags);
 -- 
 2.38.0.413.g74048e4d9e-goog
 
