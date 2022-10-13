@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8175FDD80
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95805FDD7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJMPsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S229771AbiJMPsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJMPsN (ORCPT
+        with ESMTP id S229537AbiJMPsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:48:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE5CDED0E
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:48:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F308B80DFB
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 15:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62060C433D7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 15:48:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665676089;
-        bh=Wa541eDzRYS4j76ntg21vDUMcW48jkczpqipGDLUNb8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=F8VjBD8XtQdHYVjkZNLeSI+YESNRncB1OewouOf1Ii5PDrEyrV22BVjLcEVg+/80G
-         /x80hIApxam20WbYTFgLHxcKht85/wRBPCYULhdFNL+8vs9DgMHRfGeQD12qjxJeoc
-         XGhExsYxgHfApKE+/rlD7lvQ1Eeb/m6jbcglGCt1SsYrMtVH5SyeQFK8MuEKDOQmIL
-         dx8PyXPlSWwsSRKqbwUBi0FMdrq5wW2qPC9AcLQ216Rxj5df1d4Gsc90/jBq0Dvgcj
-         HRjmJy5V7phPfoRaYsWGya0hHi+/xITUxEJ1RkpCaJFaNE1lCs/gIypAut2wktx3Ho
-         e0uifKPOzM7wQ==
-Received: by mail-ed1-f42.google.com with SMTP id z97so3209372ede.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:48:09 -0700 (PDT)
-X-Gm-Message-State: ACrzQf20UxygaLI2jZqaE/cvYX4pMmBYAo6jZGv24+DU/ArQq1vA7eNd
-        nwEdYXyJCZNIJDu2eT7Ou+qFq9/jnTVGMlFDVHs=
-X-Google-Smtp-Source: AMsMyM6mSS/hhsIJgjZGknfVP14PF0iAv+DkD7V8yhWhoSenN35ubULnVc7C9k8d8AdlIyl9fYKJYZAVaqOFTYLSFd4=
-X-Received: by 2002:aa7:df16:0:b0:45b:f51f:ab73 with SMTP id
- c22-20020aa7df16000000b0045bf51fab73mr365454edy.366.1665676087592; Thu, 13
+        Thu, 13 Oct 2022 11:48:09 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E56DD891;
+        Thu, 13 Oct 2022 08:48:08 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id g27so3189277edf.11;
+        Thu, 13 Oct 2022 08:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xq3Ft5Gy3bihgDg2eQnRZLaoZCm4mqPLSgf5VDy0lNI=;
+        b=mWZ/ksuUPM4lAAfUgZN9Ei9Qn5R6eTz98BlE0YRWEKbT8KjDvV+GttlngcBAXOlw1a
+         dWBIbzCSALWQ3kLNVFtfXjaeXpCUK8H3J84bXuigFqOwCPKWJ9ojfayGPsGC1h/ylqvZ
+         hPjDiezMO+Rv32d1PyxrJg5+Ik4eDnPKBNCc6NCCZs8urNc8pNC/JC+BpApOdh4nO2JE
+         fgrkOFW04lTpt09mKwLQomX+NOiguziVPgmyplYyqFCziWNDrwL4J2TJ2lBHKtlF7ckh
+         4uej2hGj5TBvGE4Keu7svY7Y5YT8fOoTwkl4hk1KZvGmviMYGN7bnk6Tlj3HWUlk0qGG
+         ySwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xq3Ft5Gy3bihgDg2eQnRZLaoZCm4mqPLSgf5VDy0lNI=;
+        b=63Flw57J3TGjcDhA2EbB9q4k/bU09QGShN6kFm6UneWuoTsjr36uWbs4OYw1/VQsXH
+         FmN++ou6534sDZ5vMcfVMIfCWExVejvwSfsCaYS04Vjzm83ZZWcHr/OdFy2EBCp0f1eq
+         vBUg30IuARkanRhiYsglmSGR7Us736cltc54/ts6fRyw4HeKDKtgP18BWykOT2Fs7U5Y
+         ZXPcPQkguUwwnT3WYWFo5pQ4s94TEIOcFjxlWl1tfPWV1+8IpMhzA/JqcPiJoHko1vuE
+         q1zrOWCjTRSeZED8YUODB+q8NkV1Jgrc0dhIC5uSqOylC+Rmoxev0UVqoDBO7GuGibH3
+         dTdw==
+X-Gm-Message-State: ACrzQf1PvH+Qq/xZEJt8L/9QpgSO5JkxWsDUQUczb6r5ZaO2XMP/Il7b
+        6iv/EO9ySsIM9Wp6jX2b6WufDKx1Mf8V8aAJmVk=
+X-Google-Smtp-Source: AMsMyM5vOqLU9l0cOuSy0hzikA++us8/4quTmIviD9PS0gOoS/7XEE+/biGikZTxaSTkgR9eF47jawNrEvm9Fkm2Ni4=
+X-Received: by 2002:a05:6402:22ed:b0:458:bcd1:69cf with SMTP id
+ dn13-20020a05640222ed00b00458bcd169cfmr381307edb.260.1665676087173; Thu, 13
  Oct 2022 08:48:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221013131209.775969-1-yangyingliang@huawei.com>
-In-Reply-To: <20221013131209.775969-1-yangyingliang@huawei.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 13 Oct 2022 23:47:55 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H48bH5VAYhsMvupUSWouAUR=s9b4hJYdJYdymCYbKQfjA@mail.gmail.com>
-Message-ID: <CAAhV-H48bH5VAYhsMvupUSWouAUR=s9b4hJYdJYdymCYbKQfjA@mail.gmail.com>
-Subject: Re: [PATCH] platform/loongarch: laptop: fix possible UAF in generic_acpi_laptop_init()
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, lvjianmin@loongson.cn,
-        chenhuacai@loongson.cn
+References: <20221011120108.782373-1-xukuohai@huaweicloud.com> <20221011120108.782373-3-xukuohai@huaweicloud.com>
+In-Reply-To: <20221011120108.782373-3-xukuohai@huaweicloud.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 13 Oct 2022 08:47:55 -0700
+Message-ID: <CAEf4BzZVYO42kDcmNqorLfwJcMcN7fyTLdp2GWbGfV5akP12GQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/6] libbpf: Fix memory leak in parse_usdt_arg()
+To:     Xu Kuohai <xukuohai@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yingliang,
-
-Thank you for your patches, but could you please merge the two trivial
-patches to a single one?
-
-Huacai
-
-On Thu, Oct 13, 2022 at 9:12 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
+On Tue, Oct 11, 2022 at 4:43 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
 >
-> Current the return value of 'sub_driver->init' is not checked,
-> if sparse_keymap_setup() called in the init function fails,
-> 'generic_inputdev' is freed, then it willl lead a UAF when
-> using it in generic_acpi_laptop_init(). Fix it by checking
-> return value. Set generic_inputdev to NULL after free to avoid
-> double free it.
+> From: Xu Kuohai <xukuohai@huawei.com>
 >
-> Fixes: 6246ed09111f ("LoongArch: Add ACPI-based generic laptop driver")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> In the arm64 version of parse_usdt_arg(), when sscanf returns 2, reg_name
+> is allocated but not freed. Fix it.
+>
+> Fixes: 0f8619929c57 ("libbpf: Usdt aarch64 arg parsing support")
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > ---
->  drivers/platform/loongarch/loongson-laptop.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  tools/lib/bpf/usdt.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
 >
-> diff --git a/drivers/platform/loongarch/loongson-laptop.c b/drivers/platform/loongarch/loongson-laptop.c
-> index f0166ad5d2c2..a665fd1042ac 100644
-> --- a/drivers/platform/loongarch/loongson-laptop.c
-> +++ b/drivers/platform/loongarch/loongson-laptop.c
-> @@ -448,6 +448,7 @@ static int __init event_init(struct generic_sub_driver *sub_driver)
->         if (ret < 0) {
->                 pr_err("Failed to setup input device keymap\n");
->                 input_free_device(generic_inputdev);
-> +               generic_inputdev = NULL;
+> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> index e83b497c2245..49f3c3b7f609 100644
+> --- a/tools/lib/bpf/usdt.c
+> +++ b/tools/lib/bpf/usdt.c
+> @@ -1348,25 +1348,23 @@ static int calc_pt_regs_off(const char *reg_name)
 >
->                 return ret;
->         }
-> @@ -502,8 +503,11 @@ static int __init generic_subdriver_init(struct generic_sub_driver *sub_driver)
->         if (ret)
->                 return -EINVAL;
+>  static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+>  {
+> -       char *reg_name = NULL;
+> +       char reg_name[16];
+>         int arg_sz, len, reg_off;
+>         long off;
 >
-> -       if (sub_driver->init)
-> -               sub_driver->init(sub_driver);
-> +       if (sub_driver->init) {
-> +               ret = sub_driver->init(sub_driver);
-> +               if (ret)
-> +                       goto err_out;
-> +       }
->
->         if (sub_driver->notify) {
->                 ret = setup_acpi_notify(sub_driver);
+> -       if (sscanf(arg_str, " %d @ \[ %m[a-z0-9], %ld ] %n", &arg_sz, &reg_name, &off, &len) == 3) {
+> +       if (sscanf(arg_str, " %d @ \[ %15[a-z0-9], %ld ] %n", &arg_sz, reg_name, &off, &len) == 3) {
+
+It would be nice to do the same change for other architectures where
+it makes sense and avoid having to deal with unnecessary memory
+allocations. Please send follow up patches with similar changes for
+other implementations of parse_usdt_arg. Thanks.
+
+
+>                 /* Memory dereference case, e.g., -4@[sp, 96] */
+>                 arg->arg_type = USDT_ARG_REG_DEREF;
+>                 arg->val_off = off;
+>                 reg_off = calc_pt_regs_off(reg_name);
+> -               free(reg_name);
+>                 if (reg_off < 0)
+>                         return reg_off;
+>                 arg->reg_off = reg_off;
+> -       } else if (sscanf(arg_str, " %d @ \[ %m[a-z0-9] ] %n", &arg_sz, &reg_name, &len) == 2) {
+> +       } else if (sscanf(arg_str, " %d @ \[ %15[a-z0-9] ] %n", &arg_sz, reg_name, &len) == 2) {
+>                 /* Memory dereference case, e.g., -4@[sp] */
+>                 arg->arg_type = USDT_ARG_REG_DEREF;
+>                 arg->val_off = 0;
+>                 reg_off = calc_pt_regs_off(reg_name);
+> -               free(reg_name);
+>                 if (reg_off < 0)
+>                         return reg_off;
+>                 arg->reg_off = reg_off;
+> @@ -1375,12 +1373,11 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+>                 arg->arg_type = USDT_ARG_CONST;
+>                 arg->val_off = off;
+>                 arg->reg_off = 0;
+> -       } else if (sscanf(arg_str, " %d @ %m[a-z0-9] %n", &arg_sz, &reg_name, &len) == 2) {
+> +       } else if (sscanf(arg_str, " %d @ %15[a-z0-9] %n", &arg_sz, reg_name, &len) == 2) {
+>                 /* Register read case, e.g., -8@x4 */
+>                 arg->arg_type = USDT_ARG_REG;
+>                 arg->val_off = 0;
+>                 reg_off = calc_pt_regs_off(reg_name);
+> -               free(reg_name);
+>                 if (reg_off < 0)
+>                         return reg_off;
+>                 arg->reg_off = reg_off;
 > --
-> 2.25.1
+> 2.30.2
 >
