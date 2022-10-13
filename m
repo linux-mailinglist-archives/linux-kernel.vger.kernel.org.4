@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98725FE429
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898935FE431
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJMV0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
+        id S229673AbiJMV2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiJMV0d (ORCPT
+        with ESMTP id S229785AbiJMV2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:26:33 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46B648A1B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:26:32 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id e15so2476418iof.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:26:32 -0700 (PDT)
+        Thu, 13 Oct 2022 17:28:32 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7E01905FB;
+        Thu, 13 Oct 2022 14:28:31 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id f22so2594877qto.3;
+        Thu, 13 Oct 2022 14:28:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGvXzyfaWxsSx0ELvyCr5bspehD/xx7xIHWSGqJXxeE=;
-        b=CYbwTQUVAFGPDAams5vEG6YANf8ufOlvCE2X2ftvni16//YJRbDjCSYOrdWiFJduzx
-         ctwOznzMbaEbqo8W4ciqa64lgUbbHtVvC8wj/1Pb4UsHXGujE5UC+Wt3TFg5pmiziECU
-         +ohjP5/CaEnuyHOVYPU3yj/VeZ9TB2/kk7GZY=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jXfZZJP0l0pMBcRTe50/Rz6rplWvN8+bEorBTLbabT0=;
+        b=R6rIwllRDoqi12bWZog70PzGcD+OwrSpYp8WT3W8SXbhnCDfh02IOSIvrAB6X+65M2
+         7ovIPaFQU1gXv+gmuzEvtFZ+vYPefoFVqqP1S+jQjP8/EZh1gVAa6I6N1NR+LlOt+IVL
+         CnP+QMXiFutAQO1NuUgZuw79xldiqKVxAtRD5n/lvNZwl01I4ctTzkIaJm98vqORlHan
+         TYeKKVa/n8U3SxOJK0hUuPJ8dWyPhMWYlmfXfJDTPl7d7SCgY/mv2Ii5cl++ogHjG73Q
+         9A40PSUb24HYR6PeXr2wPWc1xsaH0DPpU7Qu4Dhmfqt8XHzKzXFxzZGH2LlmPIqvyKEo
+         dQ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CGvXzyfaWxsSx0ELvyCr5bspehD/xx7xIHWSGqJXxeE=;
-        b=USdHWYQZp5OQqVTnti1tM7PTjZWicu3EaQG06Vn2+04lxT23XnLcyMFWOp0eHLE/pT
-         kBW/hm7j1oR2gVSDyTOxhuqVDiR2nO/WnecvBhtlrBBl88bRgQRr47MEO9I5YIZsVg0K
-         fc/r1jGFsCh2lMLsaJOjWat6KJ3yo3Dwm1mWkT0oOraOFUhiJMrTevqCB1aH53WzLOw/
-         g83Pf8ekQYGgl9MKwxTrXelB2jauuV2e2kjA1M2SkUnLPw633Ee/uFRxTIyf0hIPklKd
-         qQulKUv6CR4vTKVzc/URqIhKTWkKUASQS8en4/q+GhKr0S3CndKNnBLBe2Qumd+pJX3U
-         kPjA==
-X-Gm-Message-State: ACrzQf0P6NZRCZ9BEoig+hFk5+QAfIbTI0+2M5Zk+PDT5ifZfiVOeWuL
-        E8OxWUbIMmlooumkPPvG7paqyjtRfl0avA==
-X-Google-Smtp-Source: AMsMyM6KtVBdDryBmZZGXEaJj+snGglJJ7YiOpYo+1PXo788euUX3Trk3uP7t5I90wQPhmYJj7PMZQ==
-X-Received: by 2002:a5d:8052:0:b0:6a5:4b18:ac03 with SMTP id b18-20020a5d8052000000b006a54b18ac03mr886396ior.153.1665696392089;
-        Thu, 13 Oct 2022 14:26:32 -0700 (PDT)
-Received: from chromium.org ([100.107.108.164])
-        by smtp.gmail.com with ESMTPSA id y19-20020a056638039300b00363c1d1ac05sm394535jap.27.2022.10.13.14.26.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 14:26:31 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 15:25:58 -0600
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH v12] firmware: google: Implement cbmem in sysfs driver
-Message-ID: <Y0iCZip0k9WcHgsz@chromium.org>
-References: <20221004003811.4075765-1-jrosenth@chromium.org>
- <Yzvz9hn1G8rU4VaO@kroah.com>
- <Yzxl2oczTtwEvIqt@chromium.org>
- <Yzxsu2Ms43eTfOYR@kroah.com>
- <Yzy6KNUHFqxWZb9U@chromium.org>
- <CAODwPW-7Y_CbCch+Y5unH3yJD1T=3epYvqja6w_CB-23C9x9sw@mail.gmail.com>
- <Yz0jVbfDOITZfE9M@kroah.com>
- <CAODwPW8R2uXFJ_5V737Dy8z-WJHUwKkLyG4MW_Q50fs-OFm7Sw@mail.gmail.com>
- <Yz52r89A9JYEICCi@kroah.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jXfZZJP0l0pMBcRTe50/Rz6rplWvN8+bEorBTLbabT0=;
+        b=4GJMaEPwqqR4evK9IUW0hrbkBFGJSoCnVSPUhwxeT7e9h9j078mSLjq3tA1AH19MUc
+         SN6rZG3POLAhhfSiIHfSUmCtJc+26hUGSGCZX/GL1J1hn8PZIwTG9SsFsfVbFZ7kqzKw
+         OKa9u93rQqcqGQijNlfH7MRbY2HVSe2+zCPfcUsGC23vpH+Zg6dIjrpSgdqF+FlW0kl7
+         lPzwA05ry2VHNOEtMB8jwPDibYyHWigKZqEIYK5FqyJ+DWmVUZ937ASj6u3Us1M8hP1v
+         YNhLArzMw1hywuMoLORkX8FNntjnPDBcjVh4A9pXKFwDjdx05b51STYX8jYwd0iF9ORk
+         npPQ==
+X-Gm-Message-State: ACrzQf3nyZxwJg4jnqQigGoBmztPsK5liE5qxpLxVx5hTOT/g3wG+ROm
+        9C5xWsnDmaYZtWkTLEAB9v6trcvf3t0=
+X-Google-Smtp-Source: AMsMyM6dXqUX204m7wnzDlJR8+tXz/3ko+DdPLRzfskK/5i/uA/SGZ4ZUqfBy5x5EnDHvvZLS86FBw==
+X-Received: by 2002:a05:622a:1902:b0:397:82c9:d6b2 with SMTP id w2-20020a05622a190200b0039782c9d6b2mr1719905qtc.469.1665696510927;
+        Thu, 13 Oct 2022 14:28:30 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u5-20020ac87505000000b0039a8b075248sm756752qtq.14.2022.10.13.14.28.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 14:28:30 -0700 (PDT)
+Message-ID: <7fcae004-3c5e-db13-f34a-cda94708505c@gmail.com>
+Date:   Thu, 13 Oct 2022 14:28:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz52r89A9JYEICCi@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221013175146.507746257@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-06 at 08:33 +0200, Greg KH wrote:
-> On Wed, Oct 05, 2022 at 04:26:55PM -0700, Julius Werner wrote:
-> > > If the kernel is reporting a value, that value needs to be documented
-> > > somewhere.  If the kernel is acting on that value, it needs to know what
-> > > those values are.
-> > >
-> > > In this specific instance it seems that the kernel knows a subset of the
-> > > values, and some random userspace tool knows all of them?  Think about
-> > > what you would want to see here if you knew nothing about this at all.
-> > 
-> > The kernel doesn't know any of the values. The kernel is just telling
-> > userspace that spaces with these IDs exist and providing an interface
-> > to access them, it's not supposed to know what any of them mean.
+On 10/13/22 10:52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.2 release.
+> There are 34 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Ah, ok, that was not obvious to me, sorry.  If the kernel is just a
-> pass-through, no objections.
+> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.2-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Does this mean PATCH v13 looks good to you?
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-thanks,
-
-jack
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
