@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4351B5FDD06
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216CA5FDD0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiJMPVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S229666AbiJMPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJMPVS (ORCPT
+        with ESMTP id S229462AbiJMPWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:21:18 -0400
-Received: from wilbur.contactoffice.com (wilbur.contactoffice.com [212.3.242.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6717510F8A1;
-        Thu, 13 Oct 2022 08:21:17 -0700 (PDT)
-Received: from smtpauth1.co-bxl (smtpauth1.co-bxl [10.2.0.15])
-        by wilbur.contactoffice.com (Postfix) with ESMTP id B84E3D55;
-        Thu, 13 Oct 2022 17:21:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665674475;
-        s=20220911-jt8y; d=wired4ever.net; i=sndanailov@wired4ever.net;
-        h=Message-ID:Date:MIME-Version:References:Cc:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        l=747; bh=kgZc3tu2JJFZWYmDuyz5w4nLD0OZb6n0f9H+SCQhHIY=;
-        b=cYTExjZZdbexKtEmSAIkIJrmXWfhg3DlRk8G4pmYviVVOSBahBw/1wCe0IOyxov4
-        YM6LpNcixT1l2kdmVBfckf2YPaii/XuZnzz5PIEu9+WNtSgQSyNM4rGhEOrBqyo+Sor
-        GCT/wQjDKRWDV3iPVMTWnlGU5q0xPFXROvzBUrMCyQPVC4EiHer9OuGe64VG4+ixJ5W
-        eqxjN6bHBkaymbYSeQjN3ssgGZJENCFBCPCKmcFDRVFp6H8RkbwzitYHNc5GtCRJVcH
-        iWzQAKv0E4hkwTxlnyI06T4/t47jVvjqEKCZsNMh6KY4D+ms8j7ehgWCp4tfE2QsHvL
-        CxLcySd0kA==
-Received: by smtp.mailfence.com with ESMTPSA ; Thu, 13 Oct 2022 17:21:12 +0200 (CEST)
-Message-ID: <4ec2697e-ddc6-c87a-49a9-12483186af1d@wired4ever.net>
-Date:   Thu, 13 Oct 2022 17:21:11 +0200
+        Thu, 13 Oct 2022 11:22:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B9710F8A1;
+        Thu, 13 Oct 2022 08:22:21 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78E626602366;
+        Thu, 13 Oct 2022 16:22:18 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665674539;
+        bh=DM9dp4q0ZBB9kwxv9JwDMM/0XtGc6/2vq44258xzabo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZgRRH8FHMlEkPlzeZV9XV9OOigpZgq/LZPrWhdZAh7y5j3XtwFUjKX/bsy0oMA9x/
+         cbJyRFPkx9ppVUt1gcLN+pur7cHmNxVKaN1tARC5ZIHGHASwhXqo8UO5if6zHQex2F
+         SbH0o8dBl2hE47bBjSaZJs5xZ72O2L5jj78m4b/B7abjLwRA2hgXKIPOpxl/lvyg6W
+         4b6Pgkkm6vZpbxJZNo8odrnQvrcBFtw6SHSGPydEexGIGeC/N8R4MZ4KT5/ybozsiK
+         9N7Xa+XbzA/ixaXWOYz8BTlK6Wed/vkEOi27JxSA8/JRv62v9zD2QQRIfHqku0B6Zh
+         0/eiTxG6qFjTQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sam.shih@mediatek.com, hanks.chen@mediatek.com,
+        weiyi.lu@mediatek.com, zhiyong.tao@mediatek.com,
+        andrew-sh.cheng@mediatek.com, viresh.kumar@linaro.org,
+        chunfeng.yun@mediatek.com, fparent@baylibre.com,
+        mars.cheng@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 0/8] ARM64 MediaTek devicetree fixes - Part 1
+Date:   Thu, 13 Oct 2022 17:22:04 +0200
+Message-Id: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] doc: process: add privacy warning when using some SMTP
- servers
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>
-References: <20221013123115.17419-1-sndanailov@wired4ever.net>
- <8735brkfrj.fsf@meer.lwn.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Sotir Danailov <sndanailov@wired4ever.net>
-In-Reply-To: <8735brkfrj.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-ContactOffice-Account: com:378009619
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 13 10 2022 15:35, Jonathan Corbet wrote:
-> So this seems to be just a description of how email works
+This series fixes devicetree warnings for some MediaTek DTs.
 
-Well it felt appropriate to warn the user, because many people
-(like myself before) might not realize this is happening even if
-they think they know how email basically works.
+Since there's a lot to be done and since not all fixes are trivial,
+I decided to do this in more than one step, as to ease work for
+reviewers, maintainers and for .. me.
+This being part 1 means that there's more to come... a bit later :-)
 
-> the Received headers always show the path through the net.
+AngeloGioacchino Del Regno (8):
+  arm64: dts: mt7896a: Fix unit_address_vs_reg warning for oscillator
+  arm64: dts: mt6779: Fix devicetree build warnings
+  arm64: dts: mt2712e: Fix unit_address_vs_reg warning for oscillators
+  arm64: dts: mt2712e: Fix unit address for pinctrl node
+  arm64: dts: mt2712-evb: Fix vproc fixed regulators unit names
+  arm64: dts: mt2712-evb: Fix usb vbus regulators unit names
+  arm64: dts: mediatek: pumpkin-common: Fix devicetree warnings
+  arm64: dts: mediatek: mt6797: Fix 26M oscillator unit name
 
-Yes, but is also dependent on the SMTP server configuration,
-so someone might not realize that changing the server would
-add such sensitive data to something public.
+ arch/arm64/boot/dts/mediatek/mt2712-evb.dts   | 12 +++++-----
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi     | 22 +++++++++----------
+ arch/arm64/boot/dts/mediatek/mt6779.dtsi      |  8 +++----
+ arch/arm64/boot/dts/mediatek/mt6797.dtsi      |  2 +-
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  2 +-
+ .../boot/dts/mediatek/pumpkin-common.dtsi     |  6 ++---
+ 6 files changed, 26 insertions(+), 26 deletions(-)
 
-> Is this really something that we need to cover in the kernel docs?
+-- 
+2.37.2
 
-It's part of the process, is it not? I'm sure many people
-would like to have this information before starting on the
-kernel for the first time.
