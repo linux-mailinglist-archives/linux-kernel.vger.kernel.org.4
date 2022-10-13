@@ -2,132 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60A05FE341
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7F75FE344
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJMUZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 16:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S229947AbiJMU00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 16:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiJMUYw (ORCPT
+        with ESMTP id S229964AbiJMU0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 16:24:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41F412633;
-        Thu, 13 Oct 2022 13:24:46 -0700 (PDT)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C919F660236D;
-        Thu, 13 Oct 2022 21:24:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665692683;
-        bh=/urp6FGOF38ju+OWMwUWjSNprDW/xXAY6n8S22UMNjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GTzsoONBYo+04M082a10SMoJtzloBqw3/GwPTVo51uEdStLzkFeuUYZFWXF8I3NEv
-         tlgvl0jZFtz0l7OdBweF9gUW9tZ6fWYfPDzHK0JMZYOa3X/eV3tWF6l1t9LTAoc3TF
-         D2xklenwKuyf+RYiLzselE6g7nYyww/LxqibW/wUuf/0Fk1axaQG/pmlvYq9MVkBnX
-         egA8c89DHqG6B80BxIKeswc3XaD2iOrzTXlLbTdYW4gUN2Nvn1Y3sON9PeGAN46N6G
-         SzkrLg1LCx9OjFpj9vAUU904qwZV30EPQDQtid11YeLQxNgxb8XzcJDMxv72NWEGOs
-         BOJuw7uy7EcGw==
-Date:   Thu, 13 Oct 2022 16:24:38 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 5/5] arm64: dts: mediatek: asurada: Add aliases for
- i2c and mmc
-Message-ID: <20221013202438.unfa4fqinwhgvfiz@notapiano>
-References: <20221006212528.103790-1-nfraprado@collabora.com>
- <20221006212528.103790-6-nfraprado@collabora.com>
- <CAGXv+5GmJOYnfLsovO_+piuJ1ry1R0ZQqALRGK3MNp=nUO-TNw@mail.gmail.com>
- <CAGXv+5HGodRWbawEpDppZWM_EiuzdvZC9h4XBoAPo=FQ7yNotA@mail.gmail.com>
+        Thu, 13 Oct 2022 16:26:03 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7912710FDF;
+        Thu, 13 Oct 2022 13:25:43 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id w196so2981557oiw.8;
+        Thu, 13 Oct 2022 13:25:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1M5uvedmA5W80q1n3Qh4Ko8R0Hthj3fyGideqRSsxp0=;
+        b=ZaI4ztnMp6zyIHsQaR4vxnwj/HnxW0Stuq16HucIWzqKzQA7nvzpPjwScCLAig/fBc
+         MJbE8C121F7xoRl8n7DTwtGcaMENRee9lhdWBXHgq+7uTBh4v7KkwmwLkwNeqmSNyCTf
+         C/JB9DnoWUQzQTCkVz9NpfYAXzVNHhg4HrMs35niboG6IrjSrw+4+SHmWc4IbV3TTqW8
+         ZZNVR7jj9r821YKtMGmva6cZ3lcTi32GNTmMO+FMS6wFRO8YowfpUdDZqDkvIto/oucT
+         ZbUz8SLYCqTSX/ZvjRobnBqxfvsvlM2ZCRB1ycBPhBVxjPVJrCLeiZ3ME8ieW2tEpZEL
+         V7hg==
+X-Gm-Message-State: ACrzQf0uFefkNSHS9EdkcqYmgkMkLnRiOHw22t6JdBU0XXf8/G6ptBCe
+        RuAFXjjf57T/hs7rZrG3Aw==
+X-Google-Smtp-Source: AMsMyM7lvjdSsmNnJgKgpglZrglRbQswbKXCwWscIjWxrgvy1FGoz/WfAuR0Owqa+AyPIw+W7MSYgw==
+X-Received: by 2002:aca:dac2:0:b0:354:a921:a87e with SMTP id r185-20020acadac2000000b00354a921a87emr5643569oig.292.1665692742269;
+        Thu, 13 Oct 2022 13:25:42 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u6-20020a056808114600b00342e8bd2299sm331045oiu.6.2022.10.13.13.25.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 13:25:41 -0700 (PDT)
+Received: (nullmailer pid 175164 invoked by uid 1000);
+        Thu, 13 Oct 2022 20:25:42 -0000
+Date:   Thu, 13 Oct 2022 15:25:42 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Job Noorman <job@noorman.info>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Luca Weiss <luca@z3ntu.xyz>
+Subject: Re: [PATCH v2 1/3] dt-bindings: touchscreen: add Himax hx83112b
+ bindings
+Message-ID: <166569274210.175113.9615851655183284739.robh@kernel.org>
+References: <20221012202341.295351-1-job@noorman.info>
+ <20221012202341.295351-2-job@noorman.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5HGodRWbawEpDppZWM_EiuzdvZC9h4XBoAPo=FQ7yNotA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221012202341.295351-2-job@noorman.info>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 12:02:03PM +0800, Chen-Yu Tsai wrote:
-> On Fri, Oct 7, 2022 at 11:51 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
-> >
-> > On Fri, Oct 7, 2022 at 5:25 AM Nícolas F. R. A. Prado
-> > <nfraprado@collabora.com> wrote:
-> > >
-> > > Add aliases for the i2c and mmc nodes on the Asurada platform DT to
-> > > ensure that we get stable ids for those devices on userspace.
-> > >
-> > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > >
-> > > ---
-> > >
-> > > Changes in v2:
-> > > - Added this commit
-> > >
-> > >  arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 12 ++++++++++++
-> > >  1 file changed, 12 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> > > index dac2d4f5e670..758ca42a6156 100644
-> > > --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> > > +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> > > @@ -11,6 +11,18 @@
-> > >
-> > >  / {
-> > >         aliases {
-> > > +               i2c0 = &i2c0;
-> > > +               i2c1 = &i2c1;
-> > > +               i2c2 = &i2c2;
-> > > +               i2c3 = &i2c3;
-> > > +               i2c4 = &i2c4;
-> > > +               i2c5 = &i2c5;
-> > > +               i2c6 = &i2c6;
-> > > +               i2c7 = &i2c7;
-> > > +               i2c8 = &i2c8;
-> > > +               i2c9 = &i2c9;
-> >
-> > You should only add aliases for interfaces that are actually enabled.
-
-Ok, will drop the extra ones.
-
-> >
-> > Also, I think we can disable i2c6. None of the current products use it.
-
-It's already disabled upstream.
-
-> >
-> > ChenYu
-> >
-> > > +               mmc0 = &mmc0;
-> > > +               mmc1 = &mmc1;
+On Wed, 12 Oct 2022 20:24:06 +0000, Job Noorman wrote:
+> This patch adds device tree bindings for Himax 83112b touchscreen
+> devices.
 > 
-> Also, Spherion does not have an SD card slot. It might be better to move
-> the mmc aliases to the end .dts files.
+> Signed-off-by: Job Noorman <job@noorman.info>
+> ---
+>  .../input/touchscreen/himax,hx83112b.yaml     | 61 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.yaml
+> 
 
-Based on the downstream dts, rev0 and rev1 do have SD card slot (or at least the
-mmc1 controller isn't disabled on those). However upstream we have a single dts
-(asurada-spherion-r0) shared by those two and rev2 and rev3 (which don't have
-the SD card slot), given that this way we can have a single dts and there's no
-disadvantage to keeping the mmc1 node enabled because the CD IRQ will never be
-triggered. With this in mind, I think it makes more sense to keep the mmc
-aliases in the asurada dtsi, as there's no harm in having them, and will ensure
-fixed ids for the rev0 and rev1 spherion boards.
-
-Thanks,
-Nícolas
+Reviewed-by: Rob Herring <robh@kernel.org>
