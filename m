@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753F95FD441
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73C25FD444
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJMF3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 01:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S229678AbiJMFhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 01:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJMF3J (ORCPT
+        with ESMTP id S229507AbiJMFho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 01:29:09 -0400
+        Thu, 13 Oct 2022 01:37:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F2C326CC;
-        Wed, 12 Oct 2022 22:29:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5302C10CF82
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:37:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2F176166E;
-        Thu, 13 Oct 2022 05:29:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A04C433D6;
-        Thu, 13 Oct 2022 05:29:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E190A616E3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F1CEC433C1;
+        Thu, 13 Oct 2022 05:37:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665638947;
-        bh=u1aE7Guz757GpnzspBVuVfnvD43VfUWIebYhD99jq48=;
+        s=k20201202; t=1665639463;
+        bh=8aVZC45tzS5Xypj4wP6sxsCkOsmuarZG9AGJpu3SPco=;
         h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=c2V70Kmoy/YkP9WxvptKHSrsS9DV22ct28HFRE5FnT9AdLPN/Pb1qZWgom48/rYDw
-         uvNuM1c4I5hP04XlVHzAArZPeKhw9LtyR+n3GvlSuv6bGFOCXOeEcOD68asy9331XR
-         lF3eZhMGH2LCJ+T4AfaQmtUmU9x9hev5PqIG2kXPWzN8WpzWur79+TbgOgMAxyZjoK
-         MrwYShI5wXoKCf2t9LUVsWCM5DtLQcMMG3o0bHV35LEFzJsBIiLkBINAEbVl6h/ZQP
-         bDpd0frHdLbRnoDVmoOlKDZrnodiC6ZBnKTgaaiYG6k2oAQ45fNQKHD8I9C9e1xtc5
-         hH4WBRln9NybQ==
-Date:   Thu, 13 Oct 2022 06:29:03 +0100
+        b=F/D4d5YEo4S11Gj+F+xVctT+5me3AkVUXb2whtUfIS8fJ2mFuvUr8PySwMHqJDeAZ
+         b2NkTQDtu5CaRGkklBGxSm8sI7e0sfzKQs9O+ynrHay1wfBk3l89nFUEsU66zrPrFg
+         18ShVKVDCefbYGjeJYkNcpW4kNI2s4E8l2acQZ1t5DZGJBcjMK8ZdfNnaQhjsqmGye
+         An86ifLgD2CmtT+nU0bZV7B1MAhbFI87RXTyhsZDhv5+LYXvn3vc+f90B8uxlGYaDi
+         hGgxNoDjGA+p6gZQV4JMvoE0xUHL8zhimDiaqzRXHXzsslA+O0BwlTr/ZXlRqeYZIk
+         CBwcIQMlg90Ng==
+Date:   Thu, 13 Oct 2022 06:37:39 +0100
 From:   Conor Dooley <conor@kernel.org>
-To:     linux-riscv@lists.infradead.org, Sasha Levin <sashal@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_AUTOSEL_6=2E0_20/67=5D_clk=3A_microc?= =?US-ASCII?Q?hip=3A_mpfs=3A_add_MSS_pll=27s_set_=26_round_rate?=
+To:     Jisheng Zhang <jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_1/8=5D_riscv=3A_move_riscv=5Fnonc?= =?US-ASCII?Q?oherent=5Fsupported=28=29_out_of_ZICBOM_probe?=
 User-Agent: K-9 Mail for Android
-In-Reply-To: <20221013001554.1892206-20-sashal@kernel.org>
-References: <20221013001554.1892206-1-sashal@kernel.org> <20221013001554.1892206-20-sashal@kernel.org>
-Message-ID: <93982EAD-5EE5-4096-9AD6-BFA76905F1BB@kernel.org>
+In-Reply-To: <Y0GCST9IQcKws9Yh@xhacker>
+References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-2-jszhang@kernel.org> <Y0F1uH71Ll7YGygB@spud> <Y0GCST9IQcKws9Yh@xhacker>
+Message-ID: <BBEFA528-0F84-41CB-A62F-ED4673947928@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -59,102 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not a fix, NAK=2E Same for 5=2E19=2E
 
-On 13 October 2022 01:15:01 IST, Sasha Levin <sashal@kernel=2Eorg> wrote:
->From: Conor Dooley <conor=2Edooley@microchip=2Ecom>
+
+On 8 October 2022 14:59:37 IST, Jisheng Zhang <jszhang@kernel=2Eorg> wrote=
+:
+>On Sat, Oct 08, 2022 at 02:06:00PM +0100, Conor Dooley wrote:
+>> On Thu, Oct 06, 2022 at 03:08:11PM +0800, Jisheng Zhang wrote:
+>> > It's a bit wired to call riscv_noncoherent_supported() once when
+>> > insmod a module=2E Move the calling out of feature patch func=2E
+>> >=20
+>> > Signed-off-by: Jisheng Zhang <jszhang@kernel=2Eorg>
+>> > ---
+>> >  arch/riscv/kernel/cpufeature=2Ec | 7 +------
+>> >  arch/riscv/kernel/setup=2Ec      | 4 ++++
+>> >  2 files changed, 5 insertions(+), 6 deletions(-)
+>> >=20
+>> > diff --git a/arch/riscv/kernel/cpufeature=2Ec b/arch/riscv/kernel/cpu=
+feature=2Ec
+>> > index 3b5583db9d80=2E=2E03611b3ef45e 100644
+>> > --- a/arch/riscv/kernel/cpufeature=2Ec
+>> > +++ b/arch/riscv/kernel/cpufeature=2Ec
+>> > @@ -272,12 +272,7 @@ static bool __init_or_module cpufeature_probe_zi=
+cbom(unsigned int stage)
+>> >  	case RISCV_ALTERNATIVES_EARLY_BOOT:
+>> >  		return false;
+>> >  	default:
+>> > -		if (riscv_isa_extension_available(NULL, ZICBOM)) {
+>> > -			riscv_noncoherent_supported();
+>> > -			return true;
+>> > -		} else {
+>> > -			return false;
+>> > -		}
+>> > +		return riscv_isa_extension_available(NULL, ZICBOM);
+>> >  	}
+>> >  #endif
+>> > =20
+>> > diff --git a/arch/riscv/kernel/setup=2Ec b/arch/riscv/kernel/setup=2E=
+c
+>> > index 2dfc463b86bb=2E=2E1a055c3f5d9d 100644
+>> > --- a/arch/riscv/kernel/setup=2Ec
+>> > +++ b/arch/riscv/kernel/setup=2Ec
+>> > @@ -299,6 +299,10 @@ void __init setup_arch(char **cmdline_p)
+>> >  	riscv_init_cbom_blocksize();
+>> >  	riscv_fill_hwcap();
+>> >  	apply_boot_alternatives();
+>> > +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
+>> > +	if (riscv_isa_extension_available(NULL, ZICBOM))
+>> > +		riscv_noncoherent_supported();
+>> > +#endif
+>>=20
+>> I have a personal bias against ifdefs where possible, maybe @Heiko
+>> remembers why riscv_noncoherent_supported() was not defined as somethin=
+g
+>> like `void riscv_noncoherent_support(void){}` for when that CONFIG is
+>> not enabled? If it was this could become a an IS_ENABLED & we wouldn't
+>> have to be so careful about wrapping it's usage in ifdefs=2E
 >
->[ Upstream commit 14016e4aafc5f157c10fb1a386fa3b3bd9c30e9a ]
+>Good idea=2E Will do in newer version=2E
+
+Given this comment and the LKP report I've marked the series as changes re=
+quested in patchwork FYI=2E
+
+Thanks,
+Conor=2E
+
 >
->The MSS pll is not a fixed frequency clock, so add set() & round_rate()
->support=2E
->Control is limited to a 7 bit output divider as other devices on the
->FPGA occupy the other three outputs of the PLL & prevent changing
->the multiplier=2E
->
->Reviewed-by: Daire McNamara <daire=2Emcnamara@microchip=2Ecom>
->Signed-off-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->Reviewed-by: Claudiu Beznea <claudiu=2Ebeznea@microchip=2Ecom>
->Signed-off-by: Claudiu Beznea <claudiu=2Ebeznea@microchip=2Ecom>
->Link: https://lore=2Ekernel=2Eorg/r/20220909123123=2E2699583-9-conor=2Edo=
-oley@microchip=2Ecom
->Signed-off-by: Sasha Levin <sashal@kernel=2Eorg>
->---
-> drivers/clk/microchip/clk-mpfs=2Ec | 54 ++++++++++++++++++++++++++++++++
-> 1 file changed, 54 insertions(+)
->
->diff --git a/drivers/clk/microchip/clk-mpfs=2Ec b/drivers/clk/microchip/c=
-lk-mpfs=2Ec
->index b6b89413e090=2E=2Ecb4ec4749279 100644
->--- a/drivers/clk/microchip/clk-mpfs=2Ec
->+++ b/drivers/clk/microchip/clk-mpfs=2Ec
->@@ -126,8 +126,62 @@ static unsigned long mpfs_clk_msspll_recalc_rate(str=
-uct clk_hw *hw, unsigned lon
-> 	return prate * mult / (ref_div * MSSPLL_FIXED_DIV * postdiv);
-> }
->=20
->+static long mpfs_clk_msspll_round_rate(struct clk_hw *hw, unsigned long =
-rate, unsigned long *prate)
->+{
->+	struct mpfs_msspll_hw_clock *msspll_hw =3D to_mpfs_msspll_clk(hw);
->+	void __iomem *mult_addr =3D msspll_hw->base + msspll_hw->reg_offset;
->+	void __iomem *ref_div_addr =3D msspll_hw->base + REG_MSSPLL_REF_CR;
->+	u32 mult, ref_div;
->+	unsigned long rate_before_ctrl;
->+
->+	mult =3D readl_relaxed(mult_addr) >> MSSPLL_FBDIV_SHIFT;
->+	mult &=3D clk_div_mask(MSSPLL_FBDIV_WIDTH);
->+	ref_div =3D readl_relaxed(ref_div_addr) >> MSSPLL_REFDIV_SHIFT;
->+	ref_div &=3D clk_div_mask(MSSPLL_REFDIV_WIDTH);
->+
->+	rate_before_ctrl =3D rate * (ref_div * MSSPLL_FIXED_DIV) / mult;
->+
->+	return divider_round_rate(hw, rate_before_ctrl, prate, NULL, MSSPLL_POS=
-TDIV_WIDTH,
->+				  msspll_hw->flags);
->+}
->+
->+static int mpfs_clk_msspll_set_rate(struct clk_hw *hw, unsigned long rat=
-e, unsigned long prate)
->+{
->+	struct mpfs_msspll_hw_clock *msspll_hw =3D to_mpfs_msspll_clk(hw);
->+	void __iomem *mult_addr =3D msspll_hw->base + msspll_hw->reg_offset;
->+	void __iomem *ref_div_addr =3D msspll_hw->base + REG_MSSPLL_REF_CR;
->+	void __iomem *postdiv_addr =3D msspll_hw->base + REG_MSSPLL_POSTDIV_CR;
->+	u32 mult, ref_div, postdiv;
->+	int divider_setting;
->+	unsigned long rate_before_ctrl, flags;
->+
->+	mult =3D readl_relaxed(mult_addr) >> MSSPLL_FBDIV_SHIFT;
->+	mult &=3D clk_div_mask(MSSPLL_FBDIV_WIDTH);
->+	ref_div =3D readl_relaxed(ref_div_addr) >> MSSPLL_REFDIV_SHIFT;
->+	ref_div &=3D clk_div_mask(MSSPLL_REFDIV_WIDTH);
->+
->+	rate_before_ctrl =3D rate * (ref_div * MSSPLL_FIXED_DIV) / mult;
->+	divider_setting =3D divider_get_val(rate_before_ctrl, prate, NULL, MSSP=
-LL_POSTDIV_WIDTH,
->+					  msspll_hw->flags);
->+
->+	if (divider_setting < 0)
->+		return divider_setting;
->+
->+	spin_lock_irqsave(&mpfs_clk_lock, flags);
->+
->+	postdiv =3D readl_relaxed(postdiv_addr);
->+	postdiv &=3D ~(clk_div_mask(MSSPLL_POSTDIV_WIDTH) << MSSPLL_POSTDIV_SHI=
-FT);
->+	writel_relaxed(postdiv, postdiv_addr);
->+
->+	spin_unlock_irqrestore(&mpfs_clk_lock, flags);
->+
->+	return 0;
->+}
->+
-> static const struct clk_ops mpfs_clk_msspll_ops =3D {
-> 	=2Erecalc_rate =3D mpfs_clk_msspll_recalc_rate,
->+	=2Eround_rate =3D mpfs_clk_msspll_round_rate,
->+	=2Eset_rate =3D mpfs_clk_msspll_set_rate,
-> };
->=20
-> #define CLK_PLL(_id, _name, _parent, _shift, _width, _flags, _offset) {	=
-		\
+>>=20
+>> Your change in isolation makes sense to me though, so:
+>> Reviewed-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
+>>=20
+>> Thanks,
+>> Conor=2E
+>>=20
+>> >  }
+>> > =20
+>> >  static int __init topology_init(void)
+>> > --=20
+>> > 2=2E37=2E2
+>> >=20
