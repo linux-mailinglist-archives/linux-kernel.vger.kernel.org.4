@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38215FE07A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDA55FE06E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiJMSKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S231285AbiJMSJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiJMSJx (ORCPT
+        with ESMTP id S231811AbiJMSIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:09:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EC1169CEE;
-        Thu, 13 Oct 2022 11:07:32 -0700 (PDT)
+        Thu, 13 Oct 2022 14:08:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18787C58A9;
+        Thu, 13 Oct 2022 11:06:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8DE61A43;
-        Thu, 13 Oct 2022 18:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8987C433C1;
-        Thu, 13 Oct 2022 18:01:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83A2FB82039;
+        Thu, 13 Oct 2022 18:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3FF4C433C1;
+        Thu, 13 Oct 2022 18:00:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684090;
-        bh=yO7jB7qJ3SzvXbCw+6Kqc+Vb9MrWMZHZx+fu+glnvtQ=;
+        s=korg; t=1665684002;
+        bh=YcQbhCSPoD2UnDkliHAi/oE6U9WmvVTA8st+VYyO1o0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OfHkS7CKbQBrvEwGykyecb9oLe7yLh8w26y95OjtWnKjZpvXmBqtYS/OVVGOHhx17
-         MTLCjfAXzHEDoXJdi6gEvknz2c3MQ3H1+HSaUeSvqR7Udpypp+2Vh3va48ltYN22ip
-         +cjoq0nyl0vp5w4deDEvRFUAjkA9EW9STkabe+3g=
+        b=b9cpQHBBPvrPyqGe5Wydz4+sDrNPajAooT13TiUpjWREXGjhvtxCpB+Z8LddCfJcF
+         sw3w8aIZcHhJXdDaEWh8/PCX14xUWN/8LRxNC/jtathVdvitBoYxTG9MEjLT8JZIP0
+         z5HXmwiu8cUK6yFT8QzuOq4fBBIKtC+dqRgfkN5c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Soenke Huster <shuster@seemoo.tu-darmstadt.de>,
-        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
         Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 6.0 21/34] wifi: cfg80211: fix u8 overflow in cfg80211_update_notlisted_nontrans()
-Date:   Thu, 13 Oct 2022 19:52:59 +0200
-Message-Id: <20221013175147.067414219@linuxfoundation.org>
+Subject: [PATCH 5.19 28/33] wifi: cfg80211: update hidden BSSes to avoid WARN_ON
+Date:   Thu, 13 Oct 2022 19:53:00 +0200
+Message-Id: <20221013175146.199236952@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-References: <20221013175146.507746257@linuxfoundation.org>
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+References: <20221013175145.236739253@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +56,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johannes Berg <johannes.berg@intel.com>
 
-commit aebe9f4639b13a1f4e9a6b42cdd2e38c617b442d upstream.
+commit c90b93b5b782891ebfda49d4e5da36632fefd5d1 upstream.
 
-In the copy code of the elements, we do the following calculation
-to reach the end of the MBSSID element:
+When updating beacon elements in a non-transmitted BSS,
+also update the hidden sub-entries to the same beacon
+elements, so that a future update through other paths
+won't trigger a WARN_ON().
 
-	/* copy the IEs after MBSSID */
-	cpy_len = mbssid[1] + 2;
+The warning is triggered because the beacon elements in
+the hidden BSSes that are children of the BSS should
+always be the same as in the parent.
 
-This looks fine, however, cpy_len is a u8, the same as mbssid[1],
-so the addition of two can overflow. In this case the subsequent
-memcpy() will overflow the allocated buffer, since it copies 256
-bytes too much due to the way the allocation and memcpy() sizes
-are calculated.
-
-Fix this by using size_t for the cpy_len variable.
-
-This fixes CVE-2022-41674.
-
-Reported-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
-Tested-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
+Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
 Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
-Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/scan.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/wireless/scan.c |   31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
 
 --- a/net/wireless/scan.c
 +++ b/net/wireless/scan.c
-@@ -2279,7 +2279,7 @@ cfg80211_update_notlisted_nontrans(struc
- 	size_t new_ie_len;
- 	struct cfg80211_bss_ies *new_ies;
- 	const struct cfg80211_bss_ies *old;
--	u8 cpy_len;
-+	size_t cpy_len;
+@@ -1607,6 +1607,23 @@ struct cfg80211_non_tx_bss {
+ 	u8 bssid_index;
+ };
  
- 	lockdep_assert_held(&wiphy_to_rdev(wiphy)->bss_lock);
++static void cfg80211_update_hidden_bsses(struct cfg80211_internal_bss *known,
++					 const struct cfg80211_bss_ies *new_ies,
++					 const struct cfg80211_bss_ies *old_ies)
++{
++	struct cfg80211_internal_bss *bss;
++
++	/* Assign beacon IEs to all sub entries */
++	list_for_each_entry(bss, &known->hidden_list, hidden_list) {
++		const struct cfg80211_bss_ies *ies;
++
++		ies = rcu_access_pointer(bss->pub.beacon_ies);
++		WARN_ON(ies != old_ies);
++
++		rcu_assign_pointer(bss->pub.beacon_ies, new_ies);
++	}
++}
++
+ static bool
+ cfg80211_update_known_bss(struct cfg80211_registered_device *rdev,
+ 			  struct cfg80211_internal_bss *known,
+@@ -1630,7 +1647,6 @@ cfg80211_update_known_bss(struct cfg8021
+ 			kfree_rcu((struct cfg80211_bss_ies *)old, rcu_head);
+ 	} else if (rcu_access_pointer(new->pub.beacon_ies)) {
+ 		const struct cfg80211_bss_ies *old;
+-		struct cfg80211_internal_bss *bss;
  
+ 		if (known->pub.hidden_beacon_bss &&
+ 		    !list_empty(&known->hidden_list)) {
+@@ -1658,16 +1674,7 @@ cfg80211_update_known_bss(struct cfg8021
+ 		if (old == rcu_access_pointer(known->pub.ies))
+ 			rcu_assign_pointer(known->pub.ies, new->pub.beacon_ies);
+ 
+-		/* Assign beacon IEs to all sub entries */
+-		list_for_each_entry(bss, &known->hidden_list, hidden_list) {
+-			const struct cfg80211_bss_ies *ies;
+-
+-			ies = rcu_access_pointer(bss->pub.beacon_ies);
+-			WARN_ON(ies != old);
+-
+-			rcu_assign_pointer(bss->pub.beacon_ies,
+-					   new->pub.beacon_ies);
+-		}
++		cfg80211_update_hidden_bsses(known, new->pub.beacon_ies, old);
+ 
+ 		if (old)
+ 			kfree_rcu((struct cfg80211_bss_ies *)old, rcu_head);
+@@ -2360,6 +2367,8 @@ cfg80211_update_notlisted_nontrans(struc
+ 	} else {
+ 		old = rcu_access_pointer(nontrans_bss->beacon_ies);
+ 		rcu_assign_pointer(nontrans_bss->beacon_ies, new_ies);
++		cfg80211_update_hidden_bsses(bss_from_pub(nontrans_bss),
++					     new_ies, old);
+ 		rcu_assign_pointer(nontrans_bss->ies, new_ies);
+ 		if (old)
+ 			kfree_rcu((struct cfg80211_bss_ies *)old, rcu_head);
 
 
