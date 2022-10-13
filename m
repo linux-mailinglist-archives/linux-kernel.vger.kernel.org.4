@@ -2,261 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415995FDCEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834725FDCF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJMPPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S229818AbiJMPRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiJMPPc (ORCPT
+        with ESMTP id S229665AbiJMPRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:15:32 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43541BC62B;
-        Thu, 13 Oct 2022 08:15:28 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CF5B01EC064E;
-        Thu, 13 Oct 2022 17:15:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665674122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BxnWw47WYQ2Rd0ryZEoZGtMXC47/yHMYat/iIrPgZcw=;
-        b=afoCRuEWH+GTymUBeY2g6XheR8ovjS20OpCNHyMXhtOOr0NLl4oHSxCq6HnUtLkdAxg9zf
-        GHDQQ2HadRqEIdaMl3VtOQKtHzKaIoPY7Pk1Hp4F/7Y/4BA+z2YbWUwg16pSniaeTsYX6c
-        ZfNiSxF6r9SRNWZOAaxx48DAJASLFT0=
-Date:   Thu, 13 Oct 2022 17:15:18 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-Message-ID: <Y0grhk1sq2tf/tUl@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
+        Thu, 13 Oct 2022 11:17:50 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7F810F8AB;
+        Thu, 13 Oct 2022 08:17:45 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E44781884C4B;
+        Thu, 13 Oct 2022 15:17:42 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id B029F2500015;
+        Thu, 13 Oct 2022 15:17:42 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 74E139EC000A; Thu, 13 Oct 2022 15:17:42 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 13 Oct 2022 17:17:42 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 net-next 9/9] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Y0ggn5SZnw+4SGLC@shredder>
+References: <20221009174052.1927483-1-netdev@kapio-technology.com>
+ <20221009174052.1927483-10-netdev@kapio-technology.com>
+ <21f799c5a7a79e2e4b111a95fff6fe3d@kapio-technology.com>
+ <Y0ggn5SZnw+4SGLC@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <46112084313969f9a6dfdea9fe52b4b1@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:05:01PM +0000, Ashish Kalra wrote:
-> +static void snp_leak_pages(unsigned long pfn, unsigned int npages)
+On 2022-10-13 16:28, Ido Schimmel wrote:
+> On Wed, Oct 12, 2022 at 11:46:55AM +0200, netdev@kapio-technology.com 
+> wrote:
+>> Ido, have you had time to look at this patch set, and do I need to 
+>> release a
+>> v8 to fix those two forgotten statics and maybe also this new 
+>> switchcore
+>> driver that was not there when I posted this patch set?
+> 
+> I don't know which changes you are referring to, but v8 should
+> incorporate all the changes requested so far. Do not post it as long as
+> net-next is closed (unless marked as RFC):
 
-That function name looks wrong.
+Ohh, I missed declaring two functions as static in chip.c, and 
+unfortunately my compiler did not give me any warnings...
 
-> +{
-> +	WARN(1, "psc failed, pfn 0x%lx pages %d (leaking)\n", pfn, npages);
-> +	while (npages--) {
-> +		memory_failure(pfn, 0);
-		^^^^^^^^^^^^^^^^^^^^^^
+What is the schedule for net-next to be open (I guess that it is closed 
+as of now)?
 
-Why?
-
- * This function is called by the low level machine check code
- * of an architecture when it detects hardware memory corruption
- * of a page. It tries its best to recover, which includes
- * dropping pages, killing processes etc.
-
-I don't think you wanna do that.
-
-It looks like you want to prevent the page from being used again but not
-mark it as PG_hwpoison and whatnot. PG_reserved perhaps?
-
-> +		dump_rmpentry(pfn);
-> +		pfn++;
-> +	}
-> +}
-> +
-> +static int snp_reclaim_pages(unsigned long pfn, unsigned int npages, bool locked)
-> +{
-> +	struct sev_data_snp_page_reclaim data;
-> +	int ret, err, i, n = 0;
-> +
-> +	for (i = 0; i < npages; i++) {
-> +		memset(&data, 0, sizeof(data));
-> +		data.paddr = pfn << PAGE_SHIFT;
-
-Oh wow, this is just silly. A struct for a single u64. Just use a
-
-	u64 paddr;
-
-directly. But we had this topic already...
-
-> +
-> +		if (locked)
-
-Ew, that's never a good design - conditional locking.
-
-> +			ret = __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
-> +		else
-> +			ret = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
-
-<---- newline here.
-
-> +		if (ret)
-> +			goto cleanup;
-> +
-> +		ret = rmp_make_shared(pfn, PG_LEVEL_4K);
-> +		if (ret)
-> +			goto cleanup;
-> +
-> +		pfn++;
-> +		n++;
-> +	}
-> +
-> +	return 0;
-> +
-> +cleanup:
-> +	/*
-> +	 * If failed to reclaim the page then page is no longer safe to
-> +	 * be released, leak it.
-> +	 */
-> +	snp_leak_pages(pfn, npages - n);
-
-So this looks real weird: we go and reclaim pages, we hit an error
-during reclaiming a page X somewhere in-between and then we go and mark
-the *remaining* pages as not to be used?!
-
-Why?
-
-Why not only that *one* page which failed and then we continue with the
-rest?!
-
-> +	return ret;
-> +}
-> +
-> +static inline int rmp_make_firmware(unsigned long pfn, int level)
-> +{
-> +	return rmp_make_private(pfn, 0, level, 0, true);
-> +}
-
-That's a silly wrapper used only once. Just do at the callsite:
-
-	/* Mark this page as belonging to firmware */
-	rc = rmp_make_private(pfn, 0, level, 0, true);
-
-> +
-> +static int snp_set_rmp_state(unsigned long paddr, unsigned int npages, bool to_fw, bool locked,
-> +			     bool need_reclaim)
-
-Tangential to the above, this is just nuts with those bool arguments.
-Just look at the callsites: do you understand what they do?
-
-	snp_set_rmp_state(paddr, npages, true, locked, false);
-
-what does that do? You need to go up to the definition of the function,
-count the arguments and see what that "true" arg stands for.
-
-What you should do instead is, have separate helpers which do only one
-thing:
-
-	rmp_mark_pages_firmware();
-	rmp_mark_pages_shared();
-	rmp_mark_pages_...
-
-and then have the *callers* issue snp_reclaim_pages() when needed. So you'd have
-
-	rmp_mark_pages_firmware();
-	rmp_mark_pages_shared()
-
-and __snp_free_firmware_pages() would do
-
-	rmp_mark_pages_shared();
-	snp_reclaim_pages();
-
-and so on.
-
-And then if you need locking, the callers can decide which sev_do_cmd
-variant to issue.
-
-And then if you have common code fragments which you can unify into a
-bigger helper function, *then* you can do that.
-
-Instead of multiplexing it this way. Which makes it really hard to
-follow what the code does.
-
-
-> +	unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT; /* Cbit maybe set in the paddr */
-
-No side comments pls.
-
-> +	int rc, n = 0, i;
-> +
-> +	for (i = 0; i < npages; i++) {
-> +		if (to_fw)
-> +			rc = rmp_make_firmware(pfn, PG_LEVEL_4K);
-> +		else
-> +			rc = need_reclaim ? snp_reclaim_pages(pfn, 1, locked) :
-> +					    rmp_make_shared(pfn, PG_LEVEL_4K);
-> +		if (rc)
-> +			goto cleanup;
-> +
-> +		pfn++;
-> +		n++;
-> +	}
-> +
-> +	return 0;
-> +
-> +cleanup:
-> +	/* Try unrolling the firmware state changes */
-> +	if (to_fw) {
-> +		/*
-> +		 * Reclaim the pages which were already changed to the
-> +		 * firmware state.
-> +		 */
-> +		snp_reclaim_pages(paddr >> PAGE_SHIFT, n, locked);
-> +
-> +		return rc;
-> +	}
-> +
-> +	/*
-> +	 * If failed to change the page state to shared, then its not safe
-> +	 * to release the page back to the system, leak it.
-> +	 */
-> +	snp_leak_pages(pfn, npages - n);
-> +
-> +	return rc;
-> +}
-
-...
-
-> +void snp_free_firmware_page(void *addr)
-> +{
-> +	if (!addr)
-> +		return;
-> +
-> +	__snp_free_firmware_pages(virt_to_page(addr), 0, false);
-> +}
-> +EXPORT_SYMBOL(snp_free_firmware_page);
-
-EXPORT_SYMBOL_GPL() ofc.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#how-often-do-changes-from-these-trees-make-it-to-the-mainline-linus-tree
