@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4D85FE495
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2789C5FE49A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiJMVzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S229832AbiJMV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiJMVy7 (ORCPT
+        with ESMTP id S229747AbiJMV6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:54:59 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A294F303D3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:54:50 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-358bf076f1fso29987677b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:54:50 -0700 (PDT)
+        Thu, 13 Oct 2022 17:58:01 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BEBB1DF1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:58:00 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so3061016pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pMIVAykxBe38/iC/E6uc7T7wvmS7tw/OTeZ758Y5Y7o=;
-        b=P9IbXagKldqPlhXR/Ynxm74++40pPNmrIoKj68/ZaL40Wbei+ACwPUSuWAl+FrQ2So
-         B7tQeT+IPJtEryxCbbTzWRzvxaKKFxqqkupLRDwCRZ3Rzvup4fin04QZw5pR8Szdkttz
-         xLoGJmkmhX0lqgAFM8sBVqC8PBZpSnq9vZKRUv2nel9s8FTBihHQdUm+ai3lfUbStLCN
-         Ilt1ZF2yLG5ZHPbw78eV5Bmfs0dBUr4RBQd2m8lybcBxjwGo3hEZFzfZTo7uSyP415AA
-         IlafW7O47qwp53T7yWpEmIoiTGNoiW3iaa165UcV/apUNWyGhMcWNdgl7i7SkiNQ0lb3
-         Ko0Q==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=7rCkn9jK5l0UbesP3+Ce+8gzCsYUhag1x17HoTBJI/4=;
+        b=Bd5MANJdFPf7AAPWzhjx8DS8Ad1Fihxg8XpuuWgzMF3mM8ig4dYismUPALwegG2Ii9
+         jR1SkFDzMmgnMPgGGOPFY36c/c1OYknQVPtQbIcC6VRG8sEhbPTdgINWCLxsTMQ5CFCC
+         uO08684sdudbseuckZV95KSkORuPemJCWTsh356bMYGH6oEOrdEIRE0IdIrxtGxDDOoQ
+         kDPk4WkFV3734A6ctSYzJ9Xq3r5PXYOvgLBADqSGyTmpeqjI60cNGIdIlB5X+514toDw
+         f4y4/vr/i9T+m/5wKX4A4dsFXMfkiQCacvVOZCnUP2f+byjb7zbDonNbKEId4xZqYhnj
+         H0Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pMIVAykxBe38/iC/E6uc7T7wvmS7tw/OTeZ758Y5Y7o=;
-        b=Q6GIU+RtkofETRTtMsWkPhh2bQ2rk7tBFwZAbgA6he3L2SuNnaTR+Ju0g3dPK7xjCt
-         yNto3qVOXboygJR5NrdJmq1DeMufMSWwWao+WH77VNFHarUgAGo7fEJTpfQrzgJXxxZh
-         7SQD4NsiJjmkBhzkIGnPO9aRJpKHxnnbqV3UeEV17DiZgqXkuZVx7AS5R3wKMfQKQkv2
-         zpInYuAavz4Qkk3ExihQIPYP3ZvLOOM/oMbzMcCWsVIHO137qwERwD0yJ3/TdKQ2lVan
-         n6HWYJBXGRIfZBgfNmNlTegswLIBlP9obAzaPLvou+FSav/DRrefSi+TR9PFqivcfYpE
-         oStg==
-X-Gm-Message-State: ACrzQf37wcBEIhxeJtpFLVLfggVnkKNOlKqeWbl3Fp0u4V6lIu4D6qEQ
-        fnI4YtFuWtkmrGP72rO0ijoH8hwwq5/tekEMfJRWA+yA7A==
-X-Google-Smtp-Source: AMsMyM4JEMdMZBfMMOEelszS2FpP9sTFphB2c0U7BQE0LEIVEYbWEkduPrNlOO6ZaZ5zQ40oGab8VSOjZhfOIxy4NMA=
-X-Received: by 2002:a0d:ebc1:0:b0:360:5a77:4d78 with SMTP id
- u184-20020a0debc1000000b003605a774d78mr1942006ywe.336.1665698052305; Thu, 13
- Oct 2022 14:54:12 -0700 (PDT)
+        bh=7rCkn9jK5l0UbesP3+Ce+8gzCsYUhag1x17HoTBJI/4=;
+        b=yi8E+uPss58X6PRIJQ3vpOx8qU3L/Szkl7V0XjtNccmkvCZp7A+tIPPniCNPUiDiKw
+         xISeyeqc440l4uPUl1zJ0XK82s9e/SoIFIfa+vcL4PncRHIYxZ5cnENvH9V90d3ay0L4
+         0CfBtgT97CxcAE7YrzcdklLt9XoX0PruIJySZn7NpmK+EKGrO84I9LPKHph6FldOnHtb
+         6ZfxtS+PldoAz75gc75B3WbPvUYNAxQqdpUekd4gZCDVxKSzdthGPQLuq+PK/+Uk/cNw
+         N6Nvb36OGyEGStN7fMgqe0xpxS22k3w6REsM5eg5Cd/BUPe/eGk6tiDhnvny9itqgV+V
+         VI9Q==
+X-Gm-Message-State: ACrzQf1t6eC+jv8AEwv+ORZJl8Pf0i+suFpMZ/MBPAZl7IOaW7M3daJx
+        t+b9bFtQV7uTsiy0TgLMIX8g5CdQGgOSVzOM
+X-Google-Smtp-Source: AMsMyM4SRC6xnMWj/gwE8eZ+Q3U24gEYPJOYp/vdSetGB94EYLZjmaejWcDXYSPyBh8ObAxpXsrnfw==
+X-Received: by 2002:a17:903:2402:b0:184:29:8ac0 with SMTP id e2-20020a170903240200b0018400298ac0mr1999186plo.174.1665698279505;
+        Thu, 13 Oct 2022 14:57:59 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id i6-20020a628706000000b00553b37c7732sm175476pfe.105.2022.10.13.14.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 14:57:59 -0700 (PDT)
+Subject: [PATCH] get_maintainer: Add the --for-tree argument
+Date:   Thu, 13 Oct 2022 14:57:38 -0700
+Message-Id: <20221013215738.32326-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221013214637.30807-1-palmer@rivosinc.com>
-In-Reply-To: <20221013214637.30807-1-palmer@rivosinc.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 13 Oct 2022 17:54:00 -0400
-Message-ID: <CAHC9VhTPt40PFC5NASOjOK+fqJym5JOyb8UrwAL7DGDQWqVwqA@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for cschaufler
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     casey@schaufler-ca.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Cc:        linux-kernel@vger.kernel.org,
+           Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     joe@perches.com
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +68,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 5:49 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> Github deprecated the git:// links about a year ago, so let's move to
-> the https:// URLs instead.
->
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> I've split these up by github username so folks can take them
-> independently, as some of these repos have been renamed at github and
-> thus need more than just a sed to fix them.
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I recently wanted to look up the maintainers for each tree path via a
+script, and I couldn't find a better way to do that than poking
+get_maintainer.pl to add a new argument.  This lets folks run something
+like
 
-Casey is the one who needs to ACK this (and he has an email delay at
-the moment), but the URL looks good to me.
+    $ ./scripts/get_maintainer.pl --for-tree git://github.com/kvm-riscv/linux.git
+    Anup Patel <anup@brainfault.org> (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+    kvm@vger.kernel.org (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+    kvm-riscv@lists.infradead.org (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+    linux-riscv@lists.infradead.org (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+to find out who owns a tree.
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index daadd0de77a9..019cdb48e254 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18723,7 +18723,7 @@ M:      Casey Schaufler <casey@schaufler-ca.com>
->  L:     linux-security-module@vger.kernel.org
->  S:     Maintained
->  W:     http://schaufler-ca.com
-> -T:     git git://github.com/cschaufler/smack-next
-> +T:     git https://github.com/cschaufler/smack-next
->  F:     Documentation/admin-guide/LSM/Smack.rst
->  F:     security/smack/
->
-> --
-> 2.38.0
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ scripts/get_maintainer.pl | 48 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 2 deletions(-)
 
+diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+index ab123b498fd9..70abefadd295 100755
+--- a/scripts/get_maintainer.pl
++++ b/scripts/get_maintainer.pl
+@@ -23,6 +23,7 @@ use File::Spec::Functions;
+ 
+ my $cur_path = fastgetcwd() . '/';
+ my $lk_path = "./";
++my $for_tree = undef;
+ my $email = 1;
+ my $email_usename = 1;
+ my $email_maintainer = 1;
+@@ -239,6 +240,7 @@ if ($#ARGV > 0) {
+ 
+ if (!GetOptions(
+ 		'email!' => \$email,
++		'for-tree=s' => \$for_tree,
+ 		'git!' => \$email_git,
+ 		'git-all-signature-types!' => \$email_git_all_signature_types,
+ 		'git-blame!' => \$email_git_blame,
+@@ -300,7 +302,7 @@ if (defined $self_test) {
+     exit 0;
+ }
+ 
+-if (-t STDIN && !@ARGV) {
++if (-t STDIN && !@ARGV && !$for_tree) {
+     # We're talking to a terminal, but have no command line arguments.
+     die "$P: missing patchfile or -f file - use --help if necessary\n";
+ }
+@@ -527,7 +529,7 @@ sub read_mailmap {
+ 
+ ## use the filenames on the command line or find the filenames in the patchfiles
+ 
+-if (!@ARGV) {
++if (!@ARGV && !$for_tree) {
+     push(@ARGV, "&STDIN");
+ }
+ 
+@@ -951,6 +953,47 @@ sub get_maintainers {
+ 	}
+     }
+ 
++    if ($for_tree) {
++        my $tvi = find_first_section();
++        while ($tvi < @typevalue) {
++            my $start = find_starting_index($tvi);
++            my $end = find_ending_index($tvi);
++            $tvi = $end + 1;
++
++            my $i;
++            my $tree_match = 0;
++            for ($i = $start; $i < $end; $i++) {
++                my $line = $typevalue[$i];
++                if ($line =~ m/^([A-Z]):(.*)/) {
++                    my $type = $1;
++                    my $value = $2;
++
++                    if ($type eq 'T') {
++                        if ($for_tree eq $value || "git $for_tree" eq $value) {
++                            $tree_match = 1
++                        }
++                    }
++                }
++            }
++
++            if ($tree_match) {
++                for ($i = $start; $i < $end; $i++) {
++                    my $line = $typevalue[$i];
++                    if ($line =~ m/^([A-Z]):(.*)/) {
++                        my $type = $1;
++                        my $value = $2;
++
++                        if ($type eq 'M' || $type eq 'L') {
++                            my $role = get_maintainer_role($i);
++                            push_email_address($value, $role)
++                        }
++                    }
++                }
++            }
++        }
++    }
++
++
+     foreach my $email (@email_to, @list_to) {
+ 	$email->[0] = deduplicate_email($email->[0]);
+     }
+@@ -1074,6 +1117,7 @@ Output type options:
+   --multiline => print 1 entry per line
+ 
+ Other options:
++  --for-tree => Get maintainers for the given tree
+   --pattern-depth => Number of pattern directory traversals (default: 0 (all))
+   --keywords => scan patch for keywords (default: $keywords)
+   --sections => print all of the subsystem sections with pattern matches
 -- 
-paul-moore.com
+2.38.0
+
