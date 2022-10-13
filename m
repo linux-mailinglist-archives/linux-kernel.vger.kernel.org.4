@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8515FE163
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D405FE03A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiJMSgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S229797AbiJMSFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiJMSfj (ORCPT
+        with ESMTP id S231157AbiJMSDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:35:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FE2192DAC;
-        Thu, 13 Oct 2022 11:32:07 -0700 (PDT)
+        Thu, 13 Oct 2022 14:03:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87992157F58;
+        Thu, 13 Oct 2022 11:03:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2997AB8205A;
-        Thu, 13 Oct 2022 17:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15DBC433D7;
-        Thu, 13 Oct 2022 17:59:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1379861943;
+        Thu, 13 Oct 2022 18:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7464AC433C1;
+        Thu, 13 Oct 2022 18:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665683991;
-        bh=YvzWFopE4vb9e3aO/bHq8nJsTi5w8TgSx11JN20VUpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WBlfHyZlbueYhQzq0+dw9zi4dRKRhjWpF39CHEXPItnIE5QbDJp8KtE1+roeiP2V9
-         KcRmmmQ5UEaRq+EEdaOLjioirQkIFs8CzM6v8j+fH8o/LfekRSk8kApFah3+vJGiXL
-         Wr1u+F8+Ltj/Nb9mhgOoz/smhwwjA++sz8ASJel2F/yj+268TKCQFMiYFw+eh5V2OM
-         7LXtkju2vNYwvJ6rYlWeUG196YSSPtI9z8w/qtBDpQG1mECXIkZ91VTgdcQ8+GxF2f
-         4nu6aqd0grVQjal4mzNAjLAt+q4Yytb1OyRCoY3Dowh7TkMXp7zo93/PkLCz22yi2u
-         MAOLVv2gSpFhA==
-Date:   Thu, 13 Oct 2022 13:59:50 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Richard Acayan <mailingradian@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, adrian.hunter@intel.com,
-        linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.0 39/44] mmc: sdhci-msm: add compatible string
- check for sdm670
-Message-ID: <Y0hSFl3Vqo1LCpNg@sashalap>
-References: <20221009234932.1230196-1-sashal@kernel.org>
- <20221009234932.1230196-39-sashal@kernel.org>
- <20221010234353.228833-1-mailingradian@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221010234353.228833-1-mailingradian@gmail.com>
+        s=k20201202; t=1665684009;
+        bh=Fe7d0Zn2chLLmPzOexN099gWKHr/nuc+bPn9sa6xGrE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=MJwKEsc2KYYmKxjxm9JoAcOBVauyxTd/2m5uQkwKthdphd5Xzj/1AClF9tYju8D/D
+         ziw2YWuyhDW45WBiXi3QMsZzAFKB1M+NRJ0yLY8u7mvm5l09yiMnY5jrMstjHwAu/0
+         FiM8p5SbdDIPyiAFaeW91lHGcQHr4lakW7vB6L2BMVEFWMff+liyYi/JXP7Qi1FpEN
+         SJ/qWbv+BONbGA74qF93cjeRIVbty2GnYEp8coy4wwJZ88qSOYnJrTiBZp9q7v2R6e
+         Ka30mIntngJurdepbjH9HIo8FdFFfpyHVHRCG/Pk6Xr/XWeFwG/zLEkw7WmEFOo15d
+         cZvBapYzLv+2A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57F3AE29F31;
+        Thu, 13 Oct 2022 18:00:09 +0000 (UTC)
+Subject: Re: [GIT PULL] virtio: bugfix, reviewer
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221013094021-mutt-send-email-mst@kernel.org>
+References: <20221013094021-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221013094021-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+X-PR-Tracked-Commit-Id: be8ddea9e75e65b05837f6d51dc5774b866d0bcf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d6f04f26e25242898959b1758432e4076fabc0c0
+Message-Id: <166568400929.7515.1599489627533192092.pr-tracker-bot@kernel.org>
+Date:   Thu, 13 Oct 2022 18:00:09 +0000
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        angus.chen@jaguarmicro.com, jasowang@redhat.com,
+        lingshan.zhu@intel.com, mpe@ellerman.id.au, mst@redhat.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,41 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 07:43:53PM -0400, Richard Acayan wrote:
->> From: Richard Acayan <mailingradian@gmail.com>
->>
->> [ Upstream commit 4de95950d970c71a9e82a24573bb7a44fd95baa1 ]
->>
->> The Snapdragon 670 has the same quirk as Snapdragon 845 (needing to
->> restore the dll config). Add a compatible string check to detect the need
->> for this.
->>
->> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
->> Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Link: https://lore.kernel.org/r/20220923014322.33620-3-mailingradian@gmail.com
->> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  drivers/mmc/host/sdhci-msm.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
->> index dc2991422a87..3a091a387ecb 100644
->> --- a/drivers/mmc/host/sdhci-msm.c
->> +++ b/drivers/mmc/host/sdhci-msm.c
->> @@ -2441,6 +2441,7 @@ static const struct of_device_id sdhci_msm_dt_match[] = {
->>  	 */
->>  	{.compatible = "qcom,sdhci-msm-v4", .data = &sdhci_msm_mci_var},
->>  	{.compatible = "qcom,sdhci-msm-v5", .data = &sdhci_msm_v5_var},
->> +	{.compatible = "qcom,sdm670-sdhci", .data = &sdm845_sdhci_var},
->
->Supporting device trees which are invalid under 6.0 schema? It's not a bug fix,
->it's a feature.
+The pull request you sent on Thu, 13 Oct 2022 09:40:21 -0400:
 
-Does this not enable hardware to work properly? We take quirks/device
-enablement into stable tree as well.
+> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d6f04f26e25242898959b1758432e4076fabc0c0
+
+Thank you!
 
 -- 
-Thanks,
-Sasha
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
