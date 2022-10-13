@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C715FE397
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6A55FE3A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiJMU5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 16:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S229968AbiJMVA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiJMU47 (ORCPT
+        with ESMTP id S229804AbiJMVAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 16:56:59 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0609183E1E;
-        Thu, 13 Oct 2022 13:56:58 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id e129so2569284pgc.9;
-        Thu, 13 Oct 2022 13:56:58 -0700 (PDT)
+        Thu, 13 Oct 2022 17:00:24 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4D35E306
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:00:23 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3562f0fb5a7so27861407b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 14:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GwIrM6PqNMNs+23zGPNZGFODdHKdYKYXNnXBaYGk6no=;
-        b=bZryOJi77Rv3rbKooYxAQa7v8FiSWMxEFBnfpNGhi/UpvldiklHZsUNGBGy9c/pFF9
-         YxstqFBtH3jK3rya1kMqfUK0qpav7vzmKmxep7Lw4SOBJJ00EUlPRMh6FVEzQjIW3CtT
-         SLiJb9Jz+STOPtU1r0PwvNr9OBUJ9ksD0g5hi0FAU+IgiNDd8bmW9VnXPjIMSsR7pqDX
-         BmEWCrNikS98SJGVR9tRy+3GdJhkMHcL2nb6cnnr1lN+0TwP/TimWpSeY473ZRNHiL5E
-         qTA7NteYyk3aWfg1q0gWW0Sucq4UhxV9Ocj3DYhGbGiczlxw7lNNOhlObZaEeMfZIAX/
-         ru0w==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/bUd8aKPH80AhGjW+++xUOpyDvX0kb5YuI9G+Oh1VW8=;
+        b=Ump8uOis3JBmRWnAOLZHobNzJx2Li8xG9bd9NKtG4i6CMt5Rh1Yd7lTxDszAvk3Edd
+         QZYdxBYgtg3/d4Zy/sQLh7uUzkzpqBf68G19QKg6grUhU7380+5lmV6MP7YR0xw6KNY9
+         fIHuavZYQc9f45UNc+JTrLvMG7qBR8m5mX8tgDy2lt7MQim3VmDXXQQuHk8T84G6FVQH
+         ecc+Axgs04dVYxO4xc5iQYGii4BJ3uGa0NrgCNs4OxdBvzdAlGwaQQ6htxXGNaqznGPZ
+         JZxRey1d0IeHMLiw+uC06q6sYFAXbm33JLYbMzZbA0VpIKJ5oM72FdKlknkqUscOT/Zi
+         W9LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GwIrM6PqNMNs+23zGPNZGFODdHKdYKYXNnXBaYGk6no=;
-        b=mvzlOSVTce/MK5uraBI7gW6bSMdsWbPnwFlkCrufBbKjHVJ70KKDFDJNKLi+qGFXyH
-         uGUUZeP300AjWfsjz5X1tR4cCnlFQYTrcBo05C/h00DWrir2q2jTv6aarr6aR6W1x3JS
-         gyyx7IOfo05BDebEtQEqpXq4Z1EslkDU9/AjF1rlpQqT2RSzUVqfLIRr89ARF8DeT3p/
-         tq9romzbhoVV959b8AsPs0CFyq+lBnkMDswln+7VTiImfjYBOp2ZnZcP0DzRGShR7x18
-         ZfXBAs/W0rXNXenWlH/ka5rTWD0rW9WWukt7fdxM6NFqL+xhlHgTkAtUd/vl2NckTqvy
-         YaXQ==
-X-Gm-Message-State: ACrzQf3CWzktkM+X/Nrrn2iGmp6wudjbUmhdTsfJmMmXf/ruBZbHDv2E
-        oY9PkmqrkWCvWX2XxhfA0Q4=
-X-Google-Smtp-Source: AMsMyM7xAyN+uhI+6X8HJo1C0MhAUgcRa1vJ71mGmzp52Dr9HbBuY1qszhhQ1UFwMmLH4X2d7NUsWg==
-X-Received: by 2002:a63:a13:0:b0:440:a593:b79f with SMTP id 19-20020a630a13000000b00440a593b79fmr1478647pgk.557.1665694618187;
-        Thu, 13 Oct 2022 13:56:58 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:b4de:68c7:333b:58ae])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa7951a000000b005604c1a0fbcsm139964pfp.74.2022.10.13.13.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 13:56:57 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Subject: [PATCH] perf stat: Init aggr_map when reporting per-process stat
-Date:   Thu, 13 Oct 2022 13:56:55 -0700
-Message-Id: <20221013205655.401525-1-namhyung@kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/bUd8aKPH80AhGjW+++xUOpyDvX0kb5YuI9G+Oh1VW8=;
+        b=K7GRAzdgh2A8HD1sw2ICuQSB0asiR1XBBu2lftQI8pqQar+NOzIexip4tNDYrJrgfN
+         2tcNhBcRnDIG6ocDNis1mutZ844KLlahQ/Sq4OBTlRsjKAVLDcIQYW04IVEDS07Sje5w
+         TCAgsn1dOpVkhjVxBBrsNCT7y6HpryftSmCeaz/PsMAkGHJclCZ6GQYC8OBXKhWC8hv5
+         O7Yk8gIk3gWv21mEPEcWDF43NQWT4h9ZijCiHxlfP/YvBWYkcP9htB8K3Oe94KTwh1Hx
+         THATL6mDlicdySuFNn3baxaXSHfPjb04cjPRB5l5qL7LNRbjW17GFut/OD00ms07CcwM
+         /PcA==
+X-Gm-Message-State: ACrzQf16SjjfuKwKQPF5VkVWvDJvsyLQ+kZtP1bgPhENIoyuUqJaLhyC
+        N0AWgoVD8EEa1IPCHOfzsIvERLQ=
+X-Google-Smtp-Source: AMsMyM5rjCOZkY2UjSc3mVAWtSHXgFM6Tx/9iDX/1by0I51wPhLztvW5wIcgFsgGa3/iHoq07ZtMxHc=
+X-Received: from ptf16.nyc.corp.google.com ([2620:0:1003:314:397e:65e9:dc1c:f5cd])
+ (user=ptf job=sendgmr) by 2002:a25:254a:0:b0:6bc:d8a1:939c with SMTP id
+ l71-20020a25254a000000b006bcd8a1939cmr1782359ybl.438.1665694822583; Thu, 13
+ Oct 2022 14:00:22 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 17:00:17 -0400
+Mime-Version: 1.0
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-In-Reply-To: <CAM9d7cjnAPhOPont3GHSwa9BhAsAFVvqAhFPsyAfQBR8ajrvag@mail.gmail.com>
-References: <CAM9d7cjnAPhOPont3GHSwa9BhAsAFVvqAhFPsyAfQBR8ajrvag@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <20221013210017.3751025-1-ptf@google.com>
+Subject: [PATCH v3] mmc: sdhci-pci-core: Disable ES for ASUS BIOS on Jasper Lake
+From:   Patrick Thompson <ptf@google.com>
+To:     Linux MMC Development <linux-mmc@vger.kernel.org>
+Cc:     Sangwhan Moon <sxm@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Patrick Thompson <ptf@google.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'll merge this into the problematic commit.
+Enhanced Strobe (ES) does not work correctly on the ASUS 1100 series of
+devices. Jasper Lake eMMCs (pci_id 8086:4dc4) are supposed to support
+ES. There are also two system families under the series, thus this is
+being scoped to the ASUS BIOS.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+The failing ES prevents the installer from writing to disk. Falling back
+to HS400 without ES fixes the issue.
+
+Signed-off-by: Patrick Thompson <ptf@google.com>
+
+Fixes: 315e3bd7ac19 ("mmc: sdhci-pci: Add support for Intel JSL")
+
 ---
- tools/perf/builtin-stat.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 4cb3ceeb7ba4..9d35a3338976 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -1355,7 +1355,11 @@ static struct aggr_cpu_id perf_stat__get_cpu(struct perf_stat_config *config __m
- static struct aggr_cpu_id perf_stat__get_aggr(struct perf_stat_config *config,
- 					      aggr_get_id_t get_id, struct perf_cpu cpu)
- {
--	struct aggr_cpu_id id = aggr_cpu_id__empty();
-+	struct aggr_cpu_id id;
+Changes in v3:
+* Remove redundant MMC_CAP2_HS400 selection
+
+Changes in v2:
+* Only disable ES instead of CQE in its entirety.
+* Target Jasper Lake (JSL)
+* Target ASUS BIOS instead of specific system family
+
+ drivers/mmc/host/sdhci-pci-core.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+index 169b84761041..34ea1acbb3cc 100644
+--- a/drivers/mmc/host/sdhci-pci-core.c
++++ b/drivers/mmc/host/sdhci-pci-core.c
+@@ -914,6 +914,12 @@ static bool glk_broken_cqhci(struct sdhci_pci_slot *slot)
+ 		dmi_match(DMI_SYS_VENDOR, "IRBIS"));
+ }
+ 
++static bool jsl_broken_hs400es(struct sdhci_pci_slot *slot)
++{
++	return slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_JSL_EMMC &&
++			dmi_match(DMI_BIOS_VENDOR, "ASUSTeK COMPUTER INC.");
++}
 +
-+	/* per-process mode - should use global aggr mode */
-+	if (cpu.cpu == -1)
-+		return get_id(config, cpu);
+ static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
+ {
+ 	int ret = byt_emmc_probe_slot(slot);
+@@ -922,9 +928,11 @@ static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
+ 		slot->host->mmc->caps2 |= MMC_CAP2_CQE;
  
- 	if (aggr_cpu_id__is_empty(&config->cpus_aggr_map->map[cpu.cpu]))
- 		config->cpus_aggr_map->map[cpu.cpu] = get_id(config, cpu);
-@@ -2120,11 +2124,9 @@ int process_stat_config_event(struct perf_session *session,
- 	if (perf_cpu_map__empty(st->cpus)) {
- 		if (st->aggr_mode != AGGR_UNSET)
- 			pr_warning("warning: processing task data, aggregation mode not set\n");
--		return 0;
--	}
--
--	if (st->aggr_mode != AGGR_UNSET)
-+	} else if (st->aggr_mode != AGGR_UNSET) {
- 		stat_config.aggr_mode = st->aggr_mode;
-+	}
+ 	if (slot->chip->pdev->device != PCI_DEVICE_ID_INTEL_GLK_EMMC) {
+-		slot->host->mmc->caps2 |= MMC_CAP2_HS400_ES;
+-		slot->host->mmc_host_ops.hs400_enhanced_strobe =
+-						intel_hs400_enhanced_strobe;
++		if (!jsl_broken_hs400es(slot)) {
++			slot->host->mmc->caps2 |= MMC_CAP2_HS400_ES;
++			slot->host->mmc_host_ops.hs400_enhanced_strobe =
++							intel_hs400_enhanced_strobe;
++		}
+ 		slot->host->mmc->caps2 |= MMC_CAP2_CQE_DCMD;
+ 	}
  
- 	if (perf_stat.data.is_pipe)
- 		perf_stat_init_aggr_mode();
 -- 
 2.38.0.413.g74048e4d9e-goog
 
