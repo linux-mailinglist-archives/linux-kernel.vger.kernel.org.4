@@ -2,224 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36E95FD643
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B44D5FD645
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJMIfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S229504AbiJMIgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJMIfn (ORCPT
+        with ESMTP id S229656AbiJMIgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:35:43 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3DA100BD1;
-        Thu, 13 Oct 2022 01:35:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lSCjjnGS3kR+0clbLEUum+wIfM3BXUGRs9SDjgoM3svqkIvLwn7SzVxEEQqa/a5M6v3xuo+nyRMBYEcD1tqK2NNcx7n1IDzZyxnbVNSGhLlMr6XzpRPQbyHtlSNfbegcCUn5PTRtDFr6fSF8HhnK8fiGL4A8MnaDpHwKWr1MbDyLYKucKyWozz3QZSLvwAzz5icMeGyZc88PnsKiMLngRQoNRYAdo/qGqqvVAbSgw3ZqxgfcmfJOva+t7C6781EwIdLTbEZA/f5l8PDhwh1uw/hT238LT0KB6zPkMbiolb9IzIsAYLGx7/lH6o4V+5h1O4uslUVEDUkcq/Qh3yyq+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wK/oJZKTfh2jniIxFc4B9NCaOYnxEmBnVHzazEb2RLk=;
- b=nn5oiWmwpZAtyRqKUxtiFutqsVKlDgpH3o3L+lfPZuIugGh0BtMsB3bfZ2eZAKvCcUaZeyiXBQB+4fabfRI1BPoKyIJpRLPWUtYoifjRbZN/DkpQsjVReiCIjVOmXWKPxgAI/VuFvThr5oeAQSPGYfz5kxInRDoirmgqW0IxWHtLLOBA5Uj4Fotggdu8cSyMl/1CFp2S7oKkSp+Iy0XARuNs/n3N6xL1cB2hLbl3rk1uw090VgKKz689RBmar1f4zaykXiB87cReWV/tJZxZVLA8FCf0lhNTQYSJzc6o4ADBCTw7K4geoNqxlTjQ/a80qsUHIbv3NB/GAPZIf0WN6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wK/oJZKTfh2jniIxFc4B9NCaOYnxEmBnVHzazEb2RLk=;
- b=Y3iF5UuEAQUv5HKU++61otnneNaoL0b8xYcJo6TgjqteyJpxta3zPmFVBufZP/pEbELyNG/LfNXLXjjntAJF+OZ/iDjPPGdhRWvu7grXLTiSY63oe3X5jX4Hkv47AdggabFZxK6hhjJXC0RG1X4bMTqyj5rd35hbr56y4lSgB2qw2Ko8EHkeREtQGShWrZ7Lou/Coepr5X53Uu0f5y5OHQhwnG+tTpisDYk5/KD8d7NQ8K6IRXNx3BiWie3OWoNQ5k2uPwB7/O0dYZsWoCUFK9oe6xwjw7uVtSyqSIQL54E0POQ//pTjyUsyTy58+0JoINeN2HHlrkLPtgrNODkQYw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by MW4PR12MB7240.namprd12.prod.outlook.com (2603:10b6:303:226::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
- 2022 08:35:40 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::4ff2:d93e:d200:227e%6]) with mapi id 15.20.5676.031; Thu, 13 Oct 2022
- 08:35:40 +0000
-Date:   Thu, 13 Oct 2022 11:35:33 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        Thu, 13 Oct 2022 04:36:43 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260D0104D32
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:36:42 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6EFA258035B;
+        Thu, 13 Oct 2022 04:36:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 13 Oct 2022 04:36:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665650201; x=1665657401; bh=ysquayv/A7
+        PcL91ZGvk9c45xdKAQrAqStjB+DbTAf4Y=; b=fGvAjI49FOoCVdB2M5Hcd/j++r
+        uN93U9tVW2glfFC3Ec4uivVmTIoUp9RyKrzQj9rqlvHgmCRd7k7w6Zlt1tuABskA
+        4x3SkxmWIavMHV3/kZm+xfhpEHwy8/Bio04nFnSxKdrm0yErAGR6KB8Kh1QknV9g
+        /hsVp0Dz5H6wV2W4I17ytz/klpxpmFO8+cH1fM0WhfOsjz0OA8mR5Kb3zEkefAHZ
+        lzhcX8ym5wGpXcZ98qntF0EqOua/rZpPGqGBrtWSMJzRnXfGoiQqogs8dGIXN3KZ
+        POWt7SZMSJK5HM8Evv5ZvRkqNIQbekuYrO4DwcYMr4in2nAKyq/JfTXedpEg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665650201; x=1665657401; bh=ysquayv/A7PcL91ZGvk9c45xdKAQ
+        rAqStjB+DbTAf4Y=; b=UIna1zpHZ1vH/wEBK0RE1zIRyKk8c7mWVVtYYnm5tgxC
+        n4RYdAVYlpupi30CudvozDGzmCYDPpPtmH9D0eWIXLCajpR7omgKafbsYcZH4YLs
+        QdsQqYKofIf6uCaX34V6KBjRd/ezHyACFVwO6NzcdD8rb2mW+XJHwJ9Gm0fMxw6+
+        402X5BgJ539CgC0DQsbLocznUiImNqOlCFkL3QQodiJ5PX+FkQapOroNBr3T64p6
+        o69aovrHr/bGBmokirOWWOmlqAvvDus+HBfPAtwgFCCVGmYNHEhB35+kdlOCXu/E
+        uEAVTNdLUmbnG7m9JflUeeeLe6B3/VHckfUgBS4FBw==
+X-ME-Sender: <xms:GM5HY57zldkiHq5DHxAIqMV4ri47KWkn6Le_F7uS085pkYYDXfyqow>
+    <xme:GM5HY27KVj_mt2XtG7EP7IB6svmVpDO7LonsYm2ujyBE-nlqEoCchoGmKL89ClIlJ
+    N8O7_mxpduYCJnfNQA>
+X-ME-Received: <xmr:GM5HYwddm-oPwfORmFSjtwNqA0b18uKjC3Ob64gsDEeq1Mj9tg99JPrXa83w4ymyDD0jE72JF_rvEhhly1eyvqDZbAx-FGco9Gb8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeljeeugfegveetleevkeetffegudevieetieeugeeugeeivddtjeejvdef
+    feetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:GM5HYyJSEpM6YUHDJ03U9cB9w9_g4vqlvanymVLGPphkerK5JsVKoA>
+    <xmx:GM5HY9JIM4TAqtjnia8joUvmM5SPGvCpFzPqoNzuSEa5ukp3Wbwb4w>
+    <xmx:GM5HY7xJwRvkDe2E2lR2wHgOFMQGNv9JMT0AVe08Jz4EeBoP0wBzXg>
+    <xmx:Gc5HY3oXqNmr3oRXKiMt81wFysmXGv5MzjjahHsr3YO7T93tVZbvkQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Oct 2022 04:36:39 -0400 (EDT)
+Date:   Thu, 13 Oct 2022 10:36:38 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 iproute2-next 2/4] bridge: fdb: show locked FDB
- entries flag in output
-Message-ID: <Y0fN1aYfNKS3JWFN@shredder>
-References: <20221004152036.7848-1-netdev@kapio-technology.com>
- <20221004152036.7848-2-netdev@kapio-technology.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004152036.7848-2-netdev@kapio-technology.com>
-X-ClientProxiedBy: VI1PR06CA0169.eurprd06.prod.outlook.com
- (2603:10a6:803:c8::26) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH v4 11/30] drm/modes: Add a function to generate analog
+ display modes
+Message-ID: <20221013083638.kloiaxervnhii7ew@houat>
+References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v4-11-60d38873f782@cerno.tech>
+ <0aa690b8-988a-878f-4d4f-d391295bc591@tronnes.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|MW4PR12MB7240:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1f12435-6019-4129-050d-08daacf5e8ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qE8TqfGavzGa9hr/J6SOMlCbhHzeScOyUe+Aq+4Pr6IsFGYccBMb1OwfaWzR4MRUH6o//+tJ2bFf/Y1qoKR3LFjwpP2bE0YbV7iuwcFUxMdeefU08toQ2qKhfDCfrHrURPC6xAskbcTwmmM4JCqIT7oMDrZYEScUTHy88M1cMjjLfmAc+A+aRTu4rVzfcdeO7HvyI2iaDiY6ZaN/CcaWRlvxHuwfCfWlWDfG1w8/Cszd1EFsBWezRDOLpFZvVzEknZHp7RW55hRLFDzrAZhN3voD3osYVOczJDcoe9g2HGqMCk7xlC8jWHZ4I58Sq1bC80S+bp4FQIy/YN1VpGjC0wUrUlgM1xLUZ3vivw8BGQ+RulUHYbnNN3et0UdjBXKE6QghZCWTiYLEpS8oj6dTrKQ1tcVKGt/+vyw6XHvHH5k7I862riRARvOQeFGtomzO676YQAbS2Xerwznpwedx8PaRZ1EaHtK0MTCmkyMTmKbFPcG7lcEQE8ZjLT/t6xsKWhtgSGrYq5WWa8rszAAAtWeSN/TQXmP6Et0u2BqoZfGfDFLoWYKG6Ov9MWQolI3X1/UCd/JX7Iw6iJyLgqvbe++r9S7s/f7AIHVYncLfTUhTm0b6UOSBzObgqVibnem6aUftImLonvbKJGzyN59qZxJyK7vZjS03dqEB8ioI0mu5K3nUcXpQvrvPmGM3BTYGIv85vVQBnSq/zylBrADcDQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(39860400002)(366004)(346002)(376002)(396003)(451199015)(186003)(9686003)(26005)(6512007)(2906002)(316002)(33716001)(8936002)(6916009)(54906003)(41300700001)(66556008)(66476007)(66946007)(8676002)(4326008)(86362001)(6666004)(38100700002)(6506007)(478600001)(7416002)(7406005)(5660300002)(6486002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8ZnNJ1/YSjEhKguatk15sd3o1riXDxtVZRS9L0/zN+MUSCS5cIs/iF4buzi9?=
- =?us-ascii?Q?tFbdW4lVtowapaMeh680k0TLrxqLo9ZhTm+hhxweBztGWyN1Ct4nqTHa4yvi?=
- =?us-ascii?Q?rFT3MztHTgVtGEQbeTyc9P6GZgol0HdpCZLunTepNxLUQgSXCf8ooV/zOCM2?=
- =?us-ascii?Q?EV99LDtL41pQ1KjaZyQgCpVTdfznBrz+UGR9CSYxG5xsy5pOaJxgsZ5IfFWN?=
- =?us-ascii?Q?oxNYUmyailWbR2eSry36QzJ+R6+FhyGc7LSTLzpe9MM1Xe/L7zExHUg8TObB?=
- =?us-ascii?Q?ms3KXCNUtIj3pGYFxI0hfIoCt/PxMXmjoI2pFn+uH9YDOsuu5q6o/Xy0RLA/?=
- =?us-ascii?Q?kVrHjfjMDUFcL0R+Z5KL9/8M4yNt3Z2Mx9h1os7RbmWpLGqfyn2us1RK5ibM?=
- =?us-ascii?Q?6KJ32dNWGjBv+QKceQGIkhVlgTETwxWRROIZwQDRfVjb1x0dQW1YPQuagopF?=
- =?us-ascii?Q?3WKeOCFJ4qRxCImsCclm+HeHv0iGwwlPYNX9hRIFiuh0PqiRXXPy+S27u8aU?=
- =?us-ascii?Q?wgfpuZ62dOA/XlTZNzzo+HoytO/1ulS5qzQw0uVVyQTNrAGAhksUkfDsIkYj?=
- =?us-ascii?Q?trT959A3MkfRFEZRVy2tYS5MA2DF6doWzFgXuJgL7K6iDKR+I9L6FAag/LVx?=
- =?us-ascii?Q?eVDKgYHIn7mUL4IhlpOWBXMtcbXx26dEIN2gkcpOztMwAki9UoHVhLuDsGCO?=
- =?us-ascii?Q?H27l/bM5h4zELTZCfnwTIIxc7Pczr85G+5alCZHZIzQoh2vsE+USd/vEzcg+?=
- =?us-ascii?Q?QVea1bjrf4eBe5hNOQ4GGb/C7Ncxd/DWPo55HkHYgFGycNykG/jfn7eLAhSI?=
- =?us-ascii?Q?Cb34dBWb7HviUe6y4THw8HVrkdNV1biUUQkkSiB5MZXlC+ZFDmgbVWjb/R0T?=
- =?us-ascii?Q?XVbou/W8uSkHvPSSATe5S2UrT0ztCgbP7mPb/2YFxsXhLRzLx3/3+aX9yfJw?=
- =?us-ascii?Q?BsB9JxmhZdlIzb9zP9CU+XxrdgSh+JeFl6jAYoiuV+pQ/h6Cbc0Sxvu7ZIMo?=
- =?us-ascii?Q?4ec/MtS7+BUaoiW1vuPCB0l8XvgSG2q632q4FxG7/2w0ZfWyGsja8IcP8rkf?=
- =?us-ascii?Q?VcHsHF81KSYXNHy9USzFM6JxeH+bO8AJ1LxO7RHRuS954l3nO97ih8RQvIAS?=
- =?us-ascii?Q?zXRE4qpLpXrlkQUqMq5KRVKDjBURtAWx0SW6TJYwIaMzoz9VmzyJY0RiNUDw?=
- =?us-ascii?Q?YGpI+bXNrZD+Uv5H1gCFfG6jEKW6Ldo/SNvmxucoCF9QzUdsLuo0HgzP+OSW?=
- =?us-ascii?Q?C+mSQ/nqAl6KtTbfW3eMpYGx/ic86JPW6jIt1WbCo4reaTU2eS/3cMeHqJQY?=
- =?us-ascii?Q?R0avaSq/OkNVg+BTq7+/JtnhtZPhVEmBOmcfFXejUFRw1EqMlXJakZ2nVncU?=
- =?us-ascii?Q?inrObi1lFDl4SMxwaoGMKDIUNbUJEUnAOYsKbx/4ZZmfD3OvIH9rqTD+e6k4?=
- =?us-ascii?Q?VkbjnLAcubt9BgfMex7u2a0MSOmUkXrbZlDwqJybnZmpXJoljNjqq/i7yp8y?=
- =?us-ascii?Q?Kk2UmIXcSBsnU8PczwC1mIcaeLaxDSMoJuwZunuGvFzwTG0f9fDZGjTGMJzb?=
- =?us-ascii?Q?bHv6XIpzzYFPbVFLLFc6gYSwFjb2X8uWAdGy3NPd?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1f12435-6019-4129-050d-08daacf5e8ef
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 08:35:40.4258
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8S/DYPbJk2uahcjHnw/kVgD/Mdx6DfifdWwgRW+Yd7tgEb1lvYi6awvUIrba+dqidndGH9pW7UcK16+5dwbYjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7240
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l3aewuzyqmtjebmf"
+Content-Disposition: inline
+In-Reply-To: <0aa690b8-988a-878f-4d4f-d391295bc591@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 05:20:34PM +0200, Hans Schultz wrote:
-> Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
 
-Don't leave the commit message empty. Explain the change and include an
-example output showing the "locked" flag.
+--l3aewuzyqmtjebmf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  bridge/fdb.c | 11 +++++++++--
+Hi Noralf,
 
-Still missing a description of the "locked" flag from the man page.
-Something like:
+On Sat, Oct 01, 2022 at 02:52:06PM +0200, Noralf Tr=F8nnes wrote:
+> Den 29.09.2022 18.31, skrev Maxime Ripard:
+> > Multiple drivers (meson, vc4, sun4i) define analog TV 525-lines and
+> > 625-lines modes in their drivers.
+> >=20
+> > Since those modes are fairly standard, and that we'll need to use them
+> > in more places in the future, it makes sense to move their definition
+> > into the core framework.
+> >=20
+> > However, analog display usually have fairly loose timings requirements,
+> > the only discrete parameters being the total number of lines and pixel
+> > clock frequency. Thus, we created a function that will create a display
+> > mode from the standard, the pixel frequency and the active area.
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >=20
+> > ---
+> >=20
+> > Changes in v4:
+> > - Reworded the line length check comment
+> > - Switch to HZ_PER_KHZ in tests
+> > - Use previous timing to fill our mode
+> > - Move the number of lines check earlier
+> > ---
+> >  drivers/gpu/drm/drm_modes.c            | 474 +++++++++++++++++++++++++=
+++++++++
+> >  drivers/gpu/drm/tests/Makefile         |   1 +
+> >  drivers/gpu/drm/tests/drm_modes_test.c | 144 ++++++++++
+> >  include/drm/drm_modes.h                |  17 ++
+> >  4 files changed, 636 insertions(+)
+> >=20
+>=20
+> I haven't followed the discussion on this patch, but it seems rather
+> excessive to add over 600 lines of code (including tests) to add 2 fixed
+> modes. And it's very difficult to see from the code what the actual
+> display mode timings really are, which would be useful for other
+> developers down the road wanting to use them.
+>=20
+> Why not just hardcode the modes?
 
-"
-locked - this entry was added by the kernel in response to a host trying
-to communicate behind a bridge port with MAB enabled. User space can
-authenticate the host by clearing the flag. The flag cannot be set by
-user space.
-"
+Yeah, I have kind of the same feeling tbh, but it was asked back on the
+v1 to ease the transition of old fbdev drivers, since they will need
+such a function:
+https://lore.kernel.org/dri-devel/CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzR=
+YyWDuNm5=3Dg@mail.gmail.com/
 
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/bridge/fdb.c b/bridge/fdb.c
-> index 5f71bde0..f1f0a5bb 100644
-> --- a/bridge/fdb.c
-> +++ b/bridge/fdb.c
-> @@ -93,7 +93,7 @@ static int state_a2n(unsigned int *s, const char *arg)
->  	return 0;
->  }
->  
-> -static void fdb_print_flags(FILE *fp, unsigned int flags)
-> +static void fdb_print_flags(FILE *fp, unsigned int flags, __u8 ext_flags)
+Maxime
 
-s/__u8/__u32/
+--l3aewuzyqmtjebmf
+Content-Type: application/pgp-signature; name="signature.asc"
 
->  {
->  	open_json_array(PRINT_JSON,
->  			is_json_context() ?  "flags" : "");
-> @@ -116,6 +116,9 @@ static void fdb_print_flags(FILE *fp, unsigned int flags)
->  	if (flags & NTF_STICKY)
->  		print_string(PRINT_ANY, NULL, "%s ", "sticky");
->  
-> +	if (ext_flags & NTF_EXT_LOCKED)
-> +		print_string(PRINT_ANY, NULL, "%s ", "locked");
-> +
->  	close_json_array(PRINT_JSON, NULL);
->  }
->  
-> @@ -144,6 +147,7 @@ int print_fdb(struct nlmsghdr *n, void *arg)
->  	struct ndmsg *r = NLMSG_DATA(n);
->  	int len = n->nlmsg_len;
->  	struct rtattr *tb[NDA_MAX+1];
-> +	__u32 ext_flags = 0;
->  	__u16 vid = 0;
->  
->  	if (n->nlmsg_type != RTM_NEWNEIGH && n->nlmsg_type != RTM_DELNEIGH) {
-> @@ -170,6 +174,9 @@ int print_fdb(struct nlmsghdr *n, void *arg)
->  	parse_rtattr(tb, NDA_MAX, NDA_RTA(r),
->  		     n->nlmsg_len - NLMSG_LENGTH(sizeof(*r)));
->  
-> +	if (tb[NDA_FLAGS_EXT])
-> +		ext_flags = rta_getattr_u32(tb[NDA_FLAGS_EXT]);
-> +
->  	if (tb[NDA_VLAN])
->  		vid = rta_getattr_u16(tb[NDA_VLAN]);
->  
-> @@ -266,7 +273,7 @@ int print_fdb(struct nlmsghdr *n, void *arg)
->  	if (show_stats && tb[NDA_CACHEINFO])
->  		fdb_print_stats(fp, RTA_DATA(tb[NDA_CACHEINFO]));
->  
-> -	fdb_print_flags(fp, r->ndm_flags);
-> +	fdb_print_flags(fp, r->ndm_flags, ext_flags);
->  
->  
->  	if (tb[NDA_MASTER])
-> -- 
-> 2.34.1
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY0fOFgAKCRDj7w1vZxhR
+xRPTAPsHbpjwggNPU38hdpfJ1NG62HfnGiMtgUpIeY78VLwdvAD+ID6+idT6/neO
+8RrFdtowwtZdPyNPHMeV6f3x0uD7BgM=
+=iymO
+-----END PGP SIGNATURE-----
+
+--l3aewuzyqmtjebmf--
