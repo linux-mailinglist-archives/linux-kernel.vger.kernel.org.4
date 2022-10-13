@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759BA5FD411
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074125FD416
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 07:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJMFIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 01:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S229572AbiJMFJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 01:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJMFIl (ORCPT
+        with ESMTP id S229526AbiJMFJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 01:08:41 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD24111C6FB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:08:40 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id d26so1460144ejc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 22:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKssAxycUZVdqYlyW7XBylh/ZQdAtWozk4R8pqdfx/8=;
-        b=ks1MQWQJyaHI0QuXwV2LFMDlYOPnBOKUBf/oq2e8LAfOH5bmfiIxf1g0Yw8TU8BYit
-         r/ozSxUEGY56R5cA84AddDAHGT0tOydWY6qeVOISxqbuD0xLjULGXZB6xal1DZ/pVDyw
-         6zXQGrZ2IhmIG4PLsqZfyngx7/Kfpol9JTomShxTGojdZlGBy8UHBrKMez3+8pMljJqN
-         ZPImneRFx+Y4XsZgHBn7XJRE0X1f1aqOVWiwBwy9xET5yyEb88YchIPi8ntsN3OtTwpB
-         EdIb71eTBBCSkZ+eeMdBX1WiI3tlJhiw/lZG6C3NR/q3B2cRHYPDFmSE50roii5vIorR
-         nHag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wKssAxycUZVdqYlyW7XBylh/ZQdAtWozk4R8pqdfx/8=;
-        b=WOtl6f3qKobTKo2McpdH7u1dORTtGi2zZpei0Sc7BOdmTRoRiZmZLXn5enjcxCnm+y
-         EwzhQU0L3pYCq3ymT0U7bgZGQV6hlgqimE9DSP5PCQK36Y+QsKjmJ3Z23x4X0fm9ZspD
-         6toqnBOJxrRO2jSL52+3yPyLyt4D6vqtT5RHmacl3DQbDH+HM5pBxOFw7zxJZIRL0tKD
-         2h3FzKX1iqbXKWrY1dxBkC99ccBZ2aQtlm1JGCq63WS6azNq73FUcfhB6NannIBofgCA
-         9aPvJaXjN9WBsdr/9j68Fh3z7RVOCylDsllgSDy+yjDOifX1zrsiNcEYbEUZle3VCqK2
-         OQyA==
-X-Gm-Message-State: ACrzQf2c29kLV2PgRXfxxjEfOoW+IzlM5A56fJKPo/41QBU4UtXqCB/a
-        wicGzVXbbCqSeFChNeU3FQw2hs4RJO7ozYhTc+qQyQ==
-X-Google-Smtp-Source: AMsMyM4UvlKR7SSKX9XkcQKXEiFgw4SDdjwmGyp9MRtR6ny/AxgfBzL0esK4jG/yMbkgHjvvMgHXLgBWomXLvr6l5s4=
-X-Received: by 2002:a17:906:ee81:b0:77e:829a:76e9 with SMTP id
- wt1-20020a170906ee8100b0077e829a76e9mr25919122ejb.207.1665637719127; Wed, 12
- Oct 2022 22:08:39 -0700 (PDT)
+        Thu, 13 Oct 2022 01:09:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900D3D8EFA;
+        Wed, 12 Oct 2022 22:09:25 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29D4gGDD001011;
+        Thu, 13 Oct 2022 05:08:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=hRi0hxvb8ULH4SSXgcEOBo/E1ayRuxkvHkANtCDsSNs=;
+ b=NWQapbWRWpeLb4s9yBwyktnf27VoiwBfcVAsf4qBKJFNanENqxvI6a8Ragz+WhVyboQ5
+ WIkkB/50Xtj/k6965IpQtdMv5FyAXX0TUZgbQ5BxLttOsmyisvyDAlbaFIyPB5z3/zm9
+ jmBJF30A/OKGj12fgR6xvILvyFm47aMIQbXLe8YCaWH3I5lW/3GBd626yKi77p47/W7Q
+ XPTK8O9GGUxQ0IhWdf+AzYGAiUTEtZJU5XBPak3h0UpnSMFYUKzBZV6U4QQ+RsECvGVv
+ 6gPdolplGM+pXfsdqA1ObFDXBAwp7QiEI2Xt0vlkN9kF1YdPjTKd3hoCVZIbjhtyz0Ty Dw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k6ae4086h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Oct 2022 05:08:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29D58pR0024144
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Oct 2022 05:08:51 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 12 Oct 2022 22:08:46 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v2] ASoC: qcom: lpass-cpu: mark HDMI TX registers as volatile
+Date:   Thu, 13 Oct 2022 10:38:31 +0530
+Message-ID: <1665637711-13300-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20221013045619.18906-1-palmer@rivosinc.com> <20221013045619.18906-2-palmer@rivosinc.com>
-In-Reply-To: <20221013045619.18906-2-palmer@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 13 Oct 2022 10:38:27 +0530
-Message-ID: <CAAhSdy0_WaEFXgduBPKQMW20W=fQVinGZwgW8Z2jv=u4ig=rzA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] Documentation: RISC-V: Fix a typo in patch-acceptance
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Conor Dooley <conor@kernel.org>, Atish Patra <atishp@rivosinc.com>,
-        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        conor.dooley@microchip.com, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: OGksqCcJge4VA7HNf3pIL5LRC_Ik1Z3G
+X-Proofpoint-GUID: OGksqCcJge4VA7HNf3pIL5LRC_Ik1Z3G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-13_04,2022-10-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 bulkscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 phishscore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210130030
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 10:26 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> From: Palmer Dabbelt <palmer@rivosinc.com>
->
-> I just stumbled on this when modifying the docs.
->
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Update HDMI volatile registers list as DMA, Channel Selection registers,
+vbit control registers are being reflected by hardware DP port
+disconnection.
 
-Looks good to me from a KVM RISC-V perspective.
+This update is required to fix no display and no sound issue observed
+after reconnecting TAMA/SANWA DP cables.
+Once DP cable is unplugged, DMA control registers are being reset by
+hardware, however at second plugin, new dma control values does not
+updated to the dma hardware registers since new register value and
+cached values at the time of first plugin are same.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Fixes: 7cb37b7bd0d3 ("ASoC: qcom: Add support for lpass hdmi driver")
 
-Regards,
-Anup
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Reported-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ sound/soc/qcom/lpass-cpu.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> ---
->  Documentation/riscv/patch-acceptance.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/riscv/patch-acceptance.rst b/Documentation/riscv/patch-acceptance.rst
-> index dfe0ac5624fb..5da6f9b273d6 100644
-> --- a/Documentation/riscv/patch-acceptance.rst
-> +++ b/Documentation/riscv/patch-acceptance.rst
-> @@ -29,7 +29,7 @@ their own custom extensions.  These custom extensions aren't required
->  to go through any review or ratification process by the RISC-V
->  Foundation.  To avoid the maintenance complexity and potential
->  performance impact of adding kernel code for implementor-specific
-> -RISC-V extensions, we'll only to accept patches for extensions that
-> +RISC-V extensions, we'll only accept patches for extensions that
->  have been officially frozen or ratified by the RISC-V Foundation.
->  (Implementors, may, of course, maintain their own Linux kernel trees
->  containing code for any custom extensions that they wish.)
-> --
-> 2.38.0
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+diff --git a/sound/soc/qcom/lpass-cpu.c b/sound/soc/qcom/lpass-cpu.c
+index 8a56f38..99a3b44 100644
+--- a/sound/soc/qcom/lpass-cpu.c
++++ b/sound/soc/qcom/lpass-cpu.c
+@@ -782,10 +782,18 @@ static bool lpass_hdmi_regmap_volatile(struct device *dev, unsigned int reg)
+ 		return true;
+ 	if (reg == LPASS_HDMI_TX_LEGACY_ADDR(v))
+ 		return true;
++	if (reg == LPASS_HDMI_TX_VBIT_CTL_ADDR(v))
++		return true;
+ 
+ 	for (i = 0; i < v->hdmi_rdma_channels; ++i) {
+ 		if (reg == LPAIF_HDMI_RDMACURR_REG(v, i))
+ 			return true;
++		if (reg == LPASS_HDMI_TX_DMA_ADDR(v, i))
++			return true;
++		if (reg == LPASS_HDMI_TX_CH_LSB_ADDR(v, i))
++			return true;
++		if (reg == LPASS_HDMI_TX_CH_MSB_ADDR(v, i))
++			return true;
+ 	}
+ 	return false;
+ }
+-- 
+2.7.4
+
