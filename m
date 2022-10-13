@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B895A5FE399
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C715FE397
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJMU5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 16:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJMU5C (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229963AbiJMU5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 13 Oct 2022 16:57:02 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361CC183E28
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:57:01 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id c24so2893764pls.9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:57:01 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229557AbiJMU47 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Oct 2022 16:56:59 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0609183E1E;
+        Thu, 13 Oct 2022 13:56:58 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id e129so2569284pgc.9;
+        Thu, 13 Oct 2022 13:56:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BYaziEJ7Yp9qYJtgvX45VBWyIc4HpzXkckmVSYMctDg=;
-        b=aJk3zaDZBm8/UfgByPmkSLx0Vn2au4SnrDGkqEZx678j8ppPLR63VNqItjjiNuCpg9
-         fkYAXsQbLzJ/56eRN468M6UdAHgbhtmjhEj+Oqlr9V4dwPwbdP8VU7oWHHSssSWHQ2H7
-         INNNgJO/hpggwLtPMbDLUSCW4l207dMLzHvbt7KwNKkoOg3C7juBuuK6OGjzqYWFJkFz
-         s2r6Bl1TNIMs9iZOAfJapAZXcSVTzqsk3pLQDS9VsPHz51J6m8CAoNUToNUXiNgqMq1A
-         mapi5McJR4DRt7MHYGyDbBjKIEnwJZ/OQeuvddUb66cveEUBszpMqxefjN9vvEQbx82v
-         MInA==
+        bh=GwIrM6PqNMNs+23zGPNZGFODdHKdYKYXNnXBaYGk6no=;
+        b=bZryOJi77Rv3rbKooYxAQa7v8FiSWMxEFBnfpNGhi/UpvldiklHZsUNGBGy9c/pFF9
+         YxstqFBtH3jK3rya1kMqfUK0qpav7vzmKmxep7Lw4SOBJJ00EUlPRMh6FVEzQjIW3CtT
+         SLiJb9Jz+STOPtU1r0PwvNr9OBUJ9ksD0g5hi0FAU+IgiNDd8bmW9VnXPjIMSsR7pqDX
+         BmEWCrNikS98SJGVR9tRy+3GdJhkMHcL2nb6cnnr1lN+0TwP/TimWpSeY473ZRNHiL5E
+         qTA7NteYyk3aWfg1q0gWW0Sucq4UhxV9Ocj3DYhGbGiczlxw7lNNOhlObZaEeMfZIAX/
+         ru0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BYaziEJ7Yp9qYJtgvX45VBWyIc4HpzXkckmVSYMctDg=;
-        b=0RJS+h5jpkUfYCj8B8RCdkKdwkabqXEW9neiRX+YF/XY2hctaRNYfkoaUjZbHK8V69
-         8q2dz4tSQ1iuJ3eWfwmBkOxkaTe1TWavKWrKzGfHSY7R0xNROd75GRZzsA7yV6ZzYLSh
-         D1sYfa7iZqH5FD0byTuk3mhUbbr1kMc6JzNnbyC4DTYQj9P3fGQhudzWIZwqwUM8GrRE
-         dawiyXytauoTnlwfEj0kL5il1nyHRYigwdMxdCkchU5p9tsXdUouBAsTGgbC0aJGlI6D
-         /uYnIbTLqyhcoC3R+kVcFQaGAbtlnSP43TuiXY1StqZaoCi3JvSCrbsvqgB4oxHwAvdP
-         +vdw==
-X-Gm-Message-State: ACrzQf1Ye90mWrrus4/471BJwjr7gh0cxjnZGi3L5+g5kAYmJk+LdpYy
-        g8ZKWrIXadNwTKZPdo2xuF3jcU1WGwtiB48ynT8HMQ==
-X-Google-Smtp-Source: AMsMyM6MOeEKW0yihGodYRFpUfcMXSeOibakzhbNseqUJSB45y2DUEHx6M2yKYsQfl67TCq68IsL8c94sjwX/8LX6Qo=
-X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
- om8-20020a17090b3a8800b00209f35dad53mr13382600pjb.102.1665694620565; Thu, 13
- Oct 2022 13:57:00 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GwIrM6PqNMNs+23zGPNZGFODdHKdYKYXNnXBaYGk6no=;
+        b=mvzlOSVTce/MK5uraBI7gW6bSMdsWbPnwFlkCrufBbKjHVJ70KKDFDJNKLi+qGFXyH
+         uGUUZeP300AjWfsjz5X1tR4cCnlFQYTrcBo05C/h00DWrir2q2jTv6aarr6aR6W1x3JS
+         gyyx7IOfo05BDebEtQEqpXq4Z1EslkDU9/AjF1rlpQqT2RSzUVqfLIRr89ARF8DeT3p/
+         tq9romzbhoVV959b8AsPs0CFyq+lBnkMDswln+7VTiImfjYBOp2ZnZcP0DzRGShR7x18
+         ZfXBAs/W0rXNXenWlH/ka5rTWD0rW9WWukt7fdxM6NFqL+xhlHgTkAtUd/vl2NckTqvy
+         YaXQ==
+X-Gm-Message-State: ACrzQf3CWzktkM+X/Nrrn2iGmp6wudjbUmhdTsfJmMmXf/ruBZbHDv2E
+        oY9PkmqrkWCvWX2XxhfA0Q4=
+X-Google-Smtp-Source: AMsMyM7xAyN+uhI+6X8HJo1C0MhAUgcRa1vJ71mGmzp52Dr9HbBuY1qszhhQ1UFwMmLH4X2d7NUsWg==
+X-Received: by 2002:a63:a13:0:b0:440:a593:b79f with SMTP id 19-20020a630a13000000b00440a593b79fmr1478647pgk.557.1665694618187;
+        Thu, 13 Oct 2022 13:56:58 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:b4de:68c7:333b:58ae])
+        by smtp.gmail.com with ESMTPSA id b26-20020aa7951a000000b005604c1a0fbcsm139964pfp.74.2022.10.13.13.56.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 13:56:57 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Subject: [PATCH] perf stat: Init aggr_map when reporting per-process stat
+Date:   Thu, 13 Oct 2022 13:56:55 -0700
+Message-Id: <20221013205655.401525-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+In-Reply-To: <CAM9d7cjnAPhOPont3GHSwa9BhAsAFVvqAhFPsyAfQBR8ajrvag@mail.gmail.com>
+References: <CAM9d7cjnAPhOPont3GHSwa9BhAsAFVvqAhFPsyAfQBR8ajrvag@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221012174622.45006-1-cgzones@googlemail.com>
-In-Reply-To: <20221012174622.45006-1-cgzones@googlemail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 13 Oct 2022 13:56:49 -0700
-Message-ID: <CAKwvOdk+dLP+0iZmKVNdgi7425DLZpMH+9dHnASzKZeXUnkiiA@mail.gmail.com>
-Subject: Re: [PATCH] of: declare string literals const
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 10:46 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> of_overlay_action_name() returns a string literal from a function local
-> array.  Modifying string literals is undefined behavior which usage of
-> const pointer can avoid.  of_overlay_action_name() is currently only
-> used once in overlay_notify() to print the returned value.
->
-> While on it declare the data array const as well.
->
-> Reported by Clang:
->
->     In file included from arch/x86/kernel/asm-offsets.c:22:
->     In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
->     In file included from ./include/linux/kvm_host.h:19:
->     In file included from ./include/linux/msi.h:23:
->     In file included from ./arch/x86/include/asm/msi.h:5:
->     In file included from ./arch/x86/include/asm/irqdomain.h:5:
->     In file included from ./include/linux/irqdomain.h:35:
->     ./include/linux/of.h:1555:3: error: initializing 'char *' with an exp=
-ression of type 'const char[5]' discards qualifiers [-Werror,-Wincompatible=
--pointer-types-discards-qualifiers]
->                     "init",
->                     ^~~~~~
->     ./include/linux/of.h:1556:3: error: initializing 'char *' with an exp=
-ression of type 'const char[10]' discards qualifiers [-Werror,-Wincompatibl=
-e-pointer-types-discards-qualifiers]
->                     "pre-apply",
->                     ^~~~~~~~~~~
->     ./include/linux/of.h:1557:3: error: initializing 'char *' with an exp=
-ression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatibl=
-e-pointer-types-discards-qualifiers]
->                     "post-apply",
->                     ^~~~~~~~~~~~
->     ./include/linux/of.h:1558:3: error: initializing 'char *' with an exp=
-ression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatibl=
-e-pointer-types-discards-qualifiers]
->                     "pre-remove",
->                     ^~~~~~~~~~~~
->     ./include/linux/of.h:1559:3: error: initializing 'char *' with an exp=
-ression of type 'const char[12]' discards qualifiers [-Werror,-Wincompatibl=
-e-pointer-types-discards-qualifiers]
->                     "post-remove",
->                     ^~~~~~~~~~~~~
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+I'll merge this into the problematic commit.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-stat.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-> ---
->  include/linux/of.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index 6b79ef9a6541..8b9f94386dc3 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -1549,9 +1549,9 @@ enum of_overlay_notify_action {
->         OF_OVERLAY_POST_REMOVE,
->  };
->
-> -static inline char *of_overlay_action_name(enum of_overlay_notify_action=
- action)
-> +static inline const char *of_overlay_action_name(enum of_overlay_notify_=
-action action)
->  {
-> -       static char *of_overlay_action_name[] =3D {
-> +       static const char *const of_overlay_action_name[] =3D {
->                 "init",
->                 "pre-apply",
->                 "post-apply",
-> --
-> 2.37.2
->
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 4cb3ceeb7ba4..9d35a3338976 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1355,7 +1355,11 @@ static struct aggr_cpu_id perf_stat__get_cpu(struct perf_stat_config *config __m
+ static struct aggr_cpu_id perf_stat__get_aggr(struct perf_stat_config *config,
+ 					      aggr_get_id_t get_id, struct perf_cpu cpu)
+ {
+-	struct aggr_cpu_id id = aggr_cpu_id__empty();
++	struct aggr_cpu_id id;
++
++	/* per-process mode - should use global aggr mode */
++	if (cpu.cpu == -1)
++		return get_id(config, cpu);
+ 
+ 	if (aggr_cpu_id__is_empty(&config->cpus_aggr_map->map[cpu.cpu]))
+ 		config->cpus_aggr_map->map[cpu.cpu] = get_id(config, cpu);
+@@ -2120,11 +2124,9 @@ int process_stat_config_event(struct perf_session *session,
+ 	if (perf_cpu_map__empty(st->cpus)) {
+ 		if (st->aggr_mode != AGGR_UNSET)
+ 			pr_warning("warning: processing task data, aggregation mode not set\n");
+-		return 0;
+-	}
+-
+-	if (st->aggr_mode != AGGR_UNSET)
++	} else if (st->aggr_mode != AGGR_UNSET) {
+ 		stat_config.aggr_mode = st->aggr_mode;
++	}
+ 
+ 	if (perf_stat.data.is_pipe)
+ 		perf_stat_init_aggr_mode();
+-- 
+2.38.0.413.g74048e4d9e-goog
 
-
---=20
-Thanks,
-~Nick Desaulniers
