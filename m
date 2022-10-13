@@ -2,187 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EDB5FCF15
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 01:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A005FCF28
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 02:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiJLX6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 19:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S229543AbiJMADt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 20:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJLX6A (ORCPT
+        with ESMTP id S229673AbiJMADr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 19:58:00 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E00437FC;
-        Wed, 12 Oct 2022 16:57:58 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id o2so156439qkk.10;
-        Wed, 12 Oct 2022 16:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FmGTt81upNKJCIsUibynyofUcfo56u99EQM7Huk1XAY=;
-        b=CgtNenL/z9CyDUzMXKS8FMIVEYPcOxh4jHQx/8pN6R0+6F7+VW5sS7NklPE7bmXIeQ
-         XlqeopIhYfCMzOFNlev/XbSVskzyfM+wIFWhpM5HxUwVDqsV4n8YGPSvO72n0aXlTjZb
-         pQx8vjEUO+T/W4vYbflHq2m43HAjcE/ipFf0Jwc0UxGVnMEnWJo/hPqEyZ4SQwX3dVXw
-         TTq7+BTvX7xIGQBR5X+0pDLXCcUCgwQ9VglUwTAN+xsGuy9x7mgu0MrPicOHcdqczPe0
-         UYenH3Qnbe+aQXpO2QU13S23tsaJVRGA3Je281PDBV4lb4AmOvyZa+SJrINuVIXyiv/q
-         0wIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FmGTt81upNKJCIsUibynyofUcfo56u99EQM7Huk1XAY=;
-        b=kjK8CPP1/GfvVsq9oc3AyRQK3H81haCPJUiXi9pfwG139I/+D5sdrph4CXkQEMe2P7
-         YdRGToAm+1XuKtflPpT+lPRIiWPrFMYl4yOqKYqu/LBv5mxiZ6e77QIufZyFMWLfLF0A
-         I014yvH9SwgJGsMgnFUSG9qcrsYrHf6vGEEHsPzNRSoz72u7upBsxOZivV4USkcIM9i5
-         u7t64PtLa2NDmWMcjomlGeZlGYzhRBX2vOYMQ54iEN4ZoxCyOGC7iIcaFksidyVRcOAO
-         644bXVC0mr5XfeLZPH2/52bhVYvphJO7eIigKT4rOMhA5HXchRzmdT5X5WQFn6EB/1Z3
-         FiEQ==
-X-Gm-Message-State: ACrzQf1yPnlfnUP+5g008dCnuTtn85CLAOvOhA7gbndpFmv10CAoLBZM
-        ay5gQij2U1B5lQqwHDqEJBM=
-X-Google-Smtp-Source: AMsMyM6sAy/Ash+9v4opTMFFF5CqbSfOxYuzqswsETtOQTHE46P24Et4A6MkmJdYKowAg6hvDglWmw==
-X-Received: by 2002:a05:620a:43a8:b0:6ee:9b14:779e with SMTP id a40-20020a05620a43a800b006ee9b14779emr3519974qkp.343.1665619078010;
-        Wed, 12 Oct 2022 16:57:58 -0700 (PDT)
-Received: from [10.69.53.73] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05620a401300b006eeb185c209sm1256588qko.50.2022.10.12.16.57.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 16:57:57 -0700 (PDT)
-Message-ID: <0f038010-ed83-55bb-70a5-24f5c6d68666@gmail.com>
-Date:   Wed, 12 Oct 2022 16:57:53 -0700
+        Wed, 12 Oct 2022 20:03:47 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0052D25AB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 17:03:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MnqVc0j32z4x1D;
+        Thu, 13 Oct 2022 11:03:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1665619422;
+        bh=zrHj0Im3XzEaXNXwkjAVIYfuVKt/SSQKPhuOxhwgClo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ZEqQSm3Dp+p9JDjRFOTkZjDpD/YP9Aod5LwTZF6DETuMq4a8oc4j2reSkpnpCQErx
+         X17pBml+KFx6axYuvIlxdaLRL1zFiI48D/BQ4QDmwwawJk5Vdt5rbNmVZEt4ggEh1D
+         dtFCO1qP6M3bvx55RVvwFDUDGJoyR75BCPWHQPLNdKUeUExOy+4tU34twoRpb1wFS5
+         OMvIUqpayMN546BP5AlEmFqWgFB+AqS+6mTpGYb8PlrWxaMbqvKjMSSeShT0TjzuD5
+         s00H/qpoxEgVcur18rW76m20fFv/pu0LOMdIA3eoDmUVe53P56CaWX+Fh1VHgm/LRy
+         0hxrel/TCSM+g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, ajd@linux.ibm.com,
+        aneesh.kumar@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
+        christophe.leroy@csgroup.eu, cuigaosheng1@huawei.com,
+        david@redhat.com, farosas@linux.ibm.com, geoff@infradead.org,
+        gustavoars@kernel.org, haren@linux.ibm.com, hbathini@linux.ibm.com,
+        joel@jms.id.au, lihuafei1@huawei.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, lukas.bulwahn@gmail.com,
+        mikey@neuling.org, nathan@kernel.org, nathanl@linux.ibm.com,
+        nicholas@linux.ibm.com, npiggin@gmail.com, pali@kernel.org,
+        paul@paul-moore.com, rmclure@linux.ibm.com, ruscur@russell.cc,
+        windhl@126.com, wsa+renesas@sang-engineering.com,
+        ye.xingchen@zte.com.cn, yuanjilin@cdjrlc.com,
+        zhengyongjun3@huawei.com
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
+In-Reply-To: <20221012221615.GA364143@roeck-us.net>
+References: <87edvhntv0.fsf@mpe.ellerman.id.au>
+ <20221012141827.GA2405914@roeck-us.net> <Y0biBtCUtc2mowbQ@zx2c4.com>
+ <20221012164452.GA2990467@roeck-us.net> <Y0b3ZsTRHWG6jGK8@zx2c4.com>
+ <20221012221615.GA364143@roeck-us.net>
+Date:   Thu, 13 Oct 2022 11:03:34 +1100
+Message-ID: <87bkqgmvxl.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 2/9] mm/vmstat: show start_pfn when zone spans pages
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@suse.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220928223301.375229-1-opendmb@gmail.com>
- <20220928223301.375229-3-opendmb@gmail.com>
- <8e61d0f4-0c40-6c2d-da60-fa97e2ee7530@redhat.com>
- <b86d90fe-5d57-67ec-49b7-c477924f6438@gmail.com>
- <84ee3d9e-9579-d3f2-fe5a-ec6ec4a2710a@redhat.com>
-From:   Doug Berger <opendmb@gmail.com>
-In-Reply-To: <84ee3d9e-9579-d3f2-fe5a-ec6ec4a2710a@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/5/2022 11:09 AM, David Hildenbrand wrote:
-> On 01.10.22 03:28, Doug Berger wrote:
->> On 9/29/2022 1:15 AM, David Hildenbrand wrote:
->>> On 29.09.22 00:32, Doug Berger wrote:
->>>> A zone that overlaps with another zone may span a range of pages
->>>> that are not present. In this case, displaying the start_pfn of
->>>> the zone allows the zone page range to be identified.
->>>>
->>>
->>> I don't understand the intention here.
->>>
->>> "/* If unpopulated, no other information is useful */"
->>>
->>> Why would the start pfn be of any use here?
->>>
->>> What is the user visible impact without that change?
->> Yes, this is very subtle. I only caught it while testing some
->> pathological cases.
->>
->> If you take the example system:
->> The 7278 device has four ARMv8 CPU cores in an SMP cluster and two
->> memory controllers (MEMCs). Each MEMC is capable of controlling up to
->> 8GB of DRAM. An example 7278 system might have 1GB on each controller,
->> so an arm64 kernel might see 1GB on MEMC0 at 0x40000000-0x7FFFFFFF and
->> 1GB on MEMC1 at 0x300000000-0x33FFFFFFF.
->>
-> 
-> Okay, thanks. You should make it clearer in the patch description -- 
-> especially how this relates to DMB. Having that said, I still have to 
-> digest your examples:
-> 
->> Placing a DMB on MEMC0 with 'movablecore=256M@0x70000000' will lead to
->> the ZONE_MOVABLE zone spanning from 0x70000000-0x33fffffff and the
->> ZONE_NORMAL zone spanning from 0x300000000-0x33fffffff.
-> 
-> Why is ZONE_MOVABLE spanning more than 256M? It should span
-> 
-> 0x70000000-0x80000000
-> 
-> Or what am I missing?
-I was working from the notion that the classic 'movablecore' 
-implementation keeps the ZONE_MOVABLE zone the last zone on System RAM 
-so it always spans the last page on the node (i.e. 0x33ffff000). My 
-implementation moves the start of ZONE_MOVABLE up to the lowest page of 
-any defined DMBs on the node.
+Guenter Roeck <linux@roeck-us.net> writes:
+> On Wed, Oct 12, 2022 at 11:20:38AM -0600, Jason A. Donenfeld wrote:
+>> 
+>> I've also managed to not hit this bug a few times. When it triggers,
+>> after "kprobes: kprobe jump-optimization is enabled. All kprobes are
+>> optimized if possible.", there's a long hang - tens seconds before it
+>> continues. When it doesn't trigger, there's no hang at that point in the
+>> boot process.
+>> 
+>
+> I managed to bisect the problem. See below for results. Reverting the
+> offending patch fixes the problem for me.
 
-I see that memory hotplug does not behave this way, which is probably 
-more intuitive (though less consistent with the classic zone layout). I 
-could attempt to change this in a v3 if desired.
+Thanks.
 
-> 
->>
->> If instead you specified 'movablecore=256M@0x70000000,512M' you would
->> get the same ZONE_MOVABLE span, but the ZONE_NORMAL would now span
->> 0x300000000-0x32fffffff. The requested 512M of movablecore would be
->> divided into a 256MB DMB at 0x70000000 and a 256MB "classic" movable
->> zone start would be displayed in the bootlog as:
->> [    0.000000] Movable zone start for each node
->> [    0.000000]   Node 0: 0x000000330000000
-> 
-> 
-> Okay, so that's the movable zone range excluding DMB.
-> 
->>
->> Finally, if you specified the pathological
->> 'movablecore=256M@0x70000000,1G@12G' you would still have the same
->> ZONE_MOVABLE span, and the ZONE_NORMAL span would go back to
->> 0x300000000-0x33fffffff. However, because the second DMB (1G@12G)
->> completely overlaps the ZONE_NORMAL there would be no pages present in
->> ZONE_NORMAL and /proc/zoneinfo would report ZONE_NORMAL 'spanned
->> 262144', but not where those pages are. This commit adds the 'start_pfn'
->> back to the /proc/zoneinfo for ZONE_NORMAL so the span has context.
-> 
-> ... but why? If there are no pages present, there is no ZONE_NORMAL we 
-> care about. The zone span should be 0. Does this maybe rather indicate 
-> that there is a zone span processing issue in your DMB implementation?
-My implementation uses the zones created by the classic 'movablecore' 
-behavior and relocates the pages within DMBs. In this case the 
-ZONE_NORMAL still has a span which gets output but no present pages so 
-the output didn't show where the zone was without this patch. This is a 
-convenience to avoid adding zone resizing and destruction logic outside 
-of memory hotplug support, but I could attempt to add that code in a v3 
-if desired.
+This is probably down to me/us not testing with PREEMPT enabled enough.
 
-> 
-> Special-casing zones based on DMBs feels wrong. But most probably I am 
-> missing something important :)
-> 
+cheers
 
-Thanks for making me aware of your confusion so I can attempt to make it 
-clearer.
--Doug
+> ---
+> # bad: [1440f576022887004f719883acb094e7e0dd4944] Merge tag 'mm-hotfixes-stable-2022-10-11' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> # good: [4fe89d07dcc2804c8b562f6c7896a45643d34b2f] Linux 6.0
+> git bisect start 'HEAD' 'v6.0'
+> # good: [7171a8da00035e7913c3013ca5fb5beb5b8b22f0] Merge tag 'arm-dt-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> git bisect good 7171a8da00035e7913c3013ca5fb5beb5b8b22f0
+> # good: [f01603979a4afaad7504a728918b678d572cda9e] Merge tag 'gpio-updates-for-v6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
+> git bisect good f01603979a4afaad7504a728918b678d572cda9e
+> # bad: [8aeab132e05fefc3a1a5277878629586bd7a3547] Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost
+> git bisect bad 8aeab132e05fefc3a1a5277878629586bd7a3547
+> # bad: [493ffd6605b2d3d4dc7008ab927dba319f36671f] Merge tag 'ucount-rlimits-cleanups-for-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace
+> git bisect bad 493ffd6605b2d3d4dc7008ab927dba319f36671f
+> # good: [0e470763d84dcad27284067647dfb4b1a94dfce0] Merge tag 'efi-next-for-v6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi
+> git bisect good 0e470763d84dcad27284067647dfb4b1a94dfce0
+> # bad: [110a58b9f91c66f743c01a2c217243d94c899c23] powerpc/boot: Explicitly disable usage of SPE instructions
+> git bisect bad 110a58b9f91c66f743c01a2c217243d94c899c23
+> # good: [fdfdcfd504933ed06eb6b4c9df21eede0e213c3e] powerpc/build: put sys_call_table in .data.rel.ro if RELOCATABLE
+> git bisect good fdfdcfd504933ed06eb6b4c9df21eede0e213c3e
+> # good: [c2e7a19827eec443a7cbe85e8d959052412d6dc3] powerpc: Use generic fallocate compatibility syscall
+> git bisect good c2e7a19827eec443a7cbe85e8d959052412d6dc3
+> # good: [56adbb7a8b6cc7fc9b940829c38494e53c9e57d1] powerpc/64/interrupt: Fix false warning in context tracking due to idle state
+> git bisect good 56adbb7a8b6cc7fc9b940829c38494e53c9e57d1
+> # bad: [754f611774e4b9357a944f5b703dd291c85161cf] powerpc/64: switch asm helpers from GOT to TOC relative addressing
+> git bisect bad 754f611774e4b9357a944f5b703dd291c85161cf
+> # bad: [f7bff6e7759b1abb59334f6448f9ef3172c4c04a] powerpc/64/interrupt: avoid BUG/WARN recursion in interrupt entry
+> git bisect bad f7bff6e7759b1abb59334f6448f9ef3172c4c04a
+> # bad: [e485f6c751e0a969327336c635ca602feea117f0] powerpc/64/interrupt: Fix return to masked context after hard-mask irq becomes pending
+> git bisect bad e485f6c751e0a969327336c635ca602feea117f0
+> # good: [799f7063c7645f9a751d17f5dfd73b952f962cd2] powerpc/64: mark irqs hard disabled in boot paca
+> git bisect good 799f7063c7645f9a751d17f5dfd73b952f962cd2
+> # first bad commit: [e485f6c751e0a969327336c635ca602feea117f0] powerpc/64/interrupt: Fix return to masked context after hard-mask irq becomes pending
