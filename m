@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9375FDE09
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5A45FDE12
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJMQNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S229797AbiJMQRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJMQNW (ORCPT
+        with ESMTP id S229493AbiJMQRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:13:22 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CA61382C0;
-        Thu, 13 Oct 2022 09:13:21 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso320414otb.2;
-        Thu, 13 Oct 2022 09:13:21 -0700 (PDT)
+        Thu, 13 Oct 2022 12:17:02 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07BB1382DD
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:16:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ot12so5062160ejb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gvChvblwrqqBVMw+9jrRt287l5o5CC4/lYWsLRZwSc=;
+        b=qpaawdzu7lmLyCeZqvh30EUyvgzINjTvwiUjAGTGScpnpx7QAgleBxugMi90sGDp2A
+         VsZygBgLxujtOGt3ljp7eNH5USkFGhd81uk5aOrTC9qYLZSK3BJNC3+nmtWyLFKqFphg
+         PdhG/mtcupZ/fdtPcbQwpAP+sspowMpvdRQf6oS/JtPok/ucjpOPN+YHxU6iOlUq4PD6
+         2maOJ3Duw2Sft4yPLGsNJn5gZ7kzRuxrWlG9P/dhbNKQi6HMb3BjFhijttPW0CQqFHXs
+         dopXZID6WXWmawrunP+3yHl71C7g1Y9KKnpx3LRggne8qDKtzmHoOKBqOHS2RlEyfhmm
+         UdiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bDreIWRzsR6jrvQkmaVxro1G4iBmu4ZMAyB7ovkP5pk=;
-        b=3JCUVFmrcf8OCMEHwf22HzZWfCZsAn5HsX6u+sTxKGAIAlZFdviFRW/ozneNQ1FD+x
-         1Ctb0hAbWoIRG4J9O/fXNFAFEM1BfvuEWgwJ8e8Ua6MzNsBpDgxtPFVeGSBEAQgT4kb7
-         mu7vyngpvpWz5swymEWXXdAK+EuVACT9mH820lanflaaCH4XUJF+A1LFh3g5lnDL7z2Y
-         eKJ4pO+BUaG0+/So1S7fMQrgzXEIP8x42iXtcEGlXOjhjCURMTR6xskQO2bwghXJvi0K
-         tQtR8JXnfHPqRhWzpBZ7gA0kLQbdO+qRCoLDMTI1Gq58Hkk9dggQEp9+z0XMAC1TFLHc
-         c9AA==
-X-Gm-Message-State: ACrzQf2Wsb20hgde6SxGkj3mIQL+lVsAjCDsBTiq6B4SeU1Vgjhh/2xU
-        Qgn59XbIiBd+VEFnsSjvMw==
-X-Google-Smtp-Source: AMsMyM4s7hJ3dkhHBslh1BX/Q4zgzgsf9W3g91Nq4KzOpU3zRtcLEPIqpcjS8NIWCpRFbiidc/BbZQ==
-X-Received: by 2002:a05:6830:16c7:b0:661:b465:6e1e with SMTP id l7-20020a05683016c700b00661b4656e1emr391867otr.124.1665677600949;
-        Thu, 13 Oct 2022 09:13:20 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q8-20020a4ad548000000b00475d676d2d4sm2269356oos.16.2022.10.13.09.13.20
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1gvChvblwrqqBVMw+9jrRt287l5o5CC4/lYWsLRZwSc=;
+        b=JvmgsiymK4IeyAJa+N9EP+xn8WzY4C6iRtc79eqYx2JfsTIjZ1FlvLZmXYY+0vasq2
+         OMR7BI9wKrKPlAYp4HbWxnhCyTXTggOxyBKMjmO/tbt0YLcQpV6QMmXtqeoD3gIWsnIw
+         F6DtMtzblRsEh9X3URPORc+ININGaQjAfamvjscKLt1vWGWUrS0VEFcxIHOpgXAuTFpp
+         pvLz6lRPenmIdH8HcW/1YZcf/2g9+FbANtbflRc/qhHBN8edvxBAnQ1OSmP+Cw7GNVr8
+         BkrPjjhGLeaPSdeeVtHkyEHwnkgXrnSuHgYO7XKlTu/YWugAQUnSFP/aHt9b+Y62nGrQ
+         Rcaw==
+X-Gm-Message-State: ACrzQf1q0Qvy0/x/AtNJB8fHInjudXDWwg9g82RCjhJT4jp2CzXJVixY
+        Oa4nrjvHLdGT5lL4l52Wpng=
+X-Google-Smtp-Source: AMsMyM5TrmjIZdXYcCI5QT+bOwqzoxvCRfsYn3iLK69PBXnak3goClzfSIMXGFShl/ZCVg9mhFRCGQ==
+X-Received: by 2002:a17:907:e91:b0:782:607a:8dc9 with SMTP id ho17-20020a1709070e9100b00782607a8dc9mr356300ejc.729.1665677814906;
+        Thu, 13 Oct 2022 09:16:54 -0700 (PDT)
+Received: from localhost.localdomain (host-79-53-189-63.retail.telecomitalia.it. [79.53.189.63])
+        by smtp.gmail.com with ESMTPSA id v8-20020aa7d9c8000000b00458d8c68241sm105950eds.18.2022.10.13.09.16.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 09:13:20 -0700 (PDT)
-Received: (nullmailer pid 492565 invoked by uid 1000);
-        Thu, 13 Oct 2022 16:13:22 -0000
-Date:   Thu, 13 Oct 2022 11:13:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree fixes for v6.1, take 1
-Message-ID: <20221013161322.GA447023-robh@kernel.org>
+        Thu, 13 Oct 2022 09:16:54 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs/hostfs: Replace kmap() with kmap_local_page()
+Date:   Thu, 13 Oct 2022 18:17:00 +0200
+Message-Id: <20221013161700.11631-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +74,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+The use of kmap() is being deprecated in favor of kmap_local_page().
 
-Please pull a couple of DT fixes. 
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-It's not just merging the code for MT6370 that's been a mess, but the 
-bindings too with individual pieces picked up. But hey, it's 'just 
-documentation', so no one cares.
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-Rob
+Therefore, replace kmap() with kmap_local_page() in hostfs_kern.c, it
+being the only file with kmap() call sites currently left in fs/hostfs.
 
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-The following changes since commit 49da070062390094112b423ba443ea193527b2e4:
+These changes are not tested in a 32 bits VM as I use to do with other more
+problematic conversions. Mere code inspection makes me reasonably think
+that the rules of local mappings are not violated by this conversion.
 
-  Merge tag 'memblock-v6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock (2022-10-11 20:48:55 -0700)
+Furthermore, I have no idea how to test this code. If maintainers think
+that tests are absolutely necessary, any hints about how to perform them
+would be greatly appreciated.
 
-are available in the Git repository at:
+ fs/hostfs/hostfs_kern.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-6.1-1
+diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+index 07881b76d42f..0c9f89352601 100644
+--- a/fs/hostfs/hostfs_kern.c
++++ b/fs/hostfs/hostfs_kern.c
+@@ -412,7 +412,7 @@ static int hostfs_writepage(struct page *page, struct writeback_control *wbc)
+ 	if (page->index >= end_index)
+ 		count = inode->i_size & (PAGE_SIZE-1);
+ 
+-	buffer = kmap(page);
++	buffer = kmap_local_page(page);
+ 
+ 	err = write_file(HOSTFS_I(inode)->fd, &base, buffer, count);
+ 	if (err != count) {
+@@ -428,9 +428,9 @@ static int hostfs_writepage(struct page *page, struct writeback_control *wbc)
+ 	err = 0;
+ 
+  out:
+-	kunmap(page);
+-
++	kunmap_local(buffer);
+ 	unlock_page(page);
++
+ 	return err;
+ }
+ 
+@@ -441,7 +441,7 @@ static int hostfs_read_folio(struct file *file, struct folio *folio)
+ 	loff_t start = page_offset(page);
+ 	int bytes_read, ret = 0;
+ 
+-	buffer = kmap(page);
++	buffer = kmap_local_page(page);
+ 	bytes_read = read_file(FILE_HOSTFS_I(file)->fd, &start, buffer,
+ 			PAGE_SIZE);
+ 	if (bytes_read < 0) {
+@@ -458,8 +458,9 @@ static int hostfs_read_folio(struct file *file, struct folio *folio)
+ 
+  out:
+ 	flush_dcache_page(page);
+-	kunmap(page);
++	kunmap_local(buffer);
+ 	unlock_page(page);
++
+ 	return ret;
+ }
+ 
+@@ -484,9 +485,9 @@ static int hostfs_write_end(struct file *file, struct address_space *mapping,
+ 	unsigned from = pos & (PAGE_SIZE - 1);
+ 	int err;
+ 
+-	buffer = kmap(page);
++	buffer = kmap_local_page(page);
+ 	err = write_file(FILE_HOSTFS_I(file)->fd, &pos, buffer + from, copied);
+-	kunmap(page);
++	kunmap_local(buffer);
+ 
+ 	if (!PageUptodate(page) && err == PAGE_SIZE)
+ 		SetPageUptodate(page);
+-- 
+2.37.3
 
-for you to fetch changes up to 917c362b5f8a6e31ff35719b1bacfc1b76a1fd2f:
-
-  MAINTAINERS: of: collapse overlay entry into main device tree entry (2022-10-13 10:58:09 -0500)
-
-----------------------------------------------------------------
-Devicetree fixes for v6.1-rc, part 1:
-
-- Fixes for Mediatek MT6370 binding
-
-- Merge the DT overlay maintainer entry to the main entry as Pantelis is
-  not active and Frank is taking a step back
-
-----------------------------------------------------------------
-ChiaEn Wu (2):
-      dt-bindings: leds: mt6370: Fix MT6370 LED indicator DT warning
-      dt-bindings: mfd: mt6370: fix the interrupt order of the charger in the example
-
-Frank Rowand (1):
-      MAINTAINERS: of: collapse overlay entry into main device tree entry
-
- .../bindings/leds/mediatek,mt6370-indicator.yaml           |  5 ++---
- Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml |  4 ++--
- MAINTAINERS                                                | 14 +++-----------
- 3 files changed, 7 insertions(+), 16 deletions(-)
