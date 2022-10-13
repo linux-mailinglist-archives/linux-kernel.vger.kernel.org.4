@@ -2,140 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8C15FD3D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A935FD3D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiJME2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S229506AbiJME3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 00:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJME2P (ORCPT
+        with ESMTP id S229462AbiJME3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:28:15 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2D312D0F;
-        Wed, 12 Oct 2022 21:28:13 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 128so607612pga.1;
-        Wed, 12 Oct 2022 21:28:13 -0700 (PDT)
+        Thu, 13 Oct 2022 00:29:08 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD2110B02
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:29:07 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so1019217fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e4Yrx0WZ/e/LKeJiOOjo3tMuzAFvM4EVo9Qsuuw69mM=;
-        b=ODmqkmxC4WZxYbIBOSN4scr5SxuVe0XceZnfeFlEx3cmb2Uk2TmqrpoLlhk1kFusmS
-         mr2LT410i66wZqoc3eGcLU8HSl5QkEHFfe815ZMOpt+WSUUyGwppWUtgfwRV1QMe74za
-         Ma4KHrLsUqERuvTrpOw5UPWQ6TKk7/WzSJZOp+HZDdA1PBjyVPbYXyY26+9u5hg6Rq2N
-         w+LVY2dvNJhe+51XiOTD8Md68DxYgjeATQz1UKL7rSzGFigyEVv4Bd0YZMsi8xTRlMJV
-         lE8/Xcs2YocSGtPN6I8NJKsyznS0Br49nq6mVrM40G/pi8yVsc0Jij9fGhe5/T7iKox5
-         paNA==
+        bh=SYIIq0zO9axQJUK4FF0gEw5z0+wm+xs5xbHKpjK1nxE=;
+        b=aeRtqd2Sh3gnMbaYcXg+1q+5/bEdCg3LbB9VVrDjLOskPXni1TjtP+R2a1fMZ0D2xQ
+         5v+cLRSwJTv6bGpPDqXn72QFCQ1umXDphtFov4hsKy8L+fE2nsHpINSRlgB/7hP3M+WE
+         51FqSr1Ing7WnFu+YdZQ/wAoKOQlQbPnlNJ+E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e4Yrx0WZ/e/LKeJiOOjo3tMuzAFvM4EVo9Qsuuw69mM=;
-        b=aQeUERt0yfqL3Ut9g3K34iiSeC9d68rWS6ftfo5n6qozjozttlAZNF+botCjxG2FQs
-         LLfCpIysHtt8V13zD7Ymbp0s1wbSyinyCqh+9uDrThrftyDDkpEeX+Fb9MlPWN5o10e1
-         ktOFHGelqNNKUz4pBOxYH11xjKxI4bN7lOIbMMjh0XDDBxiLTgulwcpmYBFVHoA8eIo6
-         nOLw1wyl9F/hCu4n10F3tevZ29gpuRMlBhTAAdtRNyEVcQ0jwFd8qWuVu93Nje3Qt4Ln
-         SJNqPjtNr0oeP5vEP8FPi/RQnr8bAYNGtoK+jg6zYM9UbhGpPbocYKufxI7I1/BQsl3O
-         MkIA==
-X-Gm-Message-State: ACrzQf2ozt667jS3wkzI/UXLcOmMeHD8B/bPF8vxKA8V/LDArBxt7PTs
-        6713u670/E9BsIrVY/IIkBDKI7Toz7f04g==
-X-Google-Smtp-Source: AMsMyM4Cou++uNck0Zxh91K9FPzK92ptGgjuHViVaxHDwbAVoKXvQ3WQN0vpjcETyIgmGZi+v2s7RA==
-X-Received: by 2002:a63:2a86:0:b0:46a:eaba:f1f3 with SMTP id q128-20020a632a86000000b0046aeabaf1f3mr3857474pgq.79.1665635292633;
-        Wed, 12 Oct 2022 21:28:12 -0700 (PDT)
-Received: from skynet-linux.local ([2406:7400:61:b6fa:b70b:65a4:a699:40c8])
-        by smtp.googlemail.com with ESMTPSA id y9-20020a17090aca8900b001faafa42a9esm2192007pjt.26.2022.10.12.21.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 21:28:12 -0700 (PDT)
-From:   Sireesh Kodali <sireeshkodali1@gmail.com>
-To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        dmitry.baryshkov@linaro.org,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH v4 2/2] dt-bindings: remoteproc: qcom: adsp: Add ADSP on MSM8953
-Date:   Thu, 13 Oct 2022 09:57:49 +0530
-Message-Id: <20221013042749.104668-3-sireeshkodali1@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013042749.104668-1-sireeshkodali1@gmail.com>
-References: <20221013042749.104668-1-sireeshkodali1@gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SYIIq0zO9axQJUK4FF0gEw5z0+wm+xs5xbHKpjK1nxE=;
+        b=ohI1Z4cO/GHSa4Q2fx4cBvZuGMKtMSEMfCSr1B0ckoFoicEgeKk8yMmKnIC56kChuV
+         HJvF/TFyRNDwBdlY1OjAKGvwWYyDyyrBM43OG1fNTiAFfGHtiG6cPtZkPiuhIVQy3XVO
+         S4Zg6be6l51euV82zZ2FaZ7T2o1S5bAxIm90SfFV0jgxmyw6TY/iGcA8CuJuths0BItZ
+         FkNm11fwF8KEDLCgLiP/pKWirqEo8CqlRmm2RxlkhLlrMxx6QUHtCyao4XYO1qAPrm9e
+         1SLO9R5mz6aZcSa5Hua4AaC5lUI+/rlaUxb8Z2JHgyX5S5OBwd9DZ7oqQyw1hKYOUa7G
+         cygw==
+X-Gm-Message-State: ACrzQf2RmAoaBJdJ/yzLzAFhF/wd3zzug01ZLGP/c1A8Czt4ZupJkCnQ
+        jr+Kro48MJ06i2Nkg6yvIgBBvyw/sPRF+w==
+X-Google-Smtp-Source: AMsMyM5tQ1GyTxX06uD3t1+sqbC651364jK0uqQhGWVrM71qeTn5MmPhAZSAwzcCHj3V2k1YSnS5iQ==
+X-Received: by 2002:a05:6870:390b:b0:132:9ca3:8dc1 with SMTP id b11-20020a056870390b00b001329ca38dc1mr4387539oap.106.1665635345900;
+        Wed, 12 Oct 2022 21:29:05 -0700 (PDT)
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
+        by smtp.gmail.com with ESMTPSA id em37-20020a0568705ba500b00127ba61535fsm2080100oab.15.2022.10.12.21.29.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 21:29:04 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id c187-20020a4a4fc4000000b004808e2f7affso560233oob.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 21:29:04 -0700 (PDT)
+X-Received: by 2002:a4a:c11a:0:b0:480:6f49:51c8 with SMTP id
+ s26-20020a4ac11a000000b004806f4951c8mr7835433oop.47.1665635343943; Wed, 12
+ Oct 2022 21:29:03 -0700 (PDT)
+Received: from 190990251477 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 12 Oct 2022 21:29:03 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y0Z++9QUAOOUAQrj@google.com>
+References: <20221012040918.272582-1-dcallagh@chromium.org>
+ <20221012040918.272582-2-dcallagh@chromium.org> <Y0Z++9QUAOOUAQrj@google.com>
+From:   Dan Callaghan <dcallagh@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 12 Oct 2022 21:29:03 -0700
+X-Gmail-Original-Message-ID: <CAL=kDigzLLfqxJyGCon3Tk6jHH0r=Zw9ZJDT0LL4Rcr8tmmppw@mail.gmail.com>
+Message-ID: <CAL=kDigzLLfqxJyGCon3Tk6jHH0r=Zw9ZJDT0LL4Rcr8tmmppw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] platform/chrome: add a driver for HPS
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     chrome-platform@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?U2FtaSBLecO2c3RpbMOk?= <skyostil@chromium.org>,
+        Benson Leung <bleung@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for booting the Audio DSP on the MSM8953 platform. This is
-used by SoCs like SDM450, SDM625, SDM626, APQ8053, etc. Since the
-configuration is the same on all SoCs, a single compatible string is
-used.
+Excerpts from Tzung-Bi Shih=E2=80=99s message of 2022-10-12 19:46:51 +1100:
+> On Wed, Oct 12, 2022 at 03:09:18PM +1100, Dan Callaghan wrote:
+> > ---
+>
+> It doesn't need a cover letter if the series only has 1 patch in general.
+> Instead, it could put additional information (and changelogs) after "---"=
+.
 
-Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Understood, I'll omit the cover letter in future postings.
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index db9e0f0c2bea..b1127bc0f01a 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -17,6 +17,7 @@ properties:
-   compatible:
-     enum:
-       - qcom,msm8226-adsp-pil
-+      - qcom,msm8953-adsp-pil
-       - qcom,msm8974-adsp-pil
-       - qcom,msm8996-adsp-pil
-       - qcom,msm8996-slpi-pil
-@@ -179,6 +180,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,msm8226-adsp-pil
-+              - qcom,msm8953-adsp-pil
-               - qcom,msm8974-adsp-pil
-               - qcom,msm8996-adsp-pil
-               - qcom,msm8996-slpi-pil
-@@ -298,6 +300,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,msm8226-adsp-pil
-+              - qcom,msm8953-adsp-pil
-               - qcom,msm8974-adsp-pil
-               - qcom,msm8996-adsp-pil
-               - qcom,msm8996-slpi-pil
-@@ -370,6 +373,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,msm8226-adsp-pil
-+              - qcom,msm8953-adsp-pil
-               - qcom,msm8996-adsp-pil
-               - qcom,msm8998-adsp-pas
-               - qcom,sm8150-adsp-pas
-@@ -559,6 +563,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,msm8226-adsp-pil
-+              - qcom,msm8953-adsp-pil
-               - qcom,msm8974-adsp-pil
-               - qcom,msm8996-adsp-pil
-               - qcom,msm8996-slpi-pil
--- 
-2.38.0
+> > diff --git a/drivers/platform/chrome/cros_hps_i2c.c b/drivers/platform/=
+chrome/cros_hps_i2c.c
+> [...]
+> > +static int hps_i2c_probe(struct i2c_client *client)
+> > +{
+> > +     struct hps_drvdata *hps;
+> > +     int ret;
+> > +
+> > +     hps =3D devm_kzalloc(&client->dev, sizeof(*hps), GFP_KERNEL);
+> > +     if (!hps)
+> > +             return -ENOMEM;
+> > +
+> > +     memset(&hps->misc_device, 0, sizeof(hps->misc_device));
+>
+> The memset can be dropped.  `hps` is z-allocated.
 
+I'll take this out.
+
+> > +     hps->misc_device.parent =3D &client->dev;
+> > +     hps->misc_device.minor =3D MISC_DYNAMIC_MINOR;
+> > +     hps->misc_device.name =3D "cros-hps";
+> > +     hps->misc_device.fops =3D &hps_fops;
+> > +
+> > +     i2c_set_clientdata(client, hps);
+> > +     hps->client =3D client;
+>
+> To be neat, I would prefer to insert a blank line here.
+
+Sure, will add one.
+
+> > +     hps->enable_gpio =3D devm_gpiod_get(&client->dev, "enable", GPIOD=
+_OUT_HIGH);
+> > +     if (IS_ERR(hps->enable_gpio)) {
+> > +             ret =3D PTR_ERR(hps->enable_gpio);
+> > +             dev_err(&client->dev, "failed to get enable gpio: %d\n", =
+ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     ret =3D misc_register(&hps->misc_device);
+> > +     if (ret) {
+> > +             dev_err(&client->dev, "failed to initialize misc device: =
+%d\n", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     hps_set_power(hps, false);
+>
+> IIUC, the GPIO will raise to HIGH in the first place, and then fall
+> to LOW until here.  Is it an expected behavior?  How about gpiod_get()
+> with GPIOD_OUT_LOW?
+
+It might seem a little unusual, but it is intentional. The enable line is
+already high when we enter the kernel from firmware. Acquiring the GPIO
+line with GPIOD_OUT_HIGH preserves its existing state (high) in case later
+steps fail.
+
+We power off the periphal only once the driver is successfully bound and ha=
+s
+taken control of its power state.
+
+> > +static int hps_i2c_remove(struct i2c_client *client)
+> > +{
+> > +     struct hps_drvdata *hps =3D i2c_get_clientdata(client);
+> > +
+> > +     pm_runtime_disable(&client->dev);
+> > +     misc_deregister(&hps->misc_device);
+> > +     hps_set_power(hps, true);
+>
+> Why does it need to raise the GPIO again when removing the device?
+
+Similar to the above, we want to preserve the default power state
+(i.e. powered on) whenever the driver is not bound to the device.
+
+This behaviour made sense to us mainly because we were originally controlli=
+ng
+the peripheral entirely from userspace, so it was always powered on by defa=
+ult.
+
+Do you think this behaviour is acceptable, or do we need to change it?
+
+--=20
+Dan Callaghan <dcallagh@chromium.org>
+Software Engineer, Google
