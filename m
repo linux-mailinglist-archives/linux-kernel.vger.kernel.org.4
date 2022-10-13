@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BFD5FE5A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 00:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1525FE5B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 00:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJMWzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 18:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S229950AbiJMWzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 18:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJMWzZ (ORCPT
+        with ESMTP id S229819AbiJMWz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 18:55:25 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2EA7F276;
-        Thu, 13 Oct 2022 15:55:15 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gf8so3284600pjb.5;
-        Thu, 13 Oct 2022 15:55:15 -0700 (PDT)
+        Thu, 13 Oct 2022 18:55:27 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D8EB1DE6;
+        Thu, 13 Oct 2022 15:55:18 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id fw14so3302398pjb.3;
+        Thu, 13 Oct 2022 15:55:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vW+J4iogIz8BUKDsm9kkznHVxGsNPGpjXWMAol29GNU=;
-        b=XSCBTmcnlQx1gymTBIQTpPqTF9MRbmCYxJDXRbeapNDy77zubrwIRhYDIDpzfpEvSb
-         JbgQZlQAPMMy+TcJ0Zl9dcDJyp4wBOy6ZJqfjOA3FnvkxD731zzmVy4/mGVQCfMCpGnS
-         jWs9+9iTVPM3M0Gjz1Ydn12Ui/269RbphwybvVPLUj3MWc4Cm/yiU36wNPvVuuY3Xbh0
-         6dsN5JSmuA41ErGiPLn0/2KuYyPWFD9xSRe3f/fLf/6WNK3KHliihx+S/XH3EC4sQAo7
-         ngq1+APG63K7w9KOU5Tb16IKUhDJP8bbIr4HU5FM2xr6Da1P3l8L7eWhu8Q7hTJYPPT1
-         TMjw==
+        bh=q3O30/nl6pZCQT2a2Baeof1BC5ax2UChSGPY/GTCY8A=;
+        b=SeQLSPqc2/YQ5vhmURpGxCnRKh4YUw5BIN/UHXTmSTFBpDGIN/UqaqBDt6pMvjuhc/
+         j2k309PB1WiJaLcgGJw0B2k357k7sU81p9/kKp6HWYR0WsIrciIyoWz6FiWaIjOhYpmC
+         zw5NfalFvdad7ehlApMsdc3zw7uDtU0rXa7Rqe0PlHt8vzbW5hGAFR0Jpd3PAtF3BVh2
+         7ZHFQd44XtijZYU5yZmnglgziHtJA6kMwzbYr14Qx8jL0Q+t8liFJDFxfghNAxWG+I8M
+         TuyzvlRLcp8Hmr/DK46CYysmJpTARRggYYWF3bfXcO6i7UP5EPMcLY+JtsSmxsFdoUI7
+         vqGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vW+J4iogIz8BUKDsm9kkznHVxGsNPGpjXWMAol29GNU=;
-        b=G/ymWqHuLgfGApp4BVZZ2eeHqxJn0Pgg9fMnONabITi/mEbzJQen5rt93z5OBhSh4a
-         nT6TzTAQtPf9wQryEP60RIjy6jKOo1S6+HGhkrApt//6gKKd2LpGIl5bQCvTarg9a3fs
-         t5xGTnbif42nItgcqUAQbgJywKdWT6+iwiUlbBLZduN9QC3z0CzBI+hrpkneQkc0EG75
-         GrJFLnoH96u3Leo/PI/xx1VrGNKgeUagqLP0EMs5mpHXgcAFsNXxc1wtUzo6nqA6sfci
-         1ZXyffUHYVHH81Kf4Up1RR3NAEAztBSR06EXFnTji11lXaC6tVr1N+bIvmWIZ6dPebzx
-         X1PA==
-X-Gm-Message-State: ACrzQf0Qcdxkmha5yvfA3BL/12yZwA0Q7OvZW86Pp7esF/Ji+wh3/rSh
-        cf4FTsRCR3fE9VQe+tw6LSY=
-X-Google-Smtp-Source: AMsMyM4XnbS5q2Gnjr9/xh7Q1T5xD9rvWp88uDEg3OCjFW5BXDfhS6gtejtBN21UH89PxfqvVHbiew==
-X-Received: by 2002:a17:902:e40a:b0:183:f90:2fb with SMTP id m10-20020a170902e40a00b001830f9002fbmr2311120ple.28.1665701715304;
-        Thu, 13 Oct 2022 15:55:15 -0700 (PDT)
+        bh=q3O30/nl6pZCQT2a2Baeof1BC5ax2UChSGPY/GTCY8A=;
+        b=t7A/bYpizeDi+ucK2wtUoh1EVwyFP29bGURcEg/yZZVKqXU+V/eZz/23moTFr3QdUN
+         Wc2QBnLJBLSXZHe8hhyieisIXQN8S3Kuurxj3w6LO8z89VaZTxXT7OYUkjovg584gW+j
+         +tf0vB5TnPH2Aa0TftZAgzAasGhkaGi8e6fKQoWsvZWGahQ8T5ArCq3eL66fkGO/8D//
+         d2AiendKgbwvm+En8/3n7RrvgSCNx0Xjn5PEhaYq4ObdfcUA29M+eMjBjehbWvLlcm54
+         TeL9DZ3HUwtOjqhjeDrADz5zvjGmJ0W9ctJSIQ5ZDHM+CdDCOLino/Tt47jub4kUngdM
+         l+/Q==
+X-Gm-Message-State: ACrzQf2Ui+pKfCuvXLCJaj1MAo91mwR69vTr6sFac8mLp0Uel7VmI9s7
+        CTQOq5UKuLvdnNIMZO35vrw=
+X-Google-Smtp-Source: AMsMyM4NeJVCQzzcm8W75BjX0XeEL04t0hlo0bW+dZBuuOehbjB/kLxpHcNbIXA8Wid599NWqdBeZQ==
+X-Received: by 2002:a17:903:40cb:b0:17f:6e08:6eac with SMTP id t11-20020a17090340cb00b0017f6e086eacmr1993232pld.80.1665701717785;
+        Thu, 13 Oct 2022 15:55:17 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b0016dbdf7b97bsm325810plg.266.2022.10.13.15.55.14
+        by smtp.gmail.com with ESMTPSA id n123-20020a622781000000b0053b723a74f7sm226564pfn.90.2022.10.13.15.55.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 15:55:14 -0700 (PDT)
+        Thu, 13 Oct 2022 15:55:17 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
@@ -61,12 +61,10 @@ Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         Daniel Vetter <daniel@ffwll.ch>,
         Akhil P Oommen <quic_akhilpo@quicinc.com>,
         Douglas Anderson <dianders@chromium.org>,
-        Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/3] drm/msm/a6xx: Fix kvzalloc vs state_kcalloc usage
-Date:   Thu, 13 Oct 2022 15:55:13 -0700
-Message-Id: <20221013225520.371226-2-robdclark@gmail.com>
+Subject: [PATCH 2/3] drm/msm/a6xx: Skip snapshotting unused GMU buffers
+Date:   Thu, 13 Oct 2022 15:55:14 -0700
+Message-Id: <20221013225520.371226-3-robdclark@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221013225520.371226-1-robdclark@gmail.com>
 References: <20221013225520.371226-1-robdclark@gmail.com>
@@ -84,71 +82,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-adreno_show_object() is a trap!  It will re-allocate the pointer it is
-passed on first call, when the data is ascii85 encoded, using kvmalloc/
-kvfree().  Which means the data *passed* to it must be kvmalloc'd, ie.
-we cannot use the state_kcalloc() helper.
+Some buffers are unused on certain sub-generations of a6xx.  So just
+skip them.
 
-This partially reverts
-ec8f1813bf8d ("drm/msm/a6xx: Replace kcalloc() with kvzalloc()"), but
-fix the missing kvfree() to fix the memory leak that was present
-previously.  And adds a warning comment.
-
-Fixes: ec8f1813bf8d ("drm/msm/a6xx: Replace kcalloc() with kvzalloc()")
-Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/20
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c | 11 ++++++++++-
- drivers/gpu/drm/msm/adreno/adreno_gpu.c     |  7 ++++++-
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-index 3c112a6cc8a2..730355f9e2d4 100644
+index 730355f9e2d4..b0124d0f286c 100644
 --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
 +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-@@ -819,7 +819,7 @@ static struct msm_gpu_state_bo *a6xx_snapshot_gmu_bo(
- 
- 	snapshot->iova = bo->iova;
- 	snapshot->size = bo->size;
--	snapshot->data = state_kcalloc(a6xx_state, 1, snapshot->size);
-+	snapshot->data = kvzalloc(snapshot->size, GFP_KERNEL);
- 	if (!snapshot->data)
- 		return NULL;
- 
-@@ -1034,6 +1034,15 @@ static void a6xx_gpu_state_destroy(struct kref *kref)
- 	struct a6xx_gpu_state *a6xx_state = container_of(state,
- 			struct a6xx_gpu_state, base);
- 
-+	if (a6xx_state->gmu_log)
-+		kvfree(a6xx_state->gmu_log->data);
-+
-+	if (a6xx_state->gmu_hfi)
-+		kvfree(a6xx_state->gmu_hfi->data);
-+
-+	if (a6xx_state->gmu_debug)
-+		kvfree(a6xx_state->gmu_debug->data);
-+
- 	list_for_each_entry_safe(obj, tmp, &a6xx_state->objs, node)
- 		kvfree(obj);
- 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index 382fb7f9e497..5a0e8491cd3a 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -729,7 +729,12 @@ static char *adreno_gpu_ascii85_encode(u32 *src, size_t len)
- 	return buf;
- }
- 
--/* len is expected to be in bytes */
-+/* len is expected to be in bytes
-+ *
-+ * WARNING: *ptr should be allocated with kvmalloc or friends.  It can be free'd
-+ * with kvfree() and replaced with a newly kvmalloc'd buffer on the first call
-+ * when the unencoded raw data is encoded
-+ */
- void adreno_show_object(struct drm_printer *p, void **ptr, int len,
- 		bool *encoded)
+@@ -813,6 +813,9 @@ static struct msm_gpu_state_bo *a6xx_snapshot_gmu_bo(
  {
+ 	struct msm_gpu_state_bo *snapshot;
+ 
++	if (!bo->size)
++		return NULL;
++
+ 	snapshot = state_kcalloc(a6xx_state, 1, sizeof(*snapshot));
+ 	if (!snapshot)
+ 		return NULL;
 -- 
 2.37.3
 
