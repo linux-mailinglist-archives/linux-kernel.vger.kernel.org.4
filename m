@@ -2,97 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AFA5FD5FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA285FD602
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJMIMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S229772AbiJMING (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJMIMo (ORCPT
+        with ESMTP id S229816AbiJMINA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:12:44 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D3AD2CD7;
-        Thu, 13 Oct 2022 01:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665648762; x=1697184762;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=7n7bm9cEbwpAcQHLjxyNJZugoRkYPQp3Pb3ATCfFMcw=;
-  b=VtCrKD8iV80UN99qVOUOC3BWMzIqADiXbPYZA4qdJsSiW+vbEylG3NJC
-   bGWI9Uq3mWfjuQnB7B9Kuwcl2soGPhyF0OdCl6PoPt78x/Q8xSrYRzeke
-   bUMP+k/qvcLUNbAKtJs6vri3xQZJifkb98AimhnyxKz4b7DfXnThPjBjm
-   UVTeG35/7k2O+8qF0tl+jw6Vq+FJzM/q94EQb6XQmioibS21WNL+trIaA
-   yK7cH+1V0ZDN8W24wvD7Rz3zyZwb/VBvJm+NSk4MzNwMSQsWURTXttbJ+
-   wdslmJfW87VzcZStOMVrruNdrte2XsTX8sMDAjW3Bu6d4dtmySH66MdCt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="303756749"
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="303756749"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 01:12:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="769524814"
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="769524814"
-Received: from ndenisov-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.41.197])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 01:12:21 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, keescook@chromium.org
-Cc:     luc.vanoostenryck@gmail.com, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com, dlatypov@google.com,
-        vitor@massaru.org, gustavoars@kernel.org,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-sparse@vger.kernel.org,
-        arnd@kernel.org
-Subject: Re: [PATCH v3] overflow: Introduce overflows_type() and
- castable_to_type()
-In-Reply-To: <20221013064956.1548741-1-gwan-gyeong.mun@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220926191109.1803094-1-keescook@chromium.org>
- <20221013064956.1548741-1-gwan-gyeong.mun@intel.com>
-Date:   Thu, 13 Oct 2022 11:12:29 +0300
-Message-ID: <87zge0rvki.fsf@intel.com>
+        Thu, 13 Oct 2022 04:13:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DD914BB52
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665648775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SVtimxCepKvaFtR/70BleQZCZHt1ORlKbjVwxPnPGpc=;
+        b=GwwvP0jB1vKo2n3P14ol8wOz4501/UeXGJEEvj8yat9OXxKBHMWve3oIken8wgpqoSZ4Pk
+        bAL7O92LbcIF8y+1DnBxDvbUGDgwfOuentxI1oV0MNljpWY+ZgbtOa/PlvFmtNP4Pi1U3W
+        3km12x+Bc9H/HVRSdHyap4LNFG5FoL8=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-672-_gXsz4GXOCWrEo3eFj49sQ-1; Thu, 13 Oct 2022 04:12:53 -0400
+X-MC-Unique: _gXsz4GXOCWrEo3eFj49sQ-1
+Received: by mail-wr1-f69.google.com with SMTP id h4-20020adfa4c4000000b0022ec3966c3aso253732wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 01:12:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SVtimxCepKvaFtR/70BleQZCZHt1ORlKbjVwxPnPGpc=;
+        b=c1NocQ1amXSQzuQO9Jc6SxRLlDJlzZJmFIKO6x6sK/ZBK296ZdOEJHHOF2sBMtuIBp
+         /sS2MJAfPPRDOLaNj80w52JYXk+I6uqq7ROOG4kZgldRlLoNZ0WOu4deUT3WGwSTuj72
+         2fW8oCmwWGP7vN5vu3XGTb6tK5op5HSUUFVRxyKNplQGwecsep/MShj9lFtSMWdY1HUI
+         hFYnLuXElc0bB5x0Vw/d5G/S+/K8nLJWPS6ioJpISAaevOu161zR9eRTl18rsJ+667Or
+         YRjxezNYPktxh7Di/P7G2WywehqhQ9tk/jZwDuh3Xfm77VdT8qrncTyNaMtSSCgizvd9
+         QLjA==
+X-Gm-Message-State: ACrzQf1kE3hH2HJ59dR7xfgWc9Ku/0URcxLCYyZxzay83r6bWk97UZBt
+        /24S+NKJDYTt02ciUYb8AayNxCNLqNyaYozGarQyFMqWY7voPNphzYzl3EyqR02RIwF2Mm7rY+h
+        MbCyyNlyZ123Drs7ztu8HIKd+
+X-Received: by 2002:adf:f501:0:b0:22c:cbea:240a with SMTP id q1-20020adff501000000b0022ccbea240amr20840784wro.78.1665648772799;
+        Thu, 13 Oct 2022 01:12:52 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5rfyrZZb23N82N2z/p2IeDvU7rAr0iaSubmeMp2INdcTRR8S14u2WU9014RMqwlD+55CPyGA==
+X-Received: by 2002:adf:f501:0:b0:22c:cbea:240a with SMTP id q1-20020adff501000000b0022ccbea240amr20840761wro.78.1665648772526;
+        Thu, 13 Oct 2022 01:12:52 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-103-235.dyn.eolo.it. [146.241.103.235])
+        by smtp.gmail.com with ESMTPSA id m35-20020a05600c3b2300b003a1980d55c4sm4115030wms.47.2022.10.13.01.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 01:12:52 -0700 (PDT)
+Message-ID: <c7dd8b101d78c27e1f21ab15f98627e5a5fd919e.camel@redhat.com>
+Subject: Re: [syzbot] WARNING in ovs_dp_reset_user_features
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     syzbot <syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com>,
+        aahringo@redhat.com, ccaulfie@redhat.com, cluster-devel@redhat.com,
+        davem@davemloft.net, dev@openvswitch.org, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pshelar@ovn.org,
+        syzkaller-bugs@googlegroups.com, teigland@redhat.com
+Date:   Thu, 13 Oct 2022 10:12:50 +0200
+In-Reply-To: <00000000000097399505ead9ef34@google.com>
+References: <00000000000097399505ead9ef34@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com> wrote:
-> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> index 0d98c9bc75da..44da9d190057 100644
-> --- a/lib/overflow_kunit.c
-> +++ b/lib/overflow_kunit.c
-> @@ -16,6 +16,11 @@
->  #include <linux/types.h>
->  #include <linux/vmalloc.h>
->  
-> +/* We're expecting to do a lot of "always true" or "always false" tests. */
-> +#ifdef CONFIG_CC_IS_CLANG
-> +#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
-> +#endif
+On Wed, 2022-10-12 at 10:43 -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    e8bc52cb8df8 Merge tag 'driver-core-6.1-rc1' of git://git...
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=134de042880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7579993da6496f03
+> dashboard link: https://syzkaller.appspot.com/bug?extid=31cde0bef4bbf8ba2d86
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12173a34880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1792461a880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/4dc25a89bfbd/disk-e8bc52cb.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/16c9ca5fd754/vmlinux-e8bc52cb.xz
+> 
+> The issue was bisected to:
+> 
+> commit 6b0afc0cc3e9a9a91f5a76d0965d449781441e18
+> Author: Alexander Aring <aahringo@redhat.com>
+> Date:   Wed Jun 22 18:45:23 2022 +0000
+> 
+>     fs: dlm: don't use deprecated timeout features by default
 
-I thought #pragma was discouraged. I didn't try this, but would
-something like this work in the Makefile instead:
+This commit is not really relevant for the issue, but it makes the
+reproducer fail, since it changes the genl_family registration order
+and the repro hard-codes the ovs genl family id.
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10d5787c880000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=12d5787c880000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14d5787c880000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com
+> Fixes: 6b0afc0cc3e9 ("fs: dlm: don't use deprecated timeout features by default")
+> 
+> ------------[ cut here ]------------
+> Dropping previously announced user features
+> WARNING: CPU: 1 PID: 3608 at net/openvswitch/datapath.c:1619 ovs_dp_reset_user_features+0x1bc/0x240 net/openvswitch/datapath.c:1619
+> Modules linked in:
+> CPU: 1 PID: 3608 Comm: syz-executor162 Not tainted 6.0.0-syzkaller-07994-ge8bc52cb8df8 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:ovs_dp_reset_user_features+0x1bc/0x240 net/openvswitch/datapath.c:1619
+> Code: 00 c7 03 00 00 00 00 eb 05 e8 d0 be 67 f7 5b 41 5c 41 5e 41 5f 5d c3 e8 c2 be 67 f7 48 c7 c7 00 92 e3 8b 31 c0 e8 74 7a 2f f7 <0f> 0b eb c7 44 89 f1 80 e1 07 fe c1 38 c1 0f 8c f1 fe ff ff 4c 89
+> RSP: 0018:ffffc90003b8f370 EFLAGS: 00010246
+> RAX: e794c0e413340e00 RBX: ffff8880175cae68 RCX: ffff88801c069d80
+> RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+> RBP: 0000000000000008 R08: ffffffff816c58ad R09: ffffed1017364f13
+> R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: dffffc0000000000
+> R13: ffff8880175ca450 R14: 1ffff11002eb95cd R15: ffffc90003b8f6b0
+> FS:  0000555557276300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020000916 CR3: 000000001ed81000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  ovs_dp_cmd_new+0x8f6/0xc80 net/openvswitch/datapath.c:1822
+>  genl_family_rcv_msg_doit net/netlink/genetlink.c:731 [inline]
+>  genl_family_rcv_msg net/netlink/genetlink.c:808 [inline]
+>  genl_rcv_msg+0x11ca/0x1670 net/netlink/genetlink.c:825
+>  netlink_rcv_skb+0x1f0/0x460 net/netlink/af_netlink.c:2540
+>  genl_rcv+0x24/0x40 net/netlink/genetlink.c:836
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+>  netlink_unicast+0x7e7/0x9c0 net/netlink/af_netlink.c:1345
+>  netlink_sendmsg+0x9b3/0xcd0 net/netlink/af_netlink.c:1921
+>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>  sock_sendmsg net/socket.c:734 [inline]
+>  ____sys_sendmsg+0x597/0x8e0 net/socket.c:2482
+>  ___sys_sendmsg net/socket.c:2536 [inline]
+>  __sys_sendmsg+0x28e/0x390 net/socket.c:2565
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fc51f29de89
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffd99ec6ed8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> RAX: ffffffffffffffda RBX: 000000000000a2c4 RCX: 00007fc51f29de89
+> RDX: 0000000000000000 RSI: 0000000020000100 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 00007ffd99ec7078 R09: 00007ffd99ec7078
+> R10: 00007ffd99ec6950 R11: 0000000000000246 R12: 00007ffd99ec6eec
+> R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 
+In this specific case it looks like the warning is caused by the fact
+that ovs allows an 'outdated' datapath to set user_features (version is
+not checked in ovs_dp_change()) but later complains if the same user-
+space touch again the same datapath (version check in
+ovs_dp_reset_user_features())
 
-CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
+/P
 
-Sorry for not noticing before. If you all think pragma is fine, sorry
-for the noise.
-
-BR,
-Jani.
-
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
