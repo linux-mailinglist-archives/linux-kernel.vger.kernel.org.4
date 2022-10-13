@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108A05FE055
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E83B5FE097
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiJMSHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S231494AbiJMSLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiJMSFJ (ORCPT
+        with ESMTP id S231637AbiJMSK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:05:09 -0400
+        Thu, 13 Oct 2022 14:10:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64B4157F45;
-        Thu, 13 Oct 2022 11:04:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F241757A7;
+        Thu, 13 Oct 2022 11:08:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA9AA61941;
-        Thu, 13 Oct 2022 17:59:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1787C433C1;
-        Thu, 13 Oct 2022 17:59:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1F49618DE;
+        Thu, 13 Oct 2022 17:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88FDC433D7;
+        Thu, 13 Oct 2022 17:57:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683941;
-        bh=R56tc7ab5Ae7BCl75vsYTgnxuRRQc6ZCGNdTc3leahg=;
+        s=korg; t=1665683858;
+        bh=Uookn0v1XD1N29cP0O883ohBRJMgB84+zVG1F9DR7z8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pqqjf8IfVdSiADsbvp0iwQ4PPMN6AXHEj/xv5dQalbAfsiB5fODVocU6PDuzmfrE3
-         TsMpLNvETAu4ghBHBXWbgesOj0XbSaYSCOUvI/nlp8HEz9qUh+n9gORewijKrO6zsL
-         5zAxyyqCQQ4FYQ7svXIHraWs7ien7IhzLpK6SkpM=
+        b=W+vaPGHrmcHJto+BPy11zllou1GEFLVKB6ontuJCvZ2os//2QqctDF8Pc35mUulFB
+         Yi3ttxjRClU5PxUAFJ4fAZZ/oFxIbjUDBIpRqzPm9Nah6nOvznSLcCZ58kVxxoi4xL
+         ETsw3QEusbWto9xZ6UIqQuN+TVoKQjlmUPqoJFNo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aditya Garg <gargaditya08@live.com>,
-        Samuel Jiang <chyishian.jiang@gmail.com>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 5.19 11/33] efi: Correct Macmini DMI match in uefi cert quirk
-Date:   Thu, 13 Oct 2022 19:52:43 +0200
-Message-Id: <20221013175145.629145950@linuxfoundation.org>
+        stable@vger.kernel.org, Sherry Yang <sherry.yang@oracle.com>,
+        Paul Webb <paul.x.webb@oracle.com>,
+        Phillip Goerl <phillip.goerl@oracle.com>,
+        Jack Vogel <jack.vogel@oracle.com>,
+        Nicky Veitch <nicky.veitch@oracle.com>,
+        Colm Harrington <colm.harrington@oracle.com>,
+        Ramanan Govindarajan <ramanan.govindarajan@oracle.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Tejun Heo <tj@kernel.org>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 15/27] random: use expired timer rather than wq for mixing fast pool
+Date:   Thu, 13 Oct 2022 19:52:44 +0200
+Message-Id: <20221013175144.105087131@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
-References: <20221013175145.236739253@linuxfoundation.org>
+In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
+References: <20221013175143.518476113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +63,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Orlando Chamberlain <redecorating@protonmail.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit bab715bdaa9ebf28d99a6d1efb2704a30125e96d upstream.
+commit 748bc4dd9e663f23448d8ad7e58c011a67ea1eca upstream.
 
-It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
-is inconsistent with other model line names.
+Previously, the fast pool was dumped into the main pool periodically in
+the fast pool's hard IRQ handler. This worked fine and there weren't
+problems with it, until RT came around. Since RT converts spinlocks into
+sleeping locks, problems cropped up. Rather than switching to raw
+spinlocks, the RT developers preferred we make the transformation from
+originally doing:
 
-Correct the capitalisation of Macmini in the quirk for skipping loading
-platform certs on T2 Macs.
+    do_some_stuff()
+    spin_lock()
+    do_some_other_stuff()
+    spin_unlock()
 
-Currently users get:
+to doing:
 
-------------[ cut here ]------------
-[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
-WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_gracefully_on_page_fault+0x55/0xe0
-Modules linked in:
-CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3fc40fd08edab32a509fbf4c9bc52d111e
-Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
-Workqueue: efi_rts_wq efi_call_rts
-...
----[ end trace 0000000000000000 ]---
-efi: Froze efi_rts_wq and disabled EFI Runtime Services
-integrity: Couldn't get size: 0x8000000000000015
-integrity: MODSIGN: Couldn't get UEFI db list
-efi: EFI Runtime Services are disabled!
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get UEFI dbx list
+    do_some_stuff()
+    queue_work_on(some_other_stuff_worker)
 
-Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot for T2 Macs")
+This is an ordinary pattern done all over the kernel. However, Sherry
+noticed a 10% performance regression in qperf TCP over a 40gbps
+InfiniBand card. Quoting her message:
+
+> MT27500 Family [ConnectX-3] cards:
+> Infiniband device 'mlx4_0' port 1 status:
+> default gid: fe80:0000:0000:0000:0010:e000:0178:9eb1
+> base lid: 0x6
+> sm lid: 0x1
+> state: 4: ACTIVE
+> phys state: 5: LinkUp
+> rate: 40 Gb/sec (4X QDR)
+> link_layer: InfiniBand
+>
+> Cards are configured with IP addresses on private subnet for IPoIB
+> performance testing.
+> Regression identified in this bug is in TCP latency in this stack as reported
+> by qperf tcp_lat metric:
+>
+> We have one system listen as a qperf server:
+> [root@yourQperfServer ~]# qperf
+>
+> Have the other system connect to qperf server as a client (in this
+> case, it’s X7 server with Mellanox card):
+> [root@yourQperfClient ~]# numactl -m0 -N0 qperf 20.20.20.101 -v -uu -ub --time 60 --wait_server 20 -oo msg_size:4K:1024K:*2 tcp_lat
+
+Rather than incur the scheduling latency from queue_work_on, we can
+instead switch to running on the next timer tick, on the same core. This
+also batches things a bit more -- once per jiffy -- which is okay now
+that mix_interrupt_randomness() can credit multiple bits at once.
+
+Reported-by: Sherry Yang <sherry.yang@oracle.com>
+Tested-by: Paul Webb <paul.x.webb@oracle.com>
+Cc: Sherry Yang <sherry.yang@oracle.com>
+Cc: Phillip Goerl <phillip.goerl@oracle.com>
+Cc: Jack Vogel <jack.vogel@oracle.com>
+Cc: Nicky Veitch <nicky.veitch@oracle.com>
+Cc: Colm Harrington <colm.harrington@oracle.com>
+Cc: Ramanan Govindarajan <ramanan.govindarajan@oracle.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
 Cc: stable@vger.kernel.org
-Cc: Aditya Garg <gargaditya08@live.com>
-Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
-Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Fixes: 58340f8e952b ("random: defer fast pool mixing to worker")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/platform_certs/load_uefi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -31,7 +31,7 @@ static const struct dmi_system_id uefi_s
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
--	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
- 	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -897,17 +897,20 @@ struct fast_pool {
+ 	unsigned long pool[4];
+ 	unsigned long last;
+ 	unsigned int count;
+-	struct work_struct mix;
++	struct timer_list mix;
+ };
+ 
++static void mix_interrupt_randomness(struct timer_list *work);
++
+ static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
+ #ifdef CONFIG_64BIT
+ #define FASTMIX_PERM SIPHASH_PERMUTATION
+-	.pool = { SIPHASH_CONST_0, SIPHASH_CONST_1, SIPHASH_CONST_2, SIPHASH_CONST_3 }
++	.pool = { SIPHASH_CONST_0, SIPHASH_CONST_1, SIPHASH_CONST_2, SIPHASH_CONST_3 },
+ #else
+ #define FASTMIX_PERM HSIPHASH_PERMUTATION
+-	.pool = { HSIPHASH_CONST_0, HSIPHASH_CONST_1, HSIPHASH_CONST_2, HSIPHASH_CONST_3 }
++	.pool = { HSIPHASH_CONST_0, HSIPHASH_CONST_1, HSIPHASH_CONST_2, HSIPHASH_CONST_3 },
+ #endif
++	.mix = __TIMER_INITIALIZER(mix_interrupt_randomness, 0)
+ };
+ 
+ /*
+@@ -949,7 +952,7 @@ int __cold random_online_cpu(unsigned in
+ }
+ #endif
+ 
+-static void mix_interrupt_randomness(struct work_struct *work)
++static void mix_interrupt_randomness(struct timer_list *work)
+ {
+ 	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
+ 	/*
+@@ -1003,10 +1006,11 @@ void add_interrupt_randomness(int irq)
+ 	if (new_count < 1024 && !time_is_before_jiffies(fast_pool->last + HZ))
+ 		return;
+ 
+-	if (unlikely(!fast_pool->mix.func))
+-		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
+ 	fast_pool->count |= MIX_INFLIGHT;
+-	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
++	if (!timer_pending(&fast_pool->mix)) {
++		fast_pool->mix.expires = jiffies;
++		add_timer_on(&fast_pool->mix, raw_smp_processor_id());
++	}
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+ 
 
 
