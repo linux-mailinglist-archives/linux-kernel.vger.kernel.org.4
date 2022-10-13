@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3579C5FDDDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22435FDDDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiJMQBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S229823AbiJMQCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJMQBU (ORCPT
+        with ESMTP id S229763AbiJMQCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:01:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3685513728D
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665676876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8zDpItjAu5ov3bsFW3VuwHkUUIWynjpwr1yozwTgapc=;
-        b=BzFGfbc890s7a6YNzFW6iL9DF/RCCswrjdMUgeZHOPeq87kqpml6JSUukZgIiDVq5c1XOH
-        WjinO/CRS/3kn5ug2LvXzZo5WWUHvpx3uAPY4WAoqzd4lANodIy+SPrjxNmHZRYPLWOU/e
-        ZCmc5COnuHpY/ruruHkyk6+4w265O/s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-d12DpK2UMWyMz9fvft9LNA-1; Thu, 13 Oct 2022 12:01:14 -0400
-X-MC-Unique: d12DpK2UMWyMz9fvft9LNA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFF16811E7A;
-        Thu, 13 Oct 2022 16:01:13 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A3D1840398B1;
-        Thu, 13 Oct 2022 16:01:12 +0000 (UTC)
-Date:   Thu, 13 Oct 2022 12:01:10 -0400
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Ming Lei <tom.leiming@gmail.com>
-Cc:     Stefan Hajnoczi <stefanha@gmail.com>,
-        "Richard W.M. Jones" <rjones@redhat.com>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kirill Tkhai <kirill.tkhai@openvz.org>,
-        Manuel Bentele <development@manuel-bentele.de>,
-        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-Message-ID: <Y0g2Rg9nAU5grjCV@fedora>
-References: <Yza1u1KfKa7ycQm0@T590>
- <Yzs9xQlVuW41TuNC@fedora>
- <YzwARuAZdaoGTUfP@T590>
- <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
- <20221006101400.GC7636@redhat.com>
- <CAJSP0QXbnhkVgfgMfC=MAyvF63Oof_ZGDvNFhniDCvVY-f6Hmw@mail.gmail.com>
- <Y0du/9K3II70tZTD@T590>
+        Thu, 13 Oct 2022 12:02:05 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBCD104526;
+        Thu, 13 Oct 2022 09:02:03 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id s30so3298757eds.1;
+        Thu, 13 Oct 2022 09:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i0F2oICNNjCBsoL5fs6l6db9fkLD0EJdXecM8PpjA+g=;
+        b=jLWNzxCq8cXHFa+RJftXtWav9bZ8JdZZ5+4qE74RzBc46FPQlJfGhzdoVu9XPHxxTq
+         J/hmttj7Acis0PnBqCGVy73rG1f8kjb5hIRnSIApJcsDLxVcyZgHV7au7ANErMoFGHay
+         6NS0UQSngqCUvhALVMuQX978Ka7PGoy5Me1ItyikvKm1CoZgJKUgKPeK6tTPZUij6KTv
+         SV67XlXaQyBplXdO7kcfVBExhpsnF19eA3nDA+0nJxKj4FjfSl+FHfyHU0DOpvpX/Klj
+         VVJS597FU4WMT7piGywgFBIAcgSfpfvTr/7diTq2gZes1aMYhwqcjkSpn/2eWxhhxob0
+         APvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i0F2oICNNjCBsoL5fs6l6db9fkLD0EJdXecM8PpjA+g=;
+        b=NPM7H5dJ7nHAa93KUAPg3Y4xy7Q8irYYFW7foKsxvMUtrm6GNn1lEvNY4I2kuPW8iD
+         rBBhR/UoXaagIYaRcydsllvSIbjKR5M+7w+YWw48X5LucGHvjgABAO/3j8A9BDjHOpck
+         0Gp26+eKrZGICqsyx4d4UA0wriT7zQ63p+1Y7IynfSLGScrsWRkObXADzxQh/MEp1/mO
+         tZTI8VlqgIZjsxBXLpyTxAIbi2qDfl3ggg/eggpv7P2WcVqWVnsXZ7CmzCFBOly9RB8W
+         hPhglL/1xRO7yB3XBoolDX4W+Ek/u1OEOAzEhpDHHIHtHtle145CMRsBvwkLkWGwi/O7
+         D7qw==
+X-Gm-Message-State: ACrzQf1+zVGXj349vD7y7Znchg69ZUPo+ktVENCrcMHyMBCLsxedQ/H9
+        7qZ7EDqlyY+uXgRzAHSUjBSdXrtTMjDZRg==
+X-Google-Smtp-Source: AMsMyM5G8ivyL2PPCUiu15dZtPg4w+Lv0Wj/Wg/vb+TcACZF0lU9PhfKGQ6GXZqx4YhTEkADneyLJw==
+X-Received: by 2002:aa7:df16:0:b0:45b:f51f:ab73 with SMTP id c22-20020aa7df16000000b0045bf51fab73mr413883edy.366.1665676922271;
+        Thu, 13 Oct 2022 09:02:02 -0700 (PDT)
+Received: from zambezi.redhat.com (ip-94-112-104-28.bb.vodafone.cz. [94.112.104.28])
+        by smtp.gmail.com with ESMTPSA id gc37-20020a1709072b2500b0077d6f628e14sm62107ejc.83.2022.10.13.09.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 09:02:01 -0700 (PDT)
+From:   Ilya Dryomov <idryomov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Ceph updates for 6.1-rc1
+Date:   Thu, 13 Oct 2022 18:01:53 +0200
+Message-Id: <20221013160153.100941-1-idryomov@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Dz5/1ZuMbMXxUtqp"
-Content-Disposition: inline
-In-Reply-To: <Y0du/9K3II70tZTD@T590>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---Dz5/1ZuMbMXxUtqp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
 
-On Thu, Oct 13, 2022 at 09:50:55AM +0800, Ming Lei wrote:
-> On Wed, Oct 12, 2022 at 10:15:28AM -0400, Stefan Hajnoczi wrote:
-> > On Thu, 6 Oct 2022 at 06:14, Richard W.M. Jones <rjones@redhat.com> wro=
-te:
-> > >
-> > > On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi wrote:
-> > > > qemu-nbd doesn't use io_uring to handle the backend IO,
-> > >
-> > > Would this be fixed by your (not yet upstream) libblkio driver for
-> > > qemu?
-> >=20
-> > I was wrong, qemu-nbd has syntax to use io_uring:
-> >=20
-> >   $ qemu-nbd ... --image-opts driver=3Dfile,filename=3Dtest.img,aio=3Di=
-o_uring
->=20
-> Yeah, I saw the option, previously when I tried io_uring via:
->=20
-> qemu-nbd -c /dev/nbd11 -n --aio=3Dio_uring $my_file
->=20
-> It complains that 'qemu-nbd: Invalid aio mode 'io_uring'' even though
-> that 'qemu-nbd --help' does say that io_uring is supported.
->=20
-> Today just tried it on Fedora 37, looks it starts working with
-> --aio=3Dio_uring, but the IOPS is basically same with --aio=3Dnative, and
-> IO trace shows that io_uring is used by qemu-nbd.
+  Linux 6.0 (2022-10-02 14:09:07 -0700)
 
-Okay, similar performance to Linux AIO is expected. That's what we've
-seen with io_uring in QEMU. QEMU doesn't use io_uring in polling mode,
-so it's similar to what we get with Linux AIO.
+are available in the Git repository at:
 
-Stefan
+  https://github.com/ceph/ceph-client.git tags/ceph-for-6.1-rc1
 
---Dz5/1ZuMbMXxUtqp
-Content-Type: application/pgp-signature; name="signature.asc"
+for you to fetch changes up to 71cf0c1c4f9f8e42c84ca53a5ca7091e4eea7f6a:
 
------BEGIN PGP SIGNATURE-----
+  ceph: remove Sage's git tree from documentation (2022-10-04 19:18:08 +0200)
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmNINkYACgkQnKSrs4Gr
-c8ib3Qf/Tgw+o0jMenLQv3Ye1i9s4Mg9WNyB6eTM6ksmacLnBLbt225EDtkqMEqS
-wRPgsH9kB6d7yKcgAg3HR4/NoZHS+LCkLH4KCw0SyJxzQdecuDazPPQUOMN2U1D3
-wBj7ZZDv1In33uW587li1IMtzAajS9BVGwbXSCRK7ZqtaDF0WR85RIDFPbjOMrYK
-q9fmplUuSVqxYfAQ0deUiO3pM04CoVWdMpdJorpiUDRD6fJdCZBvNNXAxYov8O+8
-4Hh7Eyt7MpCwhQUR3cKc/TguVTbbza/uVc8k5o5vBrK0eftv9cT7lUr3+35AnPE4
-y+FLbhkaGFOFn4Q0jZDOjcjMRJkdNg==
-=QYko
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+A quiet round this time: several assorted filesystem fixes, the most
+noteworthy one being some additional wakeups in cap handling code, and
+a messenger cleanup.
 
---Dz5/1ZuMbMXxUtqp--
+----------------------------------------------------------------
+Jeff Layton (2):
+      libceph: drop last_piece flag from ceph_msg_data_cursor
+      ceph: increment i_version when doing a setattr with caps
 
+Kenneth Lee (1):
+      ceph: Use kcalloc for allocating multiple elements
+
+Tiezhu Yang (1):
+      ceph: remove Sage's git tree from documentation
+
+Xiubo Li (5):
+      ceph: wake up the waiters if any new caps comes
+      ceph: fail the request if the peer MDS doesn't support getvxattr op
+      ceph: no need to wait for transition RDCACHE|RD -> RD
+      ceph: fail the open_by_handle_at() if the dentry is being unlinked
+      ceph: fix incorrectly showing the .snap size for stat
+
+ Documentation/filesystems/ceph.rst |  1 -
+ fs/ceph/caps.c                     | 14 ++++++++++---
+ fs/ceph/export.c                   |  3 ++-
+ fs/ceph/inode.c                    | 29 +++++++++++++++++++++++----
+ fs/ceph/mds_client.c               | 11 +++++++++++
+ fs/ceph/mds_client.h               |  6 +++++-
+ include/linux/ceph/messenger.h     |  4 +---
+ net/ceph/messenger.c               | 40 +++++---------------------------------
+ net/ceph/messenger_v1.c            |  6 +++---
+ net/ceph/messenger_v2.c            |  2 +-
+ 10 files changed, 64 insertions(+), 52 deletions(-)
