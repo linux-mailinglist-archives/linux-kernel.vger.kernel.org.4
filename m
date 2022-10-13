@@ -2,401 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC485FE156
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B2B5FE1E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbiJMSeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S229598AbiJMSqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbiJMSeN (ORCPT
+        with ESMTP id S231797AbiJMSqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:34:13 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75E3DAC75
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:30:25 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id r14so3793895edc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:30:25 -0700 (PDT)
+        Thu, 13 Oct 2022 14:46:17 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A376B191D49;
+        Thu, 13 Oct 2022 11:43:09 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id n12so4168212wrp.10;
+        Thu, 13 Oct 2022 11:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=80yVJmDj5IDbUK+aqS6l/dUBm+Bwn69DEdWiolHKVEQ=;
-        b=FSJPenagde4qSchQNLIGuKH7m39FqdZYDX4cXscDrSd4DQs0L1KMc4rzYAQdelzOnj
-         UF6Ak0NK52yT8/8DfdNJEj9A6gPHnDn66V7+1VWIUqHsECMy3uBtxD1ZuMqhx07ZGxmH
-         JrBntFO5CY3UNA85w3OBtKxuhgF5e76Lt7ylZMABNDblsdysCHcDVS8mPFZv9H1JdZ/I
-         AKJH0uhU+XEyG10Nd+LEc8vJ0DUGh/1JFMAtnOsnuQLT22u523AH4mmuX/7Zqs6DzjRA
-         bG2+Qr5Isa0Tcz+PCt82cXW69Q2hRvI0SGZdd/KO1uPpP7a67dpLrTUV1TBOjvgtGohS
-         UKkg==
+        bh=B5L/tN8Nk5G1hFHXmpnHlaxEzIusr004HXV2igjx6Dg=;
+        b=WaMkAHVPl8AWTlsWCOn5940xJ4n2+DGuI4BNxlNTPRVWDmpiouz4lLGIdgOc56G/S6
+         iSHRYRPLpu31hPIR2oj21xQEuSdwrLDTdg/IugpMzX8dl4YOSahc+Yqf4kLYlruz8JzY
+         64PxNCx8ufShrGobabHugKDumGeDPrBw9+AWABQqzAidTIT/coJDU4Tn5zSPLWr8sdEf
+         oNp8J+itnMQD5L8G24GuDwqs4kj/GWhSmrVNWx4UmvfjtfwYAlO3E248VRJATnUSBFyS
+         20aXm6B8tZUCaWd3U1V2l5NDledETwN6ROnHCmJiV5fH9PIprBjM0gH3bh3kAWQdj8xr
+         54IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=80yVJmDj5IDbUK+aqS6l/dUBm+Bwn69DEdWiolHKVEQ=;
-        b=QI3aViSw24HDQyy44KXUFR10WUpg9dXahE55SXBIOPC4/HQpsstxlSr8KF51HQ2iA0
-         C0Fy6vt1ZC1BNhkWzKpO5uoCAbyGkGJRR8LJSMH2ZEG8Ze5An0qC8AIfmqzjgX6UCPqr
-         zVwDn1EsAEEYQVYExYEIGUqF1yH9jUzbU0HgABSHFQgR/AcZzyF3f1WejpzXnRhiGyIA
-         eHRkqPc2Zv19KDCXcIDCW425+8lnM+tH09oNFqsKC7y11eo6Wnnt2RbPdHU5V1pysBOT
-         v6cLF2N7nnp/3YACuz5ZEheBrsbSRpA5VTgAzEA8bgT1wWgMFLfn+4CoOfJ9PDE4jB9B
-         ygqA==
-X-Gm-Message-State: ACrzQf15YtuOAOgn7ehnq9X18jzpVJt5y8xj90tKk8yayi79TZASPJeR
-        CzaJEcjetOVWEZPd3UAnyQM=
-X-Google-Smtp-Source: AMsMyM7ssKdTrHDlPNauUb77WDG9zWLblYWKO18kRWRI7jkR1dhN23ZFAp3iq6h3HOsgFFKHyT7dhQ==
-X-Received: by 2002:a05:6402:b3c:b0:458:f680:6ab8 with SMTP id bo28-20020a0564020b3c00b00458f6806ab8mr923431edb.267.1665685433991;
-        Thu, 13 Oct 2022 11:23:53 -0700 (PDT)
+        bh=B5L/tN8Nk5G1hFHXmpnHlaxEzIusr004HXV2igjx6Dg=;
+        b=j6vz7WrqkhSvOisYXQ0MpTH7MYMrEAPwpjfdK3J7dK9vF09cbeGuIXpNA1ANqNaaMn
+         BX6WBxz7qvtqwNMP1NmVZpkKO6shPOE7ZI51PZnuZeOUgHLlrdjYh14Q3QeTDklQNcKc
+         6eKdHhGwJwDoa5x36MY4ttCxFRcrs5oEAx9gdv2YdycN0ssELlvDDLdaow6QBYoQ96A/
+         rviRLxkt8yBldofAjXLEnCguZjcEx6sOpgdEApvLh7jWkmsfEvpgitvXeOQ2J8uaxA20
+         D8bMffcsoVuWzZFYi/vTYVnFVSRGJAUzTBQ22sxta8cSy9/RTdzVwQHrEX2P4ZtNrbjT
+         /WLg==
+X-Gm-Message-State: ACrzQf3LvoP+o7B4IuTybBoGa9K8yu7+okLZaCyCW9xuY/nWylDgmGfZ
+        eygLMPr7DRWKWgAAboBtqtgB57EoAwXMFAR5
+X-Google-Smtp-Source: AMsMyM5D9VcyYdymrteUFP/uy7fZdMK47gw4RIDknOofM1/3bcKBsARkwBkRONaV/eI3T52TMYs+Xg==
+X-Received: by 2002:a17:907:75ed:b0:78d:97ed:2894 with SMTP id jz13-20020a17090775ed00b0078d97ed2894mr732203ejc.739.1665685520104;
+        Thu, 13 Oct 2022 11:25:20 -0700 (PDT)
 Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id e2-20020a170906314200b00730df07629fsm196329eje.174.2022.10.13.11.23.52
+        by smtp.gmail.com with ESMTPSA id i24-20020a056402055800b004588ef795easm283249edx.34.2022.10.13.11.25.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 11:23:53 -0700 (PDT)
+        Thu, 13 Oct 2022 11:25:19 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Emma Anholt <emma@anholt.net>, Chen-Yu Tsai <wens@csie.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>, linux-sunxi@lists.linux.dev,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Noralf =?ISO-8859-1?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: Re: [PATCH v5 22/22] drm/sun4i: tv: Convert to the new TV mode property
-Date:   Thu, 13 Oct 2022 20:23:51 +0200
-Message-ID: <6482539.4vTCxPXJkl@kista>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v5-22-d841cc64fe4b@cerno.tech>
-References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech> <20220728-rpi-analog-tv-properties-v5-22-d841cc64fe4b@cerno.tech>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: Re: [PATCH v2 04/10] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
+Date:   Thu, 13 Oct 2022 20:25:18 +0200
+Message-ID: <3442772.V25eIC5XRa@kista>
+In-Reply-To: <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
+References: <20221012055602.1544944-1-uwu@icenowy.me> <4218006.ejJDZkT8p0@kista> <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
-
-Dne =C4=8Detrtek, 13. oktober 2022 ob 15:19:06 CEST je Maxime Ripard napisa=
+Dne =C4=8Detrtek, 13. oktober 2022 ob 10:49:51 CEST je Icenowy Zheng napisa=
 l(a):
-> Now that the core can deal fine with analog TV modes, let's convert the
-> sun4i TV driver to leverage those new features.
+> =E5=9C=A8 2022-10-12=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 23:21 +0200=EF=
+=BC=8CJernej =C5=A0krabec=E5=86=99=E9=81=93=EF=BC=9A
 >=20
-> Acked-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > Hi Icenowy,
+> >=20
+> > Dne sreda, 12. oktober 2022 ob 07:55:56 CEST je Icenowy Zheng
+> >=20
+> > napisal(a):
+> > > The F1C100s SoC has one USB OTG port connected to a MUSB
+> > > controller.
+> > >=20
+> > > Add support for its USB PHY.
+> > >=20
+> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > > ---
+> > > No changes since v1.
+> > >=20
+> > >  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
+> > >  1 file changed, 11 insertions(+)
+> > >=20
+> > > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > > b/drivers/phy/allwinner/phy-sun4i-usb.c index
+> > > 3a3831f6059a..2f94cb77637b
+> > > 100644
+> > > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> > > @@ -109,6 +109,7 @@ enum sun4i_usb_phy_type {
+> > >         sun8i_v3s_phy,
+> > >         sun50i_a64_phy,
+> > >         sun50i_h6_phy,
+> > > +       suniv_f1c100s_phy,
+> > >  };
+> > >=20
+> > >  struct sun4i_usb_phy_cfg {
+> > > @@ -859,6 +860,14 @@ static int sun4i_usb_phy_probe(struct
+> > > platform_device
+> > > *pdev) return 0;
+> > >  }
+> > >=20
+> > > +static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg =3D {
+> > > +       .num_phys =3D 1,
+> > > +       .type =3D suniv_f1c100s_phy,
+> >=20
+> > I think you should just use sun4i_a10_phy. It has no special
+> > handling. I don't
+> > see a point adding new phy types if there is no special cases for it.
 >=20
-> ---
-> Changes in v5:
-> - Removed the count variable in get_modes
-> - Removed spurious vc4 change
-> ---
->  drivers/gpu/drm/sun4i/sun4i_tv.c | 145
-> +++++++++++++-------------------------- 1 file changed, 48 insertions(+),
-> 97 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/sun4i/sun4i_tv.c
-> b/drivers/gpu/drm/sun4i/sun4i_tv.c index c65f0a89b6b0..4f07aff11551 100644
-> --- a/drivers/gpu/drm/sun4i/sun4i_tv.c
-> +++ b/drivers/gpu/drm/sun4i/sun4i_tv.c
-> @@ -141,23 +141,14 @@ struct resync_parameters {
->  struct tv_mode {
->  	char		*name;
->=20
-> +	unsigned int	tv_mode;
-> +
->  	u32		mode;
->  	u32		chroma_freq;
->  	u16		back_porch;
->  	u16		front_porch;
-> -	u16		line_number;
->  	u16		vblank_level;
+> Sounds reasonable, although I think we should finally drop .type and
+> use only describing items.
 
-isn't there a way to get or calculate back_porch, front_porch and vblank_le=
-vel=20
-from mode? From quick glance over removed values below, I would say that at=
-=20
-least back_porch can be removed too?
-
-Otherwise this patch looks ok.
-
-Best regards,
-Jernej
+That would be even better. Will you do it?
 
 >=20
-> -	u32		hdisplay;
-> -	u16		hfront_porch;
-> -	u16		hsync_len;
-> -	u16		hback_porch;
-> -
-> -	u32		vdisplay;
-> -	u16		vfront_porch;
-> -	u16		vsync_len;
-> -	u16		vback_porch;
-> -
->  	bool		yc_en;
->  	bool		dac3_en;
->  	bool		dac_bit25_en;
-> @@ -213,7 +204,7 @@ static const struct resync_parameters
-> pal_resync_parameters =3D {
->=20
->  static const struct tv_mode tv_modes[] =3D {
->  	{
-> -		.name		=3D "NTSC",
-> +		.tv_mode	=3D DRM_MODE_TV_MODE_NTSC,
->  		.mode		=3D SUN4I_TVE_CFG0_RES_480i,
->  		.chroma_freq	=3D 0x21f07c1f,
->  		.yc_en		=3D true,
-> @@ -222,17 +213,6 @@ static const struct tv_mode tv_modes[] =3D {
->=20
->  		.back_porch	=3D 118,
->  		.front_porch	=3D 32,
-> -		.line_number	=3D 525,
-> -
-> -		.hdisplay	=3D 720,
-> -		.hfront_porch	=3D 18,
-> -		.hsync_len	=3D 2,
-> -		.hback_porch	=3D 118,
-> -
-> -		.vdisplay	=3D 480,
-> -		.vfront_porch	=3D 26,
-> -		.vsync_len	=3D 2,
-> -		.vback_porch	=3D 17,
->=20
->  		.vblank_level	=3D 240,
->=20
-> @@ -242,23 +222,12 @@ static const struct tv_mode tv_modes[] =3D {
->  		.resync_params	=3D &ntsc_resync_parameters,
->  	},
->  	{
-> -		.name		=3D "PAL",
-> +		.tv_mode	=3D DRM_MODE_TV_MODE_PAL,
->  		.mode		=3D SUN4I_TVE_CFG0_RES_576i,
->  		.chroma_freq	=3D 0x2a098acb,
->=20
->  		.back_porch	=3D 138,
->  		.front_porch	=3D 24,
-> -		.line_number	=3D 625,
-> -
-> -		.hdisplay	=3D 720,
-> -		.hfront_porch	=3D 3,
-> -		.hsync_len	=3D 2,
-> -		.hback_porch	=3D 139,
-> -
-> -		.vdisplay	=3D 576,
-> -		.vfront_porch	=3D 28,
-> -		.vsync_len	=3D 2,
-> -		.vback_porch	=3D 19,
->=20
->  		.vblank_level	=3D 252,
->=20
-> @@ -276,63 +245,21 @@ drm_encoder_to_sun4i_tv(struct drm_encoder *encoder)
->  			    encoder);
->  }
->=20
-> -/*
-> - * FIXME: If only the drm_display_mode private field was usable, this
-> - * could go away...
-> - *
-> - * So far, it doesn't seem to be preserved when the mode is passed by
-> - * to mode_set for some reason.
-> - */
-> -static const struct tv_mode *sun4i_tv_find_tv_by_mode(const struct
-> drm_display_mode *mode) +static const struct tv_mode *
-> +sun4i_tv_find_tv_by_mode(unsigned int mode)
->  {
->  	int i;
->=20
-> -	/* First try to identify the mode by name */
->  	for (i =3D 0; i < ARRAY_SIZE(tv_modes); i++) {
->  		const struct tv_mode *tv_mode =3D &tv_modes[i];
->=20
-> -		DRM_DEBUG_DRIVER("Comparing mode %s vs %s",
-> -				 mode->name, tv_mode->name);
-> -
-> -		if (!strcmp(mode->name, tv_mode->name))
-> -			return tv_mode;
-> -	}
-> -
-> -	/* Then by number of lines */
-> -	for (i =3D 0; i < ARRAY_SIZE(tv_modes); i++) {
-> -		const struct tv_mode *tv_mode =3D &tv_modes[i];
-> -
-> -		DRM_DEBUG_DRIVER("Comparing mode %s vs %s (X: %d vs=20
-%d)",
-> -				 mode->name, tv_mode->name,
-> -				 mode->vdisplay, tv_mode-
->vdisplay);
-> -
-> -		if (mode->vdisplay =3D=3D tv_mode->vdisplay)
-> +		if (tv_mode->tv_mode =3D=3D mode)
->  			return tv_mode;
->  	}
->=20
->  	return NULL;
->  }
->=20
-> -static void sun4i_tv_mode_to_drm_mode(const struct tv_mode *tv_mode,
-> -				      struct drm_display_mode=20
-*mode)
-> -{
-> -	DRM_DEBUG_DRIVER("Creating mode %s\n", mode->name);
-> -
-> -	mode->type =3D DRM_MODE_TYPE_DRIVER;
-> -	mode->clock =3D 13500;
-> -	mode->flags =3D DRM_MODE_FLAG_INTERLACE;
-> -
-> -	mode->hdisplay =3D tv_mode->hdisplay;
-> -	mode->hsync_start =3D mode->hdisplay + tv_mode->hfront_porch;
-> -	mode->hsync_end =3D mode->hsync_start + tv_mode->hsync_len;
-> -	mode->htotal =3D mode->hsync_end  + tv_mode->hback_porch;
-> -
-> -	mode->vdisplay =3D tv_mode->vdisplay;
-> -	mode->vsync_start =3D mode->vdisplay + tv_mode->vfront_porch;
-> -	mode->vsync_end =3D mode->vsync_start + tv_mode->vsync_len;
-> -	mode->vtotal =3D mode->vsync_end  + tv_mode->vback_porch;
-> -}
-> -
->  static void sun4i_tv_disable(struct drm_encoder *encoder,
->  			    struct drm_atomic_state *state)
->  {
-> @@ -356,7 +283,11 @@ static void sun4i_tv_enable(struct drm_encoder
-> *encoder, struct drm_crtc_state *crtc_state =3D
->  		drm_atomic_get_new_crtc_state(state, encoder->crtc);
->  	struct drm_display_mode *mode =3D &crtc_state->mode;
-> -	const struct tv_mode *tv_mode =3D sun4i_tv_find_tv_by_mode(mode);
-> +	struct drm_connector *connector =3D &tv->connector;
-> +	struct drm_connector_state *conn_state =3D
-> +		drm_atomic_get_new_connector_state(state, connector);
-> +	const struct tv_mode *tv_mode =3D
-> +		sun4i_tv_find_tv_by_mode(conn_state->tv.mode);
->=20
->  	DRM_DEBUG_DRIVER("Enabling the TV Output\n");
->=20
-> @@ -404,7 +335,7 @@ static void sun4i_tv_enable(struct drm_encoder *encod=
-er,
-> /* Set the lines setup */
->  	regmap_write(tv->regs, SUN4I_TVE_LINE_REG,
->  		     SUN4I_TVE_LINE_FIRST(22) |
-> -		     SUN4I_TVE_LINE_NUMBER(tv_mode->line_number));
-> +		     SUN4I_TVE_LINE_NUMBER(mode->vtotal));
->=20
->  	regmap_write(tv->regs, SUN4I_TVE_LEVEL_REG,
->  		     SUN4I_TVE_LEVEL_BLANK(tv_mode->video_levels-
->blank) |
-> @@ -467,35 +398,43 @@ static const struct drm_encoder_helper_funcs
-> sun4i_tv_helper_funcs =3D {
->=20
->  static int sun4i_tv_comp_get_modes(struct drm_connector *connector)
->  {
-> -	int i;
-> +	struct drm_display_mode *mode;
->=20
-> -	for (i =3D 0; i < ARRAY_SIZE(tv_modes); i++) {
-> -		struct drm_display_mode *mode;
-> -		const struct tv_mode *tv_mode =3D &tv_modes[i];
-> -
-> -		mode =3D drm_mode_create(connector->dev);
-> -		if (!mode) {
-> -			DRM_ERROR("Failed to create a new display=20
-mode\n");
-> -			return 0;
-> -		}
-> +	mode =3D drm_mode_analog_ntsc_480i(connector->dev);
-> +	if (!mode) {
-> +		DRM_ERROR("Failed to create a new display mode\n");
-> +		return -ENOMEM;
-> +	}
->=20
-> -		strcpy(mode->name, tv_mode->name);
-> +	mode->type |=3D DRM_MODE_TYPE_PREFERRED;
-> +	drm_mode_probed_add(connector, mode);
->=20
-> -		sun4i_tv_mode_to_drm_mode(tv_mode, mode);
-> -		drm_mode_probed_add(connector, mode);
-> +	mode =3D drm_mode_analog_pal_576i(connector->dev);
-> +	if (!mode) {
-> +		DRM_ERROR("Failed to create a new display mode\n");
-> +		return -ENOMEM;
->  	}
->=20
-> -	return i;
-> +	drm_mode_probed_add(connector, mode);
-> +
-> +	return 2;
->  }
->=20
->  static const struct drm_connector_helper_funcs
-> sun4i_tv_comp_connector_helper_funcs =3D { +	.atomic_check	=3D
-> drm_atomic_helper_connector_tv_check,
->  	.get_modes	=3D sun4i_tv_comp_get_modes,
->  };
->=20
-> +static void sun4i_tv_connector_reset(struct drm_connector *connector)
-> +{
-> +	drm_atomic_helper_connector_reset(connector);
-> +	drm_atomic_helper_connector_tv_reset(connector);
-> +}
-> +
->  static const struct drm_connector_funcs sun4i_tv_comp_connector_funcs =
-=3D {
->  	.fill_modes		=3D drm_helper_probe_single_connector_modes,
->  	.destroy		=3D drm_connector_cleanup,
-> -	.reset			=3D=20
-drm_atomic_helper_connector_reset,
-> +	.reset			=3D sun4i_tv_connector_reset,
->  	.atomic_duplicate_state	=3D=20
-drm_atomic_helper_connector_duplicate_state,
->  	.atomic_destroy_state	=3D=20
-drm_atomic_helper_connector_destroy_state,
->  };
-> @@ -587,8 +526,20 @@ static int sun4i_tv_bind(struct device *dev, struct
-> device *master,
->=20
->  	drm_connector_attach_encoder(&tv->connector, &tv->encoder);
->=20
-> +	ret =3D drm_mode_create_tv_properties(drm,
-> +					   =20
-BIT(DRM_MODE_TV_MODE_NTSC) |
-> +					   =20
-BIT(DRM_MODE_TV_MODE_PAL));
-> +	if (ret)
-> +		goto err_cleanup_connector;
-> +
-> +	drm_object_attach_property(&tv->connector.base,
-> +				   drm-
->mode_config.tv_mode_property,
-> +				   DRM_MODE_TV_MODE_NTSC);
-> +
->  	return 0;
->=20
-> +err_cleanup_connector:
-> +	drm_connector_cleanup(&tv->connector);
->  err_cleanup_encoder:
->  	drm_encoder_cleanup(&tv->encoder);
->  err_disable_clk:
->=20
-> --
-> b4 0.11.0-dev-7da52
+> > Best regards,
+> > Jernej
+> >=20
+> > > +       .disc_thresh =3D 3,
+> > > +       .phyctl_offset =3D REG_PHYCTL_A10,
+> > > +       .dedicated_clocks =3D true,
+> > > +};
+> > > +
+> > >  static const struct sun4i_usb_phy_cfg sun4i_a10_cfg =3D {
+> > >         .num_phys =3D 3,
+> > >         .type =3D sun4i_a10_phy,
+> > > @@ -988,6 +997,8 @@ static const struct of_device_id
+> > > sun4i_usb_phy_of_match[] =3D { { .compatible =3D
+> > > "allwinner,sun50i-a64-usb-phy",
+> > >           .data =3D &sun50i_a64_cfg},
+> > >         { .compatible =3D "allwinner,sun50i-h6-usb-phy", .data =3D
+> >=20
+> > &sun50i_h6_cfg },
+> >=20
+> > > +       { .compatible =3D "allwinner,suniv-f1c100s-usb-phy",
+> > > +         .data =3D &suniv_f1c100s_cfg },
+> > >         { },
+> > >  };
+> > >  MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
+> > > --
+> > > 2.37.1
 
 
