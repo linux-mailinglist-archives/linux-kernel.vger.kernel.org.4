@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E775FE04A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AA35FE046
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiJMSGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S231463AbiJMSGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbiJMSEV (ORCPT
+        with ESMTP id S231281AbiJMSD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:04:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA92915B323;
-        Thu, 13 Oct 2022 11:04:08 -0700 (PDT)
+        Thu, 13 Oct 2022 14:03:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB71157F68;
+        Thu, 13 Oct 2022 11:03:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DF6E61962;
-        Thu, 13 Oct 2022 18:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E80C433C1;
-        Thu, 13 Oct 2022 18:00:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07413B8204A;
+        Thu, 13 Oct 2022 17:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE40C433C1;
+        Thu, 13 Oct 2022 17:59:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684047;
-        bh=cUcTAyfiGD90tgpRNKHa/Zr0CnwqHXDM72pjPAcUCIM=;
+        s=korg; t=1665683981;
+        bh=AHNUl8UA0Xu7B/6vMkbigBdeVNdDURdugPOvYBgn3Dw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sATihKiy6LaoDCJTM0nAEMIux2MbymKHOSIks0ESIj+6ogW2aTrylONm8t8LJJl++
-         udKCJiSQNIwX7oMzqV9PuyuMBBFRjLoy501sUMD51ufK7xCjRCz4F0GzhL0yYMKgH4
-         87sDxOKX2Pspxysyr4VSbvGwrcDzb5CQkTQWOn8k=
+        b=ysZU41TOVqXAAC+vIeYahfOuaDlW9uBZt6IPDSAOz0JECZTNo8xr5GnbihNz+YQhM
+         jEf2HgjPK0JY5iqf3REVF/L9Myc5fzkbp5kg62H4Z/n9nk3FEiDDSiMmOZ3bimxsEU
+         DZu+WtbIuLZrMlY1FICMozUpUTO1m+36DF//15cg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 6.0 01/34] nilfs2: fix NULL pointer dereference at nilfs_bmap_lookup_at_level()
-Date:   Thu, 13 Oct 2022 19:52:39 +0200
-Message-Id: <20221013175146.547686275@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.19 08/33] random: clamp credited irq bits to maximum mixed
+Date:   Thu, 13 Oct 2022 19:52:40 +0200
+Message-Id: <20221013175145.515746744@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-References: <20221013175146.507746257@linuxfoundation.org>
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+References: <20221013175145.236739253@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,41 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 21a87d88c2253350e115029f14fe2a10a7e6c856 upstream.
+commit e78a802a7b4febf53f2a92842f494b01062d85a8 upstream.
 
-If the i_mode field in inode of metadata files is corrupted on disk, it
-can cause the initialization of bmap structure, which should have been
-called from nilfs_read_inode_common(), not to be called.  This causes a
-lockdep warning followed by a NULL pointer dereference at
-nilfs_bmap_lookup_at_level().
+Since the most that's mixed into the pool is sizeof(long)*2, don't
+credit more than that many bytes of entropy.
 
-This patch fixes these issues by adding a missing sanitiy check for the
-i_mode field of metadata file's inode.
-
-Link: https://lkml.kernel.org/r/20221002030804.29978-1-konishi.ryusuke@gmail.com
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: e3e33fc2ea7f ("random: do not use input pool from hard IRQs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nilfs2/inode.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nilfs2/inode.c
-+++ b/fs/nilfs2/inode.c
-@@ -440,6 +440,8 @@ int nilfs_read_inode_common(struct inode
- 	inode->i_atime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
- 	inode->i_ctime.tv_nsec = le32_to_cpu(raw_inode->i_ctime_nsec);
- 	inode->i_mtime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
-+	if (nilfs_is_metadata_file_inode(inode) && !S_ISREG(inode->i_mode))
-+		return -EIO; /* this inode is for metadata and corrupted */
- 	if (inode->i_nlink == 0)
- 		return -ESTALE; /* this inode is deleted */
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -989,7 +989,7 @@ static void mix_interrupt_randomness(str
+ 	local_irq_enable();
  
+ 	mix_pool_bytes(pool, sizeof(pool));
+-	credit_init_bits(max(1u, (count & U16_MAX) / 64));
++	credit_init_bits(clamp_t(unsigned int, (count & U16_MAX) / 64, 1, sizeof(pool) * 8));
+ 
+ 	memzero_explicit(pool, sizeof(pool));
+ }
 
 
