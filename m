@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C245FD804
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278145FD809
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJMLA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S229542AbiJMLE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiJMLAS (ORCPT
+        with ESMTP id S229437AbiJMLEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:00:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67160C9D;
-        Thu, 13 Oct 2022 04:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1kt3Nt1T71dSHeBMzhW3EUeOzPlxOUDZLoubcBCIwV8=; b=sGG1MCa6hZQMG59So6zoxk0b3y
-        MPNgF7h6vElznfKaZefWySoFCwCy9MeJvjGyqJKlUahKRcHH2zWU/HL5nmF49JHtKOoRdH5UPvHGr
-        V0fMjATm/E/JaTWiYG9IKXFxuWfy35cFuQS9WA/Fit2ixtVJFw1tkrzk0K0j+2I9P2S/+fE1fBJPy
-        zycy4+djRv7LW0h4qZjCl7e/IR2a2+QhB8GN1bCzdMohAsJxhtV7F5qmf1gfn0sPxJE4/AWk+v8QL
-        L/WNd0IEAK+Bblx2F1+phbZTCeBpt99TDmviSxSg587+4Y+g9HoMTT2IUu9Gx1kffFyCVRC26Fkhc
-        MdASJ0Bg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oivwR-006ekn-JJ; Thu, 13 Oct 2022 10:59:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0CC96300446;
-        Thu, 13 Oct 2022 12:59:50 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EB92B2BB8B0C7; Thu, 13 Oct 2022 12:59:49 +0200 (CEST)
-Date:   Thu, 13 Oct 2022 12:59:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, ndesaulniers@google.com,
-        srw@sladewatkins.net, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v2] perf: Rewrite core context handling
-Message-ID: <Y0fvpQEEl/tK6mJ5@hirez.programming.kicks-ass.net>
-References: <20221008062424.313-1-ravi.bangoria@amd.com>
- <Y0VTn0qLWd925etP@hirez.programming.kicks-ass.net>
- <ba47d079-6d97-0412-69a0-fa15999b5024@amd.com>
- <Y0V3kOWInrvCvVtk@hirez.programming.kicks-ass.net>
- <Y0WsRItHmfI5uaq3@hirez.programming.kicks-ass.net>
- <174fb540-ec18-eeca-191d-c02e1f1005d2@amd.com>
- <Y0awHa8oS5yal5M9@hirez.programming.kicks-ass.net>
- <Y0cn1xazYpNmqhRo@hirez.programming.kicks-ass.net>
- <99caec5f-dcdf-70c6-8909-11552ce42a20@amd.com>
+        Thu, 13 Oct 2022 07:04:20 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D69C10B785
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:04:19 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c20so1490517plc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 04:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NvbS/I8HlQoCFmjUFv0JtyT8eokdGYfA7wkL/lpFTWg=;
+        b=Ay0J5G8NHLTOS6rXjLmiS8l9zTWmvHczbyNjwYRvR1qHrImNmrH1jY3wMiBONvPwm7
+         7d61qgwf98/EqlwVd/mq+mqym9Goz9iqrqsVaezDsWE0Sljlcf7xwaCfGf4hUL/eN6ZW
+         uaj9TlPhDqmQaOXG3ZBWqgI3oiS7Fns5x968k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NvbS/I8HlQoCFmjUFv0JtyT8eokdGYfA7wkL/lpFTWg=;
+        b=jBgusorhBXkX8flwAjBBKLUSEnIKGzG+AWWBEmGFBrLqdbpuLmb/MzHmA1nY2iVV+z
+         0hOhs8GJpW80+lDdU9c3f6SS2CB5FYo7mJ1DxtelI+D/jMShMhuG6VnUIRy2h6UWjRkl
+         tm34kJtxaPStPOz08/vHwnJxMe46bIHH0shw6oFPM3PnHfmlftJ58EjbFA6FXubNC+KS
+         Fz8nMaHF6yc9D9cJbPotRj29zS+ASERsWeSYM9I6LenQI1tnvnvbUyEkStKCyU1OWKMu
+         6SS8WpMeHv8Gbl1rLLKyGsbWTGt0pk76mAwaPIJ6p/1ID9X+JdsFfSmEu5HdFr9/QGFI
+         wW+w==
+X-Gm-Message-State: ACrzQf23r1/5YofOKYNaDh+TLxdFPVlkWMdI6NTdDJH9UgJCXjqWrDEh
+        2afVSdy059o6ugBL+JbZZNkhNg==
+X-Google-Smtp-Source: AMsMyM6lUXvMM5tpyfSOIQtS1+CZpp68m5DYgKdzV5fiouCWtlb7eX/ojNAakZQwNCRsgJS2BE/c2Q==
+X-Received: by 2002:a17:90b:23c5:b0:20b:1cb4:2ca9 with SMTP id md5-20020a17090b23c500b0020b1cb42ca9mr10755124pjb.139.1665659058897;
+        Thu, 13 Oct 2022 04:04:18 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:4b90:18ed:8d41:7622])
+        by smtp.gmail.com with ESMTPSA id o11-20020a17090ab88b00b0020af2411721sm2914794pjr.34.2022.10.13.04.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 04:04:18 -0700 (PDT)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Pin-yen Lin <treapking@chromium.org>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Clean up it6505 driver and improve synchronization
+Date:   Thu, 13 Oct 2022 19:04:07 +0800
+Message-Id: <20221013110411.1674359-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99caec5f-dcdf-70c6-8909-11552ce42a20@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 03:37:23PM +0530, Ravi Bangoria wrote:
+The main purpose of this series is to improve the synchronizations of
+it6505 driver. The first two patches are required for the third one, but
+they alone can be clean ups to the driver.
 
-> > -	refcount_t			refcount;
-> > +	refcount_t			refcount; /* event <-> ctx */
-> 
-> Ok. We need to remove all those // XXX get/put_ctx() from code
-> which we added to make refcount a pmu_ctx <-> ctx.
+Changes in v2:
+- Remove redundant spaces in it6505_detect
+- Read sink count in it6505_irq_hpd
+- Add the empty line back
 
-Them already gone :-) I've not yet fixed up the typoes, but current
-version should be here:
+Pin-yen Lin (3):
+  drm/bridge: it6505: Initialize AUX channel in it6505_i2c_probe
+  drm/bridge: it6505: Setup links in it6505_irq_hpd
+  drm/bridge: it6505: Improve synchronization between extcon subsystem
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=perf/core
+ drivers/gpu/drm/bridge/ite-it6505.c | 106 +++++++++++++---------------
+ 1 file changed, 51 insertions(+), 55 deletions(-)
 
-Thanks!
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
