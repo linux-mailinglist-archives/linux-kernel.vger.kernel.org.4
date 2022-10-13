@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5E55FE38E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824FA5FE390
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 22:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJMUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 16:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S229888AbiJMUyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 16:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiJMUxd (ORCPT
+        with ESMTP id S229629AbiJMUyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 16:53:33 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663FB1757B2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:53:32 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id g28so3014021pfk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:53:32 -0700 (PDT)
+        Thu, 13 Oct 2022 16:54:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62AD175795
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:54:08 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id q10-20020a17090a304a00b0020b1d5f6975so2986856pjl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 13:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4r17VGc1y0KI+bsRJPcWxnYDIeONL0hh/0Ayx7wHqTQ=;
-        b=Q9B4O1ctEjN7cMG74XnwM0jKKYbnZlrj4HJMvK1b8AsU+QZn9QUqhC6KbwKlwHsD4X
-         1TjIAAcZA+LuPGpMXi+dt8PxUUV5SEVsrdU6njChdq2240vx92CX2NvfViUN0/YNJD+6
-         pIWcIvXrdPRTK4G3rHXvJp3S15M7JdgOdG9DzTK+/WhyG5D7N+/Ls8feRoQ9LdasENnm
-         4/0bYqXYJbp2Aud9Xs2jL842QvCPuVyUaJf4LeaU+1yAT+MrSqF7qmn9+c4tf4ECwibh
-         3JnJvNKUIU8eIzuBBgkYJzrUrbk2gR9WPL2TYaaviaGI5fiJUglRzZByWwcqIiFvXjpJ
-         P02A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GoFfFfDn3VQkpPm7uWehivLwKK9ykq+Mq5wgEF+ifbk=;
+        b=Tp9qi0TuTxLiRmZJ73P8Jqkz5cFz3/ZraH6x6b8QsdXVOf6tJ4xob/q5yBhG3kqenY
+         c/Dxlz2HSmhD+1ISeYTEjlw0e6LHvjCtbcKXEZ0jJrz0wqdDEmmC7GhKf9xSa0FDHnhZ
+         OMZ02jj3XG8hcZuSleqn7zMtYT729WnP6KvFJNtEuaE9FYt71fAwfUBYrSLcHMcjWjNa
+         LavgOyN5QbdnTuat00mf9C9ytjJ0hyHpsvkrms7qL2Zw1oBd3ICaYyB4LC+Aq+VZiJxG
+         dRMYW7nYNzhs2zEI1HKxloCJDfo1c2nkExyMYAgo2iJ1rysvwEVQ0PB6ZIzjjuIRy+oe
+         Eqhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4r17VGc1y0KI+bsRJPcWxnYDIeONL0hh/0Ayx7wHqTQ=;
-        b=bWxDZm944KgL8O/uA8hXjshsVQEfrTtj3phChP/4qI3ZMiEMrxXJokTv8n2xcNSxQN
-         /fJJAPjf8V/LuuYciOy3x9ziuiXpGx7SLpbrnSPL1LBXqxmpvUERG2O5m3Qb27a+nBrx
-         JogBII967qLlrZWHNMbGi1+Zu3nH899OlMRN6BJ5PR2gwcSU9Ynu+P/9e41sLkqU8W79
-         tRvOyNYXaS9m2lm1DEEhQNL9ynzTBJZ8VLQgg1zh6SNGiBu4GDt3COPjRh7EIZLxElHq
-         Z2zKhp/KyfCw9R3TUzO+dU3yO1ollY+frrK7TqmRzUsYx/aJdiDkkpAmGTm8noVmtwHb
-         vDvw==
-X-Gm-Message-State: ACrzQf2NiDADo5RshQybni9oXbsVgeAtr8GoY3VVqJGF01JfU9/HudQS
-        KLXa/lCHw7KYtyREEh9zfOHl2Q==
-X-Google-Smtp-Source: AMsMyM4F/9k8UYWTyBvmUTdMe8JQKDRWp680cP73rA9yvR46/Op9hloMq78n5nExLvTc7h696WznUA==
-X-Received: by 2002:a63:2bd4:0:b0:451:5df1:4b15 with SMTP id r203-20020a632bd4000000b004515df14b15mr1554887pgr.518.1665694411830;
-        Thu, 13 Oct 2022 13:53:31 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s22-20020a170902b19600b00172f6726d8esm246974plr.277.2022.10.13.13.53.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 13:53:30 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 20:53:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Like Xu <likexu@tencent.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 1/4] KVM: x86/pmu: Force reprogramming of all counters on
- PMU filter change
-Message-ID: <Y0h6x0ZJWYH56Z88@google.com>
-References: <20220923001355.3741194-1-seanjc@google.com>
- <20220923001355.3741194-2-seanjc@google.com>
- <86d88222-a70f-49ef-71f3-a7d15ae17d7d@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GoFfFfDn3VQkpPm7uWehivLwKK9ykq+Mq5wgEF+ifbk=;
+        b=ir/IWWGSa6wmjZQ6SyRba+xWqCr4Zu2VKn8ZW6ehJ0APzHXndlfL0c84wrDb+/YdCq
+         8xmAGHhS5Anwac2IsmlEeQ07vzcfD6xC1iMFBC8F6yy4iVU8TNVtjMvAqWvSYXaiJUNp
+         tK4pNK8PSi/IpDImlm85ixJaoC9m9E8772gMJW0B50DW5Ok5UfXLaiYtMve7rIYSOWSF
+         WnyZrH4+OF6Dsz8UK9XGh+aLllXXZjCrnRfIOkD1Kv7JtbqR3l/fhumev0MbrHdKdDyw
+         6ZFO8Ki2wEf3kuZ6ccWzFKf7SYF2aK8rQ3/wj/BS1ypWRNXYvlb82c9Fa7ezlNJ7L4nf
+         LekQ==
+X-Gm-Message-State: ACrzQf0zHOIV8qF+ylsFdmRR9PFWjvrRVpSym3UdtmCP2JjnC94qhV+I
+        tv5OF3D1yypxfe08KYCqenylw2pZrz/z+Lv9JGaYjg==
+X-Google-Smtp-Source: AMsMyM66I+rqXcc4prQlLIG+LwbinW4pY3ihokxrORiav1V7qXz9FmyouE/WnDWoPn8qucVCvDJ2Ko9xoTY3Yt42WV8=
+X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
+ t24-20020a170902b21800b00184710c8c52mr1632657plr.95.1665694448056; Thu, 13
+ Oct 2022 13:54:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86d88222-a70f-49ef-71f3-a7d15ae17d7d@gmail.com>
+References: <20221007203236.1750890-1-ndesaulniers@google.com>
+ <Y0htZDJoTuQegVQR@dev-arch.thelio-3990X> <20221013204151.skzateatn2keencb@google.com>
+In-Reply-To: <20221013204151.skzateatn2keencb@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 13 Oct 2022 13:53:56 -0700
+Message-ID: <CAKwvOdmoXLvfgEWx740mw+Uqy3nfPM=a7ywVeOJ5XivGT=yRog@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
+To:     Fangrui Song <maskray@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -78,53 +72,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022, Like Xu wrote:
-> Firstly, thanks for your comments that spewed out around vpmu.
-> 
-> On 23/9/2022 8:13 am, Sean Christopherson wrote:
-> > Force vCPUs to reprogram all counters on a PMU filter change to provide
-> > a sane ABI for userspace.  Use the existing KVM_REQ_PMU to do the
-> > programming, and take advantage of the fact that the reprogram_pmi bitmap
-> > fits in a u64 to set all bits in a single atomic update.  Note, setting
-> > the bitmap and making the request needs to be done _after_ the SRCU
-> > synchronization to ensure that vCPUs will reprogram using the new filter.
-> > 
-> > KVM's current "lazy" approach is confusing and non-deterministic.  It's
-> 
-> The resolute lazy approach was introduced in patch 03, right after this change.
+On Thu, Oct 13, 2022 at 1:41 PM Fangrui Song <maskray@google.com> wrote:
+>
+> On 2022-10-13, Nathan Chancellor wrote:
+> >On Fri, Oct 07, 2022 at 01:32:36PM -0700, Nick Desaulniers wrote:
+> >> When debugging LLVM IR, it can be handy for clang to not discard value
+> >> names used for local variables and parameters. Compare the generated IR.
+> >>
+> >> Implicit Default (-fdiscard-value-names):
+> >>   define i32 @core_sys_select(i32 %0, ptr %1, ptr %2, ptr %3, ptr %4) {
+> >>     %6 = alloca i64
+> >>     %7 = alloca %struct.poll_wqueues
+> >>     %8 = alloca [64 x i32]
+> >>
+> >> Explicit -fno-discard-value-names:
+> >>   define i32 @core_sys_select(i32 %n, ptr %inp, ptr %outp, ptr %exp,
+> >>                               ptr %end_time) {
+> >>     %expire.i = alloca i64
+> >>     %table.i = alloca %struct.poll_wqueues
+> >>     %stack_fds = alloca [64 x i32]
+> >>
+> >> The rule for generating human readable LLVM IR (.ll) is only useful as a
+> >> debugging feature:
+> >>
+> >> $ make LLVM=1 fs/select.ll
+> >>
+> >> Clang defaults to -fdiscard-value-names to save memory when generating
+> >> LLVM IR. For debugging purposes, the improvement in readability at a
+> >> cost of more verbose IR is a cost we're happy to pay.
+>
+> A LLVM_ENABLE_ASSEERTIONS=off build of Clang defaults to -fdiscard-value-names.
+>
+> A LLVM_ENABLE_ASSEERTIONS=on build of Clang defaults to -fno-discard-value-names.
+>
+> See clang/lib/Driver/ToolChains/Clang.cpp:5030
 
-This is referring to the lazy recognition of the filter, not the deferred
-reprogramming of the counters.  Regardless of whether reprogramming is handled
-via request or in-line, KVM is still lazily recognizing the new filter as vCPUs
-won't picke up the new filter until the _guest_ triggers a refresh.
+Thanks!
 
-> > @@ -613,9 +615,18 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
-> >   	mutex_lock(&kvm->lock);
-> >   	filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter,
-> >   				     mutex_is_locked(&kvm->lock));
-> > -	mutex_unlock(&kvm->lock);
-> > -
-> >   	synchronize_srcu_expedited(&kvm->srcu);
-> 
-> The relative order of these two operations has been reversed
-> 	mutex_unlock() and synchronize_srcu_expedited()
-> , extending the execution window of the critical area of "kvm->lock)".
-> The motivation is also not explicitly stated in the commit message.
+I thought I recalled this; I was literally just rereading through
+https://github.com/ClangBuiltLinux/linux/issues/1467#issuecomment-1046071624
+again to understand.
 
-I'll add a blurb, after I re-convince myself that the sync+request needs to be
-done under kvm->lock.
+That would be useful to include in the commit message, and is more
+precise than "Clang defaults to -fdiscard-value-names to save memory
+when generating LLVM IR."  Masahiro, would you mind including or
+replacing that, or shall I send a v2?
 
-> > +	BUILD_BUG_ON(sizeof(((struct kvm_pmu *)0)->reprogram_pmi) >
-> > +		     sizeof(((struct kvm_pmu *)0)->__reprogram_pmi));
-> > +
-> > +	kvm_for_each_vcpu(i, vcpu, kvm)
-> > +		atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi, -1ull);
-> 
-> How about:
-> 	bitmap_copy(pmu->reprogram_pmi, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX);
-> to avoid further cycles on calls of
-> "static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, bit)" ?
+I was surprised to find later in the day that I was running an
+assertions-disabled (ie. release) build of clang, which I almost never
+do!  Non-llvm-developers are more likely to be using release builds
+than assertions-enabled builds of llvm, so this patch still very much
+has merit.
 
-bitmap_copy() was my first choice too, but unfortunately it's doesn't guarantee
-atomicity and could lead to data corruption if the target vCPU is concurrently
-modifying the bitmap.
+>
+> >> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> >Thanks for the patch!
+> >
+> >Link: https://github.com/ClangBuiltLinux/linux/issues/1467
+> >Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Reviewed-by: Fangrui Song <maskray@google.com>
+>
+> >> ---
+> >>  scripts/Makefile.build | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> >> index 27be77c0d6d8..d0e4f476dfee 100644
+> >> --- a/scripts/Makefile.build
+> >> +++ b/scripts/Makefile.build
+> >> @@ -140,7 +140,7 @@ $(obj)/%.symtypes : $(src)/%.c FORCE
+> >>  # LLVM assembly
+> >>  # Generate .ll files from .c
+> >>  quiet_cmd_cc_ll_c = CC $(quiet_modtag)  $@
+> >> -      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -o $@ $<
+> >> +      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -fno-discard-value-names -o $@ $<
+> >>
+> >>  $(obj)/%.ll: $(src)/%.c FORCE
+> >>      $(call if_changed_dep,cc_ll_c)
+> >>
+> >> base-commit: 93ed07a23fd08b8613f64cf0a15d7fbdaca010fd
+> >> --
+> >> 2.38.0.rc2.412.g84df46c1b4-goog
+> >>
+> >
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
