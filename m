@@ -2,55 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917055FDFB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08F15FDF68
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiJMR5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S229775AbiJMRxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiJMR5L (ORCPT
+        with ESMTP id S229826AbiJMRx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:57:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A02B15B125;
-        Thu, 13 Oct 2022 10:55:44 -0700 (PDT)
+        Thu, 13 Oct 2022 13:53:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2009915201B;
+        Thu, 13 Oct 2022 10:53:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A2361902;
-        Thu, 13 Oct 2022 17:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BD2C433C1;
-        Thu, 13 Oct 2022 17:54:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B7597CE22CB;
+        Thu, 13 Oct 2022 17:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A81C433C1;
+        Thu, 13 Oct 2022 17:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683678;
-        bh=QK+ufwlRBWl6ehYKJV4TG8Q8jxr+5/srJj3QzUt1L9s=;
+        s=korg; t=1665683588;
+        bh=gtlsmRQIxOF1aD70zk6aG8lbdASWebPDvTW22e+qgeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KwepaxdlZpQvaKlXVxCUWTYXZYVCuY9t+aJ6mLR5Gjz8Bh5syQRTWhzrmytmdDHhJ
-         GTllm7L0dkwiCMGVO5Iw75WKBbELyWDIT7CYr/RfkM9pOVFzQMtoDJO7SJz9SHdXPl
-         MWisDow5IvSqrQPWCI7tjlJWsKGfHxh2NwaP9TV4=
+        b=0rX8uIQAomkhDJWF59utteLTetuUjGlWPL5pRhiuLu9ef9R2cy3fpCKkGQSxY1TZe
+         xxFPEO9HlsPTzmWHi8ipYo+9zV9hGyZKi3d+gytOPSf1GjmE29mpa6Yvx0Czkj9X5s
+         B06ykDuvzqFpusSKK5y4qTCpA0Ih7a4DBcvBG04s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 12/54] powerpc/64s/radix: dont need to broadcast IPI for radix pmd collapse flush
-Date:   Thu, 13 Oct 2022 19:52:06 +0200
-Message-Id: <20221013175147.666153921@linuxfoundation.org>
+        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 06/38] dmaengine: xilinx_dma: Report error in case of dma_set_mask_and_coherent API failure
+Date:   Thu, 13 Oct 2022 19:52:07 +0200
+Message-Id: <20221013175144.477698452@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
-References: <20221013175147.337501757@linuxfoundation.org>
+In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
+References: <20221013175144.245431424@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,55 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Shi <shy828301@gmail.com>
+From: Swati Agarwal <swati.agarwal@xilinx.com>
 
-commit bedf03416913d88c796288f9dca109a53608c745 upstream.
+[ Upstream commit 8f2b6bc79c32f0fa60df000ae387a790ec80eae9 ]
 
-The IPI broadcast is used to serialize against fast-GUP, but fast-GUP will
-move to use RCU instead of disabling local interrupts in fast-GUP.  Using
-an IPI is the old-styled way of serializing against fast-GUP although it
-still works as expected now.
+The driver does not handle the failure case while calling
+dma_set_mask_and_coherent API.
 
-And fast-GUP now fixed the potential race with THP collapse by checking
-whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
-flush is not necessary anymore.  But it is still needed for hash TLB.
+In case of failure, capture the return value of API and then report an
+error.
 
-Link: https://lkml.kernel.org/r/20220907180144.555485-2-shy828301@gmail.com
-Suggested-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Peter Xu <peterx@redhat.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Addresses-coverity: Unchecked return value (CHECKED_RETURN)
+
+Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Link: https://lore.kernel.org/r/20220817061125.4720-4-swati.agarwal@xilinx.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/book3s64/radix_pgtable.c |    9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/dma/xilinx/xilinx_dma.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-+++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-@@ -997,15 +997,6 @@ pmd_t radix__pmdp_collapse_flush(struct
- 	pmd = *pmdp;
- 	pmd_clear(pmdp);
+diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
+index 792776c86ee8..3bb711e735ab 100644
+--- a/drivers/dma/xilinx/xilinx_dma.c
++++ b/drivers/dma/xilinx/xilinx_dma.c
+@@ -2703,7 +2703,11 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+ 		xdev->ext_addr = false;
  
--	/*
--	 * pmdp collapse_flush need to ensure that there are no parallel gup
--	 * walk after this call. This is needed so that we can have stable
--	 * page ref count when collapsing a page. We don't allow a collapse page
--	 * if we have gup taken on the page. We can ensure that by sending IPI
--	 * because gup walk happens with IRQ disabled.
--	 */
--	serialize_against_pte_lookup(vma->vm_mm);
--
- 	radix__flush_tlb_collapsed_pmd(vma->vm_mm, address);
+ 	/* Set the dma mask bits */
+-	dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
++	err = dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
++	if (err < 0) {
++		dev_err(xdev->dev, "DMA mask error %d\n", err);
++		goto disable_clks;
++	}
  
- 	return pmd;
+ 	/* Initialize the DMA engine */
+ 	xdev->common.dev = &pdev->dev;
+-- 
+2.35.1
+
 
 
