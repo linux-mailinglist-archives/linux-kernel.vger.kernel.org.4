@@ -2,178 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACA15FDF15
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1135FDF18
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJMRez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S229748AbiJMRfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 13:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJMRew (ORCPT
+        with ESMTP id S229651AbiJMRex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:34:52 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C3712AD9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:34:46 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o17-20020a17090aac1100b0020d98b0c0f4so4185181pjq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 10:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i39DpSGkp8A10ysnMtqm1kXI7Ca0HoR3xGRlSs67Fps=;
-        b=YXn81mHbG8xm3NTs9AYPyPRj1ew4NX+TAeYudXTmcMoYjS8v3ilqkOEaW2ZudxtAkf
-         7Rm/34/MOhb4m1mWFeX1ijinGozag51xfloGfyD6oyyq0d0OoroQVAGKTgryBSouOKq3
-         /QJk5tb6peghBnxESaMWagIj+UWvHoh3wgxdRD2tE5Ji0eehu69uW7oGsEfPJHuyDJOd
-         okrTxt8qypBAQNkZ0Sy7nYYXJWEXle/fBqysIQNlODa0r9RyvrOAUWn36Eko5RTNrE8d
-         HPs+abmE2pKf0lGi5fWH2rN9sXcSBBX76zsZNYx6t5qQqmojSmSdJo6zHSIp+7xFdCKM
-         2/3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i39DpSGkp8A10ysnMtqm1kXI7Ca0HoR3xGRlSs67Fps=;
-        b=eF+YZ7f2s8HknqvXY5vppH41DLKkXXDTvpF9ci4RVk7F2Olewqrmm8ATkPuDN0nuNc
-         oHY8AFOGqakisCNLOHp8NtUnCVrUO7KqxrzQdi3L+oV56DQg/Awd6+YWJpYXGrRPjGaQ
-         sBKdIRmlNPWYi/V2iGOndNaUNMMJpowHs3KYvtgjAzKYsBibFwMxvqp/qj2YflMuLcOB
-         pVVfjshpJRsxxPfyVp/U9J5VXzTitdqPKoy5Zp+AVOC3DknldtATxDRx8Ov9O0VhPJAA
-         gVO/geelJSxOkIJkphJTyORqQfkeGfA4sLpnOxptTasvGNPXeJEXjUtDfC/9UAVqViQh
-         7YvA==
-X-Gm-Message-State: ACrzQf2qIfp3sDzxRIWFVi5yjt73cFLr7JfMcQOlh6RP1Ly3loa+xcWk
-        LJuwmkxbyAINXhf7A+ykImhWQA==
-X-Google-Smtp-Source: AMsMyM7nPsJ/hGKbjnknq8Z3lBs2WUWdwKBt5mW827Ilx/KIiaVgnOCY9zxfPvvaGzpHRx5M+QDNOQ==
-X-Received: by 2002:a17:90b:1e0b:b0:20d:85ca:b50e with SMTP id pg11-20020a17090b1e0b00b0020d85cab50emr12120186pjb.82.1665682485835;
-        Thu, 13 Oct 2022 10:34:45 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id e2-20020a17090ab38200b0020aaa678098sm44499pjr.49.2022.10.13.10.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 10:34:44 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 11:34:42 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
-Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_clew@quicinc.com
-Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
-Message-ID: <20221013173442.GA1279972@p14s>
-References: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
- <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
- <20221012204344.GA1178915@p14s>
- <792f05fc-995e-9a87-ab7d-bee03f15bc79@quicinc.com>
+        Thu, 13 Oct 2022 13:34:53 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941AC14D3D;
+        Thu, 13 Oct 2022 10:34:49 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C73EA3200926;
+        Thu, 13 Oct 2022 13:34:47 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 13 Oct 2022 13:34:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665682487; x=1665768887; bh=DsLRBe3Kqg
+        11qxqyD8iEafKn/j01pfzBRrrJqScyfLo=; b=f7SZBH7WjhSQGZCuMHebwkT2sd
+        +viFn0CR3SIjXI2JL5ZQkUqV72KbP8lssa0nGl9NnHFp3u8dM930zmbj+k1EKXGT
+        dmyWSUG4ThZuPjlJzsmMhWssQ/vk336zYPL3SGF8Bp7sntMNHw3Ra/VplQWA/ya8
+        OKnug9TsNQ7E2PIb6gsn+kN/4HXcnz4b51MJcU3dkshI5SZPtiJEGDmZZlcVi/t6
+        eAf0w6otCS9bbAl3cs6kSBJqxwMVNMW8utR3tWMkT8cyla2zeMjuYBTHhA9LEvmy
+        lsUzNHN3yTXwi7wocJ7n5OeJgSLf2fkm5/wu49LM3w6BF5QZ49mFbE7EtW/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665682487; x=1665768887; bh=DsLRBe3Kqg11qxqyD8iEafKn/j01
+        pfzBRrrJqScyfLo=; b=L76Ve5FJL9Iz4Zy1s4a7laS8w+dlLAmgusGwE5w5DYvV
+        2XGZQabRX9k2/MsXSvu/J2Jp0UZcTvJcVcD2pFibsv8AfptxG+CzLmYPouydKWtm
+        Sw3rXl/TJAIAnTgEE9Hz7UYJ7MdKnIGC0/sHeWMyu/Ut8L8RPE4TMd91QnIxQn4l
+        cJ6G9095f3wEOWX1U9xYDB+HAOnSmMUCX72fd73OEVbAYXqCDKy51IphGcyvOjpa
+        JqOEdx9+lGEs1RZZHxO8+DlvnHjDLh6b0KXwNh9TT0DaaHvnTn3MQaoFNMtSJswY
+        sPsAUN5uEoEWtsM4hs3TjaXDtiOTwcqIdU6d+AkBFA==
+X-ME-Sender: <xms:NkxIYz1JAXnchSoQ40X737hlRnuXoNfxof9Q4CtPc8BjK0pf1PcEpQ>
+    <xme:NkxIYyEZi1_PbHefB_3ZLGDU7N94iA7oP-3F2ygeHHcnIVL12Qf-i0-DEBbRo6iJK
+    mjvq__qyxPMeAgMwA>
+X-ME-Received: <xmr:NkxIYz6xmWbheEiUBU1cQbfkZD6HSj4KAtfwr5vnikiWEeWBGRoLmN9Nesunp2js4s9fOEMkMyDXjIa5>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredt
+    tddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpeffffdvfefhudfhfeejjedvieduiefgvdfghfejkeehueeu
+    hfdvieeftdeugfffhfenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdr
+    giihii
+X-ME-Proxy: <xmx:NkxIY42XuTKWSZPHKVCQDb6xQaYhp_x6WhDTrjBTHll6i_UoFT-qAw>
+    <xmx:NkxIY2H5bY_aJ91LAFSvfx0au0buKEIf3AXPLGAD312EnB2WbBUZ1g>
+    <xmx:NkxIY5_wMmQnIQh6eLuK0z_ECfmqVZjhi8bgaHlQfRSVdjbs4UhXog>
+    <xmx:N0xIY5C1R_0VE1OGECV3gCtROmkpxajr9K8vkdh2Fn_H255jVCFhSw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Oct 2022 13:34:46 -0400 (EDT)
+Date:   Thu, 13 Oct 2022 11:34:48 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     pablo@netfilter.org, fw@strlen.de, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        bpf@vger.kernel.org, memxor@gmail.com
+Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: Add connmark read test
+Message-ID: <20221013173448.aprptjs5qq777342@k2>
+References: <cover.1660254747.git.dxu@dxuuu.xyz>
+ <d3bc620a491e4c626c20d80631063922cbe13e2b.1660254747.git.dxu@dxuuu.xyz>
+ <43bf4a5f-dac9-4fe9-1eba-9ab9beb650aa@linux.dev>
+ <20221012220953.i2xevhu36kxyxscl@k2>
+ <16bcda3b-989e-eadf-b6c3-803470b0afd6@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <792f05fc-995e-9a87-ab7d-bee03f15bc79@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <16bcda3b-989e-eadf-b6c3-803470b0afd6@linux.dev>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
-> Hi Mathieu,
-> 
-> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
-> > Please add what has changed from one version to another, either in a cover
-> > letter or after the "Signed-off-by".  There are many examples on how to do that
-> > on the mailing list.
+On Wed, Oct 12, 2022 at 03:20:01PM -0700, Martin KaFai Lau wrote:
+> On 10/12/22 3:09 PM, Daniel Xu wrote:
+> > Hi Martin,
 > > 
-> Thx for the information, will take a note and benefit for next time.
-> 
-> > On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
-> > > RPROC_OFFLINE state indicate there is no recovery process
-> > > is in progress and no chance to do the pm_relax.
-> > > Because when recovering from crash, rproc->lock is held and
-> > > state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
-> > > and then unlock rproc->lock.
-> > 
-> > You are correct - because the lock is held rproc->state should be set to RPROC_RUNNING
-> > when rproc_trigger_recovery() returns.  If that is not the case then something
-> > went wrong.
-> > 
-> > Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before returning,
-> > so we know the remote processor was stopped.  Therefore if rproc->state is set
-> > to RPROC_OFFLINE something went wrong in either request_firmware() or
-> > rproc_start().  Either way the remote processor is offline and the system probably
-> > in an unknown/unstable.  As such I don't see how calling pm_relax() can help
-> > things along.
-> > 
-> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
-> finished.
-> Even if it is multi crash rproc_crash_handler_work contention issue, and
-> last rproc_trigger_recovery bailed out with only
-> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
-> Since the subsystem may still can be recovered with customer's next trigger
-> of rproc_start, and we can make each error out path clean with pm resources.
-> 
-> > I suggest spending time understanding what leads to the failure when recovering
-> > from a crash and address that problem(s).
-> > 
-> In current case, the customer's information is that the issue happened when
-> rproc_shutdown is triggered at similar time. So not an issue from error out
-> of rproc_trigger_recovery.
-
-That is a very important element to consider and should have been mentioned from
-the beginning.  What I see happening is the following:
-
-rproc_report_crash()
-        pm_stay_awake()
-        queue_work() // current thread is suspended
-
-rproc_shutdown()
-        rproc_stop()
-                rproc->state = RPROC_OFFLINE;
-
-rproc_crash_handler_work()
-        if (rproc->state == RPROC_OFFLINE)
-                return // pm_relax() is not called
-
-The right way to fix this is to add a pm_relax() in rproc_shutdown() and
-rproc_detach(), along with a very descriptive comment as to why it is needed.
-
-
-> > Thanks,
-> > Mathieu
-> > 
-> > 
-> > > When the state is in RPROC_OFFLINE it means separate request
-> > > of rproc_stop was done and no need to hold the wakeup source
-> > > in crash handler to recover any more.
+> > On Tue, Oct 11, 2022 at 10:49:32PM -0700, Martin KaFai Lau wrote:
+> > > On 8/11/22 2:55 PM, Daniel Xu wrote:
+> > > > Test that the prog can read from the connection mark. This test is nice
+> > > > because it ensures progs can interact with netfilter subsystem
+> > > > correctly.
+> > > > 
+> > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > > ---
+> > > >    tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
+> > > >    tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
+> > > >    2 files changed, 5 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> > > > index 88a2c0bdefec..544bf90ac2a7 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> > > > @@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
+> > > >    static void test_bpf_nf_ct(int mode)
+> > > >    {
+> > > > -	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
+> > > > +	const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
+> > > Hi Daniel Xu, this test starts failing recently in CI [0]:
 > > > 
-> > > Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
-> > > ---
-> > >   drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
-> > >   1 file changed, 11 insertions(+)
+> > > Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> > > Invalid argument
 > > > 
-> > > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> > > index e5279ed9a8d7..6bc7b8b7d01e 100644
-> > > --- a/drivers/remoteproc/remoteproc_core.c
-> > > +++ b/drivers/remoteproc/remoteproc_core.c
-> > > @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct work_struct *work)
-> > >   	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
-> > >   		/* handle only the first crash detected */
-> > >   		mutex_unlock(&rproc->lock);
-> > > +		/*
-> > > +		 * RPROC_OFFLINE state indicate there is no recovery process
-> > > +		 * is in progress and no chance to have pm_relax in place.
-> > > +		 * Because when recovering from crash, rproc->lock is held and
-> > > +		 * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
-> > > +		 * and then unlock rproc->lock.
-> > > +		 * RPROC_OFFLINE is only an intermediate state in recovery
-> > > +		 * process.
-> > > +		 */
-> > > +		if (rproc->state == RPROC_OFFLINE)
-> > > +			pm_relax(rproc->dev.parent);
-> > >   		return;
-> > >   	}
-> > > -- 
-> > > 2.7.4
+> > >    Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> > > Invalid argument
 > > > 
+> > >    Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> > > Invalid argument
+> > > 
+> > >    Warning: Extension CONNMARK revision 0 not supported, missing kernel module?
+> > >    iptables v1.8.8 (nf_tables): Could not fetch rule set generation id:
+> > > Invalid argument
+> > > 
+> > >    test_bpf_nf_ct:PASS:test_bpf_nf__open_and_load 0 nsec
+> > >    test_bpf_nf_ct:FAIL:iptables unexpected error: 1024 (errno 0)
+> > > 
+> > > Could you help to take a look? Thanks.
+> > > 
+> > > [0]: https://github.com/kernel-patches/bpf/actions/runs/3231598391/jobs/5291529292
+> > 
+> > [...]
+> > 
+> > Thanks for letting me know. I took a quick look and it seems that
+> > synproxy selftest is also failing:
+> > 
+> >      2022-10-12T03:14:20.2007627Z test_synproxy:FAIL:iptables -t raw -I PREROUTING      -i tmp1 -p tcp -m tcp --syn --dport 8080 -j CT --notrack unexpected error: 1024 (errno 2)
+> > 
+> > Googling the "Could not fetch rule set generation id" yields a lot of
+> > hits. Most of the links are from downstream projects recommending user
+> > downgrade iptables (nftables) to iptables-legacy.
 > 
+> Thanks for looking into it!  We have been debugging a bit today also.  I
+> also think iptables-legacy is the one to use.  I posted a patch [0].  Let
+> see how the CI goes.
 > 
-> -- 
-> Thx and BRs,
-> Aiqun(Maria) Yu
+> The rules that the selftest used is not a lot.  I wonder what it takes to
+> remove the iptables command usage from the selftest?
+
+At least the conntrack mark stuff, it would've been easier to write the
+selftests _without_ iptables. But I thought it was both good and
+necessary to test interop between BPF and netfilter. B/c that is
+what the user is doing (at least for me).
+
+However if it's causing maintenance trouble, I'll leave that call to
+you.
+
+Thanks,
+Daniel
