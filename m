@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C866C5FE09C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4FE5FE0EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiJMSMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
+        id S231857AbiJMSQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiJMSLP (ORCPT
+        with ESMTP id S232255AbiJMSOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:11:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12546152C4D;
-        Thu, 13 Oct 2022 11:08:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30948618CF;
-        Thu, 13 Oct 2022 17:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC1AC433D7;
-        Thu, 13 Oct 2022 17:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665683797;
-        bh=3BQqcau0mTJ2WJ8I+0RhdaTW9TR9ahxBYKkS/ywxSgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e60sYZxotFftMrl0lGwyZqUrma4ZcaZ7Da3q+ZuQJkwrPNR1vSDmHJowHhpeXiWsw
-         p/psL85p3HjyhpXaV2SIUPHAgL4of/Z1egpTe3Ky1ufRM1A+hy22972zOgny3OBkpn
-         HrQstIfKQCh631cbGyHMzPvIWse5I/tpbXb2GCu1tgNiQezK2efwe0xnE9zjGndVF4
-         q4bugui5ZeK6VurFAjDvSU+JQ9manSHb4jx69p2+N47EP4hV6vQPgxKHC2T9iZ+2vq
-         aYm7t/Yg69tOsecRwKM8OKgC7r1TmXzY/kVjT7t1fifjdwDq0cpf4vFJT8XBDqabwn
-         RmNxE8FFByL5A==
-Date:   Thu, 13 Oct 2022 13:56:36 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     dsterba@suse.cz, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>, clm@fb.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.0 38/46] btrfs: introduce
- BTRFS_QGROUP_RUNTIME_FLAG_CANCEL_RESCAN
-Message-ID: <Y0hRVO+l3oSPlJd6@sashalap>
-References: <20221011145015.1622882-1-sashal@kernel.org>
- <20221011145015.1622882-38-sashal@kernel.org>
- <20221012125648.GX13389@suse.cz>
- <7cf55e21-4d68-8371-a4a5-08cd8278bcf9@gmx.com>
+        Thu, 13 Oct 2022 14:14:32 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20625.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::625])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25897183E18;
+        Thu, 13 Oct 2022 11:11:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C+B8mGHrnK7sgVjwojKYx+9RftbZ2x+CutbJvNpo1MEaVDJaPzKy1hrA27EVgZBfGLLMzgf5MmP/ruer4QDbQDU95X1Mvm23cMOUCx+8Evg9L0Mk1awFL2LBtDO/KVl+QLw6qdHXZzZ973/nPGnoat76GOK10KWL1FqV9Na2SU9EUkPIM+CS0qw+RCBuDDmVvVPbwGwLv1YFNz7/rXUNA0A/zmmJu35DxfKEnBodSfjjhISZne/qPT52F7UtBwDay/DtY/fdXRM1KBwfihCCaEKiei/5NIn55s1Cs1yQxZHfgfgg09XL0yxMa0WrRGfILBiGqNRKEuIr047/awLbXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i1gjqg7L4/2RxWainXFQrd7fIoFu1Cqs2UbwwWuBGRQ=;
+ b=O/72saJ+hnqQ/JPxmC6gNKhf3h7I6DwInvL1dfUiBOchrJocwDsj87LZ/tQlRgkw16AIeE9DTw5jKbyFCaClLKJHsymGgpdIj1DsgX3NIsfJXeWaom+ZXqCt1KF/E3W5HKZHpsA/eV4D8OzDbcaxUmFw9jjef/UnC/aF4CXy3bjxbzfT7zVXEFhoEGk71od72PyRla7ogURRc2jFjdpe1VqX7NYn3zLogv67uaSD75Q5XlHkaFXTU+xBa+aV6duTVJ4UPAnxM/Bn4K/YF1FzfA4j1WMNjvMtn7R0+/D7yVg3rNbgJ2yTj2A/IGGbcdwZac03RMGC8y9xuisQAC0NzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i1gjqg7L4/2RxWainXFQrd7fIoFu1Cqs2UbwwWuBGRQ=;
+ b=nqEyd3sLdhdbeH7bwBzFK4f/TON9ZAgaPUwzdMUB7CkRv6Ohlrh2NeNW5aqWD2jvGQObEf2LeGHSjQW/tenYnHWsLl1tRrXKRWOc7JwFNkL7flZoDinfPGjaS0VwT6SbdSiZNILkg2yAeb6xedClsF0AkukeN9VSzVuhZ/ElYb+1FHUcmZ9QfZPJuiMTr9PoUSXpgl3DhOKDEwNTomvelZelkhnwgpHQze/E0VortZCu3TXgSrbTB88/WA9Ixim7y94EHEMkrLUaNTsNs5Hw/WlBseczcb0gzcOsj/Nb6M1hNfl2WT6HbObt4gywOCwfoEiLt/bWVvi1D8s2B7vy9g==
+Received: from MW4P223CA0023.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::28)
+ by CH0PR12MB5297.namprd12.prod.outlook.com (2603:10b6:610:d4::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
+ 2022 17:57:39 +0000
+Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:80:cafe::55) by MW4P223CA0023.outlook.office365.com
+ (2603:10b6:303:80::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26 via Frontend
+ Transport; Thu, 13 Oct 2022 17:57:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Thu, 13 Oct 2022 17:57:38 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Thu, 13 Oct
+ 2022 10:57:19 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 13 Oct
+ 2022 10:57:19 -0700
+Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Thu, 13 Oct 2022 10:57:14 -0700
+From:   Vidya Sagar <vidyas@nvidia.com>
+To:     <jingoohan1@gmail.com>, <gustavo.pimentel@synopsys.com>,
+        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <mani@kernel.org>,
+        <Sergey.Semin@baikalelectronics.ru>, <dmitry.baryshkov@linaro.org>,
+        <linmq006@gmail.com>, <ffclaire1224@gmail.com>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kthota@nvidia.com>,
+        <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>, <sagar.tv@gmail.com>
+Subject: [PATCH V5 0/3] PCI: designware-ep: Fix DBI access before core init
+Date:   Thu, 13 Oct 2022 23:27:09 +0530
+Message-ID: <20221013175712.7539-1-vidyas@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <7cf55e21-4d68-8371-a4a5-08cd8278bcf9@gmx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT016:EE_|CH0PR12MB5297:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96c065dd-d0db-49ba-8df6-08daad446b06
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AYXrHcBCB01dtAPZCwCMcqfHLvNXSt2A5pBKn1hDhmapm7HXpjV/1V7mhDw61GjpamG5Df21DZOuL2e4AIBp+EWjaOZKpvYwmgBas3eRl7e5HCTa55tZru9/GjeDm/fJa5MPW6AgxZMSbzi7iERbXSPI5OwlOzAJ5v1utfuElqiUH8Sq36gUmoeEcjML1z+yitI/vQbaRFZ3WfCpCEAHI2MUh7ObxHE3jganaxECC23Yh6rtJpGlP3QplBg+f/8PfpkckHdPQFmB/az/11kdDgJ6soCuiHkH+emvcxVijf/O1pImnUMzYNfO4dXJI+VMBkfolXE1uLcGz44VvgP/urwa0QWPo/TESLnX2QDOEpMQQ3OLudKB7Qe35vxQuRCLgHQ4wRSJh6mtxtFyqAKYYsakUZ/yfttLYWVuYvKsJ5SgKLg2zYriz61MzNiRX6mj2Y3f6+Ulf5cTLrSePNNnH5nl103LBaRQPZR5soBRqPPQ88OP3rnETOTfhY5jBXq+vr6LXOXdTayDIPbFhOLpl6idhzwmkwsltE4laAKnNrwbjQpY0WLTaHTpVRz++vhoIEIyN7iTDgAUeYxrNsVXb9I8g1GZNjYFddmzt2FPS/ZserY8A2BhzLjf7084qByl/0fzhU+dEOsIvL/6w939Ycc0a09thPP0+gVYzaG6Urd2BN4GVPxljwJyL0dT7ioZ3Xyssjaz8VPzd4nTCGd7LDTAA+aT2g1wr3piiLlmh4MmUIyAQfgK+QjbReA6XIOk1K6bthQJSchCwYLAhBk81wFtRRPKN29mZCIKA/GPf88=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199015)(46966006)(40470700004)(36840700001)(82740400003)(6666004)(316002)(40480700001)(36756003)(356005)(7636003)(83380400001)(70586007)(70206006)(4326008)(8676002)(426003)(47076005)(40460700003)(7696005)(921005)(82310400005)(36860700001)(336012)(8936002)(2616005)(110136005)(7416002)(26005)(54906003)(41300700001)(478600001)(186003)(5660300002)(1076003)(86362001)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 17:57:38.9444
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96c065dd-d0db-49ba-8df6-08daad446b06
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5297
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 07:12:10AM +0800, Qu Wenruo wrote:
->
->
->On 2022/10/12 20:56, David Sterba wrote:
->>On Tue, Oct 11, 2022 at 10:50:06AM -0400, Sasha Levin wrote:
->>>From: Qu Wenruo <wqu@suse.com>
->>>
->>>[ Upstream commit e562a8bdf652b010ce2525bcf15d145c9d3932bf ]
->>>
->>>Introduce a new runtime flag, BTRFS_QGROUP_RUNTIME_FLAG_CANCEL_RESCAN,
->>>which will inform qgroup rescan to cancel its work asynchronously.
->>>
->>>This is to address the window when an operation makes qgroup numbers
->>>inconsistent (like qgroup inheriting) while a qgroup rescan is running.
->>>
->>>In that case, qgroup inconsistent flag will be cleared when qgroup
->>>rescan finishes.
->>>But we changed the ownership of some extents, which means the rescan is
->>>already meaningless, and the qgroup inconsistent flag should not be
->>>cleared.
->>>
->>>With the new flag, each time we set INCONSISTENT flag, we also set this
->>>new flag to inform any running qgroup rescan to exit immediately, and
->>>leaving the INCONSISTENT flag there.
->>>
->>>The new runtime flag can only be cleared when a new rescan is started.
->>
->>Qu, does this patch make sense for stable on itself? It was part of a
->>series adding some new flags and the sysfs knob.  As I read it there's a
->>case where it can affect how the rescan is done and that it can be
->>cancelled but still am not sure if it's worth the backport.
->
->Considering the qgroup still lacks a way to handle large subvolume drop,
->and a lot of things can mark qgroup inconsistent halfway, I think
->backporting this patch itself is not that bad.
->
->The problem is, why only backporting this one?
->
->To me, it would make more sense to backport either all or none.
->
->Sure, if we can cancel rescan it's an improvement, but rescan itself is
->already relatively cheap compared to other qgroup operations.
->Thus I prefer to backport all the qgroup patches.
+This series attempts to fix the issue with core register (Ex:- DBI) accesses
+causing system hang issues in platforms where there is a dependency on the
+availability of PCIe Reference clock from the host for their core
+initialization.
+This series is verified on Tegra194 & Tegra234 platforms.
 
-I'll drop this one and happily take a series if you want to send one
-out.
+Manivannan, could you please verify on qcom platforms?
+
+V5:
+* Addressed review comments from Bjorn
+* Changed dw_pcie_ep_init_complete() to dw_pcie_ep_init_late()
+* Skipped memory allocation if done already. This is to avoid freeing and then
+  allocating again during PERST# toggles from the host.
+
+V4:
+* Addressed review comments from Bjorn and Manivannan
+* Added .ep_init_late() ops
+* Added patches to refactor code in qcom and tegra platforms
+
+Vidya Sagar (3):
+  PCI: designware-ep: Fix DBI access before core init
+  PCI: qcom-ep: Refactor EP initialization completion
+  PCI: tegra194: Refactor EP initialization completion
+
+ .../pci/controller/dwc/pcie-designware-ep.c   | 125 +++++++++++-------
+ drivers/pci/controller/dwc/pcie-designware.h  |  10 +-
+ drivers/pci/controller/dwc/pcie-qcom-ep.c     |  27 ++--
+ drivers/pci/controller/dwc/pcie-tegra194.c    |   4 +-
+ 4 files changed, 97 insertions(+), 69 deletions(-)
 
 -- 
-Thanks,
-Sasha
+2.17.1
+
