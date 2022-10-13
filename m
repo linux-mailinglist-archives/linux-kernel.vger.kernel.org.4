@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01AF5FD3EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EAD5FD3F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiJMEqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S229548AbiJMEth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 00:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJMEqm (ORCPT
+        with ESMTP id S229487AbiJMEte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:46:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F98BF1932;
-        Wed, 12 Oct 2022 21:46:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08B27B81C22;
-        Thu, 13 Oct 2022 04:46:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50757C433D7;
-        Thu, 13 Oct 2022 04:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665636398;
-        bh=pGayVfPonl3TOVCWnaUNxoqRflw7kK3LilXAze3Di2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OfWnBTzxrMhAL5pZu1woysiViYJ7xSmiHXD4iRbuQiKNy3CUFbTJZmGyFUHIqG6VT
-         dQVNW63Kb54peCNAvKBJM0WJg9VMPDU0vJBfwHHmrzRBjTyhSII/4PHJ43PWISIY89
-         vBNSqWYLEc6On1f2uMazCgG/keMiZ/jfC02SEpYk=
-Date:   Thu, 13 Oct 2022 06:47:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        longli@microsoft.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com
-Subject: Re: [PATCH] uio_hv_generic: Enable support for slower vmbus device
- channels
-Message-ID: <Y0eYWpYhqfjvxdBj@kroah.com>
-References: <1665575806-27990-1-git-send-email-ssengar@linux.microsoft.com>
- <Y0bipdisMbTNMYOq@kroah.com>
- <Y0bjH+k3G6V45WRT@kroah.com>
- <20221013041515.GA12822@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        Thu, 13 Oct 2022 00:49:34 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55FF9EE896;
+        Wed, 12 Oct 2022 21:49:33 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 7E3301E80D99;
+        Thu, 13 Oct 2022 12:49:36 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9GiwSB4b5jgH; Thu, 13 Oct 2022 12:49:33 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id CD2F41E80D90;
+        Thu, 13 Oct 2022 12:49:33 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     damien.lemoal@opensource.wdc.com
+Cc:     jejb@linux.vnet.ibm.com, kunyu@nfschina.com,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com
+Subject: Re: [PATCH 4.19] scsi: sd: Fix 'sdkp' in sd_first_printk
+Date:   Thu, 13 Oct 2022 12:49:26 +0800
+Message-Id: <20221013044927.278854-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <0e67aa4d-f66e-f392-5950-31b1c90c287b@opensource.wdc.com>
+References: <0e67aa4d-f66e-f392-5950-31b1c90c287b@opensource.wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013041515.GA12822@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 09:15:15PM -0700, Saurabh Singh Sengar wrote:
-> On Wed, Oct 12, 2022 at 05:54:07PM +0200, Greg KH wrote:
-> > On Wed, Oct 12, 2022 at 05:52:05PM +0200, Greg KH wrote:
-> > > On Wed, Oct 12, 2022 at 04:56:46AM -0700, Saurabh Sengar wrote:
-> > > > This patch enables support for slower vmbus channels, which consist
-> > > > of following 3 changes :
-> > > > 	1. Support for hypercalls
-> > > > 	2. Module params for recv/send buffer sizes
-> > > > 	3. Module param for custom ring buffer sizes
-> > > 
-> > > Even if this all was ok, you are doing 3 things all in one change,
-> > > that's not allowed at all, you all know this.
-> > > 
-> > > Anyway, no new module parameters, this is not the 1990's, we have much
-> > > better ways to do this properly (hint, module parameters modify code,
-> > > you want to modify the options of a specific device.)
-> > 
-> > Also, you give no good reason for why this is needed at all, nor how
-> > anyone would use these options and why they would need to.
-> > 
-> > The kernel should "just work" and not require manual intervention by a
-> > user.  Dynamically fix this based on the device, do NOT force a user to
-> > have to attempt to "tune" anything, that will never work properly over
-> > time, AND you are being lazy and forcing each individual user to do the
-> > work, making more effort needed overall than just doing it properly in
-> > the kernel.
-> 
-> Let me find a method if we can avoid using module parameters, this may result
-> in hardcoding values in the vmbus driver code for various devices, giving less
-> flexibilty to user.
 
-A user should not be using the uio driver for any of that, so I doubt
-this is a real issue :)
+This is defined in the 4.19 kernel:
 
-thanks,
+#define sd_printk(prefix, sdsk, fmt, a...)                              \
+        (sdsk)->disk ?                                                  \
+              sdev_prefix_printk(prefix, (sdsk)->device,                \
+                                 (sdsk)->disk->disk_name, fmt, ##a) :   \
+              sdev_printk(prefix, (sdsk)->device, fmt, ##a)
 
-greg k-h
+#define sd_first_printk(prefix, sdsk, fmt, a...)                        \
+        do {                                                            \
+                if ((sdkp)->first_scan)                                 \
+                        sd_printk(prefix, sdsk, fmt, ##a);              \
+        } while (0)
+
+
+
+Most of the sdsk used in the macro definition has only one sdkp.
+
+
+This is defined in the v6.0-rc7 kernel:
+
+#define sd_printk(prefix, sdsk, fmt, a...)                              \
+        (sdsk)->disk ?                                                  \
+              sdev_prefix_printk(prefix, (sdsk)->device,                \
+                                 (sdsk)->disk->disk_name, fmt, ##a) :   \
+              sdev_printk(prefix, (sdsk)->device, fmt, ##a)
+
+#define sd_first_printk(prefix, sdsk, fmt, a...)                        \
+        do {                                                            \
+                if ((sdsk)->first_scan)                                 \
+                        sd_printk(prefix, sdsk, fmt, ##a);              \
+        } while (0)
+
+Use sdsk in macro definition.
+
+
+I did report an error when compiling sd. o in the 4.19 kernel. It was modified to say that no more errors were reported in sdsk. Can I continue the 6.0-rc7 writing method here.
+
