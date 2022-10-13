@@ -2,187 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A43C5FD565
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420AA5FD56A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiJMHLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 03:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S229638AbiJMHMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJMHLO (ORCPT
+        with ESMTP id S229612AbiJMHLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 03:11:14 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5D21142C2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:11:09 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id k2so1962050ejr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NW8B2A4IOWuKOdLEgcuPTswvtWIBJW4ugM3qn1pYU6g=;
-        b=WVlWFONPAmcJz+b5FrHbw1XDPOcSGVqpYQEWv5efU6Aw2pUAWNyRgY08rPVd2F/UuS
-         cu+JCwwJrB8OiPe8p+3JZ9KT6/uvOxOOtYvE+xn6Tji2xaNhKtCJcOrYg+pYh2Ipa8JZ
-         ghTRipGho321op6CiyHmEG8RHLGr228q32tZFmRhyl+3AWiWo+jjoBJqb+heO7eQUkhX
-         MzuHdf76XFuS8BTwHeb9RapS+8Zwf7F+nLS6u6NyReodp2qqUO2ZvNm2CqiUiDnpDvQB
-         mJUDUpEP4Iuh6/xI5w7ebLXkyHaDc+LE8XLiKNSdLCvScJ44k4zMJvo2XhX4lNa35t2Q
-         RagQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NW8B2A4IOWuKOdLEgcuPTswvtWIBJW4ugM3qn1pYU6g=;
-        b=4Vk3ZjyrxHVknZ5hvAmJ6iuaL3ifY4TApLb5efXRT3gb79exVeBckykBHLGLtwTZDk
-         GW3gVnhgXeujpa7V/fP10O9xZgZVuGiXZGbD7MdHnE3ws0OsEKpnkfg2kxf33z1wx6/k
-         1rtqlCmQRVKggW927jEpLvta9R77fmxodqOlYesPY5F1F7+y9R/mEkoxhJP8+uzc27II
-         4pik6qS39E3jIFPdNe+xl6FprkdsO/idGlA2dJAT/NStks6GMleboM9NYdYpGcRVWIIC
-         cQNdRwsmhsdYR6mf3jlI2coHrOGNTxRGw8naaDOgRRKogMpfOVAyNWTVAjy/xE0SOWoG
-         xhFw==
-X-Gm-Message-State: ACrzQf2LL7s4RyQ5EKv0kppkZ/688Ek2ID0LIRg0nKoFnhOw9aQaxehs
-        lWHFAMY/l93RfnibCivGKWzTcA==
-X-Google-Smtp-Source: AMsMyM4A6LfMzg1ccK/c1clSzVllxMcEFWT6512S/P4zuEiRBQDfCTHEDXYEX9UAXaPRSM7gNpT9+w==
-X-Received: by 2002:a17:906:da85:b0:741:40a7:d08d with SMTP id xh5-20020a170906da8500b0074140a7d08dmr26757892ejb.263.1665645067965;
-        Thu, 13 Oct 2022 00:11:07 -0700 (PDT)
-Received: from localhost ([86.61.181.4])
-        by smtp.gmail.com with ESMTPSA id t21-20020a170906609500b007402796f065sm2471592ejj.132.2022.10.13.00.11.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 00:11:07 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 09:11:06 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com>,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] kernel panic: kernel stack overflow
-Message-ID: <Y0e6CiwphoN+dlfV@nanopsycho>
-References: <000000000000c8900705ead19e41@google.com>
- <CACT4Y+Zuoo_rgf=DP90wgSVm909Qboj5kdYQjZELPDfdkQWJqA@mail.gmail.com>
- <Y0a88zDFLVeVzBPB@nanopsycho>
- <CACT4Y+Z4CCBqyNJCNySYEWUFT-GOfEjYguBfUh_nb6aAe1w99Q@mail.gmail.com>
- <Y0bYaPsJDG1KvqKG@nanopsycho>
- <CANn89i+AN-6FrEhbGM_3JCAW9esRhdhka-=aXQYkxTP2+VGJ-w@mail.gmail.com>
+        Thu, 13 Oct 2022 03:11:39 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3269FF8CF
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1665645097; x=1697181097;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=s9hcQcdAlAzyhKMWI+wdGejeFtAk0WjChyhpIcsu+pQ=;
+  b=T3KLFSSARrqph+8e7qiuwflm3PsBE/VfC0ekr063ccGfAXL17bFMg6SC
+   /IprtXk682UEWjGe6M5lTs/CwpZpnuXyMa/ueuk55JJnMnSXpvI10qfi6
+   ZOoAoVhagyJUJvdjQhbbmYIumyGt4Lt6OU4XoxHNfZL7RCie/+eU87WTh
+   CTuwpy2FJ2idpujal0mUiuK1H8xyjkWlNaz5lWlJaH12EKk9ihs/RM1nC
+   SyfC+bARG9lBnSffdh5bFgNOSDsr6UCIk+1YtkLtGY36KDhl0peYHiK9X
+   G5gGIxcY2C+Xj98a8H8ns8+Y1qyWHjrChfETQ/xrmjzRuWtRgOlydVR26
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,180,1661788800"; 
+   d="scan'208";a="214073743"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Oct 2022 15:11:34 +0800
+IronPort-SDR: RYmeNHFQAVEqJOQiWq2OpHt2Dxa3eiGwOgxMkkthtCr33t0kbp/0dukxOfZHzxgSjtLxgTKKNk
+ lvf0bb30D+sImErhZNJo6WjGsguHueNZ+8B4dpFKeCgYkFGNH38pQT50lcnsjPtSCcx4PcUJ5o
+ rRrzipvb/TOeUmCi2PetG269rMQxKD5mte9dsgMG3RpnT7EY3j9QrjWeR+3CZEoSnu4mmUtf8R
+ BrkEo8JVQNXF5TT+XmG5rymQ4H8qhu7kDHoliim8jyWkTVRRpnhTLzet+Vcs1X/eTIRArgONQ1
+ CFiPEYcZJPmo7zJk785NYgqo
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Oct 2022 23:31:12 -0700
+IronPort-SDR: 4DUMB+IG5eBsDI5M6gEjADNH5Y3mknq0Sp8wZeLKNR4KyKJV2CaxLITCDjC2VADM7tIlnA9Mhe
+ SuHPAKHENLnidfce/xP0ErHWNnc60yWsen2PtHrjr2cmYWsSxNcdJ8iQg/FfJzEKrpKX9dRDEq
+ JJwb9dA+tkn6AKqtT2eDLXVwWnOaTcqUh8jjQx24CXsspid8inmF/2e5Gx2pk34gtUmHniyVJJ
+ L9QqmcJq/eDLQLQBR4NwRChPo+1OFViFe8uCsF3upyjkmS63x0Bm+gCcPNh//XCwrYsdxfC55t
+ bYc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Oct 2022 00:11:35 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mp10Q0Tmrz1Rwtl
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:11:34 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1665645093; x=1668237094; bh=s9hcQcdAlAzyhKMWI+wdGejeFtAk0WjChyh
+        pIcsu+pQ=; b=Jm7BAZerxx5v6gHfitNpZQJpv8yhR8Yz+0aNTdhqXMIfV0gn4TG
+        6+TBqREYVmRm0fsOf0P2tPfEbnuwWfT7OVo/a3Bbek/+s9jvrMUa2Xb2i10ghc/Y
+        HFWYEqvsVOeYJWY2tZ8/R2Sh3akv0gAH71JKPx1JTJ/I7nZemiHrqVJfvTGM4hwS
+        Jkm2agszLuKjBjr501zMV0icXH2rwWiypS9DcibKSZ9VOj/9eHQuglwkEfOoYfoM
+        P2aCHTQjerUy1B+jtxYnRrCfHKPvQwjr+IBSz8OnG/kCXGua9nxsTjPX0CsC713S
+        wQZo94NGIjDp/m31PhwSDq664N5zNeu7fRg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TK3DhZNtA3fw for <linux-kernel@vger.kernel.org>;
+        Thu, 13 Oct 2022 00:11:33 -0700 (PDT)
+Received: from [10.89.85.169] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.85.169])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mp10L5vWSz1RvLy;
+        Thu, 13 Oct 2022 00:11:30 -0700 (PDT)
+Message-ID: <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
+Date:   Thu, 13 Oct 2022 16:11:29 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89i+AN-6FrEhbGM_3JCAW9esRhdhka-=aXQYkxTP2+VGJ-w@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
+ tag
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Niklas Cassel <niklas.cassel@wdc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Oct 12, 2022 at 06:42:39PM CEST, edumazet@google.com wrote:
->On Wed, Oct 12, 2022 at 8:08 AM Jiri Pirko <jiri@resnulli.us> wrote:
->>
->> Wed, Oct 12, 2022 at 03:54:59PM CEST, dvyukov@google.com wrote:
->> >On Wed, 12 Oct 2022 at 15:11, Jiri Pirko <jiri@resnulli.us> wrote:
->> >>
->> >> Wed, Oct 12, 2022 at 09:53:27AM CEST, dvyukov@google.com wrote:
->> >> >On Wed, 12 Oct 2022 at 09:48, syzbot
->> >> ><syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com> wrote:
->> >> >>
->> >> >> Hello,
->> >> >>
->> >> >> syzbot found the following issue on:
->> >> >>
->> >> >> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
->> >> >> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
->> >> >> console output: https://syzkaller.appspot.com/x/log.txt?x=14a03a2a880000
->> >> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
->> >> >> dashboard link: https://syzkaller.appspot.com/bug?extid=60748c96cf5c6df8e581
->> >> >> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
->> >> >> userspace arch: arm64
->> >> >>
->> >> >> Unfortunately, I don't have any reproducer for this issue yet.
->> >> >>
->> >> >> Downloadable assets:
->> >> >> disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
->> >> >> vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
->> >> >>
->> >> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> >> >> Reported-by: syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com
->> >> >
->> >> >+Jiri
->> >> >
->> >> >It looks like the issue is with the team device. It seems to call
->> >> >itself infinitely.
->> >> >team_device_event was mentioned in stack overflow bugs in the past:
->> >> >https://groups.google.com/g/syzkaller-bugs/search?q=%22team_device_event%22
->> >>
->> >> Hi, do you have dmesg output available by any chance?
->> >
->> >Hi Jiri,
->> >
->> >syzbot attaches dmesg output to every report under the "console output" link.
->>
->> I see. I guess the debug messages are not printed out, I don't see them
->> there. Would it be possible to turn them on?
->
->What debug messages do you need ?
->
->There is a nice stack trace [1] with file:number available
+On 2022/10/12 16:24, Naresh Kamboju wrote:
+> On TI beagle board x15 the connected SSD is not detected on linux next
+> 20221006 tag.
+> 
+> + export STORAGE_DEV=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
+> + STORAGE_DEV=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
+> + test -n /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
+> + echo y
+> + mkfs.ext4 /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
+> mke2fs 1.46.5 (30-Dec-2021)
+> The file /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 does
+> not exist and no size was specified.
+> + lava-test-raise 'mkfs.ext4
+> /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 failed; job
+> exit'
+> 
+> Test log:
+>  - https://lkft.validation.linaro.org/scheduler/job/5634743#L2580
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> metadata:
+>   git_ref: master
+>   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git_sha: 7da9fed0474b4cd46055dd92d55c42faf32c19ac
+>   git_describe: next-20221006
+>   kernel_version: 6.0.0
+>   kernel-config: https://builds.tuxbuild.com/2FkkkZ51ZYhBL1G8D69YX8Pkt5F/config
+>   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/659754170
+>   artifact-location: https://builds.tuxbuild.com/2FkkkZ51ZYhBL1G8D69YX8Pkt5F
+>   toolchain: gcc-10
 
-Sure, but there are no debug printks that are printed out during feature
-processing. That could shed some light on if this is caused by lack of
-nest level enforce or perhaps for some reason repetitive processing
-of the same team-port netdevice couple in loop.
+The kernel messages that are shown in the links above do not show any "libata
+version 3.00 loaded." message nor any ata/ahci message that I can see. So I
+think the eSATA adapter is not even being detected and libata/ahci driver not used.
 
->
->
->My guess was that for some reason the team driver does not enforce a
->max nest level of 8 ?
->
->https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=65921376425fc9c8b7ce647e1f7989f7cdf5dd70
->
->
->[1]
->CPU: 1 PID: 16874 Comm: syz-executor.3 Not tainted
->6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
->Hardware name: Google Google Compute Engine/Google Compute Engine,
->BIOS Google 09/30/2022
->Call trace:
-> dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
-> show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
-> __dump_stack lib/dump_stack.c:88 [inline]
-> dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
-> dump_stack+0x1c/0x58 lib/dump_stack.c:113
-> panic+0x218/0x50c kernel/panic.c:274
-> nmi_panic+0xbc/0xf0 kernel/panic.c:169
-> panic_bad_stack+0x134/0x154 arch/arm64/kernel/traps.c:906
-> handle_bad_stack+0x34/0x48 arch/arm64/kernel/entry-common.c:848
-> __bad_stack+0x78/0x7c arch/arm64/kernel/entry.S:549
-> mark_lock+0x4/0x1b4 kernel/locking/lockdep.c:4593
-> lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-> do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
-> do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
-> psi_group_change+0x128/0x3d0 kernel/sched/psi.c:705
-> psi_task_switch+0x9c/0x310 kernel/sched/psi.c:851
-> psi_sched_switch kernel/sched/stats.h:194 [inline]
-> __schedule+0x554/0x5a0 kernel/sched/core.c:6489
-> preempt_schedule_irq+0x64/0x110 kernel/sched/core.c:6806
-> arm64_preempt_schedule_irq arch/arm64/kernel/entry-common.c:265 [inline]
-> __el1_irq arch/arm64/kernel/entry-common.c:473 [inline]
-> el1_interrupt+0x4c/0x68 arch/arm64/kernel/entry-common.c:485
-> el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
-> el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
-> arch_local_irq_restore+0x8/0x10 arch/arm64/include/asm/irqflags.h:122
-> lock_is_held include/linux/lockdep.h:283 [inline]
-> __might_resched+0x7c/0x218 kernel/sched/core.c:9854
-> __might_sleep+0x48/0x78 kernel/sched/core.c:9821
-> might_alloc include/linux/sched/mm.h:274 [inline]
-> slab_pre_alloc_hook mm/slab.h:700 [inline]
-> slab_alloc_node mm/slub.c:3162 [inline]
-> kmem_cache_alloc_node+0x80/0x370 mm/slub.c:3298
-> __alloc_skb+0xf8/0x378 net/core/skbuff.c:422
-> alloc_skb include/linux/skbuff.h:1257 [inline]
-> nlmsg_new include/net/netlink.h:953 [inline]
-> genlmsg_new include/net/genetlink.h:410 [inline]
-> ethnl_default_notify+0x16c/0x320 net/ethtool/netlink.c:640
->...
+Was this working before ? If yes, can you try with the following patches reverted ?
+
+d3243965f24a ("ata: make PATA_PLATFORM selectable only for suitable architectures")
+3ebe59a54111 ("ata: clean up how architectures enable PATA_PLATFORM and
+PATA_OF_PLATFORM")
+
+If reverting these patches restores the eSATA port on this board, then you need
+to fix the defconfig for that board.
+
+-- 
+Damien Le Moal
+Western Digital Research
+
