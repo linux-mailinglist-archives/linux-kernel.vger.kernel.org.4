@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0D75FE06B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552405FE07B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiJMSJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S231342AbiJMSKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiJMSIU (ORCPT
+        with ESMTP id S231182AbiJMSKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:08:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F2517899;
-        Thu, 13 Oct 2022 11:05:53 -0700 (PDT)
+        Thu, 13 Oct 2022 14:10:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D608DB854;
+        Thu, 13 Oct 2022 11:07:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FB596192F;
-        Thu, 13 Oct 2022 18:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A53FC433B5;
-        Thu, 13 Oct 2022 18:00:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2BFD6194B;
+        Thu, 13 Oct 2022 18:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C2EC433D7;
+        Thu, 13 Oct 2022 18:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665684014;
-        bh=d76VYFuP2IkY/Fd+zNHwxmqro3iVPoBaVndsGkcmcJw=;
+        s=korg; t=1665684107;
+        bh=GRz9I5d9zHaKVHe3ziSUKmLW6FeLmSChjvrYLTtRYLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pu4sKdDHDmz+USEbKtNMCD/7sr9nDlS8UXJ6rOOWxnZrhsxHzbuRzjMZ8BNjRMHL1
-         gh6DQupiMxNDWxImhnUqd3AUs/6ZNxxgxzv4vpoU80C681GBlH1d9GvBZ80mfB5Jq0
-         +mQL8E6nIJaiZrfq3LpMzM8kLH/TfM2G3wruSTfU=
+        b=pYxm0nnDyflsJi6blqVNks5K3D0GVBOobuwViEyYsF05gnbX7yNQIltdhcz24mMma
+         t7gh83ZYKh40AN0b1ExbydJ4uE183m8VsGkfoU7TygWWarAkSl7tgfCBC34tso+Qmh
+         eKH0wSH42MqM4HVgLKs4ZLmnkVXgJRIU9MK12iww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>,
-        stable <stable@kernel.org>
-Subject: [PATCH 5.19 32/33] misc: pci_endpoint_test: Aggregate params checking for xfer
-Date:   Thu, 13 Oct 2022 19:53:04 +0200
-Message-Id: <20221013175146.330866983@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 6.0 27/34] wifi: mac80211_hwsim: avoid mac80211 warning on bad rate
+Date:   Thu, 13 Oct 2022 19:53:05 +0200
+Message-Id: <20221013175147.217997359@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
-References: <20221013175145.236739253@linuxfoundation.org>
+In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
+References: <20221013175146.507746257@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,82 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shunsuke Mie <mie@igel.co.jp>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 3e42deaac06567c7e86d287c305ccda24db4ae3d upstream.
+commit 1833b6f46d7e2830251a063935ab464256defe22 upstream.
 
-Each transfer test functions have same parameter checking code. This patch
-unites those to an introduced function.
+If the tool on the other side (e.g. wmediumd) gets confused
+about the rate, we hit a warning in mac80211. Silence that
+by effectively duplicating the check here and dropping the
+frame silently (in mac80211 it's dropped with the warning).
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220907020100.122588-1-mie@igel.co.jp
+Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/pci_endpoint_test.c |   29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ drivers/net/wireless/mac80211_hwsim.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -332,6 +332,17 @@ static bool pci_endpoint_test_msi_irq(st
- 	return false;
- }
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -4526,6 +4526,8 @@ static int hwsim_cloned_frame_received_n
  
-+static int pci_endpoint_test_validate_xfer_params(struct device *dev,
-+		struct pci_endpoint_test_xfer_param *param, size_t alignment)
-+{
-+	if (param->size > SIZE_MAX - alignment) {
-+		dev_dbg(dev, "Maximum transfer data size exceeded\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 				   unsigned long arg)
- {
-@@ -363,9 +374,11 @@ static bool pci_endpoint_test_copy(struc
- 		return false;
- 	}
+ 	rx_status.band = channel->band;
+ 	rx_status.rate_idx = nla_get_u32(info->attrs[HWSIM_ATTR_RX_RATE]);
++	if (rx_status.rate_idx >= data2->hw->wiphy->bands[rx_status.band]->n_bitrates)
++		goto out;
+ 	rx_status.signal = nla_get_u32(info->attrs[HWSIM_ATTR_SIGNAL]);
  
-+	err = pci_endpoint_test_validate_xfer_params(dev, &param, alignment);
-+	if (err)
-+		return false;
-+
- 	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
- 
- 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
- 	if (use_dma)
-@@ -497,9 +510,11 @@ static bool pci_endpoint_test_write(stru
- 		return false;
- 	}
- 
-+	err = pci_endpoint_test_validate_xfer_params(dev, &param, alignment);
-+	if (err)
-+		return false;
-+
- 	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
- 
- 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
- 	if (use_dma)
-@@ -595,9 +610,11 @@ static bool pci_endpoint_test_read(struc
- 		return false;
- 	}
- 
-+	err = pci_endpoint_test_validate_xfer_params(dev, &param, alignment);
-+	if (err)
-+		return false;
-+
- 	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
- 
- 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
- 	if (use_dma)
+ 	hdr = (void *)skb->data;
 
 
