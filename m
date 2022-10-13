@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D285FDF8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 19:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0B05FDFF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJMRzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 13:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S230374AbiJMSB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJMRys (ORCPT
+        with ESMTP id S230355AbiJMSBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:54:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9372315B303;
-        Thu, 13 Oct 2022 10:53:57 -0700 (PDT)
+        Thu, 13 Oct 2022 14:01:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121DA44CF8;
+        Thu, 13 Oct 2022 11:01:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8461861901;
-        Thu, 13 Oct 2022 17:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B18C433C1;
-        Thu, 13 Oct 2022 17:53:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B42976192E;
+        Thu, 13 Oct 2022 17:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF016C4314D;
+        Thu, 13 Oct 2022 17:56:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665683636;
-        bh=pOLv8B3166I/rKsvitiotq67NdZbWnlOIsHPBxJaJbw=;
+        s=korg; t=1665683790;
+        bh=ogYEemfj0hCqBP5FiJ/sT1nkQsZaGnWIZS7D7O/DT14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DPCa+U7/FgwPB38T3TRo9sgnqRACYdtm13J6W6XxO6nyqvYj+w0rGQkn5AZJUbS92
-         cN2M+uI/TVn3GRXxBzLyDTUGG6l5fJI1wtmTTgCIfkC2GLhIACgoZN/WNTSFIS8+P/
-         vAUWjsDcuOVhoHlDipFQLdDdwqxWf5/6D4VEVh+g=
+        b=c7NraigCqQ53b2ffZpFOz5DUqkLWw/+m00DWqFLaPoR8z5Oz15KqEpuhatELvBWTj
+         Nw8oUAznb01PIEOuWGR4Yk+zJ5pASP75/b25uiR20sWcpz9MtXgY1o3KLCO4tK0NDI
+         udJkH6f1QScyh9CaAJ+J6xPKePicxM7Qo4TobvTM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?S=C3=B6nke=20Huster?= <shuster@seemoo.tu-darmstadt.de>,
+        Soenke Huster <shuster@seemoo.tu-darmstadt.de>,
+        Kees Cook <keescook@chromium.org>,
         Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.4 35/38] wifi: mac80211_hwsim: avoid mac80211 warning on bad rate
-Date:   Thu, 13 Oct 2022 19:52:36 +0200
-Message-Id: <20221013175145.415728357@linuxfoundation.org>
+Subject: [PATCH 5.10 43/54] wifi: cfg80211: fix u8 overflow in cfg80211_update_notlisted_nontrans()
+Date:   Thu, 13 Oct 2022 19:52:37 +0200
+Message-Id: <20221013175148.379769517@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
-References: <20221013175144.245431424@linuxfoundation.org>
+In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+References: <20221013175147.337501757@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,31 +57,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johannes Berg <johannes.berg@intel.com>
 
-commit 1833b6f46d7e2830251a063935ab464256defe22 upstream.
+commit aebe9f4639b13a1f4e9a6b42cdd2e38c617b442d upstream.
 
-If the tool on the other side (e.g. wmediumd) gets confused
-about the rate, we hit a warning in mac80211. Silence that
-by effectively duplicating the check here and dropping the
-frame silently (in mac80211 it's dropped with the warning).
+In the copy code of the elements, we do the following calculation
+to reach the end of the MBSSID element:
 
-Reported-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
-Tested-by: Sönke Huster <shuster@seemoo.tu-darmstadt.de>
+	/* copy the IEs after MBSSID */
+	cpy_len = mbssid[1] + 2;
+
+This looks fine, however, cpy_len is a u8, the same as mbssid[1],
+so the addition of two can overflow. In this case the subsequent
+memcpy() will overflow the allocated buffer, since it copies 256
+bytes too much due to the way the allocation and memcpy() sizes
+are calculated.
+
+Fix this by using size_t for the cpy_len variable.
+
+This fixes CVE-2022-41674.
+
+Reported-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
+Tested-by: Soenke Huster <shuster@seemoo.tu-darmstadt.de>
+Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/mac80211_hwsim.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/wireless/scan.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -3411,6 +3411,8 @@ static int hwsim_cloned_frame_received_n
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -2228,7 +2228,7 @@ cfg80211_update_notlisted_nontrans(struc
+ 	size_t new_ie_len;
+ 	struct cfg80211_bss_ies *new_ies;
+ 	const struct cfg80211_bss_ies *old;
+-	u8 cpy_len;
++	size_t cpy_len;
  
- 	rx_status.band = data2->channel->band;
- 	rx_status.rate_idx = nla_get_u32(info->attrs[HWSIM_ATTR_RX_RATE]);
-+	if (rx_status.rate_idx >= data2->hw->wiphy->bands[rx_status.band]->n_bitrates)
-+		goto out;
- 	rx_status.signal = nla_get_u32(info->attrs[HWSIM_ATTR_SIGNAL]);
+ 	lockdep_assert_held(&wiphy_to_rdev(wiphy)->bss_lock);
  
- 	hdr = (void *)skb->data;
 
 
