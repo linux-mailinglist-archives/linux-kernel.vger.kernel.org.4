@@ -2,128 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7878D5FDE8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61ED5FDE81
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiJMQwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S229863AbiJMQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiJMQwi (ORCPT
+        with ESMTP id S229862AbiJMQwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:52:38 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6219910A7D8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:52:33 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id r14so3418779lfm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6hw2W+lQ+Hv9z48dDP42SJngsa6TM787Uybb56JTsIU=;
-        b=ghoFwQTxBbVHDWGz3pu/fVVdmZGCPWS90lwX3nEcU8o2Y1zv1+S4YKeTSmNESQTc6v
-         iRO5UImZPCZP7qu1ZfLC/j5rrFtvoEEBjvZgBQVPzI9DvpXQ8FkeuIVOBWkHDpc5fmP3
-         1ATgRGOtOgU4JBqWGKYdqSQcOfHDgp5bnC5faThbh8oATv2pgFgKboonbacHOIbATQJH
-         rH0Es23nJMcEAS+3TJgRAAUeQ8cvn5VePMhUIbrmhr5EpxIprUUWmAY9Dey+gsSVNWvn
-         0E9i+lfXJe5ueJbmHYTiUe/1xqkCkFG1xyudg29Km7t5TTfV8UF0ovgJ8Nc407m2itT1
-         01Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6hw2W+lQ+Hv9z48dDP42SJngsa6TM787Uybb56JTsIU=;
-        b=I50Djl09vFJI3yBCXYfteQ9aSV+Dpa/3SqI78tq1Ve1PKO4MPvlEqeLkfNURsj8a4G
-         NnrCIgk/1TjCupr+NQedOpfFz88is1cyoS0tCB6b8+KAWM8Nm4uPwI6a8xXli3cq9Uik
-         GiUFIHqrr766q6SlA+QxejKP2PSDfH/u7QAis8TSbWPBwizvzgtwVDCLlsa/z5ojeL8u
-         EFvKk4j/tpTZkSnbtBX/mHflpzczWsL4Jh5Uy6bhu5U7wFviGCS4begazYU6g6nWfMT2
-         mV2DCRb4EXwMlGDZj7WEpJp5iavzmcH69mGrTm0+71A0ptVmG8w0F0Ug8PMhCJs/hMVL
-         SwVA==
-X-Gm-Message-State: ACrzQf1N45+JqpoNC6Mx+CSLXgmB0PLDQF8CtWdAGNFDLG78bM4PT7n2
-        o5iV2raWUoFnUxgPcg49POA/YA==
-X-Google-Smtp-Source: AMsMyM4gcJcA8tRARkMMAurN5cSMCEOxM2sdSbaTGrQZ+dBknfKwag6sQfZLDND3tnv8+yEOEtRERQ==
-X-Received: by 2002:a05:6512:33cb:b0:4a4:2bee:5c8b with SMTP id d11-20020a05651233cb00b004a42bee5c8bmr205014lfg.237.1665679950541;
-        Thu, 13 Oct 2022 09:52:30 -0700 (PDT)
-Received: from fedora.. ([78.10.206.53])
-        by smtp.gmail.com with ESMTPSA id k7-20020a2e9207000000b00262fae1ffe6sm540752ljg.110.2022.10.13.09.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 09:52:30 -0700 (PDT)
-From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
-To:     devicetree@vger.kernel.org
-Cc:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        upstream@semihalf.com
-Subject: [PATCH v4 3/3] ARM: dts: armada-375: Update network description to match schema
-Date:   Thu, 13 Oct 2022 18:51:34 +0200
-Message-Id: <20221013165134.78234-4-mig@semihalf.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221013165134.78234-1-mig@semihalf.com>
-References: <20221013165134.78234-1-mig@semihalf.com>
+        Thu, 13 Oct 2022 12:52:06 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28E0CB03E9;
+        Thu, 13 Oct 2022 09:52:03 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29DGptkO018919;
+        Thu, 13 Oct 2022 18:51:55 +0200
+Date:   Thu, 13 Oct 2022 18:51:55 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-toolchains@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: gcc 5 & 6 & others already out of date?
+Message-ID: <20221013165155.GJ16609@1wt.eu>
+References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
+ <Y0gLyLbdOCetX5LN@sirena.org.uk>
+ <Y0gteD0QYVlYxSZh@zx2c4.com>
+ <Y0g8HEYHZYHGdwlf@sirena.org.uk>
+ <Y0g+wTTJmlaFVLzr@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0g+wTTJmlaFVLzr@zx2c4.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcin Wojtas <mw@semihalf.com>
+On Thu, Oct 13, 2022 at 10:37:21AM -0600, Jason A. Donenfeld wrote:
+> On Thu, Oct 13, 2022 at 05:26:04PM +0100, Mark Brown wrote:
+> > Note that I'm not saying we shouldn't upgrade our requirements at all,
+> > just that I'm worrying about going from one extreme to the other in
+> > terms of version requirements - it feels like there's a step change when
+> > you move from things you can get in current release distros people are
+> > likely to be using to things that will require a large proportion of
+> > people to install extra stuff.  At the minute we're more at the other
+> > end where it can be hard to figure out who'd even have the oldest
+> > versions we support without deliberately seeking them out and keeping
+> > them going is noticably making work for people.
+> 
+> Regarding "one extreme to the other", I suspect that in spite of my
+> arguments, which would seem to justify an extreme, the actual thing I
+> suggested is a bit more moderate: let's support the latest 2 or 3 gccs
+> at the time of kernel release. If we choose 3, that's roughly 3 years of
+> gccs, right?
 
-Update the PP2 ethernet ports subnodes' names to match
-schema enforced by the marvell,pp2.yaml contents.
+Ideally we should support at the very least those of the oldest
+supported LTS kernels, because one thing for LTS users is that we
+also want to encourage them to try new kernels, and if they can't
+build newer kernels from the start we all know they'll give up
+very quickly. And this eases the backport to those kernels as it
+is expected that a mainline fix will support those versions (even
+if it may break from time to time by accident, but the intent is
+there).
 
-Add new required properties ('reg') which contains information
-about the port ID, keeping 'port-id' ones for backward
-compatibility.
+> 3 years seems like a fairly long amount of time.
 
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
----
- arch/arm/boot/dts/armada-375.dtsi | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+For a developer changing their distro every 6 months, possibly. Not
+for users who took time to stabilize their system to something working
+and who are curious about what the new kernel provides from time to
+time.
 
-diff --git a/arch/arm/boot/dts/armada-375.dtsi b/arch/arm/boot/dts/armada-375.dtsi
-index 929deaf312a5..9fbe0cfec48f 100644
---- a/arch/arm/boot/dts/armada-375.dtsi
-+++ b/arch/arm/boot/dts/armada-375.dtsi
-@@ -178,6 +178,8 @@ mdio: mdio@c0054 {
- 
- 			/* Network controller */
- 			ethernet: ethernet@f0000 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
- 				compatible = "marvell,armada-375-pp2";
- 				reg = <0xf0000 0xa000>, /* Packet Processor regs */
- 				      <0xc0000 0x3060>, /* LMS regs */
-@@ -187,15 +189,17 @@ ethernet: ethernet@f0000 {
- 				clock-names = "pp_clk", "gop_clk";
- 				status = "disabled";
- 
--				eth0: eth0 {
-+				eth0: ethernet-port@0 {
- 					interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
--					port-id = <0>;
-+					reg = <0>;
-+					port-id = <0>; /* For backward compatibility. */
- 					status = "disabled";
- 				};
- 
--				eth1: eth1 {
-+				eth1: ethernet-port@1 {
- 					interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
--					port-id = <1>;
-+					reg = <1>;
-+					port-id = <1>; /* For backward compatibility. */
- 					status = "disabled";
- 				};
- 			};
--- 
-2.37.3
-
+Willy
