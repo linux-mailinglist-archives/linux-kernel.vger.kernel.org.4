@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660B45FD6DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9315FD6E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJMJRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S229587AbiJMJUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJMJRW (ORCPT
+        with ESMTP id S229652AbiJMJUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:17:22 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E925FBC;
-        Thu, 13 Oct 2022 02:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1665652637; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QfKF6P//aPtt3yXkddZGb8gQhNXBSYeBQmboxbZCJlU=;
-        b=Ip0NSVDD1AM8ZgtvW/VD87fTHoRfAC5ZKR4g5vCDTryKzaGimlZJoh+FC5CRuxEyrYuyOV
-        zFio5aFohd39Q+mWiqCJyJxM7qdFhkFObmPHLG9/o7LYmzxzlFG4La4/m47ImlJB8FwZ5u
-        kKRpu9SSwogossEIyH7SeLGOjn8wS2U=
-Date:   Thu, 13 Oct 2022 10:17:04 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 7/8] serial: 8250/ingenic: Add support for the
- JZ4750/JZ4755 SoCs
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        kbuild-all@lists.01.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        GPIO SUBSYSTEM <linux-gpio@vger.kernel.org>
-Message-Id: <GSPOJR.M4XZ4D03G60F@crapouillou.net>
-In-Reply-To: <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com>
-References: <20221009181338.2896660-8-lis8215@gmail.com>
-        <202210100607.YdxoR0tD-lkp@intel.com>
-        <CAKNVLfaFvge4A8-QUzeq-JManpuYMGvyHXCJi-ew==CWN8-M=A@mail.gmail.com>
-        <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com>
+        Thu, 13 Oct 2022 05:20:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD1964C4;
+        Thu, 13 Oct 2022 02:20:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66438B81D5A;
+        Thu, 13 Oct 2022 09:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77366C433C1;
+        Thu, 13 Oct 2022 09:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665652835;
+        bh=Q+8IpjjbDGTN1jVf7AqXepJKEJGzNobz/Ltyjku67qI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nz82lYSk1BEgj5/KNC3bWc8Vr+I29GuyQYKc4mfyZk+5QkDN0cBwNC+AP8lg1TPhz
+         8ulJiZe/tg2HIIH0YyuVVPr5+/brv4au4inzz1JDGOZkkgLjiySIgzSAVqKBKoNb8q
+         TnHrm/hdFB51Kb0HeI+W8xvVf+LfmPT2sQHUGz+c=
+Date:   Thu, 13 Oct 2022 11:21:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     git@xilinx.com, michal.simek@xilinx.com, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        ronak.jain@xilinx.com, rajan.vaja@xilinx.com,
+        abhyuday.godhasara@xilinx.com, harsha.harsha@xilinx.com,
+        lakshmi.sai.krishna.potthuri@xilinx.com, tanmay.shah@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] fpga: zynqmp-fpga: Adds status interface
+Message-ID: <Y0fYjyXrMEo6M76k@kroah.com>
+References: <20221013090556.741357-1-nava.kishore.manne@amd.com>
+ <20221013090556.741357-3-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013090556.741357-3-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Oct 13, 2022 at 02:35:56PM +0530, Nava kishore Manne wrote:
+> Adds status interface for zynqmp-fpga, It's a read only interface
+> which allows the user to get the Programmable Logic(PL) configuration
+> status.
+> 
+> Usage:
+> To read the Programmable Logic(PL) configuration status
+>         cat /sys/class/fpga_manager/<fpga>/device/status
+> 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> Changes for v2:
+>               - Updated status messages handling logic as suggested by Xu Yilun.
+> 
+> Changes for v3:
+>               - Updated status interface handling logic (Restrict the status
+>                 interface to the device-specific instead of handled by the core)
+>                 as suggested by Xu Yilun.
+> 
+>  drivers/fpga/zynqmp-fpga.c | 87 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
 
-Le jeu., oct. 13 2022 at 08:46:39 +0200, Arnd Bergmann <arnd@arndb.de>=20
-a =C3=A9crit :
-> On Thu, Oct 13, 2022, at 8:37 AM, Siarhei Volkau wrote:
->>  =D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 01:29, kernel =
-test robot=20
->> <lkp@intel.com>:
->>>  config: ia64-allyesconfig
->>>  config: arm64-randconfig-r035-20221010
->>=20
->>>   > 142  #define CGU_REG_CPCCR   ((void *)CKSEG1ADDR(0x10000000))
->>=20
->>>  0-DAY CI Kernel Test Service
->>=20
->>  I know CKSEG1ADDR is MIPS specific, might be it needed to disable=20
->> COMPILE_TEST
->>  on the driver?
->>  Since early syscon isn't mainlined yet I don't see any other way at=20
->> the moment.
->>=20
->>  Any suggestions on that, folks?
->=20
-> This looks like some setup that belongs into the bootloader. If you=20
-> are
-> handing over the console from bootloader to kernel, the hardware=20
-> should
-> already be in a working state, with no need to touch it during early
-> boot.
->=20
-> If you are dealing with broken bootloaders that are not under your=20
-> control,
-> having this code in the architecture specific early boot as a fixup
-> would be better than putting it into the driver.
+You add sysfs files without a Documentation/ABI/ update as well, which
+is not allowed.  Please fix that up for your next submission.
 
-Agreed. I am not fond of having a driver poking into an unrelated=20
-subsystem's memory area.
+> @@ -95,6 +175,13 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
+>  
+>  	priv->dev = dev;
+>  
+> +	/* Add the device attributes */
+> +	ret = sysfs_create_group(&dev->kobj, &zynqmp_fpga_attr_group);
+> +	if (ret) {
+> +		dev_err(dev, "Error creating sysfs files\n");
+> +		return ret;
+> +	}
 
-Just disable the divider in ingenic_fixup_fdt() in=20
-arch/mips/generic/board-ingenic.c.
+You just raced with userspace and lost.  Do not do this, set the default
+groups attribute in your platform driver and the driver core will handle
+this all for you automatically.
 
-Cheers,
--Paul
+thanks,
 
-
+greg k-h
