@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1078A5FE206
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9635FE20A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiJMSvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S231708AbiJMSvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiJMSuv (ORCPT
+        with ESMTP id S231896AbiJMSvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:50:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6B97C1F6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:49:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC877618F6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 18:47:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C2AC433D6;
-        Thu, 13 Oct 2022 18:47:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665686860;
-        bh=YuUMePZ+vsNbKjlHx9yOeHLR/mA9M7RIxKfWjwX0qPk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PazBDFLLXt+GAi+mkSDU9TFTQyuUzl6qteLU+Qq7RRtLckPFKi6j6bJgVfJ9ZQqrX
-         erfrZur+wzF9i6QDqQLAkHrHaKDJ0hpzv18XOrbsUuTMKKY+7dEueNMVTwh/pFOVhx
-         Vm6sARenpfGClnv6W+nJYOd3dlJzEjxg/aOAvhyMJtNmLSo5+k4zIbg3KDqgKWiboT
-         KHpaLWE4n+PU9fAYfUnWOD1K2j8XXbAg3Od+sHfWmucYF4yxGzF6CAPbEPKJ2Wc8Gg
-         1c13fXR1HTlXywmLDurUmQjDdCod/EhG65fJuA3o/B//MJt8MnKtACxnL8rJtTc4aN
-         xrV9C3gqAHQiA==
-Date:   Thu, 13 Oct 2022 19:47:35 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <zx2c4@kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Aurelien Jarno <aurelien@aurel32.net>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [linux-stable-rc:linux-4.19.y 3113/3976]
- drivers/char/random.c:1336: Error: unrecognized opcode `csrs sstatus,s4'
-Message-ID: <Y0hdR2Z44oOQ989w@spud>
-References: <202210101947.iPda3BwQ-lkp@intel.com>
- <Y0QKkwQ5KGT9ngPL@wendy>
- <Y0gONdihAaosW9+U@kroah.com>
+        Thu, 13 Oct 2022 14:51:07 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC4463C4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:49:31 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id d13so1034668qko.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:49:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dqw3Xc1RI1aNzc3i+VnzEPkUPQWCL6Lh8uyt8Pd5dJw=;
+        b=wqewJerCApNEmS0BeN+nyAGvQWS5FJUEVCZiIQsSqsoi7WbkJ5fs5ShbJyrEOia5Uu
+         PU/HIS3Lf4vFJZ4H6yZkM/FD5QCLrwo1gko/wPdJyMoNzo7Dg5VdzASio1ndjysSJDQq
+         LgRG6o1zrw5tbH8noT8qTWcSWMxYpLKT3FwIIvCEB+AnhUAa5JtKjfNNIWVCoxWE9oYW
+         6OmtWUY6+5k2yslJYEaK7Yif92FIEVwy86eeKWZ2OppokNVBzTajlV3hqETGBtJX7yiw
+         F5FcXWIFkwhnKJvUZp8uldEz3TRCrBboMvfG1TxY/EZA4NICpPj7eOURHE7PR8v2kxEw
+         C4VQ==
+X-Gm-Message-State: ACrzQf1G8A7Umn9K53LG+Vie0J9hjFqAJITqprfZ+fKK5ZnUsaqvxGs0
+        J65yn26JUM5xS/+Tgm+NI3i5pOm0xN7U1w==
+X-Google-Smtp-Source: AMsMyM7nUI9eC3RBBbZ+h/6RmCZJEoT4qJb4uM4NJTrOp1AEm1yuvkmA4m4wgrZB9PXcc3CspjqARA==
+X-Received: by 2002:ae9:f205:0:b0:6bc:2d40:2f3d with SMTP id m5-20020ae9f205000000b006bc2d402f3dmr1047490qkg.448.1665686904401;
+        Thu, 13 Oct 2022 11:48:24 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id y8-20020a37f608000000b006bb87c4833asm326181qkj.109.2022.10.13.11.48.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 11:48:24 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-35befab86a4so25934427b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:48:23 -0700 (PDT)
+X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
+ h64-20020a0dde43000000b0034931bde8d5mr1243832ywe.283.1665686903595; Thu, 13
+ Oct 2022 11:48:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0gONdihAaosW9+U@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221012191142.GA3109265@bhelgaas> <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
+ <f57d954a-b565-9bfa-b8eb-ce608e168f1a@cambridgegreys.com> <2135037685.24273.1665665172126.JavaMail.zimbra@nod.at>
+ <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
+ <CAMuHMdU=TurB14tkAbqb9nWYvCOcr0UUScdga25h3-oWjYfzTg@mail.gmail.com> <20221013182912.k4deh5v47rjbpnnl@meerkat.local>
+In-Reply-To: <20221013182912.k4deh5v47rjbpnnl@meerkat.local>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Oct 2022 20:48:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com>
+Message-ID: <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com>
+Subject: Re: Add linux-um archives to lore.kernel.org?
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        helpdesk <helpdesk@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 03:10:13PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 10, 2022 at 01:05:39PM +0100, Conor Dooley wrote:
-> > On Mon, Oct 10, 2022 at 07:51:59PM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> > > head:   5644b22533b36dc1a95ab1db4ae83381514b2908
-> > > commit: 1923d9a8a08684c063da049fa9d5d8139edbbcbb [3113/3976] random: convert to using fops->write_iter()
-> > > config: riscv-randconfig-c024-20221009
-> > > compiler: riscv64-linux-gcc (GCC) 12.1.0
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=1923d9a8a08684c063da049fa9d5d8139edbbcbb
-> > >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-> > >         git fetch --no-tags linux-stable-rc linux-4.19.y
-> > >         git checkout 1923d9a8a08684c063da049fa9d5d8139edbbcbb
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/char/
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > >    arch/riscv/include/asm/irqflags.h: Assembler messages:
-> > >    arch/riscv/include/asm/irqflags.h:42: Error: unrecognized opcode `csrrc s6,sstatus,2'
-> > >    arch/riscv/include/asm/irqflags.h:60: Error: unrecognized opcode `csrs sstatus,0'
-> > >    arch/riscv/include/asm/irqflags.h:60: Error: unrecognized opcode `csrs sstatus,s6'
-> > >    drivers/char/random.c:1316: Error: unrecognized opcode `csrs sstatus,a3'
-> > >    drivers/char/random.c:1316: Error: unrecognized opcode `csrc sstatus,a3'
-> > >    drivers/char/random.c:1322: Error: unrecognized opcode `csrs sstatus,a3'
-> > >    drivers/char/random.c:1322: Error: unrecognized opcode `csrc sstatus,a3'
-> > > >> drivers/char/random.c:1336: Error: unrecognized opcode `csrs sstatus,s4'
-> > > >> drivers/char/random.c:1336: Error: unrecognized opcode `csrc sstatus,s4'
-> > 
-> > All of these look like 4.19.y is missing a backport of:
-> > Fixes: 6df2a016c0c8 ("riscv: fix build with binutils 2.38")
-> > 
-> > That commit is CC: stable, so I assume it did not apply or w/e and
-> > nobody cared enough to do a backport?
-> 
-> It does not apply and no one sent in a fixed backport :(
+Hi Konstantin,
 
-Welp, I have a fixed backport for it and pushed it out for LKP [0].
-Just quickly checked it w/ binutils 2.36 & 2.38 locally, which both
-worked fine. I doubt anyone really cares though, 4.19 is pretty long in
-the tooth RISC-V hw wise. Not the biggest fan of what I did, but I
-didn't want to send backports for some other infra changes that
-6df2a016c0c8 depends on.
+On Thu, Oct 13, 2022 at 8:29 PM Konstantin Ryabitsev
+<konstantin@linuxfoundation.org> wrote:
+> On Thu, Oct 13, 2022 at 02:57:18PM +0200, Geert Uytterhoeven wrote:
+> > The first step is
+> > https://korg.docs.kernel.org/lore.html#requesting-archival-of-an-existing-list
+> >
+> > It doesn't make much sense to start collecting archives if the lore
+> > collector hasn't been activated yet.
+>
+> The archiver is now subscribed to the list. Once we have the archives, we can
+> complete the setup.
 
-I'll send it to you once LKP gives it the all clear.
+Thank you, I have triggered the export from Gmail. After I have received
+the export archive, I will merge it with my local pre-Gmail archives.
 
-Thanks,
-Conor.
+Gr{oetje,eeting}s,
 
-0 -https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/?h=riscv-backport_238_fix&id=cf7c2ca06cd0e5f6c16fe70e751380c8673da9ed
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
