@@ -2,143 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BF25FDE72
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92045FDE7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiJMQqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S229695AbiJMQuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiJMQqN (ORCPT
+        with ESMTP id S229485AbiJMQur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:46:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0ED1929F;
-        Thu, 13 Oct 2022 09:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fFpGRKD8AHa/ARwki3ryHxtKPwFk5Ayh38G2pe7ZJxM=; b=h6WLuhk2JC6VEhSgvQfnTxkR4h
-        KU4ZbheF9y/Fp0WewoBmW5KZ2HS6zMjut2kFSnWfE/xIOE/FryhTlXE9nt9xHYhXLAISdSYPM3tH9
-        fEvvA39YzxV/lCqiHrlIjBNR3K53WwcYdMXS3vfZnxdmnV5cKw9VtG45T5D9iPlFGR17VCBzb0GQ9
-        g5jWSNw3IU5SlczxNI2kS5tXuPiVm/i3tmnVZqNjAJqNMxkoLc4j/MNFuVlwoCHjb//Wxtumdt1id
-        jR/DNIVV5rGqTXWv3DrxHidFDIestLCcqRl5yuUAwK7mgbFPnmi5DKjZIK73J9aIq0/ANON2Mb6jL
-        PyoCU1kw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oj1LB-006rj6-HP; Thu, 13 Oct 2022 16:45:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 590413001CB;
-        Thu, 13 Oct 2022 18:45:44 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 40DB32BDD933A; Thu, 13 Oct 2022 18:45:44 +0200 (CEST)
-Date:   Thu, 13 Oct 2022 18:45:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Justin He <Justin.He@arm.com>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-Message-ID: <Y0hAuBkmiUGfCs8/@hirez.programming.kicks-ass.net>
-References: <20221010023559.69655-1-justin.he@arm.com>
- <20221010023559.69655-7-justin.he@arm.com>
- <Y0VGkUxpqiIzIFzB@zn.tnic>
- <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0WBklS1XpB5as+m@zn.tnic>
- <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0gUpoaUBKw/jjaD@zn.tnic>
- <CAMj1kXGtTRaKCKJnsJ9XcRus+H16mO3TGsz+TFJLraOyvfciCA@mail.gmail.com>
+        Thu, 13 Oct 2022 12:50:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C1713333D;
+        Thu, 13 Oct 2022 09:50:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D02AE61870;
+        Thu, 13 Oct 2022 16:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0342C433C1;
+        Thu, 13 Oct 2022 16:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665679845;
+        bh=5GFgw6QTHtEZ01GdWve/MitmH27Csb+Mh/SvvIm9Y98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bs9Eqk0uiZzTaEBf4pbqi2hzjp7SqbvlAQikV/tjrUkOwNKInW81cTVN3Km1SIEhY
+         ioD599Op+rCC6kqEwlkVfMOApCM1rPevHM38ovgmlNMmyMU/NQWRpRkppsOCYfAcpM
+         amhLhQMEpULqkzPcQ/6DgtNCUzK1iQ9DtKtnLEyAi3pFrWBZ86ZGM8wpkBqDhrCC4+
+         +oNYxuoFLiRxKeU+4GRqa4UqHA+2wve6lc8tO2aH1yIkAgcH+G7cTyb2unOvjoVArW
+         ziD0/jCDoZNdECzTXowXGQ95pwHtUAgtIgR2Ps7kjjdpdzVCeiokcY3+zPZD4NETPX
+         hUPe/bozLSIVw==
+Received: by pali.im (Postfix)
+        id C0B767F0; Thu, 13 Oct 2022 18:50:41 +0200 (CEST)
+Date:   Thu, 13 Oct 2022 18:50:41 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Elad Nachman <enachman@marvell.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround for
+ PCIe Completion Timeout
+Message-ID: <20221013165041.h23yz7xxi2nejygg@pali>
+References: <20220802123816.21817-1-pali@kernel.org>
+ <20220926123434.2tqx4t6u3cnlrcx3@pali>
+ <BN9PR18MB425117376E64340DED894178DB549@BN9PR18MB4251.namprd18.prod.outlook.com>
+ <20221003211412.5pqfjvcxyszd4ai6@pali>
+ <YzvomObCatuKMujz@lpieralisi>
+ <20221004083957.qtfkn4eyi42lsd4j@pali>
+ <BN9PR18MB4251C2684FD21D8A2DE5522FDB5C9@BN9PR18MB4251.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXGtTRaKCKJnsJ9XcRus+H16mO3TGsz+TFJLraOyvfciCA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BN9PR18MB4251C2684FD21D8A2DE5522FDB5C9@BN9PR18MB4251.namprd18.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 05:41:06PM +0200, Ard Biesheuvel wrote:
-> On Thu, 13 Oct 2022 at 15:37, Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > On Wed, Oct 12, 2022 at 12:04:57PM +0000, Justin He wrote:
-> > > I have a concern about what if cmpxchg failed? Do we have to still
-> > > guarantee the ordering since cmpxchg will not imply a smp_mb if it
-> > > failed.
-> >
-> > Of course it will imply that. At least on x86 it does. smp_wmb() is a
-> > compiler barrier there and cmpxchg() already has that barrier semantics
-> > by clobbering "memory". I'm pretty sure you should have the same thing
-> > on ARM.
-> >
-> 
-> No it definitely does not imply that. A memory clobber is a codegen
-> construct, and the hardware could still complete the writes in a way
-> that could result in another observer seeing a mix of old and new
-> values that is inconsistent with the ordering of the stores as issued
-> by the compiler.
+Hello Elad! Thank you very much for detailed explanation.
 
-Borislav is thinking too much x86. Failed cmpxchg() does indeed not
-imply any memory ordering for all architectures -- and while the memory
-clobber (aka. barrier()) is equivalent to an smp_wmb() on x86, that most
-certainly doesn't hold for non x86 code.
+Lorenzo, it is OK, or do you need some other details?
 
-> > says, "new_cache must be put into array after its contents are written".
-> >
-> > Are we writing anything into the cache if cmpxchg fails?
-> >
+On Thursday 06 October 2022 08:14:48 Elad Nachman wrote:
+> Hi,
 > 
-> The cache fields get updated but the pointer to the struct is never
-> shared globally if the cmpxchg() fails so not having the barrier on
-> failure should not be an issue here.
-
-That is how I read the code too; so if the cmpxchg fails the object is
-not published and nobody cares about the ordering.
-
+> Regarding number #1 :
+> The H/W erratum means strong ordering mode is not properly implemented in the H/W.
+> The workaround is to set DIS_ORD_CHK to disable the ordered check, to prevent the issues Pali mentioned.
+> Leaving it without the workaround means encountering the crashes Pali mentioned.
+> The H/W was originally designed to have the strong ordering mode, per what is expected of PCI Express, but due to this erratum, it cannot be supported by the taped-out H/W.
+> There is nothing to do about it now in the H/W, as this is a years old SOC.
+> Software wise the only option is the workaround above, or to accept sporadic crashes of the kernel.
 > 
-> > > Besides, I didn't find the paired smp_mb or smp_rmb for this smp_wmb.
-> >
-> > Why would there be pairs? I don't understand that statement here.
-> >
+> Regarding number #2 :
+> The impact of the workaround is that the DMA done status could be set before the last data is written to the host memory, causing the host to read incomplete data. This is the reason why I recommended to add a memory barrier. If this is bothering, the memory barrier can be removed from the patch, although I suggest to thoroughly test the data integrity if implementing the patch without the memory barrier.
 > 
-> Typically, the other observer pairs the write barrier with a read barrier.
+> FYI,
 > 
-> In this case, the other observer appears to be ghes_estatus_cached(),
-> and the reads of the cache struct fields must be ordered after the
-> read of the cache struct's address. However, there is an implicit
-> ordering there through an address dependency (you cannot dereference a
-> struct without knowing its address) so the ordering is implied (and
-> rcu_dereference() has a READ_ONCE() inside so we are guaranteed to
-> always dereference the same struct, even if the array slot gets
-> updated concurrently.)
+> Elad.
 > 
-> If you want to get rid of the barrier, you could drop it and change
-> the cmpxchg() to cmpxchg_release().
-
-cmpxchg_release() is strictly weaker than cmpxchg(); so I don't see the
-point there other than optimizing for weak architectures. It can't
-fundamentally fix anything.
+> -----Original Message-----
+> From: Pali Rohár <pali@kernel.org> 
+> Sent: Tuesday, October 4, 2022 11:40 AM
+> To: Elad Nachman <enachman@marvell.com>; Lorenzo Pieralisi <lpieralisi@kernel.org>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>; Krzysztof Wilczyński <kw@linux.com>; linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+> Subject: Re: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround for PCIe Completion Timeout
+> 
+> + Elad
+> 
+> Could you please look at Lorenzo's comments and help with this fix?
+> 
+> On Tuesday 04 October 2022 10:02:32 Lorenzo Pieralisi wrote:
+> > On Mon, Oct 03, 2022 at 11:14:12PM +0200, Pali Rohár wrote:
+> > > Lorenzo, is something more needed for this patch? As it workarounds 
+> > > crashing it is really needed to have it in mainline and backports.
+> > 
+> > Yes, a clear explanation from Marvell about what this is actually 
+> > fixing - it took me a while to go through the whole thread but I still 
+> > don't understand what this patch actually does and why.
+> > 
+> > An Erratum workaround (if there is any) should define and explain a SW 
+> > workaround.
+> > 
+> > (1) Bjorn's concerns in relation to PCI memory model weren't addressed
+> > (2) We don't add undocumented memory barriers to the kernel to "minimize
+> >     risks". Either we fix a bug or we don't. If we do, write that down
+> >     and document why the barrier is there and the issue it solves.
+> > 
+> > I understand that basically you are reverse engineering a HW bug but I 
+> > am afraid we can't fix the kernel this way - more so with patches 
+> > going to be backported to stable kernels.
+> > 
+> > Lorenzo
+> > 
+> > > On Wednesday 28 September 2022 14:05:10 Elad Nachman wrote:
+> > > > Reviewed-by: Elad Nachman <enachman@marvell.com>
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > Elad.
+> > > > 
+> > > > -----Original Message-----
+> > > > From: Pali Rohár <pali@kernel.org>
+> > > > Sent: Monday, September 26, 2022 3:35 PM
+> > > > To: Elad Nachman <enachman@marvell.com>
+> > > > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Lorenzo 
+> > > > Pieralisi <lpieralisi@kernel.org>; Bjorn Helgaas 
+> > > > <bhelgaas@google.com>; Krzysztof Wilczyński <kw@linux.com>; Rob 
+> > > > Herring <robh@kernel.org>; linux-pci@vger.kernel.org; 
+> > > > linux-arm-kernel@lists.infradead.org; 
+> > > > linux-kernel@vger.kernel.org; Gregory Clement 
+> > > > <gregory.clement@bootlin.com>; Marek Behún <kabel@kernel.org>; 
+> > > > Remi Pommarel <repk@triplefau.lt>; Xogium <contact@xogium.me>; 
+> > > > Tomasz Maciej Nowak <tmn505@gmail.com>
+> > > > Subject: [EXT] Re: [PATCH v2] PCI: aardvark: Implement workaround 
+> > > > for PCIe Completion Timeout
+> > > > 
+> > > > External Email
+> > > > 
+> > > > ------------------------------------------------------------------
+> > > > ---- Hello Elad, could you please review this patch? I have 
+> > > > implemented it according your instructions, including that full memory barrier as you described.
+> > > > 
+> > > > On Tuesday 02 August 2022 14:38:16 Pali Rohár wrote:
+> > > > > Marvell Armada 3700 Functional Errata, Guidelines, and 
+> > > > > Restrictions document describes in erratum 3.12 PCIe Completion Timeout (Ref #:
+> > > > > 251), that PCIe IP does not support a strong-ordered model for inbound posted vs.
+> > > > > outbound completion.
+> > > > > 
+> > > > > As a workaround for this erratum, DIS_ORD_CHK flag in Debug Mux 
+> > > > > Control register must be set. It disables the ordering check in 
+> > > > > the core between Completions and Posted requests received from the link.
+> > > > > 
+> > > > > Marvell also suggests to do full memory barrier at the beginning 
+> > > > > of aardvark summary interrupt handler before calling interrupt 
+> > > > > handlers of endpoint drivers in order to minimize the risk for 
+> > > > > the race condition documented in the Erratum between the DMA 
+> > > > > done status reading and the completion of writing to the host memory.
+> > > > > 
+> > > > > More details about this issue and suggested workarounds are in discussion:
+> > > > > https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel
+> > > > > .org_l 
+> > > > > inux-2Dpci_BN9PR18MB425154FE5019DCAF2028A1D5DB8D9-40BN9PR18MB425
+> > > > > 1.namp 
+> > > > > rd18.prod.outlook.com_t_-23u&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r
+> > > > > =eTeNT
+> > > > > LEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=bjgkhgPgOjqCEsbHYHONCZM
+> > > > > iFDX72 
+> > > > > MztWaE0AvWBktQVn3zKEDtUdn02Kx_KJ14B&s=SToGsDGEObwbZGilVtVZPyME8j
+> > > > > NiRgrq
+> > > > > 4SDYvqqT0TA&e=
+> > > > > 
+> > > > > It was reported that enabling this workaround fixes instability 
+> > > > > issues and "Unhandled fault" errors when using 60 GHz WiFi 
+> > > > > 802.11ad card with Qualcomm
+> > > > > QCA6335 chip under significant load which were caused by 
+> > > > > interrupt status stuck in the outbound CMPLT queue traced back to this erratum.
+> > > > > 
+> > > > > This workaround fixes also kernel panic triggered after some 
+> > > > > minutes of usage 5 GHz WiFi 802.11ax card with Mediatek MT7915 chip:
+> > > > > 
+> > > > >     Internal error: synchronous external abort: 96000210 [#1] SMP
+> > > > >     Kernel panic - not syncing: Fatal exception in interrupt
+> > > > > 
+> > > > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > > Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host 
+> > > > > controller
+> > > > > driver")
+> > > > > Cc: stable@vger.kernel.org
+> > > > > ---
+> > > > >  drivers/pci/controller/pci-aardvark.c | 10 ++++++++++
+> > > > >  1 file changed, 10 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/pci/controller/pci-aardvark.c
+> > > > > b/drivers/pci/controller/pci-aardvark.c
+> > > > > index 060936ef01fe..3ae8a85ec72e 100644
+> > > > > --- a/drivers/pci/controller/pci-aardvark.c
+> > > > > +++ b/drivers/pci/controller/pci-aardvark.c
+> > > > > @@ -210,6 +210,8 @@ enum {
+> > > > >  };
+> > > > >  
+> > > > >  #define VENDOR_ID_REG				(LMI_BASE_ADDR + 0x44)
+> > > > > +#define DEBUG_MUX_CTRL_REG			(LMI_BASE_ADDR + 0x208)
+> > > > > +#define     DIS_ORD_CHK				BIT(30)
+> > > > >  
+> > > > >  /* PCIe core controller registers */
+> > > > >  #define CTRL_CORE_BASE_ADDR			0x18000
+> > > > > @@ -558,6 +560,11 @@ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
+> > > > >  		PCIE_CORE_CTRL2_TD_ENABLE;
+> > > > >  	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
+> > > > >  
+> > > > > +	/* Disable ordering checks, workaround for erratum 3.12 "PCIe completion timeout" */
+> > > > > +	reg = advk_readl(pcie, DEBUG_MUX_CTRL_REG);
+> > > > > +	reg |= DIS_ORD_CHK;
+> > > > > +	advk_writel(pcie, reg, DEBUG_MUX_CTRL_REG);
+> > > > > +
+> > > > >  	/* Set lane X1 */
+> > > > >  	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
+> > > > >  	reg &= ~LANE_CNT_MSK;
+> > > > > @@ -1581,6 +1588,9 @@ static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
+> > > > >  	struct advk_pcie *pcie = arg;
+> > > > >  	u32 status;
+> > > > >  
+> > > > > +	/* Full memory barrier (ARM dsb sy), workaround for erratum 3.12 "PCIe completion timeout" */
+> > > > > +	mb();
+> > > > > +
+> > > > >  	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
+> > > > >  	if (!(status & PCIE_IRQ_CORE_INT))
+> > > > >  		return IRQ_NONE;
+> > > > > --
+> > > > > 2.20.1
+> > > > > 
+> > > 
+> > > _______________________________________________
+> > > linux-arm-kernel mailing list
+> > > linux-arm-kernel@lists.infradead.org
+> > > https://urldefense.proofpoint.com/v2/url?u=http-3A__lists.infradead.
+> > > org_mailman_listinfo_linux-2Darm-2Dkernel&d=DwIDaQ&c=nKjWec2b6R0mOyP
+> > > az7xtfQ&r=eTeNTLEK5-TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=2NzkT9KLO26k
+> > > efUOw2nIeSeRnJVZLxEiBXqEoRvDQ0ueww6n4YaXWgAN1uCJX20o&s=nczACS_2jERbA
+> > > -c4Gfar0-HTA4PtvZdJmsBv8jhW8G0&e=
