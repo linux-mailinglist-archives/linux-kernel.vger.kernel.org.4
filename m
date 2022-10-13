@@ -2,128 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22AA5FD53D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847E25FD58D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 09:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJMGwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 02:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        id S229679AbiJMHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 03:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJMGw3 (ORCPT
+        with ESMTP id S229498AbiJMHcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:52:29 -0400
-Received: from out0-130.mail.aliyun.com (out0-130.mail.aliyun.com [140.205.0.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51013DF68;
-        Wed, 12 Oct 2022 23:52:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047192;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---.Paw6veq_1665643942;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.Paw6veq_1665643942)
-          by smtp.aliyun-inc.com;
-          Thu, 13 Oct 2022 14:52:22 +0800
-Date:   Thu, 13 Oct 2022 14:52:22 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Mark transfer type as X86_TRANSFER_RET when
- loading CS in iret emulation
-Message-ID: <20221013065222.GA100679@k08j02272.eu95sqa>
-References: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
- <Y0bssbjJTQVB+SCg@google.com>
+        Thu, 13 Oct 2022 03:32:31 -0400
+X-Greylist: delayed 2364 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Oct 2022 00:32:29 PDT
+Received: from www.kot-begemot.co.uk (ns1.kot-begemot.co.uk [217.160.28.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA7A2B626
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 00:32:29 -0700 (PDT)
+Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1ois5F-001hhl-UR; Thu, 13 Oct 2022 06:52:46 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1ois5C-00AOj3-IV; Thu, 13 Oct 2022 07:52:45 +0100
+Message-ID: <f57d954a-b565-9bfa-b8eb-ce608e168f1a@cambridgegreys.com>
+Date:   Thu, 13 Oct 2022 07:52:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0bssbjJTQVB+SCg@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: Add linux-um archives to lore.kernel.org?
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        linux-um@lists.infradead.org
+Cc:     Richard Weinberger <richard@nod.at>,
+        linux-um-owner@lists.infradead.org, linux-kernel@vger.kernel.org,
+        helpdesk@kernel.org, David Woodhouse <dwmw2@infradead.org>
+References: <20221012191142.GA3109265@bhelgaas>
+ <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+In-Reply-To: <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.0
+X-Spam-Score: -2.0
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 12:34:57AM +0800, Sean Christopherson wrote:
-> On Wed, Oct 12, 2022, Hou Wenlong wrote:
-> > When loading code segment descriptor in iret instruction emulation, the
-> > checks are same as far return instruction emulation, so transfer type
-> > should be X86_TRANSFER_RET in __load_segment_descriptor(). Although,
-> > only iret in real mode is implemented now, and no checks are actually
-> > needed for real mode, it would still be better to mark transfer type as
-> > X86_TRANSFER_RET.
+
+
+On 12/10/2022 20:15, Johannes Berg wrote:
+> On Wed, 2022-10-12 at 14:11 -0500, Bjorn Helgaas wrote:
+>> The linux-um@lists.infradead.org mailing list is listed in MAINTAINERS
+>> and is quite active [1].  Once in a while a commit links to the
+>> infradead pipermail archive [2] (the link in that commit appears
+>> broken).
+>>
+>> I propose that we add linux-um to the lore.kernel.org archives so
+>> future commits can use lore.kernel.org links that don't depend on
+>> infradead.
+>>
+>> https://korg.docs.kernel.org/lore.html says pipermail archives like
+>> infradead has are not ideal, but I don't have any archives at all, and
+>> I don't know how to get even pipermail archives out of infradead.
 > 
-> It's not strictly a RET though.  The RPL vs. DPL checks in __load_segment_descriptor()
-> might do the right thing, but there's a rather large pile of stuff IRET can do that
-> RET can't (ignoring the fact that KVM doesn't even emulate FAR RET to outer privilege
-> levels).
+> I think we talked about this before, but I also don't have any archives
+> worth talking about (only since mid 2019 with a small gap in mid 2020).
+> 
+> If anyone wants to collect the archives from all people, I'm sure it
+> could be done. I can contribute what I have ...
 >
-Yes, if EFLAGS.NT is set, IRET performs a task switch instead of far return in Protected
-Mode.
- 
-> And __emulate_int_real() also loads CS with X86_TRANSFER_NONE, i.e. KVM still has
-> a weird path to worry about.
->
-> Rather than make the IRET case slightly less wrong, what about adding a sanity
-> check in __load_segment_descriptor() that KVM doesn't attempt to load CS in Protected
-> Mode with X86_TRANSFER_NONE?
->
-OK, sanity check is needed if someone wants to implement IRET in Protected Mode but
-use load_segment_descriptor().
 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index 3b27622d4642..fe735e18c419 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -1641,6 +1641,14 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
->                         goto exception;
->                 break;
->         case VCPU_SREG_CS:
-> +               /*
-> +                * KVM uses "none" when loading CS as part of emulating Real
-> +                * Mode exceptions and IRET (handled above).  In all other
-> +                * cases, loading CS without a control transfer is a KVM bug.
-> +                */
-> +               if (WARN_ON_ONCE(transfer == X86_TRANSFER_NONE))
-> +                       goto exception;
-> +
->                 if (!(seg_desc.type & 8))
->                         goto exception;
->
-Do I need to prepare this patch or you will add this directly?
+I am not keeping any (only some of the discussion on my own patches) - I relied on the mailing list archive.
 
-> > 
-> > No functional change intended.
-> > 
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > ---
-> >  arch/x86/kvm/emulate.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> > index 3b27622d4642..5052eb480068 100644
-> > --- a/arch/x86/kvm/emulate.c
-> > +++ b/arch/x86/kvm/emulate.c
-> > @@ -2100,6 +2100,7 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
-> >  			     X86_EFLAGS_FIXED;
-> >  	unsigned long vm86_mask = X86_EFLAGS_VM | X86_EFLAGS_VIF |
-> >  				  X86_EFLAGS_VIP;
-> > +	u8 cpl = ctxt->ops->cpl(ctxt);
-> >  
-> >  	/* TODO: Add stack limit check */
-> >  
-> > @@ -2121,7 +2122,8 @@ static int emulate_iret_real(struct x86_emulate_ctxt *ctxt)
-> >  	if (rc != X86EMUL_CONTINUE)
-> >  		return rc;
-> >  
-> > -	rc = load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS);
-> > +	rc = __load_segment_descriptor(ctxt, (u16)cs, VCPU_SREG_CS, cpl,
-> > +				       X86_TRANSFER_RET, NULL);
-> >  
-> >  	if (rc != X86EMUL_CONTINUE)
-> >  		return rc;
-> > -- 
-> > 2.31.1
-> > 
+> The tooling makes that pretty simple, actually.
+> 
+> I think lists.infradead.org mostly got lost though, right dwmw2? So that
+> way I don't think we'll find much (old) archives either.
+> 
+> johannes
+> 
+
+-- 
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/
