@@ -2,44 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CE55FD503
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0305FD511
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 08:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiJMGk6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Oct 2022 02:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S229471AbiJMGoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 02:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJMGk4 (ORCPT
+        with ESMTP id S229590AbiJMGoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 02:40:56 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2B1631C0;
-        Wed, 12 Oct 2022 23:40:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VS2O8nf_1665643251;
-Received: from smtpclient.apple(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VS2O8nf_1665643251)
-          by smtp.aliyun-inc.com;
-          Thu, 13 Oct 2022 14:40:52 +0800
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v2 0/9] Drivers for Alibaba YCC (Yitian Cryptography
- Complex) cryptographic accelerator
-From:   guanjun <guanjun@linux.alibaba.com>
-In-Reply-To: <1664350687-47330-1-git-send-email-guanjun@linux.alibaba.com>
-Date:   Thu, 13 Oct 2022 14:40:50 +0800
-Cc:     "zelin.deng@linux.alibaba.com" <zelin.deng@linux.alibaba.com>,
-        xuchun.shang@linux.alibaba.com,
-        "artie.ding@linux.alibaba.com" <artie.ding@linux.alibaba.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <16B87FEE-50FE-4FEC-AA3E-7AF0B0C83F1F@linux.alibaba.com>
-References: <1664350687-47330-1-git-send-email-guanjun@linux.alibaba.com>
-To:     herbert@gondor.apana.org.au,
-        "Elliott, Robert (Servers)" <elliott@hpe.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        Thu, 13 Oct 2022 02:44:11 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D36213B8F4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 23:44:09 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id e18so554308wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 23:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=W+rxczmXg10fKsWz9dlAbQXlHy5Vc2mFKgDnkxn2Kck=;
+        b=SKEeuhM78a0OTPcXM1o78rSfUJGACYxjpcLwEC8WGbfwciUEy3s3NpS7lyg9hOJ3fQ
+         HsQyb6Vf8JF0H5rVbMcUn6Wfo2wtzmOZzx6q29+lVjpi8q7wEq1b7cSPmf2wdhGl2tUa
+         0KZNQ7WZ1qTufbsItfFT9WzFCG03971F/zkp7FFPg4SOvDA718Pq1sjIOHnVzRXVLpzf
+         inpmOJgckbIlEOboV1dAnGW5sx2oyWN/ttysxHI8+GFz7SBW9CEFzu9nCXgIpN5aUXip
+         IjkEbB9T5nJN8IMJwpxcVchHyptScSCjZwDs1teDNhLMY1fqUyx9S1nc+R1xQExeDvdi
+         ANBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W+rxczmXg10fKsWz9dlAbQXlHy5Vc2mFKgDnkxn2Kck=;
+        b=gyOJE28FP1sLGqIKFFGOMusZYVJg+BlG0yOeAJi0+pwM+e7UGxWDhBzj4Sd5bx1yIG
+         Lx354QsMEIgP4jkb72UP6k4pV6StWPv4ybMkdI5NGILOgOrU/3dq74zuwt0V+2gQvP75
+         fuYhQQHF7UvcQjwG9KU5pmrOgdmdQ4al3/oQCJSsmhUNnZCi2CmfF1Utm8JUwAcaPgYr
+         FIqFkqxBjGh8+MwkXK/8LGjEf9W68C9Xw68skQj1CJSvMddHZHuLCzgiwGMeWhZHGCk0
+         ckawxW1TRQ+YcnBvGs1I2EvXXtKT+S7eMNE44zUsDIYLd9jJTERmYy4oCp1R+mTQ8cZU
+         HvFQ==
+X-Gm-Message-State: ACrzQf112krdc2LokahHxfYRAbgzO4JSQwqoW+88DKwJBcehnZcCuijN
+        taIUcNkEDMbbccmoqWE71o2KjQ==
+X-Google-Smtp-Source: AMsMyM4kKAuve7NBLdS5HA+CyqgC97iUdTL6TelQNzkXQJQZLZ0MDtf/258wuob2uZ0auRgfBqHY2g==
+X-Received: by 2002:a7b:ca4f:0:b0:3c6:ce01:bc4a with SMTP id m15-20020a7bca4f000000b003c6ce01bc4amr5400917wml.42.1665643447879;
+        Wed, 12 Oct 2022 23:44:07 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:cb49:9049:c0a5:d695? ([2a01:e0a:982:cbb0:cb49:9049:c0a5:d695])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05600c1d0600b003a5f3f5883dsm3856029wms.17.2022.10.12.23.44.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 23:44:06 -0700 (PDT)
+Message-ID: <48069056-62f0-f7c1-c8d1-ae072058b5d1@linaro.org>
+Date:   Thu, 13 Oct 2022 08:44:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v4 1/2] remoteproc: qcom: pas: Add MSM8953 ADSP PIL
+ support
+Content-Language: en-US
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dmitry.baryshkov@linaro.org, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+References: <20221013042749.104668-1-sireeshkodali1@gmail.com>
+ <20221013042749.104668-2-sireeshkodali1@gmail.com>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+Reply-To: neil.armstrong@linaro.org
+In-Reply-To: <20221013042749.104668-2-sireeshkodali1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,96 +85,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13/10/2022 06:27, Sireesh Kodali wrote:
+> Add support for the Audio DSP PIL found on the Qualcomm MSM8953
+> platform. The same configuration is used on all SoCs based on the
+> MSM8953 platform (SDM450, SDA450, SDM625, SDM632, APQ8053).
+> 
+> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> ---
+>   drivers/remoteproc/qcom_q6v5_pas.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index 6afd0941e552..eff8d34d7f4b 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -948,6 +948,7 @@ static const struct adsp_data sm8450_mpss_resource = {
+>   
+>   static const struct of_device_id adsp_of_match[] = {
+>   	{ .compatible = "qcom,msm8226-adsp-pil", .data = &adsp_resource_init},
+> +	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
+>   	{ .compatible = "qcom,msm8974-adsp-pil", .data = &adsp_resource_init},
+>   	{ .compatible = "qcom,msm8996-adsp-pil", .data = &msm8996_adsp_resource},
+>   	{ .compatible = "qcom,msm8996-slpi-pil", .data = &slpi_resource_init},
 
-
-> 2022年9月28日 下午3:37，Guanjun <guanjun@linux.alibaba.com> 写道：
-> 
-> From: Guanjun <guanjun@linux.alibaba.com>
-> 
-> Hi,
-> 
-
-Hi Herbert, Elliott,
-
-> This patch series aims to add drivers for Alibaba YCC (Yitian Cryptography Complex)
-> cryptographic accelerator. Enables the on-chip cryptographic accelerator of
-> Alibaba Yitian SoCs which is based on ARMv9 architecture.
-> 
-> It includes PCIe enabling, skcipher, aead, rsa, sm2 support.
-> 
-> Please help to review.
-> 
-> Thanks,
-> Guanjun.
-> 
-> Change log:
-> v1 RESEND -> v2:
-> - [01/09] Remove char device that is not used now.
-
-Do you have any comments about this v2 patchset?
-
-Thank you very much for code review!
-
-BR,
-Guanjun
-
-> 
-> v1 -> v1 RESEND:
->  - [01/09] Adjust the Kconfig entry in alphabetical order
->  - [05/09][07/09][08/09] Adjust the format of algorithm names
-> 
-> v1: https://lore.kernel.org/all/1661334621-44413-1-git-send-email-guanjun@linux.alibaba.com/
-> v1 RESEND: https://lore.kernel.org/all/1662435353-114812-1-git-send-email-guanjun@linux.alibaba.com/
-> 
-> Guanjun (3):
->  crypto/ycc: Add skcipher algorithm support
->  crypto/ycc: Add aead algorithm support
->  crypto/ycc: Add rsa algorithm support
-> 
-> Xuchun Shang (1):
->  crypto/ycc: Add sm2 algorithm support
-> 
-> Zelin Deng (5):
->  crypto/ycc: Add YCC (Yitian Cryptography Complex) accelerator driver
->  crypto/ycc: Add ycc ring configuration
->  crypto/ycc: Add irq support for ycc kernel rings
->  crypto/ycc: Add device error handling support for ycc hw errors
->  MAINTAINERS: Add Yitian Cryptography Complex (YCC) driver maintainer
->    entry
-> 
-> MAINTAINERS                            |   8 +
-> drivers/crypto/Kconfig                 |   2 +
-> drivers/crypto/Makefile                |   1 +
-> drivers/crypto/ycc/Kconfig             |  18 +
-> drivers/crypto/ycc/Makefile            |   4 +
-> drivers/crypto/ycc/sm2signature_asn1.c |  38 ++
-> drivers/crypto/ycc/sm2signature_asn1.h |  13 +
-> drivers/crypto/ycc/ycc_aead.c          | 646 ++++++++++++++++++++++
-> drivers/crypto/ycc/ycc_algs.h          | 176 ++++++
-> drivers/crypto/ycc/ycc_dev.h           | 157 ++++++
-> drivers/crypto/ycc/ycc_drv.c           | 567 ++++++++++++++++++++
-> drivers/crypto/ycc/ycc_isr.c           | 279 ++++++++++
-> drivers/crypto/ycc/ycc_isr.h           |  12 +
-> drivers/crypto/ycc/ycc_pke.c           | 944 +++++++++++++++++++++++++++++++++
-> drivers/crypto/ycc/ycc_ring.c          | 652 +++++++++++++++++++++++
-> drivers/crypto/ycc/ycc_ring.h          | 168 ++++++
-> drivers/crypto/ycc/ycc_ske.c           | 925 ++++++++++++++++++++++++++++++++
-> 17 files changed, 4610 insertions(+)
-> create mode 100644 drivers/crypto/ycc/Kconfig
-> create mode 100644 drivers/crypto/ycc/Makefile
-> create mode 100644 drivers/crypto/ycc/sm2signature_asn1.c
-> create mode 100644 drivers/crypto/ycc/sm2signature_asn1.h
-> create mode 100644 drivers/crypto/ycc/ycc_aead.c
-> create mode 100644 drivers/crypto/ycc/ycc_algs.h
-> create mode 100644 drivers/crypto/ycc/ycc_dev.h
-> create mode 100644 drivers/crypto/ycc/ycc_drv.c
-> create mode 100644 drivers/crypto/ycc/ycc_isr.c
-> create mode 100644 drivers/crypto/ycc/ycc_isr.h
-> create mode 100644 drivers/crypto/ycc/ycc_pke.c
-> create mode 100644 drivers/crypto/ycc/ycc_ring.c
-> create mode 100644 drivers/crypto/ycc/ycc_ring.h
-> create mode 100644 drivers/crypto/ycc/ycc_ske.c
-> 
-> -- 
-> 1.8.3.1
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
