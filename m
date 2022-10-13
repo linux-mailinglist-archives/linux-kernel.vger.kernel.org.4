@@ -2,111 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1827C5FD2E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A175FD2EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 03:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiJMBpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 21:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S229705AbiJMBrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 21:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJMBpK (ORCPT
+        with ESMTP id S229541AbiJMBrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 21:45:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02B93F1C6;
-        Wed, 12 Oct 2022 18:45:06 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MnsfP1Wxhz1P79c;
-        Thu, 13 Oct 2022 09:40:29 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 13 Oct 2022 09:45:03 +0800
-Message-ID: <1d7b081c-9ae1-b5bd-e97e-518147e06099@huawei.com>
-Date:   Thu, 13 Oct 2022 09:45:02 +0800
+        Wed, 12 Oct 2022 21:47:19 -0400
+Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51416112ABF;
+        Wed, 12 Oct 2022 18:47:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VS1VlX2_1665625631;
+Received: from 30.221.130.192(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VS1VlX2_1665625631)
+          by smtp.aliyun-inc.com;
+          Thu, 13 Oct 2022 09:47:12 +0800
+Message-ID: <3051133b-1408-2ccb-b22f-e5ee990bdc4f@linux.alibaba.com>
+Date:   Thu, 13 Oct 2022 09:47:11 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v4 5/6] selftests/bpf: Fix error failure of case
- test_xdp_adjust_tail_grow
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [External] Re: [PATCH 3/5] cachefiles: resend an open request if
+ the read request's object is closed
 Content-Language: en-US
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Xu Kuohai <xukuohai@huaweicloud.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
- <20221011120108.782373-6-xukuohai@huaweicloud.com>
- <611e9bed-df6a-0da9-fbf9-4046f4211a7d@linux.dev>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <611e9bed-df6a-0da9-fbf9-4046f4211a7d@linux.dev>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Jia Zhu <zhujia.zj@bytedance.com>, dhowells@redhat.com,
+        xiang@kernel.org
+Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20221011131552.23833-1-zhujia.zj@bytedance.com>
+ <20221011131552.23833-4-zhujia.zj@bytedance.com>
+ <28d64f00-e408-9fc2-9506-63c1d8b08b9c@linux.alibaba.com>
+ <c6f5d729-2083-817d-fe7d-b01bce27e39f@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <c6f5d729-2083-817d-fe7d-b01bce27e39f@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/2022 7:17 AM, Martin KaFai Lau wrote:
-> On 10/11/22 5:01 AM, Xu Kuohai wrote:
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> test_xdp_adjust_tail_grow failed with ipv6:
->>    test_xdp_adjust_tail_grow:FAIL:ipv6 unexpected error: -28 (errno 28)
->>
->> The reason is that this test case tests ipv4 before ipv6, and when ipv4
->> test finished, topts.data_size_out was set to 54, which is smaller than the
->> ipv6 output data size 114, so ipv6 test fails with NOSPC error.
->>
->> Fix it by reset topts.data_size_out to sizeof(buf) before testing ipv6.
->>
->> Fixes: 04fcb5f9a104 ("selftests/bpf: Migrate from bpf_prog_test_run")
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> ---
->>   tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
->> index 9b9cf8458adf..009ee37607df 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
->> @@ -63,6 +63,7 @@ static void test_xdp_adjust_tail_grow(void)
->>       expect_sz = sizeof(pkt_v6) + 40; /* Test grow with 40 bytes */
->>       topts.data_in = &pkt_v6;
->>       topts.data_size_in = sizeof(pkt_v6);
->> +    topts.data_size_out = sizeof(buf);
-> 
-> lgtm but how was it working before... weird.
-> 
 
-the test case returns before this line is executed, see patch 6
 
->>       err = bpf_prog_test_run_opts(prog_fd, &topts);
->>       ASSERT_OK(err, "ipv6");
->>       ASSERT_EQ(topts.retval, XDP_TX, "ipv6 retval");
+On 10/12/22 11:37 PM, Jia Zhu wrote:
 > 
-> .
+> 
+> 在 2022/10/12 15:53, JeffleXu 写道:
+>>
+>>
+>> On 10/11/22 9:15 PM, Jia Zhu wrote:
+>>> @@ -254,12 +282,18 @@ ssize_t cachefiles_ondemand_daemon_read(struct
+>>> cachefiles_cache *cache,
+>>>        * request distribution fair.
+>>>        */
+>>>       xa_lock(&cache->reqs);
+>>> -    req = xas_find_marked(&xas, UINT_MAX, CACHEFILES_REQ_NEW);
+>>> -    if (!req && cache->req_id_next > 0) {
+>>> -        xas_set(&xas, 0);
+>>> -        req = xas_find_marked(&xas, cache->req_id_next - 1,
+>>> CACHEFILES_REQ_NEW);
+>>> +retry:
+>>> +    xas_for_each_marked(&xas, req, xa_max, CACHEFILES_REQ_NEW) {
+>>> +        if (cachefiles_ondemand_skip_req(req))
+>>> +            continue;
+>>> +        break;
+>>>       }
+>>>       if (!req) {
+>>> +        if (cache->req_id_next > 0 && xa_max == ULONG_MAX) {
+>>> +            xas_set(&xas, 0);
+>>> +            xa_max = cache->req_id_next - 1;
+>>> +            goto retry;
+>>> +        }
+>>
+>> I would suggest abstracting the "xas_for_each_marked(...,
+>> CACHEFILES_REQ_NEW)" part into a helper function to avoid the "goto
+>> retry".
+>>
+> Hi JingBo,
+> 
+> Thanks for your advice. Are the following revises appropriate？
+> 
+> static struct cachefiles_req *cachefiles_ondemand_select_req(struct
+> xa_state *xas, unsigned long xa_max)
+> {
+>     struct cachefiles_req *req;
+>     struct cachefiles_ondemand_info *info;
+> 
+>     xas_for_each_marked(xas, req, xa_max, CACHEFILES_REQ_NEW) {
+>         if (!req || req->msg.opcode != CACHEFILES_OP_READ)
 
+xas_for_each_marked() will guarantee that @req won't be NULL, and thus
+the NULL check here in unnecessary. Otherwise LGTM.
+
+>             return req;
+>         info = req->object->private;
+>         if (info->state == CACHEFILES_ONDEMAND_OBJSTATE_close) {
+>             cachefiles_ondemand_set_object_reopening(req->object);
+>             queue_work(fscache_wq, &info->work);
+>             continue;
+>         } else if (info->state == CACHEFILES_ONDEMAND_OBJSTATE_reopening) {
+>             continue;
+>         }
+>         return req;
+>     }
+>     return NULL;
+> }
+> 
+> ...
+> 
+>  xa_lock(&cache->reqs);
+>     req = cachefiles_ondemand_select_req(&xas, ULONG_MAX);
+>     if (!req && cache->req_id_next > 0) {
+>         xas_set(&xas, 0);
+>         req = cachefiles_ondemand_select_req(&xas, cache->req_id_next - 1);
+>     }
+>     if (!req) {
+>         xa_unlock(&cache->reqs);
+>         return 0;
+>     }
+>>
+
+
+-- 
+Thanks,
+Jingbo
