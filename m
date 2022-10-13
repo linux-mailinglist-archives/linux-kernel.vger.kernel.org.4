@@ -2,168 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39E05FD67E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5578F5FD687
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 10:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiJMI4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 04:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S229890AbiJMI7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 04:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiJMIz7 (ORCPT
+        with ESMTP id S229485AbiJMI7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:55:59 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC40F88CB;
-        Thu, 13 Oct 2022 01:55:57 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id 10so1280176pli.0;
-        Thu, 13 Oct 2022 01:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSEyTUffz4Qb3bpIvONtLStYVlQKu1503GyQBO6++fU=;
-        b=cMreJXESw6TihUxvWfRaAv2sY9e/44Ierdxl0FVkp/5ZrFvjaNNZFopfJUZHQJggyv
-         17Pk8lCy73It5xemwUsin/Q9RWnXahHh5oa93a1484pY75gDO+EI7FZJMLtM5Ly27GUq
-         1AOmlkS490R29OpE0NFnADGMinc/4OlptqWRHavSeGqbvCGsCALZ+aeLNxAMSv7k25P/
-         +hVrsG+/AZ3ViIe71fcBjWZnocC5TLwnrNr9VNGOVtO9SQPN5xoEiKPSwWs1DGGXyovj
-         U7cACzeSBIbcm4HdTG6FRHV7oHiqg2dSUawbZW2ZhEzO5O0UW3csChUKnKdiK3/VyEtc
-         zOoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VSEyTUffz4Qb3bpIvONtLStYVlQKu1503GyQBO6++fU=;
-        b=dGkl2ETK7u9wd4WrCDByUsUND5RN61dEaRusWnoQUnkytsghR6C96HPMi3zYxjGpa5
-         oxAhrqKjfiO0zlEhio4PKjRprA65af+vtF8xL5WNin1+qZh7+YHiqA/9EG26jTQzQbU/
-         F1xO1djkAY+pbhHC7+cKR3Tm2Z7LFt1ZFNF6FrIpKkG7h6+AWS4Fg4MNn2uNarRjdAmx
-         Hxi/cjF1nXbBWsP21iZ2uTmOSWVQwhmYQtQK0hN/Ja5EMLGpQI2jNKrf5m9qNHlI5NKs
-         g0nrHRx0I4nq3UwdCzPrBGAUYEIxwLAV7UumStDbWgFEFyHQ8fqxYxK+dnwmZD+ZfAHF
-         mjaA==
-X-Gm-Message-State: ACrzQf1gmNOcedbA4ipIFHl36+4Ys8yGDD5yXD7HB4psFG3UWGgjnqMT
-        kmP/Lqxnt6nIttf5GtcPTBtrWeY8eWU=
-X-Google-Smtp-Source: AMsMyM7xPQRdgIYQRWUKf2Gywb8hcjOcFiGYKHc5I34W8dk4HO4ZJUCdMDNSCmEzGnjcpsEM0VeXDw==
-X-Received: by 2002:a17:902:c405:b0:181:2355:68ea with SMTP id k5-20020a170902c40500b00181235568eamr26185246plk.70.1665651357050;
-        Thu, 13 Oct 2022 01:55:57 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id f23-20020aa79697000000b00562664d5027sm1412552pfk.61.2022.10.13.01.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 01:55:56 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 01:55:54 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH v9 016/105] KVM: TDX: create/destroy VM structure
-Message-ID: <20221013085554.GA2756200@ls.amr.corp.intel.com>
-References: <cover.1664530907.git.isaku.yamahata@intel.com>
- <07bf749357bbf1acd20b09d7ab1fac940082632c.1664530907.git.isaku.yamahata@intel.com>
- <CAAhR5DFrwP+5K8MOxz5YK7jYShhaK4A+2h1Pi31U_9+Z+cz-0A@mail.gmail.com>
+        Thu, 13 Oct 2022 04:59:52 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00EB13D0D;
+        Thu, 13 Oct 2022 01:59:50 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2B83C580467;
+        Thu, 13 Oct 2022 04:59:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 13 Oct 2022 04:59:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665651590; x=1665658790; bh=CTVtQG5QiC
+        zBfichKHTfygU6liaBhjCGgKbiqW/tDag=; b=meAYUrWfzZ7ZLVN/7//nT42nm/
+        J+AwjjQY0RXplKHkADeZH+p/c8Hr4fjdsejYw9Xt3QYy8catdQAKDWvipGj2bZI1
+        sCQ/UuJ83ZWusQyumr1XXjfXf+20a3LZkhctBY93hlcvDzKDX9gwAbNJVp/4UA1x
+        E3SHpxXn32ShXojQA6Oxi1FYZ+34Co3071J4qV0QkbyM1fwBngTzr3t0YVUfeG7f
+        F0DgfKhAq1uaaI1zQIa2DQUEoGZo7onubZlvDLQTZrwmS/z9672F9DlVDSD9se1m
+        iiPwyKsbskNK1cgEE73pcrCGYz1pyD8CTHn7aamlIS/JHEiCSdUjsNfddPjg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665651590; x=1665658790; bh=CTVtQG5QiCzBfichKHTfygU6liaB
+        hjCGgKbiqW/tDag=; b=VXzOGEqsT64dNHSl3mUD+EG9RJDP4bnk6x86Jh9cjWCa
+        N5KbLjG1LbZtRyLDtvDhMHiUZxJFnwEU/hFB9NClM6CSbquX7lghRinvORkEUnv1
+        xZKac1MNkRB11ZPECAFkcKh1BVtNKshNBghQDbu6JOZp4+X1RU1aH58Ew9QWePDu
+        nFiB0IJFeEDo+M55e0L1Ot9am0rXlCNZW2bop94+EcDgjwb7lm+BA0+4fOqPuFQv
+        haraG9KkzNDHJ6qMxBsJ0uiaRCgpdeGlukAtuwhDr9hhr1cijBVF3sTnYREbKmBj
+        U7v24AByTwLbO71l+beZ11j4hxulG+qAH2w3nbtTsQ==
+X-ME-Sender: <xms:hdNHY4unUbygZrgmv_SNNW1E0i4vwIjGFTBczHXmhM5jPxLAyChhDw>
+    <xme:hdNHY1dUZdE2DLzfBKT8Py41NV-o2BSDMz4Vvp_y0Bc4W1n_KYpYafxm7zyozRqg_
+    1K0NpZs0r_okwwUe4U>
+X-ME-Received: <xmr:hdNHYzxrf1vEbYFZRytIn4stBph8pRJvyq1IA6gLZeOY6d1ca-Psj7TevQPJs4occmUzWtKWS_Wcmkns4_Ufps6ku2dcfJFYZfH9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:hdNHY7P8y5d8Oar6GTPsWEuLDWgZY7__3jyncN1aoqbTr8YJhfW8-A>
+    <xmx:hdNHY48uK1KZcX6fsOqA6YnLaEL_xE0Rlu7nKlIY12DAt1E8tXpdNg>
+    <xmx:hdNHYzXp8TYIgQHY6aN4knYcFx8Jm0bgr0v6A0KfX20DqI5A6uL6lQ>
+    <xmx:htNHY8I7s84wa8XhqWLc1v8fSpmjQ0TSV37zs8ZFgFMl3y8FXAkUvg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Oct 2022 04:59:49 -0400 (EDT)
+Date:   Thu, 13 Oct 2022 10:59:47 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
+        Ray Jui <rjui@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/7] drm/vc4: Fix the core clock behaviour
+Message-ID: <20221013085947.jux4tfbh64ldluin@houat>
+References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
+ <20221010114420.beytjynzshjgiy6y@houat>
+ <395633de-193f-609e-abc6-9dddb2cae3c0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xi2nxcoqs7owfyl4"
 Content-Disposition: inline
-In-Reply-To: <CAAhR5DFrwP+5K8MOxz5YK7jYShhaK4A+2h1Pi31U_9+Z+cz-0A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <395633de-193f-609e-abc6-9dddb2cae3c0@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 03:30:26PM -0700,
-Sagi Shahar <sagis@google.com> wrote:
 
+--xi2nxcoqs7owfyl4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > +int tdx_vm_init(struct kvm *kvm)
-> > +{
-> > +       struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> > +       cpumask_var_t packages;
-> > +       int ret, i;
-> > +       u64 err;
-> > +
-> > +       /* vCPUs can't be created until after KVM_TDX_INIT_VM. */
-> > +       kvm->max_vcpus = 0;
-> 
-> The fact that vCPUs can't be created until KVM_TDX_INIT_VM is called
-> will make it difficult to implement intra host migration. See longer
-> discussion below.
-...
-> Me, Sean and Isaku had a short discussion offline regarding the
-> interaction between the proposed API in this patch and intra-host
-> migration. To summarize:
-> 
-> For intra-host migration you generally want the destination VM to be
-> initialized including the right number of vCPUs before you migrate the
-> source VM state into it.
-> The proposed API makes it difficult since it forces the destination VM
-> to call KVM_TDX_INIT_VM before creating vCPUs which initializes TDX
-> state and allocate a new hkid for the destination VM which would never
-> be used. This can create a resource limitation on migrating VMs where
-> there shouldn't be one.
-> 
-> To solve this issue there are 2 main proposed changes to the API:
-> 
-> 1. Add a new API based on ioctl(KVM_ENABLE_CAP) to let userspace
-> modify the max number of vcpus:
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 43a6a7efc6ec..6055098b025b 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -6278,6 +6278,18 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->                 }
->                 mutex_unlock(&kvm->lock);
->                 break;
-> +       case KVM_CAP_MAX_VCPUS:
-> +               r = -EINVAL;
-> +               if (cap->args[0] > KVM_MAX_VCPUS)
-> +                       break;
-> +
-> +               mutex_lock(&kvm->lock);
-> +               if (!kvm->created_vcpus) {
-> +                       kvm->max_vcpus = cap->args[0];
-> +                       r = 0;
-> +               }
-> +               mutex_unlock(&kvm->lock);
-> +               break;
->         case KVM_CAP_MAX_VCPU_ID:
->                 r = -EINVAL;
->                 if (cap->args[0] > KVM_MAX_VCPU_IDS)
-> 
-> 2. Modify the existing API such that max_vcpus will be set to
-> KVM_MAX_VCPUS like in regular VMs and during KVM_TDX_INIT_VM, if the
-> user created more vCPUs than the number specified, KVM_TDX_INIT_VM
-> will fail.
-> 
-> For option (1), there are some possible variations:
-> 1.a. Do we keep the max_vcpus argument in KVM_TDX_INIT_VM? If so, we
-> need to check if max_vcpus matches the number of max_vcpus already set
-> and fail otherwise.
-> 1.b. Do we require KVM_ENABLE_CAP_VM(KVM_CAP_MAX_VCPUS) to be called?
-> Theoretically, we can set max_vcpus to the KVM default KVM_MAX_VCPUS
-> and allow the user to change it as long as vcpus hasn't been created.
-> If KVM_ENABLE_CAP_VM(KVM_CAP_MAX_VCPUS), the behavior will remain the
-> same as regular VMs right now.
-> 
-> In my opinion, the cleanest solution would be option 1 (new
-> KVM_CAP_MAX_VCPUS API) while removing the max_vcpus argument from
-> KVM_TDX_INIT_VM and setting the initial max_vcpus to KVM_MAX_VCPUS and
-> not requiring the new ioctl to be called unless userspace wants to
-> specifically limit the number of vcpus. In that case,
-> KVM_CAP_MAX_VCPUS can be called at any time until vcpus are created.
+Hi Florian,
 
-Regarding to KVM_CAP_MAX_CPUS vs KVM_TDX_INIT_VM, KVM_CAP_MAX_CPUS is more
-generic, KVM_CAP_MAX_CPUS  would be better.  This follows tsc frequency.
+On Mon, Oct 10, 2022 at 12:07:22PM -0700, Florian Fainelli wrote:
+> On 10/10/22 04:44, Maxime Ripard wrote:
+> > Hi Florian,
+> >=20
+> > On Tue, Sep 20, 2022 at 02:50:19PM +0200, Maxime Ripard wrote:
+> > > Those patches used to be part of a larger clock fixes series:
+> > > https://lore.kernel.org/linux-clk/20220715160014.2623107-1-maxime@cer=
+no.tech/
+> > >=20
+> > > However, that series doesn't seem to be getting anywhere, so I've spl=
+it out
+> > > these patches that fix a regression that has been there since 5.18 an=
+d that
+> > > prevents the 4k output from working on the RaspberryPi4.
+> > >=20
+> > > Hopefully, we will be able to merge those patches through the DRM tre=
+e to avoid
+> > > any further disruption.
+> >=20
+> > Could you review this? Ideally this would be merged through drm-misc due
+> > to the dependencies between the new firmware functions and the DRM
+> > patches.
+>=20
+> I suppose I can review the firmware parts if you would like me to
 
-If option (1) is adapted, the logic should go to the common code, i.e. under
-linux/virt/kvm/, because there is nothing specific to x86.  I don't see any use
-case other than TDX, though.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+I was of course asking for the firmware parts :)
+
+> for vc4 I am pretty much clueless, and despite efforts from Emma to
+> get the vc4 driver to be usable on platforms other than Pi, that never
+> happened unfortunately.
+
+Stefan had the same concerns, but I don't think that's a big one. If
+needs be, we can move the call to the firware into an if statement or
+whatever and support a firmware-less device.
+
+> It would be better to keep the firmware and vc4 drivers decoupled,
+> just so "wrong" assumptions are not made, but for all practical
+> purposes this is the only combination that exists.
+
+I know, and my initial proposal was relying on a generic CCF function to
+implement this. Stephen didn't feel like a single user for it was
+enough, and there were some technical drawbacks too that might not have
+made this solution robust enough. Hence the firmware solution.
+
+Maxime
+
+--xi2nxcoqs7owfyl4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY0fTgwAKCRDj7w1vZxhR
+xWmxAQDOTnHICbSvwbYwASVkNAnE/Tiwz+E7mi+miG42l+Xi8wEAy7apqdl/hFYY
+g+PNXCY9HOx+PMldyNRRP9lFgFC1sQA=
+=oC3j
+-----END PGP SIGNATURE-----
+
+--xi2nxcoqs7owfyl4--
