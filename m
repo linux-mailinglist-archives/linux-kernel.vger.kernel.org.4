@@ -2,128 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644AB5FDD4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381705FDD4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiJMPhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S229741AbiJMPhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJMPhV (ORCPT
+        with ESMTP id S229717AbiJMPhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:37:21 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26C9BE2C8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:37:20 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id y205so2454296yby.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gFTFokgNHTGaQylOsGEna9aC1ySQtkamEeN27nYYtMo=;
-        b=ZfLz0QdiG9JBjp7/wEbV0kPjVt5hjZm/ZfmjnY7krnW3YJ51i4IZNCm/42GSkTLfsi
-         96OYRIV113x7VnJuK0maHfWcnG8QFdVZIjHe/0PNePOvzphvuxlgmYwqSAd+Sb5FUOSd
-         XpcqG7xnc/ayC4mGz7aPyPDM+koPWVNEfndV/AQr7XoatkXvw/DbdiOOgPATeZWELPch
-         loJ5aCEYuTaZiSCH6eohOgmCB3LoCp7/MYBx/4P4+x8XF+v3ZK/nY38AoaHpgIP8aHMz
-         241UX7NA0+zvmIw4JsTmNUbAurwfxxl+Vn8spwjRfKusHAORCRndam+Fh33IAn3iSh0w
-         nOcg==
+        Thu, 13 Oct 2022 11:37:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE22C6958
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665675454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZC8ZhODybW3HN+Dzjja+AX4is7YURzcPSRS/gTWg/mU=;
+        b=Xy+nmoRWYQjINjAENClEbpyAnaeXmP/ywdJWAw2sSU9diMnoyQAtRQYGBSAypwB/eXuTo/
+        goJiyo8MB1D0BtnFoi3Wv0cLj8mTInxJHjthkWC4+CgmfpfGcle2+JPICmGC+ms43adPKR
+        TUJeeroLct29OeTkFK7yjSY/lcsSRYg=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-39-c8gP-XhMOXyB0WAmpdOjkQ-1; Thu, 13 Oct 2022 11:37:32 -0400
+X-MC-Unique: c8gP-XhMOXyB0WAmpdOjkQ-1
+Received: by mail-oo1-f69.google.com with SMTP id m13-20020a4a390d000000b004809df50243so995061ooa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:37:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gFTFokgNHTGaQylOsGEna9aC1ySQtkamEeN27nYYtMo=;
-        b=Ayh3heMZRbBYb8OZTfrIXuJyR7dKPhcL1SWcNcxi69Xc2/5iGYOadFwf84JNoS0YSm
-         DYFzjLrqn6x2oJptYJQpMfQLb77exQUJwQWYA0QnKAny6dfcEX8yNYPi7GheTUxB3u8M
-         QocPzsq1+UKjGLOYkBqV6TX2ki7E0553fhOYaVH5N0f7ogPpfF5NsIYbYXX4NEa3c3BV
-         XLNqpizzFsgq1R08wwN1aA73fe13UY4VLYeo4zMOcr9wjboEhzVqT1tY5AlNRQvS2tZl
-         CLho1G+Ah7DXvHJC+/mHQybRdjd+3XFG4++/y6NGSgarzXGeRrlJ5eT128kHZ3dnU4YU
-         rwWw==
-X-Gm-Message-State: ACrzQf16ygC13rbDTDkcfLtOjD3VQZfcTRurszQ9vXyz6glePYk1YyBl
-        FAan+g05+oBphqfE7x7MBv2Xac7u3WqlnXbBBkmdtQ==
-X-Google-Smtp-Source: AMsMyM6rJSajVfrXSduoobUcD898rHe8tr9JXQscVFW1kDtIR1T+kP3FtiVCYE63367gGKceFY3ty5zTsJzzc9y3p54=
-X-Received: by 2002:a25:ccd0:0:b0:6bf:d596:72ff with SMTP id
- l199-20020a25ccd0000000b006bfd59672ffmr542750ybf.598.1665675439989; Thu, 13
- Oct 2022 08:37:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZC8ZhODybW3HN+Dzjja+AX4is7YURzcPSRS/gTWg/mU=;
+        b=cTXhkE4WIiVkA0jJPJqqHwdkfRHYkaeMS5kw2yz0mwgDpgtO6SawEnsK7sZ+NuUwCc
+         ZptMQM1t3xl9GZ7U83e+RcnhzuMOvZVCnCyudC2MothZYbFAImn+d2q7tR1j9w/j6zIh
+         KYJ0YUKfaS2BVbWRdpr9ZkvIshj6wQx5cc2Lxux/6dcJbwsqq+Ri2wwKKktOP6fxVRJ2
+         ITRGXaz2eCCAHpZH73zzNTUqAYpWJmsfuT5oKnGYaBx7wSpotQ1NgwPgE9qrMhBoPZD9
+         PlTVMAHUGn5cdwN6F7Vm6dpN1BuNq3dXSxbm/4IeSxy9eB6HzPj+ocMg0qi7r5mSnXHz
+         V+HA==
+X-Gm-Message-State: ACrzQf2/bKJmGbQ1+WCjGJYI0jFZZrtKqLHwRkMcyBEIOodMgPdKwpy2
+        W45QPkyPB+3Zi0BLWjrahkCvt2EKoDdxOXUIru47SPb+R5YcXT/5EgaHgFcOYtDA8gAG5Mi+XKw
+        aZ9Wa5GCJXX0zvocIzFDJy2RA
+X-Received: by 2002:a05:6808:1b12:b0:354:a089:1998 with SMTP id bx18-20020a0568081b1200b00354a0891998mr150713oib.9.1665675452095;
+        Thu, 13 Oct 2022 08:37:32 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6yjHx5WKkTxDmnf9BkOTj1JV+8H3boJ42+MTYhu1d27xRvNYYoqWqfZtJP/7wopOxXoTlmHw==
+X-Received: by 2002:a05:6808:1b12:b0:354:a089:1998 with SMTP id bx18-20020a0568081b1200b00354a0891998mr150697oib.9.1665675451855;
+        Thu, 13 Oct 2022 08:37:31 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id r2-20020a4a83c2000000b004809c78083asm872774oog.25.2022.10.13.08.37.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 08:37:31 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 08:37:30 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [RFC PATCH] iommu/vt-d: Add sanity check to
+ iommu_sva_bind_device()
+Message-ID: <20221013153730.rwtukjgpdgwgfodv@cantor>
+References: <20221013153355.2365865-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-References: <20221013151901.29368-1-cppcoffee@gmail.com>
-In-Reply-To: <20221013151901.29368-1-cppcoffee@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 13 Oct 2022 08:37:08 -0700
-Message-ID: <CANn89iKJQCmEPxf=296_dGt9Wb3MD=0mp0vP6X4exWUPML=UUw@mail.gmail.com>
-Subject: Re: [PATCH] net/atm: fix proc_mpc_write 1 byte less calculated
-To:     Xiaobo Liu <cppcoffee@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013153355.2365865-1-jsnitsel@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 8:19 AM Xiaobo Liu <cppcoffee@gmail.com> wrote:
->
-> Then the input contains '\0' or '\n', proc_mpc_write has read them,
-> so the return value needs +1.
->
-> Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
+On Thu, Oct 13, 2022 at 08:33:55AM -0700, Jerry Snitselaar wrote:
+> iommu_sva_bind_device() should only be called if
+> iommu_dev_enable_feature() succeeded. There has been one case already
+> where that hasn't been the case, which resulted in a null pointer
+> deref in dev_iommu_ops(). To avoid that happening in the future if
+> another driver makes that mistake, sanity check dev->iommu and
+> dev->iommu->iommu_dev prior to calling dev_iommu_ops().
+> 
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
 > ---
->  net/atm/mpoa_proc.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/net/atm/mpoa_proc.c b/net/atm/mpoa_proc.c
-> index 829db9eba..444ceda60 100755
-> --- a/net/atm/mpoa_proc.c
-> +++ b/net/atm/mpoa_proc.c
-> @@ -224,8 +224,11 @@ static ssize_t proc_mpc_write(struct file *file, const char __user *buff,
->                         free_page((unsigned long)page);
->                         return -EFAULT;
->                 }
-> -               if (*p == '\0' || *p == '\n')
+
+I don't know how many other drivers there will be in the future,
+so quite possibly a non-issue. It did happen with the idxd driver
+though, and I was thinking about that this morning so thought I
+would send a patch to avoid it in the future.
+
+Regards,
+Jerry
+
+> drivers/iommu/iommu.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 4893c2429ca5..20ec75667529 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2746,7 +2746,15 @@ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+>  {
+>  	struct iommu_group *group;
+>  	struct iommu_sva *handle = ERR_PTR(-EINVAL);
+> -	const struct iommu_ops *ops = dev_iommu_ops(dev);
+> +	const struct iommu_ops *ops;
 > +
-> +               if (*p == '\0' || *p == '\n') {
-> +                       len += 1
->                         break;
-> +               }
->         }
->
->         *p = '\0';
-> --
-> 2.21.0 (Apple Git-122.2)
->
+> +	if (!dev->iommu || !dev->iommu->iommu_dev) {
+> +		dev_warn(dev, "%s called without checking succes of iommu_dev_enable_feature?\n",
+> +			__func__);
+> +		return ERR_PTR(-ENODEV);
+> +	}
+> +
+> +	ops = dev_iommu_ops(dev);
+>  
+>  	if (!ops->sva_bind)
+>  		return ERR_PTR(-ENODEV);
+> -- 
+> 2.37.2
+> 
 
-Hi Xiaobo
-
-Can you submit a v2, with this added tag ?
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-Also, I would switch to something cleaner like
-
-diff --git a/net/atm/mpoa_proc.c b/net/atm/mpoa_proc.c
-index 829db9eba0cb95ac9cfe775e8eaad712943a8dbe..df530e9725fa63820a7adcd44e750db0733f9d94
-100644
---- a/net/atm/mpoa_proc.c
-+++ b/net/atm/mpoa_proc.c
-@@ -219,11 +219,12 @@ static ssize_t proc_mpc_write(struct file *file,
-const char __user *buff,
-        if (!page)
-                return -ENOMEM;
-
--       for (p = page, len = 0; len < nbytes; p++, len++) {
-+       for (p = page, len = 0; len < nbytes; p++) {
-                if (get_user(*p, buff++)) {
-                        free_page((unsigned long)page);
-                        return -EFAULT;
-                }
-+               len++;
-                if (*p == '\0' || *p == '\n')
-                        break;
-        }
