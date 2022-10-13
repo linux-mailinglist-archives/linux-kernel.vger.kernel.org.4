@@ -2,224 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447F75FD952
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993985FD954
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 14:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJMMjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 08:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S229657AbiJMMlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 08:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJMMjt (ORCPT
+        with ESMTP id S229729AbiJMMlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 08:39:49 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8283D1A3BF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:39:46 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r14so2424825edc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:39:46 -0700 (PDT)
+        Thu, 13 Oct 2022 08:41:02 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD921759F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:41:01 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a26so3640810ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 05:41:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GD5Q0fIlYFy9UgmSPGmxuwFTbHUtfpAAgAnjM1dUOhI=;
-        b=OjcVqnLYYMkA8IvE4mzGLx1ggf60Mdr2S81VA3jSR2/YIK+Z4RcpHYKbRazbSKCDna
-         2NjesK0/nrMTJlitm0X4DhPwt8F9DPVoImdHI8zWidu1c2HpteHlY6OCsR69ZFQscD61
-         nCISz4Yn2YXce4ZldUahcvzXXzAO0joUXR35Co+xVyt5ONyrwxVDZP5DvXHQGegOmBlw
-         iRlOCea2WWOEuiPTM4Cas8FTdwKxdjUnfW0ZFsz3mdV80P7Qxe02m+iagp/tvZ2kDtZd
-         HIS6JyK76Ks8WDf/hkjYugkvoCupr5PDSPy3kUGiy5PnYgI18jNxGuKPaAAyvw/Uitmz
-         kpXg==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GEUb5Rb4yDgrdEzo1wzTJ5kjOY9s+BXnnzPastL8HKw=;
+        b=EwdIcF4cxB7mxAlKSpCiZNW6DU+rzmaF5hNVxFWyAv7MxWW8ZG5644DHPhOWkvQKlN
+         q3up6g8SR7/msYkKMZUAd/+w7itaOJNumBJVstNJ5ny/H8kUvTEjArsRrCPxci/GxvBy
+         scqPsnb7fchuCkdb53mSv+jvdz4CSW6+Pe5S6wBYsQtmwJ+q16uhInJhUEJh69hH0RKx
+         cCj1X/OC3RU+gjH+POcRi7Yhomew8gIE3V8uUR+0kaTbecFu4oQWA7/cO1ezhK7R7EKB
+         Oc610VM7OA2xbW7qj/NDuSZ3kKg2iCGfy2gqyTE/kIA2CVNqr1SB1nHOgMBMFfhzMslO
+         unwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GD5Q0fIlYFy9UgmSPGmxuwFTbHUtfpAAgAnjM1dUOhI=;
-        b=afHHdcQm9aEHfer7Kt78cvNIzUz5O0pTwJHapX9/QoBNpyRvj9C71NozzOUXUr9jLq
-         bd/R2TeA0nQ16N4wwztqOTZobT0rxCdwI6FZVRq4iyB+EqTlcp8nfo6Jn+n5THITvv3S
-         BRm5fkYZc7WBqajpTrHQ530sXuHgQFAwbeRt/cKh3Q2VZFamLaUBslSlE9afzM8XLK76
-         lQfFI/eQGbrhoSyahVAdmjQJMV3k2FPKYbNeqb6hXr9NFnsFWdsKfLH7YDIHpu3BEGXv
-         vAnp+4SB6P3nzSHZNYyDFv80v0e1KCsedt/Btnc93gZm7fhz6KUR6mNPGLReVNbfWkZf
-         CbLQ==
-X-Gm-Message-State: ACrzQf157ToFZ7vNxNhYKO42sCM9CnenEMnd/XsV8P5byDhI1Aqs7YEA
-        fCAl4bgn4EIEACvD9984OGSbQAT29z7Ij85PAjselQ==
-X-Google-Smtp-Source: AMsMyM7LqebKv/Vg0TFf9NGRzOp//qKzV5yRcGJR9qiv0wViF6GF9Ih6o2EBzI/MLW2yjpk3ydnmYG0IkSo+IR/eGhU=
-X-Received: by 2002:a05:6402:2989:b0:44e:90d0:b9ff with SMTP id
- eq9-20020a056402298900b0044e90d0b9ffmr31446858edb.110.1665664784554; Thu, 13
- Oct 2022 05:39:44 -0700 (PDT)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GEUb5Rb4yDgrdEzo1wzTJ5kjOY9s+BXnnzPastL8HKw=;
+        b=OvVHN4DMxJZXM2swz2QNWjJC2GmsEgWSa6fDQk+hCtiO0OxgWaKRd1INTUF94et1WO
+         0Ch26BkKI7QXe96gM3NR88e1vW7bR2F5RtQuyVltqdLN/BNyuiYW8L+moRkfd2qxs1hW
+         SuZfz54OslrqC7Xs1dFOouHspAkV8QycqTNgKHe0Ib4CqM+MBTlT5lGPnEcv6MVH6t/i
+         nMdE/mT7RYbUlB1DsztbJSoyVveo3iXIVYuntFeXpR3Gs31dvB4WrIypj9VbqhQiVs/G
+         cm5Mg8dvNawwGaYPJGQY3heWp/Ob21aaSAVw8qy1LxvxhIOxTXFcCWfbco0wTAS/NzkW
+         ekjg==
+X-Gm-Message-State: ACrzQf3kH3fByDzgRSPyfmelfi5uuZKYvYe0gMLrE5+P0BrnZZUc2f5V
+        oyqx8XM4tyho2cJWbsgJB5w=
+X-Google-Smtp-Source: AMsMyM77b/Iob0FFfj4jC2QN20U55LraGmglSAxMEiqDOETdxHOC8aHEDiu3f3emVQSr47vhLZBRxw==
+X-Received: by 2002:a17:907:3f27:b0:78d:ad42:f733 with SMTP id hq39-20020a1709073f2700b0078dad42f733mr17696383ejc.320.1665664859673;
+        Thu, 13 Oct 2022 05:40:59 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id o4-20020a1709061d4400b0073d7bef38e3sm2949793ejh.45.2022.10.13.05.40.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Oct 2022 05:40:58 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 12:40:58 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] XArray: make xa_dump output more friendly to read
+Message-ID: <20221013124058.fpjgfrgyqm2lbw2k@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220912124647.17164-1-richard.weiyang@gmail.com>
+ <Yx9vxqmBR5rtMm2o@casper.infradead.org>
 MIME-Version: 1.0
-References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
- <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
-In-Reply-To: <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 13 Oct 2022 18:09:32 +0530
-Message-ID: <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006 tag
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yx9vxqmBR5rtMm2o@casper.infradead.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 at 12:41, Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
+On Mon, Sep 12, 2022 at 06:43:34PM +0100, Matthew Wilcox wrote:
+>On Mon, Sep 12, 2022 at 12:46:46PM +0000, Wei Yang wrote:
+>> This patch helps to adjust xa_dump output by:
 >
-> On 2022/10/12 16:24, Naresh Kamboju wrote:
-> > On TI beagle board x15 the connected SSD is not detected on linux next
-> > 20221006 tag.
-> >
-> > + export STORAGE_DEV=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> > + STORAGE_DEV=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> > + test -n /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> > + echo y
-> > + mkfs.ext4 /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84
-> > mke2fs 1.46.5 (30-Dec-2021)
-> > The file /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 does
-> > not exist and no size was specified.
-> > + lava-test-raise 'mkfs.ext4
-> > /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190702A00D84 failed; job
-> > exit'
+>Thanks for the patches.  I'm at Plumbers right now, and then I'm taking
+>a week off, so I don't really have time to look at them properly.
+>I'll try to remember to look at them when I'm back on the 26th.  If I
+>haven't responded by the beginning of October, please remind me.
 
-The reported issue is now noticed on the Linux mainline master branch.
+Hi, Matthew
 
-1)
-I see following config is missing on latest problematic builds
-  - CONFIG_HAVE_PATA_PLATFORM=y
+Do you get time slot for this?
 
-2)
-Following ahci sata kernel message are missing on problematic boots,
-[    1.408660] ahci 4a140000.sata: forcing port_map 0x0 -> 0x1
-[    1.408691] ahci 4a140000.sata: AHCI 0001.0300 32 slots 1 ports 3
-Gbps 0x1 impl platform mode
-[    1.408721] ahci 4a140000.sata: flags: 64bit ncq sntf pm led clo
-only pmp pio slum part ccc apst
-[    1.409820] scsi host0: ahci
-[    1.410064] ata1: SATA max UDMA/133 mmio [mem
-0x4a140000-0x4a1410ff] port 0x100 irq 98
-
-3)
-GOOD: 9d84bb40bcb30a7fa16f33baa967aeb9953dda78
-BAD:  e08466a7c00733a501d3c5328d29ec974478d717
-
-4)
-Here i am adding links working and not working test jobs and kernel configs,
-problematic test job:
- - https://lkft.validation.linaro.org/scheduler/job/5641407#L2602
-Good test job:
- - https://lkft.validation.linaro.org/scheduler/job/5640672#L2198
-
-5)
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: e08466a7c00733a501d3c5328d29ec974478d717
-  git_describe: v6.0-7220-ge08466a7c007
-  kernel_version: 6.0.0
-  kernel-config: https://builds.tuxbuild.com/2Fourpiqf1OrlPFFtKwhHV0wAiq/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/661424896
-  artifact-location: https://builds.tuxbuild.com/2Fourpiqf1OrlPFFtKwhHV0wAiq
-  toolchain: gcc-10
-
-
-6)
-For your information,
---
-I see diff on good to bad commits,
-$ git log --oneline 9d84bb40bcb3..e08466a7c007  -- drivers/ata
-4078aa685097 Merge tag 'ata-6.1-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata
-71d7b6e51ad3 ata: libata-eh: avoid needless hard reset when revalidating link
-e3b1fff6c051 ata: libata: drop superfluous ata_eh_analyze_tf() parameter
-b46c760e11c8 ata: libata: drop superfluous ata_eh_request_sense() parameter
-cb6e73aaadff ata: libata-eh: Remove the unneeded result variable
-ecf8322f464d ata: ahci_st: Enable compile test
-2d29dd108c78 ata: ahci_st: Fix compilation warning
-9628711aa649 ata: ahci-dwc: Add Baikal-T1 AHCI SATA interface support
-bc7af9100fa8 ata: ahci-dwc: Add platform-specific quirks support
-33629d35090f ata: ahci: Add DWC AHCI SATA controller support
-6ce73f3a6fc0 ata: libahci_platform: Add function returning a clock-handle by id
-18ee7c49f75b ata: ahci: Introduce firmware-specific caps initialization
-7cbbfbe01a72 ata: ahci: Convert __ahci_port_base to accepting hpriv as arguments
-fad64dc06579 ata: libahci: Don't read AHCI version twice in the
-save-config method
-88589772e80c ata: libahci: Discard redundant force_port_map parameter
-eb7cae0b6afd ata: libahci: Extend port-cmd flags set with port capabilities
-f67f12ff57bc ata: libahci_platform: Introduce reset
-assertion/deassertion methods
-3f74cd046fbe ata: libahci_platform: Parse ports-implemented property
-in resources getter
-3c132ea6508b ata: libahci_platform: Sanity check the DT child nodes number
-e28b3abf8020 ata: libahci_platform: Convert to using devm bulk clocks API
-82d437e6dcb1 ata: libahci_platform: Convert to using platform
-devm-ioremap methods
-d3243965f24a ata: make PATA_PLATFORM selectable only for suitable architectures
-3ebe59a54111 ata: clean up how architectures enable PATA_PLATFORM and
-PATA_OF_PLATFORM
-55d5ba550535 ata: libata-core: Check errors in sata_print_link_status()
-03070458d700 ata: libata-sff: Fix double word in comments
-0b2436d3d25f ata: pata_macio: Remove unneeded word in comments
-024811a2da45 ata: libata-core: Simplify ata_dev_set_xfermode()
-066de3b9d93b ata: libata-core: Simplify ata_build_rw_tf()
-e00923c59e68 ata: libata: Rename ATA_DFLAG_NCQ_PRIO_ENABLE
-614065aba704 ata: libata-core: remove redundant err_mask variable
-fee6073051c3 ata: ahci: Do not check ACPI_FADT_LOW_POWER_S0
-99ad3f9f829f ata: libata-core: improve parameter names for ata_dev_set_feature()
-16169fb78182 ata: libata-core: Print timeout value when internal command times
-
-
-
-
-> >
-> > Test log:
-> >  - https://lkft.validation.linaro.org/scheduler/job/5634743#L2580
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > metadata:
-> >   git_ref: master
-> >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-> >   git_sha: 7da9fed0474b4cd46055dd92d55c42faf32c19ac
-> >   git_describe: next-20221006
-> >   kernel_version: 6.0.0
-> >   kernel-config: https://builds.tuxbuild.com/2FkkkZ51ZYhBL1G8D69YX8Pkt5F/config
-> >   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/659754170
-> >   artifact-location: https://builds.tuxbuild.com/2FkkkZ51ZYhBL1G8D69YX8Pkt5F
-> >   toolchain: gcc-10
-
-7)
-> The kernel messages that are shown in the links above do not show any "libata
-> version 3.00 loaded." message nor any ata/ahci message that I can see. So I
-> think the eSATA adapter is not even being detected and libata/ahci driver not used.
->
-> Was this working before ? If yes, can you try with the following patches reverted ?
->
-> d3243965f24a ("ata: make PATA_PLATFORM selectable only for suitable architectures")
-> 3ebe59a54111 ("ata: clean up how architectures enable PATA_PLATFORM and
-> PATA_OF_PLATFORM")
-
-I have reverted above two patches and but the problem has not been solved.
-
-8)
-> If reverting these patches restores the eSATA port on this board, then you need
-> to fix the defconfig for that board.
-
-OTOH,
-Anders, enabled the new config CONFIG_AHCI_DWC=y  and tried but the
-device failed to boot.
-
-- Naresh
+-- 
+Wei Yang
+Help you, Help me
