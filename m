@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE76D5FD83A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8825FD842
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 13:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiJMLWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 07:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
+        id S229716AbiJMLXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 07:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiJMLWq (ORCPT
+        with ESMTP id S229627AbiJMLXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 07:22:46 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1670E52D0;
-        Thu, 13 Oct 2022 04:22:45 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so1110041oom.1;
-        Thu, 13 Oct 2022 04:22:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j2pVn4Fvc8UPvpqqHE5JTFIcuecvDh3adTSLyFNQC4I=;
-        b=YOK/DagqNVFQtVWjcdaBxaPepnB+gP1FaXy7+X47fvUtf4LDvcA8X5r6gBJ8EmuSQT
-         2y7oWQs8XO7OkCa0/RmE0JM/JWdRcM9Vc6csuJHqh1XZG0p97CPkpJjYam8B1KmNWCQY
-         O5Outd3Zk91Xj/2PJJOU87sj6AvvVa8ISSKgil4nypz2DmvqSaDqNkYmuoBVHGAepwiV
-         KszUDOxwPT0G5+eSJ3HcVM3EoZ6kwIvFHD7lY6bqKHt28mc/Y6T6LPfeePwYXmLZ3Gxz
-         wLDAMW/sHMasy4lkL1ZS7F/e/kKQpb2BN5ceYpzfvwOePR1bOQj9J1kwzwI7tHcuTkfm
-         79Xw==
-X-Gm-Message-State: ACrzQf3cs0v/85d30SeLkcRR7HehhuRMY97NCremon5Gp1Ki3gWHcA9q
-        ET3BPGO0x8WBf4xy5W0Ngw==
-X-Google-Smtp-Source: AMsMyM4nNIc+oRZiG6wqfGw107MyYKxWYrQ+/jkkSqpfpMwFaFfpGJOPQSYGQzkONdcJKd36NRceMA==
-X-Received: by 2002:a05:6830:2044:b0:661:8f8f:ffa2 with SMTP id f4-20020a056830204400b006618f8fffa2mr11109551otp.142.1665660165127;
-        Thu, 13 Oct 2022 04:22:45 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y1-20020a4ade01000000b0047f8ceca22bsm1951171oot.15.2022.10.13.04.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 04:22:44 -0700 (PDT)
-Received: (nullmailer pid 5417 invoked by uid 1000);
-        Thu, 13 Oct 2022 11:22:44 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jeff Chang <richtek.jeff.chang@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jeff <jeff_chang@richtek.com>,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        tiwai@suse.com, broonie@kernel.org, lgirdwood@gmail.com,
-        robh+dt@kernel.org, jeff_chang@ricthek.com,
-        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz
-In-Reply-To: <20221013080643.6509-1-richtek.jeff.chang@gmail.com>
-References: <20221013080643.6509-1-richtek.jeff.chang@gmail.com>
-Message-Id: <166565993196.4194034.3763255376639766451.robh@kernel.org>
-Subject: Re: [PATCH] ASoC: Add Richtek RT5512 Speaker Amp Driver
-Date:   Thu, 13 Oct 2022 06:22:44 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 07:23:48 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD61946864;
+        Thu, 13 Oct 2022 04:23:46 -0700 (PDT)
+X-UUID: 64896aaa555e4889b3fd3581a49ba0e2-20221013
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=xHg1H54Fp557c8dP/j/enzMQiG2x94tak33lJ6HXOWU=;
+        b=Gd7PCQ5J4SfgjCPjqmAMCxxTyyLHYtGkikggzelr7GUcN9oR4zl5jpLV8LkPDJfEH8l4U8Mi+PdI6Qo7rADOrw5G8ixiU8i0AsU7m+PUijfPJ6pudP9kq7U4jRMwPgC0i9OGnzydjbUsR9qra+qdQoLSgxlkKjZ/3iwwwcoWtKc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:f81f07cb-2a2e-44b7-b76e-c2c408b95bb8,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:39a5ff1,CLOUDID:b0dad5e1-2948-402a-a6e4-b5d31fe11eb7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 64896aaa555e4889b3fd3581a49ba0e2-20221013
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1162402231; Thu, 13 Oct 2022 19:23:41 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 13 Oct 2022 19:23:39 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 13 Oct 2022 19:23:39 +0800
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <angelogioacchino.delregno@collabora.com>, <sboyd@kernel.org>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <kuan-hsin.lee@mediatek.com>, <yu-chang.wang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: [PATCH v4 0/4] Introduce MediaTek frequency hopping driver
+Date:   Thu, 13 Oct 2022 19:23:32 +0800
+Message-ID: <20221013112336.15438-1-johnson.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 16:06:43 +0800, Jeff Chang wrote:
-> From: Jeff <jeff_chang@richtek.com>
-> 
-> The RT5512 is a boosted class-D amplifier with V/I sensing.
-> A built-in DC-DC step-up converter is used to provide efficient power for
-> class-D amplifier with multi-level class-H operation. The digital audio
-> interface supports I2S, left-justified, right-justified and TDM format for
-> audio in with a data out used for chip information like voltage sense and
-> current sense, which are able to be monitored via DATAO pin through proper
-> register setting.
-> 
-> Signed-off-by: SHIH CHIA CHANG <jeff_chang@richtek.com>
-> ---
->  .../bindings/sound/richtek,rt5512.yaml        |  50 +
->  sound/soc/codecs/Kconfig                      |  10 +
->  sound/soc/codecs/Makefile                     |   2 +
->  sound/soc/codecs/rt5512.c                     | 860 ++++++++++++++++++
->  4 files changed, 922 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/richtek,rt5512.yaml
->  create mode 100644 sound/soc/codecs/rt5512.c
-> 
+The purpose of this serie is to enhance frequency hopping and spread spectrum
+clocking feature for MT8186.
+We introduce new PLL register APIs and some helpers for FHCTL hardware control.
+For MT8186 PLL driver, we replace mtk_clk_register_plls() with newly added API
+to support frequency hopping and SSC function for specific PLLs.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Changes in v4:
+- Fixup iospace error in the binding.
+- Use GENMASK marco and remove extra line.
 
-yamllint warnings/errors:
+Changes in v3:
+- Change binding file name.
+- Add some constraints for properties.
+- Rename "mediatek,hopping-ssc-percents" to "mediatek,hopping-ssc-percent".
+- Add new config symbol.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/sound/richtek,rt5512.example.dtb:0:0: /example-0/i2c/rt5512@5c: failed to match any schema with compatible: ['richtek,rt5512']
+Changes in v2:
+- Use SoC-specific compatible instead of generic one.
+- Use standard clocks property and vendor-specific property in dt-binding.
+- Remove some unused arguments and fix some coding style.
 
-doc reference errors (make refcheckdocs):
+Johnson Wang (4):
+  clk: mediatek: Export PLL operations symbols
+  dt-bindings: arm: mediatek: Add new bindings of MediaTek frequency
+    hopping
+  clk: mediatek: Add new clock driver to handle FHCTL hardware
+  clk: mediatek: Change PLL register API for MT8186
 
-See https://patchwork.ozlabs.org/patch/
+ .../arm/mediatek/mediatek,mt8186-fhctl.yaml   |  53 ++++
+ drivers/clk/mediatek/Kconfig                  |   8 +
+ drivers/clk/mediatek/Makefile                 |   1 +
+ drivers/clk/mediatek/clk-fhctl.c              | 244 ++++++++++++++++
+ drivers/clk/mediatek/clk-fhctl.h              |  26 ++
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c  |  66 ++++-
+ drivers/clk/mediatek/clk-pll.c                |  84 +++---
+ drivers/clk/mediatek/clk-pll.h                |  55 ++++
+ drivers/clk/mediatek/clk-pllfh.c              | 268 ++++++++++++++++++
+ drivers/clk/mediatek/clk-pllfh.h              |  82 ++++++
+ 10 files changed, 834 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-fhctl.yaml
+ create mode 100644 drivers/clk/mediatek/clk-fhctl.c
+ create mode 100644 drivers/clk/mediatek/clk-fhctl.h
+ create mode 100644 drivers/clk/mediatek/clk-pllfh.c
+ create mode 100644 drivers/clk/mediatek/clk-pllfh.h
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+2.18.0
 
