@@ -2,108 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E94C5FD6CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709755FD6B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiJMJOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S229617AbiJMJNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 05:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiJMJNo (ORCPT
+        with ESMTP id S229516AbiJMJNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:13:44 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A88615E0F0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:13:37 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m15so1682052edb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+dzrAn+aBg/5KVcVy/4aX4joCWNIa7ky5mt/LVd7Cts=;
-        b=EpOkGGCsgHYv53DtFoFfROkk3L70Tad3Fr98hzdLPuGpB67l/RLNzEBfk6W4b2EshY
-         heegHPUgBEw1hcrGaYOATLKXTKvem4g5S6Lb3RMMoJufXUlAxAamcbyAY13lmYodkLeX
-         u6SHw0M8I7LxbQAztnvDt2hOo8zLTOKUeT3zGoM3n/MiiwU1TLm72iCfKo3Btj9qeuSr
-         SBtQffQhJawJuoSnXkJ1hYdSEIdN4zYqlp7AE4TyZ6Uby+P2Wr9cbdnQTBDBexZGQ/AZ
-         Jd7XJ53v38BYyjY0H+QHMPGtwcluNUpf4di0GT/wReLKc0mWX74+PHtfMGqv0efLG7Bo
-         t5yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+dzrAn+aBg/5KVcVy/4aX4joCWNIa7ky5mt/LVd7Cts=;
-        b=XUjyxDDBohJk/nUHZwFIX5FQkn59w0OYLhd/I6DT9NF7854H4RYIxY+kSQOn44vH96
-         9oRtEl4Zl0Ar06R5ey1wGkbhNK4Je1KquHjTk/c8v32uVbaQP/bzHEJR+h8No8YvFGk3
-         qLJmxRPPMS3dP6I0OtSqjHkALTHRLeHJeA9vgegvv0RrJjGcEEMC33viSTLgls4/3uBx
-         XS9NaKaYD829r067p68+02p4eEBgoegPn8MxM/g8GHrj+PDly6Nks8Bcc14GbsojQDJr
-         cjKQMPZAlF0ogThT6zuuBKJ7VAUROB1q0GvFfcS2yH5zwCNu8911e8jDrScSLd5J4jF2
-         Yyug==
-X-Gm-Message-State: ACrzQf2qTHwULmmQ4B7S7wsJn5oeDo4/VnJcs+6VuFVqkiaTfUoFAcl5
-        L54ZehPO7rSpAQVJ3znakrwGlA==
-X-Google-Smtp-Source: AMsMyM5p8hsyMuf8fEG6NDPh7dYuTrJBp5jGeer89w4o0UR99iwkf54abNti1vvH5DL5t0oMqY+4Dw==
-X-Received: by 2002:a05:6402:5510:b0:459:5ea:9bc0 with SMTP id fi16-20020a056402551000b0045905ea9bc0mr30068091edb.152.1665652416151;
-        Thu, 13 Oct 2022 02:13:36 -0700 (PDT)
-Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id ti5-20020a170907c20500b0073dd1ac2fc8sm2582725ejc.195.2022.10.13.02.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 02:13:35 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: qcom,pdc: Add missing compatibles
-Date:   Thu, 13 Oct 2022 11:12:08 +0200
-Message-Id: <20221013091208.356739-1-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 13 Oct 2022 05:13:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0472D13D62F;
+        Thu, 13 Oct 2022 02:13:13 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9A09B5C00EE;
+        Thu, 13 Oct 2022 05:13:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 13 Oct 2022 05:13:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665652391; x=1665738791; bh=0vEYkd8bix
+        r3ku/BHWvI3mqVBiV48ootD5ag5Hu/HHs=; b=Yh3pLrftscvxWZtmtj2ioiEcla
+        HOolYJoyvOR6PpCbsDWE+ZVDSKmQ8W7TPQYWBVFujwouweDFk2x9Cm/rDPRIQBjH
+        /YvRcoR6N32KNORhClIO8IP8NKfzKXQSCxhU7U+7yxjHIweS9HDx3wfnC43Cz7s0
+        eZy3qaUnFMxg2O/l4X8A6PHZS2AjGQNfVAINthPzPvlK6zRAoYIpciY6tCw4jwYj
+        SV1Fth+TEUtpqLgC4Cik3xP164nTX2sKObQ2X7pHroO0tr+fBUNw1RVoEr9HCQ/s
+        N0nULHp5CRf1Utg0WxPwRR2Im3ePeHlHYRPQZx3g8yeuxe8nNIHl/ucRb4QA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1665652391; x=1665738791; bh=0vEYkd8bixr3k
+        u/BHWvI3mqVBiV48ootD5ag5Hu/HHs=; b=LXt6dKGuNXrYQt30Ggwp18QnOBHiG
+        xhsHYdDkoc3nODgNBUQ854lSgT/HxinHmQ91tx8dLVfVwNPxhySmPwk4DY0qapi4
+        ZwT2dWwHgg2JAGd5eC9VnT+AQNcX+kKYdKzTKNrLcPsjQlGLUWtaZ0hMCuFeleQ7
+        Vqm5l/K4v/qy9C94QOv/8cBZ1cKMRbCEPd+dcSk5XVljkH5aQPlTOhuQnwa/ggC0
+        AxJgR1Wqc+m7PvbU9XeiWa2hnaBjvRV61KgPWjounO2Xu65ADbHA3mvkTdwKLv8W
+        AyAahZRXPeIkcQkSLP3Gd2BSvFGt9xXE36M7uMaUmzaOWQhYZcsC3Qlog==
+X-ME-Sender: <xms:ptZHYwU-qJ3y48ADIPjsH9KXPAt3JKJwuEhOH4173vMVifcdhPlztg>
+    <xme:ptZHY0kC7RLRBC0Q2nCu5lERDC_f7XpPvAkusgBloIV-p8YivaqGIoqUqAaSEQczG
+    RCQlKaTl8xgxPcmGtE>
+X-ME-Received: <xmr:ptZHY0bno18vJzTRqJ2Gz7u4BDtGxpSLz7gsGJFCd2AdzuYRLBP5pEt0W0jv5rg3-KJAnBew4COp5PbgeOTlcawQw9sWOlIPDWBL>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleeuveetteffvdevlefgffelgeduueefleevfedvudegheekfeekheejieek
+    gedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:ptZHY_XI_Sd7wb1FY_VcNo5eQiBOgttHJCfRvypgQ1gRyLUt4iELMw>
+    <xmx:ptZHY6lyuv0o5yiHSSUK39B679xESKkyOZOkWKxbEtHDc9ht65TIBg>
+    <xmx:ptZHY0dEGU6A_xK52Ys8ARXwmhNjvgHUTC07ZAmPst4CBsCRKQqGPA>
+    <xmx:p9ZHY02zSNfYQkQHTl6gNo4i20sdeXn4YcZvUTyrdfULbKc27YKgCQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Oct 2022 05:13:09 -0400 (EDT)
+Subject: [PATCH v3 0/7] drm/vc4: Fix the core clock behaviour
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIAKPWR2MC/3WNwQqDMBBEf0Vy7krcaNSe+h+lhySudSlESSS0SP69sfeehjfwZg4RKTBFca0OES
+ hx5NUXUJdKuMX4JwFPhQVKRDk0HYSNYeY3tC/QEpoee6U72eI4ieJYEwlsMN4tp5V0Lc964biv4fN7
+ SVji/m8wIUgYB4W9toOaNd4cBb/WO5XFR875C++5PxqyAAAA
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Thu, 13 Oct 2022 11:13:07 +0200
+Message-Id: <20220815-rpi-fix-4k-60-v3-0-fc56729d11fe@cerno.tech>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Emma Anholt <emma@anholt.net>, Stephen Boyd <sboyd@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        Dom Cobley <popcornmix@gmail.com>,
+        dri-devel@lists.freedesktop.org
+X-Mailer: b4 0.11.0-dev-7da52
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2888; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=q5AgOh+USgAmEBoawabygqWU6QbAvt2sDptobotpAq8=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMnu15b0S4qxu4mmZoZ1PdOP0bCo1bFZZVU/89SDLXGsffty
+ taM7SlkYxLgYZMUUWWKEzZfEnZr1upONbx7MHFYmkCEMXJwCMJH3jowMC1O8bSL4a4+lvz6xe9Pr9w
+ eC3HbO5gwubtddnmuUfMKklJHhTuqyaNVV77MyDhjZW1eluRsaVQhZVytWu0XXPjge/54LAA==
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the compatibles that are already in use in the upstream Linux
-kernel to resolve dtbs_check warnings.
+Hi,
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+Those patches used to be part of a larger clock fixes series:
+https://lore.kernel.org/linux-clk/20220715160014.2623107-1-maxime@cerno.tech/
+
+However, that series doesn't seem to be getting anywhere, so I've split out
+these patches that fix a regression that has been there since 5.18 and that
+prevents the 4k output from working on the RaspberryPi4.
+
+Hopefully, we will be able to merge those patches through the DRM tree to avoid
+any further disruption.
+
+Let me know what you think,
+Maxime
+
+To: Florian Fainelli <f.fainelli@gmail.com>
+To: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+To: Ray Jui <rjui@broadcom.com>
+To: Scott Branden <sbranden@broadcom.com>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Emma Anholt <emma@anholt.net>
+To: Maxime Ripard <mripard@kernel.org>
+To: David Airlie <airlied@linux.ie>
+To: Daniel Vetter <daniel@ffwll.ch>
+Cc: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: linux-rpi-kernel@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Dom Cobley <popcornmix@gmail.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
 ---
- .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml    | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes in v3:
+- Return UINT_MAX when the firmware call fails in the _get_max_rate function
+- Link to v2: https://lore.kernel.org/r/20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-index b6f56cf5fbe3..94791e261c42 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-@@ -28,11 +28,15 @@ properties:
-       - enum:
-           - qcom,sc7180-pdc
-           - qcom,sc7280-pdc
-+          - qcom,sc8280xp-pdc
-           - qcom,sdm845-pdc
-+          - qcom,sdx55-pdc
-+          - qcom,sdx65-pdc
-           - qcom,sm6350-pdc
-           - qcom,sm8150-pdc
-           - qcom,sm8250-pdc
-           - qcom,sm8350-pdc
-+          - qcom,sm8450-pdc
-       - const: qcom,pdc
- 
-   reg:
+Changes in v2:
+- Dropped the clock patches, made an ad-hoc function in the firmware driver
+- Link to v1: https://lore.kernel.org/r/20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech
+
+---
+Dom Cobley (1):
+      drm/vc4: hdmi: Add more checks for 4k resolutions
+
+Maxime Ripard (6):
+      firmware: raspberrypi: Introduce rpi_firmware_find_node()
+      firmware: raspberrypi: Move the clock IDs to the firmware header
+      firmware: raspberrypi: Provide a helper to query a clock max rate
+      drm/vc4: hdmi: Fix hdmi_enable_4kp60 detection
+      drm/vc4: hdmi: Rework hdmi_enable_4kp60 detection code
+      drm/vc4: Make sure we don't end up with a core clock too high
+
+ drivers/clk/bcm/clk-raspberrypi.c          | 18 -----------
+ drivers/firmware/raspberrypi.c             | 27 ++++++++++++++++
+ drivers/gpu/drm/vc4/vc4_drv.h              | 16 ++++++++++
+ drivers/gpu/drm/vc4/vc4_hdmi.c             | 25 ++++++++-------
+ drivers/gpu/drm/vc4/vc4_hdmi.h             |  8 -----
+ drivers/gpu/drm/vc4/vc4_hvs.c              | 26 +++++++++++++++
+ drivers/gpu/drm/vc4/vc4_kms.c              | 13 +++++---
+ include/soc/bcm2835/raspberrypi-firmware.h | 51 ++++++++++++++++++++++++++++++
+ 8 files changed, 141 insertions(+), 43 deletions(-)
+---
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+change-id: 20220815-rpi-fix-4k-60-17273650429d
+
+Best regards,
 -- 
-2.38.0
-
+Maxime Ripard <maxime@cerno.tech>
