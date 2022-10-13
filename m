@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9635FE20A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560AB5FE20B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbiJMSvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
+        id S232071AbiJMSvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiJMSvH (ORCPT
+        with ESMTP id S231927AbiJMSvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:51:07 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC4463C4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:49:31 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id d13so1034668qko.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:49:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dqw3Xc1RI1aNzc3i+VnzEPkUPQWCL6Lh8uyt8Pd5dJw=;
-        b=wqewJerCApNEmS0BeN+nyAGvQWS5FJUEVCZiIQsSqsoi7WbkJ5fs5ShbJyrEOia5Uu
-         PU/HIS3Lf4vFJZ4H6yZkM/FD5QCLrwo1gko/wPdJyMoNzo7Dg5VdzASio1ndjysSJDQq
-         LgRG6o1zrw5tbH8noT8qTWcSWMxYpLKT3FwIIvCEB+AnhUAa5JtKjfNNIWVCoxWE9oYW
-         6OmtWUY6+5k2yslJYEaK7Yif92FIEVwy86eeKWZ2OppokNVBzTajlV3hqETGBtJX7yiw
-         F5FcXWIFkwhnKJvUZp8uldEz3TRCrBboMvfG1TxY/EZA4NICpPj7eOURHE7PR8v2kxEw
-         C4VQ==
-X-Gm-Message-State: ACrzQf1G8A7Umn9K53LG+Vie0J9hjFqAJITqprfZ+fKK5ZnUsaqvxGs0
-        J65yn26JUM5xS/+Tgm+NI3i5pOm0xN7U1w==
-X-Google-Smtp-Source: AMsMyM7nUI9eC3RBBbZ+h/6RmCZJEoT4qJb4uM4NJTrOp1AEm1yuvkmA4m4wgrZB9PXcc3CspjqARA==
-X-Received: by 2002:ae9:f205:0:b0:6bc:2d40:2f3d with SMTP id m5-20020ae9f205000000b006bc2d402f3dmr1047490qkg.448.1665686904401;
-        Thu, 13 Oct 2022 11:48:24 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id y8-20020a37f608000000b006bb87c4833asm326181qkj.109.2022.10.13.11.48.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 11:48:24 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-35befab86a4so25934427b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:48:23 -0700 (PDT)
-X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
- h64-20020a0dde43000000b0034931bde8d5mr1243832ywe.283.1665686903595; Thu, 13
- Oct 2022 11:48:23 -0700 (PDT)
+        Thu, 13 Oct 2022 14:51:10 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D2B40E2D;
+        Thu, 13 Oct 2022 11:49:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UCCPFck972/LWiSwHP9ee0dOuKKIg22BPvalwSIeAmEDX4ov63SDZ+e+drPpuv7xX4qqLdOzeBzQRPXrDmYUr+pt4U/E24GKOlBQjeBGWPW1L0cUQvxOIGVHx9E5BxORhdCQyXKZKt4YPY3Zx4eZ4WpMjFDX7Y/3DeYjpEbM+QL+One2vH1DXumNLu4uoMJome4s3ETskA2YcnBcHmmekDFSD0x9VpvE3XlFgyXluZZ/k4x1WefFzFvCAw7nceamtdXuBp59VdwXHuzkug26qMzdLa70ZygG5+vdQth45//Gh6wZlk2tzTf8UytMTdglNkcC5sxy16Kk8Rx9cm5AUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6fQhXxV7ZyPHiodi6MSm8RH6inUL+zXQhWxMgej6LU8=;
+ b=FFG9vkTAnwzKaX11cEzIBU2qNGALO7nY8VkMyZrJxRVmM3FRraXj1+DNe/k2KInuSDePOu7qc0VpQ49BSJLc8WVVDHQvr5+wgCOrrok/B8M5PeQAVQm3QVTZpkdGCNQDqqB4OjXqdV4Wj9j1S3RaJl8n/6E6aq5bBsGdZMcJ/gykDgws6KO3JSG+R8IeKoFrHYi//cJUJTaATAuVbHfJY+excrQYUFTExTwoSIB2rwaccPRnw3aICVarKFnausY8gNEFoeplzyWU4vVBmRCwrdvFpXGDcKMQZeukerh/znvqd9NA66p6+EQcsqROM1oHIeenv4PrAsUOJneVralPtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lwn.net smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6fQhXxV7ZyPHiodi6MSm8RH6inUL+zXQhWxMgej6LU8=;
+ b=htgu1oSvdqN5nlZNNpX6S3406dghvmGRi2Wito2ESaFjnxLdhTgIscDZbhQTrZ3gRjzkOSeA6Qbi06espmmB0EuQsdMFNAxCXUGV+qLPyn3ygiOIdwf86h4ZamvW4Z/JcaO3hdcIgRvZx8gfZZ82CBPkt5ObjSxnh+Xh3BIpxpg=
+Received: from DS7PR06CA0035.namprd06.prod.outlook.com (2603:10b6:8:54::9) by
+ SA0PR12MB4509.namprd12.prod.outlook.com (2603:10b6:806:9e::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5709.22; Thu, 13 Oct 2022 18:48:18 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::6e) by DS7PR06CA0035.outlook.office365.com
+ (2603:10b6:8:54::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22 via Frontend
+ Transport; Thu, 13 Oct 2022 18:48:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5723.20 via Frontend Transport; Thu, 13 Oct 2022 18:48:18 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 13 Oct
+ 2022 13:48:17 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 13 Oct
+ 2022 13:48:17 -0500
+Received: from iron-maiden.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Thu, 13 Oct 2022 13:48:17 -0500
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <corbet@lwn.net>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <carlos.bilbao@amd.com>, <bilbao@vt.edu>, <ojeda@kernel.org>
+Subject: [PATCH 0/2] Documentation: Start Spanish translation and include HOWTO
+Date:   Thu, 13 Oct 2022 13:48:14 -0500
+Message-ID: <20221013184816.354278-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221012191142.GA3109265@bhelgaas> <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
- <f57d954a-b565-9bfa-b8eb-ce608e168f1a@cambridgegreys.com> <2135037685.24273.1665665172126.JavaMail.zimbra@nod.at>
- <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
- <CAMuHMdU=TurB14tkAbqb9nWYvCOcr0UUScdga25h3-oWjYfzTg@mail.gmail.com> <20221013182912.k4deh5v47rjbpnnl@meerkat.local>
-In-Reply-To: <20221013182912.k4deh5v47rjbpnnl@meerkat.local>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Oct 2022 20:48:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com>
-Message-ID: <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com>
-Subject: Re: Add linux-um archives to lore.kernel.org?
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        helpdesk <helpdesk@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT003:EE_|SA0PR12MB4509:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6adacc23-d1d5-4e9c-9c70-08daad4b7e69
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ozRjzOAh8ATjQ5Go11CuF41ZaLW3kRmX5UrWeOliyF4Zp+kO8QF2+2zwnHZCy6d8tLTfvsqQyaWBiIzRCJ15L7cMZl1R+/hDfhTeEL9XnJ+nE2p0KpFI35ZRi6IrlF/4CDMCM2OkcZ+j0mUeyjjElFkJYmZR9r6kveze8066WOrZ/F+4NSxGiXF68L3gEOaVNtQkCzPO9w15elZK1bAITC3e27R+P7tx/9/JPhG7Qlw1OUDNfAphWVlEauGwvn0qPG5rgNOvO21AtA2HfIK2B9eA8/BzZmpCFtRoMvu/nirkJPbYJ64kcWchNsIzcKHiFmw6r1KpVAcdBtw8bTw1LF65ut2Cj2y5tbD1KfCpx5HVTOQQ+7F8o2ylT0dwcASOZThJEJyFAfwPcJFDv9PW2AVlb4l8TimKxORggXRp8PBCrKjDoYmXi/OYXUWIuxA4Pu3nLX4v9e4LmCX8UgOKrCar9VToSw4rW0a+dzo6JcaRoB7zwaeiHprbMweUeZ9ZjstzD0jBrUIjINyYM+i4aGvQNxHyGG030LZQxx2dkmNllt4LBfLIBzqm2bEnPrz48LiQWzAyKc076DLcq3jQIJo5YhMSfMCpocob2guVdohlezciATRlWsEnL2s2ZQ67hNSmFdhCf+LbyZPVkwdgMcMw+MhJJulArQcpEkSUp6iLPdnbGLHOAK+bK1r5v/KFq8Z+VhnKWWmzqmHOntjCqrErzBH01+nzv/k3aJJ0ZvDN4KpoUV3puYtHuWjKc7rgl0bHnEaEihdRUSVBT4Js2nHUIuQi0goMgSlJ87yTVbNZ/kvnadRi1WiYXwApXr/8469NkpgRc/MSEazKm+XYNq+fU5tMQ1pX1eek2RXHOSg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(86362001)(36860700001)(1076003)(40460700003)(2616005)(6916009)(36756003)(336012)(54906003)(186003)(47076005)(316002)(426003)(6666004)(26005)(2906002)(7696005)(4744005)(82310400005)(40480700001)(478600001)(44832011)(5660300002)(41300700001)(8936002)(8676002)(4326008)(82740400003)(356005)(81166007)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 18:48:18.0568
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6adacc23-d1d5-4e9c-9c70-08daad4b7e69
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4509
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konstantin,
+Spanish is the second most spoken language in the world. This patch set
+starts the process of translating critical kernel documentation into the
+Spanish language.
 
-On Thu, Oct 13, 2022 at 8:29 PM Konstantin Ryabitsev
-<konstantin@linuxfoundation.org> wrote:
-> On Thu, Oct 13, 2022 at 02:57:18PM +0200, Geert Uytterhoeven wrote:
-> > The first step is
-> > https://korg.docs.kernel.org/lore.html#requesting-archival-of-an-existing-list
-> >
-> > It doesn't make much sense to start collecting archives if the lore
-> > collector hasn't been activated yet.
->
-> The archiver is now subscribed to the list. Once we have the archives, we can
-> complete the setup.
+Carlos Bilbao (2):
+  Documentation: Start translations to Spanish
+  Documentation: Add HOWTO Spanish translation into rst based build system
 
-Thank you, I have triggered the export from Gmail. After I have received
-the export archive, I will merge it with my local pre-Gmail archives.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ Documentation/translations/index.rst          |   1 +
+ .../translations/sp_SP/disclaimer-sp.rst      |   6 +
+ Documentation/translations/sp_SP/howto.rst    | 619 ++++++++++++++++++
+ Documentation/translations/sp_SP/index.rst    |  80 +++
+ 4 files changed, 706 insertions(+)
+ create mode 100644 Documentation/translations/sp_SP/disclaimer-sp.rst
+ create mode 100644 Documentation/translations/sp_SP/howto.rst
+ create mode 100644 Documentation/translations/sp_SP/index.rst
