@@ -2,173 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122FA5FE44F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA065FE44C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 23:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJMVe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 17:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S229471AbiJMVet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 17:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJMVes (ORCPT
+        with ESMTP id S229700AbiJMVeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 17:34:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C8EB870;
-        Thu, 13 Oct 2022 14:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1665696884; x=1697232884;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=VZTH6722m98QTHSUhCBhla6OtfjrNnjY5EZoCy6q/cA=;
-  b=X7GlX5wPVQZR/EpWOJ6vF13wVROyonOFTroOSqJLjmLyCByBUmy5I+Bv
-   OyH+6MlmybzUdDdA2kKIKPyAAwe93YrDAcZnPtFbMyTZBiyzX7rbMfnmU
-   gRecDLbTL/I7cQIPwPvQ+MDbSRMLM0UUSVXHHmEaNq2FF/I3OqkAXm1ty
-   0K3WMeF6gh0zOPWTW6pXXBHiYGmkEKF+SFQwaVXJ7ehnhVLTTsnOoD1vJ
-   z941BLl8AZDEuGkYMkdWmLtwmG5+lBvVwgCXMuU8a0KAsWq8qBg0/gqhy
-   vEG737x73J9lpGYfHvbiMWBWshxXmCRNUmSVT6TVLeW/i//gpDOuCM5d8
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="118485327"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Oct 2022 14:34:42 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 13 Oct 2022 14:34:38 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Thu, 13 Oct 2022 14:34:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ewrIkEAHvRZvEx/D3J/uHhrF5Bl/rAPYMmE7Qf3yzC/TE7/5aVT/CUcsGsSgpSMYa5IyulP/WXB9vr55cuLuM5FInCGTgOFemYUWSJYhFW9yX8IYcid2fTx81peVF4KQOU0bSuHx0PwqlEuX6e2IQV8qlEbBa2ipW4hnOs1KMVgi6/b0oekUT8xrMjlTiSkiOuxKitLgzEmTwfSVgiQ+XGRRFgLspE6I7wIrYBcxFQuTAbovAn0hN+0xde2MvzcihuK7vYQQ4/92YAwHkdbLq0lS8RxMIOvuYglAoc0qhyjiXgpUHYcyeY7eSiszwav0530LKN2UEmv5lK5+NisAhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VZTH6722m98QTHSUhCBhla6OtfjrNnjY5EZoCy6q/cA=;
- b=ilS48HWoSea7ptFmDK+UIXBZv88jHXOPX7jHR4Rnec+c8rciXQuGBeeLyOUmyRM+YvZrmlFjBismhHe2qpuVjyixThFWuA2RuUrIS3z5oKqWuShTs5gJwXrB/dhyARI6s2fsDDHCDLvHftsL1hte462Uz29awexwrL9PRb3WQEhA2i/MWuxpxSPLi3+TcpSn78Tq6JOfVXq53FQmCpG/OA2DTjEHePUadSG476M51ijDUtRwPtmuK7M6boLKsAGbcxQS4QHxwWsO/NpeegBUrhQDQNZmPSTuZsG2s/xeyT4swsFTLGC8/b1e+wEkwwZqCmsbMr5KYL1tzrW8OI5m8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VZTH6722m98QTHSUhCBhla6OtfjrNnjY5EZoCy6q/cA=;
- b=dXqy9bkhZc6d4Q5gt1CLUce6uPl2tf28HYqXmBj54/GG6doYmZIfKhvSGmX9i8Baa89tYaU1k8eC/FUQU6imSpyK2Yz9DwVQHyiP0iCH5XmXN4FL08a42q03/opOvVx5F32XHLE8vrxXjEvjuepve6LZ68Zg055dkvfAUJVwFAk=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by CO1PR11MB4964.namprd11.prod.outlook.com (2603:10b6:303:9e::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Thu, 13 Oct
- 2022 21:34:26 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::68c0:270e:246d:618a]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::68c0:270e:246d:618a%3]) with mapi id 15.20.5709.019; Thu, 13 Oct 2022
- 21:34:25 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>,
-        <christophe.jaillet@wanadoo.fr>, <Daire.McNamara@microchip.com>,
-        <Conor.Dooley@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH] rtc: mpfs: Use devm_clk_get_enabled() helper
-Thread-Topic: [PATCH] rtc: mpfs: Use devm_clk_get_enabled() helper
-Thread-Index: AQHYt5IndXqzWMJbz0OfuNYZ1M2LkK4NJ4kAgAAAdQA=
-Date:   Thu, 13 Oct 2022 21:34:25 +0000
-Message-ID: <5d78b5ac-ee87-102d-f234-c9a51d53d111@microchip.com>
-References: <e55c959f2821a2c367a4c5de529a638b1cc6b8cd.1661329086.git.christophe.jaillet@wanadoo.fr>
- <166569636075.1226796.3261311337977278707.b4-ty@bootlin.com>
-In-Reply-To: <166569636075.1226796.3261311337977278707.b4-ty@bootlin.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR11MB5154:EE_|CO1PR11MB4964:EE_
-x-ms-office365-filtering-correlation-id: 85ff4aba-ddcc-4eef-3ea1-08daad62b3ab
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: H3K7yp7ukg9GuvsVfyjTIpQnOI+9czLdg8dJR8rpqySOP3v+9P2Gu57jQB0HnQtlzfaxi79Sy5nV11Mg/vT55bk2fUFfkLGhggeDT5yfmqUbowoIpXaMievXc2LgFtJi4Xbmjl1Sn35B6pPyEflS0Yel9+7vjUU7+tr0VGwNqAbC2IjnVuBxV3zWzTmbnQ8axuqhnk0P0R+KjUaVqxbRwHPQm1290RsDyjvZqoma3SzzMmHywKWsS7rFyCW5UONYQcsu2X+krHdEIEyndbRHGfUOorEjT4ouDfwq80qGxCmBCwC+4wAIVqaLCRKuMbowxqhvuHp2aTJnYHxxUlUO8W6Es2t4mP7tvrrvCpzG5qEX0Ftrwpfnff1/kx7Ydt2mjrW1h3oST8Wf14p8rDo31tyuyjn8xJzhs0CP1fUWzwGWuQO7gwdnruG1lCC+cQ4xmym7vF80wpuT1GAsMQ1IRXmbO6og7U1pLaVl/Gxs5PiYPDfMVqDhIJIEqRLKYyQYjNJUBgSFRfG4Pqc68cRbmfcMGvk9FwGNJGlqaygRIsExiGj+zkdYcFGAdRKFeYM46A00Zrbk+nG3mzDV7M+Pu+JnwK1KM7TUKxjXt5mbJnJZltgXVlSydOEAv0Ag1UfeU6Fy+mwatb9WKH2ip2PuqKYmgKJtpMHFOGkJDjev5sOURGxmMlWifxaMR4TSDlbhN10HJcy0X5o5sKR4q/i7mmQETfeJJnkWLyQiX/KBopXW2podmKS1TIYRdfczdK9O4u0XtOmuY7qm/OJ/aSVV+JbtFS4/SU+9WdBjRxUghSTayQj9K80ByrocIAL2dviSTMEbkBjom1lFWON8eGQf3g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(376002)(366004)(346002)(39860400002)(451199015)(66946007)(186003)(4744005)(122000001)(41300700001)(2616005)(5660300002)(38100700002)(8936002)(2906002)(4326008)(6486002)(6506007)(110136005)(8676002)(26005)(316002)(76116006)(64756008)(91956017)(478600001)(54906003)(66446008)(53546011)(66556008)(71200400001)(66476007)(6512007)(31686004)(36756003)(38070700005)(83380400001)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WmkxcHMvekQrVGZYVm9JMFVLSFp6Q1NkcWtENk1ldEJOS0RIcjl2UFR6N1hV?=
- =?utf-8?B?THJwenl3OTBKRVJDUGxTVVMvL3QyM3hRb3NnVW9vQ1JZQm9CdzFvNm1VcWlH?=
- =?utf-8?B?a2JGU1FJSHZOaTVIMm00VkZSbzZ6ZCt1NjhscnRBYVJXcWJTazkyUy9UWG9r?=
- =?utf-8?B?MExXTFdzajVWRWNVZDVUOEhvRWtUSWtubm9kY0gzR256VHhuNG1VR24yZjBz?=
- =?utf-8?B?TmVEYlYyZjBwTHIwYXVIVno0MnE3LzljTi9GMWE4N2ZqaGsvZ0FYZE9YUldB?=
- =?utf-8?B?bFZ6V2ltek0zeXM2L0c3Z3dUWXhJUE0zSkJNYTVwelk3UlU4RnJSczFvS1dh?=
- =?utf-8?B?bnc0TkZ3T3ZIWlpneURMc0lON1duUXpnQUViMFZFMjFRZmt5eDQ4ODN5ZTBY?=
- =?utf-8?B?Vml1aHAyTFZNOVlZc1Z4VXkzeDFwbTNWQXJ2UVF3Q1JGaERLMnFmaHREd09a?=
- =?utf-8?B?SVY3N1JuUFVjbklETVdhTlRVZkVEWHJyYlRwSXliaFdoTUR3VU1tdHBvRVp5?=
- =?utf-8?B?R0x1U3I5eHlZekNOWDMxOHVwRWNOR3RFWGJDam5Ga2EwNldoNUNwTGtWK0du?=
- =?utf-8?B?c1JEZnppV090SjZhOHVZbGE1TGh5WjUvekp4V2MzVnNrS2RLak1OblVkcExZ?=
- =?utf-8?B?ZUFxZmRWTWhHTkJ0ZzYyME9MdUp6MHJiUWh3S2xxRVNwN0NGZ1laeDc3NGdK?=
- =?utf-8?B?Q3g3S041cFA4T0FPLzM3aFlZYlNQYWRpeXhPOSsvT2ZvQUozM2FVeStLdlJO?=
- =?utf-8?B?TUFXa2xHRllSUEI3N1NjYjhFRGRvV3pYZVdyNERhQWl0cjZQR283R0lXOHRC?=
- =?utf-8?B?MUx0djQrVmZrZ21EMXNLbGlLMmNWR3pSVnFlclB3bXdsRzFPbDdhNC9aMHJB?=
- =?utf-8?B?SERlczgrRG5wS2U4UEx2SlpCaUhTNlBUaEk5eGF5N0kwQjJYWWhqWUhyM2JJ?=
- =?utf-8?B?SlI5U245eUtDQVB1STFhYWplc3EzQTIzZEFUazBtRVNRcnNKeWJjV2NhYWlJ?=
- =?utf-8?B?RXJuWldsdWxVbmlPRW9PQjU0K0tGMmxGYlE2MkVZaXAyV1ROZkRydlIrdUt2?=
- =?utf-8?B?R1ZFdE5TSVp4cm9kY0ZaUEhlZ3BsbVFJUnJJaFY4bnpSbUxScHl1V0I5UHls?=
- =?utf-8?B?b0VZVmZzYjluc0NtMVcwTXF5c01oUHZLWkwyR2pHYjREblBEWTZlSWgvVjNW?=
- =?utf-8?B?UEI0Zmt2UkFNMTdxaG5Dc1RWeEpIRkF1TTNLRGNLYmxRN29nZ3VONVlpR25z?=
- =?utf-8?B?Mit3NnlKaGJ5VnphRFZreklyMUV6cEsyenFzRmpCTnVwaUgvZlU1YzFJcnRo?=
- =?utf-8?B?R3diTGRuaVRUQi96VE93aERRSVhqNklBZWxndXpJUU1Xc1lxNWhxSUIxaUlQ?=
- =?utf-8?B?Z2k0MzBIV1FMTFF0MHNmdGxHbUthb05mSWFIenNXR2U3bE1JcGhYNUZwKzN2?=
- =?utf-8?B?ZkNpUUhKcVpWSERwL28veURVSUNlWTB6RFNTakRJWW0zSkJEcFpxOEs5bUZR?=
- =?utf-8?B?TTA5YVAydHI0TWd4NlFnZ0xxbHJCbTVBekRFb2RSWFlhVlBBM29SdmliQllD?=
- =?utf-8?B?WDBDYS9jUi9CQWZHR0c5NVFKKzFnbFZlWTdHLzdYRmtuQndyVDBDY3MwczJD?=
- =?utf-8?B?a2lPWWlwVUgrRzJvcFhQTHRTV3dnWVd5di9Dd0RuYmJyN2s5Z2JJMGlBd2xs?=
- =?utf-8?B?UW1QR1ZMOGh4WFJZQUtMc3o3d1JRb2JCOW04TCtWRThPcHl0TWFEcGVQSUxX?=
- =?utf-8?B?dnEvT1NGU0ExaWljM2RDYmY5WDVxRHZzdG82VDE5R3VCb1lzSWcwK29oUnpn?=
- =?utf-8?B?dUQ2amtMeWlLekdDdDhjcDBmSkVxUlpVVzllaC95OUZBVzJIKzFkR25Cd1RB?=
- =?utf-8?B?MXBCSHhkbjZhdjY5a1E1ejVhekNtWEN3b0tET2RWSjVIakVqR2Nsbi9VREpZ?=
- =?utf-8?B?dHBycElrbE5uUGVJTm03ek1Qak9laGFpU0ZHLzJGK09uNUo1QWV5NU1waU5n?=
- =?utf-8?B?NERVMklUb3B5Y1lSQkRkSnFKMG1JdXdwNmFEVnlKWlNSQ0FtT2dybUZnR3ZO?=
- =?utf-8?B?UlQydFhxbExWSW5pbXJENkcxM1RpaUsrQmJuYTlmVGNXc1NQOGNJU0Y2MCth?=
- =?utf-8?B?MFY2dkZiZzl6TXpKRUNMWi9hTlU3UmxXL0p4eEMzRml2OEJmdXU2WHpZZHhr?=
- =?utf-8?B?RkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BB5E0ED05603554FB3E4901A88F63D69@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 13 Oct 2022 17:34:44 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F137F31;
+        Thu, 13 Oct 2022 14:34:38 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4B0D740003;
+        Thu, 13 Oct 2022 21:34:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665696877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S/j4VwaT4LG3Yaw516KnXpuXfG1/DCE/NaX0TVRcb+0=;
+        b=MyTRzYh8SaclkkMeCwVfm//yVoYxD6Nv2RNcJl3SDMzwWeu2D7dRus81kMKwU36AxnC3F7
+        A+WquWGTJw76AwW8kQAZevFMBz1v9xmlzDkqtBKVvXrcrH8yS9MmsPixCy2djZ/17v7kTZ
+        xNDvfTOvWXoNgOUQGOnJWyLZCof7eNAov8e7MjClBnNCXnEjiimVx/c/+jzsNBBRqz5lXj
+        PET7fEtZoPfmPKIknd0gki1lcOT/cd265emz8CpYUN5S+EQhfoAizgI3V6cAlbT2dnddAS
+        ZdqtgOujsskfhrMyJRkL1xW7mbSPeHBzVfAV7zEnaURqdVFoRa3f+RlTqS/6VQ==
+Date:   Thu, 13 Oct 2022 23:34:35 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: Re: [PATCH] rtc: rtc-cmos: Fix event handler registration ordering
+ issue
+Message-ID: <Y0iEaxyO8Jj6tKSC@mail.local>
+References: <5629262.DvuYhMxLoT@kreacher>
+ <20221012205757.GA3118709@bhelgaas>
+ <CAJZ5v0gWG1qVzwSy19SSqFmxL7NZRf1pkLR_buPoyCcj4f0FLw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85ff4aba-ddcc-4eef-3ea1-08daad62b3ab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2022 21:34:25.8622
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BBVR30TtsY5xWrH7iYizbJywXxsOiA1hhupfY7c4Hfhd+A8sntm86kfl42gVsDixrjRV9p2GYLP8tEMNzrHJDNcUxAOdmNYv6FC4VXSaWec=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4964
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gWG1qVzwSy19SSqFmxL7NZRf1pkLR_buPoyCcj4f0FLw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTMvMTAvMjAyMiAyMjozMiwgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+IE9uIFdlZCwg
-MjQgQXVnIDIwMjIgMTA6MTg6MjUgKzAyMDAsIENocmlzdG9waGUgSkFJTExFVCB3cm90ZToNCj4+
-IFRoZSBkZXZtX2Nsa19nZXRfZW5hYmxlZCgpIGhlbHBlcjoNCj4+ICAgIC0gY2FsbHMgZGV2bV9j
-bGtfZ2V0KCkNCj4+ICAgIC0gY2FsbHMgY2xrX3ByZXBhcmVfZW5hYmxlKCkgYW5kIHJlZ2lzdGVy
-cyB3aGF0IGlzIG5lZWRlZCBpbiBvcmRlciB0bw0KPj4gICAgICBjYWxsIGNsa19kaXNhYmxlX3Vu
-cHJlcGFyZSgpIHdoZW4gbmVlZGVkLCBhcyBhIG1hbmFnZWQgcmVzb3VyY2UuDQo+Pg0KPj4gVGhp
-cyBzaW1wbGlmaWVzIHRoZSBjb2RlLCB0aGUgZXJyb3IgaGFuZGxpbmcgcGF0aHMgYW5kIGF2b2lk
-IHRoZSBuZWVkIG9mDQo+PiBhIGRlZGljYXRlZCBmdW5jdGlvbiB1c2VkIHdpdGggZGV2bV9hZGRf
-YWN0aW9uX29yX3Jlc2V0KCkuDQo+Pg0KPj4gWy4uLl0NCj4gDQo+IEFwcGxpZWQsIHRoYW5rcyEN
-Cj4gDQo+IFsxLzFdIHJ0YzogbXBmczogVXNlIGRldm1fY2xrX2dldF9lbmFibGVkKCkgaGVscGVy
-DQo+ICAgICAgIGNvbW1pdDogMjRmYjMxNjE1NWE1ZjZiYTI3OGE4YjExMGM2MGU2N2I3OTkwMDM1
-Ng0KPiANCj4gQmVzdCByZWdhcmRzLA0KPiANCg0KV2hpbGUgdGhpcyBpcyBvbiBteSBtaW5kLCBt
-YWtpbmcgdGhlIHJ0YydzIGFoYiBjbG9jayBjcml0aWNhbCBjYW1lDQp1cCBpbiBwcmV2aW91cyBk
-aXNjdXNzaW9uIGFib3V0IHRoaXMgcGF0Y2guIEEgZml4IGZvciB0aGF0IHdhcyBhcHBsaWVkDQp0
-byB2Ni4wLg0KDQpUaGFua3MsDQpDb25vci4NCg0K
+On 13/10/2022 13:38:31+0200, Rafael J. Wysocki wrote:
+> On Wed, Oct 12, 2022 at 11:00 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Wed, Oct 12, 2022 at 08:07:01PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Because acpi_install_fixed_event_handler() enables the event
+> > > automatically on success, it is incorrect to call it before the
+> > > handler routine passed to it is ready to handle events.
+> > >
+> > > Unfortunately, the rtc-cmos driver does exactly the incorrect thing
+> > > by calling cmos_wake_setup(), which passes rtc_handler() to
+> > > acpi_install_fixed_event_handler(), before cmos_do_probe(), because
+> > > rtc_handler() uses dev_get_drvdata() to get to the cmos object
+> > > pointer and the driver data pointer is only populated in
+> > > cmos_do_probe().
+> > >
+> > > This leads to a NULL pointer dereference in rtc_handler() on boot
+> > > if the RTC fixed event happens to be active at the init time.
+> > >
+> > > To address this issue, change the initialization ordering of the
+> > > driver so that cmos_wake_setup() is always called after a successful
+> > > cmos_do_probe() call.
+> > >
+> > > While at it, change cmos_pnp_probe() to call cmos_do_probe() after
+> > > the initial if () statement used for computing the IRQ argument to
+> > > be passed to cmos_do_probe() which is cleaner than calling it in
+> > > each branch of that if () (local variable "irq" can be of type int,
+> > > because it is passed to that function as an argument of type int).
+> > >
+> > > Note that commit 6492fed7d8c9 ("rtc: rtc-cmos: Do not check
+> > > ACPI_FADT_LOW_POWER_S0") caused this issue to affect a larger number
+> > > of systems, because previously it only affected systems with
+> > > ACPI_FADT_LOW_POWER_S0 set, but it is present regardless of that
+> > > commit.
+> > >
+> > > Fixes: 6492fed7d8c9 ("rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0")
+> > > Fixes: a474aaedac99 ("rtc-cmos: move wake setup from ACPI glue into RTC driver")
+> > > Link: https://lore.kernel.org/linux-acpi/20221010141630.zfzi7mk7zvnmclzy@techsingularity.net/
+> > > Reported-by: Mel Gorman <mgorman@techsingularity.net>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+> >
+> > Yep, I blew it with a474aaedac99, sorry about that.
+> >
+> > Possibly could call cmos_wake_setup() from cmos_do_probe() instead of
+> > from cmos_pnp_probe() and cmos_platform_probe()?
+> 
+> Sounds good.
+> 
+> I would prefer to send a separate patch for this on top of the
+> $subject one, unless Alexandre wants me to do it all in one go.
+> 
+> Alexandre, what's your preference here?  Or would you prefer if I
+> pushed this forward?
+> 
+
+I applied your patch, feel free to improve on top of that ;)
+
+> > Then there would be a single call site and it would be closer to the actual dependency on
+> > dev_set_drvdata().  Either way is fine with me.
+> 
+> OK
+> 
+> > Unrelated, but I happened to notice that pnp_irq() returns -1 for
+> > failure, and this note suggests that possibly returning 0 would be
+> > better:
+> >
+> >   https://lore.kernel.org/r/CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com
+> 
+> Probably.
+> 
+> In that case, though, it would be prudent to also explicitly discard
+> IRQ resources where start is equal to 0.
+> 
+> >
+> > > ---
+> > >  drivers/rtc/rtc-cmos.c |   29 +++++++++++++++++++----------
+> > >  1 file changed, 19 insertions(+), 10 deletions(-)
+> > >
+> > > Index: linux-pm/drivers/rtc/rtc-cmos.c
+> > > ===================================================================
+> > > --- linux-pm.orig/drivers/rtc/rtc-cmos.c
+> > > +++ linux-pm/drivers/rtc/rtc-cmos.c
+> > > @@ -1352,10 +1352,10 @@ static void cmos_check_acpi_rtc_status(s
+> > >
+> > >  static int cmos_pnp_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
+> > >  {
+> > > -     cmos_wake_setup(&pnp->dev);
+> > > +     int irq, ret;
+> > >
+> > >       if (pnp_port_start(pnp, 0) == 0x70 && !pnp_irq_valid(pnp, 0)) {
+> > > -             unsigned int irq = 0;
+> > > +             irq = 0;
+> > >  #ifdef CONFIG_X86
+> > >               /* Some machines contain a PNP entry for the RTC, but
+> > >                * don't define the IRQ. It should always be safe to
+> > > @@ -1364,13 +1364,17 @@ static int cmos_pnp_probe(struct pnp_dev
+> > >               if (nr_legacy_irqs())
+> > >                       irq = RTC_IRQ;
+> > >  #endif
+> > > -             return cmos_do_probe(&pnp->dev,
+> > > -                             pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
+> > >       } else {
+> > > -             return cmos_do_probe(&pnp->dev,
+> > > -                             pnp_get_resource(pnp, IORESOURCE_IO, 0),
+> > > -                             pnp_irq(pnp, 0));
+> > > +             irq = pnp_irq(pnp, 0);
+> > >       }
+> > > +
+> > > +     ret = cmos_do_probe(&pnp->dev, pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     cmos_wake_setup(&pnp->dev);
+> > > +
+> > > +     return 0;
+> > >  }
+> > >
+> > >  static void cmos_pnp_remove(struct pnp_dev *pnp)
+> > > @@ -1454,10 +1458,9 @@ static inline void cmos_of_init(struct p
+> > >  static int __init cmos_platform_probe(struct platform_device *pdev)
+> > >  {
+> > >       struct resource *resource;
+> > > -     int irq;
+> > > +     int irq, ret;
+> > >
+> > >       cmos_of_init(pdev);
+> > > -     cmos_wake_setup(&pdev->dev);
+> > >
+> > >       if (RTC_IOMAPPED)
+> > >               resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
+> > > @@ -1467,7 +1470,13 @@ static int __init cmos_platform_probe(st
+> > >       if (irq < 0)
+> > >               irq = -1;
+> > >
+> > > -     return cmos_do_probe(&pdev->dev, resource, irq);
+> > > +     ret = cmos_do_probe(&pdev->dev, resource, irq);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     cmos_wake_setup(&pdev->dev);
+> > > +
+> > > +     return 0;
+> > >  }
+> > >
+> > >  static int cmos_platform_remove(struct platform_device *pdev)
+> > >
+> > >
+> > >
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
