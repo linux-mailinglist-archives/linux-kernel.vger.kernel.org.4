@@ -2,142 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827115FDA05
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB7A5FDA0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 15:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiJMNMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 09:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S229879AbiJMNMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 09:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJMNMK (ORCPT
+        with ESMTP id S229852AbiJMNMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 09:12:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D26DFD0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665666729; x=1697202729;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fV/3WfZrif5mBWCPnpUmqi6jTjOvsWJITNohD01iWcQ=;
-  b=O4+/NK5CjhJlZc6PwrYCY/eISP7NRp+C8/Whlzz8PYgzp2bSUZHn6UcY
-   ltF4JsfbD9ssYVYvawgYgRTMF+TfTU2rXCbOWs+vSr85sS3MuL7CN5hvS
-   eyrr9trSlTnhdPXfI6ocT7IKjMsOQ1fXwD7STz9iKRvc3QSBTY92vNmTa
-   6uP48q5DE2TrmBWvRwKGnqBl70k4r3DOOn1uq60/LrxIVuJO8qbD24Dfo
-   wbZPtPfsZ+UWlzySqeqEc/TJzKfsoP6/JQ6o9pUjsVNSXGVDlc7G5fF/F
-   sdu8xsr+uDMzSjBc4gwIcCSrPns04UotroEyRBL3iyxDUZNNOQm886OE3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="288344195"
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="288344195"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 06:12:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="658178256"
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="658178256"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by orsmga008.jf.intel.com with ESMTP; 13 Oct 2022 06:12:05 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     rui.zhang@intel.com, tim.c.chen@intel.com,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Feng Tang <feng.tang@intel.com>, Yu Liao <liaoyu15@huawei.com>
-Subject: [PATCH v2] x86/tsc: Extend watchdog check exemption to 4-Sockets platform 
-Date:   Thu, 13 Oct 2022 21:12:00 +0800
-Message-Id: <20221013131200.973649-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 13 Oct 2022 09:12:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A786914D8D8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 06:12:47 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mp8vr6jCmzmVBT;
+        Thu, 13 Oct 2022 21:08:08 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 13 Oct 2022 21:12:45 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 13 Oct
+ 2022 21:12:44 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <lvjianmin@loongson.cn>, <chenhuacai@kernel.org>,
+        <chenhuacai@loongson.cn>
+Subject: [PATCH] platform/loongarch: laptop: fix possible UAF in generic_acpi_laptop_init()
+Date:   Thu, 13 Oct 2022 21:12:09 +0800
+Message-ID: <20221013131209.775969-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is report again that the tsc clocksource on a 4 sockets x86
-Skylake server was wrongly judged as 'unstable' by 'jiffies' watchdog,
-and disabled [1].
+Current the return value of 'sub_driver->init' is not checked,
+if sparse_keymap_setup() called in the init function fails,
+'generic_inputdev' is freed, then it willl lead a UAF when
+using it in generic_acpi_laptop_init(). Fix it by checking
+return value. Set generic_inputdev to NULL after free to avoid
+double free it.
 
-Commit b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC
-on qualified platorms") was introduce to deal with these false
-alarms of tsc unstable issues, covering qualified platforms for 2
-sockets or smaller ones.
-
-Extend the exemption to 4 sockets to fix the issue.
-
-We also got similar reports on 8 sockets platform from internal test,
-but as Peter pointed out, there was tsc sync issues for 8-sockets
-platform, and it'd better be handled architecture by architecture,
-instead of directly changing the threshold to 8 here.
-
-Rui also proposed another way to disable 'jiffies' as clocksource
-watchdog [2], which can also solve this specific problem in an
-architecture independent way, with one limitation that some tsc false
-alarms are reported by other watchdogs like HPET in post-boot time,
-while 'jiffies' is mostly used in boot phase before hardware
-clocksources are initialized.
-
-[1]. https://lore.kernel.org/all/9d3bf570-3108-0336-9c52-9bee15767d29@huawei.com/
-[2]. https://lore.kernel.org/all/bd5b97f89ab2887543fc262348d1c7cafcaae536.camel@intel.com/
-
-Reported-by: Yu Liao <liaoyu15@huawei.com>
-Tested-by: Yu Liao <liaoyu15@huawei.com>
-Signed-off-by: Feng Tang <feng.tang@intel.com>
+Fixes: 6246ed09111f ("LoongArch: Add ACPI-based generic laptop driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
+ drivers/platform/loongarch/loongson-laptop.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Hi reviewers:
-
-In the v1 review cycle, Dave raised the issue that 'nr_online_nodes'
-is not accurate, and could have problem with fakenuma (numa=fake=4 in
-cmdline) case and system with CPU-less HBM/PMEM nodes, which we have
-discussed in https://lore.kernel.org/lkml/Y0UgeUIJSFNR4mQB@feng-clx/
-and will post the solution as a separate RFC patch.
-
-Thanks,
-Feng
-
-Changelog:
-  
-  Since v1:
-  * Change the max socket number from 8 to 4, as Peter Zijlstra
-    pointed the 8S machine could have tsc sync issue, and should
-    not be exempted generally
-  
- arch/x86/kernel/tsc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index cafacb2e58cc..1fa3fdf43159 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -1209,7 +1209,7 @@ static void __init check_system_tsc_reliable(void)
- 	 *  - TSC which does not stop in C-States
- 	 *  - the TSC_ADJUST register which allows to detect even minimal
- 	 *    modifications
--	 *  - not more than two sockets. As the number of sockets cannot be
-+	 *  - not more than four sockets. As the number of sockets cannot be
- 	 *    evaluated at the early boot stage where this has to be
- 	 *    invoked, check the number of online memory nodes as a
- 	 *    fallback solution which is an reasonable estimate.
-@@ -1217,7 +1217,7 @@ static void __init check_system_tsc_reliable(void)
- 	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
- 	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
- 	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
--	    nr_online_nodes <= 2)
-+	    nr_online_nodes <= 4)
- 		tsc_disable_clocksource_watchdog();
- }
+diff --git a/drivers/platform/loongarch/loongson-laptop.c b/drivers/platform/loongarch/loongson-laptop.c
+index f0166ad5d2c2..a665fd1042ac 100644
+--- a/drivers/platform/loongarch/loongson-laptop.c
++++ b/drivers/platform/loongarch/loongson-laptop.c
+@@ -448,6 +448,7 @@ static int __init event_init(struct generic_sub_driver *sub_driver)
+ 	if (ret < 0) {
+ 		pr_err("Failed to setup input device keymap\n");
+ 		input_free_device(generic_inputdev);
++		generic_inputdev = NULL;
  
+ 		return ret;
+ 	}
+@@ -502,8 +503,11 @@ static int __init generic_subdriver_init(struct generic_sub_driver *sub_driver)
+ 	if (ret)
+ 		return -EINVAL;
+ 
+-	if (sub_driver->init)
+-		sub_driver->init(sub_driver);
++	if (sub_driver->init) {
++		ret = sub_driver->init(sub_driver);
++		if (ret)
++			goto err_out;
++	}
+ 
+ 	if (sub_driver->notify) {
+ 		ret = setup_acpi_notify(sub_driver);
 -- 
-2.34.1
+2.25.1
 
