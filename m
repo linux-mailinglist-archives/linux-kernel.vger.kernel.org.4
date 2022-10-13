@@ -2,172 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E239E5FDDFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D032E5FDE04
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 18:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJMQIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 12:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S229496AbiJMQLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 12:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJMQIK (ORCPT
+        with ESMTP id S229587AbiJMQLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 12:08:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4540013332B;
-        Thu, 13 Oct 2022 09:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665677289; x=1697213289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OPQmeZ5uzAfg/Yu3vsd+t3FuvAOQsHliIP9WOqPYQKw=;
-  b=SoZ6M8rz0w4z3tqVEyO+XsZ4LpzrSB+j4psBjwxxkGr7ZlvtlxbeZnOr
-   cH34D89cSJvtC0Tw4UD++MXu8FsT/uvqY8KhCDGhMdPPMCEIr0yJYUp0/
-   /rjZ5me0OzZW1Pd9jDrUcECkiX2WROEzlzIg4TuT86UMTv9Z1NqmiheM1
-   P9UHM8zb2/Kg19M+1TXwiYu2WFmcpC+NYZeAHWUMclTlMEy4ISS0Nguqd
-   Ob0eoReheIzChHZZJGmpD4qMulHNYBjjrK7bTOIkSRF0eXuq6yHUikDN7
-   kjRunC/rEc1Hw1vmhf8+ai//880HxGdovPSIqDnCmvqVrZXlAVGNIsLJU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="306770460"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="306770460"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 09:05:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="802296581"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="802296581"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2022 09:05:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oj0hv-006V2r-0F;
-        Thu, 13 Oct 2022 19:05:15 +0300
-Date:   Thu, 13 Oct 2022 19:05:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Kent Gibson <warthog618@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Rafa?? Mi??ecki <rafal@milecki.pl>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Andreas F??rber <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 35/36] pinctrl: intel: Add missed header(s)
-Message-ID: <Y0g3OiL/9oQlcovJ@smile.fi.intel.com>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-36-andriy.shevchenko@linux.intel.com>
- <Y0gma4fmhWISrKHe@black.fi.intel.com>
+        Thu, 13 Oct 2022 12:11:12 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBC51D328
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:11:12 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 207so2621644ybn.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 09:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JbEHw5GFbGXxpSgTAnoCORfKnxkHkMtrjDyxiopNqeo=;
+        b=Vs0zdDf+YlXV2kY/1lvhAR7EJT5XL2g6aiyRvdSoRRqIPc6GWZ7IV2xWwd8DXODgPC
+         Blkggy4lFWwBBC0DhLn+p9UsZge/+ZIwBr7z4dZdyOdiqqolFFJu4HhAy7hBC0ZWqgDN
+         ECifr1+KJDstL/uO5Oldb6Wf+PBKTAb6I9ilEdEQtB3rFy0U4EyUYiQN4iXAlsMwSCmT
+         oR1d53wS87KXFRp4Btu6kctnLwQ7NTRNqk74dnqXHX1OcZSOKdV1lxCX44MVkoC7tJAu
+         aFRBZ+hDYE+sXiR2hdJ/NkJmWl5OfRlSvTKJu2pDXDLxK0YCgiQ6q/Yc1hDE44fhvqLg
+         f9oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JbEHw5GFbGXxpSgTAnoCORfKnxkHkMtrjDyxiopNqeo=;
+        b=DKlLDce4AsBsBBrpLP6l3TWhTBrkX4S8Jov9WLBi4AIreoDv39RprsPUzNZsJgXOV7
+         82OuM1z4cBKaEZvDrHe9DRlx5f9kW6B5kZnKwvlkTuRG6fc568lft2cYkDtUrzo0KIkQ
+         6FoiJ8tK9vaRJs8FV9hMEZ220Wb6jza4J2csNNVJRbNBW5ZiZ4BPDWSErj0eI47+gBWG
+         kNCBOjFFUOiKymDzjaVL/RFQN4DwVZmb+DYQ77t6TDDou1qBlLM7PDg6cRx3d51XRhJE
+         0etblEEaVQpZOHhSZRgKy6ah29voo+GpI3fNqFB2FJoH1IZvohhWcpeU/WLN8SvZLLJq
+         qr5A==
+X-Gm-Message-State: ACrzQf190R3J3id2q0iS0yAIiBwuSaIsyxhnmgqRjonqGn3GIB8/Hp3c
+        lCs7pKMdZcd0dT0cLeJ9ha4RLIsH13t6GmCdDyNTvA==
+X-Google-Smtp-Source: AMsMyM4DmrkDR3btKtiIB+eg07zHuF3FShF5Ox2BA1d+GT0yoNZHKfD6ayR6dPAcFCco3XELADpbxUpPI6i0ccezdeg=
+X-Received: by 2002:a25:e7c5:0:b0:6be:77c0:8830 with SMTP id
+ e188-20020a25e7c5000000b006be77c08830mr679103ybh.340.1665677471018; Thu, 13
+ Oct 2022 09:11:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0gma4fmhWISrKHe@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+ <20221010104206.12184-1-zhouchengming@bytedance.com> <CAJuCfpF7Z+CYhk-f_aaDTE232+m9z_n-QfjGfdLje7QrX9bFtw@mail.gmail.com>
+ <a73f58a3-9f96-2ce5-38a0-8abab27a2260@bytedance.com> <CAJuCfpET+B3X-uX2vDp-2yH-+OVxOu3YXL7JWZrPuoh22P+5SQ@mail.gmail.com>
+ <dea56c22-ab5b-25e2-9819-cc598f9aad80@bytedance.com> <CAJuCfpFTDyR1V+JYOY_uN6Xg1Nip5b=9dzkwm-CNd8vMWaQQFQ@mail.gmail.com>
+ <46c6e1cc-77d3-eac1-fa18-deed2bac4a0e@bytedance.com> <Y0g0UAAJMhPczNm/@cmpxchg.org>
+In-Reply-To: <Y0g0UAAJMhPczNm/@cmpxchg.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 13 Oct 2022 09:10:59 -0700
+Message-ID: <CAJuCfpFo5EEEg24VLSmcPo=VDMszB9Q2a4L_Eq6E9VWnbsBJDQ@mail.gmail.com>
+Subject: Re: [PATCH] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        quic_pkondeti@quicinc.com, peterz@infradead.org,
+        quic_charante@quicinc.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 05:53:31PM +0300, Mika Westerberg wrote:
-> On Mon, Oct 10, 2022 at 11:14:51PM +0300, Andy Shevchenko wrote:
-> > Do not imply that some of the generic headers may be always included.
-> > Instead, include explicitly what we are direct user of.
-> > 
-> > While at it, sort headers alphabetically.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> For all the intel pinctrl changes.
+On Thu, Oct 13, 2022 at 8:52 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Thu, Oct 13, 2022 at 07:06:55PM +0800, Chengming Zhou wrote:
+> > Should I still need to copy groupc->tasks[] out for the current_cpu as you
+> > suggested before?
+>
+> It'd be my preference as well. This way the resched logic can be
+> consolidated into a single block of comment + code at the end of the
+> function.
 
-Thank you, I have added it to the 4 Intel related patches.
+Sounds good to me. If we are copying times in the retry loop then
+let's move the `reschedule =` decision out of that loop completely. At
+the end of get_recent_times we can do:
 
--- 
-With Best Regards,
-Andy Shevchenko
+if (cpu == current_cpu)
+    reschedule = tasks[NR_RUNNING] +
+                            tasks[NR_IOWAIT] +
+                            tasks[NR_MEMSTALL] > 1;
+else
+    reschedule = *pchanged_states & (1 << PSI_NONIDLE);
 
 
+>
+> > @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
+> >                              u32 *pchanged_states)
+> >  {
+> >         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
+> > +       int current_cpu = raw_smp_processor_id();
+> > +       bool reschedule;
+> >         u64 now, state_start;
+> >         enum psi_states s;
+> >         unsigned int seq;
+> > @@ -256,6 +258,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
+> >                 memcpy(times, groupc->times, sizeof(groupc->times));
+> >                 state_mask = groupc->state_mask;
+> >                 state_start = groupc->state_start;
+> > +               if (cpu == current_cpu)
+> > +                       reschedule = groupc->tasks[NR_RUNNING] +
+> > +                               groupc->tasks[NR_IOWAIT] +
+> > +                               groupc->tasks[NR_MEMSTALL] > 1;
+> >         } while (read_seqcount_retry(&groupc->seq, seq));
+>
+> This also matches psi_show() and the poll worker. They don't currently
+> use the flag, but it's somewhat fragile and confusing. Add a test for
+> current_work() == &group->avgs_work?
+
+Good point. (tasks[NR_RUNNING] + tasks[NR_IOWAIT] + tasks[NR_MEMSTALL]
+> 1) condition should also contain this check.
