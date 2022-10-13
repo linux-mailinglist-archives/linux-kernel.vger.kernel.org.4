@@ -2,184 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB9F5FD08A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 02:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC9C5FD204
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 02:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiJMA1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Oct 2022 20:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S231147AbiJMA6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Oct 2022 20:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbiJMAYR (ORCPT
+        with ESMTP id S230436AbiJMA5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Oct 2022 20:24:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E055104534;
-        Wed, 12 Oct 2022 17:23:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D75A7616F8;
-        Thu, 13 Oct 2022 00:23:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC678C433D6;
-        Thu, 13 Oct 2022 00:23:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620612;
-        bh=osX7mwTVn8RkbfXg8lO8nWwFXf2vqdKXKViykfEay54=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FpixK/JbFeR448NDyqrngey7tl1IQ5IBvye3/uLbMFxf9/Qc661xlRei+JreanoM4
-         JJ+A+TOX+GXIHEON6OLu/P/Pe01HyB92ZFq4yKDzhC3wwyXRt7NUvtC/EUteq00Ccm
-         pHLN0wcHpKgAMAQuB3naJEpcNB/k6+yVm2JKwUvEWNw/IGS+mXD4vBGmTYEJdNlJEY
-         Ax+fwEdBxtMQUmxGLCK6WFM32y14ARTXvqGqT4Wdw9/PA/yK1k3NCRTERHF4Yb7/Wg
-         wWL5Mr2JdXhc2OyyniS23MEAfYUub1oaW+qfhNGunkUcYZLBrMHzD2BtWHOj+b+JGS
-         7XWE06E7I7SKQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Ivan T. Ivanov" <iivanov@suse.de>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mturquette@baylibre.com,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        maxime@cerno.tech, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 47/47] clk: bcm2835: Round UART input clock up
-Date:   Wed, 12 Oct 2022 20:21:22 -0400
-Message-Id: <20221013002124.1894077-47-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013002124.1894077-1-sashal@kernel.org>
-References: <20221013002124.1894077-1-sashal@kernel.org>
+        Wed, 12 Oct 2022 20:57:45 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97752501B3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 17:54:22 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id b5so245906pgb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Oct 2022 17:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SaAw8BTKIG9tAkvSBMCqtaZ5r2kfs+zZaLIVuG2dZHs=;
+        b=K5sLdtJ3zfb6xlKrXbKc4Bi1kqdHF43hnr6V3W1kqVMyK/WgPRCBSeIlssQNjqN38k
+         Ykc4udoNp8uSOE/2DsXPfb+f1BA+/HPIguYMsF8Co2QilJ8sX+Zs2OPTXUugWsuP+SB8
+         QsgR+kIHAxI2VEmakIzP/AiznOSXg8Qn7vOZQFgdoFkkEtQsu1TdjuQUn396zg4lMXCW
+         iS/3uVvY/92R5fXUa0xNzCvxAkThEtj4Ym8l5nNMw1OqL5SwxpLx/MYxQ3HP0PoD/kP1
+         64ZS/oSJw4wpL901h96XgpGpBwOzZ4KgclxuaEbjhyHSYucUTsvOMLDVVLZ3IzYb4PsA
+         +k8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SaAw8BTKIG9tAkvSBMCqtaZ5r2kfs+zZaLIVuG2dZHs=;
+        b=dWdeTEP4ZV+IRnlgsVMLlX0sPtGw6Daslpn8xek+qDgylexDExY6Q0SJEIVekwSlto
+         L2jIMsuEvjz1tLNiJTIXgKS7uJMVzIfzXdycoXJJAnlaY+p8hLpbnH/jTQajtyh1w5HR
+         FG6vqU8ooBT/UecVsJmt1iBAK9gHfL+KPHds3P89lH+kASXi+mM9E6/SqXkgT47Xz8kW
+         6eFusV9z09KvgPFLWJEvbCuUDHVpuatZ/cKlEe7pw3Qf1/kCRUcnueSFk385lNvZG5lr
+         KSredzXje7NTyW/o5zkbWH+DrB+Ew6oWXxAeNNrgxNM+3ubOl7vmq2uyh2gzXEbS+d3F
+         VHLw==
+X-Gm-Message-State: ACrzQf2E/XTdwqSsR4vZQzgdvsphLugJTxs6Wq/QwkBQPPbLUUBV9f0L
+        ClLDy6ha+h0j2nDuxr4jJHrEevMYCWB8Qw==
+X-Google-Smtp-Source: AMsMyM7nKTrKlu6DHO0ftSLXnDkfs48a/jbCu3T3jD0HgX/d2Iqg01mE3LcqY+w6ub9uQZPbiCF13Q==
+X-Received: by 2002:a05:6a00:1f10:b0:562:b9e1:55e9 with SMTP id be16-20020a056a001f1000b00562b9e155e9mr31523510pfb.60.1665620510829;
+        Wed, 12 Oct 2022 17:21:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w9-20020a1709027b8900b0017f62877604sm11159190pll.66.2022.10.12.17.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 17:21:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 12 Oct 2022 17:21:48 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        ajd@linux.ibm.com, aneesh.kumar@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
+        cuigaosheng1@huawei.com, david@redhat.com, farosas@linux.ibm.com,
+        geoff@infradead.org, gustavoars@kernel.org, haren@linux.ibm.com,
+        hbathini@linux.ibm.com, joel@jms.id.au, lihuafei1@huawei.com,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        lukas.bulwahn@gmail.com, mikey@neuling.org, nathan@kernel.org,
+        nathanl@linux.ibm.com, nicholas@linux.ibm.com, npiggin@gmail.com,
+        pali@kernel.org, paul@paul-moore.com, rmclure@linux.ibm.com,
+        ruscur@russell.cc, windhl@126.com,
+        wsa+renesas@sang-engineering.com, ye.xingchen@zte.com.cn,
+        yuanjilin@cdjrlc.com, zhengyongjun3@huawei.com
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-1 tag
+Message-ID: <20221013002148.GA535574@roeck-us.net>
+References: <87edvhntv0.fsf@mpe.ellerman.id.au>
+ <20221012141827.GA2405914@roeck-us.net>
+ <Y0biBtCUtc2mowbQ@zx2c4.com>
+ <20221012164452.GA2990467@roeck-us.net>
+ <Y0b3ZsTRHWG6jGK8@zx2c4.com>
+ <20221012221615.GA364143@roeck-us.net>
+ <87bkqgmvxl.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bkqgmvxl.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Ivan T. Ivanov" <iivanov@suse.de>
+On Thu, Oct 13, 2022 at 11:03:34AM +1100, Michael Ellerman wrote:
+> Guenter Roeck <linux@roeck-us.net> writes:
+> > On Wed, Oct 12, 2022 at 11:20:38AM -0600, Jason A. Donenfeld wrote:
+> >> 
+> >> I've also managed to not hit this bug a few times. When it triggers,
+> >> after "kprobes: kprobe jump-optimization is enabled. All kprobes are
+> >> optimized if possible.", there's a long hang - tens seconds before it
+> >> continues. When it doesn't trigger, there's no hang at that point in the
+> >> boot process.
+> >> 
+> >
+> > I managed to bisect the problem. See below for results. Reverting the
+> > offending patch fixes the problem for me.
+> 
+> Thanks.
+> 
+> This is probably down to me/us not testing with PREEMPT enabled enough.
+> 
+Not sure. My configuration has
 
-[ Upstream commit f690a4d7a8f66430662975511c86819dc9965bcc ]
+CONFIG_PREEMPT_NONE=y
+# CONFIG_PREEMPT_VOLUNTARY is not set
+# CONFIG_PREEMPT is not set
 
-It was reported that RPi3[1] and RPi Zero 2W boards have issues with
-the Bluetooth. It turns out that when switching from initial to
-operation speed host and device no longer can talk each other because
-host uses incorrect UART baud rate.
+Guenter
 
-The UART driver used in this case is amba-pl011. Original fix, see
-below Github link[2], was inside pl011 module, but somehow it didn't
-look as the right place to fix. Beside that this original rounding
-function is not exactly perfect for all possible clock values. So I
-deiced to move the hack to the platform which actually need it.
-
-The UART clock is initialised to be as close to the requested
-frequency as possible without exceeding it. Now that there is a
-clock manager that returns the actual frequencies, an expected
-48MHz clock is reported as 47999625. If the requested baud rate
-== requested clock/16, there is no headroom and the slight
-reduction in actual clock rate results in failure.
-
-If increasing a clock by less than 0.1% changes it from ..999..
-to ..000.., round it up.
-
-[1] https://bugzilla.suse.com/show_bug.cgi?id=1188238
-[2] https://github.com/raspberrypi/linux/commit/ab3f1b39537f6d3825b8873006fbe2fc5ff057b7
-
-Cc: Phil Elwell <phil@raspberrypi.com>
-Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
-Reviewed-by: Stefan Wahren <stefan.wahren@i2se.com>
-Link: https://lore.kernel.org/r/20220912081306.24662-1-iivanov@suse.de
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/bcm/clk-bcm2835.c | 35 +++++++++++++++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index 298763e78263..4eaece5cb3ae 100644
---- a/drivers/clk/bcm/clk-bcm2835.c
-+++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -30,6 +30,7 @@
- #include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/io.h>
-+#include <linux/math.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
-@@ -502,6 +503,8 @@ struct bcm2835_clock_data {
- 	bool low_jitter;
- 
- 	u32 tcnt_mux;
-+
-+	bool round_up;
- };
- 
- struct bcm2835_gate_data {
-@@ -994,12 +997,34 @@ static long bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
- 	return temp;
- }
- 
-+static unsigned long bcm2835_round_rate(unsigned long rate)
-+{
-+	unsigned long scaler;
-+	unsigned long limit;
-+
-+	limit = rate / 100000;
-+
-+	scaler = 1;
-+	while (scaler < limit)
-+		scaler *= 10;
-+
-+	/*
-+	 * If increasing a clock by less than 0.1% changes it
-+	 * from ..999.. to ..000.., round up.
-+	 */
-+	if ((rate + scaler - 1) / scaler % 1000 == 0)
-+		rate = roundup(rate, scaler);
-+
-+	return rate;
-+}
-+
- static unsigned long bcm2835_clock_get_rate(struct clk_hw *hw,
- 					    unsigned long parent_rate)
- {
- 	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
- 	struct bcm2835_cprman *cprman = clock->cprman;
- 	const struct bcm2835_clock_data *data = clock->data;
-+	unsigned long rate;
- 	u32 div;
- 
- 	if (data->int_bits == 0 && data->frac_bits == 0)
-@@ -1007,7 +1032,12 @@ static unsigned long bcm2835_clock_get_rate(struct clk_hw *hw,
- 
- 	div = cprman_read(cprman, data->div_reg);
- 
--	return bcm2835_clock_rate_from_divisor(clock, parent_rate, div);
-+	rate = bcm2835_clock_rate_from_divisor(clock, parent_rate, div);
-+
-+	if (data->round_up)
-+		rate = bcm2835_round_rate(rate);
-+
-+	return rate;
- }
- 
- static void bcm2835_clock_wait_busy(struct bcm2835_clock *clock)
-@@ -2144,7 +2174,8 @@ static const struct bcm2835_clk_desc clk_desc_array[] = {
- 		.div_reg = CM_UARTDIV,
- 		.int_bits = 10,
- 		.frac_bits = 12,
--		.tcnt_mux = 28),
-+		.tcnt_mux = 28,
-+		.round_up = true),
- 
- 	/* TV encoder clock.  Only operating frequency is 108Mhz.  */
- 	[BCM2835_CLOCK_VEC]	= REGISTER_PER_CLK(
--- 
-2.35.1
-
+> cheers
+> 
+> > ---
+> > # bad: [1440f576022887004f719883acb094e7e0dd4944] Merge tag 'mm-hotfixes-stable-2022-10-11' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > # good: [4fe89d07dcc2804c8b562f6c7896a45643d34b2f] Linux 6.0
+> > git bisect start 'HEAD' 'v6.0'
+> > # good: [7171a8da00035e7913c3013ca5fb5beb5b8b22f0] Merge tag 'arm-dt-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> > git bisect good 7171a8da00035e7913c3013ca5fb5beb5b8b22f0
+> > # good: [f01603979a4afaad7504a728918b678d572cda9e] Merge tag 'gpio-updates-for-v6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
+> > git bisect good f01603979a4afaad7504a728918b678d572cda9e
+> > # bad: [8aeab132e05fefc3a1a5277878629586bd7a3547] Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost
+> > git bisect bad 8aeab132e05fefc3a1a5277878629586bd7a3547
+> > # bad: [493ffd6605b2d3d4dc7008ab927dba319f36671f] Merge tag 'ucount-rlimits-cleanups-for-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace
+> > git bisect bad 493ffd6605b2d3d4dc7008ab927dba319f36671f
+> > # good: [0e470763d84dcad27284067647dfb4b1a94dfce0] Merge tag 'efi-next-for-v6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi
+> > git bisect good 0e470763d84dcad27284067647dfb4b1a94dfce0
+> > # bad: [110a58b9f91c66f743c01a2c217243d94c899c23] powerpc/boot: Explicitly disable usage of SPE instructions
+> > git bisect bad 110a58b9f91c66f743c01a2c217243d94c899c23
+> > # good: [fdfdcfd504933ed06eb6b4c9df21eede0e213c3e] powerpc/build: put sys_call_table in .data.rel.ro if RELOCATABLE
+> > git bisect good fdfdcfd504933ed06eb6b4c9df21eede0e213c3e
+> > # good: [c2e7a19827eec443a7cbe85e8d959052412d6dc3] powerpc: Use generic fallocate compatibility syscall
+> > git bisect good c2e7a19827eec443a7cbe85e8d959052412d6dc3
+> > # good: [56adbb7a8b6cc7fc9b940829c38494e53c9e57d1] powerpc/64/interrupt: Fix false warning in context tracking due to idle state
+> > git bisect good 56adbb7a8b6cc7fc9b940829c38494e53c9e57d1
+> > # bad: [754f611774e4b9357a944f5b703dd291c85161cf] powerpc/64: switch asm helpers from GOT to TOC relative addressing
+> > git bisect bad 754f611774e4b9357a944f5b703dd291c85161cf
+> > # bad: [f7bff6e7759b1abb59334f6448f9ef3172c4c04a] powerpc/64/interrupt: avoid BUG/WARN recursion in interrupt entry
+> > git bisect bad f7bff6e7759b1abb59334f6448f9ef3172c4c04a
+> > # bad: [e485f6c751e0a969327336c635ca602feea117f0] powerpc/64/interrupt: Fix return to masked context after hard-mask irq becomes pending
+> > git bisect bad e485f6c751e0a969327336c635ca602feea117f0
+> > # good: [799f7063c7645f9a751d17f5dfd73b952f962cd2] powerpc/64: mark irqs hard disabled in boot paca
+> > git bisect good 799f7063c7645f9a751d17f5dfd73b952f962cd2
+> > # first bad commit: [e485f6c751e0a969327336c635ca602feea117f0] powerpc/64/interrupt: Fix return to masked context after hard-mask irq becomes pending
