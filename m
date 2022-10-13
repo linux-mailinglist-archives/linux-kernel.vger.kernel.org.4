@@ -2,129 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50555FDD4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766475FDD50
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJMPiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        id S229874AbiJMPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJMPiD (ORCPT
+        with ESMTP id S229813AbiJMPkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:38:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF409C58B1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665675481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8FglV2hEiVF1FMKvRG3wYfrJNDdbdOZrWruHYlhJav4=;
-        b=BE/qkphoQnAuuMRelozRHn5BX8Z82KKfsRNhQcRxrhUW5SwhIbawKWUwFrOmhUaES557aS
-        FcKY0BjB87z+ykoJezr5HD/k8mRiaVl3BKWyWhjpt6bfFODU1HUTfWQaNa1zCNb1MWLty+
-        JBodw0ZqpvVIrLwBjSJBKj6qWvDjg2Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-JuWYSfdnPAyk3C62-oWJ9Q-1; Thu, 13 Oct 2022 11:37:59 -0400
-X-MC-Unique: JuWYSfdnPAyk3C62-oWJ9Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 530E9802541;
-        Thu, 13 Oct 2022 15:37:48 +0000 (UTC)
-Received: from [10.22.17.27] (unknown [10.22.17.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 54454C47E15;
-        Thu, 13 Oct 2022 15:37:44 +0000 (UTC)
-Message-ID: <70523e24-755f-f6ae-f665-78e6f5eef575@redhat.com>
-Date:   Thu, 13 Oct 2022 11:37:43 -0400
+        Thu, 13 Oct 2022 11:40:08 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03929140B9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:39:46 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id g11so1568096qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 08:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4bJGejV+5UqqoOtNX772kflH+cMijJELmWVNopKE40M=;
+        b=oE9CdTSv8+Xt0aYUhUqZN7FPDAmiV6BO2e5EUmbWXFQrvr/z970xWK2CqgaSd/+QYE
+         JrDRu7XINubTWtVhVtkHw/o1XXNuE0nfdOnd3s7vKkwMEjLHvC2Rrwy4Q+Lz7mK4jUnU
+         12pLlt9fkyYJofZE9hbVncfaACdNajt99AgAc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4bJGejV+5UqqoOtNX772kflH+cMijJELmWVNopKE40M=;
+        b=n4qMTGqmX5IBV2MSTLiDXulvOz7pIGFbU9fUWCsmGQiiAhfHv1mW4o3StluI6BGK2t
+         5ft+gmomWReh7urhWs+yQeFLgrsvYTt2nbkwedcq73eCVgwkOYplXePK/FhEOXc7FBwj
+         gDN9ImMXDmoi8aa53NZO/fvBRb6t039It1izliw1/mwzkzB+RiVosxqTxkb2BRJswVt/
+         /FqDXdYp6htWJUJnTOdGBzzCsv6fUR26zC9T2THBzheBLtii8mT5cpfnZ5gFdMi3Wgjr
+         BZd1cjg9LL0aTZdX5uoXUS0WBux4Y8WACS7+3uM/1fvp9xhFcosVW3jEDnxQWkIEgIJ0
+         0WXg==
+X-Gm-Message-State: ACrzQf2RdrshO0IKg59L6OOnvyOHDbgUE2kUlA2mp636KCVQZ6kl0K3d
+        VDeYD8rk4XOouG+IS99MveP7l+xQnuQdyA==
+X-Google-Smtp-Source: AMsMyM4B7MUwdK3YxoHiFpH/xe+SP1fPnidaSr32FseB7PRrcV0pHh5JH3sByK3Cx8tqonj+uPiLeQ==
+X-Received: by 2002:a05:622a:40d:b0:397:bd61:ef1d with SMTP id n13-20020a05622a040d00b00397bd61ef1dmr371643qtx.404.1665675586051;
+        Thu, 13 Oct 2022 08:39:46 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id d22-20020a376816000000b006ce0733caebsm42050qkc.14.2022.10.13.08.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 08:39:45 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 15:39:45 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Fix use __this_cpu_read() warning in preemptible
+ code
+Message-ID: <Y0gxQQzLdJLOp7wI@google.com>
+References: <20221013044148.2894320-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] locking/rwsem: Prevent non-first waiter from
- spinning in down_write() slowpath
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
-References: <20221012133333.1265281-1-longman@redhat.com>
- <20221012133333.1265281-2-longman@redhat.com>
- <Y0fiIdxA+Jip1vve@hirez.programming.kicks-ass.net>
- <ee1ea64f-f4b3-15b2-b46c-9b8ad7217962@redhat.com>
-In-Reply-To: <ee1ea64f-f4b3-15b2-b46c-9b8ad7217962@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013044148.2894320-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/22 09:33, Waiman Long wrote:
-> On 10/13/22 06:02, Peter Zijlstra wrote:
->> On Wed, Oct 12, 2022 at 09:33:32AM -0400, Waiman Long wrote:
->>> A non-first waiter can potentially spin in the for loop of
->>> rwsem_down_write_slowpath() without sleeping but fail to acquire the
->>> lock even if the rwsem is free if the following sequence happens:
->>>
->>>    Non-first waiter       First waiter      Lock holder
->>>    ----------------       ------------      -----------
->>>    Acquire wait_lock
->>>    rwsem_try_write_lock():
->>>      Set handoff bit if RT or
->>>        wait too long
->>>      Set waiter->handoff_set
->>>    Release wait_lock
->>>                           Acquire wait_lock
->>>                           Inherit waiter->handoff_set
->>>                           Release wait_lock
->>>                        Clear owner
->>>                                             Release lock
->>>    if (waiter.handoff_set) {
->>>      rwsem_spin_on_owner(();
->>>      if (OWNER_NULL)
->>>        goto trylock_again;
->>>    }
->>>    trylock_again:
->>>    Acquire wait_lock
->>>    rwsem_try_write_lock():
->>>       if (first->handoff_set && (waiter != first))
->>>           return false;
->>>    Release wait_lock
->>>
->>> It is especially problematic if the non-first waiter is an RT task and
->>> it is running on the same CPU as the first waiter as this can lead to
->>> live lock.
->>>
->> So why not do a better handoff? Specifically, have the owner set owner
->> to first-waiter instead of NULL ? (like the normal mutex code)
->
-> I understand your desire to make the rwsem handoff process more like 
-> what mutex is currently doing. I certainly think it is doable and will 
-> put this in my todo list. However, that needs to be done at unlock and 
-> wakeup time. I expect that will require moderate amount of code 
-> changes which will make it not that suitable for backporting to the 
-> stable releases.
->
-> I would like to see these simple fixes get merged first and then we 
-> can work on a major revamp of the handoff code. What do you think?
->
-I am planning to post additional patches on top to rework the handoff 
-code sometimes next week, but I will keep these fix patches for the 
-stable releases.
+On Thu, Oct 13, 2022 at 12:41:48PM +0800, Zqiang wrote:
+> BUG: using __this_cpu_read() in preemptible [00000000]
+> code: rcu_torture_fqs/398
+> caller is __this_cpu_preempt_check+0x13/0x20
+> CPU: 3 PID: 398 Comm: rcu_torture_fqs Not tainted 6.0.0-rc1-yoctodev-standard+
+> Call Trace:
+> <TASK>
+> dump_stack_lvl+0x5b/0x86
+> dump_stack+0x10/0x16
+> check_preemption_disabled+0xe5/0xf0
+> __this_cpu_preempt_check+0x13/0x20
+> rcu_force_quiescent_state.part.0+0x1c/0x170
+> rcu_force_quiescent_state+0x1e/0x30
+> rcu_torture_fqs+0xca/0x160
+> ? rcu_torture_boost+0x430/0x430
+> kthread+0x192/0x1d0
+> ? kthread_complete_and_exit+0x30/0x30
+> ret_from_fork+0x22/0x30
+> </TASK>
+> 
+> When enable rcutorture.fqs_duration, the rcu_force_quiescent_state() be
+> invoked in rcu_torture_fqs task context, invoke __this_cpu_read() in
+> preemptible code section will trigger the above calltrace.
 
-Cheers,
-Longman
+Makes sense, so in theory the GP thread might get migrated after sampling
+rcu_data.mynode but that's Ok since it wont change the behavior of the code
+following it AFAICS.
 
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+thanks,
+
+ - Joel
+
+> This commit convert __this_cpu_read() to raw_cpu_read() to avoid
+> this warning.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 96d678c9cfb6..282002e62cf3 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2436,7 +2436,7 @@ void rcu_force_quiescent_state(void)
+>  	struct rcu_node *rnp_old = NULL;
+>  
+>  	/* Funnel through hierarchy to reduce memory contention. */
+> -	rnp = __this_cpu_read(rcu_data.mynode);
+> +	rnp = raw_cpu_read(rcu_data.mynode);
+>  	for (; rnp != NULL; rnp = rnp->parent) {
+>  		ret = (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) ||
+>  		       !raw_spin_trylock(&rnp->fqslock);
+> -- 
+> 2.25.1
+> 
