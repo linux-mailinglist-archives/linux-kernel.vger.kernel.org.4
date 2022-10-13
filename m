@@ -2,151 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07215FE1FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430E35FE1CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 20:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiJMSuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 14:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S231936AbiJMSoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 14:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiJMSsu (ORCPT
+        with ESMTP id S232101AbiJMSnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:48:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F1E4DB32
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665686700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aO9uwyAWNrITIE0HcaM8sZnAKHxlA4eUnkHhusC4UKE=;
-        b=QPfowzZiWR8iUP+/Q6j2uJhTWsPFRgomnfQwPckiE8eSvEVIC4zgE8Xc/0FZUyxGZyNbdZ
-        J5sbuGKLFY0LKWRPi38V/tg6A4OuHQqMW9xi/0D9UZSEUZgnwlAjN1E9Cw7a8tqo6ASZlq
-        s9n69GxegSj2I9+IH8e+SGFFz08GMNc=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-623-UG68dnRVP3-4Kmh_LPpZ9w-1; Thu, 13 Oct 2022 14:41:15 -0400
-X-MC-Unique: UG68dnRVP3-4Kmh_LPpZ9w-1
-Received: by mail-oi1-f199.google.com with SMTP id r129-20020aca5d87000000b00350a28e1ba2so1101726oib.14
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:41:15 -0700 (PDT)
+        Thu, 13 Oct 2022 14:43:23 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157EB9F749
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:41:28 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id g11so2297148qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 11:41:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BumlHx0TbfQLcFeagrlufzZWok4cptrV+jGQa6OSx7M=;
+        b=jBSO50SWb8vc1i7NmBGUyugVxbPggZjjIygLfoGLl9bOi49sv61bD7+5ZXWvgavehS
+         tS2iwjZwEvrq4Cu+9JFTgPvWLc4KdS8m0x2udE+zdkYnv+sM2TC48MgW4DJ+vwUZkmfG
+         2kz+pK1Ctcla80XguQLCzbdLRIbbdm3wWrQ+wvqDvqAePIUZt6wzJP7Eprb9GlDs/8uc
+         tPfg/zbd3J1JAzIFEcZksI+tVdWLgbBUCvjCa8WpMvztsVbrCABfY5R0z+R0D7YXu9Y+
+         geVl4DlFebZKd/A+isMioID9EE2B3i9o037iSdMRuAcu3trjI7S/rpMPmXlIfuIY/h7w
+         P2mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aO9uwyAWNrITIE0HcaM8sZnAKHxlA4eUnkHhusC4UKE=;
-        b=aM/gsTl0LO6ntygeHiPnefvuMGZMSQTvlAG5vlzUSs9mfgZqqHEIX1+GlZYhJ9lPvc
-         ko9ZGwiN8J3r32bBNyg8XhZWVq/jo+d4DoSSZmz983EIV4EqrnJFOpsqZvG2YmsVaEoJ
-         hz+RIDzMeOAyP6fOpVjnyaIM1xChHN6mFMJI/9IANqUZcpYehX/CkLRQ4sJ6NKvzz4JH
-         BtAuxAQesyqZ7//Ut7xVWul2WnCuCVG0UYmLS0MQ+DwxXaCWVandsegIbnoWhTiNQYn8
-         07BDoVWFG4b2ZWATIKqRTnpW6lmk+gGwzlPrZqDB9Lhp+RiPcw4KaGprEYpDIzP9Ngps
-         yukQ==
-X-Gm-Message-State: ACrzQf29vUDveJp/fWm0istixdNin0dokBBkFeu1YhjGqf0Q+ZbPRN22
-        fhK5zZzKhcdAivGy7mPBh2lKZbeHZEmKzHKptr0TrN5559L+x3uTwisPO+DbxLKWBxAqlbFpwoR
-        akZ2dkhegB2eAaeo7E/wDO3yE
-X-Received: by 2002:a05:6870:596:b0:12d:91cd:cf36 with SMTP id m22-20020a056870059600b0012d91cdcf36mr6446083oap.84.1665686474662;
-        Thu, 13 Oct 2022 11:41:14 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM52k3vKtIVGL+BfBIsY/ib9UZWiX3f2GV5v2CeLaUkMNUjAO0cLO7Cc3TLwdOlxaDtAQIvz/Q==
-X-Received: by 2002:a05:6870:596:b0:12d:91cd:cf36 with SMTP id m22-20020a056870059600b0012d91cdcf36mr6446050oap.84.1665686474448;
-        Thu, 13 Oct 2022 11:41:14 -0700 (PDT)
-Received: from localhost.localdomain ([2804:1b3:a801:9473:d360:c737:7c9c:d52b])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05683024ad00b006618ad77a63sm244521ots.74.2022.10.13.11.41.08
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BumlHx0TbfQLcFeagrlufzZWok4cptrV+jGQa6OSx7M=;
+        b=tCxJzWSY333A/GkNVz0HB9XmRGBUUopvQwXIxRegZ4d+PyTvfryV6dVsW9uY2HkPcd
+         7lx/J0yYwFVfRX4UYzdT7LCzCpuFI3UiMmsQo4Jh1MlrAHuP+kOwK17u6kdYbFQN6aOA
+         Bv7SMrMJvRNJKEKMhsQMyLPQ+owVydJIPRaDx4prqF6HQYuR0D5wCaEWCC5ckn994RiK
+         8G5d61V/0S9RWVfS1kcHlkuWTyDMqHTOqpPCP/a69xo7SZGE4ntKaClfHSl8/zXLAoSy
+         EcsPci9ik/jHRiDEvDLjzibQyptiYPFCdihch+RMsG20SM4m6MyOBvGlUUyhrwehD0yA
+         Q3uw==
+X-Gm-Message-State: ACrzQf3LFMzNFp19bko1swC/4Qf66B4ApKZn4JwxtSophpzZuzVYXDPC
+        +i4mAFhJ32LVWhQ4/MVFQahS9Q==
+X-Google-Smtp-Source: AMsMyM64FzDvDydexxog05qHw0m/l+QJTB1wUf3uzuPzdO7iT4gFXLOjkCUDgL/W0bFzBvg3HxW/Vw==
+X-Received: by 2002:ac8:5f8d:0:b0:39c:beab:fc0d with SMTP id j13-20020ac85f8d000000b0039cbeabfc0dmr1042180qta.683.1665686456983;
+        Thu, 13 Oct 2022 11:40:56 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id y10-20020a37f60a000000b006e2d087fd63sm336493qkj.63.2022.10.13.11.40.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 11:41:14 -0700 (PDT)
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Phil Auld <pauld@redhat.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Wang Yufen <wangyufen@huawei.com>, mtosatti@redhat.com
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 4/4] crypto/pcrypt: Do not use isolated CPUs for callback
-Date:   Thu, 13 Oct 2022 15:40:29 -0300
-Message-Id: <20221013184028.129486-5-leobras@redhat.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221013184028.129486-1-leobras@redhat.com>
-References: <20221013184028.129486-1-leobras@redhat.com>
+        Thu, 13 Oct 2022 11:40:56 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 11:40:40 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Sasha Levin <sashal@kernel.org>
+cc:     Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.0 64/67] sbitmap: fix lockup while swapping
+In-Reply-To: <Y0hQ300MiPc4GBvh@sashalap>
+Message-ID: <d3d53e6-dc99-ff84-25cd-1eb72341f1ca@google.com>
+References: <20221013001554.1892206-1-sashal@kernel.org> <20221013001554.1892206-64-sashal@kernel.org> <d095e91-046-10e9-225e-de3aecd5e8b3@google.com> <Y0hQ300MiPc4GBvh@sashalap>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently pcrypt_aead_init_tfm() will pick callback cpus (ctx->cb_cpu)
-from any online cpus. Later padata_reorder() will queue_work_on() the
-chosen cb_cpu.
+On Thu, 13 Oct 2022, Sasha Levin wrote:
+> On Wed, Oct 12, 2022 at 06:08:50PM -0700, Hugh Dickins wrote:
+> >On Wed, 12 Oct 2022, Sasha Levin wrote:
+> >
+> >> From: Hugh Dickins <hughd@google.com>
+> >>
+> >> [ Upstream commit 30514bd2dd4e86a3ecfd6a93a3eadf7b9ea164a0 ]
+> >>
+> >> Commit 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+> >> is a big improvement: without it, I had to revert to before commit
+> >> 040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
+> >> to avoid the high system time and freezes which that had introduced.
+> >>
+> >> Now okay on the NVME laptop, but 4acb83417cad is a disaster for heavy
+> >> swapping (kernel builds in low memory) on another: soon locking up in
+> >> sbitmap_queue_wake_up() (into which __sbq_wake_up() is inlined), cycling
+> >> around with waitqueue_active() but wait_cnt 0 .  Here is a backtrace,
+> >> showing the common pattern of outer sbitmap_queue_wake_up() interrupted
+> >> before setting wait_cnt 0 back to wake_batch (in some cases other CPUs
+> >> are idle, in other cases they're spinning for a lock in dd_bio_merge()):
+> >>
+> >> sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+> >> __blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
+> >> scsi_end_request < scsi_io_completion < scsi_finish_command <
+> >> scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
+> >> __irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
+> >> _raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
+> >> sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+> >> __blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
+> >> blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
+> >> __submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
+> >> submit_bio < __swap_writepage < swap_writepage < pageout <
+> >> shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
+> >> shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
+> >> __alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
+> >> do_anonymous_page < __handle_mm_fault < handle_mm_fault <
+> >> do_user_addr_fault < exc_page_fault < asm_exc_page_fault
+> >>
+> >> See how the process-context sbitmap_queue_wake_up() has been interrupted,
+> >> after bringing wait_cnt down to 0 (and in this example, after doing its
+> >> wakeups), before advancing wake_index and refilling wake_cnt: an
+> >> interrupt-context sbitmap_queue_wake_up() of the same sbq gets stuck.
+> >>
+> >> I have almost no grasp of all the possible sbitmap races, and their
+> >> consequences: but __sbq_wake_up() can do nothing useful while wait_cnt 0,
+> >> so it is better if sbq_wake_ptr() skips on to the next ws in that case:
+> >> which fixes the lockup and shows no adverse consequence for me.
+> >>
+> >> The check for wait_cnt being 0 is obviously racy, and ultimately can lead
+> >> to lost wakeups: for example, when there is only a single waitqueue with
+> >> waiters.  However, lost wakeups are unlikely to matter in these cases,
+> >> and a proper fix requires redesign (and benchmarking) of the batched
+> >> wakeup code: so let's plug the hole with this bandaid for now.
+> >>
+> >> Signed-off-by: Hugh Dickins <hughd@google.com>
+> >> Reviewed-by: Jan Kara <jack@suse.cz>
+> >> Reviewed-by: Keith Busch <kbusch@kernel.org>
+> >> Link:
+> >> https://lore.kernel.org/r/9c2038a7-cdc5-5ee-854c-fbc6168bf16@google.com
+> >> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> >
+> >Whoa!  NAK to this 6.0 backport, and to the 5.19, 5.15, 5.10, 5.4
+> >AUTOSEL backports of the same commit.  I never experienced such a
+> >lockup on those releases.  Or have I missed announcements of stable
+> >backports of the whole series of 6.1-rc commits to which this one
+> >is a fix?  (I hope not.)
+> 
+> Happy to drop it.
 
-This is undesired if the chosen cb_cpu is listed as isolated (i.e. using
-isolcpus=... or nohz_full=... kernel parameters), since the work queued
-will interfere with the workload on the isolated cpu.
+Thanks.
 
-Make sure isolated cpus are not used for pcrypt.
+> 
+> >I'm happy for my NAK to be overruled by Jens or Jan or Keith,
+> >if they see virtue in this commit, beyond what I'm aware of:
+> >but as it stands, it looks like AUTOSEL out of control again -
+> >it found the word "fix", and found that the commit applies cleanly,
+> >so thinks it must be a good stable addition.  Not necessarily so!
+> 
+> I'm a bit confused: the subject of the patch is "fix lockup while
+> swapping" and the body describes a lockup and that this patch "fixes the
+> lockup and shows no adverse consequence". What am I missing?
 
-Signed-off-by: Leonardo Bras <leobras@redhat.com>
----
- crypto/pcrypt.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+You are missing that it was a commit to (Jens's branch for) 6.1, and
+that the problematic commits called out in the comments above were
+to (Jens's branch for) 6.1.  It had no Cc stable tag, and that was
+intentional, because it was a fix for 6.1 alone.
 
-diff --git a/crypto/pcrypt.c b/crypto/pcrypt.c
-index 9d10b846ccf73..0162629a03957 100644
---- a/crypto/pcrypt.c
-+++ b/crypto/pcrypt.c
-@@ -16,6 +16,7 @@
- #include <linux/kobject.h>
- #include <linux/cpu.h>
- #include <crypto/pcrypt.h>
-+#include <linux/sched/isolation.h>
- 
- static struct padata_instance *pencrypt;
- static struct padata_instance *pdecrypt;
-@@ -175,13 +176,15 @@ static int pcrypt_aead_init_tfm(struct crypto_aead *tfm)
- 	struct pcrypt_instance_ctx *ictx = aead_instance_ctx(inst);
- 	struct pcrypt_aead_ctx *ctx = crypto_aead_ctx(tfm);
- 	struct crypto_aead *cipher;
-+	const cpumask_t *hk_wq = housekeeping_cpumask(HK_TYPE_WQ);
- 
- 	cpu_index = (unsigned int)atomic_inc_return(&ictx->tfm_count) %
--		    cpumask_weight(cpu_online_mask);
-+		    cpumask_weight_and(hk_wq, cpu_online_mask);
- 
--	ctx->cb_cpu = cpumask_first(cpu_online_mask);
-+	ctx->cb_cpu = cpumask_first_and(hk_wq, cpu_online_mask);
- 	for (cpu = 0; cpu < cpu_index; cpu++)
--		ctx->cb_cpu = cpumask_next(ctx->cb_cpu, cpu_online_mask);
-+		ctx->cb_cpu = cpumask_next_and(ctx->cb_cpu, hk_wq,
-+					       cpu_online_mask);
- 
- 	cipher = crypto_spawn_aead(&ictx->spawn);
- 
--- 
-2.38.0
+Perhaps it would have helped AUTOSEL to exclude it, if it had a Fixes
+tag, pointing to one of those 6.1 commits: the initial version did, but
+in review we had agreed that it was unclear which commit was being fixed.
 
+(I've been choosing my words a little carefully above, because the sbitmap
+wakeup situation was not perfect before or after any of these 6.1 commits,
+and Jan hopes to improve it in future.  For all I know, this little commit
+might be an improvement in 6.0, or a disaster in 6.0: it has neither been
+needed nor tested there.)
+
+Hugh
