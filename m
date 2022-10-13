@@ -2,178 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDA75FD78A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 11:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877E05FD78C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 12:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJMJ7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 05:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S229651AbiJMKDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 06:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJMJ7T (ORCPT
+        with ESMTP id S229843AbiJMKDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 05:59:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556CDF984C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 02:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665655154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xMvP2/XkBADyXsK5rGQw9LKR5LblGeQtr9PcIXwvmao=;
-        b=KjvGfWOs1lOsd6UX9EM48PpVfWB+S14374GNAqLeDb+n5aOeDRvK+E1vHEcGkEdDwNdR9+
-        9nsOYOwqsOkna09hHAr2tVwPQWv3b6Az5n/J55V93rtgtv0PiB4VRJhkku0OSS7mjfBn9+
-        r4lpG2XN1psi5MoXxq50NIUrRoujrb8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-1GsG7_jnOdiPPjXK4a8jJQ-1; Thu, 13 Oct 2022 05:59:11 -0400
-X-MC-Unique: 1GsG7_jnOdiPPjXK4a8jJQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D492C85A5A6;
-        Thu, 13 Oct 2022 09:59:10 +0000 (UTC)
-Received: from ovpn-194-196.brq.redhat.com (ovpn-194-196.brq.redhat.com [10.40.194.196])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 931BE4B400F;
-        Thu, 13 Oct 2022 09:59:08 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 7/7] KVM: selftests: Test Hyper-V invariant TSC control
-Date:   Thu, 13 Oct 2022 11:58:49 +0200
-Message-Id: <20221013095849.705943-8-vkuznets@redhat.com>
-In-Reply-To: <20221013095849.705943-1-vkuznets@redhat.com>
-References: <20221013095849.705943-1-vkuznets@redhat.com>
+        Thu, 13 Oct 2022 06:03:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD0A27FF3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 03:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UlXZeJ+CQj5Nn1aM9o6JmHtV+nPSpnbFh7Jiz8rjgh4=; b=flmBrJxjy1NAreiMlz0jLHDSRO
+        1uyYTeEMLBcUBunMcicrfe5JCFQAJ7BkNDiztuWylCYYaIzjNrZEfrGozQZ3JjNxYqOTXu1HPYLkM
+        xBE3q1wvcrs6S2D4moWVGszFjweS6ensaNy56y+L5tLCVS0d+yrJCCk+coM/qfoQygbYixHsJeDNy
+        o65CiUuhHuBGWJixUb18ICuWvLO8V72cvnokN1m2uHNC3HI1m9/yMKbaOw+FsjLLgsKGnyMd1U5b0
+        XF5aCrDaKBDseEeK61sutWcbYiPxIkA2KrgpWfPT7xg01RWxXK/b55Et+pO82a3OIkZJRvMLG+6Zr
+        g9LiJtSw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oiv2d-006ce4-KJ; Thu, 13 Oct 2022 10:02:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6CFC73000E3;
+        Thu, 13 Oct 2022 12:02:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 416E62BB91E22; Thu, 13 Oct 2022 12:02:09 +0200 (CEST)
+Date:   Thu, 13 Oct 2022 12:02:09 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Ting11 Wang =?utf-8?B?546L5am3?= <wangting11@xiaomi.com>
+Subject: Re: [PATCH v2 1/2] locking/rwsem: Prevent non-first waiter from
+ spinning in down_write() slowpath
+Message-ID: <Y0fiIdxA+Jip1vve@hirez.programming.kicks-ass.net>
+References: <20221012133333.1265281-1-longman@redhat.com>
+ <20221012133333.1265281-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221012133333.1265281-2-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test for the newly introduced Hyper-V invariant TSC control feature:
-- HV_X64_MSR_TSC_INVARIANT_CONTROL is not available without
- HV_ACCESS_TSC_INVARIANT CPUID bit set and available with it.
-- BIT(0) of HV_X64_MSR_TSC_INVARIANT_CONTROL controls the filtering of
-architectural invariant TSC (CPUID.80000007H:EDX[8]) bit.
+On Wed, Oct 12, 2022 at 09:33:32AM -0400, Waiman Long wrote:
+> A non-first waiter can potentially spin in the for loop of
+> rwsem_down_write_slowpath() without sleeping but fail to acquire the
+> lock even if the rwsem is free if the following sequence happens:
+> 
+>   Non-first waiter       First waiter      Lock holder
+>   ----------------       ------------      -----------
+>   Acquire wait_lock
+>   rwsem_try_write_lock():
+>     Set handoff bit if RT or
+>       wait too long
+>     Set waiter->handoff_set
+>   Release wait_lock
+>                          Acquire wait_lock
+>                          Inherit waiter->handoff_set
+>                          Release wait_lock
+> 					   Clear owner
+>                                            Release lock
+>   if (waiter.handoff_set) {
+>     rwsem_spin_on_owner(();
+>     if (OWNER_NULL)
+>       goto trylock_again;
+>   }
+>   trylock_again:
+>   Acquire wait_lock
+>   rwsem_try_write_lock():
+>      if (first->handoff_set && (waiter != first))
+>      	return false;
+>   Release wait_lock
+> 
+> It is especially problematic if the non-first waiter is an RT task and
+> it is running on the same CPU as the first waiter as this can lead to
+> live lock.
+> 
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- .../selftests/kvm/include/x86_64/hyperv.h     |  3 ++
- .../selftests/kvm/include/x86_64/processor.h  |  1 +
- .../selftests/kvm/x86_64/hyperv_features.c    | 47 +++++++++++++++++++
- 3 files changed, 51 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-index 843748dde1ff..8368d65afbe4 100644
---- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-@@ -232,4 +232,7 @@
- /* hypercall options */
- #define HV_HYPERCALL_FAST_BIT		BIT(16)
- 
-+/* HV_X64_MSR_TSC_INVARIANT_CONTROL bits */
-+#define HV_INVARIANT_TSC_EXPOSED               BIT_ULL(0)
-+
- #endif /* !SELFTEST_KVM_HYPERV_H */
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e8ca0d8a6a7e..39230e3add69 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -128,6 +128,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_GBPAGES		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 26)
- #define	X86_FEATURE_RDTSCP		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 27)
- #define	X86_FEATURE_LM			KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 29)
-+#define	X86_FEATURE_INVTSC		KVM_X86_CPU_FEATURE(0x80000007, 0, EDX, 8)
- #define	X86_FEATURE_RDPRU		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 4)
- #define	X86_FEATURE_AMD_IBPB		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 12)
- #define	X86_FEATURE_NPT			KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 0)
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index 0cfab315eb22..42fbd71c6489 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -82,6 +82,16 @@ static void guest_msr(struct msr_data *msr)
- 	if (msr->write)
- 		GUEST_ASSERT_3(msr_val == msr->write_val, msr->idx,
- 			       msr_val, msr->write_val);
-+
-+	/* Invariant TSC bit appears when TSC invariant control MSR is written to */
-+	if (msr->idx == HV_X64_MSR_TSC_INVARIANT_CONTROL) {
-+		if (!this_cpu_has(HV_ACCESS_TSC_INVARIANT))
-+			GUEST_ASSERT(this_cpu_has(X86_FEATURE_INVTSC));
-+		else
-+			GUEST_ASSERT(this_cpu_has(X86_FEATURE_INVTSC) ==
-+				     !!(msr_val & HV_INVARIANT_TSC_EXPOSED));
-+	}
-+
- done:
- 	GUEST_DONE();
- }
-@@ -137,6 +147,7 @@ static void guest_test_msrs_access(void)
- 	int stage = 0;
- 	vm_vaddr_t msr_gva;
- 	struct msr_data *msr;
-+	bool has_invtsc = kvm_cpu_has(X86_FEATURE_INVTSC);
- 
- 	while (true) {
- 		vm = vm_create_with_one_vcpu(&vcpu, guest_msr);
-@@ -454,6 +465,42 @@ static void guest_test_msrs_access(void)
- 			break;
- 
- 		case 44:
-+			/* MSR is not available when CPUID feature bit is unset */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = false;
-+			msr->fault_expected = true;
-+			break;
-+		case 45:
-+			/* MSR is vailable when CPUID feature bit is set */
-+			if (!has_invtsc)
-+				continue;
-+			vcpu_set_cpuid_feature(vcpu, HV_ACCESS_TSC_INVARIANT);
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = false;
-+			msr->fault_expected = false;
-+			break;
-+		case 46:
-+			/* Writing bits other than 0 is forbidden */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = true;
-+			msr->write_val = 0xdeadbeef;
-+			msr->fault_expected = true;
-+			break;
-+		case 47:
-+			/* Setting bit 0 enables the feature */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = true;
-+			msr->write_val = 1;
-+			msr->fault_expected = false;
-+			break;
-+
-+		default:
- 			kvm_vm_free(vm);
- 			return;
- 		}
--- 
-2.37.3
-
+So why not do a better handoff? Specifically, have the owner set owner
+to first-waiter instead of NULL ? (like the normal mutex code)
