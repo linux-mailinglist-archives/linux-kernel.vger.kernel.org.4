@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE2F5FD3CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330EB5FD3CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 06:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiJME2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 00:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S229586AbiJME20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 00:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiJME2D (ORCPT
+        with ESMTP id S229502AbiJME2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 00:28:03 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B4812D0F;
-        Wed, 12 Oct 2022 21:28:01 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id l1so737362pld.13;
-        Wed, 12 Oct 2022 21:28:01 -0700 (PDT)
+        Thu, 13 Oct 2022 00:28:10 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A136710D6B2;
+        Wed, 12 Oct 2022 21:28:08 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 67so874482pfz.12;
+        Wed, 12 Oct 2022 21:28:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fYIg2WzOf03nIwqbYuPMBWLrzXyBCEb4x8ZfCAzdDu0=;
-        b=PB6hHHSd3+SuFQWbK6NTZO7GxvFQskAA6dAhhOpKXIzIUkmu0LDVSisLFpRfraApmG
-         ZQr5Am381sO9KaXYV2ZKKu9wvLU3AbfnWAkzzT0tRFUGRa9vSE3ZEmZMglCl3Ta286jg
-         jXu9WVFnTVSW7ZG1uCv1WtWuyY0vV7/OnWMZe9i52CU6A7rQrBcKyM4V/FLx2U5rf/a8
-         swUHsQQdoCBr3EgLWrkYla+bJwmH6bt8bRmlkB7UBBBnL1FTQ8eNdO1ro1LXzr91V77a
-         halV0HUwoBpAI/3S/viSP8KUMVGXnLRPnMHuzSL/gjIzRZKJ56ZOXUg4hLThRv9qEM06
-         Akiw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NKPx6vlubdTigHk3GNewjAYkgmjIp93aWrqtifhCjAQ=;
+        b=HyV2TBOyvjR5yD61XuEVuUfU7521mdV4MT6qpQ1jGLbCRL3CdnE3xPtaNSlEeCcxS3
+         FNTDQA7tob7bJI9qqxyWZP4/PKcl+aGEbnN0ufNLsiFcnh5S4J4gz3c9VFFXo34V6Wkz
+         OOwvG3vHVhBXypck3ZDGXlkIxmxm8ZWnWcgIJZD5LYuUm1ULUrp/YoBrKt2cZJ6xeCQQ
+         XVamBMr9yxsKcCD53CTJSQueA2VEV2yiR+tURzW96BeOEKdVCDsqf8b3G7ieciV13dKV
+         OvLIr6enYjXAXmU9xORcrhBDTbTxC4tJGtp1170rKAaJAzIuF43IlfszAxHwibwl9EKe
+         85aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fYIg2WzOf03nIwqbYuPMBWLrzXyBCEb4x8ZfCAzdDu0=;
-        b=7utCaIUmp+Owuwl5B6p3RuiATar+vylSs/LlPIqkUHi+qW8yS05daC/PVyhPTp4sB7
-         qxidtOPiPQ8E/NEeJXtVOGyMSCfpw3x+vLPdOkBwfPsqqcEA2YjDW3+9fEEzw7Nc6q9c
-         jxShQgP9TrPH5BC42CaRzlzxagxyHwHY2y0AWW2q1tFE9XV2qRexA+koqccKS80uPzn9
-         xbS22u0GBrA6gXJqwhKuo8unIgWhPjv8lw331O+UYLbfmhF2ZCFcnB3VvGYn8uxnrP3X
-         fYaV8R4RHmLG1GPkPPDXllT/kCEByq3S63HA0PUrp8HICNLwM5wNBBwtZu+D1k64ZILn
-         tQ0Q==
-X-Gm-Message-State: ACrzQf0Z3G2hHovGZmU24BaGt6AcjbYz89IUD/48THg7JYtthfkCwMpj
-        UkkG97sgnj7hX3EfCvNmQpz8Vk8FcWx25g==
-X-Google-Smtp-Source: AMsMyM5vIGCV8Tqdy5wnHnZQgZA4M21IavJpM74n0vLZn8SisXMe4S2DLvBTrkVJaZKPYwH2gdkMVw==
-X-Received: by 2002:a17:902:f706:b0:184:7a4c:fdd0 with SMTP id h6-20020a170902f70600b001847a4cfdd0mr6715091plo.98.1665635280609;
-        Wed, 12 Oct 2022 21:28:00 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NKPx6vlubdTigHk3GNewjAYkgmjIp93aWrqtifhCjAQ=;
+        b=SpLsOQBBVCayZicocM1CzW5wFJoPM2wr3+CrSU1mk/g3F7k5tk+NOY5ClXBmlYY3Nt
+         F1MkGErvD+DweSFhLpaOmeDJLL0OwhfHfTGETbmuCMGxZ4sdkbcOFSaYj0MfTmZbo+Nk
+         KO5o51WwhjD3TGM8HAVb1vMa8/p6jAZFZ9H7DNeQwSh03bs3NMvgb8B+VRddhWlwj/gA
+         BhQ9UC5J1339vNMH1WXk8excxYhX2vtKPXlzxQgYjTLHIJm6Za74PzAGXJmthYFRWOXn
+         2jjOB9j7q4yEW6njdgIQd4nCYFle+pO/rcKzgV3szbn1xUYuWIB6a0JPuN7i195PW+zd
+         ABIA==
+X-Gm-Message-State: ACrzQf1vlwvvZjfDLgyNnEOzUGFa01u0rB//n3fg8beOHtQAS2lx2a+z
+        EPuWrlhsOoA5eUc/rphVoF6hoGQyHcRE8g==
+X-Google-Smtp-Source: AMsMyM7pPOPEuOML6HcybrxWUtiMY5Tx4kqha5/MWW1mTWVXcQrFNEl3mn0A8rUBmroDwP0ARFxjuA==
+X-Received: by 2002:aa7:9dcb:0:b0:565:89a8:c708 with SMTP id g11-20020aa79dcb000000b0056589a8c708mr9447333pfq.4.1665635287389;
+        Wed, 12 Oct 2022 21:28:07 -0700 (PDT)
 Received: from skynet-linux.local ([2406:7400:61:b6fa:b70b:65a4:a699:40c8])
-        by smtp.googlemail.com with ESMTPSA id y9-20020a17090aca8900b001faafa42a9esm2192007pjt.26.2022.10.12.21.27.56
+        by smtp.googlemail.com with ESMTPSA id y9-20020a17090aca8900b001faafa42a9esm2192007pjt.26.2022.10.12.21.28.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 21:27:59 -0700 (PDT)
+        Wed, 12 Oct 2022 21:28:06 -0700 (PDT)
 From:   Sireesh Kodali <sireeshkodali1@gmail.com>
 To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
 Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         dmitry.baryshkov@linaro.org,
-        Sireesh Kodali <sireeshkodali1@gmail.com>
-Subject: [PATCH v4 0/2] remoteproc: qcom: Add support for MSM8953 ADSP
-Date:   Thu, 13 Oct 2022 09:57:47 +0530
-Message-Id: <20221013042749.104668-1-sireeshkodali1@gmail.com>
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: [PATCH v4 1/2] remoteproc: qcom: pas: Add MSM8953 ADSP PIL support
+Date:   Thu, 13 Oct 2022 09:57:48 +0530
+Message-Id: <20221013042749.104668-2-sireeshkodali1@gmail.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221013042749.104668-1-sireeshkodali1@gmail.com>
+References: <20221013042749.104668-1-sireeshkodali1@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,22 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for the ADSP PIL as found on the MSM8953
-platform. It is a subset of a previous patch series.
+Add support for the Audio DSP PIL found on the Qualcomm MSM8953
+platform. The same configuration is used on all SoCs based on the
+MSM8953 platform (SDM450, SDA450, SDM625, SDM632, APQ8053).
 
-Changes since v3:
- * Made ordering of compatible strings lexical in driver patch
+Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+---
+ drivers/remoteproc/qcom_q6v5_pas.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Link to v3: https://lkml.org/lkml/2022/10/8/204
-
-Sireesh Kodali (2):
-  remoteproc: qcom: pas: Add MSM8953 ADSP PIL support
-  dt-bindings: remoteproc: qcom: adsp: Add ADSP on MSM8953
-
- Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++++
- drivers/remoteproc/qcom_q6v5_pas.c                          | 1 +
- 2 files changed, 6 insertions(+)
-
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 6afd0941e552..eff8d34d7f4b 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -948,6 +948,7 @@ static const struct adsp_data sm8450_mpss_resource = {
+ 
+ static const struct of_device_id adsp_of_match[] = {
+ 	{ .compatible = "qcom,msm8226-adsp-pil", .data = &adsp_resource_init},
++	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
+ 	{ .compatible = "qcom,msm8974-adsp-pil", .data = &adsp_resource_init},
+ 	{ .compatible = "qcom,msm8996-adsp-pil", .data = &msm8996_adsp_resource},
+ 	{ .compatible = "qcom,msm8996-slpi-pil", .data = &slpi_resource_init},
 -- 
 2.38.0
 
