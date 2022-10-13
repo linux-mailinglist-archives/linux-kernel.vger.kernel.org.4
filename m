@@ -2,99 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E8D5FDCF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4351B5FDD06
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Oct 2022 17:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiJMPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 11:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        id S229617AbiJMPVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 11:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJMPTR (ORCPT
+        with ESMTP id S229484AbiJMPVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 11:19:17 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13B8E09B2;
-        Thu, 13 Oct 2022 08:19:16 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id b5so1822550pgb.6;
-        Thu, 13 Oct 2022 08:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3muxJhNWv1hg7XONepRN26NwBDFTg3vZFivnKP3G+hw=;
-        b=F8jmyvQukbGYiASMQsZRXYBAgV0Gnw2M5nkuujeTetPf3rsaauv9xqFMQYUT5FQ9Ud
-         Kzm0YATZRoKU5vKU9gHFXBPOg/rD6S1vhqv6hIGfuZ5kcBrh5w6IZ1bhSSzfKiOObQNs
-         UMP6K5+2vUvly2DoPvsBAZPTKeTBWcakE49W3hgUx0wDOWxMeujG93vUGfR/2vPwxihL
-         glDzsN22bDxXHParQbQfmUPIxzQ9MwKrKB2doeaqcqTfN1AHs0Ug/bw/R+8scqA8scOF
-         OPyhkNNPjjHd0G2cEEHkktgDhX8FLhEX05vFqHnfXkoPY5X7RhhgLUPRx+nOr1bA73L7
-         naew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3muxJhNWv1hg7XONepRN26NwBDFTg3vZFivnKP3G+hw=;
-        b=owAIRCTwM6A/D/NIdjOS7XreUu6WAg/mKstc/IVC7VTfG9nCbvsDog6IKYRbdZrEpp
-         SabhYpETPM/GQLuCjcA693pH43KpnZ43w333ZU6zHwn+lgpYJQ2HLNRHPpsBJsBjdE/P
-         D9hx2A6teVfQShYSyrnLa6HRMk/7HBXCBnnPa5OXX48PEoGfkd+0pPIq2U3aCOtqVjiU
-         ykY6+3L06vZo6jlDKZprari0/YD5YmWMj3PsPEkb86I+6atqHdeHxv/RUfv9G3O84/pC
-         M4YkqpNkC8hoi4qnWMiB2+uYAen/Uu2ftN1F0brLehcY2RGwOVVIyFfKy3d2R93PdPgK
-         zaNw==
-X-Gm-Message-State: ACrzQf3AQUrw9XP4OxlkAup5XVOF1VopfjkkjWaPcO55ftmphEB6soFG
-        7FLpHkBdyspC20PVjHUfLFg=
-X-Google-Smtp-Source: AMsMyM7KzUH6zyRCq0rjPfxSwxmRq5ml7euKx/4M8cKfmc6iy6SK4ugTZjvTtd+gJ7hAo2SCwSXXFQ==
-X-Received: by 2002:a65:5688:0:b0:3c2:1015:988e with SMTP id v8-20020a655688000000b003c21015988emr349335pgs.280.1665674356367;
-        Thu, 13 Oct 2022 08:19:16 -0700 (PDT)
-Received: from localhost.localdomain (67.230.176.239.16clouds.com. [67.230.176.239])
-        by smtp.gmail.com with ESMTPSA id j63-20020a625542000000b00562e9f636e0sm2260596pfb.10.2022.10.13.08.19.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Oct 2022 08:19:15 -0700 (PDT)
-From:   Xiaobo Liu <cppcoffee@gmail.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaobo Liu <cppcoffee@gmail.com>
-Subject: [PATCH] net/atm: fix proc_mpc_write 1 byte less calculated
-Date:   Thu, 13 Oct 2022 23:19:01 +0800
-Message-Id: <20221013151901.29368-1-cppcoffee@gmail.com>
-X-Mailer: git-send-email 2.21.0 (Apple Git-122.2)
+        Thu, 13 Oct 2022 11:21:18 -0400
+Received: from wilbur.contactoffice.com (wilbur.contactoffice.com [212.3.242.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6717510F8A1;
+        Thu, 13 Oct 2022 08:21:17 -0700 (PDT)
+Received: from smtpauth1.co-bxl (smtpauth1.co-bxl [10.2.0.15])
+        by wilbur.contactoffice.com (Postfix) with ESMTP id B84E3D55;
+        Thu, 13 Oct 2022 17:21:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665674475;
+        s=20220911-jt8y; d=wired4ever.net; i=sndanailov@wired4ever.net;
+        h=Message-ID:Date:MIME-Version:References:Cc:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        l=747; bh=kgZc3tu2JJFZWYmDuyz5w4nLD0OZb6n0f9H+SCQhHIY=;
+        b=cYTExjZZdbexKtEmSAIkIJrmXWfhg3DlRk8G4pmYviVVOSBahBw/1wCe0IOyxov4
+        YM6LpNcixT1l2kdmVBfckf2YPaii/XuZnzz5PIEu9+WNtSgQSyNM4rGhEOrBqyo+Sor
+        GCT/wQjDKRWDV3iPVMTWnlGU5q0xPFXROvzBUrMCyQPVC4EiHer9OuGe64VG4+ixJ5W
+        eqxjN6bHBkaymbYSeQjN3ssgGZJENCFBCPCKmcFDRVFp6H8RkbwzitYHNc5GtCRJVcH
+        iWzQAKv0E4hkwTxlnyI06T4/t47jVvjqEKCZsNMh6KY4D+ms8j7ehgWCp4tfE2QsHvL
+        CxLcySd0kA==
+Received: by smtp.mailfence.com with ESMTPSA ; Thu, 13 Oct 2022 17:21:12 +0200 (CEST)
+Message-ID: <4ec2697e-ddc6-c87a-49a9-12483186af1d@wired4ever.net>
+Date:   Thu, 13 Oct 2022 17:21:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] doc: process: add privacy warning when using some SMTP
+ servers
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+References: <20221013123115.17419-1-sndanailov@wired4ever.net>
+ <8735brkfrj.fsf@meer.lwn.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Sotir Danailov <sndanailov@wired4ever.net>
+In-Reply-To: <8735brkfrj.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ContactOffice-Account: com:378009619
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Then the input contains '\0' or '\n', proc_mpc_write has read them,
-so the return value needs +1.
+On Thu 13 10 2022 15:35, Jonathan Corbet wrote:
+> So this seems to be just a description of how email works
 
-Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
----
- net/atm/mpoa_proc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Well it felt appropriate to warn the user, because many people
+(like myself before) might not realize this is happening even if
+they think they know how email basically works.
 
-diff --git a/net/atm/mpoa_proc.c b/net/atm/mpoa_proc.c
-index 829db9eba..444ceda60 100755
---- a/net/atm/mpoa_proc.c
-+++ b/net/atm/mpoa_proc.c
-@@ -224,8 +224,11 @@ static ssize_t proc_mpc_write(struct file *file, const char __user *buff,
- 			free_page((unsigned long)page);
- 			return -EFAULT;
- 		}
--		if (*p == '\0' || *p == '\n')
-+
-+		if (*p == '\0' || *p == '\n') {
-+			len += 1
- 			break;
-+		}
- 	}
- 
- 	*p = '\0';
--- 
-2.21.0 (Apple Git-122.2)
+> the Received headers always show the path through the net.
 
+Yes, but is also dependent on the SMTP server configuration,
+so someone might not realize that changing the server would
+add such sensitive data to something public.
+
+> Is this really something that we need to cover in the kernel docs?
+
+It's part of the process, is it not? I'm sure many people
+would like to have this information before starting on the
+kernel for the first time.
