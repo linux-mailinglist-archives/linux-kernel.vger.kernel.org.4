@@ -2,138 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146725FF2F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13FE5FF2F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiJNRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S229618AbiJNR3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiJNRZR (ORCPT
+        with ESMTP id S229459AbiJNR3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:25:17 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F85A284F;
-        Fri, 14 Oct 2022 10:25:10 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id i9so3669901qvu.1;
-        Fri, 14 Oct 2022 10:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a5mETzZW4qi8h2MOU+Aq/FDewrEbvdbUnDP9+oZX3LE=;
-        b=M+MFRjOZBw7pP9qNfSxH6RYLByFi4618Vx1xmCU6DBOxbp0CGuwThPJ/QHDXvQieNx
-         py3vjfkAFEc8lgp57SpggVmQxwmAXn/EtBAeF2DkPCxBwoRmO35mDh2jCWip8DZAlada
-         cIDCTt7cg93QAIu2NZeVUChSmqbHzja9DhjI3J4k9AoSmp2y+MEWYSjn3avRd+FhFeC1
-         zIM/zQywKourHIbAVcKSEHZuDruO98eXf03xtpjnwh95QhhjXtCv8IsElHBHn7D6KSkw
-         /c60IiP8/5bmcNqeL/08WEa8xWxh8cum/mvL6j8/4GBr1nzn6oyY58Etap2fV5sm+ReX
-         neDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a5mETzZW4qi8h2MOU+Aq/FDewrEbvdbUnDP9+oZX3LE=;
-        b=6g7gCK+7GBZkLvy9SAf76aZMtVO4OTBOcFEukBtm98EWNKLft+HOeLixxCcYaf/YoX
-         0YsTheZM+BnpcK/amIvyBPWXZ5p3DwIWVAglp+6LGg3y8Lpl/7yAUjxPMy75QBJXnpq7
-         n/JaF+EqHshqREOohICQmWg5o7Q4cCNtwgXwFE9AE1Le2iB/pw3eACQhId7M6Zpoz1yR
-         hbxANAD9aWvekydw+HFBIR83dg5pc4UeU2RiU89T5UIHyGxgPB/QPcd1G4vwDZimWjqy
-         7R36YT8QPqEWzQ4c9mNWjO40smPWYe0i9biq/Tiole7pwqMfJRii6DSz3K1S+3B6qfNm
-         6hJw==
-X-Gm-Message-State: ACrzQf07aj8T8rkmLM9Hvl/ktc4XmFBQadXe8xlFaSJM6twt+1vAvxAb
-        bsFVCmuYR2PXz78fhgiLnG4=
-X-Google-Smtp-Source: AMsMyM6vzOmjscSaz+0L/oK2o1egx03i7La+iIFeSPzVcerbkw24bbYrplGqrTn0ZWVxPBl1DiUXgg==
-X-Received: by 2002:a05:6214:224b:b0:4af:b412:2269 with SMTP id c11-20020a056214224b00b004afb4122269mr5051092qvc.54.1665768309175;
-        Fri, 14 Oct 2022 10:25:09 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id i9-20020a05620a404900b006bc192d277csm3032331qko.10.2022.10.14.10.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 10:25:08 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1A05127C0054;
-        Fri, 14 Oct 2022 13:25:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 14 Oct 2022 13:25:07 -0400
-X-ME-Sender: <xms:cZtJY6NbMUovjM3p7x_Bia7ochkxR7z3F0iFbzK1oQTOlcTarRgNUw>
-    <xme:cZtJY4-SkgtC3i3jozNDZ70AA-s6CAnZ0li2p4YIPXyS8_n4KCDMoMx_h9EYmiKUz
-    IYWYwlhpzqyVxM6Gw>
-X-ME-Received: <xmr:cZtJYxQ5SbI_JyLMkdi-8MOOty45xlx-XEvrz4c6300zXpshbsSH8JR_icM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekvddguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:cZtJY6uxyO2N3MM019RcwoFiN7kGclBCv6ZBsQrmGdpHsluYHOTixw>
-    <xmx:cZtJYycM-91rGo4cuDNkFF0lT4Q2szO-QrUFJK-8MmwkYhZktxuzQA>
-    <xmx:cZtJY-3SqZeaFppzAhZdlGX9tSD9pWP9FURoWZulryWd-nM1nR8gVQ>
-    <xmx:cptJYzs1xnaT3qN1tlkewsEN9sa43RdcbG3Ws43FHOqLVm-cuwMsxw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Oct 2022 13:25:05 -0400 (EDT)
-Date:   Fri, 14 Oct 2022 10:25:04 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        David Gow <davidgow@google.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v10 25/27] x86: enable initial Rust support
-Message-ID: <Y0mbcEuR7GhJncSE@Boquns-Mac-mini.local>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-26-ojeda@kernel.org>
- <Y0BfN1BdVCWssvEu@hirez.programming.kicks-ass.net>
- <CABCJKuenkHXtbWOLZ0_isGewxd19qkM7OcLeE2NzM6dSkXS4mQ@mail.gmail.com>
- <Y0Ujm6a6bV3+FWM3@hirez.programming.kicks-ass.net>
- <CANiq72nggG_z28Pne7wD=CQfKX3bTUah9vMhvJoWB8Y=uA4j+w@mail.gmail.com>
+        Fri, 14 Oct 2022 13:29:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710C91D066C;
+        Fri, 14 Oct 2022 10:29:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDF67B8237A;
+        Fri, 14 Oct 2022 17:29:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF95C433D6;
+        Fri, 14 Oct 2022 17:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665768541;
+        bh=U0AKPha49Aec80L7VXJBXtUQdEMHKmSvHmeOqv3Xp3o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mxOv5d5Sk/lNoSugprzx1IARt4Pddkv7CbyEhcIShZWrD+uQBD5HR3UrQLm6OK1Ew
+         9sNBvTDe93A2uhx1kqgGs+1kQtTuh4E9GOjiI8y66f2mk4IHoutt/3Fp1HyG+4FqOH
+         pVDg/ltUY7QnuSa+mR/2E+Ii+ypCgFmnT6JoTHuqUhSpFwSdlexI/Wi5AkZ/T+a1OM
+         xkZ2q+SDBhyLBtRGK5iJGFwJ04mVODnOpf5ifNyLG3RD3tbo92j2vGwOvMW38GPXeW
+         nCP91JYmZZFvtdgdTUwMAGwjKBptWZ9zVAmVe4pv486wkrF8qbSsMnOgduds8yYi4R
+         z0GSFw13te42A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E1DE74062C; Fri, 14 Oct 2022 14:28:58 -0300 (-03)
+Date:   Fri, 14 Oct 2022 14:28:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 5/7] perf test: test_intel_pt.sh: Add jitdump test
+Message-ID: <Y0mcWpc4KaeXpU+z@kernel.org>
+References: <20221014170905.64069-1-adrian.hunter@intel.com>
+ <20221014170905.64069-6-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72nggG_z28Pne7wD=CQfKX3bTUah9vMhvJoWB8Y=uA4j+w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221014170905.64069-6-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 07:23:18PM +0200, Miguel Ojeda wrote:
-> On Tue, Oct 11, 2022 at 10:04 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > Right; so where does that leave us? Are we going to force disable rust
-> > when kCFI is selected ?
+Em Fri, Oct 14, 2022 at 08:09:03PM +0300, Adrian Hunter escreveu:
+> Add a test for decoding self-modifying code using a jitdump file.
 > 
-> Constraining it via `depends on !...` or similar as needed for the
-> moment is fine, we have a few others too.
+> The test creates a workload that uses self-modifying code and generates its
+> own jitdump file.  The result is processed with perf inject --jit and
+> checked for decoding errors.
 > 
+> Note the test will fail without patch "perf inject: Fix GEN_ELF_TEXT_OFFSET
+> for jit" applied.
+> 
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/tests/shell/test_intel_pt.sh | 162 ++++++++++++++++++++++++
+>  1 file changed, 162 insertions(+)
+> 
+> diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
+> index 79dde57b561d..e0bf75981b9c 100755
+> --- a/tools/perf/tests/shell/test_intel_pt.sh
+> +++ b/tools/perf/tests/shell/test_intel_pt.sh
+> @@ -22,6 +22,7 @@ outfile="${temp_dir}/test-out.txt"
+>  errfile="${temp_dir}/test-err.txt"
+>  workload="${temp_dir}/workload"
+>  awkscript="${temp_dir}/awkscript"
+> +jitdump_workload="${temp_dir}/jitdump_workload"
+>  
+>  cleanup()
+>  {
+> @@ -50,6 +51,13 @@ perf_record_no_decode()
+>  	perf record -B -N --no-bpf-event "$@"
+>  }
+>  
+> +# perf record for testing should not need BPF events
+> +perf_record_no_bpf()
+> +{
+> +	# Options for no BPF events
+> +	perf record --no-bpf-event "$@"
+> +}
+> +
+>  have_workload=false
+>  cat << _end_of_file_ | /usr/bin/cc -o "${workload}" -xc - -pthread && have_workload=true
+>  #include <time.h>
+> @@ -269,6 +277,159 @@ test_per_thread()
+>  	return 0
+>  }
+>  
+> +test_jitdump()
+> +{
+> +	echo "--- Test tracing self-modifying code that uses jitdump ---"
+> +
+> +	script_path=$(realpath "$0")
+> +	script_dir=$(dirname "$script_path")
+> +	jitdump_incl_dir="${script_dir}/../../util"
+> +	jitdump_h="${jitdump_incl_dir}/jitdump.h"
 
-Right, and Peter, we actually need your help to figure out which configs
-are related ;-)
+So this requires one to test this being on the kernel (perf) sources
+dir? I think we should add this header to some 'perf test' directory to
+remove this requirement, ok?
 
-Regards,
-Boqun
+But this can be done on top, right now we just don't test jitdump:
 
-> Cheers,
-> Miguel
+fd 20 : idx 11: mmapping fd 20
+Checking 16 fds
+OK
+--- Test tracing self-modifying code that uses jitdump ---
+SKIP: Include file jitdump.h not found
+--- Cleaning up ---
+--- Done ---
+test child finished with 0
+---- end ----
+Miscellaneous Intel PT testing: Ok
+
+
+> +	if [ ! -e "${jitdump_h}" ] ; then
+> +		echo "SKIP: Include file jitdump.h not found"
+> +		return 2
+> +	fi
+> +
+> +	if [ -z "${have_jitdump_workload}" ] ; then
+> +		have_jitdump_workload=false
+> +		# Create a workload that uses self-modifying code and generates its own jitdump file
+> +		cat <<- "_end_of_file_" | /usr/bin/cc -o "${jitdump_workload}" -I "${jitdump_incl_dir}" -xc - -pthread && have_jitdump_workload=true
+> +		#define _GNU_SOURCE
+> +		#include <sys/mman.h>
+> +		#include <sys/types.h>
+> +		#include <stddef.h>
+> +		#include <stdio.h>
+> +		#include <stdint.h>
+> +		#include <unistd.h>
+> +		#include <string.h>
+> +
+> +		#include "jitdump.h"
+> +
+> +		#define CHK_BYTE 0x5a
+> +
+> +		static inline uint64_t rdtsc(void)
+> +		{
+> +			unsigned int low, high;
+> +
+> +			asm volatile("rdtsc" : "=a" (low), "=d" (high));
+> +
+> +			return low | ((uint64_t)high) << 32;
+> +		}
+> +
+> +		static FILE *open_jitdump(void)
+> +		{
+> +			struct jitheader header = {
+> +				.magic      = JITHEADER_MAGIC,
+> +				.version    = JITHEADER_VERSION,
+> +				.total_size = sizeof(header),
+> +				.pid        = getpid(),
+> +				.timestamp  = rdtsc(),
+> +				.flags      = JITDUMP_FLAGS_ARCH_TIMESTAMP,
+> +			};
+> +			char filename[256];
+> +			FILE *f;
+> +			void *m;
+> +
+> +			snprintf(filename, sizeof(filename), "jit-%d.dump", getpid());
+> +			f = fopen(filename, "w+");
+> +			if (!f)
+> +				goto err;
+> +			/* Create an MMAP event for the jitdump file. That is how perf tool finds it. */
+> +			m = mmap(0, 4096, PROT_READ | PROT_EXEC, MAP_PRIVATE, fileno(f), 0);
+> +			if (m == MAP_FAILED)
+> +				goto err_close;
+> +			munmap(m, 4096);
+> +			if (fwrite(&header,sizeof(header),1,f) != 1)
+> +				goto err_close;
+> +			return f;
+> +
+> +		err_close:
+> +			fclose(f);
+> +		err:
+> +			return NULL;
+> +		}
+> +
+> +		static int write_jitdump(FILE *f, void *addr, const uint8_t *dat, size_t sz, uint64_t *idx)
+> +		{
+> +			struct jr_code_load rec = {
+> +				.p.id          = JIT_CODE_LOAD,
+> +				.p.total_size  = sizeof(rec) + sz,
+> +				.p.timestamp   = rdtsc(),
+> +				.pid	       = getpid(),
+> +				.tid	       = gettid(),
+> +				.vma           = (unsigned long)addr,
+> +				.code_addr     = (unsigned long)addr,
+> +				.code_size     = sz,
+> +				.code_index    = ++*idx,
+> +			};
+> +
+> +			if (fwrite(&rec,sizeof(rec),1,f) != 1 ||
+> +			fwrite(dat, sz, 1, f) != 1)
+> +				return -1;
+> +			return 0;
+> +		}
+> +
+> +		static void close_jitdump(FILE *f)
+> +		{
+> +			fclose(f);
+> +		}
+> +
+> +		int main()
+> +		{
+> +			/* Get a memory page to store executable code */
+> +			void *addr = mmap(0, 4096, PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+> +			/* Code to execute: mov CHK_BYTE, %eax ; ret */
+> +			uint8_t dat[] = {0xb8, CHK_BYTE, 0x00, 0x00, 0x00, 0xc3};
+> +			FILE *f = open_jitdump();
+> +			uint64_t idx = 0;
+> +			int ret = 1;
+> +
+> +			if (!f)
+> +				return 1;
+> +			/* Copy executable code to executable memory page */
+> +			memcpy(addr, dat, sizeof(dat));
+> +			/* Record it in the jitdump file */
+> +			if (write_jitdump(f, addr, dat, sizeof(dat), &idx))
+> +				goto out_close;
+> +			/* Call it */
+> +			ret = ((int (*)(void))addr)() - CHK_BYTE;
+> +		out_close:
+> +			close_jitdump(f);
+> +			return ret;
+> +		}
+> +		_end_of_file_
+> +	fi
+> +
+> +	if ! $have_jitdump_workload ; then
+> +		echo "SKIP: No jitdump workload"
+> +		return 2
+> +	fi
+> +
+> +	# Change to temp_dir so jitdump collateral files go there
+> +	cd "${temp_dir}"
+> +	perf_record_no_bpf -o "${tmpfile}" -e intel_pt//u "${jitdump_workload}"
+> +	perf inject -i "${tmpfile}" -o "${perfdatafile}" --jit
+> +	decode_br_cnt=$(perf script -i "${perfdatafile}" --itrace=b | wc -l)
+> +	# Note that overflow and lost errors are suppressed for the error count
+> +	decode_err_cnt=$(perf script -i "${perfdatafile}" --itrace=e-o-l | grep -ci error)
+> +	cd -
+> +	# Should be thousands of branches
+> +	if [ "${decode_br_cnt}" -lt 1000 ] ; then
+> +		echo "Decode failed, only ${decode_br_cnt} branches"
+> +		return 1
+> +	fi
+> +	# Should be no errors
+> +	if [ "${decode_err_cnt}" -ne 0 ] ; then
+> +		echo "Decode failed, ${decode_err_cnt} errors"
+> +		perf script -i "${perfdatafile}" --itrace=e-o-l
+> +		return 1
+> +	fi
+> +
+> +	echo OK
+> +	return 0
+> +}
+> +
+>  count_result()
+>  {
+>  	if [ "$1" -eq 2 ] ; then
+> @@ -286,6 +447,7 @@ ret=0
+>  test_system_wide_side_band		|| ret=$? ; count_result $ret ; ret=0
+>  test_per_thread "" ""			|| ret=$? ; count_result $ret ; ret=0
+>  test_per_thread "k" "(incl. kernel) "	|| ret=$? ; count_result $ret ; ret=0
+> +test_jitdump				|| ret=$? ; count_result $ret ; ret=0
+>  
+>  cleanup
+>  
+> -- 
+> 2.25.1
+
+-- 
+
+- Arnaldo
