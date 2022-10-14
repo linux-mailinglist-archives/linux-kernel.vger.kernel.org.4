@@ -2,105 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471405FF2AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC195FF2F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbiJNQ4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S230522AbiJNRY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiJNQ4Q (ORCPT
+        with ESMTP id S230333AbiJNRYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:56:16 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B291CC75F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:56:11 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y14so11750026ejd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+ycRi29HNGzJsYqIV0PQZFjUg4SSWnYtQKjFXj41VIU=;
-        b=q6OUZOBAYpZhF0HMURyGKoC2Dbf8GVUt4hr7xNspUKQlGUEEh5y4L+3ql8om/lrR3R
-         JBlA5po0rKArSFNyKfeeuP1roO2Hog+2FibtdZDfUXNtwagGJnQ16t+J/8I0mX8ohAQd
-         bsukgtvcc03VC6TVA2ASWsN543lOuWV1TcFNsEh7XRegpmcvlNHFqXk9Ee6jvze2HSMQ
-         da5k1z1EenZr1re3UXyYOek2lKN0xIJYe21w4VFAmQ38xriuytucPD3zw6070Z3jZCeK
-         q+NqSjaoFy9byj45fmekRO4cgbqBKvi7FXPad29GbX19SB2CwSCPtx4wdmQjHOeAJI7Y
-         a09g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ycRi29HNGzJsYqIV0PQZFjUg4SSWnYtQKjFXj41VIU=;
-        b=G/fqnVlyueYenyv+L+jDmrUNLvT5FbKWG5yXKAQiJ4rToZTheNDKGTroxt2/OY21uO
-         CbsW/KksbMFsY5+JcrGMgnrC6Jr++pW8dT1mVil7z8Rccq9xzc33CSYWSWWjMwsJMuJC
-         4Ist1L6kALR12LSc0qiYSA7C1d09DJqk/O17QOVIsZipaVk6r54i/XhZODHJkyXeIkkD
-         CIHd7VfrqdSnM29Wv5OvfmI/TEwlYT7IMqrB7mHWU4jO6ESpL1qTtYfsDVVGMDew4up+
-         1/9dWTG7XJZXFc6PvXPmBHEr8oVgDUfC+TIZ56GmwriqtA9dKFMksVM/jP04gBXDdePJ
-         whcg==
-X-Gm-Message-State: ACrzQf3F88ZnDalsJSw7z1IhF4O61mvb6M2NsUI0zBW660Zut/HiOGxY
-        9UkLIG6A3Y/E5sWhrD8c4B0=
-X-Google-Smtp-Source: AMsMyM6Gtop/ipLAmL+w9SYX5VT78bZu7hhlyg2cE/p7KwrM52FSicwlEtbya4Fc4go6g5AFQ/qjXg==
-X-Received: by 2002:a17:907:1deb:b0:78d:4a0e:f654 with SMTP id og43-20020a1709071deb00b0078d4a0ef654mr4260694ejc.757.1665766569596;
-        Fri, 14 Oct 2022 09:56:09 -0700 (PDT)
-Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id c22-20020a170906155600b007081282cbd8sm1784257ejd.76.2022.10.14.09.56.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 09:56:09 -0700 (PDT)
-Message-ID: <08887454-0ea8-107d-196d-b21b46e357da@gmail.com>
-Date:   Fri, 14 Oct 2022 18:56:08 +0200
+        Fri, 14 Oct 2022 13:24:55 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A3112743;
+        Fri, 14 Oct 2022 10:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=RG/Vz5vpl6JLRZINCyPYzhVyP5bdJxcuNZFvRAX9Res=;
+        b=ZW1LfKEsUOx5oiUNL6oMb+2iBiPoBtUSS4QyAwpwiXS8nNm4UHqo8CbM831GT3Dw+0z5HN2Yw9KeT
+         u0UfLEKaiZMzl1v1IJzMFJpxxe9vzt9z3k/R/0xhwQyEyky/5UsXJillfs/Un+Gu8w0v+Lqzhiy1CR
+         nBs9nY8dw6FYC0up65jD/AG69dewevlF7ifTuiSBx9h1D/v2YknEbAkbc6V63rRuNvn3VBmllDjMs/
+         jFM9RfJG745GcOE3eOcshDz4TvIUqROPfQagz1eLpbW00cGwRspU1tH0WdCwv+IdwvNX4k8yVkVzPF
+         e7N/jSrPLJIWcGdZ5yjer2JXfieuumg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.017186)], BW: [Enabled, t: (0.000014,0.000001)], RTDA: [Enabled, t: (0.085087), Hit: No, Details: v2.42.0; Id: 15.52kqks.1gfbodkce.6tsu; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([92.100.86.33])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 14 Oct 2022 20:24:36 +0300
+Date:   Fri, 14 Oct 2022 19:56:20 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v17 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <20221014165620.stw763ve7jlda54z@x260>
+References: <20221011193821.21828-1-i.bornyakov@metrotek.ru>
+ <20221011193821.21828-2-i.bornyakov@metrotek.ru>
+ <Y0l+AbjGSOyTaoqV@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] Staging: rtl8192e: fix a brace style issue
-Content-Language: en-US
-To:     Rigel Di Scala <zedr@zedr.com>, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        rigeld@gmail.com
-References: <20221012211612.75871-1-zedr@zedr.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221012211612.75871-1-zedr@zedr.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0l+AbjGSOyTaoqV@yilunxu-OptiPlex-7050>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/22 23:16, Rigel Di Scala wrote:
-> Fixed a coding style issue affecting a conditional if statement.
+On Fri, Oct 14, 2022 at 11:19:29PM +0800, Xu Yilun wrote:
+> On 2022-10-11 at 22:38:20 +0300, Ivan Bornyakov wrote:
+> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> > slave SPI sysCONFIG interface.
+> > 
+> > sysCONFIG interface core functionality is separate from both ECP5 and
+> > SPI specifics, so support for other FPGAs with different port types can
+> > be added in the future.
+> > 
+> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 > 
-> Signed-off-by: Rigel Di Scala <zedr@zedr.com>
-> ---
->   drivers/staging/rtl8192e/rtl819x_BAProc.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
+> [...]
 > 
-> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> index 19d13b3fc..e932ad1a9 100644
-> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> @@ -180,11 +180,10 @@ static void rtllib_send_ADDBAReq(struct rtllib_device *ieee, u8 *dst,
->   
->   	skb = rtllib_ADDBA(ieee, dst, pBA, 0, ACT_ADDBAREQ);
->   
-> -	if (skb) {
-> +	if (skb)
->   		softmac_mgmt_xmit(skb, ieee);
-> -	} else {
-> +	else
->   		netdev_dbg(ieee->dev, "Failed to generate ADDBAReq packet.\n");
-> -	}
->   }
->   
->   static void rtllib_send_ADDBARsp(struct rtllib_device *ieee, u8 *dst,
+> > +
+> > +static int sysconfig_read_busy(struct sysconfig_priv *priv)
+> > +{
+> > +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
+> > +	u8 busy;
+> > +	int ret;
+> > +
+> > +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
+> > +				 &busy, sizeof(busy));
+> > +
+> > +	return ret ? : busy;
+> > +}
+> > +
+> > +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
+> > +{
+> > +	unsigned long timeout;
+> > +	int ret;
+> > +
+> > +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
+> > +
+> > +	while (time_before(jiffies, timeout)) {
+> > +		ret = sysconfig_read_busy(priv);
+> > +		if (ret <= 0)
+> > +			return ret;
+> > +
+> > +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> > +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+> > +	}
+> > +
+> > +	return -ETIMEDOUT;
+> 
+> As mentioned by Ahmad, could read_poll_timeout() be used?
+> 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Surely, it could. IMHO it's just easier to read this way...
+
+> > +}
+> > +
+> > +static int sysconfig_read_status(struct sysconfig_priv *priv, u32 *status)
+> > +{
+> > +	const u8 lsc_read_status[] = SYSCONFIG_LSC_READ_STATUS;
+> > +	__be32 device_status;
+> > +	int ret;
+> > +
+> > +	ret = sysconfig_cmd_read(priv, lsc_read_status, sizeof(lsc_read_status),
+> > +				 &device_status, sizeof(device_status));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	*status = be32_to_cpu(device_status);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int sysconfig_poll_status(struct sysconfig_priv *priv, u32 *status)
+> > +{
+> > +	int ret = sysconfig_poll_busy(priv);
+> > +
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return sysconfig_read_status(priv, status);
+> > +}
+> > +
+> > +static int sysconfig_poll_gpio(struct gpio_desc *gpio, bool is_active)
+> > +{
+> > +	unsigned long timeout;
+> > +	int value;
+> > +
+> > +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_GPIO_TIMEOUT_MS);
+> > +
+> > +	while (time_before(jiffies, timeout)) {
+> > +		value = gpiod_get_value(gpio);
+> > +		if (value < 0)
+> > +			return value;
+> > +
+> > +		if ((is_active && value) || (!is_active && !value))
+> > +			return 0;
+> > +
+> > +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> > +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+> > +	}
+> > +
+> > +	return -ETIMEDOUT;
+> 
+> Same.
+> 
+> [...]
+> 
+> > +int sysconfig_probe(struct sysconfig_priv *priv)
+> > +{
+> > +	struct gpio_desc *program, *init, *done;
+> > +	struct device *dev = priv->dev;
+> > +	struct fpga_manager *mgr;
+> > +
+> > +	if (!dev)
+> > +		return -ENODEV;
+> > +
+> > +	if (!priv->bitstream_burst_write_init) {
+> > +		dev_err(dev,
+> > +			"Callback for preparation for bitstream burst write is not defined\n");
+> > +		return -EOPNOTSUPP;
+> 
+> -EINVAL is better?
+> 
+> > +	}
+> > +
+> > +	if (!priv->bitstream_burst_write) {
+> > +		dev_err(dev,
+> > +			"Callback for bitstream burst write is not defined\n");
+> > +		return -EOPNOTSUPP;
+> > +	}
+> > +
+> > +	if (!priv->bitstream_burst_write_complete) {
+> > +		dev_err(dev,
+> > +			"Callback for finishing bitstream burst write is not defined\n");
+> > +		return -EOPNOTSUPP;
+> > +	}
+> 
+> command_transfer is optional?
+> 
+> And I think different err log for each missing callback is too trivial,
+> maybe just say like "ops missing" if any mandatory callback is missing.
+> 
+> > +
+> > +	program = devm_gpiod_get_optional(dev, "program", GPIOD_OUT_LOW);
+> > +	if (IS_ERR(program))
+> > +		return dev_err_probe(dev, PTR_ERR(program),
+> > +				     "Failed to get PROGRAM GPIO\n");
+> > +
+> > +	init = devm_gpiod_get_optional(dev, "init", GPIOD_IN);
+> > +	if (IS_ERR(init))
+> > +		return dev_err_probe(dev, PTR_ERR(init),
+> > +				     "Failed to get INIT GPIO\n");
+> > +
+> > +	done = devm_gpiod_get_optional(dev, "done", GPIOD_IN);
+> > +	if (IS_ERR(done))
+> > +		return dev_err_probe(dev, PTR_ERR(done),
+> > +				     "Failed to get DONE GPIO\n");
+> > +
+> > +	priv->program = program;
+> > +	priv->init = init;
+> > +	priv->done = done;
+> > +
+> > +	mgr = devm_fpga_mgr_register(dev, "Lattice sysCONFIG FPGA Manager",
+> > +				     &sysconfig_fpga_mgr_ops, priv);
+> > +
+> > +	return PTR_ERR_OR_ZERO(mgr);
+> > +}
+> > +EXPORT_SYMBOL(sysconfig_probe);
 
