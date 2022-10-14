@@ -2,69 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94835FE8EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CF15FE8F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiJNGdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
+        id S229663AbiJNGfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiJNGdX (ORCPT
+        with ESMTP id S229504AbiJNGfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:33:23 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D031416C202;
-        Thu, 13 Oct 2022 23:33:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R521e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VS6Wv3A_1665729197;
-Received: from 30.221.130.30(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VS6Wv3A_1665729197)
-          by smtp.aliyun-inc.com;
-          Fri, 14 Oct 2022 14:33:18 +0800
-Message-ID: <60a05006-0052-c5eb-8f53-e1ce9ab26142@linux.alibaba.com>
-Date:   Fri, 14 Oct 2022 14:33:17 +0800
+        Fri, 14 Oct 2022 02:35:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E6DBBDC;
+        Thu, 13 Oct 2022 23:35:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE07EB820BD;
+        Fri, 14 Oct 2022 06:35:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB879C433C1;
+        Fri, 14 Oct 2022 06:35:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665729326;
+        bh=e3wwQAoebYtvsfnsW4jkNP8PEXtfKqTwzYXsuG6zc5w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=POKMJe3GDXf8Voj9kf6KSccZT9+i9Sekw2OuRVDLGFBzCHgQSfkV2qrbrn6oeN/GJ
+         Jb7M7ihH3ERcROsb9WQntp9o34pznxVvgwJZOLnAObUqs+xkTY2tErULUki2f1DeNk
+         wWkJcLLDVJC3jJHTa522YsDNdMGTULxJDS1mLjgtjLNaxrQTw1BVJqvPMYxWXNZumC
+         cFkWZpBthnymCtnY3439dyRWo3kLqYyaniDCh+G+SRqxGM72CjugIXTY31dEt/jAgh
+         +Gyl+U8PHSHhDuG/W9k1exDsW53B4OjUp6TsCaX4NwhduQ/y6asaq3Uv++E8pAJK7L
+         X+8FRBbAU8jEA==
+Date:   Fri, 14 Oct 2022 09:35:22 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v5] net/sock: Introduce trace_sk_data_ready()
+Message-ID: <Y0kDKpuJHPC36kal@unreal>
+References: <20221012232121.27374-1-yepeilin.cs@gmail.com>
+ <20221014000058.30060-1-yepeilin.cs@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH V2 5/5] cachefiles: add restore command to recover
- inflight ondemand read requests
-Content-Language: en-US
-To:     Jia Zhu <zhujia.zj@bytedance.com>, dhowells@redhat.com,
-        xiang@kernel.org
-Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, Gao Xiang <hsiangkao@linux.alibaba.com>
-References: <20221014030745.25748-1-zhujia.zj@bytedance.com>
- <20221014030745.25748-6-zhujia.zj@bytedance.com>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20221014030745.25748-6-zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014000058.30060-1-yepeilin.cs@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/14/22 11:07 AM, Jia Zhu wrote:
-> Previously, in ondemand read scenario, if the anonymous fd was closed by
-> user daemon, inflight and subsequent read requests would return EIO.
-> As long as the device connection is not released, user daemon can hold
-> and restore inflight requests by setting the request flag to
-> CACHEFILES_REQ_NEW.
+On Thu, Oct 13, 2022 at 05:00:58PM -0700, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
 > 
-> Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+> As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
+> callback implementations.  For example:
+> 
+> <...>
+>   ksoftirqd/0-16  [000] ..s..  99.784482: sk_data_ready: family=10 protocol=58 func=sock_def_readable
+>   ksoftirqd/0-16  [000] ..s..  99.784819: sk_data_ready: family=10 protocol=58 func=sock_def_readable
+> <...>
+> 
+> Suggested-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 
-LGTM.
+Please don't reply-to new patches and always send them as new threads
+with links to previous versions in changelog.
 
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> ---
+> change since v4:
+>   - Add back tracepoint in iscsi_target_sk_data_ready()
+> 
+> changes since v3:
+>   - Avoid using __func__ everywhere (Leon Romanovsky)
+>   - Delete tracepoint in iscsi_target_sk_data_ready()
+> 
+> change since v2:
+>   - Fix modpost error for modules (kernel test robot)
+> 
+> changes since v1:
+>   - Move tracepoint into ->sk_data_ready() callback implementations
+>     (Eric Dumazet)
+>   - Fix W=1 warning (Jakub Kicinski)
+> 
+>  drivers/infiniband/hw/erdma/erdma_cm.c   |  3 +++
+>  drivers/infiniband/sw/siw/siw_cm.c       |  5 +++++
+>  drivers/infiniband/sw/siw/siw_qp.c       |  3 +++
+>  drivers/nvme/host/tcp.c                  |  3 +++
+>  drivers/nvme/target/tcp.c                |  5 +++++
+>  drivers/scsi/iscsi_tcp.c                 |  3 +++
+>  drivers/soc/qcom/qmi_interface.c         |  3 +++
+>  drivers/target/iscsi/iscsi_target_nego.c |  2 ++
+>  drivers/xen/pvcalls-back.c               |  5 +++++
+>  fs/dlm/lowcomms.c                        |  5 +++++
+>  fs/ocfs2/cluster/tcp.c                   |  5 +++++
+>  include/trace/events/sock.h              | 24 ++++++++++++++++++++++++
+>  net/ceph/messenger.c                     |  4 ++++
+>  net/core/net-traces.c                    |  2 ++
+>  net/core/skmsg.c                         |  3 +++
+>  net/core/sock.c                          |  2 ++
+>  net/kcm/kcmsock.c                        |  3 +++
+>  net/mptcp/subflow.c                      |  3 +++
+>  net/qrtr/ns.c                            |  3 +++
+>  net/rds/tcp_listen.c                     |  2 ++
+>  net/rds/tcp_recv.c                       |  2 ++
+>  net/sctp/socket.c                        |  3 +++
+>  net/smc/smc_rx.c                         |  3 +++
+>  net/sunrpc/svcsock.c                     |  5 +++++
+>  net/sunrpc/xprtsock.c                    |  3 +++
+>  net/tipc/socket.c                        |  3 +++
+>  net/tipc/topsrv.c                        |  5 +++++
+>  net/tls/tls_sw.c                         |  3 +++
+>  net/xfrm/espintcp.c                      |  3 +++
+>  29 files changed, 118 insertions(+)
+> 
+> diff --git a/drivers/infiniband/hw/erdma/erdma_cm.c b/drivers/infiniband/hw/erdma/erdma_cm.c
+> index f13f16479eca..084da6698080 100644
+> --- a/drivers/infiniband/hw/erdma/erdma_cm.c
+> +++ b/drivers/infiniband/hw/erdma/erdma_cm.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/types.h>
+>  #include <linux/workqueue.h>
+>  #include <net/addrconf.h>
+> +#include <trace/events/sock.h>
+>  
+>  #include <rdma/ib_user_verbs.h>
+>  #include <rdma/ib_verbs.h>
+> @@ -933,6 +934,8 @@ static void erdma_cm_llp_data_ready(struct sock *sk)
+>  {
+>  	struct erdma_cep *cep;
+>  
+> +	trace_sk_data_ready(sk);
+> +
+>  	read_lock(&sk->sk_callback_lock);
 
--- 
-Thanks,
-Jingbo
+I see this pattern in all places and don't know if it is correct or not,
+but you are calling to trace_sk_data_ready() at the beginning of
+function and do it without taking sk_callback_lock.
+
+Thanks
