@@ -2,163 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8495FE86A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 07:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8325FE86D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 07:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJNFcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 01:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S229616AbiJNFd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 01:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJNFcu (ORCPT
+        with ESMTP id S229462AbiJNFd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 01:32:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B671946F9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665725568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BWNFgRVlGjYNydd5Fi8o/nyAidzrHzoVF78WNHdTm7o=;
-        b=hxWgxf3+mZAniUfoNH/fUYRtpT+eYdGbMt2wXESwppKF9H6fXpkONWNacbo8paDwnXqxkT
-        rX1PR3TLmBTzUoqoX0GlMt/pFVogBN4IU5/mzXOiiS86C4T2rSnVpJGx+JhEB9g1kr4VM2
-        RJ720gVS1uhn+jCMALmVnH7WcISYgQg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-287-4RzmNkz9MC-R6rHs7kVWmw-1; Fri, 14 Oct 2022 01:32:47 -0400
-X-MC-Unique: 4RzmNkz9MC-R6rHs7kVWmw-1
-Received: by mail-wr1-f71.google.com with SMTP id e14-20020adf9bce000000b0022d18139c79so1468690wrc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:32:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BWNFgRVlGjYNydd5Fi8o/nyAidzrHzoVF78WNHdTm7o=;
-        b=dcA9Wm9IWYQJRxXGkWqQGxnrIacmxzBW1jvgcGHwo/8Jq7oMzaUbXXwph+hdiAA5Lu
-         uqo+qlVnR2QUcg89dHnekoN/dxHJRJSlPr+0wQYDbbet7IHcfBipJZofFqAI6Gl9iwAI
-         TFlbnguhEI4SY5c9GKPQkX/VGaQEvu7/9/j/HG5VGhA9PuCg6O578rIECaF51krTahf0
-         mAti25XndPZaN/QPaRiqItAqHdb0cyr92LKz75oX4fONwVkvQsjQw3PDloPOHMux3SLd
-         NLW7I8EQtMWQSaOcPqaCmaX3U68yTOBpKhn2P+uRO4DFiH1JxataQSSHr3o9fVz8z/0m
-         uXyg==
-X-Gm-Message-State: ACrzQf0/3TnxkhQns1cyhg8A96n5Z0feiS8/TkpIdO0zrT4GTOdG0k1o
-        vi+4Fx85tWnl6VuH2zHcLoWL6NPpZ9HLcTn6PJ0V7bL+EV135pKPOu7UlNrXLdIktVbn+zW40os
-        r1xwrt73golg3pCxV+VjmZBcV
-X-Received: by 2002:a05:600c:6885:b0:3c4:de24:638 with SMTP id fn5-20020a05600c688500b003c4de240638mr8799784wmb.183.1665725566138;
-        Thu, 13 Oct 2022 22:32:46 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4R1CQSNUlZz9bqJOSmz/KQyXR4UqWpCPLl4Qqk64SVMiSobCwwLzb2VOcQZa8mbMypnWERfA==
-X-Received: by 2002:a05:600c:6885:b0:3c4:de24:638 with SMTP id fn5-20020a05600c688500b003c4de240638mr8799770wmb.183.1665725565818;
-        Thu, 13 Oct 2022 22:32:45 -0700 (PDT)
-Received: from redhat.com ([2.54.162.123])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b003bf6da9d2cesm6022807wmq.28.2022.10.13.22.32.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 22:32:45 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 01:32:42 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Angus Chen <angus.chen@jaguarmicro.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jason Wang <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH] virtio_pci: use irq to detect interrupt support
-Message-ID: <20221014013156-mutt-send-email-mst@kernel.org>
-References: <20221012220312.308522-1-mst@redhat.com>
- <TY2PR06MB3424171328BEE476FCB9942785249@TY2PR06MB3424.apcprd06.prod.outlook.com>
+        Fri, 14 Oct 2022 01:33:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CF5196B61;
+        Thu, 13 Oct 2022 22:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665725606; x=1697261606;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a0J4szhJGrj8a340To74CA+gycZKR9NLsfFvb4kqTHY=;
+  b=L4cfDTkg5Zm8Kesd6CA8aZuVkzbXVI+WCoJ29PfDU8hHPV/g7+yzLlYJ
+   m0iLMd5XMt6ywv6LnT3A4aO89BbiKuC14qe5u/5qjLWwrKyImmV3UdeY+
+   I3owAZkiwmdwcAMehU+Rat90O7sWd0ABWtQGrGD+DfW/888QrSJPg0yn3
+   d//sGwUsS7+hyeg0h6h3BBQKjdSSuujhDzyee2hBDqzzJErmbPE6hMe0Z
+   8ni0DAcSKIweQceOVno631/ri3DgAUR6/CJByAzg3IPz1MdClC4XfGN1I
+   QeGbE3Jcj2j5acHwpf8whsr6SLRCUi8zBS4/LpefRyRXRADpVqnxrBkOv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="285675824"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="285675824"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 22:33:11 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="769907714"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="769907714"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.43.79])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 22:33:09 -0700
+Message-ID: <48644cea-fa02-0250-752a-788e3a2dd303@intel.com>
+Date:   Fri, 14 Oct 2022 08:33:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TY2PR06MB3424171328BEE476FCB9942785249@TY2PR06MB3424.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v3] mmc: sdhci-pci-core: Disable ES for ASUS BIOS on
+ Jasper Lake
+To:     Patrick Thompson <ptf@google.com>,
+        Linux MMC Development <linux-mmc@vger.kernel.org>
+Cc:     Sangwhan Moon <sxm@google.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20221013210017.3751025-1-ptf@google.com>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20221013210017.3751025-1-ptf@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 12:09:20AM +0000, Angus Chen wrote:
-> Hi Mst
+On 14/10/22 00:00, Patrick Thompson wrote:
+> Enhanced Strobe (ES) does not work correctly on the ASUS 1100 series of
+> devices. Jasper Lake eMMCs (pci_id 8086:4dc4) are supposed to support
+> ES. There are also two system families under the series, thus this is
+> being scoped to the ASUS BIOS.
 > 
-> > -----Original Message-----
-> > From: Michael S. Tsirkin <mst@redhat.com>
-> > Sent: Thursday, October 13, 2022 6:04 AM
-> > To: linux-kernel@vger.kernel.org
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>; Michael Ellerman
-> > <mpe@ellerman.id.au>; Angus Chen <angus.chen@jaguarmicro.com>; Jason
-> > Wang <jasowang@redhat.com>; virtualization@lists.linux-foundation.org
-> > Subject: [PATCH] virtio_pci: use irq to detect interrupt support
-> > 
-> > commit 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
-> > breaks virtio_pci on powerpc, when running as a qemu guest.
-> > 
-> > vp_find_vqs() bails out because pci_dev->pin == 0.
-> > 
-> > But pci_dev->irq is populated correctly, so vp_find_vqs_intx() would
-> > succeed if we called it - which is what the code used to do.
-> > 
-> > This seems to happen because pci_dev->pin is not populated in
-> > pci_assign_irq().
-> > 
-> > Which is absolutely a bug in the relevant PCI code, but it
-> > may also affect other platforms that use of_irq_parse_and_map_pci().
-> > 
-> > However Linus said:
-> > 	The correct way to check for "no irq" doesn't use NO_IRQ at all, it just does
-> > 		if (dev->irq) ...
-> > so let's just check irq and be done with it.
-> > 
-> > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-> > Fixes: 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
-> > Cc: "Angus Chen" <angus.chen@jaguarmicro.com>
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> > ---
-> > 
-> > Build tested only - very late here. Angus any chance you could
-> > help test this? Thanks!
-> I tested the patch ，it work well on x86。Inlcude legacy and modern driver.
-> And I tested it on arm server also，and find some problem because of 0.9.5 limitation.
->  "platform bug: legacy virtio-pci must not be used with RAM above 0x%llxGB\n",
->  But the error is not effected by our patch.with or without our patch ,it print the same.
-
-Yes that's a limitation of 0.9.5 - just make a smaller VM to test
-legacy.
-
-> And I test modern dirver,it work well also.
-> Sorry for the late reply.
-
-
-Great, thanks a lot!
-
-> > 
-> >  drivers/virtio/virtio_pci_common.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/virtio/virtio_pci_common.c
-> > b/drivers/virtio/virtio_pci_common.c
-> > index 4df77eeb4d16..a6c86f916dbd 100644
-> > --- a/drivers/virtio/virtio_pci_common.c
-> > +++ b/drivers/virtio/virtio_pci_common.c
-> > @@ -409,8 +409,8 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int
-> > nvqs,
-> >  	err = vp_find_vqs_msix(vdev, nvqs, vqs, callbacks, names, false, ctx, desc);
-> >  	if (!err)
-> >  		return 0;
-> > -	/* Is there an interrupt pin? If not give up. */
-> > -	if (!(to_vp_device(vdev)->pci_dev->pin))
-> > +	/* Is there an interrupt? If not give up. */
-> > +	if (!(to_vp_device(vdev)->pci_dev->irq))
-> >  		return err;
-> >  	/* Finally fall back to regular interrupts. */
-> >  	return vp_find_vqs_intx(vdev, nvqs, vqs, callbacks, names, ctx);
-> > --
-> > MST
+> The failing ES prevents the installer from writing to disk. Falling back
+> to HS400 without ES fixes the issue.
 > 
+> Signed-off-by: Patrick Thompson <ptf@google.com>
+> 
+> Fixes: 315e3bd7ac19 ("mmc: sdhci-pci: Add support for Intel JSL")
+
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
+> 
+> ---
+> 
+> Changes in v3:
+> * Remove redundant MMC_CAP2_HS400 selection
+> 
+> Changes in v2:
+> * Only disable ES instead of CQE in its entirety.
+> * Target Jasper Lake (JSL)
+> * Target ASUS BIOS instead of specific system family
+> 
+>  drivers/mmc/host/sdhci-pci-core.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+> index 169b84761041..34ea1acbb3cc 100644
+> --- a/drivers/mmc/host/sdhci-pci-core.c
+> +++ b/drivers/mmc/host/sdhci-pci-core.c
+> @@ -914,6 +914,12 @@ static bool glk_broken_cqhci(struct sdhci_pci_slot *slot)
+>  		dmi_match(DMI_SYS_VENDOR, "IRBIS"));
+>  }
+>  
+> +static bool jsl_broken_hs400es(struct sdhci_pci_slot *slot)
+> +{
+> +	return slot->chip->pdev->device == PCI_DEVICE_ID_INTEL_JSL_EMMC &&
+> +			dmi_match(DMI_BIOS_VENDOR, "ASUSTeK COMPUTER INC.");
+> +}
+> +
+>  static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
+>  {
+>  	int ret = byt_emmc_probe_slot(slot);
+> @@ -922,9 +928,11 @@ static int glk_emmc_probe_slot(struct sdhci_pci_slot *slot)
+>  		slot->host->mmc->caps2 |= MMC_CAP2_CQE;
+>  
+>  	if (slot->chip->pdev->device != PCI_DEVICE_ID_INTEL_GLK_EMMC) {
+> -		slot->host->mmc->caps2 |= MMC_CAP2_HS400_ES;
+> -		slot->host->mmc_host_ops.hs400_enhanced_strobe =
+> -						intel_hs400_enhanced_strobe;
+> +		if (!jsl_broken_hs400es(slot)) {
+> +			slot->host->mmc->caps2 |= MMC_CAP2_HS400_ES;
+> +			slot->host->mmc_host_ops.hs400_enhanced_strobe =
+> +							intel_hs400_enhanced_strobe;
+> +		}
+>  		slot->host->mmc->caps2 |= MMC_CAP2_CQE_DCMD;
+>  	}
+>  
 
