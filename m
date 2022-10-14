@@ -2,109 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942DB5FEE00
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 14:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891F95FEE05
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 14:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJNM2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 08:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        id S229784AbiJNMhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 08:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiJNM2h (ORCPT
+        with ESMTP id S229567AbiJNMhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 08:28:37 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C171C493F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 05:28:36 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o21so2178979ple.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 05:28:36 -0700 (PDT)
+        Fri, 14 Oct 2022 08:37:38 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC6B181CAE;
+        Fri, 14 Oct 2022 05:37:37 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id b2so10191678eja.6;
+        Fri, 14 Oct 2022 05:37:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SCyhsNYwhZVTbMa7VcoLVc7/h3ERhFyOfIUt/jdRyKg=;
-        b=bWVQ7gDq+JxyL7dr6GZ/FM89h2P+CITEYl6LoxMGfyp1ucFtrOp/eikUNt3+WHB8tU
-         i597u6KnmRQCBN1QZlwlC0MBbJXxH7hfTh44uAlih9/fQft24D+zgWyiVlrh61UHJAe0
-         YKkxLeTGc3t+yIy7/HFeGtvGkaUu6Wmv0FzzZXz2U7npB5Pf2qOr2VsuCXu4ux2Zi9Ip
-         048owIhVsdKk/+Rfcb7dsfKPCRs6m9Al5Ra6eaEhwubbjwB7lg0vHWMcWE361SvBWwrx
-         1KvtNWmXFo9uflZMuuTZlBRBKp0o9QVrzmMsENtze7hGI8fXzyHTBjkfjy+y8B6HehIl
-         YGCA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BElY3zj5J2fYFTJ0RPslkHgvyyXgBEXfPcu4R8WcRPQ=;
+        b=jNPKOyLU0SrI2xT7FEsBNdwRhKu8jkaIdyEoiq7u/3n9RAJkUCSklDmmbJ4h0w9OAE
+         LhJGUL7DMOfhELkqg2sgNiW7u9Dqr81ugDuuDYc3OlMyAOE9lPz7HiFoO1jsCoi70CCz
+         gge5+uBD4XOUch8d+E4xwOaeLn01bweW6f9UZBxvq68fC1QdK/frtOuiHkC3/5CVwD4A
+         MzBVTEyRA+hF6C6i1zAIzkZejeoaItHnKpUFi+D7K3Y5vhVf+n9fIWX/qL3OONpLUy1E
+         lVOrApnahvLgPl7vgsZBaR1I8Ra25NpxhwI8+tBiDEG5ZV/mtmDi3yPD5ikQMbL9KjaI
+         QZFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCyhsNYwhZVTbMa7VcoLVc7/h3ERhFyOfIUt/jdRyKg=;
-        b=j9kugY39xPt19J36oxA7EwOR7xfGxgVYs0zYQRAluU7cAZk9mNoBw9cXb/nfFgkeQr
-         RJMJFTnxcscKrWrcqJP1n8qDK7TbPExsI8xICyCnnatFWnSYfUntMBQhdaA8BXFuFUHN
-         BuQX73A+CKjyEkWfFQ5Ah9uD9hkxTZjm7CrDpAbTheCeFjQ98g/7uOTZfn11LCTFhbNH
-         JAZqg9z3yQqZQQ49uYUgb1uGS7voHBuiFyO5L5ZSELlBBVuyWP48dv4IzKcZc8sk59gg
-         sWPnHdKConOats4TXDrK0VnDYxbruGEwMnGWpYj4KjVcTJlaGfn4FVDqI3Uo9V/NtEiX
-         uJiA==
-X-Gm-Message-State: ACrzQf2gpTwtvB4Z6k2vQamjCuWcYAOJrzOR9mPIfw3Qo8Imjh2yGOdi
-        qmy4I3IXLk9/8gYi2YUQNsE=
-X-Google-Smtp-Source: AMsMyM5alJd+48iN707KEK7AsJ/H4QRn2RPFJRfmvwTpeM3BlWBdCVfYD/6tpPU5oGhsHACmIZ3q2A==
-X-Received: by 2002:a17:902:c40f:b0:17f:6737:9527 with SMTP id k15-20020a170902c40f00b0017f67379527mr5059333plk.19.1665750516177;
-        Fri, 14 Oct 2022 05:28:36 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-8.three.co.id. [180.214.232.8])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c10600b001728ac8af94sm1586498pli.248.2022.10.14.05.28.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 05:28:35 -0700 (PDT)
-Message-ID: <7e0b733d-db73-f9a7-0965-4744e63f1a33@gmail.com>
-Date:   Fri, 14 Oct 2022 19:28:31 +0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BElY3zj5J2fYFTJ0RPslkHgvyyXgBEXfPcu4R8WcRPQ=;
+        b=Rmtv3TOnZ60MitKNoy6JqFIuvTBwXvlyvbMOfzLapMUsdRlMJIjNliOiAD7DMoY/4s
+         NDWjxCFNMM//vyxwwT0NcgmAKp0+qhqLMh8tg8Sy2p1oRvQgEt3B0LWnUbYdcxrlvcCB
+         16hUWSLo3vHq/lGOTYifHuqwzRvP7hJ4AQ1dsljLAM6psGWNJjxcZTB8XH3UFsEpSqRW
+         qxcI+U8GWlHwW134SI20WpR8fH81Y2EsFuLuHctup6ZnnVB1tvaXywVj5SnSiKnFC29/
+         LSkbhkPJ+SDWX4rvEzRljCW7TaHZ63bkDU4kDlvUuyTyOMX0bN2DwQ9my7RRgA2nG/cO
+         OrVA==
+X-Gm-Message-State: ACrzQf0ul8sYblc2V8E6VutYfu7MM26k7zWytZ8Jifw1QfiekqMl468E
+        5827Mx+XbkUV109P9fmPgPA=
+X-Google-Smtp-Source: AMsMyM71cZAxTqFGQDy6LN3gnTgoSQ31JESWaxnkIbtukxeZvsnqBJGa+0IX/NqQ3FxsPDtyxw/5EQ==
+X-Received: by 2002:a17:906:cc57:b0:78d:3612:f0e1 with SMTP id mm23-20020a170906cc5700b0078d3612f0e1mr3479322ejb.188.1665751055571;
+        Fri, 14 Oct 2022 05:37:35 -0700 (PDT)
+Received: from localhost.localdomain ([5.2.194.157])
+        by smtp.gmail.com with ESMTPSA id dk24-20020a0564021d9800b0045b910b0542sm1774756edb.15.2022.10.14.05.37.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 05:37:35 -0700 (PDT)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cosmin Tanislav <demonsingur@gmail.com>
+Subject: [PATCH 0/3] Support more parts in LTC2983
+Date:   Fri, 14 Oct 2022 15:37:21 +0300
+Message-Id: <20221014123724.1401011-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
- 6.0.0-rc7
-Content-Language: en-US
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     linux-kernel@vger.kernel.org, Slade Watkins <srw@sladewatkins.net>,
-        Marc Miltenberger <marcmiltenberger@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
- <Y0Zw2eHEb1aZ9f4y@debian.me>
- <29362d2e-eec6-5a23-4354-cf8868d50b2c@alu.unizg.hr>
- <6375f31f-316a-bebc-6aec-c6241049e401@alu.unizg.hr>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <6375f31f-316a-bebc-6aec-c6241049e401@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 17:32, Mirsad Todorovac wrote:
-> I tried the "make localmodconfig" and provided the default answers ([ENTER]) to all questions
-> the script asked as advised here: https://www.stolaf.edu/people/rab/os/linux-compile.html .
-> 
-> However, though it built much faster, the stripped version did not trigger the bug.
-> 
-> I am now trying to reproduce the bug with v6.0-rc[123] with config-{051913,060000}.
-> This brings a lot of combinations, and though I am a newbie, I noticed that build scripts
-> start with "make clean" for both deb-pkg and rpm-pkg.
-> 
-> Is there a way to rebuild only the stuff that changed between the versions?
-> 
+Add support for the following parts:
+ * LTC2984
+ * LTC2986
+ * LTM2985
 
-You can try building kernel with ccache enabled. However, you'll need
-to unset build timestamp, since it will make builds non-deterministic:
+The LTC2984 is a variant of the LTC2983 with EEPROM.
+The LTC2986 is a variant of the LTC2983 with only 10 channels,
+EEPROM and support for active analog temperature sensors.
+The LTM2985 is software-compatible with the LTC2986.
 
-	make CC="ccache gcc" KBUILD_BUILD_TIMESTAMP=""
+Also, remove excessive allocations on resume.
 
-The first ccache build will be slower than normal build, because the
-object files needs to be written twice (to the output directory and
-to the cache), though.
+Cosmin Tanislav (3):
+  iio: temperature: ltc2983: allocate iio channels once
+  dt-bindings: iio: temperature: ltc2983: support more parts
+  iio: temperature: ltc2983: support more parts
 
-Thanks.
+ .../bindings/iio/temperature/adi,ltc2983.yaml |  63 +++++-
+ drivers/iio/temperature/ltc2983.c             | 195 ++++++++++++++++--
+ 2 files changed, 240 insertions(+), 18 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.37.3
 
