@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334B65FF2AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1616C5FF2A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJNQ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S230506AbiJNQzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbiJNQz5 (ORCPT
+        with ESMTP id S230368AbiJNQzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:55:57 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071EA191D44
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:54 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-354c7abf786so52107847b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:54 -0700 (PDT)
+        Fri, 14 Oct 2022 12:55:43 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5712761106
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:42 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id j20-20020a056a00235400b00565af23c8c2so3160839pfj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=621BLDO+wewUpZczBZfn8RJnMCft7GwJ94oh2KaIzRg=;
-        b=IHN8W0HKAbuSfaHJWrQYdabbCio4EQjxKxBZ44SyZ/jgJhNUKCkLm4heZAaly2FvIU
-         OzuiTIyOSK0aHTI4s3PrlaTwBmG7Ew3l0+Jg6+f6VmLOCYp6CnxyNBvZcjWIEuAJC44W
-         0aDjQvSyRupLaPDcLnMDGI74NdNlXR9fUMR/DksP63rh9HdVqLZdx1IPQDk7Wz3T3v06
-         l1P/6wJa8kwdq6K5bfhTPijRS6tFRSY4W9Kct3bPc3tscDqYMzzztx7kH8XCQ2zDL6QF
-         IZjvJtKu3rMOpvsRsR5KyM6A+PFQE5O+hJ5MxAqapBFCVmGs7+FYZvk8bfYWDsEIJ6AF
-         lhwg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwQ6+sA3W7MWd0vYC/9HRNB0kdytHGubSeaFZENr5nY=;
+        b=GVIG8x8OIpWYulN7VSMqXxVDEKoHPUOUkR+1sTLzVXThxcghyxLdwMVke3uKtdLYbl
+         ZWwN6u60+DEMLfyE081V/ryY7alg8/yQ7heFroiJeCU8Ry4EYZL34K2PiA3jQ4+B/Z/b
+         lttRUGdvS2KgrwID001oZQuIYNAcD9RPud0MtUIRwPCgA0U+jsRnzPpAH3HM/xBXQbvv
+         iz2gucrGsBF9UAVNQOQ6Jrf0vqGL+gW+At4aN47DnXGv8HTBvujw2+C4sMEyapiYzN0T
+         6hbpFJS1BY8Z0dM3zHjXsKkngnOnc2TK2kRWP4FJOIljEaeJFRq09jv3JSZimTmLyTnu
+         jmng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=621BLDO+wewUpZczBZfn8RJnMCft7GwJ94oh2KaIzRg=;
-        b=SNcmNHuPWhbnJKfi70owTTtGpgcasCAE1fNwvFyVQJE6ky7T8FalVU8PsCCN7bWL3m
-         musFH0Tl0ozacFXNk1aLF1fLEQsL+ytthFY+4G4+yMg4fLm0OMD7rYYUrTOAZZK1OyiH
-         TUSooTjFJ08QHxPnllIECuNUvD5mbVwwOCdpD5E7gj9kPE0cJA5nM99y+bikoZib9md0
-         Sa63Y1eFC/1OhAC/qwZQMjYZA/pb/J7z0BsagKOm/bnR85twqjPbYzZnw+aMGOSmZXit
-         1u8R8acwFlwf8GiuKw1ToCG9IfJlEEWVwQWDXedx6l41MiNlSJusoFiFDkdYtfXP6zoX
-         CYog==
-X-Gm-Message-State: ACrzQf08/PeXDuLhrFzH+9YkVlcTT/qP99s05qb9ChuOdV71vZgyJ1tv
-        ac0K3SYyKcwuaNsQvrpi5NPU0g9A8g2m2dqn8XY6Yw==
-X-Google-Smtp-Source: AMsMyM4m6UumVYMO7hIc/3TJmtlg47mePGvcXwykIysFeyQHWxkEw4EyGr3Yzw08OS7O3Y4EFA5pyqoGLU/IQruhCxI=
-X-Received: by 2002:a0d:f545:0:b0:350:8a38:7edf with SMTP id
- e66-20020a0df545000000b003508a387edfmr5389860ywf.209.1665766553213; Fri, 14
- Oct 2022 09:55:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221010220538.1154054-1-vipinsh@google.com> <DS0PR11MB63735576A8FBF80738FF9B76DC249@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y0mPqNRSgpArgyS8@google.com>
-In-Reply-To: <Y0mPqNRSgpArgyS8@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Fri, 14 Oct 2022 09:55:27 -0700
-Message-ID: <CALzav=dU2-3avKGT2-AxO8d_uVH9bmYaO=ym8pPFM8esuSWP=A@mail.gmail.com>
-Subject: Re: [PATCH v5 0/5] dirty_log_perf_test vCPU pinning
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwQ6+sA3W7MWd0vYC/9HRNB0kdytHGubSeaFZENr5nY=;
+        b=L6DaJIo7ek+5GDJtJYIfHkaVUnWyQ9tAXJ80f5TpS0vV1jvjVxoXtmUdF2tbGfejkj
+         VY10aepinbBt9wzK85HYGlgyJ50XkRgTJlcBv1nX7h6TlaTEggzLngKnzVA39dgaUQVl
+         Y+FqhtHy0xJ0J1vSpCUmP9hGNVG5zGhs9h2xjKSZ8Gm8uQQcu3MmTNoXRvZG0ESWgi5g
+         mjHaubm4oRrXL6v6wZcQyGLU1cZmsKzgnbX67FKHE9670vxTG/5XKJEOPfkvRLIZgyvG
+         Y9KsdbL/RAYDUqq9y1a/HXWDib4PZAUkLD2sG4vx9dnucjIiC6/pcduEdFWs0Mztmu36
+         LNEg==
+X-Gm-Message-State: ACrzQf3rt3ns9ug8EwMdMDhFmExYdLyGqVuciE5sRZ/mSSyiCGRPZOTC
+        bD1epUm98TqirzIQCXubfcStbJk=
+X-Google-Smtp-Source: AMsMyM5U/qSXWm55jZSu6FKaWYtQ898xkpZOYAX7yp++hCg6q20IswAvnpoh6urdHCwwISyhttKtq+4=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:aa7:8607:0:b0:53b:13b5:2b6a with SMTP id
+ p7-20020aa78607000000b0053b13b52b6amr6299861pfn.52.1665766541868; Fri, 14 Oct
+ 2022 09:55:41 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 09:55:40 -0700
+In-Reply-To: <04d2eb4a-7365-495a-ab74-704febac2789@app.fastmail.com>
+Mime-Version: 1.0
+References: <20220715115559.139691-1-shaozhengchao@huawei.com>
+ <20220914111936.19881-1-oss@lmb.io> <CAKH8qBujKnFh8_g+npxHpo7RGFshus3N0iysmVBohTtG1X2yow@mail.gmail.com>
+ <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com> <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
+ <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com> <bc69e8a3-d474-451f-853e-1c936f776ef9@app.fastmail.com>
+ <cf6a99a1-e77f-113d-101a-5b5a52111df5@huawei.com> <04d2eb4a-7365-495a-ab74-704febac2789@app.fastmail.com>
+Message-ID: <Y0mUjLXEpVuheSUc@google.com>
+Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
+From:   sdf@google.com
+To:     Lorenz Bauer <oss@lmb.io>
+Cc:     shaozhengchao <shaozhengchao@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 9:34 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Oct 14, 2022, Wang, Wei W wrote:
-> > On Tuesday, October 11, 2022 6:06 AM, Vipin Sharma wrote:
-> > > Pin vCPUs to a host physical CPUs (pCPUs) in dirty_log_perf_test and optionally
-> > > pin the main application thread to a physical cpu if provided. All tests based on
-> > > perf_test_util framework can take advantage of it if needed.
-> > >
-> > > While at it, I changed atoi() to atoi_paranoid(), atoi_positive,
-> > > atoi_non_negative() in other tests, sorted command line options alphabetically
-> > > in dirty_log_perf_test, and added break between -e and -g which was missed in
-> > > original commit when -e was introduced.
-> >
-> > Just curious why not re-using the existing tools (e.g. taskset) to do the pinning?
->
-> IIUC, you're suggesting the test give tasks meaningful names so that the user can
-> do taskset on the appropriate tasks?  The goal is to ensure vCPUs are pinned before
-> they do any meaningful work.  I don't see how that can be accomplished with taskset
-> without some form of hook in the test to effectively pause the test until the user
-> (or some run script) is ready to continue.
+On 10/14, Lorenz Bauer wrote:
+> On Thu, 13 Oct 2022, at 11:44, shaozhengchao wrote:
+> > 	Sorry, I haven't fully understood your intentions yet.
+> > Can you explain it more detail?
 
-A taskset approach would also be more difficult to incorporate into
-automated runs of dirty_log_perf_test.
+> I'll try! Roughly, we do the following:
 
->
-> Pinning aside, naming the threads is a great idea!  That would definitely help
-> debug, e.g. if one vCPU gets stuck or is lagging behind.
+> 1. Create a BPF_PROG_TYPE_SOCKET_FILTER program that just returns 0
+> 2. Load the program into the kernel
+> 3. Call BPF_PROG_RUN with data_size_in == 14
 
-+1
+> After your bugfix, it seems like step 3 is rejected due to data_size_in  
+> == 14. We had to increase data_size_in to 15 to
+> avoid this, see [0].
 
->
-> >
-> > For example, with below changes:
-> > diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/se                                                                                                             lftests/kvm/lib/perf_test_util.c
-> > index 9618b37c66f7..aac58d1acb3c 100644
-> > --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> > @@ -264,6 +264,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
-> >                                   void (*vcpu_fn)(struct perf_test_vcpu_args *))
-> >  {
-> >         int i;
-> > +       char vcpu_name[5];
-> >
-> >         vcpu_thread_fn = vcpu_fn;
-> >         WRITE_ONCE(all_vcpu_threads_running, false);
-> > @@ -275,6 +276,8 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
-> >                 WRITE_ONCE(vcpu->running, false);
-> >
-> >                 pthread_create(&vcpu->thread, NULL, vcpu_thread_main, vcpu);
-> > +               sprintf(vcpu_name, "%s%d", "vcpu", i);
-> > +               pthread_setname_np(vcpu->thread, vcpu_name);
-> >         }
-> >
-> > and with top we can get
-> >     PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-> >    4464 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.97 dirty_log_perf_
-> >    4467 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.93 vcpu0
-> >    4469 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.93 vcpu2
-> >    4470 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.94 vcpu3
-> >    4468 root      20   0 4248684   4.0g   1628 R  99.7  26.2   0:50.93 vcpu1
+> This breaks user space, so it would be great if you could fix this in a  
+> way that doesn't refuse BPF_PROG_RUN with
+
+[..]
+
+> data_size_in == 14. Since I don't understand the original problem very  
+> well I can't tell you what the best fix is however.
+
+The problem was that we were able to generate skb with len=0 via
+BPF_PROG_RUN. Prohibiting those cases breaks backwards compatibility, so
+we either have to:
+
+a) (preferred?) accept inputs with <14, but maybe internally pad to 14
+bytes to make the core stack happy
+b) revert the patch and instead have length checks at runtime; doesn't seem  
+to
+be worth the penalty in the forwarding path because of some corner cases
+like these ?
+
+
+> 0:  
+> https://github.com/cilium/ebpf/commit/a38fb6b5a46ab3b5639ea4d421232a10013596c0
+
+> Thanks
+> Lorenz
