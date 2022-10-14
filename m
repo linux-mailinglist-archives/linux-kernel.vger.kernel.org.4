@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AC55FEB3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95FA5FEB41
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiJNI7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S230092AbiJNI7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiJNI7L (ORCPT
+        with ESMTP id S230003AbiJNI7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:59:11 -0400
+        Fri, 14 Oct 2022 04:59:12 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C6C15626F;
-        Fri, 14 Oct 2022 01:59:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EC315626F;
+        Fri, 14 Oct 2022 01:59:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665737949; x=1697273949;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xPNLdY9aqxLBPfxMLeiFDhGq4Ci6uGyirD+WbIXdUpE=;
-  b=byluB3+Rezwe9cl+6bgMFKn6nkrEHhs8naUL2nHMAg9dy/WBrD/KWm9G
-   6EFZJncXOUH0+apQIKrbBwEI03iPMgYq9H0aDBl1ZHXwFyNKfwR6mzQLd
-   JbWMt7083iwv765KA1P4dtSUtH7N1WhfrBbNHbfaC6PNNipklzgev1bA3
-   r3intpfaAGwOeE3kx/Wv+J4s96H4NpZzUyjznK4oZD9dWeFSWsGqhicb+
-   RqBgZyMNA5wtQY3/mOvjX+yHERZ26Xq/N0g2p3G4DYy3RLSTypgpksFVL
-   ukITce+ihHEgQ8O3b4JDHCWTq5afEmA1FLDnIsrGRiwVhy9YII25guNSY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="391635344"
+  t=1665737951; x=1697273951;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=2LzFHhElpAS0tiULqCikh0gwGEfkJcjRgv1pg6Sxb14=;
+  b=nk59jkXzKhRc9JREVnm/A8XueLeg1LhdRgiYSJ4IwpF6UthI1BbGO8zk
+   7o1kbeNeUbdECiR9AqohLMworOgGEZj2SpHBNb8FjE/AarOb/hWyouwpX
+   vrrgfbdi/KqF6VQQ4kh4F8kuZquGLChMsE375lk7QPOsDGXZGV9Hmkjzj
+   y+b6/ziX6gvBtAgLshbY23Rjr1Atyaon3FoTWUDc8UVxBWDjv12uHSAOy
+   Kn8pM5LynD77RTfy9gaXQWjlz/PAKdkn4+oUqV3OFMC0iEawsxNN7Xjkx
+   ks3KA8iNqcDkEoGIpOdkH2CTn+eQmzqO+mimvyuOYs6Vje9MRnGcZVqsS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="391635352"
 X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="391635344"
+   d="scan'208";a="391635352"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 01:59:08 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 01:59:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="696234480"
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="696234495"
 X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="696234480"
+   d="scan'208";a="696234495"
 Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Oct 2022 01:59:05 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 14 Oct 2022 01:59:08 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org
@@ -46,13 +46,12 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
         jdelvare@suse.com, linux@roeck-us.net, len.brown@intel.com,
         rui.zhang@intel.com
-Subject: [PATCH V4 0/4] x86/topology: Fix CPUID.1F handling
-Date:   Fri, 14 Oct 2022 17:01:43 +0800
-Message-Id: <20221014090147.1836-1-rui.zhang@intel.com>
+Subject: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
+Date:   Fri, 14 Oct 2022 17:01:44 +0800
+Message-Id: <20221014090147.1836-2-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221014090147.1836-1-rui.zhang@intel.com>
+References: <20221014090147.1836-1-rui.zhang@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -62,38 +61,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handling for CPUID.1F is introduced by commit 7745f03eb395 ("x86/topology:
-Add CPUID.1F multi-die/package support").
-And only SMT/Core/Die level types are supported at that time.
+Use variable name 'index' instead of 'indx' for the index in the
+core_data[] array.
 
-On Intel AlderLake-N platforms where there are Ecores only, the Ecore
-Module topology is enumerated via CPUID.1F Module level.
+No functional change expected.
 
-This exposes two bugs in the CPUID.1F handling code,
-1. Linux interprets the Module ID bits as package ID and erroneously
-   reports a multi module system as a multi-package system.
-2. Linux excludes the unknown Module ID bits from the core ID, and results
-   in duplicate core ID’s shown in a package after the first issue solved.
-
-Patch 3/4 and 4/4 fixes these two problems in CPUID.1F handling code, and
-patch 1/4 and 2/4 are needed to avoid potential regressions.
-
-thanks,
--rui
-
+Cc: stable@vger.kernel.org
+Suggested-by: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
-Changes in V4:
- - Drop a fix for a potential issue, as well as document cleanups/updates.
-   So this patch series only contains bug fixes (stable candidates).
- - Integrate the patch subject/changelog improvements from Dave.
- - Add Fixes tags.
+ drivers/hwmon/coretemp.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Changes in V3:
- - changelog improvements based on Peter' feedback
- - Remove combined tags
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index ccf0af5b988a..bfdcfe8ccb34 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -515,15 +515,15 @@ coretemp_add_core(struct platform_device *pdev, unsigned int cpu, int pkg_flag)
+ 		dev_err(&pdev->dev, "Adding Core %u failed\n", cpu);
+ }
+ 
+-static void coretemp_remove_core(struct platform_data *pdata, int indx)
++static void coretemp_remove_core(struct platform_data *pdata, int index)
+ {
+-	struct temp_data *tdata = pdata->core_data[indx];
++	struct temp_data *tdata = pdata->core_data[index];
+ 
+ 	/* Remove the sysfs attributes */
+ 	sysfs_remove_group(&pdata->hwmon_dev->kobj, &tdata->attr_group);
+ 
+-	kfree(pdata->core_data[indx]);
+-	pdata->core_data[indx] = NULL;
++	kfree(pdata->core_data[index]);
++	pdata->core_data[index] = NULL;
+ }
+ 
+ static int coretemp_probe(struct platform_device *pdev)
+@@ -647,7 +647,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	struct platform_device *pdev = coretemp_get_pdev(cpu);
+ 	struct platform_data *pd;
+ 	struct temp_data *tdata;
+-	int indx, target;
++	int index, target;
+ 
+ 	/*
+ 	 * Don't execute this on suspend as the device remove locks
+@@ -661,12 +661,12 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 		return 0;
+ 
+ 	/* The core id is too big, just return */
+-	indx = TO_ATTR_NO(cpu);
+-	if (indx > MAX_CORE_DATA - 1)
++	index = TO_ATTR_NO(cpu);
++	if (index > MAX_CORE_DATA - 1)
+ 		return 0;
+ 
+ 	pd = platform_get_drvdata(pdev);
+-	tdata = pd->core_data[indx];
++	tdata = pd->core_data[index];
+ 
+ 	cpumask_clear_cpu(cpu, &pd->cpumask);
+ 
+@@ -677,7 +677,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	 */
+ 	target = cpumask_any_and(&pd->cpumask, topology_sibling_cpumask(cpu));
+ 	if (target >= nr_cpu_ids) {
+-		coretemp_remove_core(pd, indx);
++		coretemp_remove_core(pd, index);
+ 	} else if (tdata && tdata->cpu == cpu) {
+ 		mutex_lock(&tdata->update_lock);
+ 		tdata->cpu = target;
+-- 
+2.25.1
 
-Changes in V2:
- - fix/improve changelog/comment wording issues
- - reorder the patches to eliminate bisection breakage window
- - add a new patch for coretemp driver variable renaming
- - update coretemp driver patch to fix a case of ida_free(&ida, -2)
