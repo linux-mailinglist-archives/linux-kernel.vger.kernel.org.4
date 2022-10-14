@@ -2,88 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757275FF2E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2985FF2E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiJNRUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S229792AbiJNRV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiJNRUp (ORCPT
+        with ESMTP id S229751AbiJNRVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:20:45 -0400
-Received: from mail.codeweavers.com (mail.codeweavers.com [65.103.31.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7EF57258;
-        Fri, 14 Oct 2022 10:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=codeweavers.com; s=6377696661; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EyQhJSXWD0na1sAKSM1PZmYSSPO/aWIU0nptxObWazE=; b=uEgxfjID/ryR0D1gRZ5Kc09HlE
-        6aAUzHPkO0ssSS1gUAxN1YIpuxr/6H8jkg/fuvGKw+lSPUpK9OCDp8O/A0OChVftlUhk1anfpqUDK
-        b4eciePkveCm2K67nUpu4jLTLLycFy1haQSV2hE+KcrVnMUOoUCLenkosWfDFqYPIeWo=;
-Received: from cw141ip123.vpn.codeweavers.com ([10.69.141.123])
-        by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <pgofman@codeweavers.com>)
-        id 1ojOMS-00GB8q-88; Fri, 14 Oct 2022 12:20:40 -0500
-Message-ID: <03031c84-baa0-fe99-b1d7-44963cad0001@codeweavers.com>
-Date:   Fri, 14 Oct 2022 12:20:37 -0500
+        Fri, 14 Oct 2022 13:21:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1A4ED9B7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 10:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665768111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gYMm/v2iwo92DvehuaGhWXJcbsxgFxkdEexWDGd3BS4=;
+        b=O7Jc+7jAhu82xGm+ruzJ0gDUSSEePAeFW8SjMYd+a9h5z/TQHsXf8BF8e4bdJCCUj11UJi
+        YQbzSeIqIM0AqlWZmYYJ+0FsM7EgxBafvhpCuGn0rHKk3j4iuBoCxzXZXi2JUQe6j5qoKZ
+        PS2bE2EdR5QVKrNQjklSkR3+mjqboC0=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-101-lwi9UjWwMqeJ_vn-Mb46sQ-1; Fri, 14 Oct 2022 13:21:50 -0400
+X-MC-Unique: lwi9UjWwMqeJ_vn-Mb46sQ-1
+Received: by mail-qt1-f200.google.com with SMTP id 17-20020ac85711000000b0039ccd4c9a37so4006744qtw.20
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 10:21:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gYMm/v2iwo92DvehuaGhWXJcbsxgFxkdEexWDGd3BS4=;
+        b=EufHWq6UXQtLmi3aYNbe4XNBLfdT+xoU3WULPdWehI1J4L+jEdyZ2JDlHxfLyRk2WG
+         AOr2ViP6iqn6ujDJi92fgEsaxclUUn89llgJdIhuXNovbbma/uqKVyq6TibIU8PTs81z
+         138LUfwnsxmFScmPFxuiEQssDp3bmgFH1LSbxo/lHo7XGxu0vfaYik5ID/H9RsPNbfss
+         Rp2dH689nxdwldNsX/mMrrLIrL48D72MaGCMhJOQKjZX3v33U6GPfXgajmYzZ1UOMgQK
+         2fi0ohdMTMYNwUjcQFqOsIuPeKx62wkESZ49KX+8vG6KRHx1tvy8k1HgICg537Ds+1l6
+         cM3g==
+X-Gm-Message-State: ACrzQf1I8gJinTJCKKQtWjS7XEsf0Bt29RIrADog5x2bvy3y/D8a4R2s
+        4k1EzlU92b74BqW/52CC2vmyjSh34Xnm1PYfyqQXxRYhSBYBUiObnUOivjCMkg1QizmPfD9R3o/
+        3Lje6HQWxbClMnACZ7NKwv5Af
+X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id j15-20020a05620a410f00b006cfc34b3c64mr4575814qko.52.1665768109104;
+        Fri, 14 Oct 2022 10:21:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6rR2pUuu2NR1kZjkFRRx2GKr1LseLDRLnnGnaO7VXwIEjWI9JmSpSORUH3HAQ96hwhDX5iSw==
+X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id j15-20020a05620a410f00b006cfc34b3c64mr4575802qko.52.1665768108860;
+        Fri, 14 Oct 2022 10:21:48 -0700 (PDT)
+Received: from vschneid.remote.csb ([149.71.65.94])
+        by smtp.gmail.com with ESMTPSA id m6-20020aed27c6000000b0039cde2cd510sm75997qtg.28.2022.10.14.10.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 10:21:48 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Douglas RAILLARD <douglas.raillard@arm.com>
+Subject: Re: [PATCH] tracing: Add __cpumask to denote a trace event field
+ that is a cpumask_t
+In-Reply-To: <20221014080456.1d32b989@rorschach.local.home>
+References: <20221014080456.1d32b989@rorschach.local.home>
+Date:   Fri, 14 Oct 2022 18:21:41 +0100
+Message-ID: <xhsmh8rlixqvu.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
-Content-Language: en-GB
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
- <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
- <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
- <5db967de-ea7e-9f35-cd74-d4cca2fcb9ee@codeweavers.com>
- <CANn89iJTNUCDLptS_rV4JUDcEH8JNXvOTx4xgzvaDHG6eodtXg@mail.gmail.com>
- <81b0e6c9-6c13-aecd-1e0e-6417eb89285f@codeweavers.com>
- <CANn89iKD=ceuLnhK-zpk3QerpS-FUb_wb_HevkpvsVqGJ_T4NQ@mail.gmail.com>
- <342a762d-22f5-b979-411f-aab0474feda2@codeweavers.com>
- <CANn89iKoaLRupASAJKW5ZprXhSMiXSs7vi5UT=wEU11R5+iLZQ@mail.gmail.com>
-From:   Paul Gofman <pgofman@codeweavers.com>
-In-Reply-To: <CANn89iKoaLRupASAJKW5ZprXhSMiXSs7vi5UT=wEU11R5+iLZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 11:45, Eric Dumazet wrote:
-> On Fri, Oct 14, 2022 at 9:39 AM Paul Gofman <pgofman@codeweavers.com> wrote:
++Cc Douglas
+
+On 14/10/22 08:04, Steven Rostedt wrote:
+> From: Steven Rostedt (Google) <rostedt@goodmis.org>
 >
-> I think it is documented.
+> The trace events have a __bitmask field that can be used for anything
+> that requires bitmasks. Although currently it is only used for CPU
+> masks, it could be used in the future for any type of bitmasks.
 >
-> man 7 socket
+> There is some user space tooling that wants to know if a field is a CPU
+> mask and not just some random unsigned long bitmask. Introduce
+> "__cpumask()" helper functions that work the same as the current
+> __bitmask() helpers but displays in the format file:
 >
->         SO_REUSEADDR
->                Indicates that the rules used in validating addresses
-> supplied in a bind(2) call should allow reuse of local addresses.  For
-> AF_INET sockets this means
->                that a socket may bind, except when there is an active
-> listening socket bound to the address.  When the listening socket is
-> bound to INADDR_ANY with  a
->                specific port then it is not possible to bind to this
-> port for any local address.  Argument is an integer boolean flag.
+>   field:__data_loc cpumask_t *[] mask;    offset:36;      size:4; signed:0;
 >
-> You seem to need another way, so you will have to ask this question in IETF.
-Thanks a lot, I think it answers my question, I am afraid I was reading 
-this a bit wrong.
+> Instead of:
+>
+>   field:__data_loc unsigned long[] mask;  offset:32;      size:4; signed:0;
+>
+> The main difference is the type. Instead of "unsigned long" it is
+> "cpumask_t *". Note, this type field needs to be a real type in the
+> __dynamic_array() logic that both __cpumask and__bitmask use, but the
+> comparison field requires it to be a scalar type whereas cpumask_t is a
+> structure (non-scalar). But everything works when making it a pointer.
+>
+> Requested-by: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Thanks for spinning this out so quickly! I gave it a test against my IPI
+tracepoints, it's working OK with one (expected) change:
+
+  [ipi:ipi_send_cpumask] function __get_cpumask not defined
+  CPU 0 is empty
+  CPU 1 is empty
+  CPU 3 is empty
+  cpus=4
+            echo-173   [002]    11.859745: ipi_send_cpumask:     [FAILED TO PARSE] cpumask=ARRAY[02, 00, 00, 00, 00, 00, 00, 00] callsite=0xffffffff81121013
+
+so libtraceevent is going to need updating - I'm happy to do that (if you
+haven't done it already!)
+
+Lastly, given all cpumasks have a (usable) size of nr_cpumask_bits, we can
+factor out the size argument, see below. Regardless:
+
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+
+---
+diff --git a/include/trace/stages/stage1_struct_define.h b/include/trace/stages/stage1_struct_define.h
+index e1a9b8462b418..b6a9e60755fe0 100644
+--- a/include/trace/stages/stage1_struct_define.h
++++ b/include/trace/stages/stage1_struct_define.h
+@@ -33,7 +33,7 @@
+ #define __bitmask(item, nr_bits) __dynamic_array(char, item, -1)
+ 
+ #undef __cpumask
+-#define __cpumask(item, nr_bits) __dynamic_array(char, item, -1)
++#define __cpumask(item) __dynamic_array(char, item, -1)
+ 
+ #undef __sockaddr
+ #define __sockaddr(field, len) __dynamic_array(u8, field, len)
+diff --git a/include/trace/stages/stage2_data_offsets.h b/include/trace/stages/stage2_data_offsets.h
+index 4f096c30303b9..2c3838f5ee892 100644
+--- a/include/trace/stages/stage2_data_offsets.h
++++ b/include/trace/stages/stage2_data_offsets.h
+@@ -39,7 +39,7 @@
+ #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
+ 
+ #undef __cpumask
+-#define __cpumask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
++#define __cpumask(item) __dynamic_array(unsigned long, item, -1)
+ 
+ #undef __sockaddr
+ #define __sockaddr(field, len) __dynamic_array(u8, field, len)
+diff --git a/include/trace/stages/stage4_event_fields.h b/include/trace/stages/stage4_event_fields.h
+index 11cf5550494d2..52ccf0b9b1765 100644
+--- a/include/trace/stages/stage4_event_fields.h
++++ b/include/trace/stages/stage4_event_fields.h
+@@ -47,7 +47,7 @@
+ #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
+ 
+ #undef __cpumask
+-#define __cpumask(item, nr_bits) __dynamic_array(cpumask_t *, item, -1)
++#define __cpumask(item) __dynamic_array(cpumask_t *, item, -1)
+ 
+ #undef __sockaddr
+ #define __sockaddr(field, len) __dynamic_array(u8, field, len)
+diff --git a/include/trace/stages/stage5_get_offsets.h b/include/trace/stages/stage5_get_offsets.h
+index 0d9386b0d320c..b3934b74c72d0 100644
+--- a/include/trace/stages/stage5_get_offsets.h
++++ b/include/trace/stages/stage5_get_offsets.h
+@@ -83,7 +83,7 @@
+ 					 __bitmask_size_in_longs(nr_bits))
+ 
+ #undef __cpumask
+-#define __cpumask(item, nr_bits) __bitmask(item, nr_bits)
++#define __cpumask(item) __bitmask(item, nr_cpumask_bits)
+ 
+ #undef __rel_bitmask
+ #define __rel_bitmask(item, nr_bits) __rel_dynamic_array(unsigned long, item,	\
+diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+index 76774cb9acc89..e12e541fef42b 100644
+--- a/include/trace/stages/stage6_event_callback.h
++++ b/include/trace/stages/stage6_event_callback.h
+@@ -58,14 +58,14 @@
+ 	memcpy(__get_bitmask(dst), (src), __bitmask_size_in_bytes(nr_bits))
+ 
+ #undef __cpumask
+-#define __cpumask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
++#define __cpumask(item) __dynamic_array(unsigned long, item, -1)
+ 
+ #undef __get_cpumask
+ #define __get_cpumask(field) (char *)__get_dynamic_array(field)
+ 
+ #undef __assign_cpumask
+-#define __assign_cpumask(dst, src, nr_bits)					\
+-	memcpy(__get_cpumask(dst), (src), __bitmask_size_in_bytes(nr_bits))
++#define __assign_cpumask(dst, src)					\
++	memcpy(__get_cpumask(dst), (src), __bitmask_size_in_bytes(nr_cpumask_bits))
+ 
+ #undef __sockaddr
+ #define __sockaddr(field, len) __dynamic_array(u8, field, len)
+
