@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE7C5FF12B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF6A5FF0FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiJNPVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S230075AbiJNPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiJNPU2 (ORCPT
+        with ESMTP id S229540AbiJNPS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:20:28 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B110CE8C57
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:20:25 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id e18so3282274wmq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tVeGkGwr3GPdeR7i1EiSinttHW7VHiK035a7xfUpheg=;
-        b=InRjgTzMx8XbJ1KgDcGDMbzPZR1VxxoUtvri/RCqT8YLh7f/82+k/7VKqOBPHZA6KE
-         DjmoxFOo7cBXuluOxICdbZ6Nd777/hg9Rbgzx59EX75Ekfvw385ym4CpGVEIBf2rI0F4
-         2T57uC07p/giZ+1uIsZl1203TlTFHLp8RtmiKxiHcc+fnDKQvt7UKqiMUE4qyggyxSKP
-         vjEcNJIOc+/1xrMJWbJmxzGjyqVshyoULY+TuQ3xUS7OlI77FshBULxX/Z1L2Ifgknua
-         dtgtlXOtz+N8x9h9dBBY69SbeDIvb4jmXgFelp4ELOHm7B/0521zrF63l0q7oXpU2AeV
-         3fhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tVeGkGwr3GPdeR7i1EiSinttHW7VHiK035a7xfUpheg=;
-        b=dRnd7Qk7T1L/i4A7WZ+g62L3YtPulogmwMo5tvaQsdEG6OEqvfTPu50QP9Ts1/3UQU
-         IA0qI9IokWr/MgitBHWsZejR7onu00WTr6VoJ4qApl/KN7tccY7rBTJsL0qYDFmxYXWr
-         8oPSITGQalY8lHGOSnUm3WHqnpXgZeojz1TjWRYlcJL1VanrWzexN6d0OGtohUKCgis2
-         368aog0QZ5occB1oatXamnPFBRkvFoAK8KI7bopLIp2OSaRwwFzj0NTlYJRBAQgpgFo6
-         nyqM/DwyVwpRjmukKW6pgoJppdOjJgL6ASVCwgcH2bAgMmAIUoVaJrT3+lZd43eDVvs0
-         nxvQ==
-X-Gm-Message-State: ACrzQf2DlS6X9C103KlC8Xv5CsZG2o6lbPX40YXblQ2ZbP5Se8Fv6hfj
-        qbSY1H1Pen047UqoSAKHKC3z4w==
-X-Google-Smtp-Source: AMsMyM7GI20M1DkrCHHPZWF7On1eDILIzgkIsk3u76ZoQXKutoYqkqtDCydpDuEe5T/fviFsBjXNiw==
-X-Received: by 2002:a05:600c:1c1f:b0:3c6:bfda:d485 with SMTP id j31-20020a05600c1c1f00b003c6bfdad485mr3852252wms.59.1665760823841;
-        Fri, 14 Oct 2022 08:20:23 -0700 (PDT)
-Received: from [127.0.0.1] (2a02-8440-6241-7429-3074-96af-9642-0004.rev.sfr.net. [2a02:8440:6241:7429:3074:96af:9642:4])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003c6bd91caa5sm2818223wmp.17.2022.10.14.08.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 08:20:23 -0700 (PDT)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-Date:   Fri, 14 Oct 2022 17:16:05 +0200
-Subject: [PATCH v2 12/12] drm/mediatek: dpi: Add mt8195 hdmi to DPI driver
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220919-v2-12-8419dcf4f09d@baylibre.com>
-References: <20220919-v2-0-8419dcf4f09d@baylibre.com>
-In-Reply-To: <20220919-v2-0-8419dcf4f09d@baylibre.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        David Airlie <airlied@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jitao shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Fri, 14 Oct 2022 11:18:29 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A482B1D3C60;
+        Fri, 14 Oct 2022 08:18:27 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mpqkl1JDxz6802C;
+        Fri, 14 Oct 2022 23:17:35 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 14 Oct 2022 17:18:25 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 14 Oct
+ 2022 16:18:25 +0100
+Date:   Fri, 14 Oct 2022 16:18:24 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+CC:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        "Jonathan Cameron" <jic23@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Guillaume Ranquet <granquet@baylibre.com>, stuart.lee@mediatek.com,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        mac.shen@mediatek.com, linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org
-X-Mailer: b4 0.11.0-dev
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH 1/3] iio: temperature: ltc2983: allocate iio channels
+ once
+Message-ID: <20221014161824.00001ca2@huawei.com>
+In-Reply-To: <20221014151123.00003268@huawei.com>
+References: <20221014123724.1401011-1-demonsingur@gmail.com>
+        <20221014123724.1401011-2-demonsingur@gmail.com>
+        <20221014151123.00003268@huawei.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,322 +62,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DPI1 hdmi path support in mtk dpi driver
+On Fri, 14 Oct 2022 15:11:47 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
----
- drivers/gpu/drm/mediatek/mtk_dpi.c      | 143 ++++++++++++++++++++++++++++++--
- drivers/gpu/drm/mediatek/mtk_dpi_regs.h |   5 ++
- 2 files changed, 141 insertions(+), 7 deletions(-)
+> On Fri, 14 Oct 2022 15:37:22 +0300
+> Cosmin Tanislav <demonsingur@gmail.com> wrote:
+> 
+> > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > 
+> > Currently, every time the device wakes up from sleep, the
+> > iio_chan array is reallocated, leaking the previous one
+> > until the device is removed (basically never).
+> > 
+> > Move the allocation to the probe function to avoid this.
+> > 
+> > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>  
+> Hi Cosmin,
+> 
+> Please give a fixes tag for this one as we'll definitely want to
+> backport it.
+> 
+> Reply to this patch is fine as b4 will pick it up like any other tag.
+Fixes: f110f3188e563 ("iio: temperature: Add support for LTC2983")
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 508a6d994e83..8052b47042b8 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -14,7 +14,10 @@
- #include <linux/of_graph.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/reset.h>
- #include <linux/types.h>
-+#include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
- 
- #include <video/videomode.h>
- 
-@@ -65,10 +68,14 @@ struct mtk_dpi {
- 	struct drm_bridge *next_bridge;
- 	struct drm_connector *connector;
- 	void __iomem *regs;
-+	struct reset_control *reset_ctl;
- 	struct device *dev;
- 	struct clk *engine_clk;
-+	struct clk *dpi_ck_cg;
- 	struct clk *pixel_clk;
-+	struct clk *dpi_sel_clk;
- 	struct clk *tvd_clk;
-+	struct clk *hdmi_cg;
- 	int irq;
- 	struct drm_display_mode mode;
- 	const struct mtk_dpi_conf *conf;
-@@ -134,6 +141,7 @@ struct mtk_dpi_yc_limit {
-  * @yuv422_en_bit: Enable bit of yuv422.
-  * @csc_enable_bit: Enable bit of CSC.
-  * @pixels_per_iter: Quantity of transferred pixels per iteration.
-+ * @is_internal_hdmi: True if this DPI block is directly connected to SoC internal HDMI block
-  */
- struct mtk_dpi_conf {
- 	unsigned int (*cal_factor)(int clock);
-@@ -152,6 +160,7 @@ struct mtk_dpi_conf {
- 	u32 yuv422_en_bit;
- 	u32 csc_enable_bit;
- 	u32 pixels_per_iter;
-+	bool is_internal_hdmi;
- };
- 
- static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
-@@ -465,8 +474,15 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
- 		pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
- 
- 	mtk_dpi_disable(dpi);
-+
-+	reset_control_rearm(dpi->reset_ctl);
-+
- 	clk_disable_unprepare(dpi->pixel_clk);
- 	clk_disable_unprepare(dpi->engine_clk);
-+	clk_disable_unprepare(dpi->dpi_sel_clk);
-+	clk_disable_unprepare(dpi->dpi_ck_cg);
-+	clk_disable_unprepare(dpi->hdmi_cg);
-+	clk_disable_unprepare(dpi->tvd_clk);
- }
- 
- static int mtk_dpi_power_on(struct mtk_dpi *dpi)
-@@ -482,12 +498,44 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
- 		goto err_refcount;
- 	}
- 
-+	ret = clk_prepare_enable(dpi->dpi_sel_clk);
-+	if (ret) {
-+		dev_err(dpi->dev, "failed to enable dpi_sel clock: %d\n", ret);
-+		goto err_refcount;
-+	}
-+
-+	ret = clk_prepare_enable(dpi->tvd_clk);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n", ret);
-+		goto err_tvd;
-+	}
-+
-+	ret = clk_prepare_enable(dpi->engine_clk);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable engine clock: %d\n", ret);
-+		goto err_engine;
-+	}
-+
-+	ret = clk_prepare_enable(dpi->hdmi_cg);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable hdmi_cg clock: %d\n", ret);
-+		goto err_hdmi_cg;
-+	}
-+
-+	ret = clk_prepare_enable(dpi->dpi_ck_cg);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable dpi_ck_cg clock: %d\n", ret);
-+		goto err_ck_cg;
-+	}
-+
- 	ret = clk_prepare_enable(dpi->pixel_clk);
- 	if (ret) {
- 		dev_err(dpi->dev, "Failed to enable pixel clock: %d\n", ret);
- 		goto err_pixel;
- 	}
- 
-+	reset_control_reset(dpi->reset_ctl);
-+
- 	if (dpi->pinctrl && dpi->pins_dpi)
- 		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
- 
-@@ -495,6 +543,15 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
- 
- err_pixel:
- 	clk_disable_unprepare(dpi->engine_clk);
-+	clk_disable_unprepare(dpi->dpi_ck_cg);
-+err_ck_cg:
-+	clk_disable_unprepare(dpi->hdmi_cg);
-+err_hdmi_cg:
-+	clk_disable_unprepare(dpi->engine_clk);
-+err_engine:
-+	clk_disable_unprepare(dpi->tvd_clk);
-+err_tvd:
-+	clk_disable_unprepare(dpi->dpi_sel_clk);
- err_refcount:
- 	dpi->refcount--;
- 	return ret;
-@@ -538,7 +595,6 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
- 	else
- 		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
- 
--
- 	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
- 
- 	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
-@@ -605,7 +661,16 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
- 	if (dpi->conf->support_direct_pin) {
- 		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
- 		mtk_dpi_config_2n_h_fre(dpi);
--		mtk_dpi_dual_edge(dpi);
-+		/* DPI could be connecting to external bridge
-+		 * or internal HDMI encoder. */
-+		if (dpi->conf->is_internal_hdmi) {
-+			mtk_dpi_mask(dpi, DPI_CON, DPI_OUTPUT_1T1P_EN,
-+				     DPI_OUTPUT_1T1P_EN);
-+			mtk_dpi_mask(dpi, DPI_CON, DPI_INPUT_2P_EN,
-+				     DPI_INPUT_2P_EN);
-+		} else {
-+			mtk_dpi_dual_edge(dpi);
-+		}
- 		mtk_dpi_config_disable_edge(dpi);
- 	}
- 	if (dpi->conf->input_2pixel) {
-@@ -720,7 +785,10 @@ static void mtk_dpi_bridge_disable(struct drm_bridge *bridge)
- {
- 	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
- 
--	mtk_dpi_power_off(dpi);
-+	if (dpi->conf->is_internal_hdmi)
-+		mtk_dpi_power_off(dpi);
-+	else
-+		mtk_dpi_disable(dpi);
- }
- 
- static void mtk_dpi_bridge_enable(struct drm_bridge *bridge)
-@@ -763,14 +831,16 @@ void mtk_dpi_start(struct device *dev)
- {
- 	struct mtk_dpi *dpi = dev_get_drvdata(dev);
- 
--	mtk_dpi_power_on(dpi);
-+	if (!dpi->conf->is_internal_hdmi)
-+		mtk_dpi_power_on(dpi);
- }
- 
- void mtk_dpi_stop(struct device *dev)
- {
- 	struct mtk_dpi *dpi = dev_get_drvdata(dev);
- 
--	mtk_dpi_power_off(dpi);
-+	if (!dpi->conf->is_internal_hdmi)
-+		mtk_dpi_power_off(dpi);
- }
- 
- static int mtk_dpi_bind(struct device *dev, struct device *master, void *data)
-@@ -853,6 +923,11 @@ static unsigned int mt8183_calculate_factor(int clock)
- 		return 2;
- }
- 
-+static unsigned int mt8195_calculate_factor(int clock)
-+{
-+	return 1;
-+}
-+
- static unsigned int mt8195_dpintf_calculate_factor(int clock)
- {
- 	if (clock < 70000)
-@@ -946,6 +1021,24 @@ static const struct mtk_dpi_conf mt8192_conf = {
- 	.csc_enable_bit = CSC_ENABLE,
- };
- 
-+static const struct mtk_dpi_conf mt8195_conf = {
-+	.cal_factor = mt8195_calculate_factor,
-+	.max_clock_khz = 594000,
-+	.reg_h_fre_con = 0xe0,
-+	.output_fmts = mt8183_output_fmts,
-+	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-+	.pixels_per_iter = 1,
-+	.is_ck_de_pol = true,
-+	.swap_input_support = true,
-+	.dimension_mask = HPW_MASK,
-+	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
-+	.yuv422_en_bit = YUV422_EN,
-+	.csc_enable_bit = CSC_ENABLE,
-+	.is_internal_hdmi = true,
-+	.support_direct_pin = true,
-+};
-+
- static const struct mtk_dpi_conf mt8195_dpintf_conf = {
- 	.cal_factor = mt8195_dpintf_calculate_factor,
- 	.max_clock_khz = 600000,
-@@ -1003,6 +1096,12 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	dpi->reset_ctl = devm_reset_control_get_optional_exclusive(dev, "dpi_on");
-+	if (IS_ERR(dpi->reset_ctl)) {
-+		dev_err(dev, "Failed to get reset_ctl: %ld\n", PTR_ERR(dpi->reset_ctl));
-+		return PTR_ERR(dpi->reset_ctl);
-+	}
-+
- 	dpi->engine_clk = devm_clk_get(dev, "engine");
- 	if (IS_ERR(dpi->engine_clk)) {
- 		ret = PTR_ERR(dpi->engine_clk);
-@@ -1012,7 +1111,26 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	dpi->pixel_clk = devm_clk_get(dev, "pixel");
-+	dpi->hdmi_cg = devm_clk_get_optional(dev, "hdmi_cg");
-+	if (IS_ERR(dpi->hdmi_cg)) {
-+		ret = PTR_ERR(dpi->hdmi_cg);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to get hdmi_cg clock: %d\n", ret);
-+
-+		return ret;
-+	}
-+
-+	dpi->dpi_ck_cg = devm_clk_get_optional(dev, "ck_cg");
-+	if (IS_ERR(dpi->dpi_ck_cg)) {
-+		ret = PTR_ERR(dpi->dpi_ck_cg);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to get dpi ck cg clock: %d\n",
-+				ret);
-+
-+		return ret;
-+	}
-+
-+	dpi->pixel_clk = devm_clk_get_optional(dev, "pixel");
- 	if (IS_ERR(dpi->pixel_clk)) {
- 		ret = PTR_ERR(dpi->pixel_clk);
- 		if (ret != -EPROBE_DEFER)
-@@ -1021,7 +1139,7 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	dpi->tvd_clk = devm_clk_get(dev, "pll");
-+	dpi->tvd_clk = devm_clk_get_optional(dev, "pll");
- 	if (IS_ERR(dpi->tvd_clk)) {
- 		ret = PTR_ERR(dpi->tvd_clk);
- 		if (ret != -EPROBE_DEFER)
-@@ -1030,6 +1148,14 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	dpi->dpi_sel_clk = devm_clk_get_optional(dev, "dpi_sel");
-+	if (IS_ERR(dpi->dpi_sel_clk)) {
-+		ret = PTR_ERR(dpi->dpi_sel_clk);
-+		dev_err_probe(dev, ret, "Failed to get dpi_Sel_clk clock: %d\n", ret);
-+
-+		return ret;
-+	}
-+
- 	dpi->irq = platform_get_irq(pdev, 0);
- 	if (dpi->irq <= 0)
- 		return -EINVAL;
-@@ -1085,6 +1211,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
- 	{ .compatible = "mediatek,mt8195-dp-intf",
- 	  .data = &mt8195_dpintf_conf,
- 	},
-+	{ .compatible = "mediatek,mt8195-dpi",
-+	  .data = &mt8195_conf,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-index 62bd4931b344..653ef4b93a97 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-@@ -43,6 +43,11 @@
- #define DPINTF_YUV422_EN		BIT(24)
- #define DPINTF_CSC_ENABLE		BIT(26)
- #define DPINTF_INPUT_2P_EN		BIT(29)
-+#define DPI_OUTPUT_1T1P_EN		BIT(24)
-+#define DPI_INPUT_2P_EN			BIT(25)
-+#define DPI_EXT_VSYNC_EN		BIT(26)
-+#define DPI_RGB565_EN			BIT(27)
-+#define DPI_RGB880_EN			BIT(28)
- 
- #define DPI_OUTPUT_SETTING	0x14
- #define CH_SWAP				0
+(from direct mail)
 
--- 
-b4 0.11.0-dev
+> 
+> > ---
+> >  drivers/iio/temperature/ltc2983.c | 13 ++++++-------
+> >  1 file changed, 6 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/iio/temperature/ltc2983.c b/drivers/iio/temperature/ltc2983.c
+> > index b652d2b39bcf..a60ccf183687 100644
+> > --- a/drivers/iio/temperature/ltc2983.c
+> > +++ b/drivers/iio/temperature/ltc2983.c
+> > @@ -1385,13 +1385,6 @@ static int ltc2983_setup(struct ltc2983_data *st, bool assign_iio)
+> >  		return ret;
+> >  	}
+> >  
+> > -	st->iio_chan = devm_kzalloc(&st->spi->dev,
+> > -				    st->iio_channels * sizeof(*st->iio_chan),
+> > -				    GFP_KERNEL);
+> > -
+> > -	if (!st->iio_chan)
+> > -		return -ENOMEM;
+> > -
+> >  	ret = regmap_update_bits(st->regmap, LTC2983_GLOBAL_CONFIG_REG,
+> >  				 LTC2983_NOTCH_FREQ_MASK,
+> >  				 LTC2983_NOTCH_FREQ(st->filter_notch_freq));
+> > @@ -1514,6 +1507,12 @@ static int ltc2983_probe(struct spi_device *spi)
+> >  		gpiod_set_value_cansleep(gpio, 0);
+> >  	}
+> >  
+> > +	st->iio_chan = devm_kzalloc(&spi->dev,
+> > +				    st->iio_channels * sizeof(*st->iio_chan),
+> > +				    GFP_KERNEL);
+> > +	if (!st->iio_chan)
+> > +		return -ENOMEM;
+> > +
+> >  	ret = ltc2983_setup(st, true);
+> >  	if (ret)
+> >  		return ret;  
+> 
+> 
+
