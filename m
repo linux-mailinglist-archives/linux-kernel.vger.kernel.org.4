@@ -2,98 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47BD5FF031
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474735FF019
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiJNOVc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Oct 2022 10:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S230428AbiJNORX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJNOVa (ORCPT
+        with ESMTP id S230410AbiJNORI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:21:30 -0400
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA11A1CC747;
-        Fri, 14 Oct 2022 07:21:29 -0700 (PDT)
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id B3E9D4099E;
-        Fri, 14 Oct 2022 14:15:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 06F541C;
-        Fri, 14 Oct 2022 14:14:56 +0000 (UTC)
-Message-ID: <043b9474f83b2da34bce5ff94b9aa3b735b70d4f.camel@perches.com>
-Subject: Re: [PATCH AUTOSEL 4.9 1/3] powerpc/selftests: Use timersub() for
- gettimeofday()
-From:   Joe Perches <joe@perches.com>
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Michael Ellerman <mpe@ellerman.id.au>, shuah@kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Date:   Fri, 14 Oct 2022 07:15:08 -0700
-In-Reply-To: <20221014135502.2110218-1-sashal@kernel.org>
-References: <20221014135502.2110218-1-sashal@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 14 Oct 2022 10:17:08 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E388B10F883;
+        Fri, 14 Oct 2022 07:17:03 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29EBBwfs019805;
+        Fri, 14 Oct 2022 16:16:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=38jsmKZyCQx5HcAiDEChsb7RscCtBxm2gGkUNsDi/Qw=;
+ b=YSdHEDFs++Po2rL7E3Fd0nDdgcayNJNSLIC/ZNfFnZbm6qt6zvCrhZ9W+oE3mU+4YOS0
+ OMWXPWv8CfQkb3BGrVHyjuUk1aR8Vi9pDHKCoDrRegE8TTgTNmtfRu7ED8eRQoioPdl9
+ XY5XncrjdfQHkbCEHnbQy+GeaFYvjifCuDJ8jmhxRItrQ0i8YbCtZUJhHHsBpgDO/vg9
+ bH3S3lDqCWkU9uovA0Wu4+pLVfGVDbFQjbeamWAarzvvKPnoNVJHawbvvAkIDbRqxNva
+ 4DWrEWHqTJm60PMp5bukUPt3KaqhhmxUY+wi9X9ATGKDUYM6THwFejvy6lZ9DsiasYit xA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k5v4n9g7c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Oct 2022 16:16:55 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5693410002A;
+        Fri, 14 Oct 2022 16:16:51 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 51F8E231505;
+        Fri, 14 Oct 2022 16:16:51 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 14 Oct
+ 2022 16:16:50 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH v2 09/10] ARM: dts: stm32: enable USB OTG in dual role mode on stm32mp135f-dk
+Date:   Fri, 14 Oct 2022 16:15:08 +0200
+Message-ID: <20221014141509.211149-10-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221014141509.211149-1-fabrice.gasnier@foss.st.com>
+References: <20221014141509.211149-1-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
-X-Stat-Signature: 3zgjaw88zojn6q9khoy8omazrsq4orrh
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 06F541C
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX190Yuwm6bfJNyNHFDdGFIA6O0pYyJESv1I=
-X-HE-Tag: 1665756896-52267
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-14_08,2022-10-14_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-14 at 09:54 -0400, Sasha Levin wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> [ Upstream commit c814bf958926ff45a9c1e899bd001006ab6cfbae ]
-> 
-> Use timersub() function to simplify the code.
+The USB OTG controller provides the USB data available on stm32mp135f-dk,
+on the Type-C connector. Data role is determined by "usb-role-switch".
 
-Why should a code simplification be backported?
+A STM32G0 provides the USB Type-C and Power Delivery connectivity.
+It controls dual role power and dual role data through UCSI protocol over
+I2C. It's wired on I2C1, with an interrupt pin on PI2 GPIO.
+Its firmware maybe updated over I2C, so use the optional firmware-name
+to enable firmware update.
 
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> Link: https://lore.kernel.org/r/20220816105106.82666-1-ye.xingchen@zte.com.cn
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  tools/testing/selftests/powerpc/benchmarks/gettimeofday.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c b/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c
-> index 3af3c21e8036..7f4bb84f1c9c 100644
-> --- a/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c
-> +++ b/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c
-> @@ -12,7 +12,7 @@ static int test_gettimeofday(void)
->  {
->  	int i;
->  
-> -	struct timeval tv_start, tv_end;
-> +	struct timeval tv_start, tv_end, tv_diff;
->  
->  	gettimeofday(&tv_start, NULL);
->  
-> @@ -20,7 +20,9 @@ static int test_gettimeofday(void)
->  		gettimeofday(&tv_end, NULL);
->  	}
->  
-> -	printf("time = %.6f\n", tv_end.tv_sec - tv_start.tv_sec + (tv_end.tv_usec - tv_start.tv_usec) * 1e-6);
-> +	timersub(&tv_start, &tv_end, &tv_diff);
-> +
-> +	printf("time = %.6f\n", tv_diff.tv_sec + (tv_diff.tv_usec) * 1e-6);
->  
->  	return 0;
->  }
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+---
+Changes in v2: adopt "typec" generic node name
+---
+ arch/arm/boot/dts/stm32mp135f-dk.dts | 34 ++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
+index 02ff2bc664da..b8a4f1a8820d 100644
+--- a/arch/arm/boot/dts/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
+@@ -95,6 +95,28 @@ &i2c1 {
+ 	/* spare dmas for other usage */
+ 	/delete-property/dmas;
+ 	/delete-property/dma-names;
++
++	typec@53 {
++		compatible = "st,stm32g0-typec";
++		reg = <0x53>;
++		/* Alert pin on PI2 */
++		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-parent = <&gpioi>;
++		/* Internal pull-up on PI2 */
++		pinctrl-names = "default";
++		pinctrl-0 = <&stm32g0_intn_pins_a>;
++		firmware-name = "stm32g0-ucsi.mp135f-dk.fw";
++		connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++
++			port {
++				con_usb_c_g0_ep: endpoint {
++					remote-endpoint = <&usbotg_hs_ep>;
++				};
++			};
++		};
++	};
+ };
+ 
+ &i2c5 {
+@@ -158,6 +180,18 @@ hub@1 {
+ 	};
+ };
+ 
++&usbotg_hs {
++	phys = <&usbphyc_port1 0>;
++	phy-names = "usb2-phy";
++	usb-role-switch;
++	status = "okay";
++	port {
++		usbotg_hs_ep: endpoint {
++			remote-endpoint = <&con_usb_c_g0_ep>;
++		};
++	};
++};
++
+ &usbphyc {
+ 	status = "okay";
+ };
+-- 
+2.25.1
 
