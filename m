@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF6A5FF0FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A9E5FF102
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJNPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S230095AbiJNPT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJNPS3 (ORCPT
+        with ESMTP id S230081AbiJNPTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:18:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A482B1D3C60;
-        Fri, 14 Oct 2022 08:18:27 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mpqkl1JDxz6802C;
-        Fri, 14 Oct 2022 23:17:35 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 14 Oct 2022 17:18:25 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 14 Oct
- 2022 16:18:25 +0100
-Date:   Fri, 14 Oct 2022 16:18:24 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-CC:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        "Jonathan Cameron" <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH 1/3] iio: temperature: ltc2983: allocate iio channels
- once
-Message-ID: <20221014161824.00001ca2@huawei.com>
-In-Reply-To: <20221014151123.00003268@huawei.com>
-References: <20221014123724.1401011-1-demonsingur@gmail.com>
-        <20221014123724.1401011-2-demonsingur@gmail.com>
-        <20221014151123.00003268@huawei.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 14 Oct 2022 11:19:50 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5063126AC3;
+        Fri, 14 Oct 2022 08:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9FcX1J+0cwKyZaS3joif6Fb/FOBJClHbHVHQXJcliJM=; b=VzbzMei0aNMEABS5WXn1aLYbwp
+        g+S1Ll2DxNL/0LsMzsJFR/3GexwQiM2Edydh6K9KzOwbNJuyxwZLpWHk0zJ2MPiTc3pArSOntSTJZ
+        xiLEABTvduIWScGm2cIXgtpJs/s5qfeZWz5+0OkSWdR6UV3BqgDiPh+0d0E/SFBqPyVAmoWHYH09o
+        jzzm0rU5gzwMVmTng6vNArk4OSKgpgcax6irOWc3WUuxtzuqfwBAT7wKm7+DaMX/1Xr6apSfJeoFh
+        qlbTQXKzZRiaWo1EGpf8u/opFlzIu6Pg7ntb35z7qMLu5fwD4Rt6YlgjLJyU/5PDmcsyKQmoI33r8
+        /yIa/9CQ==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ojMTQ-001T5Y-Dw; Fri, 14 Oct 2022 17:19:44 +0200
+Message-ID: <0d037ef8-e301-c0fd-8020-3846a4762ade@igalia.com>
+Date:   Fri, 14 Oct 2022 12:19:24 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V2 3/3] efi: pstore: Add module parameter for setting the
+ record size
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, keescook@chromium.org,
+        anton@enomsg.org, ccross@android.com, tony.luck@intel.com
+References: <20221013210648.137452-1-gpiccoli@igalia.com>
+ <20221013210648.137452-4-gpiccoli@igalia.com>
+ <CAMj1kXG7syjMsOL+AcUMfT0_nhGde6qc_6MexpdDtxFQpS2=7A@mail.gmail.com>
+ <1c6a9461-0d3d-a049-0165-0d5c95aa9405@igalia.com>
+ <CAMj1kXGLULYfA6UGwvH7NY5A5E6YaC4s8G+qU12MgChB1_5DKQ@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAMj1kXGLULYfA6UGwvH7NY5A5E6YaC4s8G+qU12MgChB1_5DKQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 15:11:47 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+On 14/10/2022 12:00, Ard Biesheuvel wrote:
+> On Fri, 14 Oct 2022 at 16:58, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
+>>
+>> On 14/10/2022 11:46, Ard Biesheuvel wrote:
+>>> [...]
+>>>>         for (;;) {
+>>>> -               varname_size = EFIVARS_DATA_SIZE_MAX;
+>>>> +               varname_size = record_size;
+>>>>
+>>>
+>>> I don't think we need this - this is the size of the variable name not
+>>> the variable itself.
+>>>
+>>
+>> Ugh, my bad. Do you want to stick with 1024 then?
+> 
+> Yes let's keep this at 1024
 
-> On Fri, 14 Oct 2022 15:37:22 +0300
-> Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> 
-> > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> > 
-> > Currently, every time the device wakes up from sleep, the
-> > iio_chan array is reallocated, leaking the previous one
-> > until the device is removed (basically never).
-> > 
-> > Move the allocation to the probe function to avoid this.
-> > 
-> > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>  
-> Hi Cosmin,
-> 
-> Please give a fixes tag for this one as we'll definitely want to
-> backport it.
-> 
-> Reply to this patch is fine as b4 will pick it up like any other tag.
-Fixes: f110f3188e563 ("iio: temperature: Add support for LTC2983")
+Perfect, will re-send after we have more feedback on patches 1 and 2.
+Thanks again,
 
-(from direct mail)
 
-> 
-> > ---
-> >  drivers/iio/temperature/ltc2983.c | 13 ++++++-------
-> >  1 file changed, 6 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/iio/temperature/ltc2983.c b/drivers/iio/temperature/ltc2983.c
-> > index b652d2b39bcf..a60ccf183687 100644
-> > --- a/drivers/iio/temperature/ltc2983.c
-> > +++ b/drivers/iio/temperature/ltc2983.c
-> > @@ -1385,13 +1385,6 @@ static int ltc2983_setup(struct ltc2983_data *st, bool assign_iio)
-> >  		return ret;
-> >  	}
-> >  
-> > -	st->iio_chan = devm_kzalloc(&st->spi->dev,
-> > -				    st->iio_channels * sizeof(*st->iio_chan),
-> > -				    GFP_KERNEL);
-> > -
-> > -	if (!st->iio_chan)
-> > -		return -ENOMEM;
-> > -
-> >  	ret = regmap_update_bits(st->regmap, LTC2983_GLOBAL_CONFIG_REG,
-> >  				 LTC2983_NOTCH_FREQ_MASK,
-> >  				 LTC2983_NOTCH_FREQ(st->filter_notch_freq));
-> > @@ -1514,6 +1507,12 @@ static int ltc2983_probe(struct spi_device *spi)
-> >  		gpiod_set_value_cansleep(gpio, 0);
-> >  	}
-> >  
-> > +	st->iio_chan = devm_kzalloc(&spi->dev,
-> > +				    st->iio_channels * sizeof(*st->iio_chan),
-> > +				    GFP_KERNEL);
-> > +	if (!st->iio_chan)
-> > +		return -ENOMEM;
-> > +
-> >  	ret = ltc2983_setup(st, true);
-> >  	if (ret)
-> >  		return ret;  
-> 
-> 
-
+Guilherme
