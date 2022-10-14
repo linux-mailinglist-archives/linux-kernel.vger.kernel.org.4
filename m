@@ -2,103 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DF95FE9D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560715FE9D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJNHuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S229830AbiJNHxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiJNHut (ORCPT
+        with ESMTP id S229555AbiJNHxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:50:49 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA6710DE5C;
-        Fri, 14 Oct 2022 00:50:46 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id l32so2606023wms.2;
-        Fri, 14 Oct 2022 00:50:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VFmh108wZNWwhA1RKIQKFbOOcCbpOXk6hBvMipGxkBQ=;
-        b=U4rQWATqAoa86GV6EmufFyVghaKe0bzkKqHtV6W/dRzSgR94LxO+SjM6cm0qwdhLpo
-         Q6bq78PEJeK7qq5IcF7UcZ38mlrut5K5ar8kQu9wS3rVhwQl2bGLdjACpg1b8fs3pAm9
-         NbUCLIWq+eU5kU3SqAzc4+nSBDtfofKzs/a2fi8k7aTSqFCDo+frX5Pr8x0xWJ/R6Bs1
-         KN+jkVkOsToObKuYIG9kBe18R7p5Kfx73uy909+AgeGpEPDhF2H9o3ej0esn24wWcIP7
-         uHyUCvxj2s9A6zUO2gkilR9qsvXx/sJ8rbmgQ+cv+TI7gucbcQPFXcAjBII0fltddKRK
-         +oyQ==
-X-Gm-Message-State: ACrzQf0Zw9luj7Uo1GyueXglJtu04/SXsx55RcTUWZjhdplsxjXI0KNd
-        giplKUJgM7JvwnFiXC/+h+o=
-X-Google-Smtp-Source: AMsMyM6LCeuoLOedEG8cIi/NYPlv6vKBhTiHzvucFE2Ql/YrLjdgc5hS23ffTLoRaYhK2TzKBfKSXg==
-X-Received: by 2002:a05:600c:3781:b0:3b4:63c8:554b with SMTP id o1-20020a05600c378100b003b463c8554bmr9216920wmr.25.1665733844686;
-        Fri, 14 Oct 2022 00:50:44 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a9246c853sm1327366wrt.41.2022.10.14.00.50.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 00:50:43 -0700 (PDT)
-Message-ID: <58855ea9-0d89-e17d-349a-657512068663@kernel.org>
-Date:   Fri, 14 Oct 2022 09:50:42 +0200
+        Fri, 14 Oct 2022 03:53:16 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FAF1B6CBC;
+        Fri, 14 Oct 2022 00:53:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0VS6v75N_1665733988;
+Received: from 30.221.98.115(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VS6v75N_1665733988)
+          by smtp.aliyun-inc.com;
+          Fri, 14 Oct 2022 15:53:09 +0800
+Message-ID: <aa17b0b4-ce59-9e4e-e08c-95668d4653ed@linux.alibaba.com>
+Date:   Fri, 14 Oct 2022 15:53:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 2/2] platform/x86/intel: pmc/core: Add Raptor Lake
- support to pmc core driver
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Gayatri Kammela <gayatri.kammela@linux.intel.com>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, irenic.rajneesh@gmail.com,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Box <david.e.box@intel.com>
-References: <20220912233307.409954-1-gayatri.kammela@linux.intel.com>
- <20220912233307.409954-2-gayatri.kammela@linux.intel.com>
- <3537fa63-9015-c63d-2321-a77062e24d6f@redhat.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <3537fa63-9015-c63d-2321-a77062e24d6f@redhat.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V6 0/6] RISC-V fixups to work with crash tool
+To:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
+ <f8d3ae66-73a8-db89-c4c4-918610fb5f35@linux.alibaba.com>
+ <Y0aOcsf06a2+ExrU@wendy>
+ <55606b89-13f2-5e3b-9176-bacbec8c36d1@linux.alibaba.com>
+ <22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19. 09. 22, 13:41, Hans de Goede wrote:
 
-> On 9/13/22 00:33, Gayatri Kammela wrote:
->> Add Raptor Lake client parts (both RPL and RPL_S) support to pmc core
->> driver. Raptor Lake client parts reuse all the Alder Lake PCH IPs.
+在 2022/10/13 下午1:24, Conor Dooley 写道:
+>
+> On 13 October 2022 03:28:09 IST, Xianting Tian <xianting.tian@linux.alibaba.com> wrote:
+>> 在 2022/10/12 下午5:52, Conor Dooley 写道:
+>>> On Wed, Oct 12, 2022 at 05:42:37PM +0800, Xianting Tian wrote:
+>>>> 在 2022/8/12 上午12:17, Palmer Dabbelt 写道:
+>>>>> On Thu, 11 Aug 2022 00:41:44 PDT (-0700),
+>>>>> xianting.tian@linux.alibaba.com wrote:
+>>>>>> I ever sent the patch 1 in the link:
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>> And patch 2,3 in the link:
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>>
+>>>>>> This patch set just put these patches together, and with three new
+>>>>>> patch 4, 5, 6.
+>>>>>> these six patches are the fixups for machine_kexec, kernel mode PC
+>>>>>> for vmcore
+>>>>>> and improvements for vmcoreinfo, memory layout dump and fixup
+>>>>>> schedule out issue
+>>>>>> in machine_crash_shutdown().
+>>>>>>
+>>>>>> The main changes in the six patchs as below,
+>>>>>> Patch 1: Fixup use of smp_processor_id() in preemptible context, to
+>>>>>> cleanup
+>>>>>>            the console prints.
+>>>>>> Patch 2: Fixup to get correct kernel mode PC for kernel mode regs
+>>>>>> for vmcore.
+>>>>>> Patch 3: Fixup schedule out issue in machine_crash_shutdown()
+>>>>>> Patch 4: Add modules to virtual kernel memory layout dump.
+>>>>>> Patch 5: Add VM layout, va bits, ram base to vmcoreinfo, which can
+>>>>>> simplify
+>>>>>>            the development of crash tool as ARM64 already did
+>>>>>>            (arch/arm64/kernel/crash_core.c).
+>>>>>> Patch 6: Updates vmcoreinfo.rst for vmcoreinfo export for RISCV64.
+>>>>>>
+>>>>>> With these six patches(patch 2 is must), crash tool can work well to
+>>>>>> analyze
+>>>>>> a vmcore. The patches for crash tool for RISCV64 is in the link:
+>>>>>> https://lore.kernel.org/linux-riscv/20220801043040.2003264-1-xianting.tian@linux.alibaba.com/
+>>>>>>
+>>>>>>
+>>>>>> ------
+>>>>>> Changes v1 -> v2:
+>>>>>>     1, remove the patch "Add a fast call path of crash_kexec()" from
+>>>>>> this series
+>>>>>>        of patches, as it already applied to riscv git.
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
+>>>>>>     2, add 'Reviewed-by' based on the comments of v1.
+>>>>>> Changes v2 -> v3:
+>>>>>>     use "riscv" instead of "riscv64" in patch 5 subject line.
+>>>>>> Changes v3 -> v4:
+>>>>>>     use "riscv" instead of "riscv64" in the summary of patch 5 subject
+>>>>>> line.
+>>>>>> Changes v4 -> v5:
+>>>>>>     add a new patch "RISC-V: Fixup schedule out issue in
+>>>>>> machine_crash_shutdown()"
+>>>>>> Changes v5 -> v6:
+>>>>>>     1, move "fixup" patches to the start of the patch set.
+>>>>>>     2, change patch 1, 2, 6's subject to make it tell more what it's
+>>>>>> about.
+>>>>>>     3, add Fixes for patch 3.
+>>>>>>     4, adjuest the changes format for patch 6.
+>>>>>>
+>>>>>>
+>>>>>> Xianting Tian (6):
+>>>>>>     RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+>>>>>>     RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+>>>>>>     RISC-V: Fixup schedule out issue in machine_crash_shutdown()
+>>>>>>     RISC-V: Add modules to virtual kernel memory layout dump
+>>>>>>     RISC-V: Add arch_crash_save_vmcoreinfo support
+>>>>>>     Documentation: kdump: describe VMCOREINFO export for RISCV64
+>>>>>>
+>>>>>>    .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
+>>>>>>    arch/riscv/kernel/Makefile                    |  1 +
+>>>>>>    arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+>>>>>>    arch/riscv/kernel/crash_save_regs.S           |  2 +-
+>>>>>>    arch/riscv/kernel/machine_kexec.c             | 28 ++++++++++++++---
+>>>>>>    arch/riscv/mm/init.c                          |  4 +++
+>>>>>>    6 files changed, 89 insertions(+), 6 deletions(-)
+>>>>>>    create mode 100644 arch/riscv/kernel/crash_core.c
+>>>>> Thank.  I've taken the first 4 onto for-next, which is still targeted
+>>>>> for 5.20, as they're fixes.  I'm not opposed to taking the documentation
+>>>>> patch for this cycle as well, it just needs some going-over as the
+>>>>> wording looks very odd (or at least it does to me right now, maybe I'm
+>>>>> just still half asleep).  Patch 5 is a new feature, and given that it's
+>>>>> being spun during the merge window it's too late.
+>>>> Hi Palmer
+>>>>
+>>>> Do you plan to merge the two patch to Linux 6.1 to support crash tool work?
+>>>> thanks
+>>>>
+>>>>     RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+>>> 357628e68f5c ("RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context"
+>>>
+>>>>     RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+>>> 59c026c359c3 ("RISC-V: Fixup get incorrect user mode PC for kernel mode regs")
+>>>
+>>> Hey Xianting, those two commits already seem to have been applied, do
+>>> you perhaps instead mean the documentation patch and the addition of
+>>> support for arch_crash_save_vmcoreinfo? I recalled asking if you needed
+>>> to respin at the time, but do not see a response:
+>>> https://lore.kernel.org/linux-riscv/39fdc85e-b2d5-863c-4878-4b3380d76bc4@microchip.com/
+>>> IIRC Bagas had some outstanding comments on the documentation change
+>>> too. Was I incorrect?
+>> Sorry, It is the two patches:
 >>
->> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
->> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Cc: David Box <david.e.box@intel.com>
->> Acked-by: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
->> Acked-by: Hans de Goede <hdegoede@redhat.com>
->> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
->> ---
->> Changes since v1:
->> 1) Added a dependency patch- ea902bcc1943f7539200ec464de3f54335588774 :
->>   "x86/cpu: Add new Raptor Lake CPU model number".
->> 2) Rebased the above patch on v6.0-rc1 with "Acked-by" from Hans and
->>   Rajneesh.
-> 
-> I still cannot take this, since patch 1/2 is *already merged* through
-> another tree, so me cherry-picking it leads to potential conflicts.
-> 
-> As I have already explained twice you need to submit this upstream
-> throuh the same tree which has the original merge of patch 1/2.
+>>    RISC-V: Add arch_crash_save_vmcoreinfo support
+>>    Documentation: kdump: describe VMCOREINFO export for RISCV64
+>>
+>> I saw Palmer already merged the two patches to his riscv-crash branch, it means they are OK?
+> Dunno, but no harm in resending given it's been a while cycle since then.
 
-Hi, friendly ping: has this ever happened, Gayatri?
+hi Conor
 
-thanks,
--- 
-js
-suse labs
+I submitted the new patch just now, please help review. thanks
 
+https://lkml.org/lkml/2022/10/14/150
+
+>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-crash
+>>
+>> I saw Bagas's comments, I will send new version patch for the two patches, thanks for the reminder.
+>>
+>>> Thanks,
+>>> Conor.
