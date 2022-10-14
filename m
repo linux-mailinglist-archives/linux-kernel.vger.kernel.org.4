@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFC85FE628
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070E45FE62B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiJNATe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 20:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S229698AbiJNATh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 20:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJNATb (ORCPT
+        with ESMTP id S229616AbiJNATb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Oct 2022 20:19:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5028B183D86;
-        Thu, 13 Oct 2022 17:19:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C591960BD;
+        Thu, 13 Oct 2022 17:19:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 647E7B8217A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DE89B8217C;
+        Fri, 14 Oct 2022 00:19:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85B8C433C1;
         Fri, 14 Oct 2022 00:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46CFC433C1;
-        Fri, 14 Oct 2022 00:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665706766;
-        bh=truyd6YXrnJgH30xs9lXfxt5wDtPtug7TuX2iG1sDRU=;
+        s=k20201202; t=1665706767;
+        bh=UtqJe2yzr571hejGyzSnhfiu4QkOMjFvnI+iTOa/KcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V+ecO9Q5WguXB07V4rM+vFlU1cbrhBaORj1CS2HmHDlG2OMUtstpFQfkqXMaOwZB7
-         xcXlTaAAUOI0c3p1Op48lhR8vpkWDcmDAxzNlvKXCWsZZZu4PMHUMnP6kUx38jhIQR
-         iruz4O2tYUuLAdCLWl7YDSGNB1xsUWfMVcLmNkd23EYAiSfHqh4Q7/gZJup/EHOpVF
-         Z6lUJjkM15/gXC0kQ7ZsWJ7Rh95ZirWZRYq0WWFw3ClqLuAqcUPZsUCQkH9VPK4vFf
-         zTL6t0PiQSvAegrPGDipBcfgPf/NYzhmtBD5yKs9yrgwVbHGUDRmbeIPz4/UaKequd
-         tBQc58bPO5ybA==
+        b=iE3Uc/CNWtRXjep3lCJtcXGzigxmiRm+vLpo+aJ5ZGQYg7E5EZoLj++x44PyUYQMP
+         sS4nPKWm1G/lWydOA1j7tDWbLmRyBd9jpocLXHdA+PTUmex/u4wozh631ulG63PtNC
+         zneflDJxF/Od95td0gQjsGqj/OwqUw49M9xDvDgorbMhzfZ0DH2WsWvHTUZA0zAq3J
+         olRVZPWeYeX78GEIdT5LeaJwTxWTQrsulAZxsKAiR1qOwBFNbj66Ppcyv+FxPodLW8
+         zAa7WI8dRcNjF5o2kEG9/MikbVSN1vIFE9c2QwZuDAibVla3+o/dJ0JBk+agnBIlqd
+         9Y7oL/Mqe666Q==
 From:   Bjorn Helgaas <helgaas@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Subject: [PATCH 1/3] sh: remove unused SLOW_DOWN_IO
-Date:   Thu, 13 Oct 2022 19:19:09 -0500
-Message-Id: <20221014001911.3342485-2-helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-ia64@vger.kernel.org
+Subject: [PATCH 2/3] ia64: remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions
+Date:   Thu, 13 Oct 2022 19:19:10 -0500
+Message-Id: <20221014001911.3342485-3-helgaas@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221014001911.3342485-1-helgaas@kernel.org>
 References: <20221014001911.3342485-1-helgaas@kernel.org>
@@ -56,77 +54,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bjorn Helgaas <bhelgaas@google.com>
 
-io.h defines SLOW_DOWN_IO only when CONF_SLOWDOWN_IO is defined, but
-CONF_SLOWDOWN_IO is never defined and is in fact explicitly undefined.
-Remove SLOW_DOWN_IO and related code.
-
-N.B. 37b7a97884ba ("sh: machvec IO death.") went to some trouble to add
-CONF_SLOWDOWN_IO and SLOW_DOWN_IO, for no obvious reason.  Maybe there was
-some out-of-tree case that used this.
+Remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions.
 
 Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: linux-sh@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
 ---
- arch/sh/include/asm/io.h | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+ arch/ia64/include/asm/io.h | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
-index fba90e670ed4..8d2df499b2fc 100644
---- a/arch/sh/include/asm/io.h
-+++ b/arch/sh/include/asm/io.h
-@@ -121,11 +121,6 @@ __BUILD_MEMORY_STRING(__raw_, q, u64)
+diff --git a/arch/ia64/include/asm/io.h b/arch/ia64/include/asm/io.h
+index ce66dfc0e719..83a492c8d298 100644
+--- a/arch/ia64/include/asm/io.h
++++ b/arch/ia64/include/asm/io.h
+@@ -23,10 +23,6 @@
+ #include <asm/unaligned.h>
+ #include <asm/early_ioremap.h>
  
- #ifdef CONFIG_HAS_IOPORT_MAP
- 
--/*
-- * Slowdown I/O port space accesses for antique hardware.
-- */
--#undef CONF_SLOWDOWN_IO
+-/* We don't use IO slowdowns on the ia64, but.. */
+-#define __SLOW_DOWN_IO	do { } while (0)
+-#define SLOW_DOWN_IO	do { } while (0)
 -
+ #define __IA64_UNCACHED_OFFSET	RGN_BASE(RGN_UNCACHED)
+ 
  /*
-  * On SuperH I/O ports are memory mapped, so we access them using normal
-  * load/store instructions. sh_io_port_base is the virtual address to
-@@ -145,13 +140,7 @@ static inline void __set_io_port_base(unsigned long pbase)
- extern void __iomem *__ioport_map(unsigned long addr, unsigned int size);
- #endif
- 
--#ifdef CONF_SLOWDOWN_IO
--#define SLOW_DOWN_IO __raw_readw(sh_io_port_base)
--#else
--#define SLOW_DOWN_IO
--#endif
--
--#define __BUILD_IOPORT_SINGLE(pfx, bwlq, type, p, slow)			\
-+#define __BUILD_IOPORT_SINGLE(pfx, bwlq, type, p)			\
- 									\
- static inline void pfx##out##bwlq##p(type val, unsigned long port)	\
- {									\
-@@ -159,7 +148,6 @@ static inline void pfx##out##bwlq##p(type val, unsigned long port)	\
- 									\
- 	__addr = __ioport_map(port, sizeof(type));			\
- 	*__addr = val;							\
--	slow;								\
- }									\
- 									\
- static inline type pfx##in##bwlq##p(unsigned long port)			\
-@@ -169,14 +157,13 @@ static inline type pfx##in##bwlq##p(unsigned long port)			\
- 									\
- 	__addr = __ioport_map(port, sizeof(type));			\
- 	__val = *__addr;						\
--	slow;								\
- 									\
- 	return __val;							\
- }
- 
- #define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
- 	__BUILD_IOPORT_SINGLE(bus, bwlq, type, ,)			\
--	__BUILD_IOPORT_SINGLE(bus, bwlq, type, _p, SLOW_DOWN_IO)
-+	__BUILD_IOPORT_SINGLE(bus, bwlq, type, _p,)
- 
- #define BUILDIO_IOPORT(bwlq, type)					\
- 	__BUILD_IOPORT_PFX(, bwlq, type)
 -- 
 2.25.1
 
