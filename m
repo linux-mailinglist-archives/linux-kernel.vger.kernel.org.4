@@ -2,71 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912A75FF17F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327E65FF185
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJNPgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S230476AbiJNPhm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Oct 2022 11:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiJNPgo (ORCPT
+        with ESMTP id S229703AbiJNPhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:36:44 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51572A417;
-        Fri, 14 Oct 2022 08:36:43 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 6359B35D;
-        Fri, 14 Oct 2022 15:36:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6359B35D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665761803; bh=JtRRNL01IJG8KRadM+8lM76wAHeKVUe2u8UMrU8vtmE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=r8jDfjapYw3nwvM3/GJ/GzAkihMfV797mWovQ5WS+0jzC9B6KOTleax8voAYe7rO2
-         FRZFnFvWwvbBJ/2IgtVo5Eqxxmo6oQCd+vptvqo6wsMI0M011Fg3HYb37LMNZkydfA
-         bNfNMPt9Bam5oAH3I7VjYUh63H93styUl+DpF7NMmgkw0iQzK4C89lMwxdCW58occq
-         y7jAwEy9FkEfHLQIqYDR54winL/InEtQp/bvseHhr6LngrtxvtuIDFgeqWM+z2Uldu
-         BbAfjAW4mEus17Ri08ZyHF4VbLVQ38bwDm88Y/RQ+uZ+hHwJE9vBGySJTmhFw7PBx0
-         MOSY3AIW8MiOA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu
-Subject: Re: [PATCH v2 1/2] Documentation: Start translations to Spanish
-In-Reply-To: <735f9ddc-01b4-f9ab-8d28-6d10630c994d@amd.com>
-References: <20221013184816.354278-1-carlos.bilbao@amd.com>
- <20221014142454.871196-1-carlos.bilbao@amd.com>
- <20221014142454.871196-2-carlos.bilbao@amd.com>
- <CANiq72=DuRw_0AiC7LtWA7n_0Rpsz3cExXj4YX4zu4o8RxugJA@mail.gmail.com>
- <735f9ddc-01b4-f9ab-8d28-6d10630c994d@amd.com>
-Date:   Fri, 14 Oct 2022 09:36:42 -0600
-Message-ID: <87bkqeh0xh.fsf@meer.lwn.net>
+        Fri, 14 Oct 2022 11:37:39 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526D816F414;
+        Fri, 14 Oct 2022 08:37:37 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mpr6Q34fGz689J2;
+        Fri, 14 Oct 2022 23:34:38 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 14 Oct 2022 17:37:34 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 14 Oct
+ 2022 16:37:34 +0100
+Date:   Fri, 14 Oct 2022 16:37:33 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+CC:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        "Jonathan Cameron" <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH 2/3] dt-bindings: iio: temperature: ltc2983: support
+ more parts
+Message-ID: <20221014163718.00000042@huawei.com>
+In-Reply-To: <20221014123724.1401011-3-demonsingur@gmail.com>
+References: <20221014123724.1401011-1-demonsingur@gmail.com>
+        <20221014123724.1401011-3-demonsingur@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Bilbao <carlos.bilbao@amd.com> writes:
+On Fri, 14 Oct 2022 15:37:23 +0300
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-> Thanks for your feedback, Miguel. I will wait to see if John has anything
-> to add before I share updated patches.
+> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> 
+> Add support for the following parts:
+>  * LTC2984
+>  * LTC2986
+>  * LTM2985
+> 
+> The LTC2984 is a variant of the LTC2983 with EEPROM.
+> The LTC2986 is a variant of the LTC2983 with only 10 channels,
+> EEPROM and support for active analog temperature sensors.
 
-I am, alas, not well qualified to judge a Spanish translation (leggo
-facilmente quello italiano, invece :), so I don't have anything to add
-there.
+If they 'work' but with fewer features, perhaps a fallback
+compatible?
 
-There's no hurry in any case, I'll not apply this before the merge
-window closes.
+> The LTM2985 is software-compatible with the LTC2986.
 
-Thanks,
+Fallback compatible?
 
-jon
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> ---
+>  .../bindings/iio/temperature/adi,ltc2983.yaml | 63 +++++++++++++++++--
+>  1 file changed, 59 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+> index 722781aa4697..c33ab524fb64 100644
+> --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+> +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
+> @@ -4,19 +4,27 @@
+>  $id: http://devicetree.org/schemas/iio/temperature/adi,ltc2983.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Analog Devices LTC2983 Multi-sensor Temperature system
+> +title: Analog Devices LTC2983, LTC2986, LTM2985 Multi-sensor Temperature system
+>  
+>  maintainers:
+>    - Nuno Sá <nuno.sa@analog.com>
+>  
+>  description: |
+> -  Analog Devices LTC2983 Multi-Sensor Digital Temperature Measurement System
+> +  Analog Devices LTC2983, LTC2984, LTC2986, LTM2985 Multi-Sensor Digital
+> +  Temperature Measurement Systems
+> +
+>    https://www.analog.com/media/en/technical-documentation/data-sheets/2983fc.pdf
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/2984fb.pdf
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/29861fa.pdf
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ltm2985.pdf
+>  
+>  properties:
+>    compatible:
+>      enum:
+>        - adi,ltc2983
+> +      - adi,ltc2984
+> +      - adi,ltc2986
+> +      - adi,ltm2985
+>  
+>    reg:
+>      maxItems: 1
+> @@ -26,7 +34,7 @@ properties:
+>  
+>    adi,mux-delay-config-us:
+>      description:
+> -      The LTC2983 performs 2 or 3 internal conversion cycles per temperature
+> +      The device performs 2 or 3 internal conversion cycles per temperature
+
+Definitely a lesson here in avoiding device names in the descriptions!
+
+>        result. Each conversion cycle is performed with different excitation and
+>        input multiplexer configurations. Prior to each conversion, these
+>        excitation circuits and input switch configurations are changed and an
+> @@ -145,7 +153,7 @@ patternProperties:
+>        adi,three-conversion-cycles:
+>          description:
+>            Boolean property which set's three conversion cycles removing
+> -          parasitic resistance effects between the LTC2983 and the diode.
+> +          parasitic resistance effects between the device and the diode.
+>          type: boolean
+>  
+>        adi,average-on:
+> @@ -353,6 +361,41 @@ patternProperties:
+>          description: Boolean property which set's the adc as single-ended.
+>          type: boolean
+>  
+> +  "^temp@":
+> +    type: object
+> +    description:
+> +      Represents a channel which is being used as an active analog temperature
+> +      sensor.
+> +
+> +    properties:
+> +      adi,sensor-type:
+> +        description:
+> +          Identifies the sensor as an active analog temperature sensor.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        const: 31
+
+Ah. This is a bit odd as it's fixed for the channel type.  However there
+is precedence in this binding so fair enough.
+
+> +
+> +      adi,single-ended:
+> +        description: Boolean property which sets the sensor as single-ended.
+> +        type: boolean
+> +
+> +      adi,custom-temp:
+> +        description:
+> +          This is a table, where each entry should be a pair of
+> +          voltage(mv)-temperature(K). The entries must be given in nv and uK
+> +          so that, the original values must be multiplied by 1000000. For
+> +          more details look at table 71 and 72.
+> +          Note should be signed, but dtc doesn't currently maintain the
+> +          sign.
+> +        $ref: /schemas/types.yaml#/definitions/uint64-matrix
+> +        minItems: 3
+> +        maxItems: 64
+> +        items:
+> +          minItems: 2
+> +          maxItems: 2
+> +
+> +    required:
+> +      - adi,custom-temp
+> +
+>    "^rsense@":
+>      type: object
+>      description:
+> @@ -382,6 +425,18 @@ required:
+>    - reg
+>    - interrupts
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,ltc2983
+> +              - adi,ltc2984
+> +    then:
+> +      patternProperties:
+> +        "^temp@": false
+> +
+>  additionalProperties: false
+>  
+>  examples:
+
