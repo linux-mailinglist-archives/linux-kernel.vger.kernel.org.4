@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6AE5FEAB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E035FEAC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiJNIpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S229694AbiJNIrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJNIo5 (ORCPT
+        with ESMTP id S229708AbiJNIrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:44:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200672FFCD;
-        Fri, 14 Oct 2022 01:44:56 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso7294825pjf.2;
-        Fri, 14 Oct 2022 01:44:56 -0700 (PDT)
+        Fri, 14 Oct 2022 04:47:08 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854BD9F37F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:47:07 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id sc25so8954516ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:47:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hNH6YoBt3tcXnXeC+JpDK2RRJ97XnIkMQVVSD5paWSc=;
-        b=j2XKkGkJutFBPNaV8FTo44sMK7ctnTAe0sd3KEU6ysVTjtWwocMLJyK5IJuuLaX9kf
-         geuIoL8Upwd2OhgAzsXNQMLSTGHNEqrwTv94obYpJleBC9vng/cZopg4MbWeNsSDIJH7
-         oPCR5TShBR3gNOJnWl+DIg0TLCLDMkD44ULCTWEETe80kbN1B44dOr360uuH+NBBKz1Y
-         Up/bSVXLAD0bhz+/z9PNebxCh0uY2tbsKxvx+dZmj0e9OlQOeMauHUE3CjgfH/s2ObKM
-         IrFjFSJA4eMLcCVIMY2lrRE3Xtu2ZE8SB0lf9ptpbSREwIkyeuQSUz6Vr+IrkE6jHKSA
-         8vwQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQiJsgQr5TBzKYI/UzuN+aYvAiaOIe2Dysr8E2kN8No=;
+        b=P63uH698engtPrPitLKkFMZZDMV9ltLDXjIjOsvY0gG1TKrDXtPn7dvgbOgEnjgm9R
+         vuSYj+7APn56QHIOtm36+p8PrdhEdDlePLuKKQ41JfeEt9uhscZxOOVwhoF7aD/aX+4F
+         acru0x7EQVj7P7zxe2cxC/EPfom8bo817otFReRYdnFM7lO42OboFdGpOplGuuleM84x
+         bBeXvTLxCD0SONDU6AWLTUHji8XkRWRotokcwKP0ZDgpkOH20oCOTHjBEFqaQPbJizqr
+         T3lqRO02kKsQQxw0qdkFgTqYdCiZK+yLzVYTJLtCve9RPGupQB8foKWEV6DJuNGceoPg
+         9fgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hNH6YoBt3tcXnXeC+JpDK2RRJ97XnIkMQVVSD5paWSc=;
-        b=WQfjWLlycn0AHJfSH/KPhSfPhYZ4UFXUV8rDLideMpykOTlsT2fdJ91itaz6SRg3gV
-         cklMzH71blt0Y7F9gaDxxvJhtku/snAN8iqiPSarmQKQfFDNmxSL8DB5Cr1iaJHhBx01
-         ENjtt9Qg28oZkDqk9RoyfD58j2QWKXYw2YgyBeLYKDAh9Y30Pjwh7Z/Ezjw+dBnvpNKO
-         KcB4a3Tl9VspOPAgfEEMiGTG/99LYmPCBXyTLAAQqj0nXiR65V79uMRu0ykp23T5s4fK
-         kUN11VY3AykftnpwOeIWq/VST4osrai0/fudpwp4RFlJu9XlusneJcgkMFnFnXf09uar
-         hLrQ==
-X-Gm-Message-State: ACrzQf0/Nf2Su0wFeFstVuSHWNDNHzk1QRFfg0/0Yw90C/Hktybr9FGi
-        z6YOzNvLP8ZDT4HIz7d4sJs=
-X-Google-Smtp-Source: AMsMyM5dINkItqbcUAq8EtcrNjLkOD7fdpnw8Gb6ct1dq67/4A03PwGhzJdAivyUQWdJEC0epO3Z/A==
-X-Received: by 2002:a17:902:d2cf:b0:17f:7b65:862f with SMTP id n15-20020a170902d2cf00b0017f7b65862fmr4019424plc.168.1665737095560;
-        Fri, 14 Oct 2022 01:44:55 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u125-20020a627983000000b005615c8a660csm1108630pfc.65.2022.10.14.01.44.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 01:44:54 -0700 (PDT)
-Message-ID: <e1003a0c-7388-9dce-3fc2-8a1f9288e23f@gmail.com>
-Date:   Fri, 14 Oct 2022 16:44:47 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kQiJsgQr5TBzKYI/UzuN+aYvAiaOIe2Dysr8E2kN8No=;
+        b=06k4ytRLlj+MMwIdylmKUHcD6x0o4nbvoPsMcUNhiBi/WI+LqGeOhiJgRnly3rrJ39
+         4hV2ohDvriHy+4qGGgcdjUEjLGAIFW5GY/LuwZ1a9LkU36A+kljoAh4/q6A8KorKUJDE
+         F2pBL1EHPo89yVXe1CxgRL2Dr70PCuzmhcNbO3r9uA9Yu6yWirKi53sVuTMTV/33RDK9
+         Nb7ys6jvaG8PVWSCRkLaU5SKXi0Ga3oem5bV/vjbyDbrSB3a+E+0Enm+A4Cx9Vp2Au9H
+         GtN/ll1rOvLfERCczVdmpqT4JgCsiEerWbA0tvntecGyMGzyPDAzw3KHnG+m8udCzjKJ
+         p+Bg==
+X-Gm-Message-State: ACrzQf2ebrXS56b6Yean262K8moAENXgWRkcOILwgea5OmDkW4h1ew/t
+        N8EZ1xG8OClhRFeulcU9fd9w6JARfZR1a+FH47GyDcdEFinE6w==
+X-Google-Smtp-Source: AMsMyM6CVSNNCeKIrx5gVla87CuZzPSu52JpjxtXVE399tVPbQQDzqtkT4pk6H8cORO7yUAcNd05DvkXQO4880fkyvU=
+X-Received: by 2002:a17:907:c18:b0:78d:8577:7c30 with SMTP id
+ ga24-20020a1709070c1800b0078d85777c30mr2626336ejc.413.1665737225935; Fri, 14
+ Oct 2022 01:47:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH v2 2/2] KVM: x86/pmu: Add PEBS support for SPR and future
- non-hybird models
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220922051929.89484-1-likexu@tencent.com>
- <20220922051929.89484-2-likexu@tencent.com> <Y0W/YR6gXhunJYry@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y0W/YR6gXhunJYry@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220929054500.488604-1-dzm91@hust.edu.cn> <96566993-e888-6d98-25a6-818dd4f2a327@oracle.com>
+In-Reply-To: <96566993-e888-6d98-25a6-818dd4f2a327@oracle.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Fri, 14 Oct 2022 16:45:02 +0800
+Message-ID: <CAD-N9QWdqwGZZFN02TyT=Ht2Fhe3NyodZPzssFN2n-0_YX8t1Q@mail.gmail.com>
+Subject: Re: [PATCH] fs: jfs: fix shift-out-of-bounds in dbAllocAG
+To:     Dave Kleikamp <dave.kleikamp@oracle.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        syzbot+15342c1aa6a00fb7a438@syzkaller.appspotmail.com,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,115 +68,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/2022 3:09 am, Sean Christopherson wrote:
-> Kind of a nit, but I would prefer a shortlog that talks about the pdit/pdir
-> stuff and not a "enable PEBS" bucket.
-> 
-> On Thu, Sep 22, 2022, Like Xu wrote:
->> @@ -140,6 +149,16 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
->>   	__kvm_perf_overflow(pmc, true);
->>   }
->>   
->> +static bool need_max_precise(struct kvm_pmc *pmc)
->> +{
->> +	if (pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu))
->> +		return true;
->> +	if (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu))
->> +		return true;
->> +
->> +	return false;
->> +}
->> +
->>   static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
->>   				  u64 config, bool exclude_user,
->>   				  bool exclude_kernel, bool intr)
->> @@ -181,11 +200,11 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
->>   		 * the accuracy of the PEBS profiling result, because the "event IP"
->>   		 * in the PEBS record is calibrated on the guest side.
->>   		 *
->> -		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
->> +		 * On Icelake everything is fine. Other hardware (TNT+) that
->>   		 * could possibly care here is unsupported and needs changes.
-> 
-> This part of the comment is still somewhat stale, and for me at least it's not at
-> all helpful.
+On Fri, Oct 14, 2022 at 4:55 AM Dave Kleikamp <dave.kleikamp@oracle.com> wrote:
+>
+> On 9/29/22 12:44AM, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > Syzbot found a crash : UBSAN: shift-out-of-bounds in dbAllocAG. The
+> > underlying bug is the missing check of bmp->db_agl2size. The field can
+> > be greater than 32 and trigger the shift-out-of-bounds.
+>
+> The shift is done to a 64-byte value, not 32.
+>
+> The volume can contain up to 2^43 blocks, which are divided up into 128
+> (2^7) aggregate groups, so each AG can have 2^36 blocks, which makes 36
+> a valid value for db_agl2size.
 
-SPR has GLC core, and this patch adds this support and removes the unsupported 
-statements.
-Not sure how else I may help you.
+Thanks for your explanation. Will send a v2 patch after testing in Syzbot.
 
-> 
->>   		 */
->>   		attr.precise_ip = 1;
->> -		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
->> +		if (need_max_precise(pmc))
->>   			attr.precise_ip = 3;
-> 
-> What about writing this as:
-> 
-> 		attr.precise_ip = pmc_get_pebs_precision(pmc);
-> 
-> (or whatever name is appropriate for "pebs_precision").
-
-The comment says, "the difference in the software precision levels of guest and
-host PEBS events will not affect the accuracy of the PEBS profiling result".
-
-> 
-> Then in the helper, add comments to explaint the magic numbers and the interaction
-> with PDIST and PDIR.  Bonus points if #defines for the the magic numbers can be
-> added somewher
-
-KVM just uses "precision_ip = 3" to request hw pdit/pdir counters from host perf,
-It only works at 3. For 1 or 2, there is no difference.
-
-> 
-> 				 *  0 - SAMPLE_IP can have arbitrary skid
-> 				 *  1 - SAMPLE_IP must have constant skid
-> 				 *  2 - SAMPLE_IP requested to have 0 skid
-> 				 *  3 - SAMPLE_IP must have 0 skid
-> 
-> static u64 pmc_get_pebs_precision(struct kvm_pmc *pmc)
-> {
-> 	/* Comment that explains why PDIST/PDIR require 0 skid? */
-> 	if ((pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu)) ||
-> 	    (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu)))
-> 		return 3;
-> 
-> 	/* Comment about constant skid? */
-> 	return 1;
-> }
-, therefore 0 or constant skid makes no difference.
-
-> 
-> 
->>   	}
->>   
->> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
->> index c5e5dfef69c7..4dc4bbe18821 100644
->> --- a/arch/x86/kvm/vmx/capabilities.h
->> +++ b/arch/x86/kvm/vmx/capabilities.h
->> @@ -398,7 +398,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
->>   
->>   static inline bool vmx_pebs_supported(void)
->>   {
->> -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
->> +	return boot_cpu_has(X86_FEATURE_PEBS) &&
->> +		!boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-> 
-> This belongs in a separate patch, and it should be ordered before patch 1 so that
-> there's no window where KVM can see pebs_ept==1 on a hybrid CPU.
-> 
-> Actually, shouldn't everything in this patch land before core enabling?
-
-Perf core enabling about SPR is already upstreamed.
-KVM support is not too late either, thanks to SPR's relentless delays.
-
-> 
->> +		kvm_pmu_cap.pebs_ept;
-> 
-> Please align indentation:
-> 
-> 	return boot_cpu_has(X86_FEATURE_PEBS) &&
-> 	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-> 	       kvm_pmu_cap.pebs_ept;
-> 
+>
+> >
+> > Fix this bug by adding a check of bmp->db_agl2size in dbMount since this
+> > field is used in many following functions. Note that, for maintainance,
+> > I reorganzie the error handling code of dbMount.
+> >
+> > Reported-by: syzbot+15342c1aa6a00fb7a438@syzkaller.appspotmail.com
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+> >   fs/jfs/jfs_dmap.c | 21 +++++++++++++++------
+> >   1 file changed, 15 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+> > index 6b838d3ae7c2..4c717f245920 100644
+> > --- a/fs/jfs/jfs_dmap.c
+> > +++ b/fs/jfs/jfs_dmap.c
+> > @@ -155,7 +155,7 @@ int dbMount(struct inode *ipbmap)
+> >       struct bmap *bmp;
+> >       struct dbmap_disk *dbmp_le;
+> >       struct metapage *mp;
+> > -     int i;
+> > +     int i, err;
+> >
+> >       /*
+> >        * allocate/initialize the in-memory bmap descriptor
+> > @@ -170,8 +170,8 @@ int dbMount(struct inode *ipbmap)
+> >                          BMAPBLKNO << JFS_SBI(ipbmap->i_sb)->l2nbperpage,
+> >                          PSIZE, 0);
+> >       if (mp == NULL) {
+> > -             kfree(bmp);
+> > -             return -EIO;
+> > +             err = -EIO;
+> > +             goto err_kfree_bmp;
+> >       }
+> >
+> >       /* copy the on-disk bmap descriptor to its in-memory version. */
+> > @@ -181,9 +181,8 @@ int dbMount(struct inode *ipbmap)
+> >       bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
+> >       bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
+> >       if (!bmp->db_numag) {
+> > -             release_metapage(mp);
+> > -             kfree(bmp);
+> > -             return -EINVAL;
+> > +             err = -EINVAL;
+> > +             goto err_release_metapage;
+> >       }
+> >
+> >       bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
+> > @@ -194,6 +193,10 @@ int dbMount(struct inode *ipbmap)
+> >       bmp->db_agwidth = le32_to_cpu(dbmp_le->dn_agwidth);
+> >       bmp->db_agstart = le32_to_cpu(dbmp_le->dn_agstart);
+> >       bmp->db_agl2size = le32_to_cpu(dbmp_le->dn_agl2size);
+> > +     if (bmp->db_agl2size >= 32) {
+>
+> I think the right number here is MAXMAPSIZE - L2MAXAG, so
+>
+>         if (bmp->db_agl2size > (MAXMAPSIZE - L2MAXAG)) {
+>
+> > +             err = -EINVAL;
+> > +             goto err_release_metapage;
+> > +     }
+> >       for (i = 0; i < MAXAG; i++)
+> >               bmp->db_agfree[i] = le64_to_cpu(dbmp_le->dn_agfree[i]);
+> >       bmp->db_agsize = le64_to_cpu(dbmp_le->dn_agsize);
+> > @@ -214,6 +217,12 @@ int dbMount(struct inode *ipbmap)
+> >       BMAP_LOCK_INIT(bmp);
+> >
+> >       return (0);
+> > +
+> > +err_release_metapage:
+> > +     release_metapage(mp);
+> > +err_kfree_bmp:
+> > +     kfree(bmp);
+> > +     return err;
+> >   }
+> >
+> >
