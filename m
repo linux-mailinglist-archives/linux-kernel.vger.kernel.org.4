@@ -2,205 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8635FE8AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19615FE8B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiJNGIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S229578AbiJNGJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiJNGIJ (ORCPT
+        with ESMTP id S229600AbiJNGJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:08:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6608B1633AE
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:08:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 14 Oct 2022 02:09:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36EF1A81C;
+        Thu, 13 Oct 2022 23:09:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 223391F461;
+        Fri, 14 Oct 2022 06:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665727784; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AxWuERTisS42uO91Wt9T0iy8s6OTDiXNii5dAiOnBhk=;
+        b=Nxo/ikEpdH8I7a0SGdrmaAbb4fW+h2hYvKpsXbklzXj9W1DDvPZuCfNALwZdahUzJsDanO
+        JszXxBImEQ/x/WJNcyRCosnTa9uIL/2nzvnTyYrAi6JvOoIhMlutytA5UJ1TzwVfnytbnG
+        bAtDwirnmkUgE3fY8GgyrHfTDFzuOdk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665727784;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AxWuERTisS42uO91Wt9T0iy8s6OTDiXNii5dAiOnBhk=;
+        b=JNOjO25PinlIFYvinteDhXuGesZl5wzU9xLRmUSBb+lwYlmqkuU8RapxfddqdKLVg3/OWm
+        M/IT+Q6Pf1fG5ZDg==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0140FB821B6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB011C43470
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665727683;
-        bh=pjo0EBaYOm3B/44XfyP4yUNEG3H60VNDBmXU8fIbsQY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DU064CD8Dfss2Qr05ts/ONK45RHGVd5hOuyM9nI9F6ReQsD1XWXQ2qa2HA1d5ngAb
-         dLP4pv1ncqnj/XFlnR2jpTZ/4n5JOqGBIC9PM8dvR7vrxO3Jkqo8Rjwn1wgwUbdX/a
-         8VJn6Sfny7Ttr89sZaqyiY3l4vvOLGHl34rndnP1+Rw7lm/xYaY9IL3Mtehmvv5eky
-         1VYw1aHCpNoJ2cbtE8Oh56kNW7zYPk5+cOJRzoozhby4Sqd43c4x7dBzWoAKijzIgj
-         y1msWi6LFwwLXMlTvLNbmkhJhnVEaV5kEArWRGuonHR23VzM7stZJmysmrBq9FfTnq
-         PkIoce67cCdpg==
-Received: by mail-ej1-f44.google.com with SMTP id 13so8337749ejn.3
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:08:03 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2LlIRXC6L9ZMegGEg3iwVCZ+5yN1DN2S/nWQVlPpDA6xQfZ9g/
-        NB9B2kPfuTeoV6vIt3UOvSCN4nJakTgXaG1uLGw=
-X-Google-Smtp-Source: AMsMyM4YfPEHVvqvhGf+VKX+WRNQB41i9RA3SXUZpmhhrJhka9iNvjat1Ogib0i/02e6PMecIesehaeahKg/ES15G6A=
-X-Received: by 2002:a17:907:8a0a:b0:78d:b87d:e68a with SMTP id
- sc10-20020a1709078a0a00b0078db87de68amr2289298ejc.301.1665727681841; Thu, 13
- Oct 2022 23:08:01 -0700 (PDT)
+        by relay2.suse.de (Postfix) with ESMTPS id A8A812C141;
+        Fri, 14 Oct 2022 06:09:43 +0000 (UTC)
+Date:   Fri, 14 Oct 2022 08:09:43 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     David Hildenbrand <david@redhat.com>
+cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+        Lin Liu <linl@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        petr.pavlu@suse.com
+Subject: Re: [PATCH v1] kernel/module: allocate module vmap space after making
+ sure the module is unique
+In-Reply-To: <20221013180518.217405-1-david@redhat.com>
+Message-ID: <alpine.LSU.2.21.2210140806130.17614@pobox.suse.cz>
+References: <20221013180518.217405-1-david@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20221007234315.2877365-1-song@kernel.org> <20221007234315.2877365-4-song@kernel.org>
- <Y0jcGjzjIYeFzNhv@ziqianlu-desk>
-In-Reply-To: <Y0jcGjzjIYeFzNhv@ziqianlu-desk>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 13 Oct 2022 23:07:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6qhyuo_M60_rgmK54eBQsestca5dz4wM+rRqpGkKBLAw@mail.gmail.com>
-Message-ID: <CAPhsuW6qhyuo_M60_rgmK54eBQsestca5dz4wM+rRqpGkKBLAw@mail.gmail.com>
-Subject: Re: [RFC v2 3/4] modules, x86: use vmalloc_exec for module core
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, x86@kernel.org, peterz@infradead.org,
-        hch@lst.de, kernel-team@fb.com, rick.p.edgecombe@intel.com,
-        dave.hansen@intel.com, urezki@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 8:49 PM Aaron Lu <aaron.lu@intel.com> wrote:
->
-> On Fri, Oct 07, 2022 at 04:43:14PM -0700, Song Liu wrote:
-> > This is a prototype that allows modules to share 2MB text pages with other
-> > modules and BPF programs.
-> >
-> > Current version only covers core_layout.
-> > ---
-> >  arch/x86/Kconfig              |  1 +
-> >  arch/x86/kernel/alternative.c | 30 ++++++++++++++++++++++++------
-> >  arch/x86/kernel/module.c      |  1 +
-> >  kernel/module/main.c          | 23 +++++++++++++----------
-> >  kernel/module/strict_rwx.c    |  3 ---
-> >  kernel/trace/ftrace.c         |  3 ++-
-> >  6 files changed, 41 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index f9920f1341c8..0b1ea05a1da6 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -91,6 +91,7 @@ config X86
-> >       select ARCH_HAS_SET_DIRECT_MAP
-> >       select ARCH_HAS_STRICT_KERNEL_RWX
-> >       select ARCH_HAS_STRICT_MODULE_RWX
-> > +     select ARCH_WANTS_MODULES_DATA_IN_VMALLOC       if X86_64
-> >       select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-> >       select ARCH_HAS_SYSCALL_WRAPPER
-> >       select ARCH_HAS_UBSAN_SANITIZE_ALL
-> > diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> > index 4f3204364caa..0e47a558c5bc 100644
-> > --- a/arch/x86/kernel/alternative.c
-> > +++ b/arch/x86/kernel/alternative.c
-> > @@ -332,7 +332,13 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
-> >
-> >               DUMP_BYTES(insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
-> >
-> > -             text_poke_early(instr, insn_buff, insn_buff_sz);
-> > +             if (system_state < SYSTEM_RUNNING) {
-> > +                     text_poke_early(instr, insn_buff, insn_buff_sz);
-> > +             } else {
-> > +                     mutex_lock(&text_mutex);
-> > +                     text_poke(instr, insn_buff, insn_buff_sz);
-> > +                     mutex_unlock(&text_mutex);
-> > +             }
-> >
-> >  next:
-> >               optimize_nops(instr, a->instrlen);
-> > @@ -503,7 +509,13 @@ void __init_or_module noinline apply_retpolines(s32 *start, s32 *end)
-> >                       optimize_nops(bytes, len);
-> >                       DUMP_BYTES(((u8*)addr),  len, "%px: orig: ", addr);
-> >                       DUMP_BYTES(((u8*)bytes), len, "%px: repl: ", addr);
-> > -                     text_poke_early(addr, bytes, len);
-> > +                     if (system_state == SYSTEM_BOOTING) {
-> > +                             text_poke_early(addr, bytes, len);
-> > +                     } else {
-> > +                             mutex_lock(&text_mutex);
-> > +                             text_poke(addr, bytes, len);
-> > +                             mutex_unlock(&text_mutex);
-> > +                     }
-> >               }
-> >       }
-> >  }
-> > @@ -568,7 +580,13 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end)
-> >               if (len == insn.length) {
-> >                       DUMP_BYTES(((u8*)addr),  len, "%px: orig: ", addr);
-> >                       DUMP_BYTES(((u8*)bytes), len, "%px: repl: ", addr);
-> > -                     text_poke_early(addr, bytes, len);
-> > +                     if (unlikely(system_state == SYSTEM_BOOTING)) {
-> > +                             text_poke_early(addr, bytes, len);
-> > +                     } else {
-> > +                             mutex_lock(&text_mutex);
-> > +                             text_poke(addr, bytes, len);
-> > +                             mutex_unlock(&text_mutex);
-> > +                     }
-> >               }
-> >       }
-> >  }
-> > @@ -609,7 +627,7 @@ void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end)
-> >                */
-> >               DUMP_BYTES(((u8*)addr), 4, "%px: orig: ", addr);
-> >               DUMP_BYTES(((u8*)&poison), 4, "%px: repl: ", addr);
-> > -             text_poke_early(addr, &poison, 4);
-> > +             text_poke(addr, &poison, 4);
-> >       }
-> >  }
-> >
-> > @@ -791,7 +809,7 @@ void __init_or_module apply_paravirt(struct paravirt_patch_site *start,
-> >
-> >               /* Pad the rest with nops */
-> >               add_nops(insn_buff + used, p->len - used);
-> > -             text_poke_early(p->instr, insn_buff, p->len);
-> > +             text_poke(p->instr, insn_buff, p->len);
->
-> Got below warning when booting a VM:
->
-> [    0.190098] ------------[ cut here ]------------
-> [    0.190377] WARNING: CPU: 0 PID: 0 at /home/aaron/linux/src/arch/x86/kernel/alternative.c:1224 text_poke+0x53/0x60
-> [    0.191083] Modules linked in:
-> [    0.191269] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-00004-gc49d19177d78 #5
-> [    0.191721] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-> [    0.192083] RIP: 0010:text_poke+0x53/0x60
-> [    0.192326] Code: c7 c7 20 e7 02 81 5b 5d e9 2a f8 ff ff be ff ff ff ff 48 c7 c7 b0 6d 06 83 48 89 14 24 e8 75 fd bf 00 85 c0 48 8b 14 24 75 c8 <0f> 0b eb c4 66 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 57 41 56
-> [    0.193083] RSP: 0000:ffffffff83003d60 EFLAGS: 00010246
-> [    0.194083] RAX: 0000000000000000 RBX: ffffffff810295b7 RCX: 0000000000000001
-> [    0.194506] RDX: 0000000000000006 RSI: ffffffff828b01c5 RDI: ffffffff8293898e
-> [    0.195083] RBP: ffffffff83003d82 R08: ffffffff82206520 R09: 0000000000000001
-> [    0.195506] R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff8a9949c0
-> [    0.195929] R13: ffffffff8a95f400 R14: 00000000ffffffff R15: 00000000ffffffff
-> [    0.196083] FS:  0000000000000000(0000) GS:ffff88842de00000(0000) knlGS:0000000000000000
-> [    0.196562] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.197083] CR2: ffff88843ffff000 CR3: 0000000003012001 CR4: 0000000000770ef0
-> [    0.197508] PKRU: 55555554
-> [    0.197673] Call Trace:
-> [    0.197822]  <TASK>
-> [    0.198084]  apply_paravirt+0xaf/0x150
-> [    0.198313]  ? __might_resched+0x3f/0x280
-> [    0.198557]  ? synchronize_rcu+0xe0/0x1c0
-> [    0.198799]  ? lock_release+0x230/0x450
-> [    0.199030]  ? _raw_spin_unlock_irqrestore+0x30/0x60
-> [    0.199083]  ? lockdep_hardirqs_on+0x79/0x100
-> [    0.199345]  ? _raw_spin_unlock_irqrestore+0x3b/0x60
-> [    0.199643]  ? atomic_notifier_chain_unregister+0x51/0x80
-> [    0.200084]  alternative_instructions+0x27/0xfa
-> [    0.200357]  check_bugs+0xe08/0xe82
-> [    0.200570]  start_kernel+0x692/0x6cc
-> [    0.200797]  secondary_startup_64_no_verify+0xe0/0xeb
-> [    0.201088]  </TASK>
-> [    0.201223] irq event stamp: 13575
-> [    0.201428] hardirqs last  enabled at (13583): [<ffffffff811193c2>] __up_console_sem+0x52/0x60
-> [    0.202083] hardirqs last disabled at (13592): [<ffffffff811193a7>] __up_console_sem+0x37/0x60
-> [    0.202594] softirqs last  enabled at (12762): [<ffffffff8117e169>] cgroup_idr_alloc.constprop.60+0x59/0x100
-> [    0.203083] softirqs last disabled at (12750): [<ffffffff8117e13d>] cgroup_idr_alloc.constprop.60+0x2d/0x100
-> [    0.203665] ---[ end trace 0000000000000000 ]---
->
-> Looks like it is also necessary to differentiate system_state in
-> apply_paravirt() like you did in the other apply_XXX() functions.
+Hi,
 
-Thanks for the report! Somehow I didn't see this in my qemu vm.
+On Thu, 13 Oct 2022, David Hildenbrand wrote:
 
-Song
+> We already make sure to allocate percpu data only after we verified that
+> the module we're loading hasn't already been loaded and isn't
+> concurrently getting loaded -- that it's unique.
+> 
+> On big systems (> 400 CPUs and many devices) with KASAN enabled, we're now
+> phasing a similar issue with the module vmap space.
+> 
+> When KASAN_INLINE is enabled (resulting in large module size), plenty
+> of devices that udev wants to probe and plenty (> 400) of CPUs that can
+> carry out that probing concurrently, we can actually run out of module
+> vmap space and trigger vmap allocation errors:
+> 
+> [  165.818200] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.836622] vmap allocation for size 315392 failed: use vmalloc=<size> to increase size
+> [  165.837461] vmap allocation for size 315392 failed: use vmalloc=<size> to increase size
+> [  165.840573] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.841059] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.841428] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.841819] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.842123] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.843359] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.844894] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.847028] CPU: 253 PID: 4995 Comm: systemd-udevd Not tainted 5.19.0 #2
+> [  165.935689] Hardware name: Lenovo ThinkSystem SR950 -[7X12ABC1WW]-/-[7X12ABC1WW]-, BIOS -[PSE130O-1.81]- 05/20/2020
+> [  165.947343] Call Trace:
+> [  165.950075]  <TASK>
+> [  165.952425]  dump_stack_lvl+0x57/0x81
+> [  165.956532]  warn_alloc.cold+0x95/0x18a
+> [  165.960836]  ? zone_watermark_ok_safe+0x240/0x240
+> [  165.966100]  ? slab_free_freelist_hook+0x11d/0x1d0
+> [  165.971461]  ? __get_vm_area_node+0x2af/0x360
+> [  165.976341]  ? __get_vm_area_node+0x2af/0x360
+> [  165.981219]  __vmalloc_node_range+0x291/0x560
+> [  165.986087]  ? __mutex_unlock_slowpath+0x161/0x5e0
+> [  165.991447]  ? move_module+0x4c/0x630
+> [  165.995547]  ? vfree_atomic+0xa0/0xa0
+> [  165.999647]  ? move_module+0x4c/0x630
+> [  166.003741]  module_alloc+0xe7/0x170
+> [  166.007747]  ? move_module+0x4c/0x630
+> [  166.011840]  move_module+0x4c/0x630
+> [  166.015751]  layout_and_allocate+0x32c/0x560
+> [  166.020519]  load_module+0x8e0/0x25c0
+> [  166.024623]  ? layout_and_allocate+0x560/0x560
+> [  166.029586]  ? kernel_read_file+0x286/0x6b0
+> [  166.034269]  ? __x64_sys_fspick+0x290/0x290
+> [  166.038946]  ? userfaultfd_unmap_prep+0x430/0x430
+> [  166.044203]  ? lock_downgrade+0x130/0x130
+> [  166.048698]  ? __do_sys_finit_module+0x11a/0x1c0
+> [  166.053854]  __do_sys_finit_module+0x11a/0x1c0
+> [  166.058818]  ? __ia32_sys_init_module+0xa0/0xa0
+> [  166.063882]  ? __seccomp_filter+0x92/0x930
+> [  166.068494]  do_syscall_64+0x59/0x90
+> [  166.072492]  ? do_syscall_64+0x69/0x90
+> [  166.076679]  ? do_syscall_64+0x69/0x90
+> [  166.080864]  ? do_syscall_64+0x69/0x90
+> [  166.085047]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+> [  166.090984]  ? lockdep_hardirqs_on+0x79/0x100
+> [  166.095855]  entry_SYSCALL_64_after_hwframe+0x63/0xcd[  165.818200] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> 
+> Interestingly, when reducing the number of CPUs (nosmt), it works as
+> expected.
+> 
+> The underlying issue is that we first allocate memory (including module
+> vmap space) in layout_and_allocate(), and then verify whether the module
+> is unique in add_unformed_module(). So we end up allocating module vmap
+> space even though we might not need it -- which is a problem when modules
+> are big and we can have a lot of concurrent probing of the same set of
+> modules as on the big system at hand.
+> 
+> Unfortunately, we cannot simply add the module earlier, because
+> move_module() -- that allocates the module vmap space -- essentially
+> brings the module to life from a temporary one. Adding the temporary one
+> and replacing it is also sub-optimal (because replacing it would require
+> to synchronize against RCU) and feels kind of dangerous judging that we
+> end up copying it.
+> 
+> So instead, add a second list (pending_load_infos) that tracks the modules
+> (via their load_info) that are unique and are still getting loaded
+> ("pending"), but haven't made it to the actual module list yet. This
+> shouldn't have a notable runtime overhead when concurrently loading
+> modules: the new list is expected to usually either be empty or contain
+> very few entries for a short time.
+> 
+> Thanks to Uladzislau for his help to verify that it's not actually a
+> vmap code issue.
+
+this seems to be related to what 
+https://lore.kernel.org/all/20220919123233.8538-1-petr.pavlu@suse.com/ 
+tries to solve. Just your symptoms are different. Does the patch set fix 
+your issue too?
+
+Regards
+Miroslav
