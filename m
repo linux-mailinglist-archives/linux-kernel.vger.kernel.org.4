@@ -2,87 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D164A5FEC78
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523795FECEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJNKVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S229698AbiJNLKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiJNKVP (ORCPT
+        with ESMTP id S229613AbiJNLKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:21:15 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F8E1B94E2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:21:13 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id t4so2782100wmj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dDU1EHry5n+XrvnahgNgah2Rjg065mq9PJm7gjM4LqY=;
-        b=weBpi7OT8CMZrlbpSnhba0XK7AN7li0KVaeNIC9WLH5il+FoUOWOHgPjMa3T2BLRFU
-         2JGX09gQtSGRZX5Mi1lO6g5KAuDbwwH1Atfg4qdGPoerf8g2ACU3nnJRIRdfWqY2C2aT
-         mMk08B6uAB4oYiaVBZEf4KgHaZfe+3XwOzVkCIpGq9W+uE2qVmcA6U2xajbUhH4K+z5v
-         FA/qF6pJbowGLw3i3s90YdZHizscizbVuMwnF/pJxMjzygUWSekeWhH8uR5ViLxfcvw6
-         I54tnjAKsZwvUVnfljwK5CoAHvHkZKmI9y1G8BGBxIQU3CnYVSuCBJHJ+R+DSLRaQ2u+
-         nILA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dDU1EHry5n+XrvnahgNgah2Rjg065mq9PJm7gjM4LqY=;
-        b=KwQeHX6sL2ou8NUm90hUf3gcQFTazXuHVhs7WNwPey6N8GkRTO5NZgEAR3GttBlVrV
-         1GnRjTaf4eL9BWkjLU0n2gJA2DDEXyJiSTJl1iOZLpLvc3q6wftXTDYkIt8v5yq4aZEN
-         Cxm7Qxv8yeYhfZxqUvKVoIe0YSbKAdzl25HeFYhTnhwMLvE+3QGDqrj/1V8RMnWC3wT6
-         bNzJ0aBBvvBoVFZlsxV6x1B9Y8dVduxmlYF3DO5ZLXoDIO5m6MoJf69P8385z2g6b/AL
-         S9lAosj2LTUkhNgTPMSYqm3bJgckSMLtUb/WAEleoac5x47KSHIlvmSEM2cvCWc5uUCv
-         2rHw==
-X-Gm-Message-State: ACrzQf2nVSf+gagi3GkfbjGXVwTQcBbWM/5WRzteXBrmdAMqiRxLqKhS
-        W9qHmogCRlDT6ervxCN4/BlV3OaxLpu6pg==
-X-Google-Smtp-Source: AMsMyM4hwqGQBIpE+BIeCKNhNjdJTVXdfNcXvl3ImrKVug9wu7yYYNOc/LK8urWEJtHZ5ZgSMDmCoA==
-X-Received: by 2002:a1c:f008:0:b0:3b4:fd2e:3ede with SMTP id a8-20020a1cf008000000b003b4fd2e3edemr9737880wmb.133.1665742872213;
-        Fri, 14 Oct 2022 03:21:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:b460:17f0:186d:9d2e? ([2a05:6e02:1041:c10:b460:17f0:186d:9d2e])
-        by smtp.googlemail.com with ESMTPSA id n17-20020a05600c465100b003c65c9a36dfsm1633633wmo.48.2022.10.14.03.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 03:21:11 -0700 (PDT)
-Message-ID: <f327dfc4-cd67-930c-a011-8cc2c58d7668@linaro.org>
-Date:   Fri, 14 Oct 2022 12:21:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] thermal/drivers/iwlwifi: Use generic
- thermal_zone_get_trip() function
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Nathan Errera <nathan.errera@intel.com>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>
-References: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
- <87mt9yn22w.fsf@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <87mt9yn22w.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Fri, 14 Oct 2022 07:10:00 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2EF248FE
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:09:55 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221014110953epoutp02cfbbd6083b28b559f7e437fb6cfb3849~d6vlEel971905819058epoutp02G
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:09:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221014110953epoutp02cfbbd6083b28b559f7e437fb6cfb3849~d6vlEel971905819058epoutp02G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1665745793;
+        bh=drQIuJSWxplbdrmSqi94xu4iCzrCrkKp7js1FjD7pio=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=tq2I/IEhnKRodIHvVU21HPJmi8wKOd7mzFMii7B7Fq0l00pszo4m70Z3yHMULMM7n
+         dsBKnNv8eAoWcTzFbzFGgh9XF5luRpmLHNCUmS7d2jkDuynT8MKvZep2mu8lADcVEk
+         Whd/a+8OGdvEq1w+RffvcRwwOvRiW9VoMHJTcA+Y=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20221014110952epcas5p11a5258e1f88485433db3d40d6e13ca86~d6vka0eVV0967309673epcas5p1_;
+        Fri, 14 Oct 2022 11:09:52 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4MpkDv0VCGz4x9Px; Fri, 14 Oct
+        2022 11:09:51 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AE.01.26992.E7349436; Fri, 14 Oct 2022 20:09:50 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221014104843epcas5p47f6daaad2e67e0c9eedd68c2256c025b~d6dGHtdk61505115051epcas5p44;
+        Fri, 14 Oct 2022 10:48:43 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221014104843epsmtrp1f2e0545eff7515ee01a22945843d750c~d6dGFpebY3160431604epsmtrp1j;
+        Fri, 14 Oct 2022 10:48:43 +0000 (GMT)
+X-AuditID: b6c32a49-319fb70000016970-ae-6349437e3d6b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        03.2C.18644.B8E39436; Fri, 14 Oct 2022 19:48:43 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221014104840epsmtip1fcd4e8faf2d2e9cdcaf053d95ed04d5a~d6dD78-cs2737027370epsmtip1S;
+        Fri, 14 Oct 2022 10:48:40 +0000 (GMT)
+From:   Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
+        alim.akhtar@samsung.com, rcsekar@samsung.com,
+        aswani.reddy@samsung.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Subject: [PATCH 0/6] ASoC: samsung: fsd: audio support for FSD SoC
+Date:   Fri, 14 Oct 2022 15:51:45 +0530
+Message-Id: <20221014102151.108539-1-p.rajanbabu@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnk+LIzCtJLcpLzFFi42LZdlhTU7fO2TPZ4OgnS4sH87axWVy5eIjJ
+        4tDmrewWUx8+YbOYf+Qcq0Xfi4fMFt+udDBZXN41h81ixvl9TBZHNwZbLNr6hd2ic1c/q8Ws
+        CztYLVr3HmG3OPymndViw/e1jA4CHhs+N7F57Jx1l91j06pONo871/aweex7u4zNo2/LKkaP
+        9Vuusnh83iQXwBGVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+Ti
+        E6DrlpkD9IGSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1
+        xMrQwMDIFKgwITtjw+I9LAVveSoetys3MJ7l7GLk5JAQMJHo/P6NtYuRi0NIYDejxMU1XYwQ
+        zidGidUvupggnM+MEjfen2HrYuQAazl1URsivotR4vfyeewQTiuTxKuD61hA5rIJmEqsmtMI
+        NldEoIlJou3NRBYQh1lgI6PE6WMPmUCqhAWcJL4cfMQIYrMIqEp8bd8J1s0rYCsx/+ZdVogL
+        5SVWbzjADNIsIdDJIdE/8TULRMJF4ufnKYwQtrDEq+Nb2CFsKYmX/W1Qdr7EtI/NbBB2hUTb
+        xw1MELa9xIErc1hA/mEW0JRYv0sfIiwrMfXUOrASZgE+id7fT6DKeSV2zIOxVSXWL98EtVZa
+        Yt/1vVC2h8TdG3/BbhYSiJU4fPEB+wRG2VkIGxYwMq5ilEwtKM5NTy02LTDMSy2Hx1Ryfu4m
+        RnDK1PLcwXj3wQe9Q4xMHIyHGCU4mJVEeF8reSYL8aYkVlalFuXHF5XmpBYfYjQFhtlEZinR
+        5Hxg0s4riTc0sTQwMTMzM7E0NjNUEuddPEMrWUggPbEkNTs1tSC1CKaPiYNTqoHJ5aOTPM+b
+        t9pHbaMr2A9NL2SL1Wi74tvzRUesiGdZW3fW64fTXt3wvnK369w3D//dX2z9HytLzpc8UWl7
+        Zf3nWQnM6zjiGU7tsi9dUhddfeREmcCe/wXfWf5L2OubGvMFvZ224ax66iGjzhdvwhP0Qpyz
+        F3msin37XDNTV8Ytau++tTUuAqf7ZizKiHhiFScYadF968Q6Z8X+RYeNy88wtRoEzFxyVXpL
+        ffHk9NkzGr27M/jLVTYGLbSSlt5vqfX40I9utqfLV/e5G7TcLZxw9unZqC18S/Lqb3/sWfsw
+        umwp00+HSpbWF8HbTftPa4aIvAye+Fr8sdbx0/rLtc8dqZ/TFCX58qSfmGjf0g9KLMUZiYZa
+        zEXFiQDpFQPNIgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJLMWRmVeSWpSXmKPExsWy7bCSnG63nWeywYGZXBYP5m1js7hy8RCT
+        xaHNW9ktpj58wmYx/8g5Vou+Fw+ZLb5d6WCyuLxrDpvFjPP7mCyObgy2WLT1C7tF565+VotZ
+        F3awWrTuPcJucfhNO6vFhu9rGR0EPDZ8bmLz2DnrLrvHplWdbB53ru1h89j3dhmbR9+WVYwe
+        67dcZfH4vEkugCOKyyYlNSezLLVI3y6BK2PD4j0sBW95Kh63KzcwnuXsYuTgkBAwkTh1UbuL
+        kYtDSGAHo8Tjy8uYuhg5geLSEtP797BB2MISK/89Z4coamaSeLF0KSNIgk3AVGLVnEZWkISI
+        wAQmiZPvjrGAJJgFtjJKTP1sBGILCzhJfDn4CKyBRUBV4mv7TrAaXgFbifk377JCbJCXWL3h
+        APMERp4FjAyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGCQ1dLawfjnlUf9A4xMnEw
+        HmKU4GBWEuF9reSZLMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgs
+        EwenVANTuMzFVr8LG19fdqosP7Eov+vSRBvTN8uilj82SteuKOg0O3FqZ1BhTHOE8xZP0dIz
+        u9dl2ysc2Bwze9OKXae9b+ZdSGvvKl9a/Znt8IZ79gtNPWY/eCk+u9AtJbvtn3rC5BOv9ptI
+        fZpYuPrI88ci7cw7OxzWb5jM8N9j8Yqpa0O87bwXfU/2tmfu+MpzRPVpSpTa9WOuZS9Fzv/7
+        e7rmqITZMv81l235JE3k1oVoblPVu8+VvlPcwqtx3hJ3hqrZnNpqeucvbayz7bnZqfRCJuwM
+        /70V55vjFErnVi4X/HoxJn1V8H9hJ+71gVYfDHI37MjPCj/1/uTCCI1+Oem4rgO/b09XXLw8
+        1+ujy9uzSizFGYmGWsxFxYkA8X98b8wCAAA=
+X-CMS-MailID: 20221014104843epcas5p47f6daaad2e67e0c9eedd68c2256c025b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221014104843epcas5p47f6daaad2e67e0c9eedd68c2256c025b
+References: <CGME20221014104843epcas5p47f6daaad2e67e0c9eedd68c2256c025b@epcas5p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,45 +117,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 12:15, Kalle Valo wrote:
-> Daniel Lezcano <daniel.lezcano@linaro.org> writes:
-> 
->> The thermal framework gives the possibility to register the trip
->> points with the thermal zone. When that is done, no get_trip_* ops are
->> needed and they can be removed.
->>
->> The get_trip_temp, get_trip_hyst and get_trip_type are handled by the
->> get_trip_point().
->>
->> The set_trip_temp() generic function does some checks which are no
->> longer needed in the set_trip_point() ops.
->>
->> Convert ops content logic into generic trip points and register them
->> with the thermal zone.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h |  2 +-
->>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c  | 71 ++++----------------
->>   2 files changed, 13 insertions(+), 60 deletions(-)
-> 
-> The subject should begin with "wifi: iwlwifi: ".
-> 
-> I don't see patch 2. Via which tree is the plan for this patch?
+The intention of this patch series is to enable audio support on FSD SoC.
 
-patch 2 are similar changes but related to the mellanox driver.
+The following features are added in samsung I2S interface:
+1. Add TDM support on samsung I2S interface
+2. Allow sound card to directly configure prescaler divider instead of
+calculating it from frame clock
 
-This is the continuation of the trip point rework:
+Also the sound card support for FSD SoC is added, which utilizes samsung
+I2S interface as CPU DAI.
 
-https://lore.kernel.org/netdev/20221003092602.1323944-22-daniel.lezcano@linaro.org/t/
+This patch is dependent on fsd-pinctrl fixes patch series [1]
+[1]: https://lkml.org/lkml/2022/10/13/257
 
-This patch is planned to go through the thermal tree
+Padmanabhan Rajanbabu (6):
+  ASoC: samsung: i2s: TDM Support for CPU DAI driver
+  ASoC: samsung: i2s: configure PSR from sound card
+  dt-bindings: sound: Add sound card bindings for Tesla FSD
+  ASoC: samsung: fsd: Add FSD soundcard driver
+  arm64: dts: fsd: Add I2S DAI node for Tesla FSD
+  arm64: dts: fsd: Add sound card node for Tesla FSD
 
-Sorry I should have mentioned that.
+ .../bindings/sound/tesla,fsd-card.yaml        | 158 ++++++++
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |  57 +++
+ arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi    |  14 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  41 ++
+ sound/soc/samsung/Kconfig                     |  12 +
+ sound/soc/samsung/Makefile                    |   2 +
+ sound/soc/samsung/fsd-card.c                  | 349 ++++++++++++++++++
+ sound/soc/samsung/i2s-regs.h                  |  17 +
+ sound/soc/samsung/i2s.c                       | 120 +++++-
+ sound/soc/samsung/i2s.h                       |   1 +
+ 10 files changed, 766 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/tesla,fsd-card.yaml
+ create mode 100644 sound/soc/samsung/fsd-card.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
