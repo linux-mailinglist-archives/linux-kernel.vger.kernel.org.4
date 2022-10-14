@@ -2,165 +2,557 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AA65FF23D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0AC5FF241
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiJNQ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S230375AbiJNQ1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiJNQ0v (ORCPT
+        with ESMTP id S230324AbiJNQ1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:26:51 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B561D103F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:26:49 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso8060694pjq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h1RXoRckstVb64Zu+F1W32N42yM60nxrLN8ZPInKuxo=;
-        b=m/3oQYy3MIFFJC/h1U8wCfy0YRay4gwaS4HXwRWu2JP+4vy5pXAup7/SDQukrMh3/o
-         O/v7+22bdN5KhmSQ4wzhiMDJQjwYSMrQAYaHFZd45rvbzaubn4OmH/7iZbUwAln9ndvs
-         4pr2yBKusDUtjqhYG89/L2iSo61jwd8DvDvhqXElLNm6RUaL4MQGu6EWjPp9dqhhK35d
-         HQWlSo4OTxppTIRwHNU3U/838VrxsEtXZDg3Uuuxr/G20Au0uwus1iybc0G2UzQuE7np
-         kgmWSeQSpTY0XznejcPJBD/oukKXb2S77OzX3Ki1xEVTDD9gmn6sFCzRpy5XPi3Puxv+
-         0U6Q==
+        Fri, 14 Oct 2022 12:27:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85A31D1E33
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665764857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gWQFQj7gvmQlpOAvJJGpEIR/W6rMI9tCdbEcuViyKiM=;
+        b=QgZQpXlKyRXsL4Wtfr5efNZt9gALRyVOPBl+2bru/9Lx5OKiXHjtKaJ0U5WOVoLRAunMnK
+        ZyGH3tTHKXZtPZRECm2KpqeyWJtMdEtt1ME7mkozIaknrWdyw3wpKg7TvY32Qd+a2QwYGp
+        c1HaEWDpTV3GrifRaPQp008Xp+tNY5s=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-658-NH_SorwsMlGMZ_STtg7YxQ-1; Fri, 14 Oct 2022 12:27:35 -0400
+X-MC-Unique: NH_SorwsMlGMZ_STtg7YxQ-1
+Received: by mail-ot1-f69.google.com with SMTP id w17-20020a9d70d1000000b006619151992bso1586873otj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:27:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h1RXoRckstVb64Zu+F1W32N42yM60nxrLN8ZPInKuxo=;
-        b=0fuXYLJY4uh57Zw27Y3IGj4fzwFmSk2DBA8+I015GurxeVUQTWG0U3Og+oyhVDlkI0
-         mAtNP67SHMaaC9jc8ahrGqMnB94yrIULrK8/U/+QsHytRw0GVHOlqyaUwCzNTfxXbKO5
-         SEDuDvpmzed7TD9oZCDQLlqPYjpFvtUKa4azdlZnoy9Y3doQ4z2zMEhR28BlHsNq148D
-         2Edaw0HVO1xDvHc06JVMAUYyHbIJGf3Lfed2MYoQlOmtSAPcof4onp8mQznqWOAvYOFa
-         5nKzs5D+Vd+r3du2m4vP1QvTNkp/LeKxKUH17EmYKiDKuttVug9PSVV/pQexHZgqVhPS
-         rwgw==
-X-Gm-Message-State: ACrzQf2lkI6GsDK0d+VC3GgT9G1FDEbfAzV85hHrgWoH4iEhKKbsaUHW
-        XL/Y0aDQU4I2jm+o/DZEr0ZdFw==
-X-Google-Smtp-Source: AMsMyM4Qx0bT+j0Nq4kEAkLDzEZzpTIqW0tcJOtc/EriGOjKLLenS5eDVt8GVaVguViHKVfhOpGfXQ==
-X-Received: by 2002:a17:90b:2247:b0:20d:a2be:95ae with SMTP id hk7-20020a17090b224700b0020da2be95aemr11935369pjb.244.1665764808417;
-        Fri, 14 Oct 2022 09:26:48 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016c50179b1esm1923881pli.152.2022.10.14.09.26.47
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gWQFQj7gvmQlpOAvJJGpEIR/W6rMI9tCdbEcuViyKiM=;
+        b=5D9fCqquq/c806al1NGGY0Uvs7WR4YPicNHu30q79b1YGbQQ7U7RBJiQu7SoLKeXXH
+         YktnSoteTxMD+b2qSVOGSPcFYkQUdaiPd94tUB/oY+ihow3HEsH3wAA3vK5RcZPrOpfC
+         aZ3QAGPpV9Xr+cCp54s9EozIovK1imelt1rXpHopxdLQG4q0hqx3TDx5RyDycZNgom90
+         Bo+9huOOi8Ge+egc4SayJy2fnxPf+viB2DpugxlIoKKAG4X649s5gwDz4aIK5+sSmLjY
+         0jWQjmde9X293dkOvH+IFFU6Yi9gUkRlNyRu+aChILAF/QUU1gMD+WSS31XdXzybSv3w
+         UOAw==
+X-Gm-Message-State: ACrzQf0IycjdamKxlzUoIKteeWEBZX5wT4+DClgcCrirsImJBxwslG84
+        KiJzjxiITJ6bbWxcDf4NhSWN6pJbMSDbB8WG1ey8tkeDDFM+WvA48T0AJGGBO5NhDftEDFZyTwE
+        oq0DNmZw++H+eez4oemj95je/
+X-Received: by 2002:a05:6870:2054:b0:132:d1fb:ddf0 with SMTP id l20-20020a056870205400b00132d1fbddf0mr9025883oad.283.1665764855082;
+        Fri, 14 Oct 2022 09:27:35 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5rG/MQ7wNzObW4bY3Eu9bywv7qJQUN8nIWFMTkDev7VaPb9LOJXDmUMNlynrjXphiKqEHA5Q==
+X-Received: by 2002:a05:6870:2054:b0:132:d1fb:ddf0 with SMTP id l20-20020a056870205400b00132d1fbddf0mr9025853oad.283.1665764854746;
+        Fri, 14 Oct 2022 09:27:34 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a801:baa9:f002:974b:318a:f9b? ([2804:1b3:a801:baa9:f002:974b:318a:f9b])
+        by smtp.gmail.com with ESMTPSA id f23-20020a9d7b57000000b00661b5e95173sm1404752oto.35.2022.10.14.09.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 09:26:48 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 16:26:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 2/4] KVM: x86/pmu: Clear "reprogram" bit if counter is
- disabled or disallowed
-Message-ID: <Y0mNxJGpXPAwKLML@google.com>
-References: <20220923001355.3741194-1-seanjc@google.com>
- <20220923001355.3741194-3-seanjc@google.com>
- <2a83292b-a4d0-8d5e-b52a-31b7fcad2de6@gmail.com>
+        Fri, 14 Oct 2022 09:27:34 -0700 (PDT)
+Message-ID: <7249d33e5b3e7d63b1b2a0df2b43e7a6f2082cf9.camel@redhat.com>
+Subject: Re: [PATCH v2 3/4] sched/isolation: Add HK_TYPE_WQ to
+ isolcpus=domain
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Phil Auld <pauld@redhat.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wang Yufen <wangyufen@huawei.com>, mtosatti@redhat.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        fweisbec@gmail.com
+Date:   Fri, 14 Oct 2022 13:27:25 -0300
+In-Reply-To: <20221014132410.GA1108603@lothringen>
+References: <20221013184028.129486-1-leobras@redhat.com>
+         <20221013184028.129486-4-leobras@redhat.com>
+         <Y0kfgypRPdJYrvM3@hirez.programming.kicks-ass.net>
+         <20221014132410.GA1108603@lothringen>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a83292b-a4d0-8d5e-b52a-31b7fcad2de6@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022, Like Xu wrote:
-> For subject title, the "reprogram" bit is _only_ used to keep track of
-> pmc->perf_event,
-> not whether the counter is disabled.
-> 
-> On 23/9/2022 8:13 am, Sean Christopherson wrote:
-> > When reprogramming a counter, clear the counter's "reprogram pending" bit
-> > if the counter is disabled (by the guest) or is disallowed (by the
-> > userspace filter).  In both cases, there's no need to re-attempt
-> > programming on the next coincident KVM_REQ_PMU as enabling the counter by
-> > either method will trigger reprogramming.
-> 
-> Perhaps we could move the check_pmu_event_filter() towards the top of the
-> call stack.
+On Fri, 2022-10-14 at 15:24 +0200, Frederic Weisbecker wrote:
+> On Fri, Oct 14, 2022 at 10:36:19AM +0200, Peter Zijlstra wrote:
+> >=20
+> > + Frederic; who actually does most of this code
+> >=20
+> > On Thu, Oct 13, 2022 at 03:40:28PM -0300, Leonardo Bras wrote:
+> > > Housekeeping code keeps multiple cpumasks in order to keep track of w=
+hich
+> > > cpus can perform given housekeeping category.
+> > >=20
+> > > Every time the HK_TYPE_WQ cpumask is checked before queueing work at =
+a cpu
+> > > WQ it also happens to check for HK_TYPE_DOMAIN. So It can be assumed =
+that
+> > > the Domain isolation also ends up isolating work queues.
+> > >=20
+> > > Delegating current HK_TYPE_DOMAIN's work queue isolation to HK_TYPE_W=
+Q
+> > > makes it simpler to check if a cpu can run a task into an work queue,=
+ since
+> > > code just need to go through a single HK_TYPE_* cpumask.
+> > >=20
+> > > Make isolcpus=3Ddomain aggregate both HK_TYPE_DOMAIN and HK_TYPE_WQ, =
+and
+> > > remove a lot of cpumask_and calls.
+> > >=20
+> > > Also, remove a unnecessary '|=3D' at housekeeping_isolcpus_setup() si=
+nce we
+> > > are sure that 'flags =3D=3D 0' here.
+> > >=20
+> > > Signed-off-by: Leonardo Bras <leobras@redhat.com>
+> >=20
+> > I've long maintained that having all these separate masks is daft;
+> > Frederic do we really need that?
+>=20
+> Indeed. In my queue for the cpuset interface to nohz_full, I have the fol=
+lowing
+> patch (but note DOMAIN and WQ have to stay seperate flags because workque=
+ue
+> affinity can be modified seperately from isolcpus)
+>=20
+> ---
+> From: Frederic Weisbecker <frederic@kernel.org>
+> Date: Tue, 26 Jul 2022 17:03:30 +0200
+> Subject: [PATCH] sched/isolation: Gather nohz_full related isolation feat=
+ures
+>  into common flag
+>=20
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> ---
+>  arch/x86/kvm/x86.c              |  2 +-
+>  drivers/pci/pci-driver.c        |  2 +-
+>  include/linux/sched/isolation.h |  7 +------
+>  kernel/cpu.c                    |  4 ++--
+>  kernel/kthread.c                |  4 ++--
+>  kernel/rcu/tasks.h              |  2 +-
+>  kernel/rcu/tree_plugin.h        |  6 +++---
+>  kernel/sched/core.c             | 10 +++++-----
+>  kernel/sched/fair.c             |  6 +++---
+>  kernel/sched/isolation.c        | 25 +++++++------------------
+>  kernel/watchdog.c               |  2 +-
+>  kernel/workqueue.c              |  2 +-
+>  net/core/net-sysfs.c            |  2 +-
+>  13 files changed, 29 insertions(+), 45 deletions(-)
+>=20
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 1910e1e78b15..d0b73fcf4a1c 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9009,7 +9009,7 @@ int kvm_arch_init(void *opaque)
+>  	}
+> =20
+>  	if (pi_inject_timer =3D=3D -1)
+> -		pi_inject_timer =3D housekeeping_enabled(HK_TYPE_TIMER);
+> +		pi_inject_timer =3D housekeeping_enabled(HK_TYPE_NOHZ_FULL);
+>  #ifdef CONFIG_X86_64
+>  	pvclock_gtod_register_notifier(&pvclock_gtod_notifier);
+> =20
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 49238ddd39ee..af3494a39921 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -378,7 +378,7 @@ static int pci_call_probe(struct pci_driver *drv, str=
+uct pci_dev *dev,
+>  			goto out;
+>  		}
+>  		cpumask_and(wq_domain_mask,
+> -			    housekeeping_cpumask(HK_TYPE_WQ),
+> +			    housekeeping_cpumask(HK_TYPE_NOHZ_FULL),
+>  			    housekeeping_cpumask(HK_TYPE_DOMAIN));
+> =20
+>  		cpu =3D cpumask_any_and(cpumask_of_node(node),
+> diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolat=
+ion.h
+> index 8c15abd67aed..7ca34e04abe7 100644
+> --- a/include/linux/sched/isolation.h
+> +++ b/include/linux/sched/isolation.h
+> @@ -6,15 +6,10 @@
+>  #include <linux/tick.h>
+> =20
+>  enum hk_type {
+> -	HK_TYPE_TIMER,
+> -	HK_TYPE_RCU,
+> -	HK_TYPE_MISC,
+> +	HK_TYPE_NOHZ_FULL,
+>  	HK_TYPE_SCHED,
+> -	HK_TYPE_TICK,
+>  	HK_TYPE_DOMAIN,
+> -	HK_TYPE_WQ,
+>  	HK_TYPE_MANAGED_IRQ,
+> -	HK_TYPE_KTHREAD,
+>  	HK_TYPE_MAX
+>  };
+> =20
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index bbad5e375d3b..573f14d75a2e 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -1500,8 +1500,8 @@ int freeze_secondary_cpus(int primary)
+>  	cpu_maps_update_begin();
+>  	if (primary =3D=3D -1) {
+>  		primary =3D cpumask_first(cpu_online_mask);
+> -		if (!housekeeping_cpu(primary, HK_TYPE_TIMER))
+> -			primary =3D housekeeping_any_cpu(HK_TYPE_TIMER);
+> +		if (!housekeeping_cpu(primary, HK_TYPE_NOHZ_FULL))
+> +			primary =3D housekeeping_any_cpu(HK_TYPE_NOHZ_FULL);
+>  	} else {
+>  		if (!cpu_online(primary))
+>  			primary =3D cpumask_first(cpu_online_mask);
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index 544fd4097406..0719035feba0 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -355,7 +355,7 @@ static int kthread(void *_create)
+>  	 * back to default in case they have been changed.
+>  	 */
+>  	sched_setscheduler_nocheck(current, SCHED_NORMAL, &param);
+> -	set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_KTHREAD));
+> +	set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_NOHZ_FULL));
+> =20
+>  	/* OK, tell user we're spawned, wait for stop or wakeup */
+>  	__set_current_state(TASK_UNINTERRUPTIBLE);
+> @@ -721,7 +721,7 @@ int kthreadd(void *unused)
+>  	/* Setup a clean context for our children to inherit. */
+>  	set_task_comm(tsk, "kthreadd");
+>  	ignore_signals(tsk);
+> -	set_cpus_allowed_ptr(tsk, housekeeping_cpumask(HK_TYPE_KTHREAD));
+> +	set_cpus_allowed_ptr(tsk, housekeeping_cpumask(HK_TYPE_NOHZ_FULL));
+>  	set_mems_allowed(node_states[N_MEMORY]);
+> =20
+>  	current->flags |=3D PF_NOFREEZE;
+> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> index f5bf6fb430da..b99f79625b26 100644
+> --- a/kernel/rcu/tasks.h
+> +++ b/kernel/rcu/tasks.h
+> @@ -537,7 +537,7 @@ static int __noreturn rcu_tasks_kthread(void *arg)
+>  	struct rcu_tasks *rtp =3D arg;
+> =20
+>  	/* Run on housekeeping CPUs by default.  Sysadm can move if desired. */
+> -	housekeeping_affine(current, HK_TYPE_RCU);
+> +	housekeeping_affine(current, HK_TYPE_NOHZ_FULL);
+>  	WRITE_ONCE(rtp->kthread_ptr, current); // Let GPs start!
+> =20
+>  	/*
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index b2219577fbe2..4935b06c3caf 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -1237,9 +1237,9 @@ static void rcu_boost_kthread_setaffinity(struct rc=
+u_node *rnp, int outgoingcpu)
+>  		if ((mask & leaf_node_cpu_bit(rnp, cpu)) &&
+>  		    cpu !=3D outgoingcpu)
+>  			cpumask_set_cpu(cpu, cm);
+> -	cpumask_and(cm, cm, housekeeping_cpumask(HK_TYPE_RCU));
+> +	cpumask_and(cm, cm, housekeeping_cpumask(HK_TYPE_NOHZ_FULL));
+>  	if (cpumask_empty(cm))
+> -		cpumask_copy(cm, housekeeping_cpumask(HK_TYPE_RCU));
+> +		cpumask_copy(cm, housekeeping_cpumask(HK_TYPE_NOHZ_FULL));
+>  	set_cpus_allowed_ptr(t, cm);
+>  	mutex_unlock(&rnp->boost_kthread_mutex);
+>  	free_cpumask_var(cm);
+> @@ -1294,5 +1294,5 @@ static void rcu_bind_gp_kthread(void)
+>  {
+>  	if (!tick_nohz_full_enabled())
+>  		return;
+> -	housekeeping_affine(current, HK_TYPE_RCU);
+> +	housekeeping_affine(current, HK_TYPE_NOHZ_FULL);
+>  }
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f53c0096860b..5ff205f39197 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1079,13 +1079,13 @@ int get_nohz_timer_target(void)
+>  	struct sched_domain *sd;
+>  	const struct cpumask *hk_mask;
+> =20
+> -	if (housekeeping_cpu(cpu, HK_TYPE_TIMER)) {
+> +	if (housekeeping_cpu(cpu, HK_TYPE_NOHZ_FULL)) {
+>  		if (!idle_cpu(cpu))
+>  			return cpu;
+>  		default_cpu =3D cpu;
+>  	}
+> =20
+> -	hk_mask =3D housekeeping_cpumask(HK_TYPE_TIMER);
+> +	hk_mask =3D housekeeping_cpumask(HK_TYPE_NOHZ_FULL);
+> =20
+>  	rcu_read_lock();
+>  	for_each_domain(cpu, sd) {
+> @@ -1101,7 +1101,7 @@ int get_nohz_timer_target(void)
+>  	}
+> =20
+>  	if (default_cpu =3D=3D -1)
+> -		default_cpu =3D housekeeping_any_cpu(HK_TYPE_TIMER);
+> +		default_cpu =3D housekeeping_any_cpu(HK_TYPE_NOHZ_FULL);
+>  	cpu =3D default_cpu;
+>  unlock:
+>  	rcu_read_unlock();
+> @@ -5562,7 +5562,7 @@ static void sched_tick_start(int cpu)
+>  	int os;
+>  	struct tick_work *twork;
+> =20
+> -	if (housekeeping_cpu(cpu, HK_TYPE_TICK))
+> +	if (housekeeping_cpu(cpu, HK_TYPE_NOHZ_FULL))
+>  		return;
+> =20
+>  	WARN_ON_ONCE(!tick_work_cpu);
+> @@ -5583,7 +5583,7 @@ static void sched_tick_stop(int cpu)
+>  	struct tick_work *twork;
+>  	int os;
+> =20
+> -	if (housekeeping_cpu(cpu, HK_TYPE_TICK))
+> +	if (housekeeping_cpu(cpu, HK_TYPE_NOHZ_FULL))
+>  		return;
+> =20
+>  	WARN_ON_ONCE(!tick_work_cpu);
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 77b2048a9326..ac3b33e00451 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -10375,7 +10375,7 @@ static inline int on_null_domain(struct rq *rq)
+>   * - When one of the busy CPUs notice that there may be an idle rebalanc=
+ing
+>   *   needed, they will kick the idle load balancer, which then does idle
+>   *   load balancing for all the idle CPUs.
+> - * - HK_TYPE_MISC CPUs are used for this task, because HK_TYPE_SCHED not=
+ set
+> + * - HK_TYPE_NOHZ_FULL CPUs are used for this task, because HK_TYPE_SCHE=
+D not set
+>   *   anywhere yet.
+>   */
+> =20
+> @@ -10384,7 +10384,7 @@ static inline int find_new_ilb(void)
+>  	int ilb;
+>  	const struct cpumask *hk_mask;
+> =20
+> -	hk_mask =3D housekeeping_cpumask(HK_TYPE_MISC);
+> +	hk_mask =3D housekeeping_cpumask(HK_TYPE_NOHZ_FULL);
+> =20
+>  	for_each_cpu_and(ilb, nohz.idle_cpus_mask, hk_mask) {
+> =20
+> @@ -10400,7 +10400,7 @@ static inline int find_new_ilb(void)
+> =20
+>  /*
+>   * Kick a CPU to do the nohz balancing, if it is time for it. We pick an=
+y
+> - * idle CPU in the HK_TYPE_MISC housekeeping set (if there is one).
+> + * idle CPU in the HK_TYPE_NOHZ_FULL housekeeping set (if there is one).
+>   */
+>  static void kick_ilb(unsigned int flags)
+>  {
+> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+> index 4087718ee5b4..443f1ce83e32 100644
+> --- a/kernel/sched/isolation.c
+> +++ b/kernel/sched/isolation.c
+> @@ -4,20 +4,15 @@
+>   *  any CPU: unbound workqueues, timers, kthreads and any offloadable wo=
+rk.
+>   *
+>   * Copyright (C) 2017 Red Hat, Inc., Frederic Weisbecker
+> - * Copyright (C) 2017-2018 SUSE, Frederic Weisbecker
+> + * Copyright (C) 2017-2022 SUSE, Frederic Weisbecker
+>   *
+>   */
+> =20
+>  enum hk_flags {
+> -	HK_FLAG_TIMER		=3D BIT(HK_TYPE_TIMER),
+> -	HK_FLAG_RCU		=3D BIT(HK_TYPE_RCU),
+> -	HK_FLAG_MISC		=3D BIT(HK_TYPE_MISC),
+> +	HK_FLAG_NOHZ_FULL	=3D BIT(HK_TYPE_NOHZ_FULL),
+>  	HK_FLAG_SCHED		=3D BIT(HK_TYPE_SCHED),
+> -	HK_FLAG_TICK		=3D BIT(HK_TYPE_TICK),
+>  	HK_FLAG_DOMAIN		=3D BIT(HK_TYPE_DOMAIN),
+> -	HK_FLAG_WQ		=3D BIT(HK_TYPE_WQ),
+>  	HK_FLAG_MANAGED_IRQ	=3D BIT(HK_TYPE_MANAGED_IRQ),
+> -	HK_FLAG_KTHREAD		=3D BIT(HK_TYPE_KTHREAD),
+>  };
+> =20
+>  DEFINE_STATIC_KEY_FALSE(housekeeping_overridden);
+> @@ -88,7 +83,7 @@ void __init housekeeping_init(void)
+> =20
+>  	static_branch_enable(&housekeeping_overridden);
+> =20
+> -	if (housekeeping.flags & HK_FLAG_TICK)
+> +	if (housekeeping.flags & HK_FLAG_NOHZ_FULL)
+>  		sched_tick_offload_init();
+> =20
+>  	for_each_set_bit(type, &housekeeping.flags, HK_TYPE_MAX) {
+> @@ -111,7 +106,7 @@ static int __init housekeeping_setup(char *str, unsig=
+ned long flags)
+>  	cpumask_var_t non_housekeeping_mask, housekeeping_staging;
+>  	int err =3D 0;
+> =20
+> -	if ((flags & HK_FLAG_TICK) && !(housekeeping.flags & HK_FLAG_TICK)) {
+> +	if ((flags & HK_FLAG_NOHZ_FULL) && !(housekeeping.flags & HK_FLAG_NOHZ_=
+FULL)) {
+>  		if (!IS_ENABLED(CONFIG_NO_HZ_FULL)) {
+>  			pr_warn("Housekeeping: nohz unsupported."
+>  				" Build with CONFIG_NO_HZ_FULL\n");
+> @@ -163,7 +158,7 @@ static int __init housekeeping_setup(char *str, unsig=
+ned long flags)
+>  			housekeeping_setup_type(type, housekeeping_staging);
+>  	}
+> =20
+> -	if ((flags & HK_FLAG_TICK) && !(housekeeping.flags & HK_FLAG_TICK))
+> +	if ((flags & HK_FLAG_NOHZ_FULL) && !(housekeeping.flags & HK_FLAG_NOHZ_=
+FULL))
+>  		tick_nohz_full_setup(non_housekeeping_mask);
+> =20
+>  	housekeeping.flags |=3D flags;
+> @@ -179,12 +174,7 @@ static int __init housekeeping_setup(char *str, unsi=
+gned long flags)
+> =20
+>  static int __init housekeeping_nohz_full_setup(char *str)
+>  {
+> -	unsigned long flags;
+> -
+> -	flags =3D HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_RCU |
+> -		HK_FLAG_MISC | HK_FLAG_KTHREAD;
+> -
+> -	return housekeeping_setup(str, flags);
+> +	return housekeeping_setup(str, HK_FLAG_NOHZ_FULL);
+>  }
+>  __setup("nohz_full=3D", housekeeping_nohz_full_setup);
+> =20
+> @@ -198,8 +188,7 @@ static int __init housekeeping_isolcpus_setup(char *s=
+tr)
+>  	while (isalpha(*str)) {
+>  		if (!strncmp(str, "nohz,", 5)) {
+>  			str +=3D 5;
+> -			flags |=3D HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER |
+> -				HK_FLAG_RCU | HK_FLAG_MISC | HK_FLAG_KTHREAD;
+> +			flags |=3D HK_FLAG_NOHZ_FULL;
+>  			continue;
+>  		}
+> =20
+> diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+> index 20a7a55e62b6..3e9636f4bac6 100644
+> --- a/kernel/watchdog.c
+> +++ b/kernel/watchdog.c
+> @@ -852,7 +852,7 @@ void __init lockup_detector_init(void)
+>  		pr_info("Disabling watchdog on nohz_full cores by default\n");
+> =20
+>  	cpumask_copy(&watchdog_cpumask,
+> -		     housekeeping_cpumask(HK_TYPE_TIMER));
+> +		     housekeeping_cpumask(HK_TYPE_NOHZ_FULL));
+> =20
+>  	if (!watchdog_nmi_probe())
+>  		nmi_watchdog_available =3D true;
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 1ea50f6be843..3eb283d76d81 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -5993,7 +5993,7 @@ void __init workqueue_init_early(void)
+>  	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long=
+));
+> =20
+>  	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
+> -	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
+> +	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_NOHZ_FULL=
+));
+>  	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumas=
+k(HK_TYPE_DOMAIN));
+> =20
+>  	pwq_cache =3D KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+> diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+> index e319e242dddf..6dddf359b754 100644
+> --- a/net/core/net-sysfs.c
+> +++ b/net/core/net-sysfs.c
+> @@ -852,7 +852,7 @@ static ssize_t store_rps_map(struct netdev_rx_queue *=
+queue,
+> =20
+>  	if (!cpumask_empty(mask)) {
+>  		cpumask_and(mask, mask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+> -		cpumask_and(mask, mask, housekeeping_cpumask(HK_TYPE_WQ));
+> +		cpumask_and(mask, mask, housekeeping_cpumask(HK_TYPE_NOHZ_FULL));
+>  		if (cpumask_empty(mask)) {
+>  			free_cpumask_var(mask);
+>  			return -EINVAL;
 
-Top of what call stack exactly?  reprogram_counter() has multiple callers, and
-the filter check is already near the top of reprogram_counter().
+Hello Frederic,
 
-> > @@ -245,7 +245,6 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
-> >   	perf_event_enable(pmc->perf_event);
-> >   	pmc->is_paused = false;
-> > -	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
-> 
-> This change is very suspicious.
+So, IIUC you are removing all flags composing nohz_full=3D parameter in fav=
+or of a
+unified NOHZ_FULL flag.=20
 
-In the current code, pmc_resume_counter() clears the bit iff it returns true.
-With this patch, reprogram_counter() is guarnteed to clear the bit if
-pmc_resume_counter() returns true.
+I am very new to the code, and I am probably missing the whole picture, but=
+ I
+actually think it's a good approach to keep them split for a couple reasons=
+:
+1 - They are easier to understand in code (IMHO):=C2=A0
+"This cpu should not do this, because it's not able to do WQ housekeeping" =
+looks
+better than "because it's not in DOMAIN or NOHZ_FULL housekeeping"
 
-	if (pmc->current_config == new_config && pmc_resume_counter(pmc))
-		goto reprogram_complete;
+2 - They are simpler for using:=C2=A0
+Suppose we have this function that should run at a WQ, but we want to keep =
+them
+out of the isolated cpus. If we have the unified flags, we need to combine =
+both
+DOMAIN and NOHZ_FULL bitmasks, and then combine it again with something lik=
+e
+cpu_online_mask. It usually means allocating a new cpumask_t, and also free=
+ing
+it afterwards.
+If we have a single WQ flag, we can avoid the allocation altogether by usin=
+g
+for_each_cpu_and(), making the code much simpler.
 
-	pmc_release_perf_event(pmc);
+3 - It makes easier to compose new isolation modes:
+In case the future requires a new isolation mode that also uses the types o=
+f
+isolation we currently have implemented, it would be much easier to just co=
+mpose
+it with the current HK flags, instead of having to go through all usages an=
+d do
+a cpumask_and() there. Also, new isolation modes would make (2) worse.
 
-	pmc->current_config = new_config;
+What I am able see as a pro in "unified flag" side, is that getting all the
+multiple flags doing their jobs should be a lot of trouble.=20
 
-	/*
-	 * If reprogramming fails, e.g. due to contention, leave the counter's
-	 * regprogram bit set, i.e. opportunistically try again on the next PMU
-	 * refresh.  Don't make a new request as doing so can stall the guest
-	 * if reprogramming repeatedly fails.
-	 */
-	if (pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
-				  (eventsel & pmu->raw_event_mask),
-				  !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
-				  !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
-				  eventsel & ARCH_PERFMON_EVENTSEL_INT))
-		return;
+While I do understand you are much more experienced than me on that, and th=
+at
+your decision is more likely to be better,=C2=A0I am unable to see the argu=
+ments that
+helped you reach it.=C2=A0
 
-reprogram_complete:
-	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
-	pmc->prev_counter = 0;
+Could you please point them, so I can better understand the decision?
 
-> > @@ -324,16 +323,27 @@ void reprogram_counter(struct kvm_pmc *pmc)
-> >   	}
-> >   	if (pmc->current_config == new_config && pmc_resume_counter(pmc))
-> > -		return;
-> > +		goto reprogram_complete;
-> >   	pmc_release_perf_event(pmc);
-> >   	pmc->current_config = new_config;
-> > -	pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
-> > -			      (eventsel & pmu->raw_event_mask),
-> > -			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
-> > -			      !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
-> > -			      eventsel & ARCH_PERFMON_EVENTSEL_INT);
-> > +
-> > +	/*
-> > +	 * If reprogramming fails, e.g. due to contention, leave the counter's
-> > +	 * regprogram bit set, i.e. opportunistically try again on the next PMU
-> 
-> This is what we need, in the upstream case we need to keep trying regprogram
-> to try to occupy the hardware.
+Best regards,
+Leo
 
-Maybe in an ideal world, but in reality KVM can't guarantee that programming will
-ever succeed.  Making a new KVM_REQ_PMU will prevent entering the guest, i.e. will
-effectively hang the vCPU.  Breaking the vPMU isn't great, but hanging the guest
-is worse.
-
-> > +	 * refresh.  Don't make a new request as doing so can stall the guest
-> > +	 * if reprogramming repeatedly fails.
-> 
-> This does not happen, the guest still enters w/p perf_event backend support
-> and the vPMU is broken until the next vm-exit.
-> 
-> There is no need to endlessly call kvm_pmu_handle_event() when reprogram fails.
-
-Yes, that's what the above comment is calling out, or at least trying to call out.
