@@ -2,106 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D24C5FF476
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16255FF478
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiJNUTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S231361AbiJNUTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiJNUT1 (ORCPT
+        with ESMTP id S230179AbiJNUTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:19:27 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689481D3C57
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:19:26 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y8so5873145pfp.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M8IVK8k7k9gOGjXG9NHmvjgor4/KedW5P7/8L1lQGUs=;
-        b=l7NuPTgKJF77glfTg5wUM0i6Q1IBcSYKNmIAmbVOrS58xzVMla3V3aoAS25ZQIUKQi
-         dbJi/3AGnfBgfwfQsywObFaIUWAEy3rJ41PT8pwaNNaS4VLPsBVEdBrEi+z4af3TsPRS
-         zR+hhvenq+Tzp4+/xhyTQDKDrx/rgaqXIoRHftUS6gljtbwBt3XwZulKmH4NCRZa4gc7
-         8jsphkevXa52aYaPftluIg3M62is4x/ZdDMdi3WCNvxSnJcAIFBeAJsmERI0DKCykVQs
-         3VIoXi58mU1wngSQkYfJiSMJMDjF67PPnEcfgW3X9Z7wWBv69C6cI6ipKt1pxq3JMo2+
-         oSGg==
+        Fri, 14 Oct 2022 16:19:46 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A83CB87E;
+        Fri, 14 Oct 2022 13:19:42 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id g11so4419737qts.1;
+        Fri, 14 Oct 2022 13:19:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M8IVK8k7k9gOGjXG9NHmvjgor4/KedW5P7/8L1lQGUs=;
-        b=Jc1ZZJnTxjIqhBfXOXAxz0C0J1xphVzQL/RuGBayv1HTI+IIStQD1HjZDt5RJZ0KPz
-         +XTzX8VBp3hDzSLyxWEwnC8QqeBI0mvML8rumxoQGUm5RVV9tZASv/HrQmFID3gIkJRz
-         Y9NNn6g4pCQfnIgG8C3zdg5p2BBDMweZEPYuU4LlirN9BCg2ozq2qjr4XpO6eZXXfqi7
-         vYE7P26AY9dN+eyD5LxgFuiLZXKKcSEqR8kjOFmFm/1HSJKdGlU32DKBqtjk1Hh2Vh07
-         s+EA//rIBskQFDKvT1AQxjFaZHKDs+9657lrAiu3tRDOjvKNLwGxMAEz1dr9vzuyuC9v
-         gn5w==
-X-Gm-Message-State: ACrzQf2oySTBIdEd3/d8OXWZts4MWjFJADDKBsIv11sPApuZnkaHomfr
-        AeALXglLsOYdaRSjI12/Dibwv6regA1bJ5dbGFh1nQ==
-X-Google-Smtp-Source: AMsMyM7RQNAQa92JkPff2Imw1hV4Xm/n13lNelqA2N++jhAukEo0EG4H91O/ZREacbcJ1MI4faUBQ8OOZaYb5XFCoFs=
-X-Received: by 2002:a63:80c7:0:b0:46b:2ccb:ff93 with SMTP id
- j190-20020a6380c7000000b0046b2ccbff93mr3283676pgd.403.1665778765642; Fri, 14
- Oct 2022 13:19:25 -0700 (PDT)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6pM02CqWA47CT6v/gwwczEldB1iRqNTULNyxzzkOdng=;
+        b=Y6XkSlRQ1jiEy0xc+tB5EtYB74U7B8laojyMGBUTzMJNBV35iQ+H5gmMQXDT3b99m3
+         a5HYMCyYBpYu/fA4kTr2ljIdneKSeIpcXWoGn8TXgCJ1Z9R1QY5Q6WEEFolowTHD/ScB
+         4LiLmGQzHM/b6HsiWTvxQsWqcovj/03PO15coQGVaBD0n12u9C5tJqnIqc6EsFgToWr1
+         HKX8hdPgbpK6DS9+ilht/5X4J2Lm6ReEnDxRMI0J+g+FYPsl1ARBM0sg7Yqab9eRQu1h
+         cjQZZlU6B6dvVdQyAPRMaPuIElZpObiFv//1Cw5KFSzEzoE5lSvp6rcsGUq2n0ugBfZU
+         FvyA==
+X-Gm-Message-State: ACrzQf1TBc0QDhoabG3IkM/3pZaF/aNZkfF8g6s9RUdu2MKWpNxKzlAc
+        9MK9EDhHZyDmuDutPEu33cXZ0hBrKhenXg==
+X-Google-Smtp-Source: AMsMyM79WpvIJ1lNm5YNc6eSlg3vqL5Nlc0ah+YPD/r0+PzYa1vdSNOBksCB8pmgCMceZXbMOGWAXQ==
+X-Received: by 2002:ac8:7f94:0:b0:39c:dd8f:59f3 with SMTP id z20-20020ac87f94000000b0039cdd8f59f3mr1351931qtj.46.1665778780797;
+        Fri, 14 Oct 2022 13:19:40 -0700 (PDT)
+Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::6918])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05622a148e00b00398313f286dsm2806264qtx.40.2022.10.14.13.19.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 13:19:40 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 15:19:39 -0500
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, tj@kernel.org, memxor@gmail.com
+Subject: Re: [PATCH v3 1/3] bpf: Allow trusted pointers to be passed to
+ KF_TRUSTED_ARGS kfuncs
+Message-ID: <Y0nEW14JcWPqRCMO@maniforge.dhcp.thefacebook.com>
+References: <20221014201427.2435461-1-void@manifault.com>
+ <20221014201427.2435461-2-void@manifault.com>
 MIME-Version: 1.0
-References: <20221012180118.331005-1-masahiroy@kernel.org> <Y0mIUW7Ozx9tseeG@dev-arch.thelio-3990X>
-In-Reply-To: <Y0mIUW7Ozx9tseeG@dev-arch.thelio-3990X>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 14 Oct 2022 13:19:13 -0700
-Message-ID: <CAKwvOdmm9FsH2G76bZ2Qr5Bbnbdb55JwONP5WG7oa_iMZUycXQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] kbuild: move -Werror from KBUILD_CFLAGS to KBUILD_CPPFLAGS
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014201427.2435461-2-void@manifault.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 9:03 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Oct 13, 2022 at 03:01:17AM +0900, Masahiro Yamada wrote:
-> > CONFIG_WERROR turns warnings into errors, which  happens only for *.c
-> > files because -Werror is added to KBUILD_CFLAGS.
-> >
-> > Adding it to KBUILD_CPPFLAGS makes more sense because preprocessors
-> > understand the -Werror option.
-> >
-> For what it's worth, this is going to break 32-bit ARM builds with clang
-> plus the integrated assembler due to
-> https://github.com/ClangBuiltLinux/linux/issues/1315:
->
-> clang-16: error: argument unused during compilation: '-march=armv7-a' [-Werror,-Wunused-command-line-argument]
+On Fri, Oct 14, 2022 at 03:14:25PM -0500, David Vernet wrote:
 
-Ah, sorry, I should have finished off that series back then. I've
-rebased the series and sent a v4.
-https://lore.kernel.org/llvm/20221014201354.3190007-1-ndesaulniers@google.com/
+[...]
 
-You mentioned to me on IRC
-https://lore.kernel.org/linux-next/CAK7LNARg8OpqLR_71PJV3ZoLuDV8+mz9mphg=CzEeEEMY0G3rw@mail.gmail.com/
-maybe will be a conflict.
+> @@ -5768,6 +5778,9 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+>  	if (arg_type & PTR_MAYBE_NULL)
+>  		type &= ~PTR_MAYBE_NULL;
+>  
+> +	if (!(arg_type & ARG_PTR_TO_BTF_ID))
+> +		type &= ~PTR_NESTED;
+> +
 
->
-> Ultimately, I want -Wunused-command-line-argument to be an error anyways
-> (https://github.com/ClangBuiltLinux/linux/issues/1587) but it would be
-> nice to get these cleaned up before this goes in.
->
-> Cheers,
-> Nathan
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Argh, I added while debugging something and I meant to remove it before
+sending out the next version.  I'll send out v4 shortly without this,
+apologies for the noise.
