@@ -2,75 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3D65FEA62
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82665FEA60
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiJNIUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S230095AbiJNIUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJNIUa (ORCPT
+        with ESMTP id S230087AbiJNIUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:20:30 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6483436BD0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:20:25 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=momi.ca; s=key1;
-        t=1665735623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Bw0wTiwP6eGlELX8NIJk0Tm4ksdmqLG9LGmsYlRymk=;
-        b=DxnwpwKzDp7ZA1Sfmx+f9x4RwPJ9BqtIQyWWVDppD26mzTUot0WFd4+BsYIFhVyHCDtvDm
-        +HlPJI/iCP5NquLwXcnTjXuP8FO94iN8I7aqxy8I65hTVpHM3A7Bu8Axt8iLQvoz0wpau8
-        YHvTPNcJKS/qxDLP6dFE6CFdsDEe3hQbS43FgQ4AtxmwN7gJz8bqnVO8FZmrQas9ibpVyf
-        f6jBIfixz1/hrhjg4Ep/BjBwg+b+0NUH9R9zEX6E7sR135jYd1LgKWnrGjTcKyOdBffTJC
-        px68uDru0ZN784DbabN3Q1RxPWCTeXjHw/YWD8ydf5WHQ3RP9p3Yt+U0knjrXA==
-From:   Anjandev Momi <anjan@momi.ca>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Anjandev Momi <anjan@momi.ca>
-Subject: [PATCH 4/4] Staging: rtl8192e: add blank line after function declaration
-Date:   Fri, 14 Oct 2022 01:18:40 -0700
-Message-Id: <20221014081839.23902-5-anjan@momi.ca>
-In-Reply-To: <20221014081839.23902-1-anjan@momi.ca>
-References: <20221014081839.23902-1-anjan@momi.ca>
+        Fri, 14 Oct 2022 04:20:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0896EA0261;
+        Fri, 14 Oct 2022 01:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06F7FB82270;
+        Fri, 14 Oct 2022 08:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9553EC433D7;
+        Fri, 14 Oct 2022 08:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665735614;
+        bh=J76X/xI3ZYRL0g1Sf6dnSW0VX7I1/KbcYZPfBHuDpR4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=E0neJOuChOHOotuezF455eXfujedVs53rYTFBaS5UWfHiDDdOQrhWXRXzuNnIJyfv
+         N1ivPbRNzvNviyt7QW3bLuoBtkaOe//Qg+ZiqTMTjnUQizPAbSZjpWqI559OZqrehH
+         zozkIZ/25KlVqNNGNOybLPP7XPxc/VJ6rovTdj/DH5ggk0RYlR8FLorqKWZf7es9pp
+         15N3ZsFKwLdYQl2nwBGpoiUlY5Mox7I5TG0W+NAkwqfvk6aBcCKgfNn+ofFIV97r/C
+         DO9Olp+raYc0Sc0v0FSjA3VGh8GYEE9a1N8m+YNtWCSRaNSLVDACKghHqZDQjZNo4A
+         Vr0/tRVs9ml8Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78D2AE4D00B;
+        Fri, 14 Oct 2022 08:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] MAINTAINERS: nfc: s3fwrn5: Drop Krzysztof Opasiak
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166573561449.14465.9269645235996945251.git-patchwork-notify@kernel.org>
+Date:   Fri, 14 Oct 2022 08:20:14 +0000
+References: <20221013234205.132630-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221013234205.132630-1-krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch removes the following check generated by checkpatch.pl
+Hello:
 
-	./drivers/staging/rtl8192e/rtl819x_BAProc.c:65: CHECK: Please
-	use a blank line after function/struct/union/enum declarations
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Anjandev Momi <anjan@momi.ca>
----
- drivers/staging/rtl8192e/rtl819x_BAProc.c | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, 13 Oct 2022 19:42:05 -0400 you wrote:
+> Emails to Krzysztof Opasiak bounce ("Recipient address rejected: User
+> unknown") so drop his email from maintainers of s3fwrn5 NFC bindings and
+> driver.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/net/nfc/samsung,s3fwrn5.yaml | 1 -
+>  MAINTAINERS                                                    | 1 -
+>  2 files changed, 2 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-index 8d92b3426..67918ef41 100644
---- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
-+++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-@@ -62,6 +62,7 @@ void ResetBaEntry(struct ba_record *pBA)
- 	pBA->dialog_token		  = 0;
- 	pBA->ba_start_seq_ctrl.short_data = 0;
- }
-+
- static struct sk_buff *rtllib_ADDBA(struct rtllib_device *ieee, u8 *Dst,
- 				    struct ba_record *pBA,
- 				    u16 StatusCode, u8 type)
+Here is the summary with links:
+  - MAINTAINERS: nfc: s3fwrn5: Drop Krzysztof Opasiak
+    https://git.kernel.org/netdev/net/c/0c9341179551
+
+You are awesome, thank you!
 -- 
-2.36.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
