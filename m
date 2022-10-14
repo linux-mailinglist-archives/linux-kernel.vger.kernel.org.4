@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0245FE793
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A835FE795
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJNDZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S229769AbiJND00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 23:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJNDZn (ORCPT
+        with ESMTP id S229813AbiJND0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:25:43 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D342511D99A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:25:40 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1665717897tggdurz9
-Received: from [192.168.50.235] ( [113.72.147.11])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 14 Oct 2022 11:24:55 +0800 (CST)
-X-QQ-SSF: 01000000000000B09000000A0000000
-X-QQ-FEAT: Sm8l2YSuDykwx9zlf9aLJ0pyGRo8hfvyvKRxpLKx+MBlrJvD5pae//UyWDAHW
-        na+5Zc7KD3nH6kxeXh6Yqpsg0LCAFrZLbmfKzGrO0BDwerR9xpCu/dFNr2efEUDZBpPls6y
-        0LDmtH/jgCC728s/PbjIVFaNySz6J0mJm1iSKu6MrWK0k1EGan9i1YWZUUWi3EDBHYOAgW7
-        2LECSrZ7SDNEbTiafYaBMYy8np1WuK2EYswgPqtX9OxtcVauKnhg8LPOPxBNgvYoa5exsQ9
-        wQooaViwTDRQvilIPnMdhtemhJTHDS6oTPIW3h1NeNCTDhUYflKHmS7yqFkhvESXqWXhT27
-        dc07HIQ4XYHjmjFWxc2ve/5cGaJHF6vbiVpGk7z6+CQyfKG3JElOgvjk2WIIg==
-X-QQ-GoodBg: 0
-Message-ID: <7CB1B79E00E38D81+9631ccf1-48b5-9ffa-e5cd-b0c9a7c50a56@linux.starfivetech.com>
-Date:   Fri, 14 Oct 2022 11:24:44 +0800
+        Thu, 13 Oct 2022 23:26:19 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61718F276
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:26:18 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id y10so2381677wma.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezfMH1M8CgZm9uCtaIu6h7oFmHb3YSxbGtnTFpXFyu4=;
+        b=thGSPXyv3XwUcIvqe1vn1S10l+qpM1ML+rE4YuOaSlP1nRa0TIm7FKciGqUzlvc/B9
+         BVde/7FQbl3itAcPpATPaXtRDi9tS3rhjbu0YpeuqcNTfK1iRn8md2Jk7NvbNaT249ur
+         1vkb9mjpuTFcdoKDsw7esb4L05N5SCWbkTD8eqs4Dm1Km4pLuhsUD1ub7iCaib40Oke/
+         7ibv8ErocpFFJB+3pXEp/hcTusFKo+snlPXvt9JbW7Ud5dbBhvGJ9F0lxRMnhuZD+hyr
+         ghwnLpEu3kunTtNwPx1haW8VKX3mQux9miTP4LUx909bhho7OGedQIOcZwqk832Ll0xR
+         BZXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ezfMH1M8CgZm9uCtaIu6h7oFmHb3YSxbGtnTFpXFyu4=;
+        b=n3Rjdo1DF3/n2fpQk4VxT+XekjslxAVKv7Ob2lugPddxymZaZ8KMer/ozpvzb9TV0q
+         OuBkAStxbR+fXNwdoehlfuqXJqMo/mMIAXNXyRNvmsMLWU66278Sd8palTb2Qnx2fNEb
+         gsi2+A98Dr7JtvQVtyKY5Ct6deMFNv2705dbIddwM75p9DZfmjMde7/65CFFoQiA0D17
+         gUmAd28kmRBozFOcdqiCb7nrXHhpzaII5nQJxjTIZM6kpQe8WqEJUbSSofE7YZuxhSb2
+         8Y8wIjiTRDwA1KBz2ab5e2Tj3n6LmxTFfE1Csc6H9dXO0I1WntXVzWlMCK7NDmZrgMMQ
+         uPtQ==
+X-Gm-Message-State: ACrzQf2+5SiqQKPo3ZKT3Qgz1eD9CX2AM6KjBVcz5H9DYUUt+u+YsQ52
+        nZzLpINei0cgg5IaTlDdubyXyl5zU1NO9whHXRXQTGPcIUf3OQ==
+X-Google-Smtp-Source: AMsMyM4UMdiWhBGftgOzR8/2OwZAPIfOcGhVzGJzBOUhF3W3yYfjUz1PqaN3zdDRIrR8K9OwAxz2BvZlzeRx8Y7TTus=
+X-Received: by 2002:a1c:ed11:0:b0:3b4:d3e1:bec with SMTP id
+ l17-20020a1ced11000000b003b4d3e10becmr1830314wmh.196.1665717976609; Thu, 13
+ Oct 2022 20:26:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 29/30] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+ <CANDhNCq-ewTnuuRPoDtq+14TCFEwUpyo-pxn3J8=x1qCZzcgKQ@mail.gmail.com>
+In-Reply-To: <CANDhNCq-ewTnuuRPoDtq+14TCFEwUpyo-pxn3J8=x1qCZzcgKQ@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 13 Oct 2022 20:25:40 -0700
+Message-ID: <CAJD7tkayXxKEPpRE7QvBN4CikqeQcUe3_qfrUaH4V+cJrk0y=Q@mail.gmail.com>
+Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
+To:     John Stultz <jstultz@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220930090653.7449-1-hal.feng@linux.starfivetech.com>
- <01c658ad-7f73-20fc-03c0-c82dcd820aa4@codethink.co.uk>
- <Yzdig6GepDx34u1j@spud>
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <Yzdig6GepDx34u1j@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 22:41:23 +0100, Conor Dooley wrote:
-> On Fri, Sep 30, 2022 at 09:54:14PM +0100, Ben Dooks wrote:
-> > On 30/09/2022 10:06, Hal Feng wrote:
-> > > Add CONFIG_SERIAL_8250_DW=y, which is a necessary option for
-> > > StarFive JH7110 and JH7100 SoCs to boot with serial ports.
-> > > 
-> > > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> > 
-> > That might be useful for other users at some point an I don't
-> > think it adds much code.
-> 
-> Honestly I think this should be applied for 6.1, for parity with the
-> other SoCs that have their serial console enabled by default.
-> 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Oct 13, 2022 at 7:39 PM John Stultz <jstultz@google.com> wrote:
+>
+> On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > I have a question about ktime_get_mono_fast_ns(), which is used by the
+> > BPF helper bpf_ktime_get_ns() among other use cases. The comment above
+> > this function specifies that there are cases where the observed clock
+> > would not be monotonic.
+> >
+> > I had 2 beginner questions:
+>
+> Thinking about this a bit more, I have my own "beginner question": Why
+> does bpf_ktime_get_ns() need to use the ktime_get_mono_fast_ns()
+> accessor instead of ktime_get_ns()?
+>
+> I don't know enough about the contexts that bpf logic can run, so it's
+> not clear to me and it's not obviously commented either.
 
-Could this patch be pulled out and applied for v6.1? So the JH7100
-and the coming JH7110 can enable serial console by default when
-booting. Thanks.
+I am not the best person to answer this question (the BPF list is
+CC'd, it's full of more knowledgeable people).
 
-Best regards,
-Hal
+My understanding is that because BPF programs can basically be run in
+any context (because they can attach to almost all functions /
+tracepoints in the kernel), the time accessor needs to be safe in all
+contexts.
+
+Now that I know that ktime_get_mono_fast_ns() can drift significantly,
+I am wondering why we don't just read sched_clock(). Can the
+difference between sched_clock() on different cpus be even higher than
+the potential drift from ktime_get_mono_fast_ns()?
+
+>
+> Looking at some of the uses of ktime_get_mono_fast_ns() spread around
+> the kernel, some are clearly necessary (trying to get timestamps in
+> suspend paths after timekeeping might be shutdown, etc). But there's
+> also a few cases where the need isn't clear and I'm worried the
+> reasoning is because it says "fast" in its name.
+>   "Why stop with ktime_get_mono_fast_ns() when you could instead use
+> ktime_get_real_fast()! It's *real fast*!" :)
+>
+> thanks
+> -john
