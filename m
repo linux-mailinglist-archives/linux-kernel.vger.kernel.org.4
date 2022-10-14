@@ -2,77 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DF55FEC91
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606C25FEC98
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJNKaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S229661AbiJNKcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 06:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJNKaP (ORCPT
+        with ESMTP id S229518AbiJNKb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:30:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE71F4E638;
-        Fri, 14 Oct 2022 03:30:13 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 355946602375;
-        Fri, 14 Oct 2022 11:30:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665743411;
-        bh=6L92KhTI3HHyC9sYJgk4N+q+nYhrAq6X4Q060GaWgUg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Yl0HDSJdvksMkC+OgWrxdQGHbzwV1bbWfJbe+/aoc7oiXV5cLsK7LSQQt+TkBzgzC
-         H652/DSoMWqM+73qpo9QSXoVg0sywrUqtH48e/8Z/De7Uf0NKCDXChKzrglo41Uuft
-         O+VCrcBFME2gcS6knyVcooqRXxF3CEewTlfQilejZmSmTC6Z9Xxo+7PSUhXpJnU5Vx
-         WeLJ2/JNLuQVPNRbPqLQSh8Wok1uNmZximH4QzN7hiIh2etNl8Aq2LjA0UQUvhOlTf
-         eSCDVwgFfkPaBJAwcUjYQ1PSH7ukgE6ZXLxgg79ARmB+WVAHoYE6xp9SwEMrxnx459
-         4COvF36tVoBjg==
-Message-ID: <4e89e401-ae10-f8c2-07c5-1cd7950f3e27@collabora.com>
-Date:   Fri, 14 Oct 2022 12:30:08 +0200
+        Fri, 14 Oct 2022 06:31:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9F252BF;
+        Fri, 14 Oct 2022 03:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665743516; x=1697279516;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ptDZqIUqk3munuUKVxS0oc3Bl5qrSZ+Czm3phxJrSjQ=;
+  b=eQofEcQcBRytGBhdtkNtgtCCqEubujQsksvsPcYThFSDLHWantJhmwG2
+   xQdMoWrk74weH0brIBzLBfVMGPnqPi9zAIqLl+dB/GJj6tBt0eaJull+2
+   NgNa46Fq49w6rvFADQjSw1ihDgLZA2rDpKCrVQ7lz398T0sY+B/mmWflH
+   v+rm5JzZIRCHugLo1BfKnjCruNMubmBFLdZKkZeVRKw7ifM6OB1mR6QgK
+   CuWXKejITuKzk5wdYofrkGlJcoRQ0z2WyJi0+KuJPIVeL39fB8t/uqJ+z
+   ul5CF8j3DKtMCevVrOM0gNan+AGV1lfyHOM4AUWmBQxp+HL6FY/ZduTIa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="304083164"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="304083164"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 03:31:55 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="660688519"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="660688519"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 03:31:52 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 370C720146;
+        Fri, 14 Oct 2022 13:31:50 +0300 (EEST)
+Date:   Fri, 14 Oct 2022 10:31:50 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] media: i2c: ov5645: Use runtime PM
+Message-ID: <Y0k6lrytZctR/UnX@paasikivi.fi.intel.com>
+References: <20220927201634.750141-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y0Ulvmyg8rBOPbRF@paasikivi.fi.intel.com>
+ <CA+V-a8v6ZGC7Ea6zdWGcLVyyq2Q=pUb0C_OwHWjFqSmuo5f-ZA@mail.gmail.com>
+ <CA+V-a8vkB=Fok5S-L_zLT+unxuuSJJk+pkeS52N_kcugCoeT6w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] soc: mediatek: pm-domains: Fix the power glitch issue
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-References: <20221014102029.1162-1-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221014102029.1162-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8vkB=Fok5S-L_zLT+unxuuSJJk+pkeS52N_kcugCoeT6w@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/10/22 12:20, Allen-KH Cheng ha scritto:
-> From: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Hi Prabhakar,
+
+On Wed, Oct 12, 2022 at 07:55:25PM +0100, Lad, Prabhakar wrote:
+> On a closer look, I can move the above after registering the subdev,
+> but I can get rid of err_pm_runtime label as PM is enabled further up
+> the code path to detect the senosr.
 > 
-> Power reset maybe generate unexpected signal. In order to avoid
-> the glitch issue, we need to enable isolation first to guarantee the
-> stable signal when power reset is triggered.
-> 
-> Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
-> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> If you are OK with this i'll post a v2 along with the below two
+> patches + the suggestions you mentioned earlier on this patch.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Sounds good to me.
 
-
+-- 
+Sakari Ailus
