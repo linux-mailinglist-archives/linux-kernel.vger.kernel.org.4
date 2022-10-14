@@ -2,91 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3694C5FEB9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBD85FEBB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJNJ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S229624AbiJNJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiJNJ2f (ORCPT
+        with ESMTP id S229790AbiJNJb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:28:35 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A121C7D4C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:28:27 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id w185so1980517vkb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMKephT0DO36b58uiumO9iVQmJHAbKITY1Dq80O5li0=;
-        b=hJ3wlaBR1rmsjyX6U3m2vET/5mRwyv6ddsDpTpVYugRoBeDvlX/p+VXFVnDEq+goeA
-         H220fsvoQR02ho5MrVXrF5VUB2nJUDf+7vEXVl+NO6Ih718lxLNDS8hsbq4J2vLk42Fj
-         A0XmR+JkhkQLxWuTlDSyAxMDy3njZoJ2bpjt8YpYjjUqDwFaftZu7y8qbuq3QicLw7jU
-         G1sUdlF0czC9iOy504QpnMUYFfAoqri9ny8xQfpNNVWtI5ljIwZqRsXSGVsYNemDpBst
-         +8bjLix7If5sLgDodiruYPHTstQeVRXouC5nRwpaInX6U9MGlC8ZJEZkSQNujnsTFxA8
-         dOeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oMKephT0DO36b58uiumO9iVQmJHAbKITY1Dq80O5li0=;
-        b=TpvjWlw10nm12YuSuCNg4b65+xpJoB0WTUaS6t/Ah9dcjpkc2+SrVzmaI4EZSpnnDZ
-         yVJktM1R71cHG2CxiGSglZstrvIXTZhOejThdHn1TGTXqg0qiAktFlveFnbCPSAymkjC
-         biRjjW0P3d44pDaVjozADm8sKZHEAIzYuj9QmHAaTkW5jSZzokhi/Frsew9+Gfyf95P1
-         NedRxwpggC/E4imR7/nCgHrFYjMs6F+oj7yZGg2/UEMAxY2igBglfbZ2U0cpyJ2tqN+9
-         CiW2+KW3xn5DLrHNoKsA9soHq32KeepF7v7Bd/xaAlQkF3cBL+TVggk59k82pzKKynt+
-         Js8Q==
-X-Gm-Message-State: ACrzQf3pJWyKsfeVQhaJMqxMKY42g7l47XO0WRO3uiEuuqhupEVF37KV
-        CPW/SN0j9GNRoLlLalUowg0AiELGEngjeehPFafMiQ==
-X-Google-Smtp-Source: AMsMyM51FP2p+iGF6rMOAh0E6lwlo48EM4GPcGJK+taDJA7BV+nQsXvedDxZnWyvtZJJhInF2liOhopGMZyt+xnp0tU=
-X-Received: by 2002:a05:6122:4f8:b0:3ae:21f7:28da with SMTP id
- s24-20020a05612204f800b003ae21f728damr2011503vkf.33.1665739705609; Fri, 14
- Oct 2022 02:28:25 -0700 (PDT)
+        Fri, 14 Oct 2022 05:31:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478AB1C69FD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:31:16 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E8iPFG020587;
+        Fri, 14 Oct 2022 09:30:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : cc : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=83O4CiYMmCZaLA6j45bwJZJvj0eE7PUIgTtTH05BV5U=;
+ b=O+Kdp1MCnEoKJh25JzoQN3eP8CA6DO3Nz9wYOyQ5d63o/vcf6j7jxbmcPi3n6Lg+/jeY
+ +xpR+fOkT3dfTFcdyeNpuMV3SpiALRYBVXb5AuVGeIXGqVR9qOY9i/5Xx7n03uW3yJPd
+ bc5mQyefhwPyHuPW81KMI2/PIZ7LLbgbgK5OBHDV3AZAsKvhJaHJGCYp3amwDbWilMa8
+ ol9194WKhyCROAhGXmhkF8q9UQMLt3+71exn7QnB3kGxidlJQmAguAnOuwihtbsIP5tg
+ tleUtNLfHdbfDZiDXajxZ8ATCMf65Wnr8uhKzdbzhsO8OLlRZ/JIhqf+wJZrqiiVrEB8 KA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6gw1tpss-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Oct 2022 09:30:55 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29E9LANx021738;
+        Fri, 14 Oct 2022 09:30:54 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3k30fjgx2f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Oct 2022 09:30:53 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29E9VNrB52363554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Oct 2022 09:31:23 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF960AE045;
+        Fri, 14 Oct 2022 09:30:51 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 99AD2AE04D;
+        Fri, 14 Oct 2022 09:30:51 +0000 (GMT)
+Received: from [9.145.12.104] (unknown [9.145.12.104])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 14 Oct 2022 09:30:51 +0000 (GMT)
+Message-ID: <581f6037-ff43-4f91-cabf-d9aa0d72bbe6@linux.ibm.com>
+Date:   Fri, 14 Oct 2022 11:30:51 +0200
 MIME-Version: 1.0
-References: <20221013001842.1893243-1-sashal@kernel.org> <20221013001842.1893243-22-sashal@kernel.org>
-In-Reply-To: <20221013001842.1893243-22-sashal@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 14 Oct 2022 11:28:14 +0200
-Message-ID: <CAMRc=Md25wNapmU4ZxNfTPAOgCpSkW6Z7Oen6NFKj-kURaupAQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.19 22/63] gpiolib: of: make Freescale SPI quirk
- similar to all others
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] gcov: support GCC 12.1 and newer compilers
+To:     =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <624bda92-f307-30e9-9aaa-8cc678b2dfb2@suse.cz>
+Content-Language: en-US
+From:   Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <624bda92-f307-30e9-9aaa-8cc678b2dfb2@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -jEytvD5xtEjyBZHqMe7yQfzyCGaD1Az
+X-Proofpoint-GUID: -jEytvD5xtEjyBZHqMe7yQfzyCGaD1Az
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-14_05,2022-10-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210140052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 2:19 AM Sasha Levin <sashal@kernel.org> wrote:
->
-> From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->
-> [ Upstream commit 984914ec4f4bfa9ee8f067b06293bc12bef20137 ]
->
-> There is no need for of_find_spi_cs_gpio() to be different from other
-> quirks: the only variant of property actually used in DTS is "gpios"
-> (plural) so we can use of_get_named_gpiod_flags() instead of recursing
-> into of_find_gpio() again.
->
-> This will allow us consolidate quirk handling down the road.
->
+On 13.10.2022 09:40, Martin Liška wrote:
+> Starting with GCC 12.1, there are 2 significant changes to the .gcda
+> file format that needs to be supported:
+> 
+> a) [gcov: Use system IO buffering] (23eb66d1d46a34cb28c4acbdf8a1deb80a7c5a05) changed
+>    that all sizes in the format are in bytes and not in words (4B)
+> b) [gcov: make profile merging smarter] (72e0c742bd01f8e7e6dcca64042b9ad7e75979de)
+>    add a new checksum to the file header.
+> 
+> Tested with GCC 7.5, 10.4, 12.2 and the current master.
+> 
+> Signed-off-by: Martin Liska <mliska@suse.cz>
 
-Sasha,
+Looks good, thanks! I successfully tested this patch on s390 using GCC
+12.2 and 11.2.
 
-This is not a fix, it's code refactoring. Definitely not stable material.
+Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
 
-Bartosz
+Andrew, could you add this patch via your tree?
 
-PS Same for the rest of the backports of the three patches I commented on.
+
+> ---
+>  kernel/gcov/gcc_4_7.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/gcov/gcc_4_7.c b/kernel/gcov/gcc_4_7.c
+> index 460c12b7dfea..7971e989e425 100644
+> --- a/kernel/gcov/gcc_4_7.c
+> +++ b/kernel/gcov/gcc_4_7.c
+> @@ -30,6 +30,13 @@
+>  
+>  #define GCOV_TAG_FUNCTION_LENGTH	3
+>  
+> +/* Since GCC 12.1 sizes are in BYTES and not in WORDS (4B). */
+> +#if (__GNUC__ >= 12)
+> +#define GCOV_UNIT_SIZE				4
+> +#else
+> +#define GCOV_UNIT_SIZE				1
+> +#endif
+> +
+>  static struct gcov_info *gcov_info_head;
+>  
+>  /**
+> @@ -383,12 +390,18 @@ size_t convert_to_gcda(char *buffer, struct gcov_info *info)
+>  	pos += store_gcov_u32(buffer, pos, info->version);
+>  	pos += store_gcov_u32(buffer, pos, info->stamp);
+>  
+> +#if (__GNUC__ >= 12)
+> +	/* Use zero as checksum of the compilation unit. */
+> +	pos += store_gcov_u32(buffer, pos, 0);
+> +#endif
+> +
+>  	for (fi_idx = 0; fi_idx < info->n_functions; fi_idx++) {
+>  		fi_ptr = info->functions[fi_idx];
+>  
+>  		/* Function record. */
+>  		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION);
+> -		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION_LENGTH);
+> +		pos += store_gcov_u32(buffer, pos,
+> +			GCOV_TAG_FUNCTION_LENGTH * GCOV_UNIT_SIZE);
+>  		pos += store_gcov_u32(buffer, pos, fi_ptr->ident);
+>  		pos += store_gcov_u32(buffer, pos, fi_ptr->lineno_checksum);
+>  		pos += store_gcov_u32(buffer, pos, fi_ptr->cfg_checksum);
+> @@ -402,7 +415,8 @@ size_t convert_to_gcda(char *buffer, struct gcov_info *info)
+>  			/* Counter record. */
+>  			pos += store_gcov_u32(buffer, pos,
+>  					      GCOV_TAG_FOR_COUNTER(ct_idx));
+> -			pos += store_gcov_u32(buffer, pos, ci_ptr->num * 2);
+> +			pos += store_gcov_u32(buffer, pos,
+> +				ci_ptr->num * 2 * GCOV_UNIT_SIZE);
+>  
+>  			for (cv_idx = 0; cv_idx < ci_ptr->num; cv_idx++) {
+>  				pos += store_gcov_u64(buffer, pos,
+
+-- 
+Peter Oberparleiter
+Linux on IBM Z Development - IBM Germany R&D
+
