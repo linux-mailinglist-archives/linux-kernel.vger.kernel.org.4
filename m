@@ -2,104 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5235FF449
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C1D5FF44A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJNUEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S229672AbiJNUEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJNUEo (ORCPT
+        with ESMTP id S229997AbiJNUEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:04:44 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD6EC67
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:04:38 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id u71so5247108pgd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kbwkanpKDCzBUU6gmctb+QrCeHgMxWi09XjJZDjO5eQ=;
-        b=X/8GV42PFEbwb1G42LBdmwiFnIlQkobhhcbf2afrVFAK/kAzcsrOrlGPim+kJih52X
-         YEK9xn2aX6LsCZGwuadCycmbegoWPQD/TLpE4JOZDawCpM6yoovy4D+vbxkNNzK2bZ21
-         exkd6HtoXl7jie6ASLErpWPPxFqfelw3JeWKiuJjWIXClxMXVe0zl+f5Ob/DcEXoRqQG
-         5hrPH8uYnrRbMADhWTWiowZP49+fF6B4VtMJ5drYYBZEBIyiPdB2J+uoQnt/aDCDpxI6
-         bwIZmYKOLSn7ZXAHq8nLORAGhHIgfO7G8z0mfZzr9aVgi3FFCikocklfxoLkFTrgrXS7
-         vNcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kbwkanpKDCzBUU6gmctb+QrCeHgMxWi09XjJZDjO5eQ=;
-        b=PAS9R8CX7/0MZ34U7vty7qk3u5YxjSGZ1AR7WlLYFzEJfhHvPurHgqoziv4JNlhR6v
-         QQG+jJ1VZSj3gO2TQWrL7S2Ujno8LaMNBi5rC6p/Z+2gbdv96Lf0Gzpz0AdXi9EFDrrc
-         WHs37xXAiz2l52naUZFhaQDv1OE7N8QQcLqn44GmQrpG7H3uritxyw5yCJgb8DDMwhXi
-         vsVZlFTcnwkScWw07kfDaQV0lzfom/F3vDF7hquJnM8lUJ9qWpuAY6fgKr54GKzCj6ys
-         j55HFdryFPdwdFIoFLytGdIpBRr9xduEu+3JoK6lmuPjCUfFE0Zo8JSZZgoIQQJAcYn8
-         DVUg==
-X-Gm-Message-State: ACrzQf10IxOanP+03+V9Da5/cS7g6zAYN/ed6jxiMk+MiVRdTZhjnzWM
-        34KeLotzCTXFHJc9NRf6rHSj6w==
-X-Google-Smtp-Source: AMsMyM7EBrEJiEtubCYTKLnlZSzu9M+zSixvrqFOxZtlxIoJYG4IoVQpLoMoGVuCpNVtnXuZY+vYvg==
-X-Received: by 2002:a62:1482:0:b0:55f:eb9a:38b2 with SMTP id 124-20020a621482000000b0055feb9a38b2mr7003442pfu.29.1665777877646;
-        Fri, 14 Oct 2022 13:04:37 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g18-20020aa79dd2000000b0056149203b60sm2136445pfq.46.2022.10.14.13.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 13:04:37 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 20:04:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/7] KVM: x86: Hyper-V invariant TSC control feature
-Message-ID: <Y0nA0DCeh4IPmWMX@google.com>
-References: <20221013095849.705943-1-vkuznets@redhat.com>
+        Fri, 14 Oct 2022 16:04:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6759810BF;
+        Fri, 14 Oct 2022 13:04:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C22AFB8234D;
+        Fri, 14 Oct 2022 20:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499A1C433C1;
+        Fri, 14 Oct 2022 20:04:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665777881;
+        bh=WgK8GBODPu1il2l6bsz7fk4bsQA1FopzCrhUOulcM70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lfzljnxZzAC2jO/hx2kly2jM4aiqMiyneVW6H27F17PXKtYJh0BYrHkzWP11NIqEZ
+         y+fq6qBvKdrp0f3eIZIZ6idKv5U7D2plbHmI5ONgld1G2EAJ1WMfoxIYyQBDcOGqte
+         fHK6U58HSZW2DZsUEhroVUciKzqFj5ooKy+54tURxNGHmGIiRlBgaN3lVimzKhYZt2
+         qSHdC09YLieWGSermrs+fDekE3LZVyjRo1LaDn3N1nzFdytYk9Fx5DsIXd2vx6ARqJ
+         0SA9YOF+JqhevnXRhxXmAmUAtZexC6umSMDhnh+39SGXB6Lq1OsRSU0wiRPIGiCFg0
+         bqqFmaFsKpwCg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9A31A4062C; Fri, 14 Oct 2022 17:04:38 -0300 (-03)
+Date:   Fri, 14 Oct 2022 17:04:38 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Subject: Re: [PATCH 20/19] perf stat: Factor out evsel__count_has_error()
+Message-ID: <Y0nA1jdFU6XBlZRL@kernel.org>
+References: <CAM9d7ch_CV3mpno+6D23UGaXzL9zhmzmt513RzbWq8q_0DhU4A@mail.gmail.com>
+ <20221014181655.771612-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013095849.705943-1-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221014181655.771612-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022, Vitaly Kuznetsov wrote:
-> Normally, genuine Hyper-V doesn't expose architectural invariant TSC
-> (CPUID.80000007H:EDX[8]) to its guests by default. A special PV MSR
-> (HV_X64_MSR_TSC_INVARIANT_CONTROL, 0x40000118) and corresponding CPUID
-> feature bit (CPUID.0x40000003.EAX[15]) were introduced. When bit 0 of the
-> PV MSR is set, invariant TSC bit starts to show up in CPUID. When the 
-> feature is exposed to Hyper-V guests, reenlightenment becomes unneeded.
+Em Fri, Oct 14, 2022 at 11:16:55AM -0700, Namhyung Kim escreveu:
+> It's possible to have 0 enabled/running time for some per-task or per-cgroup
+> events since it's not scheduled on any CPU.  Treating the whole event as
+> failed would not work in this case.  Thinking again, the code only existed
+> when any CPU-level aggregation is enabled (like per-socket, per-core, ...).
 > 
-> Note: strictly speaking, KVM doesn't have to have the feature as exposing
-> raw invariant TSC bit (CPUID.80000007H:EDX[8]) also seems to work for
-> modern Windows versions. The feature is, however, tiny and straitforward
-> and gives additional flexibility so why not.
+> To make it clearer, factor out the condition check into the new
+> evsel__count_has_error() function and add some comments.
+
+So I should just add this one to the 19-long patchkit I already applied
+locally, ok.
+
+- Arnaldo
+ 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/stat.c | 25 +++++++++++++++++++++----
+>  1 file changed, 21 insertions(+), 4 deletions(-)
 > 
-> Vitaly Kuznetsov (7):
->   x86/hyperv: Add HV_EXPOSE_INVARIANT_TSC define
->   KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
->   KVM: x86: Hyper-V invariant TSC control
->   KVM: selftests: Rename 'msr->available' to 'msr->fault_exepected' in
->     hyperv_features test
->   KVM: selftests: Convert hyperv_features test to using
->     KVM_X86_CPU_FEATURE()
->   KVM: selftests: Test that values written to Hyper-V MSRs are preserved
->   KVM: selftests: Test Hyper-V invariant TSC control
+> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> index 6ab9c58beca7..9dfa8cac6bc4 100644
+> --- a/tools/perf/util/stat.c
+> +++ b/tools/perf/util/stat.c
+> @@ -396,6 +396,25 @@ static int check_per_pkg(struct evsel *counter, struct perf_counts_values *vals,
+>  	return ret;
+>  }
+>  
+> +static bool evsel__count_has_error(struct evsel *evsel,
+> +				   struct perf_counts_values *count,
+> +				   struct perf_stat_config *config)
+> +{
+> +	/* the evsel was failed already */
+> +	if (evsel->err || evsel->counts->scaled == -1)
+> +		return true;
+> +
+> +	/* this is meaningful for CPU aggregation modes only */
+> +	if (config->aggr_mode == AGGR_GLOBAL)
+> +		return false;
+> +
+> +	/* it's considered ok when it actually ran */
+> +	if (count->ena != 0 && count->run != 0)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+>  static int
+>  process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
+>  		       int cpu_map_idx, int thread,
+> @@ -450,11 +469,9 @@ process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
+>  
+>  			/*
+>  			 * When any result is bad, make them all to give consistent output
+> -			 * in interval mode.  But per-task counters can have 0 enabled time
+> -			 * when some tasks are idle.
+> +			 * in interval mode.
+>  			 */
+> -			if (((count->ena == 0 || count->run == 0) && cpu.cpu != -1) ||
+> -			    evsel->counts->scaled == -1) {
+> +			if (evsel__count_has_error(evsel, count, config) && !ps_aggr->failed) {
+>  				ps_aggr->counts.val = 0;
+>  				ps_aggr->counts.ena = 0;
+>  				ps_aggr->counts.run = 0;
+> -- 
+> 2.38.0.413.g74048e4d9e-goog
 
-For the series, in case Paolo ends up grabbing this:
+-- 
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+- Arnaldo
