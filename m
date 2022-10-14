@@ -2,115 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A835FE795
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473C25FE799
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJND00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S229749AbiJND2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 23:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiJND0T (ORCPT
+        with ESMTP id S229609AbiJND2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:26:19 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61718F276
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:26:18 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id y10so2381677wma.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ezfMH1M8CgZm9uCtaIu6h7oFmHb3YSxbGtnTFpXFyu4=;
-        b=thGSPXyv3XwUcIvqe1vn1S10l+qpM1ML+rE4YuOaSlP1nRa0TIm7FKciGqUzlvc/B9
-         BVde/7FQbl3itAcPpATPaXtRDi9tS3rhjbu0YpeuqcNTfK1iRn8md2Jk7NvbNaT249ur
-         1vkb9mjpuTFcdoKDsw7esb4L05N5SCWbkTD8eqs4Dm1Km4pLuhsUD1ub7iCaib40Oke/
-         7ibv8ErocpFFJB+3pXEp/hcTusFKo+snlPXvt9JbW7Ud5dbBhvGJ9F0lxRMnhuZD+hyr
-         ghwnLpEu3kunTtNwPx1haW8VKX3mQux9miTP4LUx909bhho7OGedQIOcZwqk832Ll0xR
-         BZXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ezfMH1M8CgZm9uCtaIu6h7oFmHb3YSxbGtnTFpXFyu4=;
-        b=n3Rjdo1DF3/n2fpQk4VxT+XekjslxAVKv7Ob2lugPddxymZaZ8KMer/ozpvzb9TV0q
-         OuBkAStxbR+fXNwdoehlfuqXJqMo/mMIAXNXyRNvmsMLWU66278Sd8palTb2Qnx2fNEb
-         gsi2+A98Dr7JtvQVtyKY5Ct6deMFNv2705dbIddwM75p9DZfmjMde7/65CFFoQiA0D17
-         gUmAd28kmRBozFOcdqiCb7nrXHhpzaII5nQJxjTIZM6kpQe8WqEJUbSSofE7YZuxhSb2
-         8Y8wIjiTRDwA1KBz2ab5e2Tj3n6LmxTFfE1Csc6H9dXO0I1WntXVzWlMCK7NDmZrgMMQ
-         uPtQ==
-X-Gm-Message-State: ACrzQf2+5SiqQKPo3ZKT3Qgz1eD9CX2AM6KjBVcz5H9DYUUt+u+YsQ52
-        nZzLpINei0cgg5IaTlDdubyXyl5zU1NO9whHXRXQTGPcIUf3OQ==
-X-Google-Smtp-Source: AMsMyM4UMdiWhBGftgOzR8/2OwZAPIfOcGhVzGJzBOUhF3W3yYfjUz1PqaN3zdDRIrR8K9OwAxz2BvZlzeRx8Y7TTus=
-X-Received: by 2002:a1c:ed11:0:b0:3b4:d3e1:bec with SMTP id
- l17-20020a1ced11000000b003b4d3e10becmr1830314wmh.196.1665717976609; Thu, 13
- Oct 2022 20:26:16 -0700 (PDT)
+        Thu, 13 Oct 2022 23:28:40 -0400
+Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67107133300;
+        Thu, 13 Oct 2022 20:28:34 -0700 (PDT)
+Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
+  by ironport.ite.com.tw with ESMTP; 14 Oct 2022 11:28:33 +0800
+Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
+        by mse.ite.com.tw with ESMTP id 29E3SVQ1062332;
+        Fri, 14 Oct 2022 11:28:31 +0800 (GMT-8)
+        (envelope-from allen.chen@ite.com.tw)
+Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Fri, 14 Oct 2022 11:28:31 +0800
+Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
+ CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
+ 15.01.2176.014; Fri, 14 Oct 2022 11:28:31 +0800
+From:   <allen.chen@ite.com.tw>
+To:     <robh@kernel.org>, <laurent.pinchart@ideasonboard.com>
+CC:     <treapking@chromium.org>, <Jau-Chih.Tseng@ite.com.tw>,
+        <Kenneth.Hung@ite.com.tw>, <Hermes.Wu@ite.com.tw>,
+        <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
+        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Topic: [PATCH v4 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Index: AQHY3vPJt2BxrbTZTketnPM7zo04e64MLaIAgAEFYfA=
+Date:   Fri, 14 Oct 2022 03:28:31 +0000
+Message-ID: <e24a52c109444452a9027d53a21d6ef0@ite.com.tw>
+References: <20221013105116.180380-1-allen.chen@ite.com.tw>
+ <20221013105116.180380-2-allen.chen@ite.com.tw>
+ <Y0fxCVUtlkB4XHIq@pendragon.ideasonboard.com>
+ <20221013192016.GA95717-robh@kernel.org>
+In-Reply-To: <20221013192016.GA95717-robh@kernel.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.70.46]
+x-tm-snts-smtp: 5B72E33DD26C6D172F89B33E0E1B75AE939EC55DD65B7C0244349CC685D2962D2002:8
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
- <CANDhNCq-ewTnuuRPoDtq+14TCFEwUpyo-pxn3J8=x1qCZzcgKQ@mail.gmail.com>
-In-Reply-To: <CANDhNCq-ewTnuuRPoDtq+14TCFEwUpyo-pxn3J8=x1qCZzcgKQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 13 Oct 2022 20:25:40 -0700
-Message-ID: <CAJD7tkayXxKEPpRE7QvBN4CikqeQcUe3_qfrUaH4V+cJrk0y=Q@mail.gmail.com>
-Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
-To:     John Stultz <jstultz@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MAIL: mse.ite.com.tw 29E3SVQ1062332
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 7:39 PM John Stultz <jstultz@google.com> wrote:
->
-> On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > I have a question about ktime_get_mono_fast_ns(), which is used by the
-> > BPF helper bpf_ktime_get_ns() among other use cases. The comment above
-> > this function specifies that there are cases where the observed clock
-> > would not be monotonic.
-> >
-> > I had 2 beginner questions:
->
-> Thinking about this a bit more, I have my own "beginner question": Why
-> does bpf_ktime_get_ns() need to use the ktime_get_mono_fast_ns()
-> accessor instead of ktime_get_ns()?
->
-> I don't know enough about the contexts that bpf logic can run, so it's
-> not clear to me and it's not obviously commented either.
-
-I am not the best person to answer this question (the BPF list is
-CC'd, it's full of more knowledgeable people).
-
-My understanding is that because BPF programs can basically be run in
-any context (because they can attach to almost all functions /
-tracepoints in the kernel), the time accessor needs to be safe in all
-contexts.
-
-Now that I know that ktime_get_mono_fast_ns() can drift significantly,
-I am wondering why we don't just read sched_clock(). Can the
-difference between sched_clock() on different cpus be even higher than
-the potential drift from ktime_get_mono_fast_ns()?
-
->
-> Looking at some of the uses of ktime_get_mono_fast_ns() spread around
-> the kernel, some are clearly necessary (trying to get timestamps in
-> suspend paths after timekeeping might be shutdown, etc). But there's
-> also a few cases where the need isn't clear and I'm worried the
-> reasoning is because it says "fast" in its name.
->   "Why stop with ktime_get_mono_fast_ns() when you could instead use
-> ktime_get_real_fast()! It's *real fast*!" :)
->
-> thanks
-> -john
+SGkNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IFJvYiBIZXJyaW5nIDxyb2Jo
+QGtlcm5lbC5vcmc+IA0KU2VudDogRnJpZGF5LCBPY3RvYmVyIDE0LCAyMDIyIDM6MjAgQU0NClRv
+OiBMYXVyZW50IFBpbmNoYXJ0IDxsYXVyZW50LnBpbmNoYXJ0QGlkZWFzb25ib2FyZC5jb20+OyBB
+bGxlbiBDaGVuICizr6xmpnQpIDxhbGxlbi5jaGVuQGl0ZS5jb20udHc+DQpDYzogUGluLXllbiBM
+aW4gPHRyZWFwa2luZ0BjaHJvbWl1bS5vcmc+OyBKYXUtQ2hpaCBUc2VuZyAotL+sTLS8KSA8SmF1
+LUNoaWguVHNlbmdAaXRlLmNvbS50dz47IEtlbm5ldGggSHVuZyAorHiuYa3bKSA8S2VubmV0aC5I
+dW5nQGl0ZS5jb20udHc+OyBIZXJtZXMgV3UgKKdkqM6nuykgPEhlcm1lcy5XdUBpdGUuY29tLnR3
+PjsgQW5kcnplaiBIYWpkYSA8YW5kcnplai5oYWpkYUBpbnRlbC5jb20+OyBOZWlsIEFybXN0cm9u
+ZyA8bmFybXN0cm9uZ0BiYXlsaWJyZS5jb20+OyBSb2JlcnQgRm9zcyA8cm9iZXJ0LmZvc3NAbGlu
+YXJvLm9yZz47IEpvbmFzIEthcmxtYW4gPGpvbmFzQGt3aWJvby5zZT47IEplcm5laiBTa3JhYmVj
+IDxqZXJuZWouc2tyYWJlY0BnbWFpbC5jb20+OyBEYXZpZCBBaXJsaWUgPGFpcmxpZWRAbGludXgu
+aWU+OyBEYW5pZWwgVmV0dGVyIDxkYW5pZWxAZmZ3bGwuY2g+OyBLcnp5c3p0b2YgS296bG93c2tp
+IDxrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBvcGVuIGxpc3Q6RFJNIERSSVZF
+UlMgPGRyaS1kZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5vcmc+OyBvcGVuIGxpc3Q6T1BFTiBGSVJN
+V0FSRSBBTkQgRkxBVFRFTkVEIERFVklDRSBUUkVFIEJJTkRJTkdTIDxkZXZpY2V0cmVlQHZnZXIu
+a2VybmVsLm9yZz47IG9wZW4gbGlzdCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz4NClN1
+YmplY3Q6IFJlOiBbUEFUQ0ggdjQgMS8yXSBkdC1iaW5kaW5nczogaXQ2NTA1OiBhZGQgcHJvcGVy
+dGllcyB0byByZXN0cmljdCBvdXRwdXQgYmFuZHdpZHRoDQoNCk9uIFRodSwgT2N0IDEzLCAyMDIy
+IGF0IDAyOjA1OjQ1UE0gKzAzMDAsIExhdXJlbnQgUGluY2hhcnQgd3JvdGU6DQo+IEhpIEFsbGVu
+LA0KPiANCj4gVGhhbmsgeW91IGZvciB0aGUgcGF0Y2guDQo+IA0KPiBPbiBUaHUsIE9jdCAxMywg
+MjAyMiBhdCAwNjo1MToxM1BNICswODAwLCBhbGxlbiB3cm90ZToNCj4gPiBGcm9tOiBhbGxlbiBj
+aGVuIDxhbGxlbi5jaGVuQGl0ZS5jb20udHc+DQo+ID4gDQo+ID4gQWRkIHByb3BlcnRpZXMgdG8g
+cmVzdHJpY3QgZHAgb3V0cHV0IGRhdGEtbGFuZXMgYW5kIGNsb2NrLg0KPiA+IA0KPiA+IFNpZ25l
+ZC1vZmYtYnk6IFBpbi1ZZW4gTGluIDx0cmVhcGtpbmdAY2hyb21pdW0ub3JnPg0KPiA+IFNpZ25l
+ZC1vZmYtYnk6IEFsbGVuIENoZW4gPGFsbGVuLmNoZW5AaXRlLmNvbS50dz4NCj4gPiAtLS0NCj4g
+PiAgLi4uL2JpbmRpbmdzL2Rpc3BsYXkvYnJpZGdlL2l0ZSxpdDY1MDUueWFtbCAgIHwgNDMgKysr
+KysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNDMgaW5zZXJ0aW9ucygrKQ0K
+PiA+IA0KPiA+IGRpZmYgLS1naXQgDQo+ID4gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvZGlzcGxheS9icmlkZ2UvaXRlLGl0NjUwNS55YW1sIA0KPiA+IGIvRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvYnJpZGdlL2l0ZSxpdDY1MDUueWFtbA0KPiA+
+IGluZGV4IDgzM2QxMWIyMzAzYTcuLmYyYzNkMWQxMDM1OWUgMTAwNjQ0DQo+ID4gLS0tIA0KPiA+
+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvYnJpZGdlL2l0ZSxp
+dDY1MDUueWFtbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9k
+aXNwbGF5L2JyaWRnZS9pdGUsaXQ2NTA1LnlhDQo+ID4gKysrIG1sDQo+ID4gQEAgLTUyLDEwICs1
+Miw1MSBAQCBwcm9wZXJ0aWVzOg0KPiA+ICAgICAgbWF4SXRlbXM6IDENCj4gPiAgICAgIGRlc2Ny
+aXB0aW9uOiBleHRjb24gc3BlY2lmaWVyIGZvciB0aGUgUG93ZXIgRGVsaXZlcnkNCj4gPiAgDQo+
+ID4gKyAgZGF0YS1sYW5lczoNCj4gPiArICAgIG9uZU9mOg0KPiA+ICsgICAgICAtIG1pbkl0ZW1z
+OiAxDQo+ID4gKyAgICAgICAgbWF4SXRlbXM6IDENCj4gPiArICAgICAgICB1bmlxdWVJdGVtczog
+dHJ1ZQ0KPiA+ICsgICAgICAgIGl0ZW1zOg0KPiA+ICsgICAgICAgICAgZW51bToNCj4gPiArICAg
+ICAgICAgICAgLSAwDQo+ID4gKyAgICAgICAgICAgIC0gMQ0KPiA+ICsgICAgICAgIGRlc2NyaXB0
+aW9uOiBGb3Igb25lIGxhbmUgb3BlcmF0aW9uLg0KPiA+ICsNCj4gPiArICAgICAgLSBtaW5JdGVt
+czogMg0KPiA+ICsgICAgICAgIG1heEl0ZW1zOiAyDQo+ID4gKyAgICAgICAgdW5pcXVlSXRlbXM6
+IHRydWUNCj4gPiArICAgICAgICBpdGVtczoNCj4gPiArICAgICAgICAgIGVudW06DQo+ID4gKyAg
+ICAgICAgICAgIC0gMA0KPiA+ICsgICAgICAgICAgICAtIDENCj4gPiArICAgICAgICBkZXNjcmlw
+dGlvbjogRm9yIHR3byBsYW5lcyBvcGVyYXRpb24uDQo+ID4gKw0KPiA+ICsgICAgICAtIG1pbkl0
+ZW1zOiA0DQo+ID4gKyAgICAgICAgbWF4SXRlbXM6IDQNCj4gPiArICAgICAgICB1bmlxdWVJdGVt
+czogdHJ1ZQ0KPiA+ICsgICAgICAgIGl0ZW1zOg0KPiA+ICsgICAgICAgICAgZW51bToNCj4gPiAr
+ICAgICAgICAgICAgLSAwDQo+ID4gKyAgICAgICAgICAgIC0gMQ0KPiA+ICsgICAgICAgICAgICAt
+IDINCj4gPiArICAgICAgICAgICAgLSAzDQo+ID4gKyAgICAgICAgZGVzY3JpcHRpb246IEZvciBm
+b3VyIGxhbmVzIG9wZXJhdGlvbi4NCj4gDQo+IFRoZSBkYXRhIGxhbmVzIHNob3VsZCBiZSBpbiB0
+aGUgb3V0cHV0IGVuZHBvaW50LiBJZiB0aGVyZSdzIG5vIG91dHB1dCANCj4gcG9ydCwgb25lIHNo
+b3VsZCBiZSBhZGRlZC4NCj4gDQo9PT4gSW4gdGhpcyBkdC1iaW5kaW5nLCBvdXIgb3V0cHV0IHBv
+aW50IGlzICJleHRjb24iIHNvIGRvZXNuJ3QgaGF2ZSBvdXRwdXQgZW5kcG9pbnQuDQpJIGRvbid0
+IGtub3cgaG93IHRvIGFkZCB0aGUgZW5kcG9pbnQuDQpJZiBuZWVkIHRvIGFkZCB0aGUgZW5kcG9p
+bnQgdG8gdGhpcyBkdC1iaW5kaW5nLCB3aGF0IGlzIHlvdXIgcmVjb21tZW5kIGFib3V0IGFkZGlu
+ZyB0aGUgZW5kcG9pbnQ/DQpCeSB0aGUgd2F5LCBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0
+b2Yua296bG93c2tpQGxpbmFyby5vcmc+IHNhaWQgd2UgY291bGQgcHV0ICJkYXRhLWxhbmVzIiBo
+ZXJlLg0KPiA+ICsNCj4gPiAgICBwb3J0Og0KPiA+ICAgICAgJHJlZjogL3NjaGVtYXMvZ3JhcGgu
+eWFtbCMvcHJvcGVydGllcy9wb3J0DQoNClRvIGZpeCB0aGUgZXJyb3IsIHRoaXMgbXVzdCBiZToN
+Cg0KJHJlZjogL3NjaGVtYXMvZ3JhcGgueWFtbCMvJGRlZnMvcG9ydC1iYXNlDQp1bmV2YWx1YXRl
+ZFByb3BlcnRpZXM6IGZhbHNlDQoNCj4gPiAgICAgIGRlc2NyaXB0aW9uOiBBIHBvcnQgbm9kZSBw
+b2ludGluZyB0byBEUEkgaG9zdCBwb3J0IG5vZGUNCj4gPiAgDQo+ID4gKyAgICBwcm9wZXJ0aWVz
+Og0KPiA+ICsgICAgICBlbmRwb2ludDoNCj4gPiArICAgICAgICAkcmVmOiAvc2NoZW1hcy9ncmFw
+aC55YW1sIy8kZGVmcy9lbmRwb2ludC1iYXNlDQo+ID4gKw0KPiA+ICsgICAgICAgIHByb3BlcnRp
+ZXM6DQo+ID4gKyAgICAgICAgICBsaW5rLWZyZXF1ZW5jaWVzOg0KPiA+ICsgICAgICAgICAgICBt
+aW5JdGVtczogMQ0KPiA+ICsgICAgICAgICAgICBtYXhJdGVtczogMQ0KPiA+ICsgICAgICAgICAg
+ICBkZXNjcmlwdGlvbjogQWxsb3dlZCBtYXggbGluayBmcmVxdWVuY2llcyBpbiBIei4NCj4gPiAr
+DQo+ID4gIHJlcXVpcmVkOg0KPiA+ICAgIC0gY29tcGF0aWJsZQ0KPiA+ICAgIC0gb3ZkZC1zdXBw
+bHkNCj4gPiBAQCAtODQsMTAgKzEyNSwxMiBAQCBleGFtcGxlczoNCj4gPiAgICAgICAgICAgICAg
+cHdyMTgtc3VwcGx5ID0gPCZpdDY1MDVfcHAxOF9yZWc+Ow0KPiA+ICAgICAgICAgICAgICByZXNl
+dC1ncGlvcyA9IDwmcGlvIDE3OSAxPjsNCj4gPiAgICAgICAgICAgICAgZXh0Y29uID0gPCZ1c2Jj
+X2V4dGNvbj47DQo+ID4gKyAgICAgICAgICAgIGRhdGEtbGFuZXMgPSA8MCAxPjsNCj4gPiAgDQo+
+ID4gICAgICAgICAgICAgIHBvcnQgew0KPiA+ICAgICAgICAgICAgICAgICAgaXQ2NTA1X2luOiBl
+bmRwb2ludCB7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgcmVtb3RlLWVuZHBvaW50ID0gPCZk
+cGlfb3V0PjsNCj4gPiArICAgICAgICAgICAgICAgICAgICBsaW5rLWZyZXF1ZW5jaWVzID0gL2Jp
+dHMvIDY0IDwxNTAwMDAwMDA+Ow0KPiA+ICAgICAgICAgICAgICAgICAgfTsNCj4gPiAgICAgICAg
+ICAgICAgfTsNCj4gPiAgICAgICAgICB9Ow0KPiANCj4gLS0NCj4gUmVnYXJkcywNCj4gDQo+IExh
+dXJlbnQgUGluY2hhcnQNCj4gDQo=
