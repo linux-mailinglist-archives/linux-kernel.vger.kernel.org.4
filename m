@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497D05FE9DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234DC5FE9E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiJNHyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S229786AbiJNH4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiJNHyt (ORCPT
+        with ESMTP id S229665AbiJNH4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:54:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB402E9FE;
-        Fri, 14 Oct 2022 00:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665734089; x=1697270089;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IyNUXND8RFegm37PH1Kc2TacekLBXzHLk6N6Q3vmS2U=;
-  b=GDF8NvsE0VJ9DsWW5IElF6+h3en3W2miGAngTsHDZmr5IydPhVomUya1
-   24e5kuZuLqSKh5kM4AXEXGbKYaiHTQU5S6bkQWc3Ux0piraQqo/VexkpQ
-   rM1sq/N1VBceLNs9Y0e3xgmX/FBN02X7DAt4XL3cpS6DbTZqchV8iAC0B
-   6yiPPHa03vfecnz9AHcWP0GkWDEEl2GK078PIshGijXYwLntnrGPlOH+D
-   PMbCBaYVAjw83k6b1pCMrLi6lhoF6l17L0oop4aBaKt25X0+Il/FjKlrb
-   z6NDGajUEZaX1zA8g+Kyrc0TFb88XmJ5EOPpAiRsSO3iNmzxaWdSPjIxP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="285038169"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="285038169"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 00:54:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="752835130"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="752835130"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 14 Oct 2022 00:54:40 -0700
-Message-ID: <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
-Date:   Fri, 14 Oct 2022 10:56:08 +0300
+        Fri, 14 Oct 2022 03:56:46 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E3512FF9A;
+        Fri, 14 Oct 2022 00:56:45 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id bh13so3669958pgb.4;
+        Fri, 14 Oct 2022 00:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vQlBcw+mgUkkM7Cx3bvkmPoG5Mo4L5lV/iKjdWvuINA=;
+        b=GzL2kJOQFg+KuUHz3Np8FfalV7/8ofjAICt96Omlk5zVAIeTREONelF9RvX4QnOV/U
+         Htj9StJy8ty+Q1GKrfaiKXZ0Hciwzc2cgjHITZ+HZozTCF1K301boGrnaOoQk36VLFSo
+         yjZ6MldfwNzIMZWmH3K5kNM0co9jAv/zlcgzEUFILktIdGD8128r8XYbpp8EDAAk0jlC
+         f/GbJqa/htHwt8E7GXxYKATfj7+Ttomv3oXzC6AUghUcjGiQBKXXd06m71Jq1rxn/BYh
+         9gWBXWF09aZ74CpRxoXjcskHGTseXbcyUFHBOyUXsn7AZD09xHUyTLaqmVjAMm+TbU35
+         HoZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vQlBcw+mgUkkM7Cx3bvkmPoG5Mo4L5lV/iKjdWvuINA=;
+        b=YgNph6d4o6CSLRqETVOhpRrDw7/axNd2BXeBlTylnYLig/gYtqlGRxVkXT+9oH6Abj
+         cVTuMit5VKflPHuc013uokig9Ty+XGLRP7gnCGBiSjAo6IBT9ev2pSxfV/w3Ba/ULLRx
+         X6+ZD2qn14rsSKx/qmEVkGfYPh9O+y/XvSCNC5FrxO4mvpF6XNVduoZbk/ktKDWxlkNX
+         8lwOBM8QamO11SaZ1SfYFooN3zdq4znjlIjqZt3sHU1dF6VDhJ1sTZ7QZGo2SXx5NGmQ
+         Hn0C2QlzI2/Q7XJuxwI7AAoNYzheMS3D7nlYeDGyQAbkNC5cD1Y6UqY/aFfXd8mx3nv4
+         B1KA==
+X-Gm-Message-State: ACrzQf37/8/URbu2x9IfkrUlUqnET1CczXrDNqkOK73DLJra3+QYRKkI
+        PujF2iVGNS0dTp6hEVHunjgpFSHWTmQUWA==
+X-Google-Smtp-Source: AMsMyM6nLeOhUGHWtGfS0Vqs7M/NxHaMVD9z6DmujwAafkguSwy6FFbrojjKV4qZsL4yENg9BYuBsg==
+X-Received: by 2002:a05:6a00:194e:b0:566:5da:ea67 with SMTP id s14-20020a056a00194e00b0056605daea67mr4032054pfk.77.1665734204814;
+        Fri, 14 Oct 2022 00:56:44 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-79.three.co.id. [180.214.232.79])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090ad90200b0020b092534fbsm912741pjv.40.2022.10.14.00.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 00:56:44 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 35F8B103FEC; Fri, 14 Oct 2022 14:56:41 +0700 (WIB)
+Date:   Fri, 14 Oct 2022 14:56:40 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.19 00/33] 5.19.16-rc1 review
+Message-ID: <Y0kWOD9G+FiIEfmA@debian.me>
+References: <20221013175145.236739253@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] xhci: print warning when HCE was set
-Content-Language: en-US
-To:     liulongfang <liulongfang@huawei.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yisen.zhuang@huawei.com
-References: <20220915011134.58400-1-liulongfang@huawei.com>
- <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
- <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
- <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
- <19ab61d6-c2a2-42be-2bb6-500636868703@huawei.com>
-From:   Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <19ab61d6-c2a2-42be-2bb6-500636868703@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4xw+PCQM2wNdCFnP"
+Content-Disposition: inline
+In-Reply-To: <20221013175145.236739253@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.10.2022 6.12, liulongfang wrote:
-> On 2022/9/26 15:58, Mathias Nyman wrote:
->> On 24.9.2022 5.35, liulongfang wrote:
->>> On 2022/9/22 21:01, Mathias Nyman Wrote:
->>>> Hi
->>>>
->>>> On 15.9.2022 4.11, Longfang Liu wrote:
->>>>> When HCE(Host Controller Error) is set, it means that the xhci hardware
->>>>> controller has an error at this time, but the current xhci driver
->>>>> software does not log this event.
->>>>>
->>>>> By adding an HCE event detection in the xhci interrupt processing
->>>>> interface, a warning log is output to the system, which is convenient
->>>>> for system device status tracking.
->>>>>
->>>>
->>>> xHC should cease all activity when it sets HCE, and is probably not
->>>> generating interrupts anymore.
->>>>
->>>> Would probably be more useful to check for HCE at timeouts than in the
->>>> interrupt handler.
->>>>
->>>
->>> Which function of the driver code is this timeout in?
->>
->> xhci_handle_command_timeout() will usually trigger at some point,
->>
-> 
-> Because this HCE error is reported in the form of an interrupt signal, it is more
-> concise to put it in xhci_irq() than in xhci_handle_command_timeout().
-> 
 
-Patch was added to queue after you reported your xHC hardware triggers interrupts when HCE is set.
-I'll send it forward after 6.1-rc1
+--4xw+PCQM2wNdCFnP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-xHCI specification still indicate HCE might not trigger interrupts:
-  
-Section 4.24.1 -Internal Errors
-...
-"Software should implement an algorithm for checking the HCE flag if the xHC is
-not responding."
+On Thu, Oct 13, 2022 at 07:52:32PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.16 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Thanks
--Mathias
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--4xw+PCQM2wNdCFnP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0kWMwAKCRD2uYlJVVFO
+o8cKAP4jV8922RjR2IWndnCXCKLinDX5SpN1JkcaZ19A5ULRowD9GTbmR/8kkd1M
+laH9Epwe1+2e8+3bG2WPFEoSh/YNegg=
+=UnwV
+-----END PGP SIGNATURE-----
+
+--4xw+PCQM2wNdCFnP--
