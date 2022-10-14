@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C655FF53F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236C35FF540
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJNVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S229921AbiJNVXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiJNVXA (ORCPT
+        with ESMTP id S229902AbiJNVXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:23:00 -0400
+        Fri, 14 Oct 2022 17:23:03 -0400
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD711DC09C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:22:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3698E1D3A77
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:23:00 -0700 (PDT)
 Received: from localhost.localdomain (178.176.75.138) by msexch01.omp.ru
  (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 15 Oct
- 2022 00:22:47 +0300
+ 2022 00:22:51 +0300
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Oleg Nesterov <oleg@redhat.com>, Vineet Gupta <vgupta@kernel.org>,
-        <linux-snps-arc@lists.infradead.org>,
+To:     Oleg Nesterov <oleg@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 01/13] arc: ptrace: user_regset_copyin_ignore() always returns 0
-Date:   Sat, 15 Oct 2022 00:22:23 +0300
-Message-ID: <20221014212235.10770-2-s.shtylyov@omp.ru>
+Subject: [PATCH 02/13] arm: ptrace: user_regset_copyin_ignore() always returns 0
+Date:   Sat, 15 Oct 2022 00:22:24 +0300
+Message-ID: <20221014212235.10770-3-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20221014212235.10770-1-s.shtylyov@omp.ru>
 References: <20221014212235.10770-1-s.shtylyov@omp.ru>
@@ -50,15 +51,15 @@ X-KSE-AntiSpam-Info: {rep_avail}
 X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
 X-KSE-AntiSpam-Info: {relay has no DNS name}
 X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {rdns complete}
-X-KSE-AntiSpam-Info: {fromrtbl complete}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.75.138 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.75.138:7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
 X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.138
 X-KSE-AntiSpam-Info: {DNS response errors}
 X-KSE-AntiSpam-Info: Rate: 59
 X-KSE-AntiSpam-Info: Status: not_detected
 X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=none header.from=omp.ru;spf=none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
  smtp.mailfrom=omp.ru;dkim=none
 X-KSE-Antiphishing-Info: Clean
 X-KSE-Antiphishing-ScanningType: Heuristic
@@ -81,22 +82,28 @@ pointless -- don't do this anymore...
 
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 ---
- arch/arc/kernel/ptrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/kernel/ptrace.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arc/kernel/ptrace.c b/arch/arc/kernel/ptrace.c
-index da7542cea0d8..2abdcd9b09e8 100644
---- a/arch/arc/kernel/ptrace.c
-+++ b/arch/arc/kernel/ptrace.c
-@@ -185,7 +185,7 @@ static int genregs_set(struct task_struct *target,
+diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
+index bfe88c6e60d5..2d8e2516906b 100644
+--- a/arch/arm/kernel/ptrace.c
++++ b/arch/arm/kernel/ptrace.c
+@@ -651,11 +651,9 @@ static int vfp_set(struct task_struct *target,
+ 	if (ret)
+ 		return ret;
  
- #define REG_IGNORE_ONE(LOC)		\
- 	if (!ret)			\
--		ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, \
-+		user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, \
- 			offsetof(struct user_regs_struct, LOC), \
- 			offsetof(struct user_regs_struct, LOC) + 4);
+-	ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
+-				user_fpregs_offset + sizeof(new_vfp.fpregs),
+-				user_fpscr_offset);
+-	if (ret)
+-		return ret;
++	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
++				  user_fpregs_offset + sizeof(new_vfp.fpregs),
++				  user_fpscr_offset);
  
+ 	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+ 				 &new_vfp.fpscr,
 -- 
 2.26.3
 
