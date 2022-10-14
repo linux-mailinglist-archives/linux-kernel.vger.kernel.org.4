@@ -2,144 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5308F5FF29F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237B55FF2A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiJNQxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S230011AbiJNQzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiJNQxc (ORCPT
+        with ESMTP id S229991AbiJNQzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:53:32 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881571D4DEC
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:53:28 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29EGOFbP007182;
-        Fri, 14 Oct 2022 16:53:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=references : from :
- to : cc : subject : in-reply-to : date : message-id : content-type :
- mime-version; s=corp-2022-7-12;
- bh=FokC5M/7TmYXgf06jkQTCYaQsfk8lKtYu83Jl7ty9f8=;
- b=rElNRbk67113yQbID1DpLcEifaPq9s2ajIQf3S2TKiL5cZ6wkEt87KP+NBYGbfVvf7M/
- 1X6aPk6ujsqZBiq4w3fPfyCjUVSiEBRrKS1NXEvMdsRHy0E61ufO1QZRi/n39Q54wufZ
- 7jU5bt7CqIP2qrudyEiy5ZJReNpt4nnpp0vs0ZlBceafENIgUJXmS4fEc1h4g/k9ePg0
- F7npvoJpK5Y4jQ4H8DnM0uokFcP2D+pc67X2KzjbE+80KJx6naEsKS1HoYQvBEdG2Q3U
- c0fU0FYewQKgg8QCm4fJefmtTgdzyjaYtNmiM+IeJIT9tCRkyvdQi/cHtrUuCp/m+xMu 3g== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k795k0hf3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Oct 2022 16:53:24 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29EFAriX003798;
-        Fri, 14 Oct 2022 16:53:23 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k2yndx1ec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Oct 2022 16:53:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SatcyG7dfRI7XDYsYKQAhozyf59SlsbaVnSGxinv6SOAfMFw8q5ksKhhZcBIlPGmD/tnvObK+V1QyxtUZaWDVL+yI70Fy5BTG8SOWlxXZc5mA0p8GubPz8lhqfNFQ2lETCJuPlvhAjWTcFxbHC62V2u26bdEbj2VTEI9BPD481fHB3TDYU5QIAXvFUlwmIdZ6qLeznE1blo8HP4C1EIsjDyworglzhxk/C6UHM4t03aGbDPjFxTh747LyZrQaMTeOajLoPYIyVPIAHwdqk+LPpMIH8CpQtyhOim7hDUunWHlQ1DUGRvrWdurQvi2oAgv5JxoHKAT3Iwfo3DoFqIx4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FokC5M/7TmYXgf06jkQTCYaQsfk8lKtYu83Jl7ty9f8=;
- b=YXGao9+wmQHEIJdcgqO39IjwkXC1dVRirt8l6pL4koYbwRmBPKatBhi3UTlOf5WFWcbw/zfhSZHg1PGjgbu3dyBweAi+8ZbvjrCqcd2elPTKKXZw0WQHKIAYyNJ6MBE/4XB6oXbumpqCZmW0UY7gPxR/hEzAULOLL8tyzgjWtYvgfP67Q9PVvJYZNY7VhtcenUn2jVOUqV2JhqwJryALPwTlePuXKygR1Fcnr4lMevm8z6GJpI6twO+N0BCEcQ1D3uZUEOokjv2tdN0Y7ldRtTKJuuWQzCbAIebjiPlskL0Ga2yj8r/jAk3vKGyshMb9ZtKCy1H/KJfQcsKQBQI8iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 14 Oct 2022 12:55:02 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2F13B458
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:00 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bj12so11704816ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FokC5M/7TmYXgf06jkQTCYaQsfk8lKtYu83Jl7ty9f8=;
- b=FHxou0Wnp33//4/GuZfkBQKE2MatzRtBknJV5RBCemCc+WhepLBehac9HupjxHyay8lGLb7bsec1ncKIZCwrdn8on5a1HjdI4vzZVMuJPgAkiVverJBneORDQAEKX14A+4Kmy70lPdsPdFYshmt9ZINhCFm3QGz0daT1K8oRASQ=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by BLAPR10MB5028.namprd10.prod.outlook.com (2603:10b6:208:307::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Fri, 14 Oct
- 2022 16:53:21 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::9d50:fa6c:853:c12]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::9d50:fa6c:853:c12%9]) with mapi id 15.20.5723.029; Fri, 14 Oct 2022
- 16:53:21 +0000
-References: <20220927225944.2254360-4-ankur.a.arora@oracle.com>
- <20221007004943.2910736-1-ankur.a.arora@oracle.com>
- <CAHC9VhSnWZ1ovEeajasBPQA0-_AgNW21K2Ycpc3wvSHw5uQZ9Q@mail.gmail.com>
-User-agent: mu4e 1.4.10; emacs 27.2
-From:   Ankur Arora <ankur.a.arora@oracle.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Ankur Arora <ankur.a.arora@oracle.com>, linux-audit@redhat.com,
-        eparis@redhat.com, sgrubb@redhat.com, linux-kernel@vger.kernel.org,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v2] audit: unify
- audit_filter_{uring(),inode_name(),syscall()}
-In-reply-to: <CAHC9VhSnWZ1ovEeajasBPQA0-_AgNW21K2Ycpc3wvSHw5uQZ9Q@mail.gmail.com>
-Date:   Fri, 14 Oct 2022 09:53:19 -0700
-Message-ID: <87zgdyz6rk.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0315.namprd04.prod.outlook.com
- (2603:10b6:303:82::20) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nU/DQ0tem5B+xr9zmfnNsFLON0LNgS/cwdr8QLCwOXU=;
+        b=b1Gmw9pb1bPsV6NjQUyftT9pdc4qtpsgeYUFZtDljTDUDiEN9SPOvOtFZiDNpBqbzx
+         EdKe4/WGRiH44RIr31e8M9f9mXuk27W/t1pMEytS9qx7Srx4iicC8lS2v+5FjWmWWw2v
+         4tUSbN3YjCctp4aPJHmlSMHUcsNFEN2SiN5ccRUHntcqfKwSs8kBBbLvDNOqk97C4gXC
+         ZZ5BHh26CSI00DFyB6b1E2d6sWzxUAxVcY3Pm/0ZEP4uHTm1ImobcFp2IBp4Bj9cfkJl
+         oPNHiaEkuie+CbWa9QhXWp829qWJcL0W35f4TdwgDJhar/Q6AeA+UPUtr2E8m1UocyET
+         y+gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nU/DQ0tem5B+xr9zmfnNsFLON0LNgS/cwdr8QLCwOXU=;
+        b=ZcmibUVKeOdDWGSNxfI1GDAXs1AqRbarr3z2ROQUiw+UoJyepfqqlj505p3I/36S4n
+         1mbN131eLLCL7xPITzpj6kD2EVxGFNvM8ETZmq51Cz43kjCnfqVtH7rwlDurGQXRTR32
+         oyMKpJ5Ta810mZiBzUgcbbrOh+7IoGopmMFOMCraOiqf8giTh9Je9uF7IX1PlG7ImTnU
+         lpoUN+BGHWAbUxG9n4Ycl1ndgxvT/xzT6qrHavVaXW3ZmsxEsvqFsC4Jmw+mPDX/vqM9
+         VOSz6dAjMoh4rAt4fIyJ7YSHYbVQmtzNFTNLydRr6aT0HMN05GgsuwQ5jRwQ0erGSqcj
+         j+PQ==
+X-Gm-Message-State: ACrzQf1VOxJWkQHAUE5RniMYQuIX73AN64/aUYm/xaYGz7iNdwUizKfN
+        yllvSoRmb1CuDKSMnc+cTH4=
+X-Google-Smtp-Source: AMsMyM5ayRyxMSzP91J79F9C8A29dGWaAGMz8MU/BfPIt1/+SM7Hfq2jRjyrtU4DDzZ9yV4BWKg1bA==
+X-Received: by 2002:a17:907:720e:b0:78e:2b59:fdf1 with SMTP id dr14-20020a170907720e00b0078e2b59fdf1mr1352028ejc.659.1665766499366;
+        Fri, 14 Oct 2022 09:54:59 -0700 (PDT)
+Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id b18-20020a1709063cb200b0073dc4385d3bsm1785250ejh.105.2022.10.14.09.54.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 09:54:58 -0700 (PDT)
+Message-ID: <76fee6cb-871e-4719-a0b2-116f3b3f5fa7@gmail.com>
+Date:   Fri, 14 Oct 2022 18:54:57 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|BLAPR10MB5028:EE_
-X-MS-Office365-Filtering-Correlation-Id: d2d30ad3-557b-46f5-a7f9-08daae0499bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ENCZyJJtiEnkUxgL9kyK4iDxW4STn8UbbHt76T98Rpy53BA0E8I8bsUgjNamnGNpJAIAs/utYfipkjyZWAhqLJtv7vkMKRzyrMGjeeVjf2sSjTcgR/yQDpaqQ05r2ebwlMwASfpCsYKNk7v/ogXWEZrGdDWUEa9mvA5OmYDloYqRK0gYsg7RZbZY145KIa8yKBBYuuBFllG9qPJt58G0P0dZk06My4ISHSTGGmzEptl3+XZCbaBqKanXor9v51/ys/51WgCheNq0UY9QewIlIBI5Rq1+qDtMPKnzhmlp5bEOVcU+H9iDpaTCQlsmS16qi5HXgdduR166RRI63oWIV6ih0HO4MOUNdWvtTjOCECME/1opg7au5sDqGmOjpg7pqyw4wSxVGdB6qPJfJuATnnfv8lH+61iLOD4FQgeGxvH3OLPulNgJoXO5KSl+4hUw9jYBi6kO7kuDDHeBU+6W181kTnYySRNa8yETz6lrU1Zv/gEF/MFHom5EkKXcpw7Wm3g+iEnTOMF1Z34i+f3HS2W+tm+EOt6Ak+Vs0qwNfnDX5b4l97FfL4GRyY3RsLAAI3kZm/WrnnfSdhJxhO71enTgZxyXgrix/P+5WAeZW9K31EY6quElkMtSRRqHKDC6SeW2Ilf9TF+z3mmb6O0zFYAJKUsC65A/HUi/abP89Xc3GJtSvfdyM0xSVNjQevEY6wfH0bcKaRQnjVDchsFvPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(39860400002)(396003)(346002)(366004)(451199015)(186003)(83380400001)(2616005)(38100700002)(5660300002)(41300700001)(2906002)(8676002)(8936002)(66946007)(26005)(6486002)(107886003)(6916009)(6512007)(53546011)(316002)(4326008)(66556008)(6506007)(478600001)(66476007)(36756003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YlXOp4e5WS6MuWYLs4WwO+fDnEVRyUAq+Roqygs3SwPtB/gsBGKTaB8mtFUZ?=
- =?us-ascii?Q?QJZFvPKK9fWzsM7BNeZAYTtjMMkwyNQQq4SFghPupxB9mO70l2aCEaOq/X17?=
- =?us-ascii?Q?SdbrMgFh2mjUCNeTgUk7bTL2YQkpgpPEwNt3FcJSdcrz81YV/uMqHqch83r6?=
- =?us-ascii?Q?fYHhXkxnZgGhU61zhIkV65zNeiSRFuvewF+mUYyGwQzRKh+3bqrISmKrnK3h?=
- =?us-ascii?Q?8paiI6PvJJqqceXyFlm2yAqW1J+wQl9b3YH8ugfOi1vSa9V+GMJ6t6qYXfE8?=
- =?us-ascii?Q?MMis8JXs5xVHGm2DMlhR0RW57CYrw38l4AlWRheG0Jt0XvWab8Mz7VIjPcpO?=
- =?us-ascii?Q?5WQ0gzaa66wDK0m9YVq+M+Eewj/u61CWP57N1HP2/RHv4iVn17FnsUB4V/ef?=
- =?us-ascii?Q?yzj+speg568JChM1Y+8rmGiZZPJGKLSW3MXcRE/USUGUushncaBab0YtBbks?=
- =?us-ascii?Q?BnPoxYJX/VXjSul2DR9UQkcgBGzNRl94ex5F3ZqHFLVaKB2f3xocygMFpi9E?=
- =?us-ascii?Q?r5W/u2Aq5KA20WBO7RXOOYr4qYkN/n8Ndnk2Q4vo0YoiKsVd2XuhMIavE9Z5?=
- =?us-ascii?Q?eDIIAwtomRj7+rYsKgGf/4VukPZnFf1nbIVzxmE57QnpEgWaTYJ2Qy+2ZKs/?=
- =?us-ascii?Q?xALBkiwQdTy8CyZxFB5pa8I9BX4NZbvprrUK+xW53AZCQlgP/tvGZ1QstlfE?=
- =?us-ascii?Q?fn7VeD7iCVZZiv3JwQ0tA9BqHRKOnpLS6xilnQhpXJn9xFjrmPHA86VnZjSp?=
- =?us-ascii?Q?j/FQ3dShAels8WZEPRkQ7mgTHp1QKOPwKFej0yxmfVzLRufs1pD/ntRPwhCm?=
- =?us-ascii?Q?2tlXy3XxJq4u6UmgKiKUpRxQpuJ6m6WBjwN0fy1/fQNToNmRY4SMMYsBPK6K?=
- =?us-ascii?Q?/501OrfBv538Ph539UXb+gFJV8haIOAI//cryOzFYJegR6O/gzQpM+c+KgRT?=
- =?us-ascii?Q?FbKzbG20Y+OWpFm2NIFqfCd3k0UbhNLD9MfNhNQToxvXifwMWPGvBGa1jOOX?=
- =?us-ascii?Q?YoxhHbJyXwABN3CJRTcPf6AB9WYa/V4eVwXDBwyWjgl5p9ktJmdgO2UM6VGB?=
- =?us-ascii?Q?437w09Gq9wiX8D/ts1M2OosLd2WW6JnLc1SzOsBaXat5mOiizQ/u1gti9x8n?=
- =?us-ascii?Q?i5mShrF89XRbgLhxTgtmTZNLpaxQkaj3fEZfHT9t9zYe2axrG84jtIWEJrjM?=
- =?us-ascii?Q?yQmJMnJtQyHISOOMrKWScGBJPWiNs8kf+So5BW77k7ELjYVSkVmjcpb99oHd?=
- =?us-ascii?Q?vhMbzPM4MUvKakGikmsxhtggxT9SQkPGqIau50rke2FScYTAHTqv5COtDOhT?=
- =?us-ascii?Q?JMPae5MpfC5MYPbuca5zTJkpJCn6zpHsOxoMXJ2GsE5/A+X8vEN8OKGwgKXb?=
- =?us-ascii?Q?eZosUPbgTBd7Lqr6qjCqWjzCVs+G8+LM8knRHfdE5yNk7/Auou9RNnuz+OAf?=
- =?us-ascii?Q?kEv7BsLFw52fhIx5lAKK99QDzPpRJ+Nf8OQJwer5CN1e3SjVsWGllzYrfsxw?=
- =?us-ascii?Q?KBjEvdx0//nWhBCF9FKtP1DfNSiXe1yb4I9qXFtBDMg5JUp/SdIC+WTXmPKk?=
- =?us-ascii?Q?v0hY4Z1hF+vemZh0im1YIiB1xAqUkfWgayjJ7YuE?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2d30ad3-557b-46f5-a7f9-08daae0499bc
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 16:53:21.0613
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SUct462jRWlTnziVWVYB8bijRZopQv49On4WoCc7RCUndBxNrfs07poFraHnAfHTJnECalHp3grXAOqNANRwRFr59lD12cyqWFBHftcl+QY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5028
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_09,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210140094
-X-Proofpoint-GUID: eGntNJunOAWwJxSBATVpJWlO9l7M391e
-X-Proofpoint-ORIG-GUID: eGntNJunOAWwJxSBATVpJWlO9l7M391e
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] staging: rtl8192e: remove unnecessary braces for
+ single statement blocks
+Content-Language: en-US
+To:     Rui Li <me@lirui.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <166558541522.9.15423282339326993462.68459319@lirui.org>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <166558541522.9.15423282339326993462.68459319@lirui.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -147,59 +76,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/12/22 16:36, Rui Li wrote:
+> This commit cleans up checkpatch warning as follows:
+> braces {} are not necessary for single statement blocks
+> 
+> Signed-off-by: Rui Li <me@lirui.org>
+> ---
+> Changes since v3:
+>   - Clean one more warning as code updated
+> 
+> Changes since v2:
+>   - Correct commit message title
+>   - Add changelog
+> 
+> Changes since v1:
+>   - Only fix one of checkpatch warnings
+> ---
+>   drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  3 +--
+>   drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  9 +++------
+>   drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 12 ++++--------
+>   drivers/staging/rtl8192e/rtllib_softmac_wx.c   |  3 +--
+>   4 files changed, 9 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> index 18e4e5d84878..8d20b0deca37 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> @@ -1112,9 +1112,8 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
+>   	if (cb_desc->bHwSec) {
+>   		static u8 tmp;
+>   
+> -		if (!tmp) {
+> +		if (!tmp)
+>   			tmp = 1;
+> -		}
+>   		switch (priv->rtllib->pairwise_key_type) {
+>   		case KEY_TYPE_WEP40:
+>   		case KEY_TYPE_WEP104:
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> index 1b592258e640..4e3d183be0f2 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> @@ -522,9 +522,8 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
+>   		rtStatus  = rtl92e_check_bb_and_rf(dev,
+>   						   (enum hw90_block)eCheckItem,
+>   						   (enum rf90_radio_path)0);
+> -		if (!rtStatus) {
+> +		if (!rtStatus)
+>   			return rtStatus;
+> -		}
+>   	}
+>   	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x0);
+>   	_rtl92e_phy_config_bb(dev, BaseBand_Config_PHY_REG);
+> @@ -1379,9 +1378,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+>   					i++;
+>   				}
+>   
+> -				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
+> +				if (i >= MAX_DOZE_WAITING_TIMES_9x)
+>   					break;
+> -				}
+>   			}
+>   			rtl92e_set_rf_off(dev);
+>   			break;
+> @@ -1398,9 +1396,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+>   					i++;
+>   				}
+>   
+> -				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
+> +				if (i >= MAX_DOZE_WAITING_TIMES_9x)
+>   					break;
+> -				}
+>   			}
+>   
+>   			if (pPSC->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+> index 702551056227..641961a14c52 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+> @@ -267,9 +267,8 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
+>   			"PATH=/usr/bin:/bin",
+>   			 NULL};
+>   
+> -	if (priv->ResetProgress == RESET_TYPE_SILENT) {
+> +	if (priv->ResetProgress == RESET_TYPE_SILENT)
+>   		return;
+> -	}
+>   
+>   	if (priv->rtllib->state != RTLLIB_LINKED)
+>   		return;
+> @@ -330,9 +329,8 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
+>   	bool bshort_gi_enabled = false;
+>   	static u8 ping_rssi_state;
+>   
+> -	if (!priv->up) {
+> +	if (!priv->up)
+>   		return;
+> -	}
+>   
+>   	if (pra->rate_adaptive_disabled)
+>   		return;
+> @@ -777,9 +775,8 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
+>   		tmpRegA = rtl92e_get_bb_reg(dev, rOFDM0_XATxIQImbalance,
+>   					    bMaskDWord);
+>   		for (i = 0; i < OFDM_Table_Length; i++) {
+> -			if (tmpRegA == OFDMSwingTable[i]) {
+> +			if (tmpRegA == OFDMSwingTable[i])
+>   				priv->OFDM_index[0] = i;
+> -			}
+>   		}
+>   
+>   		TempCCk = rtl92e_get_bb_reg(dev, rCCK0_TxFilter1, bMaskByte2);
+> @@ -1066,9 +1063,8 @@ void rtl92e_dm_restore_state(struct net_device *dev)
+>   	u32	reg_ratr = priv->rate_adaptive.last_ratr;
+>   	u32 ratr_value;
+>   
+> -	if (!priv->up) {
+> +	if (!priv->up)
+>   		return;
+> -	}
+>   
+>   	if (priv->rate_adaptive.rate_adaptive_disabled)
+>   		return;
+> diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> index f9589c5b62ba..fdf867a5dd7a 100644
+> --- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> +++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> @@ -571,9 +571,8 @@ int rtllib_wx_set_power(struct rtllib_device *ieee,
+>   		ieee->ps = RTLLIB_PS_DISABLED;
+>   		goto exit;
+>   	}
+> -	if (wrqu->power.flags & IW_POWER_TIMEOUT) {
+> +	if (wrqu->power.flags & IW_POWER_TIMEOUT)
+>   		ieee->ps_timeout = wrqu->power.value / 1000;
+> -	}
+>   
+>   	if (wrqu->power.flags & IW_POWER_PERIOD)
+>   		ieee->ps_period = wrqu->power.value / 1000;
 
-Paul Moore <paul@paul-moore.com> writes:
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 
-> On Thu, Oct 6, 2022 at 8:49 PM Ankur Arora <ankur.a.arora@oracle.com> wrote:
->>
->> audit_filter_uring(), audit_filter_inode_name() are substantially
->> similar to audit_filter_syscall(). Move the core logic to
->> __audit_filter_op() which can be parametrized for all three.
->>
->> On a Skylakex system, getpid() latency (all results aggregated
->> across 12 boot cycles):
->>
->>          Min     Mean    Median   Max      pstdev
->>          (ns)    (ns)    (ns)     (ns)
->>
->>  -    196.63   207.86  206.60  230.98      (+- 3.92%)
->>  +    183.73   196.95  192.31  232.49      (+- 6.04%)
->>
->> Performance counter stats for 'bin/getpid' (3 runs) go from:
->>     cycles               805.58  (  +-  4.11% )
->>     instructions        1654.11  (  +-   .05% )
->>     IPC                    2.06  (  +-  3.39% )
->>     branches             430.02  (  +-   .05% )
->>     branch-misses          1.55  (  +-  7.09% )
->>     L1-dcache-loads      440.01  (  +-   .09% )
->>     L1-dcache-load-misses  9.05  (  +- 74.03% )
->> to:
->>     cycles               765.37  (  +-  6.66% )
->>     instructions        1677.07  (  +-  0.04% )
->>     IPC                    2.20  (  +-  5.90% )
->>     branches             431.10  (  +-  0.04% )
->>     branch-misses          1.60  (  +- 11.25% )
->>     L1-dcache-loads      521.04  (  +-  0.05% )
->>     L1-dcache-load-misses  6.92  (  +- 77.60% )
->>
->> (Both aggregated over 12 boot cycles.)
->>
->> The increased L1-dcache-loads are due to some intermediate values now
->> coming from the stack.
->>
->> The improvement in cycles is due to a slightly denser loop (the list
->> parameter in the list_for_each_entry_rcu() exit check now comes from
->> a register rather than a constant as before.)
->>
->> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
->> ---
->>  kernel/auditsc.c | 76 +++++++++++++++++++++++++-----------------------
->>  1 file changed, 39 insertions(+), 37 deletions(-)
->
-> Thanks, this looks good to me.  I'll queue this up for when the merge
-> window closes.
-
-Great. Thanks Paul.
-
---
-ankur
