@@ -2,205 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC435FF658
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0E45FF65A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiJNWTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S229717AbiJNWX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiJNWSb (ORCPT
+        with ESMTP id S229576AbiJNWXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:18:31 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291801E0455;
-        Fri, 14 Oct 2022 15:18:23 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id w196so6481998oiw.8;
-        Fri, 14 Oct 2022 15:18:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cv1UBJfQzFJqm9MKrYEI4Znkn0nH6Ew1AYP8Zj5KlyY=;
-        b=4+uoCLhQgJh8gn47FIutjI+KQW48uW2qWCREq8YS+gR6cRrUE0uhvfMLOlo3OJbC+N
-         eAWCxC0ly5TZ6qzA1VSiORHQvlzY9xCzW+N9Nd/FFaiZEYBPaaFBrYATJT7fz0/za+9+
-         L9btK5vEqX5+tWPkbb4QTW5iL/DAEMjAQOqsKzV9Q4SoWkUYYCVk6irwnBl5zPHpMDR4
-         /72An05tlmnNSMv/ohhuZU5Lj/jQEXFYieNRlodInHiTUAVcmlbIiJ57oS7owHL06vxK
-         5FO1f2yts7hYbbdlJFWgBF7gsmNKI3/IGSPJVyeQ9/09DCWspUZor7DWsVa5LeWEeM7A
-         A8zw==
-X-Gm-Message-State: ACrzQf0rC0gDl93dVqawOvZhah8mSWooxBySHcyODs9x4tC5EwsKj3uJ
-        qBegVCEyF5mao/33pJjktueQwCIVQJwQISaHH3s=
-X-Google-Smtp-Source: AMsMyM7RcSpNsrdTB3IMVoBjep6aChMvzNXIw7J/EQwCOamIINOB833PUrM8CKc1Dr591uE93IP4/i+8N7GjctPKlJA=
-X-Received: by 2002:a05:6808:181e:b0:350:e92a:9ab1 with SMTP id
- bh30-20020a056808181e00b00350e92a9ab1mr14639oib.209.1665785817076; Fri, 14
- Oct 2022 15:16:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220922071017.17398-1-dongli.zhang@oracle.com>
-In-Reply-To: <20220922071017.17398-1-dongli.zhang@oracle.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 14 Oct 2022 15:16:45 -0700
-Message-ID: <CAM9d7cj8z+ryyzUHR+P1Dcpot2jjW+Qcc4CPQpfafTXN=LEU0Q@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/1] perf stat: do not fatal if the leader is errored
-To:     Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     linux-perf-users <linux-perf-users@vger.kernel.org>,
-        KVM <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+        Fri, 14 Oct 2022 18:23:54 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957D71BE1E9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:23:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 6C0A03200945;
+        Fri, 14 Oct 2022 18:23:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 14 Oct 2022 18:23:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1665786230; x=1665872630; bh=Y6
+        ngsLLxEEPsALgDBVsNDsl4csmgSHWiccz5cFir6Vk=; b=Yiii8jrRkL8w+/owty
+        jm2EvI7nONMFGGGjBK/QGCbBpIAxkty3RXMNojrEBC44tcN0RSPRH/Q8kr1OtRr/
+        T+2GMwR+Rcb3n5KPusdZL55SQbADOfGV3Rb7YY02yl6fFMaiDA1wAecPhjwQovlL
+        pctk2XWTIpnYfmJrd3VkbUrQQRloLst6f+icu3tegRqks84beneI9QwtCJQ2inJl
+        qIIVFuZKRmRHMcSZ2him7UKefa/+hDjqqDxXaPpCtl6Td+mbJ/47hK798Nzy8+Pk
+        FZ7/Pjmx9VwmNjWsE45YuE0krZ/+SHQwml4kzfcivNOEd+3uv0pXdRgSbpHYWssy
+        gb2Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665786230; x=1665872630; bh=Y6ngsLLxEEPsALgDBVsNDsl4csmg
+        SHWiccz5cFir6Vk=; b=AFKuzg7kN5WYamgZ8J9vuz5dVRZV1akJiaRAO32SCH4+
+        o0pbSnDrnXD+o8ShW4H7DwB2SRlJOmlbz9LyDneVRgbApkaFYTj75Yri47Uy8D5I
+        Qh05iPd84SwlRxQ7WXAnmFo/BSb016hW+US1t0MBv2+FTKGXJKxEnDy39j4PNqMH
+        S/yA/L8+I5ZA1l6mWfENCXbo7qdoSSDlOD+fj7O3SQApfb25QcnI0nByk+xbt1rq
+        dLO+XSUDI1IoY/XyZCklfUIt+60MWWktnPNXGb0TgIycRFYLLbfvFjpwN1BhRIKU
+        FhbHKxapSNzlUkAnJxKIX9zymycmFCURvm1yM0fO/w==
+X-ME-Sender: <xms:deFJY5N_IZdoR0e2BE_RaGLUA-6Wi_jXOFLLv4AayCWUK8QktpCb3A>
+    <xme:deFJY79_W89UjiXhVYAhluBaQRDybyafQRPFYzz6cKTWrkqSsDKJ8xXr3Gs4yUX6W
+    cOBBFvx0SEMjsmQ3Ao>
+X-ME-Received: <xmr:deFJY4RWL9y6RPQfNtEaGZxpJtQnNAWJxR2ioEwgHUjHZqAO20I0R8vO05sFDhUTYrE2dg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekfedgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:deFJY1vadcb1DUcb5qPCgTBe6YkXcJAatgzFxJ8E0M6BC-jWnYfzKA>
+    <xmx:deFJYxd_g9RrVg6wjw4J2J1NpjfGb-DsHj89PGmm1TzL_0IN0wUrxQ>
+    <xmx:deFJYx1jRjzELNxb4yydyiyzlFdgef1UpwbRTkHprf2hhplIm6urfw>
+    <xmx:duFJYx13X-IcAqsGwxzYNVRBWyltVL_IwsDRzQnqKwMGgqO0zxudhQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Oct 2022 18:23:49 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 4F21E1094FB; Sat, 15 Oct 2022 01:23:46 +0300 (+03)
+Date:   Sat, 15 Oct 2022 01:23:46 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Jann Horn <jannh@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@suse.de>, Rik van Riel <riel@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, joe.jin@oracle.com,
-        Like Xu <likexu@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: [BUG?] X86 arch_tlbbatch_flush() seems to be lacking
+ mm_tlb_flush_nested() integration
+Message-ID: <20221014222346.n337tvkbyr33dsdx@box.shutemov.name>
+References: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Oct 14, 2022 at 08:19:42PM +0200, Jann Horn wrote:
+> Hi!
+> 
+> I haven't actually managed to reproduce this behavior, so maybe I'm
+> just misunderstanding how this works; but I think the
+> arch_tlbbatch_flush() path for batched TLB flushing in vmscan ought to
+> have some kind of integration with mm_tlb_flush_nested().
+> 
+> I think that currently, the following race could happen:
+> 
+> [initial situation: page P is mapped into a page table of task B, but
+> the page is not referenced, the PTE's A/D bits are clear]
+> A: vmscan begins
+> A: vmscan looks at P and P's PTEs, and concludes that P is not currently in use
+> B: reads from P through the PTE, setting the Accessed bit and creating
+> a TLB entry
+> A: vmscan enters try_to_unmap_one()
+> A: try_to_unmap_one() calls should_defer_flush(), which returns true
+> A: try_to_unmap_one() removes the PTE and queues a TLB flush
+> (arch_tlbbatch_add_mm())
+> A: try_to_unmap_one() returns, try_to_unmap() returns to shrink_folio_list()
+> B: calls munmap() on the VMA that mapped P
+> B: no PTEs are removed, so no TLB flush happens
+> B: munmap() returns
 
-On Thu, Sep 22, 2022 at 12:10 AM Dongli Zhang <dongli.zhang@oracle.com> wrote:
->
-> Add kvm@vger.kernel.org as this issue is in virtualization env.
->
-> The topdown metrics events became default since
-> commit 42641d6f4d15 ("perf stat: Add Topdown metrics events as default
-> events"). The perf will use 'slots' if the
-> /sys/bus/event_source/devices/cpu/events/slots is available.
->
-> Unfortunately, the 'slots' may not be supported in the virualization
-> environment. The hypervisor may not expose the 'slots' counter to the VM
-> in cpuid. As a result, the kernel may disable topdown slots and metrics
-> events in intel_pmu_init() if slots event is not in CPUID. E.g., both
-> c->weight and c->idxmsk64 are set to 0.
->
-> There will be below error on Icelake VM since 'slots' is the leader:
->
-> $ perf stat
-> Error:
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (slots).
-> /bin/dmesg | grep -i perf may provide additional information.
->
-> This is because the stat_handle_error() returns COUNTER_FATAL when the
-> 'slots' is used as leader of events.
->
-> There are three options to fix the issue.
->
-> 1. Do not expose /sys/bus/event_source/devices/cpu/events/slots to
-> userspace so that pmu_have_event(pmu->name, "slots") returns false.
->
-> 2. Run cpuid at perf userspace and avoid using 'slots' if it is not
-> supported in cpuid.
->
-> 3. Do not fatal perf if the leader is failed. Do not create events for an
-> evsel if its leader is already failed.
->
-> This RFC patch is with the 3rd option. Would you mind suggesting which
-> option is better?
+I think here we will serialize against anon_vma/i_mmap lock in
+__do_munmap() -> unmap_region() -> free_pgtables() that A also holds.
 
-Sorry for the late reply but I think option 1 is the way to go.
+So I believe munmap() is safe, but MADV_DONTNEED (and its flavours) is not.
 
-The option 3 would be a transient workaround and it would affect
-other events too.  If it's really needed, I think option 2 is slightly better
-than option 3.  Or, we can add --force option to skip non-supported
-events explicitly.
+> [at this point, the TLB entry still exists]
+> B: calls mmap(), which reuses the same area that was just unmapped
+> B: tries to access the newly created VMA, but instead the access goes
+> through the stale TLB entry
+> A: shrink_folio_list() calls try_to_unmap_flush(), which removes the
+> stale TLB entry
+> 
+> The effect would be that after process B removes a mapping with
+> munmap() and creates a new mapping in its place, it would still see
+> data from the old mapping when trying to access the new mapping.
+> 
+> Am I missing something that protects against this scenario?
+> 
+> munmap() uses the mmu_gather infrastructure, which tries to protect
+> against this kind of correctness bug with multiple racing TLB
+> invalidations in tlb_finish_mmu() by blowing away the whole TLB
+> whenever one TLB invalidation ends while another is still in progress
+> (tested with mm_tlb_flush_nested(tlb->mm)). But mmu_gather doesn't
+> seem to be aware of TLB flushes that are batched up in the
+> arch_tlbbatch_flush() infrastructure, so that doesn't help here.
+> 
+> I think it might be necessary to add a new global counter of pending
+> arch_tlbbatch_flush() flushes, and query that in
+> mm_tlb_flush_nested(), or something like that.
 
-Thanks,
-Namhyung
-
->
-> Here is the output of patch.
->
-> $ perf stat -v
-> Using CPUID GenuineIntel-6-6A-6
-> slots -> cpu/event=0,umask=0x4/
-> topdown-retiring -> cpu/event=0,umask=0x80/
-> topdown-bad-spec -> cpu/event=0,umask=0x81/
-> topdown-fe-bound -> cpu/event=0,umask=0x82/
-> topdown-be-bound -> cpu/event=0,umask=0x83/
-> Control descriptor is not initialized
-> Warning:
-> slots event is not supported by the kernel.
-> ^Ccpu-clock: 62021481051 62021480237 62021480237
-> context-switches: 437 62021478064 62021478064
-> cpu-migrations: 17 62021475294 62021475294
-> page-faults: 12 62021471925 62021471925
-> cycles: 15662273 62020909141 62020909141
-> instructions: 6580385 62008944246 62008944246
-> branches: 1446119 62008855550 62008855550
-> branch-misses: 30970 62008643255 62008643255
-> failed to read counter slots
-> failed to read counter topdown-retiring
-> failed to read counter topdown-bad-spec
-> failed to read counter topdown-fe-bound
-> failed to read counter topdown-be-bound
->
->  Performance counter stats for 'system wide':
->
->          62,021.48 msec cpu-clock                        #   16.006 CPUs utilized
->                437      context-switches                 #    7.046 /sec
->                 17      cpu-migrations                   #    0.274 /sec
->                 12      page-faults                      #    0.193 /sec
->         15,662,273      cycles                           #    0.000 GHz
->          6,580,385      instructions                     #    0.42  insn per cycle
->          1,446,119      branches                         #   23.316 K/sec
->             30,970      branch-misses                    #    2.14% of all branches
->    <not supported>      slots
->    <not supported>      topdown-retiring
->    <not supported>      topdown-bad-spec
->    <not supported>      topdown-fe-bound
->    <not supported>      topdown-be-bound
->
->        3.874991326 seconds time elapsed
->
-> Thank you very much!
->
-> Cc: Joe Jin <joe.jin@oracle.com>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-> ---
->  tools/perf/builtin-stat.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 0b4a62e4ff67..1053cf0886c0 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -762,9 +762,7 @@ static enum counter_recovery stat_handle_error(struct evsel *counter)
->                  */
->                 counter->errored = true;
->
-> -               if ((evsel__leader(counter) != counter) ||
-> -                   !(counter->core.leader->nr_members > 1))
-> -                       return COUNTER_SKIP;
-> +               return COUNTER_SKIP;
->         } else if (evsel__fallback(counter, errno, msg, sizeof(msg))) {
->                 if (verbose > 0)
->                         ui__warning("%s\n", msg);
-> @@ -843,6 +841,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->                 if (target.use_bpf)
->                         break;
->
-> +               if (evsel__leader(counter)->errored)
-> +                       continue;
->                 if (counter->reset_group || counter->errored)
->                         continue;
->                 if (evsel__is_bpf(counter))
-> @@ -901,6 +901,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->                 evlist__for_each_cpu(evlist_cpu_itr, evsel_list, affinity) {
->                         counter = evlist_cpu_itr.evsel;
->
-> +                       if (evsel__leader(counter)->errored)
-> +                               continue;
->                         if (!counter->reset_group && !counter->errored)
->                                 continue;
->                         if (!counter->reset_group)
-> --
-> 2.17.1
->
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
