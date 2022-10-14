@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5993F5FE6DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4175FE6E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJNCPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 22:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S229555AbiJNCSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 22:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiJNCPs (ORCPT
+        with ESMTP id S229663AbiJNCSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 22:15:48 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A29F13ECF0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:15:45 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id bs14so4439672ljb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuy+ZMA4uPGTf3eZoCGwL2/k+5QRw/FFhfkU0kjMMa0=;
-        b=Dr9qPuJzcDkqiovmS2bY/0BvhRLqTXnLQYia3409eGT0C9mWZoWdFPeleF6vsLxiwE
-         pBOhPr1T/sRYTFbJDtNzoQuztzY7zBf1tseWWkhZrHDSBweUEfdI7Z2wpTbcVG7Bc7pB
-         riGQSR0uEaYwrc7c7hxYTHpRhaYxEkLfPSkEE7tgIfP7QNXjkwhARmR1oKDrygQHiQtW
-         dkSwh43ISWTOSyznK7torBvjXxX5c+LtRW/tPM/+e/lkN4sNxenh6N8XwaFOdVDXp3JR
-         Sfzma1J0tOcX1o9qAdeZbyhl5KByrGfnBTyO4tYE0/aEuf/UztlGa/QJbdXWiaqv0IIC
-         M5FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fuy+ZMA4uPGTf3eZoCGwL2/k+5QRw/FFhfkU0kjMMa0=;
-        b=4tlplXVZxci9vZ4nrappNC8vjUo5u6tOtpKNcHIngxmRHhcg9tXmz6ZR7CzL4+qGrX
-         CcDW1P3D7196rkPesCanZjquPDvXu5LOsqydUHfyAgmEOfZvDjmD0okK28amwFM9s3pz
-         9wmA/ctNAMlQRWkSENyPQGISmA8YivEiQeHHhRaIJTaWIRo3El9kqyrwwtZBi9fB4SzO
-         HU3Qh60RocS9TVkRTLAxF2Tqv8FnWdbNK6hvJUWXfojzfP9dq/cSIXYV8ahf0FJUIgOj
-         tnbV6+8FDvIe+/rrkL/LTLhsa3TqOxzZn67ByjeZKPbrjPX18MGK7jnhmLSVM170iX5H
-         J6rA==
-X-Gm-Message-State: ACrzQf25I9B+zeLgHQC/CNgAwQfDq6EX84fN+E2ttJnXwbDtIKs9aMOE
-        C60xriEdHIazTmYyq5cYTXoS0EmT9GsY4cvcY+P0
-X-Google-Smtp-Source: AMsMyM49dZLWwOC7meVIiXUbcrIusOKXaoudHLdxZk3FeWJbP199/DbKsjYRGa5Tk1uTUEzuyYnlgtiPlCtaDeTRSpE=
-X-Received: by 2002:a2e:9e50:0:b0:261:e3fd:cdc5 with SMTP id
- g16-20020a2e9e50000000b00261e3fdcdc5mr982059ljk.56.1665713743465; Thu, 13 Oct
- 2022 19:15:43 -0700 (PDT)
+        Thu, 13 Oct 2022 22:18:47 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85131E8C44
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:18:45 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxqmr+xkhjKcgtAA--.28612S3;
+        Fri, 14 Oct 2022 10:18:39 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: BPF: Avoid declare variables in switch-case
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+References: <20221013154000.3462836-1-chenhuacai@loongson.cn>
+ <8a8fa581-94a9-649d-8c01-f1afd4bc9514@xen0n.name>
+ <CAAhV-H5U1c_wfWLuxMaHD6c9-k+g-iSqgtcJVwceoL13J7hEiA@mail.gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <ae6260e5-0eb6-a615-7032-6481cd186f3f@loongson.cn>
+Date:   Fri, 14 Oct 2022 10:18:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
- <CANDhNCrrM58vmWCos5kd7_V=+NimW-5sU7UFtjxX0C+=mqW2KQ@mail.gmail.com>
- <CANDhNCojzuCW2Udx_CssLvnY9DunEqVBSxnC5D6Rz0oX-r2-7g@mail.gmail.com>
- <CAJD7tkb=FSoRETXDMBs+ZUO1BhT7X1aG7wziYNtFg8XqmXH-Zw@mail.gmail.com> <CAJD7tkYUoW3YU-R1wNBADdUDHVprq6CP3axD9md3gJzW=yhiFw@mail.gmail.com>
-In-Reply-To: <CAJD7tkYUoW3YU-R1wNBADdUDHVprq6CP3axD9md3gJzW=yhiFw@mail.gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Thu, 13 Oct 2022 19:15:31 -0700
-Message-ID: <CANDhNCpHGvw2MxexRFwpx4nAmqgwXw3G3DqkD2s0W3RNXZw2Bg@mail.gmail.com>
-Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H5U1c_wfWLuxMaHD6c9-k+g-iSqgtcJVwceoL13J7hEiA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Cxqmr+xkhjKcgtAA--.28612S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw1UAry3Xw15WF1fuw18Grg_yoW8tr43pF
+        95Wan8Ka1DJ3yY9FyqqrWkXa48tw4kJrn8KF1FqrZ2kFsF9r1fGr48KF4FkFZxGrn8ur4I
+        va1qvayxuw15CrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfU5CztUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 6:29 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+
+
+On 10/14/2022 09:13 AM, Huacai Chen wrote:
+> Hi, Xuerui,
 >
-> On Thu, Oct 13, 2022 at 5:03 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Wed, Oct 12, 2022 at 8:07 PM John Stultz <jstultz@google.com> wrote:
-> > >
-> > > On Wed, Oct 12, 2022 at 8:02 PM John Stultz <jstultz@google.com> wrote:
-> > > > On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > > So I think it reasonable to say its bounded by approximately  2 *
-> > > > NSEC_PER_SEC/HZ +/- 11%.
-> > >
-> > > Sorry, this should be 2*NSEC_PER_SEC/HZ * 0.11
-> >
-> > Thanks so much for the detailed response :)
-> >
-> > IIUC this error bound is in ns. So on a 2 GHz cpu the bound is 0.11 ns
-> > (essentially 0)? I feel like I miscalculated, this error bound is too
-> > good to be true.
+> On Fri, Oct 14, 2022 at 12:43 AM WANG Xuerui <kernel@xen0n.name> wrote:
+>>
+>> On 10/13/22 23:40, Huacai Chen wrote:
+>>> Not all compilers support declare variables in switch-case, so move
+>>> declarations to the beginning of a function. Otherwise we may get such
+>>> build errors:
+
+...
+
+>>>
+>>>   static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool extra_pass)
+>>>   {
+>>> -     const bool is32 = BPF_CLASS(insn->code) == BPF_ALU ||
+>>> -                       BPF_CLASS(insn->code) == BPF_JMP32;
+>>> +     u8 t0 = -1;
+>> Here "t0" seems to be a versatile temp value, while the "t1" below is
+>> the actual GPR $t1. What about renaming "t0" to something like "tmp" to
+>> reduce confusion? I believe due to things like "t0 = LOONGARCH_GPR_ZERO"
+>> the "t0" is 100% not an actual mapping to $t0.
+> I rename t7 to t0 because there is no t3-t6, t7 looks very strange.
+> But from emit_cond_jmp() the 3rd and 4th parameters have no difference
+> so I suppose t0 is just OK, then whether rename it to tmp depends on
+> Tiezhu's opinion.
 >
-> Never mind, I thought HZ is the cpu speed for some reason. It's the
-> number of jiffies per second, right?
 
-Correct.
+Use "tmp" seems better due to it is a temp value.
 
-> So if HZ is 1000, the error bound is actually ~2 ms, which is very
-> large considering that the unit is ns.
+>>> +     u64 func_addr;
+>>> +     bool func_addr_fixed;
+>>> +     int i = insn - ctx->prog->insnsi;
+>>> +     int ret, jmp_offset;
+>>>       const u8 code = insn->code;
+>>>       const u8 cond = BPF_OP(code);
+>>>       const u8 t1 = LOONGARCH_GPR_T1;
+>>> @@ -400,8 +402,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>>>       const u8 dst = regmap[insn->dst_reg];
+>>>       const s16 off = insn->off;
+>>>       const s32 imm = insn->imm;
+>>> -     int jmp_offset;
+>>> -     int i = insn - ctx->prog->insnsi;
+>>> +     const u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+>>> +     const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
+>> Please consider reducing diff damage and not touching parts not directly
+>> affected by this change. For example this "is32" declaration and
+>> initialization was moved although not related to this change.
 
-Uh, for HZ=1000, I think it's closer to 220us, but yes, for HZ=100 2.2ms.
+It looks reasonable, one change per patch is better.
 
-thanks
--john
+> I think defining variables from simple to complex and grouping them
+> can make life easier. :)
+>
+
+No strong opinion on this, I am OK either way.
+
+Thanks,
+Tiezhu
+
