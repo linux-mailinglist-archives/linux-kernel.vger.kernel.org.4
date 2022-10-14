@@ -2,185 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EA35FEBBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2965FEBCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiJNJfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S230123AbiJNJhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiJNJff (ORCPT
+        with ESMTP id S230104AbiJNJhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:35:35 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F793109D66
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:35:34 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso7381888pja.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W72qU+VIW5XhUX7uAnZIVpuOffuQisEiiwK4cvRG0vU=;
-        b=B9ME/S36KxBRTW5prTouAg9AKCdUX8Tw8YNjYsziP8yB91x6yiA47toBWLLiWtsGLI
-         34pOrn+YJiLNY7QpKuTEJ664bbLnq5WqD5/3e0RnXhuwA5RYV1CxeuZJ+rnkUSCTvCJc
-         CeFgzSy2B8UJsIcTBxKfHg93Kzh65ocunBLGM3Vju03U27NSJuNJ2SKqnNQOEOZvdYcK
-         pdxL0oy3ZnESEAu3bkI1uokIv/bYhm4RNjgAJ8AbTfTXyLnbnYi8g7O5k/t1BCD2K0zi
-         KZuetDlu4F4XzoYbqEh8A4Z81TH6leaug5RBlniKwls3xyYyYu4WwGGSepX6TabCzzMJ
-         nXXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W72qU+VIW5XhUX7uAnZIVpuOffuQisEiiwK4cvRG0vU=;
-        b=HZ6hqVWBBIGhjkIZYKS6KbG6tLm5gkzz+WQv0of5JccWrLx70BGCkm2xgt7I4N7hZc
-         x0lX7Kq1AF9bkfdGSc2nRtmbDiNCI95FvzTcKW0524YdGd6TQvwEJRmT4aCwudzqH1wp
-         1kgvSqE7jp/TEdWdT+/WKhpNu7PWEdI6FZbcouET8dT21w0XP5caUr/PUqdd8cog+6hc
-         cZ0xCBmRBNKKt9mVUqauQhmPd+pvQgcmmjAavFb6qT073sCdrQcg9vwv1rEa2yjB3Bl6
-         OQT9H0fWe/8D7yPiuUvjW7c7mA1fiosJbZCBJ2G0MhK+puXdBYttf6syq7YbQ23XXCk6
-         ZoXQ==
-X-Gm-Message-State: ACrzQf1QE/n5SOdyY+kd+i2tbWeF1xLT/FZadte41VTiYpEthxmngOl3
-        PJHmHKsONerWKxNC9T8lV3pFk4gR10b6dEZOMdlT4Q==
-X-Google-Smtp-Source: AMsMyM5JTkM1AeJ9RQt3kUkKbZLzqh69dodlb7V1REpt+lPteLG7O67szgwid5ocSo1qHiAmpQ/sKjFR23AaBwSdvMk=
-X-Received: by 2002:a17:902:e74f:b0:178:3af4:fb13 with SMTP id
- p15-20020a170902e74f00b001783af4fb13mr4214727plf.19.1665740133649; Fri, 14
- Oct 2022 02:35:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-6-vannapurve@google.com> <Yz834mGQDtkdwn7q@google.com>
-In-Reply-To: <Yz834mGQDtkdwn7q@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 14 Oct 2022 15:05:22 +0530
-Message-ID: <CAGtprH_c+vhr8iBYYd7+BZtwzs_r6uFzxPyW1D3bHGhmHugcnA@mail.gmail.com>
-Subject: Re: [RFC V3 PATCH 5/6] selftests: kvm: x86: Execute VMs with private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 05:37:46 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DA916086B;
+        Fri, 14 Oct 2022 02:37:45 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 072865C00BA;
+        Fri, 14 Oct 2022 05:37:42 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 14 Oct 2022 05:37:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665740262; x=1665826662; bh=psRGotoCAz
+        loqk1qZuGwB6mybx3HJ07mki+PNF3q/YQ=; b=F9sOVc/vcSeuRDFyhAG6ap5rJs
+        gGKFd6STnjAnczslV9BWi4dcYPnj5MhDoPmVmUU9sQtwQ+6Q+65bIUwkMgt6lciZ
+        4b++m8elA7yXphM+QbXG79bHPz+Tby3zz5lsBIuzcm46viciXa1Vc+AY0Rpkmbh+
+        v+9E7hLi8GBl8XNlllQDjHoEOA+FSM7RzGTGeB8cMOaGjd1YAs2k/nWivVQbqDME
+        U4Z1FyZj9XSS9yEtXuqQo+ZkzlHk/+vq+jlws/hyFDDz60lFFk8kTMTiWj/ryvFD
+        1bIK04TtEwA0MNIZZzulpKrxr+kERu60ScFXt79EoQKf0etwFsaU6jg1SvVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665740262; x=1665826662; bh=psRGotoCAzloqk1qZuGwB6mybx3H
+        J07mki+PNF3q/YQ=; b=LtoSLpDYcaC2rGFCLZR1DEuzYafMUgca6L5zhEh3OUb+
+        gPgXZWHFDG3StO2vUjLqeCSrEAAEqihFdxSR+rQoAB21KI7XfTUKaGshH5T6Ckv/
+        OnF1brWCarPFSkuAgnsOEy0z4Mm8pmcXQsuTR0NLXtlBBGjZgP6k64+dWjGRiROn
+        OQGGTQ5JrwnGjroffmRlZda1TIBRUz644Hxf5IeulXhbHHTVutGT3Z/MuASXKzb9
+        4lIp8oe/nnLiaqbLnOJEjEmFIbtEixpe4kAoSd0VHYG9zuEwkvPsjRX/sy8CSOc2
+        Er9Ddg1OrGEJTE1V4tYlqTO7eYBex+7vV/sWRfY+cQ==
+X-ME-Sender: <xms:5C1JY9gX37tAScXt1Lt9-cg-gkNX8IAZQXOjbvNsoO4jI3PfduLBJQ>
+    <xme:5C1JYyBTfwA3wWvZPBajd088FiUWrNXFO2-urP7TjkN7J-sv3IQbwvgkfzv064z_j
+    -KsMku5esFGlxrteUo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekvddgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:5C1JY9F8xfO-LxQBKlderIax65SewA1UTkn3kaiKZCyS8T_V73KvNA>
+    <xmx:5C1JYyRXyczAqBxOUGbtFs7rqUEy6Q1nKrDhIbaUIfgubmj5zGR1Eg>
+    <xmx:5C1JY6w2eN8CtNgRRGggFyou9bA-M-1n9GwRfhDoCkeTUvVdptf0wg>
+    <xmx:5i1JY5k7gZY1cuDpWSKOreYZzXXTPpWLA017FsAOUhgn_U1vQbDs0g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DA3A9B60086; Fri, 14 Oct 2022 05:37:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <d087c831-1519-4b83-8cc1-5317659709be@app.fastmail.com>
+In-Reply-To: <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
+References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+ <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
+ <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
+ <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
+ <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
+ <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
+ <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
+ <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
+Date:   Fri, 14 Oct 2022 11:37:20 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Anders Roxell" <anders.roxell@linaro.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>
+Cc:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "Serge Semin" <Sergey.Semin@baikalelectronics.ru>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        regressions@lists.linux.dev,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
+        "Niklas Cassel" <niklas.cassel@wdc.com>
+Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006 tag
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 1:47 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Aug 19, 2022, Vishal Annapurve wrote:
-> > +/*
-> > + * Execute KVM hypercall to change memory access type for a given gpa range.
-> > + *
-> > + * Input Args:
-> > + *   type - memory conversion type TO_SHARED/TO_PRIVATE
-> > + *   gpa - starting gpa address
-> > + *   size - size of the range starting from gpa for which memory access needs
-> > + *     to be changed
-> > + *
-> > + * Output Args: None
-> > + *
-> > + * Return: None
-> > + *
-> > + * Function called by guest logic in selftests to update the memory access type
-> > + * for a given gpa range. This API is useful in exercising implicit conversion
-> > + * path.
-> > + */
-> > +void guest_update_mem_access(enum mem_conversion_type type, uint64_t gpa,
-> > +     uint64_t size)
->
-> Provide wrappers to self-document what's going on, then the massive block comments
-> go away.  And the guts of this and guest_update_mem_map() are nearly identical.
->
-> Hmm, and we probably want to make it possible to do negative testing.
->
-> Then the one-off enums for TO_PRIVATE and whatnot go way too.
->
-> > +{
-> > +     int ret = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> MIN_PAGE_SHIFT,
->
-> Needs an assert that @size is page aligned.  And since these are x86-64 specific,
-> just use PAGE_SHIFT.  Huh, IS_ALIGNED() doesn't exist in selftests.  That should
-> be added, either by pulling in align.h or by adding the generic macros to
-> kvm_util_base.h.
->
-> And then x86-64's processor.h can defined IS_PAGE_ALIGNED().
->
-> E.g.
->
-> static inline void __kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
->                                                  uint64_t flags)
-> {
->         return = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIFT, flags, 0);
-> }
->
-> static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
->                                                uint64_t flags)
-> {
->         int ret;
->
->         GUEST_ASSERT_2(IS_PAGE_ALIGNED(gpa) && IS_PAGE_ALIGNED(size), gpa, size);
->
->         ret = __kvm_hypercall_map_gpa_range(gpa, size, flags);
->         GUEST_ASSERT_1(!ret, ret);
-> }
->
-> static inline kvm_hypercall_map_shared(uint64_t gpa, uint64_t size)
-> {
->         kvm_hypercall_map_gpa_range(gpa, size, KVM_CLR_GPA_RANGE_ENC_ACCESS);
-> }
->
-> static inline kvm_hypercall_map_private(uint64_t gpa, uint64_t size)
-> {
->         kvm_hypercall_map_gpa_range(gpa, size, KVM_MARK_GPA_RANGE_ENC_ACCESS);
-> }
->
-> > +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
-> > +                             volatile struct kvm_run *run)
->
-> Pass in @vcpu, not a vm+run.
->
-> > +{
-> > +     uint64_t gpa, npages, attrs, size;
-> > +
-> > +     TEST_ASSERT(run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
-> > +             "Unhandled Hypercall %lld\n", run->hypercall.nr);
-> > +     gpa = run->hypercall.args[0];
-> > +     npages = run->hypercall.args[1];
-> > +     size = npages << MIN_PAGE_SHIFT;
-> > +     attrs = run->hypercall.args[2];
-> > +     pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
-> > +             (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
-> > +
-> > +     if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
-> > +             vm_update_private_mem(vm, gpa, size, ALLOCATE_MEM);
-> > +     else
-> > +             vm_update_private_mem(vm, gpa, size, UNBACK_MEM);
-> > +
-> > +     run->hypercall.ret = 0;
-> > +}
-> > +
-> > +static void handle_vm_exit_memory_error(struct kvm_vm *vm, volatile struct kvm_run *run)
->
-> Same  here, take a @vcpu.
+On Fri, Oct 14, 2022, at 11:22 AM, Anders Roxell wrote:
+> On Fri, 14 Oct 2022 at 09:53, Damien Le Moal
 
-Ack. Will address these comments in the next series.
+> Tested this patch on todays linux-next tag: next-20221014 without enabling
+> CONFIG_AHCI_DWC and it worked as expected when booting [1].
+> On the other hand I also tried a build/boot with CONFIG_AHCI_DWC enabled
+> and it worked as expected to boot [2].
+
+Ok, great. Can you a patch to soc@kernel.org to enable the driver in the
+relevant defconfigs?
+
+> However, during building a warning [3] popped up:
+>
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/2/build ARCH=arm
+> CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+> arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+> /builds/linux/drivers/ata/ahci_dwc.c:462:34: warning: 'ahci_dwc_plat'
+> defined but not used [-Wunused-variable]
+>   462 | static struct ahci_dwc_plat_data ahci_dwc_plat = {
+
+Strange, I can't reproduce this, and the ahci_dwc_plat symbol
+looks like it is clearly used in ahci_dwc_of_match[], at least
+in next-20221014. Do you also see this on mainline?
+
+      Arnd
