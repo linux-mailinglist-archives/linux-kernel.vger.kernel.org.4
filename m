@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ABA5FF4F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C68B5FF4F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiJNVAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S229525AbiJNVEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJNVAe (ORCPT
+        with ESMTP id S229470AbiJNVEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:00:34 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB5106A74;
-        Fri, 14 Oct 2022 14:00:33 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so2553728otu.7;
-        Fri, 14 Oct 2022 14:00:33 -0700 (PDT)
+        Fri, 14 Oct 2022 17:04:04 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE821DC4F9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:04:03 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id l1so5804916pld.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FEPtKNTg7NezEV8TRfsVFDaZ2fJ2JKYBjP7uR8dhm+Q=;
+        b=ghXdUokTFObMpYmEMyA5TGYHsb9p1yIdHyjKldJRnv8meEPZNLqDb6gaJC6CS3gCAU
+         wKI/E9fp70U4GxOlUa9Tk49BfJ7YtDWHwV8siA1GOD5deWy8f1N9GPDcWEsqIoiobPr9
+         cm18E706gRnczeSjs9KGMfnvsmBMRsFeBo5SFCK188aD8A0ErFSk0GNNO02uA7nPyrs7
+         wAp1Q2/XdVvr5ekyAAwiJhTM/tinI0cw7rq0wFvrap7tnezgLnqlm1o+eFSi8REqPquv
+         HCV5HrFWGZK2V9XrRGF08TekR6EyyL9a10mSlEBNtNAZG8s94GAn2iSkGRcZub6dcdYW
+         xbgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kq4otfpWoUaoxpIPZJV1lgpjpLZShT1J4qTsAKzDCpA=;
-        b=4pZRoWI9RE0n1zgDZKgPtJrTCa9tkp07e3QWXRbMuJd/CptQmZg4y8aDM2lgOEg0dm
-         NOnpytXrIDd1F/5MtLRI4eU5XxiPgr4DYMqIu94MPRIMU5vH8mb1egMNNV6lh9EPQTTi
-         Mr9AQmqcPSorTQ5w8+1gW9bZTmjORWpRVqzlzssb4txAD9Ff4eRlmLE9rlt4vKPjUyuf
-         1yb6PkbxnkCv6D/9VkX6DDZ7hl+iitxeUmM2yoP35w17YLSeIunCBo4guHyKZ4/5BMfk
-         VIf0Tu1zCKPXh2q5pKcXld1XBkoA9Xg3Li600EqcbLSOfIRtodVjjb1vLv4HI7krgC+g
-         q/xA==
-X-Gm-Message-State: ACrzQf38B2Vng3vvUDapaVn6AA8H+z/SiNnbapVCQW1JiexLhggjhbFr
-        ra93n6bG/tpvRRPQBTfc3Q==
-X-Google-Smtp-Source: AMsMyM4UYGB/NG4VC9kqGAklC5tFZU87mpAg9iGmbI1BTt2NsChpYzNoQCdRkPW5fPumiZKwr+PVjA==
-X-Received: by 2002:a9d:12ca:0:b0:661:b4b7:349d with SMTP id g68-20020a9d12ca000000b00661b4b7349dmr3380439otg.47.1665781232469;
-        Fri, 14 Oct 2022 14:00:32 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a056871088800b0010e73e252b8sm1860086oaq.6.2022.10.14.14.00.31
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FEPtKNTg7NezEV8TRfsVFDaZ2fJ2JKYBjP7uR8dhm+Q=;
+        b=l2hdsaRXfnehWxLeBAy9Gqhb5qddmSc1dN4+Los0kiBvynGnWBht6rCO7EInEF+Dn3
+         v6tz9aiBUkmOpgY3JdkA1ErgdIS56kaV8uN6kQnwDD6KJ47DLjzh5W5aTYvyF5Y0f0nw
+         hoU13BKyRrSixdrR5v0yvFK7W6y7yaiYGYUVqmEUjprvqFzTwTO7j3PVqN11J34R4Vo9
+         Vr1BxCaQzm1D7wllVled2+aPUD27U9qfMs7V5PpimMCqkllRgnPX7H5vl9hMTtX+Z5p1
+         3QLWaZcnVD9xUyJrkt5ZYeATDO3nBMgKN1C+NXTyc8OJyTDDQlT6k4Mm2ocTiy1VNKSS
+         KxHw==
+X-Gm-Message-State: ACrzQf1ptd5fvNUGNOcRXJlNTQQNH5fj9VscgszB6iyMWQOeUdlTx5yv
+        Hx2nI9xcNiA8kYRTwBFDF6N9b6QnJ5zmIw==
+X-Google-Smtp-Source: AMsMyM5JdhDG1UpOFIQKo1Xnh0Iup3kp8kSlAUfnxdMjkyOeWnzbt+R+akO078ePfB3UOfdracdJ7Q==
+X-Received: by 2002:a17:902:9684:b0:17e:71b2:bd16 with SMTP id n4-20020a170902968400b0017e71b2bd16mr7234080plp.163.1665781443064;
+        Fri, 14 Oct 2022 14:04:03 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b30-20020aa78ede000000b0053e6eae9665sm2253296pfr.140.2022.10.14.14.04.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:00:32 -0700 (PDT)
-Received: (nullmailer pid 2832389 invoked by uid 1000);
-        Fri, 14 Oct 2022 21:00:32 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Jacopo Mondi <jacopo@jmondi.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-media@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-In-Reply-To: <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Message-Id: <166578091220.2826696.5981359507940429250.robh@kernel.org>
-Subject: Re: [PATCH v2 1/5] media: dt-bindings: ov5645: Convert OV5645 binding to a schema
-Date:   Fri, 14 Oct 2022 16:00:32 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Fri, 14 Oct 2022 14:04:02 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 21:03:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] Use TAP in some more KVM selftests
+Message-ID: <Y0nOv6fqTe2NnPuu@google.com>
+References: <20221004093131.40392-1-thuth@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004093131.40392-1-thuth@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,81 +73,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 19:34:55 +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Tue, Oct 04, 2022, Thomas Huth wrote:
+> Many KVM selftests are completely silent. This has the disadvantage
+> for the users that they do not know what's going on here. For example,
+> some time ago, a tester asked me how to know whether a certain new
+> sub-test has been added to one of the s390x test binaries or not (which
+> he didn't compile on his own), which is hard to judge when there is no
+> output. So I finally went ahead and implemented TAP output in the
+> s390x-specific tests some months ago.
 > 
-> Convert the simple OV5645 Device Tree binding to json-schema.
-> 
-> The previous binding marked the below properties as required which was a
-> driver requirement and not the device requirement so just drop them from
-> the required list during the conversion.
-> - clock-frequency
-> - enable-gpios
-> - reset-gpios
-> 
-> Also drop the "clock-names" property as we have a single clock source for
-> the sensor and the driver has been updated to drop the clk referencing by
-> name.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
-> Resend v3:
-> * No change
-> 
-> v2 -> v3
-> * Dropped clock-names property
-> * Marked power supplies as mandatory
-> * Dropped the comment for voltage power supplies
-> * Included RB tag from Laurent
-> * Driver change to drop clock-names [0]
-> 
-> [0] https://lore.kernel.org/linux-media/Yyh%2F3uzOJOu3drEB@pendragon.ideasonboard.com/T/#t
-> 
-> v1 -> v2
-> * Dropped ref to video-interface-devices.yaml#
-> * Dropped driver specific required items from the list
-> * Updated commit message
-> * Dropped clock-lanes and bus-type from the port and example node
-> * Marked data-lanes as required in port node
-> ---
->  .../devicetree/bindings/media/i2c/ov5645.txt  |  54 ---------
->  .../bindings/media/i2c/ovti,ov5645.yaml       | 104 ++++++++++++++++++
->  2 files changed, 104 insertions(+), 54 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-> 
+> Now I wonder whether that could be a good strategy for the x86 and
+> generic tests, too?
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Taking Andrew's thoughts a step further, I'm in favor of adding TAP output, but
+only if we implement it in such a way that it reduces the burden on writing new
+tests.  I _really_ like that sync_regs_test's subtests are split into consumable
+chunks, but I worry that the amount of boilerplate needed will deter test writes
+and increase the maintenance cost.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+And my experience with KVM-unit-tests is that letting test writers specify strings
+for test names is a bad idea, e.g. using an arbitrary string creates a disconnect
+between what the user sees and what code is running, and makes it unnecessarily
+difficult to connect a failure back to code.  And if we ever support running
+specific testcases by name (I'm still not sure this is a net positive), arbitrary
+strings get really annoying because inevitably an arbitrary string will contain
+characters that need to be escaped in the shell.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+Adding a macro or three to let tests define and run testscases with minimal effort
+would more or less eliminate the boilerplate.  And in theory providing semi-rigid
+macros would help force simple tests to conform to standard patterns, which should
+reduce the cost of someone new understanding the test, and would likely let us do
+more automagic things in the future.
 
+E.g. something like this in the test:
 
-camera@3c: 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/imx6dl-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6dl-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6dl-pico-nymph.dtb
-	arch/arm/boot/dts/imx6dl-pico-pi.dtb
-	arch/arm/boot/dts/imx6dl-wandboard.dtb
-	arch/arm/boot/dts/imx6dl-wandboard-revb1.dtb
-	arch/arm/boot/dts/imx6dl-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6q-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6q-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6q-pico-nymph.dtb
-	arch/arm/boot/dts/imx6q-pico-pi.dtb
-	arch/arm/boot/dts/imx6qp-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6q-wandboard.dtb
-	arch/arm/boot/dts/imx6q-wandboard-revb1.dtb
-	arch/arm/boot/dts/imx6q-wandboard-revd1.dtb
-
-ov5645@3c: 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm64/boot/dts/renesas/r8a774a1-hihope-rzg2m-ex-mipi-2.1.dtb
-	arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-ex-mipi-2.1.dtb
-	arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dtb
-	arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h-ex-mipi-2.1.dtb
-
+	KVM_RUN_TESTCASES(vcpu,
+		test_clear_kvm_dirty_regs_bits,
+		test_set_invalid,
+		test_req_and_verify_all_valid_regs,
+		test_set_and_verify_various_reg_values,
+		test_clear_kvm_dirty_regs_bits,
+	);
