@@ -2,181 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135265FE98A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95E75FE978
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiJNH1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S229905AbiJNHY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiJNH1j (ORCPT
+        with ESMTP id S229914AbiJNHYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:27:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B578C1BF851
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665732454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1HO6ItwplxcowXlIKdJH2SQbuhYvBFkPnC0M8MrxP0E=;
-        b=Rmjx5On1H9a8hHJ9v7I37BOMox6PV9DnW3GIAyVRYtQAcQaCWsvOYq7ZS1aDpCDWHWF9W1
-        xjpOAPX+9L9OCIAtMdcyGWJElB3eFhXI6lq2ajE8NLGwHQBaepploYK8c0RQFw/6L1wq7t
-        p70Z0PQ3nwcasdu2o3e62/4UY2uzdQs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-193-l_Q2vU7YPHS0w63Vld1mlw-1; Fri, 14 Oct 2022 03:27:30 -0400
-X-MC-Unique: l_Q2vU7YPHS0w63Vld1mlw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50BD518029D2;
-        Fri, 14 Oct 2022 07:27:09 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-52.bne.redhat.com [10.64.54.52])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 180DEC56621;
-        Fri, 14 Oct 2022 07:20:40 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     kvmarm@lists.linux.dev
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ajones@ventanamicro.com,
-        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com, peterx@redhat.com,
-        maciej.szmigiero@oracle.com, ricarkol@google.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Subject: [PATCH 6/6] KVM: selftests: memslot_perf_test: Report optimal memory slots
-Date:   Fri, 14 Oct 2022 15:19:14 +0800
-Message-Id: <20221014071914.227134-7-gshan@redhat.com>
-In-Reply-To: <20221014071914.227134-1-gshan@redhat.com>
-References: <20221014071914.227134-1-gshan@redhat.com>
+        Fri, 14 Oct 2022 03:24:24 -0400
+Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7721BF21A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:24:22 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 07:24:07 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=noorman.info;
+        s=protonmail3; t=1665732259; x=1665991459;
+        bh=TGUdxn23TFMtmW8ERauoStRg6kRXdVxb0gsOuzCan3c=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=nZ9F+ovlE8hrK/h97XiF/fIJsJZyoqiMCXI88g67ya4ctVDZZhco4g7vTvYjD/MtK
+         OHTzDaX4VeJP4dDrpWIK5zFzEA9fPJfhB0NCon3RDE9AVjJ5jae7wlaI2ZbPiq6Ppb
+         FhKnMtmbNCpwQHyVD/mltUTLE4cSukGlmxzz84Q8nH6Y9r9aG0fCiJ9YwD3GxukPoq
+         E5r6WZGcnJeFTsGT1l6FfIR0GiMHrRoT6qnRcxiGwu7+nT/m3ot9zHkNgdgKrX1kHA
+         jo9B8fizpdmbCJ8zKDsNbVeLZw+17QQjrjSqF+X7gZ4mzexpHopoabLEtW+2B7y9ki
+         JXKyD0hJtT2Ng==
+To:     Rob Herring <robh@kernel.org>
+From:   Job Noorman <job@noorman.info>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Luca Weiss <luca@z3ntu.xyz>
+Subject: Re: [PATCH v2 1/3] dt-bindings: touchscreen: add Himax hx83112b bindings
+Message-ID: <CNLGSQCYFNR1.3HBI9N3N0A77B@ancom>
+In-Reply-To: <166569274210.175113.9615851655183284739.robh@kernel.org>
+References: <20221012202341.295351-1-job@noorman.info> <20221012202341.295351-2-job@noorman.info> <166569274210.175113.9615851655183284739.robh@kernel.org>
+Feedback-ID: 14439221:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory area in each slot should be aligned to host page size.
-Otherwise, the test will failure. For example, the following command
-fails with the following messages with 64KB-page-size-host and
-4KB-pae-size-guest. It's not user friendly. Lets do something to report
-the optimal memory slots, instead of failing the test.
+Hi Rob,
 
-  # ./memslot_perf_test -v -s 1000
-  Number of memory slots: 999
-  Testing map performance with 1 runs, 5 seconds each
-  Adding slots 1..999, each slot with 8 pages + 216 extra pages last
-  ==== Test Assertion Failure ====
-    lib/kvm_util.c:824: vm_adjust_num_guest_pages(vm->mode, npages) == npages
-    pid=19872 tid=19872 errno=0 - Success
-       1  0x00000000004065b3: vm_userspace_mem_region_add at kvm_util.c:822
-       2  0x0000000000401d6b: prepare_vm at memslot_perf_test.c:273
-       3  (inlined by) test_execute at memslot_perf_test.c:756
-       4  (inlined by) test_loop at memslot_perf_test.c:994
-       5  (inlined by) main at memslot_perf_test.c:1073
-       6  0x0000ffff7ebb4383: ?? ??:0
-       7  0x00000000004021ff: _start at :?
-    Number of guest pages is not compatible with the host. Try npages=16
+Thanks for you review!
 
-Report the optimal memory slots instead of failing the test when
-the memory area in each slot isn't aligned to host page size. With
-this applied, the optimal memory slots is reported.
+On Thu Oct 13, 2022 at 10:25 PM CEST, Rob Herring wrote:
+> On Wed, 12 Oct 2022 20:24:06 +0000, Job Noorman wrote:
+> > This patch adds device tree bindings for Himax 83112b touchscreen
+> > devices.
+> >
+> > Signed-off-by: Job Noorman <job@noorman.info>
+> > ---
+> >  .../input/touchscreen/himax,hx83112b.yaml     | 61 +++++++++++++++++++
+> >  MAINTAINERS                                   |  6 ++
+> >  2 files changed, 67 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/input/touchscreen=
+/himax,hx83112b.yaml
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-  # ./memslot_perf_test -v -s 1000
-  # ./memslot_perf_test -v -s 1000
-  Number of memory slots: 999
-  Testing map performance with 1 runs, 5 seconds each
-  Memslot count too high for this test, decrease the cap (max is 514)
+The next version of this patch will make the properties touchscreen-size-{x=
+,y}
+required. Can I still attach your "Reviewed-by" tag to this updated patch o=
+r
+would you like to have a look at it first?
 
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
- .../testing/selftests/kvm/memslot_perf_test.c | 45 +++++++++++++++++--
- 1 file changed, 41 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
-index e6d34744b45d..bec65803f220 100644
---- a/tools/testing/selftests/kvm/memslot_perf_test.c
-+++ b/tools/testing/selftests/kvm/memslot_perf_test.c
-@@ -230,16 +230,52 @@ static struct vm_data *alloc_vm(void)
- 	return data;
- }
- 
-+static bool check_slot_pages(uint32_t host_page_size, uint32_t guest_page_size,
-+			     uint64_t pages_per_slot, uint64_t rempages)
-+{
-+	if (!pages_per_slot)
-+		return false;
-+
-+	if ((pages_per_slot * guest_page_size) % host_page_size)
-+		return false;
-+
-+	if ((rempages * guest_page_size) % host_page_size)
-+		return false;
-+
-+	return true;
-+}
-+
-+
-+static uint64_t get_max_slots(struct vm_data *data, uint32_t host_page_size)
-+{
-+	uint32_t guest_page_size = data->vm->page_size;
-+	uint64_t mempages, pages_per_slot, rempages;
-+	uint64_t slots;
-+
-+	mempages = data->npages;
-+	slots = data->nslots;
-+	while (--slots > 1) {
-+		pages_per_slot = mempages / slots;
-+		rempages = mempages % pages_per_slot;
-+		if (check_slot_pages(host_page_size, guest_page_size,
-+				     pages_per_slot, rempages))
-+			return slots + 1;	/* slot 0 is reserved */
-+	}
-+
-+	return 0;
-+}
-+
- static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
- 		       void *guest_code, uint64_t mem_size,
- 		       struct timespec *slot_runtime)
- {
- 	uint64_t mempages, rempages;
- 	uint64_t guest_addr;
--	uint32_t slot, guest_page_size;
-+	uint32_t slot, host_page_size, guest_page_size;
- 	struct timespec tstart;
- 	struct sync_area *sync;
- 
-+	host_page_size = getpagesize();
- 	guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
- 	mempages = mem_size / guest_page_size;
- 
-@@ -250,12 +286,13 @@ static bool prepare_vm(struct vm_data *data, int nslots, uint64_t *maxslots,
- 	TEST_ASSERT(data->npages > 1, "Can't test without any memory");
- 	data->nslots = nslots;
- 	data->pages_per_slot = data->npages / data->nslots;
--	if (!data->pages_per_slot) {
--		*maxslots = data->npages + 1;
-+	rempages = data->npages % data->nslots;
-+	if (!check_slot_pages(host_page_size, guest_page_size,
-+			      data->pages_per_slot, rempages)) {
-+		*maxslots = get_max_slots(data, host_page_size);
- 		return false;
- 	}
- 
--	rempages = data->npages % data->nslots;
- 	data->hva_slots = malloc(sizeof(*data->hva_slots) * data->nslots);
- 	TEST_ASSERT(data->hva_slots, "malloc() fail");
- 
--- 
-2.23.0
+Kind regards,
+Job
 
