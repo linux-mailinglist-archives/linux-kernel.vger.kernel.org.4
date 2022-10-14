@@ -2,188 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6295FF598
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BD15FF59A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJNVwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S229608AbiJNVxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJNVwF (ORCPT
+        with ESMTP id S229595AbiJNVxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:52:05 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BA7186CD
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:52:04 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id pq16so6111542pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:52:04 -0700 (PDT)
+        Fri, 14 Oct 2022 17:53:05 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEDE178BD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:53:04 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id l4so5916550plb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+V1yq5kutqjuC703osZedH3rmdy8U8JIzTiIx0RrC4=;
-        b=nk+ppu6DZAbdjE0NaDIGVOIK4xC/wOk+IqBr0PnQsL96JO9Cwh8C5QM7ZtJQR2Sm4u
-         ZJAEwsrYBL/agkUk4PrOSJPZx+FjRj+Ua535NVuQO+3m4dK/VJeFD+W9y8rT3zYVUtlH
-         89D24IB+UaC8X9gvX59f+M/duyYgJA6Xrf+TfvpxmjN5HplOQQig/MEeQysG3VSHkmEr
-         PWSexmvNPCx6Y6qjv0TSXERh6818GwgMx463xig3lGWS72V9oPljwTxH1UlIDrHxBSx0
-         M+kINgtYCMJioajJP65SnSoeaURwMFUFq/NxHnp/uazNYt2K9s/crf6+Cos951bhdsUH
-         DAvw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o1t17x5zzSpdCuf+jFEyQQCtGA/0x7inpYCOmKSTCbI=;
+        b=Uo/GHpK8vU+smItb6OkYUg4Tbd+055hEHZN7hanO/jiPIWezUApYxsQMXMB6pYaNHW
+         YN66dB0oETBKwriK4Nmb5J9TkN89fw0Z1ls/fLsECw/qHWGQjTN79WOUuwSOTqI8vUme
+         ycK4KPHzIMv/LQwAtM1LH0zOkn9dBCsMmfJoY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d+V1yq5kutqjuC703osZedH3rmdy8U8JIzTiIx0RrC4=;
-        b=xa1Us7vUV9BRVBb3Isy+IH2qEISSuGFkuyO/q/U9xnCWqIOTPUftkqk7mOcJBd01pD
-         BR6TW9K++gwpg1iloqYYmyWN5xOSDl5Ps278/+n55N9H6JLfeOIbLH2aDPRsx+F6FUnl
-         NE2lhUnslAA2n5N3TDHToyCc9Mkh1AZwd09whoMJ0ZeE9xDrT3MCfLR6u5mNqnOa32rW
-         15vjUy5zQ+SrEeHMh6fKQvRunm9bGDCFc8fTlWaKMuuORMn9wXOXVIv5ZWlmkpr7/yHP
-         l5Fevu/rzYK6fHzuQDzfLeIDcgyb6QyY0KskBAbjwo4lUz9cRB1pblbOwOZ9gF7OeoVA
-         4wbA==
-X-Gm-Message-State: ACrzQf3o6ePo+BoDS0rr03zmJd7g4J/vRjni0TjNJMn/yJKT3PleEBhE
-        Z47DU7gzIQFf549cN0EKqPWCYtg3bLT8be3bwGsObg==
-X-Google-Smtp-Source: AMsMyM4ibZr+rEpY29bo3KcS2btMSVY8Lobg4hRbJlHPqrOKhBqk+gVVAhOrbTPvX7M08QjdnH2iaOcaxvx+g1V5rMM=
-X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
- t24-20020a170902b21800b00184710c8c52mr7304165plr.95.1665784323454; Fri, 14
- Oct 2022 14:52:03 -0700 (PDT)
+        bh=o1t17x5zzSpdCuf+jFEyQQCtGA/0x7inpYCOmKSTCbI=;
+        b=5XFxyPk345bvhDHKth8NjY+R0akJAlGRMJlW0ASqJxuZYmbk+/hzCzwDQytnSAIPWC
+         7c+GdKuNAk37xT5aZlPLleXkZooKM4A3tz8YQbB1MfXZ1FiJdAyykyeZbWZprfHMpCcz
+         ga/iUxDi5/fDnp1/7eMmUq/c1f4EUHdhNk0JHBgm9tOa2qg2+fQQPigTPrqMAGPpRweq
+         VUbvIVV6TulObTIROpEsCi6fJHyvtVAEoEhknDFmq1IkMC3+t46IxROGT++3VmfMsKA1
+         zbQ1gSJZZqXcUXjMjuWxH6vM3Py8mkWjWIz3A6Kag0CitG0SatJ0jxPrxxhTquWh9/fO
+         6xXQ==
+X-Gm-Message-State: ACrzQf1CXuKbRaFcALFsMuGScOOiC2Jx7aSY8FOrhB0eRBdkyXYuo4HP
+        Hm7Ctn2cTAb13UfQL0+0HCMOXQ==
+X-Google-Smtp-Source: AMsMyM68dam+bk2zRi9fPwq4foTUHTm41a5WwL7uUAIKb98CVmZlEOlpn3mQ8qWzIX9UqFFtGO8dCQ==
+X-Received: by 2002:a17:90b:380b:b0:20d:7364:796f with SMTP id mq11-20020a17090b380b00b0020d7364796fmr30737pjb.13.1665784384453;
+        Fri, 14 Oct 2022 14:53:04 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:9d:2:9f6e:fc87:d13f:1fa6])
+        by smtp.gmail.com with ESMTPSA id p184-20020a625bc1000000b005618189b0ffsm2197437pfb.104.2022.10.14.14.53.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 14:53:03 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     stable@vger.kernel.org
+Cc:     Sibi Sankar <sibis@codeaurora.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Alex Elder <elder@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.10] arm64: dts: qcom: sc7180-trogdor: Fixup modem memory region
+Date:   Fri, 14 Oct 2022 14:53:02 -0700
+Message-Id: <20221014215302.3905135-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
-References: <20221014204210.383380-1-nathan@kernel.org>
-In-Reply-To: <20221014204210.383380-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 14 Oct 2022 14:51:51 -0700
-Message-ID: <CAKwvOdmvqoO1220ac7RVbVzvmbJB0wYq5WOfuz=T8hd+CkijBg@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/Kconfig.debug: Add check for non-constant
- .{s,u}leb128 support to DWARF5
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 1:48 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> When building with a RISC-V kernel with DWARF5 debug info using clang
-> and the GNU assembler, several instances of the following error appear:
->
->   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
->
-> Dumping the .s file reveals these .uleb128 directives come from
-> .debug_loc and .debug_ranges:
->
->   .Ldebug_loc0:
->           .byte   4                               # DW_LLE_offset_pair
->           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
->           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
->           .byte   1                               # Loc expr size
->           .byte   90                              # DW_OP_reg10
->           .byte   0                               # DW_LLE_end_of_list
->
->   .Ldebug_ranges0:
->           .byte   4                               # DW_RLE_offset_pair
->           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
->           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
->           .byte   4                               # DW_RLE_offset_pair
->           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
->           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
->           .byte   0                               # DW_RLE_end_of_list
->
-> There is an outstanding binutils issue to support a non-constant operand
-> to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
-> be any movement on it, due to concerns over how it would work with
-> linker relaxation.
->
-> To avoid these build errors, prevent DWARF5 from being selected when
-> using clang and an assembler that does not have support for these symbol
-> deltas, which can be easily checked in Kconfig with as-instr plus the
-> small test program from the dwz test suite from the binutils issue.
->
-> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1719
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+From: Sibi Sankar <sibis@codeaurora.org>
 
-Thanks for keeping these LLVM_IAS=0 builds alive a little longer.  My
-hope is the GNU binutils can relax their requirement for debug info
-sections to improve support for DWARF v5.
+commit ef9a5d188d663753e73a3c8e8910ceab8e9305c4 upstream.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+The modem firmware memory requirements vary between 32M/140M on
+no-lte/lte skus respectively, so fixup the modem memory region
+to reflect the requirements.
 
+Reviewed-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+Link: https://lore.kernel.org/r/1602786476-27833-1-git-send-email-sibis@codeaurora.org
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-> ---
->
-> v2:
->     - Rebase on commit bb1435f3f575 ("Kconfig.debug: add toolchain
->       checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT") from the kbuild
->       tree.
->     - Limit CONFIG_AS_HAS_NON_CONST_LEB128 dependency to GNU as. There
->       is no point to applying this dependency to the integrated
->       assembler because it will always pass.
->     - Apply the CONFIG_AS_HAS_NON_CONST_LEB128 dependency to
->       CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as well, due to the
->       aforementioned kbuild change.
->     - Move comment block to above CONFIG_AS_HAS_NON_CONST_LEB128, as the
->       configuration is now used in two places.
->     - Drop Conor's tested by, as the patch is different enough to
->       potentially require new testing.
->
-> v1: https://lore.kernel.org/20220928182523.3105953-1-nathan@kernel.org/
->
->  lib/Kconfig.debug | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index db8d9271cabf..5c1c63575895 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -231,6 +231,11 @@ config DEBUG_INFO
->           in the "Debug information" choice below, indicating that debug
->           information will be generated for build targets.
->
-> +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
-> +# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> +config AS_HAS_NON_CONST_LEB128
-> +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
-> +
->  choice
->         prompt "Debug information"
->         depends on DEBUG_KERNEL
-> @@ -253,7 +258,7 @@ config DEBUG_INFO_NONE
->  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->         bool "Rely on the toolchain's implicit default DWARF version"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
->         help
->           The implicit default version of DWARF debug info produced by a
->           toolchain changes over time.
-> @@ -277,7 +282,7 @@ config DEBUG_INFO_DWARF4
->  config DEBUG_INFO_DWARF5
->         bool "Generate DWARF Version 5 debuginfo"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
->         help
->           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
->           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
->
-> base-commit: bb1435f3f575b5213eaf27434efa3971f51c01de
-> --
-> 2.38.0
->
+This fixes boot of the modem on trogdor boards with the DTS from 5.10.y
+stable tree. Without this patch I run into memory assignment errors and
+then the modem fails to boot.
 
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi | 4 ++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi         | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
---
-Thanks,
-~Nick Desaulniers
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
+index 44956e3165a1..469aad4e5948 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
+@@ -9,6 +9,10 @@ &ap_sar_sensor {
+ 	label = "proximity-wifi-lte";
+ };
+ 
++&mpss_mem {
++	reg = <0x0 0x86000000 0x0 0x8c00000>;
++};
++
+ &remoteproc_mpss {
+ 	firmware-name = "qcom/sc7180-trogdor/modem/mba.mbn",
+ 			"qcom/sc7180-trogdor/modem/qdsp6sw.mbn";
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index 5b2a616c6257..cb2c47f13a8a 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -39,7 +39,7 @@ atf_mem: memory@80b00000 {
+ 		};
+ 
+ 		mpss_mem: memory@86000000 {
+-			reg = <0x0 0x86000000 0x0 0x8c00000>;
++			reg = <0x0 0x86000000 0x0 0x2000000>;
+ 			no-map;
+ 		};
+ 
+
+base-commit: 014862eecf03f58066a957027dde73cbecdf4395
+-- 
+https://chromeos.dev
+
