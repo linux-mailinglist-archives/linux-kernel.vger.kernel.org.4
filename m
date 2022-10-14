@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3D45FE7E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DD35FE7EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJNEOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 00:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S229650AbiJNEQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 00:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiJNEOq (ORCPT
+        with ESMTP id S229542AbiJNEQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 00:14:46 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE924B850;
-        Thu, 13 Oct 2022 21:14:43 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id d7-20020a17090a2a4700b0020d268b1f02so6787005pjg.1;
-        Thu, 13 Oct 2022 21:14:43 -0700 (PDT)
+        Fri, 14 Oct 2022 00:16:49 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD93F33A2E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:16:47 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id pq16so3838538pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cv/7XzR9omBEXNn+tqEddtqBvNt7j9qjSpWwWm5+1DQ=;
-        b=c/0aG5w1PIEFnk5Ke+ScmcsJySK/PBw6ZqjFS8OedzAVtpe/UQ4YLwbC//Mu1kFrze
-         P5i47pcY8MY1NU5k3cATd3EMIJkM7P1gFJqslma9GrNSnBOSoW19Z8VNe3BFG3vH4tQI
-         r6JiZKc4iRAq/RAPO/9pMZTNwsbJGE34fqOAKn8092/H0lBskCuOBZzJ4h1uezmRQLQ7
-         qyq+M7ogv1tFsbiX/Gs8kaJ3PiEqVcsg3PnaniGjb97E642JyIe/WiKtDk6MzVi081M8
-         WxQtQRRw3+AYrjIhs06qmSE9vdhZxxShWGazntU9ehRHQX55pLzfH/WDB0cv50mAv2UI
-         rkTQ==
+        bh=xPM7H8VCe5LlRYI2O3PDUNTvx7F/b65dUWFM3N0mAts=;
+        b=DxGXzqUO2kcK4MFYJfpuIaQms12iDTlrSJOrH8dwLedxYT0RPt2j8iNpo2QzzvOxW0
+         r5PWwaBWHpQY2U8CE5OsF5Yq6Rez0U13cx/OsEWXApyahLb3fwHZ8x5hQxltgNftbprO
+         UAYiylu9w3MhNd2ix8+xMYMz26pElI7jOW2m1aROHz91MOE8oX23Xsmd0TX84MPLmJKA
+         gGxTStGmmWzXAX8CM71x4+UAMASAwdHU0mHrH1XQ/HQfFd9RnSkpd28sYJa2f5iHN0It
+         i53/i3HFTcba8h/ohl9yYAVmodkDpDwy6EtE2gRCSQoArbf4JKVAe4KCCDabxDu8gnYF
+         JWkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cv/7XzR9omBEXNn+tqEddtqBvNt7j9qjSpWwWm5+1DQ=;
-        b=GpjXu98cSCdWeuDno9ULjkVUqwhu5Qadn/1TGCFhhMieeoMUrzKqnkequhA484qw6i
-         8c+KQQGbhjfyCCpvaPOW7duWCoKaB54i4tmKMZTT7fUxmWnpHtDM5xGybb70k2e4N8OM
-         NItKjK9tkiclTE/7xunKBzT0QZ2jXrFsqWu27EW/k6t6g2rJuqwfMvz0+g9kDuwc2u6D
-         gJ9iW6nSPP0AqFWPXPqragT13Yi493Wo0yTthyf/3PvP/fi7czFIiQRxVcs3KWpXpONA
-         +xhFK75J31o/QvG5JAxntSMDDMhXai7noQVoo7JcQOvQWwPHPC3pqhhOubcLwkYVGwo8
-         0eDw==
-X-Gm-Message-State: ACrzQf3WvF56NwvWmh1Pdd3GFfnR6o9LJSeo5zy1lra2cD+n/AE8Fldf
-        W81fQ9eus6ik05AN0wwGzj8=
-X-Google-Smtp-Source: AMsMyM6hX3cH6HzMk40SPHVvXChzqtlxm6oJt67cheTqR3e0plFNnRDCktLeFDpKg0/mbnNHpohtHA==
-X-Received: by 2002:a17:90b:4c86:b0:20d:402d:6155 with SMTP id my6-20020a17090b4c8600b0020d402d6155mr14585106pjb.229.1665720883443;
-        Thu, 13 Oct 2022 21:14:43 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-74.three.co.id. [180.214.233.74])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170903120b00b0017f74cab9eesm614938plh.128.2022.10.13.21.14.42
+        bh=xPM7H8VCe5LlRYI2O3PDUNTvx7F/b65dUWFM3N0mAts=;
+        b=pipx4ewrfVfYVSfRHIAo/nLjtwMhOl4nMlGCbgecvUKD4TEz0U5yK/Ptu6PEcgh8Qt
+         qWORYMqtcCnSczlH6YKT6Nc2XJ6o7wp6rTx9onE1oJs3LQtgsd8MVavs3t2P+72KBmAg
+         q2+au8IzIPQku34NY+q9x850hxdcqH3HfieWePFrRv5v1HPsd6Hr9JYFX2SuZoUrEhqE
+         01pkiiTYMzud5UEGNuBv/Yu7bvF6/EowjVA5bTEn2GFoM8cevH7hyRDmZsNLO8QeBp9R
+         twuSuh0kXg/dwLn7JzXJloA+sVt/GhJwhX29hEpq3CEyRLRNSqD355LWxiW9wHvhqpEx
+         lS0g==
+X-Gm-Message-State: ACrzQf2DtFrwdh2inADGA3PI1NT8kn0R7FYnMHXIFfI0/AA44Iz91q2F
+        H4s/jzYEqss4Y5CPD0CQUloncg==
+X-Google-Smtp-Source: AMsMyM4LQFF9YMfsa749/qKAr4R8DhiM7rufmsp38yJkOuJKa2/YSLtLVOwXTyJU3VKtv2JAX5nGfw==
+X-Received: by 2002:a17:90b:4b4b:b0:20a:926f:3c2e with SMTP id mi11-20020a17090b4b4b00b0020a926f3c2emr3406780pjb.87.1665721007319;
+        Thu, 13 Oct 2022 21:16:47 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g186-20020a6252c3000000b0055f98a2c64bsm531582pfb.142.2022.10.13.21.16.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 21:14:42 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 219F3103744; Fri, 14 Oct 2022 11:14:38 +0700 (WIB)
-Date:   Fri, 14 Oct 2022 11:14:38 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.15 00/27] 5.15.74-rc1 review
-Message-ID: <Y0jiLqf+cOx6FmVR@debian.me>
-References: <20221013175143.518476113@linuxfoundation.org>
+        Thu, 13 Oct 2022 21:16:46 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 04:16:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Mark transfer type as X86_TRANSFER_RET when
+ loading CS in iret emulation
+Message-ID: <Y0jiqr3axA49RvDJ@google.com>
+References: <fcaf1408d2aaaa39b33cdd3b11bf06e7e935d11a.1665565774.git.houwenlong.hwl@antgroup.com>
+ <Y0bssbjJTQVB+SCg@google.com>
+ <20221013065222.GA100679@k08j02272.eu95sqa>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Geluv9GX/vn4iM9o"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013175143.518476113@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221013065222.GA100679@k08j02272.eu95sqa>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 13, 2022, Hou Wenlong wrote:
+> On Thu, Oct 13, 2022 at 12:34:57AM +0800, Sean Christopherson wrote:
+> > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> > index 3b27622d4642..fe735e18c419 100644
+> > --- a/arch/x86/kvm/emulate.c
+> > +++ b/arch/x86/kvm/emulate.c
+> > @@ -1641,6 +1641,14 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+> >                         goto exception;
+> >                 break;
+> >         case VCPU_SREG_CS:
+> > +               /*
+> > +                * KVM uses "none" when loading CS as part of emulating Real
+> > +                * Mode exceptions and IRET (handled above).  In all other
+> > +                * cases, loading CS without a control transfer is a KVM bug.
+> > +                */
+> > +               if (WARN_ON_ONCE(transfer == X86_TRANSFER_NONE))
+> > +                       goto exception;
+> > +
+> >                 if (!(seg_desc.type & 8))
+> >                         goto exception;
+> >
+> Do I need to prepare this patch or you will add this directly?
 
---Geluv9GX/vn4iM9o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Oct 13, 2022 at 07:52:29PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.74 release.
-> There are 27 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---Geluv9GX/vn4iM9o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0jiJwAKCRD2uYlJVVFO
-o8u5AQDWTq3a29qgr0JTYTDU1iCMqYNtbR6RstB3x/R5+sP/4AEAhuctUd6tqo+n
-r70kYvhT7wTudiQ1GR3IY3IuN3eGBg0=
-=AcRp
------END PGP SIGNATURE-----
-
---Geluv9GX/vn4iM9o--
+No preference.  Feel free to post a patch, if not I'll get to it soon-ish.
