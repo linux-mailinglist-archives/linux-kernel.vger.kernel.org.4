@@ -2,56 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE855FE7A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B295FE7D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJNDjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S229783AbiJNEA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 00:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJNDjQ (ORCPT
+        with ESMTP id S229618AbiJNEA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:39:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42B419298C;
-        Thu, 13 Oct 2022 20:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A9FCB820BC;
-        Fri, 14 Oct 2022 03:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEEA2C43140;
-        Fri, 14 Oct 2022 03:39:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665718753;
-        bh=KYozkUymmljAF7Z/zt5tiXLnn4emqzGDDUi4SNebNHs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fSWV20IrHlHHTBupoOxrTKAFOTl5k4jmN9qMWeOoqZFIL9zNZV8B8jnK/Zb9LfUtY
-         oxgXhpbsUYqjvRhgYhMBBcDzQ1mvAt9fqEHi1v78yA5z0fVpZV0OSMr6z4bHCjlvqH
-         KZInPjXyiOLVBuaHE7JlyDk902S5uIRswWCDr9x0ryCoq4piHT5fyrUsaj77OWdH8z
-         deaf7WTgrJGR0czgTt0oTrfCdGEQxHw4UCgZW+6N5S+G7dBXMz3KKtcHRF72HzkARc
-         lfGR51awdOa68d3M7aJ5tZY0Ne9Fgu3vT/XElrffSvXzwFBadxmm+L7heeSWKTl8TE
-         buOVnj1viUuow==
-Date:   Thu, 13 Oct 2022 20:39:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     guoren@kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, linux@rasmusvillemoes.dk,
-        yury.norov@gmail.com, caraitto@google.com, willemb@google.com,
-        jonolson@google.com, amritha.nambiar@intel.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V2 1/2] net: Fixup netif_attrmask_next_and warning
-Message-ID: <20221013203911.2705eccc@kernel.org>
-In-Reply-To: <20221013203544.110a143c@kernel.org>
-References: <20221014030459.3272206-1-guoren@kernel.org>
-        <20221014030459.3272206-2-guoren@kernel.org>
-        <20221013203544.110a143c@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Fri, 14 Oct 2022 00:00:57 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCCCED998;
+        Thu, 13 Oct 2022 21:00:56 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AE8AC216FCA;
+        Fri, 14 Oct 2022 06:00:54 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 780F4217048;
+        Fri, 14 Oct 2022 06:00:54 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 541551820F5B;
+        Fri, 14 Oct 2022 12:00:53 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     andersson@kernel.org, mathieu.poirier@linaro.org,
+        arnaud.pouliquen@foss.st.com
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com
+Subject: [PATCH v2] remoteproc: core: Auto select rproc-virtio device id
+Date:   Fri, 14 Oct 2022 11:40:51 +0800
+Message-Id: <1665718851-22341-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,13 +42,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 20:35:44 -0700 Jakub Kicinski wrote:
-> Can we instead revert 854701ba4c and take the larger rework Yury 
-> has posted a week ago into net-next?
+With multiple remoteproc device, there will below error:
 
-Oh, it was reposted today:
+sysfs: cannot create duplicate filename '/bus/platform/devices/rproc-virtio.0'
 
-https://lore.kernel.org/all/20221013234349.1165689-2-yury.norov@gmail.com/
+The rvdev_data.index is duplicate, that cause issue, so
+need to use the PLATFORM_DEVID_AUTO instead. After fixing
+device name it becomes something like:
+/bus/platform/devices/rproc-virtio.2.auto
 
-But we need a revert of 854701ba4c as well to cover the issue back up
-for 6.1, AFAIU.
+Fixes: 1d7b61c06dc3 ("remoteproc: virtio: Create platform device for the remoteproc_virtio")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Tested-by: Peng Fan <peng.fan@nxp.com>
+---
+changes in v2:
+- update commit message
+
+ drivers/remoteproc/remoteproc_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 8768cb64f560..03a26498e879 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -509,7 +509,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+ 	rvdev_data.rsc_offset = offset;
+ 	rvdev_data.rsc = rsc;
+ 
+-	pdev = platform_device_register_data(dev, "rproc-virtio", rvdev_data.index, &rvdev_data,
++	pdev = platform_device_register_data(dev, "rproc-virtio", PLATFORM_DEVID_AUTO, &rvdev_data,
+ 					     sizeof(rvdev_data));
+ 	if (IS_ERR(pdev)) {
+ 		dev_err(dev, "failed to create rproc-virtio device\n");
+-- 
+2.34.1
+
