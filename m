@@ -2,31 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA15C5FF549
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB2F5FF54A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJNVXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S229969AbiJNVYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiJNVXe (ORCPT
+        with ESMTP id S229956AbiJNVXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:23:34 -0400
+        Fri, 14 Oct 2022 17:23:45 -0400
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB351DD8BC;
-        Fri, 14 Oct 2022 14:23:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FE81DDC22
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:23:34 -0700 (PDT)
 Received: from localhost.localdomain (178.176.75.138) by msexch01.omp.ru
  (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 15 Oct
- 2022 00:23:06 +0300
+ 2022 00:23:07 +0300
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Oleg Nesterov <oleg@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+To:     Oleg Nesterov <oleg@redhat.com>, Dinh Nguyen <dinguyen@kernel.org>,
+        <linux-kernel@vger.kernel.org>
 CC:     Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 06/13] mips: ptrace: user_regset_copyin_ignore() always returns 0
-Date:   Sat, 15 Oct 2022 00:22:28 +0300
-Message-ID: <20221014212235.10770-7-s.shtylyov@omp.ru>
+Subject: [PATCH 07/13] nios2: ptrace: user_regset_copyin_ignore() always returns 0
+Date:   Sat, 15 Oct 2022 00:22:29 +0300
+Message-ID: <20221014212235.10770-8-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20221014212235.10770-1-s.shtylyov@omp.ru>
 References: <20221014212235.10770-1-s.shtylyov@omp.ru>
@@ -48,7 +47,7 @@ X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
 X-KSE-AntiSpam-Info: LuaCore: 500 500 6cc86d8f5638d79810308830d98d6b6279998c49
 X-KSE-AntiSpam-Info: {rep_avail}
 X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.75.138:7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
 X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.138
 X-KSE-AntiSpam-Info: Rate: 0
 X-KSE-AntiSpam-Info: Status: not_detected
@@ -76,28 +75,32 @@ pointless -- don't do this anymore...
 
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 ---
- arch/mips/kernel/ptrace.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/nios2/kernel/ptrace.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/kernel/ptrace.c b/arch/mips/kernel/ptrace.c
-index 567aec4abac0..d9df543f7e2c 100644
---- a/arch/mips/kernel/ptrace.c
-+++ b/arch/mips/kernel/ptrace.c
-@@ -531,10 +531,11 @@ static int fpr_set(struct task_struct *target,
- 		ptrace_setfcr31(target, fcr31);
- 	}
+diff --git a/arch/nios2/kernel/ptrace.c b/arch/nios2/kernel/ptrace.c
+index cd62f310778b..9221c15972e6 100644
+--- a/arch/nios2/kernel/ptrace.c
++++ b/arch/nios2/kernel/ptrace.c
+@@ -54,7 +54,7 @@ static int genregs_set(struct task_struct *target,
  
--	if (count > 0)
--		err = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
--						fir_pos,
--						fir_pos + sizeof(u32));
-+	if (count > 0) {
+ #define REG_IGNORE_RANGE(START, END)		\
+ 	if (!ret)					\
+-		ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, \
++		user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, \
+ 			START * 4, (END * 4) + 4);
+ 
+ #define REG_IN_ONE(PTR, LOC)	\
+@@ -80,8 +80,8 @@ static int genregs_set(struct task_struct *target,
+ 	REG_IN_ONE(&regs->ra, PTR_RA);
+ 	REG_IN_ONE(&regs->ea, PTR_PC); /* use ea for PC */
+ 	if (!ret)
+-		ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
+-					 PTR_STATUS * 4, -1);
 +		user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
-+					  fir_pos, fir_pos + sizeof(u32));
-+		return 0;
-+	}
++					  PTR_STATUS * 4, -1);
  
- 	return err;
+ 	return ret;
  }
 -- 
 2.26.3
