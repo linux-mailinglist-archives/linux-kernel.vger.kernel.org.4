@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEF45FF22F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237B85FF231
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiJNQU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        id S229491AbiJNQVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiJNQUx (ORCPT
+        with ESMTP id S229688AbiJNQVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:20:53 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3A7E4C21;
-        Fri, 14 Oct 2022 09:20:49 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ed:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 309AA1EC064E;
-        Fri, 14 Oct 2022 18:20:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665764444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=/Wh0zbFGTIbft2gDvKR16DzRYnJEB/RKZdQTzdqS+mY=;
-        b=ph9EsHV1y0KX4HYpc4X1/DaIFwwH07WDdjPORZ/cMJunsKSVMNLOUJerlurPUwYFdShdbq
-        hM6gbuhSJQA9gypG8KSA/BUTXwUIMb9AeMGlJ0BFu7DaYO18AYtvcvlpG1NMdPTlaX7cwf
-        wWdoa6T2PDBLrPzaaR1c8h+EZX7yIt0=
-Date:   Fri, 14 Oct 2022 18:20:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 03/39] x86/cpufeatures: Add CPU feature flags for
- shadow stacks
-Message-ID: <Y0mMVjzEox6Ck6iZ@zn.tnic>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-4-rick.p.edgecombe@intel.com>
+        Fri, 14 Oct 2022 12:21:36 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D016F1D299E;
+        Fri, 14 Oct 2022 09:21:35 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id 137so4266521iou.9;
+        Fri, 14 Oct 2022 09:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=45Qc6kmJfXhoQUyX3B+fNLOQoMuf3VclzIIGEEGFt1A=;
+        b=mUptDl/lHGm3yOKs3cqewPAT6HdcyKTxz5h3mSX37Dlf1Wu+XKyQF5QlBOd0YlDrEe
+         OMY1Drfzlr/2SE6Fgglns0csn8MGGwgvjJFLIv6jDenEPE6rsPsBUmlSSQXfHzPkDEdt
+         5ReiV7AhfWZuVxLoQmxS/+BZQeQ2a5j/RIaBviVTyiDMlADRljALv46B6qx2oJPsaYcd
+         mGkB6JIAgn+tkAdxFfINkZjG2p6qQJT4FdLlH39RtA4PZtUMwAaIYCxe04DNjvsUUvuD
+         4NI+zJklU6l2IHbGODhh8mbWbwN0/w4r2qKAZ5mLh8R26jrZu8XLL/L0nVD2PC5GfZXi
+         Pijg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=45Qc6kmJfXhoQUyX3B+fNLOQoMuf3VclzIIGEEGFt1A=;
+        b=htxcVO0sFHWFLe8maVd5vBe06fddyZwNylVbJhIXLhSbXuJ9nKr1BRRHEadPyMk9TL
+         TnClf4pPSXRO1NMu66b5pmLJmObL7ebpA5XRsD4ht8YGKhyPdrcg0hmZSKKYOAIYqNq7
+         +hoLduklWJnzXh5Gtdh9wQGVZNN5YfbiCqc1janoCFkzwEgsj7ramUQx5dtVPKBCGzx5
+         MxEReMUSuQy0w1AUD6Nb5i0xrVDVXW1df305TT1jkuQJqnNDskA/8sF3L3x+IKzGWBEv
+         9T9CfWrom03feBhJ5E9ZAu9vx8+F4lXj+u0TvqblDM6Pk3n0Tfrc9xXSXYFNEbvZEOZH
+         esYQ==
+X-Gm-Message-State: ACrzQf2k6VIBBtlUowffyBashuvm0IFY2TEQowO9fHvakeY98OEHu7u3
+        GwV/p6T+Rith8eQ1sOBkmsjXLZLdPCgtsCUX0cE=
+X-Google-Smtp-Source: AMsMyM4dnJTOcQS8q+8pDdCGeXUsJD1aKXpt0AU6KUaOu/cXO06Bsv6eEfaYrt8aZJT8BvRHc5tcDDHoabpZKxdPzk8=
+X-Received: by 2002:a02:cc6f:0:b0:363:98f2:347d with SMTP id
+ j15-20020a02cc6f000000b0036398f2347dmr3320450jaq.199.1665764495244; Fri, 14
+ Oct 2022 09:21:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-4-rick.p.edgecombe@intel.com>
+References: <20221004184625.10076-1-olof@lixom.net>
+In-Reply-To: <20221004184625.10076-1-olof@lixom.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 14 Oct 2022 18:21:23 +0200
+Message-ID: <CANiq72mFGoDySLHNyakOnJMDpRVmvCRUAAuiKw1B2KrMhFteCA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: rust_is_available.sh: Provide hints on how to
+ fix missing pieces
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:00PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> The Control-Flow Enforcement Technology contains two related features,
-> one of which is Shadow Stacks. Future patches will utilize this feature
-> for shadow stack support in KVM, so add a CPU feature flags for Shadow
-> Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
-> 
-> To protect shadow stack state from malicious modification, the registers
-> are only accessible in supervisor mode. This implementation
-> context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
-> on XSAVES.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
+On Tue, Oct 4, 2022 at 8:47 PM Olof Johansson <olof@lixom.net> wrote:
+>
+> This might be a bit bikesheddy, but it saves a few roundtrips to the
+> documentation when getting the `make LLVM=1 rustavailable` run to pass.
 
-Reviewed-by: Borislav Petkov <bp@suse.de>
+It is faster for someone that already knows how things work, but it
+may make newcomers skip the docs and it duplicates the information
+there. In addition, for the non-error case, it makes it more verbose
+which may not be appreciated. So maybe we should point to the docs
+instead? What do you think?
 
--- 
-Regards/Gruss,
-    Boris.
+Also, the patch doesn't add instructions for all the cases, so
+somebody that may have hit one of the documented ones + not have read
+the docs may wonder where to find them the solution or why they are
+missing.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks!
+
+Cheers,
+Miguel
