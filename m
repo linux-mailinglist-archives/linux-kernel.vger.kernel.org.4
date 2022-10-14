@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2125FEEC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78AA5FEEDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJNNkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S229902AbiJNNob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJNNkR (ORCPT
+        with ESMTP id S229872AbiJNNoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:40:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6CC46DB9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665754814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=97+yCsen+aZv3dzNcLFg5QyETWduzN4OK7Pj/5FTDqQ=;
-        b=MWTxrli7/H07BBFXzfLebWGld62zCVqxiPfy9wgHV6YBf2bXQETJwaO8828gAQMtK2B1pI
-        l7IiCMDkm/EUzb2XhAD598Rw1IwYpH8PBxcldCFU05YW2w8XDbfBPZxjqXD4HNvgEQo9xC
-        cQOiSwg5Izyf04vI3ibdyHuxOUjefcM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-88-kHqbliiBOVOIj1S1UXIo5g-1; Fri, 14 Oct 2022 09:40:13 -0400
-X-MC-Unique: kHqbliiBOVOIj1S1UXIo5g-1
-Received: by mail-wm1-f71.google.com with SMTP id l1-20020a7bc341000000b003bfe1273d6cso2199527wmj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:40:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=97+yCsen+aZv3dzNcLFg5QyETWduzN4OK7Pj/5FTDqQ=;
-        b=Gf9ApH212Jcj9Dyml7sryDYXcoQu3tkAMZXisvHLqFve+3QiyPMPOE5jtn0f9ASMHn
-         gYHuzKzSmAeOHo2h+Rysys/HyXEFsNnOJ2mY+1rcci+JEy8gNQKlY8skQzX3LiqbFkfI
-         UntyD1JRvjS302Txm/6cTCwRVVdLcskPcUpq4FaGGabopNU2rJ2uBFkjmTGDby/7C53V
-         heMmyY0MMH2+5JU0frxHp2hmpirymC70wxWUTb3GwMsXXkJMyJiCaxTyDtBENhc5SEp6
-         NRZ7yVJeEpV+eHr/iFbE2YMnafwPaKUDsG2PiQbAOf6eFAiYdGowRbpDuwHnbM17V8pJ
-         2OuA==
-X-Gm-Message-State: ACrzQf1zfT8Fff1nFGlgX6VsGL1xTdq/7+c+rdnKaF1GWpQC+yvd59SV
-        RpxJkwvgeqk5ckS/ODcLAaZTy15sAiFR1Hy2anQeLl2PDdeTuwg/oSUMeo00o0Bf3Jkh/akqGSg
-        VjlrwnBwheet1Vp5kJUMP57Zm
-X-Received: by 2002:a05:6000:15ce:b0:230:a14d:997b with SMTP id y14-20020a05600015ce00b00230a14d997bmr3546836wry.370.1665754812066;
-        Fri, 14 Oct 2022 06:40:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6P6KNGcmsIuEbmbLRw+AXx56k/GSatUv1GMsMmCBlacBtge5+MvT1KtuL8koG3QcJLq4g9eA==
-X-Received: by 2002:a05:6000:15ce:b0:230:a14d:997b with SMTP id y14-20020a05600015ce00b00230a14d997bmr3546814wry.370.1665754811770;
-        Fri, 14 Oct 2022 06:40:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:8f00:9219:ab4c:826e:9646? (p200300cbc7048f009219ab4c826e9646.dip0.t-ipconnect.de. [2003:cb:c704:8f00:9219:ab4c:826e:9646])
-        by smtp.gmail.com with ESMTPSA id y3-20020a7bcd83000000b003b492753826sm2038178wmj.43.2022.10.14.06.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 06:40:11 -0700 (PDT)
-Message-ID: <7e6f2d09-e5cf-7f8d-965d-a39bfb0ea286@redhat.com>
-Date:   Fri, 14 Oct 2022 15:40:10 +0200
+        Fri, 14 Oct 2022 09:44:25 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4B01CFC63;
+        Fri, 14 Oct 2022 06:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1665754876;
+    s=strato-dkim-0002; d=ibv-augsburg.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=3pB7WXwwUMURkXU3QEWf34QpwoK2MI1RffNpmhn/a1M=;
+    b=k9Bvgqy0oNImODQd+O/9q5JMI+eemxIVBVFBnwe7y6AhGBnCLmFsKQ4lyADmi87b9u
+    fi+yBXK9f/Dt4rM7qCztXFpeDijrAYdYQQkl9nnpWuErj/zf125NdCbWYTuJX07xV3om
+    x1LHxc8Rc+SvlTUqGrNYFnWRnGBuBqNeudm+ESdclIXs/iMXqWppWP+w1QOGjKhITAlW
+    Uh9frb4ZMkcsE2IhdGSTrj/y1Rx5v/KV9YNx12kF8EqlHSwPaYKISz9Iszg/dyqlnAY+
+    GCNpV0XqHJv+tSjA0sm0U+Br0w1fRsSNUS2ymDD5QxSCXqlP7lYk1eDTnymQ6TRR47Ag
+    5fFw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":KGMJfE6heLGk8b3w7Oa1fDtXwBjeDczIOHPRx8yNRKhFG/cxcP9dNdI9SxioDT8RvZMqtMfbyXFLOT+8odoEkA=="
+X-RZG-CLASS-ID: mo00
+Received: from JADEVM-DRA
+    by smtp.strato.de (RZmta 48.2.0 DYNA|AUTH)
+    with ESMTPSA id R6cb4ey9EDfFMag
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 14 Oct 2022 15:41:15 +0200 (CEST)
+Date:   Fri, 14 Oct 2022 15:41:14 +0200
+From:   Dominic Rath <dominic.rath@ibv-augsburg.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
+        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
+        vigneshr@ti.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Alexander Bahle <bahle@ibv-augsburg.de>,
+        Dominic Rath <rath@ibv-augsburg.de>
+Subject: Re: [PATCH 1/3] dt-bindings: PCI: cdns: Add PHY latency properties
+Message-ID: <20221014134114.GA307620@JADEVM-DRA>
+References: <20221013062649.303184-1-dominic.rath@ibv-augsburg.de>
+ <20221013062649.303184-2-dominic.rath@ibv-augsburg.de>
+ <20221013191249.GA38183-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: RFC [PATCH v4 2/7] Enable balloon drivers to report inflated
- memory
-Content-Language: en-US
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-References: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
- <20221005090158.2801592-3-alexander.atanasov@virtuozzo.com>
- <88EDC41D-408F-4ADF-A933-0A6F36E5F262@gmail.com>
- <a8ce5c48-3efc-5ea3-6f5c-53b9e33f65c7@virtuozzo.com>
- <42C75E59-696B-41D5-BD77-68EFF0B075C6@gmail.com>
- <d55338c4-d15f-14ec-c057-806a5d5aa618@virtuozzo.com>
- <71E14334-CA3B-45FB-A854-7A8D6649C798@gmail.com>
- <b7dd38ba-9ff9-6b4c-2460-d4b1ee3bb3f0@virtuozzo.com>
- <1118F098-972A-4F58-8EE1-270A06E4F9D1@gmail.com>
- <7ba328e5-3bc8-cb22-f00c-eddb8aea9a06@virtuozzo.com>
- <063efd58-8373-90ea-7c5e-9d0e9161d2ba@redhat.com>
- <04e5a2e4-052d-0f80-d642-4e104307f38b@virtuozzo.com>
- <72e535ce-80eb-a02f-970c-6a9c80da0a24@redhat.com>
- <5b1e0a13-8018-630d-d512-c3033db2f2e3@virtuozzo.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <5b1e0a13-8018-630d-d512-c3033db2f2e3@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013191249.GA38183-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>
->>> Other problem is that there are drivers that do not use
->>> adjust_managed_page_count().
->>
->> Which ones? Do we care?
+On Thu, Oct 13, 2022 at 02:12:49PM -0500, Rob Herring wrote:
+> On Thu, Oct 13, 2022 at 08:26:47AM +0200, Dominic Rath wrote:
+> > From: Alexander Bahle <bahle@ibv-augsburg.de>
+> > 
+> > Add "cdns,tx-phy-latency-ps" and "cdns,rx-phy-latency-ps" DT bindings for
+> > setting the PCIe PHY latencies.
+> > The properties expect a list of uint32 PHY latencies in picoseconds for
+> > every supported speed starting at PCIe Gen1, e.g.:
+> > 
+> >   max-link-speed = <2>;
+> >   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
+> >   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
 > 
-> VMWare and Virtio balloon drivers. I recently proposed to unify them and
-> the objection was that it would break existing users - which is valid so
-> we must care i guess.
+> These are a property of the PHY or PCI host? Sounds like PHY to me and 
+> that should be in the PHY node. No reason the PCI driver can't go read 
+> PHY node properties.
 
-I'm confused, I think we care about actual adjustment of the total pages 
-available here, that we want to notify the system about. These 
-approaches (vmware, virtio-balloon with deflate-on-oom) don't adjust 
-totalpages, because the assumption is that we can get back the inflated 
-memory any time we really need it automatically.
+I'm actually not sure if this a property of the PHY, the PCIe host, or
+of the combination of the two.
 
--- 
-Thanks,
+We thought about adding this property to the PHY, too, but we didn't
+know how to handle cases where a single PCIe host is linked with
+multiple PHYs for multi-lane configurations (see TI's AM65x for
+example). Which PHYs latency would you use to configure this PCIe RC?
 
-David / dhildenb
+Personally I don't have a very strong opinion either way - we just
+didn't know any better than to put this into the PCIe host that needs
+it. If you think this is better put into the PHY node we can of course
+send a new version of this patch.
 
+Is there any binding that specifies "generic" PCIe properties, similar
+to ethernet-phy.yaml? We couldn't find any.
+
+I guess in the AM64x case the "PHY" is serdes0_pcie_link below serdes0:
+
+&serdes0 {
+        serdes0_pcie_link: phy@0 {
+	...
+
+This seems to be described by bindings/phy/phy-cadence-torrent.yaml.
+
+Should we add a generic (without cdns) tx/rx-phy-latency-ps property
+there?
+
+> If PTM is a standard PCIe thing, then I don't think these should be 
+> Cadence specific. IOW, drop 'cdns'. 
+
+Yes, it is a standard PCIe thing, but we haven't seen that many
+implementations yet, so we didn't want to pretend to know what this
+looks like in the generic case. We can of course drop 'cdns'.
+
+Best Regards,
+
+Dominic & Alexander
