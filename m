@@ -2,96 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1520E5FE9AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEEC5FE9B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiJNHga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S229984AbiJNHiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJNHgU (ORCPT
+        with ESMTP id S229988AbiJNHiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:36:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4548F3B470;
-        Fri, 14 Oct 2022 00:36:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3C7EBCE24DF;
-        Fri, 14 Oct 2022 07:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C7BC433B5;
-        Fri, 14 Oct 2022 07:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665732975;
-        bh=RGmNY+AV7OpkSWdyidcLOuMN9jGj4/KAd9M6dyX22ac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xp/rvLqUc3qFfbrf1PYk1U34jZ4VzWNsf/8TuqdFFKZUdpapUeMLfiHE6+W/3EkoB
-         BUWAkHa4mylMD+k8GNG/Nqx6pCvsJgdzGdhdyV3b9UTaMO9YNxg7bSir/0xYplfPYe
-         NJyxbxCvDBIDt6NozQTy6LG14mKChX24VS6vJvuo=
-Date:   Fri, 14 Oct 2022 09:36:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
+        Fri, 14 Oct 2022 03:38:17 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BE79F35C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:38:15 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B63FA58035A;
+        Fri, 14 Oct 2022 03:38:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 14 Oct 2022 03:38:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665733094; x=
+        1665740294; bh=O4wijGYkNa2eVXpEmjczg9Kq8zs8dAQ0sjegIV/rrSw=; b=M
+        B6P4muAr8m7upKfRH0bzwQSBtvGu/6BhswoTVp8Bsa6bVPpeoIX16Eb+H+r9bF0D
+        3lDYEGQS54GzTWVUN9L6dFmlmnOBUyYuDaz24fBcoS+tZGFP8SAbQokp2NpgX5Q3
+        Yzbg578TdvwgWTYlxgIC/BHI+4XLBUki4yM/Os1QCz1MpC6YVn/0W4Nyeq2UzGrX
+        f78+Pj5mkvqe0hMPZ1kRstZn6pcsr1WcbO1lSOu9ly05nL0NzFFKS9xUw2uE69Ew
+        vLzJrbSs3jfhf+Qf7vFM+TtlzWP130ZqeSeUgsgM4nC9K1UPFEep055m21gdmKsK
+        mzbZNaWD9p7rI7WvnnXFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665733094; x=
+        1665740294; bh=O4wijGYkNa2eVXpEmjczg9Kq8zs8dAQ0sjegIV/rrSw=; b=h
+        129WbAqVQuOXhsJp7BE7++/9+ResYVbw7hRwxli+3d8hEzu84hA3fm3sQRmX2PRK
+        M85iSaX4OE7ICHvyYbYOv141NQjyweoWpuiyuKtawhOUK4uYoAmuHA8z9ZIMBnHj
+        KFn2zZ3ojFwIxCAK5FgEA942uOJHakgkrNdkgffqglUR+Q7MOe05hcdJ/XboMUGJ
+        EAa0WAD98+f2FwoCDx1lkDqwFpiYyCF6ByX0MqeQ1l9mwPq2xc0kz6eyy7ec0k8j
+        73jp50OsB6QZ2aRtbRfhdulJzbZaIOjpSVC3bFMGsxkXo1UqijH44o9P1gHxu76K
+        LPniYumygDmNyzU9s5zRg==
+X-ME-Sender: <xms:5RFJYyRbSbbLR31eIk4ygF3IDrfMfTnuEHbuX3I3cdSI10OQebM4Zw>
+    <xme:5RFJY3xCRArAijsTN6ij-wkAhZKdVwlPLSHJFOHAzZK_JHBawZ2GT8OWSgP4XTpYH
+    5OY695DV9xFOp8Gxeg>
+X-ME-Received: <xmr:5RFJY_0OfHykeBmzejCXRzl6cvuPU4p99mUsL6KY-RNnU0Zn-RZgzrOgyyzn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekuddguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtjeenucfhrhhomhepofgr
+    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
+    frrghtthgvrhhnpefftddtueefgfffgedtjeffveduvdduhfdugeejgeekteeugfefhfeh
+    keduhfdvhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:5RFJY-AbafJ5iOck2RgaTp5aFNN92AQjTSH7RtpnVr2zFEIqi_oKzA>
+    <xmx:5RFJY7jij9QvqqI0Wy0B63LNK8drv30f710X0bOsyBcfwh2hqchdEg>
+    <xmx:5RFJY6p0e9lA80anBs9T23g5dtLSTDEFD_QoSp9DYbMGiQCeRmY1Pg>
+    <xmx:5hFJYwB1xYd7ubyWBI1jINnxho1OIPOm_ne3TIez6rRUnpH2TxhFEg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Oct 2022 03:38:12 -0400 (EDT)
+Date:   Fri, 14 Oct 2022 09:38:10 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>, Emma Anholt <emma@anholt.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Noralf =?utf-8?B?VHLDg8K4bm5lcw==?= <noralf@tronnes.org>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 06/13] virt: gunyah: Identify hypervisor version
-Message-ID: <Y0kRmjjDQPFjPNp8@kroah.com>
-References: <20221011000840.289033-1-quic_eberman@quicinc.com>
- <20221011000840.289033-7-quic_eberman@quicinc.com>
- <Y0UJgcc0+AEbHTIM@kroah.com>
- <2f313bf8-b366-e094-b5b6-c601458f5cfa@quicinc.com>
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: Re: [PATCH v5 22/22] drm/sun4i: tv: Convert to the new TV mode
+ property
+Message-ID: <20221014073810.akfoyfzxerywnt65@houat>
+References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v5-22-d841cc64fe4b@cerno.tech>
+ <6482539.4vTCxPXJkl@kista>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2f313bf8-b366-e094-b5b6-c601458f5cfa@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <6482539.4vTCxPXJkl@kista>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 04:00:10PM -0700, Elliot Berman wrote:
-> On 10/10/2022 11:13 PM, Greg Kroah-Hartman wrote:
-> > On Mon, Oct 10, 2022 at 05:08:33PM -0700, Elliot Berman wrote:
-> > 
-> > EXPORT_SYMBOL_GPL()?  I have to ask.
-> 
-> typo only :)
-> 
-> > 
-> > But why is it exported at all?  No one is using it in this patch.
-> > 
-> It's used later in the series by the message queue driver. The idea here now
-> is that gunyah.ko is capable of identifying Gunyah and other drivers can
-> check if they are individually compatible with the reported version of
-> Gunyah.
+Hi Jernej,
 
-Then export it when you use it.  If we had taken just half of the
-series, then this would be an export that no one used, which is not ok.
+On Thu, Oct 13, 2022 at 08:23:51PM +0200, Jernej =C5=A0krabec wrote:
+> Dne =C4=8Detrtek, 13. oktober 2022 ob 15:19:06 CEST je Maxime Ripard napi=
+sal(a):
+> > Now that the core can deal fine with analog TV modes, let's convert the
+> > sun4i TV driver to leverage those new features.
+> >=20
+> > Acked-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >=20
+> > ---
+> > Changes in v5:
+> > - Removed the count variable in get_modes
+> > - Removed spurious vc4 change
+> > ---
+> >  drivers/gpu/drm/sun4i/sun4i_tv.c | 145
+> > +++++++++++++-------------------------- 1 file changed, 48 insertions(+=
+),
+> > 97 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/sun4i/sun4i_tv.c
+> > b/drivers/gpu/drm/sun4i/sun4i_tv.c index c65f0a89b6b0..4f07aff11551 100=
+644
+> > --- a/drivers/gpu/drm/sun4i/sun4i_tv.c
+> > +++ b/drivers/gpu/drm/sun4i/sun4i_tv.c
+> > @@ -141,23 +141,14 @@ struct resync_parameters {
+> >  struct tv_mode {
+> >  	char		*name;
+> >=20
+> > +	unsigned int	tv_mode;
+> > +
+> >  	u32		mode;
+> >  	u32		chroma_freq;
+> >  	u16		back_porch;
+> >  	u16		front_porch;
+> > -	u16		line_number;
+> >  	u16		vblank_level;
+>=20
+> isn't there a way to get or calculate back_porch, front_porch and vblank_=
+level=20
+> from mode? From quick glance over removed values below, I would say that =
+at=20
+> least back_porch can be removed too?
 
-thanks,
+I tried actually, but I'm not sure what the front porch and back porch
+parameters actually are. They are called that way by Allwinner, but it
+doesn't match the PAL or NTSC timings at all.
 
-greg k-h
+For example, back_porch is 118 for NTSC and 138 for PAL. Actual back
+porches would be around 12 and 16, respectively. Actually, the entire
+blanking area are 138 and 144. This is close enough for PAL, but pretty
+far off for NTSC.
+
+Allwinner has the habit of integrating the sync period into one of the
+porches, but still there's no obvious match.
+
+front_porch is pretty much in the same case.
+
+Since it affected the display output quite a lot, I chose to keep it for
+now unfortunately.
+
+> Otherwise this patch looks ok.
+
+Can I add your Acked-by/Reviewed-by then?
+
+Thanks!
+Maxime
