@@ -2,47 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5456E5FEC5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725885FEC3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiJNKJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S229618AbiJNKEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 06:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiJNKJM (ORCPT
+        with ESMTP id S229613AbiJNKEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:09:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92E0181DA2;
-        Fri, 14 Oct 2022 03:09:03 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MphnN61XnzmVLp;
-        Fri, 14 Oct 2022 18:04:24 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 14 Oct 2022 18:09:02 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 14 Oct
- 2022 18:09:02 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <yekai13@huawei.com>
-Subject: [PATCH v2 3/3] crypto: hisilicon/qm - delete redundancy check
-Date:   Fri, 14 Oct 2022 10:03:19 +0000
-Message-ID: <20221014100319.5259-4-yekai13@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221014100319.5259-1-yekai13@huawei.com>
-References: <20221014100319.5259-1-yekai13@huawei.com>
+        Fri, 14 Oct 2022 06:04:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1B027FD9;
+        Fri, 14 Oct 2022 03:04:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DFA7B82295;
+        Fri, 14 Oct 2022 10:04:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0815C43140;
+        Fri, 14 Oct 2022 10:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665741885;
+        bh=M1RHVhrd9CvGHsDLVTPIYyBQZd2boaXvVLczC8V1agw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cSjc0snQFw9N7np+xcZVe0pdiaXuGmgKZOfsbXqeSyQZyVnMhWevQh789ZMC/I480
+         xuGynoflF8jZyym9WKjQXXpCHCsTlv7+akgvg3EnUy3KvsEkKyc9PCNf+9CiS1Vcol
+         Zh+a206ZeF+2HQ2yhBQ6MQsAHCELN2YmyWnCm9LSCX8RGHptjM3SJakv4x9wXTrsmT
+         qo+xjzSd7D82sa8ppvZhOzcFxBbeuSKWQ29Bh0mJ2TyaiKzAyGvmyKUq0EBdHbNbaw
+         HDNlX7hfPNP7PxHDqVSEqzs/MRyKMtufQFA9foX/t53n1+xFXCMSHg+fIkVThHu9LE
+         Ej28w10WEDNtw==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1370acb6588so5268272fac.9;
+        Fri, 14 Oct 2022 03:04:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2RM1B9q1gSoeQrHX1cpBZ1gUcoYwJyBzILOHJJlcUk0/S/40EC
+        e37RHDAbhvLpUeafDsErSU5arpIPdeKKOIfpuik=
+X-Google-Smtp-Source: AMsMyM4AanB6DEc0QtQUMx97yjyTLDFYTwR7kLa4ZXZSkz9p6XoOhM8wnzzmCv9StC9733eUpY6ZLuCUTKfyFf7Xkuw=
+X-Received: by 2002:a05:6870:4413:b0:136:66cc:6af8 with SMTP id
+ u19-20020a056870441300b0013666cc6af8mr8049193oah.112.1665741884871; Fri, 14
+ Oct 2022 03:04:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221014030459.3272206-1-guoren@kernel.org> <20221014030459.3272206-2-guoren@kernel.org>
+ <Y0kzWQZSdCR93s/y@smile.fi.intel.com>
+In-Reply-To: <Y0kzWQZSdCR93s/y@smile.fi.intel.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 14 Oct 2022 18:04:32 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTReV1JhfP2SN-3P3g4v6Mpgaq4CMb5COAiGCwo=onaAgQ@mail.gmail.com>
+Message-ID: <CAJF2gTReV1JhfP2SN-3P3g4v6Mpgaq4CMb5COAiGCwo=onaAgQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] net: Fixup netif_attrmask_next_and warning
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@rasmusvillemoes.dk, yury.norov@gmail.com,
+        caraitto@google.com, willemb@google.com, jonolson@google.com,
+        amritha.nambiar@intel.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,28 +65,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because the permission on the VF debugfs file is "0444". So
-the VF function checking is redundant in qos writing api.
+On Fri, Oct 14, 2022 at 6:01 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Oct 13, 2022 at 11:04:58PM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Don't pass nr_bits as arg1, cpu_max_bits_warn would cause warning
+> > now 854701ba4c39 ("net: fix cpu_max_bits_warn() usage in
+> > netif_attrmask_next{,_and}").
+> >
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 2 PID: 1 at include/linux/cpumask.h:110 __netif_set_xps_queue+0x14e/0x770
+> > Modules linked in:
+>
+> Submitting Patches documentation suggests to cut this to only what makes sense
+> for the report.
+Right, thx for mentioning.
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 3 ---
- 1 file changed, 3 deletions(-)
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index 80eeb966cf89..363a02810a16 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -4632,9 +4632,6 @@ static ssize_t qm_algqos_write(struct file *filp, const char __user *buf,
- 	unsigned long val;
- 	int len, ret;
- 
--	if (qm->fun_type == QM_HW_VF)
--		return -EINVAL;
--
- 	if (*pos != 0)
- 		return 0;
- 
+
 -- 
-2.17.1
-
+Best Regards
+ Guo Ren
