@@ -2,206 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5DA5FF25D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37605FF261
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiJNQjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S230207AbiJNQlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiJNQjd (ORCPT
+        with ESMTP id S230133AbiJNQlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:39:33 -0400
-Received: from mail.codeweavers.com (mail.codeweavers.com [65.103.31.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C61114DFC;
-        Fri, 14 Oct 2022 09:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=codeweavers.com; s=6377696661; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6eMvLtK9mwBum1HsBSBhJgZIUT/9Re27IqkGuogHqoU=; b=uZ2rbG5PgScHTGpr1HiOUsLtct
-        AfoDPhPemSkQyE2Av42ziro+iH44do4pxhX4u5nCjssYtcfFOJD6tjpRH2ZDd9b0xYMNUsAKakdr1
-        cbWdYEFX+L6x56wsiaFUiXdwlJBNo+eYXqbkNFdiDOXrzMJKDiPYCvWn5HO7i8vwHPxE=;
-Received: from cw141ip123.vpn.codeweavers.com ([10.69.141.123])
-        by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <pgofman@codeweavers.com>)
-        id 1ojNic-00G8ri-Pf; Fri, 14 Oct 2022 11:39:31 -0500
-Message-ID: <342a762d-22f5-b979-411f-aab0474feda2@codeweavers.com>
-Date:   Fri, 14 Oct 2022 11:39:29 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
-Content-Language: en-GB
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        Fri, 14 Oct 2022 12:41:00 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8220164BC4;
+        Fri, 14 Oct 2022 09:40:59 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id z20so5219190plb.10;
+        Fri, 14 Oct 2022 09:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bdQA2IQ/Zdiw0tfXrnTykfoypuZKZExhaq/VdDsyQcg=;
+        b=lCZxuDQ0UPruEZ3c6zkM+o+qq6D1nO1fap4bCgiQi6n4b6TbYBoDGep63xEa6p+6rW
+         pGtFf0jMeYoePHiirDy6OlVQFAYU6X/0q4u7KJkWUETFT8OVwV9kiiJQTbBK634iY4+o
+         gcChe/p66whQgzhN44BnnLULT/bBd5I9GdAZ2oFfNP6QTTMqCDG2p/5Rz1divNDUdNk8
+         ivCY6FR9gM7s7d2MOyIHRmcgTAyq5BzepvRQ/9ba6jdLX34SpmaflPJjZNYdYK/1I/E2
+         1tPi3+nEkB8mvEwQJzulQFruvebnBL8Oqt9v+jLs+DcxuHOD8ojUteRDXLXKF0w15HSc
+         5MNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bdQA2IQ/Zdiw0tfXrnTykfoypuZKZExhaq/VdDsyQcg=;
+        b=GyGIHeV0QS4oR8SkFGtJM3tErVvAsbq0H4pqo0PkC11oBpcgKHKBKbgnXE9AceV+F/
+         uGgbfa/0Ns2TPSrEv4qeDlCdxuLO3rZP68hcvLtLQVBaL8aHhkFepLPOvd4I6d7T0CAb
+         653qG6VYBVbqbr0XGxOTCdSWg7AEVCPdk46sF5SERKxjQKQ82Uj+Wh2y3G/3HnmsdhA8
+         /4Z56QsNmh0iIWfMDgQi3H/e5pVz5jJHM/DcA9NOyPOzFgILqX8p0py9kQMNGdzhTSRU
+         DLkgxv9ptRr/E07RD1o3UdARBKOcUAamREh5X6qkmikZEUDmD9bLw9D5fPjWLw4lxNbJ
+         5xGQ==
+X-Gm-Message-State: ACrzQf34xfLd1mgVrnvgYqF5RLd1aK1syKsU7Ed2ytImqvAH0LCjVxFZ
+        ISBA4UCuBumWF2b8OrcYvZ8=
+X-Google-Smtp-Source: AMsMyM5hz9KlxdRbCJVb4RjTHgSMw6cypfg1KV1GzzYbBdOYpMMFZTtaGR/jfmjS2D3jGJFMtbSjxw==
+X-Received: by 2002:a17:90a:b00a:b0:203:87a3:9e70 with SMTP id x10-20020a17090ab00a00b0020387a39e70mr6578164pjq.218.1665765658559;
+        Fri, 14 Oct 2022 09:40:58 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y187-20020a6264c4000000b0056328e4d466sm2001005pfb.146.2022.10.14.09.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 09:40:58 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 14 Oct 2022 06:40:56 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
- <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
- <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
- <5db967de-ea7e-9f35-cd74-d4cca2fcb9ee@codeweavers.com>
- <CANn89iJTNUCDLptS_rV4JUDcEH8JNXvOTx4xgzvaDHG6eodtXg@mail.gmail.com>
- <81b0e6c9-6c13-aecd-1e0e-6417eb89285f@codeweavers.com>
- <CANn89iKD=ceuLnhK-zpk3QerpS-FUb_wb_HevkpvsVqGJ_T4NQ@mail.gmail.com>
-From:   Paul Gofman <pgofman@codeweavers.com>
-In-Reply-To: <CANn89iKD=ceuLnhK-zpk3QerpS-FUb_wb_HevkpvsVqGJ_T4NQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v2] perf stat: Support old kernels for bperf cgroup
+ counting
+Message-ID: <Y0mRGJx4Mc7t7fGB@slm.duckdns.org>
+References: <Y0Sx2KWX4gPlLytq@slm.duckdns.org>
+ <20221011052808.282394-1-namhyung@kernel.org>
+ <Y0Wfl88objrECjSo@slm.duckdns.org>
+ <Y0ljzN920sWalEHR@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0ljzN920sWalEHR@kernel.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry if I was unclear, to reformulate my question, is blocking 
-listening port (not the accept one) this way a IETF requirement? I am 
-asking because I could not find where such a requirement stems from 
-there. Sorry if I am missing the obvious.
+On Fri, Oct 14, 2022 at 10:27:40AM -0300, Arnaldo Carvalho de Melo wrote:
+> Hey, I noticed that the perf build is broken for the
+> tools/perf/util/bpf_skel/bperf_cgroup.bpf.c skell, so I tried using b4
+> on this Namhyung patch, it ended up getting a newer version, by Tejun,
+> that mixes up kernel code and tooling, which, when I tried to apply
+> upstream didn't work.
+> 
+> Please try not to mix up kernel and tools/ changes in the same patch to
+> avoid these issues.
 
-On 10/14/22 11:34, Eric Dumazet wrote:
->>       My question is if the behaviour of blocking listen socket port
->> while the accepted port (which, as I understand, does not have any
->> direct relation to listen port anymore from TCP standpoint) is still in
->> TIME_ or other wait is stipulated by TCP requirements which I am
->> missing? Or, if not, maybe that can be changed?
->>
-> Please raise these questions at IETF, this is where major TCP changes
-> need to be approved.
->
-> There are multiple ways to avoid TIME_WAIT, if you really need to.
->
->
->> Thanks,
->>       Paul.
->>
->>
->> On 10/14/22 11:20, Eric Dumazet wrote:
->>> On Fri, Oct 14, 2022 at 8:52 AM Paul Gofman <pgofman@codeweavers.com> wrote:
->>>> Hello Eric,
->>>>
->>>> our problem is actually not with the accept socket / port for which
->>>> those timeouts apply, we don't care for that temporary port number. The
->>>> problem is that the listen port (to which apps bind explicitly) is also
->>>> busy until the accept socket waits through all the necessary timeouts
->>>> and is fully closed. From my reading of TCP specs I don't understand why
->>>> it should be this way. The TCP hazards stipulating those timeouts seem
->>>> to apply to accept (connection) socket / port only. Shouldn't listen
->>>> socket's port (the only one we care about) be available for bind
->>>> immediately after the app stops listening on it (either due to closing
->>>> the listen socket or process force kill), or maybe have some other
->>>> timeouts not related to connected accept socket / port hazards? Or am I
->>>> missing something why it should be the way it is done now?
->>>>
->>> To quote your initial message :
->>>
->>> <quote>
->>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
->>> socket in a hack. But this hack cannot be added to the application
->>> process as we don't own it.
->>> </quote>
->>>
->>> Essentially you are complaining of the linux kernel being unable to
->>> run a buggy application.
->>>
->>> We are not going to change the linux kernel because you can not
->>> fix/recompile an application.
->>>
->>> Note that you could use LD_PRELOAD, or maybe eBPF to automatically
->>> turn SO_REUSEADDR before bind()
->>>
->>>
->>>> Thanks,
->>>>        Paul.
->>>>
->>>>
->>>> On 9/30/22 10:16, Eric Dumazet wrote:
->>>>> On Fri, Sep 30, 2022 at 6:24 AM Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
->>>>>> Hi Eric,
->>>>>>
->>>>>> RFC 1337 describes the TIME-WAIT Assassination Hazards in TCP. Because
->>>>>> of this hazard we have 60 seconds timeout in TIME_WAIT state if
->>>>>> connection isn't closed properly. From RFC 1337:
->>>>>>> The TIME-WAIT delay allows all old duplicate segments time
->>>>>> enough to die in the Internet before the connection is reopened.
->>>>>>
->>>>>> As on localhost there is virtually no delay. I think the TIME-WAIT delay
->>>>>> must be zero for localhost connections. I'm no expert here. On localhost
->>>>>> there is no delay. So why should we wait for 60 seconds to mitigate a
->>>>>> hazard which isn't there?
->>>>> Because we do not specialize TCP stack for loopback.
->>>>>
->>>>> It is easy to force delays even for loopback (tc qdisc add dev lo root
->>>>> netem ...)
->>>>>
->>>>> You can avoid TCP complexity (cpu costs) over loopback using AF_UNIX instead.
->>>>>
->>>>> TIME_WAIT sockets are optional.
->>>>> If you do not like them, simply set /proc/sys/net/ipv4/tcp_max_tw_buckets to 0 ?
->>>>>
->>>>>> Zapping the sockets in TIME_WAIT and FIN_WAIT_2 does removes them. But
->>>>>> zap is required from privileged (CAP_NET_ADMIN) process. We are having
->>>>>> hard time finding a privileged process to do this.
->>>>> Really, we are not going to add kludges in TCP stacks because of this reason.
->>>>>
->>>>>> Thanks,
->>>>>> Usama
->>>>>>
->>>>>>
->>>>>> On 5/24/22 1:18 PM, Muhammad Usama Anjum wrote:
->>>>>>> Hello,
->>>>>>>
->>>>>>> We have a set of processes which talk with each other through a local
->>>>>>> TCP socket. If the process(es) are killed (through SIGKILL) and
->>>>>>> restarted at once, the bind() fails with EADDRINUSE error. This error
->>>>>>> only appears if application is restarted at once without waiting for 60
->>>>>>> seconds or more. It seems that there is some timeout of 60 seconds for
->>>>>>> which the previous TCP connection remains alive waiting to get closed
->>>>>>> completely. In that duration if we try to connect again, we get the error.
->>>>>>>
->>>>>>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
->>>>>>> socket in a hack. But this hack cannot be added to the application
->>>>>>> process as we don't own it.
->>>>>>>
->>>>>>> I've looked at the TCP connection states after killing processes in
->>>>>>> different ways. The TCP connection ends up in 2 different states with
->>>>>>> timeouts:
->>>>>>>
->>>>>>> (1) Timeout associated with FIN_WAIT_1 state which is set through
->>>>>>> `tcp_fin_timeout` in procfs (60 seconds by default)
->>>>>>>
->>>>>>> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
->>>>>>> seems like this timeout has come from RFC 1337.
->>>>>>>
->>>>>>> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
->>>>>>> also doesn't seem feasible to change the timeout of TIME_WAIT state as
->>>>>>> the RFC mentions several hazards. But we are talking about a local TCP
->>>>>>> connection where maybe those hazards aren't applicable directly? Is it
->>>>>>> possible to change timeout for TIME_WAIT state for only local
->>>>>>> connections without any hazards?
->>>>>>>
->>>>>>> We have tested a hack where we replace timeout of TIME_WAIT state from a
->>>>>>> value in procfs for local connections. This solves our problem and
->>>>>>> application starts to work without any modifications to it.
->>>>>>>
->>>>>>> The question is that what can be the best possible solution here? Any
->>>>>>> thoughts will be very helpful.
->>>>>>>
->>>>>>> Regards,
->>>>>>>
->>>>>> --
->>>>>> Muhammad Usama Anjum
+I didn't write a newer version of this patch. What are you talking about?
 
-
+-- 
+tejun
