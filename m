@@ -2,98 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320235FF027
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDCC5FF01E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiJNOSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S229864AbiJNORm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiJNOSr (ORCPT
+        with ESMTP id S230462AbiJNORd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:18:47 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7020C1D2B42;
-        Fri, 14 Oct 2022 07:18:39 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29EAotjZ019789;
-        Fri, 14 Oct 2022 16:18:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=Aii0wEtTzYyeG8wgGH0XuNz7wBYepHeOofFIh/pfnuU=;
- b=1Ek0m2Zjhu0BDgg4o5NY0WfPXpLxuDUcxn8mM3eSrM5JxPOVo99Rq0lmd1oPaSLhEY9x
- gDz0+oLHdeRVnSPrSwFQbiABDlf2xK0nP5roaiiaDLx8vqguaMEfSIfUbkhmc453VYjb
- wVzB2uErf+qdWzox3ORoDCw2Q6nEbpR6yk3dYLJQy8545XAuY5H1mvlEPQoV2G2o4ka4
- NbjRKNILrs6XgLAWVOCVcGb7AHjn9Gs0aWCTJQ5oavXnfNJUBL6rTWBdv0193pAnrwnT
- caUdlrkokgvPHy7QPOxl34V0xBLkt6Gg27YdxPIqlLAs9SHUCEjpuiGKKs4pjCTC9biO 9w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k5v4n9ggx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 16:18:06 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D2EA7100038;
-        Fri, 14 Oct 2022 16:18:01 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CE76B23150B;
-        Fri, 14 Oct 2022 16:18:01 +0200 (CEST)
-Received: from localhost (10.75.127.44) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 14 Oct
- 2022 16:18:01 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2 10/10] ARM: multi_v7_defconfig: enable Type-C UCSI and STM32G0 as modules
-Date:   Fri, 14 Oct 2022 16:15:09 +0200
-Message-ID: <20221014141509.211149-11-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221014141509.211149-1-fabrice.gasnier@foss.st.com>
-References: <20221014141509.211149-1-fabrice.gasnier@foss.st.com>
+        Fri, 14 Oct 2022 10:17:33 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBFA1D2B61;
+        Fri, 14 Oct 2022 07:17:18 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so1908371otq.5;
+        Fri, 14 Oct 2022 07:17:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SJgQbbx8GSTxjlJ5aSREgb5VNrrd8KKlXzB6L8m9N+U=;
+        b=3cRXTvr/VuU3qFtcOtr8IF0GviVlIopMG91MNoYtZHHq1vL/GIJTfdEoDxcnWyXh2I
+         AZVFbmjPrlP64BC/UlTdzh4DnGbZtU34HZeAzwJORX5UPOguCaEEVjqLYaT1UAqeysa3
+         fCdredyrReUjohGs5crCgbF704MuFtUz3bZVQqXsYp7fMuY1Z0prFhrjHBA7a0lmr1gt
+         H9BKuJOebtbJySFbg7+HM1mH/01qN9jpB03L9cbvFJpmaGS8YYvBb5ezF8PFPsDx3bfD
+         r+BcqFBkxOjXZP6bzx1W80hYoZLO+6pThwkuKZaFkklTCe4B8IE/FDWWGpBeveEhZFgV
+         glgg==
+X-Gm-Message-State: ACrzQf15ORcJg8ahJMPLDz8EADqQhwGJPAdgJ2PmqUewqRI3V68fx/ZV
+        W0QyKw1wXoWxdeQ+YBflsg==
+X-Google-Smtp-Source: AMsMyM59Imc0Bum5glqerPFxzEzBx5VO/JKDoGC25QZgv78bQSe0lQuroyOM/A7u3yzpW/yFykaDuA==
+X-Received: by 2002:a9d:1d3:0:b0:661:a1a9:3727 with SMTP id e77-20020a9d01d3000000b00661a1a93727mr2551605ote.372.1665757037501;
+        Fri, 14 Oct 2022 07:17:17 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v6-20020a9d69c6000000b006618586b850sm1284868oto.46.2022.10.14.07.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 07:17:16 -0700 (PDT)
+Received: (nullmailer pid 1900473 invoked by uid 1000);
+        Fri, 14 Oct 2022 14:17:17 -0000
+Date:   Fri, 14 Oct 2022 09:17:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, eric.auger@redhat.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        puneet.gupta@amd.com, song.bao.hua@hisilicon.com,
+        mchehab+huawei@kernel.org, maz@kernel.org, f.fainelli@gmail.com,
+        jeffrey.l.hugo@gmail.com, saravanak@google.com,
+        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
+        jgg@ziepe.ca, jgg@nvidia.com, robin.murphy@arm.com,
+        will@kernel.org, joro@8bytes.org, masahiroy@kernel.org,
+        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org,
+        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
+        michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+Subject: Re: [RFC PATCH v4 1/8] dt-bindings: bus: add CDX bus device tree
+ bindings
+Message-ID: <20221014141717.GB1862711-robh@kernel.org>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20221014044049.2557085-1-nipun.gupta@amd.com>
+ <20221014044049.2557085-2-nipun.gupta@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_08,2022-10-14_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014044049.2557085-2-nipun.gupta@amd.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the USB Type-C UCSI, and the STM32G0 UCSI drivers as modules, since
-used on STM32MP13 board.
+On Fri, Oct 14, 2022 at 10:10:42AM +0530, Nipun Gupta wrote:
+> This patch adds a devicetree binding documentation for CDX
+> bus.
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- arch/arm/configs/multi_v7_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Please read submitting-patches.rst and what it says about commit 
+messages.
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 12b35008571f..d391f8216eea 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -899,6 +899,8 @@ CONFIG_USB_CONFIGFS_F_UVC=y
- CONFIG_USB_CONFIGFS_F_PRINTER=y
- CONFIG_USB_ETH=m
- CONFIG_TYPEC=m
-+CONFIG_TYPEC_UCSI=m
-+CONFIG_UCSI_STM32G0=m
- CONFIG_TYPEC_STUSB160X=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=16
--- 
-2.25.1
+> 
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> ---
+>  .../devicetree/bindings/bus/xlnx,cdx.yaml     | 65 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml b/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+> new file mode 100644
+> index 000000000000..984ff65b668a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/xlnx,cdx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMD CDX bus controller
+> +
+> +description: |
+> +  CDX bus controller detects CDX devices using CDX firmware and
+> +  add those to cdx bus. The CDX bus manages multiple FPGA based
+> +  hardware devices, which can support network, crypto or any other
+> +  specialized type of devices. These FPGA based devices can be
+> +  added/modified dynamically on run-time.
+> +
+> +  All devices on the CDX bus will have a unique streamid (for IOMMU)
+> +  and a unique device ID (for MSI) corresponding to a requestor ID
+> +  (one to one associated with the device). The streamid and deviceid
+> +  are used to configure SMMU and GIC-ITS respectively.
+> +
+> +  iommu-map property is used to define the set of stream ids
+> +  corresponding to each device and the associated IOMMU.
+> +
+> +  The MSI writes are accompanied by sideband data (Device ID).
+> +  The msi-map property is used to associate the devices with the
+> +  device ID as well as the associated ITS controller.
+> +
+> +maintainers:
+> +  - Nipun Gupta <nipun.gupta@amd.com>
+> +  - Nikhil Agarwal <nikhil.agarwal@amd.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,cdxbus-controller-1.0
 
+Where does 1.0 come from?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  iommu-map: true
+> +
+> +  msi-map: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - iommu-map
+> +  - msi-map
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        cdx: cdx@4000000 {
+
+bus@...
+
+> +            compatible = "xlnx,cdxbus-controller-1.0";
+> +            reg = <0x00000000 0x04000000 0 0x1000>;
+> +            /* define map for RIDs 250-259 */
+> +            iommu-map = <250 &smmu 250 10>;
+> +            /* define msi map for RIDs 250-259 */
+> +            msi-map = <250 &its 250 10>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f5ca4aefd184..5f48f11fe0c3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -935,6 +935,12 @@ S:	Supported
+>  F:	drivers/crypto/ccp/
+>  F:	include/linux/ccp.h
+>  
+> +AMD CDX BUS DRIVER
+> +M:	Nipun Gupta <nipun.gupta@amd.com>
+> +M:	Nikhil Agarwal <nikhil.agarwal@amd.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+> +
+>  AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - SEV SUPPORT
+>  M:	Brijesh Singh <brijesh.singh@amd.com>
+>  M:	Tom Lendacky <thomas.lendacky@amd.com>
+> -- 
+> 2.25.1
+> 
+> 
