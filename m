@@ -2,129 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799B25FE6A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 03:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649E55FE6AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 03:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJNBm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 21:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S229656AbiJNBn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 21:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiJNBmY (ORCPT
+        with ESMTP id S229720AbiJNBnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 21:42:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCB819C05C;
-        Thu, 13 Oct 2022 18:42:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 13 Oct 2022 21:43:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27CD1A2093;
+        Thu, 13 Oct 2022 18:43:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MpTf40d6qz4wgr;
-        Fri, 14 Oct 2022 12:42:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665711740;
-        bh=UOqOv9ZXTG50TVbS4bfjEnoDOx+u6Ff5Z3TJqIYC0jM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EMIVKjO8LK58j+wxxvgH1hUKrT5GwGFk1uj+JFlahxWZZkD2tN5O1/wSNObWNfcHD
-         AOXqMGEMNWM/9bwRNisei+VYUj2TfCOniuAvZAdN0uiVlT/Qca/C2IJVdjvPTAuaG4
-         tnXivgttxtNfST1NJkcU26kMNrhk+Dg+bszVLc95ti2Tl/V36W6GkVYKH9BmCrLSVU
-         B6tqUW8fXzQmnCL+kMK2c9+EKS4PgVShOpYzyqGHbIUb23J3kQ67+BqOSTuy1NOLtd
-         vDBmAQBE4Mm2WUb2dGBx6gY4w5uBXX38O1OCKody0sJPvi4U3TpT9U4GzWEoo32Zs9
-         g7hu8G/wvR3qQ==
-Date:   Fri, 14 Oct 2022 12:42:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kbuild tree
-Message-ID: <20221014124217.20fd0a27@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4458B821B6;
+        Fri, 14 Oct 2022 01:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83227C43141;
+        Fri, 14 Oct 2022 01:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665711825;
+        bh=tO5YXbZYX7MkvTGla4xgsWhhc7K+nSXU2rcqtEXJPbM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FfdLanWhbCC6Pwuq8gMpuUCWnmBjwNIVxMFbTWtsP3an75vxD/kkf6BA8d929g1d/
+         YguGTJWZlUhhVdsbsbaJTubE6aoUw8vF7ZXRDZI94C/l5U4m4QDT1kIHwLHxP0WgJT
+         uQOrHTwvu94+vAQUmj1ptZroi/TOEHygwq/YrJe3KH+rG+63BclaFU7e6DFhHZPkG+
+         R4PHqmUlTcCXiTtHmdha+c6RY+etxEvIDuzKvKS2ArNpYH1c5plyVFBozPY45lsrc3
+         dKgvwqy81WLiTFXbXD/j3mqhTLQuv8uiKEFvd+YrPFYWEbYIXsMlwfSUNwyEphr1L0
+         VvwHrkItIgQtw==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1324e7a1284so4357926fac.10;
+        Thu, 13 Oct 2022 18:43:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3dQUvOAOz6IFITTqBhNMzHM6+IU++qWoWMwGxMsFlQk29O7hPD
+        G2QfKgJq/vTrloDkJGA3P/8WvbDAf547F+aMO5o=
+X-Google-Smtp-Source: AMsMyM5sinHvVoQirZtjmtwVMnLjGe4szW3+SDH8vYDXaM5Yk7PEKmiMIF4XYFoCxNylcnSnO8AI+9KMRcCa5OlJMdA=
+X-Received: by 2002:a05:6870:4413:b0:136:66cc:6af8 with SMTP id
+ u19-20020a056870441300b0013666cc6af8mr7258893oah.112.1665711824561; Thu, 13
+ Oct 2022 18:43:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sE6JmWz7i8cpoH0y/7G.8Qz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221013163857.3086718-1-guoren@kernel.org> <CAJF2gTSu_SDGEYZxW7nfY8B=k_hkdxKy2TsK7C5v7cqM7qrKRA@mail.gmail.com>
+ <CAAH8bW8FArQL=cVex=ZFOFhBC-9JvKNtdwCwjVYexe3qWehLKw@mail.gmail.com>
+In-Reply-To: <CAAH8bW8FArQL=cVex=ZFOFhBC-9JvKNtdwCwjVYexe3qWehLKw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 14 Oct 2022 09:43:32 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSrxGWDi9zeABWg94-+Xn8GHmqeB_d-KWkdvF-a-aa-5w@mail.gmail.com>
+Message-ID: <CAJF2gTSrxGWDi9zeABWg94-+Xn8GHmqeB_d-KWkdvF-a-aa-5w@mail.gmail.com>
+Subject: Re: [PATCH] net: Fixup netif_attrmask_next_and warning
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@rasmusvillemoes.dk, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sE6JmWz7i8cpoH0y/7G.8Qz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Oct 14, 2022 at 1:57 AM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> > > Fixes: 944c417daeb6 ("net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}")
+> >
+> > Sorry, the Fixes commit is 854701ba4c39.
+>
+> 1. it doesn't fix my commit. There's nothing to fix. It fixes net code.
+Okay, I would change to:
+Fixes: 80d19669ecd3 ("net: Refactor XPS for CPUs and Rx queues")
 
-Hi all,
+> 2. https://lore.kernel.org/all/YznDSKbiDI99Om23@yury-laptop/t/#mf3a04206802c50ee7f5900e968aa03abdeb49c68
 
-After merging the kbuild tree, today's linux-next build (i386 defconfig)
-failed like this:
 
-In file included from arch/x86/kernel/head_32.S:29:
-arch/x86/include/asm/pgtable_32.h:68:5: error: "PTRS_PER_PMD" is not define=
-d, evaluates to 0 [-Werror=3Dundef]
-   68 | #if PTRS_PER_PMD > 1
-      |     ^~~~~~~~~~~~
-cc1: all warnings being treated as errors
 
-Exposed by commit
-
-  0a7606a9832a ("kbuild: move -Wundef from KBUILD_CFLAGS to KBUILD_CPPFLAGS=
-")
-
-I have no idea what the root cause is. :-(
-
-It is a great pity that this commit was not in linux-next before the
-merge window opened. :-(
-
-I have applied the following hack for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 14 Oct 2022 12:34:34 +1100
-Subject: [PATCH] i386: hack for "kbuild: move -Wundef from KBUILD_CFLAGS to=
- KBUILD_CPPFLAGS"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/include/asm/pgtable_32.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/pgtable_32.h b/arch/x86/include/asm/pgtab=
-le_32.h
-index 7c9c968a42ef..0f3f186ca140 100644
---- a/arch/x86/include/asm/pgtable_32.h
-+++ b/arch/x86/include/asm/pgtable_32.h
-@@ -65,7 +65,7 @@ do {						\
-  * With PAE paging (PTRS_PER_PMD > 1), we allocate PTRS_PER_PGD =3D=3D 4 p=
-ages for
-  * the PMD's in addition to the pages required for the last level pagetabl=
-es.
-  */
--#if PTRS_PER_PMD > 1
-+#if defined(PTRS_PER_PMD) && (PTRS_PER_PMD > 1)
- #define PAGE_TABLE_SIZE(pages) (((pages) / PTRS_PER_PMD) + PTRS_PER_PGD)
- #else
- #define PAGE_TABLE_SIZE(pages) ((pages) / PTRS_PER_PGD)
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/sE6JmWz7i8cpoH0y/7G.8Qz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNIvnkACgkQAVBC80lX
-0GyZHgf9Efsz4o/W+18mhNjLoXQH22ofjTMOjJMiBdjXo+X1kQhnL/1j9XS/W+8h
-SqTLrWHpAhEVinfSX3F2ULzbMgw6qXrWHTYVFGFnQVtRF6C9bmSYsccdLBvgoNUl
-ViOCvhRaJ50mqcnN4GhjksgAwq5/K8O4ij3IeyZuVK5BoOrsELL9A4xKe4wKZQpV
-llWNR0iSxLX9N7cndAB9aU1MutqAc4TDx4qc+RAujKcY9tnsgpQlssdBzpjQhF+h
-kH7QgNme/LMAsmfNOId+ho9+2fj2McMcvXQJtrKxCAfxAUjWqGAIX0GoOKecnngk
-qLTl84cLFKZlkEowXRjS1zKrwIah6Q==
-=ZcHs
------END PGP SIGNATURE-----
-
---Sig_/sE6JmWz7i8cpoH0y/7G.8Qz--
+-- 
+Best Regards
+ Guo Ren
