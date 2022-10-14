@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CB65FE7BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DFE5FE7C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJNDva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S229948AbiJNDvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 23:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJNDvT (ORCPT
+        with ESMTP id S229888AbiJNDvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:51:19 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09844196B5B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:51:18 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y8so3739417pfp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:51:18 -0700 (PDT)
+        Thu, 13 Oct 2022 23:51:20 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132D919B647
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:51:19 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 70so3774105pjo.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:51:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gessz9Lw9WUV8icSRgAP1AqoQqTWoQ7XuEFzNjGtaYQ=;
-        b=DITmBQLna2ECC4Ct3cSzAXZ8DN05u/+B2BjOtCLhuyT2RvRDB7qysIRQq2NoV2O7Dv
-         +hWDqCa+Cu45Zel25N6jPCAAc1CJPfFRUM6tCDzHHYZy9H/J+9vc/VTkIhLmzjYCygxg
-         BskNs05xQYtedY3yneY9vm5H7TiJ/siwAe9KaPqEDM1zlRGJQSWD1rYbwzqi6bae88Hm
-         DxBCUDMjdmtZ9IBDtNuVihSg1//s1ZL9X1wxUBIVn1kxVXW3thM5X24yZOoQPaY9C/0K
-         sZ4J3AMH4fJDRZQze0ORWBL2QjOYSRKlCkrjFQeN3yG+ZwooqP0SoqdDe1CD3WRnfCYU
-         CbSw==
+        bh=xj6EA9Cf8G1V5kTfX084ZFL0HswwaRXsbxfz8fvUzdM=;
+        b=EmENXU//I1HHcNUunkI3Nuy/Lst7i/3szR10j2QqD9QUaz/zaxjc6gMJPzkEvRVSXz
+         RvEx64dqOngIB0pCZGpVsYdGLkNngiqc/dU6a+AuL5mseSoG8zQad2HS7ZLB3TJ5+v6K
+         2pSOaNfvKHEI/b02Yiaj++xzqAJ3C/teg8I2g76lxRiTVjupi42/SBVYnPHlW80gtDIS
+         yK4jKf7x9bY5aLFABs8AeC1mOqhcHA9qWCB3nF4irs+2HRsAGQmWQYu882I9IN6swonx
+         qxhdWDU8P+9WlnGEBWMHWMNQEKLsNlJRT18Nl/QiYe9vnZ7tnvXiXVtr3pnhtshA3+Jx
+         o5Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gessz9Lw9WUV8icSRgAP1AqoQqTWoQ7XuEFzNjGtaYQ=;
-        b=x2KPur6iW2+H7W1nAXYO0Wh9Rt8/t2XIeiDykgcGbzwelStHz4L4X3yckEyOeA6WGc
-         NlCKIPwC6ZH3qDhDpRUSeS9X24DFSnsX4VkyXM4XRWTujLZYMiU1FH8yKGJnGLGwpxId
-         yJkInVfj/KQtLT3NJUtUGu2inYaKwM261sbbO/r2Qz4AcnLqnoZ7qns+291Vf5T35KyS
-         Z6HG55E5aA4Xfi8AMNIS0ydAtjd2JncGsDtM3hR2kMaACSesF+4qM8CuTs/2TRwtnBNT
-         iTn5uAPp28EADvx5kDnX3tCFM6jeqzYu0hx9WfZydPw/eGMwmshG5Gj8aC6+YUEZaFCJ
-         rHAA==
-X-Gm-Message-State: ACrzQf3jiFJRupi1xxOKaQbOtuaEd+EDAbx0bkppwJrdi6dAVoLBWbf1
-        XWn86saD3ryn65fPEZXAfNkubw==
-X-Google-Smtp-Source: AMsMyM4blGhOMbMFQpTJIBO2cyrf91uwWLI0pvOkbWu+8zpbRpLyaFGjHI4728iuaLdBuy6MYwUDoQ==
-X-Received: by 2002:a63:5144:0:b0:43b:ed4b:224 with SMTP id r4-20020a635144000000b0043bed4b0224mr2827934pgl.594.1665719477111;
-        Thu, 13 Oct 2022 20:51:17 -0700 (PDT)
+        bh=xj6EA9Cf8G1V5kTfX084ZFL0HswwaRXsbxfz8fvUzdM=;
+        b=iEQCJmQx94oW0wPGq3lRiKB19ylsXX+PShCvg7740PpQ0/lFu3Jg173Lbe4OwVnDQO
+         mtC0B19hg0wM/J/brYiedc+9hO0ATNiHvfKQwmsmkMqD8x9TLmps7DBxzs5J5hEmIhgj
+         iBw4aVVkiPNXnSYIIGCBd6K4mFa1/T8BAmFdQA950sU1moCsEH8iiVyL8R64TkjctDY0
+         JYibixbzi70q5EVThzDz6Zd6tqXWN1hZEZDPr/CFg/g5Q0bI5HIVH5SfM6paPtYop4xF
+         7ybBL7TfZ9Ckr5g2eLqx0FdEMMOI5jmaSNT9xOSAoeHCs+spBv4b5E+8wdxgJ4NNEEx8
+         LzfA==
+X-Gm-Message-State: ACrzQf0YcZ+PZZWdsztwG1uNTvwFn9J18qCKDVSyzLDjdcEI0EosNl2g
+        aYPmHjFQdTHD7PReSKqVE9Ux4g==
+X-Google-Smtp-Source: AMsMyM7s1sOslKip/dGdE56XK5d5Er1ShADXOLTKQTQv/dZlQDAoBr9sXyrrJYNVJzE2BSCrTkdTSQ==
+X-Received: by 2002:a17:90a:86c6:b0:20b:dba4:758a with SMTP id y6-20020a17090a86c600b0020bdba4758amr3424553pjv.71.1665719478458;
+        Thu, 13 Oct 2022 20:51:18 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id s16-20020a17090a1c1000b0020a81cf4a9asm3984850pjs.14.2022.10.13.20.51.16
+        by smtp.gmail.com with ESMTPSA id e24-20020a656798000000b00454f8a8cc24sm464642pgr.12.2022.10.13.20.51.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 20:51:16 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 20:51:16 -0700 (PDT)
-X-Google-Original-Date: Thu, 13 Oct 2022 20:05:39 PDT (-0700)
-Subject:     Re: [PATCH] MAINTAINERS: git://github -> https://github.com for czankel
-In-Reply-To: <CAMo8BfLs7wJEyCAPW9FKyG=mFt+EGMiWMkof=QwPRYUSdonozw@mail.gmail.com>
-CC:     chris@zankel.net, linux-xtensa@linux-xtensa.org,
-        linux-kernel@vger.kernel.org,
+        Thu, 13 Oct 2022 20:51:17 -0700 (PDT)
+Date:   Thu, 13 Oct 2022 20:51:17 -0700 (PDT)
+X-Google-Original-Date: Thu, 13 Oct 2022 20:07:05 PDT (-0700)
+Subject:     Re: [PATCH] MAINTAINERS: git://github -> https://github.com for konis
+In-Reply-To: <CAKFNMonU3aVqwRdxyFefBJMg0-XC9j8bE-qYZ-9xx-4--NdkGg@mail.gmail.com>
+CC:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
         Conor Dooley <conor.dooley@microchip.com>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     jcmvbkbc@gmail.com
-Message-ID: <mhng-894b3900-e983-4278-b7ec-1c0512a25dbc@palmer-ri-x1c9a>
+To:     konishi.ryusuke@gmail.com
+Message-ID: <mhng-1ec448c6-70ad-4964-9dd0-032892bfb2ef@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -72,10 +71,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 15:29:46 PDT (-0700), jcmvbkbc@gmail.com wrote:
-> Hello,
->
-> On Thu, Oct 13, 2022 at 2:49 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+On Thu, 13 Oct 2022 16:06:43 PDT (-0700), konishi.ryusuke@gmail.com wrote:
+> On Fri, Oct 14, 2022 at 6:49 AM Palmer Dabbelt wrote:
 >>
 >> Github deprecated the git:// links about a year ago, so let's move to
 >> the https:// URLs instead.
@@ -92,18 +89,32 @@ On Thu, 13 Oct 2022 15:29:46 PDT (-0700), jcmvbkbc@gmail.com wrote:
 >>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
 >> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 019cdb48e254..7c71b452a84d 100644
+>> index d118acdce8b8..c9c396e2d8a0 100644
 >> --- a/MAINTAINERS
 >> +++ b/MAINTAINERS
->> @@ -20069,7 +20069,7 @@ M:      Chris Zankel <chris@zankel.net>
->>  M:     Max Filippov <jcmvbkbc@gmail.com>
->>  L:     linux-xtensa@linux-xtensa.org
->>  S:     Maintained
->> -T:     git git://github.com/czankel/xtensa-linux.git
->> +T:     git https://github.com/czankel/xtensa-linux.git
+>> @@ -14363,7 +14363,7 @@ L:      linux-nilfs@vger.kernel.org
+>>  S:     Supported
+>>  W:     https://nilfs.sourceforge.io/
+>>  W:     https://nilfs.osdn.jp/
+>> -T:     git git://github.com/konis/nilfs2.git
+>> +T:     git https://github.com/konis/nilfs2.git
+>>  F:     Documentation/filesystems/nilfs2.rst
+>>  F:     fs/nilfs2/
+>>  F:     include/trace/events/nilfs2.h
+>> --
+>> 2.38.0
+>>
 >
-> This tree is outdated and hasn't been used for mainline pull requests
-> for the last 6 years. I'll send a patch that replaces that address with the
-> address of the git tree that I maintain.
+> Ah, that's right, it needs to be fixed.
+>
+> I'll pick this up unless it's decided to apply similar fixes all at once.
+> Thank you.
 
-Thanks, I'll toss this one.
+It's easier on my end if you just pick it up.  Just note the 
+"git://github -> https://github.com" typo.  I can send a v2 if you want, 
+but IMO it's trival enough to just fix up.
+
+Thanks!
+
+>
+> Ryusuke Konishi
