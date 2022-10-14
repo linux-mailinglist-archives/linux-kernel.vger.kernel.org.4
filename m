@@ -2,250 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA1B5FEA8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA7E5FEA99
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJNIbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S229578AbiJNIdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJNIbW (ORCPT
+        with ESMTP id S229792AbiJNIdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:31:22 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5E31C25DF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:31:21 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id l22so5871835edj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NOlDUExQFlQZADy0R0NpNHjOCTyy68gwL/uV8DAk8Ws=;
-        b=uGn7R00Gjfnuai7g73/hlFa4qVZNM4MJidi4x+WfZgmy/3+ozH4y/WksCkSyQ8K/wJ
-         9d02UsaBn34meWmwBMox7CQExussKt1MJeLfelXgvh5ycAQckDJGbCq4hOKwwWTwWzAQ
-         I6WkpCHDJ/SZNo4lkVrri+kffQMP9xTyz95OrY7Dj8D3CS9ju9FBnbfWrEAwE/S6kkmJ
-         XeKxh1wsbRdbxx6rgBxZWPwli2bv1xhnMhSzttbCigYRu/ijEcl5picbURvKlC37QS/n
-         IVfuh5zd32c8RfuKVaXeBfu57Y1ewbcSZcgc7knZZFP5b3Eyxn7WhdpLgvYayuXj47GI
-         90JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NOlDUExQFlQZADy0R0NpNHjOCTyy68gwL/uV8DAk8Ws=;
-        b=juomq0c9NJUMWzZW/nH83q3qYGcwgi7CmFKrwxTsvRFy70x1k9HFbTDSoGNfj3ITkH
-         DHz1HKocVWt2ZgJV1K+mWic8+ZtJTEjy1c9IWAHEZyzhRvJHmyok2o2UEO0k6G3IdqKB
-         PmVpLviS+yivFeJuIRzS9d6apELQmunWnnohOsthxVy4bU/AUkE3jAICnyrAc9u1fj2R
-         7gBTuxrNrWpOax/eijXr7k4FSKMKBtY25b6KldQOThOPGpmRYEcr4n10/HQ6faNIDtEF
-         ZDy1FwSGNFVS92gCmrfQa8duT4f9loRxg7HIts1VAUBseWzJ0Z9H0TjZi4TBqpLDzDWE
-         86VA==
-X-Gm-Message-State: ACrzQf1kzFK3bUIj8oEHv2KpQJo2NNXIXchGEHzPKavwx2gfQpejowGI
-        j9JrStLLb6Nlq3btEQwl+kI7lFUnCF5cXLZUYVHmdg==
-X-Google-Smtp-Source: AMsMyM4TauReU7wpefiGp7R3XKJ3ze4GczME6+kxx84Up0EEeg1BXTdDi0mGLYLZ4D3mtCpQPa2kvolyvxAPH+G5JIY=
-X-Received: by 2002:a05:6402:2989:b0:44e:90d0:b9ff with SMTP id
- eq9-20020a056402298900b0044e90d0b9ffmr3317194edb.110.1665736279436; Fri, 14
- Oct 2022 01:31:19 -0700 (PDT)
+        Fri, 14 Oct 2022 04:33:08 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E4D1C2EAC;
+        Fri, 14 Oct 2022 01:33:06 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E6xgKU022708;
+        Fri, 14 Oct 2022 10:32:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=fPnbtOy06TMn1DTm+aL02K49WdHSqDZcH3ig0RdQW+w=;
+ b=IY1/prKcpsMEpY3xSkBRh3tnxU8pNNGxXHX0b1ULvxcQT3P4mCDt+QAU98LsmBqKNDXY
+ NuDXck+ZXityzaIDkdrh9lFoxOyHFsypejVKbqoRkBFQS/s6S+WwahXX3kSSlDF1Pz/i
+ OGirDCKfHr+ynuXQsWslDKqcNyfD15v3lNuYoJQTzHSAfg7aD4I2r/3ChUZkuW9bc66+
+ +dF63I43UPwoSCVhwOGElGYPxY+FQbC+Wlc0MiJm2FFNhy1N/1gjYUCbB2VgeEN+MuI/
+ s4BVMV1+Jv7HwvAqDCWMe9yiiJexADHYBOwHxUbGkKaxodfdxLkY2dvgOyucdf4PAElX Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k31ey8epe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Oct 2022 10:32:46 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5018B100034;
+        Fri, 14 Oct 2022 10:32:35 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 445F02171D5;
+        Fri, 14 Oct 2022 10:32:35 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 14 Oct
+ 2022 10:32:32 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH 00/10] Add support for USB on STM32MP13
+Date:   Fri, 14 Oct 2022 10:31:57 +0200
+Message-ID: <20221014083207.20457-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221013175146.507746257@linuxfoundation.org>
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 14 Oct 2022 14:01:07 +0530
-Message-ID: <CA+G9fYudoodFn2sZC1fbFz8efRytjz5nciLODsMufA1z58u=4w@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-14_04,2022-10-13_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 at 23:32, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.2 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.2-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Add support for USBPHYC, USB Host and USB OTG on STM32MP13.
+Enable all these interfaces on STM32MP135F-DK board.
+Enable the STM32G0 UCSI driver as module.
+Dependency on PWR and PMIC regulator is tempoarily managed by using
+fixed regulators (resp in the SoC dtsi and the board dts files).
+The USB support is functional when these regulators gets enabled at
+boot time before entering the kernel.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Amelie Delaunay (5):
+  ARM: dts: stm32: add USBPHYC and dual USB HS PHY support on stm32mp131
+  ARM: dts: stm32: add UBSH EHCI and OHCI support on stm32mp131
+  ARM: dts: stm32: add USB OTG HS support on stm32mp131
+  ARM: dts: stm32: enable USB HS phys on stm32mp135f-dk
+  ARM: dts: stm32: enable USB Host EHCI on stm32mp135f-dk
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Fabrice Gasnier (5):
+  ARM: dts: stm32: add PWR fixed regulators on stm32mp131
+  ARM: dts: stm32: add fixed regulators to support usb on stm32mp135f-dk
+  ARM: dts: stm32: add pins for stm32g0 typec controller on stm32mp13
+  ARM: dts: stm32: enable USB OTG in dual role mode on stm32mp135f-dk
+  ARM: multi_v7_defconfig: enable Type-C UCSI and STM32G0 as modules
 
-## Build
-* kernel: 6.0.2-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: 2640a427a92bc725b6a7ecd72f6499bd90ed3981
-* git describe: v6.0.1-35-g2640a427a92b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.1-35-g2640a427a92b
+ arch/arm/boot/dts/stm32mp13-pinctrl.dtsi |  7 ++
+ arch/arm/boot/dts/stm32mp131.dtsi        | 81 ++++++++++++++++++++
+ arch/arm/boot/dts/stm32mp135f-dk.dts     | 95 ++++++++++++++++++++++++
+ arch/arm/configs/multi_v7_defconfig      |  2 +
+ 4 files changed, 185 insertions(+)
 
-## No Test Regressions (compared to v6.0.1)
+-- 
+2.25.1
 
-## No Metric Regressions (compared to v6.0.1)
-
-## No Test Fixes (compared to v6.0.1)
-
-## No Metric Fixes (compared to v6.0.1)
-
-
-## Test result summary
-total: 128530, pass: 111552, fail: 3700, skip: 12938, xfail: 340
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 329 passed, 4 failed
-* arm64: 65 total, 65 passed, 0 failed
-* i386: 55 total, 55 passed, 0 failed
-* mips: 56 total, 55 passed, 1 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 69 total, 63 passed, 6 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 58 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ip
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
