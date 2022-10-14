@@ -2,47 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC21B5FEEE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16105FEEEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiJNNr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S229833AbiJNNsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJNNr0 (ORCPT
+        with ESMTP id S229820AbiJNNsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:47:26 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8D2C7849;
-        Fri, 14 Oct 2022 06:47:23 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.31.41.neoplus.adsl.tpnet.pl [95.49.31.41])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 56E141F6DC;
-        Fri, 14 Oct 2022 15:47:21 +0200 (CEST)
-Message-ID: <33b6f3fa-0df3-8603-ff68-03a1f106769c@somainline.org>
-Date:   Fri, 14 Oct 2022 15:47:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 1/4] arm64: dts: qcom: msm8998: add gpio-ranges to TLMM
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221013210612.95994-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221013210612.95994-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Fri, 14 Oct 2022 09:48:08 -0400
+Received: from mail-lj1-x24a.google.com (mail-lj1-x24a.google.com [IPv6:2a00:1450:4864:20::24a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D901CFF04
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:48:06 -0700 (PDT)
+Received: by mail-lj1-x24a.google.com with SMTP id e9-20020a2ea549000000b0026fd9ba87acso789358ljn.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aiT4AGCUafLoWk2pbrHo53OIgKYTElZc1R+Afi5d73I=;
+        b=cQ+NKquQ/ldSjGX4EJ8OLK4ogWivX0GdXKT4EZ8E/QdhOMBcueIkAC0xr6OxDaRDYM
+         +tATfZPmv1h53MAXVlvW6sTBatupqhAGwCKXjDrLqSRkOQ3MDkNlFkPziiaKIABE5hmo
+         tjv6ccHnxLp8jlI5dhPUSUtrsbwg0mOJjGS6h1CPeIEH9tTXylG8bSanvx7wRwYRJAba
+         uQLNVdR+W6ZXLhNRiOha8/AcyGVywyyJoS+8d9MtYyY2/122/PCTOWirAsysu7eTofIE
+         j4u49Anavdk7FmDseRf/UVUI2StrsJNSuH1Q2jcM3gj+Adr0/HGcz0LJ2cnkD1c0wcaA
+         Q4vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aiT4AGCUafLoWk2pbrHo53OIgKYTElZc1R+Afi5d73I=;
+        b=hePIhzgr7QKZVaDX+Qc//P1iKxD7JIwdKYehkOoONUsLHDp/VLBxqMSqD/Y9lzbIZL
+         bXr9s2hp0tg6z2ttLMHTb3d6QWmRtoEw5woOFjzim7bUjJAecnr38rg6kRqASD5nWdrm
+         rlPxcp9k6PBhYzRLSyP55cstxLFCDS0ap73B5qQVRmm0AdX/MBGcDg0zGeBP7eUrZShe
+         8xyH+9+Qnn+mFKzLpKue9nrerEw6Al2+fwaTApuq4H2qzKYPi388qCvACd/JDA+zyNmz
+         rboyzUhOMRzqxXZW5FFTwfxfusOF9jyO6pIa1H59v8l3W75Hj/Iwv+CTX9x/v0K3TojO
+         r6eA==
+X-Gm-Message-State: ACrzQf1H8pRUpS6JZ50BaT80PM1L8skfSz1X8HP9Y8KWhjeBlIV7NMry
+        9f4uKIci6yfND7BFA3xM9RDC1qcPSprq
+X-Google-Smtp-Source: AMsMyM6fAAMwou9/zT1qtfIkwskBg+TuKICMRMPbatPuP2ZTJQELmBdb4OuYKL3cJ8Y/9OwlVd/w/gMEaLLo
+X-Received: from mdanylo.waw.corp.google.com ([2a00:79e0:9b:0:9507:b1bd:1910:a25d])
+ (user=mdanylo job=sendgmr) by 2002:a05:651c:4ca:b0:26c:50be:5df6 with SMTP id
+ e10-20020a05651c04ca00b0026c50be5df6mr1791206lji.177.1665755284565; Fri, 14
+ Oct 2022 06:48:04 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 15:48:02 +0200
+In-Reply-To: <Y0T2l3HaH2MU8M9m@gmail.com>
+Mime-Version: 1.0
+References: <Y0T2l3HaH2MU8M9m@gmail.com>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+Message-ID: <20221014134802.1361436-1-mdanylo@google.com>
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+From:   Danylo Mocherniuk <mdanylo@google.com>
+To:     avagin@gmail.com
+Cc:     akpm@linux-foundation.org, corbet@lwn.net, david@redhat.com,
+        gregkh@linuxfoundation.org, kernel@collabora.com,
+        krisman@collabora.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mdanylo@google.com, peter.enderborg@sony.com, shuah@kernel.org,
+        surenb@google.com, usama.anjum@collabora.com,
+        viro@zeniv.linux.org.uk, willy@infradead.org, emmir@google.com,
+        figiel@google.com, kyurtsever@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,33 +78,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 11, 2022 at 6:52 AM Andrei Vagin <avagin@gmail.com> wrote:
+>
+> On Mon, Oct 03, 2022 at 04:21:22PM +0500, Muhammad Usama Anjum wrote:
+> > On 9/28/22 10:24 PM, Andrei Vagin wrote:
+> > > On Wed, Sep 21, 2022 at 11:26 AM Muhammad Usama Anjum
+> > > <usama.anjum@collabora.com> wrote:
+> > >>
+> > >> Hi,
+> > >>
+> > >> Thank you for reviewing.
+> > >>
+> > >> On 9/19/22 7:58 PM, Andrei Vagin wrote:
+> > >>>> This ioctl can be used by the CRIU project and other applications =
+which
+> > >>>> require soft-dirty PTE bit information. The following operations a=
+re
+> > >>>> supported in this ioctl:
+> > >>>> - Get the pages that are soft-dirty.
+> > >>>
+> > >>> I think this interface doesn't have to be limited by the soft-dirty
+> > >>> bits only. For example, CRIU needs to know whether file, present an=
+d swap bits
+> > >>> are set or not.
+> > >> These operations can be performed by pagemap procfs file. Definitely
+> > >> performing them through IOCTL will be faster. But I'm trying to add =
+a
+> > >> simple IOCTL by which some specific PTE bit can be read and cleared
+> > >> atomically. This IOCTL can be extended to include other bits like fi=
+le,
+> > >> present and swap bits by keeping the interface simple. The following
+> > >> mask advice is nice. But if we add that kind of masking, it'll start=
+ to
+> > >> look like a filter on top of pagemap. My intention is to not duplica=
+te
+> > >> the functionality already provided by the pagemap. One may ask, then=
+ why
+> > >> am I adding "get the soft-dirty pages" functionality? I'm adding it =
+to
+> > >> complement the get and clear operation. The "get" and "get and clear=
+"
+> > >> operations with special flag (PAGEMAP_SD_NO_REUSED_REGIONS) can give
+> > >> results quicker by not splitting the VMAs.
+> > >
+> > > This simple interface is good only for a limited number of use-cases.
+> > > The interface
+> > > that I suggest doesn't duplicate more code than this one, but it is m=
+uch more
+> > > universal. It will be a big mess if you add a separate API for each
+> > > specific use-case.
+> > >
+> > >
+> > >>> I mean we should be able to specify for what pages we need to get i=
+nfo
+> > >>> for. An ioctl argument can have these four fields:
+> > >>> * required bits (rmask & mask =3D=3D mask) - all bits from this mas=
+k have to be set.
+> > >>> * any of these bits (amask & mask !=3D 0) - any of these bits is se=
+t.
+> > >>> * exclude masks (emask & mask =3D=3D 0) =3D none of these bits are =
+set.
+> > >>> * return mask - bits that have to be reported to user.
+> > The required mask (rmask) makes sense to me. At the moment, I only know
+> > about the practical use case for the required mask. Can you share how
+> > can any and exclude masks help for the CRIU?
+> >
+>
+> I looked at should_dump_page in the CRIU code:
+> https://github.com/checkpoint-restore/criu/blob/45641ab26d7bb78706a6215fd=
+ef8f9133abf8d10/criu/mem.c#L102
+>
+> When CRIU dumps file private mappings, it needs to get pages that have
+> PME_PRESENT or PME_SWAP but don't have PME_FILE.
 
+I would really like to see the mask discussed will be adopted. With it CRIU=
+ will
+be able to migrate huge sparse VMAs assuming that a single hole is processe=
+d in=20
+O(1) time.=20
 
-On 13.10.2022 23:06, Krzysztof Kozlowski wrote:
-> Qualcomm pinctrl bindings and drivers expect gpio-ranges property.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Use cases for migrating sparse VMAs are binaries sanitized with ASAN, MSAN =
+or
+TSAN [1]. All of these sanitizers produce sparse mappings of shadow memory =
+[2].
+Being able to migrate such binaries allows to highly reduce the amount of w=
+ork
+needed to identify and fix post-migration crashes, which happen constantly.
 
-Konrad
-> 
-> Changes since v2:
-> 1. None
-> ---
->  arch/arm64/boot/dts/qcom/msm8998.dtsi | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index f05f16ac5cc1..2c4acf227253 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -1056,6 +1056,7 @@ tlmm: pinctrl@3400000 {
->  			compatible = "qcom,msm8998-pinctrl";
->  			reg = <0x03400000 0xc00000>;
->  			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> +			gpio-ranges = <&tlmm 0 0 150>;
->  			gpio-controller;
->  			#gpio-cells = <2>;
->  			interrupt-controller;
+>
+> > >>>> - Clear the pages which are soft-dirty.
+> > >>>> - The optional flag to ignore the VM_SOFTDIRTY and only track per =
+page
+> > >>>> soft-dirty PTE bit
+> > >>>>
+> > >>>> There are two decisions which have been taken about how to get the=
+ output
+> > >>>> from the syscall.
+> > >>>> - Return offsets of the pages from the start in the vec
+> > >>>
+> > >>> We can conside to return regions that contains pages with the same =
+set
+> > >>> of bits.
+> > >>>
+> > >>> struct page_region {
+> > >>> =C2=A0 =C2=A0 =C2=A0 void *start;
+> > >>> =C2=A0 =C2=A0 =C2=A0 long size;
+> > >>> =C2=A0 =C2=A0 =C2=A0 u64 bitmap;
+> > >>> }
+> > >>>
+> > >>> And ioctl returns arrays of page_region-s. I believe it will be mor=
+e
+> > >>> compact form for many cases.
+> > >> Thank you for mentioning this. I'd considered this while development=
+.
+> > >> But I gave up and used the simple array to return the offsets of the
+> > >> pages as in the problem I'm trying to solve, the dirty pages may be
+> > >> present amid non-dirty pages. The range may not be useful in that ca=
+se.
+> > >
+> > > This is a good example. If we expect more than two consequent pages
+> > > on average, the "region" interface looks more prefered. I don't know =
+your
+> > > use-case, but in the case of CRIU, this assumption looks reasonable.
+
+Plus one for page_region data structure. It will make ASAN shadow memory
+representation much more compact as well as any other classical use-case.=
+=20
+
+[1] https://github.com/google/sanitizers=09
+[2] https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm#64-=
+bit=09
+
+Best,
+Danylo
+
