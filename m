@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB905FF452
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF70A5FF451
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiJNUJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        id S230323AbiJNUJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiJNUJ3 (ORCPT
+        with ESMTP id S230233AbiJNUJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Oct 2022 16:09:29 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4301B1D3476
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44DF1DA365
         for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1665778168; x=1697314168;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7jM/CiHxN+gWkR7IJ+ClWDUqoyWEdL8oPVI2Lk2Mu6Q=;
-  b=AnvZbh29a9jr//r66CVoZLsy5b3G9dvHSQsvtHzKYdVDL4J58VpVpmVV
-   4R+wE9CNYUaaSovRFR2erfjy1ORGDtdwJiBKnlAjFiB9d/kFEbLXDPFmf
-   CPHH14VieePTOnvjkpDMW50SAlqO8qpkbpuII8TvrZ8QTOPzfeD0UGai0
-   WfaCJuw/6UwuU/25dGr0ujKHFBeJDfDaxYpFgugiW6klF02t4UU/TcvMX
-   HzcvPLYwPuWd+7xmopRaTyr83B/OlRaV9Cgd0+moVeQznlbFFhJCjbNoq
-   HeLJUpAbHjz95F4zD7hljBBmuh2y8sjEqlA0QoFTZBf5aIDKxB2dlMODA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202154"
+  bh=prjILCsmaaEeMhSyb/xyEwNWAEoJRilUniPUTT9n6aI=;
+  b=eb3CSEsVJsgiDzIHq/kSC3YSlPnS9gk2z67DJ21BX3DNi1HeEGWnpvFB
+   xiAGOY7HLhqpDc23vZfNGx+ckh60SanczgZtnd4YNeqDvmmiUZLdnvVUE
+   2AIpib+oC4u0GroGNtUN5kR9SIgvI+iAOsvX6/xvmZqOTppqaPdmhf3qx
+   f3CvWrpLCInTIdt7UzCGSqKvpqOTel6C2EUpzKX/X9PsKmBqfecu0hFtf
+   F7s/m1+xVQUDceRi21XzolttthxhpnsqLCT6MPOM+U2bwr3D9Y5X4FWWb
+   iQp+Ewy11WOO0MEGZS1U9qhhLDzFP9GDaWh4AfUdVCME51l+JOwF3GQfv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202156"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="304202154"
+   d="scan'208";a="304202156"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870144"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:28 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870148"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="716870144"
+   d="scan'208";a="716870148"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -48,10 +48,11 @@ Cc:     Tony Luck <tony.luck@intel.com>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Arjan van de Ven <arjan.van.de.ven@intel.com>,
         Jacob Jun Pan <jacob.jun.pan@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: [PATCH 03/13] x86/microcode/intel: Fix a hang if early loading microcode fails
-Date:   Fri, 14 Oct 2022 13:09:03 -0700
-Message-Id: <20221014200913.14644-4-ashok.raj@intel.com>
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: [PATCH 04/13] x86/x2apic: Support x2apic self IPI with NMI_VECTOR
+Date:   Fri, 14 Oct 2022 13:09:04 -0700
+Message-Id: <20221014200913.14644-5-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221014200913.14644-1-ashok.raj@intel.com>
 References: <20221014200913.14644-1-ashok.raj@intel.com>
@@ -66,103 +67,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When early loading of microcode fails for any reason other than the wrong
-family-model-stepping, Linux can get into an infinite loop retrying the
-same failed load.
+From: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-A single retry is needed to handle any mixed stepping case.
+X2APIC architecture introduced a dedicated register for sending self-IPI.
+Though highly optimized for performance, its semantics limit the delivery
+mode to fixed mode.  NMI vector is not supported, this created an
+inconsistent behavior between X2APIC and others.
 
-Assume we have a microcode that fails to load for some reason.
-load_ucode_ap() seems to retry if the loading fails. But it searches for
-a new rev, but ends up finding the same copy. Hence it appears to repeat
-the same load, retry loop for ever.
+This patch adds support for X2APIC NMI_VECTOR by fall back to the slower
+ICR method.
 
-We can fix it as follows.
-
-1) When the load_ucode_intel_bsp() fails, record the revision that failed.
-2) In load_ucode_intel_ap() check if AP is same FMS as BP, and the code
-that failed earlier isn't going to apply anyway. So use the saved
-information to abort loading on AP's altogether.
-
-load_ucode_intel_ap()
-{
-..
-reget:
-        if (!*iup) {
-                patch = __load_ucode_intel(&uci);
-		^^^^^ Finds the same patch every time.
-
-                if (!patch)
-                        return;
-
-                *iup = patch;
-        }
-
-        uci.mc = *iup;
-
-        if (apply_microcode_early(&uci, true)) {
-	^^^^^^^^^^^^ apply fails
-              /* Mixed-silicon system? Try to refetch the proper patch: */
-              *iup = NULL;
-
-              goto reget;
-	      ^^^^^ Rince repeat.
-        }
-
-}
-
-Fixes: 06b8534cb728 ("x86/microcode: Rework microcode loading")
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+Suggested-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 ---
- arch/x86/kernel/cpu/microcode/intel.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ arch/x86/kernel/apic/x2apic_phys.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index cf1e2c30b230..0f7e4ba05c39 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -606,6 +606,7 @@ void __init load_ucode_intel_bsp(void)
+diff --git a/arch/x86/kernel/apic/x2apic_phys.c b/arch/x86/kernel/apic/x2apic_phys.c
+index 6bde05a86b4e..5f533b76adf6 100644
+--- a/arch/x86/kernel/apic/x2apic_phys.c
++++ b/arch/x86/kernel/apic/x2apic_phys.c
+@@ -149,7 +149,11 @@ int x2apic_phys_pkg_id(int initial_apicid, int index_msb)
+ 
+ void x2apic_send_IPI_self(int vector)
  {
- 	struct microcode_intel *patch;
- 	struct ucode_cpu_info uci;
-+	int rev, ret;
- 
- 	patch = __load_ucode_intel(&uci);
- 	if (!patch)
-@@ -613,13 +614,18 @@ void __init load_ucode_intel_bsp(void)
- 
- 	uci.mc = patch;
- 
--	apply_microcode_early(&uci, true);
-+	ret = apply_microcode_early(&uci, true);
-+	if (ret) {
-+		rev = patch->hdr.rev;
-+		pr_err("Revision 0x%x failed during early loading\n", rev);
-+	}
+-	apic_write(APIC_SELF_IPI, vector);
++	if (vector == NMI_VECTOR)
++		apic->send_IPI_mask(cpumask_of(smp_processor_id()),
++				    NMI_VECTOR);
++	else
++		apic_write(APIC_SELF_IPI, vector);
  }
  
- void load_ucode_intel_ap(void)
- {
- 	struct microcode_intel *patch, **iup;
- 	struct ucode_cpu_info uci;
-+	bool retried = false;
- 
- 	if (IS_ENABLED(CONFIG_X86_32))
- 		iup = (struct microcode_intel **) __pa_nodebug(&intel_ucode_patch);
-@@ -638,9 +644,13 @@ void load_ucode_intel_ap(void)
- 	uci.mc = *iup;
- 
- 	if (apply_microcode_early(&uci, true)) {
-+		if (retried)
-+			return;
-+
- 		/* Mixed-silicon system? Try to refetch the proper patch: */
- 		*iup = NULL;
- 
-+		retried = true;
- 		goto reget;
- 	}
- }
+ static struct apic apic_x2apic_phys __ro_after_init = {
 -- 
 2.34.1
 
