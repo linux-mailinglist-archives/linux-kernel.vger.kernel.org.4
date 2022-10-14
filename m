@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1616C5FF2A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471405FF2AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiJNQzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S231219AbiJNQ4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiJNQzn (ORCPT
+        with ESMTP id S231177AbiJNQ4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:55:43 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5712761106
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:42 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id j20-20020a056a00235400b00565af23c8c2so3160839pfj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:55:42 -0700 (PDT)
+        Fri, 14 Oct 2022 12:56:16 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B291CC75F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:56:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id y14so11750026ejd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwQ6+sA3W7MWd0vYC/9HRNB0kdytHGubSeaFZENr5nY=;
-        b=GVIG8x8OIpWYulN7VSMqXxVDEKoHPUOUkR+1sTLzVXThxcghyxLdwMVke3uKtdLYbl
-         ZWwN6u60+DEMLfyE081V/ryY7alg8/yQ7heFroiJeCU8Ry4EYZL34K2PiA3jQ4+B/Z/b
-         lttRUGdvS2KgrwID001oZQuIYNAcD9RPud0MtUIRwPCgA0U+jsRnzPpAH3HM/xBXQbvv
-         iz2gucrGsBF9UAVNQOQ6Jrf0vqGL+gW+At4aN47DnXGv8HTBvujw2+C4sMEyapiYzN0T
-         6hbpFJS1BY8Z0dM3zHjXsKkngnOnc2TK2kRWP4FJOIljEaeJFRq09jv3JSZimTmLyTnu
-         jmng==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+ycRi29HNGzJsYqIV0PQZFjUg4SSWnYtQKjFXj41VIU=;
+        b=q6OUZOBAYpZhF0HMURyGKoC2Dbf8GVUt4hr7xNspUKQlGUEEh5y4L+3ql8om/lrR3R
+         JBlA5po0rKArSFNyKfeeuP1roO2Hog+2FibtdZDfUXNtwagGJnQ16t+J/8I0mX8ohAQd
+         bsukgtvcc03VC6TVA2ASWsN543lOuWV1TcFNsEh7XRegpmcvlNHFqXk9Ee6jvze2HSMQ
+         da5k1z1EenZr1re3UXyYOek2lKN0xIJYe21w4VFAmQ38xriuytucPD3zw6070Z3jZCeK
+         q+NqSjaoFy9byj45fmekRO4cgbqBKvi7FXPad29GbX19SB2CwSCPtx4wdmQjHOeAJI7Y
+         a09g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwQ6+sA3W7MWd0vYC/9HRNB0kdytHGubSeaFZENr5nY=;
-        b=L6DaJIo7ek+5GDJtJYIfHkaVUnWyQ9tAXJ80f5TpS0vV1jvjVxoXtmUdF2tbGfejkj
-         VY10aepinbBt9wzK85HYGlgyJ50XkRgTJlcBv1nX7h6TlaTEggzLngKnzVA39dgaUQVl
-         Y+FqhtHy0xJ0J1vSpCUmP9hGNVG5zGhs9h2xjKSZ8Gm8uQQcu3MmTNoXRvZG0ESWgi5g
-         mjHaubm4oRrXL6v6wZcQyGLU1cZmsKzgnbX67FKHE9670vxTG/5XKJEOPfkvRLIZgyvG
-         Y9KsdbL/RAYDUqq9y1a/HXWDib4PZAUkLD2sG4vx9dnucjIiC6/pcduEdFWs0Mztmu36
-         LNEg==
-X-Gm-Message-State: ACrzQf3rt3ns9ug8EwMdMDhFmExYdLyGqVuciE5sRZ/mSSyiCGRPZOTC
-        bD1epUm98TqirzIQCXubfcStbJk=
-X-Google-Smtp-Source: AMsMyM5U/qSXWm55jZSu6FKaWYtQ898xkpZOYAX7yp++hCg6q20IswAvnpoh6urdHCwwISyhttKtq+4=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:aa7:8607:0:b0:53b:13b5:2b6a with SMTP id
- p7-20020aa78607000000b0053b13b52b6amr6299861pfn.52.1665766541868; Fri, 14 Oct
- 2022 09:55:41 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 09:55:40 -0700
-In-Reply-To: <04d2eb4a-7365-495a-ab74-704febac2789@app.fastmail.com>
-Mime-Version: 1.0
-References: <20220715115559.139691-1-shaozhengchao@huawei.com>
- <20220914111936.19881-1-oss@lmb.io> <CAKH8qBujKnFh8_g+npxHpo7RGFshus3N0iysmVBohTtG1X2yow@mail.gmail.com>
- <5a3c5ea9-d557-6070-d778-1092f3c51257@huawei.com> <aec8ef40-260c-4ded-b806-d381a3075ff0@www.fastmail.com>
- <c416473b-af8b-3bf6-7ede-e1198b3496f5@huawei.com> <bc69e8a3-d474-451f-853e-1c936f776ef9@app.fastmail.com>
- <cf6a99a1-e77f-113d-101a-5b5a52111df5@huawei.com> <04d2eb4a-7365-495a-ab74-704febac2789@app.fastmail.com>
-Message-ID: <Y0mUjLXEpVuheSUc@google.com>
-Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
-From:   sdf@google.com
-To:     Lorenz Bauer <oss@lmb.io>
-Cc:     shaozhengchao <shaozhengchao@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ycRi29HNGzJsYqIV0PQZFjUg4SSWnYtQKjFXj41VIU=;
+        b=G/fqnVlyueYenyv+L+jDmrUNLvT5FbKWG5yXKAQiJ4rToZTheNDKGTroxt2/OY21uO
+         CbsW/KksbMFsY5+JcrGMgnrC6Jr++pW8dT1mVil7z8Rccq9xzc33CSYWSWWjMwsJMuJC
+         4Ist1L6kALR12LSc0qiYSA7C1d09DJqk/O17QOVIsZipaVk6r54i/XhZODHJkyXeIkkD
+         CIHd7VfrqdSnM29Wv5OvfmI/TEwlYT7IMqrB7mHWU4jO6ESpL1qTtYfsDVVGMDew4up+
+         1/9dWTG7XJZXFc6PvXPmBHEr8oVgDUfC+TIZ56GmwriqtA9dKFMksVM/jP04gBXDdePJ
+         whcg==
+X-Gm-Message-State: ACrzQf3F88ZnDalsJSw7z1IhF4O61mvb6M2NsUI0zBW660Zut/HiOGxY
+        9UkLIG6A3Y/E5sWhrD8c4B0=
+X-Google-Smtp-Source: AMsMyM6Gtop/ipLAmL+w9SYX5VT78bZu7hhlyg2cE/p7KwrM52FSicwlEtbya4Fc4go6g5AFQ/qjXg==
+X-Received: by 2002:a17:907:1deb:b0:78d:4a0e:f654 with SMTP id og43-20020a1709071deb00b0078d4a0ef654mr4260694ejc.757.1665766569596;
+        Fri, 14 Oct 2022 09:56:09 -0700 (PDT)
+Received: from [192.168.1.102] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id c22-20020a170906155600b007081282cbd8sm1784257ejd.76.2022.10.14.09.56.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 09:56:09 -0700 (PDT)
+Message-ID: <08887454-0ea8-107d-196d-b21b46e357da@gmail.com>
+Date:   Fri, 14 Oct 2022 18:56:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Staging: rtl8192e: fix a brace style issue
+Content-Language: en-US
+To:     Rigel Di Scala <zedr@zedr.com>, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        rigeld@gmail.com
+References: <20221012211612.75871-1-zedr@zedr.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221012211612.75871-1-zedr@zedr.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,43 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14, Lorenz Bauer wrote:
-> On Thu, 13 Oct 2022, at 11:44, shaozhengchao wrote:
-> > 	Sorry, I haven't fully understood your intentions yet.
-> > Can you explain it more detail?
+On 10/12/22 23:16, Rigel Di Scala wrote:
+> Fixed a coding style issue affecting a conditional if statement.
+> 
+> Signed-off-by: Rigel Di Scala <zedr@zedr.com>
+> ---
+>   drivers/staging/rtl8192e/rtl819x_BAProc.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> index 19d13b3fc..e932ad1a9 100644
+> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> @@ -180,11 +180,10 @@ static void rtllib_send_ADDBAReq(struct rtllib_device *ieee, u8 *dst,
+>   
+>   	skb = rtllib_ADDBA(ieee, dst, pBA, 0, ACT_ADDBAREQ);
+>   
+> -	if (skb) {
+> +	if (skb)
+>   		softmac_mgmt_xmit(skb, ieee);
+> -	} else {
+> +	else
+>   		netdev_dbg(ieee->dev, "Failed to generate ADDBAReq packet.\n");
+> -	}
+>   }
+>   
+>   static void rtllib_send_ADDBARsp(struct rtllib_device *ieee, u8 *dst,
 
-> I'll try! Roughly, we do the following:
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 
-> 1. Create a BPF_PROG_TYPE_SOCKET_FILTER program that just returns 0
-> 2. Load the program into the kernel
-> 3. Call BPF_PROG_RUN with data_size_in == 14
-
-> After your bugfix, it seems like step 3 is rejected due to data_size_in  
-> == 14. We had to increase data_size_in to 15 to
-> avoid this, see [0].
-
-> This breaks user space, so it would be great if you could fix this in a  
-> way that doesn't refuse BPF_PROG_RUN with
-
-[..]
-
-> data_size_in == 14. Since I don't understand the original problem very  
-> well I can't tell you what the best fix is however.
-
-The problem was that we were able to generate skb with len=0 via
-BPF_PROG_RUN. Prohibiting those cases breaks backwards compatibility, so
-we either have to:
-
-a) (preferred?) accept inputs with <14, but maybe internally pad to 14
-bytes to make the core stack happy
-b) revert the patch and instead have length checks at runtime; doesn't seem  
-to
-be worth the penalty in the forwarding path because of some corner cases
-like these ?
-
-
-> 0:  
-> https://github.com/cilium/ebpf/commit/a38fb6b5a46ab3b5639ea4d421232a10013596c0
-
-> Thanks
-> Lorenz
