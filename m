@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6395C5FF450
+	by mail.lfdr.de (Postfix) with ESMTP id 17A705FF44F
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiJNUJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
+        id S230346AbiJNUJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiJNUJ2 (ORCPT
+        with ESMTP id S230257AbiJNUJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Oct 2022 16:09:28 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECE21DA362
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3551D81A4
         for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:09:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1665778167; x=1697314167;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=c7e6tnykc4mVE2lOrJC5yfRma2B2qJ8DsHSzErtQPMA=;
-  b=LRVpq6a7TboItEby168TF8j0almAvuDu3ppAlYb+JHrioj32F9qk6Eoz
-   WL9tYrjuDeDpBlllfoNj2pOh4XSfXMbjP/QkAOH4PzbdILwsrkRdz2zgL
-   9pL1msJ5p3hWgnQi5GUNamjAvVyv6nc36a875bsaKlSARwUD5Qltv7VUl
-   o7yVF3Cg+I1KErNZyGnmaebTtg22ITOmHgUKA6Xd3R+k62qhHv5WWS5m3
-   4A6oXkfVrGpIWjwtamyiD2eM1CJiKdR901E2sYYwEKwA1oBcwpYXb+nKT
-   9uvE/ectMxeo5ll9E1it4vNLpIuizRjEHJhv8pD+/pJCWm8YNkPXjHw39
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202151"
+  bh=TOJYUiBrUy7/gcOs7i6uVS4QO3wgYtY5qPGjrygs5kQ=;
+  b=JQZy2JLs4DFfyNxmJAJZayvRAT5/IgDTZh4d4bk5KhvHB1QnnmYfat9e
+   ZzYWW1Wjm0VzftriLtBucnYXcVkqMZT/sAw4p4p74PfoefeZxd8rXSmrR
+   iB8lI6nob556yw3HCQVMkuIX9N2wS8cBMd9KJmnC/bdAoSPrcxnx0qRjZ
+   5BJvK8Na/c65/kxXtTEvXemTQ2maujWJaSNqSn/MIGfNPoXkSUw7retbU
+   lIgs+xFQo7m88/IakH2LeQujjLPMU2XoAFKgF5hpdELCkKDok08MSlmsK
+   kqmlUSbouIUtzgIajEWbpNsU9W1QVMTuSvh8yRvhp37PluH1BcBFglVVm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202152"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="304202151"
+   d="scan'208";a="304202152"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870137"
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870141"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="716870137"
+   d="scan'208";a="716870141"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -49,9 +49,9 @@ Cc:     Tony Luck <tony.luck@intel.com>,
         Arjan van de Ven <arjan.van.de.ven@intel.com>,
         Jacob Jun Pan <jacob.jun.pan@intel.com>,
         Ashok Raj <ashok.raj@intel.com>
-Subject: [PATCH 01/13] x86/microcode/intel: Print old and new rev after early microcode update
-Date:   Fri, 14 Oct 2022 13:09:01 -0700
-Message-Id: <20221014200913.14644-2-ashok.raj@intel.com>
+Subject: [PATCH 02/13] x86/microcode: Do not load from filesystem for CPU hot add
+Date:   Fri, 14 Oct 2022 13:09:02 -0700
+Message-Id: <20221014200913.14644-3-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221014200913.14644-1-ashok.raj@intel.com>
 References: <20221014200913.14644-1-ashok.raj@intel.com>
@@ -66,118 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Print the old and new versions of microcode after an early load is
-complete. This is useful to know what version was loaded by BIOS before an
-early microcode load.
+When request_microcode_fw() is called, refresh_fw parameter must be set
+only when late loading. Currently during CPU hotplug, the path is as
+follows.
+
+mc_device_add() -> microcode_init_cpu() ->
+				request_microcode_fw(refresh_hw=true)
+
+Consider if a new microcode file was just copied, but have not yet
+performed a late load. Now adding a new CPU will result in loading that
+microcode file vs the rest of the CPUs in the system would have a previous
+revision of what was loaded earlier.
+
+Moreover this doesn't need to be any different from logical cpu online
+flow, microcode_update_cpu() and mc_device_add() seem to be doing the
+opposite things.
+
+Seems like there is no good use for the refresh_fw parameter in
+microcode_init_cpu(), so simply drop it.
 
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/kernel/cpu/microcode/intel.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ arch/x86/kernel/cpu/microcode/core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 1fcbd671f1df..cf1e2c30b230 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -435,10 +435,10 @@ static bool load_builtin_intel_microcode(struct cpio_data *cp)
-  * Print ucode update info.
-  */
- static void
--print_ucode_info(struct ucode_cpu_info *uci, unsigned int date)
-+print_ucode_info(u32 old_rev, struct ucode_cpu_info *uci, unsigned int date)
- {
--	pr_info_once("microcode updated early to revision 0x%x, date = %04x-%02x-%02x\n",
--		     uci->cpu_sig.rev,
-+	pr_info_once("microcode updated early from 0x%x to revision 0x%x, date = %04x-%02x-%02x\n",
-+		     old_rev, uci->cpu_sig.rev,
- 		     date & 0xffff,
- 		     date >> 24,
- 		     (date >> 16) & 0xff);
-@@ -448,6 +448,7 @@ print_ucode_info(struct ucode_cpu_info *uci, unsigned int date)
- 
- static int delay_ucode_info;
- static int current_mc_date;
-+static u32 early_old_rev;
- 
- /*
-  * Print early updated ucode info after printk works. This is delayed info dump.
-@@ -458,7 +459,7 @@ void show_ucode_info_early(void)
- 
- 	if (delay_ucode_info) {
- 		intel_cpu_collect_info(&uci);
--		print_ucode_info(&uci, current_mc_date);
-+		print_ucode_info(early_old_rev, &uci, current_mc_date);
- 		delay_ucode_info = 0;
- 	}
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 6a41cee242f6..e4135b4fdbc6 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -599,7 +599,7 @@ static enum ucode_state microcode_resume_cpu(int cpu)
+ 	return UCODE_OK;
  }
-@@ -467,11 +468,12 @@ void show_ucode_info_early(void)
-  * At this point, we can not call printk() yet. Delay printing microcode info in
-  * show_ucode_info_early() until printk() works.
-  */
--static void print_ucode(struct ucode_cpu_info *uci)
-+static void print_ucode(u32 old_rev, struct ucode_cpu_info *uci)
+ 
+-static enum ucode_state microcode_init_cpu(int cpu, bool refresh_fw)
++static enum ucode_state microcode_init_cpu(int cpu)
  {
- 	struct microcode_intel *mc;
- 	int *delay_ucode_info_p;
- 	int *current_mc_date_p;
-+	u32 *old_rev_p;
+ 	enum ucode_state ustate;
+ 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+@@ -614,7 +614,8 @@ static enum ucode_state microcode_init_cpu(int cpu, bool refresh_fw)
+ 	if (system_state != SYSTEM_RUNNING)
+ 		return UCODE_NFOUND;
  
- 	mc = uci->mc;
- 	if (!mc)
-@@ -479,13 +481,15 @@ static void print_ucode(struct ucode_cpu_info *uci)
+-	ustate = microcode_ops->request_microcode_fw(cpu, &microcode_pdev->dev, refresh_fw);
++	ustate = microcode_ops->request_microcode_fw(cpu, &microcode_pdev->dev,
++						     false);
+ 	if (ustate == UCODE_NEW) {
+ 		pr_debug("CPU%d updated upon init\n", cpu);
+ 		apply_microcode_on_target(cpu);
+@@ -633,7 +634,7 @@ static enum ucode_state microcode_update_cpu(int cpu)
+ 	if (uci->valid)
+ 		return microcode_resume_cpu(cpu);
  
- 	delay_ucode_info_p = (int *)__pa_nodebug(&delay_ucode_info);
- 	current_mc_date_p = (int *)__pa_nodebug(&current_mc_date);
-+	old_rev_p = (u32 *)__pa_nodebug(&early_old_rev);
- 
- 	*delay_ucode_info_p = 1;
- 	*current_mc_date_p = mc->hdr.date;
-+	*old_rev_p = old_rev;
+-	return microcode_init_cpu(cpu, false);
++	return microcode_init_cpu(cpu);
  }
- #else
  
--static inline void print_ucode(struct ucode_cpu_info *uci)
-+static inline void print_ucode(u32 old_rev, struct ucode_cpu_info *uci)
- {
- 	struct microcode_intel *mc;
+ static int mc_device_add(struct device *dev, struct subsys_interface *sif)
+@@ -649,7 +650,7 @@ static int mc_device_add(struct device *dev, struct subsys_interface *sif)
+ 	if (err)
+ 		return err;
  
-@@ -493,14 +497,14 @@ static inline void print_ucode(struct ucode_cpu_info *uci)
- 	if (!mc)
- 		return;
+-	if (microcode_init_cpu(cpu, true) == UCODE_ERROR)
++	if (microcode_init_cpu(cpu) == UCODE_ERROR)
+ 		return -EINVAL;
  
--	print_ucode_info(uci, mc->hdr.date);
-+	print_ucode_info(old_rev, uci, mc->hdr.date);
- }
- #endif
- 
- static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- {
- 	struct microcode_intel *mc;
--	u32 rev;
-+	u32 old_rev, rev;
- 
- 	mc = uci->mc;
- 	if (!mc)
-@@ -517,6 +521,7 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- 		return UCODE_OK;
- 	}
- 
-+	old_rev = rev;
- 	/*
- 	 * Writeback and invalidate caches before updating microcode to avoid
- 	 * internal issues depending on what the microcode is updating.
-@@ -533,9 +538,9 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
- 	uci->cpu_sig.rev = rev;
- 
- 	if (early)
--		print_ucode(uci);
-+		print_ucode(old_rev, uci);
- 	else
--		print_ucode_info(uci, mc->hdr.date);
-+		print_ucode_info(old_rev, uci, mc->hdr.date);
- 
- 	return 0;
- }
+ 	return err;
 -- 
 2.34.1
 
