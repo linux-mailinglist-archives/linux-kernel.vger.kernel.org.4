@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8D95FF39E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6514B5FF3A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiJNSfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S231180AbiJNSfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiJNSfM (ORCPT
+        with ESMTP id S230414AbiJNSf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:35:12 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585074E19D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:35:09 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id d26so12297869ejc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:35:09 -0700 (PDT)
+        Fri, 14 Oct 2022 14:35:28 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D17D88A31;
+        Fri, 14 Oct 2022 11:35:18 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j7so8896558wrr.3;
+        Fri, 14 Oct 2022 11:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dlOttIcbfyJ9Meuwl/3DVPLPY7LTZL8V6KpgIWHa/o8=;
-        b=bo+sSeamjV3ogFeVE4woZcjggXzUoZaHSUx6jp0WPOZzpXDNmcc/cEcYdKtM48zH7e
-         Q8hrssyWU3nff+vqi1+2UwgCpwkQ9mNZwhoxtCYtoyOImHoU6sr2EgS5FSVJHeHv72Gx
-         ivMoH1EYL5oEpkIYp3Altv+OuFDnh25XvMft3oq6CAX7Lg1bHdcRUDF5uanM4EvvYYLH
-         ScOMwLnABxganJ5jJ69lPKPQm06FeCCSHiH114ov0w+bi1KMynXHAw6J/ybjpBOkwQ60
-         Njc0xgYtm7geqQcvVxY6MqZQHxUA67w1M6uCS77zWiYeNi3Td5G/+xAI/uKs52rqfCAx
-         VPXA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+qOL/iKcZGPLu/1YRxFH9hlgpWjHigg9iXBISYd9lB4=;
+        b=e025hcg0iYOrxQAl774n7xh8vRKmd9KfsoEuOsmX3LDK9MQueog38aWf2dKEvYhUn2
+         Fk3PrYQDiH3xINDqo5RML+K9OERlJe7ksaHW92oZLjyh/7GeNX47+ajZ9aQfDy3qj7Ud
+         uqKXOWuOpIXL9Es/3LXhb1fNiILo97cgmeYPK/eqx17iQ/jKysE1VWlX/hagQb2HUmTj
+         ehwCn/nVqHpZoxC2Xws8JgjJHdwtVoJ6+H1waxTbQlHWIx1bxfdpztG8GuMseQdKrQ25
+         SVIB4GYHqkuCLRsdvlAiuSYKo4mlmjgezBWrxxw+H3r1FRDj2B9hmih/YdkCW3jzGe/H
+         JZIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dlOttIcbfyJ9Meuwl/3DVPLPY7LTZL8V6KpgIWHa/o8=;
-        b=E5ZsnAxKsqdvhEI1QizrP+lTIYsLEMnUizQyg6kuQg9AuV4M5/BkUanGw5YTwD7uEh
-         CrnVWU2/QJaDa7PlVjfWl4mTDKwRAvGcbm68teinez62jj+Ju9x4OFp7oOaeC9j8Npsg
-         +KsRnsrj+WIUt8SdORlvqdaLY7uvP+XOrrJP5tW/7n5fRp7tqZT5Zm8CLh21iHgwPzkn
-         zb6mRXbO7yD/N45/0qUsv9yG/qtYEF7oQV151ezXpctfiLRj3AHBACSTWLiLN04Rmwck
-         bI3qu/a8bx5oBVIEvKP4LAXb8SKgLe35Tcg0ngY7KD+a9Lit2PQPw+r/8rdaOKpYHXMn
-         jM2A==
-X-Gm-Message-State: ACrzQf0YZVqfki8Wj1gJ+5uRDe9FRFy6h+8XiNzRFHmM1yfwDV1nvxTj
-        mtbF1+ygyl9o+LzGgDjYCfahk3H9RRngNBOBZRK6+g==
-X-Google-Smtp-Source: AMsMyM5PxvI7q1eLhIz1kRuPl4pgKS5NxzGTkhgVaLLpKkixQpMznDKsv3NsRyMn7CuF+C/HYyOrjzaNom7zJdwX7EI=
-X-Received: by 2002:a17:907:e93:b0:78d:46ae:cf61 with SMTP id
- ho19-20020a1709070e9300b0078d46aecf61mr4483765ejc.579.1665772507710; Fri, 14
- Oct 2022 11:35:07 -0700 (PDT)
+        bh=+qOL/iKcZGPLu/1YRxFH9hlgpWjHigg9iXBISYd9lB4=;
+        b=7YZBkkDmoqg5vQRV1Kxd56Bt0T5s0AQ4/U9AaevElTlbQodtIGewvLdryrEbXUn4KF
+         xeLReCViyH093838CvxK/JOml57/xMxll/5GCVjl1NhUbAZ0thqR36WmKRoZyZnva5Xl
+         zKHcUWygU9rCgcUkrMNiBHi8cUJE++eFLUT6WWyBlCdOutBRaOdEJdzh0RDw6TPBTgW2
+         gG1EeiszuKHzIfoBL5JkGvTlVRTtUYb3LgRCJS7mIt3joTZKDAkiWPIN3q4VGOlAQjwx
+         Bv6fMvYyjPR9OeGlIF3LD96IcTQdJxpnoEYRXP+TSRRA5gVFjIu2kAywRRUc3wCIfpMO
+         CnQg==
+X-Gm-Message-State: ACrzQf1L96YXDRoI1XR+pg46Yp37djed29XjImHnXYsoxzYIUIehqf39
+        2ZfN1Jf8OfTz8hPwJohQ0Uc=
+X-Google-Smtp-Source: AMsMyM6ZkTlq8cTLUDQguxpCM4KrLKdSs6H4upsg/TMc6Uv8hH1iz45uaLbdZpQxjxt5Xa3nEXtwqg==
+X-Received: by 2002:adf:f5c5:0:b0:22e:264b:2179 with SMTP id k5-20020adff5c5000000b0022e264b2179mr4191486wrp.386.1665772516880;
+        Fri, 14 Oct 2022 11:35:16 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:fc4d:6548:d8bd:5bd])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a403954c3sm2485410wrt.42.2022.10.14.11.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 11:35:15 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 0/5] media: i2c: ov5645 driver enhancements 
+Date:   Fri, 14 Oct 2022 19:34:54 +0100
+Message-Id: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-26-ojeda@kernel.org>
- <Y0BfN1BdVCWssvEu@hirez.programming.kicks-ass.net> <CABCJKuenkHXtbWOLZ0_isGewxd19qkM7OcLeE2NzM6dSkXS4mQ@mail.gmail.com>
- <CANiq72k6s4=0E_AHv7FPsCQhkyxf7c-b+wUtzfjf+Spehe9Fmg@mail.gmail.com>
-In-Reply-To: <CANiq72k6s4=0E_AHv7FPsCQhkyxf7c-b+wUtzfjf+Spehe9Fmg@mail.gmail.com>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 14 Oct 2022 11:34:30 -0700
-Message-ID: <CABCJKuca0fOAs=E6LeHJiT2LOXEoPvLVKztA=u+ARcw=tbT=tw@mail.gmail.com>
-Subject: Re: [PATCH v10 25/27] x86: enable initial Rust support
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        David Gow <davidgow@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,25 +79,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 11:05 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Tue, Oct 11, 2022 at 1:16 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > Rust supports IBT with -Z cf-protection=branch, but I don't see this
-> > option being enabled in the kernel yet. Cross-language CFI is going to
-> > require a lot more work though because the type systems are not quite
-> > compatible:
-> >
-> > https://github.com/rust-lang/rfcs/pull/3296
->
-> I have pinged Ramon de C Valle as he is the author of the RFC above
-> and implementation work too; since a month or so ago he also leads the
-> Exploit Mitigations Project Group in Rust.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Thanks, Miguel. I also talked to Ramon about KCFI earlier this week
-and he expressed interest in helping with rustc support for it. In the
-meanwhile, I think we can just add a depends on !CFI_CLANG to avoid
-issues here.
+Hi All,
 
-Sami
+The main aim of this series is to add PM support to the sensor driver.
+
+I had two more patches [0] and [1] which were for ov5645, so instead
+sending them separately I have clubbed them as series.
+
+v1-> v2
+- patch #1 is infact a v3 [1] no changes
+- patch #2 fixed review comments pointed by Sakari
+- patch #3 [0] no changes 
+- patches #4 and #5 are new
+
+[0] https://patchwork.linuxtv.org/project/linux-media/patch/20220927202005.750621-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+[1] https://patchwork.linuxtv.org/project/linux-media/patch/20220919153540.178732-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (5):
+  media: dt-bindings: ov5645: Convert OV5645 binding to a schema
+  media: i2c: ov5645: Use runtime PM
+  media: i2c: ov5645: Drop empty comment
+  media: i2c: ov5645: Return zero for s_stream(0)
+  media: i2c: ov5645: Call ov5645_entity_init_cfg() before registering
+    the subdev
+
+ .../devicetree/bindings/media/i2c/ov5645.txt  |  54 -------
+ .../bindings/media/i2c/ovti,ov5645.yaml       | 104 ++++++++++++
+ drivers/media/i2c/Kconfig                     |   2 +-
+ drivers/media/i2c/ov5645.c                    | 151 +++++++++---------
+ 4 files changed, 178 insertions(+), 133 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+
+-- 
+2.25.1
+
