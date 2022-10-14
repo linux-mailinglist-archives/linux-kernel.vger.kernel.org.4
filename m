@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242595FF3BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698F65FF3BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiJNSht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
+        id S230176AbiJNSjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJNShp (ORCPT
+        with ESMTP id S229491AbiJNSjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:37:45 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D0F72940;
-        Fri, 14 Oct 2022 11:37:41 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id d24so5538308pls.4;
-        Fri, 14 Oct 2022 11:37:41 -0700 (PDT)
+        Fri, 14 Oct 2022 14:39:19 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368A47297B;
+        Fri, 14 Oct 2022 11:39:18 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id s196so3745930pgs.3;
+        Fri, 14 Oct 2022 11:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=005ujTHkQSN51VazCebo1ls5rej/w0AucMu6nYUSRXM=;
+        b=o4t2w+YH/1nJHLH7BXzNaTv3Orix8ffZpNNLx/WjjfmLg7No16sZC0RxlFJdWuOpLK
+         rc1XRTsex4bwI+NAXUunLEGZEAbjz05oD03isLg3pID+fd600mXK6CKiXJ+RIl8IHihI
+         wfakY2AYeaBs+mghWMmUoPwKbUclIKAvKmd81cTJ54b1Upks+GDZD7Su9XXnEpB2C1Bs
+         3/rLz74trX6YHPD/gUE1zYDhvy4qkibdr5WPHnGBeh1vA8QyRQtz8Ojtje8eOAevQTb5
+         +REwKXfxxFt/HXB1MoM+MQF1qecxTZp0HdQ3CRQVSOWJrZg8iXEyZBXoVBC6JgWCqg/M
+         a36w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K03/LDbX9eB92joj+CT65ha22B4/UzgTMlmjnAboAzc=;
-        b=j/tnA8idp2jE6pJ2MMtRUKqH12pF74qMJ4MdAtxbDNeqHeQ7bgoVNPPOHfC1FIHCOW
-         Jf/ySqMDBOcF77lyPE5MWOAcF3YWy/ULQH9lJOzw4tQPrb4hZ6HXwAQXf57BTZkxBGns
-         pCdTb8IiBZlJNyy80OGb1vQWGufx2rgtkKhDqy2m6Ef0z2nOnCTKjlPMd9VjFq81Jka1
-         9RapTjKsGC5qFcWYOyZ5cTEhW1I+Sz7sUtqPNAZpEd/wexMRNo9A1qU/x3BklDJlHfea
-         uEwHwHNPkk6E3D+R4PYQ3WYy0uf5ESdyWNMb8ofwpShU5OuIqf7gARVF8JJjgqyEubmH
-         JVIw==
-X-Gm-Message-State: ACrzQf3Whk+RWoc3DpVinBrLByJCbm7Fo6lqAscTiZK+bA8rz1Niy+ct
-        QDkJpEWChIfz6R/awy+4kWY=
-X-Google-Smtp-Source: AMsMyM4xIQi8dApWjum6v7as5ofEtCN2c8HFnvqgqQvGKQ7HWx2n98/GCR3r3LMT857/AAVmlYxQgA==
-X-Received: by 2002:a17:90b:388e:b0:20d:4a1f:d5a2 with SMTP id mu14-20020a17090b388e00b0020d4a1fd5a2mr7053569pjb.135.1665772660154;
-        Fri, 14 Oct 2022 11:37:40 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:7bd3:5500:b9cd:d90d? ([2620:15c:211:201:7bd3:5500:b9cd:d90d])
-        by smtp.gmail.com with ESMTPSA id t2-20020aa79462000000b00540a8074c9dsm2050783pfq.166.2022.10.14.11.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 11:37:39 -0700 (PDT)
-Message-ID: <a1cd6719-a743-fc96-e0e7-364a52b62952@acm.org>
-Date:   Fri, 14 Oct 2022 11:37:36 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=005ujTHkQSN51VazCebo1ls5rej/w0AucMu6nYUSRXM=;
+        b=CVYf/ziqzrkHO+msGJSPiJBQP7Vdlwaoh1ltVZnDjdxyB8GgDIo64FzGyWyHesUHrO
+         SlH52VOA1D6h9SEhzgfugss+iqtugFR0xdyDqa9MzwfcA7p4/s8LRlR7Nvp3IC7e2Fxt
+         xm2fLzmQgrbQ9dPoiY/OOPBrmiNX43FZM6ubVd/wFOH0CuwnupyjjRDNwq7mZQPO7P1R
+         NGwRbDwK6IS4bxT3CM9cHXGsL0XmeLx19ixlcFTANZcI1nfU7YVtT6xnwkl6ch+OMXOl
+         wmGyBEfrDjPkk77vO3wOy9bYyBh4+zE0kQoR6A+jRglVGw2pmjvKlMu0oCJpGoToYWY0
+         HmjQ==
+X-Gm-Message-State: ACrzQf1p0mh7FQnld+QVkzvy2/J+p1F/rOekAf/rrhEMV0NyjtHI4a1z
+        YnYUqcGuFR/6KqXExxj5OjJ+hIyuGF9N/fie3Ac=
+X-Google-Smtp-Source: AMsMyM7TZLZw8Bo6gzBnKo+5x1m6W2VRG2URGbi55O0bBS8FcFGInciCzqzwKauSecZ43+yd2pH7Z/nM7tGX85Ip8lk=
+X-Received: by 2002:a63:26c3:0:b0:46b:1dab:fd88 with SMTP id
+ m186-20020a6326c3000000b0046b1dabfd88mr5744312pgm.251.1665772757743; Fri, 14
+ Oct 2022 11:39:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] scsi: ufs: core: Remove unnecessary if statement
-Content-Language: en-US
-To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221010092937.520013-1-beanhuo@iokpp.de>
- <20221010092937.520013-2-beanhuo@iokpp.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221010092937.520013-2-beanhuo@iokpp.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221013175146.507746257@linuxfoundation.org>
+In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Fri, 14 Oct 2022 11:39:06 -0700
+Message-ID: <CAJq+SaAPbBna2Otpna7yNAcyt8edX5GR5C=_dygYDyVVDXZsMg@mail.gmail.com>
+Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 02:29, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
-> 
-> LUs with WB potential support are properly checked in ufshcd_wb_probe()
-> before calling ufshcd_read_unit_desc_param(), so remove this unnecessary
-> if-checkup in ufs_is_valid_unit_desc_lun() to match its function definition.
-> 
-> Signed-off-by: Bean Huo <beanhuo@micron.com>
-> ---
->   drivers/ufs/core/ufshcd-priv.h | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-> index f68ca33f6ac7..2457b005101a 100644
-> --- a/drivers/ufs/core/ufshcd-priv.h
-> +++ b/drivers/ufs/core/ufshcd-priv.h
-> @@ -300,9 +300,6 @@ static inline bool ufs_is_valid_unit_desc_lun(struct ufs_dev_info *dev_info,
->   		pr_err("Max General LU supported by UFS isn't initialized\n");
->   		return false;
->   	}
-> -	/* WB is available only for the logical unit from 0 to 7 */
-> -	if (param_offset == UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS)
-> -		return lun < UFS_UPIU_MAX_WB_LUN_ID;
->   	return lun == UFS_UPIU_RPMB_WLUN || (lun < dev_info->max_lu_supported);
->   }
-
-Hi Bean,
-
-I think the above patch reintroduces the stack overflow issue fixed by
-commit a2fca52ee640 ("scsi: ufs: WB is only available on LUN #0 to #7").
-
-How about reverting commit a2fca52ee640 and fixing the stack overflow
-issue in another way than by modifying ufs_is_valid_unit_desc_lun()?
-
-Thanks,
-
-Bart.
+> This is the start of the stable review cycle for the 6.0.2 release.
+> There are 34 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.2-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
+6.0.2-rc1 compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
+
+Tested-by: Allen Pais <apais@microsoft.com>
+
+Thanks.
