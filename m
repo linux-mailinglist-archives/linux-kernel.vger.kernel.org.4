@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EA75FECCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91BD5FECD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiJNK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S229498AbiJNLBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJNK7r (ORCPT
+        with ESMTP id S229598AbiJNLBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:59:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 393A31740C;
-        Fri, 14 Oct 2022 03:59:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EEB1A13D5;
-        Fri, 14 Oct 2022 03:59:50 -0700 (PDT)
-Received: from bogus (unknown [10.57.35.221])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 807B63F792;
-        Fri, 14 Oct 2022 03:59:41 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 11:59:38 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] ACPI: ARM Performance Monitoring Unit Table (APMT)
- initial support
-Message-ID: <20221014105938.fyy6jns5fsu5xd7q@bogus>
-References: <20220929002834.32664-1-bwicaksono@nvidia.com>
+        Fri, 14 Oct 2022 07:01:20 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A24C1C880B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:01:17 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-91-GFLKovP8PUiYyqSFZun4Kw-1; Fri, 14 Oct 2022 12:01:15 +0100
+X-MC-Unique: GFLKovP8PUiYyqSFZun4Kw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 14 Oct
+ 2022 12:01:13 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 14 Oct 2022 12:01:13 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        Robert Elliott <elliott@hpe.com>
+CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 04/19] crypto: x86/sha - limit FPU preemption
+Thread-Topic: [PATCH v2 04/19] crypto: x86/sha - limit FPU preemption
+Thread-Index: AQHY3p5YDK4bZkqaZ0OuLicTma4hgK4NuQjg
+Date:   Fri, 14 Oct 2022 11:01:12 +0000
+Message-ID: <96ed3206ef2a499f9bf95476e21608c0@AcuMS.aculab.com>
+References: <20221006223151.22159-1-elliott@hpe.com>
+ <20221012215931.3896-1-elliott@hpe.com>
+ <20221012215931.3896-5-elliott@hpe.com> <Y0deya7WnwS0HMwl@zx2c4.com>
+In-Reply-To: <Y0deya7WnwS0HMwl@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929002834.32664-1-bwicaksono@nvidia.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Besar,
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDEzIE9jdG9iZXIgMjAyMiAwMTo0Mg0K
+Li4uDQo+ID4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2NyeXB0by9zaGExX3Nzc2UzX2dsdWUuYyBi
+L2FyY2gveDg2L2NyeXB0by9zaGExX3Nzc2UzX2dsdWUuYw0KPiA+IGluZGV4IDQ0MzQwYTExMzll
+MC4uYTlmNTc3OWI0MWNhIDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gveDg2L2NyeXB0by9zaGExX3Nz
+c2UzX2dsdWUuYw0KPiA+ICsrKyBiL2FyY2gveDg2L2NyeXB0by9zaGExX3Nzc2UzX2dsdWUuYw0K
+PiA+IEBAIC0yNiw2ICsyNiw4IEBADQo+ID4gICNpbmNsdWRlIDxjcnlwdG8vc2hhMV9iYXNlLmg+
+DQo+ID4gICNpbmNsdWRlIDxhc20vc2ltZC5oPg0KPiA+DQo+ID4gKyNkZWZpbmUgRlBVX0JZVEVT
+IDQwOTZVIC8qIGF2b2lkIGtlcm5lbF9mcHVfYmVnaW4vZW5kIHNjaGVkdWxlci9yY3Ugc3RhbGxz
+ICovDQo+IA0KPiBEZWNsYXJlIHRoaXMgaW5zaWRlIHRoZSBmdW5jdGlvbiBpdCdzIHVzZWQgYXMg
+YW4gdW50eXBlZCBlbnVtLCBhbmQgZ2l2ZQ0KPiBpdCBhIGJldHRlciBuYW1lLCBsaWtlIEJZVEVT
+X1BFUl9GUFUuDQoNCklzbid0ICdieXRlcycgdGhlIHdyb25nIHVuaXQgYW55d2F5Pw0KQXQgbGVh
+c3QgaXQgb3VnaHQgdG8gYmUgJ2Nsb2Nrcycgc28gaXQgY2FuIGJlIGRpdmlkZWQgYnkgdGhlDQoo
+YXBwcm94aW1hdGUpICdjbG9ja3MgcGVyIGJ5dGUnIG9mIHRoZSBhbGdvcml0aG0uDQoNClNvbWV0
+aGluZyBsaWtlIGEgY3JjIGlzIGxpa2VseSB0byBiZSBmYXIgZmFzdGVyIHRoYW4gQUVTLg0KDQpD
+bGVhcmx5IHRoZSBhY3R1YWwgcmVxdWlyZWQgdW5pdHMgYXJlIG1pY3Jvc2Vjb25kcy4NCkJ1dCBk
+ZXBlbmRpbmcgb24gdGhlIGFjdHVhbCBjcHUgZnJlcXVlbmN5IGlzIGEgYml0IGhhcmQuDQpBbmQg
+cGVvcGxlIHJ1bm5pbmcgZmFzdGVyIGNwdSBtYXkgd2FudCBsb3dlciBsYXRlbmN5IGFueXdheS4N
+ClNvIGEgdHlwaWNhbCBzbG93IGNwdSBmcmVxdWVuY3kgaXMgcHJvYmFibHkgb2suDQoNClRoZSBh
+Y3R1YWwgYXJjaGl0ZWN0dXJlIGRlcGVuZGFudCBjb25zdGFudCByZWFsbHkgb3VnaHQNCnRvIGJl
+IGRlZmluZWQgd2l0aCBrZXJuZWxfZnB1X2JlZ2luKCkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
+cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
+eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-On Wed, Sep 28, 2022 at 07:28:34PM -0500, Besar Wicaksono wrote:
-> ARM Performance Monitoring Unit Table describes the properties of PMU
-> support in ARM-based system. The APMT table contains a list of nodes,
-> each represents a PMU in the system that conforms to ARM CoreSight PMU
-> architecture. The properties of each node include information required
-> to access the PMU (e.g. MMIO base address, interrupt number) and also
-> identification. For more detailed information, please refer to the
-> specification below:
->  * APMT: https://developer.arm.com/documentation/den0117/latest
->  * ARM Coresight PMU:
->         https://developer.arm.com/documentation/ihi0091/latest
-> 
-> The initial support adds the detection of APMT table and generic
-> infrastructure to create platform devices for ARM CoreSight PMUs.
-> Similar to IORT the root pointer of APMT is preserved during runtime
-> and each PMU platform device is given a pointer to the corresponding
-> APMT node.
-> 
-
-This looks good to me know.
-
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-
-Hi Lorenzo,
-
-Not sure if there are any other arm specific ACPI changes in the queue
-for v6.2. Can you please add this too ?
-
--- 
-Regards,
-Sudeep
