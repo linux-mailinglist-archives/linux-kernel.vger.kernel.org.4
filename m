@@ -2,162 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B9B5FEE4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1B05FEE4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJNNBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S229722AbiJNNBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJNNBQ (ORCPT
+        with ESMTP id S229513AbiJNNBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:01:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5661BE1CC
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665752473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SaldHj1fWL0JB8uDShPZGUz9Hou91o0Rg4EAQ11LSaw=;
-        b=gJDgn0OqF0/I9/ibpHSHmJLiL6bnnR4s8yU3HAZ3cPocchRukfIOzMnkt1ZJ94F2AhEa8z
-        TMUpsOAhAKOnXfWZ2JMtihxrtdn1ZnB8K1tiz4HbvV1esbTH9IIx7QS/CyJxafJ+o8DIsi
-        TS7cEKXpCvLClidg5cxTBwGtC8DGKbQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-642-_mLT8bZ4NLWJYHGcw7TIhg-1; Fri, 14 Oct 2022 09:01:12 -0400
-X-MC-Unique: _mLT8bZ4NLWJYHGcw7TIhg-1
-Received: by mail-wr1-f70.google.com with SMTP id o13-20020adfa10d000000b00232c00377a0so921440wro.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:01:12 -0700 (PDT)
+        Fri, 14 Oct 2022 09:01:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F8C1974F7;
+        Fri, 14 Oct 2022 06:01:41 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id 10so4720272pli.0;
+        Fri, 14 Oct 2022 06:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p4dlnb05MmevigtHJ5npeQ25AeXBFYvEvQsw5sWpFGI=;
+        b=TGoQstWfBGwpuTarpv5uEIg+GAgT/B8QqBhRDR96IZxKwAI4I5PIdzTiMa9zbhp4+9
+         oAHw1vwsww0hwwxwcqeYc+wUEuYZoqeph9+B1ucQa+mI6s7swkxUN88mJvXsIGpgsJnX
+         hRojlYcK4Ty6urHIZNAr+kU0uKT9sIm0NBkNS8p1SDGuOM8XExer/rUuUxrU7tO3wyQr
+         B7trVpUSBbKblV8FU5M5YZnFjGQUA/nCtq6MPDrYS1utsCDFVFBPogUXJ1mhkJzaYXHs
+         lfRYXVKu4T0ycTRnriT5zMr3m0CsJLpduN8kEhjgYnB5Z9tAoVvaVwU9Arp1sJ0fRMMR
+         x6Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SaldHj1fWL0JB8uDShPZGUz9Hou91o0Rg4EAQ11LSaw=;
-        b=mX7tWQZhIBlqW+Q1/nWLY8m/a0gbhzcF6xbY4wWCzwKyXd8UYF5vkY50TPayO3fi04
-         Re8RiXycMyj+zILs585JNwXBeU2Frctz51/bkIsN79SotLCHlbAH4sYUiMKFyBA5Blm3
-         1vN4Tknn0zsiRzMA0cMcDmx0KNkRAo+pKS358WD2xOptR8YnpWEjQNWrDwmyyNv+/n6X
-         wFKHly7LAf90FyGm02fJYXwZ3gdJibZI5gxKYxi2OJwa+pbBxyGqQydFkwnpgmEXFmSQ
-         hFMeegGLjt15vuLrmWU5MAWW2FD61l5RNVjVdyHtfrHGU9btZ8oaKreXvWybyT+Ia2Zw
-         6L3A==
-X-Gm-Message-State: ACrzQf2UR3Top88nRW0IFZwFYiX8Gd9S0Dm1WfFoV/UJwtK8PcqPlN4X
-        nzY5fOa8fN4W8tRPUy/NNxAGhAWz5TMwEIpfXsIdgS0yfb+WFf73eVvgRCY+aLECgMXEYhGmWO+
-        CCQHqrJfUoyuGwcsITW/tDP79
-X-Received: by 2002:a5d:47c5:0:b0:22e:6941:81eb with SMTP id o5-20020a5d47c5000000b0022e694181ebmr3293008wrc.408.1665752470731;
-        Fri, 14 Oct 2022 06:01:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM64LAt/bXBlG7HpFfz2D7sSRGhelA92JwzG3QdzpfXGbbOKe2ptF7MkqUTL6DhtBxrsuST3Eg==
-X-Received: by 2002:a5d:47c5:0:b0:22e:6941:81eb with SMTP id o5-20020a5d47c5000000b0022e694181ebmr3292947wrc.408.1665752470102;
-        Fri, 14 Oct 2022 06:01:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:8f00:9219:ab4c:826e:9646? (p200300cbc7048f009219ab4c826e9646.dip0.t-ipconnect.de. [2003:cb:c704:8f00:9219:ab4c:826e:9646])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c4f0f00b003c6cc57566fsm6123016wmq.14.2022.10.14.06.01.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 06:01:09 -0700 (PDT)
-Message-ID: <72e535ce-80eb-a02f-970c-6a9c80da0a24@redhat.com>
-Date:   Fri, 14 Oct 2022 15:01:08 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p4dlnb05MmevigtHJ5npeQ25AeXBFYvEvQsw5sWpFGI=;
+        b=fRcERofrRlb63DEo3jR5IYi5osrgWltpOKkB8aY9Io6HsOWdheCRNsVW/p0WAApoER
+         eaN4uT6t7c3Q8QQowkb4i+tvjW4UOVTtwl8xebFlkWwR/H62yv6VD/XmAmpmca4rvR4a
+         PIb0hOHQWHwsUGVbZdYbawjpT5IjifIWjNyGaailQXky7nmEyXyxAtKnWaHSfs3dNoLL
+         5iP9w3Y+/18l3UPly+way/1pi5GmsQzxtnxgQPWbYFLkUydH1hDsvS91sQ3Pbvon+YPf
+         mDYILzEs+WehjstTLmjJe46mEv8MgXl+ES6sQ0pV+s0Cw3OxM7b9XLMF4ZfU8gjYfBXn
+         JkXg==
+X-Gm-Message-State: ACrzQf0lb9DxBL3AIidpTKAghnnX338UlZ0CtWqW6idKc+jolH30fSFz
+        it7TuVMI2gHsngvBj1nqeks=
+X-Google-Smtp-Source: AMsMyM6j7YsVpDg/m4uDWdQUc2SyFqtniSBBp/CWN50pRwlBieYiOP5HFCzYzVOIfZ3g5tS7seORQQ==
+X-Received: by 2002:a17:90b:4c85:b0:20d:7040:532a with SMTP id my5-20020a17090b4c8500b0020d7040532amr5544291pjb.243.1665752496799;
+        Fri, 14 Oct 2022 06:01:36 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-8.three.co.id. [180.214.232.8])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa79e12000000b0056246403534sm1687407pfq.88.2022.10.14.06.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 06:01:36 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B5EF7103F3B; Fri, 14 Oct 2022 20:01:32 +0700 (WIB)
+Date:   Fri, 14 Oct 2022 20:01:32 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
+        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com
+Subject: Re: [PATCH 2/2] Documentation: kdump: describe VMCOREINFO export for
+ RISCV64
+Message-ID: <Y0ldrJ91ac0um3++@debian.me>
+References: <20221014074810.4471-1-xianting.tian@linux.alibaba.com>
+ <20221014074810.4471-3-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: RFC [PATCH v4 2/7] Enable balloon drivers to report inflated
- memory
-Content-Language: en-US
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-References: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
- <20221005090158.2801592-3-alexander.atanasov@virtuozzo.com>
- <88EDC41D-408F-4ADF-A933-0A6F36E5F262@gmail.com>
- <a8ce5c48-3efc-5ea3-6f5c-53b9e33f65c7@virtuozzo.com>
- <42C75E59-696B-41D5-BD77-68EFF0B075C6@gmail.com>
- <d55338c4-d15f-14ec-c057-806a5d5aa618@virtuozzo.com>
- <71E14334-CA3B-45FB-A854-7A8D6649C798@gmail.com>
- <b7dd38ba-9ff9-6b4c-2460-d4b1ee3bb3f0@virtuozzo.com>
- <1118F098-972A-4F58-8EE1-270A06E4F9D1@gmail.com>
- <7ba328e5-3bc8-cb22-f00c-eddb8aea9a06@virtuozzo.com>
- <063efd58-8373-90ea-7c5e-9d0e9161d2ba@redhat.com>
- <04e5a2e4-052d-0f80-d642-4e104307f38b@virtuozzo.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <04e5a2e4-052d-0f80-d642-4e104307f38b@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nuzjBSR3N8Zosn2Q"
+Content-Disposition: inline
+In-Reply-To: <20221014074810.4471-3-xianting.tian@linux.alibaba.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.10.22 14:50, Alexander Atanasov wrote:
-> Hello,
-> 
-> On 11.10.22 12:23, David Hildenbrand wrote:
->>>>>> Sounds to me that all you want is some notifier to be called from
->>>>>> adjust_managed_page_count(). What am I missing?
->>>>>
->>>>> Notifier will act as an accumulator to report size of change and it
->>>>> will make things easier for the drivers and users wrt locking.
->>>>> Notifier is similar to the memory hotplug notifier.
->>>>
->>>> Overall, I am not convinced that there is any value of separating the
->>>> value
->>>> and the notifier. You can batch both or not batch both. In addition,
->>>> as I
->>>> mentioned, having two values seems racy.
->>>
->>> I have identified two users so far above - may be more to come.
->>> One type needs the value to adjust. Also having the value is necessary
->>> to report it to users and oom. There are options with callbacks and so
->>> on but it will complicate things with no real gain. You are right about
->>> the atomicity but i guess if that's a problem for some user it could
->>> find a way to ensure it. i am yet to find such place.
->>>
->>
->> I haven't followed the whole discussion, but I just wanted to raise that
->> having a generic mechanism to notify on such changes could be valuable.
->>
->> For example, virtio-mem also uses adjust_managed_page_count() and might
->> sometimes not trigger memory hotplug notifiers when adding more memory
->> (essentially, when it fake-adds memory part of an already added Linux
->> memory block).
->>
->> What might make sense is schedule some kind of deferred notification on
->> adjust_managed_page_count() changes. This way, we could notify without
->> caring about locking and would naturally batch notifications.
->>
->> adjust_managed_page_count() users would not require changes.
-> 
-> Making it deferred will bring issues for both the users of the
-> adjust_managed_page_count and the receivers of the notification -
-> locking as first. And it is hard to know when the adjustment will
-> finish, some of the drivers wait and retry in blocks. It will bring
-> complexity and it will not be possible to convert users in small steps.
 
-What exactly is the issue about handling that deferred? Who needs an 
-immediate, 100% precise notification?
+--nuzjBSR3N8Zosn2Q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Locking from a separate workqueue shouldn't be too hard, or what am i 
-missing?
+On Fri, Oct 14, 2022 at 03:48:10PM +0800, Xianting Tian wrote:
+> The following interrelated definitions and ranges are needed by the kdump
+> crash tool, they are exported by "arch/riscv/kernel/crash_core.c":
+>     VA_BITS,
+>     PAGE_OFFSET,
+>     phys_ram_base,
+>     MODULES_VADDR ~ MODULES_END,
+>     VMALLOC_START ~ VMALLOC_END,
+>     VMEMMAP_START ~ VMEMMAP_END,
+>     KASAN_SHADOW_START ~ KASAN_SHADOW_END,
+>     KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END
+>=20
+> Document these RISCV64 exports above.
+>=20
 
-> 
-> Other problem is that there are drivers that do not use
-> adjust_managed_page_count().
+The patch description LGTM, thanks.
 
-Which ones? Do we care?
+> +------------------------------------------------------------------------=
+----------------------------------------------------------------------------
+> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMA=
+P_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
+> +------------------------------------------------------------------------=
+----------------------------------------------------------------------------
 
--- 
-Thanks,
+The overline above header text is unnecessary, so I have to strip it:
 
-David / dhildenb
+---- >8 ----
 
+diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation=
+/admin-guide/kdump/vmcoreinfo.rst
+index 6c7a1728de220e..8e2e164cf3db49 100644
+--- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
++++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+@@ -615,7 +615,6 @@ phys_ram_base
+=20
+ Indicates the start physical RAM address.
+=20
+---------------------------------------------------------------------------=
+--------------------------------------------------------------------------
+ MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_=
+END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
+ --------------------------------------------------------------------------=
+--------------------------------------------------------------------------
+=20
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--nuzjBSR3N8Zosn2Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0ldpgAKCRD2uYlJVVFO
+o51wAQDygf3rDiQGj/G3/lq6CeZQlyPUhwNtm2mmc2lNlrve0QD/cAljpqNnnPtK
+WUvHdL90TLML7Na4fSDiq+671IZ0TAI=
+=33JA
+-----END PGP SIGNATURE-----
+
+--nuzjBSR3N8Zosn2Q--
