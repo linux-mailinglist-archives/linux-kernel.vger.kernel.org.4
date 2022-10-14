@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E695FF4EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14215FF4EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJNU5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S229576AbiJNU60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJNU5U (ORCPT
+        with ESMTP id S229498AbiJNU6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:57:20 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0031C493A;
-        Fri, 14 Oct 2022 13:57:19 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id fy4so12991269ejc.5;
-        Fri, 14 Oct 2022 13:57:19 -0700 (PDT)
+        Fri, 14 Oct 2022 16:58:22 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B8B44AC
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:58:21 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id z20so5802570plb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gTPmzPxOnY51QoZSyHNdoQWICRe1EvMKuBtV8mL2WRk=;
-        b=Rq81klq9oTpXEBBWyMNDfG0ST2gxY3NXqahkyIdk00VLzheWDxTeNU9H3I7mh0I8Z5
-         YdditzDGZSdpJbPTDFRtca9Bvxdt10LNDEI4sTIy/tQFZFaVMm3PXrMp7pL+ySvijDWa
-         cxVsH9XsOsGMAXYlf4djn0pZH+DanJt8Y+Izue3V/F/SQn/hg276bQdJU0WK0SoJlWQV
-         Isy0wMErCkOBB5zyXx5EYNXlBbPl6tZslV2wlD8//6TfI+o25VArgYBAmHbM1ChYtc5s
-         CvTUjQ0wBahU4W2C7lW6jxqYaI2Lep3b8niCtNwlOhhOLAejvtGwxG2SmkOqQMocsR9u
-         fBEg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=huPp57ub9lRRha6PEidm00aaAsQprniPiZAF3tUi1Ug=;
+        b=NJ4dkUgM0+QHetFSzyitOuTnmYkKVFwGLKGbOMCR2HPUhjWHUKbyVpmskF7fEGl0/u
+         oBsGZDH4Sk5/XX+CRkq3IsN7cWzkr1gZD9ZPzIYXW8XnupXoicQAaq0323Rz633R57bR
+         PZ5Co7E84ouPZWtTKqKPXfgkWYRoh0TDNoVz+VfP1HPr9HCeXN3vk58HWQduPqID4Q/2
+         uaasNt0Om51jXvE5+QlYSU8xkDpzYLdTbuY9Yz78Tt496NrC+ZIG9Cb9Xum/183Xzvrg
+         FuE0ITSv2c9BgQRl6bzTASyUBqEvycTvUPETDU/+Cr4mgy+N4phqjucd7KD5SVscTgsG
+         cVeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gTPmzPxOnY51QoZSyHNdoQWICRe1EvMKuBtV8mL2WRk=;
-        b=GPhQGF31ZhK4wejzk7hmkDwVqYlGP33akcOAFg/lKfKy9fvA4R+q+VND2LZyPaNO+I
-         w0wjJcwNQ2YOJeK9GIJt7NIhdxVtBGiwOXSvU5qxOZXyDJT5LSXzD0mbCM+8GCUH6NPY
-         7HxwB+VehLsuXhLCLf1uIZ3okICkZI0TbPQy+Pko+HRD5OJEDTrxTW5FensecrvsL7Xo
-         +EqVufaTOQDRHAdNbOgf3R1T28eIDudiq7apRV0dWcvsYNQczcFMc+DxZMguYFRcHKIb
-         sGmUNb4tY9OBD7ovc0bM19422ivWs9zSIEA+vjaSic2mJ944984i69zAtKMq7Ec/p3uX
-         bfJA==
-X-Gm-Message-State: ACrzQf2uw1QL82i5KmC1JDV5yN7wZlqRitiLi7E3wynNXpclLfhk1A1Y
-        +h9waoZYu7G2YCKt0LP0E8U=
-X-Google-Smtp-Source: AMsMyM6aVPeke+Oypo2/VWrATxyqTprNVBWBBdzKUjApbtJmtOWUuouDnbxqNovrwKeWC+LCSg2JtA==
-X-Received: by 2002:a17:906:4795:b0:787:434f:d761 with SMTP id cw21-20020a170906479500b00787434fd761mr4858277ejc.597.1665781038088;
-        Fri, 14 Oct 2022 13:57:18 -0700 (PDT)
-Received: from [192.168.3.3] (p4fd591a2.dip0.t-ipconnect.de. [79.213.145.162])
-        by smtp.googlemail.com with ESMTPSA id p4-20020a056402074400b0045bccd8ab83sm2468909edy.1.2022.10.14.13.57.17
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=huPp57ub9lRRha6PEidm00aaAsQprniPiZAF3tUi1Ug=;
+        b=2wSWyqrsJIPA/ZCwe/NFmeMDCKW2qJa/zI5bwX6IWVHjqczogZav/8d2xUJpDEMj0F
+         tiXuBuTuG+xsDSQhA8R5V9VRJPjfi06QDZFhCYiX3Lx8Y9Kd3hnE5u7rlRXEZZ0iTf9R
+         SZJ1+6+wWwv5U4D6TkEBvwHC6fP+Jc2qLpc1fSFWS8da34wmgPNCJkG0g34l33JGL42K
+         NZunwfLsbfYTcKlURzZg4QvMp7OfQNdiUaXPL0EdxSDbyItD9p3bxBE+ySifCma82xCb
+         deKdVS/1kMytRshc/L9D3+LiTmRv5Vuq7+oQihKlbVc0AYiQ+UxByzjAwwFz16zUU8By
+         A2bQ==
+X-Gm-Message-State: ACrzQf1LGSBaz0noomF3Mkoka/HqIBdgpt1VMwdGLtzCvXZg9rSiJY8/
+        lVtnl6Z+QQDzDH/eVfpatEM=
+X-Google-Smtp-Source: AMsMyM7EzaJLedNnQbiGc6n6Dyc4wWrCyXSHx0ym9WC6w4H2Lf6l352d9OjcakaXBrpfReUXh58+qA==
+X-Received: by 2002:a17:903:2686:b0:17e:f177:3ec with SMTP id jf6-20020a170903268600b0017ef17703ecmr7269376plb.71.1665781100579;
+        Fri, 14 Oct 2022 13:58:20 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z1-20020aa79481000000b00560af825c13sm2234598pfk.91.2022.10.14.13.58.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 13:57:17 -0700 (PDT)
-Message-ID: <710292d355b7b0872f178206468769a859755ce4.camel@gmail.com>
-Subject: Re: [PATCH v2 1/2] scsi: ufs: core: Remove unnecessary if statement
-From:   Bean Huo <huobean@gmail.com>
-To:     Bart Van Assche <bvanassche@acm.org>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 14 Oct 2022 22:57:17 +0200
-In-Reply-To: <ffc4250d-7446-40eb-9218-6925f44a69ff@acm.org>
-References: <20221010092937.520013-1-beanhuo@iokpp.de>
-         <20221010092937.520013-2-beanhuo@iokpp.de>
-         <a1cd6719-a743-fc96-e0e7-364a52b62952@acm.org>
-         <d06a264c4544a23ccccd016c6797d889db526b64.camel@iokpp.de>
-         <ffc4250d-7446-40eb-9218-6925f44a69ff@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Fri, 14 Oct 2022 13:58:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 14 Oct 2022 13:58:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 10/17] mm/slab: kmalloc: pass requests larger than
+ order-1 page to page allocator
+Message-ID: <20221014205818.GA1428667@roeck-us.net>
+References: <20220817101826.236819-1-42.hyeyoo@gmail.com>
+ <20220817101826.236819-11-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817101826.236819-11-42.hyeyoo@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,26 +82,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-14 at 13:41 -0700, Bart Van Assche wrote:
-> On 10/14/22 12:20, Bean Huo wrote:
-> > I am working on the Advanced RPMB, and trying to seperate normal
-> > unit
-> > descriptor and RPMB unit descriptor, will let you know if it is
-> > possible. or if you know the solution, please let me know, thanks.
->=20
-> Hi Bean,
->=20
-> How about setting .is_visible member of struct attribute_group in the
-> UFS
-> driver and letting that callback decide which sysfs attributes are
-> visible
-> depending on the logical unit type?
->=20
-> Thanks,
->=20
-> Bart.
+Hi,
 
-Thanks, it looks like what I expected, I'll verify it further.
+On Wed, Aug 17, 2022 at 07:18:19PM +0900, Hyeonggon Yoo wrote:
+> There is not much benefit for serving large objects in kmalloc().
+> Let's pass large requests to page allocator like SLUB for better
+> maintenance of common code.
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
 
-Kind regards,
-Bean
+This patch results in a WARNING backtrace in all mips and sparc64
+emulations.
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at mm/slab_common.c:729 kmalloc_slab+0xc0/0xdc
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-11990-g9c9155a3509a #1
+Stack : ffffffff 801b2a18 80dd0000 00000004 00000000 00000000 81023cd4 00000000
+        81040000 811a9930 81040000 8104a628 81101833 00000001 81023c78 00000000
+        00000000 00000000 80f5d858 81023b98 00000001 00000023 00000000 ffffffff
+        00000000 00000064 00000002 81040000 81040000 00000001 80f5d858 000002d9
+        00000000 00000000 80000000 80002000 00000000 00000000 00000000 00000000
+        ...
+Call Trace:
+[<8010a2bc>] show_stack+0x38/0x118
+[<80cf5f7c>] dump_stack_lvl+0xac/0x104
+[<80130d7c>] __warn+0xe0/0x224
+[<80cdba5c>] warn_slowpath_fmt+0x64/0xb8
+[<8028c058>] kmalloc_slab+0xc0/0xdc
+
+irq event stamp: 0
+hardirqs last  enabled at (0): [<00000000>] 0x0
+hardirqs last disabled at (0): [<00000000>] 0x0
+softirqs last  enabled at (0): [<00000000>] 0x0
+softirqs last disabled at (0): [<00000000>] 0x0
+---[ end trace 0000000000000000 ]---
+
+Guenter
