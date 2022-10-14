@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E785FE632
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FC65FE638
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiJNAUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 20:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S229764AbiJNAU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 20:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJNAT7 (ORCPT
+        with ESMTP id S229808AbiJNAUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 20:19:59 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAA813F0B;
-        Thu, 13 Oct 2022 17:19:42 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id l127so2716951iof.12;
-        Thu, 13 Oct 2022 17:19:42 -0700 (PDT)
+        Thu, 13 Oct 2022 20:20:07 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2D3CF0;
+        Thu, 13 Oct 2022 17:19:44 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id b79so2572707iof.5;
+        Thu, 13 Oct 2022 17:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YfgeDHldJKIaGyJyuYC9kZ/QabK/ImTm8OEsJ6qFS0o=;
-        b=aPIKMzgB6NoaYto0JY7M6cEv04s4uoxll747l+s3rrQ1ZP3iVQY6mKdbR4UK/WhO6Q
-         zFDFH+JiCuN10nCLAO1N8cz6FbD+2UY6wJXlXpvG2lRXf5djAmm7Hx8o9lYxWo/hto3V
-         u7gQcwYUo3s0eCu+tQu36lHOPPoakCc/nhDiVNm6+547dbYD9OinMk18raK6OcxtZgza
-         i5S4GPGR2BUamhR5HHOCDMLWERHtiFFbobW3QUU9dF1JwgyOZVUkit6Fc/wvADVs8sp6
-         QFWgghjjMzY1oB5VZbMBnjUSWe7gwzSRSKYIp0YSuv2BOzndtGJWX3aTYtNFWAFuAiK1
-         9MLA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GvzwwiUhpN0IgGqzoco3DknAq/naHzFvP2GgIIb57ks=;
+        b=fT0CDjrti9VNBNYxf6KeQcIvamYpWzRXFW+/4sG5T0EseAn6M4GhxgDeS70GDSGyL2
+         xr+intjXMousOYVi/RqrLcaadKwGWVVO/kwjJJGheKDyDzBbc2vLRLGvOzxmeaB/OJl/
+         5GuOPrToj9Gs4zUeNnodTha1uUdIbw//gDz9xsiaUvkCQeYigDA/w8iZL4v/Snb87F7p
+         fIq+z/ULVolYBQ1zp7ireXorU8n/fHjQ4so0veKxP/NSkR+nU52tk6SVr+wsMyDTKn8A
+         w3O9WLqnQXABYzbMp3HGQa68Cdj9SKqgJprVqO3FgWnCLU/TSixx+eIfPWDn/q69CY0F
+         lseQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YfgeDHldJKIaGyJyuYC9kZ/QabK/ImTm8OEsJ6qFS0o=;
-        b=RsxQwV+QE7o4QTiXSPb9RbtbpaAeRsAVth8Of1uAKbZuBTv1We3EB9+nfjMgfhhol0
-         10KM9hAz86RFP359G8Jnlaata+AmCUR38gLWh9WKxNUeezilgjg0iVGMGiQyCeJRtoem
-         4ZgBdBGY1p64FYvbrkHT9CuSR4CoHcIw1qdSw87Ph1P6kBd/OKZtbkPcDrwd5n4ApOw3
-         yraoOw3uzMLdFqtIi5teuJLBB63Kw1KZ0iT5aF2nRklqWMUyP3HLsuBLu9UplfyIwYrv
-         MlAjkxCKTt2mgi5SEMLKlZUWS6/LnENBpu5xuyG0GjSvZCbfn9NaM1yBuBbkDvKB6SSN
-         77qQ==
-X-Gm-Message-State: ACrzQf3d+hyDO//IjfE2dKEq1/syzGoV3F6yqMYrzNLpqJhRzjEFo/li
-        oMCdOaJ/qm/ntmjTaBrCga0ypw8mtI59Tw==
-X-Google-Smtp-Source: AMsMyM7ZVf8gntYC9p76yImA3xbiGj1OFGQZpFzMdTZXI8Oy3h87wPBSpKtQ7PU0LeSajwZsc/LWfw==
-X-Received: by 2002:a05:6602:3c7:b0:6a4:334d:3344 with SMTP id g7-20020a05660203c700b006a4334d3344mr1087894iov.21.1665706781353;
-        Thu, 13 Oct 2022 17:19:41 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GvzwwiUhpN0IgGqzoco3DknAq/naHzFvP2GgIIb57ks=;
+        b=TSsEguojBiLkH3hbIBXetGAVqM8suRj64x6//mIUDfpyN1tribdBb+gnWF68IFsZlQ
+         P60L35QjeDUuKnr23ccguNDQ3fjbhKJgRdumKn8jEiHavWdj7orp1ulWbSGK3Z+ByO+O
+         MAHfdYWxahSuuwiAJ3ByVxQE3rTboB9IlPL82n8jX1fwr1Tp4BWHaD57Tzrpc/uiwWnd
+         64f1TjjklVqgNSxDbC+C6p2tWK+3sLXAAoTOcRcZi6RSDAgPcUHdjL1A/5zDkSqAHVTD
+         ZEi321ODm/LY9qJJDH1m0VmLlRREagXdTcuD/6kcBgdHomwVFKEx+RuXQitQr7qegcA8
+         7Bcg==
+X-Gm-Message-State: ACrzQf3wAXqKcpx+HVbPUbtdg4f6AbwyfP3su/oAiC0i4SWLYEUZRVLe
+        LuLONs4MKghzjE75owNcDRDUAmQzvKIBFg==
+X-Google-Smtp-Source: AMsMyM5/JluiQmrNNrSDMHqIGpscBpnvnMMzWsfkNpDxvPO2y5ViGCULH9V9bfUI6884KyWk41A0Gg==
+X-Received: by 2002:a02:a487:0:b0:363:fc40:edf5 with SMTP id d7-20020a02a487000000b00363fc40edf5mr1377509jam.233.1665706783323;
+        Thu, 13 Oct 2022 17:19:43 -0700 (PDT)
 Received: from localhost ([2607:fea8:a2e2:2d00::3fc2])
-        by smtp.gmail.com with UTF8SMTPSA id j20-20020a02cc74000000b0035672327fe5sm520116jaq.149.2022.10.13.17.19.40
+        by smtp.gmail.com with UTF8SMTPSA id z6-20020a92cb86000000b002f5024d8543sm381784ilo.38.2022.10.13.17.19.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 17:19:40 -0700 (PDT)
+        Thu, 13 Oct 2022 17:19:42 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     Andy Gross <agross@kernel.org>,
@@ -60,10 +61,12 @@ Cc:     Andy Gross <agross@kernel.org>,
         Richard Acayan <mailingradian@gmail.com>,
         Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 0/3] SDM670 Pin Control Driver
-Date:   Thu, 13 Oct 2022 20:19:31 -0400
-Message-Id: <20221014001934.4995-1-mailingradian@gmail.com>
+Subject: [PATCH v10 1/3] dt-bindings: pinctrl: qcom: add sdm670 pinctrl
+Date:   Thu, 13 Oct 2022 20:19:32 -0400
+Message-Id: <20221014001934.4995-2-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221014001934.4995-1-mailingradian@gmail.com>
+References: <20221014001934.4995-1-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,80 +79,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v9:
- - add arm64 kconfig check (3/3):
-   https://lore.kernel.org/r/20220925112103.148836-1-krzysztof.kozlowski@linaro.org
+There is a new driver for the Snapdragon 670 TLMM (Top-Level Mode
+Multiplexer). Document it.
 
-Changes since v8:
- - change dt schema description (1/3)
- - change comment (2/3)
- - remove reference to generic pinctrl (1/3)
- - change to double quotes (1/3)
+Adapted from qcom,sm6350-pinctrl.yaml.
 
-Changes since v7:
- - remove complement_fw_reserved_gpios from patch 3
-
-Changes since v6:
- - remove bitmap_fill() call completely (original commit was 4c0efbfb2669
-   ("pinctrl: msm: Add ability for drivers to supply a reserved GPIO list"),
-   original author CC'd)
- - group some entries in pingroup arrays for less lines
- - accumulate review tags
-
-Changes since v5:
- - remove function requirement in schema
- - change "-state$" regex to double quotes in schema
- - drop quotes from qcom-tlmm-state ref in dt schema
-
-Changes since v4:
- - accumulate review tag
- - use --cover-letter
- - this is effectively a resend
-
-Changes since v3:
- - constrain gpio-reserved-ranges to 1-75 items
- - proper indentation in dt-bindings example (actually tagged this time
-   instead of an outdated commit)
- - remove unnecessary commit reference
- - rename complement_fw_reserved_gpios -> complement_fw_gpio_ranges
-
-Changes since v2:
- - remove quotes from pinctrl.yaml# in dt-bindings
- - constrain gpio-reserved-ranges to 1-76 items (includes ufs_reset)
- - indentation in dt-bindings example
- - cite downstream kernel source
- - remove MODULE_AUTHOR (most imported pinctrl drivers don't have this)
-
-Changes since v1:
- - add a field in msm_pinctrl_soc_data to accomodate the needs of the
-   driver and device dts
- - apply changes made to existing tlmm dt documentation
- - add reserved gpios array
- - rename device tree compat string to qcom,sdm670-tlmm
- - remove dependency on ACPI
- - move MODULE_DEVICE_TABLE macro call up
- - add missing pins (fixes most of the debugfs problems)
- - move qup0_pins down
- - add whitespace between UFS_RESET macro and pins array
-
-This patch series adds the driver for the Qualcomm Snapdragon 670 TLMM
-(Top-Level Mode Multiplexer) and introduces a new field so that SDM670-
-related device trees can reserve their own gpios.
-
-Richard Acayan (3):
-  dt-bindings: pinctrl: qcom: add sdm670 pinctrl
-  pinctrl: qcom: do not reinitialize gpio valid mask
-  pinctrl: qcom: add sdm670 pinctrl
-
- .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    |  127 ++
- drivers/pinctrl/qcom/Kconfig                  |   10 +
- drivers/pinctrl/qcom/Makefile                 |    1 +
- drivers/pinctrl/qcom/pinctrl-msm.c            |    3 +-
- drivers/pinctrl/qcom/pinctrl-sdm670.c         | 1345 +++++++++++++++++
- 5 files changed, 1484 insertions(+), 2 deletions(-)
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+---
+ .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    | 127 ++++++++++++++++++
+ 1 file changed, 127 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
- create mode 100644 drivers/pinctrl/qcom/pinctrl-sdm670.c
 
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+new file mode 100644
+index 000000000000..7585117c0f06
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+@@ -0,0 +1,127 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,sdm670-tlmm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Technologies, Inc. SDM670 TLMM block
++
++maintainers:
++  - Richard Acayan <mailingradian@gmail.com>
++
++description: |
++  The Top Level Mode Multiplexer (TLMM) block found in the SDM670 platform.
++
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
++
++properties:
++  compatible:
++    const: qcom,sdm670-tlmm
++
++  reg:
++    maxItems: 1
++
++  interrupts: true
++  interrupt-controller: true
++  "#interrupt-cells": true
++  gpio-controller: true
++  gpio-reserved-ranges:
++    minItems: 1
++    maxItems: 75
++
++  "#gpio-cells": true
++  gpio-ranges: true
++  wakeup-parent: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-sdm670-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-sdm670-tlmm-state"
++        additionalProperties: false
++
++$defs:
++  qcom-sdm670-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-4][0-9])$"
++            - enum: [ ufs_reset, sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data,
++                      sdc2_clk, sdc2_cmd, sdc2_data ]
++        minItems: 1
++        maxItems: 36
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
++
++        enum: [ adsp_ext, agera_pll, atest_char, atest_tsens, atest_tsens2, atest_usb1, atest_usb10,
++                atest_usb11, atest_usb12, atest_usb13, atest_usb2, atest_usb20, atest_usb21,
++                atest_usb22, atest_usb23, cam_mclk, cci_async, cci_i2c, cci_timer0, cci_timer1,
++                cci_timer2, cci_timer3, cci_timer4, copy_gp, copy_phase, dbg_out, ddr_bist,
++                ddr_pxi0, ddr_pxi1, ddr_pxi2, ddr_pxi3, edp_hot, edp_lcd, gcc_gp1, gcc_gp2, gcc_gp3,
++                gp_pdm0, gp_pdm1, gp_pdm2, gpio, gps_tx, jitter_bist, ldo_en, ldo_update,
++                lpass_slimbus, m_voc, mdp_vsync, mdp_vsync0, mdp_vsync1, mdp_vsync2, mdp_vsync3,
++                mss_lte, nav_pps, pa_indicator, pci_e0, pci_e1, phase_flag, pll_bist, pll_bypassnl,
++                pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc, qdss_cti, qdss, qlink_enable,
++                qlink_request, qua_mi2s, qup0, qup1, qup10, qup11, qup12, qup13, qup14, qup15, qup2,
++                qup3, qup4, qup5, qup6, qup7, qup8, qup9, qup_l4, qup_l5, qup_l6, sdc4_clk,
++                sdc4_cmd, sdc4_data, sd_write, sec_mi2s, ter_mi2s, tgu_ch0, tgu_ch1, tgu_ch2,
++                tgu_ch3, tsif1_clk, tsif1_data, tsif1_en, tsif1_error, tsif1_sync, tsif2_clk,
++                tsif2_data, tsif2_en, tsif2_error, tsif2_sync, uim1_clk, uim1_data, uim1_present,
++                uim1_reset, uim2_clk, uim2_data, uim2_present, uim2_reset, uim_batt, usb_phy, vfr_1,
++                vsense_trigger, wlan1_adc0, wlan1_adc1, wlan2_adc0, wlan2_adc1, wsa_clk, wsa_data, ]
++
++
++      bias-disable: true
++      bias-pull-down: true
++      bias-pull-up: true
++      drive-strength: true
++      input-enable: true
++      output-high: true
++      output-low: true
++
++    required:
++      - pins
++
++    additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    pinctrl@3400000 {
++        compatible = "qcom,sdm670-tlmm";
++        reg = <0x03400000 0x300000>;
++        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++        gpio-controller;
++        #gpio-cells = <2>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++        gpio-ranges = <&tlmm 0 0 151>;
++
++        qup-i2c9-state {
++            pins = "gpio6", "gpio7";
++            function = "qup9";
++        };
++    };
++...
 -- 
 2.38.0
 
