@@ -2,152 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF7D5FF373
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387A75FF377
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiJNSKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S230084AbiJNSPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiJNSK2 (ORCPT
+        with ESMTP id S229974AbiJNSP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:10:28 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C0F402FB;
-        Fri, 14 Oct 2022 11:10:26 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1326637be6eso6723100fac.13;
-        Fri, 14 Oct 2022 11:10:26 -0700 (PDT)
+        Fri, 14 Oct 2022 14:15:28 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E203387A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:15:27 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id t4-20020a9d7f84000000b00661c3d864f9so2316585otp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KM3d9mUdbDj0z6oafXxyZzutznAV5jWXZ9fQzWHF6Bs=;
+        b=TsKo2S7GdpxCnrWyTu2QEbbgciSN5woqwIPML3g0E6pmL75LsB288Sf+10bV5E1FMd
+         +Cw39hD+tRwMpp7CEfBS80jSkGVcSwaae/dPmihuAxxWq7V7xBbSQfW1nes3ZLh+Mnsr
+         72Y30bhKclxNEcE+iZB8casHWCU81PWTfK/qY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rzfkpk16B1bdFYhVEMVjYdQPtrAb81fMcKTxh0OhDTk=;
-        b=aPxMTRfPfbAkL4g9pNzSSEsezg7ZobkfMYNeFwpSWsjdJwbZ++90U/BUPj1tQfU8EK
-         7Ts6QhB+YjODAleMlqtN16049YP4fHag7qDaRTCuAiI04TleV05GVuqk5PQ0ivo0IhVX
-         FhDkKPtciptmdzH64/RiPnju/3oI4DDGcgVle1K7dXPJ7eF/S5QWKa8QPcSGNZKg6QBQ
-         EsAwkTycOBVsnvXqio2yxow5WsPUI+QMXJr54nvKuOw8JgkhEOTyNj3IpsFjhUlYbDe3
-         hrjOtg78wW+7ZN4CyU0GEvcDVsj4PS4DQxSC6D2Yt/kw0NtzPM6a3IyeJStHi34k8RTy
-         biAg==
-X-Gm-Message-State: ACrzQf2pYDke90KmcbCrbQX0WpjYmKdYg40FfJq7tUduB6khhyRZ1ytR
-        pCD2aRQpJVMaAaiEEqmzOjfS05RTBl9ZupovpA4=
-X-Google-Smtp-Source: AMsMyM7eJfqYeu4vWre+h5nwEqQz2rgPPsbtBBe+VSosjSSvaP6iHmmSxFJ8EkclsLMMD9W4oxr55KZxma1fUWYX+eg=
-X-Received: by 2002:a05:6870:4184:b0:136:5e73:b40e with SMTP id
- y4-20020a056870418400b001365e73b40emr3347363oac.209.1665771025964; Fri, 14
- Oct 2022 11:10:25 -0700 (PDT)
+        bh=KM3d9mUdbDj0z6oafXxyZzutznAV5jWXZ9fQzWHF6Bs=;
+        b=E27NtvHLp7VAXidaD4TsnwVLbC14jzVT3ZCW1g/ebYByjEafbKWZAFhdKeJa4c2CEV
+         VcbcDOgabkg/JWuSBM31JrYdvE1JMhT4296bcsWDotfHU6TuWDnQs1ZYulOYBMDIiO2d
+         rYvqHOMernALq7Ru2BY5K1mCJFDtNUSBBQc3Hpa2JCuuHL2jKGoCLvrg2zaKHEJjR5J6
+         Y0L8KFkXCXo4abncZoqP/dwcvBPxntfYcBZz2bRbg4iUx5u8NGPe/iK8+2aMHPWihXHt
+         G8YWF1H76Rw9yOVcbzJDC5sTeFjzQulCicw6DbrAyeVqthAVrIc6aMO9XoGyrWaOTrsK
+         2imw==
+X-Gm-Message-State: ACrzQf3+hSR37DUFV0kATbkCpe/72EmKodXicABKhnT5i/o3DozxCQLn
+        bdnMuO95CYPbdTDLQKdRn+c2Z0wf9gs0hg==
+X-Google-Smtp-Source: AMsMyM74Cg31oDHr083nRel73yy2eGI54KkYXDU22DJbH4LKkBWQ9N/EsGJbKUbtgaMzwMfCKHVk/g==
+X-Received: by 2002:a9d:191:0:b0:661:a5db:56d1 with SMTP id e17-20020a9d0191000000b00661a5db56d1mr3136048ote.125.1665771326541;
+        Fri, 14 Oct 2022 11:15:26 -0700 (PDT)
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com. [209.85.160.53])
+        by smtp.gmail.com with ESMTPSA id 1-20020a4a1d01000000b0047634c1c419sm1242538oog.12.2022.10.14.11.15.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 11:15:23 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-136b5dd6655so6800093fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:15:22 -0700 (PDT)
+X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
+ e9-20020a056870c0c900b00127c4df5b50mr3564382oad.126.1665771322642; Fri, 14
+ Oct 2022 11:15:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221014061550.463644-1-namhyung@kernel.org> <Y0kIB7hxlnlEYipZ@krava>
-In-Reply-To: <Y0kIB7hxlnlEYipZ@krava>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 14 Oct 2022 11:10:14 -0700
-Message-ID: <CAM9d7ch_CV3mpno+6D23UGaXzL9zhmzmt513RzbWq8q_0DhU4A@mail.gmail.com>
-Subject: Re: [PATCHSET 00/19] perf stat: Cleanup counter aggregation (v2)
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Michael Petlan <mpetlan@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+References: <20221014152102.1755050-1-nathan@kernel.org>
+In-Reply-To: <20221014152102.1755050-1-nathan@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 14 Oct 2022 11:15:06 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg8LT6iN7ZFE_6Yfydne9gWYJaJzD1ntSuGhMv8SkKCcw@mail.gmail.com>
+Message-ID: <CAHk-=wg8LT6iN7ZFE_6Yfydne9gWYJaJzD1ntSuGhMv8SkKCcw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Fix build breakage with CONFIG_DEBUG_FS=n
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Yunxiang Li <Yunxiang.Li@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri and Michael,
-
-On Thu, Oct 13, 2022 at 11:56 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+On Fri, Oct 14, 2022 at 8:22 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> On Thu, Oct 13, 2022 at 11:15:31PM -0700, Namhyung Kim wrote:
-> > Hello,
-> >
-> > Current perf stat code is somewhat hard to follow since it handles
-> > many combinations of PMUs/events for given display and aggregation
-> > options.  This is my attempt to clean it up a little. ;-)
-> >
-> > changes in v2)
-> >  * fix a segfault in perf stat report for per-process record  (Jiri)
-> >  * fix metric only display  (Jiri)
-> >  * add evsel__reset_aggr_stat  (ian)
-> >  * add more comments  (Ian)
-> >  * add Acked-by from Ian
-> >
-> > My first concern is that aggregation and display routines are intermixed
-> > and processed differently depends on the aggregation mode.  I'd like to
-> > separate them apart and make the logic clearer.
-> >
-> > To do that, I added struct perf_stat_aggr to save the aggregated counter
-> > values and other info.  It'll be allocated and processed according to
-> > the aggr_mode and display logic will use it.
-> >
-> > I've tested the following combination.
-> >
-> >   $ cat test-matrix.sh
-> >   #!/bin/sh
-> >
-> >   set -e
-> >
-> >   yes > /dev/null &
-> >   TARGET=$!
-> >
-> >   ./perf stat true
-> >   ./perf stat -a true
-> >   ./perf stat -C0 true
-> >   ./perf stat -p $TARGET true
-> >   ./perf stat -t $TARGET true
-> >
-> >   ./perf stat -a -A true
-> >   ./perf stat -a --per-node true
-> >   ./perf stat -a --per-socket true
-> >   ./perf stat -a --per-die true
-> >   ./perf stat -a --per-core true
-> >   ./perf stat -a --per-thread true
-> >
-> >   ./perf stat -a -I 500 sleep 1
-> >   ./perf stat -a -I 500 --summary sleep 1
-> >   ./perf stat -a -I 500 --per-socket sleep 1
-> >   ./perf stat -a -I 500 --summary --per-socket sleep 1
-> >
-> >   ./perf stat -a --metric-only true
-> >   ./perf stat -a --metric-only --per-socket true
-> >   ./perf stat -a --metric-only -I 500 sleep 1
-> >   ./perf stat -a --metric-only -I 500 --per-socket sleep 1
-> >
-> >   ./perf stat record true && ./perf stat report
-> >   ./perf stat record -p $TARGET true && ./perf stat report
-> >   ./perf stat record -a true && ./perf stat report
-> >   ./perf stat record -a --per-core true && ./perf stat report
-> >   ./perf stat record -a --per-core --metric-only true && ./perf stat report
-> >   ./perf stat record -a -I 500 sleep 1 && ./perf stat report
-> >   ./perf stat record -a -I 500 --per-core sleep 1 && ./perf stat report
-> >   ./perf stat record -a -I 500 --per-core --metric-only sleep 1 && ./perf stat report
-> >
-> >   ./perf stat -a -A -e cpu/event=cpu-cycles,percore/ true
-> >   ./perf stat -a -A -e cpu/event=cpu-cycles,percore/ --percore-show-thread true
-> >
-> >   kill $TARGET
-> >
-> > The code is available at 'perf/stat-aggr-v2' branch in
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
->
-> Michael,
-> ay chance you could run your test suite on top of this change?
+> After commit 8799c0be89eb ("drm/amd/display: Fix vblank refcount in vrr
+> transition"), a build with CONFIG_DEBUG_FS=n is broken due to a
+> misplaced brace, along the lines of:
 
-I've noticed there's an issue with cgroups.  Will send a fix soon.
+Thanks, applied.
 
-Thanks,
-Namhyung
+              Linus
