@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BAF5FE915
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E525FE916
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiJNGtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S229891AbiJNGta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJNGtG (ORCPT
+        with ESMTP id S229649AbiJNGt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:49:06 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F281849B0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:49:06 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id m128so1825320vka.12
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=eLtNIenXMfog8migQ0xFnwlGco5uZQkGjiJv0H+pOCdf/bjtC006C1RBOr/en7uBLa
-         kB4u73ujB8f/2Tjpj6+YUHHDh2HASRyXyPkUnQkTsxIlk7EUIt7J/GX3LAIoa1TraXys
-         OqsyD0Jh7MlndW3uNUDcf8KbtwImKVQHMJ9fmVDKihhNQqssWPzCLGQc1gUMeXZkhSkj
-         W+jiuyFrab9j5ALRsNH68zDibK3U4h2qNDGXYIchJi8gR3e+PfnoJR80flVg9aLWJMoS
-         24gAy36nyarH52vC+k7QIQw/9BQuXCYHJs24svPRL82447eLxo7ic34WMzissLz5f0BZ
-         37/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=4huVkso5H99CXP9zMIKFR/WfJ1sBMFjQtxl7UqtLKH0Z2UPVcdsu1Eal6nruDsJD+w
-         7LoMLwG0JTmcBm52tu/B6hUMMAdTBaBS3o0CN/fDFleDM1zpvRax2YnUDp1wC6Xo2n4r
-         Itt6atQnHCgB88ivB6jZhFP6y2Kv0WJg1WyskuC7NUSQN5X4/ykFXSZ8TucnlwwLHS8L
-         D67RPxReoO/fNXBfxdK+yXASnRGz9xNqkhf6sCn5wAv92CGVubM2mqHMELrr+47WBvfH
-         gpNUiCfJneFkpuTj7DvhS/aWbN7JPaALskmfez8LeZxTCk9XoT9HHSZ5J/oHYhFy3Ksh
-         229A==
-X-Gm-Message-State: ACrzQf0I+1CGnydKy2Gg4d4NwzjKQKXXwEcjmumPEUA5YdT5r4MnfuI5
-        V6omsLUOKlwN9vBal4Sx/5TOZrovKmAp0LiLAFE=
-X-Google-Smtp-Source: AMsMyM4H4ovBz4VX+XD4cbGlGC0u7qbId72zBRZ4qLFzXc8N3lOEDGTNa3OnIomzUjydUMpqdm3a60+swmJsESSUD8s=
-X-Received: by 2002:a1f:26cf:0:b0:3ab:bb9d:48fc with SMTP id
- m198-20020a1f26cf000000b003abbb9d48fcmr1813050vkm.22.1665730144531; Thu, 13
- Oct 2022 23:49:04 -0700 (PDT)
+        Fri, 14 Oct 2022 02:49:27 -0400
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2762F1849B0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:49:25 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VS6n2Py_1665730157;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VS6n2Py_1665730157)
+          by smtp.aliyun-inc.com;
+          Fri, 14 Oct 2022 14:49:22 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH] erofs: fix up inplace decompression success rate
+Date:   Fri, 14 Oct 2022 14:49:15 +0800
+Message-Id: <20221014064915.8103-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-Received: by 2002:a05:6124:1f27:b0:31f:3a2c:27d8 with HTTP; Thu, 13 Oct 2022
- 23:49:04 -0700 (PDT)
-Reply-To: seyba_daniel@yahoo.com
-From:   Seyba Daniel <nadineouedraogo646@gmail.com>
-Date:   Fri, 14 Oct 2022 08:49:04 +0200
-Message-ID: <CACGeQuv0-xatAUiD8X0Q1Bh-4JY-F3HJ03Yso1gm0-iO0ay_ag@mail.gmail.com>
-Subject: Seyba Daniel
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Partial decompression should be checked after updating length.
+It's a new regression when introducing multi-reference pclusters.
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+Fixes: 2bfab9c0edac ("erofs: record the longest decompressed size in this round")
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/zdata.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index cce56dde135c..2417d7b73622 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -812,15 +812,14 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+ 	++spiltted;
+ 	if (fe->pcl->pageofs_out != (map->m_la & ~PAGE_MASK))
+ 		fe->pcl->multibases = true;
+-
+-	if ((map->m_flags & EROFS_MAP_FULL_MAPPED) &&
+-	    !(map->m_flags & EROFS_MAP_PARTIAL_REF) &&
+-	    fe->pcl->length == map->m_llen)
+-		fe->pcl->partial = false;
+ 	if (fe->pcl->length < offset + end - map->m_la) {
+ 		fe->pcl->length = offset + end - map->m_la;
+ 		fe->pcl->pageofs_out = map->m_la & ~PAGE_MASK;
+ 	}
++	if ((map->m_flags & EROFS_MAP_FULL_MAPPED) &&
++	    !(map->m_flags & EROFS_MAP_PARTIAL_REF) &&
++	    fe->pcl->length == map->m_llen)
++		fe->pcl->partial = false;
+ next_part:
+ 	/* shorten the remaining extent to update progress */
+ 	map->m_llen = offset + cur - map->m_la;
+-- 
+2.24.4
 
-So please confirm interest by responding back.
-
-My dearest regards
-
-Seyba Daniel
