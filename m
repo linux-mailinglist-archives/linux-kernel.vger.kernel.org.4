@@ -2,177 +2,501 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF2A5FE64F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAA85FE654
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiJNAZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 20:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S229646AbiJNA3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 20:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJNAY7 (ORCPT
+        with ESMTP id S229519AbiJNA3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 20:24:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493FD4A139
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 17:24:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4190861990
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:24:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB86C433D6;
-        Fri, 14 Oct 2022 00:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665707095;
-        bh=/23VSTNLYqmIWscuKhGhxVVaLvk1lahcvAz0t7UyFSQ=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=DOmniJWJR564x1ZOxEyQENlrjEcyVUDUE4aV0qeDC4E7W1NPd4Smk1M72wHSNjNb+
-         zfkmxfm626kykQNeN3zmlDfxc1nn9PYzDBwWDu16GPJDZl3IB23VFZwYiZN+CWMZIs
-         JrnlTrylfmy8u+j0M/2PiOqzwlFjxUjyQanrsOllIXpYGJD1T+pEaHha+8dk+8UToW
-         S87QUA8FlhpS7hgs6aG2joppsT692IGOjONOonPvzcbhLY13BvqeQsQu2Z3AmpDWzF
-         h/R/EXWcjFTgFsBaytsP9t0IsPHU0UgnbHvDTBiuulnrYyOPzRxrQ/G5F0pV6fwD0q
-         UzxkM0aw/O00w==
-Date:   Thu, 13 Oct 2022 17:24:53 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>
-Subject: Re: [PATCH V2 2/2] xen/virtio: Convert PAGE_SIZE/PAGE_SHIFT/PFN_UP
- to Xen counterparts
-In-Reply-To: <20221008151013.2537826-3-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2210131724440.3690179@ubuntu-linux-20-04-desktop>
-References: <20221008151013.2537826-1-olekstysh@gmail.com> <20221008151013.2537826-3-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 13 Oct 2022 20:29:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E9C38A29
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 17:29:32 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id a67so4763984edf.12
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 17:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8GV9617vBrf+UC3bV3cyJVifMG9hCF2QtrHm1U7am+0=;
+        b=FK6Lz95b9zAyFw0nbrfTIgxGscONNcex57FhIQD3va4cUDoZy/mhLSTfvky+qIiTv/
+         1HAHLpPSl7Ugk4lDw2bPEWVfp02RQrZB+6sEKT2u0DtzbtL8A3tuoUkxKRdwS6nWz5y2
+         NwX9009nQaHH94eSjLxuU+q1Ug8JtKMSsEMGuht90PgOx3g6BnDkaO+4yfqc0AWjR1lm
+         I61YZy/yKGaDCfvyG9BjDxoNqWKKMuH8VecxxMxIgimsQpcipeznUSXAeFv7o+gF8BNL
+         0yLxPFn801/jrwYUmckQIsYRbheFbjVJNgQjyU3hkLgv3eInwTM6wFIMWD2F5RD/OdUl
+         Ly6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8GV9617vBrf+UC3bV3cyJVifMG9hCF2QtrHm1U7am+0=;
+        b=5I+G+8NRGCVFRylWTbLlrP4/HD3DWKVCfRFKV98Mc0SjDPfcQhSGuxDRhpFMm4smCH
+         MhW0YdgyXeXxOh7g8Qzv7jwROL3q1S3UP+EwchTIPiqx5bGchN+YL2dPgWELvnVX/5Mu
+         bkGzcxYFmdcyZYyUnSUDm6kV7/Ft9QyDHIq3/paAhr4f6nIXv4XMxPVLtFctEeXA4iLT
+         PSx9VN7cVjsDaiX7e5suBx/Cenky26J7Uj6YOxaVwRREcbHb73Awq2A5XlY7z3AhfAhH
+         MPJdAG0x46szsB0OBINKUbEQ4/NG9Q4H6Q5gKdqWr+HCj0924iH1ijtiokhqbYYGm/oH
+         xb5Q==
+X-Gm-Message-State: ACrzQf3E+/VUyDVCbVDt3THqh3+B7EYgenSO4Z03c+x3SUIU9EZmkKwN
+        FfezohKc3dlq8+8IIed8lR1lUMfOAkOsGmOxxXg7qk5GOQQ/hg==
+X-Google-Smtp-Source: AMsMyM6nnNnSi8m8abM+8f1NluPrhdKA1g0+HUlTNvoM0uJ5zqmTEns92c9J+EC92oBZNYhzERXBtC7lLiQT6u7ud1A=
+X-Received: by 2002:a05:6402:26c5:b0:45d:21fc:19e4 with SMTP id
+ x5-20020a05640226c500b0045d21fc19e4mr298217edd.117.1665707370875; Thu, 13 Oct
+ 2022 17:29:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 14 Oct 2022 10:29:19 +1000
+Message-ID: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.1-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Oct 2022, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> Currently, a grant ref is always based on the Xen page granularity
-> (4KB), and guest commonly uses the same page granularity.
-> But the guest may use a different page granularity (i.e 64KB).
-> So adopt the code to be able to deal with it.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Hi Linus,
 
-Acked-by: Stefano Stabellini <sstabellini@kernel.org>
+Round of fixes for the merge window stuff, bunch of amdgpu and i915
+changes, this should have the gcc11 warning fix, amongst other
+changes.
 
+Dave.
 
-> ---
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: Xenia Ragiadakou <burzalodowa@gmail.com>
-> 
-> Changes V1 -> V2:
->    - update commit description
->    - rebase
->    - use xen_offset_in_page() in xen_grant_dma_map(unmap)_page()
-> 
-> Previous discussion is at:
-> https://lore.kernel.org/xen-devel/20221006120912.1948459-1-olekstysh@gmail.com/
-> ---
->  drivers/xen/grant-dma-ops.c | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index 1d018e3a68a0..aff0f95ed954 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -31,12 +31,12 @@ static DEFINE_XARRAY_FLAGS(xen_grant_dma_devices, XA_FLAGS_LOCK_IRQ);
->  
->  static inline dma_addr_t grant_to_dma(grant_ref_t grant)
->  {
-> -	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
-> +	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << XEN_PAGE_SHIFT);
->  }
->  
->  static inline grant_ref_t dma_to_grant(dma_addr_t dma)
->  {
-> -	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> PAGE_SHIFT);
-> +	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> XEN_PAGE_SHIFT);
->  }
->  
->  static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
-> @@ -79,7 +79,7 @@ static void *xen_grant_dma_alloc(struct device *dev, size_t size,
->  				 unsigned long attrs)
->  {
->  	struct xen_grant_dma_data *data;
-> -	unsigned int i, n_pages = PFN_UP(size);
-> +	unsigned int i, n_pages = XEN_PFN_UP(size);
->  	unsigned long pfn;
->  	grant_ref_t grant;
->  	void *ret;
-> @@ -91,14 +91,14 @@ static void *xen_grant_dma_alloc(struct device *dev, size_t size,
->  	if (unlikely(data->broken))
->  		return NULL;
->  
-> -	ret = alloc_pages_exact(n_pages * PAGE_SIZE, gfp);
-> +	ret = alloc_pages_exact(n_pages * XEN_PAGE_SIZE, gfp);
->  	if (!ret)
->  		return NULL;
->  
->  	pfn = virt_to_pfn(ret);
->  
->  	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
-> -		free_pages_exact(ret, n_pages * PAGE_SIZE);
-> +		free_pages_exact(ret, n_pages * XEN_PAGE_SIZE);
->  		return NULL;
->  	}
->  
-> @@ -116,7 +116,7 @@ static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
->  			       dma_addr_t dma_handle, unsigned long attrs)
->  {
->  	struct xen_grant_dma_data *data;
-> -	unsigned int i, n_pages = PFN_UP(size);
-> +	unsigned int i, n_pages = XEN_PFN_UP(size);
->  	grant_ref_t grant;
->  
->  	data = find_xen_grant_dma_data(dev);
-> @@ -138,7 +138,7 @@ static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
->  
->  	gnttab_free_grant_reference_seq(grant, n_pages);
->  
-> -	free_pages_exact(vaddr, n_pages * PAGE_SIZE);
-> +	free_pages_exact(vaddr, n_pages * XEN_PAGE_SIZE);
->  }
->  
->  static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
-> @@ -168,9 +168,9 @@ static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
->  					 unsigned long attrs)
->  {
->  	struct xen_grant_dma_data *data;
-> -	unsigned long dma_offset = offset_in_page(offset),
-> -			pfn_offset = PFN_DOWN(offset);
-> -	unsigned int i, n_pages = PFN_UP(dma_offset + size);
-> +	unsigned long dma_offset = xen_offset_in_page(offset),
-> +			pfn_offset = XEN_PFN_DOWN(offset);
-> +	unsigned int i, n_pages = XEN_PFN_UP(dma_offset + size);
->  	grant_ref_t grant;
->  	dma_addr_t dma_handle;
->  
-> @@ -203,8 +203,8 @@ static void xen_grant_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
->  				     unsigned long attrs)
->  {
->  	struct xen_grant_dma_data *data;
-> -	unsigned long offset = dma_handle & (PAGE_SIZE - 1);
-> -	unsigned int i, n_pages = PFN_UP(offset + size);
-> +	unsigned long dma_offset = xen_offset_in_page(dma_handle);
-> +	unsigned int i, n_pages = XEN_PFN_UP(dma_offset + size);
->  	grant_ref_t grant;
->  
->  	if (WARN_ON(dir == DMA_NONE))
-> -- 
-> 2.25.1
-> 
+drm-next-2022-10-14:
+drm fixes for 6.1-rc1
+
+amdgpu:
+- DC mutex fix
+- DC SubVP fixes
+- DCN 3.2.x fixes
+- DCN 3.1.x fixes
+- SDMA 6.x fixes
+- Enable DPIA for 3.1.4
+- VRR fixes
+- VRAM BO swapping fix
+- Revert dirty fb helper change
+- SR-IOV suspend/resume fixes
+- Work around GCC array bounds check fail warning
+- UMC 8.10 fixes
+- Misc fixes and cleanups
+
+i915:
+- Round to closest in g4x+ HDMI clock readout
+- Update MOCS table for EHL
+- Fix PSR_IMR/IIR field handling
+- Fix watermark calculations for gen12+/DG2 modifiers
+- Reject excessive dotclocks early
+- Fix revocation of non-persistent contexts
+- Handle migration for dpt
+- Fix display problems after resume
+- Allow control over the flags when migrating
+- Consider DG2_RC_CCS_CC when migrating buffers
+The following changes since commit bafaf67c42f4b547bf4fb329ac6dcb28b05de15e=
+:
+
+  Revert "drm/sched: Use parent fence instead of finished" (2022-10-07
+12:58:39 +1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-10-14
+
+for you to fetch changes up to fc3523a833c9c109e68209f1ecdd15864373e66a:
+
+  Merge tag 'amd-drm-fixes-6.1-2022-10-12' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next (2022-10-14
+07:47:25 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.1-rc1
+
+amdgpu:
+- DC mutex fix
+- DC SubVP fixes
+- DCN 3.2.x fixes
+- DCN 3.1.x fixes
+- SDMA 6.x fixes
+- Enable DPIA for 3.1.4
+- VRR fixes
+- VRAM BO swapping fix
+- Revert dirty fb helper change
+- SR-IOV suspend/resume fixes
+- Work around GCC array bounds check fail warning
+- UMC 8.10 fixes
+- Misc fixes and cleanups
+
+i915:
+- Round to closest in g4x+ HDMI clock readout
+- Update MOCS table for EHL
+- Fix PSR_IMR/IIR field handling
+- Fix watermark calculations for gen12+/DG2 modifiers
+- Reject excessive dotclocks early
+- Fix revocation of non-persistent contexts
+- Handle migration for dpt
+- Fix display problems after resume
+- Allow control over the flags when migrating
+- Consider DG2_RC_CCS_CC when migrating buffers
+
+----------------------------------------------------------------
+Alex Deucher (7):
+      drm/amdgpu: switch sdma buffer function tear down to a helper
+      drm/amdgpu: fix SDMA suspend/resume on SR-IOV
+      drm/amd/display: make dcn32_split_stream_for_mpc_or_odm static
+      drm/amd/display: fix indentation in dc.c
+      drm/amd/display: make virtual_disable_link_output static
+      drm/amd/display: add a license to cursor_reg_cache.h
+      drm/amd/display: fix transfer function passed to build_coefficients()
+
+Alexey Kodanev (2):
+      drm/amd/pm: vega10_hwmgr: fix potential off-by-one overflow in
+'performance_levels'
+      drm/amd/pm: smu7_hwmgr: fix potential off-by-one overflow in
+'performance_levels'
+
+Alvin Lee (5):
+      drm/amd/display: Only commit SubVP state after pipe programming
+      drm/amd/display: Block SubVP if rotation being used
+      drm/amd/display: Disable GSL when enabling phantom pipe
+      drm/amd/display: For SubVP pipe split case use min transition into MP=
+O
+      drm/amd/display: Fix watermark calculation
+
+Aric Cyr (4):
+      Revert "drm/amd/display: correct hostvm flag"
+      drm/amd/display: Fix vupdate and vline position calculation
+      drm/amd/display: 3.2.206
+      drm/amd/display: 3.2.207
+
+Arunpravin Paneer Selvam (1):
+      drm/amdgpu: Fix VRAM BO swap issue
+
+Aurabindo Pillai (2):
+      drm/amd/display: Do not trigger timing sync for phantom pipes
+      drm/amd/display: Add HUBP surface flip interrupt handler
+
+Bokun Zhang (1):
+      drm/amdgpu: Fix SDMA engine resume issue under SRIOV
+
+Candice Li (2):
+      drm/amdgpu: Update umc v8_10_0 headers
+      drm/amdgpu: Add poison mode query for umc v8_10_0
+
+Charlene Liu (1):
+      drm/amd/display: prevent S4 test from failing
+
+Daniel Gomez (1):
+      drm/amd/display: Fix mutex lock in dcn10
+
+Dave Airlie (3):
+      Merge tag 'drm-intel-next-fixes-2022-10-06-1' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'drm-intel-next-fixes-2022-10-13' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'amd-drm-fixes-6.1-2022-10-12' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next
+
+Dillon Varone (8):
+      drm/amd/display: Program SubVP in dc_commit_state_no_check
+      drm/amd/display: Reorder FCLK P-state switch sequence for DCN32
+      drm/amd/display: Increase compbuf size prior to updating clocks
+      drm/amd/display: Fix merging dynamic ODM+MPO configs on DCN32
+      Revert "drm/amd/display: skip commit minimal transition state"
+      drm/amd/display: Use correct pixel clock to program DTBCLK DTO's
+      drm/amd/display: Acquire FCLK DPM levels on DCN32
+      drm/amd/display: Fix bug preventing FCLK Pstate allow message being s=
+ent
+
+Dmytro Laktyushkin (3):
+      drm/amd/display: fix dcn315 dml detile overestimation
+      drm/amd/display: add dummy pstate workaround to dcn315
+      drm/amd/display: always allow pstate change when no dpps are
+active on dcn315
+
+Dong Chenchen (1):
+      drm/amd/display: Removed unused variable 'sdp_stream_enable'
+
+Eric Bernstein (1):
+      drm/amd/display: Fix disable DSC logic in the DIO code
+
+Fangzhi Zuo (1):
+      drm/amd/display: Validate DSC After Enable All New CRTCs
+
+George Shen (1):
+      drm/amd/display: Add missing SDP registers to DCN32 reglist
+
+Guenter Roeck (1):
+      drm/amd/display: fix array-bounds error in
+dc_stream_remove_writeback() [take 2]
+
+Hamza Mahfooz (1):
+      Revert "drm/amdgpu: use dirty framebuffer helper"
+
+Ian Chen (1):
+      drm/amd/display: Refactor edp ILR caps codes
+
+Iswara Nagulendran (1):
+      drm/amd/display: Allow PSR exit when panel is disconnected
+
+Josip Pavic (1):
+      drm/amd/display: do not compare integers of different widths
+
+Jouni H=C3=B6gander (1):
+      drm/i915/psr: Fix PSR_IMR/IIR field handling
+
+Jun Lei (1):
+      drm/amd/display: Add a helper to map ODM/MPC/Multi-Plane resources
+
+Leo (Hanghong) Ma (1):
+      drm/amd/display: AUX tracing cleanup
+
+Leo Chen (1):
+      drm/amd/display: Add log for LTTPR
+
+Lewis Huang (1):
+      drm/amd/display: Keep OTG on when Z10 is disable
+
+Li Zhong (1):
+      drivers/amd/pm: check the return value of amdgpu_bo_kmap
+
+Martin Leung (3):
+      drm/amd/display: block odd h_total timings from halving pixel rate
+      drm/amd/display: unblock mcm_luts
+      drm/amd/display: zeromem mypipe heap struct before using it
+
+Matthew Auld (3):
+      drm/i915/display: handle migration for dpt
+      drm/i915: allow control over the flags when migrating
+      drm/i915/display: consider DG2_RC_CCS_CC when migrating buffers
+
+Max Tseng (1):
+      drm/amd/display: Use the same cursor info across features
+
+Meenakshikumar Somasundaram (1):
+      drm/amd/display: Display does not light up after S4 resume
+
+Nicholas Kazlauskas (1):
+      drm/amd/display: Update PMFW z-state interface for DCN314
+
+Philip Yang (2):
+      drm/amdgpu: Set vmbo destroy after pt bo is created
+      drm/amdgpu: Correct amdgpu_amdkfd_total_mem_size calculation
+
+Randy Dunlap (1):
+      drm/amd/display: clean up dcn32_fpu.c kernel-doc
+
+Rodrigo Siqueira (14):
+      drm/amd/display: Drop unused code for DCN32/321
+      drm/amd/display: Update DCN321 hook that deals with pipe aquire
+      drm/amd/display: Fix SubVP control flow in the MPO context
+      drm/amd/display: Remove OPTC lock check
+      drm/amd/display: Adding missing HDMI ACP SEND register
+      drm/amd/display: Add PState change high hook for DCN32
+      drm/amd/display: Enable 2 to 1 ODM policy if supported
+      drm/amd/display: Disconnect DSC for unused pipes during ODM transitio=
+n
+      drm/amd/display: update DSC for DCN32
+      drm/amd/display: Minor code style change
+      drm/amd/display: Add a missing hook to DCN20
+      drm/amd/display: Use set_vtotal_min_max to configure OTG VTOTAL
+      drm/amd/display: Drop uncessary OTG lock check
+      drm/amd/display: Clean some DCN32 macros
+
+Roman Li (1):
+      drm/amd/display: Enable dpia support for dcn314
+
+Ruili Ji (1):
+      drm/amdgpu: Enable F32_WPTR_POLL_ENABLE in mqd
+
+Shirish S (1):
+      drm/amd/display: explicitly disable psr_feature_enable appropriately
+
+Sonny Jiang (1):
+      drm/amdgpu: Enable VCN PG on GC11_0_1
+
+Tao Zhou (4):
+      drm/amdgpu: remove check for CE in RAS error address query
+      drm/amdgpu: define RAS convert_error_address API
+      drm/amdgpu: define convert_error_address for umc v8.7
+      drm/amdgpu: fix coding style issue for mca notifier
+
+Tejas Upadhyay (1):
+      drm/i915/ehl: Update MOCS table for EHL
+
+Thomas Hellstr=C3=B6m (1):
+      drm/i915: Fix display problems after resume
+
+Tvrtko Ursulin (1):
+      drm/i915/guc: Fix revocation of non-persistent contexts
+
+Ville Syrj=C3=A4l=C3=A4 (7):
+      drm/i915: Round to closest in g4x+ HDMI clock readout
+      drm/i915: Fix watermark calculations for gen12+ RC CCS modifier
+      drm/i915: Fix watermark calculations for gen12+ MC CCS modifier
+      drm/i915: Fix watermark calculations for gen12+ CCS+CC modifier
+      drm/i915: Fix watermark calculations for DG2 CCS modifiers
+      drm/i915: Fix watermark calculations for DG2 CCS+CC modifier
+      drm/i915: Reject excessive dotclocks early
+
+Vladimir Stempen (2):
+      drm/amd/display: properly configure DCFCLK when enable/disable Freesy=
+nc
+      drm/amd/display: increase hardware status wait time
+
+Wenjing Liu (3):
+      drm/amd/display: fix integer overflow during MSA V_Freq calculation
+      drm/amd/display: write all 4 bytes of FFE_PRESET dpcd value
+      drm/amd/display: Add missing mask sh for SYM32_TP_SQ_PULSE register
+
+Yang Li (3):
+      drm/amd/display: clean up one inconsistent indenting
+      drm/amd/display: clean up one inconsistent indenting
+      drm/amd/display: Simplify bool conversion
+
+Yang Yingliang (3):
+      drm/amd/display: change to enc314_stream_encoder_dp_blank static
+      drm/amdgpu/sdma: add missing release_firmware() in
+amdgpu_sdma_init_microcode()
+      drm/amd/display: fix build error on arm64
+
+Yuan Can (1):
+      drm/amd/display: Remove unused struct i2c_id_config_access
+
+Yunxiang Li (1):
+      drm/amd/display: Fix vblank refcount in vrr transition
+
+Zhikai Zhai (1):
+      drm/amd/display: skip commit minimal transition state
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c         |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c        |  14 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |   8 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c           |  29 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h           |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c            |  17 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_umc.h            |   7 +-
+ drivers/gpu/drm/amd/amdgpu/cik_sdma.c              |   6 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v2_4.c             |   6 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v3_0.c             |   6 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |  29 +--
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c             |  11 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c             |  15 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c             |  17 +-
+ drivers/gpu/drm/amd/amdgpu/si_dma.c                |   5 +-
+ drivers/gpu/drm/amd/amdgpu/soc21.c                 |   1 +
+ drivers/gpu/drm/amd/amdgpu/umc_v6_1.c              |  10 +-
+ drivers/gpu/drm/amd/amdgpu/umc_v6_7.c              | 165 ++++++--------
+ drivers/gpu/drm/amd/amdgpu/umc_v8_10.c             |  78 ++++---
+ drivers/gpu/drm/amd/amdgpu/umc_v8_7.c              |  63 +++---
+ drivers/gpu/drm/amd/amdkfd/kfd_mqd_manager_v11.c   |   3 +-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  71 +++---
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c  |   8 +-
+ drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c |   7 -
+ .../amd/display/dc/clk_mgr/dcn20/dcn20_clk_mgr.c   |   4 +-
+ .../drm/amd/display/dc/clk_mgr/dcn314/dcn314_smu.c |  11 +-
+ .../amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c   |  85 +++++---
+ drivers/gpu/drm/amd/display/dc/core/dc.c           | 105 ++++++++-
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c      |  11 +-
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   |  70 +++---
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c  |  53 ++++-
+ drivers/gpu/drm/amd/display/dc/core/dc_stream.c    |   8 +-
+ drivers/gpu/drm/amd/display/dc/dc.h                |   8 +-
+ drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c       | 147 ++++++++++++-
+ drivers/gpu/drm/amd/display/dc/dc_dmub_srv.h       |   1 +
+ drivers/gpu/drm/amd/display/dc/dc_link.h           |   4 +
+ drivers/gpu/drm/amd/display/dc/dce/dce_aux.c       |  13 +-
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_dpp.c   |   1 +
+ .../drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c  | 239 +++++------------=
+----
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.c  |  40 +---
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_optc.h  |   1 -
+ .../gpu/drm/amd/display/dc/dcn10/dcn10_resource.c  |  66 +++++-
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hubp.c  |  30 +++
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c |  25 +--
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_optc.c  |   1 +
+ .../gpu/drm/amd/display/dc/dcn21/dcn21_hubbub.c    |   8 +-
+ .../gpu/drm/amd/display/dc/dcn21/dcn21_resource.c  |  13 +-
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dpp.c   |   4 +
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.c  |   3 +-
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |   4 +
+ .../drm/amd/display/dc/dcn301/dcn301_resource.c    |   2 +-
+ .../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c |  20 +-
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_optc.c  |   2 -
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |  15 +-
+ .../display/dc/dcn314/dcn314_dio_stream_encoder.c  |   2 +-
+ .../drm/amd/display/dc/dcn314/dcn314_resource.c    |  16 +-
+ .../drm/amd/display/dc/dcn315/dcn315_resource.c    |  15 +-
+ .../drm/amd/display/dc/dcn316/dcn316_resource.c    |  13 +-
+ .../amd/display/dc/dcn32/dcn32_dio_link_encoder.c  |   7 -
+ .../amd/display/dc/dcn32/dcn32_dio_link_encoder.h  |   4 -
+ .../display/dc/dcn32/dcn32_dio_stream_encoder.c    |  57 +++--
+ .../display/dc/dcn32/dcn32_dio_stream_encoder.h    |  14 +-
+ .../display/dc/dcn32/dcn32_hpo_dp_link_encoder.h   |   1 +
+ .../gpu/drm/amd/display/dc/dcn32/dcn32_hubbub.c    |   1 +
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hubp.c  |   6 +-
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c |  42 ++--
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_optc.c  |   2 +-
+ .../gpu/drm/amd/display/dc/dcn32/dcn32_resource.c  |  31 +++
+ .../gpu/drm/amd/display/dc/dcn32/dcn32_resource.h  |  22 ++
+ .../amd/display/dc/dcn32/dcn32_resource_helpers.c  |  88 ++++++++
+ .../display/dc/dcn321/dcn321_dio_link_encoder.c    |   1 -
+ .../drm/amd/display/dc/dcn321/dcn321_resource.c    |   6 +-
+ .../gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c   | 118 +++++-----
+ .../gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c   |  96 +++------
+ .../gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.h   |   1 +
+ .../amd/display/dc/dml/dcn31/display_mode_vba_31.c |  15 ++
+ .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c   | 131 ++++++-----
+ .../amd/display/dc/dml/dcn32/display_mode_vba_32.c |  21 +-
+ .../gpu/drm/amd/display/dc/dml/display_mode_lib.c  |   1 +
+ .../gpu/drm/amd/display/dc/dml/display_mode_lib.h  |   1 +
+ drivers/gpu/drm/amd/display/dc/inc/core_types.h    |   6 +-
+ drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h     |  19 +-
+ drivers/gpu/drm/amd/display/dc/inc/hw/clk_mgr.h    |  15 +-
+ .../drm/amd/display/dc/inc/hw/cursor_reg_cache.h   |  99 +++++++++
+ drivers/gpu/drm/amd/display/dc/inc/hw/dpp.h        |   4 +
+ drivers/gpu/drm/amd/display/dc/inc/hw/hubp.h       |   5 +
+ .../drm/amd/display/dc/inc/hw/timing_generator.h   |   1 -
+ drivers/gpu/drm/amd/display/dc/inc/resource.h      |   6 +
+ .../gpu/drm/amd/display/dc/link/link_hwss_hpo_dp.c |   2 +-
+ .../drm/amd/display/dc/virtual/virtual_link_hwss.c |   2 +-
+ drivers/gpu/drm/amd/display/dmub/dmub_srv.h        |   1 +
+ drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h    | 140 ++++++++++--
+ drivers/gpu/drm/amd/display/dmub/src/dmub_dcn31.c  |   1 +
+ .../drm/amd/display/modules/color/color_gamma.c    |   2 +-
+ .../amd/include/asic_reg/umc/umc_8_10_0_offset.h   |   2 +
+ .../amd/include/asic_reg/umc/umc_8_10_0_sh_mask.h  |   3 +
+ drivers/gpu/drm/amd/pm/legacy-dpm/kv_dpm.c         |   5 +-
+ .../gpu/drm/amd/pm/powerplay/hwmgr/smu7_hwmgr.c    |   2 +-
+ .../gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c  |   2 +-
+ drivers/gpu/drm/i915/display/g4x_hdmi.c            |   2 +-
+ drivers/gpu/drm/i915/display/intel_display.c       |  18 ++
+ drivers/gpu/drm/i915/display/intel_fb_pin.c        |  62 ++++--
+ drivers/gpu/drm/i915/display/intel_psr.c           |  78 ++++---
+ drivers/gpu/drm/i915/display/skl_watermark.c       |  16 +-
+ drivers/gpu/drm/i915/gem/i915_gem_context.c        |   8 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c         |  37 +++-
+ drivers/gpu/drm/i915/gem/i915_gem_object.h         |   4 +
+ drivers/gpu/drm/i915/gem/i915_gem_object_types.h   |   3 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c            |   5 +-
+ drivers/gpu/drm/i915/gt/intel_context.c            |   5 +-
+ drivers/gpu/drm/i915/gt/intel_context.h            |   3 +-
+ drivers/gpu/drm/i915/gt/intel_ggtt.c               |   8 +-
+ drivers/gpu/drm/i915/gt/intel_mocs.c               |   8 +
+ drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  |  26 +--
+ drivers/gpu/drm/i915/i915_reg.h                    |  16 +-
+ 116 files changed, 1830 insertions(+), 1081 deletions(-)
+ create mode 100644 drivers/gpu/drm/amd/display/dc/inc/hw/cursor_reg_cache.=
+h
