@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066335FF1A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40DF5FF1AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiJNPqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S231157AbiJNPqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiJNPqM (ORCPT
+        with ESMTP id S230354AbiJNPqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:46:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3208236BD2;
-        Fri, 14 Oct 2022 08:46:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 765C261B87;
-        Fri, 14 Oct 2022 15:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1483C433C1;
-        Fri, 14 Oct 2022 15:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665762369;
-        bh=JuumaXx2IxKYMQXfElyY3vL4dkIV4dwAE5VQdwWTIDw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=swLD2rfnIQR1SIaYlYoumovcMVc0soI5XCUzffoIblIPGVfXHXMS/5EuhCcU+TDsp
-         XwVgMdGgB15j4JbYC0HAA2RJMuigxJyeV/HdopMcEPoo4pyimXTuBk3G2RdMdn1Dr2
-         6OnatiwuFaBxG1ximcmHTEeyzGdd+ROMYru6uFW2YZxOM57eZA/00/nRMrrivUjWa0
-         +odq1WMQugA1UFaOgscNUwMi+onFIg2fpqLlscIMTbeMURyYuD5CXfFSThs2EwlGU+
-         FQFeUTnMmrsZiiX9ff9j5CO0R7af9cwZPmxMfWyxfyLYPXZCQHZVjcw9/lOQbPVViD
-         3yMG18JygqTgw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 96B215C32BF; Fri, 14 Oct 2022 08:46:06 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 08:46:06 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
-        youssefesmat@google.com, surenb@google.com
-Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
-Message-ID: <20221014154606.GJ4221@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221011180142.2742289-1-joel@joelfernandes.org>
- <20221011180142.2742289-2-joel@joelfernandes.org>
- <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
- <20221014144019.GB1108603@lothringen>
- <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQoRUJ=0_GJG6JunR58yASmehPanp14zbR3Y+KAGL1TDA@mail.gmail.com>
+        Fri, 14 Oct 2022 11:46:38 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B491D5E2A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:46:32 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id l3so2311886ilg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z5kWJWTbhCLIU0KzFSLz7SA+60MxdeDsMWAk776+PIY=;
+        b=JFcBJzFYE7749zg1Yq5unvXfW9bdpJKVEHHrGTa7PO8VZ4bvaQlVQRoC4xF+noCUWC
+         ylAv1wt9PPZ04nRjJr1/eaETmk2wpiUFxfWbaKWRZwCU8lJShAP2avPE5FFggyxyUHYW
+         3SGAlXonlLpS3BQWj0/DhxnfGvHGy4VKB2lrE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z5kWJWTbhCLIU0KzFSLz7SA+60MxdeDsMWAk776+PIY=;
+        b=f2v0T1KkcNT4iiP3EnavGLhG9v1nzFPlEQ4GwevPRiRap/oaGK2PexUhQTyrkSzLMs
+         kYnQuw1Adq+D4doF3Ne5+xfY4IsdD+6CUqIev0Fa7Le24pJar5hviYuYRCoKv4RPE0Gf
+         O57/Xw56r7aqm5YnnsJiNnOrRGTGnNmeMcFUnNj75yXqahf6gl1nG7xlIGljcCX8wl80
+         D9yKw3OomFgQ1M6x+Ino5LW/wt4thGaxPWiyPjN5EtOEW+Mwe6cvIvZMbYRtJB2grUnE
+         DhoNEoL2P3k+0+r5bwE3pTGp87RBOv5VNyMYUQpVrguaOUGWVuhcRH/BYca+aQce6USU
+         u92Q==
+X-Gm-Message-State: ACrzQf1oEk6YIBNc2R+cWTeFIWfXpaSAnM1SRJ5Me+rD/dmCz/dgE6r+
+        aahIRKw25i0GoFQ7hJfKR+7GEA==
+X-Google-Smtp-Source: AMsMyM75L5kND4ZIQ8A7WllHGvM61JfcpjFyk3/le4pBszfYptiOnWhMisPh4aReM9RY8ADdb2Eq0g==
+X-Received: by 2002:a05:6e02:160c:b0:2fc:1bc4:1811 with SMTP id t12-20020a056e02160c00b002fc1bc41811mr2795194ilu.306.1665762391684;
+        Fri, 14 Oct 2022 08:46:31 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id az34-20020a05663841a200b003635b1313b9sm1215441jab.112.2022.10.14.08.46.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 08:46:31 -0700 (PDT)
+Message-ID: <0229ec53-376e-75f2-fb80-12c9534cc2c7@linuxfoundation.org>
+Date:   Fri, 14 Oct 2022 09:46:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YQoRUJ=0_GJG6JunR58yASmehPanp14zbR3Y+KAGL1TDA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.4 00/38] 5.4.218-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221013175144.245431424@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221013175144.245431424@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 11:19:28AM -0400, Joel Fernandes wrote:
-> On Fri, Oct 14, 2022 at 11:03 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Fri, Oct 14, 2022 at 04:40:19PM +0200, Frederic Weisbecker wrote:
-> > > On Fri, Oct 14, 2022 at 07:21:27AM -0700, Paul E. McKenney wrote:
-> > > > On Tue, Oct 11, 2022 at 06:01:30PM +0000, Joel Fernandes (Google) wrote:
-> > > > > From: Frederic Weisbecker <frederic@kernel.org>
-> > > > >
-> > > > > Upon entraining a callback to a NOCB CPU, no further wake up is
-> > > > > issued on the corresponding nocb_gp kthread. As a result, the callback
-> > > > > and all the subsequent ones on that CPU may be ignored, at least until
-> > > > > an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
-> > > > > to the same group enqueues a callback on an empty queue.
-> > > > >
-> > > > > Here is a possible bad scenario:
-> > > > >
-> > > > > 1) CPU 0 is NOCB unlike all other CPUs.
-> > > > > 2) CPU 0 queues a callback
-> > > >
-> > > > Call it CB1.
-> > > >
-> > > > > 2) The grace period related to that callback elapses
-> > > > > 3) The callback is moved to the done list (but is not invoked yet),
-> > > > >    there are no more pending callbacks for CPU 0
-> > > >
-> > > > So CB1 is on ->cblist waiting to be invoked, correct?
-> > > >
-> > > > > 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
-> > > > > 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
-> > > >
-> > > > And CB1 must still be there because otherwise the IPI handler would not
-> > > > have entrained the callback, correct?  If so, we have both CB1 and the
-> > > > rcu_barrier() callback (call it CB2) in ->cblist, but on the done list.
-> > > >
-> > > > > 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
-> > > > >    callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
-> > > >
-> > > > Except that -something- must have already been prepared to wake up in
-> > > > order to invoke CB1.  And that something would invoke CB2 along with CB1,
-> > > > given that they are both on the done list.  If there is no such wakeup
-> > > > already, then the hang could occur with just CB1, without the help of CB2.
-> > >
-> > > Heh good point. I was confused with CB1 on RCU_DONE_TAIL and the possibility
-> > > for CB2 to be entrained on RCU_WAIT_TAIL. But that's indeed not supposed to
-> > > happen. Ok so this patch indeed doesn't make sense outside lazy.
-> >
-> > Whew!!!  ;-)
-> >
-> > > > > This is also required to make sure lazy callbacks in future patches
-> > > > > don't end up making rcu_barrier() wait for multiple seconds.
-> > > >
-> > > > But I do see that the wakeup is needed in the lazy case, and if I remember
-> > > > correctly, the ten-second rcu_barrier() delay really did happen.  If I
+On 10/13/22 11:52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.218 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Yes it did happen. Real world device testing confirmed it.
-
-Very good, thank you!
-
-> > > > understand correctly, for this to happen, all of the callbacks must be
-> > > > in the bypass list, that is, ->cblist must be empty.
-> > > >
-> > > > So has the scenario steps 1-6 called out above actually happened in the
-> > > > absence of lazy callbacks?
-> > >
-> > > Nope, so I guess we can have the pending check around rcu_nocb_flush_bypass()
-> > > only...
-> >
-> > OK, sounds good.
-> >
-> > I have put this series on branch lazy.2022.10.14a and am testing it.
+> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
+> Anything received after that time might be too late.
 > 
-> I agree with the discussion, though if all CBs are in the bypass list,
-> the patch will also save 2 jiffies.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.218-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> So just commit messages that need rework then? This one can be taken instead:
-> https://lore.kernel.org/rcu/21ECDA9F-81B1-4D22-8B03-020FB5DADA4F@joelfernandes.org/T/#m14d21fbce23539a521693a4184b28ddc55d7d2c5
+> thanks,
+> 
+> greg k-h
+> 
+Compiled and booted on my test system. No dmesg regressions.
 
-This one looks plausible to me.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-							Thanx, Paul
+thanks,
+-- Shuah
+
