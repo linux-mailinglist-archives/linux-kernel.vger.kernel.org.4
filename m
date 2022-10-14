@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C944A5FE78D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0245FE793
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJNDYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
+        id S229748AbiJNDZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 23:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJNDYH (ORCPT
+        with ESMTP id S229678AbiJNDZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:24:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D2BE5EE3;
-        Thu, 13 Oct 2022 20:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=k1olnhMeFRc72L34mxBEB4SzA8A37natGttf+ivr3P4=; b=YBejHR2p9R8AVJoQ/S7beTojDp
-        0d+esxsc8ZK7xqQTD4QbhTESxcj7VXIwDujaglOJLMkptWIeop5ac2Pa5FxuV2AIIshJY2C68FCh7
-        BgOGJSzIsdkTC/6bsf/n6xKXCgPZKk5135ZBUzbGKjt9kKBjj+NVrS3TGDoSDlWbCIN/qReKCRwtl
-        skoEc7VZVWUEuGlbDBYURd4rEhiiJjUG9GI6eCaw1sRicXqr5fXmFMuH7rrxIPLOd6o0DlGJy3fJ9
-        5IbUIdFOT219fqArZJOlXSm9wTSFAEeWYUZ1NKN1bAxTAr0WFiXGT1oSSGtorOuab5iYsQCafznfr
-        srem/QdA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ojBIn-007IgQ-Ms; Fri, 14 Oct 2022 03:24:01 +0000
-Date:   Fri, 14 Oct 2022 04:24:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] filemap: find_lock_entries() now updates start
- offset
-Message-ID: <Y0jWUSLY1aiVWDIb@casper.infradead.org>
-References: <20221013225708.1879-1-vishal.moola@gmail.com>
- <20221013225708.1879-2-vishal.moola@gmail.com>
+        Thu, 13 Oct 2022 23:25:43 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D342511D99A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:25:40 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1665717897tggdurz9
+Received: from [192.168.50.235] ( [113.72.147.11])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 14 Oct 2022 11:24:55 +0800 (CST)
+X-QQ-SSF: 01000000000000B09000000A0000000
+X-QQ-FEAT: Sm8l2YSuDykwx9zlf9aLJ0pyGRo8hfvyvKRxpLKx+MBlrJvD5pae//UyWDAHW
+        na+5Zc7KD3nH6kxeXh6Yqpsg0LCAFrZLbmfKzGrO0BDwerR9xpCu/dFNr2efEUDZBpPls6y
+        0LDmtH/jgCC728s/PbjIVFaNySz6J0mJm1iSKu6MrWK0k1EGan9i1YWZUUWi3EDBHYOAgW7
+        2LECSrZ7SDNEbTiafYaBMYy8np1WuK2EYswgPqtX9OxtcVauKnhg8LPOPxBNgvYoa5exsQ9
+        wQooaViwTDRQvilIPnMdhtemhJTHDS6oTPIW3h1NeNCTDhUYflKHmS7yqFkhvESXqWXhT27
+        dc07HIQ4XYHjmjFWxc2ve/5cGaJHF6vbiVpGk7z6+CQyfKG3JElOgvjk2WIIg==
+X-QQ-GoodBg: 0
+Message-ID: <7CB1B79E00E38D81+9631ccf1-48b5-9ffa-e5cd-b0c9a7c50a56@linux.starfivetech.com>
+Date:   Fri, 14 Oct 2022 11:24:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013225708.1879-2-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 29/30] RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930090653.7449-1-hal.feng@linux.starfivetech.com>
+ <01c658ad-7f73-20fc-03c0-c82dcd820aa4@codethink.co.uk>
+ <Yzdig6GepDx34u1j@spud>
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <Yzdig6GepDx34u1j@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 03:57:07PM -0700, Vishal Moola (Oracle) wrote:
-> Initially, find_lock_entries() was being passed in the start offset as a
-> value. That left the calculation of the offset to the callers. This led
-> to complexity in the callers trying to keep track of the index.
+On Fri, 30 Sep 2022 22:41:23 +0100, Conor Dooley wrote:
+> On Fri, Sep 30, 2022 at 09:54:14PM +0100, Ben Dooks wrote:
+> > On 30/09/2022 10:06, Hal Feng wrote:
+> > > Add CONFIG_SERIAL_8250_DW=y, which is a necessary option for
+> > > StarFive JH7110 and JH7100 SoCs to boot with serial ports.
+> > > 
+> > > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> > 
+> > That might be useful for other users at some point an I don't
+> > think it adds much code.
 > 
-> Now find_lock_entires() takes in a pointer to the start offset and
+> Honestly I think this should be applied for 6.1, for parity with the
+> other SoCs that have their serial console enabled by default.
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-s/entires/entries/
+Could this patch be pulled out and applied for v6.1? So the JH7100
+and the coming JH7110 can enable serial console by default when
+booting. Thanks.
 
-> updates the value to be directly after the last entry found. If no entry is
-> found, the offset is not changed. This gets rid of multiple hacky
-> calculations that kept track of the start offset.
-
-> @@ -2120,8 +2120,17 @@ unsigned find_lock_entries(struct address_space *mapping, pgoff_t start,
->  put:
->  		folio_put(folio);
->  	}
-> -	rcu_read_unlock();
->  
-> +	if (folio_batch_count(fbatch)) {
-> +		unsigned long nr = 1;
-> +		int idx = folio_batch_count(fbatch) - 1;
-> +
-> +		folio = fbatch->folios[idx];
-> +		if (!xa_is_value(folio) && !folio_test_hugetlb(folio))
-> +			nr = folio_nr_pages(folio);
-> +		*start = indices[idx] + nr;
-> +	}
-> +	rcu_read_unlock();
->  	return folio_batch_count(fbatch);
-
-Do we need to move the rcu_read_unlock()?  Pretty sure we can do all
-these calculations without it.
-
-This all looks good.  It's certainly more ergonomic to use.
-
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Best regards,
+Hal
