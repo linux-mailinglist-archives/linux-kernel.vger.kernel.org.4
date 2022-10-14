@@ -2,32 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236C35FF540
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DEE5FF541
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJNVXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S229436AbiJNVXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiJNVXD (ORCPT
+        with ESMTP id S229916AbiJNVXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:23:03 -0400
+        Fri, 14 Oct 2022 17:23:08 -0400
 Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3698E1D3A77
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:23:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848AE1DD893
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:23:03 -0700 (PDT)
 Received: from localhost.localdomain (178.176.75.138) by msexch01.omp.ru
  (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 15 Oct
- 2022 00:22:51 +0300
+ 2022 00:22:57 +0300
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     Oleg Nesterov <oleg@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 02/13] arm: ptrace: user_regset_copyin_ignore() always returns 0
-Date:   Sat, 15 Oct 2022 00:22:24 +0300
-Message-ID: <20221014212235.10770-3-s.shtylyov@omp.ru>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        <lvc-patches@linuxtesting.org>, <lvc-project@linuxtesting.org>
+Subject: [PATCH 03/13] arm64: ptrace: user_regset_copyin_ignore() always returns 0
+Date:   Sat, 15 Oct 2022 00:22:25 +0300
+Message-ID: <20221014212235.10770-4-s.shtylyov@omp.ru>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20221014212235.10770-1-s.shtylyov@omp.ru>
 References: <20221014212235.10770-1-s.shtylyov@omp.ru>
@@ -54,12 +56,14 @@ X-KSE-AntiSpam-Info: {SMTP from is not routable}
 X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.75.138 in (user)
  dbl.spamhaus.org}
 X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.75.138:7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {rdns complete}
+X-KSE-AntiSpam-Info: {fromrtbl complete}
 X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.138
 X-KSE-AntiSpam-Info: {DNS response errors}
 X-KSE-AntiSpam-Info: Rate: 59
 X-KSE-AntiSpam-Info: Status: not_detected
 X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+X-KSE-AntiSpam-Info: Auth:dmarc=none header.from=omp.ru;spf=none
  smtp.mailfrom=omp.ru;dkim=none
 X-KSE-Antiphishing-Info: Clean
 X-KSE-Antiphishing-ScanningType: Heuristic
@@ -80,30 +84,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 user_regset_copyin_ignore() always returns 0, so checking its result seems
 pointless -- don't do this anymore...
 
+Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+analysis tool.
+
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 ---
- arch/arm/kernel/ptrace.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/arm64/kernel/ptrace.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
-index bfe88c6e60d5..2d8e2516906b 100644
---- a/arch/arm/kernel/ptrace.c
-+++ b/arch/arm/kernel/ptrace.c
-@@ -651,11 +651,9 @@ static int vfp_set(struct task_struct *target,
- 	if (ret)
- 		return ret;
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index c2fb5755bbec..f3af3371280a 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -514,9 +514,7 @@ static int hw_break_set(struct task_struct *target,
  
--	ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
--				user_fpregs_offset + sizeof(new_vfp.fpregs),
--				user_fpscr_offset);
+ 	/* Resource info and pad */
+ 	offset = offsetof(struct user_hwdebug_state, dbg_regs);
+-	ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, 0, offset);
 -	if (ret)
 -		return ret;
-+	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
-+				  user_fpregs_offset + sizeof(new_vfp.fpregs),
-+				  user_fpscr_offset);
++	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, 0, offset);
  
- 	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
- 				 &new_vfp.fpscr,
+ 	/* (address, ctrl) registers */
+ 	limit = regset->n * regset->size;
+@@ -543,11 +541,8 @@ static int hw_break_set(struct task_struct *target,
+ 			return ret;
+ 		offset += PTRACE_HBP_CTRL_SZ;
+ 
+-		ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
+-						offset,
+-						offset + PTRACE_HBP_PAD_SZ);
+-		if (ret)
+-			return ret;
++		user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
++					  offset, offset + PTRACE_HBP_PAD_SZ);
+ 		offset += PTRACE_HBP_PAD_SZ;
+ 		idx++;
+ 	}
+@@ -954,10 +949,7 @@ static int sve_set_common(struct task_struct *target,
+ 
+ 	start = end;
+ 	end = SVE_PT_SVE_FPSR_OFFSET(vq);
+-	ret = user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
+-					start, end);
+-	if (ret)
+-		goto out;
++	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf, start, end);
+ 
+ 	/*
+ 	 * Copy fpsr, and fpcr which must follow contiguously in
 -- 
 2.26.3
 
