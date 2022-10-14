@@ -2,296 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BE85FF207
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB885FF20A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiJNQIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S230165AbiJNQKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJNQH6 (ORCPT
+        with ESMTP id S229863AbiJNQKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:07:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4FA1BF210;
-        Fri, 14 Oct 2022 09:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665763676; x=1697299676;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=B9ZNNnyDLvbBJcoJsJzUHzLJ9L28PhRsXr8cjC2YEc8=;
-  b=hdT7ElQUjpl9t+18yPtDnB8QbPdzYGfZR/qipd30X4jejPLbrrJiPm1F
-   Sot5WjdQVnYU15i7RIbs+wtnEdyWibNEUAqHAuFWmlABqNsCrh+UrShR/
-   +wkwLbG2O4UL1nMy6PyIj89viMaCD8f8j1h2fH3WCJqNYMEsAVSh8K/oH
-   ulDRKzfWYQBZbBd5cEXqrR1ew1XQ82QuiTrHch+H+BsOVgEQ94Aggq5NC
-   57wPs+AAajX+kMojAkXt8N8eQtVTE/e1FhNzANzYCVcPFm80aVDHJBZK9
-   +ioYiLI19axlYLp/WAnj3Vel/uyQlBTwHFXZtnb1pIi8dGs2KMECqwyJ7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="292768265"
-X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="292768265"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 09:07:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="732351769"
-X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="732351769"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Oct 2022 09:07:55 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 14 Oct 2022 09:07:54 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 14 Oct 2022 09:07:54 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 14 Oct 2022 09:07:54 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 14 Oct 2022 09:07:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cb4dVvqBZHLVCej5JVphftYXK/iSoCJjOKUHFxCCpNqgfLzF2LnQvJCGDz83uSxzrU0vHYGyjxaCm2racoNjKIlHxl0zNHoutRUuWuHwA7ojSJsxEvqSURUm6EkjCMjYx0/xgjyyf0uRrO9rH5gevfN1HAF8JTVj+37E1G9y1Sq2nK9UbH2MsCyWdasH5xVNJt7vByiouHOJH83uR29avjMubDkBL0zGQ8Xzh7A39HfZ9M/7ZBS+9WQTPYYHjDjmOMKav22ob4yzmvQ+vYgR5a772n781ctlCNUFtfWpln/KsGwQG2IvQKcFkt56e8hepbiNxtGqAV0nKLXlCsIODg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FQDE3Ms9GxKSBAb7RWcw011jWrppdsIKgEZX4LyTLgA=;
- b=O9PE2B09I3MbfhhZPdz3f8gjXHzKEHnCzF82jPmt79Ig4efglkaxbRDC81xDyHzORl+APMyZTBUZnSb6b+H/64LykX3UtxxBewCHqrcDgCDeWzKrMYyARwa0p3hZObamlAjp7BaKv+UJbwSvgsG1LqgygNgIR7Ef1NR2uJha8c5HrRMHJ8CZPXGTMYpG0ZBNSvetOf5Uj1FISe5wF+QDwu9F3jFb9Z2nDO+z9kDmVq79pXQk385Clr+4oPierzyPhsjkBi7gIT8QLcq017bihldTAshHXvbTzA5ZS6RS+VBadcDtaebVyKC4FPN/ne+blQmOf4azMgmhsku62SA2AA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by BN9PR11MB5545.namprd11.prod.outlook.com (2603:10b6:408:102::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 14 Oct
- 2022 16:07:52 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae%8]) with mapi id 15.20.5723.026; Fri, 14 Oct 2022
- 16:07:51 +0000
-Date:   Fri, 14 Oct 2022 09:07:47 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Davidlohr Bueso <dave@stgolabs.net>, <dan.j.williams@intel.com>,
-        <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <bwidawsk@kernel.org>, <a.manzanares@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH] cxl: Add generic MSI/MSI-X interrupt support
-Message-ID: <Y0mJU6IV+Xm8Pu/m@iweiny-desk3>
-References: <20221012180432.473373-1-dave@stgolabs.net>
- <20221013131913.0000038b@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221013131913.0000038b@huawei.com>
-X-ClientProxiedBy: SJ0PR03CA0294.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::29) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Fri, 14 Oct 2022 12:10:02 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE2629803
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:10:00 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id 8so2763256qka.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5ibaUtiZs0j0ZyBp6RNG4pWG3FWVSOwMKv1XJhYLZ2A=;
+        b=ztcKC+/Ury/FfFgOgJ7c8e99UOUsKW0FnQzuxZOvUmCMIbBIlKK5/X5gdg5eWMiRqm
+         Yx69tkmNYfyPgPpvi2FY66gvTL0Yn7NTEwXjF1eF0D4mDyjM3lESE3WgziRoYWbaRbHu
+         XcyiSpySlB8FKGB03etji4m7rRoPFfXALIdz2XqLu2sXl8byNOD4u+cnYvzlRgmhjxsF
+         Z8kgtXU8siH6jEnOd74igCyHjuh15ZkqMivhnN6gcnOdlFmJtKPPx1EbkuDubjBJWgQu
+         EDXhhkItZOcsScE3goaVX2a34LFlg9KAC3j31vuO/mT7flBS8aFwwWMExsF6l8isx7oa
+         i4HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ibaUtiZs0j0ZyBp6RNG4pWG3FWVSOwMKv1XJhYLZ2A=;
+        b=7jNplwKIPH69lBGKJ/npdOAyt/Jxx/KKJtggy3n8MsICrtLDPYs/k9QKysIQaMgK/S
+         gl7npisVfQ3RsAowY7cAtezuB6oYUKvsdz3EkJKeL39FsHxB39VlvhsuLMngpgt/QQHi
+         7wHahet8IY8zcHp8Ebb62wG04Hflbn9E83VGZ95oRuB6m6STq7Qu8zJL+uGv6mJg1ztt
+         vbbQii+oEwWNncSJ2gnZvZuo0KkhIiFOFZrvkyI+Lq+PtaGjSQJWdYJZYKTKbwzpKHMG
+         6A2vlTtzFjRj1utZBO6FffioGV31jh/lEKV4L8CeR2zn270Lq48xJzqINDgu1vsfSSEo
+         vWSA==
+X-Gm-Message-State: ACrzQf2xmoE90txkodKv5ZlmBkKfItOPNpNvNXeMpzwjXLaF4kN4lNj9
+        VyeZt24KFCKuApB9jJcAnNmYmg==
+X-Google-Smtp-Source: AMsMyM7ICLgE4IVjUyTBhoH1DHcdwrnifWy6OeB5AVaA4jWEGk9f8HKoHbLWrqi1/nVvZzRojjP/mA==
+X-Received: by 2002:a37:bc3:0:b0:6ee:7931:9e5a with SMTP id 186-20020a370bc3000000b006ee79319e5amr4301025qkl.105.1665763799878;
+        Fri, 14 Oct 2022 09:09:59 -0700 (PDT)
+Received: from [192.168.7.170] ([12.190.236.102])
+        by smtp.gmail.com with ESMTPSA id dm48-20020a05620a1d7000b006e99290e83fsm2887515qkb.107.2022.10.14.09.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 09:09:59 -0700 (PDT)
+Message-ID: <c91ee3ce-3f30-a3ef-bb38-8571e488b6b6@linaro.org>
+Date:   Fri, 14 Oct 2022 12:08:41 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BN9PR11MB5545:EE_
-X-MS-Office365-Filtering-Correlation-Id: dbecadd2-9b02-4c34-053b-08daadfe3efa
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eWbkRRDi6uGh/Rtk+eLKpxp8t0552wbMULIg5jj9lct1Ebf0KmHTw61z6ZoRb38FHTBPSFcv1W2BuxnQlpOUtKfEdUjbDMplg0NBXbssZQVnkKFiv+ZLeFUwdu7fhWByUOxnrPSjAGgs9a9RTcg8dkBMBeYAtcly/kCAwlVJuWXeh2Wn8XTLUyG231Ye1KklbRlHLkson8QJBWbUNWjK7up+S5H9V7kpxot32zzmJkG1bYmk0qWnXS7lhMaW/+zUi5HwSsz8s4Ze8c22WZPP8GwG809TjCUEoz1XU7bsfU5UBJyA5AFD8BbVp/+Z9kS0Osr1kb3sD17AhfG/A7pF40BhczY/gmIqfkwerjQNJgpIIexR0mPGz/KyYCh7kH9why1xtsDfId0S19wFS0Ej9jfNNJ+vmeMfWx8AnYr3ZPqA3c2pUnYYSpB8ASCSg6tizKX80N7vyiipQHajRABAND/ddhgevcgxeu0YDI8poNrJebM1SSY5uBjVvWPkyEjxFdsl59czr69ZihFXkJmQVemSfZWvX37PLKm2Aq8r7odgedXGsg/cBzPsmU58RDVi5GDhMnoqO4tuKyD3h7VN25My77389JEoBldF/sq8HCH67v0lyDOk/L2ikY9hlo5BmSNJR0gWPda6BvJewmQa8dmbgxj/buRo1SkjtIPIlhleo/KvQ5Q0DhxzvwaLs2YUxVO1MvfWDymw3bA+D8DKUuwydhvVcPUmD0PwSCW4iZ6GjLdr7riPMDfaAdeiv1Fg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(376002)(346002)(136003)(39860400002)(366004)(451199015)(66946007)(478600001)(6486002)(33716001)(86362001)(38100700002)(83380400001)(41300700001)(8676002)(6916009)(44832011)(66476007)(6506007)(26005)(4326008)(66556008)(316002)(186003)(9686003)(6512007)(82960400001)(5660300002)(2906002)(8936002)(6666004)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Kbe3KEICOSmuNFZ8CvOlWHGgZn3K87ECKIg9wh1Ax2BNTzwYkEvmcEC7RdHh?=
- =?us-ascii?Q?bYtxzM9CxjSBiLySihZZ26w56SgneiAeQfs0Q+nFXktGJxsR3hxLjDsivv4G?=
- =?us-ascii?Q?D8V3oMlNaKmrwFIJR8p/GsPBdZyCpj4sl96I+Mm7/NJ70DcaJfr/ty+UPirm?=
- =?us-ascii?Q?aLdgsjtm0h4x50nCRjYs7A1Tu+QU7A6RG15nnOYRy8iRwt7jHKUMK1c0nSyW?=
- =?us-ascii?Q?79Z0zpmkdbMpTHBj+bOPAyS49bYwsuhPZAs3omwcj8Clr3Bk/YpfOP6UdYoN?=
- =?us-ascii?Q?heuzlWns2d3gucOqiPxfLeFr1ZRkLLU/6CN5WfoltiRNrvfOjNfDMk7bDys3?=
- =?us-ascii?Q?yIQRBYNGQPDHCsLvkiPOTwxPJoHI7YhxZQeDUzal3oIF/H2d4WVK0fwrITYr?=
- =?us-ascii?Q?YJjPVMFu+wsQKKtI4S2/5Qpd/00l8mB22eZwFCvDKnM7AqGVgRh09H2ANj+p?=
- =?us-ascii?Q?7UlmhDPdCjDhoOFEBkChmt+fKPrmTMG4CZg6xOZ2n8tEWZjudoPhIK6aa51F?=
- =?us-ascii?Q?u7UHIWFDbxrcNxH3I1xmanGqg9x5I5Qma9Q/6Yfjqaxyh+wImoi6SfDMxl60?=
- =?us-ascii?Q?nUy0SfUr2Uo/AWLyOEsqDkfKujvC0oP/PQ0+bmAEZtEQT262hQbLdXiPxid1?=
- =?us-ascii?Q?YIk/GmORTtr/uwpS7oIm6+BNNr7lRMxuKK2q7+akHz7Y0deJc9UsnwhiQr7w?=
- =?us-ascii?Q?gYGOBkuDVJMlNpopj90EeJoR/O3c2J8pdNNad6IyUI9du1CMsOH6ZhOHPmFY?=
- =?us-ascii?Q?GHF0Y0LqXJIs71fiy6UifQZA+mhqrqfmJKlc6+Ar5AGAk3mgB2gKlwAT+LeO?=
- =?us-ascii?Q?ruVA6ujpT9wk7qXJ0YBHqz+HV08oHlrKKwh9axKnsKo6fY93lhSkYy9CDTQA?=
- =?us-ascii?Q?qKnamYZuRfTtLk+ZT+thJvRP3iHQRxaID/7IiodgIw3SXOAcf5lM8z+U06SV?=
- =?us-ascii?Q?FqevI/ZSNd7UkPJvRQs3CpMJGsTJT0RQOpUFvIkdjdD4aZe4pZkcZ9LJEfWe?=
- =?us-ascii?Q?yU0EoWkjTEWsrSlCmngtS6eHP9UMmCTyXKEAmzIzfBAPUl7eM7F25GzVuT9J?=
- =?us-ascii?Q?GjWG7kKWF7CWj++CFhBqDGPn0dfgb1GflWseD7A1z27CZ/pR83982W/w548f?=
- =?us-ascii?Q?IBlfocNqWdHJwk7A+Nkg7HGTGOZbX2R67LCAMUwG6JMutmtQ0kTxL/mvWM/G?=
- =?us-ascii?Q?xCs7xHE2VZAhwX51c9Ndjm11BkMrHYqp7mT2BDxc+IvSIQ26qthcRi15uCCE?=
- =?us-ascii?Q?ix4X+p0Sjt15s0N0PWeTCLgxOhkGP7/Or6P5kfw9WtV0Bi3BYq+mfDc+DT3R?=
- =?us-ascii?Q?doHaP2ZQdpESOn6YIktM72Y64dYPvVCZ7c0Sah75xOBOwG5Aqz2j7brpTstx?=
- =?us-ascii?Q?ie7rE9wkEX962f+mn3OMQftHhf5Z5izB7BRKIEucrS9F1B+cV9K+C5upDrX3?=
- =?us-ascii?Q?YGqwU2B1Z5kUMX4eoDIGofdRycMcor5eqFFONJY8F6aOhc544dt3dqE+ccHC?=
- =?us-ascii?Q?QPWhXJhraLYbZvBtB11wIORQIxyfOkgQmb4eGV7IzM4cbVARKtrPf8NiA452?=
- =?us-ascii?Q?NGAV+gMvw1fYqaKGLdT/c8XUNne90z6YIqtVdNV6?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbecadd2-9b02-4c34-053b-08daadfe3efa
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 16:07:51.8092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mUJGF7uHs/oE1Lb/x3LWSRbGt2ojDp+j/l2W2zdUjo8AocP467Wp09Qyc5gDyAA5cQCFdkUdagt9F1ckzTnkFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5545
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 02/12] dt-bindings: display: mediatek: add MT8195 hdmi
+ bindings
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        David Airlie <airlied@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jitao shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     stuart.lee@mediatek.com, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, mac.shen@mediatek.com,
+        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20220919-v2-0-8419dcf4f09d@baylibre.com>
+ <20220919-v2-2-8419dcf4f09d@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220919-v2-2-8419dcf4f09d@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 01:19:13PM +0100, Jonathan Cameron wrote:
-> On Wed, 12 Oct 2022 11:04:32 -0700
-> Davidlohr Bueso <dave@stgolabs.net> wrote:
+On 14/10/2022 11:15, Guillaume Ranquet wrote:
+> Add mt8195 SoC bindings for hdmi and hdmi-ddc
 > 
-> > Introduce a generic irq table for CXL components/features that can have
-> > standard irq support - DOE requires dynamic vector sizing and is not
-> > considered here.
-> > 
-> > Create an infrastructure to query the max vectors required for the CXL
-> > device.
-> > 
-> > Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  .../bindings/display/mediatek/mediatek,hdmi.yaml   | 67 +++++++++++++++++-----
+>  .../display/mediatek/mediatek,mt8195-hdmi-ddc.yaml | 51 ++++++++++++++++
+>  2 files changed, 104 insertions(+), 14 deletions(-)
 > 
-> Hi Davidlohr,
-> 
-> Basically good, but a few comments inline.
-> 
-> I'll role this onto front of the v2 of the CPMU set as well.
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> index bdaf0b51e68c..955026cd7ca5 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> @@ -21,26 +21,21 @@ properties:
+>        - mediatek,mt7623-hdmi
+>        - mediatek,mt8167-hdmi
+>        - mediatek,mt8173-hdmi
+> +      - mediatek,mt8195-hdmi
+>  
+>    reg:
+>      maxItems: 1
+>  
+> -  interrupts:
+> -    maxItems: 1
+> -
 
-And I don't mind this landing ahead of the event stuff.  I'll take this in my
-series too but expect it to drop out when applied.
+This change is not really explained in commit msg...
 
-Ira
+>    clocks:
+> -    items:
+> -      - description: Pixel Clock
+> -      - description: HDMI PLL
+> -      - description: Bit Clock
+> -      - description: S/PDIF Clock
+> +    minItems: 4
+> +    maxItems: 4
+>  
+>    clock-names:
+> -    items:
+> -      - const: pixel
+> -      - const: pll
+> -      - const: bclk
+> -      - const: spdif
+> +    minItems: 4
+> +    maxItems: 4
+> +
+> +  interrupts:
+> +    maxItems: 1
+>  
+>    phys:
+>      maxItems: 1
+> @@ -58,6 +53,9 @@ properties:
+>      description: |
+>        phandle link and register offset to the system configuration registers.
+>  
+> +  power-domains:
+> +    maxItems: 1
+> +
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+>  
+> @@ -86,9 +84,50 @@ required:
+>    - clock-names
+>    - phys
+>    - phy-names
+> -  - mediatek,syscon-hdmi
+>    - ports
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mediatek,mt8195-hdmi
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: APB
+> +            - description: HDCP
+> +            - description: HDCP 24M
+> +            - description: Split HDMI
+> +        clock-names:
+> +          items:
+> +            - const: hdmi_apb_sel
+> +            - const: hdcp_sel
+> +            - const: hdcp24_sel
+> +            - const: split_hdmi
+> +
+> +      required:
+> +        - power-domains
+> +    else:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: Pixel Clock
+> +            - description: HDMI PLL
+> +            - description: Bit Clock
+> +            - description: S/PDIF Clock
+> +
+> +        clock-names:
+> +          items:
+> +            - const: pixel
+> +            - const: pll
+> +            - const: bclk
+> +            - const: spdif
+> +
+> +      required:
+> +        - mediatek,syscon-hdmi
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
+> new file mode 100644
+> index 000000000000..0fe0a2a2f17f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek HDMI DDC for mt8195
+> +
+> +maintainers:
+> +  - CK Hu <ck.hu@mediatek.com>
+> +  - Jitao shi <jitao.shi@mediatek.com>
+> +
+> +description: |
+> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC pins.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8195-hdmi-ddc
 
+I think I wrote it - you already have bindings for HDMI DDC. I doubt
+that these are different and it looks like you model the bindings
+according to your driver. That's not the way.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ddc
+> +
+> +  mediatek,hdmi:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      A phandle to the mt8195 hdmi controller
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    hdmiddc0: ddc_i2c {
+
+Node names should be generic - ddc.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+No underscores in node names.
+
+Additionally I2C devices have addresses on the bus. Why this one doesn't?
+
+> +      compatible = "mediatek,mt8195-hdmi-ddc";
+> +      mediatek,hdmi = <&hdmi0>;
+> +      clocks = <&clk26m>;
+> +      clock-names = "ddc";
+> +    };
+> +
+> +...
 > 
-> > ---
-> >  drivers/cxl/pci.c | 63 +++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 63 insertions(+)
-> > 
-> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > index faeb5d9d7a7a..467f2d568e3e 100644
-> > --- a/drivers/cxl/pci.c
-> > +++ b/drivers/cxl/pci.c
-> > @@ -428,6 +428,66 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> >  	}
-> >  }
-> >  
-> > +/**
-> > + * struct cxl_irq_cap - CXL feature that is capable of receiving MSI/MSI-X irqs.
-> > + *
-> > + * @name: Name of the device generating this interrupt.
-> > + * @get_max_msgnum: Get the feature's largest interrupt message number.  If the
-> > + *		    feature does not have the Interrupt Supported bit set, then
-> > + *		    return -1.
-> > + */
-> > +struct cxl_irq_cap {
-> > +	const char *name;
-> > +	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
-> 
-> For the CPMU case I need to walk the register locator dvsec block so need
-> the callback to take the pci_dev not the cxl_dev_state.
-> 
-> Also need it later to map the resulting register blocks to go find the irq before
-> then dropping them mappings so that the resulting CPMU device can grab them
-> later.
-> 
-> > +};
-> > +
-> > +static const struct cxl_irq_cap cxl_irq_cap_table[] = {
-> > +	{ "isolation", NULL },
-> > +	{ "pmu_overflow", NULL },
-> > +	{ "mailbox", NULL },
-> > +	{ "event", NULL },
-> 
-> Fill these in as we provide them, not upfront. I'd rather see this
-> attached to one (or possibly several) of the series that are coming along
-> than stand alone.  so start off with an empty table.
-> 
-> 
-> 
-> > +};
-> > +
-> > +static void cxl_pci_free_irq_vectors(void *data)
-> > +{
-> > +	pci_free_irq_vectors(data);
-> > +}
-> > +
-> > +static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> > +{
-> > +	struct device *dev = cxlds->dev;
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	int rc, i, vectors = -1;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
-> > +		int irq;
-> > +
-> > +		if (!cxl_irq_cap_table[i].get_max_msgnum)
-> > +			continue;
-> > +
-> > +		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
-> > +		vectors = max_t(int, irq, vectors);
-> > +	}
-> > +
-> > +	if (vectors == -1)
-> > +		return -EINVAL; /* no irq support whatsoever */
-> 
-> return 0 in this case.  No irqs present is a 'good' result if there
-> aren't any.  Will be up to the consumers of the interrupts to get
-> their own interrupt vector numbers and they should get the same
-> answers!
-> 
-> > +
-> > +	vectors++;
-> > +	rc = pci_alloc_irq_vectors(pdev, vectors, vectors,
-> > +				   PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> > +	if (rc < 0)
-> > +		return rc;
-> > +
-> > +	if (rc != vectors) {
-> > +		dev_err(dev, "Not enough interrupts; use polling where supported\n");
-> > +		/* Some got allocated; clean them up */
-> > +		cxl_pci_free_irq_vectors(pdev);
-> > +		return -ENOSPC;
-> > +	}
-> > +
-> > +	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
-> > +}
-> > +
-> >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  {
-> >  	struct cxl_register_map map;
-> > @@ -498,6 +558,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> >  	if (IS_ERR(cxlmd))
-> >  		return PTR_ERR(cxlmd);
-> >  
-> > +	/* TODO: When there are users, this return value must be checked */
-> > +	cxl_pci_alloc_irq_vectors(cxlds);
-> > +
-> 
-> Gut feeling is this will end up moving ahead of any of the sub device creation
-> because many of them end up needing interrupts.
-> 
-> Also check response from the start - can't see a reason to not do so as we
-> won't be registering any at all if no callbacks provided.
-> 
-> So I'd move it above the devm_cxl_add_memdev() call.
-> 
-> 
-> 
-> >  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
-> >  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
-> >  
-> 
+
+Best regards,
+Krzysztof
+
