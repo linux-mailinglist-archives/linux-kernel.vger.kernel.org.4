@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B115FE6D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5993F5FE6DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJNCLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 22:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S229683AbiJNCPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 22:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJNCLQ (ORCPT
+        with ESMTP id S229754AbiJNCPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 22:11:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6EAE5ECC;
-        Thu, 13 Oct 2022 19:11:14 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E0YwTX021621;
-        Fri, 14 Oct 2022 02:10:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Nvz7VZjslcrs0TPXWLB8CTDZ5OZTDPnEaQ2gefzJEqI=;
- b=AHuqbLVejDlEtFy0vMYXYyYCj/k2RxmTJSdTTljpEzpUvCJoVGrNAvq8GQh37aRTa03h
- VRC+N2j3ENBmqS33AOeH93C9uMvaeBcIg89EgkhczKlQvl1199B4vSuOMS/jz6eEDLY+
- YHpWs4aRUw+jQJIwLax5qyK+OFOuQbemm1tIWg10ALnXfDa3mGgTVADAm6am0R6IXpvu
- Q3mdkDO/m8C+wzqGj0wAzvwI66vCPLSeiDjC/wbF9b6JkwzDI/DW7bJV1msa6Og8ohy4
- W5k8FU1Rlra0tuiPqftSq+hozBogW43kl6o6LaWrmIEeUQF9XCLJwBX6DfOIu0NPSm3n wQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6gw1gtum-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 02:10:58 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29E2AwRf010044;
-        Fri, 14 Oct 2022 02:10:58 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6gw1gtu7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 02:10:58 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29E26bsY015001;
-        Fri, 14 Oct 2022 02:10:57 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01dal.us.ibm.com with ESMTP id 3k6kcmhh0a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 02:10:57 +0000
-Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29E2Av9Z53150202
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Oct 2022 02:10:57 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84E8A5805E;
-        Fri, 14 Oct 2022 02:10:55 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C086458043;
-        Fri, 14 Oct 2022 02:10:54 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.3.142])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 14 Oct 2022 02:10:54 +0000 (GMT)
-Message-ID: <924a29d81cc7e0d3e2f62f693a0d8fcef97b9779.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>, David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 13 Oct 2022 22:10:54 -0400
-In-Reply-To: <20221013064308.857011E25@mail.steuer-voss.de>
-References: <20221013064308.857011E25@mail.steuer-voss.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6Rh3Y9hxAo8XJpsQtvJeqnFS7ykqp-qJ
-X-Proofpoint-GUID: 9Je1RXEcqirXsf96tPUF5ND7WkOV21mV
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 13 Oct 2022 22:15:48 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A29F13ECF0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:15:45 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bs14so4439672ljb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fuy+ZMA4uPGTf3eZoCGwL2/k+5QRw/FFhfkU0kjMMa0=;
+        b=Dr9qPuJzcDkqiovmS2bY/0BvhRLqTXnLQYia3409eGT0C9mWZoWdFPeleF6vsLxiwE
+         pBOhPr1T/sRYTFbJDtNzoQuztzY7zBf1tseWWkhZrHDSBweUEfdI7Z2wpTbcVG7Bc7pB
+         riGQSR0uEaYwrc7c7hxYTHpRhaYxEkLfPSkEE7tgIfP7QNXjkwhARmR1oKDrygQHiQtW
+         dkSwh43ISWTOSyznK7torBvjXxX5c+LtRW/tPM/+e/lkN4sNxenh6N8XwaFOdVDXp3JR
+         Sfzma1J0tOcX1o9qAdeZbyhl5KByrGfnBTyO4tYE0/aEuf/UztlGa/QJbdXWiaqv0IIC
+         M5FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fuy+ZMA4uPGTf3eZoCGwL2/k+5QRw/FFhfkU0kjMMa0=;
+        b=4tlplXVZxci9vZ4nrappNC8vjUo5u6tOtpKNcHIngxmRHhcg9tXmz6ZR7CzL4+qGrX
+         CcDW1P3D7196rkPesCanZjquPDvXu5LOsqydUHfyAgmEOfZvDjmD0okK28amwFM9s3pz
+         9wmA/ctNAMlQRWkSENyPQGISmA8YivEiQeHHhRaIJTaWIRo3El9kqyrwwtZBi9fB4SzO
+         HU3Qh60RocS9TVkRTLAxF2Tqv8FnWdbNK6hvJUWXfojzfP9dq/cSIXYV8ahf0FJUIgOj
+         tnbV6+8FDvIe+/rrkL/LTLhsa3TqOxzZn67ByjeZKPbrjPX18MGK7jnhmLSVM170iX5H
+         J6rA==
+X-Gm-Message-State: ACrzQf25I9B+zeLgHQC/CNgAwQfDq6EX84fN+E2ttJnXwbDtIKs9aMOE
+        C60xriEdHIazTmYyq5cYTXoS0EmT9GsY4cvcY+P0
+X-Google-Smtp-Source: AMsMyM49dZLWwOC7meVIiXUbcrIusOKXaoudHLdxZk3FeWJbP199/DbKsjYRGa5Tk1uTUEzuyYnlgtiPlCtaDeTRSpE=
+X-Received: by 2002:a2e:9e50:0:b0:261:e3fd:cdc5 with SMTP id
+ g16-20020a2e9e50000000b00261e3fdcdc5mr982059ljk.56.1665713743465; Thu, 13 Oct
+ 2022 19:15:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-13_10,2022-10-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 impostorscore=0 suspectscore=0 mlxscore=0
- malwarescore=0 phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210140010
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+ <CANDhNCrrM58vmWCos5kd7_V=+NimW-5sU7UFtjxX0C+=mqW2KQ@mail.gmail.com>
+ <CANDhNCojzuCW2Udx_CssLvnY9DunEqVBSxnC5D6Rz0oX-r2-7g@mail.gmail.com>
+ <CAJD7tkb=FSoRETXDMBs+ZUO1BhT7X1aG7wziYNtFg8XqmXH-Zw@mail.gmail.com> <CAJD7tkYUoW3YU-R1wNBADdUDHVprq6CP3axD9md3gJzW=yhiFw@mail.gmail.com>
+In-Reply-To: <CAJD7tkYUoW3YU-R1wNBADdUDHVprq6CP3axD9md3gJzW=yhiFw@mail.gmail.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Thu, 13 Oct 2022 19:15:31 -0700
+Message-ID: <CANDhNCpHGvw2MxexRFwpx4nAmqgwXw3G3DqkD2s0W3RNXZw2Bg@mail.gmail.com>
+Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-13 at 08:39 +0200, Nikolaus Voss wrote:
-> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> decrypted data") added key instantiation with user provided decrypted data.
-> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> Fix this to use hex2bin instead.
-> 
-> Old keys created from user provided decrypted data saved with "keyctl pipe"
-> are still valid, however if the key is recreated from decrypted data the
-> old key must be converted to the correct format. This can be done with a
-> small shell script, e.g.:
-> 
-> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-> keyctl add user masterkey "$(cat masterkey.bin)" @u
-> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
-> 
-> It is encouraged to switch to a new key because the effective key size
-> of the old keys is only half of the specified size.
+On Thu, Oct 13, 2022 at 6:29 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Thu, Oct 13, 2022 at 5:03 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > On Wed, Oct 12, 2022 at 8:07 PM John Stultz <jstultz@google.com> wrote:
+> > >
+> > > On Wed, Oct 12, 2022 at 8:02 PM John Stultz <jstultz@google.com> wrote:
+> > > > On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > > So I think it reasonable to say its bounded by approximately  2 *
+> > > > NSEC_PER_SEC/HZ +/- 11%.
+> > >
+> > > Sorry, this should be 2*NSEC_PER_SEC/HZ * 0.11
+> >
+> > Thanks so much for the detailed response :)
+> >
+> > IIUC this error bound is in ns. So on a 2 GHz cpu the bound is 0.11 ns
+> > (essentially 0)? I feel like I miscalculated, this error bound is too
+> > good to be true.
+>
+> Never mind, I thought HZ is the cpu speed for some reason. It's the
+> number of jiffies per second, right?
 
-Both the old and new decrypted data size is 32 bytes.  Is the above
-statement necessary, especially since the Documentation example does
-the equivalent?
+Correct.
 
-> The corresponding test for the Linux Test Project ltp has also been
-> fixed (see link below).
+> So if HZ is 1000, the error bound is actually ~2 ms, which is very
+> large considering that the unit is ns.
 
-The LTP patch still needs to be revised, but the "Link" is a reference
-to the discussion.  Is the above statement necessary?
+Uh, for HZ=1000, I think it's closer to 220us, but yes, for HZ=100 2.2ms.
 
-> 
-> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
-> Cc: stable <stable@kernel.org>
-> Link: https://lore.kernel.org/ltp/20221006081709.92303897@mail.steuer-voss.de/
-> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
-
-Otherwise,
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
+thanks
+-john
