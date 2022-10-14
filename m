@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B1A5FE8F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932055FE8FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiJNGiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S229507AbiJNGim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiJNGiC (ORCPT
+        with ESMTP id S229504AbiJNGik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:38:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C890817FD45
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665729481;
+        Fri, 14 Oct 2022 02:38:40 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3445717FD45
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:38:39 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 15:38:26 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1665729517;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=RoJELZz+x5LeDD7tOYxw1KCc4ujCDiWMWLzIpNsWuQc=;
-        b=ai0lyKo6T10HLudneLxcs3hRU5p0+WELJIJ0RxpI1FjTKR97UCTqkuXZYJZdwI5jAbHisK
-        6E8nDFhJPQRx9yoqKRe5UTfcAo4Iza7u+k9mq7qBEGFbFZNVlpIWuPEPdBSqCL5MjbBdm4
-        t0KDn8yb6PzKSgsIobzF1BLqFq6XSG0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-5vDBHopnMZe7Y0H0KO491A-1; Fri, 14 Oct 2022 02:37:55 -0400
-X-MC-Unique: 5vDBHopnMZe7Y0H0KO491A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FE8F803D4A;
-        Fri, 14 Oct 2022 06:37:55 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BDF2784427;
-        Fri, 14 Oct 2022 06:37:53 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-toolchains@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: gcc 5 & 6 & others already out of date?
-References: <CAHmME9prBJHmo9Bw6aobuGLjtxLsjxKJ9wopOv5+BY6ZtuKaNg@mail.gmail.com>
-        <Y0gLyLbdOCetX5LN@sirena.org.uk> <Y0gteD0QYVlYxSZh@zx2c4.com>
-        <87mt9zwotq.fsf@oldenburg.str.redhat.com>
-        <CAKwvOdnP=FTzhm1S-_ZyQaF+LGYkF1DWUekRzvEmxAr=u=FTCQ@mail.gmail.com>
-Date:   Fri, 14 Oct 2022 08:37:52 +0200
-In-Reply-To: <CAKwvOdnP=FTzhm1S-_ZyQaF+LGYkF1DWUekRzvEmxAr=u=FTCQ@mail.gmail.com>
-        (Nick Desaulniers's message of "Thu, 13 Oct 2022 14:03:30 -0700")
-Message-ID: <87k052q5a7.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        bh=GVx51+wEeaxhdduiJJ9u4pDxyncQhwvaEYATQ2iOVl4=;
+        b=XxMiNss66OkyEkiqhCvkHcicecVDn8I/Wd2LSvel1BD3vZB5t6hP2H+++JBgPiFuUZ0az2
+        yP1VYVFpmrcLF2Ym+5DnSN2mrBSL/xVMZjRe/N/UjKTxlaJuYL9PSi2ht/AvvVIW30XAU0
+        g+aQWXry5Plax1EuEkBwZrUff5cKMQE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/4] mm/hwpoison: move definitions of
+ num_poisoned_pages_* to memory-failure.c
+Message-ID: <20221014063826.GA1711843@u2004>
+References: <20221007010706.2916472-1-naoya.horiguchi@linux.dev>
+ <20221007010706.2916472-3-naoya.horiguchi@linux.dev>
+ <Y0ghWfP4n5XNWDg/@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y0ghWfP4n5XNWDg/@localhost.localdomain>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Nick Desaulniers:
+On Thu, Oct 13, 2022 at 04:31:53PM +0200, Oscar Salvador wrote:
+> On Fri, Oct 07, 2022 at 10:07:04AM +0900, Naoya Horiguchi wrote:
+> > From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > 
+> > These interfaces will be used by drivers/base/memory.c by later patch, so as a
+> > preparatory work move them to more common header file visible to the file.
+> > 
+> > Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> > ---
+> > ChangeLog v3 -> v6:
+> > - remove static in definition of num_poisoned_pages_inc() to fix build error.
+> > 
+> > ChangeLog v2 -> v3:
+> > - added declaration of num_poisoned_pages_inc() in #ifdef CONFIG_MEMORY_FAILURE
+> > ---
+> >  arch/parisc/kernel/pdt.c |  3 +--
+> >  include/linux/mm.h       |  5 +++++
+> >  include/linux/swapops.h  | 24 ++----------------------
+> >  mm/memory-failure.c      | 10 ++++++++++
+> >  4 files changed, 18 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/arch/parisc/kernel/pdt.c b/arch/parisc/kernel/pdt.c
+> > index e391b175f5ec..fdc880e2575a 100644
+> > --- a/arch/parisc/kernel/pdt.c
+> > +++ b/arch/parisc/kernel/pdt.c
+> > @@ -18,8 +18,7 @@
+> >  #include <linux/kthread.h>
+> >  #include <linux/initrd.h>
+> >  #include <linux/pgtable.h>
+> > -#include <linux/swap.h>
+> > -#include <linux/swapops.h>
+> > +#include <linux/mm.h>
+> 
+> I am probably missing something.
+> num_poisoned_pages_* functions are in swapops.h, but why are you removing swap.h as well?
 
-> On Thu, Oct 13, 2022 at 11:44 AM Florian Weimer <fweimer@redhat.com> wrote:
->>
->> * Jason A. Donenfeld:
->>
->> > It's also easy, nearly trivial, to download toolchains. Arnd provides a
->> > bunch with his crosstool. "Must use a toolchain from your distro" is a
->> > requirement that affects nobody.
->>
->> But not everything will be built with the cross-compiler.  For the
->> kernel build tools and other userspace components, you'll need a native
->> toolchain that can build programs that can actually run on the build
->> host.
->
-> ... when using GCC. We don't have this pain when using clang.
->
-> https://docs.kernel.org/kbuild/llvm.html#llvm-utilities
->
-> i.e.
-> $ make ARCH=arm LLVM=1
->
-> will build with one instance of a clang binary (and ld.lld and
-> llvm-objcopy etc.) for Target AND Host.  No need for multiple
-> toolchain binaries.
+This file included swap.h and swapops.h together to use num_poisoned_pages_inc()
+by commit 0e5a7ff6e36a ("parisc: Report bad pages as HardwareCorrupted"),
+so I thought these may be updated together.
 
-I'm sure it's nice if it works.  But someone has to do the distribution
-integration work.  If that has already happened upstream, that's great.
-(There are many little details which may or may not matter for kernel
-builds, e.g., static libraries have to be PIC or PIE because Clang now
-defaults to PIE links.)
+> 
+> Also, reading the changelog it sounded like both functions would be in mm.h,
+> but actually only the _inc part is.
 
-But it's also sort of irrelevant in the context of this thread.
-<https://llvm.org/docs/GettingStarted.html#software> says GCC 7 is
-required, and this:
+> > ChangeLog v2 -> v3:
+> > - added declaration of num_poisoned_pages_inc() in #ifdef CONFIG_MEMORY_FAILURE
 
-| LLVM is very demanding of the host C++ compiler, and as such tends to
-| expose bugs in the compiler. We also attempt to follow improvements
-| and developments in the C++ language and library reasonably
-| closely. As such, we require a modern host C++ toolchain, both
-| compiler and standard library, in order to build LLVM.
+Yeah, important part of this log is "in #ifdef CONFIG_MEMORY_FAILURE", but
+this might not be clear from my writing.  Sorry about that, I'll care about
+making change log clearer from now.  This change log will not included when
+merged to mainline, so this hopefully will not confuse anyone.
 
-So a LLVM build from upstream sources won't be an easy escape hatch if
-the kernel bumps toolchain version requirements.
+> 
+> The rest looks good to me.
 
-Historically, GCC has been much more conservative when it comes to host
-toolchain requirements.  But there are other traps (fixincludes can have
-nasty side effects, for example).
+Thank you.
 
-I'm not saying the kernel shouldn't change version requirements.  But I
-do think it's unreasonable to expect that people will be able to build
-their own newer toolchains from upstream sources as a workaround.
-
-Thanks,
-Florian
-
+- Naoya Horiguchi
