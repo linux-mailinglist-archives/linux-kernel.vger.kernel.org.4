@@ -2,152 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0E45FF65A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA805FF65E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJNWX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S229742AbiJNWZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJNWXy (ORCPT
+        with ESMTP id S229519AbiJNWZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:23:54 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957D71BE1E9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:23:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 6C0A03200945;
-        Fri, 14 Oct 2022 18:23:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 14 Oct 2022 18:23:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1665786230; x=1665872630; bh=Y6
-        ngsLLxEEPsALgDBVsNDsl4csmgSHWiccz5cFir6Vk=; b=Yiii8jrRkL8w+/owty
-        jm2EvI7nONMFGGGjBK/QGCbBpIAxkty3RXMNojrEBC44tcN0RSPRH/Q8kr1OtRr/
-        T+2GMwR+Rcb3n5KPusdZL55SQbADOfGV3Rb7YY02yl6fFMaiDA1wAecPhjwQovlL
-        pctk2XWTIpnYfmJrd3VkbUrQQRloLst6f+icu3tegRqks84beneI9QwtCJQ2inJl
-        qIIVFuZKRmRHMcSZ2him7UKefa/+hDjqqDxXaPpCtl6Td+mbJ/47hK798Nzy8+Pk
-        FZ7/Pjmx9VwmNjWsE45YuE0krZ/+SHQwml4kzfcivNOEd+3uv0pXdRgSbpHYWssy
-        gb2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665786230; x=1665872630; bh=Y6ngsLLxEEPsALgDBVsNDsl4csmg
-        SHWiccz5cFir6Vk=; b=AFKuzg7kN5WYamgZ8J9vuz5dVRZV1akJiaRAO32SCH4+
-        o0pbSnDrnXD+o8ShW4H7DwB2SRlJOmlbz9LyDneVRgbApkaFYTj75Yri47Uy8D5I
-        Qh05iPd84SwlRxQ7WXAnmFo/BSb016hW+US1t0MBv2+FTKGXJKxEnDy39j4PNqMH
-        S/yA/L8+I5ZA1l6mWfENCXbo7qdoSSDlOD+fj7O3SQApfb25QcnI0nByk+xbt1rq
-        dLO+XSUDI1IoY/XyZCklfUIt+60MWWktnPNXGb0TgIycRFYLLbfvFjpwN1BhRIKU
-        FhbHKxapSNzlUkAnJxKIX9zymycmFCURvm1yM0fO/w==
-X-ME-Sender: <xms:deFJY5N_IZdoR0e2BE_RaGLUA-6Wi_jXOFLLv4AayCWUK8QktpCb3A>
-    <xme:deFJY79_W89UjiXhVYAhluBaQRDybyafQRPFYzz6cKTWrkqSsDKJ8xXr3Gs4yUX6W
-    cOBBFvx0SEMjsmQ3Ao>
-X-ME-Received: <xmr:deFJY4RWL9y6RPQfNtEaGZxpJtQnNAWJxR2ioEwgHUjHZqAO20I0R8vO05sFDhUTYrE2dg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekfedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:deFJY1vadcb1DUcb5qPCgTBe6YkXcJAatgzFxJ8E0M6BC-jWnYfzKA>
-    <xmx:deFJYxd_g9RrVg6wjw4J2J1NpjfGb-DsHj89PGmm1TzL_0IN0wUrxQ>
-    <xmx:deFJYx1jRjzELNxb4yydyiyzlFdgef1UpwbRTkHprf2hhplIm6urfw>
-    <xmx:duFJYx13X-IcAqsGwxzYNVRBWyltVL_IwsDRzQnqKwMGgqO0zxudhQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Oct 2022 18:23:49 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 4F21E1094FB; Sat, 15 Oct 2022 01:23:46 +0300 (+03)
-Date:   Sat, 15 Oct 2022 01:23:46 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Jann Horn <jannh@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@suse.de>, Rik van Riel <riel@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sasha Levin <sasha.levin@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>
-Subject: Re: [BUG?] X86 arch_tlbbatch_flush() seems to be lacking
- mm_tlb_flush_nested() integration
-Message-ID: <20221014222346.n337tvkbyr33dsdx@box.shutemov.name>
-References: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
+        Fri, 14 Oct 2022 18:25:33 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF166846;
+        Fri, 14 Oct 2022 15:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665786332; x=1697322332;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=crbgjyT8O52ZWI32HYW5IlNr+CfyhK7rYCZVgst+Q/E=;
+  b=D3feSMbEqHs5de/PT/qGV2u4n7iYtYJ/nn1dp+EAZdW0E+ycLiuP42gf
+   ZrqKFtpK82IuiykgX2rNUufok12LZyIGIoQ5mX+9l6oBoKFQkGZ9PP9p2
+   R7EMgfQYf6tkZs4dV7SUA4UOuD5n7H5ECrWlSM1w9RM/BrsQSoxGhtO4t
+   ozHuDzXfAmtH+o+Y1HEmSAgGZuOIB1VsffiGWYaZmGXbOOW1uCqkZKXnS
+   gRmDnkRYZSGFG9J5ImPL7uFq+9IPre8/0OvwHM2f65TmLkOv+E+doJPUj
+   c3kOt4/PJnktJHZdV/uuR5N0lHZg7ZYbPWlpOgA3gG25Yus1f4XrZN4Zn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="305472374"
+X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
+   d="scan'208";a="305472374"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 15:25:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="578779966"
+X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
+   d="scan'208";a="578779966"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga003.jf.intel.com with ESMTP; 14 Oct 2022 15:25:31 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Vinod Koul" <vkoul@kernel.org>,
+        "Arjan Van De Ven" <arjan.van.de.ven@intel.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        "Jacob Pan" <jacob.jun.pan@linux.intel.com>
+Cc:     dmaengine@vger.kernel.org,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, stable@vger.kernel.org
+Subject: [PATCH v2] dmaengine: idxd: Do not enable user type Work Queue without Shared Virtual Addressing
+Date:   Fri, 14 Oct 2022 15:25:41 -0700
+Message-Id: <20221014222541.3912195-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 08:19:42PM +0200, Jann Horn wrote:
-> Hi!
-> 
-> I haven't actually managed to reproduce this behavior, so maybe I'm
-> just misunderstanding how this works; but I think the
-> arch_tlbbatch_flush() path for batched TLB flushing in vmscan ought to
-> have some kind of integration with mm_tlb_flush_nested().
-> 
-> I think that currently, the following race could happen:
-> 
-> [initial situation: page P is mapped into a page table of task B, but
-> the page is not referenced, the PTE's A/D bits are clear]
-> A: vmscan begins
-> A: vmscan looks at P and P's PTEs, and concludes that P is not currently in use
-> B: reads from P through the PTE, setting the Accessed bit and creating
-> a TLB entry
-> A: vmscan enters try_to_unmap_one()
-> A: try_to_unmap_one() calls should_defer_flush(), which returns true
-> A: try_to_unmap_one() removes the PTE and queues a TLB flush
-> (arch_tlbbatch_add_mm())
-> A: try_to_unmap_one() returns, try_to_unmap() returns to shrink_folio_list()
-> B: calls munmap() on the VMA that mapped P
-> B: no PTEs are removed, so no TLB flush happens
-> B: munmap() returns
+When the idxd_user_drv driver is bound to a Work Queue (WQ) device
+without IOMMU or with IOMMU Passthrough without Shared Virtual
+Addressing (SVA), the application gains direct access to physical
+memory via the device by programming physical address to a submitted
+descriptor. This allows direct userspace read and write access to
+arbitrary physical memory. This is inconsistent with the security
+goals of a good kernel API.
 
-I think here we will serialize against anon_vma/i_mmap lock in
-__do_munmap() -> unmap_region() -> free_pgtables() that A also holds.
+Unlike vfio_pci driver, the IDXD char device driver does not provide any
+ways to pin user pages and translate the address from user VA to IOVA or
+PA without IOMMU SVA. Therefore the application has no way to instruct the
+device to perform DMA function. This makes the char device not usable for
+normal application usage.
 
-So I believe munmap() is safe, but MADV_DONTNEED (and its flavours) is not.
+Since user type WQ without SVA cannot be used for normal application usage
+and presents the security issue, bind idxd_user_drv driver and enable user
+type WQ only when SVA is enabled (i.e. user PASID is enabled).
 
-> [at this point, the TLB entry still exists]
-> B: calls mmap(), which reuses the same area that was just unmapped
-> B: tries to access the newly created VMA, but instead the access goes
-> through the stale TLB entry
-> A: shrink_folio_list() calls try_to_unmap_flush(), which removes the
-> stale TLB entry
-> 
-> The effect would be that after process B removes a mapping with
-> munmap() and creates a new mapping in its place, it would still see
-> data from the old mapping when trying to access the new mapping.
-> 
-> Am I missing something that protects against this scenario?
-> 
-> munmap() uses the mmu_gather infrastructure, which tries to protect
-> against this kind of correctness bug with multiple racing TLB
-> invalidations in tlb_finish_mmu() by blowing away the whole TLB
-> whenever one TLB invalidation ends while another is still in progress
-> (tested with mm_tlb_flush_nested(tlb->mm)). But mmu_gather doesn't
-> seem to be aware of TLB flushes that are batched up in the
-> arch_tlbbatch_flush() infrastructure, so that doesn't help here.
-> 
-> I think it might be necessary to add a new global counter of pending
-> arch_tlbbatch_flush() flushes, and query that in
-> mm_tlb_flush_nested(), or something like that.
+Fixes: 448c3de8ac83 ("dmaengine: idxd: create user driver for wq 'device'")
+Cc: stable@vger.kernel.org
+Suggested-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+---
+v2:
+- Update changlog per Dave Hansen's comments
 
+ drivers/dma/idxd/cdev.c   | 18 ++++++++++++++++++
+ include/uapi/linux/idxd.h |  1 +
+ 2 files changed, 19 insertions(+)
+
+diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
+index c2808fd081d6..a9b96b18772f 100644
+--- a/drivers/dma/idxd/cdev.c
++++ b/drivers/dma/idxd/cdev.c
+@@ -312,6 +312,24 @@ static int idxd_user_drv_probe(struct idxd_dev *idxd_dev)
+ 	if (idxd->state != IDXD_DEV_ENABLED)
+ 		return -ENXIO;
+ 
++	/*
++	 * User type WQ is enabled only when SVA is enabled for two reasons:
++	 *   - If no IOMMU or IOMMU Passthrough without SVA, userspace
++	 *     can directly access physical address through the WQ.
++	 *   - The IDXD cdev driver does not provide any ways to pin
++	 *     user pages and translate the address from user VA to IOVA or
++	 *     PA without IOMMU SVA. Therefore the application has no way
++	 *     to instruct the device to perform DMA function. This makes
++	 *     the cdev not usable for normal application usage.
++	 */
++	if (!device_user_pasid_enabled(idxd)) {
++		idxd->cmd_status = IDXD_SCMD_WQ_USER_NO_IOMMU;
++		dev_dbg(&idxd->pdev->dev,
++			"User type WQ cannot be enabled without SVA.\n");
++
++		return -EOPNOTSUPP;
++	}
++
+ 	mutex_lock(&wq->wq_lock);
+ 	wq->type = IDXD_WQT_USER;
+ 	rc = drv_enable_wq(wq);
+diff --git a/include/uapi/linux/idxd.h b/include/uapi/linux/idxd.h
+index 095299c75828..2b9e7feba3f3 100644
+--- a/include/uapi/linux/idxd.h
++++ b/include/uapi/linux/idxd.h
+@@ -29,6 +29,7 @@ enum idxd_scmd_stat {
+ 	IDXD_SCMD_WQ_NO_SIZE = 0x800e0000,
+ 	IDXD_SCMD_WQ_NO_PRIV = 0x800f0000,
+ 	IDXD_SCMD_WQ_IRQ_ERR = 0x80100000,
++	IDXD_SCMD_WQ_USER_NO_IOMMU = 0x80110000,
+ };
+ 
+ #define IDXD_SCMD_SOFTERR_MASK	0x80000000
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.32.0
+
