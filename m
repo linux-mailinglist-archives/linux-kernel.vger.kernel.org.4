@@ -2,115 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704075FF3ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0BD5FF3EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiJNTDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 15:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S231254AbiJNTJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 15:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiJNTDA (ORCPT
+        with ESMTP id S229770AbiJNTJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 15:03:00 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B28A1905DD
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:02:59 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id m6so5795386pfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:02:59 -0700 (PDT)
+        Fri, 14 Oct 2022 15:09:10 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF841D73F3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:09:06 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 8so3111767qka.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:09:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=93SM5edoQTmh30dhmcftbv07FMloClt4sRz/Es4IFlM=;
-        b=BUJRV0Pc2cbfpCvcp0VnINHf8OFz/twYIlfpd4Oyf50KGIddch6YqP9L/dp6C+D7Md
-         GmPFvjkicX1rvEyRJDsvivlcJW5pBFTP2t1E/IBV3J9JoNBff6RYngi9r7psUHt8UOGR
-         ruYq+PfEDjUWW1GkfJwZiSah0WpONl7pW00iqVCpZ0jraczJaw0Iaz08dPZus3Msxg4Z
-         ss8BCwyflYryxfQ3BV2WEcYL1nRSsT63Dg9W8Y4wlKimRoUha2ibmRsVNUcy9PD0Grsc
-         OPtdEtjlbt0fKRZ3Q9s9hyEsPjyzlQTMJEiTdHaDM561/iCSmwZ420LAJRIBk7iW8VL7
-         25QA==
+        d=linuxfoundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PSBBubo8IAbN+yxQgMGavzYe4lqgiZmQwmoNccc+Tn4=;
+        b=F5Xlc3cB3hD+HemKoUoTCn6rUhK1cLvebZc7zGnOdkHD1l1qiFITFPwghAoVxRqtB2
+         wX1K2pDVCWFT9c5ESJ9ynoOhPSADnfXeM0ux4tvIeRZM/Fj8AS7Mgr/YEoRkVOk9NBol
+         qZLYuS+9+7U6Wx++SXhVg93i5BQzaGhNmZwe4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=93SM5edoQTmh30dhmcftbv07FMloClt4sRz/Es4IFlM=;
-        b=zoc12WFbZbD8OOmkQsAI3lRBv75gB+me3XTLvjZzbwSH2w7V3kcuYJBKN8JsMt5pgi
-         EK8fWc0trMkCfyaUGyBOkVuo+suM2qe1MHXR4ujdLrGRh/eGIuyLV3bC0mIQirYjbfT/
-         ejcWJ2nCqrYc97MzMjN99q3LwlXp20VAoGO9yWUC/b0RFhKHpeTXIP3G76MEsvh7HrfO
-         H+gUOElGisHR0weHWMb6vjbso/q1Hy5Qw4GDL2BQ86QDAAOgV31hStaAcuEqU1DWupSt
-         Wc4khmFdeon+XiqtSou5t2tPs4PaxKBOOK3wS3Er+O8Jl5Hj2U7azu3mxLC6uuMJjKzU
-         m+pw==
-X-Gm-Message-State: ACrzQf16pE3OtAQvx09sVCjcFPZy5GVQUWJH3bdtUvC9U1VPLfWG3oTz
-        Tdkv38eA0YHyFJ/SDF3Ov7yKSdAd5ZsuYg==
-X-Google-Smtp-Source: AMsMyM71eRcCLDDCqpb7XXz4/MQpa6Z2VN36ZgDsI/P22mjS9jZp1Izpx/9ABooVI5nyhiKSWq3Tsw==
-X-Received: by 2002:a63:454d:0:b0:43c:e834:ec0 with SMTP id u13-20020a63454d000000b0043ce8340ec0mr5999924pgk.270.1665774178987;
-        Fri, 14 Oct 2022 12:02:58 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g17-20020aa79dd1000000b0053e5daf1a25sm2087262pfq.45.2022.10.14.12.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 12:02:58 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 19:02:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        David Matlack <dmatlack@google.com>,
-        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 0/5] dirty_log_perf_test vCPU pinning
-Message-ID: <Y0myXiIjlT8pYyr8@google.com>
-References: <20221010220538.1154054-1-vipinsh@google.com>
- <DS0PR11MB63735576A8FBF80738FF9B76DC249@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y0mPqNRSgpArgyS8@google.com>
- <CALzav=dU2-3avKGT2-AxO8d_uVH9bmYaO=ym8pPFM8esuSWP=A@mail.gmail.com>
- <CAHVum0d2Jfr=WVxKxvnmwGKzPfV3vN5dbz11=rdcW6qoSoobew@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PSBBubo8IAbN+yxQgMGavzYe4lqgiZmQwmoNccc+Tn4=;
+        b=CktsGR5zcJT8QAPNGUK6hZ/1C6/kuIaHo53a7ZQSHOtrKtZrd4tAd/c38XUo2uumes
+         hjMTFV9eCnBeJZne5vNOp6FlXns601DPlqAxHhTf4ZVc8DzXMXsdZ9vuXQ5eN2QQpywS
+         YAlUncrNAIBTumBRs85D6Z+SXEXzNsFq8KaV8IFuWO7B5Bd4z1rcab89EJC9MHsu+PtB
+         98msonxe9gA7ueVIsEjzF7thYal/O3Z7RdPJ2l70vqQz+zD7dzppr5OF7gQ3ZjL8pUnA
+         6QUICWrpvF//DFuEbWwsRfwvtc+ruI0dRxilwvBXjk+Mg7bM3cwzkJQApDZUTGS5eO2x
+         lzKw==
+X-Gm-Message-State: ACrzQf3cP1tEvH7FwCOc9RMKb2/nzv3/sblArdrQXkQzMQSqyggbhZbJ
+        s2P776x7YCmhtZPfKBNAyrpwz1wZ/P/9ow==
+X-Google-Smtp-Source: AMsMyM7O/npxoXoVfZqtQDWy1w5dO+f/74wN38yzpV4zjKdJy0NaygMFzwGRohltAZCquzznjrWt0A==
+X-Received: by 2002:a05:620a:1231:b0:6ee:83a8:29f1 with SMTP id v17-20020a05620a123100b006ee83a829f1mr4898767qkj.325.1665774543778;
+        Fri, 14 Oct 2022 12:09:03 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id d25-20020a05620a159900b006ee7e223bb8sm2934445qkk.39.2022.10.14.12.09.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 12:09:02 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 203so6671267ybc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:09:02 -0700 (PDT)
+X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
+ t15-20020a056902124f00b0066ee3da487emr6177123ybu.310.1665774542040; Fri, 14
+ Oct 2022 12:09:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0d2Jfr=WVxKxvnmwGKzPfV3vN5dbz11=rdcW6qoSoobew@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
+In-Reply-To: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linuxfoundation.org>
+Date:   Fri, 14 Oct 2022 12:08:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgu9x3ds+Mxpz6-BxuQgPt-YJ75J8q0q38w+QR-fA2kqA@mail.gmail.com>
+Message-ID: <CAHk-=wgu9x3ds+Mxpz6-BxuQgPt-YJ75J8q0q38w+QR-fA2kqA@mail.gmail.com>
+Subject: Re: [BUG?] X86 arch_tlbbatch_flush() seems to be lacking
+ mm_tlb_flush_nested() integration
+To:     Jann Horn <jannh@google.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@suse.de>, Rik van Riel <riel@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022, Vipin Sharma wrote:
-> On Fri, Oct 14, 2022 at 9:55 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Fri, Oct 14, 2022 at 9:34 AM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Fri, Oct 14, 2022, Wang, Wei W wrote:
-> > > > Just curious why not re-using the existing tools (e.g. taskset) to do the pinning?
-> > >
-> > > IIUC, you're suggesting the test give tasks meaningful names so that the user can
-> > > do taskset on the appropriate tasks?  The goal is to ensure vCPUs are pinned before
-> > > they do any meaningful work.  I don't see how that can be accomplished with taskset
-> > > without some form of hook in the test to effectively pause the test until the user
-> > > (or some run script) is ready to continue.
-> >
-> > A taskset approach would also be more difficult to incorporate into
-> > automated runs of dirty_log_perf_test.
-> >
-> > >
-> > > Pinning aside, naming the threads is a great idea!  That would definitely help
-> > > debug, e.g. if one vCPU gets stuck or is lagging behind.
-> >
-> > +1
-> 
-> I also like the idea.
-> 
-> Sean:
-> Do you want a v6 with the naming patch or you will be fine taking v5,
-> if there are no changes needed in v5, and I can send a separate patch
-> for naming?
+On Fri, Oct 14, 2022 at 11:20 AM Jann Horn <jannh@google.com> wrote:\
+>
+> The effect would be that after process B removes a mapping with
+> munmap() and creates a new mapping in its place, it would still see
+> data from the old mapping when trying to access the new mapping.
+>
+> Am I missing something that protects against this scenario?
 
-Definitely separate, this is an orthogonal change and I don't think there will be
-any conflict.  If there is a conflict, it will be trivial to resolve.  But since
-Wei provided a more or less complete patch, let's let Wei post a formal patch
-(unless he doesn't want to).
+While I don't think that scenario is something you can trigger in
+practice without enormously bad luck, I don't see anything that would
+protect against it.
+
+Afaik, the whole vmscan thing never takes the vm lock, only the file
+lock (to protect mapping->i_map) or the anonvma lock (to protect
+anon_vma->rb_root).
+
+And none of that ends up serializing with a new mmap() that doesn't
+even install a new page in the page tables (and just gets an old TLB
+entry). There are zero shared data structures outside of the mm
+itself.
+
+Now, munmap() *could* serialize with it, because at least munmap has
+access to the data structures and their locks. But it doesn't do any
+deferred flushes that I can see, so while it's serialized, it doesn't
+help.
+
+And it wouldn't help to do try_to_unmap_flush() from munmap either,
+since the deferred flushing is per-thread, and the munmap is done from
+a different thread.
+
+So if you're missing something, then I am too.
+
+All this flushing is very careful to flush before actually releasing
+the page, which is our really traditional TLB flush bug. But yeah,
+that's not the only race - we should flush before replacing the
+mapping too.
+
+Mel? I think the batched flushing goes back to you many many years
+ago. I hope Jann and me are just being stupid and missing something
+obvious.
+
+                  Linus
