@@ -2,82 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB425FF0AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30255FF0B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJNOxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S230006AbiJNO6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJNOxi (ORCPT
+        with ESMTP id S229702AbiJNO6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:53:38 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5817A1CEC22;
-        Fri, 14 Oct 2022 07:53:38 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1370acb6588so6101003fac.9;
-        Fri, 14 Oct 2022 07:53:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gy30CbgzVzjQUM+rCFGdEeWdVOvfOjY22rZZUrW/yKM=;
-        b=wtj1sAvAbrO8XiBdiTA9xLm34lfiUtMvsvgnzigDpmPsZcW2RSZq82u72ZYhmbbntP
-         nD79Vz4Yhk4GYH3IYEgrhL/p/kr6xQtkwf6f1NJDWJRBqu3YQkZA7D7YibOXTO85vvCT
-         13WxwF69AALTQ/jaUy984qOyNlnSeYEaTk2MlEe849Mkw39VcMpY4mRCJ8oPY0F7sXHE
-         SkfJWCxWR1Xdj5940q5igRxSaY7sf6ZdRNhPymiNKhA3xK2+Dz0FRX0nEC+CU9p8cyBH
-         EEdP/EfMJZ/Aw78tMAsnClR6kQses6hXZHvb9BKY3/bvBFyvSMioNK5hRiWQbfYdTCSU
-         AXzg==
-X-Gm-Message-State: ACrzQf34iMWWuXHUdrqjmENZqVKO395FeVTLPul1xutxMRDHHBP1GOsP
-        p5a9r/Evo6tCkURmaSTYQQ==
-X-Google-Smtp-Source: AMsMyM4vNolvuaN6nEESb3jchZJppnaf98gn7taPwj073cN4z6ZsJ0f8+guVhtChAanhWKSaKP3H5Q==
-X-Received: by 2002:a05:6871:54b:b0:132:b17:d0cb with SMTP id t11-20020a056871054b00b001320b17d0cbmr2806569oal.117.1665759217594;
-        Fri, 14 Oct 2022 07:53:37 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id el40-20020a056870f6a800b0011dca1bd2cdsm1519301oab.0.2022.10.14.07.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 07:53:37 -0700 (PDT)
-Received: (nullmailer pid 1940386 invoked by uid 1000);
-        Fri, 14 Oct 2022 14:53:37 -0000
-Date:   Fri, 14 Oct 2022 09:53:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        jun.li@nxp.com, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, devicetree@vger.kernel.org,
-        kernel@pengutronix.de, s.hauer@pengutronix.de, kishon@ti.com,
-        Peng Fan <peng.fan@nxp.com>, robh+dt@kernel.org,
-        festevam@gmail.com, xu.yang_2@nxp.com, linux-usb@vger.kernel.org,
-        vkoul@kernel.org, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: phy: imx8mq-usb: add power-domains property
-Message-ID: <166575921695.1940330.11207621757952776145.robh@kernel.org>
-References: <20221014095550.2125018-1-peng.fan@oss.nxp.com>
+        Fri, 14 Oct 2022 10:58:14 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F58A1946E5;
+        Fri, 14 Oct 2022 07:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Kelky+eVwv2Q20yZzcQet2723DHRyec/jgZYHrjNAHk=; b=rcLAkiSpOA9rqfxJDX+rjl/LNM
+        G8Z25wZKMleC504EqFVqoqLekdATfsVqbeUUQNCZ94tUX0mI4bfA8cBy2bQWxYPxwhXZqTr7O5jcJ
+        Sl3YAh9tyi02OYWYt1qf36YPZ555Gs20Hwrqn5crhKsOy+g7Xkz9/dTykoyyCig/41b6MkxLICMb+
+        r0o3tYo1ywdwyU77F1cduT9aP5PWOxjr4PvSL4NO01d7vF5MCTdyz6/pmREbOaF0+NJ9I29pJf9GE
+        d4uNIwK+i6oR5t9nFZO3KtpDiEdgEuSjdVAzn8dCovVflK4KXgDV9ceLJ3uMvKPCAcO1R7RT1lsvS
+        P3oLnffQ==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ojM8S-001SEE-MU; Fri, 14 Oct 2022 16:58:05 +0200
+Message-ID: <1c6a9461-0d3d-a049-0165-0d5c95aa9405@igalia.com>
+Date:   Fri, 14 Oct 2022 11:57:49 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014095550.2125018-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V2 3/3] efi: pstore: Add module parameter for setting the
+ record size
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, keescook@chromium.org,
+        anton@enomsg.org, ccross@android.com, tony.luck@intel.com
+References: <20221013210648.137452-1-gpiccoli@igalia.com>
+ <20221013210648.137452-4-gpiccoli@igalia.com>
+ <CAMj1kXG7syjMsOL+AcUMfT0_nhGde6qc_6MexpdDtxFQpS2=7A@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAMj1kXG7syjMsOL+AcUMfT0_nhGde6qc_6MexpdDtxFQpS2=7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 17:55:50 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 14/10/2022 11:46, Ard Biesheuvel wrote:
+> [...]
+>>         for (;;) {
+>> -               varname_size = EFIVARS_DATA_SIZE_MAX;
+>> +               varname_size = record_size;
+>>
 > 
-> Add optional power-domains property for usb phy.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> I don't think we need this - this is the size of the variable name not
+> the variable itself.
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Ugh, my bad. Do you want to stick with 1024 then?
+Thanks,
+
+
+Guilherme
