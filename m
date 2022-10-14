@@ -2,154 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD80D5FF2D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05635FF2DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiJNROJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S231285AbiJNRUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiJNROH (ORCPT
+        with ESMTP id S229711AbiJNRUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:14:07 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578441CB52F;
-        Fri, 14 Oct 2022 10:14:06 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 682605801B3;
-        Fri, 14 Oct 2022 13:14:05 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 14 Oct 2022 13:14:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665767645; x=1665771245; bh=v2xtyFESI3
-        AU0yurgsvnGP78lRm7Qux9muzHiKFWjKs=; b=NYn2d4ZIt0sZnULJUkcoyQ8Ikw
-        6MQQX/gJKQIvOtHTt8J3DgRNSVMpSceZ3CdnGfVVrSxESiznwEo2lvDSY13Pf/lQ
-        aY0A2oI19viw0ZKnimzTIzjB0X93hBl6xec/iy6Qqi5eFyu3rBKOuVFWCKwvIpLE
-        qRQ+lWXgHNmS8xK2iHRaAmge8iUbhOXQAEXVm7Tv9lztzslRMjxKmqgI6A7mWeIc
-        4mn2gpd0R4CzRhvj9O+t3dgYWY6hFA59ldThsQKEi6guRuTdo03uO/9I0s8hTU9B
-        fFjnR06m3omyR+s9hIZ8arKbFD4k3Y2pm/K6puVGwif5px1KZbjouiMy7C5A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665767645; x=1665771245; bh=v2xtyFESI3AU0yurgsvnGP78lRm7
-        Qux9muzHiKFWjKs=; b=JjRZmMahHBIYt359JEHGhFsuYoT08KO1lCJ5TaZKiDQE
-        n7BthrpykGDrT9cL4dzZtnZuOQYkmJ6wlsieHuF+VEil4rAVrtJk0/GyBmbVxjn9
-        ItaovVwOyP2mz6AnmF0WcgFs9RqOwKGcoHs01vz5eiUaq7lLdRdiRsDZkc3Cy5JW
-        136HjHoHhxHRNDjp8n3fRahdhSzkIr+YXRtLyVtWYJe1NgdHDSwnrZBnbeY2XvOX
-        LpaZIytanIgl+iM5eiYxaJLgxe24JYml/SZUuPfIOo0SRhUcQ2j6BZDJvbZRBMpe
-        DfRwVaWtrDZv9lRjzTcT4/drCcyg4Aey7JO5ev4Vxg==
-X-ME-Sender: <xms:3JhJY-lhdKaoB1jW7sAhIpArnfUH_oMuHDUhuFejKDZbP2CH7l6U6g>
-    <xme:3JhJY10iRwiI7wtDY60Md8uopR63m3puhSKNJGLcdPF3FGtaHfMfl4ewX0XAXPWMM
-    hMS4RmK-D9SkUBh37Q>
-X-ME-Received: <xmr:3JhJY8qHRbpJ0cmN7BPROzJZWRf8vv0B6o3eqn5fuNaz0uQ_e79Eahqn9DE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekvddgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhihl
-    vghrucfjihgtkhhsuceotghouggvsehthihhihgtkhhsrdgtohhmqeenucggtffrrghtth
-    gvrhhnpefggeekieffteehgfetffduhfefjeehvdejhfejkeduleffudelhfefkeeiledu
-    jeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheptghouggvsehthihhihgtkhhsrdgtohhm
-X-ME-Proxy: <xmx:3ZhJYym5tWYTKMzAjZ0Yjs6L9jXoWGraoWRzf1PNnw3_CB2Ubt-TTw>
-    <xmx:3ZhJY81wynsmR0kDM83y_TiiWvaVjSvUM0bpNcwilrYAJS_fCB7vvQ>
-    <xmx:3ZhJY5vRbNoab6tjXrTsilYlzkGhyYyg1SRd5OWqQNSAuSuH0DUc2A>
-    <xmx:3ZhJY9n94Qzb9By0mmCTfFdg8ZDwTVWJMiE79d3zhORyNEwWxMgpJg>
-Feedback-ID: i78e14604:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Oct 2022 13:14:04 -0400 (EDT)
-Date:   Fri, 14 Oct 2022 12:13:48 -0500
-From:   Tyler Hicks <code@tyhicks.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
-        Sasha Levin <sashal@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v2] Documentation: process: replace outdated LTS table w/
- link
-Message-ID: <20221014171348.w5t4lwwqaqmfykta@sequoia>
-References: <Y0mSVQCQer7fEKgu@kroah.com>
- <20221014171040.849726-1-ndesaulniers@google.com>
+        Fri, 14 Oct 2022 13:20:33 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664EC474C8;
+        Fri, 14 Oct 2022 10:20:32 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y8so5460306pfp.13;
+        Fri, 14 Oct 2022 10:20:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=8fPATVudPSO8kPCMernk2QpFo+S936O55u8ii3pliT8=;
+        b=Yb1g2J3WyyLaHftxPyVqzcvJFeRCCS/ltPklCPgWW4ho9ldmCbVtfj0YZ1A9sowbI1
+         tkjrZPZLQi7GZ55jrd9Fc/qdaDHwQnFwx8W6ffa0v3nC2/XoOeIvAbT4k0QrqW364Orw
+         RuILkjYGbeoUZM5ZVcYoxIBKtpdospnzfSq2+Dfs7m5Qa5tyjYBOQQrTne5+vhaSmKW5
+         JV44cLlEP73eU5tf1bDXdc7zmqKsWbLIA3OK/MYojmg7HTLIdG8oOi0p49wvyNDHpbm6
+         ImtG+xCvSqfhKorDMOGiVxDoJb9KAl14UGTRJPPR1t1z6dQWTNtTgmtflzsJCvyZzDZV
+         vfMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8fPATVudPSO8kPCMernk2QpFo+S936O55u8ii3pliT8=;
+        b=uq5zRKhBNPwWqq1MZjZG4i3xnE4sFJKeOPYGIe/EbMjHMuHGCoTxgw5lfhcmd2EXAh
+         Zrbv8Jr+4VJ3Upv72L5rUzMZ76dEkA04CNGfnSQ0LaqT51EYHCPOVCmMvDGZ4VuWYEnc
+         SiT8GHMZGCopP7Si7w88wCeuCA2l3F6a/usubnRVU1NoNee5j/UZGomVpmdHXsCFflTI
+         Ds3bqHsSZyIj2I0mpbj2hER4slyq26+Jj2fesnMFyD9eLkGmN4I7R05NnF/upcoYH/EP
+         2dJy82FW4Fc0F0CGJhl0swOOqPxxQkcfiJzWD0W1oM6cznMzW3K/Xrk5SzOeEQg7wje9
+         4v8w==
+X-Gm-Message-State: ACrzQf1l0TU4yQyouXR/Aj9/4JCPrxAA9hzYKOQ0CT3Bv8mAneCoyfjn
+        QP0yUOXaaOwEN4ETZBBSLmOSNQAu5ZM=
+X-Google-Smtp-Source: AMsMyM5ewOIFNBJTWOZa+ubmmdVyGYhR8cPMq/e0Hz0ynxbPZJiac9+bq8Oud3TxWBLqDpyvKGLZCA==
+X-Received: by 2002:a63:5547:0:b0:456:c63b:7139 with SMTP id f7-20020a635547000000b00456c63b7139mr5502466pgm.179.1665768031920;
+        Fri, 14 Oct 2022 10:20:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g186-20020a6252c3000000b0055f98a2c64bsm2068276pfb.142.2022.10.14.10.20.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 10:20:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ed901a64-7002-4a4e-1342-c06f9a398fd1@roeck-us.net>
+Date:   Fri, 14 Oct 2022 10:20:30 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014171040.849726-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        jdelvare@suse.com, len.brown@intel.com
+References: <20221014090147.1836-1-rui.zhang@intel.com>
+ <20221014090147.1836-2-rui.zhang@intel.com>
+ <ad558e83-3e42-aefd-754d-e71f49dda206@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ad558e83-3e42-aefd-754d-e71f49dda206@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-14 10:10:40, Nick Desaulniers wrote:
-> The existing table was a bit outdated.
+On 10/14/22 10:12, Dave Hansen wrote:
+> On 10/14/22 02:01, Zhang Rui wrote:
+>> Use variable name 'index' instead of 'indx' for the index in the
+>> core_data[] array.
+>>
+>> No functional change expected.
+>>
+>> Cc: stable@vger.kernel.org
+>> Suggested-by: Ingo Molnar <mingo@kernel.org>
+>> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > 
-> 3.16 was EOL in 2020.
-> 4.4 was EOL in 2022.
+> Hi,
 > 
-> 5.10 is new in 2020.
-> 5.15 is new in 2021.
+> Thanks for paring this series down.
 > 
-> We'll see if 6.1 becomes LTS in 2022.
+> I think I'm also going to pull this patch out of the series before I
+> apply it and just rework 2/4 to apply cleanly without it.  I just can't
+> put this in our "urgent" fixes pile and keep the stable@ tag on such a
+> trivial rename and keep a straight face.
 > 
-> Rather than keep this table updated, it does duplicate information from
-> multiple kernel.org pages. Make one less duplication site that needs to
-> be updated and simply refer to the kernel.org page on releases.
-> 
-> Suggested-by: Tyler Hicks <code@tyhicks.com>
-> Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Changes v1 -> v2:
-> * Rather than update table, use a link as per Tyler and Bagas.
-> * Carry forward GKH's SB tag.
 
-Thanks! Was just about to send out that same thing. :)
+To be fair, this patch was only submitted as a prerequisite to the next
+patch in the series because someone had objected to the use of both 'indx'
+and 'index' in the driver.
 
-Reviewed-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
+Guenter
 
-Tyler
-
-> 
->  Documentation/process/2.Process.rst | 15 ++++-----------
->  1 file changed, 4 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/process/2.Process.rst b/Documentation/process/2.Process.rst
-> index e05fb1b8f8b6..6a919cffcbfd 100644
-> --- a/Documentation/process/2.Process.rst
-> +++ b/Documentation/process/2.Process.rst
-> @@ -126,17 +126,10 @@ than one development cycle past their initial release. So, for example, the
->  5.2.21 was the final stable update of the 5.2 release.
->  
->  Some kernels are designated "long term" kernels; they will receive support
-> -for a longer period.  As of this writing, the current long term kernels
-> -and their maintainers are:
-> -
-> -	======  ================================	=======================
-> -	3.16	Ben Hutchings				(very long-term kernel)
-> -	4.4	Greg Kroah-Hartman & Sasha Levin	(very long-term kernel)
-> -	4.9	Greg Kroah-Hartman & Sasha Levin
-> -	4.14	Greg Kroah-Hartman & Sasha Levin
-> -	4.19	Greg Kroah-Hartman & Sasha Levin
-> -	5.4	Greg Kroah-Hartman & Sasha Levin
-> -	======  ================================	=======================
-> +for a longer period.  Please refer to the following link for the list of active
-> +long term kernel versions and their maintainers:
-> +
-> +	https://www.kernel.org/category/releases.html
->  
->  The selection of a kernel for long-term support is purely a matter of a
->  maintainer having the need and the time to maintain that release.  There
-> 
-> base-commit: 9c9155a3509a2ebdb06d77c7a621e9685c802eac
-> -- 
-> 2.38.0.413.g74048e4d9e-goog
-> 
