@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4A95FF44E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6395C5FF450
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiJNUJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S230307AbiJNUJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJNUJX (ORCPT
+        with ESMTP id S230199AbiJNUJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:09:23 -0400
+        Fri, 14 Oct 2022 16:09:28 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB3F1D3742
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:09:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECE21DA362
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:09:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665778162; x=1697314162;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=I4+VozkQrlkKojN9mA8awXbzm9vqUsTpiTc6xON/JXg=;
-  b=iMxuIXlDHVcHvFook3AKIkVmS3AwYZdTwN4XH47vhqj/GsMu8sqiSR2I
-   Rd3LgucMKI2r7ISZjIo6NP+ndB+fIM6aK6o/NHqudwu+31NWfVVZifsOz
-   8mHwmitYZYIdy1pFOauDGJ+FtrgzVfTSB+qRN2M+IjEa0DnvpSvi/jNiT
-   D1qp44qPHuHOZj5FC1AaLTDjpkJQj7wsW4hPYjPlv39kYceXdE3yYsANc
-   ZeycUpHI/dopOLwESYSHcu8cyEA6AFmPQsc4Xmc5bin1Otzr3lYrM/SVE
-   pDdQPcgfdqgzfQLjHml0bq+EwKndUS9ATzJYX4dIYBtUXifpg2OCAxwq/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202147"
+  t=1665778167; x=1697314167;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=c7e6tnykc4mVE2lOrJC5yfRma2B2qJ8DsHSzErtQPMA=;
+  b=LRVpq6a7TboItEby168TF8j0almAvuDu3ppAlYb+JHrioj32F9qk6Eoz
+   WL9tYrjuDeDpBlllfoNj2pOh4XSfXMbjP/QkAOH4PzbdILwsrkRdz2zgL
+   9pL1msJ5p3hWgnQi5GUNamjAvVyv6nc36a875bsaKlSARwUD5Qltv7VUl
+   o7yVF3Cg+I1KErNZyGnmaebTtg22ITOmHgUKA6Xd3R+k62qhHv5WWS5m3
+   4A6oXkfVrGpIWjwtamyiD2eM1CJiKdR901E2sYYwEKwA1oBcwpYXb+nKT
+   9uvE/ectMxeo5ll9E1it4vNLpIuizRjEHJhv8pD+/pJCWm8YNkPXjHw39
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202151"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="304202147"
+   d="scan'208";a="304202151"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:22 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870109"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870137"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="716870109"
+   d="scan'208";a="716870137"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:22 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
 To:     Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>
@@ -47,11 +47,14 @@ Cc:     Tony Luck <tony.luck@intel.com>,
         X86-kernel <x86@kernel.org>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Arjan van de Ven <arjan.van.de.ven@intel.com>,
-        Jacob Jun Pan <jacob.jun.pan@intel.com>
-Subject: [PATCH 00/13] Make microcode loading more robust
-Date:   Fri, 14 Oct 2022 13:09:00 -0700
-Message-Id: <20221014200913.14644-1-ashok.raj@intel.com>
+        Jacob Jun Pan <jacob.jun.pan@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: [PATCH 01/13] x86/microcode/intel: Print old and new rev after early microcode update
+Date:   Fri, 14 Oct 2022 13:09:01 -0700
+Message-Id: <20221014200913.14644-2-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221014200913.14644-1-ashok.raj@intel.com>
+References: <20221014200913.14644-1-ashok.raj@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,70 +66,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds more robustness to microcode loading.
+Print the old and new versions of microcode after an early load is
+complete. This is useful to know what version was loaded by BIOS before an
+early microcode load.
 
-- Adds proper quiesce to sibling threads in an NMI handler.
-- Fixes some nasty early loading bugs that are there for a long time.
-- Adds a minimum revision ID to Intel patch meta-data, requested by Thomas.
-- Turns microcode late loading back on by default.
-- Adds some debugfs support to provide ability to test the microcode flows
-  without the need for a new microcode.
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+---
+ arch/x86/kernel/cpu/microcode/intel.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-This series has too many changes from previous post, but for anecdotal
-references. 
-
-https://lore.kernel.org/lkml/20220817051127.3323755-1-ashok.raj@intel.com/
-
-Here is a summary of those patches.
-
-patch1: Allow printing the old and new rev during an early update
-patch2: Fix a potential bug during CPU hot-add flow for microcode update.
-patch3: Fixes a nasty early loading bug that locks up with endless retries.
-patch4: Add a helper to perform self NMI
-patch5: Drop siblings in NMI while primary thread updates the microcode.
-patch6: Rename refresh_fw to late_loading, in preparation for min-rev patches.
-patch7: Move late loading warning to the same function as where taint happens.
-patch8: Adds support for microcode meta-data to declare a minimum version 
-patch9: Add a generic way to declare support for min-rev across vendors.
-patch10: Drop wbinvd(), its not required after patch7.
-patch11: Print microcode updated messages only when its successfully loaded
-patch12: Issue a warning if MCE arrives while a microcode update is in progress.
-patch13: Debug patch: To permit testing repeated loading of microcode.
-
-Ashok Raj (12):
-  x86/microcode/intel: Print old and new rev after early microcode
-    update
-  x86/microcode: Do not load from filesystem for CPU hot add
-  x86/microcode/intel: Fix a hang if early loading microcode fails
-  x86/microcode: Place siblings in NMI loop while update in progress
-  x86/microcode: Rename refresh_fw to late_loading
-  x86/microcode: Move late-load warning to earlier where kernel taint
-    happens
-  x86/microcode/intel: Add minimum required revision to microcode header
-  x86/microcode: Add a generic mechanism to declare support for minrev
-  x86/microcode/intel: Drop wbinvd() from microcode loading
-  x86/microcode: Display revisions only when update is successful
-  x86/mce: Warn of a microcode update is in progress when MCE arrives
-  x86/microcode/intel: Add ability to update microcode even if rev is
-    unchanged
-
-Jacob Pan (1):
-  x86/x2apic: Support x2apic self IPI with NMI_VECTOR
-
- arch/x86/include/asm/microcode.h       |  39 ++++++-
- arch/x86/include/asm/microcode_intel.h |   4 +-
- arch/x86/kernel/apic/x2apic_phys.c     |   6 +-
- arch/x86/kernel/cpu/mce/core.c         |   5 +
- arch/x86/kernel/cpu/microcode/amd.c    |   6 +-
- arch/x86/kernel/cpu/microcode/core.c   | 156 ++++++++++++++++++++++---
- arch/x86/kernel/cpu/microcode/intel.c  |  85 +++++++++-----
- arch/x86/kernel/cpu/microcode/nmi.c    |  72 ++++++++++++
- arch/x86/kernel/nmi.c                  |   7 ++
- arch/x86/Kconfig                       |   7 +-
- arch/x86/kernel/cpu/microcode/Makefile |   1 +
- 11 files changed, 332 insertions(+), 56 deletions(-)
- create mode 100644 arch/x86/kernel/cpu/microcode/nmi.c
-
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index 1fcbd671f1df..cf1e2c30b230 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -435,10 +435,10 @@ static bool load_builtin_intel_microcode(struct cpio_data *cp)
+  * Print ucode update info.
+  */
+ static void
+-print_ucode_info(struct ucode_cpu_info *uci, unsigned int date)
++print_ucode_info(u32 old_rev, struct ucode_cpu_info *uci, unsigned int date)
+ {
+-	pr_info_once("microcode updated early to revision 0x%x, date = %04x-%02x-%02x\n",
+-		     uci->cpu_sig.rev,
++	pr_info_once("microcode updated early from 0x%x to revision 0x%x, date = %04x-%02x-%02x\n",
++		     old_rev, uci->cpu_sig.rev,
+ 		     date & 0xffff,
+ 		     date >> 24,
+ 		     (date >> 16) & 0xff);
+@@ -448,6 +448,7 @@ print_ucode_info(struct ucode_cpu_info *uci, unsigned int date)
+ 
+ static int delay_ucode_info;
+ static int current_mc_date;
++static u32 early_old_rev;
+ 
+ /*
+  * Print early updated ucode info after printk works. This is delayed info dump.
+@@ -458,7 +459,7 @@ void show_ucode_info_early(void)
+ 
+ 	if (delay_ucode_info) {
+ 		intel_cpu_collect_info(&uci);
+-		print_ucode_info(&uci, current_mc_date);
++		print_ucode_info(early_old_rev, &uci, current_mc_date);
+ 		delay_ucode_info = 0;
+ 	}
+ }
+@@ -467,11 +468,12 @@ void show_ucode_info_early(void)
+  * At this point, we can not call printk() yet. Delay printing microcode info in
+  * show_ucode_info_early() until printk() works.
+  */
+-static void print_ucode(struct ucode_cpu_info *uci)
++static void print_ucode(u32 old_rev, struct ucode_cpu_info *uci)
+ {
+ 	struct microcode_intel *mc;
+ 	int *delay_ucode_info_p;
+ 	int *current_mc_date_p;
++	u32 *old_rev_p;
+ 
+ 	mc = uci->mc;
+ 	if (!mc)
+@@ -479,13 +481,15 @@ static void print_ucode(struct ucode_cpu_info *uci)
+ 
+ 	delay_ucode_info_p = (int *)__pa_nodebug(&delay_ucode_info);
+ 	current_mc_date_p = (int *)__pa_nodebug(&current_mc_date);
++	old_rev_p = (u32 *)__pa_nodebug(&early_old_rev);
+ 
+ 	*delay_ucode_info_p = 1;
+ 	*current_mc_date_p = mc->hdr.date;
++	*old_rev_p = old_rev;
+ }
+ #else
+ 
+-static inline void print_ucode(struct ucode_cpu_info *uci)
++static inline void print_ucode(u32 old_rev, struct ucode_cpu_info *uci)
+ {
+ 	struct microcode_intel *mc;
+ 
+@@ -493,14 +497,14 @@ static inline void print_ucode(struct ucode_cpu_info *uci)
+ 	if (!mc)
+ 		return;
+ 
+-	print_ucode_info(uci, mc->hdr.date);
++	print_ucode_info(old_rev, uci, mc->hdr.date);
+ }
+ #endif
+ 
+ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
+ {
+ 	struct microcode_intel *mc;
+-	u32 rev;
++	u32 old_rev, rev;
+ 
+ 	mc = uci->mc;
+ 	if (!mc)
+@@ -517,6 +521,7 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
+ 		return UCODE_OK;
+ 	}
+ 
++	old_rev = rev;
+ 	/*
+ 	 * Writeback and invalidate caches before updating microcode to avoid
+ 	 * internal issues depending on what the microcode is updating.
+@@ -533,9 +538,9 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
+ 	uci->cpu_sig.rev = rev;
+ 
+ 	if (early)
+-		print_ucode(uci);
++		print_ucode(old_rev, uci);
+ 	else
+-		print_ucode_info(uci, mc->hdr.date);
++		print_ucode_info(old_rev, uci, mc->hdr.date);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 
