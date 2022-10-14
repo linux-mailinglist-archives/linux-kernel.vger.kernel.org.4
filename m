@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9665FF60E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C19E5FF60D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJNWLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S229793AbiJNWLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiJNWKo (ORCPT
+        with ESMTP id S229615AbiJNWKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Oct 2022 18:10:44 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDACEEAAD;
-        Fri, 14 Oct 2022 15:10:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE6BFAE5E;
+        Fri, 14 Oct 2022 15:10:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
   t=1665785443; x=1697321443;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=V2oaAVBa7eTM4QCDOGDsSSjXhYncMLEnCYZvafhURr8=;
-  b=phV2FxC6suUhlUct9CL2bous3uOM88q0aog5cuApa845+SETHLJ5v8Dr
-   q9TFH13L0M3JJ+8Ufoe9aTe3fsemWqvg92VIGl55qmR1gSSABzRpRkzi3
-   hrGgtel/LmYOFrF/z7FFsMqTuncWiYUQ8m1E3c95OtxShTCFvbuAtwGzF
-   E=;
+  bh=IVXCDTmtJ9MZtZj0X1aSf97KGfN6jclv/rAdOONBIvU=;
+  b=Z0fc7BTQ3zIW2UJBSd7w/exSDtj3D1fYUxRYBszsYISNk8DIIOxsAvC1
+   pvkup9eHw4b5xhwVj8o5O5EzGtVpth40z5tn2nFYuiNegOyYYCYexCgS5
+   LtG34Zkr07R3t1Nzma/sIZkV0fW2uY/VuaVxen1vZ14Hfo84I6POCpt2v
+   k=;
 Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
   by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Oct 2022 15:10:38 -0700
 X-QCInternal: smtphost
@@ -45,10 +45,11 @@ To:     Andy Gross <agross@kernel.org>,
         Marc Zyngier <maz@kernel.org>
 CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
         Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH v2 2/6] dt-bindings: clock: Add RPMHCC bindings for QDU1000 and QRU1000
-Date:   Fri, 14 Oct 2022 15:10:07 -0700
-Message-ID: <20221014221011.7360-3-quic_molvera@quicinc.com>
+Subject: [PATCH v2 3/6] clk: qcom: branch: Add BRANCH_HALT_INVERT flag support for branch clocks
+Date:   Fri, 14 Oct 2022 15:10:08 -0700
+Message-ID: <20221014221011.7360-4-quic_molvera@quicinc.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221014221011.7360-1-quic_molvera@quicinc.com>
 References: <20221014221011.7360-1-quic_molvera@quicinc.com>
@@ -67,26 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible strings for RPMHCC for QDU1000 and QRU1000.
+From: Imran Shaik <quic_imrashai@quicinc.com>
 
+Add the BRANCH_HALT_INVERT flag to handle the inverted status bit check
+for branch clocks. Invert branch halt would indicate the clock ON when
+CLK_OFF bit is '1' and OFF when CLK_OFF bit is '0'.
+
+Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
 Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 ---
- Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/clk-branch.c | 5 +++++
+ drivers/clk/qcom/clk-branch.h | 2 ++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
-index 437a34b930e3..7cacbfe745a5 100644
---- a/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml
-@@ -17,6 +17,8 @@ description: |
- properties:
-   compatible:
-     enum:
-+      - qcom,qdu1000-rpmh-clk
-+      - qcom,qru1000-rpmh-clk
-       - qcom,sc7180-rpmh-clk
-       - qcom,sc7280-rpmh-clk
-       - qcom,sc8180x-rpmh-clk
+diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
+index f869fc6aaed6..b5dc1f4ef277 100644
+--- a/drivers/clk/qcom/clk-branch.c
++++ b/drivers/clk/qcom/clk-branch.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (c) 2013, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+  */
+ 
+ #include <linux/kernel.h>
+@@ -56,6 +57,10 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
+ 
+ 	if (enabling) {
+ 		val &= mask;
++
++		if (br->halt_check == BRANCH_HALT_INVERT)
++			return (val & BRANCH_CLK_OFF) == BRANCH_CLK_OFF;
++
+ 		return (val & BRANCH_CLK_OFF) == 0 ||
+ 			val == BRANCH_NOC_FSM_STATUS_ON;
+ 	} else {
+diff --git a/drivers/clk/qcom/clk-branch.h b/drivers/clk/qcom/clk-branch.h
+index 17a58119165e..4ac1debeb91e 100644
+--- a/drivers/clk/qcom/clk-branch.h
++++ b/drivers/clk/qcom/clk-branch.h
+@@ -1,5 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /* Copyright (c) 2013, The Linux Foundation. All rights reserved. */
++/* Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved. */
+ 
+ #ifndef __QCOM_CLK_BRANCH_H__
+ #define __QCOM_CLK_BRANCH_H__
+@@ -33,6 +34,7 @@ struct clk_branch {
+ #define BRANCH_HALT_ENABLE_VOTED	(BRANCH_HALT_ENABLE | BRANCH_VOTED)
+ #define BRANCH_HALT_DELAY		2 /* No bit to check; just delay */
+ #define BRANCH_HALT_SKIP		3 /* Don't check halt bit */
++#define BRANCH_HALT_INVERT		4 /* Invert logic for halt bit */
+ 
+ 	struct clk_regmap clkr;
+ };
 -- 
 2.38.0
 
