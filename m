@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E9B5FF50C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377495FF511
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJNVKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S229699AbiJNVLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiJNVKg (ORCPT
+        with ESMTP id S229693AbiJNVLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:10:36 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB75F124223;
-        Fri, 14 Oct 2022 14:10:34 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id w196so6342202oiw.8;
-        Fri, 14 Oct 2022 14:10:34 -0700 (PDT)
+        Fri, 14 Oct 2022 17:11:11 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA27C1C5A44;
+        Fri, 14 Oct 2022 14:11:09 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id u15so6370395oie.2;
+        Fri, 14 Oct 2022 14:11:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xM+4m5a2a5cuZ5VhUjxrp5HzYAY1IJVbywUtama6FlI=;
-        b=r9QR4ZGzO398Ly+owwsHgWN0FyRZ94twmXXBwlbXQEbaTUTx6TfDegQzVkC2Z7fVVg
-         rkqEACu8C8LklI21LCt4V+uXzLwqrcurVMZYL3/24dcbTzxI8E728a7gZs488NQLPPn1
-         1Y0c+4qs1F87FGRiOH1Fl3YiyBOAMxQLVaR0J5b3ZE6hAyJCscI9BECiXdRR0UAlZ9aN
-         dVQVcrGb1zgQtYkPaiRD+PMKclnl1cWhx4yvOvAzH6BfNW0GcOvDlWTfZg+G5LXN5MGY
-         vyOWUSeSNvOh6Tv3HenX9DTIaTNuNopvUrtHT9Wj7RzJaDdk9nDkRT0X9ufm71IrNOoR
-         4KSg==
-X-Gm-Message-State: ACrzQf3MHdPgpPFLPFKOqgPrGlfNG6pc+zbH6mZXxMa/Bf9PVS06gQSx
-        cJwu2veDzgndJoHwgQ0f9A==
-X-Google-Smtp-Source: AMsMyM70Akl6mGH6k+1/khm5MR7s9COqT/1+UPtLcqb+A+ugOm6M9TWM9XzVXoggbzWtk1ZXP1Lwpg==
-X-Received: by 2002:a05:6808:1b0d:b0:355:219c:3d28 with SMTP id bx13-20020a0568081b0d00b00355219c3d28mr1571823oib.31.1665781833942;
-        Fri, 14 Oct 2022 14:10:33 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cmlOf0WqP2VWIwHpJCvrVP8vGAHC8knpaj2VRfeMJhY=;
+        b=dfW5sTw1fzQvivqHgem09kBJg/9LNRI0+h5d/lDWGU+o+4YzO4q0crSj3JLbrOSiwa
+         3f3oqIhm7N958TnTGVPOQkfp1fdZevIQNi6nrMh1Nw4uIuhLiye0+ReQiIf2Pf1F44dt
+         M5nkqf2fLuEoIQVxOTtIB/tknlhLKI13rVomemJ2n+kmYNFYR4qjyJglBG1/7/it7Pkb
+         fVY19AL5xwEC6A0CQEBBTPjCGAXyVKDlvO53l6ssryKPKmeFDiR5yYiZoruaKxzGi1Mi
+         wQqRNHIQ+TezpFr8vnILA9sxSMGteXDw8Xk9fMiVdfH4h6IAaQ342ZlXjVcPs/xdf4yG
+         7bbQ==
+X-Gm-Message-State: ACrzQf09+iU8hPR0nRDRD9chc/sPsn8B0HZd/jtTDOfSpKQgwaGUy+Qh
+        Np1B4aMeaq1UaWEU1VuNBw==
+X-Google-Smtp-Source: AMsMyM5GyjLi8iHeCcE1tstB3RqHJ++cloFXkmlshA3SqL6w/+hImWx0FxD1VAug2ShRqCJY7tcXaQ==
+X-Received: by 2002:a05:6808:118e:b0:345:9c3e:121d with SMTP id j14-20020a056808118e00b003459c3e121dmr3480660oil.211.1665781869043;
+        Fri, 14 Oct 2022 14:11:09 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 23-20020aca0f17000000b00354d7c7e42esm1549201oip.30.2022.10.14.14.10.33
+        by smtp.gmail.com with ESMTPSA id n6-20020a05687001c600b0010c727a3c79sm1772322oad.26.2022.10.14.14.11.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:10:33 -0700 (PDT)
-Received: (nullmailer pid 2911731 invoked by uid 1000);
-        Fri, 14 Oct 2022 21:10:34 -0000
-Date:   Fri, 14 Oct 2022 16:10:34 -0500
+        Fri, 14 Oct 2022 14:11:08 -0700 (PDT)
+Received: (nullmailer pid 2912846 invoked by uid 1000);
+        Fri, 14 Oct 2022 21:11:09 -0000
+Date:   Fri, 14 Oct 2022 16:11:09 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Mack <daniel@zonque.org>, devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH] dt-bindings: display: panel: use
- spi-peripheral-props.yaml
-Message-ID: <166578183285.2911660.11950210372738963572.robh@kernel.org>
-References: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
+To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>, llvm@lists.linux.dev,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] of: declare string literals const
+Message-ID: <166578186819.2912776.6771227036062685821.robh@kernel.org>
+References: <20221012174622.45006-1-cgzones@googlemail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221012174622.45006-1-cgzones@googlemail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -73,27 +66,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Oct 2022 14:09:07 +0200, Krzysztof Kozlowski wrote:
-> For devices connectable by SPI bus (e.g. already using
-> "spi-max-frequency" property), reference the "spi-peripheral-props.yaml"
-> schema to allow using all SPI device properties, even these which device
-> bindings author did not tried yet.
+On Wed, 12 Oct 2022 19:46:22 +0200, Christian Göttsche wrote:
+> of_overlay_action_name() returns a string literal from a function local
+> array.  Modifying string literals is undefined behavior which usage of
+> const pointer can avoid.  of_overlay_action_name() is currently only
+> used once in overlay_notify() to print the returned value.
 > 
-> Change "additionalProperties" to "unevaluatedProperties", so the actual
-> other properties from "spi-peripheral-props.yaml" can be used.  This has
-> additional impact of allowing also other properties from
-> panel-common.yaml to be used.
+> While on it declare the data array const as well.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reported by Clang:
+> 
+>     In file included from arch/x86/kernel/asm-offsets.c:22:
+>     In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
+>     In file included from ./include/linux/kvm_host.h:19:
+>     In file included from ./include/linux/msi.h:23:
+>     In file included from ./arch/x86/include/asm/msi.h:5:
+>     In file included from ./arch/x86/include/asm/irqdomain.h:5:
+>     In file included from ./include/linux/irqdomain.h:35:
+>     ./include/linux/of.h:1555:3: error: initializing 'char *' with an expression of type 'const char[5]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "init",
+>                     ^~~~~~
+>     ./include/linux/of.h:1556:3: error: initializing 'char *' with an expression of type 'const char[10]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "pre-apply",
+>                     ^~~~~~~~~~~
+>     ./include/linux/of.h:1557:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "post-apply",
+>                     ^~~~~~~~~~~~
+>     ./include/linux/of.h:1558:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "pre-remove",
+>                     ^~~~~~~~~~~~
+>     ./include/linux/of.h:1559:3: error: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "post-remove",
+>                     ^~~~~~~~~~~~~
+> 
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 > ---
->  .../devicetree/bindings/display/panel/ilitek,ili9163.yaml    | 3 ++-
->  .../devicetree/bindings/display/panel/ilitek,ili9341.yaml    | 1 +
->  .../devicetree/bindings/display/panel/nec,nl8048hl11.yaml    | 3 ++-
->  .../bindings/display/panel/samsung,lms380kf01.yaml           | 5 ++---
->  .../bindings/display/panel/samsung,lms397kf04.yaml           | 3 ++-
->  .../devicetree/bindings/display/panel/samsung,s6d27a1.yaml   | 4 ++--
->  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 +
->  7 files changed, 12 insertions(+), 8 deletions(-)
+>  include/linux/of.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 
 Applied, thanks!
