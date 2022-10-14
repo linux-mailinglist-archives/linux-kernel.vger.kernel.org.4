@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868965FF1E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278595FF1E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiJNP67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S230291AbiJNP7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiJNP6v (ORCPT
+        with ESMTP id S230251AbiJNP6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:58:51 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CD2115C03
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:50 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a26so11480721ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:49 -0700 (PDT)
+        Fri, 14 Oct 2022 11:58:53 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30FB155DB2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:51 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id l22so7455003edj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uFKG/UoJdjvjZL4a++TyBLwRn5J9ab/1o+9LeC1+Wdk=;
-        b=TWAL9EKRVGNsLjKjhYh/mC6I8/1d/oatjVnsDN9OWuvFem7UzU02ZKqRzzv3m+6WNJ
-         XpbFkMRKHd8kMuyJPFPJ2O4coxdaDl4faAyVqhStpaSUGYq7BHI1TWK1CROOsrCSLceS
-         oCa0J4Fufc1QFYIqSNT7YYCBkHCuQagy+1h8ytDYHkttIN15LC4NsO9AFDHEPqj1jTqO
-         4aCSqLM2Nu3stjaVcqAwPtMDAHgS/shNxwcrymDs9yg/ism0dyRjPiNJywK3a2Ao/iyX
-         qrOsHJe4Ab8pwfjJp7mLQWu47/wJG/qQKDv8bTBXEBTHUkrCbt724EXqhc5mXve0RXVF
-         Q5Ug==
+        bh=XBIOqGjmdzThiZsnnbTdUiYSPQXS/qp/QRUJHndogxY=;
+        b=de2qcklml8jKYdhJlyXqmJXoz8FYGzMVRLfN9JcOUqf4UOLuKCrWZr59qwP/CI15i8
+         9ZEYt9iqHJUORqeLDasCpf2TvKXJ2eNiOMML8Fk+bz7YKFJbV57Ez3yS2OMYxbifi8aU
+         80V2z5mOPzJ5j+SPiaK/ExtA7pvzSXkVFgQy9BgPDzmgfE18Klp1ebv/IKnNb6TVl3x7
+         K0gO3P8T9E6LTR2oS1WZnI3pbS2vkD6iCSFlqd/rinFyB9u6Ftb/GsYDL097UX4vn1na
+         X5w9kGup7pabQp9pwZ84Krxhofd+fyywuWkx0d61FPGLmHqmWuc2PbVNpdjodZPMfLJV
+         6NYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uFKG/UoJdjvjZL4a++TyBLwRn5J9ab/1o+9LeC1+Wdk=;
-        b=LlZcD1edK9QKhfhnQklQDXQKObmlNcjcUJtV4LT9pR2ilQkcws7wsRVxN3+DoO/F9c
-         ilQIG3icMSOPtaFROnCLHxExSsQ/CVL3nRCu7q4PuRtUBPNEV++ABldOI85Qo5s7UDSJ
-         1W13X+z+qTVF6rXOvQzUJg3DbhYlpehcHvyKb1F6tuvyV0eW035Kr//IOLO9oT2EL3l4
-         Nxi4EnL/xOEyhhJQwtAgZcwUalVTYdnwDMpFZ3BXKJWTMLC28s4kliDL3zPlbOfwHWLc
-         JDl8W/wlWC2EduTlPu8Ye21ZbPulbZDXqwGz5vvrX/xlei7+HUlGLrFV4Ere1kQAWGhD
-         oFjw==
-X-Gm-Message-State: ACrzQf0RW6NUeORuVqYvxQkXOjoK0haBDgt2vtsN7HpeMbmvm/HQnMSI
-        65nsjTNpASiBH0T4KqFbm6/LJA==
-X-Google-Smtp-Source: AMsMyM7/e9vDSoMxdhGGaaPUCS7n6lh8z7ltnxJPYvupdtdDP7MiBbMySEaXciThld3Qry9um9n4rA==
-X-Received: by 2002:a17:906:4783:b0:780:5be5:c81b with SMTP id cw3-20020a170906478300b007805be5c81bmr4152627ejc.76.1665763128360;
-        Fri, 14 Oct 2022 08:58:48 -0700 (PDT)
+        bh=XBIOqGjmdzThiZsnnbTdUiYSPQXS/qp/QRUJHndogxY=;
+        b=JeavNpwsiLzHRwV0PhhxsUWzZ1bIwGkV0HS9+eeBvvFJz65xNH2k2HkgUiW3AiBovD
+         NjFNk7VFgv9hlmHc2h+tmlOGeStYxyxK86fttydyYwQfpQO/AMCf96Ur47YxdcwFse8q
+         iQVZUSb9gfqVrvtp2wwGnBay+9YimzADvXBy7ha++4URS4WZy7trnqyami70gDaJgw7z
+         kw0cBDfOruLtqKwpzeyoNBkfJg7ldKcoWnRWetAfbx28nV/4DdGK/CAmU5wwUTw53hzu
+         x1zqVHFD1qozmHW5ZTG/bzeTzEHIp/F9L5xYiEXCQl+jONwUV66OMzrSOzjGxcdJby5a
+         yleQ==
+X-Gm-Message-State: ACrzQf04gd8vECZ8P+h2HrA+g6ysJ21ITVRDCakqzcbSEWFgo0U9M/PZ
+        bx+qKF5ckjtkwNZwhY7+/5Ixkw==
+X-Google-Smtp-Source: AMsMyM7AeOygOXkM1z/GTKaGU+3a1Uh1fQyGWBmDx0oj1luEK/7mcX83iQG4d2XLgbn9xXhJP10WDg==
+X-Received: by 2002:a05:6402:3485:b0:45c:d688:6848 with SMTP id v5-20020a056402348500b0045cd6886848mr4672473edc.279.1665763129826;
+        Fri, 14 Oct 2022 08:58:49 -0700 (PDT)
 Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170906434f00b007806c1474e1sm1686070ejm.127.2022.10.14.08.58.47
+        by smtp.gmail.com with ESMTPSA id 12-20020a170906300c00b0077a1dd3e7b7sm1746796ejz.102.2022.10.14.08.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 08:58:48 -0700 (PDT)
+        Fri, 14 Oct 2022 08:58:49 -0700 (PDT)
 From:   Andrew Jones <ajones@ventanamicro.com>
 To:     x86@kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -68,11 +68,10 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 1/2] RISC-V: Fix /proc/cpuinfo cpumask warning
-Date:   Fri, 14 Oct 2022 17:58:44 +0200
-Message-Id: <20221014155845.1986223-2-ajones@ventanamicro.com>
+        linux-s390@vger.kernel.org
+Subject: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
+Date:   Fri, 14 Oct 2022 17:58:45 +0200
+Message-Id: <20221014155845.1986223-3-ajones@ventanamicro.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221014155845.1986223-1-ajones@ventanamicro.com>
 References: <20221014155845.1986223-1-ajones@ventanamicro.com>
@@ -81,7 +80,8 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -111,18 +111,15 @@ cpumask_next().
 
 Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
 Cc: Yury Norov <yury.norov@gmail.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/kernel/cpu.c | 3 +++
+ arch/x86/kernel/cpu/proc.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 4d0dece5996c..5aa0ae8dd115 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -166,6 +166,9 @@ static void print_mmu(struct seq_file *f)
+diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+index 099b6f0d96bd..de3f93ac6e49 100644
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -153,6 +153,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
  
  static void *c_start(struct seq_file *m, loff_t *pos)
  {
@@ -131,7 +128,7 @@ index 4d0dece5996c..5aa0ae8dd115 100644
 +
  	*pos = cpumask_next(*pos - 1, cpu_online_mask);
  	if ((*pos) < nr_cpu_ids)
- 		return (void *)(uintptr_t)(1 + *pos);
+ 		return &cpu_data(*pos);
 -- 
 2.37.3
 
