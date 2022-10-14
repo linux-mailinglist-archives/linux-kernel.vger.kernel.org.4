@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348615FF527
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E9B5FF50C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiJNVTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S229683AbiJNVKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiJNVTR (ORCPT
+        with ESMTP id S229656AbiJNVKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:19:17 -0400
-X-Greylist: delayed 518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Oct 2022 14:19:10 PDT
-Received: from mail.stoffel.org (mail.stoffel.org [172.104.24.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647D71D29AC;
-        Fri, 14 Oct 2022 14:19:09 -0700 (PDT)
-Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail.stoffel.org (Postfix) with ESMTPSA id 1A24F1E668;
-        Fri, 14 Oct 2022 17:10:31 -0400 (EDT)
-Received: by quad.stoffel.org (Postfix, from userid 1000)
-        id B8C27A7F96; Fri, 14 Oct 2022 17:10:30 -0400 (EDT)
+        Fri, 14 Oct 2022 17:10:36 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB75F124223;
+        Fri, 14 Oct 2022 14:10:34 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id w196so6342202oiw.8;
+        Fri, 14 Oct 2022 14:10:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xM+4m5a2a5cuZ5VhUjxrp5HzYAY1IJVbywUtama6FlI=;
+        b=r9QR4ZGzO398Ly+owwsHgWN0FyRZ94twmXXBwlbXQEbaTUTx6TfDegQzVkC2Z7fVVg
+         rkqEACu8C8LklI21LCt4V+uXzLwqrcurVMZYL3/24dcbTzxI8E728a7gZs488NQLPPn1
+         1Y0c+4qs1F87FGRiOH1Fl3YiyBOAMxQLVaR0J5b3ZE6hAyJCscI9BECiXdRR0UAlZ9aN
+         dVQVcrGb1zgQtYkPaiRD+PMKclnl1cWhx4yvOvAzH6BfNW0GcOvDlWTfZg+G5LXN5MGY
+         vyOWUSeSNvOh6Tv3HenX9DTIaTNuNopvUrtHT9Wj7RzJaDdk9nDkRT0X9ufm71IrNOoR
+         4KSg==
+X-Gm-Message-State: ACrzQf3MHdPgpPFLPFKOqgPrGlfNG6pc+zbH6mZXxMa/Bf9PVS06gQSx
+        cJwu2veDzgndJoHwgQ0f9A==
+X-Google-Smtp-Source: AMsMyM70Akl6mGH6k+1/khm5MR7s9COqT/1+UPtLcqb+A+ugOm6M9TWM9XzVXoggbzWtk1ZXP1Lwpg==
+X-Received: by 2002:a05:6808:1b0d:b0:355:219c:3d28 with SMTP id bx13-20020a0568081b0d00b00355219c3d28mr1571823oib.31.1665781833942;
+        Fri, 14 Oct 2022 14:10:33 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 23-20020aca0f17000000b00354d7c7e42esm1549201oip.30.2022.10.14.14.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 14:10:33 -0700 (PDT)
+Received: (nullmailer pid 2911731 invoked by uid 1000);
+        Fri, 14 Oct 2022 21:10:34 -0000
+Date:   Fri, 14 Oct 2022 16:10:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Mack <daniel@zonque.org>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH] dt-bindings: display: panel: use
+ spi-peripheral-props.yaml
+Message-ID: <166578183285.2911660.11950210372738963572.robh@kernel.org>
+References: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <25417.53318.731340.683540@quad.stoffel.home>
-Date:   Fri, 14 Oct 2022 17:10:30 -0400
-From:   "John Stoffel" <john@stoffel.org>
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>
-Cc:     Song Liu <song@kernel.org>, <linux-raid@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, jonathan.derrick@solidigm.com,
-        jonathanx.sk.derrick@intel.com,
-        Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
-Subject: Re: [PATCH v2 0/3] Bitmap percentage flushing
-In-Reply-To: <20221013224151.300-1-jonathan.derrick@linux.dev>
-References: <20221013224151.300-1-jonathan.derrick@linux.dev>
-X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20221004120907.72767-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Jonathan" == Jonathan Derrick <jonathan.derrick@linux.dev> writes:
+On Tue, 04 Oct 2022 14:09:07 +0200, Krzysztof Kozlowski wrote:
+> For devices connectable by SPI bus (e.g. already using
+> "spi-max-frequency" property), reference the "spi-peripheral-props.yaml"
+> schema to allow using all SPI device properties, even these which device
+> bindings author did not tried yet.
+> 
+> Change "additionalProperties" to "unevaluatedProperties", so the actual
+> other properties from "spi-peripheral-props.yaml" can be used.  This has
+> additional impact of allowing also other properties from
+> panel-common.yaml to be used.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/display/panel/ilitek,ili9163.yaml    | 3 ++-
+>  .../devicetree/bindings/display/panel/ilitek,ili9341.yaml    | 1 +
+>  .../devicetree/bindings/display/panel/nec,nl8048hl11.yaml    | 3 ++-
+>  .../bindings/display/panel/samsung,lms380kf01.yaml           | 5 ++---
+>  .../bindings/display/panel/samsung,lms397kf04.yaml           | 3 ++-
+>  .../devicetree/bindings/display/panel/samsung,s6d27a1.yaml   | 4 ++--
+>  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 +
+>  7 files changed, 12 insertions(+), 8 deletions(-)
+> 
 
-> This introduces a percentage-flushing mechanism that works in-tandem to the
-> mdadm delay timer. The percentage argument is based on the number of chunks
-> dirty (rather than percentage), due to large drives requiring smaller and
-> smaller percentages (eg, 32TB drives-> 1% is 320GB).
-
-I've been reading and re-reading this and I still don't understand
-what you're saying here.  You say you're adding a percentage based
-mechanism, but then you say it's based on chunk counts, not
-percentages.  I think you need to clean this up and re-word it.
-
-Maybe you're trying to say that you only take a percentage of the
-available write bandwidth per second or something like that? 
-
-
-> This set hopes to provide a way to make the bitmap flushing more consistent. It
-> was observed that a synchronous, random write qd1 workload, could make bitmap
-> writes easily become almost half of the I/O. And in similar workloads with
-> different timing, it was several minutes between bitmap updates. This is too
-> inconsistent to be reliable.
-
-> This first and second patches adds the flush_threshold parameter. The default
-> value of 0 defines the default behavior: unplugging immediately just as before.
-> With a flush-threshold value of 1, it becomes more consistent and paranoid,
-> flushing on nearly every I/O, leading to a 40% or greater situation. From
-
-What situation?  Please be more clear here.  
-
-> there, the flush_threshold can be defined higher for those situations where
-> power loss is rare and full resync can be tolerated.
-
-> The third patch converts the daemon worker to an actual timer. This makes it
-> more consistent and removes some ugly code.
-
-> Jonathan Derrick (3):
->   md/bitmap: Add chunk-threshold unplugging
->   md/bitmap: Add sysfs interface for flush threshold
->   md/bitmap: Convert daemon_work to proper timer
-
->  Documentation/admin-guide/md.rst |  5 ++
->  drivers/md/md-bitmap.c           | 98 +++++++++++++++++++++++++-------
->  drivers/md/md-bitmap.h           |  4 +-
->  drivers/md/md.c                  |  9 ++-
->  drivers/md/md.h                  |  2 +
->  5 files changed, 93 insertions(+), 25 deletions(-)
-
-> -- 
-> 2.31.1
-
+Applied, thanks!
