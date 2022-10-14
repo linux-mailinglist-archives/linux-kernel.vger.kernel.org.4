@@ -2,151 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032385FF0C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91CC5FF0C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiJNPFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S229772AbiJNPGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJNPFW (ORCPT
+        with ESMTP id S229491AbiJNPGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:05:22 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2072.outbound.protection.outlook.com [40.107.212.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA76260696;
-        Fri, 14 Oct 2022 08:05:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kN8SVKRg5MmK0SE1ETLeV30OMpwSx5RQZlfqZsjAEbjhM5nTslNvDgkVjd55dmqVc8qYJHiMsFqPAnN8WFkKcHsDBKAystIR/5f0Pj033/ZAXJAtA0vJExLoOIIVcMSJwUfk/hHZzY6969aU0QNFtbM/wZHbxOI8b52V9DTFllbhBRNU41vHCeipnyQeuS1OPH6SlmdkkEgiSNd9gAzaf9LSz9jNVztuzsJWhJ0Eyu/UVcpW9qhFRRDDZalzRzDsFtRyTKXg6Gw9wGSpn7a1dKlfRhKiYuHurpjRYyeOTZ1Ic1zQOpjD/+x3m4AR5iEaHdFmNjBgTGJjtjBJFk2n2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QNcinTRj1xPVwp8BBE4LEcytaSEFhrmY9lOJZMW8Qss=;
- b=nVX3Ib20CK7xYysfnoAAm/R08YhoaB588yK+xhYinzg0y0XdQRcUXmR4CfuW3MWQFKaK/lvJeguuTt0POJVfyXFTMLW628tvT4N8i24xCcQaQ02g2JrtraIwwdB+0LS9fv6MQnJLZMU0gBXZxezSjrsxoIPi258RmR2tNAyGSLevK/6QBeHD/nduf+W0zlg219eysGksCTfLD+FAdzMcjtcvNF7HWFgZ/XK2BAm/Z0kA2zP+QMMFQZyyZ4KDMOFBKfFb9rg2M40hbiS6cnQgRTtUXxHqL1pr/iWCz4BQqjnn6aDA8eRVLc8L2H7F8xLzHWwxgj8u5nEmYXlxtCiEOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QNcinTRj1xPVwp8BBE4LEcytaSEFhrmY9lOJZMW8Qss=;
- b=bOsqInKJqX2hATexRpAH8emdsKcAUkd7N94R+1pvZeas57Uae/jouuTk1NYADIaGwJHkwc16mQaC6a78gNms2MexItKNIaeEjYb7w/3hYINjfeFtJBTpvfPfXrJZYffvo8KN/jTMh5zX7j8oklMXk7vUnw8gpS8HPyHKM3+jQ38=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by DM4PR12MB6613.namprd12.prod.outlook.com (2603:10b6:8:b8::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 14 Oct
- 2022 15:05:18 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::fa1e:a29e:2f2c:43d1]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::fa1e:a29e:2f2c:43d1%7]) with mapi id 15.20.5723.026; Fri, 14 Oct 2022
- 15:05:18 +0000
-Message-ID: <8fb8d32d-cdda-b0c9-d863-a5e63ab56285@amd.com>
-Date:   Fri, 14 Oct 2022 20:34:58 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 01/15] perf/mem: Introduce
- PERF_MEM_LVLNUM_{EXTN_MEM|IO}
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, peterz@infradead.org,
-        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com,
-        irogers@google.com, jmario@redhat.com, leo.yan@linaro.org,
-        alisaidi@amazon.com, ak@linux.intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, kajoljain <kjain@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220928095805.596-1-ravi.bangoria@amd.com>
- <20220928095805.596-2-ravi.bangoria@amd.com>
- <bf4ec1cb-49a4-f5cd-8fd0-c70b287180c0@linux.ibm.com>
- <a36ffee0-b0d5-5941-8d98-cc8e9b100a50@amd.com>
- <88c920de-5af6-c7b0-d6a8-6c365491dd3e@linux.intel.com>
- <f6268268-b4e9-9ed6-0453-65792644d953@amd.com>
- <d428b526-a592-2ea5-dad8-d6eae72eb118@linux.intel.com>
- <585535bf-47d0-178c-706a-3d71bfc31f68@amd.com> <Y0lpylA86mEnmefg@kernel.org>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <Y0lpylA86mEnmefg@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0003.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::14) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Fri, 14 Oct 2022 11:06:39 -0400
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DBE1C39D7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:06:36 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 8C795604F1;
+        Fri, 14 Oct 2022 17:06:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665759993; bh=gTUm92Tm+xCh4Ca0ZE5dSUBkzGQeAUastbhcquLGQJ4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mRpu7uauVz0c3YTZ2stJQEwaKseXARhfZT8TddxfnIXfvWFoHCmSm1208MpJlVK1G
+         V+9dLJSVA5F/LhOUtI4flt2cMvvkjeqHgiihFjajY6w6bc3VPMbJWhMRITNyWINFcJ
+         LWIOYSyOjGRS3xn36dK50IJbFbeAwKHynlmf6GMgFENJHdZexDLBcF2nZ0967nl5Q2
+         3kGp8Z2TFEDbpIK/TEfDF+rxDJzEjda/wtKxkH4PdWeIjEmMfuRmgUwsmrbeeDnyCX
+         7cXjacX2N3PpvMfedmOMNX2AxMXDulE7es0tGMRL2q3/KV1ByU+Y+lWYXK4n/cAAy4
+         jOVoofT2OM8ig==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id uqPI53zV6CBn; Fri, 14 Oct 2022 17:06:29 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id C0CCB604EC;
+        Fri, 14 Oct 2022 17:06:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665759989; bh=gTUm92Tm+xCh4Ca0ZE5dSUBkzGQeAUastbhcquLGQJ4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=xPWdQtexvjRjRj6HrzECLdfFnlRuHnqUyy/ScLNobH0u7f4rC5A91Pzcc4xZKBLGO
+         vgITQhgV7mogpPYgvp/NtotzwAzxFjoBXOC4yiGTZv1+0AQc/MEIqK4pQczjlN6vpi
+         I/8f8YdyGFPY4jOl6/dzWv5BITrN/OCUDCUSX4wkShHYXQHbGZ1ocw7JhO6o9gCvGI
+         0dX8OncWU6gTZ+L8lwujGllB++gDfv+cg745oGdeqlTma5aMWAdgeuXka9pJCxlcbO
+         Y2ThwADLBXoUFh2twC8sj/DjTDt7Xu50r8Bp6uk3S7iyn5neFtEXRJai+IeMsyCHZ1
+         E45mQtYW+Vp4Q==
+Message-ID: <e3acecdc-c240-5c9a-8216-5dae0c6c0186@alu.unizg.hr>
+Date:   Fri, 14 Oct 2022 17:06:28 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|DM4PR12MB6613:EE_
-X-MS-Office365-Filtering-Correlation-Id: 11d202d1-b8a9-459f-5b09-08daadf58171
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xRLx9X+7bRDuf0RkceYoqixNeIbyzGBTFuE7bzwue9W9GQTGTu11PYacZHcY/DKYVTnShOF8V8/69Mbl/zZZFa17/ufvJEyAhxjFbQ5MtsBhj6t0iTHDLB847ohhCO2Iqv3K5g+HoSfi+R7BQ7X2OlBoW8BW97E9CA4nug1gL+mYf2qqa4PufUT8MxVSiebIrAZFWK7ltGVOxMTdXbN9Dujdz5x3l4tuB2SdYk5d4yevlCZAb7TnAUXQTCfS4GtEltK75hRkrXzBmgDY/JBQHE0sfF9Ueq+0Lkgw+80Jpq6VbhiymB+lMkeNWhE+Xdhu7TbxdchAkeyveEmjAzdUVW/J/QjSAl5nycxLIIO1jp3Nrj+QEXgS1yJ+CdihhbHi6bv0yLMUkkZRV8zUSGRvcOv/8gCiaWmRqsVLxtjUAq74ILx258NlMRmdwl8CtLLTDOpxfKkhzfaFvEkkq5Jprce1Gr0ZiegZrRaI61orGZOaU+Kv9hL/TT488kTEBsc6RNc8gWVm4J6G6ECz03VLmvpIbABC1L0MfkLJqg1TCwKG8tq9O+INlNzV64K8qT43Z6eQY/jWWJYaEDV57KLdXvQoDj2m7I/+CIImBfQc2MFg8jzMehG+1pXuJ4pOLNJO+63HXONJS+UXSuUfnFntd8+9K8nZL0RCKMCRAnDOuB5oCQj+fqnO06PxTo9RIA7Paum6Ru3oS+qr8H1VoQqean8gUhWiToSWAaoujzdQc4amt2jNffEkQ5Ks+ZqUuJYEyTvHylnBeFYgOQfFatFSDBIQhnlgYO9/9gYDCH8tgZGO+9DdKvUeACcSGozwEdd8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(366004)(39860400002)(396003)(451199015)(31696002)(86362001)(558084003)(38100700002)(36756003)(6506007)(26005)(55236004)(4326008)(8676002)(41300700001)(7416002)(6512007)(5660300002)(8936002)(66476007)(66556008)(54906003)(6486002)(478600001)(66946007)(6916009)(44832011)(316002)(6666004)(2616005)(2906002)(186003)(31686004)(83133001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YXZLbXJyZEswbExwMjNiaXBoWFFpaHJEYXh0ME1ySnNRNFNJazlQaWtVWHFm?=
- =?utf-8?B?UEcrd2JQb1h4TFdjRHZqVGpWL2FxdlJ6dmJlb3RmYVpkM2tBL3c2L0VYeXNR?=
- =?utf-8?B?a05sUDkyUEVOOE9XMkx4VHZucDFjd3FJYnFyTUdseXRheG9ZZXRORTVMbDR6?=
- =?utf-8?B?VnVXdzZBT1duOHBFdDgvclVaTnFFSFhBTTBESGNUZWdUSEh5V0NPWGt3QTlG?=
- =?utf-8?B?R0oyMVRma3FJV1FXSlZsaFhyc3hCbk1ZM3NLcFo3aGdSbGU0Tm5RZXFDeGY4?=
- =?utf-8?B?dnBUZmxES0JXUEMwZjc4MjRBN2xnK2VhSEp4NWNyM3RhTkRobUlSbGloeVNq?=
- =?utf-8?B?UlFpMGwwVEVOUnduZFJxYVduNDZBZmlBYU1nSUg2T0gwTTdDcmVMeEZoMUxp?=
- =?utf-8?B?V25JZFk2bG5WbHh3Y21CcGNPVkt4WHJ5a2RCblVhZFBCcWJORWo2UU1kWW9X?=
- =?utf-8?B?eTZhN0tIT3hIcnladFdvY1cwK3AxTWxBVzI5aG13enBWZU9ON3h2dkVlalNP?=
- =?utf-8?B?YVphdG5CdVpELy8ralRQYWZxci9aSnhlUzVyKzNXT09kQnQ4T21sUndtZUs4?=
- =?utf-8?B?OFM2V00wYk16dStFelA1Q1JpVzN3QWNoUnlyakZnc3hHWjh6a25CMjJYZ1Fi?=
- =?utf-8?B?ZitlSWhLd3R2L0xRTkNVZXdLWXJxMnd5WC9YK3VpK3NTelFQeGI1MFFGNjlU?=
- =?utf-8?B?bCsvblM4VmVhNGE5OStlNjZEYVIxbjJ4Zm15ZG5vbnRNUzVsWUlidVlDMVB5?=
- =?utf-8?B?RUorUFhhSHB0aUZ3UzRHK2hCVlArRFBMaitvNnZ0WEpaOVp1ZHZDUHcycTRh?=
- =?utf-8?B?K1RrRXpDeXhaNnViTGVETFkxTG90ZzNXZmJDRGxPYVRRQXlSVzVaNHhjK2tV?=
- =?utf-8?B?SlhrbzRlNmc5a3JPNm9VWjJDSGszdzVYQ1c5a0s2MDhJY1VtRTUrek9uK0VT?=
- =?utf-8?B?VUswMWNSTEFFSGhwZGl4K0RDb3FYQW82Q0V4ZFJaU0tVYjVEVVJIK3IxYzdK?=
- =?utf-8?B?N3YxcU4xYUNUSTFtQ0FscitPN0RVL0lidWxxcTY2ejRjb2tlYnVnRERUVUxv?=
- =?utf-8?B?dXF2aVVDTXBFdlN4UXhrdmxiZTNCNkF3WWhmOHhCNEpLT29yR3d2VVF1ZGpH?=
- =?utf-8?B?eWN2aWNzYW5GdHZhMDR4TWo2NW1Uc0x6YlRzVjlPbkNrSXNZaUExWldRaUNv?=
- =?utf-8?B?TUo0a1pSOGQvazUwOG5pdVUrUCs4aGVaMHRUYlBCTHdYa1hQcWI0R0pxWERR?=
- =?utf-8?B?ZDRObTFsdUZUNVd0Y2Jwc0VzOGZyVVg4alBMeWNPNUVaZUNaa2hIREU5TEt0?=
- =?utf-8?B?WlJ3bXlkRXFLWHlEdVBLR2dxZmNuZzRPS0JvTE1vN3VBNWZEVUFRZ3JnQ0pX?=
- =?utf-8?B?bzVGaFpXNnllaHdSUlBXdnlScnc4b0JXZWdMK3Qzem1IN1E2VEpiZW5YNjV6?=
- =?utf-8?B?ZDV2N0xmVUpraTlubWttOFBLWUwrSFBSUCttajdOSXg2V25maUYrZklGbzdM?=
- =?utf-8?B?SnB1M2s0ZHlpSWJSMGFMZEo0RmNZM0NmNVhWWkluTjVhNmVUeFVRS0RDQk9U?=
- =?utf-8?B?cTFRamFVZnpzZjAzektvMXA4bnphUXZwZ1pkRlRoSUZQeGJJaHlYMFpXUU81?=
- =?utf-8?B?SGlmYjdpNXFXZ3paUzNycDVJaHV5ZWlXODA3V0FoK1FFQU9mYWN1WVloc000?=
- =?utf-8?B?VXJwSlQveHl2dWJzTWgxazhmOHo2WkI0UmJ5UFJ2eWdiR0tLV1VaRXEwVzNw?=
- =?utf-8?B?ejFpUUxvYkFpempTcDRwVTY4cUk5aDVueTJmN29INzZLSVRLRVNMWFhGbWZk?=
- =?utf-8?B?bU9mK0xPRmFYMGU2Y21FOVgyNjN1SXlQR25QNDBEcERWd2pxV0pFZ3R1MndR?=
- =?utf-8?B?RFRqQmxDeWI5dFlPWndoTUtyZFgrcGZaaHBxaUptenMzRlBySklEMmFZbnQx?=
- =?utf-8?B?elhFQzI5a2tLOWJNMDJ4WHBkUldFNjBNYzU2THltRzN2aVFURjBnUWJoNGNK?=
- =?utf-8?B?UzlGa2R3aUN4MkFGaU4zL093VWwwdXg5alE1OVJZMllncUcrKzFSQlJ1N0Vl?=
- =?utf-8?B?K0lCZjNxSVdSL3lPZVgxOG9qZllub252aGJnRTVraGhKNm93UGpvaWhneUd0?=
- =?utf-8?Q?F6djOYR1QZAd1S8xSDK6M706U?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11d202d1-b8a9-459f-5b09-08daadf58171
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 15:05:18.0547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AF7IgFkfSUHDvMbwbSvVBSvCBAApbKlCyOYL6GlvOUIqlB9foVx+PaaGcciP1OUCLtLuriZtJEWAgsDW1ogdyA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6613
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
+ 6.0.0-rc7
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Slade Watkins <srw@sladewatkins.net>,
+        Marc Miltenberger <marcmiltenberger@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <Y0Zw2eHEb1aZ9f4y@debian.me>
+ <29362d2e-eec6-5a23-4354-cf8868d50b2c@alu.unizg.hr>
+ <6375f31f-316a-bebc-6aec-c6241049e401@alu.unizg.hr>
+ <7e0b733d-db73-f9a7-0965-4744e63f1a33@gmail.com>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <7e0b733d-db73-f9a7-0965-4744e63f1a33@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Its already upstream, so please go on from there, ok?
+On 10/14/22 14:28, Bagas Sanjaya wrote:
 
-Right. Only PERF_MEM_LVLNUM_EXTN_MEM -> PERF_MEM_LVLNUM_CXL kernel side
-patch is pending. Tool side already uses PERF_MEM_LVLNUM_CXL macro.
+> On 10/14/22 17:32, Mirsad Todorovac wrote:
+>> I tried the "make localmodconfig" and provided the default answers ([ENTER]) to all questions
+>> the script asked as advised here: https://www.stolaf.edu/people/rab/os/linux-compile.html .
+>>
+>> However, though it built much faster, the stripped version did not trigger the bug.
+>>
+>> I am now trying to reproduce the bug with v6.0-rc[123] with config-{051913,060000}.
+>> This brings a lot of combinations, and though I am a newbie, I noticed that build scripts
+>> start with "make clean" for both deb-pkg and rpm-pkg.
+>>
+>> Is there a way to rebuild only the stuff that changed between the versions?
+>>
+> You can try building kernel with ccache enabled. However, you'll need
+> to unset build timestamp, since it will make builds non-deterministic:
+>
+> 	make CC="ccache gcc" KBUILD_BUILD_TIMESTAMP=""
+>
+> The first ccache build will be slower than normal build, because the
+> object files needs to be written twice (to the output directory and
+> to the cache), though.
+>
+> Thanks.
 
-Peter, let me know if you want me to resend.
+Thank you!
+This will greatly speed up bisecting if it works ...
 
-Thanks,
-Ravi
+Have a nice evening.
+
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+
