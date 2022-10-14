@@ -2,71 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E745FEDD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 14:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4B65FEDD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 14:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJNMKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 08:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S229774AbiJNMLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 08:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiJNMKo (ORCPT
+        with ESMTP id S229609AbiJNMLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 08:10:44 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DC2105350;
-        Fri, 14 Oct 2022 05:10:40 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id a3so7340712wrt.0;
-        Fri, 14 Oct 2022 05:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+S1S6iQTadV8AVL5mXLga0jDn7GPEoPiIMlt93AwKPo=;
-        b=QHStRav4UiEhQot01O4anYo2z4HVcTniq0O+/YfRAu9OavF68YHWWCcUjuTLHsN6j2
-         NGe+csUj34npiWyoaGmREO9G8C/ux40aKX5qljZFAe/PxKZwefTMeK5jDoO8W3Z/IE9x
-         DpQQPipHmGdxt+BnLzCztvgc90Cz45YH8/ywZZdgMpkVuAqmgTIxJcy86hYaLWYUMp+E
-         3LlM35jtKliddWNzWScRTPakOPNszHy/byMpmmjocFFLkQHrZ8NGuQB8YN8NAS611D1a
-         XNX83d0IPDJvXwK6bOwIealSTysOqQTj/WVefJSi7aSHum+DEov4W1jayH3DczteuUi5
-         gWqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+S1S6iQTadV8AVL5mXLga0jDn7GPEoPiIMlt93AwKPo=;
-        b=udXAqtTeTT5V7FbkCPiCXjIGQanfUJ6zPN8M5kCe3jbCTpGt+AEPz5cfD+3CA4ztmm
-         Nrnz1XpMBU5neiHO4e6qCE988NZAoWfSY6Q0jE8c6Dl8sdWfETFkW9kd60oekV5VX48r
-         1COGxTVSwnlIcZTYKJfIYwbEvzFgqz7YwPXQgpRxUYgDzMe27a4cIFhwtyxYdQ5A6l0B
-         Pd90o9HYivrwmKHk4yHVSjB9XvIq51gH9yrcbWfTAnXKPQGltupZVdJSrR2c1DbzCPzn
-         qN8UbOiXMDZE5frv2N068I75lyL5UbvcVQKu4utMlILwn1+AzG+EizMtoMhDc4KeqO4K
-         GPfA==
-X-Gm-Message-State: ACrzQf2KQNf0SyUQwXzFmR63hKFq7bfDFvFUn3FCgvqTJKd5YMFRdYN/
-        5qeIpX8LGGhvZaO1bnYDEzo=
-X-Google-Smtp-Source: AMsMyM6qbweti8MfwZV1RQjT/MY8evDlRwtMX35HkZt88gZadAZTfta+lXLtN/m+PGWwf37RlYO1uA==
-X-Received: by 2002:adf:ba8f:0:b0:22c:def3:1179 with SMTP id p15-20020adfba8f000000b0022cdef31179mr3192011wrg.571.1665749439507;
-        Fri, 14 Oct 2022 05:10:39 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id i9-20020a5d6309000000b0022afcc11f65sm1782970wru.47.2022.10.14.05.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 05:10:39 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 13:10:37 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.15 00/33] 5.15.74-rc2 review
-Message-ID: <Y0lRvTp/JhW6P/RM@debian>
-References: <20221014082515.704103805@linuxfoundation.org>
+        Fri, 14 Oct 2022 08:11:44 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DB41B76E7;
+        Fri, 14 Oct 2022 05:11:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hMYTBM9tt4LGzPZmocwq92lW9mTxhsJlC4XDm2kRJOoctIccvtS2vnzmy0hQzxQPmxY1j/VGFgSSAMaSBabkLw7f0S1o2Pvrxz7/lKCIgisjwREtGR6f03C1SFn6vWxD/Al41NvMcpLe9DNFev11Dr34SEplL2DxhCcB7Goow+cslrSqHhF5CkXoKoiCG6vbRnqP/WYzw6ZUebs1o2M7YexFyNyu6CvzSyZMF1XIV/t+EP53QimZ+v320N9LrGH2tgUYGbF4BId8TL5QDs+PdzPshe+5SRyPr2TVomHyr28i1KA8pZgtlKfb90N9/iTQHALjDLdzRCyoPYqKwhAiSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q+YIXYcSMDaRJ+dsRDesqTDguOFFPTSNn4DHA31WySY=;
+ b=ar8wanz7HbPirb28T+JricIa8wLL4h8wO2Q8MealKtXWUHwA+dkB5EbpARDjOQgK6577yaBY8/QFINBlAn65W9W5qdNHcL47+X0T/epx4tQThNF6EoWybbRstGPBCstvwyg6mlBRgxX9eisnJSvNrqjEPnfAkMHL1429PbWOrGRqdg8NvCeiRedXNw9FrVEE1cLJuh/gzN7KunIUCZqCmz6ApO+rRObeoYJpN38vxIolNVK2675N/nHgBuo0Jy+IFv+PLSGmGBb0YCed8HwVAh0LNjrN47KvsQebkTMMllFSEDovTydZO0Per05+vSV1iBD+p7COA1BOGtQmFgao8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q+YIXYcSMDaRJ+dsRDesqTDguOFFPTSNn4DHA31WySY=;
+ b=hdXcGt5sP28YkCsrosIFkMvhHvFFl9z711QbGGoU3si1Y5FMyTimyeghcIEz5ZCUoeruFuL/K97Qv3ymaTN2b46f7KPDFknoR9KjvM55VVJxphhr/SR/zYLBLphLLJ/xT83C5pHm/NL4KzOWtIBdbf6FEGrNc/nkWjAoj5GkenI=
+Received: from DM6PR07CA0078.namprd07.prod.outlook.com (2603:10b6:5:337::11)
+ by CY5PR12MB6276.namprd12.prod.outlook.com (2603:10b6:930:f::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 14 Oct
+ 2022 12:11:41 +0000
+Received: from DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:337:cafe::78) by DM6PR07CA0078.outlook.office365.com
+ (2603:10b6:5:337::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30 via Frontend
+ Transport; Fri, 14 Oct 2022 12:11:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT069.mail.protection.outlook.com (10.13.173.202) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5723.20 via Frontend Transport; Fri, 14 Oct 2022 12:11:41 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 14 Oct
+ 2022 07:11:39 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>, <linux-kernel@vger.kernel.org>
+CC:     <Dell.Client.Kernel@dell.com>,
+        Julius Brockmann <mail@juliusbrockmann.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
+Subject: [PATCH] ACPI: x86: Add another system to quirk list for forcing StorageD3Enable
+Date:   Fri, 14 Oct 2022 07:11:36 -0500
+Message-ID: <20221014121136.8677-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014082515.704103805@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT069:EE_|CY5PR12MB6276:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f28717c-f896-4dee-d8a3-08daaddd40f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +7Z3VX+nnucUbpmMEhgy+eEx0H6zAZ5i1koVVZP8+QtSnAb7wiN6SY5ZnulQEuoKY0Ic5MIO0R/+aqrlA89J7mDUWFbqPGBgU0l5O/wyHLHtCdUECyUvV0YMW/hcv89rbmUgJcfO7zEA6k7yG3LZfypxyGwrMm8AWVoercoOnhMs8BOdW/AA0BgVOkucTa/aBMptWJN72zS5gF0A2B5O7PCETr0LMt5RV0+/DSPLX6QCsIVvLV7/dBhRByGN3QxCCpEyNLFzNo3h9uQQIQ+QJ3OFcfp7cys0aZSLtKfHH7BmRTl0/3CcKDxiXZD1k9FWn9nnp68VDj4nrhks0hOz8D/NhIkM9RyDYTEeiLIfreTLXHYCNEnQrWOfFioxLnL/tyemmwflGbzLSHV1s4RUqC5JnAvb2sByYVsuhh8rcMs6JZeyhQKZ4jQ3CNEtNUFB7TPjhXfO5uht+e0XOAozdIySQx5DZuqJ5GTgV1wg4pW3vnzGLCqzI6wfYRfUgOL0JCMqRli1TeZUDHjq2xFamDxVVjrufA1Y2ngKcNv6yXQVdWQ5Mhub3GQu6ebQ0/vwfFDf22qJFsD+n6o3CjjdWBFT7Z7Ior/X+3QWMDsWlxZtZdkTBKbDnOSFWjtZ0+SXG72lykXy9q+NJsC00PmHWkfx0pIqvK/V+ieiiIAu34RKyXtGyn1c335+s3zQOYDJGZnsWSozXnXJN0wYh2pf5bBQ3o4hXJxdpq49s8wAk4ozIEBZCyhzKZp2assb+App6NFQBGQVQqoH/EJBEd6Pi7ypWIZaxHBYnupDTXsqmsHWfeGYuP6a/uhfce28mQ6kwjVMPS5ENFo/jFsAEUUjuw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(451199015)(46966006)(36840700001)(40470700004)(36860700001)(41300700001)(47076005)(426003)(26005)(8936002)(336012)(316002)(8676002)(70206006)(54906003)(186003)(1076003)(110136005)(40480700001)(2616005)(40460700003)(36756003)(16526019)(86362001)(82740400003)(4326008)(2906002)(44832011)(81166007)(966005)(70586007)(356005)(5660300002)(6666004)(7696005)(478600001)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 12:11:41.4862
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f28717c-f896-4dee-d8a3-08daaddd40f6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6276
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +99,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+commit 018d6711c26e4 ("ACPI: x86: Add a quirk for Dell Inspiron 14 2-in-1
+for StorageD3Enable") introduced a quirk to allow a system with ambiguous
+use of _ADR 0 to force StorageD3Enable.
 
-On Fri, Oct 14, 2022 at 10:26:31AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.74 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 16 Oct 2022 08:25:00 +0000.
-> Anything received after that time might be too late.
+Julius Brockmann reports that Inspiron 16 5625 suffers that same symptoms.
+Add this other system to the list as well.
 
-Build test (gcc version 12.2.1 20220925):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216440
+Reported-and-tested-by: Julius Brockmann <mail@juliusbrockmann.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/acpi/x86/utils.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2002
-[2]. https://openqa.qa.codethink.co.uk/tests/1994
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index f8a2cbdc0ce2b..d7d3f1669d4c0 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -219,6 +219,12 @@ static const struct dmi_system_id force_storage_d3_dmi[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 14 7425 2-in-1"),
+ 		}
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 16 5625"),
++		}
++	},
+ 	{}
+ };
+ 
 -- 
-Regards
-Sudip
+2.34.1
+
