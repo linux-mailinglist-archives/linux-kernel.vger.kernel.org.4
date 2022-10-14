@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8D35FF57F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA5B5FF588
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJNVd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S229711AbiJNVkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiJNVdo (ORCPT
+        with ESMTP id S229744AbiJNVkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:33:44 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76281DDC08
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:33:42 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so9120289lfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6hw2W+lQ+Hv9z48dDP42SJngsa6TM787Uybb56JTsIU=;
-        b=IzjtkQDeQYFdEn4qZzb1y1MhYYgveIXQ3jXngRhUccpAUTAv2U56wpVEo4vTa7Ije4
-         sAupNlsKBfXuyjJMbKI1gyZDdYl00MbAfewpZYfg2yPC/+GlFo7ry7JPZ9XBuviAPHf1
-         xe0mno2Y1BaXlBQLr2ksEzGoRieudyDUjsWBHUS6EQVhJP819XxvT1zMUEsrbLwdY9Pm
-         7bHlbgY725Ccras+osgCcPSMdyan91I4QlxbukJFOvL1AYW0haPqlPU9w03RY+A2JMok
-         5kINGb3i9YDCuFkLCexSEC3CwDQ/o5uusvv8+JOtwI17ngetxbEAF6UU53D8pBUTF4bs
-         D08g==
+        Fri, 14 Oct 2022 17:40:31 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9B3726AF;
+        Fri, 14 Oct 2022 14:40:29 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id p24-20020a9d6958000000b00661c528849eso2605990oto.9;
+        Fri, 14 Oct 2022 14:40:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6hw2W+lQ+Hv9z48dDP42SJngsa6TM787Uybb56JTsIU=;
-        b=JIts1rgVGLCkV/FLm5IS8X5JJ76GnVRvDZF5nqsJZW4hIRb/SMbbZdxEVMr2rYBg17
-         0Z+zUE/lYv+Ykigla50d9o0ObXSH5/bVDRY+cvD1CxBRE0OU0ap2ZEyGTk6Et+9JXeXR
-         scriLC+RiNjWvH486aY+l4PPYxPhMeAdqAeclaUTUDTOvnrQB770WH8K9qVzGphc5l7v
-         5JBLrD258h2ZpgvK06P7RaW8W/WufQj9fNq+rtloIRyZX3uljw+y7RnC0GuBsEcSITWv
-         PtaB+0Gr/EhonYYvTi+YeAUKke3taV/l4kMAOt8POmVsqZz+1DLQ0PFgfY5UMigKfK6H
-         97DQ==
-X-Gm-Message-State: ACrzQf2j6zy3Zq6W+fm2hN6Ttg3kRpL6MLBdu4515BgUwDgVwtA0N4F/
-        XH7zPvTjKAI135vdfRgOgI2oLQ==
-X-Google-Smtp-Source: AMsMyM5e+mqse7jgqB+fvyHTHDmwUvq7Ma4QJCvAULxUDpj58pm7P4FgR2I8cnXSkGuc5SX2RoitPA==
-X-Received: by 2002:ac2:44cd:0:b0:4a2:3fcd:c960 with SMTP id d13-20020ac244cd000000b004a23fcdc960mr2482364lfm.590.1665783220846;
-        Fri, 14 Oct 2022 14:33:40 -0700 (PDT)
-Received: from fedora.. ([78.10.207.24])
-        by smtp.gmail.com with ESMTPSA id d4-20020ac24c84000000b00494978b0caesm494036lfl.276.2022.10.14.14.33.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sb3JrLf3T9Yv0jAPi4EuzhhdXdPJSp+d1r33oSjcyO4=;
+        b=lRLZ9AxG4AEfAkEj33pNyGTg/z1mi6W6RkQly602r/vbbbq0vAO2LD3QWEjpjhhKAJ
+         /yX50heQPtWm8vOeo7iXNjnv58gJAN9gpuy9zNFq7VYS4iY8Hb+QocR4rRSY3+ODhVJ5
+         iUOz2ex7YkfKmt5jhYJ6hkv0spjHHl+tYEkAJlzENI7N72lc+DT+BONxJALVBa7AnHjl
+         cU6icjdC0pR73itQ6/r9KVveAsqKuNgq6qkKn/vuiKWYntyO8wH1QsVvEcbERjdnOX/K
+         Cjoa/AZtj0vj3CWVknC9NrPjiJAP/VXLe30i5VWEPWysH6TI9YzkE0dvPBAsZIYxQY0I
+         Rknw==
+X-Gm-Message-State: ACrzQf00+O55LjmM/RtpTX8lJI8p/wXAspL6ckVsXf0qR3VJxTo6H1zo
+        hh/oszMUIZKawE+28rRbPQ==
+X-Google-Smtp-Source: AMsMyM4lvKNql9jR06JZlPelLERp1xv52bnZviFnwE99OASEPA+LBV3gCV0Cy3wCagYwVKyPcAjZyQ==
+X-Received: by 2002:a05:6830:1cc8:b0:65c:8e3:cfd with SMTP id p8-20020a0568301cc800b0065c08e30cfdmr6533otg.28.1665783628871;
+        Fri, 14 Oct 2022 14:40:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x7-20020a9d6287000000b00661a1a48079sm1721096otk.7.2022.10.14.14.40.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:33:40 -0700 (PDT)
-From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
-To:     devicetree@vger.kernel.org
-Cc:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        upstream@semihalf.com
-Subject: [PATCH v5 3/3] ARM: dts: armada-375: Update network description to match schema
-Date:   Fri, 14 Oct 2022 23:32:54 +0200
-Message-Id: <20221014213254.30950-4-mig@semihalf.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221014213254.30950-1-mig@semihalf.com>
-References: <20221014213254.30950-1-mig@semihalf.com>
+        Fri, 14 Oct 2022 14:40:28 -0700 (PDT)
+Received: (nullmailer pid 2945760 invoked by uid 1000);
+        Fri, 14 Oct 2022 21:40:29 -0000
+Date:   Fri, 14 Oct 2022 16:40:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 1/5] media: dt-bindings: ov5645: Convert OV5645
+ binding to a schema
+Message-ID: <20221014214029.GA2937999-robh@kernel.org>
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAL_JsqKC_BJDJLLFck_0CbQ-0rZ0oVWMAdiwwGep23nh2pP19g@mail.gmail.com>
+ <CA+V-a8vMLuzJ8h5UDNXUiZRXPV1vJ9gguUMywe_+sPcU8tK+tA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8vMLuzJ8h5UDNXUiZRXPV1vJ9gguUMywe_+sPcU8tK+tA@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcin Wojtas <mw@semihalf.com>
+On Fri, Oct 14, 2022 at 10:27:53PM +0100, Lad, Prabhakar wrote:
+> Hi Rob,
+> 
+> Thank you for the review.
+> 
+> On Fri, Oct 14, 2022 at 10:05 PM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Fri, Oct 14, 2022 at 1:35 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Convert the simple OV5645 Device Tree binding to json-schema.
+> > >
+> > > The previous binding marked the below properties as required which was a
+> > > driver requirement and not the device requirement so just drop them from
+> > > the required list during the conversion.
+> > > - clock-frequency
+> > > - enable-gpios
+> > > - reset-gpios
+> > >
+> > > Also drop the "clock-names" property as we have a single clock source for
+> > > the sensor and the driver has been updated to drop the clk referencing by
+> > > name.
+> >
+> > Driver requirements are the ABI!
+> >
+> > This breaks a kernel without the driver change and a DTB that has
+> > dropped the properties.
+> >
+> I already have a patch for the driver [0] which I missed to include
+> along with the series.
 
-Update the PP2 ethernet ports subnodes' names to match
-schema enforced by the marvell,pp2.yaml contents.
+You completely miss the point. Read the first sentence again. Changing 
+driver requirements changes the ABI.
 
-Add new required properties ('reg') which contains information
-about the port ID, keeping 'port-id' ones for backward
-compatibility.
+This breaks the ABI. The driver patch does not help that.
 
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
----
- arch/arm/boot/dts/armada-375.dtsi | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/armada-375.dtsi b/arch/arm/boot/dts/armada-375.dtsi
-index 929deaf312a5..9fbe0cfec48f 100644
---- a/arch/arm/boot/dts/armada-375.dtsi
-+++ b/arch/arm/boot/dts/armada-375.dtsi
-@@ -178,6 +178,8 @@ mdio: mdio@c0054 {
- 
- 			/* Network controller */
- 			ethernet: ethernet@f0000 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
- 				compatible = "marvell,armada-375-pp2";
- 				reg = <0xf0000 0xa000>, /* Packet Processor regs */
- 				      <0xc0000 0x3060>, /* LMS regs */
-@@ -187,15 +189,17 @@ ethernet: ethernet@f0000 {
- 				clock-names = "pp_clk", "gop_clk";
- 				status = "disabled";
- 
--				eth0: eth0 {
-+				eth0: ethernet-port@0 {
- 					interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
--					port-id = <0>;
-+					reg = <0>;
-+					port-id = <0>; /* For backward compatibility. */
- 					status = "disabled";
- 				};
- 
--				eth1: eth1 {
-+				eth1: ethernet-port@1 {
- 					interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
--					port-id = <1>;
-+					reg = <1>;
-+					port-id = <1>; /* For backward compatibility. */
- 					status = "disabled";
- 				};
- 			};
--- 
-2.37.3
+> > Also, with 'clock-names' dropped, you've just introduced a bunch of
+> > warnings on other people's platforms. Are you going to 'fix' all of
+> > them?
+> >
+> Yes I will fix them, once the patch driver patch [0] is merged in.
 
+Why? You are just making extra work. We have enough warnings as-is to 
+fix.
+
+Rob
