@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEE85FF66E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C285C5FF671
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiJNWpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S229617AbiJNWri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJNWpL (ORCPT
+        with ESMTP id S229471AbiJNWrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:45:11 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83584303E2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:45:06 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id a24so4593640qto.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:45:06 -0700 (PDT)
+        Fri, 14 Oct 2022 18:47:37 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB83E985F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:47:36 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id h15so4617865qtu.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0wTTtDn8bMgOHPumRgeVGmfS8E9BMHk34r0/6EY7HK8=;
-        b=fn+Sp8nK+zHTUKEu0/UOyIV8lH0ubMxMGI8FTL8t5mvCB+3CKr1NLT6vcv/DeD3m4i
-         OLauho6n3mQht+QrGQYmub8EAOQ9IaNXNv9qRXNIyZbKaGkLg7xmxDR3qEywUr3puL3x
-         g2MNZOtpJz0kIpWQup/tJynHBWGi/gjSQAWU0=
+        bh=CIDMRjxZ4Xyp6yANZOVgTit6chFtmm8gE1u2KRrbiU8=;
+        b=GipgvN6jIGf1x1HRWRkuPlagiWaApeFXdmJAP4qXH3TwUDbzJXtfqr9R3opH8hRWY/
+         +/KDsmggt6ZxSzmGITw6hPj4/xT8x+GbDbVtnvjoUsxcx3QH7X07ta/EqTNWHeq2LdjV
+         N7yTbp//7DJEsF8daPKOFeR3TIrsbhBlxBGT0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0wTTtDn8bMgOHPumRgeVGmfS8E9BMHk34r0/6EY7HK8=;
-        b=Dp0LLXa7FR8WHGUgiIfYphVPsWzt472OvzjDLGtniCB/W5eqvbS3JnSg0eeWiw85P1
-         UBGAZhUY2+fg+g+6dLi9crGe921qVo8skRWkY0zSmCmQS+sryuUQnTHuWEc+D1IAI223
-         siThNjYnXhG1UGLul8kif0pWPU72ZzZpTNf1E9qYb/3hClkFuX/UK+vLPx8Y7Tkn+wkL
-         ic2zFti87uNwRjNK5rLNseBaMooCfmGKZQWCWOR27PDp1bYo9gpKexE3P52gFekQIYHc
-         YEi1s62ZUHFKe8bzFp2lIylUIUoPFJXmcuQf6C+WAHDdQ2xhZGlqxKBxTUVYptM3dwdi
-         xlUg==
-X-Gm-Message-State: ACrzQf141gcPFsihoF5IfhhELRSQi6/BkoYyXGwnv66L8Z7fF/l4s3SR
-        o2f7SqmcoYzgssr95HpV44kKVyDCphKqvA==
-X-Google-Smtp-Source: AMsMyM7v6wQZQjuv6d1fxvAxCjL/mv6dq9FXoigfgcYIsjgQwKkCjnv8TIlfaW5n7AjTBf7wXbWWmQ==
-X-Received: by 2002:ac8:59c1:0:b0:39c:d5c3:6859 with SMTP id f1-20020ac859c1000000b0039cd5c36859mr61103qtf.230.1665787505654;
-        Fri, 14 Oct 2022 15:45:05 -0700 (PDT)
+        bh=CIDMRjxZ4Xyp6yANZOVgTit6chFtmm8gE1u2KRrbiU8=;
+        b=re31ljcqnouoxaPSHWiJPAETHtIKDoFmxzIPJmrcj4oiK0UOe4iZFFcEL5OJ0ShHbt
+         A74HLi1NZYjfBbkwzT19fqlQRKrb2h6MjtajPGcirN3WLbFbQuc2M9wGuI0gs9YyT0GP
+         wCf/53AAfvYVW0XOHz2lw7ze+g2IcceeacDhcpI48Uw5yBFzDy7YyjoNoISkq3bd63GX
+         /M3c5zJVtwNMSFMEnRDfhkV4BLUPtZjUMrzGoEENu3da1L89akkp2yNddMSmc0a0kB7Z
+         4OD9xY/OnHtEvL+nZfi9sDCqVtu1tefQutJeCMofovXqsseFGkTVaj+7IyohVK1sEnpF
+         UP+w==
+X-Gm-Message-State: ACrzQf059LZ8NdnMhjsS61j4ZGzwYDLuYEF8vv9dbxsCBvcqi7hwzpsx
+        8vpKj+dzGqvvhMDFNsDVODawBQ==
+X-Google-Smtp-Source: AMsMyM7wDDuVtEeH+l+T5khpojv2WAPqZgECsSkVI+QouWbHu5+cM9SHTr9XgZdHMNlNXHQgigMWew==
+X-Received: by 2002:a05:622a:4d1:b0:39c:beaa:411e with SMTP id q17-20020a05622a04d100b0039cbeaa411emr54269qtx.530.1665787655417;
+        Fri, 14 Oct 2022 15:47:35 -0700 (PDT)
 Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id bc10-20020a05622a1cca00b0039ccd7a0e10sm2856195qtb.62.2022.10.14.15.45.05
+        by smtp.gmail.com with ESMTPSA id d9-20020ac85349000000b00343057845f7sm2800923qto.20.2022.10.14.15.47.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 15:45:05 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 22:45:04 +0000
+        Fri, 14 Oct 2022 15:47:34 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 22:47:34 +0000
 From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, quic_neeraju@quicinc.com,
-        rcu@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH 1/3] srcu: Warn when NMI-unsafe API is used in NMI
-Message-ID: <Y0nmcH0SktDdonyW@google.com>
-References: <20221013172244.1099010-1-frederic@kernel.org>
- <20221013172244.1099010-2-frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org, tglx@linutronix.de,
+        john.ogness@linutronix.de, pmladek@suse.com
+Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
+Message-ID: <Y0nnBjTHgoIVYMrJ@google.com>
+References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013172244.1099010-2-frederic@kernel.org>
+In-Reply-To: <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,55 +69,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 07:22:42PM +0200, Frederic Weisbecker wrote:
-> Using the NMI-unsafe reader API from within NMIs is very likely to be
-> buggy for three reasons:
+On Thu, Sep 29, 2022 at 11:07:14AM -0700, Paul E. McKenney wrote:
+> Hello!
 > 
-> 1) NMIs aren't strictly re-entrant (a pending nested NMI will execute
->    at the end of the current one) so it should be fine to use a
->    non-atomic increment here. However breakpoints can still interrupt
->    NMIs and if a breakpoint callback has a reader on that same ssp, a
->    racy increment can happen.
-> 
-> 2) If the only reader site for a given ssp is in an NMI, RCU is definetly
-								  definitely
->    a better choice over SRCU.
+> This RFC series provides the second version of an NMI-safe SRCU reader API
+> in the guise of srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe().
 
-Just checking - because NMI are by definition not-preemptibe, so SRCU over
-RCU doesn't make much sense right?
+Just a comment about high-level use of the new NMI-safe SRCU api: say if for
+certain arch, NMI cannot be interrupted (by breakpoint or something), then
+using NMI-safe API will force such arch to potentially use more expensive RMW
+atomic than the previously cheap local non-atomic operations that the arch
+was able to get away with.
 
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Thoughts? Otherwise, LGTM.
 
 thanks,
 
  - Joel
 
+
+> A given srcu_struct structure must use either the traditional
+> srcu_read_lock() and srcu_read_unlock() API or the new _nmisafe() API:
+> Mixing and matching is not permitted.  So much so that kernels built
+> with CONFIG_PROVE_RCU=y will complain if you try it.
 > 
-> 3) Because of the previous reason (2), an ssp having an SRCU read side
->    critical section in an NMI is likely to have another one from a task
->    context.
+> The reason for this restriction is that I have yet to find a use case
+> that is not a accident waiting to happen.  And if free intermixing
+> were permitted, it is pretty much a given that someone somewhere will
+> get confused and use srcu_read_lock_nmisafe() within NMI handlers and
+> srcu_read_lock() elsewhere, which will not (repeat, NOT) provide NMI
+> safety.
 > 
-> For all these reasons, warn if an nmi unsafe reader API is used from an
-> NMI.
+> I do not expect to push this into the v6.1 merge window.  However, if
+> the printk() series that needs it goes in, then I will push it as a fix
+> for the resulting regression.
 > 
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> ---
->  kernel/rcu/srcutree.c | 2 ++
->  1 file changed, 2 insertions(+)
+> The series is as follows:
 > 
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index c54142374793..8b7ef1031d89 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -642,6 +642,8 @@ static void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
->  
->  	if (!IS_ENABLED(CONFIG_PROVE_RCU))
->  		return;
-> +	/* NMI-unsafe use in NMI is a bad sign */
-> +	WARN_ON_ONCE(!nmi_safe && in_nmi());
->  	sdp = raw_cpu_ptr(ssp->sda);
->  	old_nmi_safe_mask = READ_ONCE(sdp->srcu_nmi_safety);
->  	if (!old_nmi_safe_mask) {
-> -- 
-> 2.25.1
+> 1.	Convert ->srcu_lock_count and ->srcu_unlock_count to atomic.
 > 
+> 2.	Create an srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe().
+> 
+> 3.	Check for consistent per-CPU per-srcu_struct NMI safety.
+> 
+> 4.	Check for consistent global per-srcu_struct NMI safety.
+> 
+> 5.	Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.
+> 
+> 6.	Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.
+> 
+> 7.	Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.
+> 
+> 8.	Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.
+> 
+> Changes since v1 RFC:
+> 
+> 1.	Added enabling patches for arm64, loongarch, s390, and x86.
+> 	These have what appear to me to be NMI-safe this_cpu_inc()
+> 	implementations.
+> 
+> 2.	Fix a build error on !SMP kernels built without SRCU.
+> 
+> 3.	Fix a build error on !SMP kernels.
+> 
+> 						Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+>  b/arch/arm64/Kconfig       |    1 
+>  b/arch/loongarch/Kconfig   |    1 
+>  b/arch/s390/Kconfig        |    1 
+>  b/arch/x86/Kconfig         |    1 
+>  b/include/linux/srcu.h     |   39 +++++++++++++++++++++
+>  b/include/linux/srcutiny.h |   11 ++++++
+>  b/include/linux/srcutree.h |    4 +-
+>  b/kernel/rcu/Kconfig       |    3 +
+>  b/kernel/rcu/rcutorture.c  |   11 ++++--
+>  b/kernel/rcu/srcutree.c    |   24 ++++++-------
+>  include/linux/srcu.h       |    4 +-
+>  include/linux/srcutiny.h   |    4 +-
+>  include/linux/srcutree.h   |   12 +++++-
+>  kernel/rcu/srcutree.c      |   82 +++++++++++++++++++++++++++++++++++++++------
+>  14 files changed, 166 insertions(+), 32 deletions(-)
