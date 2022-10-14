@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A365FED47
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438605FED4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJNLlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S229614AbiJNLnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiJNLlu (ORCPT
+        with ESMTP id S229578AbiJNLnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:41:50 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48B71BE1E2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:41:48 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mpkxl1STpz4x1G;
-        Fri, 14 Oct 2022 22:41:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1665747707;
-        bh=2CAXROmdXXHnzNjRew8XdikNXQgXjSxX5epQMzVUkgM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TLtHq9LnOVtJzTL4fSS/iWYAdVooPFHmAd0/2hX5wtLyCj5P0mdQPVr7HI+9w6+Z4
-         SrNu3DRZBEq1eCvS719/jaQtoYlg4kWdnO5HeMcFlrG7zhyTocksSJyet1cGT7Brky
-         0CWEZVNh6YRcnWBc4VXDR1b1NXXc8RCo8nB0GSMDlDM1LW7UEauNxz7XzWic9ut/Ux
-         bEajJVj1L1HYzLdBi11noVahuPEAq+5UfKEzgS+ZCKsNyJ8LIxB2TgtMW6BsBpHCkm
-         DOmJvO07DU6Kw12PV3v79usgo0oZgvsGHku9RMYdozRd63Ybns6MMir7QB04o0PqGz
-         TqRHKK1a9lnKw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        npiggin@gmail.com
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-2 tag
-Date:   Fri, 14 Oct 2022 22:41:42 +1100
-Message-ID: <874jw6my2x.fsf@mpe.ellerman.id.au>
+        Fri, 14 Oct 2022 07:43:49 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373641C8437
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:43:49 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso7589481pjq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XtwckXY6GxG78kcpO8+3k1Gq+VT6rNZTsbhQDdeEaDs=;
+        b=RyFNLKV4kCKAULz2zXwQH1I7Vbb+R8O/w1860da086cFUgLzEPfQAZHXTJ7s8Y7ADQ
+         jfEuo6v3iUa08i0aj9Eu3Ql3MEyY07KlN3EK79rrRZd72kTZ3KZOTBI4oAuI8Q7aooBY
+         WWxhsTC+tg5Psc09DFqaQCLWkEAN+ZwAEN1gOCLT9x+h6W1Ylg4/2DbCCU3DciOzyJTx
+         46vVNqE+sV20n/trrqY+2XDvcIA3+Ht+Lz8RWq2s7bmZqNBlIEyS7m0iR4gQTbrlsaVq
+         E1k1lzwK7hw/kytwHvz0v6V9gC8nMoX1qR1bfYcsnp7Kv/W9w+xRV6s1gr6YVPWqTbKQ
+         ChUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XtwckXY6GxG78kcpO8+3k1Gq+VT6rNZTsbhQDdeEaDs=;
+        b=rM15PHp5HRvDvrm5GfRH+E828EXoNg6QgEuaJE8KXAwSm7lOmW+gSjiVYf0p7j2p/N
+         r7Zjx3CHu1+KU9fpTOsaKnFeCiX6wvE1c/7w66Ssd4pi5vlvd44+Iu22F5L8CEzEtY6W
+         yqWd8V9yWaiLqRysaUqSXReC7pUJraadLW2Sl6SRB8BRmk0AlPKOFwRh/dJ1foxg3JB/
+         d4yj+2Ie3GnMey1E6xdWLp6ktkqYl2PPZ72ZJwG/23AfH26AG0OUB7l7/BPbwid98MZV
+         3nACDuwQGUbHZK48vWOxdoSo5C1orQz58LluNv9NRSh0PFa8NBem7vpWe8TzlGTxk+CV
+         EIsA==
+X-Gm-Message-State: ACrzQf3pwdELJReIL4RipLPXIAGXNti/9KRhP/YEESYGnCpuQr9vkF4j
+        bxC58Fo2ijoPgLjiQhAnhGo=
+X-Google-Smtp-Source: AMsMyM7jsEKb+jhtAMZz14QrVwXhq59qrHDM300z2XniVkRWpRp+l8VZmMbO4pzcrNMY2TcEeeAHEg==
+X-Received: by 2002:a17:902:d484:b0:17f:7437:565d with SMTP id c4-20020a170902d48400b0017f7437565dmr4892551plg.154.1665747828641;
+        Fri, 14 Oct 2022 04:43:48 -0700 (PDT)
+Received: from hyeyoo.. ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b00178a8f4d4f2sm1542251plg.74.2022.10.14.04.43.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 04:43:47 -0700 (PDT)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/slub: remove dead code for debug caches on deactivate_slab()
+Date:   Fri, 14 Oct 2022 20:43:22 +0900
+Message-Id: <20221014114322.97512-1-42.hyeyoo@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+After commit c7323a5ad0786 ("mm/slub: restrict sysfs validation to debug
+caches and make it safe"), SLUB does not take a slab from partial list for
+debug caches. As deactivation isn't needed anymore, remove dead code.
 
-Hi Linus,
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ mm/slub.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-Please pull powerpc fixes for 6.1:
+diff --git a/mm/slub.c b/mm/slub.c
+index 96dd392d7f99..e2215240954d 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2411,7 +2411,7 @@ static void init_kmem_cache_cpus(struct kmem_cache *s)
+ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+ 			    void *freelist)
+ {
+-	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE, M_FULL_NOLIST };
++	enum slab_modes { M_NONE, M_PARTIAL, M_FREE, M_FULL_NOLIST };
+ 	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+ 	int free_delta = 0;
+ 	enum slab_modes mode = M_NONE;
+@@ -2487,14 +2487,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+ 		 * acquire_slab() will see a slab that is frozen
+ 		 */
+ 		spin_lock_irqsave(&n->list_lock, flags);
+-	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+-		mode = M_FULL;
+-		/*
+-		 * This also ensures that the scanning of full
+-		 * slabs from diagnostic functions will not see
+-		 * any frozen slabs.
+-		 */
+-		spin_lock_irqsave(&n->list_lock, flags);
+ 	} else {
+ 		mode = M_FULL_NOLIST;
+ 	}
+@@ -2504,7 +2496,7 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+ 				old.freelist, old.counters,
+ 				new.freelist, new.counters,
+ 				"unfreezing slab")) {
+-		if (mode == M_PARTIAL || mode == M_FULL)
++		if (mode == M_PARTIAL)
+ 			spin_unlock_irqrestore(&n->list_lock, flags);
+ 		goto redo;
+ 	}
+@@ -2518,10 +2510,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+ 		stat(s, DEACTIVATE_EMPTY);
+ 		discard_slab(s, slab);
+ 		stat(s, FREE_SLAB);
+-	} else if (mode == M_FULL) {
+-		add_full(s, n, slab);
+-		spin_unlock_irqrestore(&n->list_lock, flags);
+-		stat(s, DEACTIVATE_FULL);
+ 	} else if (mode == M_FULL_NOLIST) {
+ 		stat(s, DEACTIVATE_FULL);
+ 	}
+-- 
+2.32.0
 
-The following changes since commit ae5b6779fa8724628bbad58126a626d0cd599414:
-
-  powerpc: Fix 85xx build (2022-10-11 10:13:34 -0700)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-2
-
-for you to fetch changes up to 90d5ce82e143b42b2fdfb95401a89f86b71cedb7:
-
-  powerpc/pseries: Fix CONFIG_DTL=n build (2022-10-13 22:30:07 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.1 #2
-
- - Fix 32-bit syscall wrappers with 64-bit arguments of unaligned register-pairs.
-   Notably this broke ftruncate64 & pread/write64, which can lead to file corruption.
-
- - Fix lost interrupts when returning to soft-masked context on 64-bit.
-
- - Fix build failure when CONFIG_DTL=n.
-
-Thanks to: Nicholas Piggin, Jason A. Donenfeld, Guenter Roeck, Arnd Bergmann, Sachin Sant.
-
-- ------------------------------------------------------------------
-Nicholas Piggin (3):
-      powerpc/32: fix syscall wrappers with 64-bit arguments of unaligned register-pairs
-      powerpc/64s/interrupt: Fix lost interrupts when returning to soft-masked context
-      powerpc/pseries: Fix CONFIG_DTL=n build
-
-
- arch/powerpc/include/asm/syscalls.h      |  16 +++
- arch/powerpc/kernel/Makefile             |   1 +
- arch/powerpc/kernel/interrupt_64.S       |  15 +-
- arch/powerpc/kernel/sys_ppc32.c          |  38 +++--
- arch/powerpc/kernel/syscalls/syscall.tbl |  16 ++-
- arch/powerpc/platforms/pseries/Makefile  |   3 +-
- arch/powerpc/platforms/pseries/dtl.c     | 151 ++++++++++----------
- 7 files changed, 149 insertions(+), 91 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmNJSsUACgkQUevqPMjh
-pYBBOg//aOMrUh9f40AMV7EOln4mk8c28nrpbl2JOIJ0CHuEbD4RJOTD/1Ndfg/2
-5p/zR5Dz3T7NgZtwOM0Zyokl1OV4o76riwq3DR4eYDlclYNErOsv0OLFcsx4mymn
-gfqRrMf8DIVu7dyGBRK9JY+zXFswa0pYlctnDC6Ron2D1/eQtLrMVpGGuXs3QKR5
-nsqssaD/0lyQqG6K4vCk5pKx53fNi3uGiN1mjBAwVkAwy7xFvSoedQ3xg7UtE69j
-ee2tBFQAHHLgkcXX50wlQSiry5lH+FAbgiXJhNsf6YrwwJ11Hs6llVAVO+X6olQv
-h3STKbkCcP6HG1ZAq/+0w8ivzJ7EbqOG3h9lDDCp5kmK5D4uO8DPs6+lBEhcjPmf
-DeVM+AiUCCNzc2NNw8Q94HO8YTQRa/5o2VIbNPXdVvowJkBFNbdrOH/uiJx/FXBw
-+x2nMvWu/PwQCR9//Sju/71ULm+qKhw/p8IAarTBRGLG+HF1Drm/aCcxX00INcNI
-mbrUoR8fHDtVI6osdI0hjMrAyyuYGS8Bqg55J/O4aOz3AwhiI8JRennA6zLrKm/a
-KADqIdMvhwmH+hjLZPUoLjQf/WbjJUt17IXtBWEv8kZB/tmdeXr/7Cn/IEGaMFDg
-MuDL5aMkS/Y7Ve784+etgG8f8H04HrW4PuZSL71iltaF5eg2R0U=
-=UegA
------END PGP SIGNATURE-----
