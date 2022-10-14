@@ -2,139 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6125FE6C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD335FE6C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiJNCEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 22:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S229722AbiJNCEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 22:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJNCEL (ORCPT
+        with ESMTP id S229511AbiJNCEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 22:04:11 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306BA8359
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:04:10 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a6-20020a17090abe0600b0020d7c0c6650so6616938pjs.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 19:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lC2pghpTe/REQRIwm7i5sqf6UNKbGEzV2cpJkMCHIBQ=;
-        b=28MZN/1ShtOl3fkgyqUh/cC6SBCFNo3mlOfZGEJoloKnSObdeOiSPGsBR4u3wSS3ig
-         Sj1BW4xxfjCNw+WZR0tKVsVivlSvDFvEpn60PcUTdEGOXJle724YLDG6aqenU3e1W5A/
-         i/HaM6IpCTX/IHqBHYdDa3GjqeyCCxgeZTgmc05IG/Q4Im/gFwClK7AUik1xAgXoUT2w
-         x67dlylf1n6LfZWNHRwFPmN9ODsCP1c+ta5cy6Ul0p47uC5s53MhTCmGb+AD4m7RS2xt
-         rQ6TvxJscgQPHCvB3/L1U+8HXx1ID6zYjCkNfG9uHPQIbnvxNWwQ1NcrCrdiK7X6KJTf
-         ZDmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lC2pghpTe/REQRIwm7i5sqf6UNKbGEzV2cpJkMCHIBQ=;
-        b=GXD+mUiOBRcQwEMjjUMgCeAPxciCH4/Cb+SWu0UC39zO0ReBAA/U3G/OkaoUYtmdcD
-         keC8I4nfA4jaaxReyMMNDbLJ0KrdxGHL0yukzXRJ7q4rfiDBxNTimbKaDrFTN7+L4A4W
-         2pJUO8e3qoRNOrBMpcLTLVMTrpCyDQGMMGuuTIWBkC4PW8j/oN/2/99+QtGgsdsdTZFw
-         KQq1XiFGTdSULZe14EW6dtsMHq95rcy67Hzayv2jekF8bAtXnrCTnIflsM+3huzSUdah
-         XRVMPbUizSZrkjsc9m6DNjz4mCzwTeMr/at9V2txJ36XE25Z5Yqiboa8fPQTbgw/Gn6J
-         qF8A==
-X-Gm-Message-State: ACrzQf3dMytygAH5aPJLwpEpBkUSYbxjjUH+zZbv9735ZlCYM9JqZ7F7
-        pE9HJQ5jf5PzeI0yb/YYLPqJIA==
-X-Google-Smtp-Source: AMsMyM4Zs0RF14FsucgUsQU/9c7SAmQvRsy5KKjSE8KaqSMeyuqlF7oekTnk3qDR5QJLGPD6v7w5wA==
-X-Received: by 2002:a17:903:230a:b0:17d:707a:360e with SMTP id d10-20020a170903230a00b0017d707a360emr2902229plh.118.1665713043058;
-        Thu, 13 Oct 2022 19:04:03 -0700 (PDT)
-Received: from [10.4.165.47] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176c0e055f8sm490801pln.64.2022.10.13.19.04.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 19:04:02 -0700 (PDT)
-Message-ID: <7dba12ce-f981-6017-0613-542472e3ec5c@bytedance.com>
-Date:   Fri, 14 Oct 2022 10:03:58 +0800
+        Thu, 13 Oct 2022 22:04:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A48A8359;
+        Thu, 13 Oct 2022 19:04:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F2D3B821B7;
+        Fri, 14 Oct 2022 02:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DF0C433C1;
+        Fri, 14 Oct 2022 02:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665713069;
+        bh=71JUZnb+/GHrSs/6gc/+znRrLGAfu5erJaV2UmEv+m0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M+FQzbL3lM0qGKwdlolPZlvEUUsmTgpP8TcQVX6CKmos/pVjrUau3/h11d3x0428d
+         TiON4OkKo1L1Np0Rc6/01kI6W+BrYjmdQmtSfToHvLsoA0wJcCFcFVO/pYsGPjddr4
+         voAcZ5M5gllo4H822+NaDZN1ln0a76yLBK7yJITO6lCsJ08nCasgXTYBUlYET6MHeT
+         csux4KwOIaaLdDm7FXBLim6gCIJQ9VYVrnZi6p02BkWoWkVWrOQTHGULQQ4LTih+AD
+         0LRYd088p7F6ongtuiGRE36UnlxVu+ETwGVI+ZP4UWiFRtdXNbEc965npGWQp/ecGH
+         Y5UlutY8qFE4A==
+Date:   Thu, 13 Oct 2022 19:04:27 -0700
+From:   Mark Gross <markgross@kernel.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Mark Gross <markgross@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Danie l Wagner <dwagner@suse.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Junxiao Chang <junxiao.chang@intel.com>
+Subject: Re: [ANNOUNCE] 4.9.327-rt197
+Message-ID: <Y0jDq2cCoTrLFHGZ@T470>
+References: <165222469651.210737.17409564443317121708@T470>
+ <Yy4ShVWORi6XNhCv@T470>
+ <YzcEIU17EIZ7ZIF5@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     quic_pkondeti@quicinc.com, peterz@infradead.org,
-        quic_charante@quicinc.com, linux-kernel@vger.kernel.org
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
- <20221010104206.12184-1-zhouchengming@bytedance.com>
- <CAJuCfpF7Z+CYhk-f_aaDTE232+m9z_n-QfjGfdLje7QrX9bFtw@mail.gmail.com>
- <a73f58a3-9f96-2ce5-38a0-8abab27a2260@bytedance.com>
- <CAJuCfpET+B3X-uX2vDp-2yH-+OVxOu3YXL7JWZrPuoh22P+5SQ@mail.gmail.com>
- <dea56c22-ab5b-25e2-9819-cc598f9aad80@bytedance.com>
- <CAJuCfpFTDyR1V+JYOY_uN6Xg1Nip5b=9dzkwm-CNd8vMWaQQFQ@mail.gmail.com>
- <46c6e1cc-77d3-eac1-fa18-deed2bac4a0e@bytedance.com>
- <Y0g0UAAJMhPczNm/@cmpxchg.org>
- <CAJuCfpFo5EEEg24VLSmcPo=VDMszB9Q2a4L_Eq6E9VWnbsBJDQ@mail.gmail.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <CAJuCfpFo5EEEg24VLSmcPo=VDMszB9Q2a4L_Eq6E9VWnbsBJDQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzcEIU17EIZ7ZIF5@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/14 00:10, Suren Baghdasaryan wrote:
-> On Thu, Oct 13, 2022 at 8:52 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->>
->> On Thu, Oct 13, 2022 at 07:06:55PM +0800, Chengming Zhou wrote:
->>> Should I still need to copy groupc->tasks[] out for the current_cpu as you
->>> suggested before?
->>
->> It'd be my preference as well. This way the resched logic can be
->> consolidated into a single block of comment + code at the end of the
->> function.
+On Fri, Sep 30, 2022 at 04:58:41PM +0200, Sebastian Andrzej Siewior wrote:
+> On 2022-09-23 13:09:41 [-0700], Mark Gross wrote:
+> > > As this was a tricky one I request people to give a good look over.
 > 
-> Sounds good to me. If we are copying times in the retry loop then
-> let's move the `reschedule =` decision out of that loop completely. At
-> the end of get_recent_times we can do:
+> You did good. I not so much. If you could please add the following patch
+> on top, then it will compile also on !RT.
 > 
-> if (cpu == current_cpu)
->     reschedule = tasks[NR_RUNNING] +
->                             tasks[NR_IOWAIT] +
->                             tasks[NR_MEMSTALL] > 1;
-> else
->     reschedule = *pchanged_states & (1 << PSI_NONIDLE);
+> Thank you for work.
 > 
+> ------->8----------
+> 
+> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Date: Fri, 30 Sep 2022 16:55:34 +0200
+> Subject: [PATCH] local_lock: Provide INIT_LOCAL_LOCK().
+> 
+> The original code was using INIT_LOCAL_LOCK() and I tried to sneak
+> around it and forgot that this code also needs to compile on !RT
+> platforms.
+> 
+> Provide INIT_LOCAL_LOCK() to initialize properly on RT and do nothing on
+> !RT. Let random.c use which is the only user so far and oes not compile
+> on !RT otherwise.
+> 
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  drivers/char/random.c     | 4 ++--
+>  include/linux/locallock.h | 5 +++++
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index daea466812fed..86c475f70343d 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -236,7 +236,7 @@ struct crng {
+>  
+>  static DEFINE_PER_CPU(struct crng, crngs) = {
+>  	.generation = ULONG_MAX,
+> -	.lock.lock = __SPIN_LOCK_UNLOCKED(crngs.lock.lock),
+> +	.lock = INIT_LOCAL_LOCK(crngs.lock),
+>  };
+>  
+>  /* Used by crng_reseed() and crng_make_state() to extract a new seed from the input pool. */
+> @@ -515,7 +515,7 @@ struct batch_ ##type {								\
+>  };										\
+>  										\
+>  static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
+> -	.lock.lock = __SPIN_LOCK_UNLOCKED(batched_entropy_ ##type.lock.lock),	\
+> +	.lock = INIT_LOCAL_LOCK(batched_entropy_ ##type.lock),			\
+>  	.position = UINT_MAX							\
+>  };										\
+>  										\
+> diff --git a/include/linux/locallock.h b/include/linux/locallock.h
+> index 0c3ff5b23f6a1..70af9a177197e 100644
+> --- a/include/linux/locallock.h
+> +++ b/include/linux/locallock.h
+> @@ -22,6 +22,8 @@ struct local_irq_lock {
+>  	unsigned long		flags;
+>  };
+>  
+> +#define INIT_LOCAL_LOCK(lvar)			{ .lock = __SPIN_LOCK_UNLOCKED((lvar).lock.lock) }
+> +
+>  #define DEFINE_LOCAL_IRQ_LOCK(lvar)					\
+>  	DEFINE_PER_CPU(struct local_irq_lock, lvar) = {			\
+>  		.lock = __SPIN_LOCK_UNLOCKED((lvar).lock) }
+> @@ -256,6 +258,9 @@ static inline int __local_unlock_irqrestore(struct local_irq_lock *lv,
+>  
+>  #else /* PREEMPT_RT_BASE */
+>  
+> +struct local_irq_lock { };
+> +#define INIT_LOCAL_LOCK(lvar)			{ }
+> +
+>  #define DEFINE_LOCAL_IRQ_LOCK(lvar)		__typeof__(const int) lvar
+>  #define DECLARE_LOCAL_IRQ_LOCK(lvar)		extern __typeof__(const int) lvar
+>  
+> -- 
+> 2.37.2
+> 
+> 
+> Sebastian
 
-Ok, I will send an updated patch later.
+Thanks!  I've applied this and starting some testing. I've also pushed the
+update to v4.9-rt-next if anyone feels like giving a spin before I make the
+release.
 
-Thanks!
+I think I'll finally get the release done in the next few days.
 
-> 
->>
->>> @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
->>>                              u32 *pchanged_states)
->>>  {
->>>         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
->>> +       int current_cpu = raw_smp_processor_id();
->>> +       bool reschedule;
->>>         u64 now, state_start;
->>>         enum psi_states s;
->>>         unsigned int seq;
->>> @@ -256,6 +258,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
->>>                 memcpy(times, groupc->times, sizeof(groupc->times));
->>>                 state_mask = groupc->state_mask;
->>>                 state_start = groupc->state_start;
->>> +               if (cpu == current_cpu)
->>> +                       reschedule = groupc->tasks[NR_RUNNING] +
->>> +                               groupc->tasks[NR_IOWAIT] +
->>> +                               groupc->tasks[NR_MEMSTALL] > 1;
->>>         } while (read_seqcount_retry(&groupc->seq, seq));
->>
->> This also matches psi_show() and the poll worker. They don't currently
->> use the flag, but it's somewhat fragile and confusing. Add a test for
->> current_work() == &group->avgs_work?
-> 
-> Good point. (tasks[NR_RUNNING] + tasks[NR_IOWAIT] + tasks[NR_MEMSTALL]
->> 1) condition should also contain this check.
+--mark
