@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27B65FEECB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4F25FEED4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiJNNmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
+        id S229819AbiJNNm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJNNl6 (ORCPT
+        with ESMTP id S229751AbiJNNmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:41:58 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDF518C40F;
-        Fri, 14 Oct 2022 06:41:56 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id a2so4867022vsc.13;
-        Fri, 14 Oct 2022 06:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VhsGglXkDpyWTUDP1zpBe/DMVjny5tzPLCxJzM1rCH8=;
-        b=cIH2cckbEGL+G/8YvkQXnCT075p7SPbYhAj2r9HrLwKpOTGpyu9IMoDGGdvcFUwmYm
-         74Mzg0H0xer4u3MHNrjdmo418+0ytiVPIJKkTv0LawZhbJOTvYxpp9alGdc/mdIiR7Ql
-         8VwG49acoRv2MWeaDla+1OAt1de8IBl4+bf5juw8OANDCHtos05zE82UhFftovI9wEna
-         twOp6cm5s/w7FPlzANG6n6srVutDn9bLYLw6EKYAQAie+TyyNYs6Wm8HakWeyPTyvN9r
-         3zmL/orgX5pyIIfZ8SvCP1rJ1AuE/n9+JXQh73cB7RFIM41zfnxFcTg155Q6JnyosLgZ
-         xK0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VhsGglXkDpyWTUDP1zpBe/DMVjny5tzPLCxJzM1rCH8=;
-        b=1ZhZX+kJhdHQ7GJ5o0mIV+zDIFTIFc7phJF1ckxONM7py4pxXLLU3FEgoZbaOPmHL1
-         Gc6m/Hp6ByU1h5vBUjwpO0Ay7Ho9MlTM3S0uE2SYYU9knjtab9IPajBrYQihjC61RcIL
-         //d2lsqS9ZmmUUMmcGs3Wy58+xUH0Lmqjg7t7eIehMuGzcKOS6thahi4FV1A6TC1BeSD
-         SKEsPOxdGWOOc9hy5imv46Mr2IgRrCm5ZzT7pn7HaZEIRKZnPgn8/BPC52aao7I4GvZM
-         HNkXCOjVh712Fcbh3i5EAsaqLg9uxBnJQGHJTE4fZF9bDOPFjwYc3JE0kecyzO2hG7c7
-         xcOw==
-X-Gm-Message-State: ACrzQf0ge4Jl9fubPRYQbU3MQ2siPfbsdZevrY/7URfURVuogYnVskz6
-        RzIAj45/Czej0kg5Hdc0YwGLzpv465RZQgWBuxo=
-X-Google-Smtp-Source: AMsMyM7C0xvkIkQ+4nTj1gQpIbbBxDC8WXcerlQyMkQN7bDj/EnnYReGlbrgoOEF6yBlqaxk2Z/WA2ezOvu7KgtSaV8=
-X-Received: by 2002:a67:c09b:0:b0:3a7:954f:5e4d with SMTP id
- x27-20020a67c09b000000b003a7954f5e4dmr2345935vsi.31.1665754915522; Fri, 14
- Oct 2022 06:41:55 -0700 (PDT)
+        Fri, 14 Oct 2022 09:42:51 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12701C7133;
+        Fri, 14 Oct 2022 06:42:50 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MpnZ05Fp7z67bhc;
+        Fri, 14 Oct 2022 21:39:52 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 14 Oct 2022 15:42:49 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 14 Oct
+ 2022 14:42:48 +0100
+Date:   Fri, 14 Oct 2022 14:42:47 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+Message-ID: <20221014144247.00001eb1@huawei.com>
+In-Reply-To: <b1700ea7-4a7a-263c-595c-0f7a56763c10@gmail.com>
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+        <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
+        <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+        <98b59ad5-8c29-be41-4da1-a961db67827c@gmail.com>
+        <Y0QIzf2cAH9ehSeO@smile.fi.intel.com>
+        <19a6db0f-40a8-dacf-4583-cdb9d74e1243@fi.rohmeurope.com>
+        <b1700ea7-4a7a-263c-595c-0f7a56763c10@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <20220818125027.1131-1-yongsuyoo0215@gmail.com>
- <CANXPkT4KL9KxvgjaJO058zg8nb00qaiPfDFKEaQ42g6v18XvKA@mail.gmail.com> <CANXPkT4hB4AEKk_=piESRTxToBsoKCpaq8vvjP05o3CX6QX4_g@mail.gmail.com>
-In-Reply-To: <CANXPkT4hB4AEKk_=piESRTxToBsoKCpaq8vvjP05o3CX6QX4_g@mail.gmail.com>
-From:   =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
-Date:   Fri, 14 Oct 2022 22:41:47 +0900
-Message-ID: <CANXPkT4pzpEKMXuBShAeWfA80g5UigodrVZc+EBDnTLrHjnpyA@mail.gmail.com>
-Subject: Re: [PATCH] media: dvb_ca_en50221: A bug is fixed for size write
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yongsu.yoo@lge.com,
-        =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>,
-        Hans Petter Selasky <hps@selasky.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,152 +69,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear All
-Can you share how this patch is going ?
+On Wed, 12 Oct 2022 10:40:38 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-2022=EB=85=84 9=EC=9B=94 15=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 5:47, =
-=EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =EC=
-=9E=91=EC=84=B1:
->
-> Dear All
-> Can you share how this patch is going ?
->
-> 2022=EB=85=84 8=EC=9B=94 31=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 10:43=
-, =EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =
-=EC=9E=91=EC=84=B1:
-> >
-> > Dear All
-> > Can you share how this patch is going ?
-> >
-> > 2022=EB=85=84 8=EC=9B=94 18=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 9:5=
-0, YongSu Yoo <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
-=B1:
-> > >
-> > > Signed-off-by:Yongsu Yoo <yongsuyoo0215@gmail.com>
-> > >
-> > > The function of "dvb_ca_en50221_write_data" at source/drivers/media
-> > > /dvb-core/dvb_ca_en50221.c is used for two cases.
-> > > The first case is for writing APDU data in the function of
-> > > "dvb_ca_en50221_io_write" at source/drivers/media/dvb-core/
-> > > dvb_ca_en50221.c.
-> > > The second case is for writing the host link buf size on the
-> > > Command Register in the function of "dvb_ca_en50221_link_init"
-> > > at source/drivers/media/dvb-core/dvb_ca_en50221.c.
-> > > In the second case, there exists a bug like followings.
-> > > In the function of the "dvb_ca_en50221_link_init",
-> > > after a TV host calculates the host link buf_size,
-> > > the TV host writes the calculated host link buf_size on the
-> > > Size Register.
-> > > Accroding to the en50221 Spec (the page 60 of
-> > > https://dvb.org/wp-content/uploads/2020/02/En50221.V1.pdf),
-> > > before this writing operation, the "SW(CMDREG_SW)" flag in the
-> > > Command Register should be set. We can see this setting operation
-> > > in the function of the "dvb_ca_en50221_link_init" like below.
-> > > ...
-> > >         if ((ret =3D ca->pub->write_cam_control(ca->pub, slot,
-> > > CTRLIF_COMMAND, IRQEN | CMDREG_SW)) !=3D 0)
-> > >                 return ret;
-> > > ...
-> > > But, after that, the real writing operation is implemented using
-> > > the function of the "dvb_ca_en50221_write_data" in the function of
-> > > "dvb_ca_en50221_link_init", and the "dvb_ca_en50221_write_data"
-> > > includes the function of "ca->pub->write_cam_control",
-> > > and the function of the "ca->pub->write_cam_control" in the
-> > > function of the "dvb_ca_en50221_wrte_data" does not include
-> > > "CMDREG_SW" flag like below.
-> > > ...
-> > >         if ((status =3D ca->pub->write_cam_control(ca->pub, slot,
-> > > CTRLIF_COMMAND, IRQEN | CMDREG_HC)) !=3D 0)
-> > > ...
-> > > In the above source code, we can see only the "IRQEN | CMDREG_HC",
-> > > but we cannot see the "CMDREG_SW".
-> > > The "CMDREG_SW" flag which was set in the function of the
-> > > "dvb_ca_en50221_link_init" was rollbacked by the follwoing function
-> > > of the "dvb_ca_en50221_write_data".
-> > > This is a bug. and this bug causes that the calculated host link buf_=
-size
-> > > is not properly written in the CI module.
-> > > Through this patch, we fix this bug.
-> > > ---
-> > >  drivers/media/dvb-core/dvb_ca_en50221.c | 12 +++++++-----
-> > >  1 file changed, 7 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/drivers/media/dvb-core/dvb_ca_en50221.c b/drivers/media/=
-dvb-core/dvb_ca_en50221.c
-> > > index 15a08d8c69ef..13f249b0a080 100644
-> > > --- a/drivers/media/dvb-core/dvb_ca_en50221.c
-> > > +++ b/drivers/media/dvb-core/dvb_ca_en50221.c
-> > > @@ -187,7 +187,7 @@ static void dvb_ca_en50221_thread_wakeup(struct d=
-vb_ca_private *ca);
-> > >  static int dvb_ca_en50221_read_data(struct dvb_ca_private *ca, int s=
-lot,
-> > >                                     u8 *ebuf, int ecount);
-> > >  static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int =
-slot,
-> > > -                                    u8 *ebuf, int ecount);
-> > > +                                    u8 *ebuf, int ecount, int size_w=
-rite_flag);
-> > >
-> > >  /**
-> > >   * findstr - Safely find needle in haystack.
-> > > @@ -370,7 +370,7 @@ static int dvb_ca_en50221_link_init(struct dvb_ca=
-_private *ca, int slot)
-> > >         ret =3D dvb_ca_en50221_wait_if_status(ca, slot, STATUSREG_FR,=
- HZ / 10);
-> > >         if (ret)
-> > >                 return ret;
-> > > -       ret =3D dvb_ca_en50221_write_data(ca, slot, buf, 2);
-> > > +       ret =3D dvb_ca_en50221_write_data(ca, slot, buf, 2, CMDREG_SW=
-);
-> > >         if (ret !=3D 2)
-> > >                 return -EIO;
-> > >         ret =3D ca->pub->write_cam_control(ca->pub, slot, CTRLIF_COMM=
-AND, IRQEN);
-> > > @@ -778,11 +778,13 @@ static int dvb_ca_en50221_read_data(struct dvb_=
-ca_private *ca, int slot,
-> > >   * @buf: The data in this buffer is treated as a complete link-level=
- packet to
-> > >   *      be written.
-> > >   * @bytes_write: Size of ebuf.
-> > > + * @size_write_flag: A flag on Command Register which says whether t=
-he link size
-> > > + * information will be writen or not.
-> > >   *
-> > >   * return: Number of bytes written, or < 0 on error.
-> > >   */
-> > >  static int dvb_ca_en50221_write_data(struct dvb_ca_private *ca, int =
-slot,
-> > > -                                    u8 *buf, int bytes_write)
-> > > +                                    u8 *buf, int bytes_write, int si=
-ze_write_flag)
-> > >  {
-> > >         struct dvb_ca_slot *sl =3D &ca->slot_info[slot];
-> > >         int status;
-> > > @@ -817,7 +819,7 @@ static int dvb_ca_en50221_write_data(struct dvb_c=
-a_private *ca, int slot,
-> > >
-> > >         /* OK, set HC bit */
-> > >         status =3D ca->pub->write_cam_control(ca->pub, slot, CTRLIF_C=
-OMMAND,
-> > > -                                           IRQEN | CMDREG_HC);
-> > > +                                           IRQEN | CMDREG_HC | size_=
-write_flag);
-> > >         if (status)
-> > >                 goto exit;
-> > >
-> > > @@ -1508,7 +1510,7 @@ static ssize_t dvb_ca_en50221_io_write(struct f=
-ile *file,
-> > >
-> > >                         mutex_lock(&sl->slot_lock);
-> > >                         status =3D dvb_ca_en50221_write_data(ca, slot=
-, fragbuf,
-> > > -                                                          fraglen + =
-2);
-> > > +                                                          fraglen + =
-2, 0);
-> > >                         mutex_unlock(&sl->slot_lock);
-> > >                         if (status =3D=3D (fraglen + 2)) {
-> > >                                 written =3D 1;
-> > > --
-> > > 2.17.1
-> > >
+> On 10/10/22 16:20, Vaittinen, Matti wrote:
+> > On 10/10/22 14:58, Andy Shevchenko wrote:  
+> >> On Mon, Oct 10, 2022 at 12:12:34PM +0300, Matti Vaittinen wrote:
+> >> ...
+> >>  
+> >>>>> +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
+> >>>>> +			       sizeof(s16));  
+> >>  
+> >>>> No endianess awareness (sizeof __le16 / __be16)  
+> >>  
+> >>>>> +	if (ret)
+> >>>>> +		return ret;
+> >>>>> +
+> >>>>> +	*val = data->buffer[0];  
+> >>>>
+> >>>> Ditto (get_unaligned_be16/le16 / le16/be16_to_cpup()).  
+> >>>
+> >>> I have probably misunderstood something but I don't see why we should use
+> >>> 'endianess awareness' in drivers? I thought the IIO framework code takes
+> >>> care of the endianes conversions based on scan_type so each individual
+> >>> driver does not need to do that. That however has been just my assumption. I
+> >>> will need to check this. Thanks for pointing it out.  
+> >>
+> >> The IIO core uses endianness field only once in iio_show_fixed_type() AFAICS.  
+> 
+> Following is some hand waving and speculation after my quick code read. 
+> So, I may be utterly wrong in which case please do correct me...
+> 
+> Anyways, it seems to me that you're correct. The endianness field is 
+> only used by the IIO to build the channel information for user-space so 
+> that applications reading data can parse it. As far as I understand, the 
+> driver does not need to do the conversions for user-space, but the 
+> user-space tools should inspect the type information and do the 
+> conversion. I think it makes sense as user-space applications may be 
+> better equipped to do some maths. It also may be some applications do 
+> not want to spend cycles doing the conversion but the conversions can be 
+> done later "offline" for the captured raw data. So omitting conversion 
+> in the IIO driver kind of makes sense to me.
+
+That was indeed the original reasonining for buffered data path
+(note the endian marker is for scans only which only apply in buffered
+ / chardev case).
+
+It's less obvious for the sysfs path as that's inherently slow.
+We could have made this a problem for the IIO core, but we didn't :)
+
+> 
+> I haven't thoroughly looked (and I have never used) the in-kernel IIO 
+> APIs for getting the data. A quick look at the 
+> include/linux/iio/consumer.h allows me to assume the iio_chan_spec can 
+> be obtained by the consumer drivers. This should make the endianess 
+> information available for the consumer drivers as well. So, again, 
+> consumer drivers can parse the raw-format data themself.
+
+yes consumers should be be endian aware if they are using the
+callback buffer route to get the data.  Now you mention it, we
+may well have cases where that isn't handled correctly.
+There are few enough users of that interface that it might well work
+by coincidence rather than design. oops.
+
+> 
+> I have this far only used the sysfs and iio_generic_buffer on a 
+> little-endian machine so I have had no issues with the little-endian 
+> data and I have only observed the code. Hence I can not really say if my 
+> reasoning is correct - or if it is how IIO has been designed to operate. 
+> But based on my quick study I don't see a need for the IIO driver to do 
+> endianess conversion to any other format but what is indicated by 
+> scan_type. Specifically for KX022A, the data is already 16B LE when read 
+> from the sensor. This is also advertised by scan_type so no conversion 
+> should be needed (unless, of course, I am mistaken :]).
+
+Ah. I'd missed that. Data storage should reflect the read back endianness
+and for the read_raw path you need to perform the conversion in driver
+(but not the high perf push to buffers path).
+
+Sure we could probably have handled read_raw in tree as well but we didn't
+and probably too late to sensibly fix that now.  One of many things we'd
+probably do differently if we were starting again.
+
+J
+
+> 
+> >> And it does nothing with it. Maybe Jonathan can shed a light what is it for
+> >> (I mean the field)?
+> >>  
+> 
+> I agree. It'd be great to listen to someone who actually knows what he 
+> is talking about and is not just guessing as I am ^_^;
+> 
+> Yours,
+> 	-- Matti
+> 
+
