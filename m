@@ -2,93 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEE55FE989
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE2D5FE990
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJNH1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S229866AbiJNH2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJNH1h (ORCPT
+        with ESMTP id S229548AbiJNH2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:27:37 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DCB1BF84A;
-        Fri, 14 Oct 2022 00:27:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MpdFh3X2PzKD1t;
-        Fri, 14 Oct 2022 15:25:12 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAXF8lhD0ljuwMAAQ--.30428S3;
-        Fri, 14 Oct 2022 15:27:30 +0800 (CST)
-Subject: Re: [PATCH] blk-mq: put the reference of the io scheduler module
- after switching back
-To:     Jinlong Chen <chenjinlong2016@outlook.com>, yukuai1@huaweicloud.com
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
-References: <f1c07b2a-ffdd-0912-139d-d51b34b77bcd@huaweicloud.com>
- <OSYP286MB0344A71BA994B77B9E2E46EDBE259@OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b4d2bb3e-ae2d-3028-ca73-f34eabf7bd01@huaweicloud.com>
-Date:   Fri, 14 Oct 2022 15:27:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 14 Oct 2022 03:28:40 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649CA17FD6A;
+        Fri, 14 Oct 2022 00:28:39 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id b2so5921871lfp.6;
+        Fri, 14 Oct 2022 00:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SyMPuARgI/cMW3vAnqIKcmeUrRRRLXL+kTVTiHp6F18=;
+        b=Uhk7l/TUMcB3aXP5JC4d928KA5zigdEwO6kuyDxzN04onE2qENHX2fYQ3X0VR50OWu
+         yWIiBiogxa3oj5M29c8lukh9WfSS6r3itRbzKdsnRcGz2QVOmWCImh8Blw1GsXb4HeNT
+         BJi/8D/+tVN/YunWReEzfo9PTRzkH0mMpjDjfE5GdeN9M2Fs7zR9xbHEo43YUZuD1NFE
+         ynL0IzO9U/1brhRFHJL6RjTLLyRE8NWeJjPtq4hDdPj+aVs/YRgLqS6CMdlqknh9KOs2
+         YCYkYA4N0bJMpMQqHY//x6RX3RFc/Vcc/7sTxU6cjofIfxu6o1SmyuqMExco5Sm4B3Ze
+         U+XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SyMPuARgI/cMW3vAnqIKcmeUrRRRLXL+kTVTiHp6F18=;
+        b=ELJaf09nIQnAsAEEK0PAVkiHdrp4q2oCHrcOM5noRhv29J3sVpmjnmR3J1RsqiXJSN
+         9m4J0H2hQLjTYPcf+fAnn4MZ/1FOYRZ2IdILw28NKyoaewIMu4XkJ1E1HAFHomaGS+0c
+         QWXaswJ+ya7Xx6QgZ3M4Fbq+7vDAy4WgwqyQT9oRHZu00+MT7f4UnfAMIUCBOsKimri6
+         lmgPBj69840nLcAONfth3tHTdQQ/u7635V/BOFiwcsxJ0ddB8aVDx0StFjVGLsyqhK9L
+         l39aHWEtQB03IxPKP2VD8hf4RNaj5zQWx9O3kwDjwsiO/lYMmmXOx6+zSgaEoy+kWKQ9
+         Ja2w==
+X-Gm-Message-State: ACrzQf3qe0+Kduza90sJHVgb8baJCWpXZoiXbRC5QP7ZFFRv3FrBqNYb
+        AtNr6D0F665lBpdaX3X1P8s=
+X-Google-Smtp-Source: AMsMyM7egWkgr8i9TnfRJ4inSksIa8+UNFlB0IyGYii7eeDMWqnAmy4nspLLyCI7QLACC4NVuAahAA==
+X-Received: by 2002:a05:6512:458:b0:4a2:c67c:afbd with SMTP id y24-20020a056512045800b004a2c67cafbdmr1281812lfk.76.1665732517599;
+        Fri, 14 Oct 2022 00:28:37 -0700 (PDT)
+Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id i14-20020a056512340e00b00497a879e552sm224136lfr.291.2022.10.14.00.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 00:28:36 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 09:28:36 +0200
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Peng Fan <peng.fan@oss.nxp.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] thermal: imx8mm_thermal: wait for a valid measurement
+Message-ID: <Y0kPpAYYnSvV/HWR@gmail.com>
+References: <20221007073057.41803-1-marcus.folkesson@gmail.com>
+ <1b247906-665f-8d14-82b3-c55467659644@oss.nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <OSYP286MB0344A71BA994B77B9E2E46EDBE259@OSYP286MB0344.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAXF8lhD0ljuwMAAQ--.30428S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYF7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
-        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
-        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
-        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zogtDrRbthaXzIxw"
+Content-Disposition: inline
+In-Reply-To: <1b247906-665f-8d14-82b3-c55467659644@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
 
-ÔÚ 2022/10/13 22:18, Jinlong Chen Ð´µÀ:
->>
->> But I don't see elevator_switch() release the referenct of the module
->> it is switching from. It's still not balance to me.
->>
-> 
-> The reference count is released here:
-> 
-> elevator_switch_mq()
->    --> elevator_exit()
->      --> __elevator_exit()
->        --> kobject_put()
->          --> kobject_release()
->            --> elevator_release()
->              --> elevator_put()
-> 
-> What a deep call stack. :)
+--zogtDrRbthaXzIxw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, you're right.
+Hi Peng,
 
-Thanks,
-Kuai
-> 
-> Sincerely,
-> Jinlong Chen
-> .
-> 
+On Fri, Oct 14, 2022 at 09:20:21AM +0800, Peng Fan wrote:
+>=20
+>=20
+> On 10/7/2022 3:30 PM, Marcus Folkesson wrote:
+> > Check if first measurement is still pending or if temperature is out of
+> > range.
+> > Return and try again later if that is the case.
+> >=20
+> > Fixes: 5eed800a6811 ("thermal: imx8mm: Add support for i.MX8MM thermal =
+monitoring unit")
+> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+>=20
+> NAK:
+> Please refer: https://www.nxp.com/docs/en/errata/IMX8MM_0N87W.pdf
+> ERR051272: TMU: Bit 31 of registers TMU_TSCR/TMU_TRITSR/TMU_TRATSR invalid
 
+I see, thank you.
+
+I think it is still worth to check the upper limit though, so I will
+send a patch for that.
+
+>=20
+> Thanks,
+> Peng.
+
+Best regards,
+Marcus Folkesson
+
+--zogtDrRbthaXzIxw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmNJD58ACgkQiIBOb1ld
+UjIi9w/+OPV3O8sggMQbdOEJXZNCBSIxdf5ni+OQ2LXoP8vQ9kLmnpc3PCSGJ+Mn
+erLM6iQriIGkONfbRrsXvX3nfejt1md3ouu9q0BMRt8XtOs3rVTcGa9H3WlhzgO5
+SOg+Cc0MMcDeOqjlQVs6uc5H8PyWEAEnC88WospNVMB1NQqFrt9hf8aJ+otoZwoK
+DKqgL0EiBCc8WXlDV6ab4wABglaLESH1SMr6n7+RQieHW9faNgg35OOUEwk0KV1t
+F25x9iOEUnvQzMSV9NXbtAQYgpwW75o0gUWuu+JYU3kNkXe4jXvuYGfy0VIz/Qhs
+VJ8r20U3FHOBinkODdU8UE9u6SV2dlq4LbYOmGGg2/v3kpqzeLU/pcIypx/3uUs6
+ivQbo/O1Y10ZFLGSgwiqrcKLlvTaNS6FWnNgYFmQZxi3RgBsemsJ62zW0JfZwlwt
+KQOhIl+wKjrKn2BHvBCj/k+9TQ0WMeKjx3Y5kEhamFUNDv+qr1rK9+9gDhPc/AiY
+Qs5YPgccFtqnDhlUkApierjryEjb0QNTEBDJpog5LWRiph7k3Z+RGE5XokuV4c6L
+1eNjNltDnJqOdkNc6HbUn67qmnFzYKEknCu/Hun5cpq7ma1NGBpSkmyoyYMFE/MC
+9OBiu3Ecp99NkR4xDk1ldFZzhpHuxkx0KLElKP32Lx+EyP1d0TU=
+=htvi
+-----END PGP SIGNATURE-----
+
+--zogtDrRbthaXzIxw--
