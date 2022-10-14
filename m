@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150875FF006
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2FF5FEFF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiJNOP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        id S230304AbiJNOPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiJNOPq (ORCPT
+        with ESMTP id S229863AbiJNOPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:15:46 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6500EC58AB;
-        Fri, 14 Oct 2022 07:15:45 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29EA9xMQ019182;
-        Fri, 14 Oct 2022 16:15:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=fGvz6oql+K0UHWPbNDcQlT4m0Yenf1lBjmyoVUBkJPU=;
- b=s2OeqV09NvZF+Bdsr2/Hntae4fH10ejp79CRxi2Rx4iQH+2D+J0vKkRnc8UjsyqncMsP
- mpdFJDioMhP8nOEkwUsUadm0JybEwlVgcQt9FAxDKzx1YPZWmaqfIlJkelGQLz85P+za
- zjHbc8CccE6jI6UW6WwlNC4sMANGjqxWd2ph9o9avLVUymKvVXkheaT443qsgz0Efcmm
- cqDm7actbAtjN8fGEqwzc+QKEpvkNCIkUn+mUpiaMwqFspUOAy4XqExIwIrdxY2iZ/Me
- OKMX4UF+ftkVR16Mh0D0CFOiqoH6l6l2AhayOAapDA9T311l+6+emDIgZdn6mSI+rTLK kA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k75sd9hyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 16:15:36 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8F4FB100034;
-        Fri, 14 Oct 2022 16:15:31 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8AA8F2309FB;
-        Fri, 14 Oct 2022 16:15:31 +0200 (CEST)
-Received: from localhost (10.75.127.45) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 14 Oct
- 2022 16:15:29 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2 01/10] ARM: dts: stm32: add PWR fixed regulators on stm32mp131
-Date:   Fri, 14 Oct 2022 16:15:00 +0200
-Message-ID: <20221014141509.211149-2-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221014141509.211149-1-fabrice.gasnier@foss.st.com>
-References: <20221014141509.211149-1-fabrice.gasnier@foss.st.com>
+        Fri, 14 Oct 2022 10:15:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3604DB5E;
+        Fri, 14 Oct 2022 07:15:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1573B82356;
+        Fri, 14 Oct 2022 14:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CFAC433C1;
+        Fri, 14 Oct 2022 14:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665756908;
+        bh=kceQmgdPFaemBr6NpR+rvC6uWn6wwb6RWTB1Ad7mZ2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z1YyY4ykZbiYIPSKnchJGYFQEe9j4uk+R6yK3URJyLfLiMOJYpTdEKSJep0AHv5Bd
+         WuC6mrzH3Ai0PD06U48B1Zg8sjUPvKdv64v+oA4exhYEv6KJ8HsiaDufBlLGbzHDw+
+         4YYpbioQ7VryjzzVIRwrTYVcx99+Ii453ZNTVVWok+yfiz8gKTWW1vdXgVKX33y8f1
+         Qu0rQYRwwbhjTarlhCtbGwF9VtHww81Q7g9lSMPdGXVY8ioDvf+aRtSpZUYugeXLaE
+         2TUNTNgLqTqN+zWaVEipg8SSHuhVrMaDnnNg4tlEvqWBKodKA+SdLnmIzhAU/EtT3W
+         L2uxhSFbb7a/w==
+Date:   Fri, 14 Oct 2022 16:15:01 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Besar Wicaksono <bwicaksono@nvidia.com>, rafael@kernel.org,
+        lenb@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
+        linux-tegra@vger.kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, vsethi@nvidia.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] ACPI: ARM Performance Monitoring Unit Table (APMT)
+ initial support
+Message-ID: <Y0lu5Vqs8pVeAfwR@lpieralisi>
+References: <20220929002834.32664-1-bwicaksono@nvidia.com>
+ <20221014105938.fyy6jns5fsu5xd7q@bogus>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_08,2022-10-14_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014105938.fyy6jns5fsu5xd7q@bogus>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 1v1, 1v8 and 3v3 PWR regulators on stm32mp131. Temporary add them
-as fixed regulators, waiting for full SCMI regulators support.
+[Please Besar update my email address according to MAINTAINERS - I missed
+this thread]
 
-This is a precursor patch to enable USB support on STM32MP13.
-Note: USB support requires these regulators to be enabled before
-entering kernel.
+On Fri, Oct 14, 2022 at 11:59:38AM +0100, Sudeep Holla wrote:
+> Hi Besar,
+> 
+> On Wed, Sep 28, 2022 at 07:28:34PM -0500, Besar Wicaksono wrote:
+> > ARM Performance Monitoring Unit Table describes the properties of PMU
+> > support in ARM-based system. The APMT table contains a list of nodes,
+> > each represents a PMU in the system that conforms to ARM CoreSight PMU
+> > architecture. The properties of each node include information required
+> > to access the PMU (e.g. MMIO base address, interrupt number) and also
+> > identification. For more detailed information, please refer to the
+> > specification below:
+> >  * APMT: https://developer.arm.com/documentation/den0117/latest
+> >  * ARM Coresight PMU:
+> >         https://developer.arm.com/documentation/ihi0091/latest
+> > 
+> > The initial support adds the detection of APMT table and generic
+> > infrastructure to create platform devices for ARM CoreSight PMUs.
+> > Similar to IORT the root pointer of APMT is preserved during runtime
+> > and each PMU platform device is given a pointer to the corresponding
+> > APMT node.
+> > 
+> 
+> This looks good to me know.
+> 
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> 
+> Hi Lorenzo,
+> 
+> Not sure if there are any other arm specific ACPI changes in the queue
+> for v6.2. Can you please add this too ?
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- arch/arm/boot/dts/stm32mp131.dtsi | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+We should just ask Catalin/Will to pick it up for the next kernel cycle,
+if there is no need to repost we can just remind them in a couple
+of weeks.
 
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index dd35a607073d..e0e0e27a9221 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -77,6 +77,28 @@ timer {
- 		always-on;
- 	};
- 
-+	/* PWR 1v1, 1v8 and 3v3 regulators defined as fixed, waiting for SCMI */
-+	reg11: reg11 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "reg11";
-+		regulator-min-microvolt = <1100000>;
-+		regulator-max-microvolt = <1100000>;
-+	};
-+
-+	reg18: reg18 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "reg18";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	usb33: usb33 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb33";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
- 	soc {
- 		compatible = "simple-bus";
- 		#address-cells = <1>;
--- 
-2.25.1
+This also requires Rafael's review - at least to acknowledge the
+change.
 
+Thanks,
+Lorenzo
