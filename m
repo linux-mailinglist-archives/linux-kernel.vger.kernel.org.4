@@ -2,135 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36945FF3E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9843D5FF3E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiJNTAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 15:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S230361AbiJNTBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 15:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJNTAs (ORCPT
+        with ESMTP id S231218AbiJNTAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 15:00:48 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FA325C78;
-        Fri, 14 Oct 2022 12:00:46 -0700 (PDT)
+        Fri, 14 Oct 2022 15:00:55 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4900F6148
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:00:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a26so12450145ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1665774046; x=1697310046;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=GXoD9gRB2Hvbmyc4m6TRPnO3SU6oxhVMCZ99nFZXCTs=;
-  b=kmlbJDgDARB2uYSv8s75cK/H/EycW2ZXIKh8BNOgP97RMZUKKYQ3EJlA
-   Ae7gF4kERrThUVSyTdGSIRqKYIxf7GDkTYaYwjW120gqrXnH93iQqa82V
-   w/NymC6n+ptkN5kEcpXWb6tpja+9JK+yowF8L0+cM5HVI3NtDTcpNU7vu
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.95,185,1661817600"; 
-   d="scan'208";a="140426874"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 19:00:45 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 6B880C090F;
-        Fri, 14 Oct 2022 19:00:43 +0000 (UTC)
-Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Fri, 14 Oct 2022 19:00:42 +0000
-Received: from [192.168.28.131] (10.43.162.230) by
- EX19D002UWC004.ant.amazon.com (10.13.138.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
- Fri, 14 Oct 2022 19:00:42 +0000
-Message-ID: <0d923959-1b93-6133-6609-ac2c0c5711ee@amazon.com>
-Date:   Fri, 14 Oct 2022 12:00:31 -0700
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kXobvSQVt9q6I8i2aGg0lLZQfL1YP6gSaNYsr3Rxk60=;
+        b=MImgUmR/yHX1E0wPk6/pe8Y9ZukXGsPrzZUJoI7er6YIzUUX9PGYs1Kkqnh+rjcz5H
+         PAQDUFhnB7zWElUEIj2xnieF7UCB8cwG17+EWsy5j7tXXUXzrTd+CiqWw2iA59Z24k8X
+         H9fgPbgfYVqLJeVTtvnZ/IoqLkGIE+MmVC0S97WsP8BVr1Qat0sc3VW4IUgNGP1u9ZjQ
+         oQWCmuyxRrcs7hAfBJDMXVtW8KkyykN3GS5CctUlkbKzRDpivPeut160BffgdjC+AIh4
+         HraRHKrwWPry6MMeIQq3OkjmBsph6ZAbZl5VQ3yhLpvfkQZ33tCTHj6zLRMVLgx+bM+1
+         3ruQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kXobvSQVt9q6I8i2aGg0lLZQfL1YP6gSaNYsr3Rxk60=;
+        b=emCH9cSWV/hezs6jdcC2+o7IKmRPYfINfpBjR1FKX80YCfT/8XkiCj1x0e/4dP8GV0
+         1qRDAVyp1V+qufU7bgPLpUHN6seBNSYu/l74+Kxwp3hwgc1iVBpfe5qsHLMB7Hr/ols+
+         rAhPQ2DqBRL03dSjcu0P82OSfvnCAN0V5Q9l9Oz9fiCege8Tr5kJW2Sv4+/g6a6EJT0q
+         2faYEz4yjCG6xKQtsQRAwL9QS8uavBQM3MY4EWCHuk8uTe7TAjfQAStRTqI3432KcK6I
+         XTE6gOh0GvMRLIXS6MHEHdM/hDxOKlhUrc2RuMgn6UB1+AG2MZVVzettRzTjKbKWYaRw
+         H8wA==
+X-Gm-Message-State: ACrzQf0BCpIxREwPfBk6e8fvq9y4qRVYeq8tLJhEjrlPEfKBtHpoKJlV
+        3D8k26SgfgGrRTfFOu6lYUo=
+X-Google-Smtp-Source: AMsMyM7kttQMMDCGdRoDZGbNC9xVlTlXZ2gPlhBicHGv49oUodGeRkXKffWrQvK809oBpVw5XkBmow==
+X-Received: by 2002:a17:907:94c3:b0:78e:2866:f89f with SMTP id dn3-20020a17090794c300b0078e2866f89fmr2266274ejc.617.1665774052116;
+        Fri, 14 Oct 2022 12:00:52 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f3e:6a24:d9ca:fb25:65a1:90fa? (p200300c78f3e6a24d9cafb2565a190fa.dip0.t-ipconnect.de. [2003:c7:8f3e:6a24:d9ca:fb25:65a1:90fa])
+        by smtp.gmail.com with ESMTPSA id v25-20020aa7dbd9000000b00456c6b4b777sm2199943edt.69.2022.10.14.12.00.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 12:00:51 -0700 (PDT)
+Message-ID: <38990e85-b74f-0910-8d64-ad614c3bd8e4@gmail.com>
+Date:   Fri, 14 Oct 2022 21:00:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/4] Staging: rtl8192e: make alignment match open
+ parenthesis
 Content-Language: en-US
-From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
-To:     "Herrenschmidt, Benjamin" <benh@amazon.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "sashal@kernel.org" <sashal@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Bacco, Mike" <mbacco@amazon.com>
-References: <20220929210651.12308-1-risbhat@amazon.com>
- <YzmujBxtwUxHexem@kroah.com>
- <58294d242fc256a48abb31926232565830197f02.camel@amazon.com>
- <e35b7856-138c-a255-a32e-41f57ad6f76d@amazon.com>
-In-Reply-To: <e35b7856-138c-a255-a32e-41f57ad6f76d@amazon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.162.230]
-X-ClientProxiedBy: EX13D08UWC001.ant.amazon.com (10.43.162.110) To
- EX19D002UWC004.ant.amazon.com (10.13.138.186)
-X-Spam-Status: No, score=-14.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+To:     Anjandev Momi <anjan@momi.ca>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221014081839.23902-1-anjan@momi.ca>
+ <20221014081839.23902-4-anjan@momi.ca>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221014081839.23902-4-anjan@momi.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/14/22 10:18, Anjandev Momi wrote:
+> This patch removes the following checks generated by checkpatch.pl:
+> 
+> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:261: CHECK:
+> 	Alignment should match open parenthesis
+> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:284: CHECK:
+> 	Alignment should match open parenthesis
+> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:421: CHECK:
+> 	Alignment should match open parenthesis
+> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:441: CHECK:
+> 	Alignment should match open parenthesis
+> 
+> Signed-off-by: Anjandev Momi <anjan@momi.ca>
+> ---
+>   drivers/staging/rtl8192e/rtl819x_BAProc.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> index f36c24c2a..8d92b3426 100644
+> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> @@ -258,7 +258,7 @@ int rtllib_rx_ADDBAReq(struct rtllib_device *ieee, struct sk_buff *skb)
+>   		goto OnADDBAReq_Fail;
+>   	}
+>   	if (!GetTs(ieee, (struct ts_common_info **)&pTS, dst,
+> -	    (u8)(pBaParamSet->field.tid), RX_DIR, true)) {
+> +		   (u8)(pBaParamSet->field.tid), RX_DIR, true)) {
+>   		rc = ADDBA_STATUS_REFUSED;
+>   		netdev_warn(ieee->dev, "%s(): can't get TS\n", __func__);
+>   		goto OnADDBAReq_Fail;
+> @@ -281,7 +281,7 @@ int rtllib_rx_ADDBAReq(struct rtllib_device *ieee, struct sk_buff *skb)
+>   	pBA->ba_start_seq_ctrl = *pBaStartSeqCtrl;
+>   
+>   	if (ieee->GetHalfNmodeSupportByAPsHandler(ieee->dev) ||
+> -	   (ieee->pHTInfo->IOTAction & HT_IOT_ACT_ALLOW_PEER_AGG_ONE_PKT))
 
-On 10/9/22 10:50 AM, Bhatnagar, Rishabh wrote:
->
-> On 10/6/22 8:07 PM, Herrenschmidt, Benjamin wrote:
->> (putting my @amazon.com hat on)
->>
->> On Sun, 2022-10-02 at 17:30 +0200, Greg KH wrote:
->>
->>
->>> On Thu, Sep 29, 2022 at 09:06:45PM +0000, Rishabh Bhatnagar wrote:
->>>> This patch series backports a bunch of patches related IRQ handling
->>>> with respect to freeing the irq line while IRQ is in flight at CPU
->>>> or at the hardware level.
->>>> Recently we saw this issue in serial 8250 driver where the IRQ was
->>>> being
->>>> freed while the irq was in flight or not yet delivered to the CPU.
->>>> As a
->>>> result the irqchip was going into a wedged state and IRQ was not
->>>> getting
->>>> delivered to the cpu. These patches helped fixed the issue in 4.14
->>>> kernel.
->>> Why is the serial driver freeing an irq while the system is running?
->>> Ah, this could happen on a tty hangup, right?
->> Right. Rishabh answered that separately.
->>
->>>> Let us know if more patches need backporting.
->>> What hardware platform were these patches tested on to verify they
->>> work properly?  And why can't they move to 4.19 or newer if they
->>> really need this fix?  What's preventing that?
->>>
->>> As Amazon doesn't seem to be testing 4.14.y -rc releases, I find it
->>> odd that you all did this backport.  Is this a kernel that you all
->>> care about?
->> These were tested on a collection of EC2 instances, virtual and metal I
->> believe (Rishabh, please confirm).
-> Yes these patches were tested on multiple virt/metal EC2 instances.
->>
->> Amazon Linux 2 runs 4.14 or 5.10. Unfortunately we still have to
->> support customers running the former.
->>
->> We'll be including these patches in our releases, we thought it would
->> be nice to have them in -stable as well for the sake of whoever else
->> might be still using this kernel. No huge deal if they don't.
->>
->> As for testing -rc's, yes, we need to get better at that (and publish
->> what we test). Point taken :-)
->>
->> Cheers,
->> Ben.
->>
-Hi Greg
+Did a git pull 2 hours ago.
+Cannot apply this patch because IOTAction was already renamed.
 
-Let us know if you think it would be beneficial to take these backports 
-for 4.14 stable.
-We can drop this patch set otherwise.
+Bye Philipp
 
-Thanks alot,
-Rishabh
+> +	    (ieee->pHTInfo->IOTAction & HT_IOT_ACT_ALLOW_PEER_AGG_ONE_PKT))
+>   		pBA->ba_param_set.field.buffer_size = 1;
+>   	else
+>   		pBA->ba_param_set.field.buffer_size = 32;
+> @@ -418,7 +418,7 @@ int rtllib_rx_DELBA(struct rtllib_device *ieee, struct sk_buff *skb)
+>   	}
+>   
+>   	if (!ieee->current_network.qos_data.active ||
+> -		!ieee->pHTInfo->bCurrentHTSupport) {
+> +	    !ieee->pHTInfo->bCurrentHTSupport) {
+>   		netdev_warn(ieee->dev,
+>   			    "received DELBA while QOS or HT is not supported(%d, %d)\n",
+>   			    ieee->current_network. qos_data.active,
+> @@ -438,7 +438,7 @@ int rtllib_rx_DELBA(struct rtllib_device *ieee, struct sk_buff *skb)
+>   		struct rx_ts_record *pRxTs;
+>   
+>   		if (!GetTs(ieee, (struct ts_common_info **)&pRxTs, dst,
+> -		    (u8)pDelBaParamSet->field.tid, RX_DIR, false)) {
+> +			   (u8)pDelBaParamSet->field.tid, RX_DIR, false)) {
+>   			netdev_warn(ieee->dev,
+>   				    "%s(): can't get TS for RXTS. dst:%pM TID:%d\n",
+>   				    __func__, dst,
 
