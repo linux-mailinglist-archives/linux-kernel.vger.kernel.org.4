@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713185FF66D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEE85FF66E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJNWpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S229485AbiJNWpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiJNWpB (ORCPT
+        with ESMTP id S229732AbiJNWpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:45:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9957B27CC9;
-        Fri, 14 Oct 2022 15:44:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 588A4B82447;
-        Fri, 14 Oct 2022 22:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4BEC433C1;
-        Fri, 14 Oct 2022 22:44:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665787495;
-        bh=76auTpYAGb5cdGloWPsQFXvwKjAB8wQIcC8hAOFyJ4Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JpKcL3K2iulReMROCM55Cs+TE2+e0d+NAM+jMxEljicqOmnKqHujg5jMf6hwNw/bP
-         ATSlDOcQ5mTqZqc7zQrln7DFflbdDgzamUeSxhfunuNSTjEadOSOYlp57FcHovP4jW
-         WhZSNA6t+4jzhubRKOLhZ1nZAJTWcnTCi09ovzU0EGcbZA4nqpMpe2MbQKf0x+z/mi
-         uuCNvTa9TqpAa3ISdJh+j0qp9uePc9/5qC9UZagS5/o1Rmm8Qt5QS/d7ZX6Hf+vGbe
-         /8U3svS4kx4SEHa8vj8bKFbMaAhESTvefXV4rXo/NPDWUvRal+gVE7IrKCyYNF1rmI
-         3mVvLa35kicmw==
-Date:   Fri, 14 Oct 2022 15:44:53 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mbenes@suse.cz
-Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
- inactive tasks"
-Message-ID: <20221014224453.5upiioslqjzo2bow@treble>
-References: <20220727031506.59322-1-chenzhongjin@huawei.com>
- <20220804045518.bfhe3rxhpkxzn4hk@treble>
- <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
- <20220804220623.a2s7ucblryudm63m@treble>
- <a3d754f7-5dde-4adc-205a-c4c380a30372@huawei.com>
+        Fri, 14 Oct 2022 18:45:11 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83584303E2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:45:06 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id a24so4593640qto.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0wTTtDn8bMgOHPumRgeVGmfS8E9BMHk34r0/6EY7HK8=;
+        b=fn+Sp8nK+zHTUKEu0/UOyIV8lH0ubMxMGI8FTL8t5mvCB+3CKr1NLT6vcv/DeD3m4i
+         OLauho6n3mQht+QrGQYmub8EAOQ9IaNXNv9qRXNIyZbKaGkLg7xmxDR3qEywUr3puL3x
+         g2MNZOtpJz0kIpWQup/tJynHBWGi/gjSQAWU0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0wTTtDn8bMgOHPumRgeVGmfS8E9BMHk34r0/6EY7HK8=;
+        b=Dp0LLXa7FR8WHGUgiIfYphVPsWzt472OvzjDLGtniCB/W5eqvbS3JnSg0eeWiw85P1
+         UBGAZhUY2+fg+g+6dLi9crGe921qVo8skRWkY0zSmCmQS+sryuUQnTHuWEc+D1IAI223
+         siThNjYnXhG1UGLul8kif0pWPU72ZzZpTNf1E9qYb/3hClkFuX/UK+vLPx8Y7Tkn+wkL
+         ic2zFti87uNwRjNK5rLNseBaMooCfmGKZQWCWOR27PDp1bYo9gpKexE3P52gFekQIYHc
+         YEi1s62ZUHFKe8bzFp2lIylUIUoPFJXmcuQf6C+WAHDdQ2xhZGlqxKBxTUVYptM3dwdi
+         xlUg==
+X-Gm-Message-State: ACrzQf141gcPFsihoF5IfhhELRSQi6/BkoYyXGwnv66L8Z7fF/l4s3SR
+        o2f7SqmcoYzgssr95HpV44kKVyDCphKqvA==
+X-Google-Smtp-Source: AMsMyM7v6wQZQjuv6d1fxvAxCjL/mv6dq9FXoigfgcYIsjgQwKkCjnv8TIlfaW5n7AjTBf7wXbWWmQ==
+X-Received: by 2002:ac8:59c1:0:b0:39c:d5c3:6859 with SMTP id f1-20020ac859c1000000b0039cd5c36859mr61103qtf.230.1665787505654;
+        Fri, 14 Oct 2022 15:45:05 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id bc10-20020a05622a1cca00b0039ccd7a0e10sm2856195qtb.62.2022.10.14.15.45.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 15:45:05 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 22:45:04 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH 1/3] srcu: Warn when NMI-unsafe API is used in NMI
+Message-ID: <Y0nmcH0SktDdonyW@google.com>
+References: <20221013172244.1099010-1-frederic@kernel.org>
+ <20221013172244.1099010-2-frederic@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a3d754f7-5dde-4adc-205a-c4c380a30372@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221013172244.1099010-2-frederic@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,66 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 11:14:05AM +0800, Chen Zhongjin wrote:
-> Hi Josh,
+On Thu, Oct 13, 2022 at 07:22:42PM +0200, Frederic Weisbecker wrote:
+> Using the NMI-unsafe reader API from within NMIs is very likely to be
+> buggy for three reasons:
 > 
-> On 2022/8/5 6:06, Josh Poimboeuf wrote:
-> > On Thu, Aug 04, 2022 at 03:27:39PM +0800, Chen Zhongjin wrote:
-> > > I believe disassemble show_stack in vmlinux and if we have:
-> > > 
-> > >      push   %rbp
-> > > 
-> > >      mov    %rsp,%rbp
-> > > 
-> > >      ... (no regs pushed to stack)
-> > > 
-> > >      callq  <show_trace_log_lvl>
-> > > 
-> > > This can be reproduced.
-> > Weird, that's what I have.  This is GCC 12.1.
-> > 
-> > ffffffff81056de0 <show_stack>:
-> > ffffffff81056de0:	e8 0b 43 05 00       	call   ffffffff810ab0f0 <__fentry__>
-> > ffffffff81056de5:	55                   	push   %rbp
-> > ffffffff81056de6:	48 83 05 b2 0f c9 02 01 	addq   $0x1,0x2c90fb2(%rip)        # ffffffff83ce7da0 <__gcov0.show_stack>
-> > ffffffff81056dee:	48 89 e5             	mov    %rsp,%rbp
-> > ffffffff81056df1:	48 85 ff             	test   %rdi,%rdi
-> > ffffffff81056df4:	74 41                	je     ffffffff81056e37 <show_stack+0x57>
-> > ffffffff81056df6:	48 85 f6             	test   %rsi,%rsi
-> > ffffffff81056df9:	0f 85 c2 24 15 01    	jne    ffffffff821a92c1 <show_stack.cold+0xd>
-> > ffffffff81056dff:	65 48 8b 04 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rax
-> > ffffffff81056e08:	48 39 c7             	cmp    %rax,%rdi
-> > ffffffff81056e0b:	0f 85 a3 24 15 01    	jne    ffffffff821a92b4 <show_stack.cold>
-> > ffffffff81056e11:	48 83 05 af 0f c9 02 01 	addq   $0x1,0x2c90faf(%rip)        # ffffffff83ce7dc8 <__gcov0.show_stack+0x28>
-> > ffffffff81056e19:	48 89 ee             	mov    %rbp,%rsi
-> > ffffffff81056e1c:	48 89 d1             	mov    %rdx,%rcx
-> > ffffffff81056e1f:	48 89 f2             	mov    %rsi,%rdx
-> > ffffffff81056e22:	31 f6                	xor    %esi,%esi
-> > ffffffff81056e24:	e8 8e 20 15 01       	call   ffffffff821a8eb7 <show_trace_log_lvl>
-> > ffffffff81056e29:	48 83 05 9f 0f c9 02 01 	addq   $0x1,0x2c90f9f(%rip)        # ffffffff83ce7dd0 <__gcov0.show_stack+0x30>
-> > ffffffff81056e31:	5d                   	pop    %rbp
-> > ffffffff81056e32:	e9 49 b2 5a 01       	jmp    ffffffff82602080 <__x86_return_thunk>
-> > ffffffff81056e37:	48 83 05 69 0f c9 02 01 	addq   $0x1,0x2c90f69(%rip)        # ffffffff83ce7da8 <__gcov0.show_stack+0x8>
-> > ffffffff81056e3f:	65 48 8b 3c 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rdi
-> > ffffffff81056e48:	eb ac                	jmp    ffffffff81056df6 <show_stack+0x16>
-> > ffffffff81056e4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+> 1) NMIs aren't strictly re-entrant (a pending nested NMI will execute
+>    at the end of the current one) so it should be fine to use a
+>    non-atomic increment here. However breakpoints can still interrupt
+>    NMIs and if a breakpoint callback has a reader on that same ssp, a
+>    racy increment can happen.
 > 
-> This problem still exist on my machine:
-> 
-> CONFIG: defconfig + CONFIG_GCOV_PROFILE_ALL
-> 
-> GCC: gcc 7.5.0 & 12.1.0
-> 
-> TRIGGER:
-> 
-> # echo l > /proc/sysrq-trigger
+> 2) If the only reader site for a given ssp is in an NMI, RCU is definetly
+								  definitely
+>    a better choice over SRCU.
 
-Hi Chen,
+Just checking - because NMI are by definition not-preemptibe, so SRCU over
+RCU doesn't make much sense right?
 
-Thanks for your patience.  I'm able to recreate now.  I still have no
-idea why I couldn't recreate before.
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Anyway the patch looks good.  I'll run it through some more testing.
+thanks,
 
--- 
-Josh
+ - Joel
+
+> 
+> 3) Because of the previous reason (2), an ssp having an SRCU read side
+>    critical section in an NMI is likely to have another one from a task
+>    context.
+> 
+> For all these reasons, warn if an nmi unsafe reader API is used from an
+> NMI.
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> ---
+>  kernel/rcu/srcutree.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index c54142374793..8b7ef1031d89 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -642,6 +642,8 @@ static void srcu_check_nmi_safety(struct srcu_struct *ssp, bool nmi_safe)
+>  
+>  	if (!IS_ENABLED(CONFIG_PROVE_RCU))
+>  		return;
+> +	/* NMI-unsafe use in NMI is a bad sign */
+> +	WARN_ON_ONCE(!nmi_safe && in_nmi());
+>  	sdp = raw_cpu_ptr(ssp->sda);
+>  	old_nmi_safe_mask = READ_ONCE(sdp->srcu_nmi_safety);
+>  	if (!old_nmi_safe_mask) {
+> -- 
+> 2.25.1
+> 
