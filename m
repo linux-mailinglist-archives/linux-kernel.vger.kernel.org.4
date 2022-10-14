@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B045FF362
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9155B5FF365
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiJNSEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S230160AbiJNSFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiJNSEe (ORCPT
+        with ESMTP id S230218AbiJNSFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:04:34 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010E51C5A73
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:04:31 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j16so8769523wrh.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:04:31 -0700 (PDT)
+        Fri, 14 Oct 2022 14:05:19 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B325F275F3;
+        Fri, 14 Oct 2022 11:05:13 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id u10so2915950ilm.5;
+        Fri, 14 Oct 2022 11:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PmFvlWd5wkxXCWS8yBplcliFQK7XhSRLw1ieHsZC+LI=;
-        b=CSyhZ+5JCN/61p/50tFRoBhu5WfChTnMUATV1F0VT4ZGSgcvBb+zqDpdEEe/H4hNQA
-         SJ0AA5XMnBm/SpigvOks3wEJzv5O3wJjpkXi9LjOtLB6QupEXDDP+2uM2MOtRwhO8OAD
-         DXgnFXM/Blq1+0N1LTAXrco0E5UPOdIrj1JY7tqw6RZvCDrsVG/1UBq4ltBnahv8va+I
-         UsZWsTK0fljF/tW4JmMcFVcRhOGco6ypFvEB/5RGe+st9d1wHtF/hhTkuvzRFqZhCo+u
-         A4kDqbrsfumySjlLa8z2DipE/AV0I12s2nykHiqEMg88n8q+lbieQDrPY/fuH+HKS+r3
-         Wf1A==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=heX+Vf4ClPZWziY9bX1NMfoFhQNF692mEmPkdTluBtI=;
+        b=BZ0YQm3TM80LUGEu/I6xjj9baWntOotGI3JZbxq9/KPD5bc8vmQyk3V3by2cnlzVp6
+         KEprpwCXOhFSo7hEfWVuCzK5oiz0jCA6J2lW6AkLmB7FZJ7tVFf+amf1HrGESND5g/x1
+         yrJxmk0G0W8KXUTIIM4hOf6YVaDOaQFnSiffMjF1FoYP/cNaXSDKXrO0rjLX2ihh5YNb
+         nbuhzOgisGmpmpE9iF9K3/ySYvH+GJfskpiZi60nXSUuq7f9C7Bm5QUEf3rG1bE71njV
+         6mKDa2jmT9kjw+QVy566pI8teS4G7grRKZxO1zd24zlxM2p073KMWqH+DpTgN6pn4Fha
+         wlTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PmFvlWd5wkxXCWS8yBplcliFQK7XhSRLw1ieHsZC+LI=;
-        b=Yms7mzQzKHZEz0tOJlnCWlpv8SO+7k7ZGkZnW9IzDYj8cYmEwbNTgBBoh9ZxOEdOhZ
-         y3PF/gkGlgKmARG4so0g0iVwb9+gncRG0DkvxBfL7L++M/86G2SCdRvVWdZXMVZZp+c3
-         fCntxfA2Bw6zLKBzShr1nHDPK2TYsAqN1YAs7UGrnE87D05LvU+yvavKshnGTjgYYZVc
-         kboGX3928f0rRvDvZ3bdYhD4Rb3ZOEefFUcd9lObsm9oEHKDgeAoGsDZiecGxtcGAa33
-         irYXJXaGdofv/GNBT2Fwm1stvTSIzYlPrTil5PxHqO8lF/AjL8wolc7UWtZ5hpWOW0JU
-         3Ksg==
-X-Gm-Message-State: ACrzQf3mrZSQwVs+1Hwz7+t4uspl/jpDhij3e2FIUe6iNu4NqKXz3pix
-        OYCmCfKLZcIDOcc3ZGoeY1j9CA==
-X-Google-Smtp-Source: AMsMyM48Mfg4yVy5feoPDCCBQdQwLIwcM6DX1ush5A3ziu34UT6nqQcvv5ozWvyKLJv17AX2vn2PLA==
-X-Received: by 2002:a05:6000:1b85:b0:230:3652:335 with SMTP id r5-20020a0560001b8500b0023036520335mr4134747wru.467.1665770670310;
-        Fri, 14 Oct 2022 11:04:30 -0700 (PDT)
-Received: from planet9.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c001100b003c6bbe910fdsm8950346wmc.9.2022.10.14.11.04.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 11:04:29 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     sakari.ailus@iki.fi, dave.stevenson@raspberrypi.com,
-        jacopo@jmondi.org, paul.j.murphy@intel.com,
-        daniele.alessandrelli@intel.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Cc:     bryan.odonoghue@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/3] media: i2c: imx412: Add new compatible strings
-Date:   Fri, 14 Oct 2022 19:04:17 +0100
-Message-Id: <20221014180417.3683285-4-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221014180417.3683285-1-bryan.odonoghue@linaro.org>
-References: <20221014180417.3683285-1-bryan.odonoghue@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=heX+Vf4ClPZWziY9bX1NMfoFhQNF692mEmPkdTluBtI=;
+        b=VNGKCQxp7u7fyIuv2NqWxk1RuvA4CH+fUvwLgwWuNuKW3qlSPR/1bwej0f4VGmJVUf
+         wyUULiQJ+cjQdMFdapzOO9axvBQHOMekdN71OqBwwv+Z7eXxS6s1bMyfWax9Mjj36/5V
+         fmBWN7Q2fI0iH1BzfjOgn7Ef0UooQuhTEjmXYQuKT3udPTmbyHvmT+YTafe4m5tgIYsT
+         VlZ223jW/Q3wzxJ4ImikSji1b5trsid0tHFVFdOeYqn8Z4+eJknjXk3mYcR49k46fZ18
+         cMBlUSNza9WJeY6WtLhdapuc0BgY3aD146St1EI9Ut2VLkhKV5jG38LNKtIGYinw496z
+         H6GA==
+X-Gm-Message-State: ACrzQf21T5kiVim9QdtHK43KyLru6giae0lhvGOmjpL26EtZtBJa2XXx
+        Yv+wwvdrZXh8VCJvtkbC/57i9yEZLQqlzUYgSXw=
+X-Google-Smtp-Source: AMsMyM6s5Rfx2u7/NNT10bG8hjnLthUnRVBOBP4MJcv/JcaVp/vUIfqY38iYUZHZwKjUZcMueSSsRlZ5c2s9/Rfgu1A=
+X-Received: by 2002:a05:6e02:1b0a:b0:2fa:1435:a0fa with SMTP id
+ i10-20020a056e021b0a00b002fa1435a0famr2920474ilv.321.1665770712014; Fri, 14
+ Oct 2022 11:05:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-26-ojeda@kernel.org>
+ <Y0BfN1BdVCWssvEu@hirez.programming.kicks-ass.net> <CABCJKuenkHXtbWOLZ0_isGewxd19qkM7OcLeE2NzM6dSkXS4mQ@mail.gmail.com>
+In-Reply-To: <CABCJKuenkHXtbWOLZ0_isGewxd19qkM7OcLeE2NzM6dSkXS4mQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 14 Oct 2022 20:05:00 +0200
+Message-ID: <CANiq72k6s4=0E_AHv7FPsCQhkyxf7c-b+wUtzfjf+Spehe9Fmg@mail.gmail.com>
+Subject: Re: [PATCH v10 25/27] x86: enable initial Rust support
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        David Gow <davidgow@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Sony imx577 uses the same silicon enabling reference code in the
-available examples provided as the imx412.
+On Tue, Oct 11, 2022 at 1:16 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> Rust supports IBT with -Z cf-protection=branch, but I don't see this
+> option being enabled in the kernel yet. Cross-language CFI is going to
+> require a lot more work though because the type systems are not quite
+> compatible:
+>
+> https://github.com/rust-lang/rfcs/pull/3296
 
-Add in compatible strings to enable and differentiate the parts.
+I have pinged Ramon de C Valle as he is the author of the RFC above
+and implementation work too; since a month or so ago he also leads the
+Exploit Mitigations Project Group in Rust.
 
-Cc: sakari.ailus@iki.fi
-Cc: dave.stevenson@raspberrypi.com
-Cc: jacopo@jmondi.org
-Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>
-Cc: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: linux-media@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/i2c/imx412.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
-index 353304312e1c..e1e986dc8856 100644
---- a/drivers/media/i2c/imx412.c
-+++ b/drivers/media/i2c/imx412.c
-@@ -1286,6 +1286,7 @@ static const struct dev_pm_ops imx412_pm_ops = {
- 
- static const struct of_device_id imx412_of_match[] = {
- 	{ .compatible = "sony,imx412", .data = "imx412" },
-+	{ .compatible = "sony,imx577", .data = "imx577" },
- 	{ }
- };
- 
--- 
-2.34.1
-
+Cheers,
+Miguel
