@@ -2,179 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE0A5FF4F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351FD5FF500
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiJNVE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S229581AbiJNVGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJNVEY (ORCPT
+        with ESMTP id S229577AbiJNVF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:04:24 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712011DC4FA
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:04:23 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id e129so5330926pgc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ci/sgzHgR3d0PFeCOGERzmh/pNEGWCM51oway6gP1ic=;
-        b=bZosADocQdRBlEJI0ayUUpAZrXnpGu+7TB3h17CyYBp8w9gT1qkmP2u1x9Xq56T1mM
-         TvzKTXQzKIpBV7rtIrHeCsh1OVMKkUBmbkijlDiJ2GGWxqTUeT/YwfgkDRP2oeEYHRjJ
-         Kpm+/b/KjP7JJfS+JqI8y/7mzT0iRshxu3DSlIc2U22Bl7bVlCxVyJQj9bAwuXELCIkd
-         698nI2jh1mT+HerTc/h91+7J4N/z5MNIP5BBFOZ6T6z5ZxzVuC7+v7ez4ouXtkzut4oX
-         XdQ9FFF34op+c+qhQlaC2ypn6YrhKoIRVT9nO/VpoJcbk8w7Zp4D5BOA236o5VR59RGM
-         KG4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ci/sgzHgR3d0PFeCOGERzmh/pNEGWCM51oway6gP1ic=;
-        b=Xle6l/1Jcs5eJH39FtHcmCnno+Or5f+vXfMcNtltvIb5I3VGbDlnIl9HtvqeZx0aH7
-         zdEpqzX34ySHfgQdp60dE5ilqPaNzw07ZKOIkCG7BnbUPS9JtbaIfFFienaJYa2iFQc1
-         X2RdIcBVL+1pJkozLOo+Sm75g6QSyiBEtob2fQZi6n5g3fEzhxLOzwZ40BNXqpON5wHw
-         TIAtGuPc7cAZHzsPNzlqlHzvGYktphxdSWO0F6gnCRqhONLsmi4hgQGonbOwpTRGFE8w
-         kXlOZEd9Bzayp/yxyy9Uu9s3MTow6UCzwuSXdrKCe64R98DSJD2hcec3oHJaJopNGzSk
-         Kp2Q==
-X-Gm-Message-State: ACrzQf39kEZzn57Jf73uha6fx97PuV+eQFuJxifM3UgDsjJMO97q6nak
-        lrQtRLQexHSzerfNa7Z66ZAbKA==
-X-Google-Smtp-Source: AMsMyM4I7xCNIreqlQtGJiS3h42xl7qThTw8N1DikSu2ja1uzqHa+EKcRAIzd6ZsWgQCutT99icVKA==
-X-Received: by 2002:a63:8643:0:b0:462:9b02:a0c1 with SMTP id x64-20020a638643000000b004629b02a0c1mr6325633pgd.536.1665781462773;
-        Fri, 14 Oct 2022 14:04:22 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j23-20020a63e757000000b0043a18cef977sm1784619pgk.13.2022.10.14.14.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:04:22 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 21:04:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        maciej.szmigiero@oracle.com
-Subject: Re: [PATCH v2 4/8] KVM: x86: do not go through ctxt->ops when
- emulating rsm
-Message-ID: <Y0nO0quQnVFQruPM@google.com>
-References: <20220929172016.319443-1-pbonzini@redhat.com>
- <20220929172016.319443-5-pbonzini@redhat.com>
+        Fri, 14 Oct 2022 17:05:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4931905D3;
+        Fri, 14 Oct 2022 14:05:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD0C961BEA;
+        Fri, 14 Oct 2022 21:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1018BC43145;
+        Fri, 14 Oct 2022 21:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665781556;
+        bh=iwtaw18SgQfyVreOlBjZ/VGlpTVryimlc+lwG/JqXWY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WmPSji7sbHqULwD9i+xveomk3mxFQF1QLToed5H4/6Bq4eO0J/0hlUjMNmV9RLmE1
+         2WQWqYXzMCzrQL+w873UETyOZsuCkqJ4mGMrqsipYPe1XT/hSo5Q7jVFBZcgAPcsR0
+         IPR0fojYFZw1Skvcm2SRc7VqcbvynzA1nJy3HDAxDkr1kdx3O15nWqR5pFBAiMBtwL
+         w9kbk5e0apULtTmxRS9OpdcqgXW4l4jdcpO/1qfctr0hQeWJ5cTYtJINgtNA1SQ8+n
+         vpD/9biCHXLGUGb3Xup7nCbrjoJvHd3nUiwdWljsv8gINI7OgJw45q0HMEQxqNtgXf
+         u+aWp1dtngDow==
+Received: by mail-ua1-f48.google.com with SMTP id t26so2363834uaj.9;
+        Fri, 14 Oct 2022 14:05:55 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2TWtV7h9putW9uZsVu66ZgRQPCP6i+ySni3WfbuwlFwprLImIS
+        1oT3EYN1Tr2faeENuLM61xO0Eduf3jmNodm/AA==
+X-Google-Smtp-Source: AMsMyM4Twm//j07Dxsd28ylIM+PiFANjOaPsp/7z1ebAU3rElAWScDtRAc1ozOv1uTQH68YDbmQAED/5lcAdhLB039o=
+X-Received: by 2002:ab0:166f:0:b0:3e8:af59:df81 with SMTP id
+ l44-20020ab0166f000000b003e8af59df81mr3610910uae.36.1665781554888; Fri, 14
+ Oct 2022 14:05:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929172016.319443-5-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 14 Oct 2022 16:05:45 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKC_BJDJLLFck_0CbQ-0rZ0oVWMAdiwwGep23nh2pP19g@mail.gmail.com>
+Message-ID: <CAL_JsqKC_BJDJLLFck_0CbQ-0rZ0oVWMAdiwwGep23nh2pP19g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] media: dt-bindings: ov5645: Convert OV5645 binding
+ to a schema
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022, Paolo Bonzini wrote:
-> @@ -520,14 +505,14 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
->  	u64 smbase;
->  	int ret;
->  
-> -	smbase = ctxt->ops->get_smbase(ctxt);
-> +	smbase = vcpu->arch.smbase;
->  
-> -	ret = ctxt->ops->read_phys(ctxt, smbase + 0xfe00, buf, sizeof(buf));
-> -	if (ret != X86EMUL_CONTINUE)
-> +	ret = kvm_vcpu_read_guest(vcpu, smbase + 0xfe00, buf, sizeof(buf));
-> +	if (ret < 0)
->  		return X86EMUL_UNHANDLEABLE;
->  
-> -	if ((ctxt->ops->get_hflags(ctxt) & X86EMUL_SMM_INSIDE_NMI_MASK) == 0)
-> -		ctxt->ops->set_nmi_mask(ctxt, false);
-> +	if ((vcpu->arch.hflags & HF_SMM_INSIDE_NMI_MASK) == 0)
-> +		static_call(kvm_x86_set_nmi_mask)(vcpu, false);
->  
->  	kvm_smm_changed(vcpu, false);
->  
-> @@ -535,41 +520,41 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
->  	 * Get back to real mode, to prepare a safe state in which to load
->  	 * CR0/CR3/CR4/EFER.  It's all a bit more complicated if the vCPU
->  	 * supports long mode.
-> -	 *
-> -	 * The ctxt->ops callbacks will handle all side effects when writing
-> -	 * writing MSRs and CRs, e.g. MMU context resets, CPUID
-> -	 * runtime updates, etc.
->  	 */
-> -	if (emulator_has_longmode(ctxt)) {
-> -		struct desc_struct cs_desc;
-> +#ifdef CONFIG_X86_64
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
+On Fri, Oct 14, 2022 at 1:35 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+>
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Convert the simple OV5645 Device Tree binding to json-schema.
+>
+> The previous binding marked the below properties as required which was a
+> driver requirement and not the device requirement so just drop them from
+> the required list during the conversion.
+> - clock-frequency
+> - enable-gpios
+> - reset-gpios
+>
+> Also drop the "clock-names" property as we have a single clock source for
+> the sensor and the driver has been updated to drop the clk referencing by
+> name.
 
-To fix the "unused 'efer'" issue and avoid multiple guest_cpuid_has() calls, this
-as fixup?  It's not like we care about the code footprint for 32-bit KVM if the
-compiler isn't clever enough to optimize away the dead code.
+Driver requirements are the ABI!
 
----
- arch/x86/kvm/smm.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+This breaks a kernel without the driver change and a DTB that has
+dropped the properties.
 
-diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-index 41ca128478fc..740fca1cf3a3 100644
---- a/arch/x86/kvm/smm.c
-+++ b/arch/x86/kvm/smm.c
-@@ -500,6 +500,8 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
- int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- {
- 	struct kvm_vcpu *vcpu = ctxt->vcpu;
-+	bool is_64bit_vcpu = IS_ENABLED(CONFIG_X86_64) &&
-+			     guest_cpuid_has(vcpu, X86_FEATURE_LM);
- 	unsigned long cr0, cr4, efer;
- 	char buf[512];
- 	u64 smbase;
-@@ -521,8 +523,7 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 	 * CR0/CR3/CR4/EFER.  It's all a bit more complicated if the vCPU
- 	 * supports long mode.
- 	 */
--#ifdef CONFIG_X86_64
--	if (guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
-+	if (is_64bit_vcpu) {
- 		struct kvm_segment cs_desc;
- 
- 		/* Zero CR4.PCIDE before CR0.PG.  */
-@@ -536,15 +537,13 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		cs_desc.s = cs_desc.g = cs_desc.present = 1;
- 		kvm_set_segment(vcpu, &cs_desc, VCPU_SREG_CS);
- 	}
--#endif
- 
- 	/* For the 64-bit case, this will clear EFER.LMA.  */
- 	cr0 = kvm_read_cr0(vcpu);
- 	if (cr0 & X86_CR0_PE)
- 		kvm_set_cr0(vcpu, cr0 & ~(X86_CR0_PG | X86_CR0_PE));
- 
--#ifdef CONFIG_X86_64
--	if (guest_cpuid_has(vcpu, X86_FEATURE_LM)) {
-+	if (is_64bit_vcpu) {
- 		/* Clear CR4.PAE before clearing EFER.LME. */
- 		cr4 = kvm_read_cr4(vcpu);
- 		if (cr4 & X86_CR4_PAE)
-@@ -554,7 +553,6 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		efer = 0;
- 		kvm_set_msr(vcpu, MSR_EFER, efer);
- 	}
--#endif
- 
- 	/*
- 	 * Give leave_smm() a chance to make ISA-specific changes to the vCPU
-@@ -565,7 +563,7 @@ int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
- 		return X86EMUL_UNHANDLEABLE;
- 
- #ifdef CONFIG_X86_64
--	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-+	if (is_64bit_vcpu)
- 		return rsm_load_state_64(ctxt, buf);
- 	else
- #endif
+Also, with 'clock-names' dropped, you've just introduced a bunch of
+warnings on other people's platforms. Are you going to 'fix' all of
+them?
 
-base-commit: 8b86d27cc60a150252b04989de818ad4ec85f899
--- 
-
+Rob
