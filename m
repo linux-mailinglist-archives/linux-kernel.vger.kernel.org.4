@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE9F5FF2FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7095FF302
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJNRc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        id S229897AbiJNRdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJNRcY (ORCPT
+        with ESMTP id S229954AbiJNRdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:32:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402851D1E23;
-        Fri, 14 Oct 2022 10:32:22 -0700 (PDT)
+        Fri, 14 Oct 2022 13:33:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638A91D20CA;
+        Fri, 14 Oct 2022 10:33:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29D9F61BB5;
-        Fri, 14 Oct 2022 17:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDEDC433C1;
-        Fri, 14 Oct 2022 17:32:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20BD5B82276;
+        Fri, 14 Oct 2022 17:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3E7C433C1;
+        Fri, 14 Oct 2022 17:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665768741;
-        bh=Jk4EBDJ8ghjB5zn4b2gGQROlee3ts8rsAgyBgyQNDmo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dkv5Rq+BxBSmxZ+UfsAA7580dXssLiTCuwEeQEXNKSz0sb76leNbv0HpIIafcC/zw
-         AugoBY3FgM5rz1K14VoZ2ksuzSVsvSE9HxJmqVy+tMKitr86r7potMUhFHW8QbkGmz
-         e/wSFFEJL4rSKKm3bY64zybAMhxtGcWF6Gv0ud4ipfDRuHfJ/S5W63eUe4BB77OQuf
-         OY2Vb3N13Ou7MbA1V1etvJg7RBiCW26GBuboSJ4C1k2wFFUrb6sUtfsNo5DMTfVT1r
-         mWhmXKpDX2U4Nv2FRAuYDHG0E3lmXHVFdCw9pBz/jDXSJj+5ZVRJmm40EehFyxsOvA
-         NGw0ZJcGTHgjA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6DF8C4062C; Fri, 14 Oct 2022 14:32:19 -0300 (-03)
-Date:   Fri, 14 Oct 2022 14:32:19 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 5/7] perf test: test_intel_pt.sh: Add jitdump test
-Message-ID: <Y0mdIxx630X5zi4V@kernel.org>
-References: <20221014170905.64069-1-adrian.hunter@intel.com>
- <20221014170905.64069-6-adrian.hunter@intel.com>
- <Y0mcWpc4KaeXpU+z@kernel.org>
+        s=k20201202; t=1665768792;
+        bh=nzxnAJmocdVc0OIXHQF2dyBHBQZ9Fu8WY7GVAZagNUM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=likyj8YjIMlqVk9KW3r5cko4Fj12v8lDNAsGddB0G/NGi1ZB8aL2Hghc0kaNi5mM+
+         fEKzoCvoRs7mwRPwr9aF/hVIamu1anooV3NHQpfw1wLwyraq3cKVyOQwUZOEWN4CdU
+         O4i/pZbA2ydrQcQ+cgRJdxIqHhNVTJc/1KQS1u8tyPKtW/8GIohVVw/7QCx31vgOkP
+         FTI3pIs+mY9NHdtHWGaYKn00Rjhbd+nU0EBiAbMMXBK2wrFH96YByQBGiliA85tcjW
+         arCMZajX2TTmSTeRs9YxnNxFubUSf7ZKncsD1AgzP9sh2ST1XJvUe0wza8XNIJzQYM
+         oOeLfghCUQCsw==
+Received: by mail-vs1-f43.google.com with SMTP id p7so5611580vsr.7;
+        Fri, 14 Oct 2022 10:33:12 -0700 (PDT)
+X-Gm-Message-State: ACrzQf06KehpSvr5xUvL6+wCkCpOVVqO4Syx2hjC/4OMpNQAyhUxf8mB
+        X00+c8LFW6jDDj20Rr9TXiyArMkbpVQSOK7fBQ==
+X-Google-Smtp-Source: AMsMyM4TP4PjzqDTN2tC9wkFDi4o8DRDf1izbn9qxHFhrlkY0MPOw7TSTVhcsKNcluXzcdSyMSLAqc7I/2UNzUCk2do=
+X-Received: by 2002:a67:3c7:0:b0:39b:45c2:6875 with SMTP id
+ 190-20020a6703c7000000b0039b45c26875mr3248666vsd.6.1665768791744; Fri, 14 Oct
+ 2022 10:33:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0mcWpc4KaeXpU+z@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
+ <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com> <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
+ <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com> <20221010104210.68edf825@fixe.home>
+ <0d571d21-507d-fcc5-bf58-d02f958de28a@gmail.com> <20221013100245.14c509ec@fixe.home>
+ <c427fd85-3746-bf26-e4a3-9b2aa53f6572@gmail.com>
+In-Reply-To: <c427fd85-3746-bf26-e4a3-9b2aa53f6572@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 14 Oct 2022 12:33:01 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+aiJbrna6kpvb9k=KWUwMH-k8_Y_W1+HkJpHyGEee7NA@mail.gmail.com>
+Message-ID: <CAL_Jsq+aiJbrna6kpvb9k=KWUwMH-k8_Y_W1+HkJpHyGEee7NA@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devicesgain,
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        helgaas@kernel.org, max.zhen@amd.com, sonal.santan@amd.com,
+        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
+        trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,128 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Oct 14, 2022 at 02:28:58PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Fri, Oct 14, 2022 at 08:09:03PM +0300, Adrian Hunter escreveu:
-> > Add a test for decoding self-modifying code using a jitdump file.
-> > 
-> > The test creates a workload that uses self-modifying code and generates its
-> > own jitdump file.  The result is processed with perf inject --jit and
-> > checked for decoding errors.
-> > 
-> > Note the test will fail without patch "perf inject: Fix GEN_ELF_TEXT_OFFSET
-> > for jit" applied.
-> > 
-> > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> > ---
-> >  tools/perf/tests/shell/test_intel_pt.sh | 162 ++++++++++++++++++++++++
-> >  1 file changed, 162 insertions(+)
-> > 
-> > diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
-> > index 79dde57b561d..e0bf75981b9c 100755
-> > --- a/tools/perf/tests/shell/test_intel_pt.sh
-> > +++ b/tools/perf/tests/shell/test_intel_pt.sh
-> > @@ -22,6 +22,7 @@ outfile="${temp_dir}/test-out.txt"
-> >  errfile="${temp_dir}/test-err.txt"
-> >  workload="${temp_dir}/workload"
-> >  awkscript="${temp_dir}/awkscript"
-> > +jitdump_workload="${temp_dir}/jitdump_workload"
-> >  
-> >  cleanup()
-> >  {
-> > @@ -50,6 +51,13 @@ perf_record_no_decode()
-> >  	perf record -B -N --no-bpf-event "$@"
-> >  }
-> >  
-> > +# perf record for testing should not need BPF events
-> > +perf_record_no_bpf()
-> > +{
-> > +	# Options for no BPF events
-> > +	perf record --no-bpf-event "$@"
-> > +}
-> > +
-> >  have_workload=false
-> >  cat << _end_of_file_ | /usr/bin/cc -o "${workload}" -xc - -pthread && have_workload=true
-> >  #include <time.h>
-> > @@ -269,6 +277,159 @@ test_per_thread()
-> >  	return 0
-> >  }
-> >  
-> > +test_jitdump()
-> > +{
-> > +	echo "--- Test tracing self-modifying code that uses jitdump ---"
-> > +
-> > +	script_path=$(realpath "$0")
-> > +	script_dir=$(dirname "$script_path")
-> > +	jitdump_incl_dir="${script_dir}/../../util"
-> > +	jitdump_h="${jitdump_incl_dir}/jitdump.h"
-> 
-> So this requires one to test this being on the kernel (perf) sources
-> dir? I think we should add this header to some 'perf test' directory to
-> remove this requirement, ok?
-> 
-> But this can be done on top, right now we just don't test jitdump:
-> 
-> fd 20 : idx 11: mmapping fd 20
-> Checking 16 fds
-> OK
-> --- Test tracing self-modifying code that uses jitdump ---
-> SKIP: Include file jitdump.h not found
-> --- Cleaning up ---
-> --- Done ---
-> test child finished with 0
-> ---- end ----
-> Miscellaneous Intel PT testing: Ok
+On Thu, Oct 13, 2022 at 12:28 PM Frank Rowand <frowand.list@gmail.com> wrot=
+e:
+>
+> On 10/13/22 03:02, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Le Thu, 13 Oct 2022 01:05:26 -0500,
+> > Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
+> >
+> >>> This would also require two different descriptions of the same card
+> >>> (for ACPI and device-tree) and would require the final user to create=
+ a
+> >>> specific overlay for its device based on the PCI slots the card is
+> >>> plugged in.
+> >>
+> >> One of the many missing pieces of overlay support.  There have been se=
+veral
+> >> discussion of how to describe a "socket" in a device tree that a devic=
+e
+> >> could be plugged into, where a single device tree subtree .dtb could b=
+e
+> >> relocated to one or more different socket locations.  Thus in this
+> >> case a single overlay could be relocated to various PCI slots.
+> >>
+> >> I don't expect be getting involved in any future efforts around socket=
+s
+> >> (see my following comment for why).
+> >>
+> >>>
+> >>> The solution we proposed (Lizhi and I) allows to overcome these
+> >>> problems and is way easier to use. Fixing the potential bugs that mig=
+ht
+> >>> exists in the overlay layer seems a way better idea that just pushing
+> >>
+> >> It is not potential bugs.  The current run time overlay implementation=
+ is
+> >> proof of concept quality and completeness.  It is not production ready=
+.
+> >>
+> >> I got an opportunity for early retirement a couple of weeks ago.  My f=
+irst
+> >> inclination was to continue the same level of device tree maintainersh=
+ip,
+> >> but I am quickly realizing that there are other activities that I woul=
+d
+> >> like to devote my time and energy to.  I will continue to support Rob =
+with
+> >> minor patch reviews and testing, and potentially finishing up some
+> >> improvements to unittest.  On the other hand, bringing run time overla=
+y
+> >> support to product quality would be a major investment of my time that=
+ I
+> >> am not willing to continue.
+> >
+> > Hi Frank,
+> >
+> > This explains your position on the overlay support and I can
+> > certainly understand it ! Regarding the fact that it would enter
+>
+> No, my position on the technical aspects of overlay support is totally
+> unchanged.
+>
+> The only thing that has changed is that my time will not be available to
+> assist in future overlay related work.  The burden for this will fall
+> more on Rob than it has in the past.
 
-Actually:
+s/Rob/someone that steps up to maintain the overlay code/
 
---- Test tracing self-modifying code that uses jitdump ---
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.018 MB /tmp/perf-test-intel-pt-sh.GJoKOxGVFY/tmp-perf.data ]
+> > "production", the devices we are talking about are not really
+> > widespread yet? This would be a good opportunity to gather feedback
+> > early and improve the support gradually. We could probably even be able
+> > to support improvements in the overlay code if needed I guess.
+>
+> That is avoiding my point about the current implementation being
+> proof of concept.
 
-Warning:
-1 instruction trace errors
-/home/acme/git/perf
-Decode failed, 1 errors
-Warning:
-1 instruction trace errors
- instruction trace error type 1 time 494778.777081924 cpu 3 pid 309650 tid 309650 ip 0x7f0972f22009 code 5: Failed to get instruction
---- Cleaning up ---
---- Done ---
-test child finished with -1
----- end ----
-Miscellaneous Intel PT testing: FAILED!
-[root@quaco perf]#
-[root@quaco perf]# pwd
-/home/acme/git/perf
+I think it would be better to talk in terms of under what conditions
+the overlay support is adequate (for production) rather than a blanket
+statement that it is not-production ready. A large part of it is
+really outside the code itself and related to going from static to
+dynamic DT. There are certainly issues, but dynamic DTs have been used
+in production for a very long time. However, that usage has been
+constrained.
 
-Multiple runs end up failing, processor info:
-
-[root@quaco perf]# grep -m1 -A26 vendor_id /proc/cpuinfo
-vendor_id	: GenuineIntel
-cpu family	: 6
-model		: 142
-model name	: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
-stepping	: 10
-microcode	: 0xf0
-cpu MHz		: 2100.000
-cache size	: 8192 KB
-physical id	: 0
-siblings	: 8
-core id		: 0
-cpu cores	: 4
-apicid		: 0
-initial apicid	: 0
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 22
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities
-vmx flags	: vnmi preemption_timer invvpid ept_x_only ept_ad ept_1gb flexpriority tsc_offset vtpr mtf vapic ept vpid unrestricted_guest ple shadow_vmcs pml ept_mode_based_exec
-bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs taa itlb_multihit srbds mmio_stale_data retbleed
-bogomips	: 4199.88
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 39 bits physical, 48 bits virtual
-power management:
-
-[root@quaco perf]#
+Rob
