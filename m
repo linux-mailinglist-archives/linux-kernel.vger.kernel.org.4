@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224525FEA22
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F365FEA26
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiJNIH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S230048AbiJNIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiJNIHH (ORCPT
+        with ESMTP id S229590AbiJNII3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:07:07 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6931BE1FE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:06:53 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id m6so4273064pfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:06:52 -0700 (PDT)
+        Fri, 14 Oct 2022 04:08:29 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89551B94F8;
+        Fri, 14 Oct 2022 01:08:28 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so7200277pjq.3;
+        Fri, 14 Oct 2022 01:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mJhr9GEso5XW6jomGaYhGKFuz4nHt5uQZJthz4evrwY=;
-        b=qVTtmipam3rM6KfQlKjS9oB81qvNT4EbK05pZ/u8KhqTeMxi1fgQuugD0vIdferh4A
-         YbPU1ZdtYPR/ZPK5WVwhOLx0PTxgdovGreGSp3BwRvbk/eVN1SZMEkZTSXOGevy3iugB
-         AogReglRz/ngZipTLIK2lRwUlzQ7E6noznmewO+dUqWDsZMVyqKhugFDig/QBvybFt8t
-         Vsx7w7v2uUUB5MSDzYmRU6/oD4TB2PLfO4YaDpnr5j9n7LFnLE8L91zITpD9smh490eb
-         0/OSLFJHUGkje4f/2tYzx91hXBA5zHhogkFUEypk+BKxWcCeQ66erKddmZAiYYVM9FTE
-         hyHQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xK6fW6kMOZrKxJ/R2Pth+02xZVi1100jXJMyRN3sdFA=;
+        b=q6uPo73rme15pNGc4xGwAR+kgjRuWGN1DysiYNhK5scYe0eQ1AaB1LFKezo2y3VsNI
+         N3Uq+5vLyisVGzH7aAinoakWeh1XBNcte9TyTL5VhQLWzMhbWGhTVJMAflCb36TYS/Qf
+         erLBavfYxP277WshVx7nuXOrits6jJZr/GnKuT28ljKLj4TChdfEdhnDuDm6QqcoajEI
+         TDcb/ZUtkgVrSdHVN5wcGMfYk/HdOs0ihdJbR84wrOrAbKOpr5U+8M8oosRKFECbUB7c
+         pC+mjCFDM+ixqu7pSb5KYAJxAS8F+Dlq7kLKHWLCm73YCQH4IcctuMnChmQcr7DrURUP
+         VffA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mJhr9GEso5XW6jomGaYhGKFuz4nHt5uQZJthz4evrwY=;
-        b=va9eDGHIkjBjM3EqwwyQdW8Y3KyBsQhi4FAVhZvBADGq8/ij0ri6VQ5ELIoC4CBeim
-         rrNl9uJIUG/ErT25p450TSlVStnzNOfxJkV8sAPo2gFMGNyJ7BiRMZXWlYW6d7u4lC29
-         t7FRqaYO8S8ly4Rz/pztTPPgD8+BrVD6Oztbk5p4Tvtz4BLdhh42UgWwGoaYq4TUbOJq
-         +X3HCWbei/TCqWJK8SlXIvOzAsBR8keuHiCXbnUvBHYRmQq61KhvKXPyVSSV2z2R9o6U
-         67mWADUBnUhlQU7anfafECpJaBDULB4VUQp0nL+s6OVjUEfyic74EX5WtJ4wVv/c/6z7
-         sOGw==
-X-Gm-Message-State: ACrzQf3U8SYEQi/5ey/b9iD2ppyZvFIktauuMXyFi2DTVnWZfVSfJX+I
-        cnQs11WjOEYF2QlGWk2Ji4JkMg==
-X-Google-Smtp-Source: AMsMyM5JxpG9s5zxrgZFOJc1qRRC6V0WPzYraBHHSO028+hk4ZTnTxwCa5/lFVyTrnav5G/YHeoJVg==
-X-Received: by 2002:a05:6a00:1a0e:b0:547:1cf9:40e8 with SMTP id g14-20020a056a001a0e00b005471cf940e8mr3894976pfv.82.1665734811751;
-        Fri, 14 Oct 2022 01:06:51 -0700 (PDT)
-Received: from C02G705SMD6V.bytedance.net ([63.216.146.188])
-        by smtp.gmail.com with ESMTPSA id ik20-20020a170902ab1400b001730a1af0fbsm1119196plb.23.2022.10.14.01.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 01:06:51 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     dhowells@redhat.com, xiang@kernel.org, jefflexu@linux.alibaba.com
-Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, Jia Zhu <zhujia.zj@bytedance.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH V3 5/5] cachefiles: add restore command to recover inflight ondemand read requests
-Date:   Fri, 14 Oct 2022 16:05:59 +0800
-Message-Id: <20221014080559.42108-6-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20221014080559.42108-1-zhujia.zj@bytedance.com>
-References: <20221014080559.42108-1-zhujia.zj@bytedance.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xK6fW6kMOZrKxJ/R2Pth+02xZVi1100jXJMyRN3sdFA=;
+        b=r7d0tbr/0q6SuTYsEuTExVwpeUmtOsUfZ/eMESCCtaovKHPie4ZKC92/jWexVBtZDH
+         /CIEpeKrYa62Da6Y0HaEPeJXCO3/3Wll1TiiPGn4qfqyOv15NU79QUrWcV382LB1n7KC
+         sjNnoJT5KYbW3lVUBZwHHqEWjJW9zcIJ0DDCXgZlGNzjIcqr3hHX+Onr+vp9SSPSLoXB
+         UpZgiRh2pvPvJBX1wGZ8Te3TAkRFg7BPygjuuO9ki14Q1q7eS2hKOh+P7xZU9KHhPeyP
+         Qyc6JeKszffF6P05qxYqrITvK2/LUnfk73miqjTs36HXS7vnLXf+mCK7a2ZFG8A03TI1
+         Qnwg==
+X-Gm-Message-State: ACrzQf0SGy50sCvOdvTDq7TJVdxtezb1LYLnKjbqbA77B0zOaaeZ8Cgf
+        0P7nu9KMQWBDvqXM4HhrTD0=
+X-Google-Smtp-Source: AMsMyM589E3hvhE2jFPeWoKcf+kXiB3ru4Ti4mpBLpL3oeyDinCSIpcVWKaAm1rZM6s7nvBxdqWMBg==
+X-Received: by 2002:a17:902:d70a:b0:178:5d52:9e41 with SMTP id w10-20020a170902d70a00b001785d529e41mr3903681ply.0.1665734908345;
+        Fri, 14 Oct 2022 01:08:28 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 138-20020a621490000000b00563b31c9e0csm1017486pfu.34.2022.10.14.01.08.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 01:08:27 -0700 (PDT)
+Message-ID: <341cffc3-d0b9-2ef7-3c6e-c48ea179699b@gmail.com>
+Date:   Fri, 14 Oct 2022 16:08:20 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH v3 5/7] KVM: x86/pmu: Defer counter emulated overflow via
+ pmc->prev_counter
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220831085328.45489-1-likexu@tencent.com>
+ <20220831085328.45489-6-likexu@tencent.com> <Yyz2x5bSR/7ZTV0R@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Yyz2x5bSR/7ZTV0R@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,82 +77,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, in ondemand read scenario, if the anonymous fd was closed by
-user daemon, inflight and subsequent read requests would return EIO.
-As long as the device connection is not released, user daemon can hold
-and restore inflight requests by setting the request flag to
-CACHEFILES_REQ_NEW.
+On 23/9/2022 7:59 am, Sean Christopherson wrote:
+> The bigger issue is that calling __kvm_perf_overflow() here can get false negatives.
+> If reprogramming fails due to contention, the reprogram_pmi bit will be left set
+> and so this check in __kvm_perf_overflow() will suppress the PMI.
 
-Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/cachefiles/daemon.c   |  1 +
- fs/cachefiles/internal.h |  3 +++
- fs/cachefiles/ondemand.c | 23 +++++++++++++++++++++++
- 3 files changed, 27 insertions(+)
-
-diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
-index c74bd1f4ecf5..014369266cb2 100644
---- a/fs/cachefiles/daemon.c
-+++ b/fs/cachefiles/daemon.c
-@@ -77,6 +77,7 @@ static const struct cachefiles_daemon_cmd cachefiles_daemon_cmds[] = {
- 	{ "tag",	cachefiles_daemon_tag		},
- #ifdef CONFIG_CACHEFILES_ONDEMAND
- 	{ "copen",	cachefiles_ondemand_copen	},
-+	{ "restore",	cachefiles_ondemand_restore	},
- #endif
- 	{ "",		NULL				}
- };
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 3d94990a8b38..e1f8bd47a315 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -301,6 +301,9 @@ extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
- extern int cachefiles_ondemand_copen(struct cachefiles_cache *cache,
- 				     char *args);
- 
-+extern int cachefiles_ondemand_restore(struct cachefiles_cache *cache,
-+					char *args);
-+
- extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
- extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
- 
-diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
-index d8dce55d907c..c773ea940cc1 100644
---- a/fs/cachefiles/ondemand.c
-+++ b/fs/cachefiles/ondemand.c
-@@ -182,6 +182,29 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
- 	return ret;
- }
- 
-+int cachefiles_ondemand_restore(struct cachefiles_cache *cache, char *args)
-+{
-+	struct cachefiles_req *req;
-+
-+	XA_STATE(xas, &cache->reqs, 0);
-+
-+	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Reset the requests to CACHEFILES_REQ_NEW state, so that the
-+	 * requests have been processed halfway before the crash of the
-+	 * user daemon could be reprocessed after the recovery.
-+	 */
-+	xas_lock(&xas);
-+	xas_for_each(&xas, req, ULONG_MAX)
-+		xas_set_mark(&xas, CACHEFILES_REQ_NEW);
-+	xas_unlock(&xas);
-+
-+	wake_up_all(&cache->daemon_pollwq);
-+	return 0;
-+}
-+
- static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
- {
- 	struct cachefiles_object *object;
--- 
-2.20.1
-
+I understand your motivation, and before we reprocess on "left set reprogram_pmi 
+bit",
+we may need reproducible cases to cover "reprogramming fails".
