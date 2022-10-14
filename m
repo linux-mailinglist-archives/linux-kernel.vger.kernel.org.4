@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC0B5FF3B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2421B5FF3AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiJNSf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S231182AbiJNSf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiJNSfc (ORCPT
+        with ESMTP id S231130AbiJNSfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:35:32 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85509A3ABA;
-        Fri, 14 Oct 2022 11:35:22 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id f11so8863244wrm.6;
-        Fri, 14 Oct 2022 11:35:22 -0700 (PDT)
+        Fri, 14 Oct 2022 14:35:31 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857C4A7A99;
+        Fri, 14 Oct 2022 11:35:23 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r13so8846637wrj.11;
+        Fri, 14 Oct 2022 11:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FJOMeXQc0Af23KUB04em2P8Wb6t/cXjCGBlz5qX5m2I=;
-        b=Blx6n6pTCzYuF2uFy4alGGau4/NnYP0o4vNBhGXWQRNsNrieWBhNlU5sXvUlt36deY
-         Up8KjVElZ9eJzp09elNQ7ohGy95b7beEFL6gq8JioodbGPmNNnOCtMFrOw2TaKWZ72tT
-         H/1engiV+OY1rQ8QZkPRYgS//0kuDuEofrv1CGegAelLJpjADbY4HaTAW5Mz8Rird3X1
-         Vqjr9eYKml6aC6FfmoIyiH4uC7zX4p0MKAh4CLZrj9vCTxA58QYUM7gfoy5blJe2AcBA
-         6vX2JBjEYXjXWDmnW3NHkAzOAmNYa76E0ILDhJHY2sXQy5Nr342NhIISTi82YMv0Di33
-         gajg==
+        bh=FPNinP5NcVb9ViQFD23z9JvBzsucMh06jMRDsBjL9jk=;
+        b=K3ZIGnYTG2IW438XZKj0WhZ+OGMxdF8aRcvKK9NtgqDu/HP4htzpzZP5o4f6MqSCNn
+         hoDyxzJP5TSGezWugWfiKaUdYwng+RoV0hCpMm+dava7Kf8Y7i0X09qMAxg58qrqFS56
+         49X+On/sn8fp+tQfes6gRmGRmp6yJskbhBVD6gjINZ3nhKtrcNSe0b434f/2idDVba5S
+         1ASPzAUmhBiGb6aXngjNu3ZSL78xhXOqlqgLmad4HP7ToGqNIUolv8EJgMdkr2CVv/4T
+         1M4k2F5fpbP+82IboWoD+wVeYUnHJK19a3gP/dWYxvpiwZ7kxEjqe/N8cQM7oFz3e31Q
+         PnMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FJOMeXQc0Af23KUB04em2P8Wb6t/cXjCGBlz5qX5m2I=;
-        b=NXNVpnFPXwD5XM4IN+Alm+70IdmAC216ULv0bR1G/dmiYOt1vVKsWtjh/Aeh78Mdqb
-         SfVsRCSHvnwac1B5oBuMSZ21E7V8/Nr3p/WiHe/vytiemHgisqzM2NPoTF1TenTp2295
-         /0apgnO7UY2vlr17o7W0WTeC6gqJSqTv+BDU0419bo/8It29BJ3+30asoT/xLqAkRuXH
-         Rm+0xexiDK0W7RVndeCe7LXPHdhSxXRgTxf4cpX1stviZq8gsiJ4RFN2U+e2jWF37M6N
-         jSVa989WNvaLpMY5STL7qW1UU394sUrXBHH45OGxdhiWubaBRe0ojNrnk3DJS/GwLh5R
-         vBtA==
-X-Gm-Message-State: ACrzQf0tm8v0LCGqU1lH0B6RNmcRg7SlC6hXdXc0cSCm4OFfTi/juABz
-        K5XBCLHyEt3IVKxalQ/vTfQ=
-X-Google-Smtp-Source: AMsMyM43W+6KucZ5pur5Y1vLY5wYeI4dvbIHXeyeR9lh5PeK8unsRnN2JgiYFN+dFo+cLtG1SorOog==
-X-Received: by 2002:a5d:674f:0:b0:22e:3d59:cf0f with SMTP id l15-20020a5d674f000000b0022e3d59cf0fmr4267687wrw.304.1665772520556;
-        Fri, 14 Oct 2022 11:35:20 -0700 (PDT)
+        bh=FPNinP5NcVb9ViQFD23z9JvBzsucMh06jMRDsBjL9jk=;
+        b=tbNvugd/stySTJmTLWIHLVs8t61V/u57XlkwRLBS0IKjTwpVH/u1dQ7q340BPOt9j2
+         f1LQ4WlvbPHv2RTIsDVu0TX+/qtXWaIHOt441EXXopeaLlkVsDgRPO1PTbL/iMhwHn5v
+         tR+cuc3bMa99UdkFCE20KeTJ15HmUpaLvEGseiuNCGhqJ7f44gQYLUgiKUWYO1HNucnw
+         TxZzfV2WLrVG4FjmCKRcxhF62OUTH1cdaot3YJDGXoCM22J4n8X4y8lO3RBUyagw2TXj
+         skZY6PeOr0P5H+xSuJr4pRhWxGzQxZ9h+WgCZUznh3iNjmim5iZIPGJVXkls4ObboeQb
+         g1AA==
+X-Gm-Message-State: ACrzQf0UFDVOWALkJKDvyXeoX1117ojsYK/tcOeZAt7SiyCCdNuxy/iP
+        GrASPFoJRC/UUv4mcn0DEa8=
+X-Google-Smtp-Source: AMsMyM7Hlq/qoUuIN7LZWt5FzuxUS5Vip9VOqXeP9bjmE6fswYv2HHk/IN4q6q5SaiDJTqoeH9XUgg==
+X-Received: by 2002:a05:6000:1565:b0:22f:1407:9bfd with SMTP id 5-20020a056000156500b0022f14079bfdmr4240073wrz.620.1665772521673;
+        Fri, 14 Oct 2022 11:35:21 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:fc4d:6548:d8bd:5bd])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a403954c3sm2485410wrt.42.2022.10.14.11.35.19
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a403954c3sm2485410wrt.42.2022.10.14.11.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 11:35:19 -0700 (PDT)
+        Fri, 14 Oct 2022 11:35:21 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -64,9 +64,9 @@ Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 3/5] media: i2c: ov5645: Drop empty comment
-Date:   Fri, 14 Oct 2022 19:34:57 +0100
-Message-Id: <20221014183459.181567-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 4/5] media: i2c: ov5645: Return zero for s_stream(0)
+Date:   Fri, 14 Oct 2022 19:34:58 +0100
+Message-Id: <20221014183459.181567-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -84,30 +84,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Drop empty multiline comment.
+Always return zero while stopping the stream as the caller will ignore the
+return value.
 
+This patch drops checking the return value of ov5645_write_reg() and
+continues further in the code path while stopping stream. The user anyway
+gets an error message in case ov5645_write_reg() fails.
+
+Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
 v1->v2
-* No change
+* New patch
 ---
- drivers/media/i2c/ov5645.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/media/i2c/ov5645.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 1551690a94e0..a0b9d0c43b78 100644
+index a0b9d0c43b78..b3825294aaf1 100644
 --- a/drivers/media/i2c/ov5645.c
 +++ b/drivers/media/i2c/ov5645.c
-@@ -14,9 +14,6 @@
-  *   https://www.mail-archive.com/linux-media%40vger.kernel.org/msg92671.html
-  */
+@@ -995,14 +995,11 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+ 		if (ret < 0)
+ 			goto err_rpm_put;
+ 	} else {
+-		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+-		if (ret < 0)
+-			return ret;
++		ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
++
++		ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
++				 OV5645_SYSTEM_CTRL0_STOP);
  
--/*
-- */
--
- #include <linux/bitops.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
+-		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
+-				       OV5645_SYSTEM_CTRL0_STOP);
+-		if (ret < 0)
+-			return ret;
+ 		pm_runtime_put(ov5645->dev);
+ 	}
+ 
 -- 
 2.25.1
 
