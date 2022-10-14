@@ -2,44 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D985FEE56
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F975FEE61
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJNNFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S229775AbiJNNKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiJNNFs (ORCPT
+        with ESMTP id S229507AbiJNNKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:05:48 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183242A24C;
-        Fri, 14 Oct 2022 06:05:46 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 273211C0025; Fri, 14 Oct 2022 15:05:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1665752745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=9TRlQOWWegS83pe5Ve1QmWfEX50i/wCXwds1kTs2jhA=;
-        b=PbV7q3lfA/AYFwLtyb8NkiROnqkkKtUE3fNIhh1beLrnml3lg3hh816V8/7ysXaKusPkZO
-        EOfxgwHhd6BqovWkklziVbrnaR+pe7UwNRpOnESyFvnb45N0yV3RVWaM1XgKJn7N64IxUE
-        6IgPq8qImGjuC/Pbb2vVDs/UtwiKm+4=
-Date:   Fri, 14 Oct 2022 15:05:44 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org
-Subject: [GIT PULL] LEDs changes for v6.1-rc
-Message-ID: <20221014130544.GA10424@duo.ucw.cz>
+        Fri, 14 Oct 2022 09:10:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B46C33871
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:10:03 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y8so4834144pfp.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fk/quJ74rHsZ1Ova6EOCJyFmRO49mfECzgwRXnhSG1A=;
+        b=ZRkmvozIwo645mpwwMu4mp3tF84LY+GPL8yWcxrGv1qS0rondxJtdP0IeMnZ5EP7aw
+         YaK57ihpkHyopJb6ZAVbiOnw1G/8bTf+Z9UHBeERJm6BdVucXItAtfHX1xUP6AAYZZjE
+         7mKpkV28NKxmkrcZengef5RDU4Bq8LHuNW62xm8wZFxqcTf0kS2BMGZAlGX2j3zA5IFH
+         zNeoeRCI4A58mbNmpqBXNo/ullgoOZb5l07HqUmBMC9iSOR5GjjUkEzb+0L1oRzk81Sk
+         QbL63GA//2mKJH8hOG26P853DiPJuNZZ49Mq0LKIOh3ORYPgg0aEZJs+Lss7BjMfB2HC
+         6Z5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fk/quJ74rHsZ1Ova6EOCJyFmRO49mfECzgwRXnhSG1A=;
+        b=E5xnP3RgZDntSrKizdRaD/hdz+XwJ+lWRSh4qPPfkawsCddCHlRXvsKoZpELQdA5sJ
+         PKctXXYN46xN8oY8hAMA04e03+5k0J1b92nOFm16XX8DSnveRqXz4+4VUScifFYsz1mQ
+         xLm87roBqeYixrON4F6x7hyLdSD1rRL9oEtK2FfJ2EnlI93kxJZxyKS2M6HMNoogtFSp
+         ZUR/+moqrQ6WbjaV5R2NwSV79f13Kk72WcqaAXWl9NG85hYSKyv1yzUyWiErDkt+UXFG
+         hh1/rlPCFG5E81zIVwDjceyhSKmkcSnbcAxfgyce0R8Vs5Lc/qZpMjiOq/q8Shh5vHfp
+         nB2w==
+X-Gm-Message-State: ACrzQf2zAAqyKB/PiIpP2koaigH1Wq6lAaHP4LaJvXz+iMA7kn1td79P
+        BohKq/Q+D5HCQB8MqXytGc4=
+X-Google-Smtp-Source: AMsMyM6xAq9RgZN2LCCOb22a75WNSCP88vtz1QUopMhxkikXWXWenwgCLge9OZVmkw9h9v5Uvw7ftg==
+X-Received: by 2002:a05:6a02:202:b0:42b:d711:f27c with SMTP id bh2-20020a056a02020200b0042bd711f27cmr4523490pgb.246.1665753002879;
+        Fri, 14 Oct 2022 06:10:02 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-8.three.co.id. [180.214.232.8])
+        by smtp.gmail.com with ESMTPSA id f7-20020a631007000000b0045935b12e97sm1436760pgl.36.2022.10.14.06.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 06:10:02 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C1360103F3B; Fri, 14 Oct 2022 20:09:59 +0700 (WIB)
+Date:   Fri, 14 Oct 2022 20:09:59 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] clocksource/drivers/timer-ti-dm: Fix some
+ kernel-doc comments
+Message-ID: <Y0lfpxXZZZuiI4A8@debian.me>
+References: <20221014091357.64504-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="8t9RHnE3ZwKMSgU+"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qqNtyi/bdFWrjAqo"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221014091357.64504-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -47,54 +76,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---8t9RHnE3ZwKMSgU+
-Content-Type: text/plain; charset=us-ascii
+--qqNtyi/bdFWrjAqo
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+On Fri, Oct 14, 2022 at 05:13:57PM +0800, Yang Li wrote:
+> Fix some kernel-doc comments.
+>=20
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2399
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+What fix are you doing below? Please describe (should contain warning
+messages from bugzilla link above).
 
-are available in the Git repository at:
+---- ranting ----
+When I see social media posts, I often see "Link in bio" phrase. That
+is, instead of posting the full link, the link is placed on URL section
+of a poster's bio and a pointer to it is phrased in relevant posts. What
+if such "link in bio" link changes? The older posts which points to
+different link than in the bio become irrelevant.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/=
-leds-6.1-rc1
+I would rather just spell the full link in my posts instead for
+posterity.
+---- end ranting ----
 
-for you to fetch changes up to 4d1632151bde847230a0bd2318806380d309655f:
+> diff --git a/drivers/clocksource/timer-ti-dm.c b/drivers/clocksource/time=
+r-ti-dm.c
+> index cad29ded3a48..574c88584fbf 100644
+> --- a/drivers/clocksource/timer-ti-dm.c
+> +++ b/drivers/clocksource/timer-ti-dm.c
+> @@ -181,8 +181,7 @@ static inline u32 dmtimer_read(struct dmtimer *timer,=
+ u32 reg)
+>  /**
+>   * dmtimer_write - write timer registers in posted and non-posted mode
+>   * @timer:      timer pointer over which write operation is to perform
+> - * @reg:        lowest byte holds the register offset
+> - * @value:      data to write into the register
+> + * @val:      data to write into the register
+>   *
+>   * The posted mode bit is encoded in reg. Note that in posted mode, the =
+write
+>   * pending bit must be checked. Otherwise a write on a register which ha=
+s a
+> @@ -925,7 +924,7 @@ static int omap_dm_timer_set_int_enable(struct omap_d=
+m_timer *cookie,
+> =20
+>  /**
+>   * omap_dm_timer_set_int_disable - disable timer interrupts
+> - * @timer:	pointer to timer handle
+> + * @cookie:	pointer to omap dm timer handle
+>   * @mask:	bit mask of interrupts to be disabled
+>   *
+>   * Disables the specified timer interrupts for a timer.
 
-  leds: pca963: fix misleading indentation (2022-09-26 23:16:37 +0200)
+Seems like two different fixes, right? These should be splitted into its
+own patch.
 
-----------------------------------------------------------------
-This is very quiet release for LEDs, pca963 got blinking support and
-that's pretty much it.
-
-----------------------------------------------------------------
-Bernardo Rodrigues (1):
-      leds: pca963x: fix blink with hw acceleration
-
-Marek Vasut (1):
-      dt-bindings: leds: Document mmc trigger
-
-Pavel Machek (1):
-      leds: pca963: fix misleading indentation
-
- Documentation/devicetree/bindings/leds/common.yaml | 39 ++++++++++++------=
-----
- drivers/leds/leds-pca963x.c                        | 22 ++++++++++--
- 2 files changed, 41 insertions(+), 20 deletions(-)
+Thanks.
 
 --=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+An old man doll... just what I always wanted! - Clara
 
---8t9RHnE3ZwKMSgU+
+--qqNtyi/bdFWrjAqo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY0leqAAKCRAw5/Bqldv6
-8s1cAKCaZvXwLC+T6kkORuBk04wArQjxDwCgl3UsJuVlon0zN6exh7TnZgl5oqU=
-=VqEr
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0lfpwAKCRD2uYlJVVFO
+o3csAQCWz9VFu9TGcgBSLP9v85LV+TmGBJjg9g+6qNxBmR3PHgEAuMJnfWmCDGLx
+py8SAfX5G1u4AiGNzxZ3GFg3hz3kYQw=
+=GOSp
 -----END PGP SIGNATURE-----
 
---8t9RHnE3ZwKMSgU+--
+--qqNtyi/bdFWrjAqo--
