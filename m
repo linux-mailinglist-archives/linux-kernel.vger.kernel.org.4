@@ -2,107 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1D35FE7F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2A35FE7F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJNEUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 00:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S229910AbiJNEU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 00:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJNEUo (ORCPT
+        with ESMTP id S229906AbiJNEUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 00:20:44 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6E8E194B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:20:41 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k2so8011997ejr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OV3+a/0BT6g9pXRrmU2hqgr8aQ3sfDDJkFYLKeuZKSw=;
-        b=cboXTgdXBn/Wg/ayWDkxV5ELOweKXTZUGvbDt3Cmf0EdfrB9qbaUFkZJPMTeg5QpPU
-         GfjaCB0baw9rlJMW9Y244f07QcuHhHVTav9W4d+xzt0wMJNvaTVGQi2o/BRuMcAcCkGk
-         FPsAeSL4KiKHcG3Vxof/E7hgArG2wAnjhYbjbQG38wUqcpGJl+fciRQv35Y4m4vk3e73
-         GJJNzxPShx5BR1MgfW1RSXBXGFoduCsWS0aen8QmMfLqdUFNZzX+iZ4SlXtHAGu0j1CZ
-         QMYAv1hZnG5ucr1mVb51/pORWIppRrSCJhMEum9JHcR8ZATch9YS4gMOFzyN1q4gqb0K
-         qOjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OV3+a/0BT6g9pXRrmU2hqgr8aQ3sfDDJkFYLKeuZKSw=;
-        b=0LEOxk//3lPTgFw0FsaEPth7BGNIxOGLpAp5SqEI7iUgc6RxQ5fLGgYoLJ7bvmR1Ne
-         7DYYaZltLvkJuP6vyX9d1c/Kb3d7OCpCnFB/16ucj4I0bOxLoXAKXbp7ntluP1BHeIN5
-         kRG8Fe09VZgAbme4hlNhoq42NSfXBu/KfvAFS0Do63mf66T4Qi4UfcZhZwn6wWWY0aHP
-         oABGffSuKYWnlxVYfGjflWrgA1HJlHa85BpoPfLhy73NFu7ApqT6wgN7fMn2NoHgbYus
-         Zlfuzz6MHhPKdKEYtliV6Nj6JKSwlHOPDdV0j/q3UxdJhsKghWuH/wPsQ5p7EWX3UY1w
-         21Hw==
-X-Gm-Message-State: ACrzQf27A2oN6zHlv6cZni99QyHVjtxYUzeTHO+YzvgbJgjmvWcF/8/h
-        vTtRMxS3jrR96f01Ef0lIFqwUj2G8PopXXWfrE5muQ==
-X-Google-Smtp-Source: AMsMyM7+0eUHblw7Luuc7IqD0pCKWwi1rSFfe7iQHBNTv6SEMO9oK6RTkN53yr+znEsS/vx6MTrhy5z9iOxdtvbbdFA=
-X-Received: by 2002:a17:907:a065:b0:78d:c5dd:45cf with SMTP id
- ia5-20020a170907a06500b0078dc5dd45cfmr2146288ejc.117.1665721239633; Thu, 13
- Oct 2022 21:20:39 -0700 (PDT)
+        Fri, 14 Oct 2022 00:20:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CD917651A
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665721249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HnSURpZm+VRo/jWoSn4Tgay2ffXUBOQESxlPLKKSxGM=;
+        b=RcSLPPj9uiXffeHi+HgP6gQOCBpiU3EqGZqRnISWELClcFRUnG89CuDWhehTkXKca1FFpQ
+        CFBgJVpk9vf+irIrc9kz33p05NPivndklXGgP7+SIzTOkta4AbQ03bw4CubBfQVdRFUPVj
+        dhXN/0qh2wukbYvel9pDVtF5CV+Bnvc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-574-h_Ui7k8wPmmjl_qv7bpchw-1; Fri, 14 Oct 2022 00:20:46 -0400
+X-MC-Unique: h_Ui7k8wPmmjl_qv7bpchw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30B34185A794;
+        Fri, 14 Oct 2022 04:20:46 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-12-249.pek2.redhat.com [10.72.12.249])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7ED081121320;
+        Fri, 14 Oct 2022 04:20:39 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, corbet@lwn.net
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        mikelley@microsoft.com, vkuznets@redhat.com, liuwe@microsoft.com,
+        kkashanjat@microsoft.com, cohuck@redhat.com, otubo@redhat.com,
+        andavis@redhat.com, aadam@redhat.com, stefanha@redhat.com,
+        sgarzare@redhat.com, virtualization@lists.linux-foundation.org
+Subject: [RFC PATCH] virtio: document virtio hardening status and TODO
+Date:   Fri, 14 Oct 2022 12:20:37 +0800
+Message-Id: <20221014042037.23639-1-jasowang@redhat.com>
 MIME-Version: 1.0
-References: <20221013214638.30974-1-palmer@rivosinc.com>
-In-Reply-To: <20221013214638.30974-1-palmer@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 14 Oct 2022 09:49:30 +0530
-Message-ID: <CAAhSdy0sM1ENhTuakHBB7xm5nUVtKzUzPFQ-sVMyeWHDv0FPzQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for kvm-riscv
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 3:19 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> Github deprecated the git:// links about a year ago, so let's move to
-> the https:// URLs instead.
->
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+This patch summarizes the status of hardening and TODO of hardening
+virtio core and drivers.
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+ Documentation/security/virtio/core.rst | 49 ++++++++++++++++++++++++++
+ MAINTAINERS                            |  1 +
+ 2 files changed, 50 insertions(+)
+ create mode 100644 Documentation/security/virtio/core.rst
 
-Thanks,
-Anup
+diff --git a/Documentation/security/virtio/core.rst b/Documentation/security/virtio/core.rst
+new file mode 100644
+index 000000000000..b8baa104d7c8
+--- /dev/null
++++ b/Documentation/security/virtio/core.rst
+@@ -0,0 +1,49 @@
++================
++Virtio hardening
++================
++
++The virtio core and drivers should not trust the devices. This means
++all kinds of input from the device must be validated before being
++used. This document summarizes the current status and TODO for this
++validation/hardening efforts.
++
++
++Status
++======
++
++The virtio core and drivers has done some basic hardening:
++
++* Config callback hardening: The core makes sure the config interrupt
++  callbacks are enabled after the driver is ready and disable before
++  the driver is removed.
++
++* Descriptor ring hardening: The metadata of a descriptor were copied
++  and stored in a driver private memory that can not be accessed by the
++  device. The eliminates the device triggerable behaviours through the
++  descriptor ring.
++
++* Device configuration space validation: Some of the virtio drivers
++  validates the fields of device configuration space before try to use
++  them.
++
++
++TODO
++====
++
++* Input buffer length validation: The virtio core needs to validate
++  the input buffer length validation before passing them to individual
++  virtio drivers.
++
++* Virtqueue callback hardening: The virtio core (or with the help of
++  the drivers) should guarantee that the virtqueue callbacks should not
++  be triggered before the driver is ready or after the driver is
++  removed.
++
++* Transport specific data validation: The virtio transport driver should
++  validate the virtio transport specific data provided by the device
++  before trying to use them in the probing.
++
++* Device specific validation: Driver should validate the device specific
++  metadata before being used by a specific subsystem.
++
++
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 673b9f9b8d8a..b33cc5c751c1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21516,6 +21516,7 @@ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-bus-vdpa
+ F:	Documentation/ABI/testing/sysfs-class-vduse
+ F:	Documentation/devicetree/bindings/virtio/
++F:	Documentation/security/virtio/core.rst
+ F:	drivers/block/virtio_blk.c
+ F:	drivers/crypto/virtio/
+ F:	drivers/net/virtio_net.c
+-- 
+2.25.1
 
-> ---
-> I've split these up by github username so folks can take them
-> independently, as some of these repos have been renamed at github and
-> thus need more than just a sed to fix them.
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9a47bd58a330..d103b44fb40c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11156,7 +11156,7 @@ L:      kvm@vger.kernel.org
->  L:     kvm-riscv@lists.infradead.org
->  L:     linux-riscv@lists.infradead.org
->  S:     Maintained
-> -T:     git git://github.com/kvm-riscv/linux.git
-> +T:     git https://github.com/kvm-riscv/linux.git
->  F:     arch/riscv/include/asm/kvm*
->  F:     arch/riscv/include/uapi/asm/kvm*
->  F:     arch/riscv/kvm/
-> --
-> 2.38.0
->
