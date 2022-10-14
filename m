@@ -2,64 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BD15FF59A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515F55FF5E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJNVxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S229525AbiJNWD3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Oct 2022 18:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiJNVxF (ORCPT
+        with ESMTP id S229518AbiJNWDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:53:05 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEDE178BD
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:53:04 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id l4so5916550plb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o1t17x5zzSpdCuf+jFEyQQCtGA/0x7inpYCOmKSTCbI=;
-        b=Uo/GHpK8vU+smItb6OkYUg4Tbd+055hEHZN7hanO/jiPIWezUApYxsQMXMB6pYaNHW
-         YN66dB0oETBKwriK4Nmb5J9TkN89fw0Z1ls/fLsECw/qHWGQjTN79WOUuwSOTqI8vUme
-         ycK4KPHzIMv/LQwAtM1LH0zOkn9dBCsMmfJoY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o1t17x5zzSpdCuf+jFEyQQCtGA/0x7inpYCOmKSTCbI=;
-        b=5XFxyPk345bvhDHKth8NjY+R0akJAlGRMJlW0ASqJxuZYmbk+/hzCzwDQytnSAIPWC
-         7c+GdKuNAk37xT5aZlPLleXkZooKM4A3tz8YQbB1MfXZ1FiJdAyykyeZbWZprfHMpCcz
-         ga/iUxDi5/fDnp1/7eMmUq/c1f4EUHdhNk0JHBgm9tOa2qg2+fQQPigTPrqMAGPpRweq
-         VUbvIVV6TulObTIROpEsCi6fJHyvtVAEoEhknDFmq1IkMC3+t46IxROGT++3VmfMsKA1
-         zbQ1gSJZZqXcUXjMjuWxH6vM3Py8mkWjWIz3A6Kag0CitG0SatJ0jxPrxxhTquWh9/fO
-         6xXQ==
-X-Gm-Message-State: ACrzQf1CXuKbRaFcALFsMuGScOOiC2Jx7aSY8FOrhB0eRBdkyXYuo4HP
-        Hm7Ctn2cTAb13UfQL0+0HCMOXQ==
-X-Google-Smtp-Source: AMsMyM68dam+bk2zRi9fPwq4foTUHTm41a5WwL7uUAIKb98CVmZlEOlpn3mQ8qWzIX9UqFFtGO8dCQ==
-X-Received: by 2002:a17:90b:380b:b0:20d:7364:796f with SMTP id mq11-20020a17090b380b00b0020d7364796fmr30737pjb.13.1665784384453;
-        Fri, 14 Oct 2022 14:53:04 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:9d:2:9f6e:fc87:d13f:1fa6])
-        by smtp.gmail.com with ESMTPSA id p184-20020a625bc1000000b005618189b0ffsm2197437pfb.104.2022.10.14.14.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:53:03 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Sibi Sankar <sibis@codeaurora.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alex Elder <elder@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.10] arm64: dts: qcom: sc7180-trogdor: Fixup modem memory region
-Date:   Fri, 14 Oct 2022 14:53:02 -0700
-Message-Id: <20221014215302.3905135-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+        Fri, 14 Oct 2022 18:03:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432D3176520
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:03:23 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-317-JETZyr0OPF-X3dTWyLgaXA-1; Fri, 14 Oct 2022 23:03:20 +0100
+X-MC-Unique: JETZyr0OPF-X3dTWyLgaXA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 14 Oct
+ 2022 23:03:18 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 14 Oct 2022 23:03:18 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Lutomirski' <luto@kernel.org>, Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>
+CC:     Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jorge Merlino <jorge.merlino@canonical.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "John Johansen" <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Kjos <tkjos@google.com>,
+        "Ondrej Mosnacek" <omosnace@redhat.com>,
+        Prashanth Prahlad <pprahlad@redhat.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: RE: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
+Thread-Topic: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
+Thread-Index: AQHY33u3rva59bT1H02MahRCUmFfoq4Ocehg
+Date:   Fri, 14 Oct 2022 22:03:18 +0000
+Message-ID: <d2a6ccdd8a734d36ae88866a4c16019b@AcuMS.aculab.com>
+References: <20221006082735.1321612-1-keescook@chromium.org>
+ <20221006082735.1321612-2-keescook@chromium.org>
+ <20221006090506.paqjf537cox7lqrq@wittgenstein>
+ <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
+ <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
+In-Reply-To: <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,58 +89,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sibi Sankar <sibis@codeaurora.org>
+From: Andy Lutomirski
+> Sent: 14 October 2022 04:18
+...
+> But seriously, this makes no sense at all.  It should not be possible to exec a program and then,
+> without ptrace, change its cwd out from under it.  Do we really need to preserve this behavior?
 
-commit ef9a5d188d663753e73a3c8e8910ceab8e9305c4 upstream.
+it maybe ok if the exec'ed program also 'bought-in' to the
+fact that its cwd and open files might get changed.
+But imagine someone doing it to a login shell!
 
-The modem firmware memory requirements vary between 32M/140M on
-no-lte/lte skus respectively, so fixup the modem memory region
-to reflect the requirements.
+	David
 
-Reviewed-by: Evan Green <evgreen@chromium.org>
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-Link: https://lore.kernel.org/r/1602786476-27833-1-git-send-email-sibis@codeaurora.org
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
-
-This fixes boot of the modem on trogdor boards with the DTS from 5.10.y
-stable tree. Without this patch I run into memory assignment errors and
-then the modem fails to boot.
-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi | 4 ++++
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi         | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-index 44956e3165a1..469aad4e5948 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lte-sku.dtsi
-@@ -9,6 +9,10 @@ &ap_sar_sensor {
- 	label = "proximity-wifi-lte";
- };
- 
-+&mpss_mem {
-+	reg = <0x0 0x86000000 0x0 0x8c00000>;
-+};
-+
- &remoteproc_mpss {
- 	firmware-name = "qcom/sc7180-trogdor/modem/mba.mbn",
- 			"qcom/sc7180-trogdor/modem/qdsp6sw.mbn";
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 5b2a616c6257..cb2c47f13a8a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -39,7 +39,7 @@ atf_mem: memory@80b00000 {
- 		};
- 
- 		mpss_mem: memory@86000000 {
--			reg = <0x0 0x86000000 0x0 0x8c00000>;
-+			reg = <0x0 0x86000000 0x0 0x2000000>;
- 			no-map;
- 		};
- 
-
-base-commit: 014862eecf03f58066a957027dde73cbecdf4395
--- 
-https://chromeos.dev
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
