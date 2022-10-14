@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BA35FF3D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92CF5FF3E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiJNSw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
+        id S231153AbiJNS5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJNSwx (ORCPT
+        with ESMTP id S230158AbiJNS51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:52:53 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE5E1D0658;
-        Fri, 14 Oct 2022 11:52:52 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id o64so5968508oib.12;
-        Fri, 14 Oct 2022 11:52:52 -0700 (PDT)
+        Fri, 14 Oct 2022 14:57:27 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C911D3752
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:57:25 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 129so5086074pgc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TjTGbgLL1E+Ar8FdvDAUWbKGmgf0GFsLgLaDGmZd6uE=;
-        b=Gy5ZzZpsMsHgo5dACgAzfZDi41Zg2iJpUdpc6P2h2Dpqufa0eLfd9tEGDF0xItwRHe
-         baO1GmANcGABtTFRQQ+1oSpe3jBkIGaQ3mcOH9wB2o0f7ETW8ma9OrmlgIAV8ghMBjzm
-         0Tu7QLKS0oKPBult0jxu3idP2a1oaCC+jst9jb+uhQoKF9d9CWKLIjPzNP7A5Gtbeqn9
-         tyF5UTtCNOJiMtCErM+qcrUt2h65sNFfl9Orp9gpejQzI5+qgbXZgbS0BdXPBJ3ob2U/
-         XZM347n6yO8TarlbQ12VR3aLVQOyHStJ1XKdVfhpm7+9Mth6cYMqBsdTceRt4MqzHtLv
-         dgXw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hp3yAxY8quCRjHZnHuBPErW5fHEohLMFvOXbDGO/GC8=;
+        b=smV3l+b0gPfxsb+cqdrtrWHgL08g1JwC/C9k3qD53pTkH5zIwd+CIdIyQkxG2V3LLQ
+         vr0fhAZDODX1iShv+uzVVoKO2yI7QS7Dpy4QRu2J0zo+aNXAVzvGg9sHUoPxlMruufUT
+         Kd/EU2UsY1bQRGYb9CuGI8JhB7KR+4XGd9bVk3KgrDAwpXMdf9mvoLDt+7277BOEjAQV
+         15NUZRhkPpmEySXzwlsNUL2z1AS+68J/MFJRdyKFhuc1w6rWzoLKg91755NPIspVj/io
+         XF7nOZ5WJqalD97V+ZX9AqmTvPbtx0IjpzWhO5nEiArwNwQFjprucchbkW3wnXB21FW0
+         xdnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TjTGbgLL1E+Ar8FdvDAUWbKGmgf0GFsLgLaDGmZd6uE=;
-        b=ijTp+sxqK7v2EV0Mgnp15F4nLFHKxUH/fziP1HAYxQwZBxhQXmdiCu0mskQpauqDm5
-         6gCxdvuYo8igWUuHs0dQEr0rAHnk/2yQv2U5xtxJs99VHzIw6t2ob5bk3KPEjpsv8+0+
-         IJStTbdSkvnVudtCaU3riLILNi/viwxDr3NywDgg+JrT8o2kcJvRlDFRTcuyCf5vFxa2
-         dwVC8WV2Pb8TqfBJ+C3Z8We05/RTpSyi3AI816t/wyRmkaVpTnbod3PAWtbSX/yECq8z
-         NYUwqLIW5NAh4V4GGCpShQoTeBrZyLil7j8qNapZ7q+3JQZxAlbxNyOiWP/XTTGtj2zy
-         eD3g==
-X-Gm-Message-State: ACrzQf2LUXrh3RRBowUrpZqC0k6/gPpw6c7IafBza5F/HUI4xEMnZzE6
-        7G7j04C/bLI89l4jwvcrA4RL3wwBvN0=
-X-Google-Smtp-Source: AMsMyM551BdHYSzlImPOkXj9Q81CtG36Oq7PnoacevHfrCv6nonFja0ABoThaMMo8g7FFTH6kxTrEw==
-X-Received: by 2002:a05:6808:1285:b0:350:9908:6394 with SMTP id a5-20020a056808128500b0035099086394mr8265376oiw.150.1665773572327;
-        Fri, 14 Oct 2022 11:52:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:b45a:72e4:d631:1b4c? ([2600:1700:2442:6db0:b45a:72e4:d631:1b4c])
-        by smtp.gmail.com with ESMTPSA id f23-20020a9d7b57000000b00661b5e95173sm1559424oto.35.2022.10.14.11.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 11:52:51 -0700 (PDT)
-Message-ID: <fbfb817c-6f09-32d0-fafc-7d37618e2886@gmail.com>
-Date:   Fri, 14 Oct 2022 13:52:50 -0500
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hp3yAxY8quCRjHZnHuBPErW5fHEohLMFvOXbDGO/GC8=;
+        b=CiQSO9sRKBjXs9Us1Ra7QwEQvaWlFYvbViE4QrN4a1rvGUtnqUGF3lgTusazKhIQHn
+         UyVH0Hw3qxIntfo3wFfECxgYOlwKU9aMq/x2FlanrVaMMY+78HlgrlaRwG73IhpI/1W9
+         vKrBYDCnHu+9eRqKwL/Vi4NXsfYWkT6ga5anp668aNUMRWXN8oBeEDyLMJXa33tgf1d7
+         plc9zcmiv/unu4Skwka15KREzDpFTxDyxtP/1LWDtCKXY2dmVem61T+VPMhv0OHgH1EF
+         NhxHesd8OT4ASbG+CCyXnUuP+Ok//h9YUE/yH8TYfwpkM8O2xeBZDIFbMcYuX8KMYxJk
+         qpqQ==
+X-Gm-Message-State: ACrzQf0lOgP1Pdo3BOqr2OOry1AVzR2tLARGlTxKg2RsVVrtWvQNFPc2
+        EAMacXPqSnVbSwziKl56Smu65g==
+X-Google-Smtp-Source: AMsMyM4sMMNxa+29AKQJlblJPyT5lnKnzMKJX7jVmbsXLFeWuFqUiTCO3icedQ7T+zlfYZ0ltLMusQ==
+X-Received: by 2002:a63:2483:0:b0:461:ab67:ccfb with SMTP id k125-20020a632483000000b00461ab67ccfbmr5521853pgk.341.1665773844428;
+        Fri, 14 Oct 2022 11:57:24 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j5-20020a625505000000b00562019b961asm2064125pfb.188.2022.10.14.11.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 11:57:23 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 18:57:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 7/8] KVM: Handle page fault for private memory
+Message-ID: <Y0mxEFpvS7O96CCD@google.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-8-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devicesgain,
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        helgaas@kernel.org, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
- <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
- <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
- <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
- <20221010104210.68edf825@fixe.home>
- <0d571d21-507d-fcc5-bf58-d02f958de28a@gmail.com>
- <20221013100245.14c509ec@fixe.home>
- <c427fd85-3746-bf26-e4a3-9b2aa53f6572@gmail.com>
- <CAL_Jsq+aiJbrna6kpvb9k=KWUwMH-k8_Y_W1+HkJpHyGEee7NA@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAL_Jsq+aiJbrna6kpvb9k=KWUwMH-k8_Y_W1+HkJpHyGEee7NA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915142913.2213336-8-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,89 +100,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 12:33, Rob Herring wrote:
-> On Thu, Oct 13, 2022 at 12:28 PM Frank Rowand <frowand.list@gmail.com> wrote:
->>
->> On 10/13/22 03:02, Clément Léger wrote:
->>> Le Thu, 13 Oct 2022 01:05:26 -0500,
->>> Frank Rowand <frowand.list@gmail.com> a écrit :
->>>
->>>>> This would also require two different descriptions of the same card
->>>>> (for ACPI and device-tree) and would require the final user to create a
->>>>> specific overlay for its device based on the PCI slots the card is
->>>>> plugged in.
->>>>
->>>> One of the many missing pieces of overlay support.  There have been several
->>>> discussion of how to describe a "socket" in a device tree that a device
->>>> could be plugged into, where a single device tree subtree .dtb could be
->>>> relocated to one or more different socket locations.  Thus in this
->>>> case a single overlay could be relocated to various PCI slots.
->>>>
->>>> I don't expect be getting involved in any future efforts around sockets
->>>> (see my following comment for why).
->>>>
->>>>>
->>>>> The solution we proposed (Lizhi and I) allows to overcome these
->>>>> problems and is way easier to use. Fixing the potential bugs that might
->>>>> exists in the overlay layer seems a way better idea that just pushing
->>>>
->>>> It is not potential bugs.  The current run time overlay implementation is
->>>> proof of concept quality and completeness.  It is not production ready.
->>>>
->>>> I got an opportunity for early retirement a couple of weeks ago.  My first
->>>> inclination was to continue the same level of device tree maintainership,
->>>> but I am quickly realizing that there are other activities that I would
->>>> like to devote my time and energy to.  I will continue to support Rob with
->>>> minor patch reviews and testing, and potentially finishing up some
->>>> improvements to unittest.  On the other hand, bringing run time overlay
->>>> support to product quality would be a major investment of my time that I
->>>> am not willing to continue.
->>>
->>> Hi Frank,
->>>
->>> This explains your position on the overlay support and I can
->>> certainly understand it ! Regarding the fact that it would enter
->>
->> No, my position on the technical aspects of overlay support is totally
->> unchanged.
->>
->> The only thing that has changed is that my time will not be available to
->> assist in future overlay related work.  The burden for this will fall
->> more on Rob than it has in the past.
-> 
-> s/Rob/someone that steps up to maintain the overlay code/
-> 
->>> "production", the devices we are talking about are not really
->>> widespread yet? This would be a good opportunity to gather feedback
->>> early and improve the support gradually. We could probably even be able
->>> to support improvements in the overlay code if needed I guess.
->>
->> That is avoiding my point about the current implementation being
->> proof of concept.
-> 
+On Thu, Sep 15, 2022, Chao Peng wrote:
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index a0f198cede3d..81ab20003824 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3028,6 +3028,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
+>  			break;
+>  	}
+>  
+> +	if (kvm_mem_is_private(kvm, gfn))
 
+Rather than reload the Xarray info, which is unnecessary overhead, pass in
+@is_private.  The caller must hold mmu_lock, i.e. invalidations from
+private<->shared conversions will be stalled and will zap the new SPTE if the
+state is changed.
 
-> I think it would be better to talk in terms of under what conditions
-> the overlay support is adequate (for production) rather than a blanket
-> statement that it is not-production ready. 
+E.g.
 
-I sort of agree.  Use of run time overlays has been narrowly supported
-for use by a limited set of very cautious developers in a very constrained
-usage.
-
-> A large part of it is
-> really outside the code itself and related to going from static to
-> dynamic DT. There are certainly issues, but dynamic DTs have been used
-> in production for a very long time. However, that usage has been
-> constrained.
-
-Yes, to the dynamic DT comments.
-
-When the run time overlay code was added the overlay code used the existing
-dynamic DT code as a foundation but did not address the architectural
-issues that are exposed by using the dynamic DT code in a less constrained
-manner.
-
-> 
-> Rob
-
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index d68944f07b4b..44eea47697d8 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3072,8 +3072,8 @@ void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+         * Enforce the iTLB multihit workaround after capturing the requested
+         * level, which will be used to do precise, accurate accounting.
+         */
+-       fault->req_level = kvm_mmu_max_mapping_level(vcpu->kvm, slot,
+-                                                    fault->gfn, fault->max_level);
++       fault->req_level = kvm_mmu_max_mapping_level(vcpu->kvm, slot, fault->gfn,
++                                                    fault->max_level, fault->is_private);
+        if (fault->req_level == PG_LEVEL_4K || fault->huge_page_disallowed)
+                return;
+ 
+@@ -6460,7 +6460,7 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
+                 */
+                if (sp->role.direct &&
+                    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
+-                                                              PG_LEVEL_NUM)) {
++                                                              PG_LEVEL_NUM, false)) {
+                        kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
+ 
+                        if (kvm_available_flush_tlb_with_range())
+diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+index 7670c13ce251..9acdf72537ce 100644
+--- a/arch/x86/kvm/mmu/spte.h
++++ b/arch/x86/kvm/mmu/spte.h
+@@ -315,6 +315,12 @@ static inline bool is_dirty_spte(u64 spte)
+        return dirty_mask ? spte & dirty_mask : spte & PT_WRITABLE_MASK;
+ }
+ 
++static inline bool is_private_spte(u64 spte)
++{
++       /* FIXME: Query C-bit/S-bit for SEV/TDX. */
++       return false;
++}
++
+ static inline u64 get_rsvd_bits(struct rsvd_bits_validate *rsvd_check, u64 pte,
+                                int level)
+ {
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 672f0432d777..69ba00157e90 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1767,8 +1767,9 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+                if (iter.gfn < start || iter.gfn >= end)
+                        continue;
+ 
+-               max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
+-                                                             iter.gfn, PG_LEVEL_NUM);
++               max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
++                                                             PG_LEVEL_NUM,
++                                                             is_private_spte(iter.old_spte));
+                if (max_mapping_level < iter.level)
+                        continue;
+ 
