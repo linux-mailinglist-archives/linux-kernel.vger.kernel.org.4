@@ -2,124 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F1A5FF522
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A175FF523
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJNVRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S229786AbiJNVSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJNVRS (ORCPT
+        with ESMTP id S229598AbiJNVSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:17:18 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A658CEE8B3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:17:16 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 7CDF7642172E;
-        Fri, 14 Oct 2022 23:17:15 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EueKNQ03VQhz; Fri, 14 Oct 2022 23:17:15 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 395E3642172F;
-        Fri, 14 Oct 2022 23:17:15 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id sKScj7yUuC4f; Fri, 14 Oct 2022 23:17:15 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 243B7642172E;
-        Fri, 14 Oct 2022 23:17:15 +0200 (CEST)
-Date:   Fri, 14 Oct 2022 23:17:15 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     torvalds <torvalds@linux-foundation.org>
-Cc:     linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1664125781.30715.1665782235123.JavaMail.zimbra@nod.at>
-Subject: [GIT PULL] UML updates for 6.1-rc1
+        Fri, 14 Oct 2022 17:18:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DDAF88EE
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:18:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 232BB61B8D
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C5EC433C1;
+        Fri, 14 Oct 2022 21:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665782288;
+        bh=J6PgskZaAY1qyGHi1l6L6dU7ZAigdju+rA7uW8rvJK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NwXHMijSjb74jNvLdzhT4c+M0NTILDkkhwY1rh1MZwqVvxOoDiIClA8F9b6uN8zsQ
+         RrufGW9bGPu17NRSqJyM/Apv6sGywatUPt4w+r7jSGECot2Njyl8+5vdZ7IDRgQfao
+         jpS8pGDS4NJV9MQrTu7tcAZcF7o63jjYUqu7TSCYu4YUOBgugkE5hDfcqrTYgzPpxH
+         EuxS97FL2NY1riU9ZqbsrA3APgt7zEg0lWXP5y6LGcFevg5BoQ+x4b1EpSLUXhHNiJ
+         WgJQ0tdAI+ID1ar20Fi5RYccfExXmf3kawsjGNNqU3lGPdz2DwGPClU1m85oL1RsfE
+         kHEQz383xLBTw==
+Date:   Fri, 14 Oct 2022 14:18:06 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/4] ARM: remove lazy evaluation in Makefile
+Message-ID: <Y0nSDuEumerVwyHT@dev-arch.thelio-3990X>
+References: <20221014201354.3190007-1-ndesaulniers@google.com>
+ <20221014201354.3190007-2-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Index: eu8Lr/WFHSi3zrjtn8iP5stRMfVGvQ==
-Thread-Topic: UML updates for 6.1-rc1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014201354.3190007-2-ndesaulniers@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Fri, Oct 14, 2022 at 01:13:51PM -0700, Nick Desaulniers wrote:
+> arch-y and tune-y used lazy evaluation since they used to contain
+> cc-option checks. They don't any longer, so just eagerly evaluate these
+> command line flags.
+> 
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-  Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git tags/for-linus-6.1-rc1
-
-for you to fetch changes up to 193cb8372424184dde28088a4230a5fed0afb0ad:
-
-  uml: Remove the initialization of statics to 0 (2022-09-19 23:10:07 +0200)
-
-----------------------------------------------------------------
-This pull request contains the following changes for UML:
-
-- Move to strscpy()
-- Improve panic notifiers
-- Fix NR_CPUS usage
-- Fixes for various comments
-- Fixes for virtio driver
-
-----------------------------------------------------------------
-Benjamin Beichler (1):
-      um: read multiple msg from virtio slave request fd
-
-Christian Lamparter (1):
-      um: increase default virtual physical memory to 64 MiB
-
-Gaosheng Cui (1):
-      um: remove unused reactivate_chan() declaration
-
-Guilherme G. Piccoli (1):
-      um: Improve panic notifiers consistency and ordering
-
-Huacai Chen (1):
-      UM: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-
-Jason Wang (1):
-      um: Fix comment typo
-
-Shaomin Deng (1):
-      uml: Remove the initialization of statics to 0
-
-Wolfram Sang (2):
-      um: move from strlcpy with unused retval to strscpy
-      hostfs: move from strlcpy with unused retval to strscpy
-
-Xin Gao (1):
-      um: Do not initialise statics to 0.
-
-Xiu Jianfeng (2):
-      um: virt-pci: add __init/__exit annotations to module init/exit funcs
-      um: mmaper: add __exit annotations to module exit funcs
-
- arch/um/drivers/chan.h          |  1 -
- arch/um/drivers/mconsole_kern.c |  9 +++---
- arch/um/drivers/mmapper_kern.c  |  2 +-
- arch/um/drivers/net_kern.c      |  2 +-
- arch/um/drivers/ssl.c           |  2 +-
- arch/um/drivers/stdio_console.c |  2 +-
- arch/um/drivers/ubd_kern.c      |  2 +-
- arch/um/drivers/vector_kern.c   |  2 +-
- arch/um/drivers/virt-pci.c      |  4 +--
- arch/um/drivers/virtio_uml.c    | 71 +++++++++++++++++++++--------------------
- arch/um/kernel/physmem.c        |  2 +-
- arch/um/kernel/um_arch.c        | 14 ++++----
- arch/um/kernel/umid.c           |  2 +-
- fs/hostfs/hostfs_kern.c         |  2 +-
- 14 files changed, 59 insertions(+), 58 deletions(-)
+> ---
+> No change from v3.
+> 
+>  arch/arm/Makefile | 60 +++++++++++++++++++++--------------------------
+>  1 file changed, 27 insertions(+), 33 deletions(-)
+> 
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index c846119c448f..8dd943b50b7d 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -63,44 +63,38 @@ KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
+>  # Note that GCC does not numerically define an architecture version
+>  # macro, but instead defines a whole series of macros which makes
+>  # testing for a specific architecture or later rather impossible.
+> -arch-$(CONFIG_CPU_32v7M)	=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
+> -arch-$(CONFIG_CPU_32v7)		=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
+> -arch-$(CONFIG_CPU_32v6)		=-D__LINUX_ARM_ARCH__=6 -march=armv6
+> -# Only override the compiler option if ARMv6. The ARMv6K extensions are
+> +arch-$(CONFIG_CPU_32v7M)	:=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
+> +arch-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
+> +arch-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6 -march=armv6
+> +# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
+>  # always available in ARMv7
+>  ifeq ($(CONFIG_CPU_32v6),y)
+> -arch-$(CONFIG_CPU_32v6K)	=-D__LINUX_ARM_ARCH__=6 -march=armv6k
+> +arch-$(CONFIG_CPU_32v6K)	:=-D__LINUX_ARM_ARCH__=6 -march=armv6k
+>  endif
+> -arch-$(CONFIG_CPU_32v5)		=-D__LINUX_ARM_ARCH__=5 -march=armv5te
+> -arch-$(CONFIG_CPU_32v4T)	=-D__LINUX_ARM_ARCH__=4 -march=armv4t
+> -arch-$(CONFIG_CPU_32v4)		=-D__LINUX_ARM_ARCH__=4 -march=armv4
+> -arch-$(CONFIG_CPU_32v3)		=-D__LINUX_ARM_ARCH__=3 -march=armv3m
+> -
+> -# Evaluate arch cc-option calls now
+> -arch-y := $(arch-y)
+> +arch-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5 -march=armv5te
+> +arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
+> +arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
+> +arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3m
+>  
+>  # This selects how we optimise for the processor.
+> -tune-$(CONFIG_CPU_ARM7TDMI)	=-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM720T)	=-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM740T)	=-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM9TDMI)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM940T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM946E)	=-mtune=arm9e
+> -tune-$(CONFIG_CPU_ARM920T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM922T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM925T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM926T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_FA526)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_SA110)	=-mtune=strongarm110
+> -tune-$(CONFIG_CPU_SA1100)	=-mtune=strongarm1100
+> -tune-$(CONFIG_CPU_XSCALE)	=-mtune=xscale
+> -tune-$(CONFIG_CPU_XSC3)		=-mtune=xscale
+> -tune-$(CONFIG_CPU_FEROCEON)	=-mtune=xscale
+> -tune-$(CONFIG_CPU_V6)		=-mtune=arm1136j-s
+> -tune-$(CONFIG_CPU_V6K)		=-mtune=arm1136j-s
+> -
+> -# Evaluate tune cc-option calls now
+> -tune-y := $(tune-y)
+> +tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM720T)	:=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM740T)	:=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM9TDMI)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM940T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM946E)	:=-mtune=arm9e
+> +tune-$(CONFIG_CPU_ARM920T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM922T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM925T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM926T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_FA526)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_SA110)	:=-mtune=strongarm110
+> +tune-$(CONFIG_CPU_SA1100)	:=-mtune=strongarm1100
+> +tune-$(CONFIG_CPU_XSCALE)	:=-mtune=xscale
+> +tune-$(CONFIG_CPU_XSC3)		:=-mtune=xscale
+> +tune-$(CONFIG_CPU_FEROCEON)	:=-mtune=xscale
+> +tune-$(CONFIG_CPU_V6)		:=-mtune=arm1136j-s
+> +tune-$(CONFIG_CPU_V6K)		:=-mtune=arm1136j-s
+>  
+>  ifeq ($(CONFIG_AEABI),y)
+>  CFLAGS_ABI	:=-mabi=aapcs-linux -mfpu=vfp
+> -- 
+> 2.38.0.413.g74048e4d9e-goog
+> 
+> 
