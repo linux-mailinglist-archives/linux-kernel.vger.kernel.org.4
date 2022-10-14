@@ -2,136 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3AA5FF2C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A540A5FF2C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbiJNRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S231276AbiJNRLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiJNRLB (ORCPT
+        with ESMTP id S231231AbiJNRKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:11:01 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFC71D5863
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 10:10:54 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id k11-20020aa792cb000000b00558674e8e7fso3175357pfa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 10:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v9ap2GLZvM/h5WRSh6U8yqJEQTu6U3qmUyyLz0cSVPc=;
-        b=EHXIjcEVaP7GqJu7+/7iwMQnBTtvMzb0JNHXjKS/ZxLiViC57AmLU08ZKnjpnGCP3S
-         YgBZrJcXF0nYt6Oj8HeoePeKbFrCOcPGOd2U0bXoD9U57xmAD1ElzzgboS9ngHKQ6sm3
-         73I+Qo3dmVEV/XMEkXmIZrGDSCYB+hcsKmHvu+LxfAlrWEe9PzzhujoJVskKUavQDINh
-         lpLlENpfUFYBCNdnKtl8qLYecLygj0ue1C/qrZvwaKcPjndqm0v+0ulPPgte2XmrpXF6
-         wfyrFIazoOr/rsFFudAktPdpwATeRmQhaqS6rqXaSYU8F4vAiamH6zZzcxbAPFwaksk5
-         t9Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v9ap2GLZvM/h5WRSh6U8yqJEQTu6U3qmUyyLz0cSVPc=;
-        b=Zud1pSMcg8/BLEpXKMNAVuQhqLmpBlCjQ5I+V+dr6Z0++AuoNX9crmM2g5Sc34voSv
-         YrlzFy3o+bzUmJH3wuGtgCoH5kIs48yMrHyPSAkdunmLTToOLe2x4QztSt8hmNedwKSa
-         oe6tF9bdambmbHmS7jULsKosVqLe0tpk52yyt8yEx49Xpwg8bOijJIZFpmT+kMmn+JTE
-         DBjE3zBrVVN0zwdsfdzVDC396JWGsoj2uMdi1Uvv1N4sINSu2WxMRvUIp1xazVtU6bx8
-         n8nb/fUdIUT5z8WvtJqXHra4NPDDJoH1N6jfaiBjfZ1i/lYIRh0JoiGtYUtW0PEJ0QfA
-         kTgw==
-X-Gm-Message-State: ACrzQf0YkN4pK2lPaylt2YAnjlopM37CxwxGyOHZRtLJV7tbC7JbPG5T
-        wDHWFLN8B0AJ4qJEhSfbur7AqRgP4ROO/VK2QVU=
-X-Google-Smtp-Source: AMsMyM4YzRBXmzyhCa/4pBcn2mG0C8gX42INaXx++KNjjHjH35AjvdUI0Z61ht5TLtZm4/EMlCQbZM29Psqw2nv0hHA=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:ff3e:881c:4c2c:b8c9])
- (user=ndesaulniers job=sendgmr) by 2002:a62:1744:0:b0:562:4e9b:3e0c with SMTP
- id 65-20020a621744000000b005624e9b3e0cmr6202729pfx.63.1665767452872; Fri, 14
- Oct 2022 10:10:52 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 10:10:40 -0700
-In-Reply-To: <Y0mSVQCQer7fEKgu@kroah.com>
-Mime-Version: 1.0
-References: <Y0mSVQCQer7fEKgu@kroah.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665767440; l=2239;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=kVkxjDQc5kjwHf3srGXAwtiAks3feBD+FzGTuZwcG7s=;
- b=xBNfNpF27rA58YIkIpHdFJ8sCZIZsRqpxhp19dqNIfQZGlYiV1zD8vSBeuNSlVsyMVwkwB4BqEkh
- 8b6o41b2BqirH9MpbAfxx9PHV7mtZTw0Rn5RAqE/2zrNXGHNS2Rt
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221014171040.849726-1-ndesaulniers@google.com>
-Subject: [PATCH v2] Documentation: process: replace outdated LTS table w/ link
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Hutchings <ben@decadent.org.uk>,
-        Sasha Levin <sashal@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tyler Hicks <code@tyhicks.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 13:10:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081FB1ACABA;
+        Fri, 14 Oct 2022 10:10:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8949E61BD1;
+        Fri, 14 Oct 2022 17:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1669C433D6;
+        Fri, 14 Oct 2022 17:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665767443;
+        bh=h1ZcOrur4TJeGwPpm76nE+8Oc267yBVgjArLBmRvdEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V2GSIz1DbBVxLG+rKYKYlDhGQOHkEfjNRC8vZtLNlPkFYqCHiZI+GaH14mtNHa+tM
+         CewaQ4ktqTh2kGctbw2eyV128CJH/RfGZ7FMcL5UbcP70/kqZa80jK6W+8gFMOVUAM
+         55h5/ngRkRkQ/HnX+rtVMZ5rqOSxEpLUsF/cThTa9KgjPQresGEDslFDkZlddIsUzS
+         sL7BQ5kco/pbTVmjF/pwoow0Q/OxLvkcOz2GxA0nE1H0oM8tM3YOv8OSmhh1rSNSNu
+         5jS44D7gsgtCTQ9GH8pD/9Fl6d39Y9xID2qUlXyj73WVAjfjB087bB7IkceXRTLibt
+         f4VjU0V4sDwUg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id EDB314062C; Fri, 14 Oct 2022 14:10:40 -0300 (-03)
+Date:   Fri, 14 Oct 2022 14:10:40 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v2] perf stat: Support old kernels for bperf cgroup
+ counting
+Message-ID: <Y0mYEBVbJTwNIjSM@kernel.org>
+References: <Y0Sx2KWX4gPlLytq@slm.duckdns.org>
+ <20221011052808.282394-1-namhyung@kernel.org>
+ <Y0Wfl88objrECjSo@slm.duckdns.org>
+ <Y0ljzN920sWalEHR@kernel.org>
+ <Y0mRGJx4Mc7t7fGB@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y0mRGJx4Mc7t7fGB@slm.duckdns.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing table was a bit outdated.
+Em Fri, Oct 14, 2022 at 06:40:56AM -1000, Tejun Heo escreveu:
+> On Fri, Oct 14, 2022 at 10:27:40AM -0300, Arnaldo Carvalho de Melo wrote:
+> > Hey, I noticed that the perf build is broken for the
+> > tools/perf/util/bpf_skel/bperf_cgroup.bpf.c skell, so I tried using b4
+> > on this Namhyung patch, it ended up getting a newer version, by Tejun,
+> > that mixes up kernel code and tooling, which, when I tried to apply
+> > upstream didn't work.
 
-3.16 was EOL in 2020.
-4.4 was EOL in 2022.
+> > Please try not to mix up kernel and tools/ changes in the same patch to
+> > avoid these issues.
+ 
+> I didn't write a newer version of this patch. What are you talking about?
 
-5.10 is new in 2020.
-5.15 is new in 2021.
+So, I saw this message from you in reply to Namhyung's v2 patch:
 
-We'll see if 6.1 becomes LTS in 2022.
+--------------------------
 
-Rather than keep this table updated, it does duplicate information from
-multiple kernel.org pages. Make one less duplication site that needs to
-be updated and simply refer to the kernel.org page on releases.
+Date: Tue, 11 Oct 2022 06:53:43 -1000
+From: Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v2] perf stat: Support old kernels for bperf cgroup counting
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, Song Liu
+        <songliubraving@fb.com>, bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Sender: Tejun Heo <htejun@gmail.com>
+Message-ID: <Y0Wfl88objrECjSo@slm.duckdns.org>
 
-Suggested-by: Tyler Hicks <code@tyhicks.com>
-Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Mon, Oct 10, 2022 at 10:28:08PM -0700, Namhyung Kim wrote:
+> The recent change in the cgroup will break the backward compatiblity in
+> the BPF program.  It should support both old and new kernels using BPF
+> CO-RE technique.
+
+> Like the task_struct->__state handling in the offcpu analysis, we can
+> check the field name in the cgroup struct.
+
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+
+Applied to cgroup/for-6.1-fixes.
+
+Thanks.
+
+--
+tejun
+--------------------------
+
+So, I picked the message id, Y0Wfl88objrECjSo@slm.duckdns.org, and asked
+b4 to pick the patch:
+
+⬢[acme@toolbox perf]$ b4 am --help | grep -A1 -- -c,
+  -c, --check-newer-revisions
+                        Check if newer patch revisions exist
+⬢[acme@toolbox perf]$
+
+⬢[acme@toolbox perf]$ b4 am -ctsl --cc-trailers Y0Wfl88objrECjSo@slm.duckdns.org
+Grabbing thread from lore.kernel.org/all/Y0Wfl88objrECjSo%40slm.duckdns.org/t.mbox.gz
+Checking for newer revisions on https://lore.kernel.org/all/
+Analyzing 27 messages in the thread
+('Acked-by', 'Andrii Nakryiko <andrii@kernel.org>', None)
+Will use the latest revision: v3
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
 ---
-Changes v1 -> v2:
-* Rather than update table, use a link as per Tyler and Bagas.
-* Carry forward GKH's SB tag.
+  ✓ [PATCH v3] cgroup: Replace cgroup->ancestor_ids[] with ->ancestors[]
+  ---
+  ✓ Signed: DKIM/gmail.com (From: tj@kernel.org)
+---
+Total patches: 1
+---
+ Link: https://lore.kernel.org/r/YuRo2PLFH6wLgEkm@slm.duckdns.org
+ Base: not specified
+       git am ./v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors.mbx
+⬢[acme@toolbox perf]$
 
- Documentation/process/2.Process.rst | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+Which got me this:
 
-diff --git a/Documentation/process/2.Process.rst b/Documentation/process/2.Process.rst
-index e05fb1b8f8b6..6a919cffcbfd 100644
---- a/Documentation/process/2.Process.rst
-+++ b/Documentation/process/2.Process.rst
-@@ -126,17 +126,10 @@ than one development cycle past their initial release. So, for example, the
- 5.2.21 was the final stable update of the 5.2 release.
- 
- Some kernels are designated "long term" kernels; they will receive support
--for a longer period.  As of this writing, the current long term kernels
--and their maintainers are:
--
--	======  ================================	=======================
--	3.16	Ben Hutchings				(very long-term kernel)
--	4.4	Greg Kroah-Hartman & Sasha Levin	(very long-term kernel)
--	4.9	Greg Kroah-Hartman & Sasha Levin
--	4.14	Greg Kroah-Hartman & Sasha Levin
--	4.19	Greg Kroah-Hartman & Sasha Levin
--	5.4	Greg Kroah-Hartman & Sasha Levin
--	======  ================================	=======================
-+for a longer period.  Please refer to the following link for the list of active
-+long term kernel versions and their maintainers:
-+
-+	https://www.kernel.org/category/releases.html
- 
- The selection of a kernel for long-term support is purely a matter of a
- maintainer having the need and the time to maintain that release.  There
+⬢[acme@toolbox perf]$ diffstat ./v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors.mbx
+ include/linux/cgroup-defs.h                 |   16 ++++++++++------
+ include/linux/cgroup.h                      |    8 +++-----
+ kernel/cgroup/cgroup.c                      |    7 +++----
+ net/netfilter/nft_socket.c                  |    9 +++++----
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c |    2 +-
+ 5 files changed, 22 insertions(+), 20 deletions(-)
+⬢[acme@toolbox perf]$
 
-base-commit: 9c9155a3509a2ebdb06d77c7a621e9685c802eac
--- 
-2.38.0.413.g74048e4d9e-goog
+⬢[acme@toolbox perf]$ grep From: ./v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors.mbx
+From: Tejun Heo <tj@kernel.org>
+⬢[acme@toolbox perf]$
 
+That mixes kernel and tools bits and touches
+tools/perf/util/bpf_skel/bperf_cgroup.bpf.c, hence my request to add me
+to the CC list for patches touching tools/perf/.
+
+My assumption that it was a new patch was because b4 somehow got to
+v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors,
+which has v3 and touches the tools cgroup bpf skel.
+
+So it seems b4 is confused somehow.
+
+Hope this clarifies.
+
+- Arnaldo
