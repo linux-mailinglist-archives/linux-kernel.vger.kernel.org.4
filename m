@@ -2,175 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EABE5FF1DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EA35FF1E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiJNP55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S230254AbiJNP6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJNP5s (ORCPT
+        with ESMTP id S229542AbiJNP6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:57:48 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE92107CD0;
-        Fri, 14 Oct 2022 08:57:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F1ZX6YGbPHNxV6JYtmX1QCH45+nQXx5JEoelF8TRJkNXzzXt1HMW612D4CHAbZNBOsAvS9Ivm8UVd/a8ENpsvk/PmaChARJRLvSr7HudgZ3/KrQ+b1gb6r83/3N6RullG2XrLBgwlLIkiQ9vye8uRGJDPt4AiuI71y+Mg7LsSqxgC5Ve4NrEl5dRs+PYwr7IAAuYJtwFEJwjw9siYt+psGg66PijOSZEb/ltVcjn3sHB9JXJJ5ftJmH8imXkV/3RP6ldGHJd9pChkLPjlVdTh6BXIqXhN0DonUqYFHKNc3B62YkG13FNcA0B/qUykFmP93wrGnjiohtWJWDi7aerKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N+5sISLAJmdAf9DtcWEir7gP12Y165gCqjLNmighxuc=;
- b=FxttUfb+rv0TTf1MX+gE78NNkBG00BhsCPsIFglaxR/iCIDW/tqpYugxh3RCJXXucm/pAqoh6N27nHT30SCwTBKhtJ9CLpLRhexUiSmO4zvskQksKppVY+IEasCejGs4nU9D5LwqxraxKxXyep4RozbS3ABMek8YbGDahqm8CgUbHa1mLIPglsDbkWCL8T0kBDqalp2tOoxJ5gsTFF9wHwAvcgzA8re7bVMxrv+i+94oif0I1RlVd7YoELNTcUoXoUaaH25nhMtHAsk2w7A9aHBMdKwGy7eaocaxLeFKxrDqWNNRQppXVezDZ/Oe1+ZLeH7JP24ST0rvYR5FtmMA1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N+5sISLAJmdAf9DtcWEir7gP12Y165gCqjLNmighxuc=;
- b=WSbhtSCP9oWvNBPidL2pkIKM71zVCdoUdXg6YvSnyArtcgrTLU3plk2AVYuW3VHHwLUOVRz4RB3Ikq2LH0wuHmj5HwIVSMdZ60eVp2aEbt/1VJHrJbqsetTxXIi3HIbnBd1WRDKtD6sXBPk4dlBDcFb2I1bOX5I6GYn7yBUeQ9kPK9sKaWux8KgLbX/IQJAUIkzZDUKJlxY4d0mFnSvVGJgxeZXQ+WNYoc/DHMV08ywUUlw0za/ni8Yq11ypJXHrbtSWmSvIGEgNFxyK1i3+65imKpJ+ZmlhuBoVF0YXBfQKb+rXl/jyxuFuT7tzRLQ9XZRCFp2LI+WohcXxkPn2iA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- PH8PR12MB7302.namprd12.prod.outlook.com (2603:10b6:510:221::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Fri, 14 Oct
- 2022 15:57:44 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66%5]) with mapi id 15.20.5723.029; Fri, 14 Oct 2022
- 15:57:44 +0000
-Message-ID: <e43be9a1-4a8f-00f0-9654-4c52e858c913@nvidia.com>
-Date:   Fri, 14 Oct 2022 16:57:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fri, 14 Oct 2022 11:58:49 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E582AC7B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:48 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fy4so11469131ejc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W5eO6i8yGqM/Qk/helghde+sK2B6uuy7iGWdi59LQv0=;
+        b=m5i1o0Ap34XB2wlP21XgYIqsVDRRQOqNgXMX5tJzWsaI6hGrAZN9MXRzGc93zF2XPA
+         8L/SLRgslFncCk0nXLKfro+LvVAuBiIJEkGi+kku5MAuwTr4Av+VkPDyus9j5yCxKY0e
+         YOtAgl4m9DWHQK3UYRyVu1beWyQGVeOVcZD55vwQwp4fSb0QhgMCnZzRu0uhrRUo1Tvq
+         XZgdlHZK3gCz7g4TIGW4i3ZvbPG7Gm3XysvcL00yJwc2GO4L3l9DhN608jkbddOb/W9j
+         f6nCuDr1Hx3UpL7i6FB65/PdJkLsqhTn6pdhYB+vtA5dMZT/TwoMfVhWXkBkx0/mc7XG
+         dKSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W5eO6i8yGqM/Qk/helghde+sK2B6uuy7iGWdi59LQv0=;
+        b=d2MwV0a+HqUlwEeOXMubGvw18tFxFC5V59ifdr0sNdE0SQY41+GhLYZtK7G9bYV2Ig
+         h3mUKcjMmI5C2CjxuM+GIZJfDv4WCyVWCGgwPxQcL94WX3sqn3QT6DKkIomvzlWx8RUc
+         cUXeqafw8VHoRq46YPpOZIwip0Aq/S+uJ3VzqZAO3nYksaoKDl0O8v8v2rxds4GcPwEx
+         Hpb0oupPnYxWiDRvrefXQ9/7GfoRrT1mr5chU2W8nmkGmPSEOJ3bH5jOdgPeYZr2JiX2
+         ZbxtNfNPC8x8L7n1ol78yGUk9nC1i+6x1TCNdCE5GpKoVh6/+hYAcgoJ/wkKS1hgMk+L
+         /jag==
+X-Gm-Message-State: ACrzQf0abUUp1gg+QyhBl1OuIpLgaFmUaQJZpDTdN7f8RGSIYkS1LDD2
+        WBjazekJvPPFf10Fws74IMqGjA==
+X-Google-Smtp-Source: AMsMyM7W6+fPu+mWcsl2mA5mLUmVxJY6ZAokGeJNv3DvlB68CliPDKXds+EoUBatPkHWx2Y7U7pt8g==
+X-Received: by 2002:a17:907:94c9:b0:78d:3544:ff0a with SMTP id dn9-20020a17090794c900b0078d3544ff0amr3984138ejc.386.1665763126950;
+        Fri, 14 Oct 2022 08:58:46 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170906944500b007262a5e2204sm1693950ejx.153.2022.10.14.08.58.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 08:58:46 -0700 (PDT)
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     x86@kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20221013175146.507746257@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0683.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:351::13) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: [PATCH v3 0/2] Fix /proc/cpuinfo cpumask warning
+Date:   Fri, 14 Oct 2022 17:58:43 +0200
+Message-Id: <20221014155845.1986223-1-ajones@ventanamicro.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH8PR12MB7302:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54d7c627-e9c1-495b-b7e2-08daadfcd4ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EXtsDTSCSnBr13EEUqIMygbluiOMmdq39yBT4soLMbA7dcJbnGOcibVa9gFMif7tGOw+g0m/BNm681RhyVdfD9F2iY6juLfXdG88KUUaxT9sI6mCMicSgryL1VUmWK7SOLi9XsQeb8dI3FmVxCkT0EYJ5iH6o7C12fQyiwIQhfawAlAJO7YDhoD6vkoXj/04fYza17dO589AWt8zTq+UhN62PZOaG8SsQnYMETFjfHo2iz9aWGVE2WVy3Ks+bDgF6kV3BJ/Rju8RNu36ibgKZJ6e+1OTRrvyWryD//2D7213jrcsj7727kUntAbPMslAMpBN1ymhD4OEOsVsu2nOPsRoGm6ejSXSkruUhhep9A0GGwVXNdaUZ4fJbp/GNjs9e9zfb21G9j2LuYgZwveYLXt8mJfBf+Dk/1C38hrJCcd7QRMGX9AEPIZ0bajjoq6Js6NUi2zNtDIti/0Kt3MhPW1dokfsbSkLAF5n0KztIVfBc0x94w4PVoX/ROBidWj44NKYYSwYeUk6dLZtxBdO4BAf/SVX5FERTHe1cZP29dsqmBTfHlva4hBDJscOXS0q03pLlJYvTlyquk9TEo7ulSP9/6HHe/fNIDdaAKHqPAZ8+YQ0qqWFFTjjy2HF6/+XF8vfj00cjISAX53lsGPau5geECsLuWo0FQi/RZxc0YICCE9nAIABkxALcv+HsWF2pJIgs0pl2yHWOoGZW4Wa0bXmxlbdNun25cDR6RKVH/WCvYAfHGkrLR8+j6fNt7Yu07jGeBGOOGMSF+JkhBN0nGgqQ5kJKMbUdsmkQKt1nIckWnjbClTV/JSHcTEhHTgIy7B0zCtCQux/Uh4IN+cyYzuNqAac5rOYY8f0UIPgCACzQ3HfQu0wMBWG5hu9MnSO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199015)(6666004)(4326008)(41300700001)(66476007)(66556008)(8676002)(2906002)(66946007)(5660300002)(38100700002)(2616005)(186003)(7416002)(6506007)(83380400001)(53546011)(8936002)(6512007)(966005)(31686004)(36756003)(478600001)(6486002)(86362001)(316002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cEMyNWU2RFJQa21yWlZTRytnN01wWmJJOFFBUkZQTFlNRmFkMFY0ellScjN5?=
- =?utf-8?B?T0lieDBucnJDMlJFQWE2Z2lhdmsxSGhmdFh2YUd1VllqUnZMWi92OW1YTVM0?=
- =?utf-8?B?bXRCeUJyaG9HdjlPZ3YxRUhzUFE5WGlvZkNrOGpWMzhyMHJTdStiUUFTMGtW?=
- =?utf-8?B?VGQwbllFRUpjWFNzbzl5UXhmTTdMcFJsREZnNGlxcG11aGFML0xOZk9xUDZZ?=
- =?utf-8?B?Tzg5RFZyY2pqWWlrbXFZeG9kZkh4ZGRBKzE5LzRZY1JkZEdXLzlybHVoRGMw?=
- =?utf-8?B?T0x2T2dNQTFZeWpGMWF4czRCZ2ZwenhVV25kSzhvWU5HeDBnTy9nYU5DUW5s?=
- =?utf-8?B?UjNvb0R4dytOZHRHbEtOams0dWRhVGkydGRiVHdlOHBpL0tJRkFtcGl1VjUv?=
- =?utf-8?B?bFptVHlGZEF2aTQ0RHpVWnhieExuWGJ0OVJSaDI5VUJoVXJWcVZwSjhFc3pi?=
- =?utf-8?B?dkxFYnBUSVZzQ1ZQREg1RGNCcnJIbU1zMWlUV01pRXJwaURkMWJmWCszUElO?=
- =?utf-8?B?emRBcE5FejRWeG5tWXlUcTZob0ZxKzN0bjROc1QxQW43QnRnQkV0aGRZdjcy?=
- =?utf-8?B?RTVsREM5cUMranBtcFZTdnJJL1g2emJSUjFNNzB0WUgzNTRYbnpGQ0ovem5x?=
- =?utf-8?B?U1JKWnZNSjNVckgvU0tWcGJJL2czVkw1TlJHR21BMUI1aUhwZVNHb2JjbUtK?=
- =?utf-8?B?cTh0T3VLUExBazhaYURUZXJ1cW45T1pmUU5rYTZ5S0V5c0NsdzZOOU0wa1Yv?=
- =?utf-8?B?bjE3SmpSRjZjbDR4Z20zTkRReDRMYjBYOFphcHVCcWpjSzYzZ3ErWUxVRElS?=
- =?utf-8?B?ak10MXlHRTU2cUpXSlZiY3BwaHVSU1Uwdkk1NUZSRGM5VzlSa1E5NlhiOFFQ?=
- =?utf-8?B?VGVETUpwb2RaYTZLWWpQaHF5a3pXOVViL292dUY3ckFNeXJsbHpWVGhpTFVq?=
- =?utf-8?B?Um5IUHh6bi83dk9mSm9zaXFmUnRxY1AvK3R6Sit3MmZIM2lubGhBeVZJMzEr?=
- =?utf-8?B?SzFadExUc0FWTmIzODZVTDNDOGhGU0loT2hXSlczMjdvcFhEejA4QkRNQ2JL?=
- =?utf-8?B?MGE3OTM0V3pveHFtT1dZT3R5TWxOZ2NSSG5NMmRKQmgwR1hoNWx6UTc4WWtt?=
- =?utf-8?B?cEYxWGpZTWllWFlNaWtNSTZSY1VPcnVncnA2UlpOYUZJdmZHS3pRdjBIaHlM?=
- =?utf-8?B?b3NyQldjVGx6ZkUxbTVBS1ZYd1BLR0dPcCtnNHduNlMxZmdEYURKRlZTZFhB?=
- =?utf-8?B?Z29WR2YydXY5dzFSSGgxRXFyeU1rU1FMejZrbFIzL282MkNzNTdxZEx0R2pU?=
- =?utf-8?B?VEt4a1lGcDVsZHVob2g3ZUxZWml4Z0VNS3lLUVZ0Rm1TU3czWG5GMWVLRTNp?=
- =?utf-8?B?QmhCQ1VKUDEySXJleG1mS05jWDgrc3NPa00wWU94eHdVUGZ2OXhwbmo4a2VK?=
- =?utf-8?B?ZjlYSDlpQUVSOXVCc0hjR0ZrOFlsLzBlNHJEYnFhTGN6SGxBQ201SzIwc2I4?=
- =?utf-8?B?MGxSWU9IdFZFOW1RcjZBMVRpTzd4WGJRWERRMERsUXNCVTBRcTlwclVMaGlG?=
- =?utf-8?B?ckJxbGpDZGJkbTNzb3phdjdRRDZhTmNLYjRXcHl3U2dMMHhwR1BYQnNlT0Ja?=
- =?utf-8?B?M3NiSTk1Z3o1Y1dFcWdjNzJvWUlCWko1YVhrT2VXZ3RzSXluczF2UU1PMlR0?=
- =?utf-8?B?VFFkT3UzcytUYUgwSFBqK1VLQXFYd3ppRjlwQVJma0oyOURKeXhjcU41MFVV?=
- =?utf-8?B?RXRhTy9GWVFBOHNOZXd1cEU5ZzhWSHE3ZUx1d0tOMDZXcjVvZTBqcGMreE5G?=
- =?utf-8?B?VTRvZnI2RFk4STBiM2xJcHZpOTlSSEdTTzdwZHpBcW1tcW5jTldPT1dQUmRs?=
- =?utf-8?B?ajJXL3N0K21ORUtYSDdkd28vM0Q5NzA5bEJ6STVuQTFmbnJVd0VOZG9ZZEVx?=
- =?utf-8?B?Z294RktvZzh4R1dYT2JuOENBMmlSMDFpZUJoQ2xpdE9Tb2tOQ1g1ZmUxNE1S?=
- =?utf-8?B?OFVJK25UNTJhd1IwUU56NHIrZ094b0RjM29nbDc0MVF2L1lEK3N3ME5zREpn?=
- =?utf-8?B?V2wzeTh3UHMwZXNscXA1QlJzQVpHcjJ1SDRJeVJ3RDNXbzlPbDdUdU0vUnRL?=
- =?utf-8?B?N1FlWUlyTGNKQWEyV1ErS0JELzQ1ZUpFd2NjejVhWklYcFpqWWpkUkptMGR6?=
- =?utf-8?B?U1drR0wwaE50bU0vSHJJWFNQN3ZHVnZYc3lKNWRzdDMrUytkMzROTXBTdlBq?=
- =?utf-8?B?bnlkUm5jbjAvem5kcVBXRnpwdTRRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54d7c627-e9c1-495b-b7e2-08daadfcd4ed
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 15:57:44.5183
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BAG8U5X/UUGbQmKwdDodiR3foNbUOZ6jcqX91Zhw1KueOuZdmo0EKxxoaisMbadkFFTxhebpHBKUEhJhhpeemg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7302
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
+started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
+are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
+start and next seq operations implement a pattern like
 
-On 13/10/2022 18:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.2 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+  n = cpumask_next(n - 1, mask);
+  show(n);
+  while (1) {
+      ++n;
+      n = cpumask_next(n - 1, mask);
+      if (n >= nr_cpu_ids)
+          break;
+      show(n);
+  }
+    
+which will issue the warning when reading /proc/cpuinfo.
 
-No new regressions for Tegra ...
+[*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
 
-Test results for stable-v6.0:
-     11 builds:	11 pass, 0 fail
-     28 boots:	28 pass, 0 fail
-     130 tests:	128 pass, 2 fail
+This series address the issue for x86 and riscv, but from a quick
+grep of cpuinfo seq operations, I think at least openrisc, powerpc,
+and s390 also need an equivalent patch. While the test is simple (see
+next paragraph) I'm not equipped to test on each architecture.
 
-Linux version:	6.0.2-rc1-g2640a427a92b
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                 tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                 tegra20-ventana, tegra210-p2371-2180,
-                 tegra210-p3450-0000, tegra30-cardhu-a04
+To test, just build a kernel with DEBUG_PER_CPU_MAPS enabled, boot to
+a shell, do 'cat /proc/cpuinfo', and look for a kernel warning.
 
-Test failures:	tegra194-p2972-0000: boot.py
-                 tegra210-p3450-0000: devices
+While the patches are being posted together in a series since they're
+for two different architectures they don't necessarily need to go
+through the same tree.
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+v3:
+  - Change condition from >= to == in order to still get a warning
+    for > as that's unexpected. [Yury]
+  - Picked up tags on the riscv patch
 
-Jon
+v2:
+  - Added all the information I should have in the first place
+    to the commit message [Boris]
+  - Changed style of fix [Boris]
+
+Andrew Jones (2):
+  RISC-V: Fix /proc/cpuinfo cpumask warning
+  x86: Fix /proc/cpuinfo cpumask warning
+
+ arch/riscv/kernel/cpu.c    | 3 +++
+ arch/x86/kernel/cpu/proc.c | 3 +++
+ 2 files changed, 6 insertions(+)
 
 -- 
-nvpublic
+2.37.3
+
