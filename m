@@ -2,140 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA805FF65E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B484C5FF664
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJNWZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S229617AbiJNWak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJNWZd (ORCPT
+        with ESMTP id S229540AbiJNWaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:25:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF166846;
-        Fri, 14 Oct 2022 15:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665786332; x=1697322332;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=crbgjyT8O52ZWI32HYW5IlNr+CfyhK7rYCZVgst+Q/E=;
-  b=D3feSMbEqHs5de/PT/qGV2u4n7iYtYJ/nn1dp+EAZdW0E+ycLiuP42gf
-   ZrqKFtpK82IuiykgX2rNUufok12LZyIGIoQ5mX+9l6oBoKFQkGZ9PP9p2
-   R7EMgfQYf6tkZs4dV7SUA4UOuD5n7H5ECrWlSM1w9RM/BrsQSoxGhtO4t
-   ozHuDzXfAmtH+o+Y1HEmSAgGZuOIB1VsffiGWYaZmGXbOOW1uCqkZKXnS
-   gRmDnkRYZSGFG9J5ImPL7uFq+9IPre8/0OvwHM2f65TmLkOv+E+doJPUj
-   c3kOt4/PJnktJHZdV/uuR5N0lHZg7ZYbPWlpOgA3gG25Yus1f4XrZN4Zn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="305472374"
-X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="305472374"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 15:25:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="578779966"
-X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="578779966"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by orsmga003.jf.intel.com with ESMTP; 14 Oct 2022 15:25:31 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Vinod Koul" <vkoul@kernel.org>,
-        "Arjan Van De Ven" <arjan.van.de.ven@intel.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>
-Cc:     dmaengine@vger.kernel.org,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, stable@vger.kernel.org
-Subject: [PATCH v2] dmaengine: idxd: Do not enable user type Work Queue without Shared Virtual Addressing
-Date:   Fri, 14 Oct 2022 15:25:41 -0700
-Message-Id: <20221014222541.3912195-1-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 14 Oct 2022 18:30:35 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502361408D
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:30:34 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id h203so5033276iof.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MQmRtQd4Y17eTEgOLxItVutgn0mL2LxkpMiy4WqkuT4=;
+        b=Dox+MWLElhSlYcloiGdbaN0HaBpQV27gSS2NUSu6jtmMVfYGrj2fyDbGgg17sPi4rH
+         lsUqZDhkqwwuZLVZlvOFNKoteJQFuuJjVWlFVCYfILVAUPEibUKcIumNIBsiga+wo/i2
+         8W64ktmmI1DN+ZsfCezcNv4AjGqIJVt/0rphSKdE9PyBxv8w9WgW40+311sazjyRZDqT
+         gE4g70Fjd1IKTAwFtIaOSfgaOJPg/k8awcCTcO6Yv7FRym6RvE8s5PNt3Dc+qnOAmpSj
+         u7R/9j1cQwgPwtG2y3ncvu0AUgx8bZhqzenjQbJ3M6kOEAu8rjaDcTYkf2l8/vOHT5PR
+         Ej5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MQmRtQd4Y17eTEgOLxItVutgn0mL2LxkpMiy4WqkuT4=;
+        b=ThdFllYfnNAHQ+pBsFRThImnt4V1LNfMbn+W2kxTiIi0eA9/hnZFywpvot+n20MTts
+         npVeCWp9rDQc3D78+fanplY9r9/yn4GUlUFcOVtp3nJi6EOuveu0bbB+A/g5cehr891i
+         DM0Q8TUbE6Gb5sR4I3mCiKIO0IVAbOM7lDBxQKP2/P4rSQpBDA0Cus2rMDCdoC2JlzKc
+         u6h+o1jDblhkjMGmtyonlvei0c+qceNJ75zOgc/+M7fUc/KUmYWSDphwAt9d1T0dkllt
+         QMZsCTqt6z4v1SF9z/PFp19ezBUu20iJ/kbZP4XwbKNpi3dn2znnzpaTZXHXVVsDoyyP
+         EeVA==
+X-Gm-Message-State: ACrzQf01/EM3gQw82XLVvBYRrtNtc4j3mJERjKNVIudNRY6w5zVxy5Re
+        bouA9aJ4MBz9pfO+8hrS4CAl8cwPScbXkhKznoRKk6p0hpE=
+X-Google-Smtp-Source: AMsMyM6XrBpWcHeAi4uT7qeU6tHY8D0h/loFjr0mJb/JFD8Gh1ekWMvbaIUtZ732UIqbBxbBUg8Jq+VVKE0EiMs4JOA=
+X-Received: by 2002:a05:6638:3a15:b0:363:ecaf:2a53 with SMTP id
+ cn21-20020a0566383a1500b00363ecaf2a53mr44236jab.66.1665786633385; Fri, 14 Oct
+ 2022 15:30:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAG48ez0B18eh3Q1853Cug8WSip7dPb2G9fhgqsPWzr0D_TBjRQ@mail.gmail.com>
+ <20221014222346.n337tvkbyr33dsdx@box.shutemov.name>
+In-Reply-To: <20221014222346.n337tvkbyr33dsdx@box.shutemov.name>
+From:   Jann Horn <jannh@google.com>
+Date:   Sat, 15 Oct 2022 00:29:57 +0200
+Message-ID: <CAG48ez1B11EFyssTi=4izy04_FBOP1qdYVhEomYRdDBXb3jHkA@mail.gmail.com>
+Subject: Re: [BUG?] X86 arch_tlbbatch_flush() seems to be lacking
+ mm_tlb_flush_nested() integration
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Andy Lutomirski <luto@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@suse.de>, Rik van Riel <riel@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the idxd_user_drv driver is bound to a Work Queue (WQ) device
-without IOMMU or with IOMMU Passthrough without Shared Virtual
-Addressing (SVA), the application gains direct access to physical
-memory via the device by programming physical address to a submitted
-descriptor. This allows direct userspace read and write access to
-arbitrary physical memory. This is inconsistent with the security
-goals of a good kernel API.
+On Sat, Oct 15, 2022 at 12:23 AM Kirill A. Shutemov
+<kirill@shutemov.name> wrote:
+> On Fri, Oct 14, 2022 at 08:19:42PM +0200, Jann Horn wrote:
+> > Hi!
+> >
+> > I haven't actually managed to reproduce this behavior, so maybe I'm
+> > just misunderstanding how this works; but I think the
+> > arch_tlbbatch_flush() path for batched TLB flushing in vmscan ought to
+> > have some kind of integration with mm_tlb_flush_nested().
+> >
+> > I think that currently, the following race could happen:
+> >
+> > [initial situation: page P is mapped into a page table of task B, but
+> > the page is not referenced, the PTE's A/D bits are clear]
+> > A: vmscan begins
+> > A: vmscan looks at P and P's PTEs, and concludes that P is not currently in use
+> > B: reads from P through the PTE, setting the Accessed bit and creating
+> > a TLB entry
+> > A: vmscan enters try_to_unmap_one()
+> > A: try_to_unmap_one() calls should_defer_flush(), which returns true
+> > A: try_to_unmap_one() removes the PTE and queues a TLB flush
+> > (arch_tlbbatch_add_mm())
+> > A: try_to_unmap_one() returns, try_to_unmap() returns to shrink_folio_list()
+> > B: calls munmap() on the VMA that mapped P
+> > B: no PTEs are removed, so no TLB flush happens
+> > B: munmap() returns
+>
+> I think here we will serialize against anon_vma/i_mmap lock in
+> __do_munmap() -> unmap_region() -> free_pgtables() that A also holds.
+>
+> So I believe munmap() is safe, but MADV_DONTNEED (and its flavours) is not.
 
-Unlike vfio_pci driver, the IDXD char device driver does not provide any
-ways to pin user pages and translate the address from user VA to IOVA or
-PA without IOMMU SVA. Therefore the application has no way to instruct the
-device to perform DMA function. This makes the char device not usable for
-normal application usage.
+shrink_folio_list() is not in a context that is operating on a
+specific MM; it is operating on a list of pages that might be mapped
+into different processes all over the system.
 
-Since user type WQ without SVA cannot be used for normal application usage
-and presents the security issue, bind idxd_user_drv driver and enable user
-type WQ only when SVA is enabled (i.e. user PASID is enabled).
-
-Fixes: 448c3de8ac83 ("dmaengine: idxd: create user driver for wq 'device'")
-Cc: stable@vger.kernel.org
-Suggested-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
----
-v2:
-- Update changlog per Dave Hansen's comments
-
- drivers/dma/idxd/cdev.c   | 18 ++++++++++++++++++
- include/uapi/linux/idxd.h |  1 +
- 2 files changed, 19 insertions(+)
-
-diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
-index c2808fd081d6..a9b96b18772f 100644
---- a/drivers/dma/idxd/cdev.c
-+++ b/drivers/dma/idxd/cdev.c
-@@ -312,6 +312,24 @@ static int idxd_user_drv_probe(struct idxd_dev *idxd_dev)
- 	if (idxd->state != IDXD_DEV_ENABLED)
- 		return -ENXIO;
- 
-+	/*
-+	 * User type WQ is enabled only when SVA is enabled for two reasons:
-+	 *   - If no IOMMU or IOMMU Passthrough without SVA, userspace
-+	 *     can directly access physical address through the WQ.
-+	 *   - The IDXD cdev driver does not provide any ways to pin
-+	 *     user pages and translate the address from user VA to IOVA or
-+	 *     PA without IOMMU SVA. Therefore the application has no way
-+	 *     to instruct the device to perform DMA function. This makes
-+	 *     the cdev not usable for normal application usage.
-+	 */
-+	if (!device_user_pasid_enabled(idxd)) {
-+		idxd->cmd_status = IDXD_SCMD_WQ_USER_NO_IOMMU;
-+		dev_dbg(&idxd->pdev->dev,
-+			"User type WQ cannot be enabled without SVA.\n");
-+
-+		return -EOPNOTSUPP;
-+	}
-+
- 	mutex_lock(&wq->wq_lock);
- 	wq->type = IDXD_WQT_USER;
- 	rc = drv_enable_wq(wq);
-diff --git a/include/uapi/linux/idxd.h b/include/uapi/linux/idxd.h
-index 095299c75828..2b9e7feba3f3 100644
---- a/include/uapi/linux/idxd.h
-+++ b/include/uapi/linux/idxd.h
-@@ -29,6 +29,7 @@ enum idxd_scmd_stat {
- 	IDXD_SCMD_WQ_NO_SIZE = 0x800e0000,
- 	IDXD_SCMD_WQ_NO_PRIV = 0x800f0000,
- 	IDXD_SCMD_WQ_IRQ_ERR = 0x80100000,
-+	IDXD_SCMD_WQ_USER_NO_IOMMU = 0x80110000,
- };
- 
- #define IDXD_SCMD_SOFTERR_MASK	0x80000000
--- 
-2.32.0
-
+So A has temporarily held those locks somewhere inside
+try_to_unmap_one(), but it will drop them before it reaches the point
+where it issues the batched TLB flush.
+And this batched TLB flush potentially covers multiple MMs at once; it
+is not targeted towards a specific MM, but towards all of the CPUs on
+which any of the touched MMs might be active.
