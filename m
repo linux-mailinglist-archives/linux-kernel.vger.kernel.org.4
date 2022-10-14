@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AAA5FF0BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50035FF0C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiJNPAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        id S229577AbiJNPDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiJNPAh (ORCPT
+        with ESMTP id S229496AbiJNPDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:00:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A3EACF70;
-        Fri, 14 Oct 2022 08:00:35 -0700 (PDT)
+        Fri, 14 Oct 2022 11:03:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E587A1CFC7E;
+        Fri, 14 Oct 2022 08:03:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF69061B76;
-        Fri, 14 Oct 2022 15:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A24C43142;
-        Fri, 14 Oct 2022 15:00:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABC52B82352;
+        Fri, 14 Oct 2022 15:03:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295C5C433C1;
+        Fri, 14 Oct 2022 15:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665759634;
-        bh=OxW0KzawkZ2Ykmwi2XDi++58/gYDRqGQfyaXHw6Or/8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZZel9hHTO+Trp5+FM0vtTfCzmIECDglx6ThzKolEuu9TtDIwBd69tuyuXHhMaCEtY
-         bRCmE7KcWt37g5a5uaK96DEzrRVgHAKjbRgj/CuUfr/x9szlImbHW3vxR4d/g00TcR
-         v+3pHd38foq/+c57gJkDmEcOyLUtwesNQV3AIf9vEdWux4O6ns5hObJRzX+RwyfyzU
-         +0Lw7YeXXvWVJY6FzJxc8tjHdE0FugpeomHUP74Iv777Hg8kVSQ3IOecv2WupsBZMI
-         FtjdqJF4R0TUQmqAWdNTfwDiPZDq1nVB3tJms3qunwf3F8NpKWt/NoXbB+tOThpnuT
-         HXUB7jdMMkoyA==
-Received: by mail-lf1-f46.google.com with SMTP id b1so7615237lfs.7;
-        Fri, 14 Oct 2022 08:00:34 -0700 (PDT)
-X-Gm-Message-State: ACrzQf01eoqzsrJ4RtzIoxnhCSATtOcjcQsLbViu5f8534dI0khM7vi+
-        iHH8SnVdX+j5t8CdH72m3gCPdsDtYq+QZ0fcz8w=
-X-Google-Smtp-Source: AMsMyM7JNwHFcEqmmO2qOEXoQqP5NFQXr7qlaf9afUajpTsJJ9l6zymlYfZZv6RkGuSq2R5t34cBRuArycH/55jvODE=
-X-Received: by 2002:a05:6512:104a:b0:4a2:9c7b:c9c with SMTP id
- c10-20020a056512104a00b004a29c7b0c9cmr1797311lfb.122.1665759632164; Fri, 14
- Oct 2022 08:00:32 -0700 (PDT)
+        s=k20201202; t=1665759828;
+        bh=8JHrqp2BtSY6zR/ZUbmdFTfoDk9yKJl0APpTHHSZIFc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fdHhq1wGeNLjcgDC6hMGXoXuyYyRBm7gnx7/Ky1DLSXnJuVoNXYUES5Ys0RymAr/g
+         LWPfsze9hHcB9snAQHxvewCvS8UjgfIoXsJlV9re8vwh5yq+I0DpeX8qGdoXT09aNK
+         6IeCJfCliAkvvLF+tdRWBV/RBbRO1+2u5ngfnUWHa9VH+2P7TTZ54b4fpsdCACv4hL
+         uC4DxZPJQB3M5Rj1LIayd5lRYvY3f2X3rlpm6smJSjj430mSejh4LoMiXrWmrfFKd8
+         sPScLnL/ET2kTweYTQd41bYmyslUB2fQvSOVg4QY5f2wFKNJ3A09VKbL/c+WSLFdES
+         cgh1YHCd+Lbag==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E709D5C32BF; Fri, 14 Oct 2022 08:03:44 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 08:03:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, rostedt@goodmis.org,
+        youssefesmat@google.com, surenb@google.com
+Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
+Message-ID: <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221011180142.2742289-1-joel@joelfernandes.org>
+ <20221011180142.2742289-2-joel@joelfernandes.org>
+ <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
+ <20221014144019.GB1108603@lothringen>
 MIME-Version: 1.0
-References: <20221013210648.137452-1-gpiccoli@igalia.com> <20221013210648.137452-4-gpiccoli@igalia.com>
- <CAMj1kXG7syjMsOL+AcUMfT0_nhGde6qc_6MexpdDtxFQpS2=7A@mail.gmail.com> <1c6a9461-0d3d-a049-0165-0d5c95aa9405@igalia.com>
-In-Reply-To: <1c6a9461-0d3d-a049-0165-0d5c95aa9405@igalia.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 14 Oct 2022 17:00:20 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGLULYfA6UGwvH7NY5A5E6YaC4s8G+qU12MgChB1_5DKQ@mail.gmail.com>
-Message-ID: <CAMj1kXGLULYfA6UGwvH7NY5A5E6YaC4s8G+qU12MgChB1_5DKQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] efi: pstore: Add module parameter for setting the
- record size
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, keescook@chromium.org,
-        anton@enomsg.org, ccross@android.com, tony.luck@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014144019.GB1108603@lothringen>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,19 +62,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 at 16:58, Guilherme G. Piccoli <gpiccoli@igalia.com> wrote:
->
-> On 14/10/2022 11:46, Ard Biesheuvel wrote:
-> > [...]
-> >>         for (;;) {
-> >> -               varname_size = EFIVARS_DATA_SIZE_MAX;
-> >> +               varname_size = record_size;
-> >>
-> >
-> > I don't think we need this - this is the size of the variable name not
-> > the variable itself.
-> >
->
-> Ugh, my bad. Do you want to stick with 1024 then?
+On Fri, Oct 14, 2022 at 04:40:19PM +0200, Frederic Weisbecker wrote:
+> On Fri, Oct 14, 2022 at 07:21:27AM -0700, Paul E. McKenney wrote:
+> > On Tue, Oct 11, 2022 at 06:01:30PM +0000, Joel Fernandes (Google) wrote:
+> > > From: Frederic Weisbecker <frederic@kernel.org>
+> > > 
+> > > Upon entraining a callback to a NOCB CPU, no further wake up is
+> > > issued on the corresponding nocb_gp kthread. As a result, the callback
+> > > and all the subsequent ones on that CPU may be ignored, at least until
+> > > an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
+> > > to the same group enqueues a callback on an empty queue.
+> > > 
+> > > Here is a possible bad scenario:
+> > > 
+> > > 1) CPU 0 is NOCB unlike all other CPUs.
+> > > 2) CPU 0 queues a callback
+> > 
+> > Call it CB1.
+> > 
+> > > 2) The grace period related to that callback elapses
+> > > 3) The callback is moved to the done list (but is not invoked yet),
+> > >    there are no more pending callbacks for CPU 0
+> > 
+> > So CB1 is on ->cblist waiting to be invoked, correct?
+> > 
+> > > 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
+> > > 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
+> > 
+> > And CB1 must still be there because otherwise the IPI handler would not
+> > have entrained the callback, correct?  If so, we have both CB1 and the
+> > rcu_barrier() callback (call it CB2) in ->cblist, but on the done list.
+> > 
+> > > 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
+> > >    callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
+> > 
+> > Except that -something- must have already been prepared to wake up in
+> > order to invoke CB1.  And that something would invoke CB2 along with CB1,
+> > given that they are both on the done list.  If there is no such wakeup
+> > already, then the hang could occur with just CB1, without the help of CB2.
+> 
+> Heh good point. I was confused with CB1 on RCU_DONE_TAIL and the possibility
+> for CB2 to be entrained on RCU_WAIT_TAIL. But that's indeed not supposed to
+> happen. Ok so this patch indeed doesn't make sense outside lazy.
 
-Yes let's keep this at 1024
+Whew!!!  ;-)
+
+> > > This is also required to make sure lazy callbacks in future patches
+> > > don't end up making rcu_barrier() wait for multiple seconds.
+> > 
+> > But I do see that the wakeup is needed in the lazy case, and if I remember
+> > correctly, the ten-second rcu_barrier() delay really did happen.  If I
+> > understand correctly, for this to happen, all of the callbacks must be
+> > in the bypass list, that is, ->cblist must be empty.
+> > 
+> > So has the scenario steps 1-6 called out above actually happened in the
+> > absence of lazy callbacks?
+> 
+> Nope, so I guess we can have the pending check around rcu_nocb_flush_bypass()
+> only...
+
+OK, sounds good.
+
+I have put this series on branch lazy.2022.10.14a and am testing it.
+
+							Thanx, Paul
