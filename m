@@ -2,86 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0EE5FEB8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC2B5FEB98
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiJNJ1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S230172AbiJNJ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiJNJ1q (ORCPT
+        with ESMTP id S230140AbiJNJ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:27:46 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F356C2CE15
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:27:44 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id 128so4263416vsz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:27:44 -0700 (PDT)
+        Fri, 14 Oct 2022 05:28:27 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5BE1C69F0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:28:15 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id l22so6043776edj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cjnW4tf9c8x2Kot+4dsA36tSE1A+nkdrr9pQjeRPHo4=;
-        b=e/8Eg6T4sL2d/8ZnDiMjNkRy01w2HUG9WQlOFFimobkyf+lC2UbteN4wD+9hgX5kqL
-         YTFyWdsvdUE2puoNRHdJ7gsClx0sb46fqYhuZRG+zQHTIrkRGK6I72RPinw6QqXSiVTg
-         2vZbnYUxvOyZxMlvQOTfgU9AfHuTdjGCiZ3+SkuXiNFPEe3WYNqFozCjMt7+70jIcQz/
-         ogcbPTHZeq6TGS4OUwFpfW2VcXDYfdv1AcMDryMyK9EI+9haZfQZdr82q5hJD6ZRg+rb
-         9rhsPWE0aTRRp7RF/jfDVKcYOqmHrbq066AnWQPTjer+YGaqWEUwmzKqrp6b5edWz4+v
-         b/OQ==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBer2GEwLDqWtk5rNwSGvKwXRghOgJjbD3n6X1wartM=;
+        b=UjN6FvcMrQ05sUSCbxoj1X+dk5aCbKAug4Zhrw1lSFehGFbPwwAaFvE8Y/eAdHDHJr
+         QEmx0uC2PRrm5YXh7ti8X8HT5KNko9uZ5YWO7YkLRKRQqI5tuB7SgJ7dslu8b8zhfHHY
+         UnCneiEe4ag5EwoSs1tmEFYkgKxyMzTghPJ2KF0O+Ddha1GMoiUsG3zbwWgZ/e8VbplG
+         1F1/2tnO2tUTl+qY4XDXvd0CHbKMJDlAXsYJ7o1IO5VnYiPRSR1Fc84dVZAYDUI3xZep
+         rYFnia0OeHLYV6mWoKq+hnVpOdAzRP3vQCvEjymhNdol521ylk7BCu3KFONMwuB0fw5J
+         K+ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cjnW4tf9c8x2Kot+4dsA36tSE1A+nkdrr9pQjeRPHo4=;
-        b=ydI18yMlLt4b8aW9cuSRJnZID+WxrXAaEsPd/3vJvcBrav0jOUTYRiKzcnkCvizTd1
-         OoYssX9nxoy/XiVM3Kwjm88F7KUxCH7KK/T4bRob706tage7/nLQZyaFtin8yZY3/ocD
-         s0sCZQ+6qhKuglDgMFs7C33JggJ4HHAdd/qKxON8S/JJBJxHmfkae3+GVmOxCwrw7ItD
-         e8gnWR+QFim1ou1/BkOtCmA43M/4KDbI9nfSJk78pAVFNZcgu2TJudQPdfct7Yl+gRcF
-         Ppoza9zzO43gkZmaS1HXNnZ//E3UlMQ85Of/++CNbvuGA2eitOrHwr2id3Ly6C7zfWci
-         aCXA==
-X-Gm-Message-State: ACrzQf2XRdnPb6e5PlzYzIhGaEVhL7Q5B+0pGAp9htPsTtcUxiZJjtCQ
-        7WF4goIUHPaRwodZ86Mjgv0FoHrP2ilenr6h2GNmhw==
-X-Google-Smtp-Source: AMsMyM6cJ+8YudU/hDCymz25EyARZ8r+Qou4Z3HxJ+UPdqodRApASZer9YjNLOs6CCe1LBlOtcI3yHLb/56Zzr4CEZw=
-X-Received: by 2002:a67:cb07:0:b0:3a6:f64f:4627 with SMTP id
- b7-20020a67cb07000000b003a6f64f4627mr2269436vsl.47.1665739664146; Fri, 14 Oct
- 2022 02:27:44 -0700 (PDT)
+        bh=cBer2GEwLDqWtk5rNwSGvKwXRghOgJjbD3n6X1wartM=;
+        b=p1HaUFeEXxqWEKPXNy/0mcCBNV6fsaEyC4ePyeoi5NdxEcIWYNIowSOzOG5fQhLoPu
+         M7d58dZTRY+lAlk2JC69eRYPmKsub3oezK8ckmN0iklYElSwnb47Bc1wvdkUlDwP8bK+
+         ++ixr2/1fT7/wsQSW7IqFvsBW3DtVZ12EJpD+nG29CErEHlDUt7FSm7DPw+Ra8a4DOV1
+         PhymEKbfU0gykgyVffIT8CyKbFKqUSzaJ+V1EVEm/qxYI6rhi96bTq7XETn8o5FKWKZc
+         ughd26XswyYG91cjCnNYzH4HusLs+M+/r21zwGSZdQ712qLYHLHxEpIugYCTDF7vMGY7
+         vrHw==
+X-Gm-Message-State: ACrzQf3KznrRTBtNM2CWwWr5SQoOaUHn5vM9WtqJwxHnG0YoW0rbI0dE
+        v6JvuLyqwhPF5NNseoJ9Qrw=
+X-Google-Smtp-Source: AMsMyM6UGyEz1LW4PLIUwy0ytiyRMNKbVy8ESAvMJJrHNBsldcs92w+lRPXXTCrVmp8HoLzveEKGFQ==
+X-Received: by 2002:a05:6402:5288:b0:457:22e5:8022 with SMTP id en8-20020a056402528800b0045722e58022mr3432691edb.244.1665739693493;
+        Fri, 14 Oct 2022 02:28:13 -0700 (PDT)
+Received: from gmail.com (1F2EF605.nat.pool.telekom.hu. [31.46.246.5])
+        by smtp.gmail.com with ESMTPSA id a16-20020a170906191000b0078ae49ad169sm1259842eje.91.2022.10.14.02.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 02:28:12 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 14 Oct 2022 11:28:10 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [GIT PULL] sched/psi changes for v6.1
+Message-ID: <Y0krqnKlHb/gp9Za@gmail.com>
 MIME-Version: 1.0
-References: <20221013001842.1893243-1-sashal@kernel.org> <20221013001842.1893243-21-sashal@kernel.org>
-In-Reply-To: <20221013001842.1893243-21-sashal@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 14 Oct 2022 11:27:33 +0200
-Message-ID: <CAMRc=MebwvKv28084YHihnNGYGTz9FEBcDA8EPmsgqoEif6fzg@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.19 21/63] gpiolib: of: do not ignore requested
- index when applying quirks
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 2:19 AM Sasha Levin <sashal@kernel.org> wrote:
->
-> From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->
-> [ Upstream commit 98c3c940ea5c3957056717e8b77a91c7d94536ad ]
->
-> We should not ignore index passed into of_find_gpio() when handling
-> quirks. While in practice this change will not have any effect, it
-> will allow consolidate quirk handling.
->
 
-Sasha,
+Linus,
 
-This is not a fix, it's code refactoring. Definitely not stable material.
+Please pull the latest sched/psi git tree from:
 
-Bartosz
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-psi-2022-10-14
+
+   # HEAD: 34f26a15611afb03c33df6819359d36f5b382589 sched/psi: Per-cgroup PSI accounting disable/re-enable interface
+
+PSI updates for v6.1:
+
+ - Various performance optimizations, resulting in a 4%-9% speedup
+   in the mmtests/config-scheduler-perfpipe micro-benchmark.
+
+ - New interface to turn PSI on/off on a per cgroup level.
+
+MERGE NOTES:
+
+ - The cgroup interface was suggested & acked by the cgroup maintainers.
+
+ - There's a merge commit in the tree, because the changes rely on
+   driver-core kernfs changes to hit upstream first. This is why
+   this tree was sent late in the merge window as well.
+
+ - There will be a new conflict in kernel/cgroup/cgroup.c when
+   merged into your tree at 9c9155a3509a.
+
+   Most of the conflicts are straightforward, but there's a semantic
+   conflict between these two commits:
+
+     cgroup-tree/upstream:   8a693f7766f9 ("cgroup: Remove CFTYPE_PRESSURE")
+     sched/psi tree:         34f26a15611a ("sched/psi: Per-cgroup PSI accounting disable/re-enable interface")
+
+   8a693f7766f9 removes the CFTYPE_PRESSURE flag, while 34f26a15611a adds
+   new uses. This semantic conflict will result in a build failure on
+   certain configs.
+
+   The resolution I used in -tip is to remove the two new lines adding
+   CFTYPE_PRESSURE flags use in 34f26a15611a.
+
+Thanks,
+
+	Ingo
+
+------------------>
+
+Chengming Zhou (9):
+      sched/psi: Fix periodic aggregation shut off
+      sched/psi: Don't create cgroup PSI files when psi_disabled
+      sched/psi: Save percpu memory when !psi_cgroups_enabled
+      sched/psi: Move private helpers to sched/stats.h
+      sched/psi: Optimize task switch inside shared cgroups again
+      sched/psi: Add PSI_IRQ to track IRQ/SOFTIRQ pressure
+      sched/psi: Consolidate cgroup_psi()
+      sched/psi: Cache parent psi_group to speed up group iteration
+      sched/psi: Per-cgroup PSI accounting disable/re-enable interface
+
+Johannes Weiner (1):
+      sched/psi: Remove NR_ONCPU task accounting
+
+Peter Zijlstra (1):
+      Merge branch 'driver-core/driver-core-next'
+
+ Documentation/admin-guide/cgroup-v2.rst |  23 +++
+ include/linux/cgroup-defs.h             |   3 +
+ include/linux/cgroup.h                  |   5 -
+ include/linux/psi.h                     |  12 +-
+ include/linux/psi_types.h               |  31 ++--
+ kernel/cgroup/cgroup.c                  | 104 +++++++++++-
+ kernel/sched/core.c                     |   1 +
+ kernel/sched/psi.c                      | 280 +++++++++++++++++++++++---------
+ kernel/sched/stats.h                    |   6 +
+ 9 files changed, 362 insertions(+), 103 deletions(-)
