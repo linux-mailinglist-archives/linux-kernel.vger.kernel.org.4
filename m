@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A705FF44F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB905FF452
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiJNUJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S230427AbiJNUJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiJNUJ2 (ORCPT
+        with ESMTP id S230220AbiJNUJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:09:28 -0400
+        Fri, 14 Oct 2022 16:09:29 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3551D81A4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:09:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4301B1D3476
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665778167; x=1697314167;
+  t=1665778168; x=1697314168;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TOJYUiBrUy7/gcOs7i6uVS4QO3wgYtY5qPGjrygs5kQ=;
-  b=JQZy2JLs4DFfyNxmJAJZayvRAT5/IgDTZh4d4bk5KhvHB1QnnmYfat9e
-   ZzYWW1Wjm0VzftriLtBucnYXcVkqMZT/sAw4p4p74PfoefeZxd8rXSmrR
-   iB8lI6nob556yw3HCQVMkuIX9N2wS8cBMd9KJmnC/bdAoSPrcxnx0qRjZ
-   5BJvK8Na/c65/kxXtTEvXemTQ2maujWJaSNqSn/MIGfNPoXkSUw7retbU
-   lIgs+xFQo7m88/IakH2LeQujjLPMU2XoAFKgF5hpdELCkKDok08MSlmsK
-   kqmlUSbouIUtzgIajEWbpNsU9W1QVMTuSvh8yRvhp37PluH1BcBFglVVm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202152"
+  bh=7jM/CiHxN+gWkR7IJ+ClWDUqoyWEdL8oPVI2Lk2Mu6Q=;
+  b=AnvZbh29a9jr//r66CVoZLsy5b3G9dvHSQsvtHzKYdVDL4J58VpVpmVV
+   4R+wE9CNYUaaSovRFR2erfjy1ORGDtdwJiBKnlAjFiB9d/kFEbLXDPFmf
+   CPHH14VieePTOnvjkpDMW50SAlqO8qpkbpuII8TvrZ8QTOPzfeD0UGai0
+   WfaCJuw/6UwuU/25dGr0ujKHFBeJDfDaxYpFgugiW6klF02t4UU/TcvMX
+   HzcvPLYwPuWd+7xmopRaTyr83B/OlRaV9Cgd0+moVeQznlbFFhJCjbNoq
+   HeLJUpAbHjz95F4zD7hljBBmuh2y8sjEqlA0QoFTZBf5aIDKxB2dlMODA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="304202154"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="304202152"
+   d="scan'208";a="304202154"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870141"
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="716870144"
 X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
-   d="scan'208";a="716870141"
+   d="scan'208";a="716870144"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 13:09:27 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -49,9 +49,9 @@ Cc:     Tony Luck <tony.luck@intel.com>,
         Arjan van de Ven <arjan.van.de.ven@intel.com>,
         Jacob Jun Pan <jacob.jun.pan@intel.com>,
         Ashok Raj <ashok.raj@intel.com>
-Subject: [PATCH 02/13] x86/microcode: Do not load from filesystem for CPU hot add
-Date:   Fri, 14 Oct 2022 13:09:02 -0700
-Message-Id: <20221014200913.14644-3-ashok.raj@intel.com>
+Subject: [PATCH 03/13] x86/microcode/intel: Fix a hang if early loading microcode fails
+Date:   Fri, 14 Oct 2022 13:09:03 -0700
+Message-Id: <20221014200913.14644-4-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221014200913.14644-1-ashok.raj@intel.com>
 References: <20221014200913.14644-1-ashok.raj@intel.com>
@@ -66,71 +66,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When request_microcode_fw() is called, refresh_fw parameter must be set
-only when late loading. Currently during CPU hotplug, the path is as
-follows.
+When early loading of microcode fails for any reason other than the wrong
+family-model-stepping, Linux can get into an infinite loop retrying the
+same failed load.
 
-mc_device_add() -> microcode_init_cpu() ->
-				request_microcode_fw(refresh_hw=true)
+A single retry is needed to handle any mixed stepping case.
 
-Consider if a new microcode file was just copied, but have not yet
-performed a late load. Now adding a new CPU will result in loading that
-microcode file vs the rest of the CPUs in the system would have a previous
-revision of what was loaded earlier.
+Assume we have a microcode that fails to load for some reason.
+load_ucode_ap() seems to retry if the loading fails. But it searches for
+a new rev, but ends up finding the same copy. Hence it appears to repeat
+the same load, retry loop for ever.
 
-Moreover this doesn't need to be any different from logical cpu online
-flow, microcode_update_cpu() and mc_device_add() seem to be doing the
-opposite things.
+We can fix it as follows.
 
-Seems like there is no good use for the refresh_fw parameter in
-microcode_init_cpu(), so simply drop it.
+1) When the load_ucode_intel_bsp() fails, record the revision that failed.
+2) In load_ucode_intel_ap() check if AP is same FMS as BP, and the code
+that failed earlier isn't going to apply anyway. So use the saved
+information to abort loading on AP's altogether.
 
+load_ucode_intel_ap()
+{
+..
+reget:
+        if (!*iup) {
+                patch = __load_ucode_intel(&uci);
+		^^^^^ Finds the same patch every time.
+
+                if (!patch)
+                        return;
+
+                *iup = patch;
+        }
+
+        uci.mc = *iup;
+
+        if (apply_microcode_early(&uci, true)) {
+	^^^^^^^^^^^^ apply fails
+              /* Mixed-silicon system? Try to refetch the proper patch: */
+              *iup = NULL;
+
+              goto reget;
+	      ^^^^^ Rince repeat.
+        }
+
+}
+
+Fixes: 06b8534cb728 ("x86/microcode: Rework microcode loading")
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/kernel/cpu/microcode/core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/x86/kernel/cpu/microcode/intel.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 6a41cee242f6..e4135b4fdbc6 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -599,7 +599,7 @@ static enum ucode_state microcode_resume_cpu(int cpu)
- 	return UCODE_OK;
- }
- 
--static enum ucode_state microcode_init_cpu(int cpu, bool refresh_fw)
-+static enum ucode_state microcode_init_cpu(int cpu)
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index cf1e2c30b230..0f7e4ba05c39 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -606,6 +606,7 @@ void __init load_ucode_intel_bsp(void)
  {
- 	enum ucode_state ustate;
- 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
-@@ -614,7 +614,8 @@ static enum ucode_state microcode_init_cpu(int cpu, bool refresh_fw)
- 	if (system_state != SYSTEM_RUNNING)
- 		return UCODE_NFOUND;
+ 	struct microcode_intel *patch;
+ 	struct ucode_cpu_info uci;
++	int rev, ret;
  
--	ustate = microcode_ops->request_microcode_fw(cpu, &microcode_pdev->dev, refresh_fw);
-+	ustate = microcode_ops->request_microcode_fw(cpu, &microcode_pdev->dev,
-+						     false);
- 	if (ustate == UCODE_NEW) {
- 		pr_debug("CPU%d updated upon init\n", cpu);
- 		apply_microcode_on_target(cpu);
-@@ -633,7 +634,7 @@ static enum ucode_state microcode_update_cpu(int cpu)
- 	if (uci->valid)
- 		return microcode_resume_cpu(cpu);
+ 	patch = __load_ucode_intel(&uci);
+ 	if (!patch)
+@@ -613,13 +614,18 @@ void __init load_ucode_intel_bsp(void)
  
--	return microcode_init_cpu(cpu, false);
-+	return microcode_init_cpu(cpu);
+ 	uci.mc = patch;
+ 
+-	apply_microcode_early(&uci, true);
++	ret = apply_microcode_early(&uci, true);
++	if (ret) {
++		rev = patch->hdr.rev;
++		pr_err("Revision 0x%x failed during early loading\n", rev);
++	}
  }
  
- static int mc_device_add(struct device *dev, struct subsys_interface *sif)
-@@ -649,7 +650,7 @@ static int mc_device_add(struct device *dev, struct subsys_interface *sif)
- 	if (err)
- 		return err;
+ void load_ucode_intel_ap(void)
+ {
+ 	struct microcode_intel *patch, **iup;
+ 	struct ucode_cpu_info uci;
++	bool retried = false;
  
--	if (microcode_init_cpu(cpu, true) == UCODE_ERROR)
-+	if (microcode_init_cpu(cpu) == UCODE_ERROR)
- 		return -EINVAL;
+ 	if (IS_ENABLED(CONFIG_X86_32))
+ 		iup = (struct microcode_intel **) __pa_nodebug(&intel_ucode_patch);
+@@ -638,9 +644,13 @@ void load_ucode_intel_ap(void)
+ 	uci.mc = *iup;
  
- 	return err;
+ 	if (apply_microcode_early(&uci, true)) {
++		if (retried)
++			return;
++
+ 		/* Mixed-silicon system? Try to refetch the proper patch: */
+ 		*iup = NULL;
+ 
++		retried = true;
+ 		goto reget;
+ 	}
+ }
 -- 
 2.34.1
 
