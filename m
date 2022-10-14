@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79DD5FF4C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8742C5FF4CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiJNUoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S229945AbiJNUpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiJNUow (ORCPT
+        with ESMTP id S230392AbiJNUpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:44:52 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2237412D26
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:44:48 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id j21so3258202qkk.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ok9hI7NWTIZgdhkAUpeBmH2n5gbA7izg6BGKrFBe8OQ=;
-        b=W154eT/TZJ/Um3zPanjrRhXY2pLXsL9jKejRbUCB1J2vdK5oh1Isoe/nekoKT5unjV
-         EbYVGH/jfqWTYYQK893YdbBgeRxM5qz5IOmuXWlNSJi9HjEpwYn8jgv2grGjq4ECS3od
-         1CtpnizpM3wcmhKpwP02l/aRc2lllihNBu7Hk=
+        Fri, 14 Oct 2022 16:45:49 -0400
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC09D03AB;
+        Fri, 14 Oct 2022 13:45:46 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id y1so5964540pfr.3;
+        Fri, 14 Oct 2022 13:45:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ok9hI7NWTIZgdhkAUpeBmH2n5gbA7izg6BGKrFBe8OQ=;
-        b=ocMYscf1jF3C6tE0w9IByYJGUaq1v6k572moSwX72rwAJBdXvSII4HuCaJgHhZW0SD
-         HSEjQ+AGj+lGdMreLcy+QvgH/pBAgacn25j/rMvvIGnte6BQ/e7iBhZpgIbGGaxLEuef
-         wJUUx8Iqi2zZHiHI5SyooAn/XHj+xjaMfuC9LE910AE541H94gPFfZgZbGv1gM4Hb4bt
-         MNCpMtvNyW9SWvQlxtxiwOOiOlqbc0j2wABK2WghUrNvrJkr5+faRnXl31k6UfV6eQ7f
-         52kQMJv/vUMQ6LknjNc46fChJ+7+BqIZ/nY/pjXnOBESnEehvF+pI2+Bbd79E+U+5PWf
-         lLDA==
-X-Gm-Message-State: ACrzQf1bAT9ofeddnQ1IGi5+RpXsXuv5RkaHBsQFNRcUJTl5/WJVKTuB
-        FK9KMhVKMoJLsIJVPES0pBjoqhwea1YALw==
-X-Google-Smtp-Source: AMsMyM6MOLtfWdcDGS1vuzP5Mch2f7QlYuIaIHZX7pGB2x/VAGkUsgX/8dGVCmDL8YqLujivRdPRgg==
-X-Received: by 2002:a05:620a:b87:b0:6ea:d354:49b9 with SMTP id k7-20020a05620a0b8700b006ead35449b9mr5196217qkh.384.1665780286760;
-        Fri, 14 Oct 2022 13:44:46 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id s8-20020a05620a254800b006c479acd82fsm3376697qko.7.2022.10.14.13.44.43
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V6F4cqScoAnyG62i61m4oJ0MGIQvNAp6Biva4swYu9g=;
+        b=CPR1GPSR9p8XPYplL4jnpZDVA8mVxl/7kICuPJ/Z5OC6ZVbDvEMGd9xs/YuWwFptwu
+         7SIT4YEuWo5Ev4UQYhXcag2E2jThUwZKhU+MouhdFsMFGM+UATnTXTxRp/wCkv4jY0uD
+         zGCjQu/qid5KfRdVN4BRefUsoLsosP+k3bpyIj56s481GMGQctYSlw3zGN9XScAUu4Al
+         bv+wzxPF6ywWk06xOrkDs6Z4I0uR5e8zMELDWAyyE/+PFTeC85UzK4uBjVzKCALv4qj6
+         a8N4Tzb0JdpNH4wYNtKcgLNbGhF6sItGMkxWX/830nDEbmo6htJBe/X5ZU9QTvQ4X+yS
+         7DiA==
+X-Gm-Message-State: ACrzQf2wUD/QG79wsst+Dp6/caD4XWYv4EL6OvT4nmrkLTDfgSJe1xAJ
+        5FjP7/MsEYDWJe1UtQ9++kg=
+X-Google-Smtp-Source: AMsMyM5MKBbUdqmwvx5/5F4v7bmbYZsgm3kn8yLzjJML5o9xvFokP77MQT0uLCsCIJAB97rQdw2YQQ==
+X-Received: by 2002:a63:1353:0:b0:457:3e87:7883 with SMTP id 19-20020a631353000000b004573e877883mr6039567pgt.172.1665780345440;
+        Fri, 14 Oct 2022 13:45:45 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:7bd3:5500:b9cd:d90d? ([2620:15c:211:201:7bd3:5500:b9cd:d90d])
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b0017a032d7ae4sm2147835plg.104.2022.10.14.13.45.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 13:44:43 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-360871745b0so57055297b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:44:43 -0700 (PDT)
-X-Received: by 2002:a81:5843:0:b0:361:2d0:7d9 with SMTP id m64-20020a815843000000b0036102d007d9mr6405882ywb.58.1665780283206;
- Fri, 14 Oct 2022 13:44:43 -0700 (PDT)
+        Fri, 14 Oct 2022 13:45:44 -0700 (PDT)
+Message-ID: <16bee8e7-a9ec-0847-9d89-92484b0399a0@acm.org>
+Date:   Fri, 14 Oct 2022 13:45:41 -0700
 MIME-Version: 1.0
-References: <YlvTNQGh+MfZFWKW@gondor.apana.org.au> <YlxATW56ZoNtmxlk@arm.com>
- <YtHo3Xu33jovwpFt@google.com> <YtIvr7t8A/OlIXrT@gondor.apana.org.au>
- <YtWeJ12GI7LxQ4IK@arm.com> <YypfJQqj8PeOp8A4@google.com> <Yzc2UrX7ndWw1vKI@arm.com>
- <Y0b9SYI7v94ig5v8@google.com> <Y0hDdmD0yJ+PS2Kz@arm.com> <CAGETcx8SZ8XjyTveh2iWiHK09iOpU_fsOkFcBL_EG4Qp93A_wA@mail.gmail.com>
- <Y0mNek2pRpXexZxX@arm.com> <CAGETcx9zGaFFBqQ8d4kF-jz3nOjyShkbu3Z4YHpFY9_N+16g-w@mail.gmail.com>
-In-Reply-To: <CAGETcx9zGaFFBqQ8d4kF-jz3nOjyShkbu3Z4YHpFY9_N+16g-w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 14 Oct 2022 13:44:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjgaWEsObv2SO-xa6g6ncj53q8tPpM3cgJGr+wtWknVyA@mail.gmail.com>
-Message-ID: <CAHk-=wjgaWEsObv2SO-xa6g6ncj53q8tPpM3cgJGr+wtWknVyA@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Isaac Manjarres <isaacmanjarres@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/2] scsi: ufs: core: Remove unnecessary if statement
+Content-Language: en-US
+To:     Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
+        daejun7.park@samsung.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221010092937.520013-1-beanhuo@iokpp.de>
+ <20221010092937.520013-2-beanhuo@iokpp.de>
+ <a1cd6719-a743-fc96-e0e7-364a52b62952@acm.org>
+ <227f117ee9491cc9d2ae4bb2211a99ccd1dd3c21.camel@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <227f117ee9491cc9d2ae4bb2211a99ccd1dd3c21.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 1:24 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> Agreed. Even allowing a 64-byte kmalloc cache on a system with a
-> 64-byte cacheline size saves quite a bit of memory.
+On 10/14/22 13:30, Bean Huo wrote:
+> I double-checked the changelog and the stack overflow issue was double
+> fixed by your commit:
+> 
+> commit d3d9c4570285 ("scsi: ufs: Fix memory corruption by
+> ufshcd_read_desc_param()"),
+> 
+> For example, if the user wants to read wb_buf_alloc_units in the RPMB
+> unit descriptor,
+> 
+> parameter offset = 41, parameter size = 4,
+> buff_len = 45;
+> 
+> After ufshcd_query_descriptor_retry(), buff_len will be updated to 35.
+> 
+> param_offset > buff_len, then -EINVAL will be returned.
+> 
+> So we can safely remove this check, and if you still have concerns, I
+> can verify when I get back to the office.
 
-Well, the *really* trivial thing to do is to just say "if the platform
-is DMA coherent, just allow any size kmalloc cache". And just
-consciously leave the broken garbage behind.
+Hi Bean,
 
-Because it's not just 64-byte kmalloc. It's things like 'avtab_node'
-that is 24 bytes, and that on my system currently uses about 3MB of
-memory simply because there's a _lot_ of them.
+Thank you for having looked this up. I agree with the above.
 
-I've got 1.8MB in "kmalloc-32" too, and about 1MB in "kamlloc-16", fwiw. That's
-
-Yeah, yeah, this is on a 64GB machine and so none of that matters (and
-some of these things are very much "scales with memory", but these
-small allocations aren't actually all that unusual.
-
-And yes, the above is obviously on my x86-64 machine.
-
-My arm64 laptop doesn't have the small kmallocs, and as a result the
-"kmalloc-128" has 633 _thousand_ entries, and takes up 77MB of RAM on
-my 16GB laptop. I'm assuming (but have no proof) more than 50% of that
-is just wasted memory.
-
-I suspect that DMA is cache coherent on this thing, and that wasted
-space is just *stupid* wasted space, but hey, I don't actually know. I
-just use the Asahi people's patches.
-
-               Linus
+Bart.
