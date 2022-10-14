@@ -2,194 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7615FEB7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776185FEB80
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiJNJWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S229713AbiJNJ0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJNJWv (ORCPT
+        with ESMTP id S229674AbiJNJ0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:22:51 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EE11BE1F6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:22:50 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c24so4194838pls.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:22:50 -0700 (PDT)
+        Fri, 14 Oct 2022 05:26:12 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B60152C7D;
+        Fri, 14 Oct 2022 02:26:09 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id r18so3803996pgr.12;
+        Fri, 14 Oct 2022 02:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E5dHqmsGt5x/ibVS7C2KP9W7Xq57N2db5FdvVrUVbOU=;
-        b=D2h+Wop90g0YPLvq0/itoDRoDkV4i8mL5jZgAMr66oLRqL++TeQwzCJnd24aYOGqCq
-         M+Eiou8ACzqtPjdV6oznbCrAN5dTNP/FVylg5z2/XBaXIcnZhPogpbD1mrz+Y0qyVQJI
-         UjGZQIhCY2OkjfXlijN4ea3lpY5sDQpgkTQh3b5/l8tUGfTSoD+I9Nm2AWINgj8We/3E
-         0jXHrEH3db0ENkNDKiXNEdD3ACfb+/PAxat2RMHOQp2nJz8Uu6zbU15cCgGOF3yGI/D9
-         +dpyRxh7v2b9HGmDFpmnquVxcgJrF8Rtxhz6ratICcRPpqkTVQmqcjhhOEIz7U1F38ln
-         0MJA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S1qvkdkHjEbNas9/ZZPIOjRrBJgMEZ8YW9tqgYLo2/A=;
+        b=HEPsv2LdvlKEFiy9GlLbJMP21D7B6Ag32ye/blp0kGggQyWUgEXd9TSHw5c66+ECAe
+         PiMKhToYIihgmbrCycA89SBQOSlHLOb9ep13DNQUjtyeALesqYNnThLAcaxiayeSmrky
+         rzfj/g2wU1qj406xK5QAzgJxG7IizSbXL5WghXxSqKKQiFlZbV0hHjqueyeelYCzcQle
+         WJdRetmMGC/u+spZpzPooV2bk/E2kXkAdf7/bgaPzdC2DnzE23iCtbowjrMlWLfmTHK2
+         n3CAzBrd8FA0aKKoD1ntjsYtaTouzAWJTYtMG9mXxOtqVlfsdegdX4CZtdikHvIyx1c1
+         jR5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E5dHqmsGt5x/ibVS7C2KP9W7Xq57N2db5FdvVrUVbOU=;
-        b=Bqbnx7Tsr3BAW0plHtds0YvDwuYlTLxYOk8qIOP/UOQisPMaZFmPJXM1GkWFPkVvWU
-         yOSg7ZzQnN9M01VCrJEjeKmD2MoWD9wasiAhVpCMnMp9VcTgsbk1OoGQW+AQIU/j/MWD
-         ocX0ma+AJp4YmGtYNJ93PY8qdUTfz9CQRwQXjw3p/RrYo4Vgf8ztXaEf7VYyCVLlDWFW
-         CsKgDOcN0gV31JvNp6NMQ7FS9Rxdr6sraFDbWP2IEMhZ5SsHuSOOSH7rxbzDfYjKb9JS
-         yyD6l/dMWHEch8EwoxO/6dAKHwhAdFF9as4+OjkmSbU4a1GmSn3CLkrYtHNUhhbigHU3
-         zNCw==
-X-Gm-Message-State: ACrzQf1PBIPLVDOcDYhasTMVDD1ZkXgqyaIj2585IzajRF+ZK/QLvrif
-        HrHXnrHQvWgqmn66runKnYmW215i/flFx1nQCeeNIQ==
-X-Google-Smtp-Source: AMsMyM72Z7WXqecPOsima7MyAX3naNW0+GG3m5+Cc1fPA2iqBdOh7VdTkcAsrvefy7FXih6bxdf9CPFn2ipJ1C49CtI=
-X-Received: by 2002:a17:902:ec83:b0:17c:afb3:d1ec with SMTP id
- x3-20020a170902ec8300b0017cafb3d1ecmr4185102plg.172.1665739369636; Fri, 14
- Oct 2022 02:22:49 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S1qvkdkHjEbNas9/ZZPIOjRrBJgMEZ8YW9tqgYLo2/A=;
+        b=LaVVRUWfzgbSaKCLgCz/nlF/ibox0l/PJeXOSO9LpGZF/XJ/uOBsqKVnslt5+7Mnrj
+         Euy8lpCnwZHMhJ/H6rKcT/xc+GzepV2PZLkULVHcK9t5CPHVALa7GbH8TM4fbWaTcWa+
+         6r8V+4M41WenSdTG9fXgKUE0pF0uKPIxxu+n+tAt2xBgXsaYVWnfKMwKzsfVULRRcon7
+         l47RXL85yjwmV6dt/6FiSj7MbqTMtdUc1kwQeVF1M2QBc+t4HVdwOnLW9gwlJABvZGf/
+         lz32SB7Dk2i99mtwjWxNJ0dLELPlgi5JB6uBMrhH0HmiT5DyHDBq23dzfLlhI40evc3a
+         Hz5g==
+X-Gm-Message-State: ACrzQf2ojFOWp7MjmyI0MBbmvOZYAaHMuhB6Hz/nbOb09fn0GTOvHfIx
+        KBp0WL7Xdnudxp8nplYePm8=
+X-Google-Smtp-Source: AMsMyM66mJhmEpsxy1o+YNlVL4Zy8EkA0z7zmNNBni/AoqbNzJGYPkx2pap4zHI4407nu2rTu530kw==
+X-Received: by 2002:aa7:8504:0:b0:563:1ae2:6dc0 with SMTP id v4-20020aa78504000000b005631ae26dc0mr4153396pfn.48.1665739568532;
+        Fri, 14 Oct 2022 02:26:08 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id s3-20020aa78bc3000000b0056323de479bsm1215487pfd.120.2022.10.14.02.26.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 02:26:07 -0700 (PDT)
+Message-ID: <7e3be98e-d0c0-634b-fbb3-0096976a89bf@gmail.com>
+Date:   Fri, 14 Oct 2022 17:25:58 +0800
 MIME-Version: 1.0
-References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
- <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com> <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
- <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
- <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com> <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
- <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
-In-Reply-To: <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 14 Oct 2022 11:22:38 +0200
-Message-ID: <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006 tag
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Sergey.Semin@baikalelectronics.ru,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        regressions@lists.linux.dev,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH v5 5/8] KVM: x86: Track supported PERF_CAPABILITIES in
+ kvm_caps
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20221006000314.73240-1-seanjc@google.com>
+ <20221006000314.73240-6-seanjc@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20221006000314.73240-6-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 at 09:53, Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 10/14/22 16:31, Arnd Bergmann wrote:
-> > On Fri, Oct 14, 2022, at 2:22 AM, Damien Le Moal wrote:
-> >> On 10/14/22 07:07, Anders Roxell wrote:
-> >> [...]
-> >>>> 8)
-> >>>>> If reverting these patches restores the eSATA port on this board, then you need
-> >>>>> to fix the defconfig for that board.
-> >>>>
-> >>>> OTOH,
-> >>>> Anders, enabled the new config CONFIG_AHCI_DWC=y  and tried but the
-> >>>> device failed to boot.
-> >>>
-> >>> I thought it would work with enabling CONFIG_AHCI_DWC=y, but it didn't...
-> >>
-> >> As mentioned in my previous reply to Naresh, this is a new driver added in
-> >> 6.1. Your board was working before so this should not be the driver needed
-> >> for it.
-> >>
-> >>> However, reverting patch 33629d35090f ("ata: ahci: Add DWC AHCI SATA
-> >>> controller support")
-> >>> from next-20221013 was a success, kernel booted  and the 'mkfs.ext4' cmd was
-> >>> successful.
-> >>
-> >> Which is very strange... There is only one hunk in that commit that could
-> >> be considered suspicious:
-> >>
-> >> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> >> index 9b56490ecbc3..8f5572a9f8f1 100644
-> >> --- a/drivers/ata/ahci_platform.c
-> >> +++ b/drivers/ata/ahci_platform.c
-> >> @@ -80,9 +80,7 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
-> >>  static const struct of_device_id ahci_of_match[] = {
-> >>         { .compatible = "generic-ahci", },
-> >>         /* Keep the following compatibles for device tree compatibility */
-> >> -       { .compatible = "snps,spear-ahci", },
-> >>         { .compatible = "ibm,476gtr-ahci", },
-> >> -       { .compatible = "snps,dwc-ahci", },
-> >>         { .compatible = "hisilicon,hisi-ahci", },
-> >>         { .compatible = "cavium,octeon-7130-ahci", },
-> >>         { /* sentinel */ }
-> >>
-> >> Is your board using one of these compatible string ?
-> >
-> > The x15 uses "snps,dwc-ahci". I would expect it to detect the device
-> > with the new driver if that is loaded, but it's possible that the
-> > driver does not work on all versions of the dwc-ahci hardware.
-> >
-> > Anders, can you provide the boot log from a boot with the new driver
-> > built in? There should be some messages from dwc-ahci about finding
-> > the device, but then not ultimately working.
-> >
-> > Depending on which way it goes wrong, the safest fallback for 6.1 is
-> > probably to move the "snps,spear-ahci" and "snps,dwc-ahci" compatible
-> > strings back into the old driver, and leave the new one only for
-> > the "baikal,bt1-ahci" implementation of it, until it has been
-> > successfully verified on TI am5/dra7, spear13xx and exynos.
->
-> OK. So a fix patch until further tests/debug is completed would be this:
->
-> diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
-> index 8fb66860db31..7a0cbab00843 100644
-> --- a/drivers/ata/ahci_dwc.c
-> +++ b/drivers/ata/ahci_dwc.c
-> @@ -469,8 +469,6 @@ static struct ahci_dwc_plat_data ahci_bt1_plat = {
->  };
->
->  static const struct of_device_id ahci_dwc_of_match[] = {
-> -       { .compatible = "snps,dwc-ahci", &ahci_dwc_plat },
-> -       { .compatible = "snps,spear-ahci", &ahci_dwc_plat },
->         { .compatible = "baikal,bt1-ahci", &ahci_bt1_plat },
->         {},
->  };
-> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> index 8f5572a9f8f1..9b56490ecbc3 100644
-> --- a/drivers/ata/ahci_platform.c
-> +++ b/drivers/ata/ahci_platform.c
-> @@ -80,7 +80,9 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
->  static const struct of_device_id ahci_of_match[] = {
->         { .compatible = "generic-ahci", },
->         /* Keep the following compatibles for device tree compatibility */
-> +       { .compatible = "snps,spear-ahci", },
->         { .compatible = "ibm,476gtr-ahci", },
-> +       { .compatible = "snps,dwc-ahci", },
->         { .compatible = "hisilicon,hisi-ahci", },
->         { .compatible = "cavium,octeon-7130-ahci", },
->         { /* sentinel */ }
->
-> Anders, Naresh,
->
-> Can you try this ?
+On 6/10/2022 8:03 am, Sean Christopherson wrote:
+> Track KVM's supported PERF_CAPABILITIES in kvm_caps instead of computing
+> the supported capabilities on the fly every time.  Using kvm_caps will
+> also allow for future cleanups as the kvm_caps values can be used
+> directly in common x86 code.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Tested this patch on todays linux-next tag: next-20221014 without enabling
-CONFIG_AHCI_DWC and it worked as expected when booting [1].
-On the other hand I also tried a build/boot with CONFIG_AHCI_DWC enabled
-and it worked as expected to boot [2]. However, during building a
-warning [3] popped up:
+A similar change was made to one of my git branches. Please move forward.
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/2/build ARCH=arm
-CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
-/builds/linux/drivers/ata/ahci_dwc.c:462:34: warning: 'ahci_dwc_plat'
-defined but not used [-Wunused-variable]
-  462 | static struct ahci_dwc_plat_data ahci_dwc_plat = {
-         |                                  ^~~~~~~~~~~~~
+Acked-by: Like Xu <likexu@tencent.com>
 
-
-Cheers,
-Anders
-[1] https://lkft.validation.linaro.org/scheduler/job/5678031
-[2] https://lkft.validation.linaro.org/scheduler/job/5678152
-[3] https://builds.tuxbuild.com/2G7PDSV5uzjnQqCCBybK4WpoTxz/build.log
+> ---
+>   arch/x86/kvm/svm/svm.c          |  2 ++
+>   arch/x86/kvm/vmx/capabilities.h | 25 ------------------------
+>   arch/x86/kvm/vmx/pmu_intel.c    |  2 +-
+>   arch/x86/kvm/vmx/vmx.c          | 34 +++++++++++++++++++++++++++++----
+>   arch/x86/kvm/x86.h              |  1 +
+>   5 files changed, 34 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 58f0077d9357..6b680b249975 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -2715,6 +2715,7 @@ static int svm_get_msr_feature(struct kvm_msr_entry *msr)
+>   			msr->data |= MSR_F10H_DECFG_LFENCE_SERIALIZE;
+>   		break;
+>   	case MSR_IA32_PERF_CAPABILITIES:
+> +		msr->data = kvm_caps.supported_perf_cap;
+>   		return 0;
+>   	default:
+>   		return KVM_MSR_RET_INVALID;
+> @@ -4898,6 +4899,7 @@ static __init void svm_set_cpu_caps(void)
+>   {
+>   	kvm_set_cpu_caps();
+>   
+> +	kvm_caps.supported_perf_cap = 0;
+>   	kvm_caps.supported_xss = 0;
+>   
+>   	/* CPUID 0x80000001 and 0x8000000A (SVM features) */
+> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> index 479124e49bbd..cd2ac9536c99 100644
+> --- a/arch/x86/kvm/vmx/capabilities.h
+> +++ b/arch/x86/kvm/vmx/capabilities.h
+> @@ -395,31 +395,6 @@ static inline bool vmx_pebs_supported(void)
+>   	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
+>   }
+>   
+> -static inline u64 vmx_get_perf_capabilities(void)
+> -{
+> -	u64 perf_cap = PMU_CAP_FW_WRITES;
+> -	struct x86_pmu_lbr lbr;
+> -	u64 host_perf_cap = 0;
+> -
+> -	if (!enable_pmu)
+> -		return 0;
+> -
+> -	if (boot_cpu_has(X86_FEATURE_PDCM))
+> -		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+> -
+> -	x86_perf_get_lbr(&lbr);
+> -	if (lbr.nr)
+> -		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+> -
+> -	if (vmx_pebs_supported()) {
+> -		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
+> -		if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
+> -			perf_cap &= ~PERF_CAP_PEBS_BASELINE;
+> -	}
+> -
+> -	return perf_cap;
+> -}
+> -
+>   static inline bool cpu_has_notify_vmexit(void)
+>   {
+>   	return vmcs_config.cpu_based_2nd_exec_ctrl &
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 25b70a85bef5..24f4c22691f8 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -631,7 +631,7 @@ static void intel_pmu_init(struct kvm_vcpu *vcpu)
+>   		pmu->fixed_counters[i].current_config = 0;
+>   	}
+>   
+> -	vcpu->arch.perf_capabilities = vmx_get_perf_capabilities();
+> +	vcpu->arch.perf_capabilities = kvm_caps.supported_perf_cap;
+>   	lbr_desc->records.nr = 0;
+>   	lbr_desc->event = NULL;
+>   	lbr_desc->msr_passthrough = false;
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index e70ac91cd2fb..850ff6e683d1 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1850,7 +1850,7 @@ static int vmx_get_msr_feature(struct kvm_msr_entry *msr)
+>   			return 1;
+>   		return vmx_get_vmx_msr(&vmcs_config.nested, msr->index, &msr->data);
+>   	case MSR_IA32_PERF_CAPABILITIES:
+> -		msr->data = vmx_get_perf_capabilities();
+> +		msr->data = kvm_caps.supported_perf_cap;
+>   		return 0;
+>   	default:
+>   		return KVM_MSR_RET_INVALID;
+> @@ -2029,7 +2029,7 @@ static u64 vmx_get_supported_debugctl(struct kvm_vcpu *vcpu, bool host_initiated
+>   	    (host_initiated || guest_cpuid_has(vcpu, X86_FEATURE_BUS_LOCK_DETECT)))
+>   		debugctl |= DEBUGCTLMSR_BUS_LOCK_DETECT;
+>   
+> -	if ((vmx_get_perf_capabilities() & PMU_CAP_LBR_FMT) &&
+> +	if ((kvm_caps.supported_perf_cap & PMU_CAP_LBR_FMT) &&
+>   	    (host_initiated || intel_pmu_lbr_is_enabled(vcpu)))
+>   		debugctl |= DEBUGCTLMSR_LBR | DEBUGCTLMSR_FREEZE_LBRS_ON_PMI;
+>   
+> @@ -2342,14 +2342,14 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   			return 1;
+>   		if (data & PMU_CAP_LBR_FMT) {
+>   			if ((data & PMU_CAP_LBR_FMT) !=
+> -			    (vmx_get_perf_capabilities() & PMU_CAP_LBR_FMT))
+> +			    (kvm_caps.supported_perf_cap & PMU_CAP_LBR_FMT))
+>   				return 1;
+>   			if (!cpuid_model_is_consistent(vcpu))
+>   				return 1;
+>   		}
+>   		if (data & PERF_CAP_PEBS_FORMAT) {
+>   			if ((data & PERF_CAP_PEBS_MASK) !=
+> -			    (vmx_get_perf_capabilities() & PERF_CAP_PEBS_MASK))
+> +			    (kvm_caps.supported_perf_cap & PERF_CAP_PEBS_MASK))
+>   				return 1;
+>   			if (!guest_cpuid_has(vcpu, X86_FEATURE_DS))
+>   				return 1;
+> @@ -7669,6 +7669,31 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>   	vmx_update_exception_bitmap(vcpu);
+>   }
+>   
+> +static u64 vmx_get_perf_capabilities(void)
+> +{
+> +	u64 perf_cap = PMU_CAP_FW_WRITES;
+> +	struct x86_pmu_lbr lbr;
+> +	u64 host_perf_cap = 0;
+> +
+> +	if (!enable_pmu)
+> +		return 0;
+> +
+> +	if (boot_cpu_has(X86_FEATURE_PDCM))
+> +		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+> +
+> +	x86_perf_get_lbr(&lbr);
+> +	if (lbr.nr)
+> +		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+> +
+> +	if (vmx_pebs_supported()) {
+> +		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
+> +		if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
+> +			perf_cap &= ~PERF_CAP_PEBS_BASELINE;
+> +	}
+> +
+> +	return perf_cap;
+> +}
+> +
+>   static __init void vmx_set_cpu_caps(void)
+>   {
+>   	kvm_set_cpu_caps();
+> @@ -7691,6 +7716,7 @@ static __init void vmx_set_cpu_caps(void)
+>   
+>   	if (!enable_pmu)
+>   		kvm_cpu_cap_clear(X86_FEATURE_PDCM);
+> +	kvm_caps.supported_perf_cap = vmx_get_perf_capabilities();
+>   
+>   	if (!enable_sgx) {
+>   		kvm_cpu_cap_clear(X86_FEATURE_SGX);
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index 829d3134c1eb..9de72586f406 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -27,6 +27,7 @@ struct kvm_caps {
+>   	u64 supported_mce_cap;
+>   	u64 supported_xcr0;
+>   	u64 supported_xss;
+> +	u64 supported_perf_cap;
+>   };
+>   
+>   void kvm_spurious_fault(void);
