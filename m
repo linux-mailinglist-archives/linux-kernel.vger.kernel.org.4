@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C8B5FEB34
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40225FEB3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJNIyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S230007AbiJNI6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJNIyX (ORCPT
+        with ESMTP id S229916AbiJNI6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:54:23 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4401DA58;
-        Fri, 14 Oct 2022 01:54:21 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id b5so3765962pgb.6;
-        Fri, 14 Oct 2022 01:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dGx4DR91AHMtyy59g5UbkX45izOPK7p3T7j1FkT3gPs=;
-        b=NOGGVZVA2t9YMvwaxRO7IwHjqxWy1tel+WkWqxRjHHsbilJOpnSchrit/mwSGPgqP/
-         t5fz4ayYCZe+i+ucW1E1n3vpm70RpGAKoNV8gRVOspSFn2VHcTbp5wI5MQDDrXANxgfg
-         WcYIXEDrjH5wuJvG4uUec+y1EAShIfol0T82lo4g0P93mPhX03D2yyLyss376d64natb
-         qEXcfOlIuo7ieldxwlnBH9ndS8P6m2fIDLXDLLWjXhAHnRk5UiTr5lemovwYn5gBr9b6
-         o6+6wLeJuyi7hDqs8cQPvcxMNwUMy/xM/W02yewzAQ8BQ/9IXHkpYoVUquqxfcqzmrfa
-         2Ydg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dGx4DR91AHMtyy59g5UbkX45izOPK7p3T7j1FkT3gPs=;
-        b=s7ovhQLJmItQI2Ysak91Sx+21VkQ6NsdJUmMxLjc5TbUx0aDLlgAXes3MftbAwvW2G
-         JSKYU5rXmgb8sZ0koACzFKUgxXK/smGHxegBQCG5LB4hglcN4+dU3MQuA2278Yk8FV/C
-         zJD+WN1meWxiyvdfnM096m8zHmBR67pZbVP3dUEkS0Cly4H48EKpsEoIrArJ9j+uwUA1
-         Calcm2ofYATK2FHCpZyVGANGiLDK6YzpDasqhIiBejl11kYzTG9NTyk6wd/yH2LPP26e
-         wKphxl0dV5D4IDtU0jjUuhwZO/tPoy1gk79IyqpCxIqvNU3kVKxkiY93tmr7RTKuxM8/
-         TiLw==
-X-Gm-Message-State: ACrzQf3TlcVAvV/RpsgBXAO+5yD7E9/oAE4VIuas1QrCvb0TxOmwv+bA
-        n8uz8/dzSZh4UHok7pdxAtw=
-X-Google-Smtp-Source: AMsMyM6khNFTbzWgxwhh8jgTUnH6lQQjvLGeXk3EEj93bvvCcFw/YUwFWDmeGwRoamh6d0CAC0lr1w==
-X-Received: by 2002:a63:e544:0:b0:462:2c80:f521 with SMTP id z4-20020a63e544000000b004622c80f521mr3477166pgj.549.1665737660835;
-        Fri, 14 Oct 2022 01:54:20 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id m14-20020a17090a668e00b00203ab277966sm4538076pjj.7.2022.10.14.01.54.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 01:54:20 -0700 (PDT)
-Message-ID: <a90c28df-eb54-f20a-13a5-9ee4172f870e@gmail.com>
-Date:   Fri, 14 Oct 2022 16:54:13 +0800
+        Fri, 14 Oct 2022 04:58:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8745B14EC4B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:58:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CE6961A3E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8999DC433B5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665737900;
+        bh=jjLpNiBtYUiuOX7cnEKMRg+pshJMGQgSYBE4bgVEUIU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ef/3XGuFVgUUNlF1CkC9qw6I+JqB7jQOVfGbhBOLpsl16VCmb+d514fxn2DpzYxYw
+         Hhu1A//L1dLqw7XGRdb56GabTHhDqRenlZuu1NDOJGFF2hYXqGeJ1UGfGUJfUi8Sgm
+         TUq4penAHlqQd3dzB2WFLy106LhHP4CyzkufCQlfNZ1WZKkUs0JxdeiNYRG6LPYUsb
+         F29ddHnA8qvS8HAxWpp/8aP29DE3qSjhRp11k3ckiLm4KB2cbNcomxWJO6KyFfENK+
+         gNjueg6UgkvaCLQ+8lHAY3BBffrIMGrCK6ToL4MxNMl0GCtgd0/jxr1CoehvVcM8TJ
+         5TBrLZ+79Fvlg==
+Received: by mail-ed1-f41.google.com with SMTP id e18so5946240edj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:58:20 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1Wcyo/ebMvbPlXRse3T6NhQJMeIXiuwsm9pdpMi0qqxAIMtcSy
+        zuD8OWOa/wQ2qtMtBarS0y6tdYrRbRexFYT2JlE=
+X-Google-Smtp-Source: AMsMyM4wO+ShrjWkuHUfgMw2Cp3IocIUPMPT5y53aZgRfsRMZolMats/QrCYYwSZQffgVQDjZqisQCwpWV6Z3z2l3c4=
+X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
+ t25-20020aa7d4d9000000b0045c7eaed8d8mr3411632edr.254.1665737898655; Fri, 14
+ Oct 2022 01:58:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Stop adding speculative Intel GP
- PMCs that don't exist yet
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20220919091008.60695-1-likexu@tencent.com>
- <Y0CAHch5UR2Lp0tU@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y0CAHch5UR2Lp0tU@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221013154000.3462836-1-chenhuacai@loongson.cn>
+ <8a8fa581-94a9-649d-8c01-f1afd4bc9514@xen0n.name> <CAAhV-H5U1c_wfWLuxMaHD6c9-k+g-iSqgtcJVwceoL13J7hEiA@mail.gmail.com>
+ <ae6260e5-0eb6-a615-7032-6481cd186f3f@loongson.cn>
+In-Reply-To: <ae6260e5-0eb6-a615-7032-6481cd186f3f@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 14 Oct 2022 16:58:07 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4H5x=XmShR7s_=bwTE8mN37QTt7t8QRaYy1i3oYQKWgw@mail.gmail.com>
+Message-ID: <CAAhV-H4H5x=XmShR7s_=bwTE8mN37QTt7t8QRaYy1i3oYQKWgw@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: BPF: Avoid declare variables in switch-case
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/2022 3:38 am, Sean Christopherson wrote:
-> Does this need Cc:stable@vger.kernel.org?  Or is this benign enough that we don't
-> care?
+On Fri, Oct 14, 2022 at 10:18 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+>
+>
+> On 10/14/2022 09:13 AM, Huacai Chen wrote:
+> > Hi, Xuerui,
+> >
+> > On Fri, Oct 14, 2022 at 12:43 AM WANG Xuerui <kernel@xen0n.name> wrote:
+> >>
+> >> On 10/13/22 23:40, Huacai Chen wrote:
+> >>> Not all compilers support declare variables in switch-case, so move
+> >>> declarations to the beginning of a function. Otherwise we may get such
+> >>> build errors:
+>
+> ...
+>
+> >>>
+> >>>   static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool extra_pass)
+> >>>   {
+> >>> -     const bool is32 = BPF_CLASS(insn->code) == BPF_ALU ||
+> >>> -                       BPF_CLASS(insn->code) == BPF_JMP32;
+> >>> +     u8 t0 = -1;
+> >> Here "t0" seems to be a versatile temp value, while the "t1" below is
+> >> the actual GPR $t1. What about renaming "t0" to something like "tmp" to
+> >> reduce confusion? I believe due to things like "t0 = LOONGARCH_GPR_ZERO"
+> >> the "t0" is 100% not an actual mapping to $t0.
+> > I rename t7 to t0 because there is no t3-t6, t7 looks very strange.
+> > But from emit_cond_jmp() the 3rd and 4th parameters have no difference
+> > so I suppose t0 is just OK, then whether rename it to tmp depends on
+> > Tiezhu's opinion.
+> >
+>
+> Use "tmp" seems better due to it is a temp value.
+OK, then I will use tmp or just tm for alignment.
 
-Considering stable kernel may access IA32_OVERCLOCKING_STATUS as well,
-cc stable list helps to remove the illusion of pmu msr scope for stable tree 
-maintainers.
-
-> 
-> No need for a v4, the above nits can be handled when applying.
-
-Thanks, so kind of you.
-
-> 
->> Suggested-by: Jim Mattson<jmattson@google.com>
->> Signed-off-by: Like Xu<likexu@tencent.com>
->> Reviewed-by: Jim Mattson<jmattson@google.com>
->> ---
-> In the future, please provide a cover letter even for trivial series, it helps
-> (me at least) mentally organize patches.
-
-Roger that.
-
-> 
-> Thanks!
-> 
+>
+> >>> +     u64 func_addr;
+> >>> +     bool func_addr_fixed;
+> >>> +     int i = insn - ctx->prog->insnsi;
+> >>> +     int ret, jmp_offset;
+> >>>       const u8 code = insn->code;
+> >>>       const u8 cond = BPF_OP(code);
+> >>>       const u8 t1 = LOONGARCH_GPR_T1;
+> >>> @@ -400,8 +402,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+> >>>       const u8 dst = regmap[insn->dst_reg];
+> >>>       const s16 off = insn->off;
+> >>>       const s32 imm = insn->imm;
+> >>> -     int jmp_offset;
+> >>> -     int i = insn - ctx->prog->insnsi;
+> >>> +     const u64 imm64 = (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
+> >>> +     const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
+> >> Please consider reducing diff damage and not touching parts not directly
+> >> affected by this change. For example this "is32" declaration and
+> >> initialization was moved although not related to this change.
+>
+> It looks reasonable, one change per patch is better.
+>
+> > I think defining variables from simple to complex and grouping them
+> > can make life easier. :)
+> >
+>
+> No strong opinion on this, I am OK either way.
+>
+> Thanks,
+> Tiezhu
+>
+>
