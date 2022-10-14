@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14215FF4EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05ABA5FF4F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiJNU60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S229540AbiJNVAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiJNU6W (ORCPT
+        with ESMTP id S229462AbiJNVAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:58:22 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B8B44AC
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:58:21 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id z20so5802570plb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=huPp57ub9lRRha6PEidm00aaAsQprniPiZAF3tUi1Ug=;
-        b=NJ4dkUgM0+QHetFSzyitOuTnmYkKVFwGLKGbOMCR2HPUhjWHUKbyVpmskF7fEGl0/u
-         oBsGZDH4Sk5/XX+CRkq3IsN7cWzkr1gZD9ZPzIYXW8XnupXoicQAaq0323Rz633R57bR
-         PZ5Co7E84ouPZWtTKqKPXfgkWYRoh0TDNoVz+VfP1HPr9HCeXN3vk58HWQduPqID4Q/2
-         uaasNt0Om51jXvE5+QlYSU8xkDpzYLdTbuY9Yz78Tt496NrC+ZIG9Cb9Xum/183Xzvrg
-         FuE0ITSv2c9BgQRl6bzTASyUBqEvycTvUPETDU/+Cr4mgy+N4phqjucd7KD5SVscTgsG
-         cVeA==
+        Fri, 14 Oct 2022 17:00:34 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB5106A74;
+        Fri, 14 Oct 2022 14:00:33 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so2553728otu.7;
+        Fri, 14 Oct 2022 14:00:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=huPp57ub9lRRha6PEidm00aaAsQprniPiZAF3tUi1Ug=;
-        b=2wSWyqrsJIPA/ZCwe/NFmeMDCKW2qJa/zI5bwX6IWVHjqczogZav/8d2xUJpDEMj0F
-         tiXuBuTuG+xsDSQhA8R5V9VRJPjfi06QDZFhCYiX3Lx8Y9Kd3hnE5u7rlRXEZZ0iTf9R
-         SZJ1+6+wWwv5U4D6TkEBvwHC6fP+Jc2qLpc1fSFWS8da34wmgPNCJkG0g34l33JGL42K
-         NZunwfLsbfYTcKlURzZg4QvMp7OfQNdiUaXPL0EdxSDbyItD9p3bxBE+ySifCma82xCb
-         deKdVS/1kMytRshc/L9D3+LiTmRv5Vuq7+oQihKlbVc0AYiQ+UxByzjAwwFz16zUU8By
-         A2bQ==
-X-Gm-Message-State: ACrzQf1LGSBaz0noomF3Mkoka/HqIBdgpt1VMwdGLtzCvXZg9rSiJY8/
-        lVtnl6Z+QQDzDH/eVfpatEM=
-X-Google-Smtp-Source: AMsMyM7EzaJLedNnQbiGc6n6Dyc4wWrCyXSHx0ym9WC6w4H2Lf6l352d9OjcakaXBrpfReUXh58+qA==
-X-Received: by 2002:a17:903:2686:b0:17e:f177:3ec with SMTP id jf6-20020a170903268600b0017ef17703ecmr7269376plb.71.1665781100579;
-        Fri, 14 Oct 2022 13:58:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z1-20020aa79481000000b00560af825c13sm2234598pfk.91.2022.10.14.13.58.19
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kq4otfpWoUaoxpIPZJV1lgpjpLZShT1J4qTsAKzDCpA=;
+        b=4pZRoWI9RE0n1zgDZKgPtJrTCa9tkp07e3QWXRbMuJd/CptQmZg4y8aDM2lgOEg0dm
+         NOnpytXrIDd1F/5MtLRI4eU5XxiPgr4DYMqIu94MPRIMU5vH8mb1egMNNV6lh9EPQTTi
+         Mr9AQmqcPSorTQ5w8+1gW9bZTmjORWpRVqzlzssb4txAD9Ff4eRlmLE9rlt4vKPjUyuf
+         1yb6PkbxnkCv6D/9VkX6DDZ7hl+iitxeUmM2yoP35w17YLSeIunCBo4guHyKZ4/5BMfk
+         VIf0Tu1zCKPXh2q5pKcXld1XBkoA9Xg3Li600EqcbLSOfIRtodVjjb1vLv4HI7krgC+g
+         q/xA==
+X-Gm-Message-State: ACrzQf38B2Vng3vvUDapaVn6AA8H+z/SiNnbapVCQW1JiexLhggjhbFr
+        ra93n6bG/tpvRRPQBTfc3Q==
+X-Google-Smtp-Source: AMsMyM4UYGB/NG4VC9kqGAklC5tFZU87mpAg9iGmbI1BTt2NsChpYzNoQCdRkPW5fPumiZKwr+PVjA==
+X-Received: by 2002:a9d:12ca:0:b0:661:b4b7:349d with SMTP id g68-20020a9d12ca000000b00661b4b7349dmr3380439otg.47.1665781232469;
+        Fri, 14 Oct 2022 14:00:32 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r8-20020a056871088800b0010e73e252b8sm1860086oaq.6.2022.10.14.14.00.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 13:58:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 14 Oct 2022 13:58:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 10/17] mm/slab: kmalloc: pass requests larger than
- order-1 page to page allocator
-Message-ID: <20221014205818.GA1428667@roeck-us.net>
-References: <20220817101826.236819-1-42.hyeyoo@gmail.com>
- <20220817101826.236819-11-42.hyeyoo@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817101826.236819-11-42.hyeyoo@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Fri, 14 Oct 2022 14:00:32 -0700 (PDT)
+Received: (nullmailer pid 2832389 invoked by uid 1000);
+        Fri, 14 Oct 2022 21:00:32 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Jacopo Mondi <jacopo@jmondi.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        devicetree@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+In-Reply-To: <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Message-Id: <166578091220.2826696.5981359507940429250.robh@kernel.org>
+Subject: Re: [PATCH v2 1/5] media: dt-bindings: ov5645: Convert OV5645 binding to a schema
+Date:   Fri, 14 Oct 2022 16:00:32 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,42 +69,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Aug 17, 2022 at 07:18:19PM +0900, Hyeonggon Yoo wrote:
-> There is not much benefit for serving large objects in kmalloc().
-> Let's pass large requests to page allocator like SLUB for better
-> maintenance of common code.
+On Fri, 14 Oct 2022 19:34:55 +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> Convert the simple OV5645 Device Tree binding to json-schema.
+> 
+> The previous binding marked the below properties as required which was a
+> driver requirement and not the device requirement so just drop them from
+> the required list during the conversion.
+> - clock-frequency
+> - enable-gpios
+> - reset-gpios
+> 
+> Also drop the "clock-names" property as we have a single clock source for
+> the sensor and the driver has been updated to drop the clk referencing by
+> name.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
+> Resend v3:
+> * No change
+> 
+> v2 -> v3
+> * Dropped clock-names property
+> * Marked power supplies as mandatory
+> * Dropped the comment for voltage power supplies
+> * Included RB tag from Laurent
+> * Driver change to drop clock-names [0]
+> 
+> [0] https://lore.kernel.org/linux-media/Yyh%2F3uzOJOu3drEB@pendragon.ideasonboard.com/T/#t
+> 
+> v1 -> v2
+> * Dropped ref to video-interface-devices.yaml#
+> * Dropped driver specific required items from the list
+> * Updated commit message
+> * Dropped clock-lanes and bus-type from the port and example node
+> * Marked data-lanes as required in port node
+> ---
+>  .../devicetree/bindings/media/i2c/ov5645.txt  |  54 ---------
+>  .../bindings/media/i2c/ovti,ov5645.yaml       | 104 ++++++++++++++++++
+>  2 files changed, 104 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/i2c/ov5645.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+> 
 
-This patch results in a WARNING backtrace in all mips and sparc64
-emulations.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 0 at mm/slab_common.c:729 kmalloc_slab+0xc0/0xdc
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-11990-g9c9155a3509a #1
-Stack : ffffffff 801b2a18 80dd0000 00000004 00000000 00000000 81023cd4 00000000
-        81040000 811a9930 81040000 8104a628 81101833 00000001 81023c78 00000000
-        00000000 00000000 80f5d858 81023b98 00000001 00000023 00000000 ffffffff
-        00000000 00000064 00000002 81040000 81040000 00000001 80f5d858 000002d9
-        00000000 00000000 80000000 80002000 00000000 00000000 00000000 00000000
-        ...
-Call Trace:
-[<8010a2bc>] show_stack+0x38/0x118
-[<80cf5f7c>] dump_stack_lvl+0xac/0x104
-[<80130d7c>] __warn+0xe0/0x224
-[<80cdba5c>] warn_slowpath_fmt+0x64/0xb8
-[<8028c058>] kmalloc_slab+0xc0/0xdc
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-irq event stamp: 0
-hardirqs last  enabled at (0): [<00000000>] 0x0
-hardirqs last disabled at (0): [<00000000>] 0x0
-softirqs last  enabled at (0): [<00000000>] 0x0
-softirqs last disabled at (0): [<00000000>] 0x0
----[ end trace 0000000000000000 ]---
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-Guenter
+
+camera@3c: 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/imx6dl-pico-dwarf.dtb
+	arch/arm/boot/dts/imx6dl-pico-hobbit.dtb
+	arch/arm/boot/dts/imx6dl-pico-nymph.dtb
+	arch/arm/boot/dts/imx6dl-pico-pi.dtb
+	arch/arm/boot/dts/imx6dl-wandboard.dtb
+	arch/arm/boot/dts/imx6dl-wandboard-revb1.dtb
+	arch/arm/boot/dts/imx6dl-wandboard-revd1.dtb
+	arch/arm/boot/dts/imx6q-pico-dwarf.dtb
+	arch/arm/boot/dts/imx6q-pico-hobbit.dtb
+	arch/arm/boot/dts/imx6q-pico-nymph.dtb
+	arch/arm/boot/dts/imx6q-pico-pi.dtb
+	arch/arm/boot/dts/imx6qp-wandboard-revd1.dtb
+	arch/arm/boot/dts/imx6q-wandboard.dtb
+	arch/arm/boot/dts/imx6q-wandboard-revb1.dtb
+	arch/arm/boot/dts/imx6q-wandboard-revd1.dtb
+
+ov5645@3c: 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/renesas/r8a774a1-hihope-rzg2m-ex-mipi-2.1.dtb
+	arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-ex-mipi-2.1.dtb
+	arch/arm64/boot/dts/renesas/r8a774c0-ek874-mipi-2.1.dtb
+	arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h-ex-mipi-2.1.dtb
+
