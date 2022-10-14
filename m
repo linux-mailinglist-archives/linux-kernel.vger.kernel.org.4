@@ -2,104 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8712B5FEC7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D164A5FEC78
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJNKWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S229798AbiJNKVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 06:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJNKWM (ORCPT
+        with ESMTP id S229674AbiJNKVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:22:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66C1B867E;
-        Fri, 14 Oct 2022 03:22:06 -0700 (PDT)
-X-UUID: 1c96c13c1224425bb2747da53a5f5f47-20221014
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=1EVtCMCEdutuhUNCrNtPVBANOTU4/N44AAt3ryFs7N0=;
-        b=crvxpsJocBUOzCEOqnQJSd01HAN9UMcKjOQri5P39mQxzI2wIqCnZE2P0noLDNGPZFsIT3hLrSJeefFnTGNtesT7NZGIG4pGRC92rpwR4f6G48gW+3Cn4tCQ4GbtkPxT6tNGyFKDFixWxBipsSChwDfP/L7R2GevDhehc9TXudY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:bf3a6cab-0045-4e2b-91cd-101521b671be,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:965d17b6-a023-44ff-92b1-76c504f71c7a,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 1c96c13c1224425bb2747da53a5f5f47-20221014
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2005646948; Fri, 14 Oct 2022 18:22:00 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 14 Oct 2022 18:21:59 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 14 Oct 2022 18:21:59 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH] soc: mediatek: pm-domains: Fix the power glitch issue
-Date:   Fri, 14 Oct 2022 18:20:29 +0800
-Message-ID: <20221014102029.1162-1-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Fri, 14 Oct 2022 06:21:15 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F8E1B94E2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:21:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id t4so2782100wmj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dDU1EHry5n+XrvnahgNgah2Rjg065mq9PJm7gjM4LqY=;
+        b=weBpi7OT8CMZrlbpSnhba0XK7AN7li0KVaeNIC9WLH5il+FoUOWOHgPjMa3T2BLRFU
+         2JGX09gQtSGRZX5Mi1lO6g5KAuDbwwH1Atfg4qdGPoerf8g2ACU3nnJRIRdfWqY2C2aT
+         mMk08B6uAB4oYiaVBZEf4KgHaZfe+3XwOzVkCIpGq9W+uE2qVmcA6U2xajbUhH4K+z5v
+         FA/qF6pJbowGLw3i3s90YdZHizscizbVuMwnF/pJxMjzygUWSekeWhH8uR5ViLxfcvw6
+         I54tnjAKsZwvUVnfljwK5CoAHvHkZKmI9y1G8BGBxIQU3CnYVSuCBJHJ+R+DSLRaQ2u+
+         nILA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dDU1EHry5n+XrvnahgNgah2Rjg065mq9PJm7gjM4LqY=;
+        b=KwQeHX6sL2ou8NUm90hUf3gcQFTazXuHVhs7WNwPey6N8GkRTO5NZgEAR3GttBlVrV
+         1GnRjTaf4eL9BWkjLU0n2gJA2DDEXyJiSTJl1iOZLpLvc3q6wftXTDYkIt8v5yq4aZEN
+         Cxm7Qxv8yeYhfZxqUvKVoIe0YSbKAdzl25HeFYhTnhwMLvE+3QGDqrj/1V8RMnWC3wT6
+         bNzJ0aBBvvBoVFZlsxV6x1B9Y8dVduxmlYF3DO5ZLXoDIO5m6MoJf69P8385z2g6b/AL
+         S9lAosj2LTUkhNgTPMSYqm3bJgckSMLtUb/WAEleoac5x47KSHIlvmSEM2cvCWc5uUCv
+         2rHw==
+X-Gm-Message-State: ACrzQf2nVSf+gagi3GkfbjGXVwTQcBbWM/5WRzteXBrmdAMqiRxLqKhS
+        W9qHmogCRlDT6ervxCN4/BlV3OaxLpu6pg==
+X-Google-Smtp-Source: AMsMyM4hwqGQBIpE+BIeCKNhNjdJTVXdfNcXvl3ImrKVug9wu7yYYNOc/LK8urWEJtHZ5ZgSMDmCoA==
+X-Received: by 2002:a1c:f008:0:b0:3b4:fd2e:3ede with SMTP id a8-20020a1cf008000000b003b4fd2e3edemr9737880wmb.133.1665742872213;
+        Fri, 14 Oct 2022 03:21:12 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:b460:17f0:186d:9d2e? ([2a05:6e02:1041:c10:b460:17f0:186d:9d2e])
+        by smtp.googlemail.com with ESMTPSA id n17-20020a05600c465100b003c65c9a36dfsm1633633wmo.48.2022.10.14.03.21.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 03:21:11 -0700 (PDT)
+Message-ID: <f327dfc4-cd67-930c-a011-8cc2c58d7668@linaro.org>
+Date:   Fri, 14 Oct 2022 12:21:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] thermal/drivers/iwlwifi: Use generic
+ thermal_zone_get_trip() function
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Nathan Errera <nathan.errera@intel.com>,
+        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>
+References: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
+ <87mt9yn22w.fsf@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <87mt9yn22w.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+On 14/10/2022 12:15, Kalle Valo wrote:
+> Daniel Lezcano <daniel.lezcano@linaro.org> writes:
+> 
+>> The thermal framework gives the possibility to register the trip
+>> points with the thermal zone. When that is done, no get_trip_* ops are
+>> needed and they can be removed.
+>>
+>> The get_trip_temp, get_trip_hyst and get_trip_type are handled by the
+>> get_trip_point().
+>>
+>> The set_trip_temp() generic function does some checks which are no
+>> longer needed in the set_trip_point() ops.
+>>
+>> Convert ops content logic into generic trip points and register them
+>> with the thermal zone.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h |  2 +-
+>>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c  | 71 ++++----------------
+>>   2 files changed, 13 insertions(+), 60 deletions(-)
+> 
+> The subject should begin with "wifi: iwlwifi: ".
+> 
+> I don't see patch 2. Via which tree is the plan for this patch?
 
-Power reset maybe generate unexpected signal. In order to avoid
-the glitch issue, we need to enable isolation first to guarantee the
-stable signal when power reset is triggered.
+patch 2 are similar changes but related to the mellanox driver.
 
-Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
-Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
----
-  Resend a PATCH from
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220310011548.2487-1-chun-jie.chen@mediatek.com/
+This is the continuation of the trip point rework:
 
- [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
----
----
- drivers/soc/mediatek/mtk-pm-domains.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://lore.kernel.org/netdev/20221003092602.1323944-22-daniel.lezcano@linaro.org/t/
 
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-index 09e3c38b8466..474b272f9b02 100644
---- a/drivers/soc/mediatek/mtk-pm-domains.c
-+++ b/drivers/soc/mediatek/mtk-pm-domains.c
-@@ -275,9 +275,9 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
- 	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
- 
- 	/* subsys power off */
--	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
- 	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_ISO_BIT);
- 	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_CLK_DIS_BIT);
-+	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
- 	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ON_2ND_BIT);
- 	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ON_BIT);
- 
+This patch is planned to go through the thermal tree
+
+Sorry I should have mentioned that.
+
 -- 
-2.18.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
