@@ -2,164 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C990F5FE9D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DA95FE9DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJNHy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S230021AbiJNHzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJNHyY (ORCPT
+        with ESMTP id S229982AbiJNHzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:54:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82F71B6C9D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:54:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A94A11F385;
-        Fri, 14 Oct 2022 07:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1665734062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 14 Oct 2022 03:55:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4861F326E1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665734093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YKCTjUXkgWXHelzxl7iwE9MFXdtFxf+ctoNJ6hwB31w=;
-        b=d+G7iCu4/46sYKXEXRYF34PpehqY2SvKQ+zLHYaKdgh2JQdykEuqRi1cdXUZ/JfFSSwO/b
-        QWprGOA4RFfRkX9+hvJM8u1ikvQlIKPl1BkIepHd92GUsBohyq6bv1KrF2utGrXc2xgvQL
-        LOMoQ6aXDGjbU4yIhE/klUTllwQJvIw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1665734062;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YKCTjUXkgWXHelzxl7iwE9MFXdtFxf+ctoNJ6hwB31w=;
-        b=rC2JV+OVOSeKfGDRmoqiyFNwGLXkJid3OiC5YuhjuebKh8UQsaMIIs0HT8wVdR9mcS/3jK
-        nuK/kkmu5yLJrDAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9263713A4A;
-        Fri, 14 Oct 2022 07:54:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /2MLI64VSWMMaQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 14 Oct 2022 07:54:22 +0000
-Message-ID: <8ef3a72d-8719-aeaf-1a03-9b7cb1a03cc4@suse.cz>
-Date:   Fri, 14 Oct 2022 09:54:22 +0200
+        bh=kwtn6uvhgQEqm/XpkC52bizaNd8cjGpKe1WGKPimX2I=;
+        b=UNGzN68VwMF05ZNykEjg7O9sYN7F15kZ+AYjJvFYX4arZNj2+Aabbh6TIu+WXBmZcvqIuP
+        OlSK3HBshyLolCSVDzcpyecrVAqEgzlcQh9JywpscsBbrbncMaoHxPgkhuXk9gFIEEZuw7
+        X7kQC4mWTF94u1b3R2EmnqNbf090y2Y=
+Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
+ [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-60-HJtbtnfYMH2EUyIef2hhrQ-1; Fri, 14 Oct 2022 03:54:52 -0400
+X-MC-Unique: HJtbtnfYMH2EUyIef2hhrQ-1
+Received: by mail-vs1-f70.google.com with SMTP id d184-20020a671dc1000000b0039b46979cb9so1071095vsd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:54:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kwtn6uvhgQEqm/XpkC52bizaNd8cjGpKe1WGKPimX2I=;
+        b=xDGKDuez93/ULQshaMCj4HuE8XTk1dU+8OUBZ0Oxb+jr6zVJA+s/4MJTP/cBRS0Uxy
+         gmRVdwEPi6eCe41buJhcxHap68IhTGUKptGJK3AlLlxQ9XGg1x/KJcuCm2harqdm9OwQ
+         vmEfw0pTfPDtRIB2b+EW39LyUayVbb86XsbOgxMj4XXFpm7y7hijIWF3REQ/0tqaRkv9
+         Q/KdVsEGXb902Qz5pmLlrOQJDP7IyPGei6AgsMAr4bO8fWwj9QarVi+htnzYW599w6DZ
+         zHWWccvMDdIQ94UkUir2FmuVfaMMPVJGMltiAhsVPuucSysr9wlzbHAUOUhz4b1+79SL
+         Dtzg==
+X-Gm-Message-State: ACrzQf12UbvjZ7itEocMZQhA9oINedOT2m9Wlbq+y2A/qdpBqsWsQGdc
+        Axk1PDf2k++wZt9xNyaZ6Se7Ie2DFMm/Ett1oLELnIvOexf8YD+g4AnmIDC1kQxkleq86SKeFjU
+        +I/Y5Mk3FP2UkObhu3Ol7H6sQx8gpVodxQPrKIofw
+X-Received: by 2002:ab0:7590:0:b0:3ea:d2ef:ee0d with SMTP id q16-20020ab07590000000b003ead2efee0dmr1991789uap.62.1665734091459;
+        Fri, 14 Oct 2022 00:54:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM56JqUVAqmbVw+dtHtQM+y2Di+UwZLKyQqOqheAu6wo2RecBdTSfwx+px7+hQCfD79pvuwlD+7EI56QH9y5dR4=
+X-Received: by 2002:ab0:7590:0:b0:3ea:d2ef:ee0d with SMTP id
+ q16-20020ab07590000000b003ead2efee0dmr1991781uap.62.1665734091201; Fri, 14
+ Oct 2022 00:54:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: kernel BUG in page_try_dup_anon_rmap
-Content-Language: en-US
-To:     Wei Chen <harperchen1110@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>, hughd@google.com,
-        dhowells@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <CAO4mrfdLMXsao9RF4fUE8-Wfde8xmjsKrTNMNC9wjUb6JudD0g@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAO4mrfdLMXsao9RF4fUE8-Wfde8xmjsKrTNMNC9wjUb6JudD0g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919123233.8538-1-petr.pavlu@suse.com> <20220919123233.8538-3-petr.pavlu@suse.com>
+In-Reply-To: <20220919123233.8538-3-petr.pavlu@suse.com>
+From:   David Hildenbrand <david@redhat.com>
+Date:   Fri, 14 Oct 2022 09:54:40 +0200
+Message-ID: <CADFyXm5AP8pvXAKRBVNsZd5SUPziKBV0UktwORokuLU7c6Sbvg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     mcgrof@kernel.org, pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 14:25, Wei Chen wrote:
-> Dear Linux Developer,
-> 
-> Recently when using our tool to fuzz kernel, the following crash was triggered:
-> 
-> HEAD commit: 03c765b0e3b4 Linux 5.19-rc4
+On Mon, Sep 19, 2022 at 2:33 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>
+> During a system boot, it can happen that the kernel receives a burst of
+> requests to insert the same module but loading it eventually fails
+> during its init call. For instance, udev can make a request to insert
+> a frequency module for each individual CPU when another frequency module
+> is already loaded which causes the init function of the new module to
+> return an error.
+>
+> The module loader currently serializes all such requests, with the
+> barrier in add_unformed_module(). This creates a lot of unnecessary work
+> and delays the boot.
+>
+> This patch improves the behavior as follows:
+> * A check whether a module load matches an already loaded module is
+>   moved right after a module name is determined. -EEXIST continues to be
+>   returned if the module exists and is live, -EBUSY is returned if
+>   a same-name module is going.
+> * A new reference-counted shared_load_info structure is introduced to
+>   keep track of duplicate load requests. Two loads are considered
+>   equivalent if their module name matches. In case a load duplicates
+>   another running insert, the code waits for its completion and then
+>   returns -EEXIST or -EBUSY depending on whether it succeeded.
+>
+> Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
+> for modules that have finished loading"), the kernel already did merge
+> some of same load requests but it was more by accident and relied on
+> specific timing. The patch brings this behavior back in a more explicit
+> form.
+>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
 
-That's a rather odd version to report against, now that there's v6.0 final?
-(not to mention 5.19 final, months ago) Or is v5.19-rc4 just the first
-affected tag and the bug persists until v6.0?
+Hi Petr,
 
-> git tree: upstream
-> compiler: clang 12.0.0
-> console output:
-> https://drive.google.com/file/d/16ht-2pDp_nU_nXhobMfHaQraVt4qfzBK/view?usp=sharing
-> kernel config: https://drive.google.com/file/d/1lNGU17X6Ui1NDLE4XCRu3I6f9lzhCBcH/view?usp=sharing
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: Wei Chen <harperchen1110@gmail.com>
-> 
-> kernel BUG at include/linux/mm.h:1585!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 20332 Comm: syz-executor Not tainted 5.19.0-rc4 #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:page_try_dup_anon_rmap+0x927/0x1120
-> Code: e6 ff 0f 00 00 31 ff e8 87 75 b2 ff 4c 89 e0 48 25 ff 0f 00 00
-> 0f 84 0e 01 00 00 e8 c3 70 b2 ff e9 43 03 00 00 e8 b9 70 b2 ff <0f> 0b
-> e8 b2 70 b2 ff 4c 89 e7 48 c7 c6 80 96 9e 8a e8 03 91 ee ff
-> RSP: 0018:ffffc900088e7368 EFLAGS: 00010287
-> RAX: ffffffff81d29967 RBX: 0000000000000000 RCX: 0000000000040000
-> RDX: ffffc900084b9000 RSI: 00000000000023c4 RDI: 00000000000023c5
-> RBP: ffff88802e3a0670 R08: ffffffff81d29420 R09: fffff9400011d001
-> R10: fffff9400011d001 R11: 0000000000000000 R12: ffffea00008e8000
-> R13: dffffc0000000000 R14: ffff88802e3a0670 R15: 1ffff11005c740ce
-> FS:  00007fa374806700(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fa3737b8000 CR3: 000000002f26f000 CR4: 0000000000750ef0
-> DR0: 0000000020000080 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  copy_hugetlb_page_range+0xc9d/0x1cc0
->  copy_page_range+0x424/0x1b40
->  dup_mmap+0xa72/0xf80
->  dup_mm+0x8c/0x310
->  copy_process+0x2b3b/0x60d0
->  kernel_clone+0x21a/0x7d0
->  __do_sys_fork+0x9e/0xf0
->  do_syscall_64+0x3d/0x90
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7fa373695c4d
-> Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fa374805c58 EFLAGS: 00000246 ORIG_RAX: 0000000000000039
-> RAX: ffffffffffffffda RBX: 00007fa3737bc0a0 RCX: 00007fa373695c4d
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> RBP: 00007fa37370ed80 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fa3737bc0a0
-> R13: 00007ffc0a3c127f R14: 00007ffc0a3c1420 R15: 00007fa374805dc0
->  </TASK>
-> Modules linked in:
-> Dumping ftrace buffer:
->    (ftrace buffer empty)
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:page_try_dup_anon_rmap+0x927/0x1120
-> Code: e6 ff 0f 00 00 31 ff e8 87 75 b2 ff 4c 89 e0 48 25 ff 0f 00 00
-> 0f 84 0e 01 00 00 e8 c3 70 b2 ff e9 43 03 00 00 e8 b9 70 b2 ff <0f> 0b
-> e8 b2 70 b2 ff 4c 89 e7 48 c7 c6 80 96 9e 8a e8 03 91 ee ff
-> RSP: 0018:ffffc900088e7368 EFLAGS: 00010287
-> RAX: ffffffff81d29967 RBX: 0000000000000000 RCX: 0000000000040000
-> RDX: ffffc900084b9000 RSI: 00000000000023c4 RDI: 00000000000023c5
-> RBP: ffff88802e3a0670 R08: ffffffff81d29420 R09: fffff9400011d001
-> R10: fffff9400011d001 R11: 0000000000000000 R12: ffffea00008e8000
-> R13: dffffc0000000000 R14: ffff88802e3a0670 R15: 1ffff11005c740ce
-> FS:  00007fa374806700(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fa3737b8000 CR3: 000000002f26f000 CR4: 0000000000750ef0
-> DR0: 0000000020000080 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> 
-> Best,
-> Wei
+as you might have seen I sent a patch/fix yesterday (not being aware
+of this patch and that
+this is also a performance issue, which is interesting), that
+similarly makes sure that modules
+are unique early.
+
+https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
+
+It doesn't perform the -EBUSY changes or use something like
+shared_load_info/refcounts;
+it simply uses a second list while the module cannot be placed onto
+the module list yet.
+
+Not sure if that part is really required (e.g., for performance
+reasons). Like Luis, I feel like
+some of these parts could be split into separate patches, if the other
+parts are really required.
+
+I just tested your patch in the environment where I can reproduce the
+vmap allocation issue, and
+(unsurprisingly) this patch similarly seems to fix the issue.
+
+So if your patch ends up upstream, it would be good to add some details
+of my patch description (vmap allocation issue) to this patch description.
+
+
+Cheers,
+David
 
