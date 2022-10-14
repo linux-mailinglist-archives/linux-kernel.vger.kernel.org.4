@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C789F5FED3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87B05FED46
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiJNLga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S229732AbiJNLjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiJNLg1 (ORCPT
+        with ESMTP id S229578AbiJNLjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:36:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E191C0705
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:36:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ojIz3-0008Bs-Ap; Fri, 14 Oct 2022 13:36:09 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3B87BFE1ED;
-        Fri, 14 Oct 2022 11:36:06 +0000 (UTC)
-Date:   Fri, 14 Oct 2022 13:36:03 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: mcan: Add support for handling DLEC error on CAN
- FD
-Message-ID: <20221014113603.hrg3ttsgofgq44ba@pengutronix.de>
-References: <CGME20221014053017epcas5p359d337008999640fa140c691f47bc79c@epcas5p3.samsung.com>
- <20221014050332.45045-1-vivek.2311@samsung.com>
- <20221014071114.a6ls5ay56xk4cin3@pengutronix.de>
- <00db01d8dfbf$5e38fbd0$1aaaf370$@samsung.com>
+        Fri, 14 Oct 2022 07:39:43 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CDE116F;
+        Fri, 14 Oct 2022 04:39:38 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id 831DD495; Fri, 14 Oct 2022 13:39:34 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.steuer-voss.de (Postfix) with ESMTP id 815E831D;
+        Fri, 14 Oct 2022 13:39:34 +0200 (CEST)
+Date:   Fri, 14 Oct 2022 13:39:34 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
+        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] KEYS: encrypted: fix key instantiation with user-provided
+ data
+In-Reply-To: <16fe5265c49fcecdf613fe9dd660efe4ae8d452e.camel@linux.ibm.com>
+Message-ID: <1b621acf-a1f1-ec9b-21f6-d081d69ed74@vosn.de>
+References: <20221013064308.857011E25@mail.steuer-voss.de>  <924a29d81cc7e0d3e2f62f693a0d8fcef97b9779.camel@linux.ibm.com>  <c620d6ed-d97f-b0c3-574-7b3cd63a7799@vosn.de> <16fe5265c49fcecdf613fe9dd660efe4ae8d452e.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mj7nepgaiz77tn2a"
-Content-Disposition: inline
-In-Reply-To: <00db01d8dfbf$5e38fbd0$1aaaf370$@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-2142412134-1665747574=:33507"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---mj7nepgaiz77tn2a
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--8323329-2142412134-1665747574=:33507
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-On 14.10.2022 16:53:19, Vivek Yadav wrote:
-> >=20
-> >                 if (is_lec_err(lec))
-> >                         work_done +=3D m_can_handle_lec_err(dev, lec);
-> >=20
-> >                 if (is_lec_err(dlec))
-> >                         work_done +=3D m_can_handle_lec_err(dev, dlec);
-> >=20
-> > > +			u8 dlec =3D FIELD_GET(PSR_DLEC_MASK, psr);
-> > > +
-> > > +			if (is_lec_err(dlec)) {
-> > > +				netdev_dbg(dev, "Data phase error
-> > detected\n");
-> >=20
-> > If you add a debug, please add one for the Arbitration phase, too.
+On Fri, 14 Oct 2022, Mimi Zohar wrote:
+> On Fri, 2022-10-14 at 08:40 +0200, Nikolaus Voss wrote:
+>> On Thu, 13 Oct 2022, Mimi Zohar wrote:
+>>> On Thu, 2022-10-13 at 08:39 +0200, Nikolaus Voss wrote:
+>>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+>>>> decrypted data") added key instantiation with user provided decrypted data.
+>>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+>>>> Fix this to use hex2bin instead.
+>>>>
+>>>> Old keys created from user provided decrypted data saved with "keyctl pipe"
+>>>> are still valid, however if the key is recreated from decrypted data the
+>>>> old key must be converted to the correct format. This can be done with a
+>>>> small shell script, e.g.:
+>>>>
+>>>> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
+>>>> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
+>>>> keyctl add user masterkey "$(cat masterkey.bin)" @u
+>>>> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
+>>>>
+>>>> It is encouraged to switch to a new key because the effective key size
+>>>> of the old keys is only half of the specified size.
+>>>
+>>> Both the old and new decrypted data size is 32 bytes.  Is the above
+>>> statement necessary, especially since the Documentation example does
+>>> the equivalent?
+>>
+>> The old key has the same byte size but all bytes must be within the
+>> hex-ascíi range of characters, otherwise it is refused by the kernel.
+>> So if you wanted a 32 bytes key you get 16 effective bytes for the key.
+>> In the above example the string size of the $BROKENKEY is 32, while
+>> the string size of the $NEWKEY is 64.
+>>
+>> If you do
+>>
+>> $ echo $NEWKEY
+>> 6162636465664142434445463132333435363738393061616161616161616161
+>>
+>> for the example, the range problem is obvious, so $NEWKEY is still broken.
+>> That's why it should only be used to recover data which should be
+>> reencypted with a new key. If you count exactly, the effective key size is
+>> _slightly_ longer than half of the specified size, but it is still a
+>> severe security problem.
 >
-> I have added the debug print specially for dlec (data phase). So we
-> can differentiate lec errors (for all type of frames except FD with
-> BRS) and Data phase errors, as we are calling same handler function
-> for both the errors.
->=20
-> If I understood your comment correctly, you are asking something like bel=
-ow:
->         /* handle protocol errors in arbitration phase */
->         if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-> -           m_can_is_protocol_err(irqstatus))
-> +           m_can_is_protocol_err(irqstatus)) {
-> +               netdev_dbg(dev, "Arbitration phase error detected\n");
->                 work_done +=3D m_can_handle_protocol_error(dev, irqstatus=
-);
-> +       }
->=20
-> If the above implementation is correct as per your review comment, I
-> think we don't need the above changes because Debug print for
-> arbitration failure are already there in "
-> m_can_handle_protocol_error" function.
+> So the issue with NEWKEY isn't the "effective key size of the old keys
+> is only half of the specified size", but that the old key, itself, is
+> limited to the hex-ascii range of characters.
 
-Ok
+The latter resulting in the former. If for BROKENKEY 32 bytes were 
+specified, a brute force attacker knowing the key properties would only 
+need to try at most 2^(16*8) keys, as if the key was only 16 bytes long. 
+This is what I mean with "effective size" in contrast to the key's byte 
+size which is 32 in my example.
 
-regards,
-Marc
+The security issue is a result of the combination of limiting the input 
+range to hex-ascii and using memcpy() instead of hex2bin(). It could have 
+been fixed either by allowing binary input or using hex2bin() (and 
+doubling the ascii input key length). I chose the latter.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---mj7nepgaiz77tn2a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNJSaEACgkQrX5LkNig
-011yxgf/c6acNcBfDRfZ9nhxnau0jXG2K7yOwJb8Hi4SIxPO/63RPFT+lqGvm+Pn
-eA75SQiGy8ojstW3XJyGDTm5hJ0YNHN1jEd00ZlY4LuBwTmoNrsdMigxjbpLOAdp
-orkIkDcbsL6TNx37Ky38actcIhNVJ9MognLme0WG/2Z3AA9iEQHpV1RmBe1a3rxQ
-TDpUo9iK8juT9CtH7A54MPEmeFJnIiHTC4sOBD5fX9e8iaTiqQS73UP8O6R3M8LG
-AHDywbXMHeCVI8M/mPP2iY11q58D2omCh6J7lD0VpiycpWEycGaGp+n52S33FaEX
-BFx4blHBGw7XsfT2KbGaZm52yweSWw==
-=UAXg
------END PGP SIGNATURE-----
-
---mj7nepgaiz77tn2a--
+Niko
+--8323329-2142412134-1665747574=:33507--
