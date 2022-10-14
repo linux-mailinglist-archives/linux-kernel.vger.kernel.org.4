@@ -2,127 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712C95FF36D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CAB5FF370
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiJNSHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S230103AbiJNSH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiJNSG7 (ORCPT
+        with ESMTP id S229982AbiJNSHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:06:59 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629C9286FF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:06:58 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id i9so3766931qvo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:06:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ch6qXOBT3Q0ocySQGQG2KLhZbSalwxj2bTbWL/3dxw4=;
-        b=yKjU3nkQMthh7ZPA4yLoU1sNa/IAtFJF6wu+AbdAkaWmO9EQsNjxL3+90sG8fUs/Ec
-         JgVAEwjNXkdcnqQvL5FwvyZ17kXPDhHNLa0Yhrf1JQatWsq6b74PHiu3VqrfihaPSwUq
-         Gx+TgQTMtCGROzDMG4NHQNSbD/zBWrIxfyPuAAgm99R/vH+LD7RJUxcIfte8rhCA1Cdx
-         nCsrs1whzQJLxekbq+Cy2ag6vzLqz9wAGfm/vGTlQ/nN0y9YFL/+RUb1uf0rLJsm08kV
-         iHwyNQw+L6co7EtTTtySi0gKdQSUcBtpJWQfGo9a9JpdtlXJJK65GTxZKdsGVlJqjxXh
-         uLSA==
-X-Gm-Message-State: ACrzQf1pCdtXWMHh9O21yTCX9c9YF3YMN+Yh+ATozn/JOflSuMGctQ0R
-        oW4yHgB7qMdZmqfF8JWXV4WYwkU5AKtYDQ==
-X-Google-Smtp-Source: AMsMyM5choQHAfUTNtG+7cn9txPovMlufi2gFmMHcq6otcAgb1TD6vz+ML3+SPA8zrqLdw/Qf96TGA==
-X-Received: by 2002:a05:6214:e49:b0:4b3:f24e:91ac with SMTP id o9-20020a0562140e4900b004b3f24e91acmr4936110qvc.41.1665770817226;
-        Fri, 14 Oct 2022 11:06:57 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id t200-20020a3746d1000000b006cbcdc6efedsm2831440qka.41.2022.10.14.11.06.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 11:06:56 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 126so6519347ybw.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:06:56 -0700 (PDT)
-X-Received: by 2002:a25:cd01:0:b0:6c2:6f0d:f4ce with SMTP id
- d1-20020a25cd01000000b006c26f0df4cemr5234242ybf.365.1665770815994; Fri, 14
- Oct 2022 11:06:55 -0700 (PDT)
+        Fri, 14 Oct 2022 14:07:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532201D4631;
+        Fri, 14 Oct 2022 11:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1665770835;
+        bh=qt6OErHWsTDKZrWmkypB7PH5kVLGo0E85ODKBQDxDhw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=EuPkDVSc+wMkb23sZ0qt2uponSkCVabrPXK1rJGb/ZMo2pxCWwZAUjXytuZbzrEfS
+         QosL5e9DJ2FkzfRB4P5zQx22YNJv+l+DVPDS+MiE/zgj4GMPMQx2WImyPrnLnAOIOj
+         fRw1mWE+iyXtZHxM0qKNMNDNtI7y73KVFDE7VBMc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.188.185]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6sn7-1pDIRo2NZv-018KNL; Fri, 14
+ Oct 2022 20:07:15 +0200
+Message-ID: <4cfd944b-2558-0b74-b976-e8b7b175428c@gmx.de>
+Date:   Fri, 14 Oct 2022 20:07:12 +0200
 MIME-Version: 1.0
-References: <20221012191142.GA3109265@bhelgaas> <885a98b927a5244ad5a5ec8727b67b2135d5a8ad.camel@sipsolutions.net>
- <f57d954a-b565-9bfa-b8eb-ce608e168f1a@cambridgegreys.com> <2135037685.24273.1665665172126.JavaMail.zimbra@nod.at>
- <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com>
- <CAMuHMdU=TurB14tkAbqb9nWYvCOcr0UUScdga25h3-oWjYfzTg@mail.gmail.com>
- <20221013182912.k4deh5v47rjbpnnl@meerkat.local> <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 14 Oct 2022 20:06:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV5i3JGtg8e=STuP7SENVOKHAEtZ+WdUw8GPt7j9gH65A@mail.gmail.com>
-Message-ID: <CAMuHMdV5i3JGtg8e=STuP7SENVOKHAEtZ+WdUw8GPt7j9gH65A@mail.gmail.com>
-Subject: Re: Add linux-um archives to lore.kernel.org?
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        helpdesk <helpdesk@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] parisc: Fix spelling mistake "mis-match" -> "mismatch"
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221013221915.128286-1-colin.i.king@gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221013221915.128286-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:SsI7+OOhrckqJ9s71RET+UmBVYmcBfG3BxtNPAnpEaaLLltYf/q
+ W76QW46tGg7oyNbFqDCU9YH4ckpIuwWLipXzrCQPWXljqpsuA3HnZIR696Oe0KmLauJwehM
+ pKzkxXhOkWFzc7BDm2BIxtuOr6565cIXP4Lwy3lYfxjx/a3GL5ec/1NSClYCfAmiyqBaq4S
+ VKQHdNQGpBqpURzgs7XTA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:36OZDcg+JL8=:D1m7yYw0u5tlw4bVmNjOz5
+ TRYljKp7WktP8mwyDJB5sbiehN54ckfgCqfjOT+wg0bTPfoSTWfE6o9Y8REPrZhOSxTAGRcyP
+ dM6Tq/eRE068MzDAJsADFzCcYkw+0WJ7CfCDI7qfoCbQKBCuSidlrM/7FOHkPc/Jbh7e1PFyD
+ GvrPwgqcU42F6IOEeFd0ppe3RzBP39NV2oAeSVe8VQHtF68jTd5ytJujAWaA8OtDyFuRCiWyd
+ A3M35SyIezb+VtjbhhC0tQU35sqhBTaSrWa8Kkcw6klNhr5erB97X9exOHwbvsfFEjF98bRuZ
+ i8eh4x0+/NGkR8KC39QSp/sDVo5NHYKerTqpi4b/oWWtenn1V7y7ViBBIiL3Z1GcWXgr8l365
+ mqft/1X4qbg7K1iDwqxqwtCCl2owixVMeAROCwpQTUHnoKwdkJYbqnn9anYxgPUgDViqT5ovx
+ X71xceSJGzn2ums8uNVtr/hu8vkzBNhfnVjtUbg7ohiLt/v1R3XZNSve39xQWGDTjEL0uAyTJ
+ S8pVAWdRPSw4d+fLHvF5Ye5wXUpOz8tjyqA/48yLxu/NkeCKshAuUUY7QZ4kjXuSv0WSMNNU9
+ h4mq7RrSA14RY2YtvVCt3cUCT4tIXcPNBG/4YCqHUu4zwdKlzPrdLjHyVyXMC/R44BG1p9one
+ zIE0o0jHf1oF5TSOByNsk41pmyV6K9MLsvnFeGz+BUbJuuaDEWd9heaNhxfSFnJD73JXShMjI
+ orMZNTOH6yLirdVcM55kb4QPMw9kXkdkr52JsLGLeBAyRKCUBD4OXUEhaU6gs/Xi/88NwjQeJ
+ fxWv7GH3T0GbK/vWjcaZTdP+VbrqPdDy8JqZb7XHaoRCuACK5KWiabCH1rRahIaNWvbj/Fija
+ IOoiRHS7+exrhnCBsHrrNH2QjWmZKGCj/Gmbz87V/z9+jq2MwlN5Am1bJy7UZjymsCEbc9AwF
+ mOj53JJMTqxfoWGGNryq+NqkJ16gVlAH43kd0Y6Z9wwBfAyNKT3ZkwOW+/VuiNLMVcxvkbxU7
+ HFjUM7QbfVv/G2igUTByTaBvX0/cGSCTOj9xV19g7MRACCZDev/Q19QbzMwTlUa7bHyqYV6P7
+ dg3kcvc3i0IIdoTnmpNDyb+B+EP9s4HhmtUJT47WVfawAAswl9oVz/4CHvwREF651MY63q0E7
+ rjuA/yifsFXq5W8/CA4F3imC8mo4jPoazlPeN2ol827+6v6/BJfdbchvE6HdsxuYE0sKrNhz+
+ Dj2i9FX+RnHcTBFm/n1AQ9GRTCYaCTKeSnx9UBkEr/JM4s4feRej/buMHxO43VwlprU0pGA0V
+ lDXH+OMbO6rUAIawBDQ3xLCQSi4MwseeAeJlZWFECNRlatGBLTMugtYflA0cw9TiTzx5Okx6Z
+ G+EVbFlyvldcIpIv5aDRqVcu4lOQe1kjbuPL72ad5TwxIXXLuRsGW6Me70zZcqqRpndjJe/3B
+ A7f3xR35zEnH7k2SaZJYgl8ChE1QEL63ipulZQD44EwYhJZ5C0Au1k3JRaW+ufLaIjft/Nqxe
+ AeFhs/SiXgq3wnyoWe4JTLHAxjRpPBH1x9Pm4266O06di
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 8:48 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, Oct 13, 2022 at 8:29 PM Konstantin Ryabitsev
-> <konstantin@linuxfoundation.org> wrote:
-> > On Thu, Oct 13, 2022 at 02:57:18PM +0200, Geert Uytterhoeven wrote:
-> > > The first step is
-> > > https://korg.docs.kernel.org/lore.html#requesting-archival-of-an-existing-list
-> > >
-> > > It doesn't make much sense to start collecting archives if the lore
-> > > collector hasn't been activated yet.
-> >
-> > The archiver is now subscribed to the list. Once we have the archives, we can
-> > complete the setup.
+On 10/14/22 00:19, Colin Ian King wrote:
+> There are several spelling mistakes in kernel error messages. Fix them.
 >
-> Thank you, I have triggered the export from Gmail. After I have received
-> the export archive, I will merge it with my local pre-Gmail archives.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-I have just sent my merged archive for linux-um.lists.infradead.org
-and the old user-mode-linux-devel.lists.sourceforge.net (starting
-from 2003-09-02) to Konstantin.
-
-If you you have older archives, or want to fill in the possible gaps,
-you can follow the procedure [1] starting from my
-linux-um-known-ids.txt.xz[2], and share the new emails with Konstantin.
-
-Konstantin: I believe there is a bug in the sending procedure [3]:
-
-    tar cf full-archives.tar dir-with-mbox-files
-
-I guess that should be
-
-    tar cf full-archives.tar ~/linux-kernel-announce
-
-instead?
+applied to parisc tree.
 
 Thanks!
+Helge
 
-[1] https://korg.docs.kernel.org/lore.html#merging-multiple-archives-into-one
-[2] https://drive.google.com/file/d/1d68UBC4pOCgQicz_a3vIsJAhDy9CTQnH/view?usp=sharing
-[3] https://korg.docs.kernel.org/lore.html#send-the-archive-to-helpdesk
+> ---
+>   drivers/parisc/eisa_enumerator.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/parisc/eisa_enumerator.c b/drivers/parisc/eisa_enum=
+erator.c
+> index f54a6f450391..f0cb31198a8f 100644
+> --- a/drivers/parisc/eisa_enumerator.c
+> +++ b/drivers/parisc/eisa_enumerator.c
+> @@ -393,7 +393,7 @@ static int parse_slot_config(int slot,
+>   		}
+>
+>   		if (p0 + function_len < pos) {
+> -			printk(KERN_ERR "eisa_enumerator: function %d length mis-match "
+> +			printk(KERN_ERR "eisa_enumerator: function %d length mismatch "
+>   			       "got %d, expected %d\n",
+>   			       num_func, pos-p0, function_len);
+>   			res=3D-1;
+> @@ -407,13 +407,13 @@ static int parse_slot_config(int slot,
+>   	}
+>
+>   	if (pos !=3D es->config_data_length) {
+> -		printk(KERN_ERR "eisa_enumerator: config data length mis-match got %d=
+, expected %d\n",
+> +		printk(KERN_ERR "eisa_enumerator: config data length mismatch got %d,=
+ expected %d\n",
+>   			pos, es->config_data_length);
+>   		res=3D-1;
+>   	}
+>
+>   	if (num_func !=3D es->num_functions) {
+> -		printk(KERN_ERR "eisa_enumerator: number of functions mis-match got %=
+d, expected %d\n",
+> +		printk(KERN_ERR "eisa_enumerator: number of functions mismatch got %d=
+, expected %d\n",
+>   			num_func, es->num_functions);
+>   		res=3D-2;
+>   	}
+> @@ -451,7 +451,7 @@ static int init_slot(int slot, struct eeprom_eisa_sl=
+ot_info *es)
+>   		}
+>   		if (es->eisa_slot_id !=3D id) {
+>   			print_eisa_id(id_string, id);
+> -			printk(KERN_ERR "EISA slot %d id mis-match: got %s",
+> +			printk(KERN_ERR "EISA slot %d id mismatch: got %s",
+>   			       slot, id_string);
+>
+>   			print_eisa_id(id_string, es->eisa_slot_id);
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
