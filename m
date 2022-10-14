@@ -2,88 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68425FE8DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5695FE8E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJNGYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S229717AbiJNGbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiJNGYn (ORCPT
+        with ESMTP id S229518AbiJNGbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:24:43 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46AAB1D9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 23:24:41 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29E6OWCC047135;
-        Fri, 14 Oct 2022 01:24:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665728672;
-        bh=qe2gyXvDE+BMFUGXRhvyFIUF6gnIH6JhuSdFdkENsv4=;
-        h=From:To:CC:Subject:Date;
-        b=vqQ6F6SCyObEcGuh/69h7LicGH4a45CEgONwQp1lOO7SGmyQV6v8h+belS2Y6vYNU
-         F1EE/FBuCppgZyAZ1Mc68utQ5ZVyNC8/yIKt4a/RDJa9IYMwC0RWA3NEcxiXnpuZx1
-         I68QcatdT7OXuB+yW1nxZY1Vr+V961HumaeKQ7lM=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29E6OWHJ016002
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Oct 2022 01:24:32 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 14
- Oct 2022 01:24:32 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 14 Oct 2022 01:24:32 -0500
-Received: from a0393678ub.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29E6OUaN003197;
-        Fri, 14 Oct 2022 01:24:31 -0500
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH] MAINTAINERS: Update Kishon's email address in GENERIC PHY FRAMEWORK
-Date:   Fri, 14 Oct 2022 11:54:24 +0530
-Message-ID: <20221014062424.3327-1-kishon@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 14 Oct 2022 02:31:37 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F36C32B9D;
+        Thu, 13 Oct 2022 23:31:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VS6WuA7_1665729090;
+Received: from 30.221.130.30(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VS6WuA7_1665729090)
+          by smtp.aliyun-inc.com;
+          Fri, 14 Oct 2022 14:31:32 +0800
+Message-ID: <5ca5d4bd-63b4-12e9-39cd-7580958980db@linux.alibaba.com>
+Date:   Fri, 14 Oct 2022 14:31:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [PATCH V2 3/5] cachefiles: resend an open request if the read
+ request's object is closed
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, dhowells@redhat.com,
+        xiang@kernel.org
+Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20221014030745.25748-1-zhujia.zj@bytedance.com>
+ <20221014030745.25748-4-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20221014030745.25748-4-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update Kishon's email address in GENERIC PHY FRAMEWORK maintainer
-entry.
 
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9dc9a4aa2301..071428241c50 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8543,8 +8543,8 @@ F:	include/asm-generic/
- F:	include/uapi/asm-generic/
- 
- GENERIC PHY FRAMEWORK
--M:	Kishon Vijay Abraham I <kishon@ti.com>
- M:	Vinod Koul <vkoul@kernel.org>
-+M:	Kishon Vijay Abraham I <kishon@kernel.org>
- L:	linux-phy@lists.infradead.org
- S:	Supported
- Q:	https://patchwork.kernel.org/project/linux-phy/list/
+On 10/14/22 11:07 AM, Jia Zhu wrote:
+
+> +/*
+> + * Reopen the closed object with associated read request.
+
+I think "Reopen the closed object if there's any inflight or subsequent
+READ request on this object" would be better?
+
+> + * Skip read requests whose related object are reopening.
+					       ^
+					      is ?
+
+
+> @@ -277,14 +308,18 @@ ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+>  	xa_unlock(&cache->reqs);
+>  
+>  	id = xas.xa_index;
+> -	msg->msg_id = id;
+>  
+>  	if (msg->opcode == CACHEFILES_OP_OPEN) {
+>  		ret = cachefiles_ondemand_get_fd(req);
+> -		if (ret)
+> +		if (ret) {
+> +			cachefiles_ondemand_set_object_close(req->object);
+>  			goto error;
+> +		}
+>  	}
+>  
+> +	msg->msg_id = id;
+> +	msg->object_id = req->object->private->ondemand_id;
+
+Since currently msg->object_id is always assigned in
+cachefiles_ondemand_daemon_read(), we can remove the assignment in
+cachefiles_ondemand_get_fd().
+
+
+Otherwise LGTM.
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
 -- 
-2.17.1
-
+Thanks,
+Jingbo
