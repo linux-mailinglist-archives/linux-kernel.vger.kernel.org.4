@@ -2,112 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086F85FEE52
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9850A5FEE54
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJNNCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S229889AbiJNNDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiJNNCq (ORCPT
+        with ESMTP id S229850AbiJNNDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:02:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55471C883A
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:02:43 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ojKKX-0001M4-Io; Fri, 14 Oct 2022 15:02:25 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B2C2DFE29F;
-        Fri, 14 Oct 2022 13:02:22 +0000 (UTC)
-Date:   Fri, 14 Oct 2022 15:02:20 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Fri, 14 Oct 2022 09:03:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8A11C8D7E;
+        Fri, 14 Oct 2022 06:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e74pYK7vLx6IlOPOPqh+gX/TxdxGdVFG28XXhBE8NKE=; b=XpaTghU4uz+r5xaUJJ/HBrjwdn
+        8IGOQXKHEe8ekuSVqZj+ZNdqGxMX7X2bSP4s4BtJ1OEgegaqQ4WrFUDaB90deADiF420PrzXb2M0i
+        8VTihJGTS1JRRRozSG9yevwcSrbvR0b4u7KcT3XSy+IzpMEIaVY8OBN4V4IhX0kEefs8oArnQ4/7s
+        r0PMwWigDabkFAZRaeGjXL7Lw3YGXovPTv008a1H6Huw3GAOi9QesgVunlX7sh/vcAnHLcX+4G4Ni
+        YIXvQ2LCgtGaN79MdvouF/uZJBebCMIW+4vphrYMXp/ho1VHku3rz7bxeH4IJfe/bkKVzn6SX/lxu
+        384EcPBg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ojKLe-007dNb-Ln; Fri, 14 Oct 2022 13:03:34 +0000
+Date:   Fri, 14 Oct 2022 14:03:34 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     krisman@collabora.com, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] can: mcan: Add support for handling DLEC error on CAN
- FD
-Message-ID: <20221014130220.jfdldo644aq5x6ox@pengutronix.de>
-References: <CGME20221014121257epcas5p3805649d1a77149ac4d3dd110fb808633@epcas5p3.samsung.com>
- <20221014114613.33369-1-vivek.2311@samsung.com>
+Subject: Re: [PATCH] unicode: mkutf8data: Add malloc return value detection
+Message-ID: <Y0leJgPmNrqeZP37@casper.infradead.org>
+References: <20221014075710.310943-1-zeming@nfschina.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nsyareichhihttzn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221014114613.33369-1-vivek.2311@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221014075710.310943-1-zeming@nfschina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 14, 2022 at 03:57:10PM +0800, Li zeming wrote:
+> Add the check and judgment statement of malloc return value.
 
---nsyareichhihttzn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why?  Just to shut up some static checker?
 
-On 14.10.2022 17:16:13, Vivek Yadav wrote:
-> When a frame in CAN FD format has reached the data phase, the next
-> CAN event (error or valid frame) will be shown in DLEC.
->=20
-> Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-> determine the type of last error that occurred in the data phase
-> of a CAN FD frame and handle the bus errors.
+> +++ b/fs/unicode/mkutf8data.c
+> @@ -495,6 +495,9 @@ static struct node *alloc_node(struct node *parent)
+>  	int bitnum;
+>  
+>  	node = malloc(sizeof(*node));
+> +	if (unlikely(!node))
+> +		return NULL;
+> +
 
-Can you please test your code before sending it.
+Right, so now alloc_node() can return NULL when it couldn't before.
+Look at the callers ...
 
-| drivers/net/can/m_can/m_can.c: In function =E2=80=98m_can_handle_bus_erro=
-rs=E2=80=99:
-| include/linux/build_bug.h:16:51: error: negative width in bit-field =E2=
-=80=98<anonymous>=E2=80=99
-|    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e));=
- })))
-[...]
-| drivers/net/can/m_can/m_can.c:883:17: warning: ISO C90 forbids mixed decl=
-arations and code [-Wdeclaration-after-statement]
-|   883 |                 u8 dlec =3D FIELD_GET(PSR_DLEC_MASK, psr);
-|       |                 ^~
+        while (keybits) {
+                if (!*cursor)
+                        *cursor = alloc_node(node);
+                node = *cursor;
+                if (node->nextbyte)
+                        key++;
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---nsyareichhihttzn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNJXdkACgkQrX5LkNig
-010E+ggAr4/hTIGmZRl7ym8KMWr1saLyszKV4xOnKcuQNMW9IR4eDH0jVoLnSIur
-zfkSEEIfjZWMRJhHu4h2iIV6YnkBz0jZa5rMnDG63LSYJOl2UT1yBNzo1MBFjhhs
-JSLdk069k9y1R2oAZ0Madks2vkHN42HHqOXG4/c7aa/vAMK8mHIws4z16nMonF0x
-fsfwzm8QXhKSdzQ3vVJkbupFKoUe7a+FB5dOKlG1oOqTCXY2CEKz553qPP8le8Ql
-w5mFYCOWBhy5ESxuIBFDQA0+MiCmeuFgGNZiULHQAd0dU1ROmBI9VKFTOkNXxeXU
-XHZfHqoLfscfXRyzKOefhrBVb/X5jw==
-=XetC
------END PGP SIGNATURE-----
-
---nsyareichhihttzn--
+They're unprepared for alloc_node() to return NULL, so all you've done
+is move the crash.
