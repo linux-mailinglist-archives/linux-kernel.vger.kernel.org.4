@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407B15FF26F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2265FF276
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiJNQod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S230130AbiJNQpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiJNQob (ORCPT
+        with ESMTP id S230340AbiJNQpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:44:31 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051171BE938;
-        Fri, 14 Oct 2022 09:44:31 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id b5so4765235pgb.6;
-        Fri, 14 Oct 2022 09:44:30 -0700 (PDT)
+        Fri, 14 Oct 2022 12:45:35 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A479A2A1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:45:33 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id r3so6266496yba.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RIneIIyv2q1QhRu+3OHZL3JM2gZoB+5mtMOcLTE6H5o=;
-        b=BwSyffdZ7ppvkQKzkjX8ZuUEorSmxftn6JIbU9av3L4VS2Qx0gsN0ypL0HY2iVxktw
-         vPLrgnsCv8xNaRWh0e52rFevY26OEa0UVXJGBukKkCoF56SvFkQdHHi59C/NiaLSPoTR
-         ZRlfq1Am8o/iICbjCknzpDXBsoPEfTSyFNK9sUqX3GLgUr6nazM/f7mnMGANTUIwTeQS
-         q3wz/A1OgHaFEPTZahmaUDv/Et8gW3vd2EHkVwFQwGaEU/gHOFjylAI/cIZZjYbMFHwN
-         2sY0VWK4+IdzYHUpLzdp1caf9KDLafKM/Jk7ANhCXH1sw2TWS9NQGwIo6JlP//tS1zOk
-         r2HA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x3jAJWSDmoBnMCj7Rya+eCIcMnszLy+/Wa/EqdUIo28=;
+        b=bMFj2IUFMIPQgPOzwAuOgE2wxAvJZQlHdaN+YRC1Wp7f2fhpEpEWxZ/Mp6iV4epSPY
+         Yumi24rSinylvcPcdCmBxgX/kOqZcFePCJ1sSpQpttca8qGyhaRZtYvsb+pf9ubMM9rv
+         lFnsNqANz8JESuNZT+YBcnzTEGYqIz+XoUK0fyaL0D5JUNq0q+JqSEK/Na+/+JvFNuX5
+         4qWt67jceHNCeAqLEsz8D9uh/9ppz4xWSetHQ4998df+6VmHNf9+795N26T3n2wMVTiI
+         4naeOzk7+L4++5fTErYGyzh9cxRnKG2G/vKc3KApM51OkTw0DeUecAG5vhvzBr1BbA2X
+         D8Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RIneIIyv2q1QhRu+3OHZL3JM2gZoB+5mtMOcLTE6H5o=;
-        b=McFE31RGOOJrit6EiVycFpSV1ZnrGY/Tmg3g1tDHOy06v0QVl+Jk7OOXfRJ3D1Fx24
-         OAmJuSKKO5ilwBmSVx3bFz18THnIl29xwlPq2SuDQmc2PI9xt6DYRTnlgnFm1MZWFKZO
-         kYRyx7cfKEzm3I4yd+rKYdioj0GIDwPnae0g5/rITJgrjqgOkA1Bp106INfHFu0zSKu8
-         OcbqGDdu7pXUmH98bk/ojSU1OwnHzfZDNN7YnW5sNRQFFPdbqmw+DR6q46UwzB+46mTC
-         H4zK41fSpIsBpr4rXysrsLmNqbOZ05ia24VnVTfR0zEA0DliIoAa2GjINQlIzcv7RWJG
-         +t+Q==
-X-Gm-Message-State: ACrzQf3d3Z1L4QPI2MVlUFH9pd4wmZfLG6vStf5iLVv4Ubr4L3f2Gqsj
-        9loSkKR7Ge3J//uD9Bp5AWE=
-X-Google-Smtp-Source: AMsMyM4zlhvmOb981pIpU8iL5h6g94L0kwQftqJ4fjE7+cBBW14QWUC73V+KUBNWwo3Z+f4NVMFQbw==
-X-Received: by 2002:a05:6a00:2402:b0:52c:81cf:8df2 with SMTP id z2-20020a056a00240200b0052c81cf8df2mr5995331pfh.40.1665765870304;
-        Fri, 14 Oct 2022 09:44:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o2-20020a170902d4c200b001708c4ebbaesm1845054plg.309.2022.10.14.09.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 09:44:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 14 Oct 2022 09:44:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] watchdog: sp805_wdt: fix spelling typo in comment
-Message-ID: <20221014164428.GA105432@roeck-us.net>
-References: <20221009083944.2988237-1-13667453960@163.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x3jAJWSDmoBnMCj7Rya+eCIcMnszLy+/Wa/EqdUIo28=;
+        b=YwT9/X6kRpT5+HmalS+UDlcOVhfxyDQ6BdE9KmB6VvwQI6pY7/F/3M9hTFdabRbZ4n
+         Mno1pmBTyBAjQuGDekUP1F44EY+j+0YY9hsXF+4tx9NnpMNAotllyR8Ku/tNc79q9F9c
+         cN1vb6idJZ3SsGGwS8GeHQx8twmgs8OFxSRseLnJuRem8TQLQM122Di2MqUwbEo29kv+
+         HZSPvnxVrdfQnJcgrcBqV09VsL/xBxABtjidSttamdg7Nlua7AZo1YRKl377fjc5B3k7
+         nXKXvqtEXACZF43L8sljZHBPsullf7Paji9/faemTNlTjhwF62PqKnNvkVZccf8usP5p
+         aDBg==
+X-Gm-Message-State: ACrzQf3myWZjwUuv2Q4ESBwOg9DBFrSSR4ZVoA80QtR2jgurmvQ9FRq9
+        rjWdpUlz0B4FXEWc7KIaJnH7p4L9mdXRvk94mJGNupLuXt7HQA==
+X-Google-Smtp-Source: AMsMyM6uhBLxUSMai7lmYeksE+w6603hFivbA+hkPMtGc0C5VED6vzgxxgDiz9XbnvozplOe3sBlxcdtloOmHkUTBhg=
+X-Received: by 2002:a25:7a01:0:b0:6b0:820:dd44 with SMTP id
+ v1-20020a257a01000000b006b00820dd44mr4932743ybc.387.1665765932162; Fri, 14
+ Oct 2022 09:45:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009083944.2988237-1-13667453960@163.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+ <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com> <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
+ <5db967de-ea7e-9f35-cd74-d4cca2fcb9ee@codeweavers.com> <CANn89iJTNUCDLptS_rV4JUDcEH8JNXvOTx4xgzvaDHG6eodtXg@mail.gmail.com>
+ <81b0e6c9-6c13-aecd-1e0e-6417eb89285f@codeweavers.com> <CANn89iKD=ceuLnhK-zpk3QerpS-FUb_wb_HevkpvsVqGJ_T4NQ@mail.gmail.com>
+ <342a762d-22f5-b979-411f-aab0474feda2@codeweavers.com>
+In-Reply-To: <342a762d-22f5-b979-411f-aab0474feda2@codeweavers.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 14 Oct 2022 09:45:19 -0700
+Message-ID: <CANn89iKoaLRupASAJKW5ZprXhSMiXSs7vi5UT=wEU11R5+iLZQ@mail.gmail.com>
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
+To:     Paul Gofman <pgofman@codeweavers.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +78,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 04:39:44PM +0800, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
-> 
-> Fix spelling typo in comment.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Fri, Oct 14, 2022 at 9:39 AM Paul Gofman <pgofman@codeweavers.com> wrote:
+>
+> Sorry if I was unclear, to reformulate my question, is blocking
+> listening port (not the accept one) this way a IETF requirement? I am
+> asking because I could not find where such a requirement stems from
+> there. Sorry if I am missing the obvious.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I think it is documented.
 
-> ---
->  drivers/watchdog/sp805_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index 78ba36689eec..2756ed54ca3d 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -88,7 +88,7 @@ static bool wdt_is_running(struct watchdog_device *wdd)
->  	return (wdtcontrol & ENABLE_MASK) == ENABLE_MASK;
->  }
->  
-> -/* This routine finds load value that will reset system in required timout */
-> +/* This routine finds load value that will reset system in required timeout */
->  static int wdt_setload(struct watchdog_device *wdd, unsigned int timeout)
->  {
->  	struct sp805_wdt *wdt = watchdog_get_drvdata(wdd);
+man 7 socket
+
+       SO_REUSEADDR
+              Indicates that the rules used in validating addresses
+supplied in a bind(2) call should allow reuse of local addresses.  For
+AF_INET sockets this means
+              that a socket may bind, except when there is an active
+listening socket bound to the address.  When the listening socket is
+bound to INADDR_ANY with  a
+              specific port then it is not possible to bind to this
+port for any local address.  Argument is an integer boolean flag.
+
+You seem to need another way, so you will have to ask this question in IETF.
+
+>
+> On 10/14/22 11:34, Eric Dumazet wrote:
+> >>       My question is if the behaviour of blocking listen socket port
+> >> while the accepted port (which, as I understand, does not have any
+> >> direct relation to listen port anymore from TCP standpoint) is still in
+> >> TIME_ or other wait is stipulated by TCP requirements which I am
+> >> missing? Or, if not, maybe that can be changed?
+> >>
+> > Please raise these questions at IETF, this is where major TCP changes
+> > need to be approved.
+> >
+> > There are multiple ways to avoid TIME_WAIT, if you really need to.
+> >
+> >
+> >> Thanks,
+> >>       Paul.
+> >>
+> >>
+> >> On 10/14/22 11:20, Eric Dumazet wrote:
+> >>> On Fri, Oct 14, 2022 at 8:52 AM Paul Gofman <pgofman@codeweavers.com> wrote:
+> >>>> Hello Eric,
+> >>>>
+> >>>> our problem is actually not with the accept socket / port for which
+> >>>> those timeouts apply, we don't care for that temporary port number. The
+> >>>> problem is that the listen port (to which apps bind explicitly) is also
+> >>>> busy until the accept socket waits through all the necessary timeouts
+> >>>> and is fully closed. From my reading of TCP specs I don't understand why
+> >>>> it should be this way. The TCP hazards stipulating those timeouts seem
+> >>>> to apply to accept (connection) socket / port only. Shouldn't listen
+> >>>> socket's port (the only one we care about) be available for bind
+> >>>> immediately after the app stops listening on it (either due to closing
+> >>>> the listen socket or process force kill), or maybe have some other
+> >>>> timeouts not related to connected accept socket / port hazards? Or am I
+> >>>> missing something why it should be the way it is done now?
+> >>>>
+> >>> To quote your initial message :
+> >>>
+> >>> <quote>
+> >>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
+> >>> socket in a hack. But this hack cannot be added to the application
+> >>> process as we don't own it.
+> >>> </quote>
+> >>>
+> >>> Essentially you are complaining of the linux kernel being unable to
+> >>> run a buggy application.
+> >>>
+> >>> We are not going to change the linux kernel because you can not
+> >>> fix/recompile an application.
+> >>>
+> >>> Note that you could use LD_PRELOAD, or maybe eBPF to automatically
+> >>> turn SO_REUSEADDR before bind()
+> >>>
+> >>>
+> >>>> Thanks,
+> >>>>        Paul.
+> >>>>
+> >>>>
+> >>>> On 9/30/22 10:16, Eric Dumazet wrote:
+> >>>>> On Fri, Sep 30, 2022 at 6:24 AM Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> >>>>>> Hi Eric,
+> >>>>>>
+> >>>>>> RFC 1337 describes the TIME-WAIT Assassination Hazards in TCP. Because
+> >>>>>> of this hazard we have 60 seconds timeout in TIME_WAIT state if
+> >>>>>> connection isn't closed properly. From RFC 1337:
+> >>>>>>> The TIME-WAIT delay allows all old duplicate segments time
+> >>>>>> enough to die in the Internet before the connection is reopened.
+> >>>>>>
+> >>>>>> As on localhost there is virtually no delay. I think the TIME-WAIT delay
+> >>>>>> must be zero for localhost connections. I'm no expert here. On localhost
+> >>>>>> there is no delay. So why should we wait for 60 seconds to mitigate a
+> >>>>>> hazard which isn't there?
+> >>>>> Because we do not specialize TCP stack for loopback.
+> >>>>>
+> >>>>> It is easy to force delays even for loopback (tc qdisc add dev lo root
+> >>>>> netem ...)
+> >>>>>
+> >>>>> You can avoid TCP complexity (cpu costs) over loopback using AF_UNIX instead.
+> >>>>>
+> >>>>> TIME_WAIT sockets are optional.
+> >>>>> If you do not like them, simply set /proc/sys/net/ipv4/tcp_max_tw_buckets to 0 ?
+> >>>>>
+> >>>>>> Zapping the sockets in TIME_WAIT and FIN_WAIT_2 does removes them. But
+> >>>>>> zap is required from privileged (CAP_NET_ADMIN) process. We are having
+> >>>>>> hard time finding a privileged process to do this.
+> >>>>> Really, we are not going to add kludges in TCP stacks because of this reason.
+> >>>>>
+> >>>>>> Thanks,
+> >>>>>> Usama
+> >>>>>>
+> >>>>>>
+> >>>>>> On 5/24/22 1:18 PM, Muhammad Usama Anjum wrote:
+> >>>>>>> Hello,
+> >>>>>>>
+> >>>>>>> We have a set of processes which talk with each other through a local
+> >>>>>>> TCP socket. If the process(es) are killed (through SIGKILL) and
+> >>>>>>> restarted at once, the bind() fails with EADDRINUSE error. This error
+> >>>>>>> only appears if application is restarted at once without waiting for 60
+> >>>>>>> seconds or more. It seems that there is some timeout of 60 seconds for
+> >>>>>>> which the previous TCP connection remains alive waiting to get closed
+> >>>>>>> completely. In that duration if we try to connect again, we get the error.
+> >>>>>>>
+> >>>>>>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
+> >>>>>>> socket in a hack. But this hack cannot be added to the application
+> >>>>>>> process as we don't own it.
+> >>>>>>>
+> >>>>>>> I've looked at the TCP connection states after killing processes in
+> >>>>>>> different ways. The TCP connection ends up in 2 different states with
+> >>>>>>> timeouts:
+> >>>>>>>
+> >>>>>>> (1) Timeout associated with FIN_WAIT_1 state which is set through
+> >>>>>>> `tcp_fin_timeout` in procfs (60 seconds by default)
+> >>>>>>>
+> >>>>>>> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
+> >>>>>>> seems like this timeout has come from RFC 1337.
+> >>>>>>>
+> >>>>>>> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
+> >>>>>>> also doesn't seem feasible to change the timeout of TIME_WAIT state as
+> >>>>>>> the RFC mentions several hazards. But we are talking about a local TCP
+> >>>>>>> connection where maybe those hazards aren't applicable directly? Is it
+> >>>>>>> possible to change timeout for TIME_WAIT state for only local
+> >>>>>>> connections without any hazards?
+> >>>>>>>
+> >>>>>>> We have tested a hack where we replace timeout of TIME_WAIT state from a
+> >>>>>>> value in procfs for local connections. This solves our problem and
+> >>>>>>> application starts to work without any modifications to it.
+> >>>>>>>
+> >>>>>>> The question is that what can be the best possible solution here? Any
+> >>>>>>> thoughts will be very helpful.
+> >>>>>>>
+> >>>>>>> Regards,
+> >>>>>>>
+> >>>>>> --
+> >>>>>> Muhammad Usama Anjum
+>
+>
