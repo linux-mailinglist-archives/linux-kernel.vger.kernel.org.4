@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDF45FECF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F39F5FECF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJNLKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S229783AbiJNLKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJNLKN (ORCPT
+        with ESMTP id S229766AbiJNLKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:10:13 -0400
+        Fri, 14 Oct 2022 07:10:15 -0400
 Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FDA357C3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:10:07 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221014111005epoutp0442b3b0886c85e003bba2d79edfc7420f~d6vwi88dY0623806238epoutp04f
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:10:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221014111005epoutp0442b3b0886c85e003bba2d79edfc7420f~d6vwi88dY0623806238epoutp04f
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E9E476E6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:10:12 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221014111010epoutp0480c178e1ef9c17524768680cc792b63f~d6v1THHn30818408184epoutp04k
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:10:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221014111010epoutp0480c178e1ef9c17524768680cc792b63f~d6v1THHn30818408184epoutp04k
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665745805;
-        bh=b0SpkS4ju/nMLrPXxPclPFQEAVxgNqmow5paQbtJPUc=;
+        s=mail20170921; t=1665745810;
+        bh=X+AgLGa5lEnY8GHICnKcE5aQCOfPFmz4hGlS4PuZixQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IAvFc8WEXoPQHIaf4SOoerpBC6qz3yjazYtvSl297qUiYa8THSc/Iw3NUreHN6VuI
-         hiWXFpjNZag9LYIgDSz7baMfhM4ysjOHNnz4iBMj/ezPh9Qu5VHlxGbQWBlHxAh0v9
-         BF3dpr+rGlINjAMzfC7VsmJDVHeoItH0myRxOde8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221014111005epcas5p16b721de3063b2aa36be8030e23076149~d6vv7bzYX0967309673epcas5p1H;
-        Fri, 14 Oct 2022 11:10:05 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4MpkF63nhqz4x9Pt; Fri, 14 Oct
-        2022 11:10:02 +0000 (GMT)
+        b=llKkbRjQEpsYxihhXRlOSXqYYCjY5MuaUJe9WFg5/f/0FhK13bBaw2zv7I1HVPIS8
+         sgBFu3wcVmHHdcSh1KF80gNGX6ADJfGYL6Zm0aHJXCvQn0MsL+r8xnOcQhMekwHZB9
+         qlQ275ficWYw5ZQSXPrxPQpvkjvFbMuX/zrTODU8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221014111010epcas5p20d10d00d365e0f4073ddf47b171ecc0e~d6v0rrd7w1113011130epcas5p2a;
+        Fri, 14 Oct 2022 11:10:10 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MpkFC5vL9z4x9Pr; Fri, 14 Oct
+        2022 11:10:07 +0000 (GMT)
 Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.3E.56352.A8349436; Fri, 14 Oct 2022 20:10:02 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221014104850epcas5p1a707b9d407a0947c3519077cf7fca5ff~d6dMcJ3X02013820138epcas5p1w;
-        Fri, 14 Oct 2022 10:48:50 +0000 (GMT)
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        27.06.39477.F8349436; Fri, 14 Oct 2022 20:10:07 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221014104857epcas5p2a275a1d606ca066227228d13bcf5b120~d6dS97GIL0052600526epcas5p22;
+        Fri, 14 Oct 2022 10:48:57 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221014104850epsmtrp1b40bf3b4a9eb9bf0311fb12133d443dc~d6dMbRuoq3160431604epsmtrp1p;
-        Fri, 14 Oct 2022 10:48:50 +0000 (GMT)
-X-AuditID: b6c32a4b-5f7fe7000001dc20-e3-6349438aeec3
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221014104857epsmtrp2a596a658fb9740b9ee46152613e68298~d6dS8-1ID0248602486epsmtrp2u;
+        Fri, 14 Oct 2022 10:48:57 +0000 (GMT)
+X-AuditID: b6c32a4a-259fb70000019a35-58-6349438fde64
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.2C.18644.19E39436; Fri, 14 Oct 2022 19:48:50 +0900 (KST)
+        B7.2C.18644.89E39436; Fri, 14 Oct 2022 19:48:56 +0900 (KST)
 Received: from cheetah.sa.corp.samsungelectronics.net (unknown
         [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221014104847epsmtip1a09b60df02bcbbdd501ba89313fa8bc1~d6dKT-h8_2736427364epsmtip1Z;
-        Fri, 14 Oct 2022 10:48:47 +0000 (GMT)
+        20221014104854epsmtip10e316d810d89bf2e6392115791f00634~d6dQxi0AG2688026880epsmtip1J;
+        Fri, 14 Oct 2022 10:48:54 +0000 (GMT)
 From:   Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
@@ -61,54 +61,54 @@ To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
 Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Subject: [PATCH 1/6] ASoC: samsung: i2s: TDM Support for CPU DAI driver
-Date:   Fri, 14 Oct 2022 15:51:46 +0530
-Message-Id: <20221014102151.108539-2-p.rajanbabu@samsung.com>
+Subject: [PATCH 2/6] ASoC: samsung: i2s: configure PSR from sound card
+Date:   Fri, 14 Oct 2022 15:51:47 +0530
+Message-Id: <20221014102151.108539-3-p.rajanbabu@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221014102151.108539-1-p.rajanbabu@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmlm6Xs2eywfOf0hYP5m1js7hy8RCT
-        xaHNW9ktpj58wmYx/8g5Vou+Fw+ZLb5d6WCyuLxrDpvFjPP7mCyObgy2WLT1C7tF565+VotZ
-        F3awWrTuPcJucfhNO6vFhu9rGR0EPDZ8bmLz2DnrLrvHplWdbB53ru1h89j3dhmbR9+WVYwe
-        67dcZfH4vEkugCMq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnF
-        J0DXLTMH6AMlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5q
-        iZWhgYGRKVBhQnbGgjdRBT+MK3aeeczewNit1cXIySEhYCLx+9Jjli5GLg4hgd2MEpcnd7NB
-        OJ8YJZo6OpkhnM+MEvcunWCDabl1+CwjRGIXo8T+lXNYIZxWJonL7/qYQKrYBEwlVs1pBEuI
-        CDQxSbS9mQi2hVlgI6PE6WMPgao4OIQF3CW+zCgBaWARUJW4/P0GG0iYV8BW4swqY4ht8hKr
-        NxxgBrE5Bewknrc0gc2UEFjIIfH82zuok1wkvrx6zwphC0u8Or6FHcKWknjZ3wZl50tM+9gM
-        VV8h0fZxAxOEbS9x4MocFpC9zAKaEut36UOEZSWmnloHVsIswCfR+/sJVDmvxI55MLaqxPrl
-        mxghbGmJfdf3QtkeEltnTYUG3URGiR9dP9gnMMrNQlixgJFxFaNkakFxbnpqsWmBcV5qOTzW
-        kvNzNzGCU6mW9w7GRw8+6B1iZOJgPMQowcGsJML7WskzWYg3JbGyKrUoP76oNCe1+BCjKTD8
-        JjJLiSbnA5N5Xkm8oYmlgYmZmZmJpbGZoZI47+IZWslCAumJJanZqakFqUUwfUwcnFINTDxZ
-        UyRtRe8pmlvf1q/RmHXKJ+H2POlJx9Iykws+FT58z+oa9OYi96k68WeHOrhKNm/+X2HM3rIy
-        3slrS+HFN9yWt1+enuAUGysh/aZhGlerny/vklNPtv2qZTF43JfFlG2xl++io9fUzsRZTYum
-        pzZuv8a5s7ty3VH3XSu6L/NMOMT/nm1R5sva1dtSN2acvpajEsIrUmMXcbHF5f7H6pe9DIH1
-        kZZePw4fW737h5g2x/wni9fs8Wvz6pDYJ+HeqjQtbsfLfM3vm8XiTqlY6qTPn//rYH3HnBbx
-        GsfTcnkpOlZr3XcUWHEsXFCwM1Yu3ysqyfegVaRSSWTNtD0CNumWn1TYkzl0pqysTn6sxFKc
-        kWioxVxUnAgAHYrL+y4EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrALMWRmVeSWpSXmKPExsWy7bCSnO4kO89kg9unGC0ezNvGZnHl4iEm
-        i0Obt7JbTH34hM1i/pFzrBZ9Lx4yW3y70sFkcXnXHDaLGef3MVkc3RhssWjrF3aLzl39rBaz
-        LuxgtWjde4Td4vCbdlaLDd/XMjoIeGz43MTmsXPWXXaPTas62TzuXNvD5rHv7TI2j74tqxg9
-        1m+5yuLxeZNcAEcUl01Kak5mWWqRvl0CV8aCN1EFP4wrdp55zN7A2K3VxcjJISFgInHr8FnG
-        LkYuDiGBHYwSZx5cZodISEtM79/DBmELS6z895wdoqiZSeLFv6WMIAk2AVOJVXMaWUESIgIT
-        mCROvjvGApJgFtjKKDH1s1EXIweHsIC7xJcZJSBhFgFVicvfb7CBhHkFbCXOrDKGmC8vsXrD
-        AWYQm1PATuJ5SxMriC0EVPL8/DvGCYx8CxgZVjFKphYU56bnFhsWGOWllusVJ+YWl+al6yXn
-        525iBAe6ltYOxj2rPugdYmTiYDzEKMHBrCTC+1rJM1mINyWxsiq1KD++qDQntfgQozQHi5I4
-        74Wuk/FCAumJJanZqakFqUUwWSYOTqkGJoMta28y5p7bVXTmRj3zjCIzn6J7s/mTL++8/TNu
-        0c/n8Sn8DtceNBrf0ppRaTWvaLrpzTc7u28U70ldY92978WZrXUZ50tOPDKV7DjbNj9+sYSx
-        eL2Ki8y7mg5RnYUPrn3rkb6+/JjKm6bChMsmNd5+ul3Hjpx6tHVBSwHrvFaWZ7/my9V9yAj4
-        IRQf9G2yldDivFvJS5oTeVwmv+va2cEte5+R6UCwrkaJwxvTJT9lGbvv3lml8mwpZ3DGK9dF
-        on9LVNV9056pRuz8zJKWeVjZIcZ0q1PdlABdAZlb1yx//VvXpbLj+JII49S+c7mfnsh+CFYw
-        fLrouXm1wEd314r2W/ySF36U8k+XtmI5r8RSnJFoqMVcVJwIAHNuNmnjAgAA
-X-CMS-MailID: 20221014104850epcas5p1a707b9d407a0947c3519077cf7fca5ff
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmlm6/s2eyQfs8XYsH87axWVy5eIjJ
+        4tDmrewWUx8+YbOYf+Qcq0Xfi4fMFt+udDBZXN41h81ixvl9TBZHNwZbLNr6hd2ic1c/q8Ws
+        CztYLVr3HmG3OPymndViw/e1jA4CHhs+N7F57Jx1l91j06pONo871/aweex7u4zNo2/LKkaP
+        9Vuusnh83iQXwBGVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+Ti
+        E6DrlpkD9IGSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1
+        xMrQwMDIFKgwITtj1amPTAVPFCvOXGlib2BcIN3FyMkhIWAiMXXJQ/YuRi4OIYHdjBK9iw6z
+        QjifGCXe7jrHDFIlJPCZUWLl5iqYjps79jJDFO1ilDiy/z0jhNPKJLF9+212kCo2AVOJVXMa
+        wUaJCDQxSbS9mcgC4jALbGSUOH3sIVMXIweHsICbROf+EJAGFgFViWeHbrKAhHkFbCWu3w+A
+        2CYvsXrDAbArOAXsJJ63NIHNlBBYyCFxdvIFdogiF4n1h68yQ9jCEq+Ob4GKS0l8freXDcLO
+        l5j2sRnKrpBo+7iBCcK2lzhwZQ7YXmYBTYn1u/QhwrISU0+tAythFuCT6P39BKqcV2LHPBhb
+        VWL98k2MELa0xL7re6FsD4nZc89DQ2gio8S19SeYJjDKzUJYsYCRcRWjZGpBcW56arFpgVFe
+        ajk81pLzczcxglOpltcOxocPPugdYmTiYDzEKMHBrCTC+1rJM1mINyWxsiq1KD++qDQntfgQ
+        oykw/CYyS4km5wOTeV5JvKGJpYGJmZmZiaWxmaGSOO/iGVrJQgLpiSWp2ampBalFMH1MHJxS
+        DUyOHLwhH2zl7bpfvFo7e8dsFflVCxebrJJqe6rpXBBme0Oy+Ktj+DS3iXNm2iTf/7h+zu76
+        TazSZVN2eL0OmF7IeeSZ2W1On1UfhbnWfJ0btKsnbU6kQPRKfz5hFUch5wtBURpi9+eJcDEG
+        ud6VsDLdlv14BUOO5pSLE861cM/Nnc4Zc3GHyqFJuUteXuF2OH9qo8zyC1FNJY1v86I4wz83
+        Wi94nTFr0ZfG5CNKbCq3VU7Fb9KR7VrTe3rBjv/f3H8sdj4/gzu7VFp89dnkbm6n1e+juv80
+        nd15fP+xiO1LQmf38/x+vCdN4cI9XwPzG5INoUeO6ymmzZmc23Q/PdHozIQLC9+I32m8OqPU
+        xPicEktxRqKhFnNRcSIAn/E/Ty4EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrALMWRmVeSWpSXmKPExsWy7bCSnO5MO89kg0saFg/mbWOzuHLxEJPF
+        oc1b2S2mPnzCZjH/yDlWi74XD5ktvl3pYLK4vGsOm8WM8/uYLI5uDLZYtPULu0Xnrn5Wi1kX
+        drBatO49wm5x+E07q8WG72sZHQQ8NnxuYvPYOesuu8emVZ1sHneu7WHz2Pd2GZtH35ZVjB7r
+        t1xl8fi8SS6AI4rLJiU1J7MstUjfLoErY9Wpj0wFTxQrzlxpYm9gXCDdxcjJISFgInFzx17m
+        LkYuDiGBHYwST7fOY4dISEtM79/DBmELS6z895wdoqiZSWLy3nVgRWwCphKr5jSygiREBCYw
+        SZx8d4wFJMEssJVRYupnoy5GDg5hATeJzv0hIGEWAVWJZ4dusoCEeQVsJa7fD4CYLy+xesMB
+        ZhCbU8BO4nlLEyuILQRU8vz8O8YJjHwLGBlWMUqmFhTnpucWGxYY5aWW6xUn5haX5qXrJefn
+        bmIEB7qW1g7GPas+6B1iZOJgPMQowcGsJML7WskzWYg3JbGyKrUoP76oNCe1+BCjNAeLkjjv
+        ha6T8UIC6YklqdmpqQWpRTBZJg5OqQamwhwOKe1kzyDG92kZl3c9WTFBsTfk6pG2XEn/W5wx
+        x/f7xn2+VVpoZjs/am/Tfu6sWn3HUBZbMd1j27IE3HX/2ysXuul9WbOymCthS+KcYOv5qbEO
+        lVebzW5WPNfeae69zshGNn6W6xvWwhvLWie/WyMwy8+4tNJKmNlhinWDxOWbf5LfZjVYq8+Z
+        x6ly/0TEa8vbLd7WCU9263WZv5pj59j66t8kxltuc44WznOxCZorMa1wTb568Wsppi0fr7Nu
+        NZJdwCC+oqn90cxtrcI7Zm231Xv+SvPHhpBH28+e0pWeNetC44e8iKa6vvxbtzz2P79guOdt
+        7Ca7mfWhtU8U1W02rLSOMikPqJkk9lWJpTgj0VCLuag4EQB8G1By4wIAAA==
+X-CMS-MailID: 20221014104857epcas5p2a275a1d606ca066227228d13bcf5b120
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221014104850epcas5p1a707b9d407a0947c3519077cf7fca5ff
+X-CMS-RootMailID: 20221014104857epcas5p2a275a1d606ca066227228d13bcf5b120
 References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
-        <CGME20221014104850epcas5p1a707b9d407a0947c3519077cf7fca5ff@epcas5p1.samsung.com>
+        <CGME20221014104857epcas5p2a275a1d606ca066227228d13bcf5b120@epcas5p2.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -119,211 +119,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to configure samsung I2S CPU DAI in TDM mode.
+Currently the prescaler value in samsung I2S dai is calculated by
+dividing the peripheral input clock frequency with frame clock
+frequency and root clock frequency divider. This prescaler value is
+used to divide the input clock to generate root clock (RCLK) from which
+frame clock is generated for I2S communication.
 
-Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
+However for the platforms which does not have a dedicated audio PLL as
+an input clock source, the prescaler divider will not generate accurate
+root clock frequency, which inturn affects sampling frequency also.
+
+To overcome this scenario, support has been added to let the sound card
+identify right prescaler divider value and configure the prescaler (PSR)
+divider directly the from the sound card to achieve near accurate sample
+frequencies
+
 Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
 ---
- sound/soc/samsung/i2s-regs.h | 15 +++++++
- sound/soc/samsung/i2s.c      | 84 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 98 insertions(+), 1 deletion(-)
+ sound/soc/samsung/i2s-regs.h |  2 ++
+ sound/soc/samsung/i2s.c      | 36 ++++++++++++++++++++++++++++++++----
+ sound/soc/samsung/i2s.h      |  1 +
+ 3 files changed, 35 insertions(+), 4 deletions(-)
 
 diff --git a/sound/soc/samsung/i2s-regs.h b/sound/soc/samsung/i2s-regs.h
-index b4b5d6053503..cb2be4a3b70b 100644
+index cb2be4a3b70b..e2581dc73df2 100644
 --- a/sound/soc/samsung/i2s-regs.h
 +++ b/sound/soc/samsung/i2s-regs.h
-@@ -154,4 +154,19 @@
- #define I2SSIZE_TRNMSK		(0xffff)
- #define I2SSIZE_SHIFT		(16)
+@@ -132,6 +132,8 @@
+ #define EXYNOS7_MOD_RCLK_192FS	7
  
-+#define TDM_LRCLK_WIDTH_SHIFT	12
-+#define TDM_LRCLK_WIDTH_MASK	0xFF
-+#define TDM_RX_SLOTS_SHIFT	8
-+#define TDM_RX_SLOTS_MASK	7
-+#define TDM_TX_SLOTS_SHIFT	4
-+#define TDM_TX_SLOTS_MASK	7
-+#define TDM_MODE_MASK		1
-+#define TDM_MODE_SHIFT		1
-+#define TDM_MODE_DSPA		0
-+#define TDM_MODE_DSPB		1
-+#define TDM_ENABLE		(1 << 0)
-+
-+/* stereo default */
-+#define TDM_DEFAULT_SLOT_NUM_DIVIDER	2
-+
- #endif /* __SND_SOC_SAMSUNG_I2S_REGS_H */
+ #define PSR_PSREN		(1 << 15)
++#define PSR_PSVAL_SHIFT		8
++#define PSR_PSVAL_MASK		0x3f
+ 
+ #define FIC_TX2COUNT(x)		(((x) >>  24) & 0xf)
+ #define FIC_TX1COUNT(x)		(((x) >>  16) & 0xf)
 diff --git a/sound/soc/samsung/i2s.c b/sound/soc/samsung/i2s.c
-index 9505200f3d11..fb806b0af6ab 100644
+index fb806b0af6ab..a96286b27f1d 100644
 --- a/sound/soc/samsung/i2s.c
 +++ b/sound/soc/samsung/i2s.c
-@@ -117,6 +117,8 @@ struct samsung_i2s_priv {
- 	struct clk *clk_table[3];
- 	struct clk_onecell_data clk_data;
- 
-+	int tdm_slots;
-+
- 	/* Spinlock protecting member fields below */
- 	spinlock_t lock;
- 
-@@ -625,15 +627,19 @@ static int i2s_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 	struct samsung_i2s_priv *priv = snd_soc_dai_get_drvdata(dai);
- 	struct i2s_dai *i2s = to_info(dai);
- 	int lrp_shift, sdf_shift, sdf_mask, lrp_rlow, mod_slave;
-+	int tdm_mod_mask, tdm_mod_shift;
-+	u32 tdm = 0, tdm_tmp = 0;
- 	u32 mod, tmp = 0;
- 	unsigned long flags;
- 
- 	lrp_shift = priv->variant_regs->lrp_off;
- 	sdf_shift = priv->variant_regs->sdf_off;
-+	tdm_mod_shift = TDM_MODE_SHIFT;
- 	mod_slave = 1 << priv->variant_regs->mss_off;
- 
- 	sdf_mask = MOD_SDF_MASK << sdf_shift;
- 	lrp_rlow = MOD_LR_RLOW << lrp_shift;
-+	tdm_mod_mask = TDM_MODE_MASK << tdm_mod_shift;
- 
- 	/* Format is priority */
- 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
-@@ -648,6 +654,20 @@ static int i2s_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 	case SND_SOC_DAIFMT_I2S:
- 		tmp |= (MOD_SDF_IIS << sdf_shift);
- 		break;
-+	case SND_SOC_DAIFMT_DSP_A:
-+		if (!(priv->quirks & QUIRK_SUPPORTS_TDM)) {
-+			dev_err(&i2s->pdev->dev, "TDM mode not supported\n");
-+			return -EINVAL;
-+		}
-+		tdm_tmp |= (TDM_MODE_DSPA << tdm_mod_shift);
-+		break;
-+	case SND_SOC_DAIFMT_DSP_B:
-+		if (!(priv->quirks & QUIRK_SUPPORTS_TDM)) {
-+			dev_err(&i2s->pdev->dev, "TDM mode not supported\n");
-+			return -EINVAL;
-+		}
-+		tdm_tmp |= (TDM_MODE_DSPB << tdm_mod_shift);
-+		break;
- 	default:
- 		dev_err(&i2s->pdev->dev, "Format not supported\n");
- 		return -EINVAL;
-@@ -693,12 +713,17 @@ static int i2s_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 	pm_runtime_get_sync(dai->dev);
- 	spin_lock_irqsave(&priv->lock, flags);
- 	mod = readl(priv->addr + I2SMOD);
-+
-+	if (priv->quirks & QUIRK_SUPPORTS_TDM)
-+		tdm = readl(priv->addr + I2STDM);
+@@ -59,10 +59,10 @@ struct i2s_dai {
+ 	/* Frame clock */
+ 	unsigned frmclk;
  	/*
- 	 * Don't change the I2S mode if any controller is active on this
- 	 * channel.
+-	 * Specifically requested RCLK, BCLK by machine driver.
++	 * Specifically requested RCLK, BCLK and PSR by machine driver.
+ 	 * 0 indicates CPU driver is free to choose any value.
  	 */
- 	if (any_active(i2s) &&
--		((mod & (sdf_mask | lrp_rlow | mod_slave)) != tmp)) {
-+		(((mod & (sdf_mask | lrp_rlow | mod_slave)) != tmp) ||
-+		((priv->quirks & QUIRK_SUPPORTS_TDM) &&
-+		 ((tdm & tdm_mod_mask) != tdm_tmp)))) {
- 		spin_unlock_irqrestore(&priv->lock, flags);
- 		pm_runtime_put(dai->dev);
- 		dev_err(&i2s->pdev->dev,
-@@ -706,6 +731,12 @@ static int i2s_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 		return -EAGAIN;
+-	unsigned rfs, bfs;
++	unsigned int rfs, bfs, psr;
+ 	/* Pointer to the Primary_Fifo if this is Sec_Fifo, NULL otherwise */
+ 	struct i2s_dai *pri_dai;
+ 	/* Pointer to the Secondary_Fifo if it has one, NULL otherwise */
+@@ -389,6 +389,17 @@ static inline int get_blc(struct i2s_dai *i2s)
  	}
- 
-+	if (priv->quirks & QUIRK_SUPPORTS_TDM) {
-+		tdm &= ~(tdm_mod_mask);
-+		tdm |= tdm_tmp;
-+		writel(tdm, priv->addr + I2STDM);
-+	}
-+
- 	mod &= ~(sdf_mask | lrp_rlow | mod_slave);
- 	mod |= tmp;
- 	writel(mod, priv->addr + I2SMOD);
-@@ -812,6 +843,47 @@ static int i2s_hw_params(struct snd_pcm_substream *substream,
- 	return 0;
  }
  
-+static int i2s_set_tdm_slot(struct snd_soc_dai *dai, unsigned int tx_mask,
-+				unsigned int rx_mask, int slots, int slot_width)
++static inline unsigned int get_psval(struct i2s_dai *i2s)
 +{
-+	struct samsung_i2s_priv *priv = snd_soc_dai_get_drvdata(dai);
-+	struct i2s_dai *i2s = to_info(dai);
-+	u32 tdm = 0, mask = 0, val = 0;
-+	unsigned long flags;
++	struct samsung_i2s_priv *priv = i2s->priv;
++	u32 psr;
 +
-+	if (!(priv->quirks & QUIRK_SUPPORTS_TDM)) {
-+		dev_err(&i2s->pdev->dev, "Invalid request: TDM not enabled\n");
-+		return -EINVAL;
-+	}
++	psr = readl(priv->addr + I2SPSR) >> PSR_PSVAL_SHIFT;
++	psr &= PSR_PSVAL_MASK;
 +
-+	mask |= (TDM_ENABLE);
-+	mask |= (TDM_TX_SLOTS_MASK << TDM_TX_SLOTS_SHIFT);
-+	mask |= (TDM_RX_SLOTS_MASK << TDM_RX_SLOTS_SHIFT);
-+
-+	if (slots) {
-+		val |= ((slots-1) & TDM_TX_SLOTS_MASK) << TDM_TX_SLOTS_SHIFT;
-+		val |= ((slots-1) & TDM_RX_SLOTS_MASK) << TDM_RX_SLOTS_SHIFT;
-+
-+		dev_info(&i2s->pdev->dev,
-+			"TDM Mode Configured - TX and RX Slots: %d\n", slots);
-+
-+		val |= TDM_ENABLE;
-+
-+		priv->tdm_slots = slots;
-+	} else {
-+		val = 0;
-+		priv->tdm_slots = 0;
-+	}
-+
-+	spin_lock_irqsave(&priv->lock, flags);
-+	tdm = readl(priv->addr + I2STDM);
-+	tdm = (tdm & ~mask) | val;
-+	writel(tdm, priv->addr + I2STDM);
-+	spin_unlock_irqrestore(&priv->lock, flags);
-+
-+	return 0;
++	return (psr + 1);
 +}
 +
- /* We set constraints on the substream according to the version of I2S */
- static int i2s_startup(struct snd_pcm_substream *substream,
- 	  struct snd_soc_dai *dai)
-@@ -879,6 +951,9 @@ static int config_setup(struct i2s_dai *i2s)
- 	if (!bfs && other)
- 		bfs = other->bfs;
+ /* TX channel control */
+ static void i2s_txctrl(struct i2s_dai *i2s, int on)
+ {
+@@ -994,7 +1005,11 @@ static int config_setup(struct i2s_dai *i2s)
+ 		return 0;
  
-+	if (!bfs && (priv->quirks & QUIRK_SUPPORTS_TDM) && priv->tdm_slots)
-+		bfs = blc * priv->tdm_slots;
+ 	if (!(priv->quirks & QUIRK_NO_MUXPSR)) {
+-		psr = priv->rclk_srcrate / i2s->frmclk / rfs;
++		if (i2s->psr)
++			psr = i2s->psr;
++		else
++			psr = priv->rclk_srcrate / i2s->frmclk / rfs;
 +
- 	/* Select least possible multiple(2) if no constraint set */
- 	if (!bfs)
- 		bfs = blc * 2;
-@@ -899,6 +974,9 @@ static int config_setup(struct i2s_dai *i2s)
- 			rfs = 256;
- 		else
- 			rfs = 384;
-+
-+		if ((priv->quirks & QUIRK_SUPPORTS_TDM) && priv->tdm_slots)
-+			rfs /= (priv->tdm_slots / TDM_DEFAULT_SLOT_NUM_DIVIDER);
+ 		writel(((psr - 1) << 8) | PSR_PSREN, priv->addr + I2SPSR);
+ 		dev_dbg(&i2s->pdev->dev,
+ 			"RCLK_SRC=%luHz PSR=%u, RCLK=%dfs, BCLK=%dfs\n",
+@@ -1072,6 +1087,18 @@ static int i2s_set_clkdiv(struct snd_soc_dai *dai,
+ 		i2s->bfs = div;
+ 		pm_runtime_put(dai->dev);
+ 		break;
++	case SAMSUNG_I2S_DIV_RCLK:
++		pm_runtime_get_sync(dai->dev);
++		if ((any_active(i2s) && div && (get_psval(i2s) != div))
++			|| (other && other->psr && (other->psr != div))) {
++			pm_runtime_put(dai->dev);
++			dev_err(&i2s->pdev->dev,
++				"%s:%d Other DAI busy\n", __func__, __LINE__);
++			return -EAGAIN;
++		}
++		i2s->psr = div;
++		pm_runtime_put(dai->dev);
++		break;
+ 	default:
+ 		dev_err(&i2s->pdev->dev,
+ 			"Invalid clock divider(%d)\n", div_id);
+@@ -1140,9 +1167,10 @@ static int samsung_i2s_dai_probe(struct snd_soc_dai *dai)
+ 					   other->idma_playback.addr);
  	}
  
- 	/* If already setup and running */
-@@ -1110,6 +1188,7 @@ static const struct snd_soc_dai_ops samsung_i2s_dai_ops = {
- 	.set_fmt = i2s_set_fmt,
- 	.set_clkdiv = i2s_set_clkdiv,
- 	.set_sysclk = i2s_set_sysclk,
-+	.set_tdm_slot = i2s_set_tdm_slot,
- 	.startup = i2s_startup,
- 	.shutdown = i2s_shutdown,
- 	.delay = i2s_delay,
-@@ -1464,6 +1543,9 @@ static int samsung_i2s_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "failed to enable clock: %d\n", ret);
- 		return ret;
- 	}
-+
-+	priv->tdm_slots = 0;
-+
- 	pri_dai->dma_playback.addr = regs_base + I2STXD;
- 	pri_dai->dma_capture.addr = regs_base + I2SRXD;
- 	pri_dai->dma_playback.chan_name = "tx";
+-	/* Reset any constraint on RFS and BFS */
++	/* Reset any constraint on RFS, BFS and PSR*/
+ 	i2s->rfs = 0;
+ 	i2s->bfs = 0;
++	i2s->psr = 0;
+ 
+ 	spin_lock_irqsave(&priv->lock, flags);
+ 	i2s_txctrl(i2s, 0);
+diff --git a/sound/soc/samsung/i2s.h b/sound/soc/samsung/i2s.h
+index 78b475ef98d9..e783d33fdfac 100644
+--- a/sound/soc/samsung/i2s.h
++++ b/sound/soc/samsung/i2s.h
+@@ -13,6 +13,7 @@
+ #define SAMSUNG_I2S_DAI_SEC    "samsung-i2s-sec"
+ 
+ #define SAMSUNG_I2S_DIV_BCLK		1
++#define SAMSUNG_I2S_DIV_RCLK		2
+ 
+ #define SAMSUNG_I2S_RCLKSRC_0		0
+ #define SAMSUNG_I2S_RCLKSRC_1		1
 -- 
 2.17.1
 
