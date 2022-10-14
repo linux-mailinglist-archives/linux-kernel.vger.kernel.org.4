@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246385FF642
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534A05FF64E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiJNWNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S230104AbiJNWNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiJNWMg (ORCPT
+        with ESMTP id S229892AbiJNWMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:12:36 -0400
+        Fri, 14 Oct 2022 18:12:39 -0400
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9E71CF57D;
-        Fri, 14 Oct 2022 15:12:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C7B1D2992;
+        Fri, 14 Oct 2022 15:12:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1665785532; x=1697321532;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PdtJ+0TskRuL5tgpsJ+tnXE9FMPE8NKf3SWIqt8ZBEA=;
-  b=LMjyV/G0QPGN6OQTGFcdD+rlSyHiuCohVEk0O3Q29hahkp/P7itTzW0s
-   LXSjW8nzAE+gN85OQZ4oAPEjYz2uIqgkvQwxmB+1nXSQxh3/sDm9yAGW+
-   a+tUKqerujtQAhwQoZjvAseLAYfQaMlCCgRpfdSeyYjZ81vFacbgJP674
-   4=;
+  t=1665785539; x=1697321539;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3+JzfZN351f5CPgINbyI8EkYTpUxj/3CJwM0A6tPQbY=;
+  b=bD200UpdzrQMBLvVTcuqy9904QmKqcTXSL1KXPY+EddRfucNiGyYwOr4
+   tTJY+PFm6MxvGlUBa1r0/uo3pqacNpKu2Fkc4AkG0s2Fasofo5SO/xwBw
+   AO+Ci+d9YOBC5EBR9D9TKgAJX4NnhKJU541XLjMkbwIPC0HbCdgnYdchT
+   c=;
 Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
   by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Oct 2022 15:11:52 -0700
 X-QCInternal: smtphost
@@ -44,10 +44,12 @@ CC:     Robert Marko <robimarko@gmail.com>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH v2 0/4] Add misc support for QDU1000/QRU1000 SoCs
-Date:   Fri, 14 Oct 2022 15:11:17 -0700
-Message-ID: <20221014221121.7497-1-quic_molvera@quicinc.com>
+Subject: [PATCH v2 1/4] dt-bindings: firmware: scm: Add QDU1000/QRU1000 compatibles
+Date:   Fri, 14 Oct 2022 15:11:18 -0700
+Message-ID: <20221014221121.7497-2-quic_molvera@quicinc.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221014221121.7497-1-quic_molvera@quicinc.com>
+References: <20221014221121.7497-1-quic_molvera@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -63,28 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series firmware, SoC, rpmpd, tz-log, and mmc bindings as well as
-pmic, rpmpd, and socinfo support for QDU1000 and QRU1000 SoCs.
+Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
 
-The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
-1000 are new SoCs meant for enabling Open RAN solutions. See more at
-https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
-
-Melody Olvera (4):
-  dt-bindings: firmware: scm: Add QDU1000/QRU1000 compatibles
-  dt-bindings: power: rpmpd: Add QDU1000/QRU1000 to rpmpd binding
-  soc: qcom: rpmhpd: Add QDU1000/QRU1000 power domains
-  soc: qcom: socinfo: Add QDU1000/QRU1000 and variant IDs
-
+Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+---
  .../devicetree/bindings/firmware/qcom,scm.yaml   | 16 ++++++++++++++++
- .../devicetree/bindings/power/qcom,rpmpd.yaml    |  2 ++
- drivers/soc/qcom/rpmhpd.c                        | 15 +++++++++++++++
- drivers/soc/qcom/socinfo.c                       |  6 ++++++
- include/dt-bindings/power/qcom-rpmpd.h           |  6 ++++++
- 5 files changed, 45 insertions(+)
+ 1 file changed, 16 insertions(+)
 
-
-base-commit: dca0a0385a4963145593ba417e1417af88a7c18d
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index c5b76c9f7ad0..47083f47f109 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -38,6 +38,8 @@ properties:
+           - qcom,scm-msm8994
+           - qcom,scm-msm8996
+           - qcom,scm-msm8998
++          - qcom,scm-qdu1000
++          - qcom,scm-qru1000
+           - qcom,scm-sc7180
+           - qcom,scm-sc7280
+           - qcom,scm-sc8280xp
+@@ -80,6 +82,20 @@ properties:
+     description: TCSR hardware block
+ 
+ allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,scm-qdu1000
++              - qcom,scm-qru1000
++    then:
++      properties:
++        '#reset-cells':
++          maxItems: 1
++
++      required:
++        - '#reset-cells'
+   - if:
+       properties:
+         compatible:
 -- 
 2.38.0
 
