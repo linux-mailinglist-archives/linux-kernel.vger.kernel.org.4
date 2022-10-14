@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55AC5FEA40
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD6E5FEA48
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJNIPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
+        id S229967AbiJNIQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJNIPa (ORCPT
+        with ESMTP id S229775AbiJNIQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:15:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F866C941
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:15:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B73011F383;
-        Fri, 14 Oct 2022 08:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1665735327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wiClufEX8gfPW9xRDiuGe0Q9e36uYJDoy7apgwehwGU=;
-        b=e5jz93ekyXrf97a9Sinalx2ZrBWTmpzb4T4BP3dcgQjKq7XsCG3EfJB6cShHzMIQUIEoIF
-        nF/LWqe3EvNEQmQlUc3x5mt22rYUl7tQinIJY7RDAuVzPJkeiwFvrBUuVhstsp7kd0l8X/
-        64KbW0bnNafCXnyTpzs7vSQ5IKVPXwY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1665735327;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wiClufEX8gfPW9xRDiuGe0Q9e36uYJDoy7apgwehwGU=;
-        b=GvYODW4J4vZUr6xg7tg4yBXSZJ3wK3M8EoV+tpCh1ueBt9U82jQkfJ6626hqSKOVYaPDvs
-        QXwMtughU/mtA/AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EB6E13A4A;
-        Fri, 14 Oct 2022 08:15:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id b2AGIp8aSWMDdQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 14 Oct 2022 08:15:27 +0000
-Message-ID: <e0fc92a3-3e4f-b82b-f52c-0745d0e1ba09@suse.cz>
-Date:   Fri, 14 Oct 2022 10:15:27 +0200
+        Fri, 14 Oct 2022 04:16:34 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC008BE2E0;
+        Fri, 14 Oct 2022 01:16:32 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id a6so5133860ljq.5;
+        Fri, 14 Oct 2022 01:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=edW1SZPZk5oTvbkbtASITiKdHC2vwGxOU1SxXrshM3s=;
+        b=Y78sMr/o4YSO539vsfAdIvlQ0jd/6rPhIdLpv6YNTg0hrcITtiG9myVUl/aNFGedin
+         0Ra0o/d+gVFZMawqf+rVVAqKgPgbMWK6xIlCL08+Kl6XgLg94b3y9dPd5FzD5YICpb59
+         zP/C2eiwx8xWWGMOoUBe2l+Lg2T5HTuwStdLMVullG6pTbNbIaZcXejzFpbPn/N9NDan
+         qQOlqCdziGe00c5UZxRU7AzsTkUeDekjFrzs+y5Wmv/tq/BdfFtkXRJW0Jg0GrHPtlT5
+         0Ck6rUdnnkaBNem5Rw+1pMVBU1UUAX60w4tTsT1pj9L9ZSO+d34CNihQ4oXoKa3ZiTzA
+         pdgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=edW1SZPZk5oTvbkbtASITiKdHC2vwGxOU1SxXrshM3s=;
+        b=uGzk25czvw0mYZrlWFquLNa8NqKZnRtLdJRzNFcgOMebr85YhipY1zLiV+IqddUuJm
+         GOe1S4AZ1svMLdzBTJ07SGBGcxCVDdn/XL5+jPFe39ibDNQ+Y6SI166f3RIzsjKU5BRX
+         l2CZcGziNSdfozxChK0d/fjIs1CEw/UpWJ0+KSM+MaBUJ0QbiNAN1ksgW5y/zltvNhU2
+         Eey2Zavk6OR/IxMO2SIRhjhA5hnJAbhoKFFBWiE+7gm4XOUVVGG3bLBZ3895NE5iCcYB
+         366op5OgcEE/hbLuP4IyWBd15sBiYP9+A6y0wOa/wq1FzaNHLR35kE3f4SrkgMtOCx/C
+         6XwQ==
+X-Gm-Message-State: ACrzQf0UcUFSI8uz35DXgKg48jbpIscmNtNDIwLeBXK2/70PMsSvDPjN
+        m39D7XLoElbr/IKSGqUzSXY=
+X-Google-Smtp-Source: AMsMyM4naaQLAMQ8tXoTscYfLSobLQwKWzJzvDBqvWV5PXeeauDm1XtczDREsNSk5AfT1jKfT7LXxA==
+X-Received: by 2002:a2e:bd0c:0:b0:26d:d9fd:f61b with SMTP id n12-20020a2ebd0c000000b0026dd9fdf61bmr1434686ljq.151.1665735391141;
+        Fri, 14 Oct 2022 01:16:31 -0700 (PDT)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id a9-20020a05651c030900b0026ddd41aecasm263555ljp.135.2022.10.14.01.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 01:16:29 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH] thermal: imx8mm_thermal: use GENMASK() when appropriate
+Date:   Fri, 14 Oct 2022 10:16:20 +0200
+Message-Id: <20221014081620.1599511-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] mm: slub: remove dead and buggy code from
- sysfs_slab_add()
-Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 10:47, Rasmus Villemoes wrote:
-> The function sysfs_slab_add() has two callers:
-> 
-> One is slab_sysfs_init(), which first initializes slab_kset, and only
-> when that succeeds sets slab_state to FULL, and then proceeds to call
-> sysfs_slab_add() for all previously created slabs.
-> 
-> The other is __kmem_cache_create(), but only after a
-> 
-> 	if (slab_state <= UP)
-> 		return 0;
-> 
-> check.
-> 
-> So in other words, sysfs_slab_add() is never called without
-> slab_kset (aka the return value of cache_kset()) being non-NULL.
-> 
-> And this is just as well, because if we ever did take this path and
-> called kobject_init(&s->kobj), and then later when called again from
-> slab_sysfs_init() would end up calling kobject_init_and_add(), we
-> would hit
-> 
-> 	if (kobj->state_initialized) {
-> 		/* do not error out as sometimes we can recover */
-> 		pr_err("kobject (%p): tried to init an initialized object, something is seriously wrong.\n",
-> 		dump_stack();
-> 	}
-> 
-> in kobject.c.
-> 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+GENMASK() is preferred to use for bitmasks.
 
-Thanks, added to slab.git for-6.2/slub-sysfs
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ drivers/thermal/imx8mm_thermal.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  mm/slub.c | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 4b98dff9be8e..04a7f75a7b1f 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5937,11 +5937,6 @@ static int sysfs_slab_add(struct kmem_cache *s)
->  	struct kset *kset = cache_kset(s);
->  	int unmergeable = slab_unmergeable(s);
->  
-> -	if (!kset) {
-> -		kobject_init(&s->kobj, &slab_ktype);
-> -		return 0;
-> -	}
-> -
->  	if (!unmergeable && disable_higher_order_debug &&
->  			(slub_debug & DEBUG_METADATA_FLAGS))
->  		unmergeable = 1;
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index c5cd873c6e01..74fc34b88bb0 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -23,8 +23,8 @@
+ 
+ #define TER_ADC_PD		BIT(30)
+ #define TER_EN			BIT(31)
+-#define TRITSR_TEMP0_VAL_MASK	0xff
+-#define TRITSR_TEMP1_VAL_MASK	0xff0000
++#define TRITSR_TEMP0_VAL_MASK	GENMASK(7, 0)
++#define TRITSR_TEMP1_VAL_MASK	GENMASK(23, 16)
+ 
+ #define PROBE_SEL_ALL		GENMASK(31, 30)
+ 
+-- 
+2.37.1
 
