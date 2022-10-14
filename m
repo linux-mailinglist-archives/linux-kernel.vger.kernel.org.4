@@ -2,170 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82085FE905
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CE95FE907
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJNGmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        id S229863AbiJNGmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJNGmF (ORCPT
+        with ESMTP id S229649AbiJNGml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:42:05 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10271946E9;
-        Thu, 13 Oct 2022 23:42:03 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h185so3522979pgc.10;
-        Thu, 13 Oct 2022 23:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wgMNc1/p3kWYBlyjxsEmMlPIxvpXqHiHcX9JbgUw0hE=;
-        b=UaerY0EgkXWYExScySFZ2Prsnh1NEHkEjxmiJzt8PKASJuHT3i1A0OYXLZhltsRRsF
-         yGM9xDaVu1JeiMEFUwAfm9YNYqu7jA4JPMD0axLXkjPx6OtsqZkasnVytLYJayBNQpCT
-         dr1x8Rdk+6uHUk/18vFqEFDENbQm6CiT+HhAFZOZhn06QOjlejZCimA6YZwwhzdc9ZcK
-         TLdKnC/ydl/TW9Zs+uMEtH3mk9toiVMJIru7pt/0iHeLZzSMqNb/crhRB5kObI55ZG33
-         t8t11yRqBq3nvoVF3Sa2kQz4jH051C5GguJYxQb9KZSNbL+XEw1PQ6uMgSCs93wA80ZK
-         b4Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgMNc1/p3kWYBlyjxsEmMlPIxvpXqHiHcX9JbgUw0hE=;
-        b=EaF8sM0TAbDY/24siKulu09sozGI7+lw1LZaRVE0GiUQUPKKxLUEq/gIeepkWgHRnA
-         /ZyUK3/PjelZxD3SMYbkmcRbtP/9DQlX072ZfVUeKJ62UY2CMJXH3ymtK3+BbKbUiFGr
-         OzapvehS5XJQEys9af9yIe25FYBLAb+2sgqgvYUiP63aTuouHSOpRc1zMZ86nqDn0Zn+
-         TnaYy8poRsjjQIu+FfHrx3Ws4dAVTbKCeGUXbp8OygBH3s5m+6W5UdPPe8Xb2rD0zzI4
-         BQ1/Uv2b14y93el99wb8lQHR/IGG5NrerK1f5g2C4SF5ALMgvDoF6VPYj9+/FHAhb0f4
-         BLgw==
-X-Gm-Message-State: ACrzQf1D/a/wJnDcIRBksv7poBrYftSxlpCdvgFjcCK/jby0g8Q3XQ6x
-        S4u5OFguXtZymm4fXSJpvug=
-X-Google-Smtp-Source: AMsMyM78ugh/Q3fxI7oiGZBbomPmFzisVotLkYNBVKamTAzC9zoHFV6Ic+Cz0oV6LOcWkG8KZ32Etg==
-X-Received: by 2002:a65:49c9:0:b0:462:9ce1:3f58 with SMTP id t9-20020a6549c9000000b004629ce13f58mr3319538pgs.200.1665729723243;
-        Thu, 13 Oct 2022 23:42:03 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id t23-20020a656097000000b00434272fe870sm730080pgu.88.2022.10.13.23.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 23:42:02 -0700 (PDT)
-Message-ID: <8007659a-6c6c-2c5e-f500-652ed31448fb@gmail.com>
-Date:   Fri, 14 Oct 2022 14:41:54 +0800
+        Fri, 14 Oct 2022 02:42:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABB11946EB;
+        Thu, 13 Oct 2022 23:42:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3413FB82218;
+        Fri, 14 Oct 2022 06:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9891C433B5;
+        Fri, 14 Oct 2022 06:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665729756;
+        bh=eW2HUck35u1qifMCTu3OfQoHmFkJZtQcrSUIJ/PJ4hA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hWbN1sm0QIwlff2tnplfIkJy+t70pfa9ted2ZMRnpcjQ7hcGYzGnQ9aRb/4BUxa6i
+         7H+VP+nfm8yektekF1YHpqNuomGRUXvGVwYeG0ezwFA05O9YaM0818nqynh6P6khqQ
+         7PKdLI+0iAieMc0K+7hp035CPURlKXbjVrAB4yo3RRHzrfM45GME/3ggSpkEV30uWn
+         AVv1jB2dK9YRWm5tAM/D0IShvT50zZwOLFim9LxcW+uzsBCUgFJlmKbx1kd4MIdQ6z
+         F6SfJ/hMTJ4EGwpKFBMnyK9WBESAdaAWlmEP3xI+MJJBINApl8qZ0tBDJF0KSaBjag
+         W30bFcRpNiDlQ==
+Received: by mail-oi1-f182.google.com with SMTP id w196so4131790oiw.8;
+        Thu, 13 Oct 2022 23:42:36 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0aTldYF5FzKTyZjVU5aIV0VfUjXp/cj69yG+fTPXjwfsUuIA5T
+        kHimie3uz0b5/NuQagzfbgDJMLQCac3COCNL0eI=
+X-Google-Smtp-Source: AMsMyM666LQOO+rKhPSl0IyxA5zLp4Y0JaqfwQSUvyyUCZnEvSpPaTAz+nEGLq7ZXtTLJFnaSmS32QySgegFg+9FZQ4=
+X-Received: by 2002:a05:6808:10c3:b0:354:db1e:c4a8 with SMTP id
+ s3-20020a05680810c300b00354db1ec4a8mr5884742ois.112.1665729756010; Thu, 13
+ Oct 2022 23:42:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH 1/4] KVM: x86/pmu: Force reprogramming of all counters on
- PMU filter change
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220923001355.3741194-1-seanjc@google.com>
- <20220923001355.3741194-2-seanjc@google.com>
- <86d88222-a70f-49ef-71f3-a7d15ae17d7d@gmail.com>
- <Y0h6x0ZJWYH56Z88@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y0h6x0ZJWYH56Z88@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221014030459.3272206-1-guoren@kernel.org> <20221014030459.3272206-2-guoren@kernel.org>
+ <20221013203544.110a143c@kernel.org> <20221013203911.2705eccc@kernel.org> <Y0jowX4zIZMMVc0H@yury-laptop>
+In-Reply-To: <Y0jowX4zIZMMVc0H@yury-laptop>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 14 Oct 2022 14:42:24 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR6BJMvoz+QhVDbG3Ho1xvMAwNLkmTCOByZxpymZfZJnQ@mail.gmail.com>
+Message-ID: <CAJF2gTR6BJMvoz+QhVDbG3Ho1xvMAwNLkmTCOByZxpymZfZJnQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] net: Fixup netif_attrmask_next_and warning
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        andriy.shevchenko@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, linux@rasmusvillemoes.dk,
+        caraitto@google.com, willemb@google.com, jonolson@google.com,
+        amritha.nambiar@intel.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 4:53 am, Sean Christopherson wrote:
-> On Thu, Oct 13, 2022, Like Xu wrote:
->> Firstly, thanks for your comments that spewed out around vpmu.
->>
->> On 23/9/2022 8:13 am, Sean Christopherson wrote:
->>> Force vCPUs to reprogram all counters on a PMU filter change to provide
->>> a sane ABI for userspace.  Use the existing KVM_REQ_PMU to do the
->>> programming, and take advantage of the fact that the reprogram_pmi bitmap
->>> fits in a u64 to set all bits in a single atomic update.  Note, setting
->>> the bitmap and making the request needs to be done _after_ the SRCU
->>> synchronization to ensure that vCPUs will reprogram using the new filter.
->>>
->>> KVM's current "lazy" approach is confusing and non-deterministic.  It's
->>
->> The resolute lazy approach was introduced in patch 03, right after this change.
-> 
-> This is referring to the lazy recognition of the filter, not the deferred
-> reprogramming of the counters.  Regardless of whether reprogramming is handled
-> via request or in-line, KVM is still lazily recognizing the new filter as vCPUs
-> won't picke up the new filter until the _guest_ triggers a refresh.
+On Fri, Oct 14, 2022 at 12:42 PM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> On Thu, Oct 13, 2022 at 08:39:11PM -0700, Jakub Kicinski wrote:
+> > On Thu, 13 Oct 2022 20:35:44 -0700 Jakub Kicinski wrote:
+> > > Can we instead revert 854701ba4c and take the larger rework Yury
+> > > has posted a week ago into net-next?
+> >
+> > Oh, it was reposted today:
+> >
+> > https://lore.kernel.org/all/20221013234349.1165689-2-yury.norov@gmail.com/
+> >
+> > But we need a revert of 854701ba4c as well to cover the issue back up
+> > for 6.1, AFAIU.
+>
+> The patch 854701ba4c is technically correct. I fixed most of warnings in
+> advance, but nobody can foresee everything, right? I expected some noise,
+> and now we have just a few things to fix. This is what for -rc releases
+> exist, didn't they?
+Your job is great, I just want to help with some fixes. Fixes them in
+-rc would be a good point.
 
-It may still be too late for the pmu filter to take effect. To eliminate this 
-"non-deterministic",
-should we kick out all vpmu-enabled vcpus right after making KVM_REQ_PMU requests ?
+>
+> I suggest to keep the patch, because this is the only way to make
+> cpumask_check()-related issues visible to people. If things will go as
+> they go now, I expect that -rc3 will be clean from cpumask_check()
+> warnings.
+>
+> Thanks,
+> Yury
 
-> 
->>> @@ -613,9 +615,18 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void __user *argp)
->>>    	mutex_lock(&kvm->lock);
->>>    	filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter,
->>>    				     mutex_is_locked(&kvm->lock));
->>> -	mutex_unlock(&kvm->lock);
->>> -
->>>    	synchronize_srcu_expedited(&kvm->srcu);
->>
->> The relative order of these two operations has been reversed
->> 	mutex_unlock() and synchronize_srcu_expedited()
->> , extending the execution window of the critical area of "kvm->lock)".
->> The motivation is also not explicitly stated in the commit message.
-> 
-> I'll add a blurb, after I re-convince myself that the sync+request needs to be
-> done under kvm->lock.
-> 
->>> +	BUILD_BUG_ON(sizeof(((struct kvm_pmu *)0)->reprogram_pmi) >
->>> +		     sizeof(((struct kvm_pmu *)0)->__reprogram_pmi));
->>> +
->>> +	kvm_for_each_vcpu(i, vcpu, kvm)
->>> +		atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi, -1ull);
->>
->> How about:
->> 	bitmap_copy(pmu->reprogram_pmi, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX);
->> to avoid further cycles on calls of
->> "static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, bit)" ?
-> 
-> bitmap_copy() was my first choice too, but unfortunately it's doesn't guarantee
-> atomicity and could lead to data corruption if the target vCPU is concurrently
-> modifying the bitmap.
 
-Indeed, it may help to reuse "pmu->global_ctrl_mask" instead of "-1ull":
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 4504987cbbe2..8e279f816e27 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -621,7 +621,8 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm *kvm, void 
-__user *argp)
-  		     sizeof(((struct kvm_pmu *)0)->__reprogram_pmi));
-
-  	kvm_for_each_vcpu(i, vcpu, kvm)
--		atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi, -1ull);
-+		atomic64_set(&vcpu_to_pmu(vcpu)->__reprogram_pmi,
-+			     pmu->global_ctrl_mask);
-
-  	kvm_make_all_cpus_request(kvm, KVM_REQ_PMU);
-
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index b68956299fa8..a946c1c57e1d 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -185,6 +185,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
-  	pmu->nr_arch_fixed_counters = 0;
-  	pmu->global_status = 0;
-  	bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
-+	pmu->global_ctrl_mask = ~((1ull << pmu->nr_arch_gp_counters) - 1);
-  }
-
-  static void amd_pmu_init(struct kvm_vcpu *vcpu)
 -- 
-2.38.0
+Best Regards
+ Guo Ren
