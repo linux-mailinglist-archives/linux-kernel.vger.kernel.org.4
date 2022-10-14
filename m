@@ -2,165 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B355FEBE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7585FEBE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiJNJlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:41:42 -0400
+        id S229772AbiJNJlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:41:45 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiJNJlg (ORCPT
+        with ESMTP id S229769AbiJNJlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:41:36 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2832C8972
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:41:31 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c24so4233609pls.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KdrfFMceV7elb/rA2YCTui/ZhC4l1ygRRIMRPNusZhU=;
-        b=tILJoqotiPdze1TCCwL+mF59nGOxYtncfKrouddVFax7Gcsz+crVbOVRREI0Tubts5
-         vV3yE8640V3CYRlQELJMmFfQQTczEty9SrunN7E3D3rGtjh2DtqxOyXcFHLCaUj06bmI
-         n2K5LQbByQ+bIzM6sx24DqM+gWvxy+s7nteoahhh7v3RsKCxB7wfK3JM651TalbDEgCt
-         iq+ySPOEI9A34HStVa3+jhYVticSF1HMoHESfANw0eGaYRCfMc6JZDSu2ulbuQq9aPiZ
-         CEjBxmmj7CjShgC3jfj1T37OUIOlhGbi6AzfZNYGfNVtK/Ji6CXdTMJ7lej9vyZzHKB2
-         fE3g==
+        Fri, 14 Oct 2022 05:41:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16511C69D3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:41:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665740491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wKlR+CcE/XKB9cJEzU9OvSSq3ilgCUyh56aB2R9hIbY=;
+        b=UEpgAIdOyUeVbLxvNzbTujVbhlJ7jxZTTjjOhApFJzOB6jImx/xwdcqpfEAtPm+RwWTEEf
+        UhIDtqloc7OHcNag8mmU/VT1RX0uJW+GeHq4mvZF51F6K+AarKkGYbs0dzQ07XDKxIbxPt
+        GDZwALfX+fyF7cZi1u3dhBKt5ZvFLpU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-214-8RAKFX6UNzOHRotWDKDFow-1; Fri, 14 Oct 2022 05:41:30 -0400
+X-MC-Unique: 8RAKFX6UNzOHRotWDKDFow-1
+Received: by mail-wm1-f70.google.com with SMTP id 2-20020a05600c268200b003c4290989e1so1924085wmt.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:41:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KdrfFMceV7elb/rA2YCTui/ZhC4l1ygRRIMRPNusZhU=;
-        b=bXx7rEPl5OYMif1/b4wd7zURz8Cjzqdi0M8yTlRtgrKZ9D3viwRx/BINgL0rKLI2f+
-         C7s9AgQuor5ZGI77bnB6ry7DqZpNI+dbcxL0DonqyYPo420UCm+A4GGhe6U4tV4WuJ9l
-         zvoQMIXraB46FUcGbpGjAI2UzioKDs1+U0fzXl+5dO4mdOBnr3Qcrh6aVgQ+TbRMiEZC
-         2wWBVKw6UgrPqbyfHJfEBWoS2X/dVp8NXH/VbE9MXgiBBtYhBxMS3qLlHU3DXJFY/GYr
-         BV+SBbhzR2QLWnW+WST3JX/dnQcg8yzyWsvoyihkZR5DHvqNobz6rYlS4WC2g2zY/1Oc
-         uWQg==
-X-Gm-Message-State: ACrzQf04faDLFm8vQZ0aJBiusbA8tWTv6sE6dkAbLAK8V6J5TDVnblcX
-        W5UwzTGsDyx9EQAaRtWpeo2q9rHA2KHDaXqxeWlJwA==
-X-Google-Smtp-Source: AMsMyM4UqG/vIk3S7koHuixUnBbVmb4fDf+woVq1uoMPm6jtVGqdAhA4fxEgS9gbQtKnvvq2Dv3MB4MMySXFLzb02qg=
-X-Received: by 2002:a17:90b:38c3:b0:20d:406e:26d9 with SMTP id
- nn3-20020a17090b38c300b0020d406e26d9mr4843007pjb.121.1665740490315; Fri, 14
- Oct 2022 02:41:30 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wKlR+CcE/XKB9cJEzU9OvSSq3ilgCUyh56aB2R9hIbY=;
+        b=eZLqf+JY0kn1VbH69CYc1+dJsq4BBXzEDmG9tgZCb54YVFxJwaNDkYVbyHJ2Y8bWrr
+         UmAISTbDq7rPsugCjtd/o7jjTvVLzqGdFvSRQM/4pOw2LOvobCHgORVzHNYiGgfYI6l0
+         6pSuXMqr5uwB5MjdHekXv+lBPZn57VpURKYqsEotw95TLUMTIQfGVCZS2PXHjUN9PVEu
+         oUpjYbVbWvtzcgGdGowyP/q44k/2/LHsFmKG1lh38i13bnPNs/cFJKZLptkSLbXP48sr
+         SBOAPyb8uVcio22+/Uf2a4yvCJACt9TSbPE1NYkBl7CApoq3bOSyJ00I9O+mDlL8ITly
+         KHsQ==
+X-Gm-Message-State: ACrzQf0z9Ga1EWs8Cz26L7OJuIO4pyOxPeAJHoASzOpugoBkkGOYdfAy
+        96JIJYtIwsOdDdn60r7r8jTaJmZ58OKy5nWEp3xgwWTq2Axj9xinXSu/1BgL+MdtHJ+PR02MXAr
+        vbPVigTsYggwIYm4rAUfvyIun
+X-Received: by 2002:a05:600c:358f:b0:3c6:da94:66f9 with SMTP id p15-20020a05600c358f00b003c6da9466f9mr2762398wmq.142.1665740488793;
+        Fri, 14 Oct 2022 02:41:28 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6w3cEiR6rQvgkTTtlNrYW5Q7DNktZGWlaya7vja/FrE/eQqGE4HHUEag6zb93Od1CS7LyiTg==
+X-Received: by 2002:a05:600c:358f:b0:3c6:da94:66f9 with SMTP id p15-20020a05600c358f00b003c6da9466f9mr2762380wmq.142.1665740488423;
+        Fri, 14 Oct 2022 02:41:28 -0700 (PDT)
+Received: from redhat.com ([2.54.162.123])
+        by smtp.gmail.com with ESMTPSA id d5-20020adfe845000000b0022b1d74dc56sm1510165wrn.79.2022.10.14.02.41.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 02:41:27 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 05:41:23 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     syzbot <syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com>
+Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [syzbot] usb-testing boot error: WARNING in cpumask_next_wrap
+Message-ID: <20221014054043-mutt-send-email-mst@kernel.org>
+References: <0000000000001207f205ead6dc09@google.com>
 MIME-Version: 1.0
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-7-vannapurve@google.com> <Yz85WEQWsXAbLWnu@google.com>
-In-Reply-To: <Yz85WEQWsXAbLWnu@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 14 Oct 2022 15:11:19 +0530
-Message-ID: <CAGtprH-eA+k3BwczSyds+Hrr5QZn96hNK81Op_iBH20-wKfKeg@mail.gmail.com>
-Subject: Re: [RFC V3 PATCH 6/6] sefltests: kvm: x86: Add selftest for private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001207f205ead6dc09@google.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 1:54 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Aug 19, 2022, Vishal Annapurve wrote:
-> > +static bool verify_mem_contents(void *mem, uint32_t size, uint8_t pat)
->
-> As per feedback in v1[*], spell out "pattern".
->
-> [*] https://lore.kernel.org/all/YtiJx11AZHslcGnN@google.com
->
-> > +{
-> > +     uint8_t *buf = (uint8_t *)mem;
-> > +
-> > +     for (uint32_t i = 0; i < size; i++) {
-> > +             if (buf[i] != pat)
-> > +                     return false;
-> > +     }
-> > +
-> > +     return true;
-> > +}
-> > +
-> > +/*
-> > + * Add custom implementation for memset to avoid using standard/builtin memset
-> > + * which may use features like SSE/GOT that don't work with guest vm execution
-> > + * within selftests.
-> > + */
-> > +void *memset(void *mem, int byte, size_t size)
-> > +{
-> > +     uint8_t *buf = (uint8_t *)mem;
-> > +
-> > +     for (uint32_t i = 0; i < size; i++)
-> > +             buf[i] = byte;
-> > +
-> > +     return buf;
-> > +}
->
-> memset(), memcpy(), and memcmp() are safe to use as of commit 6b6f71484bf4 ("KVM:
-> selftests: Implement memcmp(), memcpy(), and memset() for guest use").
->
+On Wed, Oct 12, 2022 at 07:03:39AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    49da07006239 Merge tag 'memblock-v6.1-rc1' of git://git.ke..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1361eb1a880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8be1ac10ff2d4692
+> dashboard link: https://syzkaller.appspot.com/bug?extid=28ec239d5c21a2d91f3d
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/d41d7d5418ab/disk-49da0700.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/9ffb9548d913/vmlinux-49da0700.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com
 
-This is much better. It made less sense to add a custom memset for a
-single selftest.
 
-> Note the "fun" with gcc "optimizing" into infinite recursion... :-)
->
-> > +
-> > +static void populate_test_area(void *test_area_base, uint64_t pat)
-> > +{
-> > +     memset(test_area_base, pat, TEST_AREA_SIZE);
-> > +}
-> > +
-> > +static void populate_guest_test_mem(void *guest_test_mem, uint64_t pat)
-> > +{
-> > +     memset(guest_test_mem, pat, GUEST_TEST_MEM_SIZE);
-> > +}
-> > +
-> > +static bool verify_test_area(void *test_area_base, uint64_t area_pat,
-> > +     uint64_t guest_pat)
->
-> Again, avoid "pat".
->
-> > +{
-> > +     void *test_area1_base = test_area_base;
-> > +     uint64_t test_area1_size = GUEST_TEST_MEM_OFFSET;
-> > +     void *guest_test_mem = test_area_base + test_area1_size;
-> > +     uint64_t guest_test_size = GUEST_TEST_MEM_SIZE;
-> > +     void *test_area2_base = guest_test_mem + guest_test_size;
-> > +     uint64_t test_area2_size = (TEST_AREA_SIZE - (GUEST_TEST_MEM_OFFSET +
-> > +                     GUEST_TEST_MEM_SIZE));
->
-> This is all amazingly hard to read.  AFAICT, the local variables are largely useless.
-> Actually, why even take in @test_area_base, isn't it hardcoded to TEST_AREA_GPA?
-> Then everything except the pattern can be hardcoded.
->
-> > +     return (verify_mem_contents(test_area1_base, test_area1_size, area_pat) &&
-> > +             verify_mem_contents(guest_test_mem, guest_test_size, guest_pat) &&
-> > +             verify_mem_contents(test_area2_base, test_area2_size, area_pat));
-> > +}
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git b0d0538b9a8c47da2e3fb2ee44cd3dacc75509a6
 
-Ack. Will address these comments in the next series.
+
+> software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
+> RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+> clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb6feccdd0, max_idle_ns: 440795259471 ns
+> clocksource: Switched to clocksource tsc
+> Initialise system trusted keyrings
+> workingset: timestamp_bits=40 max_order=21 bucket_order=0
+> NFS: Registering the id_resolver key type
+> Key type id_resolver registered
+> Key type id_legacy registered
+> 9p: Installing v9fs 9p2000 file system support
+> Key type asymmetric registered
+> Asymmetric key parser 'x509' registered
+> Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
+> io scheduler mq-deadline registered
+> io scheduler kyber registered
+> usbcore: registered new interface driver udlfb
+> usbcore: registered new interface driver smscufx
+> input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+> ACPI: button: Power Button [PWRF]
+> input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+> ACPI: button: Sleep Button [SLPF]
+> ACPI: \_SB_.LNKC: Enabled at IRQ 11
+> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+> ACPI: \_SB_.LNKD: Enabled at IRQ 10
+> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+> ACPI: \_SB_.LNKB: Enabled at IRQ 10
+> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+> Non-volatile memory driver v1.3
+> Linux agpgart interface v0.103
+> ACPI: bus type drm_connector registered
+> usbcore: registered new interface driver udl
+> loop: module loaded
+> usbcore: registered new interface driver rtsx_usb
+> usbcore: registered new interface driver viperboard
+> usbcore: registered new interface driver dln2
+> usbcore: registered new interface driver pn533_usb
+> usbcore: registered new interface driver port100
+> usbcore: registered new interface driver nfcmrvl
+> scsi host0: Virtio SCSI HBA
+> scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
+> sd 0:0:1:0: Attached scsi generic sg0 type 0
+> Rounding down aligned max_sectors from 4294967295 to 4294967288
+> db_root: cannot open: /etc/target
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+> Modules linked in:
+> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-11414-g49da07006239 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+> RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+> RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+> RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+> Code: df e8 6b 9e 80 fb 39 eb 77 64 e8 12 a2 80 fb 41 8d 6c 24 01 89 de 89 ef e8 54 9e 80 fb 39 dd 0f 82 54 ff ff ff e8 f7 a1 80 fb <0f> 0b e9 48 ff ff ff e8 eb a1 80 fb 48 c7 c2 80 dc e3 88 48 b8 00
+> RSP: 0000:ffffc9000001f920 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+> RDX: ffff8881002b0000 RSI: ffffffff85c61b89 RDI: 0000000000000004
+> RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
+> R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
+> R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff88e3da90
+> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2303
+>  init_vqs drivers/net/virtio_net.c:3581 [inline]
+>  init_vqs drivers/net/virtio_net.c:3567 [inline]
+>  virtnet_probe+0x12ae/0x33a0 drivers/net/virtio_net.c:3884
+>  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+>  call_driver_probe drivers/base/dd.c:560 [inline]
+>  really_probe+0x249/0xb90 drivers/base/dd.c:639
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+>  __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+>  bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+>  bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+>  driver_register+0x220/0x3a0 drivers/base/driver.c:246
+>  virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
+>  do_one_initcall+0x13d/0x780 init/main.c:1303
+>  do_initcall_level init/main.c:1376 [inline]
+>  do_initcalls init/main.c:1392 [inline]
+>  do_basic_setup init/main.c:1411 [inline]
+>  kernel_init_freeable+0x6fa/0x783 init/main.c:1631
+>  kernel_init+0x1a/0x1d0 init/main.c:1519
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
