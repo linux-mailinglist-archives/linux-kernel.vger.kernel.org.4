@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD2F5FF3CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAA35FF3CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJNSot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S230480AbiJNSql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiJNSoo (ORCPT
+        with ESMTP id S229984AbiJNSqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:44:44 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1315CE2E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:44:41 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id a66so2696072vkc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:44:41 -0700 (PDT)
+        Fri, 14 Oct 2022 14:46:38 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C2F1BE1EB
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:46:36 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id h13so5706317pfr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qHPx3FIICBJ97+4m/tNrnrrE7c7V77it4zG5MOEekP8=;
-        b=uRB9bMp8g92Q1/kj2CCMj1RnY456AXrKWO1G6V1TtDob3IS9h+kGLhuo7DxuE/3/VR
-         mclpNViNnitDQKXEhe6xad8L+Xy6HfUWQJWP7LA4EuSYNHg5BpeBSpaVnAazHVW+EPtN
-         Zwg+tbgIbik1grCVluV1PqKZbftqR+FQYT7s2Xq4nNrs3erhO8uwK0OOm28CpBZZZOdP
-         JXkd78OGKeNktU8kmzFEt42ykgYDiVTF4w1qE6Amw6GtJRAf/GMnfbzaKJgmvFMTjGPe
-         miuf2ZnYjBf/vH+77VeBBV+2MnZ6rGtBmnXDjV1ivrCMFFv9BHIECzP2XQli5INU4V9R
-         3sSw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r9b1WxYCtQHAvJQbAPYaXXw5JIstR8dPjphyBTVotDg=;
+        b=C9ChpAljNx+6EX+b7MIXOhJ/DxR1oEgil1ZdehQzrOHu0htP0Wb4hihn7cdKw7kusB
+         unlXoi0fYM8ckb4UqUThqiouQ/fgrebyEJmB7iEik2j7ocpYju1X+GtQNb/e2THXGyfu
+         pdn2pYHgdd7SXL+E5NiLfpnCE8W4Xn9DguZTY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qHPx3FIICBJ97+4m/tNrnrrE7c7V77it4zG5MOEekP8=;
-        b=Slzo4iKMsZiB9nGtCIIWkxsm1OQ2YmcJWYZA7yhZcBZXOAbFImrijJ+5QFsYFzsUAw
-         h6HzXfFyh/2Xvl7Vz9kWfDdsFWwij9Gn+LjJGUiBNhwoUmtiYsopwxCoTCZ9SbJTtXAC
-         tVUgaBVpsnLYHq79RG+KiAbASprkt+CJDhhYyhX3QITu/c3JFRSbZcBLHJ9jj4n+XYZS
-         RzwmQPtVoFymMHWfgmZUtwi3oanZF+emcb9cBw0kJ2r9Zv+zTbV2euIQ0t2WJNiaNbyz
-         Feg3U3Js9O7vXjVn1Gkz2fmui9Wb5r9+n9u7VCIgozsjHHztS46U6n+e+mYH6kY7UI0M
-         WRTg==
-X-Gm-Message-State: ACrzQf3o8Qi4j2hKPtUZ72jokLb47cn+eaTvBMPzkJyhop6nJoru7GbJ
-        Re+y1E+IpFV7DUvdviHlKx4gYJDYfvqSVaE1f3csVoN7Mn1ZSQ==
-X-Google-Smtp-Source: AMsMyM6QKRzoCjo0ApqBM+lkCZ5RSJXpZqKuxDYGeeX6qtxur8+D1dbHMhYRfQNGn6xUWsYDjysKB/tPD11BUvp0DyE=
-X-Received: by 2002:a1f:a0d8:0:b0:3a3:e1a1:3682 with SMTP id
- j207-20020a1fa0d8000000b003a3e1a13682mr3547342vke.20.1665773080912; Fri, 14
- Oct 2022 11:44:40 -0700 (PDT)
+        bh=r9b1WxYCtQHAvJQbAPYaXXw5JIstR8dPjphyBTVotDg=;
+        b=GBssaesT2WjSWGuKJuJMTNo0xr4BgtefApcYonfsVv7PQcclhratnqTdgdR9PxSyES
+         RL6e1PkyMOVfAPKsik/GfYv+O/TXI9W2Qr20y8Zp3aXe4V7LuGbAUxDYXrnPGM+Wh5r8
+         TkIIeBqYODDlScC5zZ78uPCs7imVTuQ0CXnulxeIwTCdqvZBnPfAWAS3WemnK6EBKwAy
+         fAGDQn7WuAlPA5tJABBADLBahAkRcFO7x5obe5SfF0IPUQBhFclg6zE++jIPHXaGhmq8
+         4u3RGsAFjs9ljPKzHV7tNOB1WLEe2AuWppzt5nD81ACfQqknS/MjNeHSVe/zzfxaM/DI
+         lfhA==
+X-Gm-Message-State: ACrzQf3+qVihGuNENT/W4RJdj/6vASaChStDM1JABxi0UIUTO2yRMm8W
+        NxV9PMpjrsChgDLwYunehEwObw==
+X-Google-Smtp-Source: AMsMyM4KxZFUnZ3+JVUZbSV1KdBMKe5N17ONrn6zYeMpUbJ+0CiKCyk427n5W/she7eWjJeNE5SITA==
+X-Received: by 2002:a05:6a00:1707:b0:562:e790:dfc3 with SMTP id h7-20020a056a00170700b00562e790dfc3mr6609803pfc.59.1665773196248;
+        Fri, 14 Oct 2022 11:46:36 -0700 (PDT)
+Received: from localhost ([2620:15c:2ce:200:e8c9:5029:f577:f6ca])
+        by smtp.gmail.com with UTF8SMTPSA id 203-20020a6217d4000000b0053653c6b9f9sm2047145pfx.204.2022.10.14.11.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 11:46:35 -0700 (PDT)
+From:   Denis Nikitin <denik@chromium.org>
+To:     Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        David Brazdil <dbrazdil@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Denis Nikitin <denik@chromium.org>
+Subject: [PATCH v3] KVM: arm64: nvhe: Fix build with profile optimization
+Date:   Fri, 14 Oct 2022 11:45:32 -0700
+Message-Id: <20221014184532.3153551-1-denik@chromium.org>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
-References: <20221004184625.10076-1-olof@lixom.net> <CANiq72mFGoDySLHNyakOnJMDpRVmvCRUAAuiKw1B2KrMhFteCA@mail.gmail.com>
-In-Reply-To: <CANiq72mFGoDySLHNyakOnJMDpRVmvCRUAAuiKw1B2KrMhFteCA@mail.gmail.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Fri, 14 Oct 2022 11:44:30 -0700
-Message-ID: <CAOesGMhBnBrrJuT49V64nSN=UyvAdh1n9mXKYbxAexi1FC1_DA@mail.gmail.com>
-Subject: Re: [PATCH] scripts: rust_is_available.sh: Provide hints on how to
- fix missing pieces
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 9:21 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Tue, Oct 4, 2022 at 8:47 PM Olof Johansson <olof@lixom.net> wrote:
-> >
-> > This might be a bit bikesheddy, but it saves a few roundtrips to the
-> > documentation when getting the `make LLVM=1 rustavailable` run to pass.
->
-> It is faster for someone that already knows how things work, but it
-> may make newcomers skip the docs and it duplicates the information
-> there. In addition, for the non-error case, it makes it more verbose
-> which may not be appreciated. So maybe we should point to the docs
-> instead? What do you think?
+Kernel build with clang and KCFLAGS=-fprofile-sample-use=<profile> fails with:
 
-I don't really have a preference. This patch would have helped me, so
-I figured I would post it. My interest isn't really high enough to
-spend more effort on it at this time -- I got my setup working by now.
+error: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o: Unexpected SHT_REL
+section ".rel.llvm.call-graph-profile"
 
-Refactoring the script to have a shared message on non-successful exit
-with a reference to the doc would achieve what you're suggesting
-though.
+Starting from 13.0.0 llvm can generate SHT_REL section, see
+https://reviews.llvm.org/rGca3bdb57fa1ac98b711a735de048c12b5fdd8086.
+gen-hyprel does not support SHT_REL relocation section.
 
+Filter out profile use flags to fix the build with profile optimization.
 
-> Also, the patch doesn't add instructions for all the cases, so
-> somebody that may have hit one of the documented ones + not have read
-> the docs may wonder where to find them the solution or why they are
-> missing.
+Signed-off-by: Denis Nikitin <denik@chromium.org>
+---
+V2 -> V3: Filter out the profile-use flags.
+V1 -> V2: Remove the relocation instead of disabling the profile-use flags.
+---
+ arch/arm64/kvm/hyp/nvhe/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Sure.
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+index b5c5119c7396..16c6abdda494 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -89,6 +89,10 @@ quiet_cmd_hypcopy = HYPCOPY $@
+ # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
+ # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
+ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
++# Starting from 13.0.0 llvm emits SHT_REL section '.llvm.call-graph-profile'
++# when profile optimization is applied. gen-hyprel does not support SHT_REL and
++# causes a build failure. Remove profile optimization flags.
++KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%, $(KBUILD_CFLAGS))
+ 
+ # KVM nVHE code is run at a different exception code with a different map, so
+ # compiler instrumentation that inserts callbacks or checks into the code may
+-- 
+2.38.0.413.g74048e4d9e-goog
 
-
--Olof
