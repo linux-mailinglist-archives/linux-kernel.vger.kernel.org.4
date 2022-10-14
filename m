@@ -2,223 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4BA5FF502
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3155FF505
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJNVGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S229622AbiJNVJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJNVGp (ORCPT
+        with ESMTP id S229598AbiJNVJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:06:45 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617AC1C8D7A
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:06:43 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id n18-20020a17090ade9200b0020b0012097cso8736293pjv.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gBsIgMFkR4hW6DkbKUL3jsquGqWZiZYs8XXLe7DQw4A=;
-        b=EZEnHyPWVM20eYK0drT8VKRVFesb8BxKsJzc0N+c8Wa34hBYJ9Q6wgFLIdZOwP2E2A
-         snZ8B9uD5ZMLmdIeDQTPBg5PfNB4eBY2/6kO+U06aK1ADIhjSOZUjL1tOQoN/z2a7Kun
-         WjJsTnYEQLDEx7jASlQs0iLsRJ2AIE2dVwfgPgoxt4krLRyaIs6K5r1V0XDInXNPdJmG
-         jrRPrXsfD+0AUNroc6Ysr03801gaTAC7fZuMbfHuID6fMhC4bphXtGYn5aGZlqD0ViXp
-         fLfvaZUXPywdh4phfAmRqFHubAUgEvH+UGdKgvBBBWHEcOYKY2L0o0bu+NREHGB4zAsm
-         6dzw==
+        Fri, 14 Oct 2022 17:09:07 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454BE1DCCCB;
+        Fri, 14 Oct 2022 14:09:02 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id w196so6338277oiw.8;
+        Fri, 14 Oct 2022 14:09:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gBsIgMFkR4hW6DkbKUL3jsquGqWZiZYs8XXLe7DQw4A=;
-        b=FObhD9mAjehHBPRRUw1qgicQz6hL1USBzWMBiSibm6bZQrzGZh4Gm8guJHB8G50E0y
-         Dofo5rnyVZL+RZaAN/1t1EeU2SgBszmf8jF5t8ytJuxLYXmqN2mnImbMStK06vLg3IY0
-         hQNQTNEfoweSz90QX+1EiWdCVjEnFi1e1nxNWXhg3jG3QTnmZQma5kvtTt/8THVlaAkV
-         GedZq6vPju329pIxCbHzvGIh6QqJQOxrLiL0XzZ3K4Tv8eNnrEuL/96QFwOonzencaQa
-         ZZze5WBhHUG4ORZjfOq6lRu/PlL/zud+FGBWnocK2LG6qHB4K1Jq9szjMKnSVuf8rCN6
-         bREg==
-X-Gm-Message-State: ACrzQf1TdPIJ5hZtDbPXaHJp/P13UYcDxhuwvIU/B5iyFxpoNqMuS+V3
-        CoQYkuP7IZKXZRvEYUxhbGwa4g==
-X-Google-Smtp-Source: AMsMyM4TRUGumiH9zPUpVbD+pbo9y8PKyNt58Hq6N9oJ6PlfFsmKD5LHpHH6bXmjSd0NXZc8ax2ong==
-X-Received: by 2002:a17:902:d48e:b0:178:b5d:ab3 with SMTP id c14-20020a170902d48e00b001780b5d0ab3mr6947676plg.22.1665781602184;
-        Fri, 14 Oct 2022 14:06:42 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i18-20020a63e912000000b0045724d09cb4sm1835259pgh.29.2022.10.14.14.06.41
+        bh=sFbWOiyQ97fl6msdrmbKRp8AqMUR98EgH4kmS3rexak=;
+        b=E7KB33jyJ/sd2rJQRjKFTdsdBWUi5QV+DHKu8SgLYC/FYscvzy9vYr25TsMmmMMk5Y
+         2apIukM7I7rsdwJ6hBlsbrFwb6dLXcfzhvrnCldxfnhjTMzwMKKrERWNnKJ7Y3y4DnuF
+         E07Zy6vaSn5RqffuQv5RvtYJ46GsYvAdaGcWsh4LAcy6/QxpdGwrrdtfrAlGVaVxdfcF
+         hZ8DgA6wvreGNIvyE6/W4ZMzcq6cd2ZJnDPz490fRtH2elonuuSVZZZ9BKYWsDeUwr7g
+         8C7JTagmpogp427iPMkXL9+1hlu+lRSxWDGbuLngPD6z0IdV9e2mcA21IgAa96hQejSZ
+         M3xg==
+X-Gm-Message-State: ACrzQf1T79mqGCb46RBEHo3vrhPtDy/Sra+ZuTiDU+QnsJ4JUxY2xq/T
+        Hx4ali5nBcFas6QJ5m7+4t31ON+sXhyE
+X-Google-Smtp-Source: AMsMyM5exSaegpHBePjo8BcVuZoo8kQdXZomJxgyXZ72GJFXcpyYNV6f3Nb7Cbh/csJE79kBBPNDuA==
+X-Received: by 2002:a54:450c:0:b0:354:9464:2e64 with SMTP id l12-20020a54450c000000b0035494642e64mr3424172oil.178.1665781741786;
+        Fri, 14 Oct 2022 14:09:01 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l36-20020a05687106a400b0013669485016sm1797234oao.37.2022.10.14.14.09.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:06:41 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 21:06:37 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        maciej.szmigiero@oracle.com
-Subject: Re: [PATCH v2 8/8] KVM: x86: do not define KVM_REQ_SMI if SMM
- disabled
-Message-ID: <Y0nPXfVT1pUaGppn@google.com>
-References: <20220929172016.319443-1-pbonzini@redhat.com>
- <20220929172016.319443-9-pbonzini@redhat.com>
+        Fri, 14 Oct 2022 14:09:01 -0700 (PDT)
+Received: (nullmailer pid 2899059 invoked by uid 1000);
+        Fri, 14 Oct 2022 21:09:02 -0000
+Date:   Fri, 14 Oct 2022 16:09:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     devicetree@vger.kernel.org, paul.j.murphy@intel.com,
+        mchehab@kernel.org, daniele.alessandrelli@intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        dave.stevenson@raspberrypi.com, jacopo@jmondi.org,
+        sakari.ailus@iki.fi, linux-media@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] media: dt-bindings: imx412: Extend compatible
+ strings
+Message-ID: <166578173132.2894359.17034886949314932517.robh@kernel.org>
+References: <20221014180417.3683285-1-bryan.odonoghue@linaro.org>
+ <20221014180417.3683285-2-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929172016.319443-9-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221014180417.3683285-2-bryan.odonoghue@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	On Thu, Sep 29, 2022, Paolo Bonzini wrote:
-> This ensures that all the relevant code is compiled out, in fact
-> the process_smi stub can be removed too.
+On Fri, 14 Oct 2022 19:04:15 +0100, Bryan O'Donoghue wrote:
+> Add compatible bindings for imx577 which uses the same silicon enabling
+> reference code from Sony in the available examples provided.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: sakari.ailus@iki.fi
+> Cc: dave.stevenson@raspberrypi.com
+> Cc: jacopo@jmondi.org
+> Cc: "Paul J. Murphy" <paul.j.murphy@intel.com>
+> Cc: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  arch/x86/include/asm/kvm_host.h | 2 ++
->  arch/x86/kvm/smm.h              | 1 -
->  arch/x86/kvm/x86.c              | 6 ++++++
->  3 files changed, 8 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index d11697504471..d58d4a62b227 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -81,7 +81,9 @@
->  #define KVM_REQ_NMI			KVM_ARCH_REQ(9)
->  #define KVM_REQ_PMU			KVM_ARCH_REQ(10)
->  #define KVM_REQ_PMI			KVM_ARCH_REQ(11)
-> +#ifdef CONFIG_KVM_SMM
->  #define KVM_REQ_SMI			KVM_ARCH_REQ(12)
-> +#endif
->  #define KVM_REQ_MASTERCLOCK_UPDATE	KVM_ARCH_REQ(13)
->  #define KVM_REQ_MCLOCK_INPROGRESS \
->  	KVM_ARCH_REQ_FLAGS(14, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
-> diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
-> index 7ccce6b655ca..a6795b93ba30 100644
-> --- a/arch/x86/kvm/smm.h
-> +++ b/arch/x86/kvm/smm.h
-> @@ -28,7 +28,6 @@ void process_smi(struct kvm_vcpu *vcpu);
->  static inline int kvm_inject_smi(struct kvm_vcpu *vcpu) { return -ENOTTY; }
->  static inline bool is_smm(struct kvm_vcpu *vcpu) { return false; }
->  static inline void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm) { WARN_ON_ONCE(1); }
-> -static inline void process_smi(struct kvm_vcpu *vcpu) { WARN_ON_ONCE(1); }
 
-I think it's worth adding one more patch to kill off kvm_smm_changed() too.  Most
-of the affected code already has references to CONFIG_KVM_SMM nearby.
-
----
- arch/x86/include/asm/kvm_host.h |  3 ++-
- arch/x86/kvm/smm.c              |  4 ++++
- arch/x86/kvm/smm.h              |  2 --
- arch/x86/kvm/x86.c              | 18 +++++++++---------
- 4 files changed, 15 insertions(+), 12 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 0b0a82c0bb5c..6c572cf1cf8d 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1994,10 +1994,11 @@ enum {
- #define HF_NMI_MASK		(1 << 3)
- #define HF_IRET_MASK		(1 << 4)
- #define HF_GUEST_MASK		(1 << 5) /* VCPU is in guest-mode */
-+
-+#ifdef CONFIG_KVM_SMM
- #define HF_SMM_MASK		(1 << 6)
- #define HF_SMM_INSIDE_NMI_MASK	(1 << 7)
- 
--#ifdef CONFIG_KVM_SMM
- # define __KVM_VCPU_MULTIPLE_ADDRESS_SPACE
- # define KVM_ADDRESS_SPACE_NUM 2
- # define kvm_arch_vcpu_memslots_id(vcpu) ((vcpu)->arch.hflags & HF_SMM_MASK ? 1 : 0)
-diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-index 740fca1cf3a3..12480446c43b 100644
---- a/arch/x86/kvm/smm.c
-+++ b/arch/x86/kvm/smm.c
-@@ -10,6 +10,10 @@
- 
- void kvm_smm_changed(struct kvm_vcpu *vcpu, bool entering_smm)
- {
-+	BUILD_BUG_ON(HF_GUEST_MASK != X86EMUL_GUEST_MASK);
-+	BUILD_BUG_ON(HF_SMM_MASK != X86EMUL_SMM_MASK);
-+	BUILD_BUG_ON(HF_SMM_INSIDE_NMI_MASK != X86EMUL_SMM_INSIDE_NMI_MASK);
-+
- 	trace_kvm_smm_transition(vcpu->vcpu_id, vcpu->arch.smbase, entering_smm);
- 
- 	if (entering_smm) {
-diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
-index 131fbe1817d5..9935045fcf20 100644
---- a/arch/x86/kvm/smm.h
-+++ b/arch/x86/kvm/smm.h
-@@ -29,8 +29,6 @@ void process_smi(struct kvm_vcpu *vcpu);
- #else
- static inline int kvm_inject_smi(struct kvm_vcpu *vcpu) { return -ENOTTY; }
- static inline bool is_smm(struct kvm_vcpu *vcpu) { return false; }
--static inline void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm) { WARN_ON_ONCE(1); }
--
- /*
-  * emulator_leave_smm is used as a function pointer, so the
-  * stub is defined in x86.c.
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 56004890a717..ec74d579ca1b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5103,10 +5103,12 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
- 
- 	events->sipi_vector = 0; /* never valid when reporting to user space */
- 
-+#ifdef CONFIG_KVM_SMM
- 	events->smi.smm = is_smm(vcpu);
- 	events->smi.pending = vcpu->arch.smi_pending;
- 	events->smi.smm_inside_nmi =
- 		!!(vcpu->arch.hflags & HF_SMM_INSIDE_NMI_MASK);
-+#endif
- 	events->smi.latched_init = kvm_lapic_latched_init(vcpu);
- 
- 	events->flags = (KVM_VCPUEVENT_VALID_NMI_PENDING
-@@ -5194,12 +5196,7 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
- 		vcpu->arch.apic->sipi_vector = events->sipi_vector;
- 
- 	if (events->flags & KVM_VCPUEVENT_VALID_SMM) {
--		if (!IS_ENABLED(CONFIG_KVM_SMM) &&
--		    (events->smi.smm ||
--		     events->smi.pending ||
--		     events->smi.smm_inside_nmi))
--			return -EINVAL;
--
-+#ifdef CONFIG_KVM_SMM
- 		if (!!(vcpu->arch.hflags & HF_SMM_MASK) != events->smi.smm) {
- 			kvm_x86_ops.nested_ops->leave_nested(vcpu);
- 			kvm_smm_changed(vcpu, events->smi.smm);
-@@ -5214,6 +5211,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
- 				vcpu->arch.hflags &= ~HF_SMM_INSIDE_NMI_MASK;
- 		}
- 
-+#else
-+		if (events->smi.smm || events->smi.pending ||
-+		    events->smi.smm_inside_nmi)
-+			return -EINVAL;
-+#endif
-+
- 		if (lapic_in_kernel(vcpu)) {
- 			if (events->smi.latched_init)
- 				set_bit(KVM_APIC_INIT, &vcpu->arch.apic->pending_events);
-@@ -8228,9 +8231,6 @@ static void init_emulate_ctxt(struct kvm_vcpu *vcpu)
- 		     (cs_l && is_long_mode(vcpu))	? X86EMUL_MODE_PROT64 :
- 		     cs_db				? X86EMUL_MODE_PROT32 :
- 							  X86EMUL_MODE_PROT16;
--	BUILD_BUG_ON(HF_GUEST_MASK != X86EMUL_GUEST_MASK);
--	BUILD_BUG_ON(HF_SMM_MASK != X86EMUL_SMM_MASK);
--	BUILD_BUG_ON(HF_SMM_INSIDE_NMI_MASK != X86EMUL_SMM_INSIDE_NMI_MASK);
- 
- 	ctxt->interruptibility = 0;
- 	ctxt->have_exception = false;
-
-base-commit: f7641bcac507589d34b20d30cceb7067f8bcfd08
--- 
-
+Acked-by: Rob Herring <robh@kernel.org>
