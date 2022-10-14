@@ -2,186 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3575A5FF3FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C6C5FF402
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiJNTQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 15:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S230506AbiJNTSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 15:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiJNTQw (ORCPT
+        with ESMTP id S229560AbiJNTST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 15:16:52 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE7E19E023
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:16:50 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a10so8990744wrm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+e+IQzI9c5hsaffhdIQpTgvSkWzJAQJmGRtn9258sI=;
-        b=fo9kRAadMgh2pQxiCRkbO1eOO6wkXFqvRjqolLVd32MobIKbxJ7+eo4xEjpl020pb9
-         FWr2XKlZSKHRTFa7j7Xt0G4tsFy2dsPR6Y5EIK0W9z4GUsPiR0nEwxnKtrK29PXGdBaN
-         DNF2H9xKL2Y6ekpZbal9w9lMTZAbW6EsgdXis=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q+e+IQzI9c5hsaffhdIQpTgvSkWzJAQJmGRtn9258sI=;
-        b=qQ4/dtFi3P9VjMf6s4JYjw0TvZoJL80v7EOd3PtR0xHlWMOiqYkAQz8iEgq6EVQXik
-         q114mWJR71t5IrF16U/B8tiyKLj/u5gYvgESbNbB33brgka/893ZC4naM0jwN6Na2+PF
-         VvSa/DsVxftVexjYOPeLUgcljQj564soje5Z3W6mfnE7T1D68nHJeq3cLhWwxKP81SFW
-         GqL3xRc9ELID2EKrekb6T+xEhARvth+r7N/MEjOujsgetStspnQX+07eWQbTmOVpWIf9
-         tbkbKLQja7OVujinnL+6LjdlB3pLOy36uc+rK4EYo3Gy7aJB1I64JR1Hb1Yfxc2b+dpU
-         Bm9Q==
-X-Gm-Message-State: ACrzQf0JOFhewkOmHlB+Isw770XReOfluclfLDOTmyltOzJKi+6QSUh2
-        UwTrEE3909/cj1+UZVQNP7xS9IzQF1E3pNHSOG6ScQ==
-X-Google-Smtp-Source: AMsMyM7AcCe6vxXJnNtYSWQ6PMRrrE50WSp6xy+rzt2VFuEW9unwZ1mptvypBBomWhQTZk/5lTezgjEoCbJpQkujYBk=
-X-Received: by 2002:adf:fb0e:0:b0:21a:34a2:5ca9 with SMTP id
- c14-20020adffb0e000000b0021a34a25ca9mr4426434wrr.472.1665775008571; Fri, 14
- Oct 2022 12:16:48 -0700 (PDT)
+        Fri, 14 Oct 2022 15:18:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20171C208F;
+        Fri, 14 Oct 2022 12:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665775097; x=1697311097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VhEzD1+s4UBVZBCb9ksjCgOB+a85FsVlqv5XHXgX99o=;
+  b=ncm6hwf+/qNL7wvDpW7anVUPSVJrMzSw0wu+KqNJ7l+6jqHEPSH7uiGW
+   9TKpCdfHcay7Iw65N1o5hvYXu8Yl/h36jOLGdD2nnzp1Oeag3B1CAAuBD
+   tUfya4/rEqrM5C/YkMQmiLlE0eoUVb/goRxx0JxG2l35/qnhw+nnB9tN/
+   zKGMK3a0ShhvE6ueJi0ZJMrpR7TVgNH+kTyDRo2hHAjtXIgQyVpoEUoVb
+   Qd2/BIMph4804DzhuApKoEcttd+9gOTz+vGVxXdNOVrzLdlIOBgFDpFGS
+   FYRAMEuTfTNlrk+DyVKh0/lnQ0MJp0LsGVcaho102SVf2uxvSbNuyq09S
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="305442314"
+X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
+   d="scan'208";a="305442314"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 12:18:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="696417779"
+X-IronPort-AV: E=Sophos;i="5.95,185,1661842800"; 
+   d="scan'208";a="696417779"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 12:18:14 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id D2779200DA;
+        Fri, 14 Oct 2022 22:18:11 +0300 (EEST)
+Date:   Fri, 14 Oct 2022 19:18:11 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
+Message-ID: <Y0m180wwV9CiNNTf@paasikivi.fi.intel.com>
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20221011184211.18128-6-jim2101024@gmail.com> <20221013141225.GA3245514@bhelgaas>
-In-Reply-To: <20221013141225.GA3245514@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Fri, 14 Oct 2022 15:16:35 -0400
-Message-ID: <CA+-6iNw3Eotf29e=3=H2QZBEbbL8th9xrLRN8sUfcRMKQ1ML7w@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000add70005eb037767"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000add70005eb037767
-Content-Type: text/plain; charset="UTF-8"
+Hi Prabhakar,
 
-On Thu, Oct 13, 2022 at 10:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Tue, Oct 11, 2022 at 02:42:10PM -0400, Jim Quinlan wrote:
-> > Set RCB_MPS mode bit so that data for PCIe read requests up to the size of
-> > the Maximum Payload Size (MPS) are returned in one completion, and data for
-> > PCIe read requests greater than the MPS are split at the specified Read
-> > Completion Boundary setting.
-> >
-> > Set RCB_64B so that the Read Compeletion Boundary is 64B.
->
-> s/Compeletion/Completion/
+On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Switch to using runtime PM for power management.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Moved pm_runtime_*_autosuspend() calls after registering the subdev.
+> ---
+>  drivers/media/i2c/Kconfig  |   2 +-
+>  drivers/media/i2c/ov5645.c | 137 +++++++++++++++++++------------------
+>  2 files changed, 70 insertions(+), 69 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index 7806d4b81716..c0edd1017fe8 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -459,7 +459,7 @@ config VIDEO_OV5640
+>  config VIDEO_OV5645
+>  	tristate "OmniVision OV5645 sensor support"
+>  	depends on OF
+> -	depends on I2C && VIDEO_DEV
+> +	depends on I2C && PM && VIDEO_DEV
+>  	select MEDIA_CONTROLLER
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select V4L2_FWNODE
+> diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> index 81e4e87e1821..1551690a94e0 100644
+> --- a/drivers/media/i2c/ov5645.c
+> +++ b/drivers/media/i2c/ov5645.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_graph.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> @@ -108,7 +109,6 @@ struct ov5645 {
+>  	u8 timing_tc_reg21;
+>  
+>  	struct mutex power_lock; /* lock to protect power state */
+> -	int power_count;
+>  
+>  	struct gpio_desc *enable_gpio;
+>  	struct gpio_desc *rst_gpio;
+> @@ -635,8 +635,24 @@ static int ov5645_set_register_array(struct ov5645 *ov5645,
+>  	return 0;
+>  }
+>  
+> -static int ov5645_set_power_on(struct ov5645 *ov5645)
+> +static int ov5645_set_power_off(struct device *dev)
+>  {
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5645 *ov5645 = to_ov5645(sd);
+> +
+> +	ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
+> +	gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
+> +	gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
+> +	clk_disable_unprepare(ov5645->xclk);
+> +	regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ov5645_set_power_on(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5645 *ov5645 = to_ov5645(sd);
+>  	int ret;
+>  
+>  	ret = regulator_bulk_enable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> @@ -658,57 +674,19 @@ static int ov5645_set_power_on(struct ov5645 *ov5645)
+>  
+>  	msleep(20);
+>  
+> -	return 0;
+> -}
+> -
+> -static void ov5645_set_power_off(struct ov5645 *ov5645)
+> -{
+> -	gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
+> -	gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
+> -	clk_disable_unprepare(ov5645->xclk);
+> -	regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+> -}
+> -
+> -static int ov5645_s_power(struct v4l2_subdev *sd, int on)
+> -{
+> -	struct ov5645 *ov5645 = to_ov5645(sd);
+> -	int ret = 0;
+> -
+> -	mutex_lock(&ov5645->power_lock);
+> -
+> -	/* If the power count is modified from 0 to != 0 or from != 0 to 0,
+> -	 * update the power state.
+> -	 */
+> -	if (ov5645->power_count == !on) {
+> -		if (on) {
+> -			ret = ov5645_set_power_on(ov5645);
+> -			if (ret < 0)
+> -				goto exit;
+> -
+> -			ret = ov5645_set_register_array(ov5645,
+> -					ov5645_global_init_setting,
+> +	ret = ov5645_set_register_array(ov5645, ov5645_global_init_setting,
+>  					ARRAY_SIZE(ov5645_global_init_setting));
+> -			if (ret < 0) {
+> -				dev_err(ov5645->dev,
+> -					"could not set init registers\n");
+> -				ov5645_set_power_off(ov5645);
+> -				goto exit;
+> -			}
+> -
+> -			usleep_range(500, 1000);
+> -		} else {
+> -			ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
+> -			ov5645_set_power_off(ov5645);
+> -		}
+> +	if (ret < 0) {
+> +		dev_err(ov5645->dev, "could not set init registers\n");
+> +		goto exit;
+>  	}
+>  
+> -	/* Update the power count. */
+> -	ov5645->power_count += on ? 1 : -1;
+> -	WARN_ON(ov5645->power_count < 0);
+> +	usleep_range(500, 1000);
+>  
+> -exit:
+> -	mutex_unlock(&ov5645->power_lock);
+> +	return 0;
+>  
+> +exit:
+> +	ov5645_set_power_off(dev);
+>  	return ret;
+>  }
+>  
+> @@ -795,7 +773,7 @@ static int ov5645_s_ctrl(struct v4l2_ctrl *ctrl)
+>  	int ret;
+>  
+>  	mutex_lock(&ov5645->power_lock);
+> -	if (!ov5645->power_count) {
+> +	if (!pm_runtime_get_if_in_use(ov5645->dev)) {
+>  		mutex_unlock(&ov5645->power_lock);
+>  		return 0;
+>  	}
+> @@ -827,6 +805,7 @@ static int ov5645_s_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> +	pm_runtime_put_autosuspend(ov5645->dev);
 
-Hi Bjorn,
+I think you'll need pm_runtime_mark_last_busy() before this. I missed this
+on the last round. Maybe in probe() too. Feel free to resend just this
+patch.
 
-TIL that checkpatch.pl only flags misspelled words only if they match
-its list of misspelled words.
-I've modified my checkpatch.pl wrapper script to use aspell to better
-address my typos.
-At any rate, do you mind if I add some new commits for V3?
+>  	mutex_unlock(&ov5645->power_lock);
+>  
+>  	return ret;
+> @@ -991,6 +970,10 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+>  	int ret;
+>  
+>  	if (enable) {
+> +		ret = pm_runtime_resume_and_get(ov5645->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +
+>  		ret = ov5645_set_register_array(ov5645,
+>  					ov5645->current_mode->data,
+>  					ov5645->current_mode->data_size);
+> @@ -998,22 +981,22 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+>  			dev_err(ov5645->dev, "could not set mode %dx%d\n",
+>  				ov5645->current_mode->width,
+>  				ov5645->current_mode->height);
+> -			return ret;
+> +			goto err_rpm_put;
+>  		}
+>  		ret = v4l2_ctrl_handler_setup(&ov5645->ctrls);
+>  		if (ret < 0) {
+>  			dev_err(ov5645->dev, "could not sync v4l2 controls\n");
+> -			return ret;
+> +			goto err_rpm_put;
+>  		}
+>  
+>  		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x45);
+>  		if (ret < 0)
+> -			return ret;
+> +			goto err_rpm_put;
+>  
+>  		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
+>  				       OV5645_SYSTEM_CTRL0_START);
+>  		if (ret < 0)
+> -			return ret;
+> +			goto err_rpm_put;
+>  	} else {
+>  		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+>  		if (ret < 0)
+> @@ -1023,14 +1006,15 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+>  				       OV5645_SYSTEM_CTRL0_STOP);
+>  		if (ret < 0)
+>  			return ret;
+> +		pm_runtime_put(ov5645->dev);
+>  	}
+>  
+>  	return 0;
+> -}
+>  
+> -static const struct v4l2_subdev_core_ops ov5645_core_ops = {
+> -	.s_power = ov5645_s_power,
+> -};
+> +err_rpm_put:
+> +	pm_runtime_put(ov5645->dev);
+> +	return ret;
+> +}
+>  
+>  static const struct v4l2_subdev_video_ops ov5645_video_ops = {
+>  	.s_stream = ov5645_s_stream,
+> @@ -1046,7 +1030,6 @@ static const struct v4l2_subdev_pad_ops ov5645_subdev_pad_ops = {
+>  };
+>  
+>  static const struct v4l2_subdev_ops ov5645_subdev_ops = {
+> -	.core = &ov5645_core_ops,
+>  	.video = &ov5645_video_ops,
+>  	.pad = &ov5645_subdev_pad_ops,
+>  };
+> @@ -1188,11 +1171,9 @@ static int ov5645_probe(struct i2c_client *client)
+>  		goto free_ctrl;
+>  	}
+>  
+> -	ret = ov5645_s_power(&ov5645->sd, true);
+> -	if (ret < 0) {
+> -		dev_err(dev, "could not power up OV5645\n");
+> +	ret = ov5645_set_power_on(dev);
+> +	if (ret)
+>  		goto free_entity;
+> -	}
+>  
+>  	ret = ov5645_read_reg(ov5645, OV5645_CHIP_ID_HIGH, &chip_id_high);
+>  	if (ret < 0 || chip_id_high != OV5645_CHIP_ID_HIGH_BYTE) {
+> @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
+>  
+>  	dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
+>  
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_get_noresume(dev);
+> +	pm_runtime_enable(dev);
+> +
+>  	ret = ov5645_read_reg(ov5645, OV5645_AEC_PK_MANUAL,
+>  			      &ov5645->aec_pk_manual);
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not read AEC/AGC mode\n");
+>  		ret = -ENODEV;
+> -		goto power_down;
+> +		goto err_pm_runtime;
+>  	}
+>  
+>  	ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG20,
+> @@ -1222,7 +1207,7 @@ static int ov5645_probe(struct i2c_client *client)
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not read vflip value\n");
+>  		ret = -ENODEV;
+> -		goto power_down;
+> +		goto err_pm_runtime;
+>  	}
+>  
+>  	ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG21,
+> @@ -1230,23 +1215,30 @@ static int ov5645_probe(struct i2c_client *client)
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not read hflip value\n");
+>  		ret = -ENODEV;
+> -		goto power_down;
+> +		goto err_pm_runtime;
+>  	}
+>  
+> -	ov5645_s_power(&ov5645->sd, false);
+> -
+>  	ret = v4l2_async_register_subdev(&ov5645->sd);
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not register v4l2 device\n");
+> +		pm_runtime_disable(dev);
+> +		pm_runtime_set_suspended(dev);
+>  		goto free_entity;
+>  	}
+>  
+> +	pm_runtime_set_autosuspend_delay(dev, 1000);
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_put_autosuspend(dev);
+> +
+>  	ov5645_entity_init_cfg(&ov5645->sd, NULL);
+>  
+>  	return 0;
+>  
+> +err_pm_runtime:
+> +	pm_runtime_disable(dev);
+> +	pm_runtime_put_noidle(dev);
+>  power_down:
+> -	ov5645_s_power(&ov5645->sd, false);
+> +	ov5645_set_power_off(dev);
+>  free_entity:
+>  	media_entity_cleanup(&ov5645->sd.entity);
+>  free_ctrl:
+> @@ -1264,6 +1256,10 @@ static void ov5645_remove(struct i2c_client *client)
+>  	v4l2_async_unregister_subdev(&ov5645->sd);
+>  	media_entity_cleanup(&ov5645->sd.entity);
+>  	v4l2_ctrl_handler_free(&ov5645->ctrls);
+> +	pm_runtime_disable(ov5645->dev);
+> +	if (!pm_runtime_status_suspended(ov5645->dev))
+> +		ov5645_set_power_off(ov5645->dev);
+> +	pm_runtime_set_suspended(ov5645->dev);
+>  	mutex_destroy(&ov5645->power_lock);
+>  }
+>  
+> @@ -1279,10 +1275,15 @@ static const struct of_device_id ov5645_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, ov5645_of_match);
+>  
+> +static const struct dev_pm_ops ov5645_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(ov5645_set_power_off, ov5645_set_power_on, NULL)
+> +};
+> +
+>  static struct i2c_driver ov5645_i2c_driver = {
+>  	.driver = {
+>  		.of_match_table = ov5645_of_match,
+>  		.name  = "ov5645",
+> +		.pm = &ov5645_pm_ops,
+>  	},
+>  	.probe_new = ov5645_probe,
+>  	.remove = ov5645_remove,
 
-Thanks,
-Jim Quinlan
-Broadcom STB
+-- 
+Kind regards,
 
---000000000000add70005eb037767
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-mOAplh6h3nMZUZxBguxG3g2p3iD4EgibUYneEzqOQafIQB/naf2uetKb8y9jKgWJxq2Y4y8Jqg2u
-uVIO1AyOJjWwqdgN+QhuIlat+qZd03P48Gim9ZPEMDUCAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFGx/E27aeGBP2eJktrILxlhK
-z8f6MA0GCSqGSIb3DQEBCwUAA4IBAQBdQQukiELsPfse49X4QNy/UN43dPUw0I1asiQ8wye3nAuD
-b3GFmf3SZKlgxBTdWJoaNmmUFW2H3HWOoQBnTeedLtV9M2Tb9vOKMncQD1f9hvWZR6LnZpjBIlKe
-+R+v6CLF07qYmBI6olvOY/Rsv9QpW9W8qZYk+2RkWHz/fR5N5YldKlJHP0NDT4Wjc5fEzV+mZC8A
-AlT80qiuCVv+IQP08ovEVSLPhUp8i1pwsHT9atbWOfXQjbq1B/ditFIbPzwmwJPuGUc7n7vpmtxB
-75sSFMj27j4JXl5W9vORgHR2YzuPBzfzDJU1ul0DIofSWVF6E1dx4tZohRED1Yl/T/ZGMYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMSO43VW7D5NP1X/KD
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAjtgXHloPjATU5wBuUbcuRtPf0kTcd
-MSC3MPH9obbYTDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjEw
-MTQxOTE2NDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEApf59R9py38QslfzyyhroB4aF/A7G4Oe+2rHLMqeKF70EAgUd
-J+t4XQKrpHMzy62rFE6ZyHAw4i0u4gfTziiUMZQFrrL9UAWT8CPWLivbhxwuQNV6NgzmnDXPtW3i
-AiObI2JPX5PTqmAc3jPJnyvHcTqLiWc4vEJiu2nu2GmxAh3vZ+dfgJxx9RQ00zyqhGFZ+BqFj9VU
-H83fk4U/wleH3RqzI8gfOEKyzIk8oO1eOjAJ4h0paeG4sBGzI+iO955cocNQ+TD+gyCItf02Tuiv
-woS0PtObHc1U1GB2hIQZEtHuiCx87NacravgI38W/q39rNprgpS3v+RnIY10fUIhJg==
---000000000000add70005eb037767--
+Sakari Ailus
