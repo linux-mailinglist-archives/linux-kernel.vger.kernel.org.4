@@ -2,145 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516D75FF0FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FC25FF158
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiJNPTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S229894AbiJNP2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJNPTn (ORCPT
+        with ESMTP id S230440AbiJNP2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:19:43 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B6A11468
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:19:40 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id q18so2655574ils.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2zvPqb25LaKvgJw1g+vrVj2+cczSny1mletatYObzpQ=;
-        b=pGN7A8z2tVKu/9djyxLPPM6NThRzrQuFMaCSF53ai3awSgyLsrvfjZQWtkmFszlD6X
-         8YaNxkQbdXaYJrBk6HYL3NezbiSSCIhQVwdfe+S+7Oluy3RyN9jhr5K3g5maVVBJgPxv
-         OBEkDJ5C5seL1uz+rQ8n+HMIhaSH3fi0feOYs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2zvPqb25LaKvgJw1g+vrVj2+cczSny1mletatYObzpQ=;
-        b=PehTtjgOJhwbqTfqDg8ub+836S0Uevvv7u+IyaUrdiblpqh6XdsxvenUyeBloby4Sn
-         c5PDzwvWlsM8ZWCmlMDdYfJ6santDo4ve/2G0MP3FhDxWo+sU5kJBUd5iTXPIWM89K9E
-         H8Oscyky/NniaY10sU7HeahShfm/66oib0jfMIVOZlqJulZIvr4wLKS3IFFKD3i7oxs5
-         lgkwjO1WDLAxTCf5CiqSVD5bD9YBUx518cZEYsOPO1R4PSsccOOwFG6aTZTF+sbwYfIH
-         ZlaVBOMAbfcyLDkNZe6dqbrghEA5AY+8ea/Hmt8j3ykUeYJUC0v1lC9qWR+aaZCD/Wfs
-         FTew==
-X-Gm-Message-State: ACrzQf0VO57fk24wSehlNU+mdjDyRU/W7m+w6o4rqH6udLECm6fROei5
-        ze/8mm4sPqdZRMTRJ+cQOpQoB98//JBWWVAJ3TLjwQ==
-X-Google-Smtp-Source: AMsMyM4MPJ3hUAgGaXpcMx8mi1ofWAiMYLpJVm8UYufNwcdwxssquPI8MKQC8suZe3ACqXwf5KjyBRNN6Uz1wnV3SnU=
-X-Received: by 2002:a92:d686:0:b0:2fa:6226:6247 with SMTP id
- p6-20020a92d686000000b002fa62266247mr2813891iln.79.1665760779944; Fri, 14 Oct
- 2022 08:19:39 -0700 (PDT)
+        Fri, 14 Oct 2022 11:28:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F326165528;
+        Fri, 14 Oct 2022 08:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665761318; x=1697297318;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5z/eMgxqqUuDg2RjLvj72J5xElrEO8SgLrrsw5yzTWI=;
+  b=Glh2OkpvxbfD/VinJqInH76DXRgcU/RbCZjd4m4f+v4fQ24Rty31c62M
+   T4m8RNS/4qjcriGsg5Qi9OrXExaLPB/vZqVBtcxtcwANocubV+w7e3PsW
+   JkxNhhId00W6X0eI/7YnuZMYcgCvTLbqjGqH0ya+MAUMK8Nyl92p76Z2M
+   vFw2YSLzgwDypLrUrxqPTBuj4cyftEQZCdsUMURV14VdLkyAoFfmittCS
+   NHTHKJ+kMnV+QbAYx5OhTSJVYoiGMIOweNPV7BAGI5DRTJDuZpXebqmt9
+   iBbD6tBHNn+S0ilFCDNh/PpoiXFqdSZo3rjzbhRAVdtQoqdbLRc/7zuE4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="292758293"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="292758293"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 08:28:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="956619071"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="956619071"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Oct 2022 08:28:34 -0700
+Date:   Fri, 14 Oct 2022 23:19:29 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v17 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <Y0l+AbjGSOyTaoqV@yilunxu-OptiPlex-7050>
+References: <20221011193821.21828-1-i.bornyakov@metrotek.ru>
+ <20221011193821.21828-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-References: <20221011180142.2742289-1-joel@joelfernandes.org>
- <20221011180142.2742289-2-joel@joelfernandes.org> <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
- <20221014144019.GB1108603@lothringen> <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 14 Oct 2022 11:19:28 -0400
-Message-ID: <CAEXW_YQoRUJ=0_GJG6JunR58yASmehPanp14zbR3Y+KAGL1TDA@mail.gmail.com>
-Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
-        youssefesmat@google.com, surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011193821.21828-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 11:03 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Fri, Oct 14, 2022 at 04:40:19PM +0200, Frederic Weisbecker wrote:
-> > On Fri, Oct 14, 2022 at 07:21:27AM -0700, Paul E. McKenney wrote:
-> > > On Tue, Oct 11, 2022 at 06:01:30PM +0000, Joel Fernandes (Google) wrote:
-> > > > From: Frederic Weisbecker <frederic@kernel.org>
-> > > >
-> > > > Upon entraining a callback to a NOCB CPU, no further wake up is
-> > > > issued on the corresponding nocb_gp kthread. As a result, the callback
-> > > > and all the subsequent ones on that CPU may be ignored, at least until
-> > > > an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
-> > > > to the same group enqueues a callback on an empty queue.
-> > > >
-> > > > Here is a possible bad scenario:
-> > > >
-> > > > 1) CPU 0 is NOCB unlike all other CPUs.
-> > > > 2) CPU 0 queues a callback
-> > >
-> > > Call it CB1.
-> > >
-> > > > 2) The grace period related to that callback elapses
-> > > > 3) The callback is moved to the done list (but is not invoked yet),
-> > > >    there are no more pending callbacks for CPU 0
-> > >
-> > > So CB1 is on ->cblist waiting to be invoked, correct?
-> > >
-> > > > 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
-> > > > 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
-> > >
-> > > And CB1 must still be there because otherwise the IPI handler would not
-> > > have entrained the callback, correct?  If so, we have both CB1 and the
-> > > rcu_barrier() callback (call it CB2) in ->cblist, but on the done list.
-> > >
-> > > > 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
-> > > >    callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
-> > >
-> > > Except that -something- must have already been prepared to wake up in
-> > > order to invoke CB1.  And that something would invoke CB2 along with CB1,
-> > > given that they are both on the done list.  If there is no such wakeup
-> > > already, then the hang could occur with just CB1, without the help of CB2.
-> >
-> > Heh good point. I was confused with CB1 on RCU_DONE_TAIL and the possibility
-> > for CB2 to be entrained on RCU_WAIT_TAIL. But that's indeed not supposed to
-> > happen. Ok so this patch indeed doesn't make sense outside lazy.
->
-> Whew!!!  ;-)
->
-> > > > This is also required to make sure lazy callbacks in future patches
-> > > > don't end up making rcu_barrier() wait for multiple seconds.
-> > >
-> > > But I do see that the wakeup is needed in the lazy case, and if I remember
-> > > correctly, the ten-second rcu_barrier() delay really did happen.  If I
+On 2022-10-11 at 22:38:20 +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI sysCONFIG interface.
+> 
+> sysCONFIG interface core functionality is separate from both ECP5 and
+> SPI specifics, so support for other FPGAs with different port types can
+> be added in the future.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 
-Yes it did happen. Real world device testing confirmed it.
+[...]
 
-> > > understand correctly, for this to happen, all of the callbacks must be
-> > > in the bypass list, that is, ->cblist must be empty.
-> > >
-> > > So has the scenario steps 1-6 called out above actually happened in the
-> > > absence of lazy callbacks?
-> >
-> > Nope, so I guess we can have the pending check around rcu_nocb_flush_bypass()
-> > only...
->
-> OK, sounds good.
->
-> I have put this series on branch lazy.2022.10.14a and am testing it.
+> +
+> +static int sysconfig_read_busy(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
+> +	u8 busy;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
+> +				 &busy, sizeof(busy));
+> +
+> +	return ret ? : busy;
+> +}
+> +
+> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
+> +{
+> +	unsigned long timeout;
+> +	int ret;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
+> +
+> +	while (time_before(jiffies, timeout)) {
+> +		ret = sysconfig_read_busy(priv);
+> +		if (ret <= 0)
+> +			return ret;
+> +
+> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+> +	}
+> +
+> +	return -ETIMEDOUT;
 
-I agree with the discussion, though if all CBs are in the bypass list,
-the patch will also save 2 jiffies.
+As mentioned by Ahmad, could read_poll_timeout() be used?
 
-So just commit messages that need rework then? This one can be taken instead:
-https://lore.kernel.org/rcu/21ECDA9F-81B1-4D22-8B03-020FB5DADA4F@joelfernandes.org/T/#m14d21fbce23539a521693a4184b28ddc55d7d2c5
+> +}
+> +
+> +static int sysconfig_read_status(struct sysconfig_priv *priv, u32 *status)
+> +{
+> +	const u8 lsc_read_status[] = SYSCONFIG_LSC_READ_STATUS;
+> +	__be32 device_status;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_read(priv, lsc_read_status, sizeof(lsc_read_status),
+> +				 &device_status, sizeof(device_status));
+> +	if (ret)
+> +		return ret;
+> +
+> +	*status = be32_to_cpu(device_status);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sysconfig_poll_status(struct sysconfig_priv *priv, u32 *status)
+> +{
+> +	int ret = sysconfig_poll_busy(priv);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return sysconfig_read_status(priv, status);
+> +}
+> +
+> +static int sysconfig_poll_gpio(struct gpio_desc *gpio, bool is_active)
+> +{
+> +	unsigned long timeout;
+> +	int value;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_GPIO_TIMEOUT_MS);
+> +
+> +	while (time_before(jiffies, timeout)) {
+> +		value = gpiod_get_value(gpio);
+> +		if (value < 0)
+> +			return value;
+> +
+> +		if ((is_active && value) || (!is_active && !value))
+> +			return 0;
+> +
+> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+> +	}
+> +
+> +	return -ETIMEDOUT;
 
-Thanks!
+Same.
 
- - Joel
+[...]
+
+> +int sysconfig_probe(struct sysconfig_priv *priv)
+> +{
+> +	struct gpio_desc *program, *init, *done;
+> +	struct device *dev = priv->dev;
+> +	struct fpga_manager *mgr;
+> +
+> +	if (!dev)
+> +		return -ENODEV;
+> +
+> +	if (!priv->bitstream_burst_write_init) {
+> +		dev_err(dev,
+> +			"Callback for preparation for bitstream burst write is not defined\n");
+> +		return -EOPNOTSUPP;
+
+-EINVAL is better?
+
+> +	}
+> +
+> +	if (!priv->bitstream_burst_write) {
+> +		dev_err(dev,
+> +			"Callback for bitstream burst write is not defined\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	if (!priv->bitstream_burst_write_complete) {
+> +		dev_err(dev,
+> +			"Callback for finishing bitstream burst write is not defined\n");
+> +		return -EOPNOTSUPP;
+> +	}
+
+command_transfer is optional?
+
+And I think different err log for each missing callback is too trivial,
+maybe just say like "ops missing" if any mandatory callback is missing.
+
+> +
+> +	program = devm_gpiod_get_optional(dev, "program", GPIOD_OUT_LOW);
+> +	if (IS_ERR(program))
+> +		return dev_err_probe(dev, PTR_ERR(program),
+> +				     "Failed to get PROGRAM GPIO\n");
+> +
+> +	init = devm_gpiod_get_optional(dev, "init", GPIOD_IN);
+> +	if (IS_ERR(init))
+> +		return dev_err_probe(dev, PTR_ERR(init),
+> +				     "Failed to get INIT GPIO\n");
+> +
+> +	done = devm_gpiod_get_optional(dev, "done", GPIOD_IN);
+> +	if (IS_ERR(done))
+> +		return dev_err_probe(dev, PTR_ERR(done),
+> +				     "Failed to get DONE GPIO\n");
+> +
+> +	priv->program = program;
+> +	priv->init = init;
+> +	priv->done = done;
+> +
+> +	mgr = devm_fpga_mgr_register(dev, "Lattice sysCONFIG FPGA Manager",
+> +				     &sysconfig_fpga_mgr_ops, priv);
+> +
+> +	return PTR_ERR_OR_ZERO(mgr);
+> +}
+> +EXPORT_SYMBOL(sysconfig_probe);
