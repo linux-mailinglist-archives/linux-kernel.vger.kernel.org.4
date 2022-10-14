@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA7E5FEA99
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348425FEA96
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiJNIdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S229761AbiJNIc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiJNIdI (ORCPT
+        with ESMTP id S229792AbiJNIcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:33:08 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E4D1C2EAC;
-        Fri, 14 Oct 2022 01:33:06 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E6xgKU022708;
-        Fri, 14 Oct 2022 10:32:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=fPnbtOy06TMn1DTm+aL02K49WdHSqDZcH3ig0RdQW+w=;
- b=IY1/prKcpsMEpY3xSkBRh3tnxU8pNNGxXHX0b1ULvxcQT3P4mCDt+QAU98LsmBqKNDXY
- NuDXck+ZXityzaIDkdrh9lFoxOyHFsypejVKbqoRkBFQS/s6S+WwahXX3kSSlDF1Pz/i
- OGirDCKfHr+ynuXQsWslDKqcNyfD15v3lNuYoJQTzHSAfg7aD4I2r/3ChUZkuW9bc66+
- +dF63I43UPwoSCVhwOGElGYPxY+FQbC+Wlc0MiJm2FFNhy1N/1gjYUCbB2VgeEN+MuI/
- s4BVMV1+Jv7HwvAqDCWMe9yiiJexADHYBOwHxUbGkKaxodfdxLkY2dvgOyucdf4PAElX Sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k31ey8epe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 10:32:46 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5018B100034;
-        Fri, 14 Oct 2022 10:32:35 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 445F02171D5;
-        Fri, 14 Oct 2022 10:32:35 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 14 Oct
- 2022 10:32:32 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 00/10] Add support for USB on STM32MP13
-Date:   Fri, 14 Oct 2022 10:31:57 +0200
-Message-ID: <20221014083207.20457-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 14 Oct 2022 04:32:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55204190E77;
+        Fri, 14 Oct 2022 01:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3ysRf/XUGmt7J2wKxcUncSlHGfraCO3geaEjIZ3t3jE=; b=bCT42uP4yLYoNnO2O7/c9/kixP
+        +c/n/awFAt7H02QLSzD61rQ+3X0DRt3o3XCPqcKXvRnzYO36zKbs6oikeaKggkJVGJf3WvOjMfN+a
+        lMuDc65d6PaMDhOrQN00gtnjfDiy+LZbAOqjYe5UKE6sr0iD0Dps21b47+J55t4yAUOL/CtxNEutz
+        BXCdeq6F/oB70T2ZyxO6wZ/9PRr0OcUNDnCu57HhiFssG+N4k1cavgKogX8AlGUsCj5elRtva49jV
+        vgb8JYt4EPLh5oXKmgEam0tT7IA9MmflASFLc1eeN6tkpcySsoGUtIbR2T9gxjC4QezdEwJxYOjb2
+        0+2tu58A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ojG75-003MZI-6g; Fri, 14 Oct 2022 08:32:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BA4FB30012F;
+        Fri, 14 Oct 2022 10:32:14 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A30BD203DBB33; Fri, 14 Oct 2022 10:32:14 +0200 (CEST)
+Date:   Fri, 14 Oct 2022 10:32:14 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Leonardo Bras <leobras@redhat.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Phil Auld <pauld@redhat.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wang Yufen <wangyufen@huawei.com>, mtosatti@redhat.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] sched/isolation: Improve documentation
+Message-ID: <Y0kejqowLYqHIS43@hirez.programming.kicks-ass.net>
+References: <20221013184028.129486-1-leobras@redhat.com>
+ <20221013184028.129486-3-leobras@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_04,2022-10-13_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013184028.129486-3-leobras@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for USBPHYC, USB Host and USB OTG on STM32MP13.
-Enable all these interfaces on STM32MP135F-DK board.
-Enable the STM32G0 UCSI driver as module.
-Dependency on PWR and PMIC regulator is tempoarily managed by using
-fixed regulators (resp in the SoC dtsi and the board dts files).
-The USB support is functional when these regulators gets enabled at
-boot time before entering the kernel.
+On Thu, Oct 13, 2022 at 03:40:27PM -0300, Leonardo Bras wrote:
 
-Amelie Delaunay (5):
-  ARM: dts: stm32: add USBPHYC and dual USB HS PHY support on stm32mp131
-  ARM: dts: stm32: add UBSH EHCI and OHCI support on stm32mp131
-  ARM: dts: stm32: add USB OTG HS support on stm32mp131
-  ARM: dts: stm32: enable USB HS phys on stm32mp135f-dk
-  ARM: dts: stm32: enable USB Host EHCI on stm32mp135f-dk
+> +/* Kernel parameters like nohz_full and isolcpus allow passing cpu numbers
+> + * for disabling housekeeping types.
+> + *
+> + * The functions bellow work the opposite way, by referencing which cpus
+> + * are able to perform the housekeeping type in parameter.
+> + */
 
-Fabrice Gasnier (5):
-  ARM: dts: stm32: add PWR fixed regulators on stm32mp131
-  ARM: dts: stm32: add fixed regulators to support usb on stm32mp135f-dk
-  ARM: dts: stm32: add pins for stm32g0 typec controller on stm32mp13
-  ARM: dts: stm32: enable USB OTG in dual role mode on stm32mp135f-dk
-  ARM: multi_v7_defconfig: enable Type-C UCSI and STM32G0 as modules
+So checkpatch should have bitten your head off for this drug-indiced
+comment style :-)
 
- arch/arm/boot/dts/stm32mp13-pinctrl.dtsi |  7 ++
- arch/arm/boot/dts/stm32mp131.dtsi        | 81 ++++++++++++++++++++
- arch/arm/boot/dts/stm32mp135f-dk.dts     | 95 ++++++++++++++++++++++++
- arch/arm/configs/multi_v7_defconfig      |  2 +
- 4 files changed, 185 insertions(+)
-
--- 
-2.25.1
-
+https://lore.kernel.org/all/CA+55aFyQYJerovMsSoSKS7PessZBr4vNp-3QUUwhqk4A4_jcbg@mail.gmail.com/
