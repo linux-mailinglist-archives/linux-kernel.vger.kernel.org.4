@@ -2,114 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6C45FF224
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE0F5FF221
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiJNQR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S229652AbiJNQR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJNQRz (ORCPT
+        with ESMTP id S229460AbiJNQRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:17:55 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED471D0D68
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:17:54 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id x13so2758782qkg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:17:54 -0700 (PDT)
+        Fri, 14 Oct 2022 12:17:23 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7B1D0D65
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:17:20 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c24so5168579pls.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1gzC+6pIKgTRrlwCoquBVcFiz8VbT8QxkPUglAW6yjw=;
-        b=AA/+P5YcqpsI8jTynPbHxeED8efo3L92Ft5IK7ZzFKCeZmZ4nv3SKnoENmrrbu/8c8
-         fZkq4I5jbeaxW/bTEvgFGJ7vTxd6kJQO2Wd184HbCSRGuN2a7jyS0+iwTGwUFRiyQOo2
-         hyPZFOOti4Ql9unYGK/ye9LyGhSkdQhmSqCahl4S5rlO+8NUf0+zQhaMHLrptVab8xy8
-         JMnrDZbsLvRupj2sQiwFt+WLO/BGVgXo535qowjp1AVNKRq1x//oIv1EP/Zm6JAup12+
-         jxubr6v9hhJEh4TeZ6RJwgnEw6q4SEH2E80BJNRbWIGpMqT9zebQVtGdpwHmeJM0Gc93
-         NMwQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LmoTank4ciPVTTOzFggPZZfwZehLALhhGxl6jeia+oY=;
+        b=lfAoyqEBqqc1Ch0aSdhfK7SMt7I0b5VlJTO/iZJXDqNT0qLDOtRmqQYN+n5uuubVbE
+         dSiBj+4/GntUoJz7qG4GgeF+NDJzslNCfoH3clEpm/TtDzz/7hihrsAIVADm52DL0hNL
+         8285eO4B2H0WW3wSz70kpBna3wD2rTmsk9rTsQVpht42S2a6p/XqA1li2CdKXjCco3Hp
+         YneCWfB+DsuxZ0ZXs7sS7TMPulcQrCtu2NCpvkwPyIUCRaLK+SBNiGSTp4U5/m+cZXtV
+         vIIC4Dq6J3iCt9jnpapdY4JljBjuhzE1jJ/QPjpGEQqP5VoAvhXB5coDle8wYp5SGDSu
+         S+sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gzC+6pIKgTRrlwCoquBVcFiz8VbT8QxkPUglAW6yjw=;
-        b=Ld3cv/n5yRcVOdB/HvUbGmN/tP+tIkBmvbf1vKujJ8Kqxn/XKc7uYBLOz+YlsbfKlc
-         5o5qlUVdE6JVdWNfab8ka7fG9X+9jS6T0gEG0aTvpXK4eGebjgWLwBj8Yfr4NlBXraW2
-         lHcsP6fqdDnI3n1+WuTfy9oWnT/0DiPv7nvsu6/WAeQwYS3kWMKStGVvQEPLXJGwoEO6
-         5aLZudSlxcNp9ER6iXwuJrymOseGhb4OeelwTQ4A27MixEGPK2sw+qtVSZuaTNv/F3nA
-         fQ1o5ixnOl63IWzVpt/SsRmYe1mNLMRRlF1Q/KiJ7XOXCjgrHo2LYDltuU9Q0yqFWyKX
-         cUTw==
-X-Gm-Message-State: ACrzQf1WJQ7ZBkrd+ZmLkjeLZEP0/k2Bn8TCnRKEAlkaWUS68CA8OiUG
-        XhpN8qzWyoHJ2ZnAPgNBKa0PUA==
-X-Google-Smtp-Source: AMsMyM6zeraRWOrhtxrEgxldJTmnsoJAKyRx/WeT0BIT3KKR45k0neMZPYTh54xC8XbnEVvqPXN4dg==
-X-Received: by 2002:a05:620a:b05:b0:6ee:cb0e:3c94 with SMTP id t5-20020a05620a0b0500b006eecb0e3c94mr3673383qkg.379.1665764273917;
-        Fri, 14 Oct 2022 09:17:53 -0700 (PDT)
-Received: from [192.168.7.170] ([12.190.236.102])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05620a441100b006ce813bb306sm3137040qkp.125.2022.10.14.09.17.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 09:17:53 -0700 (PDT)
-Message-ID: <de4726f5-d7da-041a-31a3-dc7177786bf4@linaro.org>
-Date:   Fri, 14 Oct 2022 12:16:41 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LmoTank4ciPVTTOzFggPZZfwZehLALhhGxl6jeia+oY=;
+        b=REAQHPtnT+gGXaL2VyOfz/fVzUqRwshrTjpz1QZDCl2T6QGtcUZ2XpbXN70kYNBw4q
+         F27UhuMhfSZspOnAf1UDbdfBQ12O/+UvoKDOu1d31orSJfmjEDpDhu97I/cN/tsndEWg
+         IzbdkfUIRnDnD01zqCAC7/3zJP7klFL7XATSs9lfENzWm/8XEG3CYjgHjeGJ21ASYbIZ
+         aqovJinW1nl60gVKN+ueoh8y/RGQmmKO4UhQhAQk2pnXOkJGOL5qRqMf5SHstpnKQ7DI
+         S+hPgj5Tu49n5a7YQuB3J+PWK+jtZottFlg6pgBbA5dV9/FzhDY5Mn7bJgfo7I0AOahy
+         fOXw==
+X-Gm-Message-State: ACrzQf22aYqMZy4l6z3D0V6ixGr9N7HZnU6Me6/kWe6ZjcIXI2weGOft
+        LOflocLdyOC7TWpQ2ruRJ01XWQ==
+X-Google-Smtp-Source: AMsMyM6IjJWtye9KgXbQltHSJhKNO/l21mXMYXRKPY70Aa625miIx06KvhJYDoo6WtJxOMUEm2ZfUw==
+X-Received: by 2002:a17:90b:1197:b0:20a:97e9:b20d with SMTP id gk23-20020a17090b119700b0020a97e9b20dmr17906803pjb.65.1665764240367;
+        Fri, 14 Oct 2022 09:17:20 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 8-20020a630308000000b0043c80e53c74sm1649213pgd.28.2022.10.14.09.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 09:17:19 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 16:17:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] KVM: x86/pmu: Add PEBS support for SPR and future
+ non-hybird models
+Message-ID: <Y0mLi5KRnzSiAXPk@google.com>
+References: <20220922051929.89484-1-likexu@tencent.com>
+ <20220922051929.89484-2-likexu@tencent.com>
+ <Y0W/YR6gXhunJYry@google.com>
+ <e1003a0c-7388-9dce-3fc2-8a1f9288e23f@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 09/10] ARM: dts: stm32: enable USB OTG in dual role mode
- on stm32mp135f-dk
-Content-Language: en-US
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        alexandre.torgue@foss.st.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     amelie.delaunay@foss.st.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20221014092651.25202-1-fabrice.gasnier@foss.st.com>
- <20221014092651.25202-10-fabrice.gasnier@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014092651.25202-10-fabrice.gasnier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1003a0c-7388-9dce-3fc2-8a1f9288e23f@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 05:26, Fabrice Gasnier wrote:
-> The USB OTG controller provides the USB data available on stm32mp135f-dk,
-> on the Type-C connector. Data role is determined by "usb-role-switch".
+On Fri, Oct 14, 2022, Like Xu wrote:
+> On 12/10/2022 3:09 am, Sean Christopherson wrote:
+> > > @@ -181,11 +200,11 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+> > >   		 * the accuracy of the PEBS profiling result, because the "event IP"
+> > >   		 * in the PEBS record is calibrated on the guest side.
+> > >   		 *
+> > > -		 * On Icelake everything is fine. Other hardware (GLC+, TNT+) that
+> > > +		 * On Icelake everything is fine. Other hardware (TNT+) that
+> > >   		 * could possibly care here is unsupported and needs changes.
+> > 
+> > This part of the comment is still somewhat stale, and for me at least it's not at
+> > all helpful.
 > 
-> A STM32G0 provides the USB Type-C and Power Delivery connectivity.
-> It controls dual role power and dual role data through UCSI protocol over
-> I2C. It's wired on I2C1, with an interrupt pin on PI2 GPIO.
-> Its firmware maybe updated over I2C, so use the optional firmware-name
-> to enable firmware update.
+> SPR has GLC core, and this patch adds this support and removes the
+> unsupported statements.
+
+It's stale in the sense that it says "Icelake is fine", which implies that SPR is
+NOT fine.
+
+> Not sure how else I may help you.
+
+Write comments that don't require the reader to have in-depth knowledge of the PMU's
+magic numbers.  Explain what "unsupported" means.  Explain what changes might need
+to be made.  Use search-friendly words, e.g. I assume TNT means Tremont, but Googling
+for "Intel TNT" doesn't yield anything useful.
+
+The above comment essentially says "Icelake is good, Tremont is broken", but that
+doesn't help the reader understand what this code actually does.
+
+> > >   		attr.precise_ip = 1;
+> > > -		if (x86_match_cpu(vmx_icl_pebs_cpu) && pmc->idx == 32)
+> > > +		if (need_max_precise(pmc))
+> > >   			attr.precise_ip = 3;
+> > 
+> > What about writing this as:
+> > 
+> > 		attr.precise_ip = pmc_get_pebs_precision(pmc);
+> > 
+> > (or whatever name is appropriate for "pebs_precision").
 > 
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
->  arch/arm/boot/dts/stm32mp135f-dk.dts | 34 ++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
+> The comment says, "the difference in the software precision levels of guest and
+> host PEBS events will not affect the accuracy of the PEBS profiling result".
 > 
-> diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-> index 02ff2bc664da..1c92bf096397 100644
-> --- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-> +++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-> @@ -95,6 +95,28 @@ &i2c1 {
->  	/* spare dmas for other usage */
->  	/delete-property/dmas;
->  	/delete-property/dma-names;
-> +
-> +	stm32g0@53 {
+> > 
+> > Then in the helper, add comments to explaint the magic numbers and the interaction
+> > with PDIST and PDIR.  Bonus points if #defines for the the magic numbers can be
+> > added somewher
+> 
+> KVM just uses "precision_ip = 3" to request hw pdit/pdir counters from host perf,
+> It only works at 3. For 1 or 2, there is no difference.
 
-Node names should be generic, usually typec.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+What only works at 3?  Are 0..3 architectural PMU values, or are they arbitrary
+numbers perf uses?
 
+> > 
+> > 				 *  0 - SAMPLE_IP can have arbitrary skid
+> > 				 *  1 - SAMPLE_IP must have constant skid
+> > 				 *  2 - SAMPLE_IP requested to have 0 skid
+> > 				 *  3 - SAMPLE_IP must have 0 skid
+> > 
+> > static u64 pmc_get_pebs_precision(struct kvm_pmc *pmc)
+> > {
+> > 	/* Comment that explains why PDIST/PDIR require 0 skid? */
+> > 	if ((pmc->idx == 0 && x86_match_cpu(vmx_pebs_pdist_cpu)) ||
+> > 	    (pmc->idx == 32 && x86_match_cpu(vmx_pebs_pdir_cpu)))
+> > 		return 3;
+> > 
+> > 	/* Comment about constant skid? */
+> > 	return 1;
+> > }
+> , therefore 0 or constant skid makes no difference.
 
-Best regards,
-Krzysztof
+Then why '1'?  
 
+> > > diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> > > index c5e5dfef69c7..4dc4bbe18821 100644
+> > > --- a/arch/x86/kvm/vmx/capabilities.h
+> > > +++ b/arch/x86/kvm/vmx/capabilities.h
+> > > @@ -398,7 +398,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
+> > >   static inline bool vmx_pebs_supported(void)
+> > >   {
+> > > -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
+> > > +	return boot_cpu_has(X86_FEATURE_PEBS) &&
+> > > +		!boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
+> > 
+> > This belongs in a separate patch, and it should be ordered before patch 1 so that
+> > there's no window where KVM can see pebs_ept==1 on a hybrid CPU.
+> > 
+> > Actually, shouldn't everything in this patch land before core enabling?
+> 
+> Perf core enabling about SPR is already upstreamed.
+
+I'm referring to patch 1, "perf/x86/intel: Expose EPT-friendly PEBS for SPR and
+future models".  Before that patch, x86_pmu.pebs_ept will be set only for Icelake,
+i.e. PEBS for KVM is effecitively not enabled in the core perf code until patch 1.
+KVM should get all its support lined up, and then enable PEBS support for SPR and
+beyond in core perf.  E.g. if someone applied only patch 1, they would be able to
+use KVM PEBS on any CPU with PEBS v5, even if it were a hybrid CPU.
