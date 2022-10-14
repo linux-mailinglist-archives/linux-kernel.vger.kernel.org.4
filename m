@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78745FEB6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C884B5FEB72
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJNJRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S229716AbiJNJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJNJRK (ORCPT
+        with ESMTP id S229513AbiJNJUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:17:10 -0400
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8672AF1A6;
-        Fri, 14 Oct 2022 02:17:08 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.108.4.248])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 74978130870B3;
-        Fri, 14 Oct 2022 11:17:07 +0200 (CEST)
-Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
- (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 14 Oct
- 2022 11:17:06 +0200
-Message-ID: <fb513ce8-3c2a-6b67-7abe-1d5671b682d0@traphandler.com>
-Date:   Fri, 14 Oct 2022 11:17:06 +0200
+        Fri, 14 Oct 2022 05:20:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50943B700
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:20:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9273D21DF8;
+        Fri, 14 Oct 2022 09:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665739205;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n52SkV7Ax/wZ9k4CuOsll0s3NLfyMLNwu9OAT947O44=;
+        b=CP9kBANq+4+Mhd40AMpt8RDO3fAh63HYMcSofsz+tM889I5shp6HfZrlMgj+WEdqMTZ608
+        kWWt8X+CKbNGmSBXIxOcqc4F2BQ2hrmoFaAm+DGAU6W0Jjx35fICH5c6xbZ69vgSI4IU7H
+        dna1qJnovE0fkwwlk9PjbAHny/0w6NQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665739205;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n52SkV7Ax/wZ9k4CuOsll0s3NLfyMLNwu9OAT947O44=;
+        b=m0ezkaHIiHEkpBfudad1EYP86KyCVWCTLpWbwliDD1mLjjGM3fzsCIJiVcdUqVKvho70w8
+        Wzgmks5stlz6H4Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 03B2C13451;
+        Fri, 14 Oct 2022 09:20:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aCP3OMQpSWPSGwAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Fri, 14 Oct 2022 09:20:04 +0000
+Date:   Fri, 14 Oct 2022 11:20:02 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     vapier@gentoo.org, chrubis@suse.cz, wanlong.gao@gmail.com,
+        jstancek@redhat.com, stanislav.kholmanskikh@oracle.com,
+        alexey.kodanev@oracle.com, ltp@lists.linux.it,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [LTP] [PATCH] MAINTAINERS: git://github -> https://github.com
+ for linux-test-project
+Message-ID: <Y0kpwmBvY6uxNXHC@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20221013214638.30953-1-palmer@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 1/6] devres: provide devm_krealloc_array()
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     <lee.jones@linaro.org>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
-        <sven.schwermer@disruptive-technologies.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <johan+linaro@kernel.org>,
-        <marijn.suijten@somainline.org>, <bjorn.andersson@linaro.org>,
-        <jacek.anaszewski@gmail.com>, <linux-leds@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221007145641.3307075-1-jjhiblot@traphandler.com>
- <20221007145641.3307075-2-jjhiblot@traphandler.com>
- <CAHp75VcX2w9mdzbKtfRpc-4zrz8tp33Q5uHyBfds8MJfyeVYvQ@mail.gmail.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <CAHp75VcX2w9mdzbKtfRpc-4zrz8tp33Q5uHyBfds8MJfyeVYvQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: CAS4.emp2.local (172.16.1.4) To DAG1EX1.emp2.local
- (172.16.2.1)
-X-Ovh-Tracer-Id: 2959709381908183515
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekvddgudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepieejfedukeevudfghfetudevhffhhfekjeeiudegtdehueevgfdvgeeivdeifedvnecukfhppeduvdejrddtrddtrddupdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegrnhguhidrshhhvghvtghhvghnkhhosehgmhgrihhlrdgtohhmpdgsrhhglhessghguggvvhdrphhlpdhlvggvrdhjohhnvghssehlihhnrghrohdrohhrghdpphgrvhgvlhesuhgtfidrtgiipdhrohgshhdoughtsehkvghrnhgvlhdrohhrghdpshhvvghnrdhstghhfigvrhhmvghrseguihhsrhhuphhtihhvvgdqthgvtghhnhholhhoghhivghsrdgtohhmpdhkrhiihihsiihtohhfrdhkohiilhhofihskh
- hiodgutheslhhinhgrrhhordhorhhgpdhjohhhrghnodhlihhnrghroheskhgvrhhnvghlrdhorhhgpdhmrghrihhjnhdrshhuihhjthgvnhesshhomhgrihhnlhhinhgvrdhorhhgpdgsjhhorhhnrdgrnhguvghrshhsohhnsehlihhnrghrohdrohhrghdpjhgrtggvkhdrrghnrghsiigvfihskhhisehgmhgrihhlrdgtohhmpdhlihhnuhigqdhlvggushesvhhgvghrrdhkvghrnhgvlhdrohhrghdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvkedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013214638.30953-1-palmer@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 07/10/2022 18:18, Andy Shevchenko wrote:
->>   {
->>          return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
->>   }
-> Missed blank line?
+> Github deprecated the git:// links about a year ago, so let's move to
+> the https:// URLs instead.
+Good point!
 
-There is no blank line after the definitions of devm_kzalloc(), 
-devm_kmalloc_array() and devm_kcalloc() defined just above.
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
->
->> +static inline void *devm_krealloc_array(struct device *dev,
->> +                                       void *p,
->> +                                       size_t new_n,
->> +                                       size_t new_size,
->> +                                       gfp_t flags)
->> +{
->> +       size_t bytes;
->> +
->> +       if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
->> +               return NULL;
-> I'm not sure it is what we want, but I have read the man realloc and found this:
->
->        ... reallocarray() fails safely in the case where the multiplication
->        would overflow.  If such an overflow occurs, reallocarray() returns NULL,
->        sets  errno  to  ENOMEM,  and leaves the original block of memory
->        unchanged.
->
-> So, perhaps you can add that this behaviour mimics reallocarray()?
-
-except for the errno part, that is what is does. I don't think we should 
-use ERR_PTR in this case as the other allocation functions don't use it.
-
->
->> +       return devm_krealloc(dev, p, bytes, flags);
->> +}
-> ...
->
-> All comments are minor, feel free to add
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->
+Kind regards,
+Petr
