@@ -2,26 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EEC5FF4D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F83C5FF4D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiJNUsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S231601AbiJNUsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbiJNUsf (ORCPT
+        with ESMTP id S231579AbiJNUsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:48:35 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Oct 2022 13:48:34 PDT
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0596E183D9D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:48:33 -0700 (PDT)
+        Fri, 14 Oct 2022 16:48:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0123183D9D
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:48:41 -0700 (PDT)
 Received: from sopl295.home ([109.220.248.156])
         by smtp.orange.fr with ESMTPA
-        id jRUKoZbe2JvOZjRUKoWP7L; Fri, 14 Oct 2022 22:41:01 +0200
+        id jRUSoZbhLJvOZjRUSoWP7m; Fri, 14 Oct 2022 22:41:08 +0200
 X-ME-Helo: sopl295.home
 X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Fri, 14 Oct 2022 22:41:01 +0200
+X-ME-Date: Fri, 14 Oct 2022 22:41:08 +0200
 X-ME-IP: 109.220.248.156
 From:   Robert Jarzmik <jarzmik.robert@orange.fr>
 To:     Palmer Dabbelt <palmer@rivosinc.com>
@@ -30,13 +29,13 @@ Cc:     daniel@zonque.org, haojian.zhuang@gmail.com,
         Conor Dooley <conor.dooley@microchip.com>
 Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for
  hzhuang1, rjarzmik
-References: <20221013214637.30853-1-palmer@rivosinc.com>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Fri, 14 Oct 2022 22:40:59 +0200
 In-Reply-To: <20221013214637.30853-1-palmer@rivosinc.com> (Palmer Dabbelt's
         message of "Thu, 13 Oct 2022 14:46:37 -0700")
-Message-ID: <m21qrai1es.fsf@sopl295.home>
+References: <20221013214637.30853-1-palmer@rivosinc.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (darwin)
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Fri, 14 Oct 2022 22:41:08 +0200
+Message-ID: <m2zgdygmu3.fsf@sopl295.home>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
