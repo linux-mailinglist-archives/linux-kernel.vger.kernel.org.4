@@ -2,248 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECEF5FF08F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421845FF09D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiJNOrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S229542AbiJNOuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiJNOrf (ORCPT
+        with ESMTP id S229843AbiJNOuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:47:35 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFF910A7ED
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:47:34 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id b12so7162668edd.6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAKUb4MuSpN5a0Y0/cadRof5wSBZgkcrrOjmpmbSjLw=;
-        b=PcUEjmNwqnHFdawpikUxUdj5TgDCBzpl3SNSClBMIGBtoSUhaGj19pEqUOv+wJQdiS
-         5xpgccLU3f3+kMBS/XGFzEcPc1bQE8+dff8gHRM1aQtTqe/AP28aXSwI1/W/TOL0b0Qr
-         iM2nWui0VOildJYwcQWptElQOmpbcJyYSIfq+t66Zjxkf0mhs4TiQXT0/jEufHQjCPku
-         KvEX+5OXGoND+KDNHsCl4/M9hFvI7FsxpU7GBpKU/ozWCujTAZ3Ee7YOz/rXCAQZZZKr
-         W1dOlLlciXbJKSzmnKz+JkjdMfkNYrXCfdgi1WTDLHABMpf2Sxt2wF6AcaxCtf8YSZRm
-         M5bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QAKUb4MuSpN5a0Y0/cadRof5wSBZgkcrrOjmpmbSjLw=;
-        b=FqeZTPBeAwighdKaOdb+VqLRSrE0FOBL06HTr0G3B7pAzokg38ZCPJij01MG4mhYGo
-         iF+STqaDdSYeXGYwix6Qqc0u9OS4/BETWFGjK8dRONgoMUoz4D8Do3jBEnvKzgTnKp+A
-         fGrs1rS3QSIMGsrTcR9qqArp6E9MRMD4i3veAZmwL7gPA3FZk42c3eVbZeP5GLAA06KT
-         nIJqSC5kq3VDlx8iUnJhOzSmNufCFzvYbXKP2ao4+Y98OJN1ctXUCNj6x9Ll6gWCS8lE
-         9PoHeHbsVNnJ4z+tB5COavifIBDIOBkofQ3mkMm9Xh8jXFg0lFmjZvUcg6jxTspGJqRq
-         lw0A==
-X-Gm-Message-State: ACrzQf0nrdWHWdbre67WooKN583TwFJjCHzOrnaqxRFwAnaLs2XVWdiv
-        X9lKIv4XWpFWhW6h4bB93hhN4yQu6EA1XVFqn7piNQ==
-X-Google-Smtp-Source: AMsMyM71RsFSG+WqztWT/Qe2ymo1z0kDcPDcOfzrPWIxCuLd4qIlLKe6cVLAa1g99FC9h7Q031EvwFMs8m7kNTtHAsI=
-X-Received: by 2002:a50:c31b:0:b0:458:cc93:8000 with SMTP id
- a27-20020a50c31b000000b00458cc938000mr4705187edb.264.1665758852435; Fri, 14
- Oct 2022 07:47:32 -0700 (PDT)
+        Fri, 14 Oct 2022 10:50:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A22EF45;
+        Fri, 14 Oct 2022 07:50:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B4FA221EB2;
+        Fri, 14 Oct 2022 14:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665759005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8T6Ig2kAX7i1ELDm18RCHxPf9499f4Scte73Zgsjgo=;
+        b=ElggAD/kgeVTBymIbafVSqYTdqTwbXm+nhPmndMhBX/e/lDy0kt9o7FXsVl+hDApSF4zaw
+        7eYQO4QahPf2Qp8TyN05xoqYjoc/I3hlAKSE3qOZ65xwtuRuG5BBcrVsKBjFXutFqj8HLR
+        rQWw6Mhm9n9IpF0bS8v86ZPqLdfsqDg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665759005;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8T6Ig2kAX7i1ELDm18RCHxPf9499f4Scte73Zgsjgo=;
+        b=d012M3EAmA4Hg5ffW4BWjg8WNH1e1dpgrlz0HcqC9wDx2YUpEjC4CGXXruradBma/uMyBi
+        uGL/aSLXEpleQxBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A191213A4A;
+        Fri, 14 Oct 2022 14:50:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z/JlJx13SWNKWgAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 14 Oct 2022 14:50:05 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 07EB2A06F1; Fri, 14 Oct 2022 16:50:05 +0200 (CEST)
+Date:   Fri, 14 Oct 2022 16:50:04 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yuwei Guan <ssawgyw@gmail.com>
+Cc:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com
+Subject: Re: [PATCH] bfq: do try insert merge before bfq_init_rq() call
+Message-ID: <20221014145004.gqqpa5uvgg576tej@quack3>
+References: <20221013135321.174-1-Yuwei.Guan@zeekrlife.com>
 MIME-Version: 1.0
-References: <20221014082515.704103805@linuxfoundation.org>
-In-Reply-To: <20221014082515.704103805@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 14 Oct 2022 20:17:20 +0530
-Message-ID: <CA+G9fYuB_uS_WkGTEJCow4TwgYOCRpjfc8=O1b8-Bc1Mvq=Ygw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/33] 5.15.74-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013135321.174-1-Yuwei.Guan@zeekrlife.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 at 13:55, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.74 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 16 Oct 2022 08:25:00 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.74-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu 13-10-22 21:53:21, Yuwei Guan wrote:
+> It's useless to do bfq_init_rq(rq), if the rq can do merge first.
+> 
+> In the patch 5f550ede5edf8, it moved to bfq_init_rq() before
+> blk_mq_sched_try_insert_merge(), but it's pointless,
+> as the fifo_time of next is not set yet,
+> and !list_empty(&next->queuelist) is 0, so it does not
+> need to reposition rq's fifo_time.
+> 
+> And for the "hash lookup, try again" situation, as follow,
+> bfq_requests_merged() call can work normally.
+> 
+> blk_mq_sched_try_insert_merge
+>   elv_attempt_insert_merge
+>     elv_rqhash_find
+> 
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+OK, after some thinking I agree. How much testing has this patch got?
+Because I'd like to verify we didn't overlook something.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+							Honza
 
-## Build
-* kernel: 5.15.74-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: e3d8c2f748861227f55b9dc8ba9e10b6f95e6ec4
-* git describe: v5.15.73-34-ge3d8c2f74886
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.73-34-ge3d8c2f74886
-
-## No Test Regressions (compared to v5.15.73)
-
-## No Metric Regressions (compared to v5.15.73)
-
-## No Test Fixes (compared to v5.15.73)
-
-## No Metric Fixes (compared to v5.15.73)
-
-## Test result summary
-total: 117411, pass: 101156, fail: 1769, skip: 13988, xfail: 498
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 333 passed, 0 failed
-* arm64: 65 total, 63 passed, 2 failed
-* i386: 55 total, 53 passed, 2 failed
-* mips: 56 total, 56 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 63 total, 63 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 24 total, 24 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 56 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> ---
+>  block/bfq-iosched.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 7ea427817f7f..9845370a701c 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -6147,7 +6147,7 @@ static void bfq_insert_request(struct blk_mq_hw_ctx *hctx, struct request *rq,
+>  		bfqg_stats_update_legacy_io(q, rq);
+>  #endif
+>  	spin_lock_irq(&bfqd->lock);
+> -	bfqq = bfq_init_rq(rq);
+> +
+>  	if (blk_mq_sched_try_insert_merge(q, rq, &free)) {
+>  		spin_unlock_irq(&bfqd->lock);
+>  		blk_mq_free_requests(&free);
+> @@ -6156,6 +6156,7 @@ static void bfq_insert_request(struct blk_mq_hw_ctx *hctx, struct request *rq,
+>  
+>  	trace_block_rq_insert(rq);
+>  
+> +	bfqq = bfq_init_rq(rq);
+>  	if (!bfqq || at_head) {
+>  		if (at_head)
+>  			list_add(&rq->queuelist, &bfqd->dispatch);
+> -- 
+> 2.34.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
