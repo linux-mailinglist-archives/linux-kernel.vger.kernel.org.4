@@ -2,180 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57845FF487
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBEB5FF4E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiJNU1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S229729AbiJNU4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiJNU1K (ORCPT
+        with ESMTP id S229609AbiJNU41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:27:10 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923851ACAA4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:27:08 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id j4so8987224lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:27:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PnTf6LMv8c90DAffjojAc5gCz/Pz6CdILHxs3Cu4YjY=;
-        b=fgwAQD12LmiwDBEU35EJ9StUrPpGo/gCAtfQW51Ah4zfvCFYZcE8iVVyI7V1DAFpOV
-         21VQQIBga+kIsNlC+c6sJCpsfeunhfymP7FK6xrRFAzkPxQbTGohXR78wBjKWhLMYroS
-         Q529f2GiHi+RnpycZMHrgwElTXHg7yIwsd+cE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PnTf6LMv8c90DAffjojAc5gCz/Pz6CdILHxs3Cu4YjY=;
-        b=PKtrrqBdFaTW3j3c//OeeclR9feo5lM+cFbp7n/Ijg8M/5F/fw/xF+G/XVp6xOywmd
-         yJpdeIajJnoWHOtbsk72OBDhI+f7CKxMCBs1GKN4ytES8DLZYo3z/n5bQcuBKGaxP5QY
-         79UaTUPynYng1yBz1Z5u1HDPc3+T+dYT78m1MK5m3aeBkeYrM7MI145n4nIpL3eSekw8
-         ll1foTpGbywJ2q7TzIwwjvNCRBqSuUXYCaPl1+ClOPNrPI5h2PU6zy83Bw2vOxp2h/Ts
-         Stf0HmqUbCbCadlyj8lCpmHBNYwQyYmzVSG12BoK5bD45qZL51otvS+8hG2LTZETb8Iu
-         dzZA==
-X-Gm-Message-State: ACrzQf1CHOY7hPoOxW2WLI6qal2ec1a7ObwDx0URgCu6aEWxIP2w2Gfo
-        43QXERxeWGIChKZdlPiiMcxA7cIHTVxGeHcUjssGHA==
-X-Google-Smtp-Source: AMsMyM5ppSzx6lIMkanfmWYEQL2Hbi+//MrjWxIy5a/wUaW7YMOUJeV+4E7j7W1hotWln2SqzRxUUzbV7NxyhTs01KE=
-X-Received: by 2002:a05:6512:3d89:b0:4a2:4d71:7d9e with SMTP id
- k9-20020a0565123d8900b004a24d717d9emr2237489lfv.145.1665779226424; Fri, 14
- Oct 2022 13:27:06 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 14 Oct 2022 13:27:05 -0700
+        Fri, 14 Oct 2022 16:56:27 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4872B1C493F;
+        Fri, 14 Oct 2022 13:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=O38m3Gmwd1SrCi88XGH7fqSPtTeCobB2G4S90JKS4LE=;
+        b=APR5lPihbmnA7ydWGAq02059QmawuCzALRSf9UBQczYDmjCVySRG1fkH4ivdHFt6U/A6R1LyAMR/C
+         NPIFJRAkS3P31tunb/C5hKKbm8vfVPnqXabrRGFXA+timWXFShOI8Xguh7R3pP/dGhVcMBCxoE6e5+
+         0rQ6WgCZbSHPmRDaR/ytI0QYu2T4JwvVDKhQTU5bbfWtUIj5UFZCC7qShejd4/A0Q9rZHBd2xe6goy
+         CcN2Z/jWx9nKnyZBcxMBpdk786VY0CbkOFgieiBS4FQFN0c1NsRyuofq4J7wLbM/0CBRtVFU/OkhSe
+         HN4NBzQYB/pjsUYDpvVgISqobdMyriw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000012,0.028393)], BW: [Enabled, t: (0.000030,0.000001)], RTDA: [Enabled, t: (0.109497), Hit: No, Details: v2.42.0; Id: 15.52k3rc.1gfc4h2bg.cfpc; mclb], total: 0(700)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([92.100.86.33])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 14 Oct 2022 23:56:11 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        system@metrotek.ru
+Subject: [PATCH v18 0/2] Lattice sysCONFIG SPI FPGA manager
+Date:   Fri, 14 Oct 2022 23:27:48 +0300
+Message-Id: <20221014202750.20542-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-In-Reply-To: <20221014103217.1.I656bb2c976ed626e5d37294eb252c1cf3be769dc@changeid>
-References: <20221014103217.1.I656bb2c976ed626e5d37294eb252c1cf3be769dc@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 14 Oct 2022 13:27:05 -0700
-Message-ID: <CAE-0n50wZ+b5rVZsjDYpsdKc6jgUBqmZBnAT=sqL-pcG28LQ5Q@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: qcom: Avoid glitching lines when we first mux to output
-To:     Douglas Anderson <dianders@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-10-14 10:33:18)
-> Back in the description of commit e440e30e26dd ("arm64: dts: qcom:
-> sc7180: Avoid glitching SPI CS at bootup on trogdor") we described a
-> problem that we were seeing on trogdor devices. I'll re-summarize here
-> but you can also re-read the original commit.
->
-> On trogdor devices, the BIOS is setting up the SPI chip select as:
-> - mux special function (SPI chip select)
-> - output enable
-> - output low (unused because we've muxed as special function)
->
-> In the kernel, however, we've moved away from using the chip select
-> line as special function. Since the kernel wants to fully control the
-> chip select it's far more efficient to treat the line as a GPIO rather
-> than sending packet-like commands to the GENI firmware every time we
-> want the line to toggle.
->
-> When we transition from how the BIOS had the pin configured to how the
-> kernel has the pin configured we end up glitching the line. That's
-> because we _first_ change the mux of the line and then later set its
-> output. This glitch is bad and can confuse the device on the other end
-> of the line.
->
-> The old commit e440e30e26dd ("arm64: dts: qcom: sc7180: Avoid
-> glitching SPI CS at bootup on trogdor") fixed the glitch, though the
-> solution was far from elegant. It essentially did the thing that
-> everyone always hates: encoding a sequential program in device tree,
-> even if it's a simple one. It also, unfortunately, got broken by
-> commit b991f8c3622c ("pinctrl: core: Handling pinmux and pinconf
-> separately"). After that commit we did all the muxing _first_ even
-> though the config (set the pin to output high) was listed first. :(
->
-> I looked at ideas for how to solve this more properly. My first
-> thought was to use the "init" pinctrl state. In theory the "init"
-> pinctrl state is supposed to be exactly for achieving glitch-free
-> transitions. My dream would have been for the "init" pinctrl to do
-> nothing at all. That would let us delay the automatic pin muxing until
-> the driver could set things up and call pinctrl_init_done(). In other
-> words, my dream was:
->
->   /* Request the GPIO; init it 1 (because DT says GPIO_ACTIVE_LOW) */
->   devm_gpiod_get_index(dev, "cs", GPIOD_OUT_LOW);
->   /* Output should be right, so we can remux, yay! */
->   pinctrl_init_done(dev);
->
-> Unfortunately, it didn't work out. The primary reason is that the MSM
-> GPIO driver implements gpio_request_enable(). As documented in
-> pinmux.h, that function automatically remuxes a line as a GPIO. ...and
-> it does this remuxing _before_ specifying the output of the pin. You
-> can see in gpiod_get_index() that we call gpiod_request() before
-> gpiod_configure_flags(). gpiod_request() isn't passed any flags so it
-> has no idea what the eventual output will be.
->
-> We could have debates about whether or not the automatic remuxing to
-> GPIO for the MSM pinctrl was a good idea or not, but at this point I
-> think there is a plethora of code that's relying on it and I certainly
-> wouldn't suggest changing it.
->
-> Alternatively, we could try to come up with a way to pass the initial
-> output state to gpio_request_enable() and plumb all that through. That
-> seems like it would be doable, but we'd have to plumb it through
-> several layers in the stack.
->
-> This patch implements yet another alternative. Here, we specifically
-> avoid glitching the first time a pin is muxed to GPIO function if the
-> direction of the pin is output. The idea is that we can read the state
-> of the pin before we set the mux and make sure that the re-mux won't
-> change the state.
->
-> NOTES:
-> - We only do this the first time since later swaps between mux states
->   might want to preserve the old output value. In other words, I
->   wouldn't want to break a driver that did:
->      gpiod_set_value(g, 1);
->      pinctrl_select_state(pinctrl, special_state);
->      pinctrl_select_default_state();
->      /* We should be driving 1 even if "special_state" made the pin 0 */
-> - It's safe to do this the first time since the driver _couldn't_ have
->   explicitly set a state. In order to even be able to control the GPIO
->   (at least using gpiod) we have to have requested it which would have
->   counted as the first mux.
-> - In theory, instead of keeping track of the first time a pin was set
->   as a GPIO we could enable the glitch-free behavior only when
->   msm_pinmux_request_gpio() is in the callchain. That works an enables
->   my "dream" implementation above where we use an "init" state to
->   solve this. However, it's nice not to have to do this. By handling
->   just the first transition to GPIO we can simply let the normal
->   "default" remuxing happen and we can be assured that there won't be
->   a glitch.
->
-> Before this change I could see the glitch reported on the EC console
-> when booting. It would say this when booting the kernel:
->   Unexpected state 1 in CSNRE ISR
->
-> After this change there is no error reported.
->
-> Note that I haven't reproduced the original problem described in
-> e440e30e26dd ("arm64: dts: qcom: sc7180: Avoid glitching SPI CS at
-> bootup on trogdor") but I could believe it might happen in certain
-> timing conditions.
->
-> Fixes: b991f8c3622c ("pinctrl: core: Handling pinmux and pinconf separately")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI sysCONFIG interface.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
+  v6 -> v7:
+    * ecp5-spi.c -> lattice-sysconfig-spi.c. Reworked to represent
+      generalized sysCONFIG port with implementations for ECP5 and
+      MachXO2
+    * lattice,ecp5-fpga-mgr.yaml -> lattice,sysconfig.yaml. Reworked to
+      document both ECP5 and MachXO2 sysCONFIG.
+    * dt-bindings: remove "Reviewed-by: Krzysztof Kozlowski" tag as doc
+      was rewritten by a considerable amount.
+  v7 -> v8:
+    * dt-bindings: move "program-gpios", "init-gpios" and "done-gpios"
+      to top-level properties and disallow them for MachXO2 variant.
+  v8 -> v9:
+    * dt-bindings: "program-gpios", "init-gpios" and "done-gpios" are
+      now optional for both ECP5 and MachXO2
+    * lattice-sysconfig-spi.c -> sysconfig-spi.c + sysconfig.c +
+      sysconfig.h
+        ** reworked to be one sysCONFIG FPGA Manager rather than two
+	   distinct ECP5 and MachXO2 managers
+	** splitted to port type agnostic sysconfig.c and SPI-specific
+	   sysconfig-spi.c
+	** command transfer function moved to callback for ease of
+	   adding another port type, such as I2C
+  v9 -> v10:
+    * split sysconfig_transfer() callback into separate command_write()
+      and command_write_then_read(). There are too many transfers
+      without readback.
+    * add command_write_with_data() callback which performs single
+      transfer of command + data. It's needed for better abstraction of
+      paged bitstream write routine.
+    * move sysconfig_lsc_burst_init() to bitstream_burst_write_init()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * move sysconfig_lsc_burst_complete() to bitstream_burst_write_complete()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * add bitstream_burst_write() to abstract fpga_manager_ops->write()
+      from bus type
+    * remove struct spi_device from struct sysconfig_priv, use
+      to_spi_device()
+    * move fpga_manager_ops initialization to sysconfig.c
+  v10 -> v11:
+    * rename sysconfig_lsc_burst_init() to sysconfig_spi_lsc_burst_init()
+    * rename sysconfig_bitstream_burst_write() to
+      sysconfig_spi_bitstream_burst_write()
+    * rename sysconfig_lsc_burst_complete() to
+      sysconfig_spi_lsc_burst_complete()
+    * rename "ecp5-fpga-mgr" to "sysconfig-ecp5"
+    * rename "machxo2-fpga-mgr" to "sysconfig-machxo2"
+    * move spi_max_speed_hz from struct sysconfig_fpga_priv to
+      struct sysconfig_spi_fpga_priv, which is local to sysconfig-spi.c
+    * remove SPI bus unlock on write error form
+      sysconfig_spi_bitstream_burst_write(), call
+      sysconfig_burst_write_complete() on error in
+      sysconfig_bitstream_burst_write() instead.
+  v11 -> v12:
+    * build sysconfig core as separate module to prevent duplication of
+      common code segments across different binaries
+    * rename sysconfig.c to lattice-sysconfig.c
+    * rename sysconfig.h to lattice-sysconfig.h
+    * rename sysconfig-spi.c to lattice-sysconfig-spi.c
+    * rename sysconfig_spi_cmd_write_then_read() to
+      sysconfig_spi_cmd_read()
+    * rename command_write_then_read() callback to command_read()
+    * rename sysconfig_cmd_write_then_read() to sysconfig_cmd_read()
+    * rename sysconfig_spi_lsc_burst_init() to
+      sysconfig_spi_bitstream_burst_init()
+    * rename sysconfig_spi_lsc_burst_complete() to
+      sysconfig_spi_bitstream_burst_complete()
+    * remove excessive !spi check from sysconfig_spi_cmd_write(),
+      sysconfig_spi_cmd_read(), sysconfig_spi_bitstream_burst_init(),
+      sysconfig_spi_bitstream_burst_write() and
+      sysconfig_spi_bitstream_burst_complete()
+    * drop MachXO2 support
+        ** drop struct sysconfig_fpga_priv
+        ** drop paged write
+        ** drop command_write_with_data() and friends
+        ** drop ISC_PROGRAM_DONE routine
+        ** drop refresh from sysconfig_isc_finish()
+        ** sysconfig_isc_erase() only erase SRAM
+	** drop MachXO2 mentions from DT bindings doc
+  v12 -> v13:
+    * use device_get_match_data() instead of of_device_get_match_data()
+      and drop of_device.h inclusion
+    * in polling routines use time_before(jiffies, timeout) instead of
+      retries count
+    * add usleep_range() to gpio polling routine
+    * check fail status of command in more pronounced way
+    * check definition of sysconfig_priv callbacks at probe
+    * (BIT(23) | BIT(24) | BIT(25)) -> GENMASK(25, 23)
+  v13 -> v14:
+    * return -ETIMEDOUT instead of -EBUSY from sysconfig_poll_busy() to
+      align with sysconfig_poll_gpio()
+  v14 -> v15:
+    * move sysCONFIG commands from stack to heap, as spi-summary doc
+      says: "I/O buffers use the usual Linux rules, and must be
+      DMA-safe. [...] Don't use the stack, or anything that's declared
+      "static"."
+        ** add u8 cmd_tx_buf[4] and u8 cmd_rx_buf[4] to
+	   struct sysconfig_priv
+	** copy commands to cmd_tx_buf before sending to the device
+	** use cmd_rx_buf for commands readback
+	** change command_write() and command_read() signatures, as
+	   command buffers are now embedded to sysconfig_priv
+	** combine sysconfig_read_busy() with sysconfig_poll_busy() to
+	   avoid same memcpy in the loop
+  v15 -> v16:
+    * revert to v14
+    * combine command_write() and command_read() to command_transfer()
+      which uses spi_write_then_read() underhood. spi_write_then_read()
+      is dma-safe for on-stack buffers.
+    * in sysconfig_spi_bitstream_burst_init() bounce on-stack buffer
+      with LSC_BITSTREAM_BURST command to the heap. Now everything
+      should be dma-safe.
+  v16 -> v17:
+    * return dev_err_probe() from sysconfig_probe() if
+      devm_gpiod_get_optional() fails
+  v17 -> v18:
+    * use read_poll_timeout() in sysconfig_poll_busy() and
+      sysconfig_poll_gpio()
+    * combine checks for callbacks presence in sysconfig_probe() into
+      one if-statement, add missing check for command_transfer()
+
+Ivan Bornyakov (2):
+  fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
+
+ .../bindings/fpga/lattice,sysconfig.yaml      |  81 ++++
+ drivers/fpga/Kconfig                          |  11 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/lattice-sysconfig-spi.c          | 154 +++++++
+ drivers/fpga/lattice-sysconfig.c              | 394 ++++++++++++++++++
+ drivers/fpga/lattice-sysconfig.h              |  39 ++
+ 6 files changed, 681 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.h
+
+-- 
+2.37.3
+
+
