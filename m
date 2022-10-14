@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9195FF50A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348615FF527
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJNVJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S229832AbiJNVTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJNVJs (ORCPT
+        with ESMTP id S229826AbiJNVTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:09:48 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6BF5584;
-        Fri, 14 Oct 2022 14:09:40 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-132af5e5543so7281790fac.8;
-        Fri, 14 Oct 2022 14:09:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hb6+hRsJ2+j+iFOkFuOlPFAOELc94JpoZuRVImRdf8g=;
-        b=2E2flWabyczENMEFHS0kHdDvpHUjWgRbpYQtRN77ZY3S54gnNv7yM/Wi3tppK2cdPe
-         7VtxeH++biM/OSZBTVTvr4tCxPwHEKd0GSL8SiAVCPVvrDC7fQ7N2krDopj9nVRsg1AC
-         rYVun/RGpOivdkgTmhE0lZOf3g0dtQ30gk5M9jMvq9flkpewFYITMRB6VJ+uTGVfKJ9/
-         /NkFFo2l6EHPW2hWvGTYgwwLeBnidBTVnXw8nZyjRGWkWpyBQ8M7e3j6RqrdSpJWJdqv
-         londH3nmO5s/wDEDsghJxsFyZSrBYiAzSTruLTCJP1Z37ClOOyMRUpnS+qg2RXIbx6lV
-         /t4Q==
-X-Gm-Message-State: ACrzQf1RGAgZwAOH4Fl+a06whsmJwMVuPdWn/X9zmE825+cTc7n8wBW+
-        qCgKhtrdH1Opn20VOocj7UNnf8Xq5i5B
-X-Google-Smtp-Source: AMsMyM4+BPQEN5gTldI4WjhqseUpc40eMXjxoGcOKszJd0o09wnb6qdWDwfEFTmDEqNGJfLGVrMorg==
-X-Received: by 2002:a05:6870:538a:b0:132:756f:2c98 with SMTP id h10-20020a056870538a00b00132756f2c98mr9414474oan.134.1665781780102;
-        Fri, 14 Oct 2022 14:09:40 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d21-20020a9d4f15000000b0066193fe498bsm1776819otl.28.2022.10.14.14.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:09:39 -0700 (PDT)
-Received: (nullmailer pid 2910371 invoked by uid 1000);
-        Fri, 14 Oct 2022 21:09:40 -0000
-Date:   Fri, 14 Oct 2022 16:09:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        William Zhang <william.zhang@broadcom.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Rini <trini@konsulko.com>, u-boot@lists.denx.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] dt-bindings: nvmem: u-boot,env: add Broadcom's
- variant binding
-Message-ID: <166578177913.2909910.7600034251484225468.robh@kernel.org>
-References: <20220930163631.27040-1-zajec5@gmail.com>
+        Fri, 14 Oct 2022 17:19:17 -0400
+X-Greylist: delayed 518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Oct 2022 14:19:10 PDT
+Received: from mail.stoffel.org (mail.stoffel.org [172.104.24.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647D71D29AC;
+        Fri, 14 Oct 2022 14:19:09 -0700 (PDT)
+Received: from quad.stoffel.org (068-116-170-226.res.spectrum.com [68.116.170.226])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail.stoffel.org (Postfix) with ESMTPSA id 1A24F1E668;
+        Fri, 14 Oct 2022 17:10:31 -0400 (EDT)
+Received: by quad.stoffel.org (Postfix, from userid 1000)
+        id B8C27A7F96; Fri, 14 Oct 2022 17:10:30 -0400 (EDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220930163631.27040-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <25417.53318.731340.683540@quad.stoffel.home>
+Date:   Fri, 14 Oct 2022 17:10:30 -0400
+From:   "John Stoffel" <john@stoffel.org>
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>
+Cc:     Song Liu <song@kernel.org>, <linux-raid@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, jonathan.derrick@solidigm.com,
+        jonathanx.sk.derrick@intel.com,
+        Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
+Subject: Re: [PATCH v2 0/3] Bitmap percentage flushing
+In-Reply-To: <20221013224151.300-1-jonathan.derrick@linux.dev>
+References: <20221013224151.300-1-jonathan.derrick@linux.dev>
+X-Mailer: VM 8.2.0b under 27.1 (x86_64-pc-linux-gnu)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 18:36:31 +0200, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Broadcom uses U-Boot for a lot of their bcmbca familiy chipsets. U-Boot
-> stores its configuration in an environment data block.
-> 
-> Such blocks are usually stored on flash as a separated partition at
-> hardcoded address. Broadcom however decided to:
-> 1. Store env data block inside U-Boot partition
-> 2. Avoid sticking to hardcoded offsets
-> 3. Use custom header with "uEnv" magic and env data length
-> 
-> Example (length 0x4000):
-> $ hexdump -n 32 -C -s 0x40000 /dev/mtdblock0
-> 00040000  76 6e 45 75 00 40 00 00  34 89 7a 82 49 4d 41 47  |vnEu.@..4.z.IMAG|
-> 00040010  45 3d 4e 41 4e 44 3a 31  4d 2c 31 30 32 34 4d 00  |E=NAND:1M,1024M.|
-> (0x40000 offset is unit specific and can change)
-> 
-> Starting with the commit 118f3fbe517f4 ("dt-bindings: mtd: partitions:
-> support label/name only partition") DT can describe partitions matching
-> them by a name (without specifying actual address). With that feature
-> and this binding change it's possible to:
-> 1. Specify DT node for Broadcom's U-Boot env data subpartition
-> 2. Add nodes for specific environment data variables
-> 3. Reference them as NVMEM cells
-> 
-> This binding is unlikely to help Broadcom's U-Boot. U-Boot SPL needs to
-> find environment data early (before it accesses DTB) and it does that by
-> looking for an "uEnv" magic. Dirty way.
-> 
-> This binding can however be used by operating systems. It allows
-> describing cleanly U-Boot, its env data and variables. It tells
-> operating system about Broadcom-specific env data so it can parse it.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Work on better commit body & add example
-> ---
->  .../devicetree/bindings/nvmem/u-boot,env.yaml | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
+>>>>> "Jonathan" == Jonathan Derrick <jonathan.derrick@linux.dev> writes:
 
-Applied, thanks!
+> This introduces a percentage-flushing mechanism that works in-tandem to the
+> mdadm delay timer. The percentage argument is based on the number of chunks
+> dirty (rather than percentage), due to large drives requiring smaller and
+> smaller percentages (eg, 32TB drives-> 1% is 320GB).
+
+I've been reading and re-reading this and I still don't understand
+what you're saying here.  You say you're adding a percentage based
+mechanism, but then you say it's based on chunk counts, not
+percentages.  I think you need to clean this up and re-word it.
+
+Maybe you're trying to say that you only take a percentage of the
+available write bandwidth per second or something like that? 
+
+
+> This set hopes to provide a way to make the bitmap flushing more consistent. It
+> was observed that a synchronous, random write qd1 workload, could make bitmap
+> writes easily become almost half of the I/O. And in similar workloads with
+> different timing, it was several minutes between bitmap updates. This is too
+> inconsistent to be reliable.
+
+> This first and second patches adds the flush_threshold parameter. The default
+> value of 0 defines the default behavior: unplugging immediately just as before.
+> With a flush-threshold value of 1, it becomes more consistent and paranoid,
+> flushing on nearly every I/O, leading to a 40% or greater situation. From
+
+What situation?  Please be more clear here.  
+
+> there, the flush_threshold can be defined higher for those situations where
+> power loss is rare and full resync can be tolerated.
+
+> The third patch converts the daemon worker to an actual timer. This makes it
+> more consistent and removes some ugly code.
+
+> Jonathan Derrick (3):
+>   md/bitmap: Add chunk-threshold unplugging
+>   md/bitmap: Add sysfs interface for flush threshold
+>   md/bitmap: Convert daemon_work to proper timer
+
+>  Documentation/admin-guide/md.rst |  5 ++
+>  drivers/md/md-bitmap.c           | 98 +++++++++++++++++++++++++-------
+>  drivers/md/md-bitmap.h           |  4 +-
+>  drivers/md/md.c                  |  9 ++-
+>  drivers/md/md.h                  |  2 +
+>  5 files changed, 93 insertions(+), 25 deletions(-)
+
+> -- 
+> 2.31.1
+
