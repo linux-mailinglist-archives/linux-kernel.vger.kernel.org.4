@@ -2,75 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2A75FEFAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3375C5FEFC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiJNOER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S230260AbiJNOHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiJNODh (ORCPT
+        with ESMTP id S230024AbiJNOHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:03:37 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9CC1D20D1;
-        Fri, 14 Oct 2022 07:02:51 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 14 Oct 2022 10:07:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51BFAF1AA
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665756395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gTDMT5dUS3Kh1fBWxDZJMEprgSmNC1zcod1UBzX5NVw=;
+        b=PO+GOYgUU/ZiEdyDGUs9fLcCq/n+2WWhk5rG4A3rVJbysBs83STEvtYHyiVYXny7LK18HX
+        fLBDrJAjzaT9boXJ/5Fb1ZNWU/f8YoLM7Ax8nwDaI0lNy5DmWSBW47kws3YKA4OO9DJfUv
+        oAhrUWrEPviVBaBQfUuMo5NWvHW20JE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-CAqzT3VWOAucnqmqLG9C7g-1; Fri, 14 Oct 2022 10:06:32 -0400
+X-MC-Unique: CAqzT3VWOAucnqmqLG9C7g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 6F09E35D;
-        Fri, 14 Oct 2022 14:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6F09E35D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665756119; bh=gbZzFGi0DSyuETMCUk6reDBoaJz8+cLXjDxO5eRHjvE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=S9xOMx/OZvcRHXLRWB1Ul+0vAzTIoES49Je91LcmW/7V7XADM88FjzNKdj+1zQzcB
-         /vUe2kJ+uiDkm0fF/6p0nZsNNnlSckeKEwJMI1oo1zhluZjZOxpfeXAPNVDg8rLHDS
-         T7NvFZZbSAcfEqYQi6ltrM24GmE55c3F76/azxznkBvJj7IajG7WWWlBHlrrVdJehl
-         /poKARtHRY0QaqmD9vnJPV60iQWhf6gZ2wjCt+067cYj2eLVlp+SIf8SIbibtYuUSj
-         velU80CDYX2N4GZy142jeOWgl0gqVxwVzH0X5TCo/JFQTALaWH6RzQTCDikstqhimK
-         PVlZsleK+ZY3g==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Jason Wang <jasowang@redhat.com>, mst@redhat.com,
-        jasowang@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        mikelley@microsoft.com, vkuznets@redhat.com, liuwe@microsoft.com,
-        kkashanjat@microsoft.com, cohuck@redhat.com, otubo@redhat.com,
-        andavis@redhat.com, aadam@redhat.com, stefanha@redhat.com,
-        sgarzare@redhat.com, virtualization@lists.linux-foundation.org
-Subject: Re: [RFC PATCH] virtio: document virtio hardening status and TODO
-In-Reply-To: <20221014042037.23639-1-jasowang@redhat.com>
-References: <20221014042037.23639-1-jasowang@redhat.com>
-Date:   Fri, 14 Oct 2022 08:01:58 -0600
-Message-ID: <87o7ueh5bd.fsf@meer.lwn.net>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F3DA832D3E;
+        Fri, 14 Oct 2022 14:06:19 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.78])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3EF761155889;
+        Fri, 14 Oct 2022 14:06:14 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YwWgdekd+f3MqVmu@infradead.org>
+References: <YwWgdekd+f3MqVmu@infradead.org> <166126392703.708021.14465850073772688008.stgit@warthog.procyon.org.uk> <166126393409.708021.16165278011941496946.stgit@warthog.procyon.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] iov_iter: Add a function to extract an iter's buffers to a bvec iter
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1584070.1665756368.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 14 Oct 2022 15:06:08 +0100
+Message-ID: <1584071.1665756368@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason Wang <jasowang@redhat.com> writes:
+Christoph Hellwig <hch@infradead.org> wrote:
 
-> This patch summarizes the status of hardening and TODO of hardening
-> virtio core and drivers.
->
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  Documentation/security/virtio/core.rst | 49 ++++++++++++++++++++++++++
->  MAINTAINERS                            |  1 +
->  2 files changed, 50 insertions(+)
->  create mode 100644 Documentation/security/virtio/core.rst
+> On Tue, Aug 23, 2022 at 03:12:14PM +0100, David Howells wrote:
+> > Copy cifs's setup_aio_ctx_iter() and to lib/iov_iter.c and generalise =
+it as
+> > extract_iter_to_iter().  This allocates and sets up an array of bio_ve=
+cs
+> > for all the page fragments in an I/O iterator and sets a second suppli=
+ed
+> > iterator to bvec-type pointing to the array.
+> =
 
-Do you really need to create a new directory for a single file?
+> Did you read my NACK and comments from last time?
 
-Regardless of where it sits, you'll need to add this file to an
-index.rst file so that it becomes part of the docs build.
+No, because they ended up in a different mailbox from everything else for =
+some
+reason.
 
-Thanks,
+> I really do not like this as a general purpose helper.  This is an odd
+> quirk that we really generally should not needed unless you have very
+> convoluted locking.  So please keep it inside of cifs.
 
-jon
+I'm using it in under-development netfslib code also.
+
+Let me ask the question more generally in a separate email.
+
+David
+
