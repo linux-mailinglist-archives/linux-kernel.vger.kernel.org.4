@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8742C5FF4CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5ADE5FF4CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiJNUpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S231499AbiJNUr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiJNUpt (ORCPT
+        with ESMTP id S230392AbiJNUr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:45:49 -0400
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC09D03AB;
-        Fri, 14 Oct 2022 13:45:46 -0700 (PDT)
-Received: by mail-pf1-f175.google.com with SMTP id y1so5964540pfr.3;
-        Fri, 14 Oct 2022 13:45:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V6F4cqScoAnyG62i61m4oJ0MGIQvNAp6Biva4swYu9g=;
-        b=CPR1GPSR9p8XPYplL4jnpZDVA8mVxl/7kICuPJ/Z5OC6ZVbDvEMGd9xs/YuWwFptwu
-         7SIT4YEuWo5Ev4UQYhXcag2E2jThUwZKhU+MouhdFsMFGM+UATnTXTxRp/wCkv4jY0uD
-         zGCjQu/qid5KfRdVN4BRefUsoLsosP+k3bpyIj56s481GMGQctYSlw3zGN9XScAUu4Al
-         bv+wzxPF6ywWk06xOrkDs6Z4I0uR5e8zMELDWAyyE/+PFTeC85UzK4uBjVzKCALv4qj6
-         a8N4Tzb0JdpNH4wYNtKcgLNbGhF6sItGMkxWX/830nDEbmo6htJBe/X5ZU9QTvQ4X+yS
-         7DiA==
-X-Gm-Message-State: ACrzQf2wUD/QG79wsst+Dp6/caD4XWYv4EL6OvT4nmrkLTDfgSJe1xAJ
-        5FjP7/MsEYDWJe1UtQ9++kg=
-X-Google-Smtp-Source: AMsMyM5MKBbUdqmwvx5/5F4v7bmbYZsgm3kn8yLzjJML5o9xvFokP77MQT0uLCsCIJAB97rQdw2YQQ==
-X-Received: by 2002:a63:1353:0:b0:457:3e87:7883 with SMTP id 19-20020a631353000000b004573e877883mr6039567pgt.172.1665780345440;
-        Fri, 14 Oct 2022 13:45:45 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:7bd3:5500:b9cd:d90d? ([2620:15c:211:201:7bd3:5500:b9cd:d90d])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b0017a032d7ae4sm2147835plg.104.2022.10.14.13.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 13:45:44 -0700 (PDT)
-Message-ID: <16bee8e7-a9ec-0847-9d89-92484b0399a0@acm.org>
-Date:   Fri, 14 Oct 2022 13:45:41 -0700
+        Fri, 14 Oct 2022 16:47:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3986C183D9D;
+        Fri, 14 Oct 2022 13:47:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D89461C0D;
+        Fri, 14 Oct 2022 20:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA07C433D7;
+        Fri, 14 Oct 2022 20:47:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665780473;
+        bh=Y7cSkEtUOjuIr7FqCD+7qZvk2lC0Q/y7fiup3u4Ldi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WNbp6++2LvkDrdKGSTnUe4UQQKhTR4gUKL9HN1pBvDAByrrMAZkZUrq4lAR/x5mW1
+         jbumKhOPY6bNZJuLFYXR7vIFv8PZaZIeRaR+JoDpg6Agpc3RtKP046U5PKcLRv/5Rc
+         wjQhhxx4qQuW5RhcCVUnjuyQJDqX6Q9gaH2bruYafSJc+4m7TBc7CmjJNoBFKptYU3
+         npcALBHnqtq1BAATXkqmfRKxBHpaJKmP9TCRz6kRXxt0eh6nTm2GbubIUJEYuJLxMG
+         edxNdQTDEsOP8dU2E2hMoubZCwqAIt3VE6Rm7RVeH/IJvje19os7PelpSgdH8i42o6
+         BXmNoRx61m5uw==
+Date:   Fri, 14 Oct 2022 22:47:50 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
+        youssefesmat@google.com, surenb@google.com
+Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
+Message-ID: <20221014204750.GA1119620@lothringen>
+References: <20221011180142.2742289-1-joel@joelfernandes.org>
+ <20221011180142.2742289-2-joel@joelfernandes.org>
+ <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
+ <20221014144019.GB1108603@lothringen>
+ <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQoRUJ=0_GJG6JunR58yASmehPanp14zbR3Y+KAGL1TDA@mail.gmail.com>
+ <20221014154606.GJ4221@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] scsi: ufs: core: Remove unnecessary if statement
-Content-Language: en-US
-To:     Bean Huo <huobean@gmail.com>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221010092937.520013-1-beanhuo@iokpp.de>
- <20221010092937.520013-2-beanhuo@iokpp.de>
- <a1cd6719-a743-fc96-e0e7-364a52b62952@acm.org>
- <227f117ee9491cc9d2ae4bb2211a99ccd1dd3c21.camel@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <227f117ee9491cc9d2ae4bb2211a99ccd1dd3c21.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014154606.GJ4221@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 13:30, Bean Huo wrote:
-> I double-checked the changelog and the stack overflow issue was double
-> fixed by your commit:
+On Fri, Oct 14, 2022 at 08:46:06AM -0700, Paul E. McKenney wrote:
+> On Fri, Oct 14, 2022 at 11:19:28AM -0400, Joel Fernandes wrote:
+> > I agree with the discussion, though if all CBs are in the bypass list,
+> > the patch will also save 2 jiffies.
+> > 
+> > So just commit messages that need rework then? This one can be taken instead:
+> > https://lore.kernel.org/rcu/21ECDA9F-81B1-4D22-8B03-020FB5DADA4F@joelfernandes.org/T/#m14d21fbce23539a521693a4184b28ddc55d7d2c5
 > 
-> commit d3d9c4570285 ("scsi: ufs: Fix memory corruption by
-> ufshcd_read_desc_param()"),
-> 
-> For example, if the user wants to read wb_buf_alloc_units in the RPMB
-> unit descriptor,
-> 
-> parameter offset = 41, parameter size = 4,
-> buff_len = 45;
-> 
-> After ufshcd_query_descriptor_retry(), buff_len will be updated to 35.
-> 
-> param_offset > buff_len, then -EINVAL will be returned.
-> 
-> So we can safely remove this check, and if you still have concerns, I
-> can verify when I get back to the office.
+> This one looks plausible to me.
 
-Hi Bean,
+With the following modified diff (passed 25 hours of TREE01):
 
-Thank you for having looked this up. I agree with the above.
-
-Bart.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 96d678c9cfb6..7f1f6f792240 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3914,6 +3914,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ {
+ 	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
+ 	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
++	bool wake_nocb = false;
++	bool was_alldone = false;
+ 
+ 	lockdep_assert_held(&rcu_state.barrier_lock);
+ 	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
+@@ -3922,7 +3924,14 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ 	rdp->barrier_head.func = rcu_barrier_callback;
+ 	debug_rcu_head_queue(&rdp->barrier_head);
+ 	rcu_nocb_lock(rdp);
++	/*
++	 * Flush bypass and wakeup rcuog if we add callbacks to an empty regular
++	 * queue. This way we don't wait for bypass timer that can reach seconds
++	 * if it's fully lazy.
++	 */
++	was_alldone = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
+ 	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
++	wake_nocb = was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
+ 	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+ 		atomic_inc(&rcu_state.barrier_cpu_count);
+ 	} else {
+@@ -3930,6 +3939,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ 		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
+ 	}
+ 	rcu_nocb_unlock(rdp);
++	if (wake_nocb)
++		wake_nocb_gp(rdp, false);
+ 	smp_store_release(&rdp->barrier_seq_snap, gseq);
+ }
+ 
+diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+index d4a97e40ea9c..925dd98f8b23 100644
+--- a/kernel/rcu/tree.h
++++ b/kernel/rcu/tree.h
+@@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
+ static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+ static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+ static void rcu_init_one_nocb(struct rcu_node *rnp);
++static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j);
+ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index f77a6d7e1356..094fd454b6c3 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
+ {
+ }
+ 
++static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
++{
++	return false;
++}
++
+ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j)
+ {
