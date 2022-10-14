@@ -2,83 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD335FF574
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4875FF577
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiJNVcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S230041AbiJNVdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiJNVcr (ORCPT
+        with ESMTP id S230070AbiJNVdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:32:47 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5F52FC29;
-        Fri, 14 Oct 2022 14:32:47 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id s1-20020a4a81c1000000b0047d5e28cdc0so1868746oog.12;
-        Fri, 14 Oct 2022 14:32:47 -0700 (PDT)
+        Fri, 14 Oct 2022 17:33:40 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76AA1DD88D
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:33:38 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bu25so9184627lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mW/7734DTN1y7Y84OiEwHnT+yRfPOMTAoIPWG7Voljw=;
+        b=PgFR0tEGuo3vVa/CnuAlTPfOfTELLs3aGGGMb9IXzOYePq3nCpO5+4OEsvz/kOxF2A
+         79yQVzo+NK/ltxBghNxezmA0alKaNFReFj3T8+RFNiORJuxO3asWB+7FGcXOsRaR6CKH
+         fJmaks9zQNjnFeWRiBDyNKdpuS3Aar4YMYhPW6RuHbCjl2krHzMquR6LAKzC+F2+1G2c
+         hC9vZgo0cJ4twjeTA/Giah3yGE5G79sjV69EF8OuDdoHR4OsCecddgyMDtWdSWwrGVxb
+         QvxttGQ1CCNtrHgV5I+XXWlfcv0EMsTVL0XQdisXmRp7S2YaZA7eJqlE4Q71mGypaJ8x
+         vyEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dVyH5ppmeLm9SOZr74i6fTL8JuopDsI3RJLzigzFYWI=;
-        b=nKLXLUOZJjeIhyQVRDtGs+7AzzL77/GwMQffmpfyeGGH7CK6c84rnfvLmnhDqDYQBy
-         r9cLldZ9m3FwnFyf+/HojFXnp6o+VqCgDrB6sQ3zdMthLL0wDovFnrBZVkN39ECnJpA3
-         iSQQhPR1XmxH5gIb87Ii+TtwbArH0aRaXzv0/nkBSLX5JvUdoC9WKVt5GIhfJBVl+qyS
-         +PuE36vIZBrfPsRWTlRsQ3wXgjY39QJAWTfnSWZmOCa3DcRP20RcrNiTnmY338Ip6Vx7
-         ZbIsYEsiknMqKKrOevALp1AVnGIHvJgMKu9V192EJZYUgnqEKZVgiJ0YRd+IsheHQWtX
-         eucQ==
-X-Gm-Message-State: ACrzQf3SF9PwxVdfsb0djXcqEEut50Db/jiNl+5DA555JVd1l5Rwe24u
-        cOEtwQd9QIjXSdcwPOpOwQ==
-X-Google-Smtp-Source: AMsMyM48eD18qFAwbjuP2QLLGMmCexEbpR/cfrktU3suYYJfdqfjzaSfN+CXrnhEdtn0X1TNnQBmxQ==
-X-Received: by 2002:a05:6820:811:b0:476:6b2:4cd2 with SMTP id bg17-20020a056820081100b0047606b24cd2mr2736553oob.84.1665783166319;
-        Fri, 14 Oct 2022 14:32:46 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id eo18-20020a056870ec9200b001326b043f37sm1838777oab.36.2022.10.14.14.32.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mW/7734DTN1y7Y84OiEwHnT+yRfPOMTAoIPWG7Voljw=;
+        b=nXMKQcGoqth8jPM8EC6lS0fHRwg9/Fj5xuBgAZrESVFNgM0LAYLtZDhomGBPQN4EzZ
+         l6v7N0zeDjhEPbwR0q1dgV6YzeOG9AWxCjWepILlb4cOfcuC1jdtnhwV3m3dDhm5Jj5z
+         xwLnjpURgudj26U3ote/wWq1vru4Qoqq7Oy3dUaEQyN6+kL8bo8gUOrrfVI4OhEIr8b9
+         oTqXZFSke0O2ww7xWVF3A8e5cUZ7525FTWCLay16/s71cyCqAyuafS6axMO+IKeuP0Sd
+         XtgbXy4n8dlH48xdsUuHcdkLDz+r7DGDFi8t11fW+TvZGXFR21nGzdGIrj1GO5+r2Udp
+         IFAQ==
+X-Gm-Message-State: ACrzQf1WUbKPpFTrtMUgRLbNg49aGHfL9Fmg0mL5mNL/8tetTSmi0zca
+        /3WEgY6813hx3wTso1zrk2JP1A==
+X-Google-Smtp-Source: AMsMyM7GgugwNIIkfWkvLdGyp4sIaNYuvJRRWZgRBGTLjTUjCybeUUq9Ahem1s1muto2zKZqx17MiQ==
+X-Received: by 2002:a05:6512:3e01:b0:4a2:5c6e:d88e with SMTP id i1-20020a0565123e0100b004a25c6ed88emr2604305lfv.431.1665783217299;
+        Fri, 14 Oct 2022 14:33:37 -0700 (PDT)
+Received: from fedora.. ([78.10.207.24])
+        by smtp.gmail.com with ESMTPSA id d4-20020ac24c84000000b00494978b0caesm494036lfl.276.2022.10.14.14.33.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:32:45 -0700 (PDT)
-Received: (nullmailer pid 2937600 invoked by uid 1000);
-        Fri, 14 Oct 2022 21:32:46 -0000
-Date:   Fri, 14 Oct 2022 16:32:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for
- stm32-romem
-Message-ID: <166578316635.2937544.10153180806992297540.robh@kernel.org>
-References: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+        Fri, 14 Oct 2022 14:33:36 -0700 (PDT)
+From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
+To:     devicetree@vger.kernel.org
+Cc:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com,
+        =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
+Subject: [PATCH v5 0/3] further improvements to marvell,pp2.yaml
+Date:   Fri, 14 Oct 2022 23:32:51 +0200
+Message-Id: <20221014213254.30950-1-mig@semihalf.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 17:23:27 +0200, Patrick Delaunay wrote:
-> Add a new compatible for stm32mp13 support.
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> ---
-> 
->  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hi,
 
-Acked-by: Rob Herring <robh@kernel.org>
+This patchset addresses problems with reg ranges and 
+additional $refs. It also limits phy-mode and aligns examples.
+
+Best regards,
+Michał
+
+---
+Changelog:
+v4->v5
+- drop '+' from all patternProperties
+- restrict range of patternProperties to [0-2] in top level
+- drop the $ref in patternProperties:'^...':properties:reg
+- add patternProperties:'^...':properties:reg:maximum:2
+- drop $ref in patternProperties:'^...':properties:phys
+- add patternProperties:'^...':properties:phys:maxItems:1
+- limit phy-mode to the subset found in dts files
+- reflect the order of subnodes' properties in subnodes' required:
+- restrict range of pattern to [0-2] in marvell,armada-7k-pp22 case
+- restrict range of pattern to [0-1] in marvell,armada-375-pp2 case
+- align to 4 spaces all examples:
+- add specified maximum to allOf:if:then-else:properties:reg
+
+v3->v4
+- change commit message of first patch
+- move allOf:$ref to patternProperties:'^...':$ref
+- deprecate port-id in favour of reg
+- move reg to front of properties list in patternProperties
+- reflect the order of properties in required list in
+  patternProperties
+- add unevaluatedProperties: false to patternProperties
+- change unevaluated- to additionalProperties at top level
+- add property phys: to ports subnode
+- extend example binding with additional information about phys and sfp
+- hook phys property to phy-consumer.yaml schema
+
+v2->v3
+- move 'reg:description' to 'allOf:if:then'
+- change '#size-cells: true' and '#address-cells: true'
+  to '#size-cells: const: 0' and '#address-cells: const: 1'
+- replace all occurences of pattern "^eth\{hex_num}*"
+  with "^(ethernet-)?port@[0-9]+$"
+- add description in 'patternProperties:^...'
+- add 'patternProperties:^...:interrupt-names:minItems: 1'
+- add 'patternProperties:^...:reg:description'
+- update 'patternProperties:^...:port-id:description'
+- add 'patternProperties:^...:required: - reg'
+- update '*:description:' to uppercase
+- add 'allOf:then:required:marvell,system-controller'
+- skip quotation marks from 'allOf:$ref'
+- add 'else' schema to match 'allOf:if:then'
+- restrict 'clocks' in 'allOf:if:then'
+- restrict 'clock-names' in 'allOf:if:then'
+- add #address-cells=<1>; #size-cells=<0>; in 'examples:'
+- change every "ethX" to "ethernet-port@X" in 'examples:'
+- add "reg" and comment in all ports in 'examples:'
+- change /ethernet/eth0/phy-mode in examples://Armada-375
+  to "rgmii-id"
+- replace each cpm_ with cp0_ in 'examples:'
+- replace each _syscon0 with _clk0 in 'examples:'
+- remove each eth0X label in 'examples:'
+- update armada-375.dtsi and armada-cp11x.dtsi to match
+  marvell,pp2.yaml
+
+v1->v2
+- move 'properties' to the front of the file
+- remove blank line after 'properties'
+- move 'compatible' to the front of 'properties'
+- move 'clocks', 'clock-names' and 'reg' definitions to 'properties' 
+- substitute all occurences of 'marvell,armada-7k-pp2' with
+  'marvell,armada-7k-pp22'
+- add properties:#size-cells and properties:#address-cells 
+- specify list in 'interrupt-names'
+- remove blank lines after 'patternProperties'
+- remove '^interrupt' and '^#.*-cells$' patterns
+- remove blank line after 'allOf'
+- remove first 'if-then-else' block from 'allOf'
+- negate the condition in allOf:if schema
+- delete 'interrupt-controller' from section 'examples'
+- delete '#interrupt-cells' from section 'examples'
+
+Marcin Wojtas (2):
+  arm64: dts: marvell: Update network description to match schema
+  ARM: dts: armada-375: Update network description to match schema
+
+Michał Grzelak (1):
+  dt-bindings: net: marvell,pp2: convert to json-schema
+
+ .../devicetree/bindings/net/marvell,pp2.yaml  | 305 ++++++++++++++++++
+ .../devicetree/bindings/net/marvell-pp2.txt   | 141 --------
+ MAINTAINERS                                   |   2 +-
+ arch/arm/boot/dts/armada-375.dtsi             |  12 +-
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi |  17 +-
+ 5 files changed, 325 insertions(+), 152 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/marvell,pp2.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/marvell-pp2.txt
+
+-- 
+2.37.3
+
