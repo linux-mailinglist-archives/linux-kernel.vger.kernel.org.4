@@ -2,117 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA70F5FF1C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AFF5FF1C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiJNPww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
+        id S231171AbiJNPw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiJNPwu (ORCPT
+        with ESMTP id S230512AbiJNPwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:52:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB671C77CC;
-        Fri, 14 Oct 2022 08:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uURYEhJNF/y4ef2ytvd2xFiDhwfWuIdCXYX1RDrMcEU=; b=FI8zrVaVC/8UN/s+IiozYmQHKy
-        Y557SBFHLKXCkrCnS2qkGQO6WBcuTY9UCgzKthC5OYmAmaNRDidzUfdySBCzwEmZak48g63V7W0se
-        harj0CbOOajx4M9COGuuEFZB31SGwzSyEhtOzDzwtY/UdMeFeYkVkbJUgsabjCu3o8WnPFWYW7VJX
-        yhyvlOKxkjg0twaCH2fp4fjBU+DMUPJ3kNPjuOsacZZWAZ+xrgJ9JXv7/akKIdWxrls5DXgfpU87E
-        eQT1cZyX4+yNpZBCtP+moPbnXDOYLTwpdr6p37FiH/BfjURSfu6BObNi1jef0hOl3BRHNT5bYE6+j
-        +NS805UA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ojMys-007jm1-O0; Fri, 14 Oct 2022 15:52:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7E68A30008D;
-        Fri, 14 Oct 2022 17:52:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 67EF92C1B1259; Fri, 14 Oct 2022 17:52:08 +0200 (CEST)
-Date:   Fri, 14 Oct 2022 17:52:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 17/39] mm: Fixup places that call pte_mkwrite()
- directly
-Message-ID: <Y0mFqGvtSrw/kS4b@hirez.programming.kicks-ass.net>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-18-rick.p.edgecombe@intel.com>
+        Fri, 14 Oct 2022 11:52:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC65D1C6BE4;
+        Fri, 14 Oct 2022 08:52:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85821B82367;
+        Fri, 14 Oct 2022 15:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E3BC433C1;
+        Fri, 14 Oct 2022 15:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665762741;
+        bh=KB5yV/ErkZcjUTijfeVO4kmN9+d0J7rzX42NU+CHSZQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hxizLyBqwBpsL+YmB2RwdnEZTjpyezWCDbKR7q1KII+P8VEY9GFyFVLvV++i2CF+q
+         Oa5C36dTpZBS7h88v1RfNl1iWDGwnd+LOmBn+Lv/ZDhnW8+/B+p/+sK23MNerq72kn
+         UhVXXzkJVLk9+bvkF2W6jf8K0vKUP4fzSMohPgi3jHs7POU1+xdaMKuBliqmejsk/g
+         6JADOjOW9/4mtTLfy6gYtAR/BI/XImxUzyiJBTLhIg63feU5IhvROUn61T+y/yahuY
+         y39pJhVt+iIVjfCkAJIUPhe8YNQ6jDhxQ7AmVay7V7GexMTx9CCHqZy1UVU6c8fxV+
+         16FViRMPq8F5Q==
+Date:   Fri, 14 Oct 2022 08:52:19 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, linux@rasmusvillemoes.dk,
+        yury.norov@gmail.com, caraitto@google.com, willemb@google.com,
+        jonolson@google.com, amritha.nambiar@intel.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2 1/2] net: Fixup netif_attrmask_next_and warning
+Message-ID: <20221014085219.635d25cd@kernel.org>
+In-Reply-To: <CAJF2gTQyMHNHLizeU-gvUdA5hRLUWxvHXuVVqSoPg3M_WxPPdw@mail.gmail.com>
+References: <20221014030459.3272206-1-guoren@kernel.org>
+        <20221014030459.3272206-2-guoren@kernel.org>
+        <20221013203544.110a143c@kernel.org>
+        <CAJF2gTQyMHNHLizeU-gvUdA5hRLUWxvHXuVVqSoPg3M_WxPPdw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-18-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:14PM -0700, Rick Edgecombe wrote:
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index 7327b2573f7c..b49372c7de41 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -63,6 +63,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
->  	int ret;
->  	pte_t _dst_pte, *dst_pte;
->  	bool writable = dst_vma->vm_flags & VM_WRITE;
-> +	bool shstk = dst_vma->vm_flags & VM_SHADOW_STACK;
->  	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
->  	bool page_in_cache = page->mapping;
->  	spinlock_t *ptl;
-> @@ -83,9 +84,12 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
->  		writable = false;
->  	}
->  
-> -	if (writable)
-> -		_dst_pte = pte_mkwrite(_dst_pte);
-> -	else
-> +	if (writable) {
-> +		if (shstk)
-> +			_dst_pte = pte_mkwrite_shstk(_dst_pte);
-> +		else
-> +			_dst_pte = pte_mkwrite(_dst_pte);
-> +	} else
->  		/*
->  		 * We need this to make sure write bit removed; as mk_pte()
->  		 * could return a pte with write bit set.
+On Fri, 14 Oct 2022 14:38:56 +0800 Guo Ren wrote:
+> > This does not look equivalent, have you tested it?
+> >
+> > nr_ids is unsigned, doesn't it mean we'll never enter the loop?  
+> 
+> Yes, you are right. Any unsigned int would break the result.
+> (gdb) p (int)-1 < (int)2
+> $1 = 1
+> (gdb) p (int)-1 < (unsigned int)2
+> $2 = 0
+> (gdb) p (unsigned int)-1 < (int)2
+> $4 = 0
+> 
+> So it should be:
+>  -     for (j = -1; j = netif_attrmask_next_and(j, online_mask, mask, nr_ids),
+>  -          j < nr_ids;) {
+>  +     for (j = -1; j < (int)nr_ids;
+>  +          j = netif_attrmask_next_and(j, online_mask, mask, nr_ids)) {
+> 
+> Right? Of cause, nr_ids couldn't be 0xffffffff (-1).
 
-Urgh.. that's unfortunate. But yeah, I don't see a way to make that
-pretty either.
+No. You can't enter the loop with -1 as the iterator either. 
+Let's move on.
