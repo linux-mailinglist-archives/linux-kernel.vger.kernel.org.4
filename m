@@ -2,144 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DC65FE9A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B242B5FE9A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJNHfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S229967AbiJNHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiJNHfb (ORCPT
+        with ESMTP id S230011AbiJNHfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:35:31 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91278767C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:35:28 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fy4so8685702ejc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IH2CpfxEnRPwyicRs6j2xX+M8g2xRDD94KWbgPm56UQ=;
-        b=WTM16MpNXdwQMpkJIl9siCRyn8/P6hXgvjHqcZ4wHq5Ylr095mkKLwo1MssyAHb7T7
-         AZ5gQWH3xEMbjuplmB1Uid8GIqzqZfEXRK8/iMRtKGULNKpCsrObFi7WT4rwGIFJUdY3
-         amOeedWqg0fJzgTFTD8EwKoqNV7lQdmQoJAURykshfJQenO8eOMtFzB9YXutzL3aChr9
-         xyfeKZNWy/8vpE+6OIFyve7NhEBlAywrTSC/npVIJYX+OPuX4svHHSWXxPPWbKnu4sUA
-         HJZAKXcR17CXxJolDRAO0v9IHKe0QPMMGaYqMRopo5bUynVUGtt7bmljiTj751SQiGk7
-         MeAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IH2CpfxEnRPwyicRs6j2xX+M8g2xRDD94KWbgPm56UQ=;
-        b=LWdeOQ6Me8qiQHM1uw2K/tkqOx+Qw8XKyEwZj9+z9lhNg+czBwnY/DQaW6lTZoF/w6
-         70SG3pUBic98Q70/k4Kjm/IG+WXu2RSO9qt/uKxOapDOvYY6gRXdJ8Ms4drlkR1MREd0
-         kIdkkLzlArPkeRg+kW6LSupJGda1mNn6k6Fz2Z6GXTelm+Yhw61/xH8dpsPBhwBqyy2g
-         kRSb6x591gb+v5Kg6cG1M8hpx0cCJpOGLOX5WluMvosP8wK5+4BYoxVHjITXBpO0nq2v
-         Y9fXa/CTi4S1ISUFT9h8bjv3YzKu05o+Bn89h5iCg7l4p78BDZkH0PlUHrmYriRnTzmH
-         WybA==
-X-Gm-Message-State: ACrzQf0E6rJY8DAN3izH5Cta5dOszuIXvnZDcAgW5d2I7nWsOr+kmk0p
-        fUwhaqVwDnWefzZQwdcYttc=
-X-Google-Smtp-Source: AMsMyM5tm2UqwC7RYDcv5cU9uJmlRMFT3E8NR+6T0bg+FpAoctHGfjZtODhQ0PuioODwiwWi3zZivQ==
-X-Received: by 2002:a17:906:9c82:b0:781:5752:4f2b with SMTP id fj2-20020a1709069c8200b0078157524f2bmr2483158ejc.561.1665732926818;
-        Fri, 14 Oct 2022 00:35:26 -0700 (PDT)
-Received: from [192.168.1.93] (adsl-9.109.242.227.tellas.gr. [109.242.227.9])
-        by smtp.gmail.com with ESMTPSA id p13-20020a17090653cd00b0078d175d6dc5sm1040479ejo.201.2022.10.14.00.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 00:35:26 -0700 (PDT)
-Message-ID: <ae26a54b-ece5-f8a3-2331-f7e495ecceea@gmail.com>
-Date:   Fri, 14 Oct 2022 10:35:24 +0300
+        Fri, 14 Oct 2022 03:35:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106558C006;
+        Fri, 14 Oct 2022 00:35:34 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 84E7B6602331;
+        Fri, 14 Oct 2022 08:35:31 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665732932;
+        bh=tSXD9lC4lmzBzTd508v0re7W/dlGI2rWfX0PdDrA9IQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UpiHRazV8w0iYoVneXWhaonVxxKK5QquHlp8rFS1PKQ8p2sejYC1S4/cs6DzyWXqg
+         LEL4nbzGj5mhRzN9snpvfZqOpDUNOv2hCLJK98MeqNj8EZJMHDechSiVKHlrj+5A7i
+         3J2D7gwfrSs6MwtQKsvHz4LXuV+f6KYrpDPhbBUnovqsQHkaAB0pX4HhE63w24xqes
+         AGqM37qQuoifrrTq5JcSvbxH1WEnTuawBtr9Yy29yZ43KloJ8bt0Pb8Wq1ySf5AYvm
+         6hFqfYI58WYMZeAW6s1kqZm9VPoHjevaBY9rO0r2KTiJd4j8L/X5zygqwHNVRpyi59
+         ITmXcLAcHX23g==
+Message-ID: <96ab6836-4650-ee53-a0c9-54b8328b8667@collabora.com>
+Date:   Fri, 14 Oct 2022 09:35:28 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 1/2] xen/virtio: Handle cases when page offset >
- PAGE_SIZE properly
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 6/8] arm64: dts: mt2712-evb: Fix usb vbus regulators unit
+ names
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>, matthias.bgg@gmail.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sam.shih@mediatek.com, hanks.chen@mediatek.com,
+        weiyi.lu@mediatek.com, zhiyong.tao@mediatek.com,
+        andrew-sh.cheng@mediatek.com, viresh.kumar@linaro.org,
+        fparent@baylibre.com, mars.cheng@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221013152212.416661-1-angelogioacchino.delregno@collabora.com>
+ <20221013152212.416661-7-angelogioacchino.delregno@collabora.com>
+ <3b7fc7414f282ca044c24dae280f9bc9533a5b7b.camel@mediatek.com>
 Content-Language: en-US
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-References: <20221008151013.2537826-1-olekstysh@gmail.com>
- <20221008151013.2537826-2-olekstysh@gmail.com>
-From:   Xenia Ragiadakou <burzalodowa@gmail.com>
-In-Reply-To: <20221008151013.2537826-2-olekstysh@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <3b7fc7414f282ca044c24dae280f9bc9533a5b7b.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/8/22 18:10, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Il 14/10/22 04:43, Chunfeng Yun ha scritto:
+> On Thu, 2022-10-13 at 17:22 +0200, AngeloGioacchino Del Regno wrote:
+>> Update the names to regulator-usb-p{0-3}-vbus to fix
+>> unit_address_vs_reg
+>> warnings for those.
+>>
+>> Fixes: 1724f4cc5133 ("arm64: dts: Add USB3 related nodes for MT2712")
+>> Signed-off-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt2712-evb.dts | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
+>> b/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
+>> index 638908773706..d31a194124c9 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
+>> +++ b/arch/arm64/boot/dts/mediatek/mt2712-evb.dts
+>> @@ -50,7 +50,7 @@ extcon_usb1: extcon_iddig1 {
+>>   		id-gpio = <&pio 14 GPIO_ACTIVE_HIGH>;
+>>   	};
+>>   
+>> -	usb_p0_vbus: regulator@2 {
+>> +	usb_p0_vbus: regulator-usb-p0-vbus {
+> Can we modify dt-binding of fixed regulator instead of changing the
+> node name,
+> since all nodes using fixed regulator may need be changed.
 > 
-> Passed to xen_grant_dma_map_page() offset in the page
-> can be > PAGE_SIZE even if the guest uses the same page granularity
-> as Xen (4KB).
-> 
-> Before current patch, if such case happened we ended up providing
-> grants for the whole region in xen_grant_dma_map_page() which
-> was really unnecessary. The more, we ended up not releasing all
-> grants which represented that region in xen_grant_dma_unmap_page().
-> 
-> Current patch updates the code to be able to deal with such cases.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Reviewed-by: Xenia Ragiadakou <burzalodowa@gmail.com>
+These regulators have no MMIO, nor need any index, so it would be simply
+wrong to change the binding and leave them as they are here in the devicetree.
 
-> ---
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: Xenia Ragiadakou <burzalodowa@gmail.com>
-> 
-> Changes V1 -> V2:
->     - s/gfn_offset/pfn_offset
->     - clarify gfn calculation when granting a page
-> 
-> Previous discussion is at:
-> https://lore.kernel.org/lkml/20221007132736.2275574-1-olekstysh@gmail.com/
-> ---
->   drivers/xen/grant-dma-ops.c | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index c66f56d24013..1d018e3a68a0 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -168,7 +168,9 @@ static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
->   					 unsigned long attrs)
->   {
->   	struct xen_grant_dma_data *data;
-> -	unsigned int i, n_pages = PFN_UP(offset + size);
-> +	unsigned long dma_offset = offset_in_page(offset),
-> +			pfn_offset = PFN_DOWN(offset);
-> +	unsigned int i, n_pages = PFN_UP(dma_offset + size);
->   	grant_ref_t grant;
->   	dma_addr_t dma_handle;
->   
-> @@ -187,10 +189,11 @@ static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
->   
->   	for (i = 0; i < n_pages; i++) {
->   		gnttab_grant_foreign_access_ref(grant + i, data->backend_domid,
-> -				xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
-> +				pfn_to_gfn(page_to_xen_pfn(page) + i + pfn_offset),
-> +				dir == DMA_TO_DEVICE);
->   	}
->   
-> -	dma_handle = grant_to_dma(grant) + offset;
-> +	dma_handle = grant_to_dma(grant) + dma_offset;
->   
->   	return dma_handle;
->   }
-
--- 
-Xenia
+Regards,
+Angelo
