@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9843D5FF3E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704075FF3ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiJNTBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 15:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S231211AbiJNTDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 15:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiJNTAz (ORCPT
+        with ESMTP id S230305AbiJNTDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 15:00:55 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4900F6148
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:00:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a26so12450145ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:00:53 -0700 (PDT)
+        Fri, 14 Oct 2022 15:03:00 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B28A1905DD
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:02:59 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id m6so5795386pfb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 12:02:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kXobvSQVt9q6I8i2aGg0lLZQfL1YP6gSaNYsr3Rxk60=;
-        b=MImgUmR/yHX1E0wPk6/pe8Y9ZukXGsPrzZUJoI7er6YIzUUX9PGYs1Kkqnh+rjcz5H
-         PAQDUFhnB7zWElUEIj2xnieF7UCB8cwG17+EWsy5j7tXXUXzrTd+CiqWw2iA59Z24k8X
-         H9fgPbgfYVqLJeVTtvnZ/IoqLkGIE+MmVC0S97WsP8BVr1Qat0sc3VW4IUgNGP1u9ZjQ
-         oQWCmuyxRrcs7hAfBJDMXVtW8KkyykN3GS5CctUlkbKzRDpivPeut160BffgdjC+AIh4
-         HraRHKrwWPry6MMeIQq3OkjmBsph6ZAbZl5VQ3yhLpvfkQZ33tCTHj6zLRMVLgx+bM+1
-         3ruQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=93SM5edoQTmh30dhmcftbv07FMloClt4sRz/Es4IFlM=;
+        b=BUJRV0Pc2cbfpCvcp0VnINHf8OFz/twYIlfpd4Oyf50KGIddch6YqP9L/dp6C+D7Md
+         GmPFvjkicX1rvEyRJDsvivlcJW5pBFTP2t1E/IBV3J9JoNBff6RYngi9r7psUHt8UOGR
+         ruYq+PfEDjUWW1GkfJwZiSah0WpONl7pW00iqVCpZ0jraczJaw0Iaz08dPZus3Msxg4Z
+         ss8BCwyflYryxfQ3BV2WEcYL1nRSsT63Dg9W8Y4wlKimRoUha2ibmRsVNUcy9PD0Grsc
+         OPtdEtjlbt0fKRZ3Q9s9hyEsPjyzlQTMJEiTdHaDM561/iCSmwZ420LAJRIBk7iW8VL7
+         25QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kXobvSQVt9q6I8i2aGg0lLZQfL1YP6gSaNYsr3Rxk60=;
-        b=emCH9cSWV/hezs6jdcC2+o7IKmRPYfINfpBjR1FKX80YCfT/8XkiCj1x0e/4dP8GV0
-         1qRDAVyp1V+qufU7bgPLpUHN6seBNSYu/l74+Kxwp3hwgc1iVBpfe5qsHLMB7Hr/ols+
-         rAhPQ2DqBRL03dSjcu0P82OSfvnCAN0V5Q9l9Oz9fiCege8Tr5kJW2Sv4+/g6a6EJT0q
-         2faYEz4yjCG6xKQtsQRAwL9QS8uavBQM3MY4EWCHuk8uTe7TAjfQAStRTqI3432KcK6I
-         XTE6gOh0GvMRLIXS6MHEHdM/hDxOKlhUrc2RuMgn6UB1+AG2MZVVzettRzTjKbKWYaRw
-         H8wA==
-X-Gm-Message-State: ACrzQf0BCpIxREwPfBk6e8fvq9y4qRVYeq8tLJhEjrlPEfKBtHpoKJlV
-        3D8k26SgfgGrRTfFOu6lYUo=
-X-Google-Smtp-Source: AMsMyM7kttQMMDCGdRoDZGbNC9xVlTlXZ2gPlhBicHGv49oUodGeRkXKffWrQvK809oBpVw5XkBmow==
-X-Received: by 2002:a17:907:94c3:b0:78e:2866:f89f with SMTP id dn3-20020a17090794c300b0078e2866f89fmr2266274ejc.617.1665774052116;
-        Fri, 14 Oct 2022 12:00:52 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f3e:6a24:d9ca:fb25:65a1:90fa? (p200300c78f3e6a24d9cafb2565a190fa.dip0.t-ipconnect.de. [2003:c7:8f3e:6a24:d9ca:fb25:65a1:90fa])
-        by smtp.gmail.com with ESMTPSA id v25-20020aa7dbd9000000b00456c6b4b777sm2199943edt.69.2022.10.14.12.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 12:00:51 -0700 (PDT)
-Message-ID: <38990e85-b74f-0910-8d64-ad614c3bd8e4@gmail.com>
-Date:   Fri, 14 Oct 2022 21:00:50 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=93SM5edoQTmh30dhmcftbv07FMloClt4sRz/Es4IFlM=;
+        b=zoc12WFbZbD8OOmkQsAI3lRBv75gB+me3XTLvjZzbwSH2w7V3kcuYJBKN8JsMt5pgi
+         EK8fWc0trMkCfyaUGyBOkVuo+suM2qe1MHXR4ujdLrGRh/eGIuyLV3bC0mIQirYjbfT/
+         ejcWJ2nCqrYc97MzMjN99q3LwlXp20VAoGO9yWUC/b0RFhKHpeTXIP3G76MEsvh7HrfO
+         H+gUOElGisHR0weHWMb6vjbso/q1Hy5Qw4GDL2BQ86QDAAOgV31hStaAcuEqU1DWupSt
+         Wc4khmFdeon+XiqtSou5t2tPs4PaxKBOOK3wS3Er+O8Jl5Hj2U7azu3mxLC6uuMJjKzU
+         m+pw==
+X-Gm-Message-State: ACrzQf16pE3OtAQvx09sVCjcFPZy5GVQUWJH3bdtUvC9U1VPLfWG3oTz
+        Tdkv38eA0YHyFJ/SDF3Ov7yKSdAd5ZsuYg==
+X-Google-Smtp-Source: AMsMyM71eRcCLDDCqpb7XXz4/MQpa6Z2VN36ZgDsI/P22mjS9jZp1Izpx/9ABooVI5nyhiKSWq3Tsw==
+X-Received: by 2002:a63:454d:0:b0:43c:e834:ec0 with SMTP id u13-20020a63454d000000b0043ce8340ec0mr5999924pgk.270.1665774178987;
+        Fri, 14 Oct 2022 12:02:58 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g17-20020aa79dd1000000b0053e5daf1a25sm2087262pfq.45.2022.10.14.12.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 12:02:58 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 19:02:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        David Matlack <dmatlack@google.com>,
+        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 0/5] dirty_log_perf_test vCPU pinning
+Message-ID: <Y0myXiIjlT8pYyr8@google.com>
+References: <20221010220538.1154054-1-vipinsh@google.com>
+ <DS0PR11MB63735576A8FBF80738FF9B76DC249@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Y0mPqNRSgpArgyS8@google.com>
+ <CALzav=dU2-3avKGT2-AxO8d_uVH9bmYaO=ym8pPFM8esuSWP=A@mail.gmail.com>
+ <CAHVum0d2Jfr=WVxKxvnmwGKzPfV3vN5dbz11=rdcW6qoSoobew@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/4] Staging: rtl8192e: make alignment match open
- parenthesis
-Content-Language: en-US
-To:     Anjandev Momi <anjan@momi.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221014081839.23902-1-anjan@momi.ca>
- <20221014081839.23902-4-anjan@momi.ca>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221014081839.23902-4-anjan@momi.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHVum0d2Jfr=WVxKxvnmwGKzPfV3vN5dbz11=rdcW6qoSoobew@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,67 +80,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 10:18, Anjandev Momi wrote:
-> This patch removes the following checks generated by checkpatch.pl:
+On Fri, Oct 14, 2022, Vipin Sharma wrote:
+> On Fri, Oct 14, 2022 at 9:55 AM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Fri, Oct 14, 2022 at 9:34 AM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > On Fri, Oct 14, 2022, Wang, Wei W wrote:
+> > > > Just curious why not re-using the existing tools (e.g. taskset) to do the pinning?
+> > >
+> > > IIUC, you're suggesting the test give tasks meaningful names so that the user can
+> > > do taskset on the appropriate tasks?  The goal is to ensure vCPUs are pinned before
+> > > they do any meaningful work.  I don't see how that can be accomplished with taskset
+> > > without some form of hook in the test to effectively pause the test until the user
+> > > (or some run script) is ready to continue.
+> >
+> > A taskset approach would also be more difficult to incorporate into
+> > automated runs of dirty_log_perf_test.
+> >
+> > >
+> > > Pinning aside, naming the threads is a great idea!  That would definitely help
+> > > debug, e.g. if one vCPU gets stuck or is lagging behind.
+> >
+> > +1
 > 
-> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:261: CHECK:
-> 	Alignment should match open parenthesis
-> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:284: CHECK:
-> 	Alignment should match open parenthesis
-> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:421: CHECK:
-> 	Alignment should match open parenthesis
-> 	./drivers/staging/rtl8192e/rtl819x_BAProc.c:441: CHECK:
-> 	Alignment should match open parenthesis
+> I also like the idea.
 > 
-> Signed-off-by: Anjandev Momi <anjan@momi.ca>
-> ---
->   drivers/staging/rtl8192e/rtl819x_BAProc.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> index f36c24c2a..8d92b3426 100644
-> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> @@ -258,7 +258,7 @@ int rtllib_rx_ADDBAReq(struct rtllib_device *ieee, struct sk_buff *skb)
->   		goto OnADDBAReq_Fail;
->   	}
->   	if (!GetTs(ieee, (struct ts_common_info **)&pTS, dst,
-> -	    (u8)(pBaParamSet->field.tid), RX_DIR, true)) {
-> +		   (u8)(pBaParamSet->field.tid), RX_DIR, true)) {
->   		rc = ADDBA_STATUS_REFUSED;
->   		netdev_warn(ieee->dev, "%s(): can't get TS\n", __func__);
->   		goto OnADDBAReq_Fail;
-> @@ -281,7 +281,7 @@ int rtllib_rx_ADDBAReq(struct rtllib_device *ieee, struct sk_buff *skb)
->   	pBA->ba_start_seq_ctrl = *pBaStartSeqCtrl;
->   
->   	if (ieee->GetHalfNmodeSupportByAPsHandler(ieee->dev) ||
-> -	   (ieee->pHTInfo->IOTAction & HT_IOT_ACT_ALLOW_PEER_AGG_ONE_PKT))
+> Sean:
+> Do you want a v6 with the naming patch or you will be fine taking v5,
+> if there are no changes needed in v5, and I can send a separate patch
+> for naming?
 
-Did a git pull 2 hours ago.
-Cannot apply this patch because IOTAction was already renamed.
-
-Bye Philipp
-
-> +	    (ieee->pHTInfo->IOTAction & HT_IOT_ACT_ALLOW_PEER_AGG_ONE_PKT))
->   		pBA->ba_param_set.field.buffer_size = 1;
->   	else
->   		pBA->ba_param_set.field.buffer_size = 32;
-> @@ -418,7 +418,7 @@ int rtllib_rx_DELBA(struct rtllib_device *ieee, struct sk_buff *skb)
->   	}
->   
->   	if (!ieee->current_network.qos_data.active ||
-> -		!ieee->pHTInfo->bCurrentHTSupport) {
-> +	    !ieee->pHTInfo->bCurrentHTSupport) {
->   		netdev_warn(ieee->dev,
->   			    "received DELBA while QOS or HT is not supported(%d, %d)\n",
->   			    ieee->current_network. qos_data.active,
-> @@ -438,7 +438,7 @@ int rtllib_rx_DELBA(struct rtllib_device *ieee, struct sk_buff *skb)
->   		struct rx_ts_record *pRxTs;
->   
->   		if (!GetTs(ieee, (struct ts_common_info **)&pRxTs, dst,
-> -		    (u8)pDelBaParamSet->field.tid, RX_DIR, false)) {
-> +			   (u8)pDelBaParamSet->field.tid, RX_DIR, false)) {
->   			netdev_warn(ieee->dev,
->   				    "%s(): can't get TS for RXTS. dst:%pM TID:%d\n",
->   				    __func__, dst,
-
+Definitely separate, this is an orthogonal change and I don't think there will be
+any conflict.  If there is a conflict, it will be trivial to resolve.  But since
+Wei provided a more or less complete patch, let's let Wei post a formal patch
+(unless he doesn't want to).
