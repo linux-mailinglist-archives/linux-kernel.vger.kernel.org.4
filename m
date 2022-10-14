@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515F55FF5E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29505FF5E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJNWD3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Oct 2022 18:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S229607AbiJNWEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiJNWDZ (ORCPT
+        with ESMTP id S229518AbiJNWEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:03:25 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432D3176520
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:03:23 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-JETZyr0OPF-X3dTWyLgaXA-1; Fri, 14 Oct 2022 23:03:20 +0100
-X-MC-Unique: JETZyr0OPF-X3dTWyLgaXA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 14 Oct
- 2022 23:03:18 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 14 Oct 2022 23:03:18 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Lutomirski' <luto@kernel.org>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>
-CC:     Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jorge Merlino <jorge.merlino@canonical.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "John Johansen" <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        "Ondrej Mosnacek" <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Thread-Topic: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Thread-Index: AQHY33u3rva59bT1H02MahRCUmFfoq4Ocehg
-Date:   Fri, 14 Oct 2022 22:03:18 +0000
-Message-ID: <d2a6ccdd8a734d36ae88866a4c16019b@AcuMS.aculab.com>
-References: <20221006082735.1321612-1-keescook@chromium.org>
- <20221006082735.1321612-2-keescook@chromium.org>
- <20221006090506.paqjf537cox7lqrq@wittgenstein>
- <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
- <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
-In-Reply-To: <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 14 Oct 2022 18:04:23 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1278176520;
+        Fri, 14 Oct 2022 15:04:21 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 18A7B240003;
+        Fri, 14 Oct 2022 22:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665785060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=C9owIX0xWqA1XVKbswZj12TMV1FoncD3STWfIWlYGAQ=;
+        b=pGSOQk8zSt+BSo853hKDVV7Gs1fL/8aPpx/ENYQ/fV25zeP4unxYa6wbxGQBdwE10up46K
+        UGCNc407OBE9yWU0tiaV02kNgsdCPhfQfUEMfixvLbvB3tS0OTq0S64+Kq+rrtvCB/0iXd
+        Lm1KrHqcF2UeC3Lv5fyiWER5l79LHTOz2NhSUbR4lztDjMY2iCGAmXwZtl8gsKtwkGowAB
+        NLE/vgBdh4WfWEQWUUWHpywirEnAzJhOZh8acj8jOqAf6aMIHjEED7+67kqHR55F8WgbDG
+        CQCnIjkIGirtvAm9T/p0j9cp6Yc5Ar7SDedIL5QIpW8QSlVM1zpqtWpRwR/Pew==
+Date:   Sat, 15 Oct 2022 00:04:19 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 6.1
+Message-ID: <Y0nc49iertOPOB02@mail.local>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Lutomirski
-> Sent: 14 October 2022 04:18
-...
-> But seriously, this makes no sense at all.  It should not be possible to exec a program and then,
-> without ptrace, change its cwd out from under it.  Do we really need to preserve this behavior?
+Linus,
 
-it maybe ok if the exec'ed program also 'bought-in' to the
-fact that its cwd and open files might get changed.
-But imagine someone doing it to a login shell!
+Here is the RTC subsystem pull request for 6.1. A great rework of the
+isl12022 driver makes up the bulk of the changes. There is also an
+important fix for CMOS and then the usual small fixes.
 
-	David
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.1
+
+for you to fetch changes up to e5f12a398371280649ccc9d6eb0b97fd42a5df98:
+
+  rtc: rv3028: Fix codestyle errors (2022-10-13 23:36:52 +0200)
+
+----------------------------------------------------------------
+RTC for 6.1
+
+Drivers:
+ - switch to devm_clk_get_enabled() where relevant
+ - cmos: event handler registration fix
+ - isl12022: code improvements
+
+----------------------------------------------------------------
+Bryan Brattlof (2):
+      rtc: k3: wait until the unlock field is not zero
+      rtc: k3: detect SoC to determine erratum fix
+
+Christophe JAILLET (4):
+      rtc: mxc: Use devm_clk_get_enabled() helper
+      rtc: mpfs: Use devm_clk_get_enabled() helper
+      rtc: jz4740: Use devm_clk_get_enabled() helper
+      rtc: k3: Use devm_clk_get_enabled() helper
+
+Colin Ian King (1):
+      rtc: ds1685: Fix spelling of function name in comment block
+
+Emmanuel Gil Peyrot (1):
+      rtc: gamecube: Always reset HW_SRNPROT after read
+
+Geert Uytterhoeven (1):
+      rtc: mpfs: Remove printing of stray CR
+
+Ke Sun (1):
+      rtc: rv3028: Fix codestyle errors
+
+Lin Yujun (1):
+      rtc: stmp3xxx: Add failure handling for stmp3xxx_wdt_register()
+
+Rafael J. Wysocki (1):
+      rtc: cmos: Fix event handler registration ordering issue
+
+Rasmus Villemoes (8):
+      rtc: isl12022: stop using deprecated devm_rtc_device_register()
+      rtc: isl12022: specify range_min and range_max
+      rtc: isl12022: drop a dev_info()
+      rtc: isl12022: simplify some expressions
+      rtc: isl12022: use %ptR
+      rtc: isl12022: use dev_set_drvdata() instead of i2c_set_clientdata()
+      rtc: isl12022: drop redundant write to HR register
+      rtc: isl12022: switch to using regmap API
+
+ drivers/rtc/Kconfig        |   1 +
+ drivers/rtc/rtc-cmos.c     |  29 +++++---
+ drivers/rtc/rtc-ds1685.c   |   2 +-
+ drivers/rtc/rtc-gamecube.c |  11 ++--
+ drivers/rtc/rtc-isl12022.c | 161 +++++++++++----------------------------------
+ drivers/rtc/rtc-jz4740.c   |  25 +------
+ drivers/rtc/rtc-mpfs.c     |  26 ++------
+ drivers/rtc/rtc-mxc.c      |  27 +-------
+ drivers/rtc/rtc-rv3028.c   |   5 +-
+ drivers/rtc/rtc-stmp3xxx.c |   2 +
+ drivers/rtc/rtc-ti-k3.c    |  56 ++++++----------
+ 11 files changed, 98 insertions(+), 247 deletions(-)
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
