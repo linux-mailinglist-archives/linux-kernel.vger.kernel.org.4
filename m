@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9AB5FEBA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7E15FEBAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiJNJ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S229906AbiJNJ32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJNJ3O (ORCPT
+        with ESMTP id S229700AbiJNJ3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:29:14 -0400
+        Fri, 14 Oct 2022 05:29:20 -0400
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485231C5A66;
-        Fri, 14 Oct 2022 02:29:11 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E75PjY019894;
-        Fri, 14 Oct 2022 11:28:59 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D128F1C5A5F;
+        Fri, 14 Oct 2022 02:29:14 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E8cV98008909;
+        Fri, 14 Oct 2022 11:29:04 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=VxRBgimP26JpPfojcnUGD1RWSdCB/e3xLalPvah99dU=;
- b=fWW/WAYpFqeXWGSB1//gnfGAK6IvgJhhU2nVigoxlgqw6sSl206XTd2B9R4QwMVpaE+a
- F30pKSyZcZn7Z6pBT4AQxQQbO18kp4JXK177NXtFhLLZPCaeys3vHF76lG63FsTkj4j9
- +yFvLwXgqEh70axC0F8oc2mwfK5upH4SXITgPo9v2EofpB/IHmamk/3BQXtfTTJAAWS/
- r+w5lWnubsZ5ryjVtcRJt2ymslPlN/sFlEfvkHT3XEyKQjn6GpdenFicSqeR3L3BKTKo
- /72dmWSEay2LcaJGdgX8d1f887b+LbapGcCA1wtKsDObK/Pbg8gOE/6bjE5NxZGtfsL/ Rw== 
+ bh=QJkdlha7hhplN6y54cwgCZoQ4JVyU6BQmPtqvBb5nxg=;
+ b=xwa1gqhy7Kk33JnzpoPn/KfujLiN38L7VlvGFC4qjpFyp8Tov86Am3dWXHNSJvvW1bce
+ r9Tz+sYtum+ijxl0ZeEt0q8vJ5Zz19hqRrypvY92JqETNi2pv0var4GqikMaMWHSMUbo
+ 4+foQCJQq1HKhLJQEnN+lrnYE3qpehK0+lfvxjaS8aMXaMNnSQPLpf+Ck34DLHldr/sP
+ MBXDs7j/pkC45OB9hFQJdTXtxVzGg3xA8bS+D39NcyCxVkXv65m70nswIO8OFJO2qHSb
+ iQofXktvdDRhtwJ5XFWJ+eXIDFM4Srk6diwwG5yY/LfxRauIqR5WHtyJd7DpLnXGPhLj nA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k5v4n7kgt-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3k6h7v7gt9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 11:28:59 +0200
+        Fri, 14 Oct 2022 11:29:04 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 68026100039;
-        Fri, 14 Oct 2022 11:28:55 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3118510002A;
+        Fri, 14 Oct 2022 11:29:00 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6198321A904;
-        Fri, 14 Oct 2022 11:28:55 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SHFDAG1NODE2.st.com (10.75.129.70)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2C34721A904;
+        Fri, 14 Oct 2022 11:29:00 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SHFDAG1NODE2.st.com (10.75.129.70)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Fri, 14 Oct
- 2022 11:28:52 +0200
+ 2022 11:28:56 +0200
 From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>
@@ -49,16 +49,16 @@ CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <fabrice.gasnier@foss.st.com>
-Subject: [PATCH 06/10] ARM: dts: stm32: enable USB HS phys on stm32mp135f-dk
-Date:   Fri, 14 Oct 2022 11:26:47 +0200
-Message-ID: <20221014092651.25202-7-fabrice.gasnier@foss.st.com>
+Subject: [PATCH 07/10] ARM: dts: stm32: enable USB Host EHCI on stm32mp135f-dk
+Date:   Fri, 14 Oct 2022 11:26:48 +0200
+Message-ID: <20221014092651.25202-8-fabrice.gasnier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221014092651.25202-1-fabrice.gasnier@foss.st.com>
 References: <20221014092651.25202-1-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
+X-Originating-IP: [10.75.127.44]
 X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
  (10.75.129.70)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -75,56 +75,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-USBPHYC manages the two USB High-Speed phys. port0 is used by USBH and
-port1 is used by USBOTG.
-Enable and tune both PHYs on stm32mp135f-dk.
+USBH Host EHCI controller manages the USB High-Speed hub controller IC
+offering Type-A CN5 & CN6 connectors available on stm32mp135f-dk.
+USB Host OHCI controller doesn't need to be enabled as Full-Speed and
+Low-Speed traffic will be managed by the hub.
+This USB2514B onboard hub is supplied by a 3v3 PMIC regulator.
 
 Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
 Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 ---
- arch/arm/boot/dts/stm32mp135f-dk.dts | 32 ++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ arch/arm/boot/dts/stm32mp135f-dk.dts | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-index 291f05a958fd..af87fb36eabc 100644
+index af87fb36eabc..02ff2bc664da 100644
 --- a/arch/arm/boot/dts/stm32mp135f-dk.dts
 +++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-@@ -144,3 +144,35 @@ &uart4 {
- 	pinctrl-0 = <&uart4_pins_a>;
+@@ -145,6 +145,19 @@ &uart4 {
  	status = "okay";
  };
-+
-+&usbphyc {
+ 
++&usbh_ehci {
++	phys = <&usbphyc_port0>;
 +	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	/* onboard HUB */
++	hub@1 {
++		compatible = "usb424,2514";
++		reg = <1>;
++		vdd-supply = <&v3v3_sw>;
++	};
 +};
 +
-+&usbphyc_port0 {
-+	phy-supply = <&vdd_usb>;
-+	st,current-boost-microamp = <1000>;
-+	st,decrease-hs-slew-rate;
-+	st,tune-hs-dc-level = <2>;
-+	st,enable-hs-rftime-reduction;
-+	st,trim-hs-current = <11>;
-+	st,trim-hs-impedance = <2>;
-+	st,tune-squelch-level = <1>;
-+	st,enable-hs-rx-gain-eq;
-+	st,no-hs-ftime-ctrl;
-+	st,no-lsfs-sc;
-+};
-+
-+&usbphyc_port1 {
-+	phy-supply = <&vdd_usb>;
-+	st,current-boost-microamp = <1000>;
-+	st,decrease-hs-slew-rate;
-+	st,tune-hs-dc-level = <2>;
-+	st,enable-hs-rftime-reduction;
-+	st,trim-hs-current = <11>;
-+	st,trim-hs-impedance = <2>;
-+	st,tune-squelch-level = <1>;
-+	st,enable-hs-rx-gain-eq;
-+	st,no-hs-ftime-ctrl;
-+	st,no-lsfs-sc;
-+};
+ &usbphyc {
+ 	status = "okay";
+ };
 -- 
 2.25.1
 
