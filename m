@@ -2,118 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78AA5FEEDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2D65FEECF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiJNNob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S229762AbiJNNmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJNNoZ (ORCPT
+        with ESMTP id S229749AbiJNNmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:44:25 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4B01CFC63;
-        Fri, 14 Oct 2022 06:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1665754876;
-    s=strato-dkim-0002; d=ibv-augsburg.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=3pB7WXwwUMURkXU3QEWf34QpwoK2MI1RffNpmhn/a1M=;
-    b=k9Bvgqy0oNImODQd+O/9q5JMI+eemxIVBVFBnwe7y6AhGBnCLmFsKQ4lyADmi87b9u
-    fi+yBXK9f/Dt4rM7qCztXFpeDijrAYdYQQkl9nnpWuErj/zf125NdCbWYTuJX07xV3om
-    x1LHxc8Rc+SvlTUqGrNYFnWRnGBuBqNeudm+ESdclIXs/iMXqWppWP+w1QOGjKhITAlW
-    Uh9frb4ZMkcsE2IhdGSTrj/y1Rx5v/KV9YNx12kF8EqlHSwPaYKISz9Iszg/dyqlnAY+
-    GCNpV0XqHJv+tSjA0sm0U+Br0w1fRsSNUS2ymDD5QxSCXqlP7lYk1eDTnymQ6TRR47Ag
-    5fFw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":KGMJfE6heLGk8b3w7Oa1fDtXwBjeDczIOHPRx8yNRKhFG/cxcP9dNdI9SxioDT8RvZMqtMfbyXFLOT+8odoEkA=="
-X-RZG-CLASS-ID: mo00
-Received: from JADEVM-DRA
-    by smtp.strato.de (RZmta 48.2.0 DYNA|AUTH)
-    with ESMTPSA id R6cb4ey9EDfFMag
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 14 Oct 2022 15:41:15 +0200 (CEST)
-Date:   Fri, 14 Oct 2022 15:41:14 +0200
-From:   Dominic Rath <dominic.rath@ibv-augsburg.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
-        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
-        vigneshr@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Alexander Bahle <bahle@ibv-augsburg.de>,
-        Dominic Rath <rath@ibv-augsburg.de>
-Subject: Re: [PATCH 1/3] dt-bindings: PCI: cdns: Add PHY latency properties
-Message-ID: <20221014134114.GA307620@JADEVM-DRA>
-References: <20221013062649.303184-1-dominic.rath@ibv-augsburg.de>
- <20221013062649.303184-2-dominic.rath@ibv-augsburg.de>
- <20221013191249.GA38183-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013191249.GA38183-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 09:42:04 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BDA1CBAA1;
+        Fri, 14 Oct 2022 06:42:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VS82WXR_1665754904;
+Received: from localhost.localdomain(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VS82WXR_1665754904)
+          by smtp.aliyun-inc.com;
+          Fri, 14 Oct 2022 21:41:56 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com
+Cc:     kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
+        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH V2 0/2] Support VMCOREINFO export for RISCV64
+Date:   Fri, 14 Oct 2022 21:41:37 +0800
+Message-Id: <20221014134139.5151-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 02:12:49PM -0500, Rob Herring wrote:
-> On Thu, Oct 13, 2022 at 08:26:47AM +0200, Dominic Rath wrote:
-> > From: Alexander Bahle <bahle@ibv-augsburg.de>
-> > 
-> > Add "cdns,tx-phy-latency-ps" and "cdns,rx-phy-latency-ps" DT bindings for
-> > setting the PCIe PHY latencies.
-> > The properties expect a list of uint32 PHY latencies in picoseconds for
-> > every supported speed starting at PCIe Gen1, e.g.:
-> > 
-> >   max-link-speed = <2>;
-> >   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
-> >   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
-> 
-> These are a property of the PHY or PCI host? Sounds like PHY to me and 
-> that should be in the PHY node. No reason the PCI driver can't go read 
-> PHY node properties.
+As disscussed in below patch set, the patch of 'describe VMCOREINFO export in Documentation'
+need to update according to Bagas's comments. 
+https://lore.kernel.org/linux-riscv/22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org/
 
-I'm actually not sure if this a property of the PHY, the PCIe host, or
-of the combination of the two.
+As others patches in above patch set already applied, so this patch set only contains below two
+patches.
 
-We thought about adding this property to the PHY, too, but we didn't
-know how to handle cases where a single PCIe host is linked with
-multiple PHYs for multi-lane configurations (see TI's AM65x for
-example). Which PHYs latency would you use to configure this PCIe RC?
+------
+Changes:
+   Fix commit message in patch 2: use "Document these RISCV64 exports above" instead of
+   "This patch just add the description of VMCOREINFO export for RISCV64."
+V1 -> V2:
+   Remove unnecessary overline above header text in patch 2.
 
-Personally I don't have a very strong opinion either way - we just
-didn't know any better than to put this into the PCIe host that needs
-it. If you think this is better put into the PHY node we can of course
-send a new version of this patch.
+Xianting Tian (2):
+  RISC-V: Add arch_crash_save_vmcoreinfo support
+  Documentation: kdump: describe VMCOREINFO export for RISCV64
 
-Is there any binding that specifies "generic" PCIe properties, similar
-to ethernet-phy.yaml? We couldn't find any.
+ .../admin-guide/kdump/vmcoreinfo.rst          | 30 ++++++++++++++++++
+ arch/riscv/kernel/Makefile                    |  1 +
+ arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+ 3 files changed, 61 insertions(+)
+ create mode 100644 arch/riscv/kernel/crash_core.c
 
-I guess in the AM64x case the "PHY" is serdes0_pcie_link below serdes0:
+-- 
+2.17.1
 
-&serdes0 {
-        serdes0_pcie_link: phy@0 {
-	...
-
-This seems to be described by bindings/phy/phy-cadence-torrent.yaml.
-
-Should we add a generic (without cdns) tx/rx-phy-latency-ps property
-there?
-
-> If PTM is a standard PCIe thing, then I don't think these should be 
-> Cadence specific. IOW, drop 'cdns'. 
-
-Yes, it is a standard PCIe thing, but we haven't seen that many
-implementations yet, so we didn't want to pretend to know what this
-looks like in the generic case. We can of course drop 'cdns'.
-
-Best Regards,
-
-Dominic & Alexander
