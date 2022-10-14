@@ -2,227 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25AF5FEE9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7928E5FEEA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 15:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiJNN31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 09:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S229622AbiJNNb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 09:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiJNN3Z (ORCPT
+        with ESMTP id S229600AbiJNNbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 09:29:25 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2F91CC74E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 06:29:22 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221014132920epoutp02a588ce6459d0a63693c4a440d8019e61~d8pVuMe8B3255832558epoutp021
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:29:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221014132920epoutp02a588ce6459d0a63693c4a440d8019e61~d8pVuMe8B3255832558epoutp021
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665754160;
-        bh=gau0Rx4qcOQ3rT4lWYHFMjK50XkjZ2agqBB2/aIEa7g=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=lj24/r0pv+Dn5A/rR8qtssTEY7AsnxYAStLDQthEVjnNaQNGWtc+phLnptwmNWtDC
-         W2djPwyXz+T9xeXFbNpieqSw8ubwG5+30PcZtBeU8Sg7TdWXacWEMuRXPo9JmN2BYL
-         uYLmQuhAAb7BCinhKhd64jnv7HLG2TDU5tXPtU1s=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221014132920epcas5p1b7f564450bb2a8f7fac9b51fa98d5fc6~d8pVPEri22913429134epcas5p1O;
-        Fri, 14 Oct 2022 13:29:20 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.180]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MpnKn5GJ0z4x9Pr; Fri, 14 Oct
-        2022 13:29:17 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        19.8C.39477.D2469436; Fri, 14 Oct 2022 22:29:17 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221014132917epcas5p112f73a2fd3ff12a4c440a72bea3acafc~d8pScyjkr3159431594epcas5p1x;
-        Fri, 14 Oct 2022 13:29:17 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221014132917epsmtrp11e97d83823ec431b6ec2fe51c32028ee~d8pSauLD_2934329343epsmtrp1M;
-        Fri, 14 Oct 2022 13:29:17 +0000 (GMT)
-X-AuditID: b6c32a4a-259fb70000019a35-ec-6349642d279d
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        47.FC.14392.D2469436; Fri, 14 Oct 2022 22:29:17 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221014132915epsmtip25d9d1732a8aeb0ebf9513feabe10abb8~d8pQXvVR01566515665epsmtip2f;
-        Fri, 14 Oct 2022 13:29:14 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Padmanabhan Rajanbabu'" <p.rajanbabu@samsung.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s.nawrocki@samsung.com>,
-        <perex@perex.cz>, <tiwai@suse.com>, <pankaj.dubey@samsung.com>,
-        <rcsekar@samsung.com>, <aswani.reddy@samsung.com>
-Cc:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20221014102151.108539-7-p.rajanbabu@samsung.com>
-Subject: RE: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
-Date:   Fri, 14 Oct 2022 18:59:13 +0530
-Message-ID: <00c301d8dfd0$f55ca230$e015e690$@samsung.com>
+        Fri, 14 Oct 2022 09:31:25 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7AC1C7104;
+        Fri, 14 Oct 2022 06:31:23 -0700 (PDT)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 29EDVAbm009635;
+        Fri, 14 Oct 2022 22:31:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29EDVAbm009635
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1665754271;
+        bh=eoO4dT7/oE91n2LdemDyH/9TSUzar9QMEDiS2eiitmQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ATiYKVcA4e0RZgOhzHxW9xgv1sxtWf++e8DH9R3JQ9uLDt6a3cqaZoN5roh7LV38L
+         qgMxVuPIN+uLvryPk8kqgft94DHItd8JK/4cBfo4f38am5XZag4ZX3aPC6P9fLU6Wf
+         RyiUHQSE5WpfCHdmrW5Vzl8MEPpqEGxoA1emP1xX6RlColJpIZ6bpBwORCZNlZXem7
+         1x806h4Zn5I7RJXxuhG05CmDvDULTSe/8zuZPIu+zLTkKnIZgE05dLLMizSVNwmLdD
+         PktZd95AeD2TFiywRCpw/tSSlcTZJSyw0Yw8h9J894NiwgLCyCziyZPfMKrWzDgVtD
+         pBlntivHho8kw==
+X-Nifty-SrcIP: [209.85.160.45]
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so5814250fac.11;
+        Fri, 14 Oct 2022 06:31:10 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0L7PBMCJYSAUkd5e+7h7LiaFRQ6RARmSnvQB4wYJcNA2cRPXVT
+        QeqbfMuMwDP/oZGs8gPk7Vvmgc/nC8eqSXQvPmc=
+X-Google-Smtp-Source: AMsMyM48rOk4RS1W8P1kWSTh8sIj+I5oTEn0bZai5fiS3d4C6lV+k5+G6w/5CYS/6+156Yhy0F/Kb6wcoz3pZhGxiuw=
+X-Received: by 2002:a05:6870:8a09:b0:132:554d:2f3d with SMTP id
+ p9-20020a0568708a0900b00132554d2f3dmr8390681oaq.194.1665754269746; Fri, 14
+ Oct 2022 06:31:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKFI9qd/qMOsyXBjKz4d8Q6MS4QvwItme6KAWz5sEismIUOIA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0xTVxTHc/teX4ux41lhXtgP27cYA6HQMqivRnSZZGuFLBgTdWhgb+UF
-        CO1r11cm858xt5UfOkHC0BaQX5M1bPxYKcrAdoZfDrehncAwwwgbslbEKSwwp6Rrebjx3+ee
-        8z0553vuvUJE7MEihbmMmTYxlI7ANqAX+6OiZLIsjVbeVrSdHPX08ci+zi4B+fn0DEbWDYzw
-        ydPeaYRcGi3mkTd7ajDy3HU3jxz85gDZ2PWXgCzpKeOTthvdfPJT14CA7L9fxCc7llvBa6Hq
-        jsUTmPpb222B2tFSgqknxy9javd8M6Y+7WwB6nbnGKpedLycJkzP25VDU1m0SUIzWkNWLpOd
-        RKQcyNybmaiUK2QKFbmDkDCUnk4iklPTZG/k6gLDE5L3KV1+IJRGsSwRt3uXyZBvpiU5Btac
-        RNDGLJ0xwRjLUno2n8mOZWjzToVcHp8YEL6Tl+Ot/RkxPgwv+GpoBC0EleJSECKEeAK8sdgo
-        KAUbhGK8F8CWOgfGHRYALL7uWsssAegZtPGelSxPOtdULgDLbzUA7uAD8N5vbiSownAZ7G6y
-        YEEOw5086HIcDYoQ3AKgy9MKgokQfDf0D1jRIG/GU+CJC9OrcRTfBlfKGgRBFuEq6O9YQTne
-        BIetM6uM4FvhpfkahBtJAh/fbeZzzV6H18aHME6zBfoGB1Y9QNwrhJ1NfgFXkAyt3nGU483w
-        3lXnWjwS+sosARYGWA0bn0Zy4Rw4/2U74HgPvDJagwYlCB4F23viuFbPwc+ezPC4ShEstqzt
-        dxv8+MHYWqMX4JmTJ/kcq+HCqSK0HEht64zZ1hmzrTNg+79ZPUBbQARtZPXZNJtojGfoY/9d
-        uNagd4DVtx29rxtMTz2M7QM8IegDUIgQYaI5QqMVi7KoD47TJkOmKV9Hs30gMbDtM0hkuNYQ
-        +ByMOVORoJInKJXKBNWrSgWxRdR0LlorxrMpM51H00ba9KyOJwyJLOTZzxbY29JFjjzvaL2k
-        QR/T8GCn55X2v/f48R+PfbIk7XokSZy9qndpnBnmjYYUccwRv2/o+Owh3cRLVSGVC2fLVXNT
-        s1XJnqoV44LlV2nnPx12w0F7akTqvitGoPwp7ODTQV2KI66yP74+5etH0nf3h4/pTjFWtg5s
-        t8/Q0uo/fTfp9OFQZDg07IuSykuXqxZUGZvenC6YKmz7IyL3fGpvCM9a6z58tOGuXd/61saJ
-        J79rjKUW2YfLymt11Na3DxMZkr3uudtzt5wFIzHy96p0sUee91XUa76b+IgGGNlsqyAfN9/v
-        bV1u3vFixR1v9RRzB6u5+Muh2u9/qD4fviSYJFA2h1JEIyaW+he9pIstZAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsWy7bCSvK5uimeywcJLnBZXLh5isji0eSu7
-        xdSHT9gs5h85x2rR9+Ihs8W3Kx1MFpd3zWGzmHF+H5PF0Y3BFou2fmG36NzVz2ox68IOVovW
-        vUfYLQ6/aWe12PB9LaMDv8eGz01sHjtn3WX32LSqk83jzrU9bB773i5j8+jbsorRY/2Wqywe
-        nzfJBXBEcdmkpOZklqUW6dslcGW8mHuJueCDaMXqY+dYGhinCHUxcnJICJhIfL+zha2LkYtD
-        SGA3o8T8/z/ZIRLSEtc3ToCyhSVW/nvODlH0nFGi++k7ZpAEm4CuxI7FbWDdIgIHmCQ6fm9g
-        BXGYBboYJY7/XckM0XKQUeLM6fWsIC2cAnYS/4/MZAGxhQW8JZqWPmQEsVkEVCX+9i8E28cr
-        YCnxf8NfFghbUOLkzCdgNrOAtkTvw1ZGCFteYvvbOcwQ9ylI/Hy6DGy+iICTxKlrx9ggasQl
-        Xh49wj6BUXgWklGzkIyahWTULCQtCxhZVjFKphYU56bnFhsWGOallusVJ+YWl+al6yXn525i
-        BEewluYOxu2rPugdYmTiYDzEKMHBrCTC+1rJM1mINyWxsiq1KD++qDQntfgQozQHi5I474Wu
-        k/FCAumJJanZqakFqUUwWSYOTqkGpm0zJHg0l8h1/D/VcXW68ObAdiGJzIY78h/3nL72i1Xu
-        tdqCY3MXz9O96c847XnWrM9xR20dyley57yb+3Jbvsajf4/exq54qF6lfucbZ7q6rAHz6x3L
-        XeYv4n3w6+9rt8cMb+zdWsz212bMXtLz4diijBAz6YOX9FYEbL/XWBf6VHPaW/nF/3SVq3a0
-        Vpb0f50gEeOxX/3FX/NK16sO8aHRbS8djNaJhESfPdWt8C7YVv2VmFth8x4Db8VFLQ4S24Rk
-        Xk7RP7AgdlFWyqx7DddbbfnLOzsOXHcwlTqWzTlPkU1hbcO+fVLLz9yTc75SznHWdT7rpZzp
-        gezVd0tlLHx2MppdENq9v2dyTMfu3UosxRmJhlrMRcWJAIuuKKtPAwAA
-X-CMS-MailID: 20221014132917epcas5p112f73a2fd3ff12a4c440a72bea3acafc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221014104915epcas5p12414b87ea127b2d5bf521556bf841b00
-References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
-        <CGME20221014104915epcas5p12414b87ea127b2d5bf521556bf841b00@epcas5p1.samsung.com>
-        <20221014102151.108539-7-p.rajanbabu@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221007203236.1750890-1-ndesaulniers@google.com>
+ <Y0htZDJoTuQegVQR@dev-arch.thelio-3990X> <20221013204151.skzateatn2keencb@google.com>
+ <CAKwvOdmoXLvfgEWx740mw+Uqy3nfPM=a7ywVeOJ5XivGT=yRog@mail.gmail.com>
+In-Reply-To: <CAKwvOdmoXLvfgEWx740mw+Uqy3nfPM=a7ywVeOJ5XivGT=yRog@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 14 Oct 2022 22:30:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT7yY3VL=so0+h=fsefT2QXsKHn4KjCFJ5VtGGkvSRjLg@mail.gmail.com>
+Message-ID: <CAK7LNAT7yY3VL=so0+h=fsefT2QXsKHn4KjCFJ5VtGGkvSRjLg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
->-----Original Message-----
->From: Padmanabhan Rajanbabu [mailto:p.rajanbabu@samsung.com]
->Sent: Friday, October 14, 2022 3:52 PM
->To: lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
->krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
->perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
->alim.akhtar@samsung.com; rcsekar@samsung.com;
->aswani.reddy@samsung.com
->Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
->kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org; Padmanabhan
->Rajanbabu <p.rajanbabu@samsung.com>
->Subject: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
+On Fri, Oct 14, 2022 at 5:54 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
->Add device tree node support for sound card on Tesla FSD board
+> On Thu, Oct 13, 2022 at 1:41 PM Fangrui Song <maskray@google.com> wrote:
+> >
+> > On 2022-10-13, Nathan Chancellor wrote:
+> > >On Fri, Oct 07, 2022 at 01:32:36PM -0700, Nick Desaulniers wrote:
+> > >> When debugging LLVM IR, it can be handy for clang to not discard value
+> > >> names used for local variables and parameters. Compare the generated IR.
+> > >>
+> > >> Implicit Default (-fdiscard-value-names):
+> > >>   define i32 @core_sys_select(i32 %0, ptr %1, ptr %2, ptr %3, ptr %4) {
+> > >>     %6 = alloca i64
+> > >>     %7 = alloca %struct.poll_wqueues
+> > >>     %8 = alloca [64 x i32]
+> > >>
+> > >> Explicit -fno-discard-value-names:
+> > >>   define i32 @core_sys_select(i32 %n, ptr %inp, ptr %outp, ptr %exp,
+> > >>                               ptr %end_time) {
+> > >>     %expire.i = alloca i64
+> > >>     %table.i = alloca %struct.poll_wqueues
+> > >>     %stack_fds = alloca [64 x i32]
+> > >>
+> > >> The rule for generating human readable LLVM IR (.ll) is only useful as a
+> > >> debugging feature:
+> > >>
+> > >> $ make LLVM=1 fs/select.ll
+> > >>
+> > >> Clang defaults to -fdiscard-value-names to save memory when generating
+> > >> LLVM IR. For debugging purposes, the improvement in readability at a
+> > >> cost of more verbose IR is a cost we're happy to pay.
+> >
+> > A LLVM_ENABLE_ASSEERTIONS=off build of Clang defaults to -fdiscard-value-names.
+> >
+> > A LLVM_ENABLE_ASSEERTIONS=on build of Clang defaults to -fno-discard-value-names.
+> >
+> > See clang/lib/Driver/ToolChains/Clang.cpp:5030
 >
->Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
->---
-> arch/arm64/boot/dts/tesla/fsd-evb.dts | 49
->+++++++++++++++++++++++++++
-> arch/arm64/boot/dts/tesla/fsd.dtsi    |  3 ++
-> 2 files changed, 52 insertions(+)
+> Thanks!
 >
->diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts
->b/arch/arm64/boot/dts/tesla/fsd-evb.dts
->index c0a4509499ab..ecaa3c2e3045 100644
->--- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
->+++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
->@@ -49,3 +49,52 @@
-> &tdm_1 {
-> 	status = "okay";
-> };
->+
->+&sound {
->+	compatible = "tesla,fsd-sndcard";
->+	status = "okay";
->+	model = "fsd-i2s";
->+	widgets =
->+		"Speaker", "MAIN SPK",
->+		"Microphone", "MAIN MIC";
->+
->+	primary-dai-link-0 {
->+		link-name = "fsd-primary-0";
->+		dai-format = "i2s";
->+		tesla,bitclock-master = <&tdm_0>;
->+		tesla,frame-master = <&tdm_0>;
->+		cpu {
->+			sound-dai = <&tdm_0 0>;
->+		};
->+	};
->+
->+	secondary-dai-link-0 {
->+		link-name = "fsd-secondary-0";
->+		dai-format = "i2s";
->+		tesla,bitclock-master = <&tdm_0>;
->+		tesla,frame-master = <&tdm_0>;
->+		cpu {
->+			sound-dai = <&tdm_0 1>;
->+		};
->+	};
->+
->+	primary-dai-link-1 {
->+		link-name = "fsd-primary-1";
->+		dai-format = "i2s";
->+		tesla,bitclock-master = <&tdm_1>;
->+		tesla,frame-master = <&tdm_1>;
->+		cpu {
->+			sound-dai = <&tdm_1 0>;
->+		};
->+	};
->+
->+	secondary-dai-link-1 {
->+		link-name = "fsd-secondary-1";
->+		dai-format = "i2s";
->+		tesla,bitclock-master = <&tdm_1>;
->+		tesla,frame-master = <&tdm_1>;
->+		cpu {
->+			sound-dai = <&tdm_1 1>;
->+		};
->+	};
->+};
->diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi
->b/arch/arm64/boot/dts/tesla/fsd.dtsi
->index 5decad45a1b6..fc8931f830a7 100644
->--- a/arch/arm64/boot/dts/tesla/fsd.dtsi
->+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
->@@ -847,6 +847,9 @@
-> 			status = "disabled";
-> 		};
+> I thought I recalled this; I was literally just rereading through
+> https://github.com/ClangBuiltLinux/linux/issues/1467#issuecomment-1046071624
+> again to understand.
 >
->+		sound: sound {
->+		};
->+
-Why to have an empty node in dtsi?
-
-> 		timer@10040000 {
-> 			compatible = "tesla,fsd-mct", "samsung,exynos4210-
->mct";
-> 			reg = <0x0 0x10040000 0x0 0x800>;
->--
->2.17.1
+> That would be useful to include in the commit message, and is more
+> precise than "Clang defaults to -fdiscard-value-names to save memory
+> when generating LLVM IR."  Masahiro, would you mind including or
+> replacing that, or shall I send a v2?
 
 
+
+
+Can you send v2, or provide the entire new commit description?
+Thank you.
+
+
+
+
+
+
+
+
+>
+> I was surprised to find later in the day that I was running an
+> assertions-disabled (ie. release) build of clang, which I almost never
+> do!  Non-llvm-developers are more likely to be using release builds
+> than assertions-enabled builds of llvm, so this patch still very much
+> has merit.
+>
+> >
+> > >> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > >Thanks for the patch!
+> > >
+> > >Link: https://github.com/ClangBuiltLinux/linux/issues/1467
+> > >Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > Reviewed-by: Fangrui Song <maskray@google.com>
+> >
+> > >> ---
+> > >>  scripts/Makefile.build | 2 +-
+> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > >> index 27be77c0d6d8..d0e4f476dfee 100644
+> > >> --- a/scripts/Makefile.build
+> > >> +++ b/scripts/Makefile.build
+> > >> @@ -140,7 +140,7 @@ $(obj)/%.symtypes : $(src)/%.c FORCE
+> > >>  # LLVM assembly
+> > >>  # Generate .ll files from .c
+> > >>  quiet_cmd_cc_ll_c = CC $(quiet_modtag)  $@
+> > >> -      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -o $@ $<
+> > >> +      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -fno-discard-value-names -o $@ $<
+> > >>
+> > >>  $(obj)/%.ll: $(src)/%.c FORCE
+> > >>      $(call if_changed_dep,cc_ll_c)
+> > >>
+> > >> base-commit: 93ed07a23fd08b8613f64cf0a15d7fbdaca010fd
+> > >> --
+> > >> 2.38.0.rc2.412.g84df46c1b4-goog
+> > >>
+> > >
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
