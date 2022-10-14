@@ -2,93 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57745FEDAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B6A5FEDAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJNLz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S229947AbiJNL4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiJNLzY (ORCPT
+        with ESMTP id S229808AbiJNL4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:55:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938DF357EA;
-        Fri, 14 Oct 2022 04:55:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16CAA61B07;
-        Fri, 14 Oct 2022 11:55:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24DEC433C1;
-        Fri, 14 Oct 2022 11:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665748522;
-        bh=w1gnSyo/sHEY1sf3aTn5NzwjtonvxvcQ/yPvIe4/0tk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bg0bxXdOrxLdVVn4IKoVrPzljijNyfKRQxPChgFzeuOXeg9wJnt/AdrF4blJjga6L
-         la+DfSwt0k33JWhmSHJHHT5mY5nOCjelnRc1USe9nKTknKUUKTbhSk06xVNoCZYMO0
-         IME26e+maUN5h3F+c7xbIWgTKlgRMEyWDnEIh3yo=
-Date:   Fri, 14 Oct 2022 13:56:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, xu.yang_2@nxp.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 1/6] dt-bindings: usb: usbmisc-imx: convert to DT
- schema
-Message-ID: <Y0lOV8iWlpfDV/kj@kroah.com>
-References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
- <20221014095148.2063669-2-peng.fan@oss.nxp.com>
+        Fri, 14 Oct 2022 07:56:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E070B15627D;
+        Fri, 14 Oct 2022 04:56:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 926CA13D5;
+        Fri, 14 Oct 2022 04:56:49 -0700 (PDT)
+Received: from bogus (unknown [10.57.35.221])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 259563F792;
+        Fri, 14 Oct 2022 04:56:41 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 12:56:39 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     YaxiongTian <iambestgod@outlook.com>, iambestgod@qq.com,
+        james.quinlan@broadcom.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tianyaxiong@kylinos.cn
+Subject: Re: [PATCH -next 1/1] firmware: arm_scmi: Fix possible deadlock in
+ shmem_tx_prepare()
+Message-ID: <20221014115639.waexbqi4vxbu6rxv@bogus>
+References: <Y0V6Q7ZJ3GjBwWub@e120937-lin>
+ <KL1PR01MB3510AD021B2258CB789466E3D5259@KL1PR01MB3510.apcprd01.prod.exchangelabs.com>
+ <Y0g2d/pw6yCoA3Nc@e120937-lin>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221014095148.2063669-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y0g2d/pw6yCoA3Nc@e120937-lin>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 05:51:43PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Thu, Oct 13, 2022 at 05:02:15PM +0100, Cristian Marussi wrote:
+> On Thu, Oct 13, 2022 at 03:05:43PM +0800, YaxiongTian wrote:
+> > Hi Cristian
+> > 
+> > �� There may be a problem with my qq email client, � I don't see my mail in
+> > the
+> > 
+> > communityI had to switch outlook email.Forgive me if you've received
+> > multiple emails.
+> > 
+> No worries.
 > 
-> Convert usbmisc-imx to DT schema format.
+> > >Problem is anyway, as you said, you'll have to pick this timeout from the
+> > >related transport scmi_desc (even if as of now the max_rx_timeout for
+> > >all existent shared mem transport is the same..) and this means anyway
+> > >adding more complexity to the chain of calls to just to print a warn of
+> > >some kind in a rare error-situation from which you cannot recover anyway.
+> > 
+> > � Yes,it has add more complexity about Monitorring this time.For system
+> > stability,the safest thing to do is to abort the transmission.But this will
+> > lose performance due to more complexity in such unusual situation.
+> > 
+> > >Due to other unrelated discussions, I was starting to think about
+> > >exposing some debug-only (Kconfig dependent) SCMI stats like timeouts,
+> > errors,
+> > >unpexpected/OoO/late_replies in order to ease the debug and monitoring
+> > >of the health of a running SCMI stack: maybe this could be a place where
+> > >to flag this FW issues without changing the spinloop above (or
+> > >to add the kind of timeout you mentioned but only when some sort of
+> > >CONFIG_SCMI_DEBUG is enabled...)...still to fully think it through, though.
+> > 
+> > � I think it should active report warn or err rather than user queries the
+> > information manually.(i.e fs_debug way).Becasue in system startup\S1\S3\S4,
+> > user can not queries this flag in Fw,they need get stuck message
+> > immediately.
+> > 
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 52 +++++++++++++++++++
->  .../devicetree/bindings/usb/usbmisc-imx.txt   | 18 -------
->  2 files changed, 52 insertions(+), 18 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
->  delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+> Looking more closely at this, I experimented a bit with an SCMI stack based on
+> mailbox transport in which I had forcefully set the spin_until_cond() to
+> spin forever.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> new file mode 100644
-> index 000000000000..c83ffb6729b5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/fsl,usbmisc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> Even though on a normal SCMI system when the SCMI stack fails at boot
+> the system is supposed to boot anyway (maybe slower), this particular
+> failure in TX path led indeed to a system that does not boot at all and
+> spits out an infinite sequence of:
+> 
+> [ 2924.499486] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> [ 2924.505596] rcu:     2-...0: (0 ticks this GP) idle=1be4/1/0x4000000000000000 softirq=50/50 fqs=364757
+> [ 2924.514672]  (detected by 4, t=730678 jiffies, g=-1119, q=134 ncpus=6)
+> [ 2924.521215] Task dump for CPU 2:
+> [ 2924.524445] task:kworker/u12:0   state:R  running task     stack:    0 pid:    9 ppid:     2 flags:0x0000000a
+> [ 2924.534391] Workqueue: events_unbound deferred_probe_work_func
+> [ 2924.540244] Call trace:
+> [ 2924.542691]  __switch_to+0xe4/0x1b8
+> [ 2924.546189]  deferred_probe_work_func+0xa4/0xf8
+> [ 2924.550731]  process_one_work+0x208/0x480
+> [ 2924.554754]  worker_thread+0x230/0x428
+> [ 2924.558514]  kthread+0x114/0x120
+> [ 2924.561752]  ret_from_fork+0x10/0x20
+> 
+> I imagine this is the annoying thing you want to avoid.
+> 
+> So experimenting a bit with a patch similar to yours (ignoring the timeout
+> config issues and using the static cnt to temporarily stuck and revive the SCMI
+> transport)
+> 
+> ------>8-----
+> diff --git a/drivers/firmware/arm_scmi/shmem.c b/drivers/firmware/arm_scmi/shmem.c
+> index 0e3eaea5d852..6dde669abd03 100644
+> --- a/drivers/firmware/arm_scmi/shmem.c
+> +++ b/drivers/firmware/arm_scmi/shmem.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/io.h>
+>  #include <linux/processor.h>
+>  #include <linux/types.h>
+>  
+>  #include "common.h"
+>  
+> @@ -29,17 +30,28 @@ struct scmi_shared_mem {
+>         u8 msg_payload[];
+>  };
+>  
+> +static int cnt = 50;
+>  void shmem_tx_prepare(struct scmi_shared_mem __iomem *shmem,
+>                       struct scmi_xfer *xfer)
+>  {
+> +       ktime_t stop;
 > +
-> +title: Freescale i.MX non-core registers
+>         /*
+>          * Ideally channel must be free by now unless OS timeout last
+>          * request and platform continued to process the same, wait
+>          * until it releases the shared memory, otherwise we may endup
+>          * overwriting its response with new message payload or vice-versa
+>          */
+> -       spin_until_cond(ioread32(&shmem->channel_status) &
+> -                       SCMI_SHMEM_CHAN_STAT_CHANNEL_FREE);
+> +       stop = ktime_add_ms(ktime_get(), 35);
+> +       spin_until_cond(((--cnt > 0) && ioread32(&shmem->channel_status) &
+> +                       SCMI_SHMEM_CHAN_STAT_CHANNEL_FREE) ||
+> +                       ktime_after(ktime_get(), stop));
+> +       if (ktime_after(ktime_get(), stop)) {
+> +               pr_warn_once("TX Timeout !\n");
+> +               cnt = 10;
+> +               return;
+> +       }
 > +
-> +maintainers:
-> +  - Xu Yang <xu.yang_2@nxp.com>
+>         /* Mark channel busy + clear error */
+>         iowrite32(0x0, &shmem->channel_status);
+>         iowrite32(xfer->hdr.poll_completion ? 0 : SCMI_SHMEM_FLAG_INTR_ENABLED,
+> ----8<-------------
+> 
+> With the above I had in fact a system that could boot even with a
+> failing/stuck SCMI transport, but, as expected the SCMI stack
+> functionality was totally compromised after the first timeout with no
+> possibility to recover.
+> 
+> Moreover I was thinking at what could happen if later on after boot the
+> SCMI server should end in some funny/hogged condition so that it is,
+> only temporarily, a bit slower to answer and release the channel: with
+> the current implemenation the Kernel agent will spin just a little bit
+> more waiting for the channel to be freed and then everything carries
+> without much hassle, while with this possible new timing-out solution
+> we could end up dropping that transmission and compromising the whole
+> transport fucntionality for all the subsequent transmissions.
+> 
+> So, again, I'm not sure it is worth making such a change even for debug
+> purposes, given that in the worst scenario above you end up with a
+> system stuck at boot but for which the SCMI stack is anyway compromised
+> and where the only solution is fixing the server FW really.
+> 
+> I'll ask Sudeep is thoughts about the possible hang.
+>
 
-Signing someone else up to be a maintainer requires them to sign off on
-the patch to agree with this.  Why not list yourself instead?
+I am fine with the patch as it provides more info on what is going wrong
+in the system. Please post the patch separately with all the info/background.
 
-thanks,
-
-greg k-h
+-- 
+Regards,
+Sudeep
