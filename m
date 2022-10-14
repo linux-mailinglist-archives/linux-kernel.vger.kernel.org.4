@@ -2,273 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E295FED1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D147D5FED32
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJNLSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S229806AbiJNLai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJNLSm (ORCPT
+        with ESMTP id S229674AbiJNLad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:18:42 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2082.outbound.protection.outlook.com [40.107.212.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A5B1C6BE7;
-        Fri, 14 Oct 2022 04:18:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gcQHbciZ99QZc5mlNtoFAzpGbtB40OdmZJXvhnFidJqbkOKtCGXHzv6TkE7u31J1nxmRZofZBfZU5tFjojxuinlbIz7mAGKwriswCa1GWn44SEN5fDQY8iFNGlI3PWYi+kYBUWGFqur8ISzMR4BpCdC83u3OXuu0qCuFRAYWpNCtwR8aM774aDjsU07lEpgDwXFZPAKO9+54bpgSGSAVEblw14dlgBC9LkN9UVHcBJmBf+5bQtLjUvz+XYtbNNhh0rrCKjf4fTUaWmHrdSIK3ZVmddSUIokQV4ocbJyTOnB+u8y1Y0cXEoRahQN60CEWDxyZbdbTVw3f2ZDz0MpU3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XjpH/BiRkw3E8RcVj3KkpRFkTYEzyLYgneEGbULrQdc=;
- b=NgUzsxtxCCrBDAe1pKyi08nNMnmhlo+9aMOCT/r7dcXUlOo/ZBFKFRy1HtnJ2eC8ScZS0pxUKA+3YS5uMC3Dbdrw99WrfR8joq57DwxVJZ1XSeyApxbhCsD114axlb7ZR2iBfefSxfTUA6zm+AgP3WUQYUU69Bj/zA8ovy88Cz0YIWwWcTbOMwaVXQww3G3wg6pIO5b50FXzYFB86kZG2mblvQJ1F39Mo+lloWRzSu7g9DW1gjl+tD/W5u739jF8BsS8u+QvedMBpEQ/UTnUZr+Cikz8eq0F1sztI1kar3ACjtKOVlBYdLKhe+upbKIXswbFUJk661PoRyJsSbDrTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XjpH/BiRkw3E8RcVj3KkpRFkTYEzyLYgneEGbULrQdc=;
- b=0j2GTDsb07g1rMUk9JKx4jJNSKXm8Qvs1gMw+AwSPqGPio5ReuCq28QAsZGDg3KqeDtjX5yDKXyMMgMhhd6WfCVAoUx56A2Fxnu9m4IFQxsjPJwdASQ7B8Xgt1cu33R5g36j/Crp0YHol5Zz5mSrmBzQ6kzzV1nl+3/B0reYVxs=
-Received: from MN2PR12MB4358.namprd12.prod.outlook.com (2603:10b6:208:24f::12)
- by BL1PR12MB5192.namprd12.prod.outlook.com (2603:10b6:208:311::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 14 Oct
- 2022 11:18:37 +0000
-Received: from MN2PR12MB4358.namprd12.prod.outlook.com
- ([fe80::a094:c6b2:d306:d7bf]) by MN2PR12MB4358.namprd12.prod.outlook.com
- ([fe80::a094:c6b2:d306:d7bf%3]) with mapi id 15.20.5723.029; Fri, 14 Oct 2022
- 11:18:36 +0000
-From:   "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
- domain as parent
-Thread-Topic: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
- domain as parent
-Thread-Index: AQHYwfdzMPgE56itm0GRwc9i4G18eq3T9LKAgDbLT4CAAAON8IAALkeAgAACWFCAABh6gIAABiXQgAFsD4CAAWkgkA==
-Date:   Fri, 14 Oct 2022 11:18:36 +0000
-Message-ID: <MN2PR12MB4358CF6B6D2576B35E39328A89249@MN2PR12MB4358.namprd12.prod.outlook.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
- <20220906134801.4079497-1-nipun.gupta@amd.com>
- <20220906134801.4079497-5-nipun.gupta@amd.com> <87h71juxuk.wl-maz@kernel.org>
- <DM6PR12MB30820EE430405FF50C7F856BE8229@DM6PR12MB3082.namprd12.prod.outlook.com>
- <MN2PR12MB43586084670E14691920952889229@MN2PR12MB4358.namprd12.prod.outlook.com>
- <Y0a65a9leWXpKfTo@ziepe.ca>
- <MN2PR12MB4358A871519748CD7A6DB7A089229@MN2PR12MB4358.namprd12.prod.outlook.com>
- <Y0bRZTP9Kc6mdCiu@ziepe.ca>
- <MN2PR12MB4358277977C1B7E0BC214AC789229@MN2PR12MB4358.namprd12.prod.outlook.com>
- <Y0gH8R8tEqn6sqZ5@ziepe.ca>
-In-Reply-To: <Y0gH8R8tEqn6sqZ5@ziepe.ca>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-10-14T11:18:34Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=b09f937e-8828-466a-8cd2-d1a3be9be6da;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR12MB4358:EE_|BL1PR12MB5192:EE_
-x-ms-office365-filtering-correlation-id: 9fccf871-433d-4f99-e221-08daadd5d6c6
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2Y78MBqq9uQEJntw9iEGn+kyRX5QgtvjhNcDoeTT3+efXxRtAlhZ8uyjp0SR8QZ0P+9nIhxpuROk5l2NC6K1XNbHmmnMlFfDlDAyHGFHAEdeXhRiem+SkBLLh8HaQq1jYsjj1qktSX94bjtswXre0OPyXGgkrEwIPGR1eKDqH2g8Yc5jxp0kDOip6DOqnIOzKdT8/rVosv9r86WVgJsEqwVtrkCmG3nkO1ghRrewC52CFcjCF2VoPaA9r2pp15ABoVTXiIKyhe/htF2mz257lEXo7PnIwTiSQdmxnZmYw955PQVUe8DuXGfur8JZNK0zg3w/d0zFitW56VpddKKBMT6q1ZC8uQupb2GT6lQxvSiIPIlHWd4UHafD/+OU/JrHj9dRjIdzBTuPTR6PpYzc/JCqTnxsjLruUsHJ24NlrpKIqkRj68yXqUg9BiOkqg8zu27lbWbKKGBt6Z0x2y9UFwwCBL3p5DD7sqoG3wjSX/y6y2EQLWwecygfFzgJmK+G9EDt05DHTbEJVMlQ8Ijjr+WQv/NxQ5xItaF061+kpkAtGsiKTNE3nkbZQrIAM0pXewp1QdJeRwroVFhRKCppVg558Vmo8jN4gSh8UzBEDH44MNeKRVaKdTnFGSPbJUalguBuQBQjDsJYjDxBNrRRV1LGtnyNt0n4/j3Kl8V0L1QSan+hK2pqrAT05IJYa4tzc6JNd4d0RTqjQjq7j8zBWN6fDDt/ZjpcW90iNBefpV/tbZC5333abZI00VrevsiYA6nP8ccibeMw2n1tYO5oVw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4358.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(376002)(366004)(39860400002)(451199015)(66946007)(76116006)(38070700005)(83380400001)(71200400001)(2906002)(4326008)(8676002)(66556008)(8936002)(66476007)(64756008)(66446008)(53546011)(33656002)(7416002)(9686003)(41300700001)(5660300002)(38100700002)(52536014)(6506007)(7696005)(86362001)(55016003)(54906003)(122000001)(6916009)(186003)(316002)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?svwoalLmm3J87fO+hCtYmVcCZoETsX6y9KBz7BmvCVlDy0a8wNTUioVkOt7K?=
- =?us-ascii?Q?E2tgGEi56W6q8WhCcRrC8uZEoQVe61QevsXF+uLOB+4uI5pX3rklK2LXzdT9?=
- =?us-ascii?Q?slPJ4LapH7Yrfy2Skxhy3rPS4sfS0UH6VZVQ2HvTkxn5C6Wb8qd1G5mgSNoU?=
- =?us-ascii?Q?UajpTrPkHviOprmiA5mLDvQTQhhojbM6G01cl9YFgmtOCFkl5PLXTEZA4FAI?=
- =?us-ascii?Q?QyC5xD6sx7YDTZgG+LvjquyKyaAPzPedgaFCgioo5mUPEMbH+uYUmihreuwa?=
- =?us-ascii?Q?rSDMIyXxQxsIBLXf4NXPP2TxafuGFp37o4NXIGhTBL+/2+mtzQ+utlPbA5XB?=
- =?us-ascii?Q?+biaupNIqD62IEg21fnnMGwiG6D6V9u5BHH3pVljJ/1rTBUfuA/WcGSpS7v1?=
- =?us-ascii?Q?dItRAtH57OnETHPFG9TUP4np8Jo4pV5HwL3wHOqV0TPU/lsN6x5sq+Ju/FKx?=
- =?us-ascii?Q?N/2qJwAEUBUkVqJu30VFrGFo861BK0ElKfRxaMX2JD244wc2wE9mNHMM25no?=
- =?us-ascii?Q?FshcGMU3yGe0HsK3om+D4v9KKAgw5sP0kA7HxgmaigQu+9Y6JYZTgmls3glp?=
- =?us-ascii?Q?j1H0MLm2dBmQPCXMmqmVNphOIKFZE0LcPqzojG0UuSfBwRWDvZxr281O0kZi?=
- =?us-ascii?Q?70prFLNZ6jOtLosAT18aOFPKxDFziAnFOXdlIfH5Ea8rDmMSNZoRuJ4POI+o?=
- =?us-ascii?Q?0Yy9E3cgnsrVU/5YZJ/cID6KXSCNf9pDngfBCY09msRZmvHemFnGzEUkvsrP?=
- =?us-ascii?Q?mGrj528JYMk9J+NQXSA9RCUMimjwMa2HoumfgqYKfOW9HPRLG3uQTxjqVtN4?=
- =?us-ascii?Q?TSMFMjsWFObXFh7NYU4VG/7BWsI7xgBSLkYx7K6w+N4sQSJ8bZOJlmijNb08?=
- =?us-ascii?Q?PEKlqGQD3X+NZ17a7S7SkA8V2wNVe7HkRJ7pJfKlf8VseaRCcyfPcYwosrcO?=
- =?us-ascii?Q?dVTPWVWjI1QMh5/mqMJbU3m2M1pZAurvzgKN5jX+bWjjzM5+CWKYkwDCMwdN?=
- =?us-ascii?Q?4uwq7RPG/1VjjPR4pEF0GrWQvDMtU/OEOlfMazqjJWm6CDe6YFNfFypZQF/i?=
- =?us-ascii?Q?Ra0wGg24scfphAoS97xETDJIN/X/RLQVgd0YLJMwiiQ2EfJtqxNCWWmYoXjW?=
- =?us-ascii?Q?HX9A4csSrakXaucmDCmIyRI7ThvtW5+DfnP8MlziYZnKKjTVvKvag7iFmj8P?=
- =?us-ascii?Q?jyMEVwCwXRYJRggqyfgamrpF0aNGVU+M5kv5pHMHm5a33dzm5eTP28rfOmkU?=
- =?us-ascii?Q?AoSH+maQLICBd5QyVVqnycUd1D9CczSegfk3cAsZbRCK0CdNBa11MBOjK0AP?=
- =?us-ascii?Q?JfWLUqKENCF/MMxdGITUJ+qkIjuTYwlVpFXsW6H69a9g+GkNh6T2NWzd91UL?=
- =?us-ascii?Q?sql+IkbSB3E9gbH1PGfjapybqdEc8r6K9ZnW5Kn9DtSSRXM5bydrhrbJ8vpb?=
- =?us-ascii?Q?u/+1U47t0K00P7BTO1OZ0vH1DPFaafrPH0XtQON8JPlnoFP17bpeUXuYeZV/?=
- =?us-ascii?Q?ZeovsJzMm14mreuDUATYG9kDQBqAFORtB3NgfyH5aniMD66fY83CXz9rzJiQ?=
- =?us-ascii?Q?+khAwwVK6qnlgytXNnt8F4/uzkgBbciLFKGzdr9Rc2LS1mB528UOrphpiLrE?=
- =?us-ascii?Q?JthUcc0i7dLskZaQPoFM0eM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 14 Oct 2022 07:30:33 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D06A3AB6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:30:30 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221014113029epoutp0179a1afa5eb7038c8ba0987b34cf78407~d7Bj1iGGC0903809038epoutp01J
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:30:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221014113029epoutp0179a1afa5eb7038c8ba0987b34cf78407~d7Bj1iGGC0903809038epoutp01J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1665747029;
+        bh=/AKHjCFjBqyfkK74ApxUVgWTDmD07lr2ge/emwzMYeE=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=uC6FvI1hT4raY6iAHLbi24OpTkeNOoKJpjBDfn+9IhkLZvD7LoHbhjoFMehgXKj/2
+         goTUSo8OMQexA9SsEDhqvhxo2CFZ1hiZzms0swy7mMTA2inDalU3sCX4UKwNGrgXxd
+         ANZU2rntYo7DVpUB1GuiNGXi0UvPedpNrbNBIst8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221014113027epcas5p28080fcf9e3aaba7ef3303f8737c1a0fc~d7BivW7Ju2932529325epcas5p2i;
+        Fri, 14 Oct 2022 11:30:27 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Mpkhd30Grz4x9Pv; Fri, 14 Oct
+        2022 11:30:25 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        05.32.56352.15849436; Fri, 14 Oct 2022 20:30:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221014112322epcas5p1f646c73b101df59b069c0e0c1e3e45d0~d67WW0Cdf3026430264epcas5p1G;
+        Fri, 14 Oct 2022 11:23:22 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221014112322epsmtrp22094fab4913f9e7ea24a10ba00d2059a~d67WVwgbH2323323233epsmtrp2L;
+        Fri, 14 Oct 2022 11:23:22 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-d1-6349485189fb
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        10.FD.18644.AA649436; Fri, 14 Oct 2022 20:23:22 +0900 (KST)
+Received: from FDSFTE314 (unknown [107.122.81.85]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221014112320epsmtip2a93e0140fa9d23f9f29556bb3546266f~d67Uo-h950486904869epsmtip2Z;
+        Fri, 14 Oct 2022 11:23:20 +0000 (GMT)
+From:   "Vivek Yadav" <vivek.2311@samsung.com>
+To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
+Cc:     <rcsekar@samsung.com>, <wg@grandegger.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <pankaj.dubey@samsung.com>, <ravi.patel@samsung.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+In-Reply-To: <20221014071114.a6ls5ay56xk4cin3@pengutronix.de>
+Subject: RE: [PATCH v2] can: mcan: Add support for handling DLEC error on
+ CAN FD
+Date:   Fri, 14 Oct 2022 16:53:19 +0530
+Message-ID: <00db01d8dfbf$5e38fbd0$1aaaf370$@samsung.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4358.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fccf871-433d-4f99-e221-08daadd5d6c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2022 11:18:36.8875
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P58BPxVa5HQX6wy8OyRsMWX6hKl6xs3VI+VtEkm6stqUw3S4AqrDuPN4UQXk13bICVzda8afFnf2v2MSFAXvIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5192
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFA9TupQLxuA4HUejy/jSNcE77YKQHiGD9PArXv/PmvGMpyAA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmhm6gh2eyQfNvYYs551tYLJ4ee8Ru
+        cWFbH6vFqu9TmS0u75rDZrF+0RQWi2MLxCy+nX7DaLFo6xd2i4cf9rBbzLqwg9Vi6b2drA48
+        HltW3mTyWLCp1OPjpduMHptWdbJ59P818Hi/7yqbR9+WVYwenzfJBXBEZdtkpCampBYppOYl
+        56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAN2qpFCWmFMKFApILC5W0rez
+        KcovLUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjOuHRAouC6UsXX2bsY
+        Gxh7pbsYOTkkBEwkdkx6yNrFyMUhJLCbUaJjRjMbhPOJUeJKy1R2COczo8TRjffZYFo2r7nC
+        CmILCexilJg6Kxii6DmjxLQrn1hAEmwCOhLNk/8ygtgiAnoSvycsYgIpYhaYySSxf+ofZpAE
+        p4CtxKIjb8CKhAWCJM49fMAEYrMIqEo8utMFFucVsJTYPm0GK4QtKHFy5hOwBcwC2hLLFr5m
+        hrhIQeLn02WsEMucJB5e28kMUSMucfRnD5DNAVRzgUPiXihEuYvEurcX2SFsYYlXx7dA2VIS
+        n9/thXoyWWLHv05WCDtDYsHEPYwQtr3EgStzWEBGMgtoSqzfpQ8RlpWYemodE8RWPone30+Y
+        IOK8EjvmwdgqEi8+T2CFuEZKovec8ARGpVlI/pqF5K9ZSO6fhbBsASPLKkbJ1ILi3PTUYtMC
+        47zUcnhsJ+fnbmIEp2Mt7x2Mjx580DvEyMTBeIhRgoNZSYT3tZJnshBvSmJlVWpRfnxRaU5q
+        8SFGU2BgT2SWEk3OB2aEvJJ4QxNLAxMzMzMTS2MzQyVx3sUztJKFBNITS1KzU1MLUotg+pg4
+        OKUamI4fPuzRena36e9bb7uNTu598amJmT3nntw/udSI03dX3TjfkrE1ffuU047ePv1Noiw8
+        q5R4JBlvb2DzeBVr8SpsEueuPoEvobVp3cYO37kCYpXf/J0g29Y94azCjiuip+Wre8+7azjt
+        lbm1a+K1Sq/glvXCITwbVhdHcMjGCyy+aPqeWYDx0soPb1nc47apmEfP4XzZuLt47q0J+zZ7
+        K+m2eb9oTLt/QnrKyXa+T2+9N/85of1+ye9Y69n8gZbbc/asectzrVZuisF5b9fkzmerXxqy
+        n0l4Ypqw7PqKFGHrBoGP1eb35zB6ft5163+LY/vhqPs/LIL5pnwpi321X2nl8yOTFY4mv5bd
+        wh9+/4wSS3FGoqEWc1FxIgB/3sPtUAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvO4qN89kg5WneCzmnG9hsXh67BG7
+        xYVtfawWq75PZba4vGsOm8X6RVNYLI4tELP4dvoNo8WirV/YLR5+2MNuMevCDlaLpfd2sjrw
+        eGxZeZPJY8GmUo+Pl24zemxa1cnm0f/XwOP9vqtsHn1bVjF6fN4kF8ARxWWTkpqTWZZapG+X
+        wJUx+U8zY8ErxYrvzSuYGxinSXUxcnJICJhIbF5zhbWLkYtDSGAHo0TbwzOsEAkpiSlnXrJA
+        2MISK/89ZwexhQSeMkosvRgNYrMJ6Eg0T/7LCGKLCOhJ/J6wiAlkELPAUiaJKVsXskBM3cco
+        0fL2PhtIFaeArcSiI2/AOoQFAiQ61y5nArFZBFQlHt3pAovzClhKbJ82gxXCFpQ4OfMJ2BXM
+        AtoSvQ9bGWHsZQtfM0NcpyDx8+kyVogrnCQeXtvJDFEjLnH0Zw/zBEbhWUhGzUIyahaSUbOQ
+        tCxgZFnFKJlaUJybnltsWGCUl1quV5yYW1yal66XnJ+7iREcm1paOxj3rPqgd4iRiYPxEKME
+        B7OSCO9rJc9kId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODil
+        Gpgkdi/89Prf+tuBx4/oTNxzxuGP/PbAlbNdfgRc3C/6eobA8WcR81Wyrq9Iz/U3n218cuOW
+        K9s43/C3GCqULWKMWmYpu/hNx7yThVItbxztGV2PN2SuvHI6Qb1K+fo/960uHK2KRexZa26W
+        vdzxJaTuzf7pPyrZWF+815j8LGKL0vnXfFczQ2YZqVyTWPN1TsXKx00ZrA81uP14orTy7nwN
+        vP147zuvmVkFWaKRopbvJvRevum7WZutctn55kNbPTiTCjnyvi7WNSsxXGYQy5Yl+kqrvdnW
+        ckWflsJytqqT1f1PIpx0X85hS5n8xU6DYWbhGvZPhuJpq3YvP16+MUCM0zM8R2ueWuvxz7pf
+        dp9WYinOSDTUYi4qTgQACHNNbzwDAAA=
+X-CMS-MailID: 20221014112322epcas5p1f646c73b101df59b069c0e0c1e3e45d0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221014053017epcas5p359d337008999640fa140c691f47bc79c
+References: <CGME20221014053017epcas5p359d337008999640fa140c691f47bc79c@epcas5p3.samsung.com>
+        <20221014050332.45045-1-vivek.2311@samsung.com>
+        <20221014071114.a6ls5ay56xk4cin3@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
-
 
 
 > -----Original Message-----
-> From: Jason Gunthorpe <jgg@ziepe.ca>
-> Sent: 13 October 2022 13:43
-> To: Radovanovic, Aleksandar <aleksandar.radovanovic@amd.com>
-> Cc: Gupta, Nipun <Nipun.Gupta@amd.com>; Marc Zyngier
-> <maz@kernel.org>; Robin Murphy <robin.murphy@arm.com>;
-> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> gregkh@linuxfoundation.org; rafael@kernel.org; eric.auger@redhat.com;
-> alex.williamson@redhat.com; cohuck@redhat.com; Gupta, Puneet (DCG-
-> ENG) <puneet.gupta@amd.com>; song.bao.hua@hisilicon.com;
-> mchehab+huawei@kernel.org; f.fainelli@gmail.com;
-> jeffrey.l.hugo@gmail.com; saravanak@google.com;
-> Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com;
-> will@kernel.org; joro@8bytes.org; masahiroy@kernel.org;
-> ndesaulniers@google.com; linux-arm-kernel@lists.infradead.org; linux-
-> kbuild@vger.kernel.org; linux-kernel@vger.kernel.org;
-> devicetree@vger.kernel.org; kvm@vger.kernel.org; okaya@kernel.org;
-> Anand, Harpreet <harpreet.anand@amd.com>; Agarwal, Nikhil
-> <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>; git
-> (AMD-Xilinx) <git@amd.com>
-> Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
-> domain as parent
+> From: Marc Kleine-Budde =5Bmailto:mkl=40pengutronix.de=5D
+> Sent: 14 October 2022 12:41
+> To: Vivek Yadav <vivek.2311=40samsung.com>
+> Cc: rcsekar=40samsung.com; wg=40grandegger.com; davem=40davemloft.net;
+> edumazet=40google.com; kuba=40kernel.org; pabeni=40redhat.com;
+> pankaj.dubey=40samsung.com; ravi.patel=40samsung.com; linux-
+> can=40vger.kernel.org; netdev=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org
+> Subject: Re: =5BPATCH v2=5D can: mcan: Add support for handling DLEC erro=
+r on
+> CAN FD
 >=20
-> Caution: This message originated from an External Source. Use proper
-> caution when opening attachments, clicking links, or responding.
->=20
->=20
-> On Wed, Oct 12, 2022 at 03:09:26PM +0000, Radovanovic, Aleksandar wrote:
->=20
-> > > On Wed, Oct 12, 2022 at 01:37:54PM +0000, Radovanovic, Aleksandar
-> wrote:
-> > > > > On Wed, Oct 12, 2022 at 10:34:23AM +0000, Radovanovic,
-> > > > > Aleksandar
-> > > wrote:
-> > > > >
-> > > > >
-> > > > > > As for GITS_TRANSLATER, we can take up to 4 different IOVAs,
-> > > > > > which limits us to 4 CDX devices (should be sufficient for
-> > > > > > current HW use-cases). Also, it means that the address part
-> > > > > > must be the same for all vectors within a single CDX device.
-> > > > > > I'm assuming this is OK as it is going to be a single interrupt=
- and
-> IOMMU domain anyway.
-> > > > >
-> > > > > This is not at all how MSI is supposed to work.
-> > > >
-> > > > In the general case, no, they're not.
-> > >
-> > > I don't mean that you can hack this to work - I mean that in MSI the
-> > > addr/data is supposed to come from the end point itself, not from
-> > > some kind of shared structure. This is important because the actual
-> > > act of generating the write has to be coherent with the DMA the
-> > > device is doing, as the MSI write must push any DMA data to
-> > > visibility to meet the "producer / consumer" model.
-> > >
+> On 14.10.2022 10:33:32, Vivek Yadav wrote:
+> > When a frame in CAN FD format has reached the data phase, the next CAN
+> > event (error or valid frame) will be shown in DLEC.
 > >
-> > I'm not sure I follow your argument, the limitation here is that the
-> > MSI address value is shared between vectors of the same device
-> > (requester id or endpoint, whichever way you prefer to call it), not
-> > between devices.
+> > Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
+> > determine the type of last error that occurred in the data phase of a
+> > CAN FD frame and handle the bus errors.
+> >
+> > Signed-off-by: Vivek Yadav <vivek.2311=40samsung.com>
+> > ---
+> > This patch is dependent on following patch from Marc:
+> > =5B1=5D:
+> > https://lore.kernel.org/all/20221012074205.691384-1-mkl=40pengutronix.d=
+e
+> > /
+> >
+> >  drivers/net/can/m_can/m_can.c =7C 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/can/m_can/m_can.c
+> > b/drivers/net/can/m_can/m_can.c index 18a138fdfa66..8cff1f274aab
+> > 100644
+> > --- a/drivers/net/can/m_can/m_can.c
+> > +++ b/drivers/net/can/m_can/m_can.c
+> > =40=40 -156,6 +156,7 =40=40 enum m_can_reg =7B
+> >  =23define PSR_EW		BIT(6)
+> >  =23define PSR_EP		BIT(5)
+> >  =23define PSR_LEC_MASK	GENMASK(2, 0)
+> > +=23define PSR_DLEC_MASK   GENMASK(8, 10)
+> >
+> >  /* Interrupt Register (IR) */
+> >  =23define IR_ALL_INT	0xffffffff
+> > =40=40 -876,8 +877,16 =40=40 static int m_can_handle_bus_errors(struct
+> net_device *dev, u32 irqstatus,
+> >  	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) =7B
+> >  		u8 lec =3D FIELD_GET(PSR_LEC_MASK, psr);
+> >
+> > -		if (is_lec_err(lec))
+> > +		if (is_lec_err(lec)) =7B
+> >  			work_done +=3D m_can_handle_lec_err(dev, lec);
+> > +		=7D else =7B
 >=20
-> That isn't what you said, you said "we can take up to 4 different IOVAs, =
-which
-> limits us to 4 CDX devices" - which sounds like HW being shared across
-> devices??
+> In case of high interrupt latency there might be lec and dlec errors pend=
+ing.
+> As this is error handling and not the hot path, please check for both, i.=
+e.:
+Okay will do that.
+>=20
+>                 if (is_lec_err(lec))
+>                         work_done +=3D m_can_handle_lec_err(dev, lec);
+>=20
+>                 if (is_lec_err(dlec))
+>                         work_done +=3D m_can_handle_lec_err(dev, dlec);
+>=20
+> > +			u8 dlec =3D FIELD_GET(PSR_DLEC_MASK, psr);
+> > +
+> > +			if (is_lec_err(dlec)) =7B
+> > +				netdev_dbg(dev, =22Data phase error
+> detected=5Cn=22);
+>=20
+> If you add a debug, please add one for the Arbitration phase, too.
+I have added the debug print specially for dlec (data phase). So we can dif=
+ferentiate lec errors (for all type of frames except FD with BRS) and Data =
+phase errors, as we are calling same handler function for both the errors.
 
-And that still does not imply lack of ordering or sharing of MSI target add=
-resses between devices.
+If I understood your comment correctly, you are asking something like below=
+:
+        /* handle protocol errors in arbitration phase */
+        if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
+-           m_can_is_protocol_err(irqstatus))
++           m_can_is_protocol_err(irqstatus)) =7B
++               netdev_dbg(dev, =22Arbitration phase error detected=5Cn=22)=
+;
+                work_done +=3D m_can_handle_protocol_error(dev, irqstatus);
++       =7D
 
-This is a highly programmable IP block, at the core of which is an intercon=
-nect interfacing to programmable logic (PL), a number of PCIe controllers (=
-either endpoint or root-port), DMA engines, offload engines, the embedded p=
-rocessor subsystem (PSX), etc. DMA and interrupts can be routed across it i=
-n almost any (meaningful) direction. The datapath 'endpoints' request DMA a=
-nd interrupts, but don't concern themselves with the mechanics of deliverin=
-g that in the target domain. It is the responsibility of the egress bridges=
- to the target domains to convert the interconnect interrupt transactions t=
-o whatever the interrupt delivery mechanism for that domain is. E.g. for PC=
-Ie controllers in endpoint mode, that would be through PCIe MSI-X tables in=
-ternal to the controller (and managed by the PCIe host), for PSX that would=
- be the PSX bridge (partially managed by the PSX OS, mediated through firmw=
-are, i.e. through CDX bus driver) and so on. It is the responsibility of th=
-e interconnect to maintain transaction ordering (including DMA vs. interrup=
-ts). It is the responsibility of the firmware to manage the bridges accordi=
-ng to the implemented use-case, so everything works as expected.=20
+If the above implementation is correct as per your review comment, I think =
+we don't need the above changes because=20
+Debug print for arbitration failure are already there in =22 m_can_handle_p=
+rotocol_error=22 function.
 
-The CDX bus driver manages a single aspect of this and that is endpoints im=
-plemented in PL/engines, targeting the PSX.
+>=20
+> > +				work_done +=3D m_can_handle_lec_err(dev,
+> dlec);
+> > +			=7D
+> > +		=7D
+> >  	=7D
+> >
+> >  	/* handle protocol errors in arbitration phase */
+>=20
+> regards,
+> Marc
+>=20
+> --
+> Pengutronix e.K.                 =7C Marc Kleine-Budde           =7C
+> Embedded Linux                   =7C
+> https://protect2.fireeye.com/v1/url?k=3D28e40100-499fab97-28e58a4f-
+> 74fe4860001d-8e82bf09edd18d7c&q=3D1&e=3D47b831bd-4118-45e2-977c-
+> eac4315bdf6d&u=3Dhttps%3A%2F%2Fwww.pengutronix.de%2F  =7C
+> Vertretung West/Dortmund         =7C Phone: +49-231-2826-924     =7C
+> Amtsgericht Hildesheim, HRA 2686 =7C Fax:   +49-5121-206917-5555 =7C
 
-So, yes, the hardware that translates interrupt transactions to GIC AXI wri=
-tes is shared between endpoints, but what I said above still applies. And t=
-hat doesn't necessarily make it weird/wrong, it's just more complex than yo=
-u might think.
 
-Anyway, I think we're straying off topic here, none of this is visible to t=
-he kernel anyway. The question that we still need to answer is, are you OK =
-with the limitations I listed originally?
-
-Thanks,
-Aleksandar
