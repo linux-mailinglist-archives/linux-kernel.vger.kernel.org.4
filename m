@@ -2,186 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF97F5FF463
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DA35FF465
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiJNUO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S229861AbiJNUPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiJNUOQ (ORCPT
+        with ESMTP id S231403AbiJNUPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:14:16 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74F7186FE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:14:15 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id p5-20020a25bd45000000b006beafa0d110so5208441ybm.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s1u5FCYn8RsWrm4xJEN7PdURIEcHyxJb/9pj2n8isAA=;
-        b=fhvrXFoWhZpC391txksgdYNhBWOVQCBl52aYSUmgLmhInb9/MtPSZeYIGNH/ys8YWI
-         mQSvZiXV1v5iLGTGKg3WLOnb1cFS0+Th+kedZ2Q3zmcpiIRzT5RaNzsSxxtcaNVbbxQo
-         6C/ki/P9jwc6ECEEO3qyZ7BhL6tV27cjhxD/VeL/TfQ+p/pKemcqLqpJM6t6JMdBSclB
-         h82uZmMBfbIJIfgs+0ai9YWmfThqceTYpj/4W8VtdRmM96JMViT3MmTw9mDdKQfv3xvt
-         kEinfPe2PO+UwyaMeL2LurLmXdFoE/9L88IDkDSdt7gWv/6RRC+AabmHqrVrKTq57VGh
-         UuKA==
+        Fri, 14 Oct 2022 16:15:07 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07472F39E;
+        Fri, 14 Oct 2022 13:15:00 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id z18so3941619qvn.6;
+        Fri, 14 Oct 2022 13:15:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s1u5FCYn8RsWrm4xJEN7PdURIEcHyxJb/9pj2n8isAA=;
-        b=3S2nlx7JKYVzVjDo7mPfSqxM5pBb5R43VqxJHfsC68TcFd8HxUdNS4LU1W+Boh2WGh
-         hq/7hBEuEKjSK/WswwftZLMEfqQMCcsxyZI+gjSxVQPNJiN43+DG6tQ8DjWKWPEG9+Ui
-         rROqxV4Hkf2ZeUqvuCsW+BGweM1Q14OjHVIqrtT8h7mCbzJU0/CFvPRPwyOfqyzlffNs
-         KgkbisXrYckU9CXpfr7t4UyBZjB+8mSniPirgssLygORVHfOpBq6z6b7RONHE4zd0z/p
-         uGrq8qdARsroqAFYFvUfBotwsyQBwpZvxDGQTs3k4idgIstX7myv8rrbtCthbHgW5VfR
-         OCCQ==
-X-Gm-Message-State: ACrzQf2EtC2oYpmxP09LfFQ0f0jxcDnXnPiO3u4ctTRo7W5y9nKgUZxw
-        ZpNI1x1J9u1AxMWiV5pznPjjz52OGFhFoOLe9IU=
-X-Google-Smtp-Source: AMsMyM5LJchL6EFofTHHxs4MNR5XzLntxu/R6NAv2OzNylDOZxQp85yFrPbs85r8ne1/8BZAIoLHNBBM5axsYtLlCVM=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:2ba5:63af:4077:4515])
- (user=ndesaulniers job=sendgmr) by 2002:a0d:eb0d:0:b0:356:67be:73ca with SMTP
- id u13-20020a0deb0d000000b0035667be73camr6144943ywe.108.1665778454896; Fri,
- 14 Oct 2022 13:14:14 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 13:13:54 -0700
-In-Reply-To: <20221014201354.3190007-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <20221014201354.3190007-1-ndesaulniers@google.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665778434; l=4916;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=VxwVKVoT72n36JM/fgC34SDckwipa3adGbKwxRiCt2I=;
- b=rr6SNqvjfUP45yOE+YAm3SR9cD5RDQnj3V+GfQQxH8pSx9VoCaj7uytjS9DlnvEkq4VZJ0hzDBme
- Yv8fiIbkB02j4cJV0iSKr9y6pV5x0SIUrX0N5J9BqTNYul2wwy6r
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221014201354.3190007-5-ndesaulniers@google.com>
-Subject: [PATCH v4 4/4] ARM: pass -march= only to compiler
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Russell King <rmk+kernel@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jPMxAoolUKUZpMFf0g5q1NnQIG6EvSAKe+JJbcK/7Z8=;
+        b=e1XaPGiGlGRUnV5FY547aw7fQNsjiSbqdw7HivThWcaX03L+wA0hEw+2LK/+8xtxnX
+         uQNu3980ji+s4CZpy6tijaspdMH0pSJ/bG/txAA7hnFTwlBtimkNKFZ0g0UDoqEZ+p1C
+         iJmMb2xvTqQ0b4z1Q4zmk8p/PvmqrBjo80kYyD/t8g4w+rE1x3f04PLSlMs7x8a6guvz
+         t09HGLobiQ5bL2hmtD+WirJnWh87zw+UvtcA6HMmIu+rXSy7wKKR+uxNUHSkBzND+hUt
+         7EU4rbbbwHgy4WTcfxd+NzKRalIegBptUhdqoo1j7FjsjRga/ghILtPr7TubmoV7D5mY
+         lhHg==
+X-Gm-Message-State: ACrzQf3KsathmnsaV0pp/L6J3Wsj5bA0sPPSv/PtJHqlh6LiV6e/EFos
+        RTX9FMapkvwVN4Km8dF/nKlFitWlX8fC7w==
+X-Google-Smtp-Source: AMsMyM6Wm/pUbZhtwR4a9PtrwKInPgqki5i7r7d8Qu4wc14QwIm7Q/2Z136MC7GRkkhhJYRV9TuB3w==
+X-Received: by 2002:a05:6214:3017:b0:4b1:bfdc:d4c1 with SMTP id ke23-20020a056214301700b004b1bfdcd4c1mr5429379qvb.42.1665778499589;
+        Fri, 14 Oct 2022 13:14:59 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::6918])
+        by smtp.gmail.com with ESMTPSA id y21-20020a05620a44d500b006b61b2cb1d2sm3297124qkp.46.2022.10.14.13.14.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 13:14:59 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, tj@kernel.org, memxor@gmail.com
+Subject: [PATCH v3 0/3] Support storing struct task_struct objects as kptrs
+Date:   Fri, 14 Oct 2022 15:14:24 -0500
+Message-Id: <20221014201427.2435461-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TVD_PH_BODY_ACCOUNTS_PRE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When both -march= and -Wa,-march= are specified for assembler or
-assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
-value but Clang will warn that -march= is unused.
+Now that BPF supports adding new kernel functions with kfuncs, and storing
+kernel objects in maps with kptrs, we can add a set of kfuncs which allow
+struct task_struct objects to be stored in maps as referenced kptrs.
 
-warning: argument unused during compilation: '-march=armv6k'
-[-Wunused-command-line-argument]
+The possible use cases for doing this are plentiful.  During tracing,
+for example, it would be useful to be able to collect some tasks that
+performed a certain operation, and then periodically summarize who they
+are, which cgroup they're in, how much CPU time they've utilized, etc.
+Doing this now would require storing the task's pids along with some
+relevant data to be exported to user space, and later associating the
+pids to tasks in other event handlers where the data is recorded.
+Another useful by-product of this is that it allows a program to pin a
+task in a BPF program, and by proxy therefore also e.g. pin its task
+local storage.
 
-This is the top group of warnings we observe when using clang to
-assemble the kernel via `ARCH=arm make LLVM=1`.
+In order to support this, we'll need to expand KF_TRUSTED_ARGS to
+support receiving trusted, non-refcounted pointers. It currently only
+supports either PTR_TO_CTX pointers, or refcounted pointers . What this
+means in terms of implementation is that btf_check_func_arg_match()
+would have to add another condition to its logic for checking if
+a ptr needs a refcount to also require that the pointer has at least one
+type modifier, such as PTR_UNTRUSTED. PTR_UNTRUSTED does not cover all
+of the possible pointers we need to watch out for, though. For example,
+a pointer obtained from walking a struct is considered "trusted" (or at
+least, not PTR_UNTRUSTED). To account for this and enable us to expand
+KF_TRUSTED_ARGS, this patch set also introduces a new PTR_NESTED type
+flag modifier which records if a pointer was obtained from walking a
+struct.
 
-Split the arch-y make variable into two, so that -march= flags only get
-passed to the compiler, not the assembler. -D flags are added to
-KBUILD_CPPFLAGS which is used for both C and assembler-with-cpp sources.
+This patch set adds this new PTR_NESTED type flag, expands
+KF_TRUSTED_ARGS accordingly, adds the new set of kfuncs mentioned above,
+and then finally adds a new selftest suite to validate all of this new
+behavior.
 
-Clang is trying to warn that it doesn't support different values for
--march= and -Wa,-march= (like GCC does, but the kernel doesn't need this)
-though the value of the preprocessor define __thumb2__ is based on
--march=. Make sure to re-set __thumb2__ via -D flag for assembler
-sources now that we're no longer passing -march= to the assembler. Set
-it to a different value than the preprocessor would for -march= in case
--march= gets accidentally re-added to KBUILD_AFLAGS in the future.
-Thanks to Ard and Nathan for this suggestion.
+David Vernet (3):
+  bpf: Allow trusted pointers to be passed to KF_TRUSTED_ARGS kfuncs
+  bpf: Add kfuncs for storing struct task_struct * as a kptr
+  bpf/selftests: Add selftests for new task kfuncs
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1315
-Link: https://github.com/ClangBuiltLinux/linux/issues/1587
-Link: https://github.com/llvm/llvm-project/issues/55656
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes v3 -> v4:
-* Add -D__thumb2__=2 to KBUILD_AFLAGS as per in-person discussion with
-  Ard and Nathan, and their SB tags.
-* Reword commit message.
+ include/linux/bpf.h                           |   6 +
+ kernel/bpf/btf.c                              |  11 +-
+ kernel/bpf/helpers.c                          |  86 ++++-
+ kernel/bpf/verifier.c                         |  15 +-
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../selftests/bpf/prog_tests/task_kfunc.c     | 160 +++++++++
+ .../selftests/bpf/progs/task_kfunc_common.h   |  83 +++++
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 315 ++++++++++++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 132 ++++++++
+ tools/testing/selftests/bpf/verifier/calls.c  |   4 +-
+ 10 files changed, 804 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
 
- arch/arm/Makefile | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
-
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index ee888070b2ff..b58998749ead 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -60,21 +60,34 @@ endif
- KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
- 
- # This selects which instruction set is used.
-+arch-$(CONFIG_CPU_32v7M)	:=-march=armv7-m
-+arch-$(CONFIG_CPU_32v7)		:=-march=armv7-a
-+arch-$(CONFIG_CPU_32v6)		:=-march=armv6
-+# Only override the compiler option if ARMv6. The ARMv6K extensions are
-+# always available in ARMv7
-+ifeq ($(CONFIG_CPU_32v6),y)
-+arch-$(CONFIG_CPU_32v6K)	:=-march=armv6k
-+endif
-+arch-$(CONFIG_CPU_32v5)		:=-march=armv5te
-+arch-$(CONFIG_CPU_32v4T)	:=-march=armv4t
-+arch-$(CONFIG_CPU_32v4)		:=-march=armv4
-+arch-$(CONFIG_CPU_32v3)		:=-march=armv3m
-+
- # Note that GCC does not numerically define an architecture version
- # macro, but instead defines a whole series of macros which makes
- # testing for a specific architecture or later rather impossible.
--arch-$(CONFIG_CPU_32v7M)	:=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
--arch-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
--arch-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6 -march=armv6
--# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
-+cpp-$(CONFIG_CPU_32v7M)		:=-D__LINUX_ARM_ARCH__=7
-+cpp-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7
-+cpp-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6
-+# Only override the compiler option if ARMv6. The ARMv6K extensions are
- # always available in ARMv7
- ifeq ($(CONFIG_CPU_32v6),y)
--arch-$(CONFIG_CPU_32v6K)	:=-D__LINUX_ARM_ARCH__=6 -march=armv6k
-+cpp-$(CONFIG_CPU_32v6K)		:=-D__LINUX_ARM_ARCH__=6
- endif
--arch-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5 -march=armv5te
--arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
--arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
--arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3m
-+cpp-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5
-+cpp-$(CONFIG_CPU_32v4T)		:=-D__LINUX_ARM_ARCH__=4
-+cpp-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4
-+cpp-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3
- 
- # This selects how we optimise for the processor.
- tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
-@@ -119,15 +132,16 @@ AFLAGS_NOWARN	:=$(call as-option,-Wa$(comma)-mno-warn-deprecated,-Wa$(comma)-W)
- 
- ifeq ($(CONFIG_THUMB2_KERNEL),y)
- CFLAGS_ISA	:=-mthumb -Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
--AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb
-+AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb -D__thumb2__=2
- else
- CFLAGS_ISA	:=$(call cc-option,-marm,) $(AFLAGS_NOWARN)
- AFLAGS_ISA	:=$(CFLAGS_ISA)
- endif
- 
- # Need -Uarm for gcc < 3.x
-+KBUILD_CPPFLAGS	+=$(cpp-y)
- KBUILD_CFLAGS	+=$(CFLAGS_ABI) $(CFLAGS_ISA) $(arch-y) $(tune-y) $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,)) -msoft-float -Uarm
--KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include asm/unified.h -msoft-float
-+KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) -Wa,$(arch-y) $(tune-y) -include asm/unified.h -msoft-float
- 
- CHECKFLAGS	+= -D__arm__
- 
 -- 
-2.38.0.413.g74048e4d9e-goog
+2.38.0
 
