@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26AA5FF0D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D912D5FF0E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJNPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S229908AbiJNPLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJNPLa (ORCPT
+        with ESMTP id S229942AbiJNPLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:11:30 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E7851A17;
-        Fri, 14 Oct 2022 08:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hh+wBzcQrEQZd7oz4Q6gVYf4bZRMf51ALRJ27tTdtW4=; b=O/3G50wblRrnpDUyXmoXXLdlvN
-        crK8xdQtjqyx9tcej2PjhhSOzwaNegLchL7oSwsEmqYB+ml5y9xnCmQ+6p/t0PTC/H5QMVIRkf6wD
-        6GysgvUSXdUKvXQXiGSelKTbedcn0KeEBe5DCYp/LFESXcqF7cfQIAOklb2ycjT/U0P8rkrDaWnFY
-        Su77dGhlHJU3xefgPElAZrdZPS72kKbOH43+1irKcyGJ3x5vylvyhemIGtLztJOJECn7afhNa6ehl
-        8xbhIAIN7S3DsNvipbSO9EP25If9ZfJJTNQZgY1h6wTYyyu6wW7orhUyVQs6J1agFVaL8DwZiXsyR
-        jb6saz0Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ojMKy-003RBT-3t; Fri, 14 Oct 2022 15:11:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29E6430008D;
-        Fri, 14 Oct 2022 17:10:57 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 913BB2C1ACA78; Fri, 14 Oct 2022 17:10:57 +0200 (CEST)
-Date:   Fri, 14 Oct 2022 17:10:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Justin He <Justin.He@arm.com>, Borislav Petkov <bp@alien8.de>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v8 6/7] apei/ghes: Use unrcu_pointer for cmpxchg
-Message-ID: <Y0l8AeQCrMLYW6g3@hirez.programming.kicks-ass.net>
-References: <20221010023559.69655-1-justin.he@arm.com>
- <20221010023559.69655-7-justin.he@arm.com>
- <Y0VGkUxpqiIzIFzB@zn.tnic>
- <DBBPR08MB4538A9F831FA96545BA35D9FF7239@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0WBklS1XpB5as+m@zn.tnic>
- <DBBPR08MB4538D5A85F707632ACCB70A4F7229@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y0gUpoaUBKw/jjaD@zn.tnic>
- <CAMj1kXGtTRaKCKJnsJ9XcRus+H16mO3TGsz+TFJLraOyvfciCA@mail.gmail.com>
- <DBBPR08MB453845A7A15596F6FE96DBC9F7249@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <CAMj1kXHrP_P79ObKPFFgpN-X7gN+zaN1vKbsQZTJGvm=Uoav3g@mail.gmail.com>
+        Fri, 14 Oct 2022 11:11:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C871CF54B;
+        Fri, 14 Oct 2022 08:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665760302; x=1697296302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N/njfTWM92urhDh1tc8kt06mInCQV3hTHb5sdf7xqk0=;
+  b=bYM9g6tVvtVxav3WaIrakhmyROkTIIboxfH+Snti7Ci8xFZNO4FolujL
+   thOBhsuC2TfFHL04DoRxG5S2eUY/pAV0ZXb0LWpYmunDj/ubmUPdfkPSY
+   lNHnGkeaZMzKLb684jH0zXNvWWJdgTnh0v0EcW4qCAjgpfJ+TBq5lwWg2
+   1euRJ0TRDrJx5ddSw44StElwH8iUvgQNGC6z3xIaZe9/ef+zoNkL0R21m
+   AGZv/jOUPRKHS0+dy0loDJ4uj3Bzkmpsh04Qo5X4rRcPoI2vhFmADfEF4
+   D/1eSZezcYNv2aMlKCnX02TtPb5jFtE3vkhoYLsQg15GaZf6PSNlwT/Er
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="369587630"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="369587630"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 08:11:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="660758830"
+X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
+   d="scan'208";a="660758830"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 14 Oct 2022 08:11:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ojMLW-006yCQ-0e;
+        Fri, 14 Oct 2022 18:11:34 +0300
+Date:   Fri, 14 Oct 2022 18:11:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
+Message-ID: <Y0l8JTQQvLzRejk1@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <0684f480-2092-d520-2c8e-bd9a2dca47e3@gmail.com>
+ <CAHp75VdDjyUAZBTaoPOe5oA3f_5xRznAooq08=Eff4F1AZyVOQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXHrP_P79ObKPFFgpN-X7gN+zaN1vKbsQZTJGvm=Uoav3g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <CAHp75VdDjyUAZBTaoPOe5oA3f_5xRznAooq08=Eff4F1AZyVOQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,45 +78,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 04:31:37PM +0200, Ard Biesheuvel wrote:
-> +       if (slot != -1) {
-> +               /*
-> +                * Use release semantics to ensure that ghes_estatus_cached()
-> +                * running on another CPU will see the updated cache fields if
-> +                * it can see the new value of the pointer.
-> +                */
-> +               victim = xchg_release(ghes_estatus_caches + slot,
-> +                                     RCU_INITIALIZER(new_cache));
-> +
-> +               /*
-> +                * At this point, victim may point to a cached item different
-> +                * from the one based on which we selected the slot. Instead of
-> +                * going to the loop again to pick another slot, let's just
-> +                * drop the other item anyway: this may cause a false cache
-> +                * miss later on, but that won't cause any problems.
-> +                */
-> +               if (victim) {
-> +                       call_rcu(&rcu_dereference(victim)->rcu,
-> +                                ghes_estatus_cache_rcu_free);
-		}
+On Wed, Oct 12, 2022 at 01:04:10PM +0300, Andy Shevchenko wrote:
+> On Tue, Oct 11, 2022 at 11:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> > On 10/10/2022 1:14 PM, Andy Shevchenko wrote:
+> > > Currently the header inclusion inside the pinctrl headers seems more arbitrary
+> > > than logical. This series is basically out of two parts:
+> > > - add missed headers to the pin control drivers / users
+> > > - clean up the headers of pin control subsystem
+> > >
+> > > The idea is to have this series to be pulled after -rc1 by the GPIO and
+> > > pin control subsystems, so all new drivers will utilize cleaned up headers
+> > > of the pin control.
+> > >
+> > > Please, review and comment.
+> >
+> > Did you really need to split this on a per-driver basis as opposed to
+> > just a treewide drivers/pinctrl, drivers/media and drivers/gpiolib patch
+> > set?
+> >
+> > 36 patches seems needlessly high when 4 patches could have achieve the
+> > same outcome.
+> 
+> I can combine them if maintainers ask for that, nevertheless for Intel
+> pin control and GPIO drivers, which I care more about, I would like to
+> leave as separate changes (easy to see in history what was done).
 
-I think you can use unrcu_pointer() here instead, there should not be a
-data dependency since the ->rcu member itself should be otherwise unused
-(and if it were, we wouldn't care about its previous content anyway).
+I can now tell why I don't like to combine. While doing a revert (it's not
+related to GPIO nor to pin control), it appears that I reverted extra bits
+as merge conflict resolution. This is per se is not an issue, but when
+I tried to find and reapply that missed piece I can't, because the patch
+is combined and Git simply ignores to have
+`git cherry-pick _something in the past_` done.
 
-But only Alpha cares about that distinction anyway, so *shrug*.
+But again, up to maintainers.
 
-While I much like the xchg() variant; I still don't really fancy the
-verbage the sparse nonsense makes us do.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-		victim = xchg_release(&ghes_estatus_caches[slot], new_cache);
-		if (victim)
-			call_rcu(&victim->rcu, ghes_estatus_cache_rcu_free);
 
-is much nicer code.
-
-Over all; I'd simply ignore sparse (I often do).
-
-> +       }
->         rcu_read_unlock();
->  }
