@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D42E5FEC45
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7735FEC4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJNKHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S229533AbiJNKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 06:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiJNKHt (ORCPT
+        with ESMTP id S230020AbiJNKHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:07:49 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D0E10537D;
-        Fri, 14 Oct 2022 03:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=L4LcT7d4jLsOBvjwIUOPjvR1C67SbCP8S9zjCTw+b2o=; b=MneAwRNqK978+qReSDZqbf8fim
-        UdRSbq7lmjHyTh35JQdV6EthH34ObvMUiYYfpj08BShsMWHF52K0JjuOTlmahD6SHbiKfXPYikKYV
-        /rzOQsR970gScpCntYCd7TwW+Y1ek1sy6mnIhepsW2PRKZPYCmg9olf8WL9MHREItELXqwt8xH88+
-        sna8Sc1k3lsXdvajEvbeYrzoZPTpaGoPCiPWLnVgG9VKn06Xu/S6aRRczUI0TQa8IU/K99NPKOfOF
-        doqNcbA62hoHANW7n2c416I1Ts35IaJB6KhkkkQ+erlEeGR8rwDBQz+wplE1UT4Gf6pWByPcPIEci
-        BPFiM9UQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ojHaw-003NqY-0V; Fri, 14 Oct 2022 10:07:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1C4E830008D;
-        Fri, 14 Oct 2022 12:07:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EDBD22C164D35; Fri, 14 Oct 2022 12:07:08 +0200 (CEST)
-Date:   Fri, 14 Oct 2022 12:07:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 15/39] x86/mm: Check Shadow Stack page fault errors
-Message-ID: <Y0k0zJK7biH+EMlO@hirez.programming.kicks-ass.net>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-16-rick.p.edgecombe@intel.com>
+        Fri, 14 Oct 2022 06:07:55 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1D014EC4E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:07:52 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j16so6816241wrh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kPSC14H4qvXkT9TYkAZgmifJI9m19ef7qgoJ4OsHyyg=;
+        b=vnlPWAmwmg0Zu0PEMDLBoa6dhUKeqWzyoHwUBGMfJ7nVwamcozMkMIhqh6E/zs7Y31
+         bPNQRhSvMPKWcsBOvMJKluiIsuLnfxFpqHpTXCZAONw2Ppgoq9JpNDaBcoXk9hmT63dH
+         sKKlPQlXA4+rChv4Xrri3HQgo+D86h/YVo40Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kPSC14H4qvXkT9TYkAZgmifJI9m19ef7qgoJ4OsHyyg=;
+        b=3GoAoHBx+RocC5H9HkD/oJtTOwRig24HJxoVITGRWqMjzc+XgUsid7/BzoZCax+SZB
+         MQUqVASMtKuaa6JpU3lphXBNzmMI6ogYGlgAHo9oJwLQD/QP5p9/S/rSpkz6vUtvcLBS
+         hAopRC0kr3K8HyioVa/l7ThnaYVhyjNAbKNmNCZXLqXkL4BkM3spZoxPkiI9zVLQeCpT
+         RkgWi+3AGQftIOUwKervYWUI0PmJ94btGjskLmVbIVCl8DGKbl0P4YOFzwupAVm57SKx
+         BrjYSMhX7XEWt5MZeOjXLJHGI8wZEA2iV+rnZyo/KaxpUoDLYOKlZU++fKrtGfTbi1BB
+         d3YA==
+X-Gm-Message-State: ACrzQf2309Ph7GRoPAaVIscZYcPMMMGBqWFv1t9knAdegZchS81oI3p+
+        LNvpO8Z2Th+CouQE64yIUxsrKg==
+X-Google-Smtp-Source: AMsMyM63n0BME1wzakGcd9fpHxmmjPaT7s3n01NO4QiDx0MC/YSVqw0PfekfOqiRcGaQE7RhMCABWg==
+X-Received: by 2002:adf:9dd0:0:b0:22c:d6cc:b387 with SMTP id q16-20020adf9dd0000000b0022cd6ccb387mr2922910wre.353.1665742071061;
+        Fri, 14 Oct 2022 03:07:51 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:c7c:5308:6600:49a0:d6bf:5c1a:f3da])
+        by smtp.gmail.com with ESMTPSA id c15-20020a5d414f000000b002285f73f11dsm1931008wrq.81.2022.10.14.03.07.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 03:07:50 -0700 (PDT)
+From:   Ignat Korchagin <ignat@cloudflare.com>
+To:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel-team@cloudflare.com, lei he <helei.sig11@bytedance.com>,
+        Ignat Korchagin <ignat@cloudflare.com>
+Subject: [PATCH v2 0/4] crypto, keys: add ECDSA signature support to key retention service
+Date:   Fri, 14 Oct 2022 11:07:33 +0100
+Message-Id: <20221014100737.94742-1-ignat@cloudflare.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-16-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:12PM -0700, Rick Edgecombe wrote:
+Changes from v1:
+  * fixed code format
 
-> The architecture has concepts of both shadow stack reads and shadow stack
-> writes. Any shadow stack access to non-shadow stack memory will generate
-> a fault with the shadow stack error code bit set.
-> 
-> This means that, unlike normal write protection, the fault handler needs
-> to create a type of memory that can be written to (with instructions that
-> generate shadow stack writes), even to fulfill a read access. So in the
-> case of COW memory, the COW needs to take place even with a shadow stack
-> read. Otherwise the page will be left (shadow stack) writable in
-> userspace. So to trigger the appropriate behavior, set FAULT_FLAG_WRITE
-> for shadow stack accesses, even if the access was a shadow stack read.
+Kernel Key Retention Service[1] is a useful building block to build secure
+production key management systems. One of its interesting features is
+support for asymmetric keys: we can allow a process to use a certain key
+(decrypt or sign data) without actually allowing the process to read the
+cryptographic key material. By doing so we protect our code from certain
+type of attacks, where a process memory memory leak actually leaks a
+potentially highly sensitive cryptographic material.
 
-That ^ should be moved into the comment below
+But unfortunately only RSA algorithm was supported until now, because
+in-kernel ECDSA implementation supported signature verifications only.
 
->  - Clarify reasoning for FAULT_FLAG_WRITE for all shadow stack accesses
+This patchset implements in-kernel ECDSA signature generation and adds
+support for ECDSA signing in the key retention service. The key retention
+service support was taken out of a previous unmerged patchset from Lei He[2]
 
-> @@ -1300,6 +1314,13 @@ void do_user_addr_fault(struct pt_regs *regs,
->  
->  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
->  
-> +	/*
-> +	 * In order to fullfull a shadow stack access, the page needs
-> +	 * to be made (shadow stack) writable. So treat all shadow stack
-> +	 * accesses as writes.
-> +	 */
+[1]: https://www.kernel.org/doc/html/latest/security/keys/core.html
+[2]: https://patchwork.kernel.org/project/linux-crypto/list/?series=653034&state=*
 
-Because that's impenetrable.
+Ignat Korchagin (2):
+  crypto: add ECDSA signature generation support
+  crypto: add ECDSA test vectors from RFC 6979
 
-> +	if (error_code & X86_PF_SHSTK)
-> +		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_WRITE)
->  		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_INSTR)
-> -- 
-> 2.17.1
-> 
+lei he (2):
+  crypto: pkcs8 parser support ECDSA private keys
+  crypto: remove unused field in pkcs8_parse_context
+
+ crypto/Kconfig                        |   3 +-
+ crypto/Makefile                       |   4 +-
+ crypto/asymmetric_keys/pkcs8.asn1     |   2 +-
+ crypto/asymmetric_keys/pkcs8_parser.c |  46 +++-
+ crypto/ecc.c                          |   9 +-
+ crypto/ecdsa.c                        | 373 +++++++++++++++++++++++++-
+ crypto/ecprivkey.asn1                 |   6 +
+ crypto/testmgr.c                      |  18 ++
+ crypto/testmgr.h                      | 333 +++++++++++++++++++++++
+ include/crypto/internal/ecc.h         |  10 +
+ 10 files changed, 787 insertions(+), 17 deletions(-)
+ create mode 100644 crypto/ecprivkey.asn1
+
+-- 
+2.30.2
+
