@@ -2,157 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6285FE7B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7765FE7B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiJNDsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S229841AbiJNDsY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Oct 2022 23:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiJNDsJ (ORCPT
+        with ESMTP id S229727AbiJNDsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:48:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E5119298C;
-        Thu, 13 Oct 2022 20:48:06 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbWvv20hjbtwtAA--.51528S2;
-        Fri, 14 Oct 2022 11:47:59 +0800 (CST)
-Subject: Re: [PATCH v7 2/2] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        zhuyinbo@loongson.cn
-References: <20220930021054.22387-1-zhuyinbo@loongson.cn>
- <20220930021054.22387-2-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <21717466-63f9-09b0-e666-61b98ab808f4@loongson.cn>
-Date:   Fri, 14 Oct 2022 11:47:59 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 13 Oct 2022 23:48:19 -0400
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC47E192984
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:48:14 -0700 (PDT)
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay05.hostedemail.com (Postfix) with ESMTP id A901C401DE;
+        Fri, 14 Oct 2022 03:48:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id AD57B20028;
+        Fri, 14 Oct 2022 03:48:00 +0000 (UTC)
+Message-ID: <3251b73cce77964413e01d4f5361de48942e98ae.camel@perches.com>
+Subject: Re: [PATCH] get_maintainer: Add the --for-tree argument
+From:   Joe Perches <joe@perches.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org
+Date:   Thu, 13 Oct 2022 20:48:10 -0700
+In-Reply-To: <mhng-220de489-6329-41ce-9a6f-d7acdd73344c@palmer-ri-x1c9a>
+References: <mhng-220de489-6329-41ce-9a6f-d7acdd73344c@palmer-ri-x1c9a>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-In-Reply-To: <20220930021054.22387-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxbWvv20hjbtwtAA--.51528S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZrW7uryUCryrXrWrZFW3trb_yoW5Gr4UpF
-        4xCas5CF4vkF17Z39IkFyUCws0qwnayF9rur4xW3W5Kr98Ja4Sq3yagw1DZ393ur1jgFW7
-        uFyS9r4UC3WkJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMx
-        C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-        wI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-        vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-        0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: ugof11ur5ew5jqn5rwc5f3jtw4hykyww
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: AD57B20028
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19KudPR12seH2SBnua8sGthUr5XMtuNAFE=
+X-HE-Tag: 1665719280-754373
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi thermal maintainer
-
-Are there any other suggestions about this patch? If not, please help
-merge this patch to upstream.
-
-RRs
-Yinbo
-ÔÚ 2022/9/30 ÉÏÎç10:10, Yinbo Zhu Ð´µÀ:
-> Add the loongson2k thermal binding with DT schema format using
-> json-schema.
+On Thu, 2022-10-13 at 19:56 -0700, Palmer Dabbelt wrote:
+> On Thu, 13 Oct 2022 17:39:53 PDT (-0700), joe@perches.com wrote:
+> > On Thu, 2022-10-13 at 14:57 -0700, Palmer Dabbelt wrote:
+> > > I recently wanted to look up the maintainers for each tree path via a
+> > > script, and I couldn't find a better way to do that than poking
+> > > get_maintainer.pl to add a new argument.  This lets folks run something
+> > > like
+> > > 
+> > >     $ ./scripts/get_maintainer.pl --for-tree git://github.com/kvm-riscv/linux.git
+> > >     Anup Patel <anup@brainfault.org> (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+> > >     kvm@vger.kernel.org (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+> > >     kvm-riscv@lists.infradead.org (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+> > >     linux-riscv@lists.infradead.org (maintainer:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv))
+> > > 
+> > > to find out who owns a tree.
+> > 
+> > I'm not sure this is useful.
+[]
+> Generally sound like you 
+> don't want this one so I'm going to punt on fixing these for now, I 
+> don't care all that much about having this merged.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> 
->   .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 44 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> new file mode 100644
-> index 000000000000..12f54076bdd1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Thermal sensors on loongson2k SoCs
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    thermal: thermal-sensor@1fe01500 {
-> +        compatible = "loongson,ls2k-thermal";
-> +        reg = <0x1fe01500 0x30>;
-> +        interrupt-parent = <&liointc0>;
-> +        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2efbd5b158b9..0be0f520c032 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11904,6 +11904,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-pm@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->   F:	drivers/thermal/loongson2_thermal.c
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SP
+> LMK if you want a v2, though.
 
-> 
+I think it's not necessary.
 
+Thanks,  Joe
