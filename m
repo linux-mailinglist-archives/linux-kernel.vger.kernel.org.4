@@ -2,111 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B085FED9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EED35FEDA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiJNLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S229732AbiJNLyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJNLu2 (ORCPT
+        with ESMTP id S229933AbiJNLyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:50:28 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6C1156269;
-        Fri, 14 Oct 2022 04:49:28 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so4741791wms.0;
-        Fri, 14 Oct 2022 04:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AaQQNmDhTQ63O8gvYPwPmPKLG9hxIOmFr07BGT5pPL4=;
-        b=ENeKv8TfJrjBUFIbIxSUwY7AgglGNbf3FG3xxvxdTaa2EXconSUXEcGOJbHIvOIvor
-         CPC0GR7SV61M57LOOvsxgZ2pG3ypYpTIe4qYdzMqlbrDFLZr14BkHHjoX59uOTsYM7r4
-         1wfbj7cBo9grfoPjKexAZO2Dp2Vf8UymgCU0asxqipowHxX2p5A64BwO58MG7XPbvWWf
-         oaKKLIwFr4ZKa5kIWo0UDIhv7TBaZN8hf2bU2c9yl8mJCzkrSQLCQFP4vhVowBVSCMwQ
-         NyiNB/1LQ+xaWAHYmSnoZ+teRsi760XKQ+TKX2qlOcffrdxOI0ywKfPqmeELJzBop5mt
-         DX5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AaQQNmDhTQ63O8gvYPwPmPKLG9hxIOmFr07BGT5pPL4=;
-        b=TOFT1hYaHyUvprmWJ0t9YQ+H/pisDfYzqoLrFB5kV7bAIrjfBuXzWqCE89OJyI/SPI
-         wUrs9b1bgP8+qLC1TFj69yNry0aRmpnQd0YwNAi2UqJ84YsQxi9vQVzbWKImNEMTALC3
-         IDFBGWxLdPXgf9qp8z3LnCeEAE74y6WJCAntT08kyRTnv6TlMTVM9hUeHdDSaKpVj64J
-         XTefHkhlUw4wB6zyRB+Oh2hm/mEdPkK+1c/iymUQ3y7RtwKHGTC7h60eifCgcjSQSLU6
-         lfmeVxdwZnrRxRqex1ClIhG/a6LaCpd0BnirKAATuEsAsREZqkf9fnJD+9p45W1Nsbne
-         IAFw==
-X-Gm-Message-State: ACrzQf3ElFF0+eM6Kqa7akPqjLfPLbgP8y43EeAwRlB6ioJwpo+rAqbm
-        2+a0VVaUMxKUdCOIgXbE4/k=
-X-Google-Smtp-Source: AMsMyM6KeoUbEpigP1xvclK8PBuDH85xyMpSGio6ypild2fDTRbK9NHX4HIgK4a3MDj0aEFlda/ctw==
-X-Received: by 2002:a05:600c:1547:b0:3b4:c56b:a3a6 with SMTP id f7-20020a05600c154700b003b4c56ba3a6mr3307932wmg.29.1665748158303;
-        Fri, 14 Oct 2022 04:49:18 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id r3-20020a05600c158300b003c21ba7d7d6sm1788432wmf.44.2022.10.14.04.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 04:49:18 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 12:49:16 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.10 00/54] 5.10.148-rc1 review
-Message-ID: <Y0lMvET5i4FFQkxL@debian>
-References: <20221013175147.337501757@linuxfoundation.org>
+        Fri, 14 Oct 2022 07:54:16 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0F11958C1;
+        Fri, 14 Oct 2022 04:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Y5HkdSnQwwhYn4XoEiPn5A22fhd1yJEXYYhQPNU+LGM=; b=oSwL4IiL0f5UKhk4F9ianYv3pY
+        Bg/1K9c4/3pUk6izxRed4/LhGXeVTc8bnI9OAKinVFRzOXx0c74wJ2zSFryQxjs5xngZkgXjQGtQV
+        ACOZTDYwx+ElZ67HyuHtzpIKdNF7sHBAazP3Y/oebUPJecxdgdxomMDJYHjLqE0ItB+8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ojJFP-001y3r-8a; Fri, 14 Oct 2022 13:53:03 +0200
+Date:   Fri, 14 Oct 2022 13:53:03 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Harini Katakam <harini.katakam@amd.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        harinikatakamlinux@gmail.com, michal.simek@amd.com,
+        radhey.shyam.pandey@amd.com
+Subject: Re: [PATCH v2] net: phy: dp83867: Extend RX strap quirk for SGMII
+ mode
+Message-ID: <Y0lNn4Eqgyu5YS87@lunn.ch>
+References: <20221014064735.18928-1-harini.katakam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013175147.337501757@linuxfoundation.org>
+In-Reply-To: <20221014064735.18928-1-harini.katakam@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Thu, Oct 13, 2022 at 07:51:54PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.148 release.
-> There are 54 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Oct 14, 2022 at 12:17:35PM +0530, Harini Katakam wrote:
+> When RX strap in HW is not set to MODE 3 or 4, bit 7 and 8 in CF4
+> register should be set. The former is already handled in
+> dp83867_config_init; add the latter in SGMII specific initialization.
 > 
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
+> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
 
-Build test (gcc version 11.3.1 20220925):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+Please see the netdev FAQ. You are supposed to put the tree this patch
+is for in the subject line, [PATCH net v2] ... etc. Please remember
+this for next time.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1988
-[2]. https://openqa.qa.codethink.co.uk/tests/1993
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+    Andrew
