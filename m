@@ -2,159 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF555FEB1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD115FEAE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 10:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJNIuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 04:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S229787AbiJNItG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 04:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiJNIt7 (ORCPT
+        with ESMTP id S229657AbiJNItA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:49:59 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D5832BA7;
-        Fri, 14 Oct 2022 01:49:56 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id c9-20020a05600c100900b003c6da0f9b62so2546530wmc.1;
-        Fri, 14 Oct 2022 01:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gOV3h57ut5GHhGlnLsxkEHBnkvFbonX9ORLLuFusyi0=;
-        b=GfG0sfEgh2ptierbWCnoguBubKf8JDmmicxf1uJSpFpGObOsFWBqAhZpEYJ5Krl+yo
-         ZD1cwtaOtRSGc/If6NW2e99cfjHy447Mfkim3JBoO6lFHYVO43xdxReqY6l8QyFBn4Qc
-         tGp1dAr825o3wC1fJ3+NYRhGU424uQwhoZSV5IZH/fycyAueUF0kXNr3kuIlzRScRjEM
-         aqxVZim71FxWOLPQbEMG0l3htKZad0jBeYIJY2DLYtsbqGW8wiG+xF4GplnsrmQkllp0
-         oM0aAGnq+3SiJfldcLJyIp7maRrgbF8Lv6EtCNGsqquNz1rjsbw3Zxsk5zbVXT/52SAq
-         oChQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gOV3h57ut5GHhGlnLsxkEHBnkvFbonX9ORLLuFusyi0=;
-        b=yFc18Ic5uajmvY858S5SmYtEssLPjsgZ3xhbt5SLxBd5DKgGxNVdPiEKVGqQcyiRVx
-         hOYbYRKrNermmCe3SP/LNZrws7EhYTeigD8acNBYogs4HL3q1t/oryvNT0GKvT3DQ/vL
-         ASvTa9n4jk01jTgw/pty0FaBVcQOp7Fd8oEFtN7rXdsvEFXIkp0ljWQpwfboFF6bArc3
-         H1a2JhbnJYZKSUpQPynem1jCiNBLmeh9vXDhInQtZOUywg7QAGrYweNLFT8t9a+o2jIG
-         A5/RbJgP5ZAlal12VYy1tiq6LUlR8P8HYAH6tm62y37HbLePfFlN/pm6ZR8UaYEP888E
-         mefw==
-X-Gm-Message-State: ACrzQf3+WPZYFCGsXiYY2zWNaDDGanw5mkjHffyFN+3lEqjki/eraPHS
-        DpNQ/Rn2M9k1CHTWYbgLgs8=
-X-Google-Smtp-Source: AMsMyM77yv8Pg3D5oDIyozFj8+3/IZB1l6YKqrDliEThMChfauLgTj828aJxH3GHPZOHomGULwIXmw==
-X-Received: by 2002:a05:600c:4f93:b0:3b4:c026:85a1 with SMTP id n19-20020a05600c4f9300b003b4c02685a1mr9583025wmq.39.1665737394358;
-        Fri, 14 Oct 2022 01:49:54 -0700 (PDT)
-Received: from hrutvik.c.googlers.com.com (120.142.205.35.bc.googleusercontent.com. [35.205.142.120])
-        by smtp.gmail.com with ESMTPSA id 123-20020a1c1981000000b003c6c4639ac6sm1547372wmz.34.2022.10.14.01.49.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 01:49:54 -0700 (PDT)
-From:   Hrutvik Kanabar <hrkanabar@gmail.com>
-To:     Hrutvik Kanabar <hrutvik@google.com>
-Cc:     Marco Elver <elver@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        kasan-dev@googlegroups.com,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        linux-ntfs-dev@lists.sourceforge.net
-Subject: [PATCH RFC 7/7] fs/f2fs: support `DISABLE_FS_CSUM_VERIFICATION` config option
-Date:   Fri, 14 Oct 2022 08:48:37 +0000
-Message-Id: <20221014084837.1787196-8-hrkanabar@gmail.com>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-In-Reply-To: <20221014084837.1787196-1-hrkanabar@gmail.com>
-References: <20221014084837.1787196-1-hrkanabar@gmail.com>
+        Fri, 14 Oct 2022 04:49:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC971781D7;
+        Fri, 14 Oct 2022 01:48:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 300C121A2C;
+        Fri, 14 Oct 2022 08:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665737338; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e92DTbDaQNolF7YKNbIS6b3pmt4/q07KdyY56iTEIVM=;
+        b=sJi7T1ThSa1l+g9i6ycsgjAk9iuUOTs7/3izNtA7vQnv0vyYMVFBw41TRBvSfWJEzHS6IV
+        wnNgxagYdYqWzA7MRb7ZVLzFdLK2JgsstbQopXqLeqDtsRUQn9vRzk77wMfrVH+jk3lcJo
+        kIP0bAClmUL/wZxr/KHNYTaw6GxACNc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665737338;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e92DTbDaQNolF7YKNbIS6b3pmt4/q07KdyY56iTEIVM=;
+        b=jzHsfiRL+KN0jqgeVZuneNFRQnh63NlQM3eIemKaaGji/7C4arlS9jkiKa/xLFHT23zaB2
+        M5vBQmiEajm4ASDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1B8513451;
+        Fri, 14 Oct 2022 08:48:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nC9wMnkiSWMSCQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 14 Oct 2022 08:48:57 +0000
+Message-ID: <d9b794ea-ff2f-b1a0-0569-1b7a54136242@suse.cz>
+Date:   Fri, 14 Oct 2022 10:48:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2] mm: Make failslab writable again
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
+        Kees Cook <keescook@chromium.org>,
+        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
+ <Yyr1xONdw8dBgsKr@hyeyoo>
+ <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
+ <YzJIsFZQoCEYntvR@hyeyoo>
+ <7640a2d9-a32d-2fd7-8f64-586edb9b781e@virtuozzo.com>
+ <YzRmZlJBFA9HIlSM@hyeyoo>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <YzRmZlJBFA9HIlSM@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hrutvik Kanabar <hrutvik@google.com>
+On 9/28/22 17:21, Hyeonggon Yoo wrote:
+> On Tue, Sep 27, 2022 at 10:44:20AM +0300, Alexander Atanasov wrote:
+>> Hello,
+>> 
+>> On 27.09.22 3:49, Hyeonggon Yoo wrote:
+>> > On Fri, Sep 23, 2022 at 10:34:28AM +0300, Alexander Atanasov wrote:
+>> > > Hello,
+>> > > 
+>> > > On 21.09.22 14:30, Hyeonggon Yoo wrote:
+>> > > > On Tue, Sep 20, 2022 at 03:11:11PM +0300, Alexander Atanasov wrote:
+>> > > > > In (060807f841ac mm, slub: make remaining slub_debug related attributes
+>> > > > > read-only) failslab was made read-only.
+>> > > > > I think it became a collateral victim to the two other options for which
+>> > > > > the reasons are perfectly valid.
+>> > > > > Here is why:
+>> > > > >    - sanity_checks and trace are slab internal debug options,
+>> > > > >      failslab is used for fault injection.
+>> > > > >    - for fault injections, which by presumption are random, it
+>> > > > >      does not matter if it is not set atomically. And you need to
+>> > > > >      set atleast one more option to trigger fault injection.
+>> > > > >    - in a testing scenario you may need to change it at runtime
+>> > > > >      example: module loading - you test all allocations limited
+>> > > > >      by the space option. Then you move to test only your module's
+>> > > > >      own slabs.
+>> > > > >    - when set by command line flags it effectively disables all
+>> > > > >      cache merges.
+>> > > > 
+>> > > > Maybe we can make failslab= boot parameter to consider cache filtering?
+>> > > > 
+>> > > > With that, just pass something like this:
+>> > > > 	failslab=X,X,X,X,cache_filter slub_debug=A,<cache-name>>
+>> > > 
+>> > > > Users should pass slub_debug=A,<cache-name> anyway to prevent cache merging.
+>> > > 
+>> > > It will be good to have this in case you want to test cache that is used
+>> > > early. But why push something to command line option only when it can be
+>> > > changed at runtime?
+>> > 
+>> > Hmm okay. I'm not against changing it writable. (it looks okay to me.)
+>> 
+>> Okay. Good to know that.
+>> 
+>> > Just wanted to understand your use case!
+>> > Can you please elaborate why booting with slub_debug=A,<your cache name>
+>> > and enabling cache_filter after boot does not work?
+>> 
+>> I didn't say it does not work - it does work but requires reboot. You may
+>> want to test variations of caches for example. Cache A, Cache B ... C and so
+>> on one by one. Reboots might be fast these days with VMs but you may not be
+>> able to test everything in a VM. And ... reboots used to be the signature
+>> move of one Other OS.
+> 
+> Thank you for elaboration!
+> Makes sense.
+> 
+>> 
+>> > Or is it trying to changnig these steps,
+>> > 
+>> > FROM
+>> > 	1. booting with slub_debug=A,<cache name>
+>> > 	2. write to cache_filter to enable cache filtering
+>> > 	3. setup probability, interval, times, size
+>> > 
+>> > TO
+>> > 
+>> > 	1. write to failslab attribute of <cache name> (may fail it has alias)
+>> > 	2. write to cache_filter to enable cache filtering
+>> > 	3. setup probability, interval, times, size
+>> > ?
+>> > 
+>> > as you may know, SLAB_FAILSLAB does nothing whens
+>> > cache_filter is disabled, and you should pass slub_debug=A,<cache name> anyway
+>> 
+>> Okay , i think there awaits another problem:
+>> bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
+>> {
+>> ...
+>> 
+>>         if (failslab.cache_filter && !(s->flags & SLAB_FAILSLAB))
+>>                 return false;
+>> ...
+>> 	return should_fail(&failslab.attr, s->object_size);
+>> }
+>> 
+>> So if you do not have cache_filter set ... you go to should_fail for all
+>> slabs.
+> 
+> Yes.
+> 
+>> I've been hit by that and spend a lot of time trying to understand why i got
+>> crashes at random places. And the reason was that i read an old
+>> documentation that said cache_filter is writable and i blindly wrote 1 to
+>> it.
 
-When `DISABLE_FS_CSUM_VERIFICATION` is enabled, bypass checksum
-verification.
+I don't understand. It is writable for root, and you can enable it that way, no?
 
-Signed-off-by: Hrutvik Kanabar <hrutvik@google.com>
----
- fs/f2fs/checkpoint.c | 3 ++-
- fs/f2fs/compress.c   | 3 ++-
- fs/f2fs/f2fs.h       | 2 ++
- fs/f2fs/inode.c      | 3 +++
- 4 files changed, 9 insertions(+), 2 deletions(-)
+>> If the intent is to only work with cache filter set - then i will update
+>> the patch to do so.
+> 
+> You mean to set cache_filter to true when writing to 'failslab',
+> or when setting SLAB_FAILSLAB slab flag?
+> 
+> I'm not so confident for that because it's implicitly changing.
+> Maybe more documentation would be proper?
+> 
+> what do you think, Vlastimil?
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 0c82dae082aa..cc5043fbffcb 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -864,7 +864,8 @@ static int get_checkpoint_version(struct f2fs_sb_info *sbi, block_t cp_addr,
- 	}
- 
- 	crc = f2fs_checkpoint_chksum(sbi, *cp_block);
--	if (crc != cur_cp_crc(*cp_block)) {
-+	if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-+	    crc != cur_cp_crc(*cp_block)) {
- 		f2fs_put_page(*cp_page, 1);
- 		f2fs_warn(sbi, "invalid crc value");
- 		return -EINVAL;
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index d315c2de136f..d0bce92dbf38 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -772,7 +772,8 @@ void f2fs_decompress_cluster(struct decompress_io_ctx *dic, bool in_task)
- 		u32 provided = le32_to_cpu(dic->cbuf->chksum);
- 		u32 calculated = f2fs_crc32(sbi, dic->cbuf->cdata, dic->clen);
- 
--		if (provided != calculated) {
-+		if (!IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION) &&
-+		    provided != calculated) {
- 			if (!is_inode_flag_set(dic->inode, FI_COMPRESS_CORRUPT)) {
- 				set_inode_flag(dic->inode, FI_COMPRESS_CORRUPT);
- 				printk_ratelimited(
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e6355a5683b7..b27f1ec9b49f 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1976,6 +1976,8 @@ static inline u32 f2fs_crc32(struct f2fs_sb_info *sbi, const void *address,
- static inline bool f2fs_crc_valid(struct f2fs_sb_info *sbi, __u32 blk_crc,
- 				  void *buf, size_t buf_size)
- {
-+	if (IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION))
-+		return true;
- 	return f2fs_crc32(sbi, buf, buf_size) == blk_crc;
- }
- 
-diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-index 9f0d3864d9f1..239bb08e45b1 100644
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -181,6 +181,9 @@ bool f2fs_inode_chksum_verify(struct f2fs_sb_info *sbi, struct page *page)
- #endif
- 		return true;
- 
-+	if (IS_ENABLED(CONFIG_DISABLE_FS_CSUM_VERIFICATION))
-+		return true;
-+
- 	ri = &F2FS_NODE(page)->i;
- 	provided = le32_to_cpu(ri->i_inode_checksum);
- 	calculated = f2fs_inode_chksum(sbi, page);
--- 
-2.38.0.413.g74048e4d9e-goog
+I also don't think we should change cache_filter when writing to a cache's
+failslab attribute.
+
+>> This is the only place where SLAB_FAILSLAB is explicitly
+>> tested, other places check it as part of SLAB_NEVER_MERGE.
+>> 
+>> But even for all caches it is kind of possible to test with size(space)
+>> which is in turn useful because you need to figure out how you handle
+>> failures from external caches - external to your code under test and you
+>> don't want to keep track for all of them (same goes for too much options in
+>> command line). 
+> 
+> Yeah, we should be able to inject fault in all caches, or a specific
+> cache(s).
+> 
+>> > to prevent doing cache merging with <cache name>.
+>> 
+>> Or you can pass SLAB_FAILSLAB from your module when creating the cache to
+>> prevent merge when under test.
+> 
+> Right. I missed that.
+> 
+>> 
+>> 
+>> -- 
+>> Regards,
+>> Alexander Atanasov
+>> 
+> 
 
