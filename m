@@ -2,106 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91B75FF263
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C595FF271
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiJNQli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S231171AbiJNQop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiJNQlg (ORCPT
+        with ESMTP id S230523AbiJNQok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:41:36 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FFB191D5F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:41:35 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3321c2a8d4cso51390247b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NiFexjlTvC7lzZHYKqn2wsRcOtMjNz2f2+18kg4ZV1s=;
-        b=PoLyCxWP8+M5FMfSrh3Fejd4iRJAayG5MyO0Ebr8QOFogHI0WSak2i10J1YxDtNz0C
-         7h36PymIN/Jshwd03YWupn2wnbj8Px0r04ECbihwM/ltrGsuqu2dOVb33n0c3APlszwt
-         FXh/TT0EYAB5gMg5SFgcrC9qLMYySWNnrNamD4xZCjD4lB1lumtRp/PJzwTkpWygqQKm
-         Ug9mwVrvCFTWIUSNh8plsniHjiuBAYVAnSlxdTEYFRU2oWUCvlAfLunN6UMpn735dRaE
-         Es954MsD21wnFhbGvak5Jiq7sI3abIqOeB11VeHCZR1Ko1mvUuSKbjCgaMY8NHe+6Mnw
-         dv6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NiFexjlTvC7lzZHYKqn2wsRcOtMjNz2f2+18kg4ZV1s=;
-        b=qkbP3WQ6lKAaxD5qjxAxzcosHln2DvSsyBHdPtYDYPTny/JDFESqTRdEbi46BUV3D/
-         7sa2Z7z85cXOLv7pb7V77C76nUblBJrnwyiDbehKdIiDm2UtG86pYbEvxq8Xf1n1fOvB
-         0mnN27aNPPFcnEvkfwo0/PzaenY0uUIwNf1qeYPHZlOjUhM7mzGe3TI6CJAdfCNWa5bJ
-         RKYFj9g21h/HnphvNjm4HfvsNPIflN0gwxyWKR1t2I3FiU0vfTr8US8FDekQKY9BW3QT
-         CviZFLYNSvIe98ehCFcYrdUBsvcQSZf94P3a0QCyqURaq+42NGgy2oVLrWWd0D2hsZzj
-         yxow==
-X-Gm-Message-State: ACrzQf2tGIM8zPOIaU1q/liuAhsEo2uc+p8aLC+IL2QE8rq7veO252fJ
-        R9AnDaYVI6GfqcnuLfF90I21r2i/Jj50EZEyc0gTuw==
-X-Google-Smtp-Source: AMsMyM6G5UFBOJhNxwAUX87q8i8wzHuf/UeAMAkbRY7MF0ch9rRAeLYZukVMGJVxivIs/yJ9YT7WPOyo+NYx5CIIGtU=
-X-Received: by 2002:a81:a0d7:0:b0:357:6a14:e736 with SMTP id
- x206-20020a81a0d7000000b003576a14e736mr5521702ywg.455.1665765694861; Fri, 14
- Oct 2022 09:41:34 -0700 (PDT)
+        Fri, 14 Oct 2022 12:44:40 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165F9A476;
+        Fri, 14 Oct 2022 09:44:34 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1ojNnU-0004xS-0P; Fri, 14 Oct 2022 18:44:32 +0200
+Message-ID: <220d39ad-11cc-338f-806e-293ac43b5021@maciej.szmigiero.name>
+Date:   Fri, 14 Oct 2022 18:44:25 +0200
 MIME-Version: 1.0
-References: <20221014110551.22695-1-zhouchengming@bytedance.com> <Y0lvuKbrb/pyWQDs@cmpxchg.org>
-In-Reply-To: <Y0lvuKbrb/pyWQDs@cmpxchg.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 14 Oct 2022 09:41:23 -0700
-Message-ID: <CAJuCfpEQPpVZ+0Nyb52y30y=5+XBqMqKkvQ93NZtOistrjAC1g@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        quic_pkondeti@quicinc.com, peterz@infradead.org,
-        quic_charante@quicinc.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, pl-PL
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ed1c179cff84b49e22cf229cc69751fa4d357d9a.1664221825.git.maciej.szmigiero@oracle.com>
+ <df8701f3905c1a394863e57c7a2d30c5b5dc3503.1664221825.git.maciej.szmigiero@oracle.com>
+ <24a48f71-8a79-6311-1e43-494df0458a32@opensource.wdc.com>
+ <7ecf20b7-794a-39d8-0b03-8f19d9167efd@maciej.szmigiero.name>
+ <28712bad-8215-4246-7370-42d204488aa3@opensource.wdc.com>
+ <7cf5744e-78ec-79c3-98af-2a716167ea1a@opensource.wdc.com>
+ <31f8c4d1-1575-e64d-f42a-ce864e060975@maciej.szmigiero.name>
+ <cb78be0f-633c-29ee-a3c8-cc05d8108cf9@opensource.wdc.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 2/2] ata: allow enabling FUA support in Kconfig
+In-Reply-To: <cb78be0f-633c-29ee-a3c8-cc05d8108cf9@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 7:18 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Fri, Oct 14, 2022 at 07:05:51PM +0800, Chengming Zhou wrote:
-> > Pavan reported a problem that PSI avgs_work idle shutoff is not
-> > working at all. Because PSI_NONIDLE condition would be observed in
-> > psi_avgs_work()->collect_percpu_times()->get_recent_times() even if
-> > only the kworker running avgs_work on the CPU.
-> >
-> > Although commit 1b69ac6b40eb ("psi: fix aggregation idle shut-off")
-> > avoided the ping-pong wake problem when the worker sleep, psi_avgs_work()
-> > still will always re-arm the avgs_work, so shutoff is not working.
-> >
-> > This patch changes to use PSI_STATE_RESCHEDULE to flag whether to
-> > re-arm avgs_work in get_recent_times(). For the current CPU, we re-arm
-> > avgs_work only when (NR_RUNNING > 1 || NR_IOWAIT > 0 || NR_MEMSTALL > 0),
-> > for other CPUs we can just check PSI_NONIDLE delta. The new flag
-> > is only used in psi_avgs_work(), so we check in get_recent_times()
-> > that current_work() is avgs_work.
-> >
-> > One potential problem is that the brief period of non-idle time
-> > incurred between the aggregation run and the kworker's dequeue will
-> > be stranded in the per-cpu buckets until avgs_work run next time.
-> > The buckets can hold 4s worth of time, and future activity will wake
-> > the avgs_work with a 2s delay, giving us 2s worth of data we can leave
-> > behind when shut off the avgs_work. If the kworker run other works after
-> > avgs_work shut off and doesn't have any scheduler activities for 2s,
-> > this maybe a problem.
-> >
-> > Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+On 8.10.2022 00:41, Damien Le Moal wrote:
+> On 10/7/22 23:14, Maciej S. Szmigiero wrote:
+>> On 7.10.2022 00:53, Damien Le Moal wrote:
+>>> On 10/7/22 07:20, Damien Le Moal wrote:
+>>>> On 10/6/22 22:06, Maciej S. Szmigiero wrote:
+>>>>> On 6.10.2022 01:38, Damien Le Moal wrote:
+>>>>>> On 9/27/22 04:51, Maciej S. Szmigiero wrote:
+>>>>>>> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+>>>>>>>
+>>>>>>> Currently, if one wants to make use of FUA support in libata it is
+>>>>>>> necessary to provide an explicit kernel command line parameter in order to
+>>>>>>> enable it (for drives that report such support).
+>>>>>>>
+>>>>>>> In terms of Git archaeology: FUA support was enabled by default in early
+>>>>>>> libata versions but was disabled soon after.
+>>>>>>> Since then there were a few attempts to enable this support by default:
+>>>>>>> [1] (for NCQ drives only), [2] (for all drives).
+>>>>>>> However, the second change had to be reverted after a report came of
+>>>>>>> an incompatibility with the HDD in 2011 Mac Mini.
+>>>>>>>
+>>>>>>> Enabling FUA avoids having to emulate it by issuing an extra drive cache
+>>>>>>> flush for every request that have this flag set.
+>>>>>>> Since FUA support is required by the ATA/ATAPI spec for any drive that
+>>>>>>> supports LBA48 and so these days should be pretty widespread let's provide
+>>>>>>> an ability to enable it by default in Kconfig.
+>>>>>>
+>>>>>> This can be done by adding "libata.fua=1" to the CONFIG_CMDLINE option. So
+>>>>>> I do not see the need to add yet another config option.
+>>>>>
+>>>>> A specific Kconfig option is more structured than a free-form
+>>>>> CONFIG_CMDLINE (which is also technically a per-arch option, but seems
+>>>>> to be widely supported across arches).
+>>>>>
+>>>>> That's why there is a lot (100+) of similar Kconfig default-changing
+>>>>> options, a quick sample of these (in no particular order):
+>>>>> SOUND_OSS_CORE_PRECLAIM, SND_INTEL_BYT_PREFER_SOF, LSM,
+>>>>> SECURITY_SELINUX_CHECKREQPROT_VALUE, SECURITY_LOADPIN_ENFORCE,
+>>>>> SECURITY_APPARMOR_DEBUG_MESSAGES, IP_VS_TAB_BITS, IP_SET_MAX,
+>>>>> MAC80211_HAS_RC, SLUB_DEBUG_ON, KFENCE_SAMPLE_INTERVAL, PRINTK_TIME,
+>>>>> DEBUG_OBJECTS_ENABLE_DEFAULT, RCU_NOCB_CPU_DEFAULT_ALL, ...
+>>>>>
+>>>>> libata currently has only one similar option: SATA_MOBILE_LPM_POLICY,
+>>>>> so it's not like a person performing kernel configuration is
+>>>>> overloaded with questions here.
+>>>>>
+>>>>> But at the same time, I respect your decision as a maintainer of
+>>>>> this code.
+>>>>
+>>>> I am not dead set on pushing back on this, but as usual, whenever we can
+>>>> avoid adding config options, we should. Given that libata has had fua
+>>>> disabled forever, I am not convinced yet that there is a strong need for
+>>>> that new option. But if distros prefer the config option approach, we can
+>>>> make that happen.
+>>>>
+>>>> If anything, I would be tempted to switch fua support to on by default
+>>>> after some time if we do not get many reports of broken drives. You did
+>>>> mention that old mac minis drives did not like it, but these are not even
+>>>> blacklisted in libata-scsi. They should. Only one model of maxtor drives
+>>>> is. We should add an ATA_HORKAGE_NO_FUA flag and start a proper blacklist
+>>>> of drives not liking fua. Without that in place, switching to on by
+>>>> default as your config option allows could break many (old) systems.
+>>>
+>>> To be extra clear, I think that this fua module parameter is silly. If a
+>>> drive says it supports fua, we should use it and not have a global
+>>> parameter to disable it for all drives. So no config option needed for it.
+>>>
+>>> That is also why I am not keen on taking that config option. It is not
+>>> really improving anything at all and would prefer nuking the fua module
+>>> argument and have a proper blacklisting of buggy drives.
+>>>
+>>> But such a change is painful as we'll be able to update the blacklist with
+>>> users getting corrupted FSes on buggy drives. The time may have come to do
+>>> this change though as the number of buggy drives out there is hopefully
+>>> small enough now.
+>>
+>> So your proposal is basically to switch the existing fua option default
+>> to "on" and deal with the fallout (hopefully minimal) by blacklisting
+>> misbehaving drives as they get reported, right?
+> 
+> Yes. The risk though is that if the fallout are not minimal and we get too
+> many bug reports, we'll likely have to revert. So this needs to be
+> attempted early at the beginning of a cycle to get plenty of testing.
+> 
+>> In this case, my vote would be to still keep the "libata.fua" parameter
+>> available (at least for the time being) so people have some way of
+>> working broken drives around without having to recompile their kernel
+>> (maybe also print a kernel log message if libata.fua=0 is provided asking
+>> people to report these drive models to linux-ide@).
+> 
+> If we add a proper "nofua" horkage flag to blacklist buggy drives, we need
+> to move the fua parameter to be an argument of the force parameter so that
+> disabling fua can be done per drive (port) or for all drives, similarly to
+> other tweak (noncq, nodmalog, etc)
 
-Please make sure to test the final version. With that done,
+So would you like an updated patch set or do you prefer to do the changes
+yourself?
 
-Acked-by: Suren Baghdasaryan <surenb@google.com>
+Thanks,
+Maciej
+
