@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1B25FEF85
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B145FEFB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiJNOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S230387AbiJNOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiJNOBD (ORCPT
+        with ESMTP id S231174AbiJNOEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:01:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887552B1B0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665755981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k8qQltuyjmygy+O43yanVxeFaxBvrjiQoX3IXlPZtGE=;
-        b=gj4UJR3IFbxBWJI1E0tXFQbPDo973PEgIvbQoqxRO/fZO+Ai76lG4kzLVbkh5xGkY/U2XH
-        kT1stTx6M+sLhluS9Pu9qcWreSE2sxzlhlOiO5T5+9/f5DgzWz4kJVfRBshIFWinVBFiPc
-        DagNAt7SOpGWEF5/0lsPcUIkHzaqiUo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-0ngC2H1gONipQ71LSLOWqQ-1; Fri, 14 Oct 2022 09:59:38 -0400
-X-MC-Unique: 0ngC2H1gONipQ71LSLOWqQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 14 Oct 2022 10:04:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A291F1D3442;
+        Fri, 14 Oct 2022 07:03:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2DFA3C10687;
-        Fri, 14 Oct 2022 13:59:37 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 456D84030DF;
-        Fri, 14 Oct 2022 13:59:36 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220901220138.182896-6-vishal.moola@gmail.com>
-References: <20220901220138.182896-6-vishal.moola@gmail.com> <20220901220138.182896-1-vishal.moola@gmail.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     dhowells@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 05/23] afs: Convert afs_writepages_region() to use filemap_get_folios_tag()
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B35761B4A;
+        Fri, 14 Oct 2022 13:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B494EC433D7;
+        Fri, 14 Oct 2022 13:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665755676;
+        bh=N7qjOu8AM4o2tEFVFWLtqsDSfSJXOTnsmwUIOChiYk8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eU/V53/8xGV6aGvXIpDd+yVbTl/WtSqMm5szp8ph5UwdcukC5qqsJvi+rzy4I5PpX
+         ZqlUSK4wW5n1EEej4zUYsKjWoCM2nlKSiTCnT8e+xYqXRMELUCz40tv619ZX34GUit
+         onLHby5WlAO5ySo7OWBrgohys6kQrKv7yx+AZMNB2ilcDJqHqzLPgdc5QKafkImdPH
+         UZnHMsjklhmSNBLmR/timpwRBicTDehTzZC8iCksuz5b97lb9SocQZBHa3xcR6tifC
+         9REW9q1jx94QoO5aCERuF0Zk6povvmOW4tHHfh4ZO32kXOa7IM0Wa9p/GpWS+z/RqC
+         yLZHY94Isgt0w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>, oss@buserror.net,
+        nathan@kernel.org, ndesaulniers@google.com, Julia.Lawall@inria.fr,
+        joel@jms.id.au, nick.child@ibm.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 4.19 2/5] powerpc/85xx: Fix fall-through warning for Clang
+Date:   Fri, 14 Oct 2022 09:54:25 -0400
+Message-Id: <20221014135430.2110067-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221014135430.2110067-1-sashal@kernel.org>
+References: <20221014135430.2110067-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1569539.1665755974.1@warthog.procyon.org.uk>
-Date:   Fri, 14 Oct 2022 14:59:34 +0100
-Message-ID: <1569540.1665755974@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vishal Moola (Oracle) <vishal.moola@gmail.com> wrote:
+From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 
-> Convert to use folios throughout. This function is in preparation to
-> remove find_get_pages_range_tag().
-> 
-> Also modified this function to write the whole batch one at a time,
-> rather than calling for a new set every single write.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+[ Upstream commit d4d944ff68cb1f896d3f3b1af0bc656949dc626a ]
 
-Tested-by: David Howells <dhowells@redhat.com>
+Fix the following fallthrough warning:
+
+arch/powerpc/platforms/85xx/mpc85xx_cds.c:161:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://github.com/KSPP/linux/issues/198
+Link: https://lore.kernel.org/lkml/202209061224.KxORRGVg-lkp@intel.com/
+Link: https://lore.kernel.org/r/Yxe8XTY5C9qJLd0Z@work
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/powerpc/platforms/85xx/mpc85xx_cds.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/powerpc/platforms/85xx/mpc85xx_cds.c b/arch/powerpc/platforms/85xx/mpc85xx_cds.c
+index 224db30c497b..b3736b835c10 100644
+--- a/arch/powerpc/platforms/85xx/mpc85xx_cds.c
++++ b/arch/powerpc/platforms/85xx/mpc85xx_cds.c
+@@ -162,6 +162,7 @@ static void __init mpc85xx_cds_pci_irq_fixup(struct pci_dev *dev)
+ 			else
+ 				dev->irq = 10;
+ 			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
++			break;
+ 		default:
+ 			break;
+ 		}
+-- 
+2.35.1
 
