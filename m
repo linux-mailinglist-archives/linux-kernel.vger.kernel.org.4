@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A7F5FE949
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539905FE94C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiJNHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
+        id S229657AbiJNHPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiJNHPG (ORCPT
+        with ESMTP id S229701AbiJNHPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:15:06 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0C927B36;
-        Fri, 14 Oct 2022 00:14:55 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y191so4148265pfb.2;
-        Fri, 14 Oct 2022 00:14:55 -0700 (PDT)
+        Fri, 14 Oct 2022 03:15:43 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AEDC510C;
+        Fri, 14 Oct 2022 00:15:40 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id a25so5039732ljk.0;
+        Fri, 14 Oct 2022 00:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=O1uTvZzh8RS2GyiFatdDCOZIfUcH2ah3khqENyTDbD8=;
-        b=CT5TyGBbuObOvfYQz4+vbt7NRdOIo78d5sbDgKK70zuwHBLcj4eLjDqLfMhqe4uZGx
-         aTxQVDUHbPk2ZuNmVtV5Symquz0zFsXSXoh2AAEwZRACnUzDg8UhztN6hzO16/yLAnsp
-         mVfSRAioiOTx7gZPhkV8DtbDuakA7ngaUNzCrZ6oan5JUd2Mx4R2Uncaptk3wssq+mtS
-         IZHoyRtXNhQqDCUJHe/dDRCmX9EDsC/1E+j+8a7/5TvbDBVGOVN1kOw9yqOaNbx9ZjLq
-         Lhq8K9wr102zyOYPzDFx8ySFHr8UaAXdsk7HeAkaDyZUTya2qW2QnP9PB+M1WuhJXXcu
-         Mz7A==
+        bh=NGyxzte2IKH3Md6Ogu2BfJvxcJ1+fvLq/yJsfWOfr70=;
+        b=pqwCFkn2YfX8+dy9tEFmmFX254tPZhy8XC/gXHWLPWFBChGhNjq3ISmacP2zxKbyFc
+         DZrD/71buQpS8mz6Jk3J4P/Gseqg8DQ9OsFKn0GeflaZzq2mBbQ4pgOyFFjN3Uya/t7r
+         wqlx4VXoWYSp0c9QUis7psazVfZgJOXVie6kCk/CRbSxI/8BDkw6crllLe8SfciZzw1r
+         GHmhItW9sYvjzYsve0MyIVF783NG11UHp+pkLiT7lVgQ93jA/qX5qgpE86BEnvd5UChX
+         3cDMo7Z3R6/qEwZSRJv9y4z5qgk1OWNPDgbzkLvoHHddloHqKpAqwzYXrV7tFLf4SbF3
+         41Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1uTvZzh8RS2GyiFatdDCOZIfUcH2ah3khqENyTDbD8=;
-        b=uxlynC+DOcUeb2+5Ek1q0YqZIZgMoghUapTsQewi7ccfx/Lu8ejjfyC3EOIsXAtg7p
-         wNn/j3HRRm+6gLq2ZM9H3ujXqGP9xmIl864DzJm4yP5FOp/M+sEJWkxqlgwh53EnLfoH
-         jaY5dnjFgdkPb2uGhEJP0S17YYiQ9o46LMOUZAZq1jikZZEYPPl1XdJID9Iv9AerPqir
-         W6D0W0OHQlhsenQcGLaxHBz2Hxb/ehweGOiucpI33m/lHf8JE0Fe9mCXavwLdfphGrCW
-         KseokzfRh+5jkB3Y3PEwgb68Y+8ca0B3tekQE57Y/vwZN+tzTKvI39GhuOjkgC7/uL0+
-         ggkA==
-X-Gm-Message-State: ACrzQf1lKGFGiKlPUtmQEIBWln1+GYT1aMuAizwKfozpusI2fc5lIXqI
-        ZvZ8FDSoYrFHhXWwSwgv06oNXhmfE13FEkQx
-X-Google-Smtp-Source: AMsMyM5rpnAaPmHIoqUzmfO/5//fBOf4dPQQucAL4kzQZ1t2tSfZ85asIXufiJ0i9P5BG9Q6yov2Yg==
-X-Received: by 2002:a05:6a00:807:b0:563:136f:a4fe with SMTP id m7-20020a056a00080700b00563136fa4femr3709865pfk.36.1665731694593;
-        Fri, 14 Oct 2022 00:14:54 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id f14-20020a170902ab8e00b001783f964fe3sm981519plr.113.2022.10.14.00.14.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 00:14:53 -0700 (PDT)
-Message-ID: <2a83292b-a4d0-8d5e-b52a-31b7fcad2de6@gmail.com>
-Date:   Fri, 14 Oct 2022 15:14:47 +0800
+        bh=NGyxzte2IKH3Md6Ogu2BfJvxcJ1+fvLq/yJsfWOfr70=;
+        b=pyRbCnYn2gckFVJDfl2Fabu3e7nN9riBsbYFrviMdnp4epl6u1hQQyPt23pSlgOpz2
+         7fnOnNNHq5weyc+f1bApBpZfi/EHqdil7XyNYkazAsfbvYO1hdiN3FSlua9Scre68L+4
+         e4IoiqzjaS1nE3814HNZj11c6o1fS9FlJwmIbmrptH1JsG150Ie7p6cxHmXsXzvyOWQ5
+         5tCMUvNEUKuVLliThZKVHuFV2Zo8+iYXXCKvG1ef4NPjABNrFgstRxzO14z9Seq7PzHz
+         OhEAXOp2S984i6Yk88wmbIN2rRtUYxrhOL3613ioORevmsgHNW7GZXZsB7KKADyo/Nxm
+         RmxQ==
+X-Gm-Message-State: ACrzQf1V7RqMRrVF+nKKvIuqQMZLLf+B+1TCuVDGvfp+4hJ0vjRpHRSI
+        3JsdXiZRgSw8/d7KXyMOCI71qqF288k=
+X-Google-Smtp-Source: AMsMyM6nxpTjYdLb97LQzpum5UqrHvPtyw9mv3uPfpi7o1Md6mpYRYfd3QXz4o77WMOfwYnUASYfNg==
+X-Received: by 2002:a05:651c:b23:b0:26f:db39:9544 with SMTP id b35-20020a05651c0b2300b0026fdb399544mr443383ljr.116.1665731738793;
+        Fri, 14 Oct 2022 00:15:38 -0700 (PDT)
+Received: from dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::4])
+        by smtp.gmail.com with ESMTPSA id bi19-20020a05651c231300b00261b4df9ec4sm240535ljb.138.2022.10.14.00.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 00:15:37 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 10:15:19 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] =?iso-8859-1?Q?=A7tools?= =?iso-8859-1?Q?=3A?= iio:
+ iio_generic_buffer: Fix read size
+Message-ID: <Y0kMh0t5qUXJw3nQ@dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH 2/4] KVM: x86/pmu: Clear "reprogram" bit if counter is
- disabled or disallowed
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220923001355.3741194-1-seanjc@google.com>
- <20220923001355.3741194-3-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220923001355.3741194-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mOhZbFKr2wlI1FAt"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,125 +72,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For subject title, the "reprogram" bit is _only_ used to keep track of 
-pmc->perf_event,
-not whether the counter is disabled.
 
-On 23/9/2022 8:13 am, Sean Christopherson wrote:
-> When reprogramming a counter, clear the counter's "reprogram pending" bit
-> if the counter is disabled (by the guest) or is disallowed (by the
-> userspace filter).  In both cases, there's no need to re-attempt
-> programming on the next coincident KVM_REQ_PMU as enabling the counter by
-> either method will trigger reprogramming.
+--mOhZbFKr2wlI1FAt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Perhaps we could move the check_pmu_event_filter() towards the top of the call 
-stack.
+When noevents is true and small buffer is used the allocated memory for
+holding the data may be smaller than the hard-coded 64 bytes. This can
+cause the iio_generic_buffer to crash.
 
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/pmu.c | 38 ++++++++++++++++++++++++--------------
->   1 file changed, 24 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 4504987cbbe2..4cd99320019b 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -150,9 +150,9 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
->   	__kvm_perf_overflow(pmc, true);
->   }
->   
-> -static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
-> -				  u64 config, bool exclude_user,
-> -				  bool exclude_kernel, bool intr)
-> +static int pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type, u64 config,
-> +				 bool exclude_user, bool exclude_kernel,
-> +				 bool intr)
->   {
->   	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
->   	struct perf_event *event;
-> @@ -204,14 +204,14 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
->   	if (IS_ERR(event)) {
->   		pr_debug_ratelimited("kvm_pmu: event creation failed %ld for pmc->idx = %d\n",
->   			    PTR_ERR(event), pmc->idx);
-> -		return;
-> +		return PTR_ERR(event);
->   	}
->   
->   	pmc->perf_event = event;
->   	pmc_to_pmu(pmc)->event_count++;
-> -	clear_bit(pmc->idx, pmc_to_pmu(pmc)->reprogram_pmi);
->   	pmc->is_paused = false;
->   	pmc->intr = intr || pebs;
-> +	return 0;
->   }
->   
->   static void pmc_pause_counter(struct kvm_pmc *pmc)
-> @@ -245,7 +245,6 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
->   	perf_event_enable(pmc->perf_event);
->   	pmc->is_paused = false;
->   
-> -	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
+Following was recorded on beagle bone black with v6.0 kernel and the
+digit fix patch:
+https://lore.kernel.org/all/Y0f+tKCz+ZAIoroQ@dc75zzyyyyyyyyyyyyycy-3.rev.dn=
+ainternet.fi/
+using valgrind;
 
-This change is very suspicious.
+=3D=3D339=3D=3D Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyrig=
+ht info
+=3D=3D339=3D=3D Command: /iio_generic_buffer -n kx022-accel -T0 -e -l 10 -a=
+ -w 2000000
+=3D=3D339=3D=3D Parent PID: 307
+=3D=3D339=3D=3D
+=3D=3D339=3D=3D Syscall param read(buf) points to unaddressable byte(s)
+=3D=3D339=3D=3D    at 0x496BFA4: read (read.c:26)
+=3D=3D339=3D=3D    by 0x11699: main (iio_generic_buffer.c:724)
+=3D=3D339=3D=3D  Address 0x4ab3518 is 0 bytes after a block of size 160 all=
+oc'd
+=3D=3D339=3D=3D    at 0x4864B70: malloc (vg_replace_malloc.c:381)
+=3D=3D339=3D=3D    by 0x115BB: main (iio_generic_buffer.c:677)
 
->   	return true;
->   }
->   
-> @@ -303,10 +302,10 @@ void reprogram_counter(struct kvm_pmc *pmc)
->   	pmc_pause_counter(pmc);
->   
->   	if (!pmc_speculative_in_use(pmc) || !pmc_is_enabled(pmc))
-> -		return;
-> +		goto reprogram_complete;
->   
->   	if (!check_pmu_event_filter(pmc))
-> -		return;
-> +		goto reprogram_complete;
->   
->   	if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
->   		printk_once("kvm pmu: pin control bit is ignored\n");
-> @@ -324,16 +323,27 @@ void reprogram_counter(struct kvm_pmc *pmc)
->   	}
->   
->   	if (pmc->current_config == new_config && pmc_resume_counter(pmc))
-> -		return;
-> +		goto reprogram_complete;
->   
->   	pmc_release_perf_event(pmc);
->   
->   	pmc->current_config = new_config;
-> -	pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
-> -			      (eventsel & pmu->raw_event_mask),
-> -			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
-> -			      !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
-> -			      eventsel & ARCH_PERFMON_EVENTSEL_INT);
-> +
-> +	/*
-> +	 * If reprogramming fails, e.g. due to contention, leave the counter's
-> +	 * regprogram bit set, i.e. opportunistically try again on the next PMU
+Fix this by always using the same size for reading as was used for
+data storage allocation.
 
-This is what we need, in the upstream case we need to keep trying regprogram
-to try to occupy the hardware.
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-> +	 * refresh.  Don't make a new request as doing so can stall the guest
-> +	 * if reprogramming repeatedly fails.
+---
 
-This does not happen, the guest still enters w/p perf_event backend support
-and the vPMU is broken until the next vm-exit.
+This patch has been only tested with my kx022a sensor driver. Driver may
+have some culprits(s) and my understanding regarding IIO and these tools
+is limited so perhaps the hard-coded size of 64 bytes has perfectly
+legitimate reason - in which case I would appreciate to hear the
+reasoning so I could seek the problem from my driver. Also, I didn't add
+the fixes-tag as I don't really know which commit has caused the problem
+- as I am not 100% sure what the problem actually is and if I am just
+fixing a symptom here.
+---
+ tools/iio/iio_generic_buffer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-There is no need to endlessly call kvm_pmu_handle_event() when reprogram fails.
+diff --git a/tools/iio/iio_generic_buffer.c b/tools/iio/iio_generic_buffer.c
+index 2491c54a5e4f..f8deae4e26a1 100644
+--- a/tools/iio/iio_generic_buffer.c
++++ b/tools/iio/iio_generic_buffer.c
+@@ -715,12 +715,12 @@ int main(int argc, char **argv)
+ 				continue;
+ 			}
+=20
+-			toread =3D buf_len;
+ 		} else {
+ 			usleep(timedelay);
+-			toread =3D 64;
+ 		}
+=20
++		toread =3D buf_len;
++
+ 		read_size =3D read(buf_fd, data, toread * scan_size);
+ 		if (read_size < 0) {
+ 			if (errno =3D=3D EAGAIN) {
 
-> +	 */
-> +	if (pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
-> +				  (eventsel & pmu->raw_event_mask),
-> +				  !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
-> +				  !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
-> +				  eventsel & ARCH_PERFMON_EVENTSEL_INT))
-> +		return;
-> +
-> +reprogram_complete:
-> +	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
->   }
->   EXPORT_SYMBOL_GPL(reprogram_counter);
->   
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+--=20
+2.37.3
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--mOhZbFKr2wlI1FAt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNJDIIACgkQeFA3/03a
+ocVehQf/XIQ0ICkmrTi+n5aEjFmdKGhSs62dWbL4jsnhmp5k9znUWu5FbggGrIS1
+Zjhh2srQ9oec+88NUdEcIkupXIuHBW3rsoQTtlA3/Egi5D1sQeLjmikAvq5ps6AS
+pVSohBswNh8QgKElzubyoKDN8bUKibbD3xj0oFeONKrN7q0wGlEHRb+e6qAY/HCq
+5pVunzYHjzTvymqh6OFu7BYzF5P9+lUb5x/2WyKPR3RiCSdS71MYFV8+YjDCzpLA
+K3Mv1/r5NNQh5mBw+6ydBDsO75Kl/uJBjS8sseGSxK8lBqp6YKA638Cy4IXLl6pg
+pTOLgxnpUN3vlIw3OCJIEsm3i5OOpw==
+=IFzV
+-----END PGP SIGNATURE-----
+
+--mOhZbFKr2wlI1FAt--
