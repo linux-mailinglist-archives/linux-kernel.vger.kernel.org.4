@@ -2,140 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBD45FE788
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DD95FE78A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiJNDTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S229454AbiJNDTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 23:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJNDSc (ORCPT
+        with ESMTP id S229721AbiJNDTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:18:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020BF1119CB;
-        Thu, 13 Oct 2022 20:18:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60263619D6;
-        Fri, 14 Oct 2022 03:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE094C43470;
-        Fri, 14 Oct 2022 03:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665717509;
-        bh=XdPGgMOKnebM+bZev/ZKP6wiusPUf6c3wma5ZTnpm0o=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=TCqLtjMUhY3E6hf1ob6xgOd/SwpJweBv3tU3uwDefMm4A/ahGMxIC1fYKYYfBlwsp
-         c4OzGNUkyZI/EWcYPFYJKey7rW0cEUkZE+LOkpGV19buQ6rtAwI/hLX5iw1NyHEOWp
-         FqFekRHYzRsrNlju7lbJW+OBW4KWCrNhryyrvGL4FXB9xq9XMqweABSa7E89pobMDj
-         dhbr4pgnLECh4yJxmSvj30PN6CSkv/1SL630AvtuHSSPF+716FXaWyEJPJV5YfWvUX
-         AcpoA4Go3xPK5zpt0aNt/TWRQOKwqnAINiTRleYiI5qW8pa8hRcvsqQddsl387N9qW
-         FvzX+DBznhG0Q==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7304527C0054;
-        Thu, 13 Oct 2022 23:18:27 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Thu, 13 Oct 2022 23:18:27 -0400
-X-ME-Sender: <xms:AdVIYzOOj40fYDS1rOvXIoESyi161w0DmwR247bhjuKHqLFeT9OiDA>
-    <xme:AdVIY99529hlGQo-8KK9C30W0jlvvwwm75Z23pVzj3dmAFAsNJ7f6r-P3PWWqRCOA
-    Phzta6qNL1zttkMjs8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekuddgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgeejhfehkeejleffheetkefhtdduuedtieehheekgfekudeggfff
-    udejuddufeeknecuffhomhgrihhnpegthhhrohhmihhumhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhp
-    rghuthhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqd
-    hluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
-X-ME-Proxy: <xmx:AdVIYySW5Tdj3xc9QCIj2mq3H0rlkZatHo_4MuZZWFFBYFhYq8rSyA>
-    <xmx:AdVIY3uxuPeTfHWQd84oguwbXb3jq_lpHxPlgcluwo9B3Bp9AzVjRg>
-    <xmx:AdVIY7fXv-y_hn4d5Su6ASkwBxzA9fYhaSJ9rz-aLpvt3ull2hzjEQ>
-    <xmx:A9VIY5GVCHHHXumAGXj3B2GHtzhL21R2t0gobETwrTSxeyRxILj7NXJ9Hqc>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 878A331A03F7; Thu, 13 Oct 2022 23:18:25 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
-In-Reply-To: <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
-References: <20221006082735.1321612-1-keescook@chromium.org>
- <20221006082735.1321612-2-keescook@chromium.org>
- <20221006090506.paqjf537cox7lqrq@wittgenstein>
- <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
-Date:   Thu, 13 Oct 2022 20:18:04 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Jann Horn" <jannh@google.com>,
-        "Christian Brauner" <brauner@kernel.org>
-Cc:     "Kees Cook" <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Jorge Merlino" <jorge.merlino@canonical.com>,
-        "Al Viro" <viro@zeniv.linux.org.uk>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        "John Johansen" <john.johansen@canonical.com>,
-        "Paul Moore" <paul@paul-moore.com>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Stephen Smalley" <stephen.smalley.work@gmail.com>,
-        "Eric Paris" <eparis@parisplace.org>,
-        "Richard Haines" <richard_c_haines@btinternet.com>,
-        "Casey Schaufler" <casey@schaufler-ca.com>,
-        "Xin Long" <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Todd Kjos" <tkjos@google.com>,
-        "Ondrej Mosnacek" <omosnace@redhat.com>,
-        "Prashanth Prahlad" <pprahlad@redhat.com>,
-        "Micah Morton" <mortonm@chromium.org>,
-        "Fenghua Yu" <fenghua.yu@intel.com>,
-        "Andrei Vagin" <avagin@gmail.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 13 Oct 2022 23:19:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567501119CB;
+        Thu, 13 Oct 2022 20:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665717556; x=1697253556;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CP7r4Um5+1qR+53fVUdJfLQyFttboCVnIx7/w/U+eTY=;
+  b=AY0LneKOUhmcpumYh2tWV0pBz9Glwvtry61LYIdT3el4ZPTPsWhVM+k8
+   N+Kx9zoi+FYufw/say9qcgmeD36QlRCeQUqDuqXGViq7U+ISQLl+VNLPd
+   8a9DG8q/RWnPzplnNw2OA864vpr17pOKYFfDshcNKL7PI1rWBXiHuGYEC
+   T2gSk0jWrjPsCT+yeGtTSiC79r9n3KIPkO/C5kXzfiNDTEwNL32qsGM9C
+   5Bb1LjI8wFVn1Q6Yli/BZBuDwB3pYo+CO5PgABAoHG5A2VlwTYYKwlhXX
+   Q0BHY1o+T9GLQ2IddJbY/JW+IIKXnEAQvYVXNvwAqZdtDALitLWfnqcrR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="391573192"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="391573192"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 20:19:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="622396134"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="622396134"
+Received: from mkucejko-mobl.ger.corp.intel.com (HELO [10.213.24.166]) ([10.213.24.166])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 20:19:07 -0700
+Message-ID: <147a619e-e595-90c5-7a2a-ffbc2d20be7c@intel.com>
+Date:   Thu, 13 Oct 2022 20:19:03 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 0/8] x86/topology: Improve CPUID.1F handling
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        peterz@infradead.org, corbet@lwn.net, fenghua.yu@intel.com,
+        jdelvare@suse.com, linux@roeck-us.net, len.brown@intel.com
+References: <20220922133800.12918-1-rui.zhang@intel.com>
+ <5af2d8bb-8591-78f6-8102-6f7d0df33d98@intel.com>
+ <9a1ae0b5d7a5ee3c870195e942d58bdd9b3b71db.camel@intel.com>
+ <CAJvTdKkYTQzY1UsH_o2QdN1bS4gVfT87bEwMvgUXYwd+VFD+=w@mail.gmail.com>
+ <668e5126-f344-c30b-a743-877b1783cec7@intel.com>
+ <0307a5881c875e0b104051792b0f5e7f0ff973c1.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <0307a5881c875e0b104051792b0f5e7f0ff973c1.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/13/22 19:06, Zhang Rui wrote:
+> Patch 4/8 ~ 5/8 are real fixes and they depends on patch 2/8 and 3/8 to
+> avoid possible regressions. So patch 2/8 ~ 5/8 should be stable
+> material.
+> 
+> patch 6/8 is also a bugfix, but we have not observed any functionality
+> issues so far.
 
-
-On Thu, Oct 6, 2022, at 7:13 AM, Jann Horn wrote:
-> On Thu, Oct 6, 2022 at 11:05 AM Christian Brauner <brauner@kernel.org> wrote:
->> On Thu, Oct 06, 2022 at 01:27:34AM -0700, Kees Cook wrote:
->> > The check_unsafe_exec() counting of n_fs would not add up under a heavily
->> > threaded process trying to perform a suid exec, causing the suid portion
->> > to fail. This counting error appears to be unneeded, but to catch any
->> > possible conditions, explicitly unshare fs_struct on exec, if it ends up
->>
->> Isn't this a potential uapi break? Afaict, before this change a call to
->> clone{3}(CLONE_FS) followed by an exec in the child would have the
->> parent and child share fs information. So if the child e.g., changes the
->> working directory post exec it would also affect the parent. But after
->> this change here this would no longer be true. So a child changing a
->> workding directoro would not affect the parent anymore. IOW, an exec is
->> accompanied by an unshare(CLONE_FS). Might still be worth trying ofc but
->> it seems like a non-trivial uapi change but there might be few users
->> that do clone{3}(CLONE_FS) followed by an exec.
->
-> I believe the following code in Chromium explicitly relies on this
-> behavior, but I'm not sure whether this code is in active use anymore:
->
-> https://source.chromium.org/chromium/chromium/src/+/main:sandbox/linux/suid/sandbox.c;l=101?q=CLONE_FS&sq=&ss=chromium
-
-Wait, this is absolutely nucking futs.  On a very quick inspection, the sharable things like this are fs, files, sighand, and io.    files and sighand get unshared, which makes sense.  fs supposedly checks for extra refs and prevents gaining privilege.  io is... ignored!  At least it's not immediately obvious that io is a problem.
-
-But seriously, this makes no sense at all.  It should not be possible to exec a program and then, without ptrace, change its cwd out from under it.  Do we really need to preserve this behavior?
-
---Andy
+If you want to make this really easy on me, you could take the changelog
+and comment revisions that I made in that testing branch that I shared,
+integrate them, and send it out again, and *only* include the bugfixes.
