@@ -2,163 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B31E5FF665
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA215FF66A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJNWdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S229769AbiJNWjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiJNWdK (ORCPT
+        with ESMTP id S229660AbiJNWjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:33:10 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA691CA598
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:33:09 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id u21so8644082edi.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gaNP/MqQA2XMTgLWSG4/mQLvCDK3B3VNCmOC9wOcOHQ=;
-        b=TmtbDeAmgFHSc13cB9cetc8+6ZowCMa1TPxsmAutaFi30L5J/iW3J4/OAEzWaMQzMs
-         aelkLJJjYi4dLNuR0mtVxEb/kUJ163wK0H/yi0r4AjG90XHvLX7j3QxZN56SrEcP31aX
-         gy9qxgDQUtW6As1ci3L5/IWV1KbFAd17Zj46yN6TWjMxiWfsu4FpO5f005r9AXIDv2GV
-         bTajzK8TqElbusc/gmU5gEwlmcUviNH5anLyvZ3MH6L/iR3ZDph/r36eMSbhvIOSYCry
-         1Rsv6Q4OPrgowea3eeeO4jDZ5CvHAGzr1fs/V1kSHY4Fiae2VDD+E1HpCbjah8mzU5wL
-         pxZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gaNP/MqQA2XMTgLWSG4/mQLvCDK3B3VNCmOC9wOcOHQ=;
-        b=gQxljsMwj7GPRJuVIs3S3ovTAkiV44ICkFE+uSa6k+cJ/BG3ZiX7EpgnHLeEssYkrF
-         6/PT05/d3WrgyNMBI0MqkdEA31lkb34i6EaQdwPbIxl7OcQEVgw+oRk8s30d6Xfguejl
-         3UZeNIPbM7MafFyjI5KM9MM76A0WZs2DOmy9vUl7EqGGD/BFWzJix1wlB6Ffw46M8Gap
-         x3mzEKFwDczf+AzsVYTDte6aU3NY5GBiWjA2Zk1Zt02+b2ZtCh2KBP4O3ZEtq9I7p4t9
-         tHeqMxmAu/2u+N8A728Ma7evuJGy4mfc3VK6a+kKAuu24/FrMBbo7FzjBe+Dv30XSnIO
-         NrzA==
-X-Gm-Message-State: ACrzQf2va/4OIVJPpYAIve2Tq1SQdx4uwcrUy1EDlhWB7kl121Y2rgnW
-        veIMLkl1ZORBysu/CEkfv5XiJOuoI9U5PlgxzfAJ+Q==
-X-Google-Smtp-Source: AMsMyM5Il2dSY78/IPh/jxR+1OV0Jm67N3rIlljJPoCOTV8rUj2vVbWVWx/+MxtFv4RnUkX0WImbL9EJQ2jekSfDMfQ=
-X-Received: by 2002:aa7:c792:0:b0:453:98b7:213c with SMTP id
- n18-20020aa7c792000000b0045398b7213cmr18541eds.159.1665786788233; Fri, 14 Oct
- 2022 15:33:08 -0700 (PDT)
+        Fri, 14 Oct 2022 18:39:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342B310B3;
+        Fri, 14 Oct 2022 15:39:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E48E461CE1;
+        Fri, 14 Oct 2022 22:39:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA51C433C1;
+        Fri, 14 Oct 2022 22:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665787178;
+        bh=ScZ7ZpzpYCbhHr2dgKusZtqNyUk5mj5ETrqZNK3W/aA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IKRoMTk3ERHolXcN0xKekhjMg0NBp1WEHv9rsuu/0IMCA/UCaDojvajV92EMiC0AN
+         r8wYZnYHeumVpj9Pn3k6EMognTrdbWYoNWnWMvDFGFqb6V7l1HBasqdVLFO1jKMcdH
+         ETaLl8dwX9r6p19hSRp5v5AY10gVky2YNb1PoOLQ/MvyhPss2AUMolEf+WnnF5UpRW
+         sOaP/8kq+N5/kWnWZ6oVXBaRyzWfVJLfMKwNu3YYzKaPI6iRf/iA07mGeVt6kIKZo2
+         1HD5L7SNdD8WZoR+Yfelw11OpnVI7c58aRt/dVswBYfAnGDmhaYqV1KyIfKBayR6zT
+         SYdTsyQ6aS8uQ==
+Date:   Fri, 14 Oct 2022 15:39:35 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tom Rix <trix@redhat.com>, Xiaoming Ni <nixiaoming@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] fs/select: mark do_select noinline_for_stack
+Message-ID: <Y0nlJ6whtJuZddjr@dev-arch.thelio-3990X>
+References: <c8f87abd-9d66-40cf-bcea-e2b1388d3030@app.fastmail.com>
+ <20221011205547.14553-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-References: <20221003214501.2050087-1-connoro@google.com> <20221003214501.2050087-10-connoro@google.com>
- <xhsmhv8orgb59.mognet@vschneid.remote.csb>
-In-Reply-To: <xhsmhv8orgb59.mognet@vschneid.remote.csb>
-From:   "Connor O'Brien" <connoro@google.com>
-Date:   Fri, 14 Oct 2022 15:32:56 -0700
-Message-ID: <CALE1s+ODz2FUJoSHcORa25kckk81qSHuZ6RSE6-k=s2gzQ+eOQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 09/11] sched/rt: Fix proxy/current (push,pull)ability
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011205547.14553-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 4:40 AM Valentin Schneider <vschneid@redhat.com> wrote:
->
-> On 03/10/22 21:44, Connor O'Brien wrote:
-> > From: Valentin Schneider <valentin.schneider@arm.com>
->
-> This was one of my attempts at fixing RT load balancing (the BUG_ON in
-> pick_next_pushable_task() was quite easy to trigger), but I ended up
-> convincing myself this was insufficient - this only "tags" the donor and
-> the proxy, the entire blocked chain needs tagging. Hopefully not all of
-> what I'm about to write is nonsense, some of the neurons I need for this
-> haven't been used in a while - to be taken with a grain of salt.
-Made sense to me! Thanks, this was really helpful for understanding
-the interactions between proxy execution & load balancing.
->
-> Consider pick_highest_pushable_task() - we don't want any task in a blocked
-> chain to be pickable. There's no point in migrating it, we'll just hit
-> schedule()->proxy(), follow p->blocked_on and most likely move it back to
-> where the rest of the chain is. This applies any sort of balancing (CFS,
-> RT, DL).
->
-> ATM I think PE breaks the "run the N highest priority task on our N CPUs"
-> policy. Consider:
->
->    p0 (FIFO42)
->     |
->     | blocked_on
->     v
->    p1 (FIFO41)
->     |
->     | blocked_on
->     v
->    p2 (FIFO40)
->
->   Add on top p3 an unrelated FIFO1 task, and p4 an unrelated CFS task.
->
->   CPU0
->   current:  p0
->   proxy:    p2
->   enqueued: p0, p1, p2, p3
->
->   CPU1
->   current:  p4
->   proxy:    p4
->   enqueued: p4
->
->
-> pick_next_pushable_task() on CPU0 would pick p1 as the next highest
-> priority task to push away to e.g. CPU1, but that would be undone as soon
-> as proxy() happens on CPU1: we'd notice the CPU boundary and punt it back
-> to CPU0. What we would want here is to pick p3 instead to have it run on
-> CPU1.
+On Tue, Oct 11, 2022 at 01:55:47PM -0700, Nick Desaulniers wrote:
+> Effectively a revert of
+> commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> 
+> Various configs can still push the stack useage of core_sys_select()
+> over the CONFIG_FRAME_WARN threshold (1024B on 32b targets).
+> 
+>   fs/select.c:619:5: error: stack frame size of 1048 bytes in function
+>   'core_sys_select' [-Werror,-Wframe-larger-than=]
+> 
+> core_sys_select() has a large stack allocation for `stack_fds` where it
+> tries to do something equivalent to "small string optimization" to
+> potentially avoid a kmalloc.
+> 
+> core_sys_select() calls do_select() which has another potentially large
+> stack allocation, `table`. Both of these values depend on
+> FRONTEND_STACK_ALLOC.
+> 
+> Mix those two large allocation with register spills which are
+> exacerbated by various configs and compiler versions and we can just
+> barely exceed the 1024B limit.
+> 
+> Rather than keep trying to find the right value of MAX_STACK_ALLOC or
+> FRONTEND_STACK_ALLOC, mark do_select() as noinline_for_stack.
+> 
+> The intent of FRONTEND_STACK_ALLOC is to help potentially avoid a
+> dynamic memory allocation. In that spirit, restore the previous
+> threshold but separate the stack frames.
+> 
+> Many tests of various configs for different architectures and various
+> versions of GCC were performed; do_select() was never inlined into
+> core_sys_select() or compat_core_sys_select(). The kernel is built with
+> the GCC specific flag `-fconserve-stack` which can limit inlining
+> depending on per-target thresholds of callee stack size, which helps
+> avoid the issue when using GCC. Clang is being more aggressive and not
+> considering the stack size when decided whether to inline or not. We may
+> consider using the clang-16+ flag `-finline-max-stacksize=` in the
+> future.
+> 
+> Link: https://lore.kernel.org/lkml/20221006222124.aabaemy7ofop7ccz@google.com/
+> Fixes: ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Given this point, is there any reason that blocked tasks should ever
-be pushable, even if they are not part of the blocked chain for the
-currently running task? If we could just check task_is_blocked()
-rather than needing to know whether the task is in the middle of the
-"active" chain, that would seem to simplify things greatly. I think
-that approach might also require another dequeue/enqueue, in
-ttwu_runnable(), to catch non-proxy blocked tasks becoming unblocked
-(and therefore pushable), but that *seems* OK...though I could
-certainly be missing something.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-A related load balancing correctness question that caught my eye while
-taking another look at this code: when we have rq->curr != rq->proxy
-and then rq->curr is preempted and switches out, IIUC rq->curr should
-become pushable immediately - but this does not seem to be the case
-even with this patch. Is there a path that handles this case that I'm
-just missing, or a reason that no special handling is needed?
-Otherwise I wonder if __schedule() might need a dequeue/enqueue for
-the prev task as well in this case.
->
-> I *think* we want only the proxy of an entire blocked-chain to be visible
-> to load-balance, unfortunately PE gathers the blocked-chain onto the
-> donor's CPU which kinda undoes that.
->
-> Having the blocked tasks remain in the rq is very handy as it directly
-> gives us the scheduling context and we can unwind the blocked chain for the
-> execution context, but it does wreak havock in load-balancing :/
->
+> ---
+> Changes v1 -> v2:
+> * Drop the 32b specific guard, since I could reproduce the no-inlining
+>   w/ aarch64-linux-gnu-gcc-10 ARCH=arm64 defconfig, and per Arnd.
+> * Drop references to 32b in commit message.
+> * Add new paragraph in commit message at the end about -fconserve-stack
+>   and -finline-max-stacksize=.
+> * s/malloc/kmalloc/ in commit message.
+> 
+>  fs/select.c          | 1 +
+>  include/linux/poll.h | 4 ----
+>  2 files changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/fs/select.c b/fs/select.c
+> index 0ee55af1a55c..794e2a91b1fa 100644
+> --- a/fs/select.c
+> +++ b/fs/select.c
+> @@ -476,6 +476,7 @@ static inline void wait_key_set(poll_table *wait, unsigned long in,
+>  		wait->_key |= POLLOUT_SET;
+>  }
+>  
+> +noinline_for_stack
+>  static int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
+>  {
+>  	ktime_t expire, *to = NULL;
+> diff --git a/include/linux/poll.h b/include/linux/poll.h
+> index a9e0e1c2d1f2..d1ea4f3714a8 100644
+> --- a/include/linux/poll.h
+> +++ b/include/linux/poll.h
+> @@ -14,11 +14,7 @@
+>  
+>  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
+>     additional memory. */
+> -#ifdef __clang__
+> -#define MAX_STACK_ALLOC 768
+> -#else
+>  #define MAX_STACK_ALLOC 832
+> -#endif
+>  #define FRONTEND_STACK_ALLOC	256
+>  #define SELECT_STACK_ALLOC	FRONTEND_STACK_ALLOC
+>  #define POLL_STACK_ALLOC	FRONTEND_STACK_ALLOC
+> -- 
+> 2.38.0.rc2.412.g84df46c1b4-goog
+> 
+> 
