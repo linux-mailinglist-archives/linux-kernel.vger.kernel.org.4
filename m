@@ -2,187 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666115FF192
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95AC5FF17D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiJNPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        id S229906AbiJNPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiJNPma (ORCPT
+        with ESMTP id S229818AbiJNPgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:42:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8522AE25;
-        Fri, 14 Oct 2022 08:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665762148; x=1697298148;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O3hlM9RR1X0TYLon8E8uraMngu523Z9hnJiAtff+dNg=;
-  b=Gd0/iQZAHcRdhTOyPrFx/TVyUoONcPjTKcIBQhI643DlV8+WsqJKCwEr
-   FRBG8FO4rZC0mWrJufLvtiGBzEQ0YREEijh29rT+56DD5UuWwf6DMY08+
-   yZ+UN329W/1O4hCuGLJ+5jqXgIRoW2ou65jPKdftCDep5Y6ld/4xdCC2z
-   6+FBiVaMIPBZ+St7456HYSOwSQVhJTS6iAdXltM/wGJdHStsFtk28YAc8
-   QIwhoV8Ax0bh/7zzmSXYD6/UBlub8TCR2GOm85Mjmn0e64M3YhJQmMW0o
-   XkYFbqL1VtkvXBnkLvZG81TEy8fUIqJa1ZqKCDJhZ3IYTKcMd73vEWqpE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="285794014"
-X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="285794014"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 08:42:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="660767496"
-X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="660767496"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga001.jf.intel.com with ESMTP; 14 Oct 2022 08:42:23 -0700
-Date:   Fri, 14 Oct 2022 23:33:18 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     git@xilinx.com, michal.simek@xilinx.com, mdf@kernel.org,
-        hao.wu@intel.com, trix@redhat.com, gregkh@linuxfoundation.org,
-        ronak.jain@xilinx.com, rajan.vaja@xilinx.com,
-        abhyuday.godhasara@xilinx.com, harsha.harsha@xilinx.com,
-        lakshmi.sai.krishna.potthuri@xilinx.com, tanmay.shah@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] firmware: xilinx: Add pm api function for PL
- config reg readback
-Message-ID: <Y0mBPmoAeAZ+9SGv@yilunxu-OptiPlex-7050>
-References: <20221013090556.741357-1-nava.kishore.manne@amd.com>
- <20221013090556.741357-2-nava.kishore.manne@amd.com>
+        Fri, 14 Oct 2022 11:36:05 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462AC2A711
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:36:03 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id y17so2693331ilq.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:36:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ytj3+kIoMyv4FX1lyc9tQ8OGwlhuPVWv2RqpKd5YyDU=;
+        b=JR0xr0fIsskJTzO427SqrUgqb1DWjVVtwkmODGGjkSZJ4FMfX2ZsXK6Mm2spguP5Fi
+         nyMmB82X0MA3h2JOCrtW3gl25dxsj4jiveXGKR6Z8STGPeeVjmS2VTjycP+RBn0tVhJl
+         RTnAEkh5Qc5sIHtelNV80ZV0a1sV1g2AGrc8jU/2ZL2m19qrw9p6cxMlxHCX1YxptKvv
+         NWg2UfEw3P0qeI86qPSMdLeiUDU5LTngBxTc3KHC3yReE92Ufkh4RP9JTPdhqddOZWDg
+         6zCkai4UfclKgR3ffQ4VMj7CkN9eR7ciGLAV2JgtjXPGADfXQqzzW05FazqVHzwOwv/N
+         dRvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ytj3+kIoMyv4FX1lyc9tQ8OGwlhuPVWv2RqpKd5YyDU=;
+        b=k+0nc0GmQDkmfqgApUYFT2eRxOrI6r56VX+FjID+cAA/4ySRUFQMbVMZBfinwPW9zH
+         cCY6HR7bW6nAhAZ7ISVIuRH25XUZuydOz8lURp/sYAJ8uKCFVRDXXtPcbtEnlAQQMonG
+         pJQwrrq5NQJqt+ZCCAG8y80H1G34sFc0xArq0voLk6NyzUJgSGN+0mFwwNV5r+36nzSV
+         8QuqVvTo7T5GWeuWoDzxDpIFInmoAumB9aFidvABvKpgh9GJdWUt/HVoXLSrYEMZLfA3
+         w9R6vKmSeOVfDcNkV2uLcAaU4WLKsWye6hg/qPr2Bav/A/69tWFaSTyyR5zqn/335KqU
+         Ffhg==
+X-Gm-Message-State: ACrzQf2q05Kw9RUP7sUgBlrCnkcFCOCSG6SIHc+ubz5uOsBLlPI3DR9U
+        W/1TYEbN2jFBzRIpQ6yeLC2N61oYll4H4SGRLS2zAw==
+X-Google-Smtp-Source: AMsMyM7SIvsGjFVFdZwPi/xpWspvv9GkH6JpuhbcRadzt8f/XtARZ9xDpqKEwls7AQ8KnXFNx+6y9OAVQ6OkLrOgJ1E=
+X-Received: by 2002:a05:6e02:1c27:b0:2fc:6aa7:edda with SMTP id
+ m7-20020a056e021c2700b002fc6aa7eddamr2701536ilh.177.1665761762432; Fri, 14
+ Oct 2022 08:36:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013090556.741357-2-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221006082735.1321612-1-keescook@chromium.org>
+ <20221006082735.1321612-2-keescook@chromium.org> <20221006090506.paqjf537cox7lqrq@wittgenstein>
+ <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com> <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
+In-Reply-To: <2032f766-1704-486b-8f24-a670c0b3cb32@app.fastmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 14 Oct 2022 17:35:26 +0200
+Message-ID: <CAG48ez3hM+-V39QpFaNfRJxVrQVBu2Dm-B-xFN2GEt9p81Vd2Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jorge Merlino <jorge.merlino@canonical.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Kjos <tkjos@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Prashanth Prahlad <pprahlad@redhat.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-13 at 14:35:55 +0530, Nava kishore Manne wrote:
-> Adds PM API for performing Programmable Logic(PL) configuration
-> register readback. It provides an interface to the firmware(pmufw)
-> to readback the FPGA configuration register.
-> 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
-> hanges for v2:
->               - None.
-> 
-> Changes for v3:
->               - Updated API and config reg read-back handling logic
->               - Updated the commit msg to align with the changes.
-> 
->  drivers/firmware/xilinx/zynqmp.c     | 35 ++++++++++++++++++++++++++++
->  include/linux/firmware/xlnx-zynqmp.h | 11 +++++++++
->  2 files changed, 46 insertions(+)
-> 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index d1f652802181..045a113434c2 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -941,6 +941,41 @@ int zynqmp_pm_fpga_get_status(u32 *value)
->  }
->  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
->  
-> +/**
-> + * zynqmp_pm_fpga_get_config_status - Get the FPGA configuration status.
-> + * @value: Buffer to store FPGA configuration status.
-> + *
-> + * This function provides access to the pmufw to get the FPGA configuration
-> + * status
-> + *
-> + * Return: Returns status, either success or error+reason
+On Fri, Oct 14, 2022 at 5:18 AM Andy Lutomirski <luto@kernel.org> wrote:
+> On Thu, Oct 6, 2022, at 7:13 AM, Jann Horn wrote:
+> > On Thu, Oct 6, 2022 at 11:05 AM Christian Brauner <brauner@kernel.org> =
+wrote:
+> >> On Thu, Oct 06, 2022 at 01:27:34AM -0700, Kees Cook wrote:
+> >> > The check_unsafe_exec() counting of n_fs would not add up under a he=
+avily
+> >> > threaded process trying to perform a suid exec, causing the suid por=
+tion
+> >> > to fail. This counting error appears to be unneeded, but to catch an=
+y
+> >> > possible conditions, explicitly unshare fs_struct on exec, if it end=
+s up
+> >>
+> >> Isn't this a potential uapi break? Afaict, before this change a call t=
+o
+> >> clone{3}(CLONE_FS) followed by an exec in the child would have the
+> >> parent and child share fs information. So if the child e.g., changes t=
+he
+> >> working directory post exec it would also affect the parent. But after
+> >> this change here this would no longer be true. So a child changing a
+> >> workding directoro would not affect the parent anymore. IOW, an exec i=
+s
+> >> accompanied by an unshare(CLONE_FS). Might still be worth trying ofc b=
+ut
+> >> it seems like a non-trivial uapi change but there might be few users
+> >> that do clone{3}(CLONE_FS) followed by an exec.
+> >
+> > I believe the following code in Chromium explicitly relies on this
+> > behavior, but I'm not sure whether this code is in active use anymore:
+> >
+> > https://source.chromium.org/chromium/chromium/src/+/main:sandbox/linux/=
+suid/sandbox.c;l=3D101?q=3DCLONE_FS&sq=3D&ss=3Dchromium
+>
+> Wait, this is absolutely nucking futs.  On a very quick inspection, the s=
+harable things like this are fs, files, sighand, and io.    files and sigha=
+nd get unshared, which makes sense.  fs supposedly checks for extra refs an=
+d prevents gaining privilege.  io is... ignored!  At least it's not immedia=
+tely obvious that io is a problem.
+>
+> But seriously, this makes no sense at all.  It should not be possible to =
+exec a program and then, without ptrace, change its cwd out from under it. =
+ Do we really need to preserve this behavior?
 
-As mentioned before, please at least specify what value is success
+I agree that this is pretty wild.
 
-> + */
-> +int zynqmp_pm_fpga_get_config_status(u32 *value)
-> +{
-> +	u32 ret_payload[PAYLOAD_ARG_CNT];
-> +	u32 buf, phys_lower_addr, phys_upper_addr, addr;
+The single user I'm aware of is Chrome, and as far as I know, they use
+it for establishing their sandbox on systems where unprivileged user
+namespaces are disabled - see
+<https://chromium.googlesource.com/chromium/src/+/main/docs/linux/suid_sand=
+box.md>.
+They also have seccomp-based sandboxing, but IIRC there are some small
+holes that mean it's still useful for them to be able to set up
+namespaces, like how sendmsg() on a unix domain socket can specify a
+file path as the destination address.
 
-reverse santa tree, please
+(By the way, I think maybe Chrome wouldn't need this wacky trick with
+the shared fs_struct if the "NO_NEW_PRIVS permits chroot()" thing had
+ever landed that you
+(https://lore.kernel.org/lkml/0e2f0f54e19bff53a3739ecfddb4ffa9a6dbde4d.1327=
+858005.git.luto@amacapital.net/)
+and Micka=C3=ABl Sala=C3=BCn proposed in the past... or alternatively, if t=
+here
+was a way to properly filter all the syscalls that Chrome has to
+permit for renderers.)
 
-> +	int ret;
-> +
-> +	if (!value)
-> +		return -EINVAL;
-> +
-> +	addr = (u64)&buf;
-> +
-> +	phys_lower_addr = lower_32_bits(addr);
-> +	phys_upper_addr = upper_32_bits(addr);
-
-u64 addr???
-
-> +
-> +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ,
-> +				  XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET,
-> +				  phys_lower_addr, phys_upper_addr,
-> +				  XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG,
-> +				  ret_payload);
-> +
-> +	*value = ret_payload[1];
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_config_status);
-> +
->  /**
->   * zynqmp_pm_pinctrl_request - Request Pin from firmware
->   * @pin: Pin number to request
-> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> index 9f50dacbf7d6..34b0a9171293 100644
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@ -70,6 +70,10 @@
->  #define XILINX_ZYNQMP_PM_FPGA_FULL	0x0U
->  #define XILINX_ZYNQMP_PM_FPGA_PARTIAL	BIT(0)
->  
-> +/* FPGA Status Reg */
-> +#define XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET	7U
-> +#define XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG		0U
-> +
->  /*
->   * Node IDs for the Error Events.
->   */
-> @@ -117,6 +121,7 @@ enum pm_api_id {
->  	PM_CLOCK_GETRATE = 42,
->  	PM_CLOCK_SETPARENT = 43,
->  	PM_CLOCK_GETPARENT = 44,
-> +	PM_FPGA_READ = 46,
->  	PM_SECURE_AES = 47,
->  	PM_FEATURE_CHECK = 63,
->  };
-> @@ -475,6 +480,7 @@ int zynqmp_pm_is_function_supported(const u32 api_id, const u32 id);
->  int zynqmp_pm_set_feature_config(enum pm_feature_config_id id, u32 value);
->  int zynqmp_pm_get_feature_config(enum pm_feature_config_id id, u32 *payload);
->  int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
-> +int zynqmp_pm_fpga_get_config_status(u32 *value);
->  #else
->  static inline int zynqmp_pm_get_api_version(u32 *version)
->  {
-> @@ -745,6 +751,11 @@ static inline int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
->  {
->  	return -ENODEV;
->  }
-> +
-> +int zynqmp_pm_fpga_get_config_status(u32 *value)
-> +{
-> +	return -ENODEV;
-> +}
->  #endif
->  
->  #endif /* __FIRMWARE_ZYNQMP_H__ */
-> -- 
-> 2.25.1
-> 
+(But also, to be clear, I don't speak for Chrome, this is just my
+understanding of how their stuff works.)
