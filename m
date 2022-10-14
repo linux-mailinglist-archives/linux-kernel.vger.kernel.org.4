@@ -2,162 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D3D5FE875
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 07:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD465FE84D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 07:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJNFhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 01:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
+        id S229511AbiJNFFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 01:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJNFhG (ORCPT
+        with ESMTP id S229459AbiJNFFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 01:37:06 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D24181CBF
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:37:00 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221014053655epoutp0192497ac100f33d5bcbeb5a3eacfbbc01~d2M3BMPa41711917119epoutp01Q
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 05:36:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221014053655epoutp0192497ac100f33d5bcbeb5a3eacfbbc01~d2M3BMPa41711917119epoutp01Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665725815;
-        bh=ZnJVFbTzP9eebVe4+g0M0rZLfcEg5nFDzB4HwJfDe78=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=eReF/GEI9wFA2aIdwFABYvT09Y6D9llikK1ZB8icpgx0Wja3xFxzf+3/rv4pzaTuw
-         10RZPXk9F6sHynJNDyXfQl9tyZVU1mCUAP2FWoe6ZTttgyRlL1iQUVi3wtvTUJxxsi
-         j96KwYvYG7c6B/qoOY/vD5RVzr9alcxXXULsPsUs=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221014053654epcas5p1d6fad50fcdebff57f75f39f035231188~d2M2ZsMnS1072510725epcas5p1W;
-        Fri, 14 Oct 2022 05:36:54 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MpZrg59xWz4x9Q2; Fri, 14 Oct
-        2022 05:36:51 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        07.05.56352.375F8436; Fri, 14 Oct 2022 14:36:51 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20221014053017epcas5p359d337008999640fa140c691f47bc79c~d2HENp0kk1178711787epcas5p3L;
-        Fri, 14 Oct 2022 05:30:17 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221014053017epsmtrp163eb7e2924d33763218bff35a59b19d5~d2HEMp-FM0388403884epsmtrp1A;
-        Fri, 14 Oct 2022 05:30:17 +0000 (GMT)
-X-AuditID: b6c32a4b-383ff7000001dc20-6a-6348f5732f05
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        15.88.14392.9E3F8436; Fri, 14 Oct 2022 14:30:17 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221014053015epsmtip12390955ca821a42ae222ef6fde8ee9a5~d2HCIU6j60123001230epsmtip1t;
-        Fri, 14 Oct 2022 05:30:14 +0000 (GMT)
-From:   Vivek Yadav <vivek.2311@samsung.com>
-To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, pankaj.dubey@samsung.com, ravi.patel@samsung.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vivek Yadav <vivek.2311@samsung.com>
-Subject: [PATCH v2] can: mcan: Add support for handling DLEC error on CAN FD
-Date:   Fri, 14 Oct 2022 10:33:32 +0530
-Message-Id: <20221014050332.45045-1-vivek.2311@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNKsWRmVeSWpSXmKPExsWy7bCmum7xV49kg3ft6hZzzrewWDw99ojd
-        4sK2PlaLVd+nMltc3jWHzWL9oiksFscWiFl8O/2G0WLR1i/sFg8/7GG3mHVhB6vFr4WHWSyW
-        3tvJ6sDrsWXlTSaPBZtKPT5eus3osWlVJ5tH/18Dj/f7rrJ59G1ZxejxeZNcAEdUtk1GamJK
-        apFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0MFKCmWJOaVAoYDE
-        4mIlfTubovzSklSFjPziElul1IKUnAKTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMfx+6mQqu
-        8FRsfbyNsYFxJVcXIweHhICJRP857i5GLg4hgd2MEkeXbmPtYuQEcj4xSuz9nwOR+MYosXXP
-        dGaQBEjD2bmHGCESexkl1i85zQrhtDJJXN15mR2kik1AS+Jx5wIWkISIwCFGiZVtz1hA9jEL
-        VEscOMIHUiMs4CNxcvJ7sHoWAVWJ1UuPsYDYvALWEkf2PGCC2CYvsXrDAWaQORICb9klGp4d
-        gEq4SPyadpgRwhaWeHV8CzuELSXxsr8Nyk6W2PGvkxXCzpBYMHEPVL29xIErc6Du0ZRYv0sf
-        IiwrMfXUOrDxzAJ8Er2/n0Ct4pXYMQ/GVpF48XkCKyTopCR6zwlDhD0kHmxYywIJuViJTYcu
-        Mk1glJ2FsGABI+MqRsnUguLc9NRi0wLjvNRyeDQl5+duYgSnQi3vHYyPHnzQO8TIxMEIDDUO
-        ZiURXpcQt2Qh3pTEyqrUovz4otKc1OJDjKbAIJvILCWanA9Mxnkl8YYmlgYmZmZmJpbGZoZK
-        4ryLZ2glCwmkJ5akZqemFqQWwfQxcXBKNTCt1jL8cuioP2ty12/vDR8+VE2Zzp01vzLGSdhQ
-        xV+y/NssYY9ne1Yulf0x5b3u5HszfG/5/ln058hq01dsC+b2PnH9asSyIlPx9PGIhAXSspvK
-        dlV3H7KPZ148tWrr1pUyf4rW5a+dFLan+mLOyXe9KRNsH3cdvvZS5YsYw6xfX3w/tRTbsj0I
-        Z9239/7ltdIsunoG+7r43reuNvB65/C+P0rSVNmYQ+fklTlX5jzq7Cqa2x9lf3+KSNE3/twt
-        +5qThB3/XY/kN55kMf/61yfJ35Xm6r8ps0pvSs192b0qbfutppfz32u7R+sEP94r8ujd1I9L
-        d2pJOHPufb3Prv1SHYu1v8rti7c8Oeafd3fnUWIpzkg01GIuKk4EAGMZH3gOBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFLMWRmVeSWpSXmKPExsWy7bCSnO7Lzx7JBhOncFrMOd/CYvH02CN2
-        iwvb+lgtVn2fymxxedccNov1i6awWBxbIGbx7fQbRotFW7+wWzz8sIfdYtaFHawWvxYeZrFY
-        em8nqwOvx5aVN5k8Fmwq9fh46Tajx6ZVnWwe/X8NPN7vu8rm0bdlFaPH501yARxRXDYpqTmZ
-        ZalF+nYJXBn/PnQzFVzhqdj6eBtjA+NKri5GTg4JAROJs3MPMXYxcnEICexmlFhxbRM7REJK
-        YsqZlywQtrDEyn/P2SGKmpkkfp1fxgaSYBPQknjcuYAFJCEicI5R4vn6H2AJZoF6iXdnboJN
-        EhbwkTg5+T2YzSKgKrF66TGwqbwC1hJH9jxggtggL7F6wwHmCYw8CxgZVjFKphYU56bnFhsW
-        GOallusVJ+YWl+al6yXn525iBAenluYOxu2rPugdYmTiYDzEKMHBrCTC6xLilizEm5JYWZVa
-        lB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDU3zXCh+uCzKSgsKvZk1S
-        O/wgWY4/12pRv9PxO403WIPOJTBtOqu52WzX/OVR+W+Dv3S57c5iDPG8um3fL6HeOm2LOjHL
-        wuoec74KHbnH6V1zeFnTBZLWcay8dkhe1c67I4/3YVZPS/ryZPHu8EWX6x01om5e2nOx5ltF
-        W55KfbNuyl7H2R/tIst1/zouZfCwSQ2/cSMpdZXJ2S8WjEc3+5QdF0isY9qfp/aA3/5X8mK/
-        SXliLkH3jrxf/UAg426hyKHa7hPaLJK7Vz7crNqp9mSj0xuPe/+vrDzfn6z+d8nFDTmlqkn+
-        z5i8vas032w+bdyZyLFpk+yfpP97Qm7Y8AlvSBafrrGM41eT+1klluKMREMt5qLiRAAs8XlI
-        vQIAAA==
-X-CMS-MailID: 20221014053017epcas5p359d337008999640fa140c691f47bc79c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221014053017epcas5p359d337008999640fa140c691f47bc79c
-References: <CGME20221014053017epcas5p359d337008999640fa140c691f47bc79c@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 01:05:08 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F43B4E41F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:05:06 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id z8so3060064qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c58OXeLn4p9khAmfcGXdtPDfOgfwmf+kmuPnuHvzL7o=;
+        b=KzF1jdXnGbTJGSkKyBE4RwB3Ujud9hmwzc6rWNY2CUDd2lzj6W97T1r7U909VWQ6H5
+         ToXCuBuLX463El6MEE+4YLVdbhFN/u0nIg4r+vKcwDlBvvT/iUI+qi2WGeKZLkd7Z1ZU
+         fxFCJ5ptXsQOl6XMySW4b7Rcwfny+qwPFyhmw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c58OXeLn4p9khAmfcGXdtPDfOgfwmf+kmuPnuHvzL7o=;
+        b=rMfNvQcOe0dchDHVgwYhioCpYcVh3Debt7AMyAbaWlRZbSnPy88Y+tXP+QD0+CM1me
+         amsbkrqn+bD5hkPtxfcjKrr93Wx5DhwIQVOayUMICchf2Axpy57KudbBRsidyW3pxQnu
+         Uv9SiQ2AIxNfcgGiFwfjw3rCcJc/4HLKzkLU2bbITn7LE+LbRPyFpV953trGYdKAI5Oe
+         tizCNdExJ3xP3DQv7iuHXQmlVOFWB3zUy7iAESzQ/9eR/QZ1pDecMedvgNBxNcsRy8n/
+         mqLD6910zU1Rrp6dfeXTF5+xgCx47u83j1HQhFk3FdugqsXMjLHeJV5mklkPqvPXsYXC
+         4Ryg==
+X-Gm-Message-State: ACrzQf2uc2qV/0G5xHQuGGNNPG+3h9hrJpoWqp8UoboioQN3b7kC3LoO
+        lSVEbu5QasTUKPq3PYPidmib/LblkYlWYQ==
+X-Google-Smtp-Source: AMsMyM5cCZ7u6oqYWNCpzBEAG/E4GhovcHzWMnpbke2URHtOmfjuBe/fG/q08FKd+6pnndAnhWqmYQ==
+X-Received: by 2002:a05:622a:614:b0:39c:cd36:ff9a with SMTP id z20-20020a05622a061400b0039ccd36ff9amr2749284qta.432.1665723904883;
+        Thu, 13 Oct 2022 22:05:04 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id t200-20020a3746d1000000b006cbcdc6efedsm1463984qka.41.2022.10.13.22.05.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 22:05:03 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3608b5e634aso36324367b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:05:03 -0700 (PDT)
+X-Received: by 2002:a0d:fe07:0:b0:360:c3e9:fc8a with SMTP id
+ o7-20020a0dfe07000000b00360c3e9fc8amr3101468ywf.441.1665723903437; Thu, 13
+ Oct 2022 22:05:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com>
+In-Reply-To: <CAPM=9ty3DGWa8vnfumgSrpSgWnixWjikb6C0Zk_5bW+deKLVQw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 13 Oct 2022 22:04:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whStfYqRSsFXeoCmTeJu0VHNwfP_tYO7pKDMw-uQpraDg@mail.gmail.com>
+Message-ID: <CAHk-=whStfYqRSsFXeoCmTeJu0VHNwfP_tYO7pKDMw-uQpraDg@mail.gmail.com>
+Subject: Re: [git pull] drm fixes for 6.1-rc1
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a frame in CAN FD format has reached the data phase, the next
-CAN event (error or valid frame) will be shown in DLEC.
+On Thu, Oct 13, 2022 at 5:29 PM Dave Airlie <airlied@gmail.com> wrote:
+>
+> Round of fixes for the merge window stuff, bunch of amdgpu and i915
+> changes, this should have the gcc11 warning fix, amongst other
+> changes.
 
-Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-determine the type of last error that occurred in the data phase
-of a CAN FD frame and handle the bus errors.
+Some of those amd changes aren't "fixes". They are some major code changes.
 
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
----
-This patch is dependent on following patch from Marc:
-[1]: https://lore.kernel.org/all/20221012074205.691384-1-mkl@pengutronix.de/
+We're still in the merge window, so I'm letting it slide, but calling
+then "fixes" really stretches things. They are fixes exactly the same
+way completely new development can "fix" things.
 
- drivers/net/can/m_can/m_can.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 18a138fdfa66..8cff1f274aab 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -156,6 +156,7 @@ enum m_can_reg {
- #define PSR_EW		BIT(6)
- #define PSR_EP		BIT(5)
- #define PSR_LEC_MASK	GENMASK(2, 0)
-+#define PSR_DLEC_MASK   GENMASK(8, 10)
- 
- /* Interrupt Register (IR) */
- #define IR_ALL_INT	0xffffffff
-@@ -876,8 +877,16 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- 	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
- 		u8 lec = FIELD_GET(PSR_LEC_MASK, psr);
- 
--		if (is_lec_err(lec))
-+		if (is_lec_err(lec)) {
- 			work_done += m_can_handle_lec_err(dev, lec);
-+		} else {
-+			u8 dlec = FIELD_GET(PSR_DLEC_MASK, psr);
-+
-+			if (is_lec_err(dlec)) {
-+				netdev_dbg(dev, "Data phase error detected\n");
-+				work_done += m_can_handle_lec_err(dev, dlec);
-+			}
-+		}
- 	}
- 
- 	/* handle protocol errors in arbitration phase */
--- 
-2.17.1
-
+                      Linus
