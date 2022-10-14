@@ -2,82 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95E75FE978
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D381E5FE975
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJNHY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S229833AbiJNHYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiJNHYY (ORCPT
+        with ESMTP id S229727AbiJNHYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:24:24 -0400
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7721BF21A
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:24:22 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 07:24:07 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=noorman.info;
-        s=protonmail3; t=1665732259; x=1665991459;
-        bh=TGUdxn23TFMtmW8ERauoStRg6kRXdVxb0gsOuzCan3c=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=nZ9F+ovlE8hrK/h97XiF/fIJsJZyoqiMCXI88g67ya4ctVDZZhco4g7vTvYjD/MtK
-         OHTzDaX4VeJP4dDrpWIK5zFzEA9fPJfhB0NCon3RDE9AVjJ5jae7wlaI2ZbPiq6Ppb
-         FhKnMtmbNCpwQHyVD/mltUTLE4cSukGlmxzz84Q8nH6Y9r9aG0fCiJ9YwD3GxukPoq
-         E5r6WZGcnJeFTsGT1l6FfIR0GiMHrRoT6qnRcxiGwu7+nT/m3ot9zHkNgdgKrX1kHA
-         jo9B8fizpdmbCJ8zKDsNbVeLZw+17QQjrjSqF+X7gZ4mzexpHopoabLEtW+2B7y9ki
-         JXKyD0hJtT2Ng==
-To:     Rob Herring <robh@kernel.org>
-From:   Job Noorman <job@noorman.info>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Subject: Re: [PATCH v2 1/3] dt-bindings: touchscreen: add Himax hx83112b bindings
-Message-ID: <CNLGSQCYFNR1.3HBI9N3N0A77B@ancom>
-In-Reply-To: <166569274210.175113.9615851655183284739.robh@kernel.org>
-References: <20221012202341.295351-1-job@noorman.info> <20221012202341.295351-2-job@noorman.info> <166569274210.175113.9615851655183284739.robh@kernel.org>
-Feedback-ID: 14439221:user:proton
+        Fri, 14 Oct 2022 03:24:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E7D19C07E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:24:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8FF5B82166
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:24:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2BF4C433D6;
+        Fri, 14 Oct 2022 07:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665732250;
+        bh=3+4ELQRvpQGXuMkn5AtQjc15E6olmIrVFv8lJeW/QFg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QXpkCrpIJPJWtsWLfgYXVvltQKARrqoxunUliXHr3UDG9hWTFntI4Px6MtP+9FkO0
+         v0PpDzTczjwnR4yW8TanxlfPBwefeHcpswq8V3ihfTq912Dnt8LMRb22TkRXQHzfp7
+         yK7oVRvlVkj8srZ/tDa4+EAzktnct7Q9Gf5hNa4I=
+Date:   Fri, 14 Oct 2022 09:24:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jack Rosenthal <jrosenth@chromium.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v12] firmware: google: Implement cbmem in sysfs driver
+Message-ID: <Y0kOxqyDM3/4HSnx@kroah.com>
+References: <20221004003811.4075765-1-jrosenth@chromium.org>
+ <Yzvz9hn1G8rU4VaO@kroah.com>
+ <Yzxl2oczTtwEvIqt@chromium.org>
+ <Yzxsu2Ms43eTfOYR@kroah.com>
+ <Yzy6KNUHFqxWZb9U@chromium.org>
+ <CAODwPW-7Y_CbCch+Y5unH3yJD1T=3epYvqja6w_CB-23C9x9sw@mail.gmail.com>
+ <Yz0jVbfDOITZfE9M@kroah.com>
+ <CAODwPW8R2uXFJ_5V737Dy8z-WJHUwKkLyG4MW_Q50fs-OFm7Sw@mail.gmail.com>
+ <Yz52r89A9JYEICCi@kroah.com>
+ <Y0iCZip0k9WcHgsz@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0iCZip0k9WcHgsz@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, Oct 13, 2022 at 03:25:58PM -0600, Jack Rosenthal wrote:
+> On 2022-10-06 at 08:33 +0200, Greg KH wrote:
+> > On Wed, Oct 05, 2022 at 04:26:55PM -0700, Julius Werner wrote:
+> > > > If the kernel is reporting a value, that value needs to be documented
+> > > > somewhere.  If the kernel is acting on that value, it needs to know what
+> > > > those values are.
+> > > >
+> > > > In this specific instance it seems that the kernel knows a subset of the
+> > > > values, and some random userspace tool knows all of them?  Think about
+> > > > what you would want to see here if you knew nothing about this at all.
+> > > 
+> > > The kernel doesn't know any of the values. The kernel is just telling
+> > > userspace that spaces with these IDs exist and providing an interface
+> > > to access them, it's not supposed to know what any of them mean.
+> > 
+> > Ah, ok, that was not obvious to me, sorry.  If the kernel is just a
+> > pass-through, no objections.
+> 
+> Does this mean PATCH v13 looks good to you?
 
-Thanks for you review!
+No idea, sorry.  It's the middle of the merge window, as my bot told
+you, so I can't do anything with changes until after it is over.  Please
+relax, there is no rush here...
 
-On Thu Oct 13, 2022 at 10:25 PM CEST, Rob Herring wrote:
-> On Wed, 12 Oct 2022 20:24:06 +0000, Job Noorman wrote:
-> > This patch adds device tree bindings for Himax 83112b touchscreen
-> > devices.
-> >
-> > Signed-off-by: Job Noorman <job@noorman.info>
-> > ---
-> >  .../input/touchscreen/himax,hx83112b.yaml     | 61 +++++++++++++++++++
-> >  MAINTAINERS                                   |  6 ++
-> >  2 files changed, 67 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/input/touchscreen=
-/himax,hx83112b.yaml
-> >
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
-
-The next version of this patch will make the properties touchscreen-size-{x=
-,y}
-required. Can I still attach your "Reviewed-by" tag to this updated patch o=
-r
-would you like to have a look at it first?
-
-Kind regards,
-Job
-
+greg k-h
