@@ -2,118 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEA65FF3C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6975FF3C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 20:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiJNSlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 14:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S230465AbiJNSlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 14:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiJNSlJ (ORCPT
+        with ESMTP id S230236AbiJNSl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 14:41:09 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D23C1C116B;
-        Fri, 14 Oct 2022 11:41:06 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id g27so7986832edf.11;
-        Fri, 14 Oct 2022 11:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w8juC6hMPMU2N03LaFSLm2HtS0qIXfus5Qh81eVapbo=;
-        b=RtNba/Q15Dwtjw+/9AybnS/nkRDKtk46OAbyJKFRQs5MVZRUawxrNeIhiEVXtkxc5G
-         lbVgu0N4fL6sTHjthSXG/WvdTP672n7pgaKRoETtGl7VnsEuF6hdG9wAfe2yQWCtvGYl
-         B3zChh2OixTvT7VsdmdQ4dvaVUx2s6oxa87FghJWdcUddeYAvAsg4Er9BICMgN+XVPsW
-         mRLmOZ6ePhX/ZDigreEhIdmjF0EGNEZgQeH4L6q62woIgX5KJe31PhCFNF6z2nPqoT42
-         pPIpl20rhzV+zdtcqxG77x/IFcJ7qNhqw7BH5U427mEURl0SxA03A46aAoLvlrVWjyAb
-         Y1hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w8juC6hMPMU2N03LaFSLm2HtS0qIXfus5Qh81eVapbo=;
-        b=Nen52ch4vDD7SSribFg0kStrfsNTVYz697sNcIL0BxtQwgdmq80otw8hQ9C0aHVsFu
-         rzUjr0znW6XYMi1YKqrJG4mx72u2pV8kErleUFpDdPIgVm+yykhzaDx6hmhb56LWMrXQ
-         7co42pFuHzAVTUjvnu30MSLwXnSsLb26CjaZdwwRKl/ZuzMFtvGhNhw898coELA1sDxT
-         8Q1mF6Xzvh/aSOq417cFQK/wlC9uoECjZwwHz8lK9Di9Nmah1E9WHb+p4OCnDxFsYyX2
-         UAN1rNIWSFrzUzpAl4ZlmtXodDfITPEB+fIAauIO03L+AeKKCWpKlqpRJWHdIAptndv7
-         uxyQ==
-X-Gm-Message-State: ACrzQf2rqgrjsmqTDYJqhZFr5QQnJt/MTugPd3PvJLTCA2z0i9YKwMMs
-        ffLi7qoDNX6P2YqiiFf13Ia8yAxWEk5DqETkr5A=
-X-Google-Smtp-Source: AMsMyM7gGbl8alPUyCtiMtgGvzBv11vh19S7U55cAsqsI5VCbyej6jfc5cwLQkFaH4IGmeWQ5U72JYiN8gSoJYoe7CU=
-X-Received: by 2002:a05:6402:26cf:b0:45d:48d7:928e with SMTP id
- x15-20020a05640226cf00b0045d48d7928emr2432edd.275.1665772865109; Fri, 14 Oct
- 2022 11:41:05 -0700 (PDT)
+        Fri, 14 Oct 2022 14:41:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292651C77C1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 11:41:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE990B810EE
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25ADC433D6;
+        Fri, 14 Oct 2022 18:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665772882;
+        bh=m3HaRT4Am8hiRILJCA1BmK39Zfen9jQhjt24Wl83ADg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kK+Y7Fkc2B0IlmR6GHKMpQX9PjJicT4YxghIJDDddyVv7yOlYX98IdCct89YQbwER
+         LEJ/hCd5KCyTWn9lVt7z7zNmQaHGlMpix8gMsWjGXIoMm39PdlVpuGjVxQtmTWn3BQ
+         ogubK4BE5FrJNjbsuozm+SJ8L1lHCWjLLJKVGisUALyv4GFD1RylJdrz0oluYoMLLu
+         0pTIJNo5i7/MhcpWvjX+KIEd3WRXY4TGCCBX9qunAe6pqdaFNtZerkgc+ZFoBH7mfF
+         Yu6I3ah5Fowq0B+aNg5WewpCJG6revmYR11iRIZZrvst4vsN84RB+ZcMiArik5qmmc
+         MagDOXW/o/ECA==
+Date:   Fri, 14 Oct 2022 13:41:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Richard Weinberger <richard@nod.at>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        helpdesk <helpdesk@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: Add linux-um archives to lore.kernel.org?
+Message-ID: <20221014184120.GA3395472@bhelgaas>
 MIME-Version: 1.0
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 14 Oct 2022 19:40:37 +0100
-Message-ID: <CA+V-a8szP16n90tkwVaqdbC-e7sEs8pA6GKCY5EzAfU630RGyA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] media: i2c: ov5645 driver enhancements
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdV5i3JGtg8e=STuP7SENVOKHAEtZ+WdUw8GPt7j9gH65A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+On Fri, Oct 14, 2022 at 08:06:43PM +0200, Geert Uytterhoeven wrote:
+> On Thu, Oct 13, 2022 at 8:48 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-On Fri, Oct 14, 2022 at 7:35 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
->
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Hi All,
->
-> The main aim of this series is to add PM support to the sensor driver.
->
-> I had two more patches [0] and [1] which were for ov5645, so instead
-> sending them separately I have clubbed them as series.
->
-> v1-> v2
-> - patch #1 is infact a v3 [1] no changes
-> - patch #2 fixed review comments pointed by Sakari
-> - patch #3 [0] no changes
-> - patches #4 and #5 are new
->
-> [0] https://patchwork.linuxtv.org/project/linux-media/patch/20220927202005.750621-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> [1] https://patchwork.linuxtv.org/project/linux-media/patch/20220919153540.178732-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
->
-> Cheers,
-> Prabhakar
->
-> Lad Prabhakar (5):
->   media: dt-bindings: ov5645: Convert OV5645 binding to a schema
->   media: i2c: ov5645: Use runtime PM
->   media: i2c: ov5645: Drop empty comment
->   media: i2c: ov5645: Return zero for s_stream(0)
->   media: i2c: ov5645: Call ov5645_entity_init_cfg() before registering
->     the subdev
->
-After sending this series I realized I had an additional patch [0] for
-ov5645 which I should have tagged along with the series. Can you
-please pick [0] while reviewing this series.
+> Konstantin: I believe there is a bug in the sending procedure [3]:
+> 
+>     tar cf full-archives.tar dir-with-mbox-files
+> 
+> I guess that should be
+> 
+>     tar cf full-archives.tar ~/linux-kernel-announce
+> 
+> instead?
 
-[0] https://patchwork.kernel.org/project/linux-media/patch/20220919143350.176746-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+While you're looking at typos, there's a "list-archive-marker.py" in
+the last section [4] that I think should be "list-archive-maker.py".
 
-Cheers,
-Prabhakar
+> [3] https://korg.docs.kernel.org/lore.html#send-the-archive-to-helpdesk
+
+[4] https://korg.docs.kernel.org/lore.html#can-we-use-mailman-archives
