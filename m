@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2995FF33A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CE05FF33D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiJNRzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S230295AbiJNRzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiJNRy6 (ORCPT
+        with ESMTP id S230201AbiJNRy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:54:58 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8052B258;
-        Fri, 14 Oct 2022 10:54:47 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so8566142pjq.3;
-        Fri, 14 Oct 2022 10:54:47 -0700 (PDT)
+        Fri, 14 Oct 2022 13:54:59 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62EE2BB39;
+        Fri, 14 Oct 2022 10:54:48 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 70so5563817pjo.4;
+        Fri, 14 Oct 2022 10:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BX6I3wxmmC2re4tlQ7azHaY51bTZUH4nJgPdj4ITZq8=;
-        b=cyugA0yHJUN3qAYBEX22+gvLsKzT0Qskj8CNA+ZBQPAmGtgf7tK+Sy7JA8OTpXVWB9
-         YXCtr/IhxkTKGg6wXcjDhbXvGxTbLTOZI43n2iC2HOissspE74cppc0sruSR9JwaR+Vz
-         Eoc1W/ULVDcc5A7omUhw68ovv7kBCrPWVoPjH4eiFFybdVWKDgTTp/IqST7suQo+y58g
-         MeR1NqyDiYNodnBCHIGpogo+vlERi25f/glW2sbIkJC+RsL+O6Dc0JqqixOttVYHuVzn
-         hPVgOV7m0N/1sNNDaKuOtKopFleKiT9qgs1E45fHsq6jbfTzWqe69zPvrCMo/fl4TqzN
-         DbkA==
+        bh=hifOoY9aqLLHbcQa2d9K53VxHn7l+VlC4N3fss0zE6o=;
+        b=TrpvH1TyIPvuJXDWY1g6ts8rJV3gvM9Nm0JNTBhFYpx2VK44z8Rht7w/Ag7is45ey3
+         5ezFxZHhpI1YuXCQLbvQ5ecv06+V+SpA8r3lf/wFqfbcgHg5EQdjS2WVhz1pQNfTH8mw
+         66b2PU7ve2MOYaj8Nme0hrcf44ijbJ7sLBuHf9KH/FcrhkMupMn0xH7cQ80fAJa1R7uo
+         AJ0nAeFYhJKaANAWnQj8t4Ny1oxgPj9ldWk8x9jBk/mz5+5Uh893cGshBAVNMPpVORGV
+         Vnbw5tMxeBSEBR0PeLMJWfW7uuE7fsZLMNQrIgS7369saBkiEQeJV6Y5zPq0r3LNSy6l
+         ahqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BX6I3wxmmC2re4tlQ7azHaY51bTZUH4nJgPdj4ITZq8=;
-        b=hpPvEJFE6iuPNawyPCrOdSljGQm5fG8QsYr9yftisReSyODKH/Fy7vr4OUHeX/1CJB
-         WgQdemtKAaPcuS/JxiJwMgmSDnO5JW5PmsVkbWwOYEeLTprMY2q8k2gNqcKEMErSTxDU
-         44meYj/F/lxzitwPfQxGyf75uTCHzjc+k+N5fVLtPQeqnRxk0acdVhvlLh05qsV9K2WX
-         9/B00mqckzX92Whny+bnbxG/nSz4VezIGdlLermWdodzu7ExgipDWCq8aKM7l8Qk6qRW
-         WjKUGAxJnlh4w7ipxhMTedTMq+j2OEqNvy6uqXwnj292YRoH4HTRMVkZ3LxVQN8fUsQs
-         QorQ==
-X-Gm-Message-State: ACrzQf0gbSYfrZIEbHM99E8WNuaJsqtnCz/IPcrPxF/PdOJf16p07Z+D
-        vM3EEZ8XKMBh0f/nWTrqsfE=
-X-Google-Smtp-Source: AMsMyM6HJMSW8eaOV/L8mdLS4/siuzIHXjCFIiLCzS5TaBfYxq818U8i5HSUDm/flCBDm5MDoy8urA==
-X-Received: by 2002:a17:90a:4311:b0:20b:e232:5920 with SMTP id q17-20020a17090a431100b0020be2325920mr7199880pjg.190.1665770086268;
-        Fri, 14 Oct 2022 10:54:46 -0700 (PDT)
+        bh=hifOoY9aqLLHbcQa2d9K53VxHn7l+VlC4N3fss0zE6o=;
+        b=n3VmXRbRc5IAwuB7kl0ocbrIBe4y4GZv4fEade4EwsT4RT3/MxMnFsuSfChjg6e+fU
+         XnoHfMQ6aCMTmRHhLeQFdDaEFmet6XYxWPBD6kI1SD0eSh59zWV3owUpjM76wYlDiQ4M
+         obX6/a6R0iExgN0HPMxkgQog/ADYriDcNWqmwHjmRwN3z53JlM7wEQvVQKuKabqxAZZ/
+         wnUUbf8cUe9hjCgD3l+9nRxN9Y4bCgNGTfHl39AEyHtZQgYrwyUPYSM/Ql+S5R/WKMlK
+         ocpdni+3YRuzZ5yuiecH1T3Co/UsHjtOigAnI2tbWyLvTqgbQaFo2B40GR6I7ep703md
+         0lYA==
+X-Gm-Message-State: ACrzQf2C2Jf9qwE3JFLIryYjVMub5V6/88rddtGs9Xq93wQ403zDKoMl
+        FaFUpMyZJol4f4/WCNRcA6Y=
+X-Google-Smtp-Source: AMsMyM7wLkfeK7I1F9q2E31QSGa2I946SkJ4WKVNKK++Nlyyi1mDDFQDfViwRLKauuXRwbgorVoV9Q==
+X-Received: by 2002:a17:90b:1804:b0:20d:a753:7d4c with SMTP id lw4-20020a17090b180400b0020da7537d4cmr11027033pjb.78.1665770087982;
+        Fri, 14 Oct 2022 10:54:47 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:da06:5604:594f:f6af])
-        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b0017f7819732dsm2011780plb.77.2022.10.14.10.54.44
+        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b0017f7819732dsm2011780plb.77.2022.10.14.10.54.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 10:54:45 -0700 (PDT)
+        Fri, 14 Oct 2022 10:54:47 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Linus Walleij <linus.walleij@linaro.org>
@@ -60,9 +60,9 @@ Cc:     linux-mediatek@lists.infradead.org,
         Daniel Thompson <daniel.thompson@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-gpio@vger.kernel.org
-Subject: [PATCH v2 5/9] gpiolib: of: add a quirk for reset line for Marvell NFC controller
-Date:   Fri, 14 Oct 2022 10:54:29 -0700
-Message-Id: <20221011-gpiolib-quirks-v2-5-73cb7176fd94@gmail.com>
+Subject: [PATCH v2 6/9] gpiolib: of: add a quirk for reset line for Cirrus CS42L56 codec
+Date:   Fri, 14 Oct 2022 10:54:30 -0700
+Message-Id: <20221011-gpiolib-quirks-v2-6-73cb7176fd94@gmail.com>
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 In-Reply-To: <20221011-gpiolib-quirks-v2-0-73cb7176fd94@gmail.com>
 References: <20221011-gpiolib-quirks-v2-0-73cb7176fd94@gmail.com>
@@ -80,37 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The controller is using non-standard "reset-n-io" name for its reset
-gpio property, whereas gpiod API expects "<name>-gpios". Add a quirk
-so that gpiod API will still work on unmodified DTSes.
+The controller is using non-standard "cirrus,gpio-nreset" name for its
+reset gpio property, whereas gpiod API expects "<name>-gpios".
+Add a quirk so that gpiod API will still work on unmodified DTSes.
 
 Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/gpio/gpiolib-of.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/gpio/gpiolib-of.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 2b5d1b3095c7..5c11ee7638d1 100644
+index 5c11ee7638d1..77cabcfb2da0 100644
 --- a/drivers/gpio/gpiolib-of.c
 +++ b/drivers/gpio/gpiolib-of.c
-@@ -390,6 +390,16 @@ static struct gpio_desc *of_find_gpio_rename(struct device_node *np,
- #if IS_ENABLED(CONFIG_MFD_ARIZONA)
- 		{ "wlf,reset",	NULL,		NULL },
+@@ -418,6 +418,9 @@ static struct gpio_desc *of_find_gpio_rename(struct device_node *np,
+ 		{ "wlf,ldo2ena", NULL,		NULL }, /* WM8994 */
  #endif
-+
-+#if IS_ENABLED(CONFIG_NFC_MRVL_I2C)
-+		{ "reset",	"reset-n-io",	"marvell,nfc-i2c" },
+ 
++#if IS_ENABLED(CONFIG_SND_SOC_CS42L56)
++		{ "reset",	"cirrus,gpio-nreset",	"cirrus,cs42l56" },
 +#endif
-+#if IS_ENABLED(CONFIG_NFC_MRVL_SPI)
-+		{ "reset",	"reset-n-io",	"marvell,nfc-spi" },
-+#endif
-+#if IS_ENABLED(CONFIG_NFC_MRVL_UART)
-+		{ "reset",	"reset-n-io",	"marvell,nfc-uart" },
-+#endif
- #if !IS_ENABLED(CONFIG_PCI_LANTIQ)
- 		/* MIPS Lantiq PCI */
- 		{ "reset",	"gpios-reset",	"lantiq,pci-xway" },
+ #if IS_ENABLED(CONFIG_SND_SOC_TLV320AIC3X)
+ 		{ "reset",	"gpio-reset",	"ti,tlv320aic3x" },
+ 		{ "reset",	"gpio-reset",	"ti,tlv320aic33" },
 
 -- 
 b4 0.11.0-dev-5166b
