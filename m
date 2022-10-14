@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD4E5FF074
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2E15FF075
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJNOjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S230160AbiJNOjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiJNOj1 (ORCPT
+        with ESMTP id S229920AbiJNOj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:39:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044DD1D4DE7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:39:26 -0700 (PDT)
+        Fri, 14 Oct 2022 10:39:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A61B1D4DE7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:39:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665758366;
+        s=mimecast20190719; t=1665758367;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CEy7pKIEsfMMFzj4vyOzQVpkWI0TxrmvN3NLo9J44z8=;
-        b=iepYJhttJwhqIGc6BDa2CKrYQKQSHTWGZcrN9v8IMO6Ngab5cIWXky27aNI4NmuNNYOSci
-        bSf0nvG2q5zt0ych081OKFa68KQDieNsDiLXthPTHCB/NucxMfOIHcV3Sl6Zq5Ytq5HSPf
-        9cUoITp/c97tRaOiwJktQ35/6tRlOYs=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=zhrtCe5O8iJscoLdf85Accar6WxcllS+eYr7bBy1HkM=;
+        b=gtdPCQsofa7kHijNmmurBxhr/APJhIXVcNkZGAICAgJzsqN8S/KYZw8zO/ZVAZh19ZVc0H
+        NeMb4fZxaw3zIiKsAZkrtL62b+FEnrh+/YSzx77cKfwLqSZoywohaqXv6peouxWspVaxEs
+        qJ6aF9gJul5lj9NBGKPAXkANnUTjDNE=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-622-l_ER5CKYNmuc7kbrvHuT5A-1; Fri, 14 Oct 2022 10:39:25 -0400
-X-MC-Unique: l_ER5CKYNmuc7kbrvHuT5A-1
-Received: by mail-qk1-f198.google.com with SMTP id j13-20020a05620a288d00b006be7b2a758fso3580147qkp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:39:25 -0700 (PDT)
+ us-mta-339-p1WeIEz_M_CFSrXw6Tm80g-1; Fri, 14 Oct 2022 10:39:26 -0400
+X-MC-Unique: p1WeIEz_M_CFSrXw6Tm80g-1
+Received: by mail-qk1-f197.google.com with SMTP id az32-20020a05620a172000b006ee8ae138a7so3594407qkb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:39:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CEy7pKIEsfMMFzj4vyOzQVpkWI0TxrmvN3NLo9J44z8=;
-        b=kyIQlijkbsz/HvzKAO59f5AwgWjTywJg4zXdJ4Z6JcQzqEcCl33jfDuXR1B1qnJCQy
-         5FU82tFQ6AulAfzojEbXKVOeRTmzm+PEwmbFK/taI7IenBp6gXibynNzGrbVrw9by02W
-         vurin6GwOpYtRDrN8LbmX7SqNPchLmHdQx68RvyVr2XW2L4ghsrFnmzHVXyIerKlYPqR
-         r6lZXNK64RJG3Ef+wkvWQITNsDk/azjxl20fZ0VIDZpgPH4IM+h0JjwCZTDiJWaGbzj+
-         31Nk4+It7OxynBP4R4rVo2Z4jbdQ4h0XnO3ou2f1LP8yvy+Nwn4OmYkDIv8CjqLJrxBq
-         F6Cw==
-X-Gm-Message-State: ACrzQf0yI6jITXJsZeR+UjxR9n6ivlrcJQOaql6vShcFEv/24p2snBsY
-        n7njwdIJwq244B/7Ty/km44PlpnjwZuLVD+VyqxySVmmwDY1hu89TmoQoWZeWE5hs53DFwTK3mL
-        nEWbFxdrDP4dHcMQ9MnzQyvSCKn4gwnp4dJevH94a97cnYlQ08L2ZcogE0LJvZAhhJdp+Kt7Y1w
+        bh=zhrtCe5O8iJscoLdf85Accar6WxcllS+eYr7bBy1HkM=;
+        b=g4VKWBHrZvqNyr2VGAzGCLM7kL+U6/eLN8CQ9BXeT67l2RRgg1SUE+HY9GffFf8Iue
+         DHwowud44HkwRdlsBbtQsw0SE7HBYUMObE+uTA1sKMTp4jDlclYNplZqWDpoZ4IrO2kB
+         H0VmPOltvQJp2AntD9mFzG5+EgFwgJ7GZOudhCh4V9C1/KrKxDB5lHZcuTu80JEeXPIg
+         M5Xs8TQVzl2hrFpDgSDwx+hHwKAguHnwIHkOLlye8qt0HkeJlVxD4uOo6m44Xb4g993n
+         295+kUeDBgDj5h0Q+kvMcgrBsjZQlaI6S8CfzVuaoAqYDDTGN2E2a8+DZH7/rA2KuCGB
+         mD1g==
+X-Gm-Message-State: ACrzQf1zz+88uePPogAIUi7yBcAl98fyRRrgGM/hLsFSMvJ5yP7CqHoS
+        SetPN0lATx49BRB9NIIKJoUkelC0iJ9XdDngouXyxKL2xOMCcpskEJitaoL7v/7MMMgXZ8xIX+J
+        w6z/1dfS2OwLKkiD41cxrXVMbQ/wDeqTf54+WjN3PhqY/wgIfs/XvdLHKgEUAEL5Q3k+IuxgZiQ
         ==
-X-Received: by 2002:a05:6214:500f:b0:4b1:d2b1:54c with SMTP id jo15-20020a056214500f00b004b1d2b1054cmr4236938qvb.54.1665758364406;
-        Fri, 14 Oct 2022 07:39:24 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5hcHtcB11MKZ36Ka9jJq2b9wUzusa/zVJ0ne6bkmpItRnjhCW0Ngl0EeWdKQA1NKrIZ/bLuw==
-X-Received: by 2002:a05:6214:500f:b0:4b1:d2b1:54c with SMTP id jo15-20020a056214500f00b004b1d2b1054cmr4236905qvb.54.1665758364028;
-        Fri, 14 Oct 2022 07:39:24 -0700 (PDT)
+X-Received: by 2002:a05:620a:4487:b0:6ee:bcfd:bd38 with SMTP id x7-20020a05620a448700b006eebcfdbd38mr3958894qkp.468.1665758365599;
+        Fri, 14 Oct 2022 07:39:25 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4Sm2N0MTTyvS+djMYYsPheIDh6qYStLP75xZfMOIeKo1yJ56X446Gqke44gOKPwhPm9ANfZA==
+X-Received: by 2002:a05:620a:4487:b0:6ee:bcfd:bd38 with SMTP id x7-20020a05620a448700b006eebcfdbd38mr3958866qkp.468.1665758365343;
+        Fri, 14 Oct 2022 07:39:25 -0700 (PDT)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id q4-20020a05620a2a4400b006ec09d7d357sm2675541qkp.47.2022.10.14.07.39.22
+        by smtp.gmail.com with ESMTPSA id q4-20020a05620a2a4400b006ec09d7d357sm2675541qkp.47.2022.10.14.07.39.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 07:39:23 -0700 (PDT)
+        Fri, 14 Oct 2022 07:39:24 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Axel Rasmussen <axelrasmussen@google.com>,
         Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
         Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH v2 1/4] selftests/vm: Use memfd for uffd hugetlb tests
-Date:   Fri, 14 Oct 2022 10:39:18 -0400
-Message-Id: <20221014143921.93887-2-peterx@redhat.com>
+Subject: [PATCH v2 2/4] selftests/vm: Use memfd for hugetlb-madvise test
+Date:   Fri, 14 Oct 2022 10:39:19 -0400
+Message-Id: <20221014143921.93887-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221014143921.93887-1-peterx@redhat.com>
 References: <20221014143921.93887-1-peterx@redhat.com>
@@ -80,133 +80,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already used memfd for shmem test, move it forward with hugetlb too so
-that we don't need user to specify the hugetlb file path explicitly when
-running hugetlb shared tests.
+For dropping the hugetlb mountpoint in run_vmtests.sh.  Since no parameter
+is needed, drop USAGE too.
 
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 62 ++++++++----------------
- 1 file changed, 21 insertions(+), 41 deletions(-)
+ tools/testing/selftests/vm/hugetlb-madvise.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 74babdbc02e5..58f70d81e630 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -93,10 +93,8 @@ static volatile bool test_uffdio_zeropage_eexist = true;
- static bool test_uffdio_wp = true;
- /* Whether to test uffd minor faults */
- static bool test_uffdio_minor = false;
+diff --git a/tools/testing/selftests/vm/hugetlb-madvise.c b/tools/testing/selftests/vm/hugetlb-madvise.c
+index 3c9943131881..f96435b70986 100644
+--- a/tools/testing/selftests/vm/hugetlb-madvise.c
++++ b/tools/testing/selftests/vm/hugetlb-madvise.c
+@@ -12,6 +12,7 @@
+  * directory.
+  */
+ 
++#define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <unistd.h>
+@@ -19,7 +20,6 @@
+ #define __USE_GNU
+ #include <fcntl.h>
+ 
+-#define USAGE	"USAGE: %s <hugepagefile_name>\n"
+ #define MIN_FREE_PAGES	20
+ #define NR_HUGE_PAGES	10	/* common number of pages to map/allocate */
+ 
+@@ -103,11 +103,6 @@ int main(int argc, char **argv)
+ 	int fd;
+ 	int ret;
+ 
+-	if (argc != 2) {
+-		printf(USAGE, argv[0]);
+-		exit(1);
+-	}
 -
- static bool map_shared;
--static int shm_fd;
--static int huge_fd;
-+static int mem_fd;
- static unsigned long long *count_verify;
- static int uffd = -1;
- static int uffd_flags, finished, *pipefd;
-@@ -143,7 +141,7 @@ const char *examples =
-     "# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
-     "./userfaultfd hugetlb 256 50\n\n"
-     "# Run the same hugetlb test but using shared file:\n"
--    "./userfaultfd hugetlb_shared 256 50 /dev/hugepages/hugefile\n\n"
-+    "./userfaultfd hugetlb_shared 256 50\n\n"
-     "# 10MiB-~6GiB 999 bounces anonymous test, "
-     "continue forever unless an error triggers\n"
-     "while ./userfaultfd anon $[RANDOM % 6000 + 10] 999; do true; done\n\n";
-@@ -260,35 +258,21 @@ static void hugetlb_release_pages(char *rel_area)
- 
- static void hugetlb_allocate_area(void **alloc_area, bool is_src)
- {
-+	off_t size = nr_pages * page_size;
-+	off_t offset = is_src ? 0 : size;
- 	void *area_alias = NULL;
- 	char **alloc_area_alias;
- 
--	if (!map_shared)
--		*alloc_area = mmap(NULL,
--			nr_pages * page_size,
--			PROT_READ | PROT_WRITE,
--			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB |
--				(is_src ? 0 : MAP_NORESERVE),
--			-1,
--			0);
--	else
--		*alloc_area = mmap(NULL,
--			nr_pages * page_size,
--			PROT_READ | PROT_WRITE,
--			MAP_SHARED |
--				(is_src ? 0 : MAP_NORESERVE),
--			huge_fd,
--			is_src ? 0 : nr_pages * page_size);
-+	*alloc_area = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
-+			   (is_src ? 0 : MAP_NORESERVE),
-+			   mem_fd, offset);
- 	if (*alloc_area == MAP_FAILED)
- 		err("mmap of hugetlbfs file failed");
- 
- 	if (map_shared) {
--		area_alias = mmap(NULL,
--			nr_pages * page_size,
--			PROT_READ | PROT_WRITE,
--			MAP_SHARED,
--			huge_fd,
--			is_src ? 0 : nr_pages * page_size);
-+		area_alias = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+				  MAP_SHARED, mem_fd, offset);
- 		if (area_alias == MAP_FAILED)
- 			err("mmap of hugetlb file alias failed");
- 	}
-@@ -334,14 +318,14 @@ static void shmem_allocate_area(void **alloc_area, bool is_src)
+ 	huge_page_size = default_huge_page_size();
+ 	if (!huge_page_size) {
+ 		printf("Unable to determine huge page size, exiting!\n");
+@@ -125,9 +120,9 @@ int main(int argc, char **argv)
+ 		exit(1);
  	}
  
- 	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
--			   shm_fd, offset);
-+			   mem_fd, offset);
- 	if (*alloc_area == MAP_FAILED)
- 		err("mmap of memfd failed");
- 	if (test_collapse && *alloc_area != p)
- 		err("mmap of memfd failed at %p", p);
- 
- 	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
--			  shm_fd, offset);
-+			  mem_fd, offset);
- 	if (area_alias == MAP_FAILED)
- 		err("mmap of memfd alias failed");
- 	if (test_collapse && area_alias != p_alias)
-@@ -1821,21 +1805,17 @@ int main(int argc, char **argv)
+-	fd = open(argv[1], O_CREAT | O_RDWR, 0755);
++	fd = memfd_create(argv[0], MFD_HUGETLB);
+ 	if (fd < 0) {
+-		perror("Open failed");
++		perror("memfd_create() failed");
+ 		exit(1);
  	}
- 	nr_pages = nr_pages_per_cpu * nr_cpus;
  
--	if (test_type == TEST_HUGETLB && map_shared) {
--		if (argc < 5)
--			usage();
--		huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
--		if (huge_fd < 0)
--			err("Open of %s failed", argv[4]);
--		if (ftruncate(huge_fd, 0))
--			err("ftruncate %s to size 0 failed", argv[4]);
--	} else if (test_type == TEST_SHMEM) {
--		shm_fd = memfd_create(argv[0], 0);
--		if (shm_fd < 0)
-+	if (test_type == TEST_SHMEM || test_type == TEST_HUGETLB) {
-+		unsigned int memfd_flags = 0;
-+
-+		if (test_type == TEST_HUGETLB)
-+			memfd_flags = MFD_HUGETLB;
-+		mem_fd = memfd_create(argv[0], memfd_flags);
-+		if (mem_fd < 0)
- 			err("memfd_create");
--		if (ftruncate(shm_fd, nr_pages * page_size * 2))
-+		if (ftruncate(mem_fd, nr_pages * page_size * 2))
- 			err("ftruncate");
--		if (fallocate(shm_fd,
-+		if (fallocate(mem_fd,
- 			      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
- 			      nr_pages * page_size * 2))
- 			err("fallocate");
+@@ -406,6 +401,5 @@ int main(int argc, char **argv)
+ 	(void)munmap(addr2, NR_HUGE_PAGES * huge_page_size);
+ 
+ 	close(fd);
+-	unlink(argv[1]);
+ 	return 0;
+ }
 -- 
 2.37.3
 
