@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE575FF432
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1375FF438
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiJNTof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 15:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S231437AbiJNTo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 15:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiJNTob (ORCPT
+        with ESMTP id S231410AbiJNTor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 15:44:31 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72851D79B2;
-        Fri, 14 Oct 2022 12:44:30 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id h10so3895238qvq.7;
-        Fri, 14 Oct 2022 12:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jRUJ/QuzoFh7CZWCmP/Tvwc6hY7OTq8JN3QKuFbW8/8=;
-        b=iPwNeLHyqaFNTPw3QAfJflixPHFnxLKYWk27ZjSlOrkAf1sNonJPypAnjw+0nVjuP0
-         RTNYnwrrm8+SOU9H4gtwLe8/dFs0D+UOilYO5IlMqLfxNV+QUNY76S0GcIzMCWB03Ka1
-         gKUqtw/YFWBsYEr5kRK71GtG7k48lhNfycbF93pH5WjMYgywC555KUrCqwKswTztolOc
-         RVtjxYlccZcxs0vNyTI+6Z7LQiagsWoOm98ClzwSwE4KQAWqxBNWUh+FiYFI5CbVqy3B
-         dPnyWMQWgbzQklANOqoZMU+Qo3+tQqkNlIpLZ1AZvIvZC1LS0LkvEccVrtetuM8afc3T
-         afFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jRUJ/QuzoFh7CZWCmP/Tvwc6hY7OTq8JN3QKuFbW8/8=;
-        b=by3Cwvl51mY9KIw/Y3WIT3g+6Sxuhx7dzIsXnJf7ygYO0s94F6Bkl3zHcXzkmK7Dh2
-         ZJs8Xe3V9kM16A2tsUQQAvLOyk8K3B10U7606I5QIsCM1mIy39eznvlMXj6b/JIcZH6U
-         wT5TNTAtwzlob3VmQz70uHVAwSmg5Wz9hbAMAanXsmglVbnvZ3r2ncGvACSBCz/pBa9p
-         b3NkmX9nIb7hwjKjpmzDGMNWOQC3eU2EKuSNDvV/G9gOUyudBR4T321GzWnMB/vV6rUb
-         ZM9e9pCaGlOjVSDv6/aQojq1dVtZOpyBK3W8NfUBQs1Nq10hw43pzrOzWLGbeG9snbUl
-         loYw==
-X-Gm-Message-State: ACrzQf1SuUTBM6k8ahWlajx/Wqtw8cSfKhpohqvR8RntUuwC+ONENgBE
-        ImdOPX39EfPCloq+rU0S0ZY=
-X-Google-Smtp-Source: AMsMyM4Z3G8ESlxxaBGvcPzIV8pBrcD99S8yd+JZsybkrXWtMqOFr/g1WwkRVGlDPTmYl9kd5q08Gw==
-X-Received: by 2002:a05:6214:622:b0:4b1:d189:1631 with SMTP id a2-20020a056214062200b004b1d1891631mr5391197qvx.62.1665776669830;
-        Fri, 14 Oct 2022 12:44:29 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id t138-20020a37aa90000000b006ecb9dfdd15sm3053872qke.92.2022.10.14.12.44.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 12:44:29 -0700 (PDT)
-Message-ID: <c3535ca9-1676-750a-9041-8bcc4c636e86@gmail.com>
-Date:   Fri, 14 Oct 2022 12:44:20 -0700
+        Fri, 14 Oct 2022 15:44:47 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E012BEE;
+        Fri, 14 Oct 2022 12:44:40 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7ed329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ed:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 936011EC0745;
+        Fri, 14 Oct 2022 21:44:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665776674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=/V95RNDyG4C0aXVPfYmbPIz3FOBoOTs+eKl5UB9vPKs=;
+        b=CH3Dw0F6sUBootIDepy8xu8SZlUqfyEbs1sZrwlg3E7dKOz34Nr41iAjSyzAvqEtP6IfFj
+        H+Hv4B1TcCVGKnzMjTjy0r+KM7Pq05/PjJWMKOrsBw7qD+sz+QE1gmondjrULUrTc/BDJn
+        ly1DXRZkoOd6GwlsHRLdAYjL+jHXVJE=
+Date:   Fri, 14 Oct 2022 21:44:34 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 04/39] x86/cpufeatures: Enable CET CR4 bit for shadow
+ stack
+Message-ID: <Y0m8IoU/I3y8JMQh@zn.tnic>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-5-rick.p.edgecombe@intel.com>
+ <Y0mYib7ygyxbiZ2K@zn.tnic>
+ <1f9e89ae13b49ffbcc947bf6bdee0303387c5cd4.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/7] firmware: raspberrypi: Move the clock IDs to the
- firmware header
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Emma Anholt <emma@anholt.net>, Stephen Boyd <sboyd@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        Dom Cobley <popcornmix@gmail.com>,
-        dri-devel@lists.freedesktop.org
-References: <20220815-rpi-fix-4k-60-v3-0-fc56729d11fe@cerno.tech>
- <20220815-rpi-fix-4k-60-v3-2-fc56729d11fe@cerno.tech>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220815-rpi-fix-4k-60-v3-2-fc56729d11fe@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1f9e89ae13b49ffbcc947bf6bdee0303387c5cd4.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/22 02:13, Maxime Ripard wrote:
-> We'll need the clock IDs in more drivers than just the clock driver from
-> now on, so let's move them in the firmware header.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+On Fri, Oct 14, 2022 at 06:15:30PM +0000, Edgecombe, Rick P wrote:
+> Andrew Cooper has suggested to create some software cpu features to
+> differentiate user/supervisor CET feature use. It could replace
+> HAS_KERNEL_IBT. Any objections to that versus Kconfig symbols?
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Sure, except you can't use them in
+
+arch/x86/include/asm/idtentry.h:8:#define IDT_ALIGN     (8 * (1 + HAS_KERNEL_IBT))
+
+as that gets used in asm code.
+
+But you don't have to do this in this patchset - it is huge already
+anyway. I have this thing on my todo so I'll get to it eventually.
+Unless you're itching to remove it yourself - then I won't stay in the
+way.
+
+:-)
+
+Thx.
+
 -- 
-Florian
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
