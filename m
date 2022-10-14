@@ -2,127 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8B55FF656
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC435FF658
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiJNWRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S229721AbiJNWTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJNWRu (ORCPT
+        with ESMTP id S229886AbiJNWSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:17:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411991B864F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 15:17:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=xQaKAyCKu0+ueL4Q6Y1AwFEQ4l4Z/XAvSp7zoyHPOUc=; b=jWPxb7hvPO0cC/qmLaMnWu1alM
-        tRyrCk4vpg+LURVtndZGTbRk1h1zrMYmkRzUwu286EonS/2S7zHTzLxLR16uUUi5QyycRaJY1ETGa
-        V4yaL7Q2pzl9E0G5DMP9AF9z7DwgTNLG6KSTUZFKog1OaXooRBPzKfJ90ZNRP7uAxTSx98OHDnDog
-        EOAZh5r03GkD745+RouwjW/iAgtmOEtIsjztnMCys4fikxwdR7XIWk8BsoQ3l3u3qRYV7z1qqJjiK
-        zgTF8zNRO8TggdOHOKztN80TXG2m6nA2CXujkg1CyX/AhPTjCoj4ki6qn1gL4T84JDvVnUqacFbbA
-        UpYrqcJA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ojSxn-007xKz-Lr; Fri, 14 Oct 2022 22:15:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7D66430008D;
-        Sat, 15 Oct 2022 00:15:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 688272C1B4E05; Sat, 15 Oct 2022 00:15:26 +0200 (CEST)
-Date:   Sat, 15 Oct 2022 00:15:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Liang, Kan" <kan.liang@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: assert from intel_pmu_hw_config
-Message-ID: <Y0nffphm+aqtMBMc@hirez.programming.kicks-ass.net>
+        Fri, 14 Oct 2022 18:18:31 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291801E0455;
+        Fri, 14 Oct 2022 15:18:23 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id w196so6481998oiw.8;
+        Fri, 14 Oct 2022 15:18:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cv1UBJfQzFJqm9MKrYEI4Znkn0nH6Ew1AYP8Zj5KlyY=;
+        b=4+uoCLhQgJh8gn47FIutjI+KQW48uW2qWCREq8YS+gR6cRrUE0uhvfMLOlo3OJbC+N
+         eAWCxC0ly5TZ6qzA1VSiORHQvlzY9xCzW+N9Nd/FFaiZEYBPaaFBrYATJT7fz0/za+9+
+         L9btK5vEqX5+tWPkbb4QTW5iL/DAEMjAQOqsKzV9Q4SoWkUYYCVk6irwnBl5zPHpMDR4
+         /72An05tlmnNSMv/ohhuZU5Lj/jQEXFYieNRlodInHiTUAVcmlbIiJ57oS7owHL06vxK
+         5FO1f2yts7hYbbdlJFWgBF7gsmNKI3/IGSPJVyeQ9/09DCWspUZor7DWsVa5LeWEeM7A
+         A8zw==
+X-Gm-Message-State: ACrzQf0rC0gDl93dVqawOvZhah8mSWooxBySHcyODs9x4tC5EwsKj3uJ
+        qBegVCEyF5mao/33pJjktueQwCIVQJwQISaHH3s=
+X-Google-Smtp-Source: AMsMyM7RcSpNsrdTB3IMVoBjep6aChMvzNXIw7J/EQwCOamIINOB833PUrM8CKc1Dr591uE93IP4/i+8N7GjctPKlJA=
+X-Received: by 2002:a05:6808:181e:b0:350:e92a:9ab1 with SMTP id
+ bh30-20020a056808181e00b00350e92a9ab1mr14639oib.209.1665785817076; Fri, 14
+ Oct 2022 15:16:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922071017.17398-1-dongli.zhang@oracle.com>
+In-Reply-To: <20220922071017.17398-1-dongli.zhang@oracle.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 14 Oct 2022 15:16:45 -0700
+Message-ID: <CAM9d7cj8z+ryyzUHR+P1Dcpot2jjW+Qcc4CPQpfafTXN=LEU0Q@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/1] perf stat: do not fatal if the leader is errored
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     linux-perf-users <linux-perf-users@vger.kernel.org>,
+        KVM <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, joe.jin@oracle.com,
+        Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kan,
+Hello,
 
-While fuzzing on my ADL, I saw a splat (sadly not captured because
-MeshCommander is a pain in the backside).
+On Thu, Sep 22, 2022 at 12:10 AM Dongli Zhang <dongli.zhang@oracle.com> wrote:
+>
+> Add kvm@vger.kernel.org as this issue is in virtualization env.
+>
+> The topdown metrics events became default since
+> commit 42641d6f4d15 ("perf stat: Add Topdown metrics events as default
+> events"). The perf will use 'slots' if the
+> /sys/bus/event_source/devices/cpu/events/slots is available.
+>
+> Unfortunately, the 'slots' may not be supported in the virualization
+> environment. The hypervisor may not expose the 'slots' counter to the VM
+> in cpuid. As a result, the kernel may disable topdown slots and metrics
+> events in intel_pmu_init() if slots event is not in CPUID. E.g., both
+> c->weight and c->idxmsk64 are set to 0.
+>
+> There will be below error on Icelake VM since 'slots' is the leader:
+>
+> $ perf stat
+> Error:
+> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (slots).
+> /bin/dmesg | grep -i perf may provide additional information.
+>
+> This is because the stat_handle_error() returns COUNTER_FATAL when the
+> 'slots' is used as leader of events.
+>
+> There are three options to fix the issue.
+>
+> 1. Do not expose /sys/bus/event_source/devices/cpu/events/slots to
+> userspace so that pmu_have_event(pmu->name, "slots") returns false.
+>
+> 2. Run cpuid at perf userspace and avoid using 'slots' if it is not
+> supported in cpuid.
+>
+> 3. Do not fatal perf if the leader is failed. Do not create events for an
+> evsel if its leader is already failed.
+>
+> This RFC patch is with the 3rd option. Would you mind suggesting which
+> option is better?
 
-The thing I did recover was that it was the new
-lockdep_assert_event_ctx() triggering from intel_pmu_hw_config().
+Sorry for the late reply but I think option 1 is the way to go.
 
-Now; that code reads:
+The option 3 would be a transient workaround and it would affect
+other events too.  If it's really needed, I think option 2 is slightly better
+than option 3.  Or, we can add --force option to skip non-supported
+events explicitly.
 
-	if (require_mem_loads_aux_event(event) &&
-	    (event->attr.sample_type & PERF_SAMPLE_DATA_SRC) &&
-	    is_mem_loads_event(event)) {
-		struct perf_event *leader = event->group_leader;
-		struct perf_event *sibling = NULL;
+Thanks,
+Namhyung
 
-		if (!is_mem_loads_aux_event(leader)) {
-			for_each_sibling_event(sibling, leader) {
-				if (is_mem_loads_aux_event(sibling))
-					break;
-			}
-			if (list_entry_is_head(sibling, &leader->sibling_list, sibling_list))
-				return -ENODATA;
-		}
-	}
-
-And it is trying to assert leader->ctx->mutex is held.
-
-Now, the calling context perf_try_init_event() has:
-
-	/*
-	 * A number of pmu->event_init() methods iterate the sibling_list to,
-	 * for example, validate if the group fits on the PMU. Therefore,
-	 * if this is a sibling event, acquire the ctx->mutex to protect
-	 * the sibling_list.
-	 */
-	if (event->group_leader != event && pmu->task_ctx_nr != perf_sw_context) {
-		/*
-		 * This ctx->mutex can nest when we're called through
-		 * inheritance. See the perf_event_ctx_lock_nested() comment.
-		 */
-		ctx = perf_event_ctx_lock_nested(event->group_leader,
-						 SINGLE_DEPTH_NESTING);
-		BUG_ON(!ctx);
-	}
-
-IOW; we only hold leader->ctx->mutex when event is *NOT* the group
-leader; while the above code *can* in fact use for_each_sibilng_event()
-on the group leader when conditions are just right.
-
-Now, it's really late and my brain has long since started the weekend,
-but I think something like the below ought to fix things.
-
-Does that make sense? IIRC this would not destroy the purpose of this
-code -- although admittedly, the comment there tickles only vague
-memories.
-
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index d8af75466ee9..450463d36450 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -3975,7 +3975,7 @@ static int intel_pmu_hw_config(struct perf_event *event)
- 		struct perf_event *leader = event->group_leader;
- 		struct perf_event *sibling = NULL;
- 
--		if (!is_mem_loads_aux_event(leader)) {
-+		if (event != leader && !is_mem_loads_aux_event(leader)) {
- 			for_each_sibling_event(sibling, leader) {
- 				if (is_mem_loads_aux_event(sibling))
- 					break;
+>
+> Here is the output of patch.
+>
+> $ perf stat -v
+> Using CPUID GenuineIntel-6-6A-6
+> slots -> cpu/event=0,umask=0x4/
+> topdown-retiring -> cpu/event=0,umask=0x80/
+> topdown-bad-spec -> cpu/event=0,umask=0x81/
+> topdown-fe-bound -> cpu/event=0,umask=0x82/
+> topdown-be-bound -> cpu/event=0,umask=0x83/
+> Control descriptor is not initialized
+> Warning:
+> slots event is not supported by the kernel.
+> ^Ccpu-clock: 62021481051 62021480237 62021480237
+> context-switches: 437 62021478064 62021478064
+> cpu-migrations: 17 62021475294 62021475294
+> page-faults: 12 62021471925 62021471925
+> cycles: 15662273 62020909141 62020909141
+> instructions: 6580385 62008944246 62008944246
+> branches: 1446119 62008855550 62008855550
+> branch-misses: 30970 62008643255 62008643255
+> failed to read counter slots
+> failed to read counter topdown-retiring
+> failed to read counter topdown-bad-spec
+> failed to read counter topdown-fe-bound
+> failed to read counter topdown-be-bound
+>
+>  Performance counter stats for 'system wide':
+>
+>          62,021.48 msec cpu-clock                        #   16.006 CPUs utilized
+>                437      context-switches                 #    7.046 /sec
+>                 17      cpu-migrations                   #    0.274 /sec
+>                 12      page-faults                      #    0.193 /sec
+>         15,662,273      cycles                           #    0.000 GHz
+>          6,580,385      instructions                     #    0.42  insn per cycle
+>          1,446,119      branches                         #   23.316 K/sec
+>             30,970      branch-misses                    #    2.14% of all branches
+>    <not supported>      slots
+>    <not supported>      topdown-retiring
+>    <not supported>      topdown-bad-spec
+>    <not supported>      topdown-fe-bound
+>    <not supported>      topdown-be-bound
+>
+>        3.874991326 seconds time elapsed
+>
+> Thank you very much!
+>
+> Cc: Joe Jin <joe.jin@oracle.com>
+> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+> ---
+>  tools/perf/builtin-stat.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 0b4a62e4ff67..1053cf0886c0 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -762,9 +762,7 @@ static enum counter_recovery stat_handle_error(struct evsel *counter)
+>                  */
+>                 counter->errored = true;
+>
+> -               if ((evsel__leader(counter) != counter) ||
+> -                   !(counter->core.leader->nr_members > 1))
+> -                       return COUNTER_SKIP;
+> +               return COUNTER_SKIP;
+>         } else if (evsel__fallback(counter, errno, msg, sizeof(msg))) {
+>                 if (verbose > 0)
+>                         ui__warning("%s\n", msg);
+> @@ -843,6 +841,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>                 if (target.use_bpf)
+>                         break;
+>
+> +               if (evsel__leader(counter)->errored)
+> +                       continue;
+>                 if (counter->reset_group || counter->errored)
+>                         continue;
+>                 if (evsel__is_bpf(counter))
+> @@ -901,6 +901,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>                 evlist__for_each_cpu(evlist_cpu_itr, evsel_list, affinity) {
+>                         counter = evlist_cpu_itr.evsel;
+>
+> +                       if (evsel__leader(counter)->errored)
+> +                               continue;
+>                         if (!counter->reset_group && !counter->errored)
+>                                 continue;
+>                         if (!counter->reset_group)
+> --
+> 2.17.1
+>
