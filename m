@@ -2,140 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE2D5FE990
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D095FE993
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJNH2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S229925AbiJNH3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJNH2k (ORCPT
+        with ESMTP id S229774AbiJNH3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:28:40 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649CA17FD6A;
-        Fri, 14 Oct 2022 00:28:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id b2so5921871lfp.6;
-        Fri, 14 Oct 2022 00:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyMPuARgI/cMW3vAnqIKcmeUrRRRLXL+kTVTiHp6F18=;
-        b=Uhk7l/TUMcB3aXP5JC4d928KA5zigdEwO6kuyDxzN04onE2qENHX2fYQ3X0VR50OWu
-         yWIiBiogxa3oj5M29c8lukh9WfSS6r3itRbzKdsnRcGz2QVOmWCImh8Blw1GsXb4HeNT
-         BJi/8D/+tVN/YunWReEzfo9PTRzkH0mMpjDjfE5GdeN9M2Fs7zR9xbHEo43YUZuD1NFE
-         ynL0IzO9U/1brhRFHJL6RjTLLyRE8NWeJjPtq4hDdPj+aVs/YRgLqS6CMdlqknh9KOs2
-         YCYkYA4N0bJMpMQqHY//x6RX3RFc/Vcc/7sTxU6cjofIfxu6o1SmyuqMExco5Sm4B3Ze
-         U+XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SyMPuARgI/cMW3vAnqIKcmeUrRRRLXL+kTVTiHp6F18=;
-        b=ELJaf09nIQnAsAEEK0PAVkiHdrp4q2oCHrcOM5noRhv29J3sVpmjnmR3J1RsqiXJSN
-         9m4J0H2hQLjTYPcf+fAnn4MZ/1FOYRZ2IdILw28NKyoaewIMu4XkJ1E1HAFHomaGS+0c
-         QWXaswJ+ya7Xx6QgZ3M4Fbq+7vDAy4WgwqyQT9oRHZu00+MT7f4UnfAMIUCBOsKimri6
-         lmgPBj69840nLcAONfth3tHTdQQ/u7635V/BOFiwcsxJ0ddB8aVDx0StFjVGLsyqhK9L
-         l39aHWEtQB03IxPKP2VD8hf4RNaj5zQWx9O3kwDjwsiO/lYMmmXOx6+zSgaEoy+kWKQ9
-         Ja2w==
-X-Gm-Message-State: ACrzQf3qe0+Kduza90sJHVgb8baJCWpXZoiXbRC5QP7ZFFRv3FrBqNYb
-        AtNr6D0F665lBpdaX3X1P8s=
-X-Google-Smtp-Source: AMsMyM7egWkgr8i9TnfRJ4inSksIa8+UNFlB0IyGYii7eeDMWqnAmy4nspLLyCI7QLACC4NVuAahAA==
-X-Received: by 2002:a05:6512:458:b0:4a2:c67c:afbd with SMTP id y24-20020a056512045800b004a2c67cafbdmr1281812lfk.76.1665732517599;
-        Fri, 14 Oct 2022 00:28:37 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id i14-20020a056512340e00b00497a879e552sm224136lfr.291.2022.10.14.00.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 00:28:36 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 09:28:36 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] thermal: imx8mm_thermal: wait for a valid measurement
-Message-ID: <Y0kPpAYYnSvV/HWR@gmail.com>
-References: <20221007073057.41803-1-marcus.folkesson@gmail.com>
- <1b247906-665f-8d14-82b3-c55467659644@oss.nxp.com>
+        Fri, 14 Oct 2022 03:29:00 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2065.outbound.protection.outlook.com [40.107.220.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021201BF85D;
+        Fri, 14 Oct 2022 00:29:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=URNb8VCO5ScKA2h7I8O2SgF04rJyN3GfZ3o7o24Yy0fFQJ4r6BxYPUgWVBGzsx09EDZkvWdKcZIWrJQ2hHGpetLLgno+8gA0cP5oUq73Bk6ixVxXYZG06LfbpOJ6Q/slDBbXLk8h36ct/tqYYYR8ufWZzI0U02i8Ik5oD4jJLrVud/PIFd/0WunY1kZ6gvpDg/g/JifMXQIkLwvKNct3mjX+c7OkYm738INd3pY/lLVkGHCOnumIbS992O0DIDkPR9dpXyZyN5CclpyGRWR6+ZWdjxEnC9DO8FMjreMcMEI2GqcyIdeJyCLEaSAdySNDPipJlJ1uPjPMlbi+C8Ja7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r5yoHfTmLrtwPQlcUDk/YIxIIslyvVUQl1aR9ZNKl7Q=;
+ b=Wvw8wfu6s+bRQt602akixx+O+gwmgZc8XDFp8p0W09dX70deNWxvddqu00Fo1Pf0eXb07dYySsaTZuVNvrstZgtG7rGOMKFCnmAAWjZ9RbPa4TDXBnsEpS9274l1yTm5/cyORwde8OtAOBxqZhBTHSDWjIXh9DE5DEvwkBxl4PkX29bBMu6HPCPF7axrwBs8vIF9NUOI/yiTxvMfjPNs3s0vgDLQPb9iuwfYQDW244KjbWktBRS+JzDhDPQ9ypR8S/p7A4CRBAc2VhY0GI5Fr+myIUEiFlYKCHMi5SkUSh6kIMFjUgvrwrmIt8ObXp2X1LEP/uEhP6XjTrheqgX11w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r5yoHfTmLrtwPQlcUDk/YIxIIslyvVUQl1aR9ZNKl7Q=;
+ b=Q/QY2JwYOU2xkSQ+BA6MiseYz64nPiEDXodvK1tINNzuK24QBjxLEiUo5w9EibDINDvByRnw63FSxOm++PG/0yyJSKHBi5AQ/2D2sCwwttF3v3UBl3i88gOSMHacXorb02GO+9jV4Upj5oxbWpoVf+RHGQYZK7GlFX6GcLFx2ylkqaALnEmDJffvx1I5tkJiiq3uZ+gcJhrlQ7LUTSiK9Of/m3Rv0mDCaPGptihLQilv9lFd8qv1lHUPOB50BVc8vau5teB7feYC/uYLwfYqQ862/IVAMguPUx3BGAOLg9XQMhVQJfj3lsYgjw71fbs1iE4w2OATKDgmNqDGK7yMmQ==
+Received: from MW2PR12MB2412.namprd12.prod.outlook.com (2603:10b6:907:b::33)
+ by CY5PR12MB6406.namprd12.prod.outlook.com (2603:10b6:930:3d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 14 Oct
+ 2022 07:28:58 +0000
+Received: from MW2PR12MB2412.namprd12.prod.outlook.com
+ ([fe80::d56c:50d7:f0de:e3f6]) by MW2PR12MB2412.namprd12.prod.outlook.com
+ ([fe80::d56c:50d7:f0de:e3f6%7]) with mapi id 15.20.5709.021; Fri, 14 Oct 2022
+ 07:28:58 +0000
+From:   Prathamesh Shete <pshete@nvidia.com>
+To:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Aniruddha Tvs Rao <anrao@nvidia.com>,
+        Suresh Mangipudi <smangipudi@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: RE: [PATCH v8 3/3] mmc: sdhci-tegra: Issue CMD and DAT resets
+ together
+Thread-Topic: [PATCH v8 3/3] mmc: sdhci-tegra: Issue CMD and DAT resets
+ together
+Thread-Index: AQHY354oMJLO8R7MiUaTXWAsX6IV0q4NfYOQ
+Date:   Fri, 14 Oct 2022 07:28:58 +0000
+Message-ID: <MW2PR12MB2412E92633E4A6B670DFC93EB7249@MW2PR12MB2412.namprd12.prod.outlook.com>
+References: <CAPDyKFq5hNTdwT7CMvsxG=_5u+xvG2k3-PfbGhAbHfHbGqK81w@mail.gmail.com>
+ <20221014072456.28953-1-pshete@nvidia.com>
+ <20221014072456.28953-3-pshete@nvidia.com>
+In-Reply-To: <20221014072456.28953-3-pshete@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB2412:EE_|CY5PR12MB6406:EE_
+x-ms-office365-filtering-correlation-id: 7d561b0d-ac3a-400c-e974-08daadb5c206
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DSn1lnTgUHNdCetfCHLY5EJSw2bMX7jmRSfzieO57s9CkfHErgWCkx4IVLSpYx18ETqquXEaJWOG68bF2S2EyxSbIvnmciyUP+ARVtGLlAjuabxs8q0X6w+fZHFoJDsok0lre3buZ/SMgn2EKmK+sciT5iBY8viRQ3BTM7A8pcvsVREEi8FppNVTLRWIeR4YO/RHAUfd+Kwm1UVgww9XwrGLbsD5WEYlLsU2TDsTbokqlCzFWzGiD7qifDCdg01JTk0mG0BEhQB71hH0p7ojdPsbAmL6AvlJwNne3O5J85EUJp9agUWXbQ/h2NuJ39iyhCEgC+wbjGSFNFfIVr7O6/A191L2dAue0+MWNe+oAFhysKvEgiouW9LViTjE6I136yVM9Q4+Xhmv8uQoHW5B4e0QVLbzWRuQnOoDzb4vaCHeidXItlflyloWXhuJyPbFrBzOCBu9PHKYQ7QQPeYOyfdHv3BsKKS7/9A/ETPs2IqoojywfQpe3vOYYZYH9NDkp59qIf2BeLjmRuEtiNjOf0Y+3aJlBPAcnboP6LzhkF5NJIGxRR1SLHy4vxEST7SzPp9xfMrRkspeEpABDqzJmkR8foRNRgvpTHBGm5FU8dS971H2o+ePXA3uR+DqsSJ+xdW3ITLJ/aEqF36fNpJZFd8rd1rirBDVh57YLnokptx/GslaG8FGc06EJkAN2jSpqg3Oyvz1Zo+f6Y1uwjMUnO4GPMiaAyRQnzw3UC4dHnhtetrJuMYCsyGH9ljcyGCqg+s2HpTqBOAD+cJi4JTfIA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2412.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(366004)(346002)(451199015)(316002)(83380400001)(71200400001)(66556008)(66446008)(66476007)(64756008)(8676002)(4326008)(107886003)(76116006)(66946007)(33656002)(186003)(8936002)(54906003)(5660300002)(55016003)(38100700002)(110136005)(478600001)(53546011)(2906002)(26005)(38070700005)(9686003)(41300700001)(7696005)(52536014)(6506007)(86362001)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6A9zs2ebsYvyKY0SHVDkXtttivS41aF8thwbZ/8OpTfkRisx8ppohCONmq8Z?=
+ =?us-ascii?Q?BqD66vTBz0Hr9834YIu83GXKnsDDhlN3sXFnX0Dxk1JkuaaVkRT25jIuocl0?=
+ =?us-ascii?Q?KATiDtaTstVhkPL3DOkMmR3zvjLteFP9W/Z7PtrDxv13C+qRoDK8Jof8xsNI?=
+ =?us-ascii?Q?GXk7EOLYFlybofQ5Bz2qmstS7nmhNMELTWyyqvQJrsgrFwGkQXiN+84j8LFS?=
+ =?us-ascii?Q?oPUFekatgns7RNHnOXlrVxM5JXtcdpWR72mRSe8GaeWoX6A9gI0KF0mR1ACK?=
+ =?us-ascii?Q?CowKsQ+qovSsDXu+JWr/xoFeWkUxwfhbb1TcEiKw1ekaGtxHTF6y0YWyhUv+?=
+ =?us-ascii?Q?unYA6+rGaVJwwUsxIu7ZU5dm8jBobtL01XK+xAanuGJJJpV1+9sEpH0AwgCJ?=
+ =?us-ascii?Q?KLfEIvWu7MBV2e/LfhjAeNgiR89XqnWre2M14CnQ5XSWQ4kPFJaJ782vGLzo?=
+ =?us-ascii?Q?gpUHMBgwWuqskqML9EUY0EbvcHjp4rjHUFQtTvMeNJDYF1SzH63UE0haQoUA?=
+ =?us-ascii?Q?bdfZmBWqPIjazku5s1UJoKRinRqTAWOWDBWPUGGfCFsM1HTEwX2rMJkSQvoA?=
+ =?us-ascii?Q?y6iCzHlB0xFLXAG718JnVCdfVQGvKU8P57DRv2xt6wHBDoHwrpuXbQGPW9R3?=
+ =?us-ascii?Q?0ONCPFeUtQqXVLoL7eafk9/j9/vdEnBjWuePcIfCa9yq4xvgv1r0+nch/bPQ?=
+ =?us-ascii?Q?2iUese6P33y5Z9L8vmsEor/ZqDQ5n/h0I3qJRzd195SSa84G135JhvhnSYri?=
+ =?us-ascii?Q?zSq4muNWCNaUqe8h0ww26jY3/TPcwMsC7VV1saF0ldVB+8i5yGoO37C49bOx?=
+ =?us-ascii?Q?l5e8ev+FgTciji+WNCyJlO5NTQRLIxPkujjmymwbwMPNWBCsToW/UeK+GOvI?=
+ =?us-ascii?Q?7PS6ri8qHlqoAPXhtzONjyVRT5wARS+zsNvkvxaDPlYFUiK8DM8wQWAQMpKM?=
+ =?us-ascii?Q?gbaEELYNcMNn3vwlGl9kXEhvGuHfQgWZtY54NqJXOjUJojSbNvJIwXg3xaAB?=
+ =?us-ascii?Q?Aj1q0DrfnYY6BkkDvaJgatkO/2AVOYGFy5EWRsr/zil7erC/ZxVqQo6dNQod?=
+ =?us-ascii?Q?KxqI5mNJT6IdHlm/HpLbDOBu3W94kv0EkPfxmTzjx7zJhpHx4+U4DbrHir8J?=
+ =?us-ascii?Q?lT3cgXO6IbKi7th0yb5mrCjQgF3TGYvc2Ve/OZQWEWXfhMajiEdZ/BwRAhi9?=
+ =?us-ascii?Q?iD+lgEQ3FADMyvpvAPVMKW7/F56shEKhfv8K5dBjAJZ1mn259VdmoG46qVE4?=
+ =?us-ascii?Q?/OmNhEFIfxlDfGmQ8Sdku1WxuhEDXmGJp3fYGVe2CBPSgyUxAwdOPKpr9j27?=
+ =?us-ascii?Q?HHbgu5emrwGqpvhDIeIvbxJv1MzpTQS1OEkiSmmq5ixU4i53hRMM9hSgHfzD?=
+ =?us-ascii?Q?rVQx8jH/4GwWbDFxNHAPfycjNUXS8KZw1MKSGl000Ckg81wwpo0kSRf6lwar?=
+ =?us-ascii?Q?q8+AzPybdJe1r18V4HHn+MesAcLwhHiiof3753W+3xpXH1APaSW8iKNJ2Nil?=
+ =?us-ascii?Q?jJoUdjXyla95LC1WmQh5nBOxVJA7ex15EsNGlK6g3jZ+TeE4I7S/hxfD6+d8?=
+ =?us-ascii?Q?DoKPbgWyPUu74aJrCr8=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zogtDrRbthaXzIxw"
-Content-Disposition: inline
-In-Reply-To: <1b247906-665f-8d14-82b3-c55467659644@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2412.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d561b0d-ac3a-400c-e974-08daadb5c206
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2022 07:28:58.1952
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6s5F8baOUZvPjpwjQTMnSfZXLEUgsoKl4wm016QC0u6yoxGAlv736HRRlBkR8Wng11dHOysTbJZ4miMQvYzXAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6406
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dropping 4th(following) patch in this series from previous versions as that=
+ fix is applied.
+[PATCH v7 4/4] mmc: sdhci-tegra: Use actual clock rate for SW tuning correc=
+tion
 
---zogtDrRbthaXzIxw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Peng,
-
-On Fri, Oct 14, 2022 at 09:20:21AM +0800, Peng Fan wrote:
+> -----Original Message-----
+> From: Prathamesh Shete <pshete@nvidia.com>
+> Sent: Friday, October 14, 2022 12:55 PM
+> To: adrian.hunter@intel.com; ulf.hansson@linaro.org;
+> thierry.reding@gmail.com; Jonathan Hunter <jonathanh@nvidia.com>;
+> p.zabel@pengutronix.de; linux-mmc@vger.kernel.org; linux-
+> tegra@vger.kernel.org; linux-kernel@vger.kernel.org
+> Cc: Aniruddha Tvs Rao <anrao@nvidia.com>; Suresh Mangipudi
+> <smangipudi@nvidia.com>; Prathamesh Shete <pshete@nvidia.com>;
+> Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> Subject: [PATCH v8 3/3] mmc: sdhci-tegra: Issue CMD and DAT resets
+> together
 >=20
+> In case of error condition to avoid system crash Tegra SDMMC controller
+> requires CMD and DAT resets issued together. SDHCI controller FSM goes
+> into bad state due to rapid SD card hot-plug event.
+> Issuing reset on the CMD FSM before DATA FSM results in kernel panic,
+> hence add support to issue CMD and DAT resets together.
+> This is applicable to Tegra186 and later chips.
 >=20
-> On 10/7/2022 3:30 PM, Marcus Folkesson wrote:
-> > Check if first measurement is still pending or if temperature is out of
-> > range.
-> > Return and try again later if that is the case.
-> >=20
-> > Fixes: 5eed800a6811 ("thermal: imx8mm: Add support for i.MX8MM thermal =
-monitoring unit")
-> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/mmc/host/sdhci-tegra.c | 3 ++-
+>  drivers/mmc/host/sdhci.c       | 5 +++++
+>  drivers/mmc/host/sdhci.h       | 2 ++
+>  3 files changed, 9 insertions(+), 1 deletion(-)
 >=20
-> NAK:
-> Please refer: https://www.nxp.com/docs/en/errata/IMX8MM_0N87W.pdf
-> ERR051272: TMU: Bit 31 of registers TMU_TSCR/TMU_TRITSR/TMU_TRATSR invalid
-
-I see, thank you.
-
-I think it is still worth to check the upper limit though, so I will
-send a patch for that.
-
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegr=
+a.c
+> index 0cd7c3f7e6f4..9fbea5bbfa4a 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -1535,7 +1535,8 @@ static const struct sdhci_pltfm_data
+> sdhci_tegra186_pdata =3D {
+>  		  SDHCI_QUIRK_NO_HISPD_BIT |
+>  		  SDHCI_QUIRK_BROKEN_ADMA_ZEROLEN_DESC |
+>  		  SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
+> -	.quirks2 =3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+> +	.quirks2 =3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+> +		   SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER,
+>  	.ops  =3D &tegra186_sdhci_ops,
+>  };
 >=20
-> Thanks,
-> Peng.
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c index
+> 2b5dda521b0e..8512a69f1aae 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -270,6 +270,11 @@ enum sdhci_reset_reason {
+>=20
+>  static void sdhci_reset_for_reason(struct sdhci_host *host, enum
+> sdhci_reset_reason reason)  {
+> +	if (host->quirks2 &
+> +		SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER) {
+> +		sdhci_do_reset(host, SDHCI_RESET_CMD |
+> SDHCI_RESET_DATA);
+> +		return;
+> +	}
+>  	switch (reason) {
+>  	case SDHCI_RESET_FOR_INIT:
+>  		sdhci_do_reset(host, SDHCI_RESET_CMD |
+> SDHCI_RESET_DATA); diff --git a/drivers/mmc/host/sdhci.h
+> b/drivers/mmc/host/sdhci.h index d750c464bd1e..6a5766774b05 100644
+> --- a/drivers/mmc/host/sdhci.h
+> +++ b/drivers/mmc/host/sdhci.h
+> @@ -478,6 +478,8 @@ struct sdhci_host {
+>   * block count.
+>   */
+>  #define SDHCI_QUIRK2_USE_32BIT_BLK_CNT			(1<<18)
+> +/* Issue CMD and DATA reset together */
+> +#define SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER	(1<<19)
+>=20
+>  	int irq;		/* Device IRQ */
+>  	void __iomem *ioaddr;	/* Mapped address */
+> --
+> 2.17.1
 
-Best regards,
-Marcus Folkesson
-
---zogtDrRbthaXzIxw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmNJD58ACgkQiIBOb1ld
-UjIi9w/+OPV3O8sggMQbdOEJXZNCBSIxdf5ni+OQ2LXoP8vQ9kLmnpc3PCSGJ+Mn
-erLM6iQriIGkONfbRrsXvX3nfejt1md3ouu9q0BMRt8XtOs3rVTcGa9H3WlhzgO5
-SOg+Cc0MMcDeOqjlQVs6uc5H8PyWEAEnC88WospNVMB1NQqFrt9hf8aJ+otoZwoK
-DKqgL0EiBCc8WXlDV6ab4wABglaLESH1SMr6n7+RQieHW9faNgg35OOUEwk0KV1t
-F25x9iOEUnvQzMSV9NXbtAQYgpwW75o0gUWuu+JYU3kNkXe4jXvuYGfy0VIz/Qhs
-VJ8r20U3FHOBinkODdU8UE9u6SV2dlq4LbYOmGGg2/v3kpqzeLU/pcIypx/3uUs6
-ivQbo/O1Y10ZFLGSgwiqrcKLlvTaNS6FWnNgYFmQZxi3RgBsemsJ62zW0JfZwlwt
-KQOhIl+wKjrKn2BHvBCj/k+9TQ0WMeKjx3Y5kEhamFUNDv+qr1rK9+9gDhPc/AiY
-Qs5YPgccFtqnDhlUkApierjryEjb0QNTEBDJpog5LWRiph7k3Z+RGE5XokuV4c6L
-1eNjNltDnJqOdkNc6HbUn67qmnFzYKEknCu/Hun5cpq7ma1NGBpSkmyoyYMFE/MC
-9OBiu3Ecp99NkR4xDk1ldFZzhpHuxkx0KLElKP32Lx+EyP1d0TU=
-=htvi
------END PGP SIGNATURE-----
-
---zogtDrRbthaXzIxw--
