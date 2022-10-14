@@ -2,189 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0E55FF032
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC9D5FF037
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiJNOVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S230457AbiJNOWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiJNOVh (ORCPT
+        with ESMTP id S229819AbiJNOW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:21:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEB615B114;
-        Fri, 14 Oct 2022 07:21:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AC1CB82161;
-        Fri, 14 Oct 2022 14:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC27C433C1;
-        Fri, 14 Oct 2022 14:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665757291;
-        bh=dqeD1vrMeLYwqQDNjUyf6ndX3UFDCdt2jmlGnqqMgbE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JZLt4iT4Sb6F2ovzVZMOYKi1e06yiH+skqSOzx3M/Ao3GbrGetP+hGIyDtyIva+PX
-         9WJakxRwNexPSLjqKkaD4sdCb1cXSDbmLhsBLElCwaxrtsuybWp2wy9IJu/EyKCaBX
-         HF0CWIn9GUlrU9isc4QhO6wI76ugSJtUR3axsb3pDeMaSomlYWs+7WP5T03DlJxNGq
-         cKvdH6R1WsjjkaYomewHBfe9MMxPBrjf41YCsNGFaU2t2pDRJVGuuVMjq+ACpQP8zl
-         4BnLfNnUnsH03TfuyfpOc7X0bb+OgxTWfCjA9RwVoVFqDANfv8nM9/n05ppjRozZGn
-         Y96BKmeyqkVnQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E0A615C32BF; Fri, 14 Oct 2022 07:21:27 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 07:21:27 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        youssefesmat@google.com, surenb@google.com
-Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
-Message-ID: <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221011180142.2742289-1-joel@joelfernandes.org>
- <20221011180142.2742289-2-joel@joelfernandes.org>
+        Fri, 14 Oct 2022 10:22:29 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3861D5E27
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:22:27 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id 3so5027844vsh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fco4aoSGDktPeCUQicKuShHwB8ASsS0GQpxb9h8fR+w=;
+        b=WLXwQ39TkUO4zir3sdYOz4kTOtMQMK6kFCLHeTi79EsXnhwm5TzOUnwgAqFPNy0ZeU
+         lDfGHpClHjUkKEYxAUXCH0ihZpc3VDr8Adk0vPdkfTKnEYMXyspZOJDBz7f1PCM01DOa
+         1uSmwa8uzl2D3UxAkcTWx/3lTbS6221jVqnqnlJk9iG1JE4CS0Gn1ZqPEdFNw0FvwJ4u
+         d9FgmuxsF/0uycvSfhOpIMCEWn8vQ0yiSy/4YKWNJtvDQUE8Uys0lxy6x1NN7Sl678R6
+         3MpinPGP/Wzt4jF6tsuqQSH/E+eJtZBpWkqtNEoAd4uh+BTt9daXwLOCmrQPOt/5oZiV
+         /7GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fco4aoSGDktPeCUQicKuShHwB8ASsS0GQpxb9h8fR+w=;
+        b=kHEKjwcsQOdq+9M2/SirNcqH6aaNIGck1tbpnrqrD3/Qi6i7cfG8TvYoBRoe/Nspbz
+         o6OBdwWzDRZaNrgp/jukrEBQ16bnNWmri0A76hQnyUqIB4PNgFXa48K1l+FTO361I8aH
+         P+HSX4/QeheZmaCqHYCzLM6tUMalej9azUalGHV1pEc9ISqAjrXvhsU8psIWFwVs9eaw
+         2Be/F8US910jzlSsVyKOemjrt+hHeyGfwS46hISICQg6UfpePZWp/7qek16WHegvwvyw
+         Qx3Mr1pJ+7/rp0/gt49CmfDkD1drIVMaGJu/3VbLy9FJKr3B7smVD1xtA0sCnDL8xwZR
+         0Kcw==
+X-Gm-Message-State: ACrzQf0KHbvPsqXw0SZp89V1mfgZTzpVDEAW8V0qU9O+VBHyNn10V+Vt
+        xrOLwYH5w/4F4FjokeqMXKR9cDEdhUiowddKSl6Njw==
+X-Google-Smtp-Source: AMsMyM6l+fGo9Wf4J2FUIvmKXM0/HI/acOrBBzHdAxkVC3nVrGupoi+dtA71v8gOFQ/HUJfxOEjWC90jrAxWlg/FdjE=
+X-Received: by 2002:a67:ac09:0:b0:39a:eab8:a3a6 with SMTP id
+ v9-20020a67ac09000000b0039aeab8a3a6mr2594681vse.9.1665757346338; Fri, 14 Oct
+ 2022 07:22:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011180142.2742289-2-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+ <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
+ <b348a306-3043-4ccc-9067-81759ab29143@www.fastmail.com> <CACRpkdbazHcUassRMqZ2oHmama3nWEZ3U3bB-y-3dmo3jgFPWg@mail.gmail.com>
+ <a7cb856c-8a3f-4737-ae9e-b75c306ad88e@www.fastmail.com> <da8e0775-7d3e-d6fa-e1ff-395769d35614@csgroup.eu>
+In-Reply-To: <da8e0775-7d3e-d6fa-e1ff-395769d35614@csgroup.eu>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 14 Oct 2022 16:22:15 +0200
+Message-ID: <CAMRc=MdNnUS72cSARv8dAVUsujkUM9jyjutJsty9o+=LOkOefg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Davide Ciminaghi <ciminaghi@gnudd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-doc <linux-doc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 06:01:30PM +0000, Joel Fernandes (Google) wrote:
-> From: Frederic Weisbecker <frederic@kernel.org>
-> 
-> Upon entraining a callback to a NOCB CPU, no further wake up is
-> issued on the corresponding nocb_gp kthread. As a result, the callback
-> and all the subsequent ones on that CPU may be ignored, at least until
-> an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
-> to the same group enqueues a callback on an empty queue.
-> 
-> Here is a possible bad scenario:
-> 
-> 1) CPU 0 is NOCB unlike all other CPUs.
-> 2) CPU 0 queues a callback
+On Fri, Oct 14, 2022 at 4:13 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> Hi Linus,
+>
+> Le 14/09/2022 =C3=A0 15:03, Arnd Bergmann a =C3=A9crit :
+> > On Wed, Sep 14, 2022, at 2:38 PM, Linus Walleij wrote:
+> >> On Wed, Sep 7, 2022 at 12:15 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>>>>   drivers/gpio/gpio-sta2x11.c              | 411 ------------------=
+-----
+> >> (...)
+> >>> sta2x11 is an x86 driver, so not my area, but I think it would be
+> >>> best to kill off the entire platform rather than just its gpio
+> >>> driver, since everything needs to work together and it's clearly
+> >>> not functional at the moment.
+> >>>
+> >>> $ git grep -l STA2X11
+> >>> Documentation/admin-guide/media/pci-cardlist.rst
+> >>> arch/x86/Kconfig
+> >>> arch/x86/include/asm/sta2x11.h
+> >>> arch/x86/pci/Makefile
+> >>> arch/x86/pci/sta2x11-fixup.c
+> >>> drivers/ata/ahci.c
+> >>> drivers/gpio/Kconfig
+> >>> drivers/gpio/Makefile
+> >>> drivers/gpio/gpio-sta2x11.c
+> >>> drivers/i2c/busses/Kconfig
+> >>> drivers/media/pci/Makefile
+> >>> drivers/media/pci/sta2x11/Kconfig
+> >>> drivers/media/pci/sta2x11/Makefile
+> >>> drivers/media/pci/sta2x11/sta2x11_vip.c
+> >>> drivers/media/pci/sta2x11/sta2x11_vip.h
+> >>> drivers/mfd/Kconfig
+> >>> drivers/mfd/Makefile
+> >>> drivers/mfd/sta2x11-mfd.c
+> >>> include/linux/mfd/sta2x11-mfd.h
+> >>>
+> >>> Removing the other sta2x11 bits (mfd, media, x86) should
+> >>> probably be done through the respective tree, but it would
+> >>> be good not to forget those.
+> >>
+> >> Andy is pretty much default x86 platform device maintainer, maybe
+> >> he can ACK or brief us on what he knows about the status of
+> >> STA2x11?
+> >
+> > I think the explanation given by Davide and Alessandro
+> > was rather detailed already:
+> >
+> > https://lore.kernel.org/lkml/Yw3LQjhZWmZaU2N1@arcana.i.gnudd.com/
+> > https://lore.kernel.org/lkml/Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com/
+> >
+>
+> I can't see this series in neither linus tree nor linux-next.
+>
+> Following the ACK from Andy + the above explanations from Arnd, do you
+> plan to merge this series anytime soon ?
+>
+> Do you need anything more from me ?
+>
+> Thanks
+> Christophe
 
-Call it CB1.
+I will take it after v6.1-rc1 is tagged.
 
-> 2) The grace period related to that callback elapses
-> 3) The callback is moved to the done list (but is not invoked yet),
->    there are no more pending callbacks for CPU 0
-
-So CB1 is on ->cblist waiting to be invoked, correct?
-
-> 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
-> 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
-
-And CB1 must still be there because otherwise the IPI handler would not
-have entrained the callback, correct?  If so, we have both CB1 and the
-rcu_barrier() callback (call it CB2) in ->cblist, but on the done list.
-
-> 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
->    callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
-
-Except that -something- must have already been prepared to wake up in
-order to invoke CB1.  And that something would invoke CB2 along with CB1,
-given that they are both on the done list.  If there is no such wakeup
-already, then the hang could occur with just CB1, without the help of CB2.
-
-> Make sure the necessary wake up is produced whenever necessary.
-
-I am not seeing that the wakeup is needed in this case.
-
-So what am I missing here?
-
-> This is also required to make sure lazy callbacks in future patches
-> don't end up making rcu_barrier() wait for multiple seconds.
-
-But I do see that the wakeup is needed in the lazy case, and if I remember
-correctly, the ten-second rcu_barrier() delay really did happen.  If I
-understand correctly, for this to happen, all of the callbacks must be
-in the bypass list, that is, ->cblist must be empty.
-
-So has the scenario steps 1-6 called out above actually happened in the
-absence of lazy callbacks?
-
-							Thanx, Paul
-
-> Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Fixes: 5d6742b37727 ("rcu/nocb: Use rcu_segcblist for no-CBs CPUs")
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  kernel/rcu/tree.c      | 6 ++++++
->  kernel/rcu/tree.h      | 1 +
->  kernel/rcu/tree_nocb.h | 5 +++++
->  3 files changed, 12 insertions(+)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 5ec97e3f7468..dc1c502216c7 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3894,6 +3894,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
->  {
->  	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
->  	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
-> +	bool wake_nocb = false;
-> +	bool was_alldone = false;
->  
->  	lockdep_assert_held(&rcu_state.barrier_lock);
->  	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
-> @@ -3902,6 +3904,7 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
->  	rdp->barrier_head.func = rcu_barrier_callback;
->  	debug_rcu_head_queue(&rdp->barrier_head);
->  	rcu_nocb_lock(rdp);
-> +	was_alldone = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
->  	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
->  	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
->  		atomic_inc(&rcu_state.barrier_cpu_count);
-> @@ -3909,7 +3912,10 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
->  		debug_rcu_head_unqueue(&rdp->barrier_head);
->  		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
->  	}
-> +	wake_nocb = was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
->  	rcu_nocb_unlock(rdp);
-> +	if (wake_nocb)
-> +		wake_nocb_gp(rdp, false);
->  	smp_store_release(&rdp->barrier_seq_snap, gseq);
->  }
->  
-> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-> index d4a97e40ea9c..925dd98f8b23 100644
-> --- a/kernel/rcu/tree.h
-> +++ b/kernel/rcu/tree.h
-> @@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
->  static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
->  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
->  static void rcu_init_one_nocb(struct rcu_node *rnp);
-> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
->  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->  				  unsigned long j);
->  static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index f77a6d7e1356..094fd454b6c3 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
->  {
->  }
->  
-> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
-> +{
-> +	return false;
-> +}
-> +
->  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->  				  unsigned long j)
->  {
-> -- 
-> 2.38.0.rc1.362.ged0d419d3c-goog
-> 
+Bart
