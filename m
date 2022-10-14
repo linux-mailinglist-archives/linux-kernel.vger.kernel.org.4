@@ -2,250 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A3A5FE67B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 03:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FBB5FE67D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 03:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJNBOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 21:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S229777AbiJNBPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 21:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiJNBN6 (ORCPT
+        with ESMTP id S229712AbiJNBPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 21:13:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F13152C5A
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 18:13:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5064D619B5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92B8C433D6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 01:13:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665710035;
-        bh=Ea/O2fe7nNh2hBCq1sb4Ae1w0AEyb6eHwu15T+O/hxQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pYb/V6+i2N5ZkYFhpik6ARi4yTHe4DFWSEv3/dDZJEVmv7XVG7peTGYfNZUXU4r+3
-         pz0zT9CIQ+UeFt//6uj6IFSN577zgMSK/wOWnOpFx4S1WK5d9TXotc6MJMRPEUm9Ba
-         Lcf3ZMI7p0tYPqS3DUbvL8SMi9JqMz3j2fopN9Omr8JiHfUBKC0yboWa2J712/wOtA
-         TVk46E2yCE3kv73MmoCNazz6K6loFJUDscnKHP3rbtnzcsiXd33Oqt0nBGeVxkqFlD
-         8N2/BMeCFt7hheBKfzoEB8jNDnnMOl5i4K3/25TeAQCt362c+lGQyvHMohO5Y6qjfK
-         BrbAeUtAnaq9Q==
-Received: by mail-ed1-f46.google.com with SMTP id m15so4872317edb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 18:13:55 -0700 (PDT)
-X-Gm-Message-State: ACrzQf23/UfLfTV88kY9nmHZPUYvjsgYi7mC4RH60hztZ1fh7vB4XTJV
-        H1bwcjzBgmSx7+L9cozgnllZyojjGvp6PRlaArM=
-X-Google-Smtp-Source: AMsMyM6f1hplivOREauXfRNR5hGJofII9G8IW32fzww/gHjspQVZ9mXvr88kXqREljt2Hx+Kdl6kwQq8+6C634JTvKs=
-X-Received: by 2002:aa7:d4d9:0:b0:45c:7eae:d8d8 with SMTP id
- t25-20020aa7d4d9000000b0045c7eaed8d8mr2088640edr.254.1665710033821; Thu, 13
- Oct 2022 18:13:53 -0700 (PDT)
+        Thu, 13 Oct 2022 21:15:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943B212633
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 18:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665710101; x=1697246101;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=CSCsm8tKicbGqoTU+EK9OPLuQ3+39YFGyxoINxu0aWk=;
+  b=S0I3cavORQXKenMei4Wc3svUmVqYiZHeV/lTsyDKCsCL3QRPXgZuCFbd
+   u/yojSnAYhwF3YMhyEGYPuGXS2aPowR1jLDuXxcYGmxPRQ+N/u52ejSOr
+   cwBEteMqAkEv20KShbmgAwMQfSgNtMMDlEP8T7Kh1bggoIHX+pVXJecZK
+   CilRSbto4uBcNZKeOg9tExNcx5dmi+tZOKRum0zaBA8WJaDIDoI+4XcJC
+   qqwULoG+JTq7BI7z7RCatczde38YTCKChWLyOiXA74Fcr1DQ3cN5O/gks
+   BtHvHtL1lQz2aHR7/DGutqCs3y8cIS1EGfAwAQKnGA5rF5sc5DsYz6IAu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="284974161"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="284974161"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 18:15:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="627392739"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="627392739"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga002.jf.intel.com with ESMTP; 13 Oct 2022 18:15:00 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 13 Oct 2022 18:14:59 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 13 Oct 2022 18:14:59 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 13 Oct 2022 18:14:59 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 13 Oct 2022 18:14:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cWguMug1JyUHDnXNEfhyPA1i8h4hJuJXcLzZvX9EmTVEEjtIpw3SXkLok9dY26nTOoQ4TUzX+L3oB3zPDPqFAVBants6xJQsvzGjg0dGurKG7gJjs0VSUY8Pzw3QToALAWiJZVpLiit+wlqcEC+dgwfQorM9eNGVTVoo2YxvZZiLKEbIZvCUAZJUy0VTyNy4D+rRkgvVvqf70v+q0zauEVFoptvWUk2zVN/lCaEsZsYBhUkvMox4r8Ucu4mHUDJ6Mn2jxhcu1IZFMxg3PioXNLu0EhkCiuF2nyx1IEho8DU3ZOd7fSDPl9P+HOYljdH9qNgP76esVRePALv+E2OUSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ujPG1QVGjiDb8QIbPFbybxPZtbrl0QBISdtIfsyDn7I=;
+ b=ZL6QUUygcBnLKrhaRoiFiPkoj0D8nUAe/SfrsbhNY6UPxqRllA/olawbMVABgyAYZ77sCOMIi3adavyHqOMzyCGmMV/9UepjTHrkSzsyRnyVm+uLCzyepsqc5nW/slQzG7yObMlVOrUjS1jKOry/qJQ4pnYXZHxgqbBIwQQxJKceWKI5cH76Wf8Srtctnu6FVqcypqkrIsp3oSCTX32I8VakKmgfyOkldcQvhqV7YJRqKQVlI94DpCVG+B6FYuEBmkqi6RUqYLJlqKvP6j0Gc9vaXwlkM5UPikA1FbdPHJjkbrPuF5vAO9fgZ/Sc0N8wndX+VD6Wgb09sz/4JbxCjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by CH0PR11MB5300.namprd11.prod.outlook.com (2603:10b6:610:bf::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 14 Oct
+ 2022 01:14:57 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::3f8d:1406:50e2:7bcc]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::3f8d:1406:50e2:7bcc%3]) with mapi id 15.20.5723.022; Fri, 14 Oct 2022
+ 01:14:55 +0000
+Date:   Fri, 14 Oct 2022 09:14:39 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra" <peterz@infradead.org>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rui.zhang@intel.com>,
+        <tim.c.chen@intel.com>, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Yu Liao <liaoyu15@huawei.com>
+Subject: Re: [PATCH v2] x86/tsc: Extend watchdog check exemption to 4-Sockets
+ platform
+Message-ID: <Y0i3/yQSTdTeuIXv@feng-clx>
+References: <20221013131200.973649-1-feng.tang@intel.com>
+ <a4860054-0f16-6513-f121-501048431086@intel.com>
+ <Y0ivPhN/BgLZXKmu@feng-clx>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y0ivPhN/BgLZXKmu@feng-clx>
+X-ClientProxiedBy: SG2PR02CA0112.apcprd02.prod.outlook.com
+ (2603:1096:4:92::28) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-References: <20221013154000.3462836-1-chenhuacai@loongson.cn> <8a8fa581-94a9-649d-8c01-f1afd4bc9514@xen0n.name>
-In-Reply-To: <8a8fa581-94a9-649d-8c01-f1afd4bc9514@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 14 Oct 2022 09:13:39 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5U1c_wfWLuxMaHD6c9-k+g-iSqgtcJVwceoL13J7hEiA@mail.gmail.com>
-Message-ID: <CAAhV-H5U1c_wfWLuxMaHD6c9-k+g-iSqgtcJVwceoL13J7hEiA@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: BPF: Avoid declare variables in switch-case
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|CH0PR11MB5300:EE_
+X-MS-Office365-Filtering-Correlation-Id: a80ffa15-5536-4836-9857-08daad818132
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /11mVAIHzLAlyH+AOXDZgbo1EQL+CCPIo7IvARcqGJrqXOf+QsnF2pjOHiHqcR1aPAXEQryR1IVWz5gf51mn4L+MvmCPKC/Zxv7wYE3S1/Q5y6C2uOrkJxaW+Cm4Gy8FYjkEj/iRW/Kary1CdJLSLKA3T1eRVTUN6OZMwkSZ99HthWHytyDcqrKw5/EhgK6+vaDAhFs2FiCEKC4/WD4WnkV9gVFw+tlEov6Dv7ay0LlFBWRigZfGCjO4n1rG3+ePB8o9ZyDG7F42L2/Ce9LkehlUi9l0FWqps0hVVMBl/OkYWlsPmo7eutqrAb06c+Ux3pzt/QmofUm0LBSzjuoaqiIzSE0q0SFfrpC8dzRBahLISS6XnKujyS01N8K6T/GcqPuEVRvfvdOsiTWKkJcwTQ25VcF0eK9CKIkjJk03CmsjdaJtFAcnjocjPJq15C2/CTCLPX5J79fWat0ZSgUhwj/9encU0rfVmRIJb2cOQuPZ4iVmU3Yfxb7IQ6c11LzRMy3XhdM9PDVJiTvl0fmasnuxLc5p4ScSf54YCFVpKiZbD//+xhr0Wh2GPs2T6/0Pwfmv1Lj7cTHflG5F50DDnPHV/BOwaPD1dPnkcOEpFaRaQjNuMe0///g6GY/cByQLP09YSX/lnxNG4uXx+o0Dd+pOR/xYMndOuvp4SqqLgQVFjgJKvITJYGAiUEMGEuhN7m6XIkh4AY9P682b15oFotCDeKv8aXMyRZhUvgTeqTwYqES46cZAq8e6yom8Ef0Y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(366004)(346002)(136003)(396003)(376002)(451199015)(66476007)(5660300002)(6512007)(83380400001)(86362001)(9686003)(26005)(66946007)(66556008)(186003)(8936002)(4326008)(8676002)(6862004)(82960400001)(38100700002)(41300700001)(966005)(6666004)(2906002)(6486002)(53546011)(478600001)(6506007)(44832011)(316002)(6636002)(54906003)(33716001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YhKG57z6+JIIvcMVwovK8oiOaHQ/NLDgnR57KhB5GenRXGKxL6XtOrYhdura?=
+ =?us-ascii?Q?fKtyO6VGxx/lU/mEQKznu/gSf+vU4DSen+H17gaO+6LkP+P0QSuZ6aV0EkSv?=
+ =?us-ascii?Q?w10+h+QlmIcxz+TlQEBjVxj7dyqdCCwYp7pb/bV/CJLME/wHiCBfuftge56q?=
+ =?us-ascii?Q?DPUcgIG6lpdYiBrqlofo14OMVM1w2Mc4b7lhzCVCAUXCzqSOscJROW4pBxYX?=
+ =?us-ascii?Q?EyrObOU3rfywnYy2eYJPaJ/nvzdhCHaIF5Z4rC/6oWVc8CUQxSSTT/z7sAvW?=
+ =?us-ascii?Q?r84VkF+xTjA7o+O1il7FrorPVH1gKX4KB0zDEBArXSIuCB3ByNHtc1TUZ/FT?=
+ =?us-ascii?Q?6f97pav6OU18riJlYcN5rvwUtscJgWYo8ja2QXtOh9Kq7Uyh+EtLV9LZeifQ?=
+ =?us-ascii?Q?KjzlWIIGjtDjCCYEuHGcvYYT4lj5lWoElfxn8WevfBISTqgTWxFMu7uJiVBq?=
+ =?us-ascii?Q?1e1K88FH669+4MigNj3wsV6JAs48hDmjSo2P0HnAKonz3DqRp5fUx+OVS0Lw?=
+ =?us-ascii?Q?HZLdWFEZw8wGURIP1Ht1RBuJHLqh1wQpFxpEPble6DPsgupnh/3hXeeFAVMB?=
+ =?us-ascii?Q?LWHaNkaNzMZ6vIt1vGjkPtZ96AEfeH2iJjGsEjT3OU+Mg/oGxYfpwqcoDm7G?=
+ =?us-ascii?Q?kpvQ/upX1SKINkMpKlKsAqxtv15lpiNbqf7HnYdEjfXtDqfg+ehNKtaB3KK1?=
+ =?us-ascii?Q?LDBuHv9zRHXHBkx+VajQpUmtMc9GO/MeNAxivjj88uY0z4SWmyuTSZOF1xxB?=
+ =?us-ascii?Q?JhZB0uTl3+pLep5pG8+zcEqM9Hms7LUVgdMfusp9R6HSMounFwXCsD0jtCzh?=
+ =?us-ascii?Q?6adqGobSSYdc5Gr8YtjEpG56pGEIehKdS+hUoi+KI7n3tIwu9ObIOZn4qZcA?=
+ =?us-ascii?Q?UEljnyu8oMdJN5dAkKa57/KE1poOviqIhBA31D3CGStEJoGI6wRk7OIWHg/Z?=
+ =?us-ascii?Q?lriKj7jI1LbGdVVF79MjGlWnO6i6QfPcJHh7Uh4CWPY8YLFC8rSOCVYwyOpF?=
+ =?us-ascii?Q?5RX6NiLIoo/hCN5ejuezQ+Ja5Df6EbqzwAslQaSPQiIwJBdaGWhnAbgpHM3i?=
+ =?us-ascii?Q?Ivoa3o5KnJjIc9lxDrU4VqFC3vcCUV5PbtdIkI7NTWmeG7wsydIpAZqIoP2L?=
+ =?us-ascii?Q?FjStqunCUXRuXNUgRkIZuZ/CoWj6Boc6j85NRtRQ00sSiCQt4i1JOSOIi0ml?=
+ =?us-ascii?Q?mtpl5n32W2YYT60Y2R9DYpQ4r1xtb03BpCvy1xnGyDn/ib6ULAeyk9kdf2Rh?=
+ =?us-ascii?Q?U9X9uV/D+3VU1JUwOkSYuIVLBQR+Lep/nAS/nbWwPZteyk+ZKwYqBJUXb3rE?=
+ =?us-ascii?Q?ZlDGbiSbO2nnJPG4RCWZsU5exWdUtOwAnot2cePH3eCMZhyHlr2P2cKZ6MOX?=
+ =?us-ascii?Q?7yXDmAoi5o9CDoVCLeIM8MgCTmmhhYkWtTbFWIyHkrts9qaMxWSfrSh6KP6/?=
+ =?us-ascii?Q?TrhSGqae6kp5ARc9hSQpAjnLxhExABnwMdHCHkFRYjGXcuyF60JNbM1ViIy6?=
+ =?us-ascii?Q?5Cm6YR2VCLpMEeLd/WakUSStMDPEICrwRMowuhzPd3X7gcw5S0nzzdk09oQt?=
+ =?us-ascii?Q?l8NaRIuuMJjLOGcE0O4nqenKIzG6YrsUdZOKTsfk?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a80ffa15-5536-4836-9857-08daad818132
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 01:14:55.7871
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1XIrLy2CkXUIevNWLBXGlVs4xMijtqWZuMq4P7WhiIG2l/v0UcrJQorw7U/f6cQ+LkMPCcrQNN4hfr4RUAOGUA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5300
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xuerui,
+On Fri, Oct 14, 2022 at 08:37:18AM +0800, Feng Tang wrote:
+> On Thu, Oct 13, 2022 at 09:02:43AM -0700, Dave Hansen wrote:
+> > On 10/13/22 06:12, Feng Tang wrote:
+> > > @@ -1217,7 +1217,7 @@ static void __init check_system_tsc_reliable(void)
+> > >  	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+> > >  	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+> > >  	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
+> > > -	    nr_online_nodes <= 2)
+> > > +	    nr_online_nodes <= 4)
+> > >  		tsc_disable_clocksource_watchdog();
+> > 
+> > I still don't think we should perpetuate this hack.
+> > 
+> > This just plain doesn't work in numa=off numa=fake=... or presumably in
+> > cases where NUMA is disabled in the firmware and memory is interleaved
+> > across all sockets.
+> > 
+> > It also presumably doesn't work on two-socket systems that have
+> > Cluster-on-Die or Sub-NUMA-Clustering where a single socket is chopped
+> > up into multiple nodes.
+> 
+> Yes, after you raised the 'nr_online_nodes' issue, Peter, Rui and I
+> have discussed the problem, and plan to post a RFC patch as in 
+>  https://lore.kernel.org/lkml/Y0UgeUIJSFNR4mQB@feng-clx/
+> 
+> Which can cover:
+>  - numa=fake=... case
+>  - platform has DRAM nodes and cpu-less HBM/PMEM nodes
+> 
+> and 'sub-numa-clustering' can't be covered, and the tsc will be
+> watchdoged as before.
+[...] 
 
-On Fri, Oct 14, 2022 at 12:43 AM WANG Xuerui <kernel@xen0n.name> wrote:
->
-> On 10/13/22 23:40, Huacai Chen wrote:
-> > Not all compilers support declare variables in switch-case, so move
-> > declarations to the beginning of a function. Otherwise we may get such
-> > build errors:
-> >
-> > arch/loongarch/net/bpf_jit.c: In function =E2=80=98emit_atomic=E2=80=99=
-:
-> > arch/loongarch/net/bpf_jit.c:362:3: error: a label can only be part of =
-a statement and a declaration is not a statement
-> >     u8 r0 =3D regmap[BPF_REG_0];
-> >     ^~
-> > arch/loongarch/net/bpf_jit.c: In function =E2=80=98build_insn=E2=80=99:
-> > arch/loongarch/net/bpf_jit.c:727:3: error: a label can only be part of =
-a statement and a declaration is not a statement
-> >     u8 t7 =3D -1;
-> >     ^~
-> > arch/loongarch/net/bpf_jit.c:778:3: error: a label can only be part of =
-a statement and a declaration is not a statement
-> >     int ret;
-> >     ^~~
-> > arch/loongarch/net/bpf_jit.c:779:3: error: expected expression before =
-=E2=80=98u64=E2=80=99
-> >     u64 func_addr;
-> >     ^~~
-> > arch/loongarch/net/bpf_jit.c:780:3: warning: ISO C90 forbids mixed decl=
-arations and code [-Wdeclaration-after-statement]
-> >     bool func_addr_fixed;
-> >     ^~~~
-> > arch/loongarch/net/bpf_jit.c:784:11: error: =E2=80=98func_addr=E2=80=99=
- undeclared (first use in this function); did you mean =E2=80=98in_addr=E2=
-=80=99?
-> >            &func_addr, &func_addr_fixed);
-> >             ^~~~~~~~~
-> >             in_addr
-> > arch/loongarch/net/bpf_jit.c:784:11: note: each undeclared identifier i=
-s reported only once for each function it appears in
-> > arch/loongarch/net/bpf_jit.c:814:3: error: a label can only be part of =
-a statement and a declaration is not a statement
-> >     u64 imm64 =3D (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
-> >     ^~~
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> Fixes: 5dc615520c4d ("LoongArch: Add BPF JIT support")
-> > ---
-> >   arch/loongarch/net/bpf_jit.c | 31 +++++++++++++------------------
-> >   1 file changed, 13 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.=
-c
-> > index 43f0a98efe38..2a9b590f47e6 100644
-> > --- a/arch/loongarch/net/bpf_jit.c
-> > +++ b/arch/loongarch/net/bpf_jit.c
-> > @@ -279,6 +279,7 @@ static void emit_atomic(const struct bpf_insn *insn=
-, struct jit_ctx *ctx)
-> >       const u8 t1 =3D LOONGARCH_GPR_T1;
-> >       const u8 t2 =3D LOONGARCH_GPR_T2;
-> >       const u8 t3 =3D LOONGARCH_GPR_T3;
-> > +     const u8 r0 =3D regmap[BPF_REG_0];
-> >       const u8 src =3D regmap[insn->src_reg];
-> >       const u8 dst =3D regmap[insn->dst_reg];
-> >       const s16 off =3D insn->off;
-> > @@ -359,8 +360,6 @@ static void emit_atomic(const struct bpf_insn *insn=
-, struct jit_ctx *ctx)
-> >               break;
-> >       /* r0 =3D atomic_cmpxchg(dst + off, r0, src); */
-> >       case BPF_CMPXCHG:
-> > -             u8 r0 =3D regmap[BPF_REG_0];
-> > -
-> >               move_reg(ctx, t2, r0);
-> >               if (isdw) {
-> >                       emit_insn(ctx, lld, r0, t1, 0);
-> > @@ -390,8 +389,11 @@ static bool is_signed_bpf_cond(u8 cond)
-> >
-> >   static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ct=
-x, bool extra_pass)
-> >   {
-> > -     const bool is32 =3D BPF_CLASS(insn->code) =3D=3D BPF_ALU ||
-> > -                       BPF_CLASS(insn->code) =3D=3D BPF_JMP32;
-> > +     u8 t0 =3D -1;
-> Here "t0" seems to be a versatile temp value, while the "t1" below is
-> the actual GPR $t1. What about renaming "t0" to something like "tmp" to
-> reduce confusion? I believe due to things like "t0 =3D LOONGARCH_GPR_ZERO=
-"
-> the "t0" is 100% not an actual mapping to $t0.
-I rename t7 to t0 because there is no t3-t6, t7 looks very strange.
-But from emit_cond_jmp() the 3rd and 4th parameters have no difference
-so I suppose t0 is just OK, then whether rename it to tmp depends on
-Tiezhu's opinion.
 
-> > +     u64 func_addr;
-> > +     bool func_addr_fixed;
-> > +     int i =3D insn - ctx->prog->insnsi;
-> > +     int ret, jmp_offset;
-> >       const u8 code =3D insn->code;
-> >       const u8 cond =3D BPF_OP(code);
-> >       const u8 t1 =3D LOONGARCH_GPR_T1;
-> > @@ -400,8 +402,8 @@ static int build_insn(const struct bpf_insn *insn, =
-struct jit_ctx *ctx, bool ext
-> >       const u8 dst =3D regmap[insn->dst_reg];
-> >       const s16 off =3D insn->off;
-> >       const s32 imm =3D insn->imm;
-> > -     int jmp_offset;
-> > -     int i =3D insn - ctx->prog->insnsi;
-> > +     const u64 imm64 =3D (u64)(insn + 1)->imm << 32 | (u32)insn->imm;
-> > +     const bool is32 =3D BPF_CLASS(insn->code) =3D=3D BPF_ALU || BPF_C=
-LASS(insn->code) =3D=3D BPF_JMP32;
-> Please consider reducing diff damage and not touching parts not directly
-> affected by this change. For example this "is32" declaration and
-> initialization was moved although not related to this change.
-I think defining variables from simple to complex and grouping them
-can make life easier. :)
+> For numa=off case, there is only one CPU up, and I think lifting this
+> watchdog for tsc is fine.
 
-Huacai
-> >
-> >       switch (code) {
-> >       /* dst =3D src */
-> > @@ -724,24 +726,23 @@ static int build_insn(const struct bpf_insn *insn=
-, struct jit_ctx *ctx, bool ext
-> >       case BPF_JMP32 | BPF_JSGE | BPF_K:
-> >       case BPF_JMP32 | BPF_JSLT | BPF_K:
-> >       case BPF_JMP32 | BPF_JSLE | BPF_K:
-> > -             u8 t7 =3D -1;
-> >               jmp_offset =3D bpf2la_offset(i, off, ctx);
-> >               if (imm) {
-> >                       move_imm(ctx, t1, imm, false);
-> > -                     t7 =3D t1;
-> > +                     t0 =3D t1;
-> >               } else {
-> >                       /* If imm is 0, simply use zero register. */
-> > -                     t7 =3D LOONGARCH_GPR_ZERO;
-> > +                     t0 =3D LOONGARCH_GPR_ZERO;
-> >               }
-> >               move_reg(ctx, t2, dst);
-> >               if (is_signed_bpf_cond(BPF_OP(code))) {
-> > -                     emit_sext_32(ctx, t7, is32);
-> > +                     emit_sext_32(ctx, t0, is32);
-> >                       emit_sext_32(ctx, t2, is32);
-> >               } else {
-> > -                     emit_zext_32(ctx, t7, is32);
-> > +                     emit_zext_32(ctx, t0, is32);
-> >                       emit_zext_32(ctx, t2, is32);
-> >               }
-> > -             if (emit_cond_jmp(ctx, cond, t2, t7, jmp_offset) < 0)
-> > +             if (emit_cond_jmp(ctx, cond, t2, t0, jmp_offset) < 0)
-> >                       goto toofar;
-> >               break;
-> >
-> > @@ -775,10 +776,6 @@ static int build_insn(const struct bpf_insn *insn,=
- struct jit_ctx *ctx, bool ext
-> >
-> >       /* function call */
-> >       case BPF_JMP | BPF_CALL:
-> > -             int ret;
-> > -             u64 func_addr;
-> > -             bool func_addr_fixed;
-> > -
-> >               mark_call(ctx);
-> >               ret =3D bpf_jit_get_func_addr(ctx->prog, insn, extra_pass=
-,
-> >                                           &func_addr, &func_addr_fixed)=
-;
-> > @@ -811,8 +808,6 @@ static int build_insn(const struct bpf_insn *insn, =
-struct jit_ctx *ctx, bool ext
-> >
-> >       /* dst =3D imm64 */
-> >       case BPF_LD | BPF_IMM | BPF_DW:
-> > -             u64 imm64 =3D (u64)(insn + 1)->imm << 32 | (u32)insn->imm=
-;
-> > -
-> >               move_imm(ctx, dst, imm64, is32);
-> >               return 1;
-> >
->
-> --
-> WANG "xen0n" Xuerui
->
-> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
->
->
+Sorry, I was wrong about this. 'numa=off' will still boot all CPUs up,
+but skip SRAT table init and only show one node. so this is another
+case that the fix patch can't cover.
+
+Thanks,
+Feng
+
+
