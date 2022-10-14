@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A265FE800
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B525FE804
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 06:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJNEdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 00:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S229543AbiJNEhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 00:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJNEdx (ORCPT
+        with ESMTP id S229582AbiJNEhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 00:33:53 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEB344CC6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:33:52 -0700 (PDT)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 5B0D710048EC4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:33:42 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id jCODoKCjr76pjjCOEo6dQW; Fri, 14 Oct 2022 04:33:42 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=TL6A93pa c=1 sm=1 tr=0 ts=6348e6a6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=Qawa6l4ZSaYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=OLmlkwXjvnPPfp-jv6YA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=S20gLhLfqA3t6QFp79HC+ZRf0CIiK8ILqvNiNUtkAFQ=; b=gKV3AXHg7mLDgOQ0jCZeKa5ozX
-        USx6ZMLulXGgberDdR8v37JN68NygvKASVU4s73ehX3NH3iiryxf5ZaSVnKz5E84ivT7Bfb+95Obj
-        tkGpCPzC829AcC+PzEXcGusnTNklop/r3KKAKCDrl17qDlf4mVAqpB7IqO8cQCMW0Nw2NEonrpIrl
-        SPZxb73PRmTfAyDOzrNE6xJCQqIzGVjBatcM+AERbcjcnliSQo8sLm8AqJhDFrF7zNYCH7zI0qJs+
-        d3ZpF11H7pGurnkIxor67+xig/eKZvq/HFJSXgnCgp8t/BBxiJ9TH5x0zCnbuO5bqSMPz5seb8T/m
-        Eei4JrnA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53774 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1ojCOB-004HVq-Jy;
-        Thu, 13 Oct 2022 22:33:39 -0600
-Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221013175146.507746257@linuxfoundation.org>
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <988efb2a-1be0-b809-781c-099804ef96b9@w6rz.net>
-Date:   Thu, 13 Oct 2022 21:33:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Oct 2022 00:37:00 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48C318C419
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:36:57 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id l5so3928862oif.7
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 21:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OnYLSD2OypS0Uent7BXmwBd+4DlgLNwAMehMf+rH4Xc=;
+        b=tYgN7DxuXOQ4PsGCeAxogoF1GWVfRlNZ9Y7LzymSSSkJLzDEvNRtwBtuYui9OOYqzk
+         5oMLVhOLMH3R+q0m12mGm3EG2h1sFbpEIl1e/B0y6IzwrvG+nPmuHkC9DGM4yw/BwAoB
+         Mi2OTNTi/spUDcWHVeVzkIiWonCLhf8j1xvzaTAEyGsMd20bLUX01KxK2lexfVZ60al+
+         SOmHkxkQCwyAuTalb0B0TZ8zfwS6kasCQHVVDbqYS73iFGgUMC54parNbbJUB4VbDA2i
+         bBMpke53SXfzi4plr1UJdLARkcwu6OhY+hqLq+SwcHhVoOCdm8RfMn0huOkJKllfj5Sv
+         XnMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OnYLSD2OypS0Uent7BXmwBd+4DlgLNwAMehMf+rH4Xc=;
+        b=Uz1a6Ds8HKZg8mFJ1ID7aw1ad/kZYV/UMXX+j3cBMYWo/UuHBNNugjPcgHecGunzJQ
+         EkasV0wjG+8TO/WHojeNpITJR/44fYFVha2M1lBl71HWyOJxfxXJXlwNH4hY4H+KgVhF
+         hzYzmagTE19N/+JJdIdpFQ+3+oFe+4tDAhzauA8Z+Qh6ZigcogJuXtT69yBbHUVdO8lC
+         ktp80Tw3s/eoZi/b9DZAlZPfSk0DgU4rKiz2wpeQ6jRp82/3dBlH4aeA5h6+UhoKnD1F
+         eCy1W65izfRl0J8Cx7+K81LqMh0MyVSwvDW6iZNZPpIrYNfyQTgYChlFl0s2AaT2eOGU
+         8Ekg==
+X-Gm-Message-State: ACrzQf3bN1SjG41L27WsJ6xOydU5Jjkyb8PUcE7Uo33KMOOgBiRS7Q6i
+        5jZ9IGagvPlSgCbt6egU/OfTrBJc2FsVTm4rX3K4XQ==
+X-Google-Smtp-Source: AMsMyM4leE0KhwTlTAnPFxGFHx8sUzWEJTlnMBYFXN4MOd9EfH5nk8PW2WE8e5eaQsgPlMx/hzO1nXVyZ71aPqAK/NY=
+X-Received: by 2002:aca:3083:0:b0:355:afb:cdb5 with SMTP id
+ w125-20020aca3083000000b003550afbcdb5mr2632053oiw.110.1665722216982; Thu, 13
+ Oct 2022 21:36:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1ojCOB-004HVq-Jy
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:53774
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAJD7tkZkY9nfaVDmjzhDG4zzezNn7bXnGrK+kpn0zQFwPhdorw@mail.gmail.com>
+ <CANDhNCq-ewTnuuRPoDtq+14TCFEwUpyo-pxn3J8=x1qCZzcgKQ@mail.gmail.com>
+ <CAJD7tkayXxKEPpRE7QvBN4CikqeQcUe3_qfrUaH4V+cJrk0y=Q@mail.gmail.com>
+ <CANDhNCp6MOfWnHZKkd_pQbkJqJqPmArVK0JQKKzH4=GbyBVeSQ@mail.gmail.com>
+ <CAJD7tkZ6dmbFS4wba8bcYaHWyMJCi+M1PPEc_WbuaHtvMY4HaA@mail.gmail.com> <CANDhNCrkceUi=+S8xzcBzf8=uUpD4namcm5U-MoACTSVEpcMrg@mail.gmail.com>
+In-Reply-To: <CANDhNCrkceUi=+S8xzcBzf8=uUpD4namcm5U-MoACTSVEpcMrg@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 13 Oct 2022 21:36:20 -0700
+Message-ID: <CAJD7tkajQz=houWcmYvjtpp+xL_=hyn3g3BASgwO_zJWnraWHA@mail.gmail.com>
+Subject: Re: Question about ktime_get_mono_fast_ns() non-monotonic behavior
+To:     John Stultz <jstultz@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,26 +75,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/22 10:52 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.2 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Oct 13, 2022 at 9:13 PM John Stultz <jstultz@google.com> wrote:
 >
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
+> On Thu, Oct 13, 2022 at 8:47 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > On Thu, Oct 13, 2022 at 8:42 PM John Stultz <jstultz@google.com> wrote:
+> > >
+> > > On Thu, Oct 13, 2022 at 8:26 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > > On Thu, Oct 13, 2022 at 7:39 PM John Stultz <jstultz@google.com> wrote:
+> > > > > On Mon, Sep 26, 2022 at 2:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > > > >
+> > > > > > I have a question about ktime_get_mono_fast_ns(), which is used by the
+> > > > > > BPF helper bpf_ktime_get_ns() among other use cases. The comment above
+> > > > > > this function specifies that there are cases where the observed clock
+> > > > > > would not be monotonic.
+> > > > > >
+> > > > > > I had 2 beginner questions:
+> > > > >
+> > > > > Thinking about this a bit more, I have my own "beginner question": Why
+> > > > > does bpf_ktime_get_ns() need to use the ktime_get_mono_fast_ns()
+> > > > > accessor instead of ktime_get_ns()?
+> > > > >
+> > > > > I don't know enough about the contexts that bpf logic can run, so it's
+> > > > > not clear to me and it's not obviously commented either.
+> > > >
+> > > > I am not the best person to answer this question (the BPF list is
+> > > > CC'd, it's full of more knowledgeable people).
+> > > >
+> > > > My understanding is that because BPF programs can basically be run in
+> > > > any context (because they can attach to almost all functions /
+> > > > tracepoints in the kernel), the time accessor needs to be safe in all
+> > > > contexts.
+> > >
+> > > Ah. Ok, the tracepoint connection is indeed likely the case. Thanks
+> > > for clarifying.
+> > >
+> > > > Now that I know that ktime_get_mono_fast_ns() can drift significantly,
+> > > > I am wondering why we don't just read sched_clock(). Can the
+> > > > difference between sched_clock() on different cpus be even higher than
+> > > > the potential drift from ktime_get_mono_fast_ns()?
+> > >
+> > > sched_clock is also lock free and so I think it's possible to have
+> > > inconsistencies.
+> >
+> > Right, I am just trying to figure out which is worse,
+> > ktime_get_mono_fast_ns() or sched_clock(). It appears to me that both
+> > can be inconsistent, but at least AFAICT sched_clock() can only be
+> > inconsistent if read across different cpus, right? It should also be
+> > faster (at least in my experimentation).
+> >
+> > I am wondering if there is a bound on the inconsistency we might
+> > observe from sched_clock() if we read it across different cpus, and if
+> > there is, how does it compare to ktime_get_mono_fast_ns() in that
+> > regard.
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
+> Again, I think ktime_get_raw_fast_ns() (so CLOCK_MONOTONIC_RAW) is
+> likely to be closer to sched_clock() as neither of them are NTP
+> adjusted.
+> (Which also likely makes them unusable for the case where timestamps
+> are compared with userland CLOCK_MONOTONIC timestamps).
 >
-> thanks,
+> So folks might need a new bpf interface for that.
 >
-> greg k-h
+> Also I think folks would want to avoid exporting sched_clock
+> timestamps out to userland as they aren't connected to a well defined
+> clockid, and may have odd behavior around suspend/resume, etc.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I think I should have described my use case long ago, sorry :) My use
+case does not involve exporting any timestamps. It involves using BPF
+programs to measure the duration of events, so running one BPF program
+before and one after, then subtracting the acquired timestamps.
 
-Tested-by: Ron Economos <re@w6rz.net>
+What I was looking for is something fast enough for hot paths and also
+consistent enough (in case the two BPF programs end up running on
+different cpus), and also safe from all contexts to satisfy this
+general BPF restriction.
 
+>
+> thanks
+> -john
