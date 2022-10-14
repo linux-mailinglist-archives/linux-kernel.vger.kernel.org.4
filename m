@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD2B5FF28D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A705FF291
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiJNQui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S230077AbiJNQvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiJNQub (ORCPT
+        with ESMTP id S229818AbiJNQvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:50:31 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95955244D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:50:22 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id f140so5432447pfa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:50:22 -0700 (PDT)
+        Fri, 14 Oct 2022 12:51:31 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7472C105;
+        Fri, 14 Oct 2022 09:51:30 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d10so5424775pfh.6;
+        Fri, 14 Oct 2022 09:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RXs8pGXtGGZWzXsw4rZ+LS2EAkzqKLgAwtWpxGx92fU=;
-        b=fttFUz+vxtraLRPbXbj3FKm0IZ9ARAZnSS6vv/CpioswqaUGc2WlbiSpyUSk+1nU1/
-         luOh02QiD1Iflia0SkTTTUXHBeGh1ks5OEB9XPvZ2wZn5L7n1NVPCHbWcJho/5YCCojE
-         VdYKJgr0K5MJom5sx6sIUr18wcSJLP/VyQfP+ywSQD0C2sQuYSX+vPUK57XQ+jIm33hy
-         R9jNjgVzXuNGjF+KDbV2u2Re3Xn2Q2NcvBirDKBfqGmsN/AVwNIusT0ugCg7Ck16LrGX
-         n+4oSwQDJY+tbTLLExEj8WsBpPeejE1IG6rMbaZQuwoWvPFkA7XDNt47FDOAEMyv62X6
-         6QmA==
+        bh=OFvfv0UWGbNZojkW4m37OPvbrZXUyDcmNX8dFdGXeQ4=;
+        b=AneMt3bR6CjNYR/zB9Mj07/kpGHrjCtjy4Z0Mzo+0SykdqHY6TZ+/KyBQdvrYyancl
+         lIxYA5lbWLJ7uWT5SUF7VTqfYWr850pw3WStP3yrvMWDHLLzb/Fbgf74Zqb13EaTnjj7
+         OnzvE4Dru0sSp8p0lKeqm4l1SkDzd0NcMGakAO6ccghmS+1MxJwou/w+pMxeaBrNV3MJ
+         Gqtca4QVVqnkH7ae/qIArdoGNWKhALO1cVnAkfx7EnyQ+PH49wRmNM7/s+DO3rRFQMkD
+         y+/7Xvo5F4r+XB9A0WpT0mL9NEDTFZf3VRzlRnp8jM+bor9SyEngR1oly0tYVnkdhSJY
+         V4Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RXs8pGXtGGZWzXsw4rZ+LS2EAkzqKLgAwtWpxGx92fU=;
-        b=xGv556J+A9w5tOSP2KckkyLVk48J74yW9tadMWjkcw4vnMyyRq3PD+GqLtgzsd8dQE
-         B1gVO5Qxf4QD+OStv36HEwAOZYPShO24GIpsjfx143pde5Jsi+dmyOxHMmu4PQ/hIYsC
-         3s43IMeJuUfqIeFszXrSTaluIXyRfC85BtDjESAUf7wHxbOrAcv4b1U6+vfZ50Im/ew7
-         jB74iTwP+yuGKaFCr3xlgdAtO9lHa4h7cdH1Tp6+i/17QnldQOHMZYf6qkKUX2pc/dBt
-         K8CItxCN1gC1KD8mxE2luQVMXmAFqH9kpDrOH/rKQcuY3LYIzdi2As9eCa3AFqJF61m1
-         55Tw==
-X-Gm-Message-State: ACrzQf17YsxsKaEOUEm0zhyKaxT8BwaEkV10jPBDIRAsYZ4Ldr/wWjKU
-        GK8m5UQUHgURNne9e8SXl5WYsA==
-X-Google-Smtp-Source: AMsMyM5S9FfuTscYk1rWNAgrhHrGOzoBMP/C/g49+m/RbzrY6zhImlSUl23Oz0HPujc59lXNjdSqzQ==
-X-Received: by 2002:aa7:8895:0:b0:565:e8b7:8494 with SMTP id z21-20020aa78895000000b00565e8b78494mr6131922pfe.82.1665766222208;
-        Fri, 14 Oct 2022 09:50:22 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id k24-20020a170902761800b001782aab6318sm1969958pll.68.2022.10.14.09.50.21
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OFvfv0UWGbNZojkW4m37OPvbrZXUyDcmNX8dFdGXeQ4=;
+        b=wIIhgyVvJmyBLWENl3LeTfEnEHgZSR45NvLlRDViuPr2zXM7v+HLX5Ymoq3I5dJxwb
+         Cdq5gtF1gbSqK/3LRa/mRmfLza81ycKLoUTtfJDNXA53JSiFfV9eWjhRWjxbJemE++PV
+         z5lIXOvkiKOWCBwzIOclR7pT3iyLXiVdTlTNQjJVvXL1znUjraDchzV3T+jKfsyzndrb
+         6dnnG/na6UgbPpu/TImeBDNGFoCzJ/7IVw78bcno8aL2xoqDa1gwxd/TmxDxE+61e4vH
+         KOwefN6Emw5EgZbWzWR6QBG1qzTUQHY9r5K7ZxBAMxd7mtlZBN95Bsch7AR/hdqFKHkj
+         s3NQ==
+X-Gm-Message-State: ACrzQf04z8tbxabCjXG/HZkpeub7syA8mT60lc9fESTIc2X6EFkJNPBR
+        jpM/K75oQ+Wo0ZCbrH4y50M=
+X-Google-Smtp-Source: AMsMyM7yHa4syirxMh3BWZQ21Yb3JW9li8TD621PykanyzIBE+c2aQJhVkzKck+YRGLE4VW9G0f0Ug==
+X-Received: by 2002:a05:6a00:3406:b0:55c:e661:6d31 with SMTP id cn6-20020a056a00340600b0055ce6616d31mr6402510pfb.42.1665766290074;
+        Fri, 14 Oct 2022 09:51:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j8-20020a170902da8800b0017305e99f00sm1947154plx.107.2022.10.14.09.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 09:50:21 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 09:50:21 -0700 (PDT)
-X-Google-Original-Date: Fri, 14 Oct 2022 09:50:27 PDT (-0700)
-Subject:     Re: [PATCH] MAINTAINERS: git://github -> https://github.com for petkan
-In-Reply-To: <166573561445.14465.3335360255597249102.git-patchwork-notify@kernel.org>
-CC:     petkan@nucleusys.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     patchwork-bot+netdevbpf@kernel.org
-Message-ID: <mhng-f9587376-2d54-4ff5-ae71-0992b080ff1a@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 09:51:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 14 Oct 2022 09:51:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pwm-fan) Explicitly switch off fan power when
+ setting pwm1_enable to 0
+Message-ID: <20221014165129.GA234611@roeck-us.net>
+References: <20221013135951.4902-1-matthias.schiffer@ew.tq-group.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013135951.4902-1-matthias.schiffer@ew.tq-group.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 01:20:14 PDT (-0700), patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
->
-> This patch was applied to netdev/net.git (master)
-> by David S. Miller <davem@davemloft.net>:
->
-> On Thu, 13 Oct 2022 14:46:36 -0700 you wrote:
->> Github deprecated the git:// links about a year ago, so let's move to
->> the https:// URLs instead.
->>
->> Reported-by: Conor Dooley <conor.dooley@microchip.com>
->> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->>
->> [...]
->
-> Here is the summary with links:
->   - MAINTAINERS: git://github -> https://github.com for petkan
->     https://git.kernel.org/netdev/net/c/9a9a5d80ec98
->
-> You are awesome, thank you!
+On Thu, Oct 13, 2022 at 03:59:51PM +0200, Matthias Schiffer wrote:
+> When pwm1_enable is changed from 1 to 0 while pwm1 == 0, the regulator
+> is not switched off as expected. The reason is that when the fan is
+> already off, ctx->enabled is false, so pwm_fan_power_off() will be a
+> no-op.
+> 
+> Handle this case explicitly in pwm_fan_update_enable() by calling
+> pwm_fan_switch_power() directly.
+> 
+> Fixes: b99152d4f04b ("hwmon: (pwm-fan) Switch regulator dynamically")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-I made a typo in the subject: "git://github -> https://github.com" 
-doesn't match.  No big deal, but I figured I'd point it out.
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/pwm-fan.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index dc3d9a22d917..83a347ca35da 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -257,7 +257,10 @@ static int pwm_fan_update_enable(struct pwm_fan_ctx *ctx, long val)
+>  
+>  	if (val == 0) {
+>  		/* Disable pwm-fan unconditionally */
+> -		ret = __set_pwm(ctx, 0);
+> +		if (ctx->enabled)
+> +			ret = __set_pwm(ctx, 0);
+> +		else
+> +			ret = pwm_fan_switch_power(ctx, false);
+>  		if (ret)
+>  			ctx->enable_mode = old_val;
+>  		pwm_fan_update_state(ctx, 0);
