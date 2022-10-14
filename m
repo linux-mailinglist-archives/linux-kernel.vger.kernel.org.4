@@ -2,179 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A355FF43E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493D15FF441
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 21:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiJNTut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 15:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S229672AbiJNT63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 15:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbiJNTuq (ORCPT
+        with ESMTP id S229460AbiJNT61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 15:50:46 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC73A8CE2;
-        Fri, 14 Oct 2022 12:50:34 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 89FDE6C2207;
-        Fri, 14 Oct 2022 19:50:20 +0000 (UTC)
-Received: from pdx1-sub0-mail-a219.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A13EB6C21FA;
-        Fri, 14 Oct 2022 19:50:19 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1665777019; a=rsa-sha256;
-        cv=none;
-        b=bCRoiEOR2noCWwHM4YQ9ty2djvpvNZ/PUmmkLfGcDoRXixygs4WX7W3mBSwj1DifEgSNul
-        0W2PyMU85luQKuVIpZh3o9/LPVZ/9mKEfSujoo62jgPS6ESIVdU9I6/kEoA4hcQeOws5dx
-        TrYPZbawr5f0Bxg79wyDNTuquhbWtN7tRzOjVdKFj36TH6oVFRJAOBnDiLyPZ/wl8OnFbL
-        /dMoeX3FjhGujch2wnC00BN4zQT4KeR3LEeCFybVUvYfRiR26Mm2NHPd9kth309g5Amb2X
-        eunYaA/s4Zh8vv9LCLV7jnX2wY9k3R/u3Fw8DfY2UQHwRLVU8nmUEMj3j3B+NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1665777019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=hfzbsr9FI/rzLOLEFBaAvUZAbZ6DVfHSQA0uzUjx5qs=;
-        b=HFVwuu2aewx890rozxPt5Fa3tJjbVFk3Syd2hXKUDpCsmcJAkw3oCPSrJOjtwlYMI8nNjS
-        dZNn1xqcJES5PuIQ0u8sgOZZ17TqH1/3LUsgt3bFLFybgbKMruVn8CIAp+T9W6gfCJ0uyH
-        1ffUYs7tD8nUV7DZFYwpwo+Q4m50bH58g1UC+LYthMj6DafBZJQDGX8bYMKAcOMuvtKXsl
-        PJWC2TzXgsVMfvjW8j28N2t3eJuXsDaU3bcL97klFvSx4wuqd8YKhzly7vJ/KpTwqC+93r
-        3PIz70t+/DDHQpf9ZBqYXD7XfFxo7o2mvUL5xhu79l4/3vwGY5CBNAZzey81jg==
-ARC-Authentication-Results: i=1;
-        rspamd-5798657bcf-8zx8p;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Spicy-Occur: 419aa3984982d9c9_1665777020009_1395546131
-X-MC-Loop-Signature: 1665777020009:465102095
-X-MC-Ingress-Time: 1665777020009
-Received: from pdx1-sub0-mail-a219.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.122.146.22 (trex/6.7.1);
-        Fri, 14 Oct 2022 19:50:20 +0000
-Received: from offworld.. (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a219.dreamhost.com (Postfix) with ESMTPSA id 4MpxnP22gyz3p;
-        Fri, 14 Oct 2022 12:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1665777017;
-        bh=hfzbsr9FI/rzLOLEFBaAvUZAbZ6DVfHSQA0uzUjx5qs=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=LBXQNzKkFNGvlcw2g1l6ZBy61RbR2Sq48CUW7lnbxvi9mkhq80iMvQvEM9Gr3dUz6
-         uNfxvIjmhPJsuSiwTXEQXnzCGhkhypi0F33WrZmWd+uySBsGU0RAFVRJgoKdBKJt+C
-         uDMhD7FO2meN8emPwIgofxkGpVfBIJaWk8HHwtqEv3MHSx0InXLR8LPalJLOSJa9cS
-         gHKDxNmkr8xDjfNzIj9Ze4fJNYC6FoMartV1ZNy2dp/gf7JLX3YYWHBSgOyfUb4hLZ
-         s5ZgOQT+d86QLIjrIx743vhEYF0IEncUcxn1lPjHszSRuiLuEMWmnotLQkyexUJq4/
-         FJDxMxYJylw3Q==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     dan.j.williams@intel.com
-Cc:     ira.weiny@intel.com, Jonathan.Cameron@huawei.com,
-        dave.jiang@intel.com, alison.schofield@intel.com,
-        vishal.l.verma@intel.com, bwidawsk@kernel.org,
-        a.manzanares@samsung.com, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org, dave@stgolabs.net
-Subject: [PATCH 2/2] cxl/mbox: Wire up basic irq support
-Date:   Fri, 14 Oct 2022 12:49:30 -0700
-Message-Id: <20221014194930.2630416-3-dave@stgolabs.net>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221014194930.2630416-1-dave@stgolabs.net>
-References: <20221014194930.2630416-1-dave@stgolabs.net>
+        Fri, 14 Oct 2022 15:58:27 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1E41D0D75;
+        Fri, 14 Oct 2022 12:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1665777487;
+        bh=1Liwd8ZbCrocRKAWWRbi9j0+CfT3XqraqowX8PdsdaM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=bcOD2fBAdkwQtcF9rvQD29RXNXyaGP610W4P7dt0rrYLF0c2w7YqkkF/Kwkb7ybPQ
+         kMo+XM3zxILoVfC1Z2olTUNGfN5HmGrQlYlf9MWWwj6rXEGW/0tM4QEe91oG6q1suz
+         S86oUA9rGadH/d8w1DeS+eOOXlbMH+UwP/V9POuE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.1.1.24] ([217.61.200.164]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MV67y-1ocJGj0jVm-00S7y8; Fri, 14
+ Oct 2022 21:58:07 +0200
+Message-ID: <0259a530-32af-f6be-b2e5-fcfbda80a052@gmx.de>
+Date:   Fri, 14 Oct 2022 21:58:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
+ machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+To:     Steve French <smfrench@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Davyd McColl <davydm@gmail.com>,
+        "lsahlber@redhat.com" <lsahlber@redhat.com>,
+        "stfrench@microsoft.com" <stfrench@microsoft.com>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <D58238A4-F04E-458E-AB05-4A74235B2C65@getmailspring.com>
+ <ff982786-4033-7450-c10c-8ce71c28d6eb@leemhuis.info>
+ <CAH2r5mtE-EjNbF3OhCLmbGQFMbJgRZphQHS+hHLBiWRJPEBqKA@mail.gmail.com>
+From:   Carsten Langer <carsten.langer@gmx.de>
+In-Reply-To: <CAH2r5mtE-EjNbF3OhCLmbGQFMbJgRZphQHS+hHLBiWRJPEBqKA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:padXh2RnjollxFDOOtlrXsmY6HvQANRPS2yC3548meSi73n8W9t
+ MfiI3oLEAWXBa9bXZPTEWAD5/xixcPcjJw/e927cNNgXjg4o6ZR7qc7UxEaT1bGkKwJr1x/
+ mk9oaWA5Z2WkxXQ7xmUD8WUSfs1sBmoZ9u6mw/Vz+JTRmzB7aJbVCycI4ybLYiWMYrdoCz6
+ WtubqOKuopzDeEAkdTlZg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fgKoRaNZ/HI=:31OUKn8OUU6sjWVFJKwwxi
+ ClCpNfUaRn8Rec54WYqSyq8yq3Y+qCpTwhSELn3MvN+w+ZHKqGEmqbGWTzkLhZEssDrJswHHN
+ mWTCS+b+xaEFI4L9rQaFan+02LgMo3nXgHeh5qK8fYU5Lz6FsPfegdFl90sIDHYtXidq9Muty
+ QGj9oTEvM+q2wz2MzbACEwvrGIhhQRDkAF8DJoQfhyiKaHISqGpI+0wLOyRX347fwtK0Xj3wJ
+ o7TKGRr4RNhrwoCOvNYeecwsQ4WGeTABrOCx1lwP+BVWqfvK9Jix43FEx3eBLbks4urWlyvlI
+ yCXzmvBHeqoT3Q/Yxg6yMZLKTiXU/1op9p2gkQLa4MJxjZx17guGkt8Flgsibho2Y9SECqfLS
+ yiDl6JIv+lZPvkgkkimD8d80wtqk98eXGlUGaOyKxYJ3/HxImrsUzShzC4X8RAtdxO4vp1pxh
+ EN78ZmlirX0XEORmjA4jL3gL4dvMgazbP4WFO7ayhbHc3tIEx+7bafkY7AYp/YYI5JuN2fviN
+ oNU3Ni2AOu0nlbyb84+v4Qt4o983BZlrbP54jOon8EjJFeud67TFd0DRbuEMOVIkXbFAuajBd
+ p9bv3zZRzPCujrr2ldSQPw+nnk0nTb1qh7zQOskhqcRWloqnVOK547/fSxGuBHfJU1Cnf7cm2
+ CswkHDoxznOzZECsjVTu38avQKiKHolPP1TuAtgRiCsZ5kGnXotBk1xmDb70sZGz0JpvwEuSb
+ h7unRK2vTQIdJd7IPNarqFausuNAQTSRrf3fnm29zEshQ7X7aVbFl0t9hORMvfsitugH7U0XF
+ dZLv8AnywwgKduJ8g+zkoK1exudAbv9rwXejrbGFxxOIVVU6ow8vB0Ark+S+XUTJ9Wb0sf6eW
+ zaZnHXs55BxQsFkPRp82EzkMDVV729/u8tFrOXUvKyyeY+3/6KKw2gq6b4luZbpahIB9bSfpG
+ 8/wsgAJeIWIvZ9/5H1+VafbXFvjGGewyjQIUBCfyIG5N44LrOlh7SNCvy4AMVbYqKlbRMfbBZ
+ NjStvk4Iqt9wC/1LTTYl0JOxYLOYTA/SeSnXK7Jb18EDxuv0JCu6Baa6m5ZdgRQNZHByslCFV
+ 0x4JHo+POtzt2+IJiMLGlWPxMss4SglD/Nt5UToLWVq+V53rys/teqnugAzHZ8Uqo40aITa1e
+ xrzn3KZohsVnmIvm6E/vY8DVrFIhKfErkBu1Zaq02EAchz2xV7ls4bqvzRrMnsdDCTpkqUs2l
+ IWozvKXznKzmmT5DeXGwuTTx84SlViPQjEEcrIohweXMinjppSfdzg3cSQnAqQMAAbN/3W5xb
+ 3pzSNuq8aT+NFaU9DOkQuAkf1EhOxzfSr3MDB9XCPr2iSwnxKRw6Lyl0R/R9brbJfSlRDqLFI
+ LPv+JfxL5HiI6RGmqSbigQFmPH8TigOrLD3OcRxUDY7+nUxZtRwVH31c7RAeyruqpiNjtilY5
+ TBikiE1iSDmbKnartTYjw5ugdePvh128Bbzk8UqMwSm4hq/IZIhJtx7ZU71grfWiN61addGPh
+ UwHvV+GNGjJzoqj7fQbVvqEGk/7SUDeB6NtG81S/MQVuM
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for mailbox interrupts, which are needed, for
-example, for background completion handling.
+ > We have been looking to see if we could setup some VMs for something
+ > that old, and we are willing to test against it if it could
+ > realistically be setup, but it has been harder than expected. Ronnie
+ > had some ideas and we are willing to experiment more but realistically
+ > it is very hard to deal with 'legacy museum style' unless we have some
+ > VMs available for old systems.
+ >
+ > Feel free to contact Ronnie and me or Shyam etc (offline if easier) if
+ > you have ideas on how to setup something like this.=C2=A0=C2=A0 We don'=
+t want to
+ > be encouraging SMB1, but certainly not NTLMv1 auth with SMB1 given its
+ > security weaknesses (especially given the particular uses hackers have
+ > made of 25+ year old NTLMv1 weaknesses).
 
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
-Note: We could also handle doorbell irq, but not sure this is
-actually needed.
+I would be willing to try to set up a VM for testing.
 
- drivers/cxl/cxl.h |  1 +
- drivers/cxl/pci.c | 27 ++++++++++++++++++++++++++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+The issue was further discussed in
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215375
+I think we could split the topic. The part important for me and others
+affected
+by this bug is that this regression introduced a protocol violation of
+the SMB1
+protocol, even for the case where users want to use SMB1 in guest mode,
+i.e. without any authentication. At least in this case IMHO we do not need
+to discuss NTLMv1 etc., but just make sure that the SMB1 protocol is
+again correctly
+followed for the case that no user/password is needed. That is what the
+proposed patch is
+about.
 
-diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-index 879661702054..d15a743bfc9e 100644
---- a/drivers/cxl/cxl.h
-+++ b/drivers/cxl/cxl.h
-@@ -140,6 +140,7 @@ enum {
- /* CXL 2.0 8.2.8.4 Mailbox Registers */
- #define CXLDEV_MBOX_CAPS_OFFSET 0x00
- #define   CXLDEV_MBOX_CAP_PAYLOAD_SIZE_MASK GENMASK(4, 0)
-+#define   CXLDEV_MBOX_CAP_IRQ_MSGNUM_MASK GENMASK(10, 7)
- #define CXLDEV_MBOX_CTRL_OFFSET 0x04
- #define   CXLDEV_MBOX_CTRL_DOORBELL BIT(0)
- #define CXLDEV_MBOX_CMD_OFFSET 0x08
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index 942c4449d30f..6e18ca3e551f 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -51,6 +51,20 @@ static unsigned short mbox_ready_timeout = 60;
- module_param(mbox_ready_timeout, ushort, 0644);
- MODULE_PARM_DESC(mbox_ready_timeout, "seconds to wait for mailbox ready");
- 
-+static int cxl_pci_mbox_get_max_msgnum(struct cxl_dev_state *cxlds)
-+{
-+	int cap;
-+
-+	cap = readl(cxlds->regs.mbox + CXLDEV_MBOX_CAPS_OFFSET);
-+	return FIELD_GET(CXLDEV_MBOX_CAP_IRQ_MSGNUM_MASK, cap);
-+}
-+
-+static irqreturn_t cxl_pci_mbox_irq(int irq, void *id)
-+{
-+	/* TODO: handle completion of background commands */
-+	return IRQ_HANDLED;
-+}
-+
- static int cxl_pci_mbox_wait_for_doorbell(struct cxl_dev_state *cxlds)
- {
- 	const unsigned long start = jiffies;
-@@ -271,6 +285,15 @@ static int cxl_pci_setup_mailbox(struct cxl_dev_state *cxlds)
- 	dev_dbg(cxlds->dev, "Mailbox payload sized %zu",
- 		cxlds->payload_size);
- 
-+	if (cxlds->irq_type == CXL_IRQ_MSI) {
-+		struct device *dev = cxlds->dev;
-+		int irq = cxl_pci_mbox_get_max_msgnum(cxlds);
-+
-+		if (devm_request_irq(dev, irq, cxl_pci_mbox_irq,
-+				     IRQF_SHARED, "mailbox", cxlds))
-+			dev_dbg(dev, "Mailbox irq (%d) supported", irq);
-+	}
-+
- 	return 0;
- }
- 
-@@ -441,7 +464,9 @@ struct cxl_irq_cap {
- 	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
- };
- 
--static const struct cxl_irq_cap cxl_irq_cap_table[] = { NULL };
-+static const struct cxl_irq_cap cxl_irq_cap_table[] = {
-+	{ "mailbox", cxl_pci_mbox_get_max_msgnum }
-+};
- 
- static void cxl_pci_free_irq_vectors(void *data)
- {
--- 
-2.37.3
+Thus my idea would be to set up an old-enough Samba server providing the
+SMB1 protocol
+(just) for guest mode, without user/password. If I could then prove that
+without patch
+the error against that VM occurs and with the patch it works fine, would
+that be enough?
 
+But I wonder what you understand by VM? A VirtualBox OVA file? Vmware?
+Some Dockerfile
+to create an image?
+And as this will be a test against a simulated server in a network, are
+there standard
+requirements how the network is set up between test system and the VM?
+
+- Carsten
