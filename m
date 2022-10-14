@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB0B5FF2B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CF65FF2BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiJNRJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
+        id S230371AbiJNRJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiJNRJ3 (ORCPT
+        with ESMTP id S230207AbiJNRJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:09:29 -0400
+        Fri, 14 Oct 2022 13:09:31 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E5CC834;
-        Fri, 14 Oct 2022 10:09:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8491C1119FA;
+        Fri, 14 Oct 2022 10:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665767368; x=1697303368;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EowE/WYIM33IXc3RRSzpTiUcTLJHWnpccOlWK9V+Ju0=;
-  b=YLQFLgjOHTvuJNqZa4iMHCUS1kwHRBf5x54faQLl4Vxve/Y6x4Dh/dWe
-   9sYRIRgv/ETZXAxrf8EynEBzCeAau/dMG6QQIGdfON6tjDKusz7s2/6iN
-   VjCfzafvQsGh+VkKQqOJRKoNFPCEo9qNHIEQPeKnufQ9VKlZMZdYzii2G
-   axcu9BDUpLwPp+nGqavm/odtKxzYXLeN0cqDR5SwAxkuqi4fNPtv3BqRJ
-   0gDCujba4TwRFFHLvOQWq/IRwLIoPjJETx8uHjqj2cSMI2+9pzuTIh/Ub
-   fjR6+t7Yrai7pU2kJLXGFZhV88wIy/4Az0FJlj98kb6NkUgEmJxiwZ3Qs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="303041961"
+  t=1665767370; x=1697303370;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jUrjMM7Alwl5r3W2FcMRVxujVyEHUtZGS+tz5iNw/vk=;
+  b=LouiBfqRHfInu7ezLdXFLIwptCPgcH8/dChsSNyir1ct55Tni4kVQKGq
+   UWJzpXw6C7mhDiS7nayl94gVFHLfAXd+cKTEwZiXiU/Zd93vI64xbpSSz
+   E9MWKUK1H6/aiB+wakUG8HEFPMNTzAYPMRjch5THMGaQD/SbPIXl0ewIx
+   oKsf1AA+LkCgpcCUDRuBa3vpea+WF2BlXGH6DKMSBwFH8rzgmSrxta/hJ
+   uiuynIJHDHjp+msS36703UB9oXPl/MDvEB+3x+wf9oG82k7K8ZuR5vsR/
+   7c54K/jpRjZJ47Xqb4Xe7KM+Ad61hNCpCdH8o8imtA5bRihhtVOZtw6gL
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="303041969"
 X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="303041961"
+   d="scan'208";a="303041969"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:28 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="696376895"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="696376922"
 X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="696376895"
+   d="scan'208";a="696376922"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.43.79])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:26 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:28 -0700
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 0/7] perf intel-pt: jitdump fix and test
-Date:   Fri, 14 Oct 2022 20:08:58 +0300
-Message-Id: <20221014170905.64069-1-adrian.hunter@intel.com>
+Subject: [PATCH 1/7] perf test: test_intel_pt.sh: Fix return checking again
+Date:   Fri, 14 Oct 2022 20:08:59 +0300
+Message-Id: <20221014170905.64069-2-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221014170905.64069-1-adrian.hunter@intel.com>
+References: <20221014170905.64069-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
@@ -59,30 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+count_result() does not always reset ret=0 which means the value can spill
+into the next test result.
 
-Here is a fix for perf inject --jit (patch 6) and an Intel PT test
-(patch 5) that fails unless the fix is applied.
+Fix by explicitly setting it to zero between tests.
 
-There is also another small fix, some tidy-ups and other new tests for the
-shell test test_intel_pt.sh.
+Fixes: fd9b45e39cfa ("perf test: test_intel_pt.sh: Fix return checking")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ tools/perf/tests/shell/test_intel_pt.sh | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
+index efaad9566c34..4609a24c9340 100755
+--- a/tools/perf/tests/shell/test_intel_pt.sh
++++ b/tools/perf/tests/shell/test_intel_pt.sh
+@@ -265,13 +265,12 @@ count_result()
+ 		return
+ 	fi
+ 	err_cnt=$((err_cnt + 1))
+-	ret=0
+ }
+ 
+ ret=0
+-test_system_wide_side_band || ret=$? ; count_result $ret
+-test_per_thread "" "" || ret=$? ; count_result $ret
+-test_per_thread "k" "(incl. kernel) " || ret=$? ; count_result $ret
++test_system_wide_side_band || ret=$? ; count_result $ret ; ret=0
++test_per_thread "" "" || ret=$? ; count_result $ret ; ret=0
++test_per_thread "k" "(incl. kernel) " || ret=$? ; count_result $ret ; ret=0
+ 
+ cleanup
+ 
+-- 
+2.25.1
 
-Adrian Hunter (6):
-      perf test: test_intel_pt.sh: Fix return checking again
-      perf test: test_intel_pt.sh: Tidy some perf record options
-      perf test: test_intel_pt.sh: Print a message when skipping kernel tracing
-      perf test: test_intel_pt.sh: Tidy some alignment
-      perf test: test_intel_pt.sh: Add jitdump test
-      perf inject: Fix GEN_ELF_TEXT_OFFSET for jit
-
-Ammy Yi (1):
-      perf test: test_intel_pt.sh: Add 9 tests
-
- tools/perf/tests/shell/test_intel_pt.sh | 385 +++++++++++++++++++++++++++++++-
- tools/perf/util/genelf.h                |   4 +-
- 2 files changed, 380 insertions(+), 9 deletions(-)
-
-
-Regards
-Adrian
