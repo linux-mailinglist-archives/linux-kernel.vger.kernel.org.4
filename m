@@ -2,176 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723315FE8A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F9B5FE8A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiJNGD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S229694AbiJNGHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJNGDz (ORCPT
+        with ESMTP id S229563AbiJNGHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:03:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F27E19E92B;
-        Thu, 13 Oct 2022 23:03:39 -0700 (PDT)
+        Fri, 14 Oct 2022 02:07:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CE8160EC4;
+        Thu, 13 Oct 2022 23:07:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC77B8216A;
-        Fri, 14 Oct 2022 06:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E751DC433D7;
-        Fri, 14 Oct 2022 06:03:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1665727383;
-        bh=Sj0ADGiNe3/XsOSpd7wJHdWZ6tdgK0sm1kkalZ7RaSY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=P9BG0Ck8iDe81L0WJ+YcLn9CxMR9gFyyW+s6iLJGOf4sH0/ypMrFTbr4LfizLM5cd
-         mbmVSNSosjIZJIblJoy/A33gzMGbsllwIfhjD4hAFI5fwgHXXkdppbFL6fJnAvFufj
-         iEsb9lLIie/w99bBfxxxbBWi+cuzuoV+evmX4efU=
-Date:   Thu, 13 Oct 2022 23:03:02 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Final MM updates for 6.1-rc1
-Message-Id: <20221013230302.96f2869cd26026b36e8ecd40@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40FF061A14;
+        Fri, 14 Oct 2022 06:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC8FC433C1;
+        Fri, 14 Oct 2022 06:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665727631;
+        bh=u3kGUVSwIM6aC0X/nUxTJ+dIkv4+IjwEsnePoGA23iY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XjMI7T4bg9LHBu4vtbXrVl5f6pPGQ5QZfNNNaUmOka8KNXjZZOLqxJM0VbbNl435y
+         V8DZdV+p88YFc6s6sotXSo81HDjXJ6Yg1eFqa+nJKb68aRgEsT6mHjey5WTby1H+ua
+         a5Uds9ZzSosOF+NQr3gD21C7BXWu0whoNX49DfUxRikx/OmsOpNmg52Qw4BSe8BRrY
+         qGsxbmMmW6/0mHdx2XrxjjqQSdd1Nu0KHM0ahkcVhpzVQJvfG2P/ifzCX0toDQlE+c
+         e3uSnDCHg/QCjWU2eanhHr2HCSh+emn4Lt4KEmDFXlpBJ3GH3WhheQzKZ34/trhATd
+         GPP1VJA8PWrGg==
+Date:   Fri, 14 Oct 2022 09:07:07 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, isdn@linux-pingi.de, kuba@kernel.org,
+        andrii@kernel.org, davem@davemloft.net, axboe@kernel.dk
+Subject: Re: [PATCH] mISDN: hfcpci: Fix use-after-free bug in hfcpci_Timer
+Message-ID: <Y0j8ixwitdWKuUoM@unreal>
+References: <20221013125729.105652-1-duoming@zju.edu.cn>
+ <Y0gQhe6EL6nDstlL@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0gQhe6EL6nDstlL@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 13, 2022 at 03:20:05PM +0200, Greg KH wrote:
+> On Thu, Oct 13, 2022 at 08:57:29PM +0800, Duoming Zhou wrote:
+> > If the timer handler hfcpci_Timer() is running, the
+> > del_timer(&hc->hw.timer) in release_io_hfcpci() could
+> > not stop it. As a result, the use-after-free bug will
+> > happen. The process is shown below:
+> > 
+> >     (cleanup routine)          |        (timer handler)
+> > release_card()                 | hfcpci_Timer()
+> >   release_io_hfcpci            |
+> >     del_timer(&hc->hw.timer)   |
+> >   ...                          |  ...
+> >   kfree(hc) //[1]FREE          |
+> >                                |   hc->hw.timer.expires //[2]USE
+> > 
+> > The hfc_pci is deallocated in position [1] and used in
+> > position [2].
+> > 
+> > Fix by changing del_timer() in release_io_hfcpci() to
+> > del_timer_sync(), which makes sure the hfcpci_Timer()
+> > have finished before the hfc_pci is deallocated.
+> > 
+> > Fixes: 1700fe1a10dc ("Add mISDN HFC PCI driver")
+> > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> > ---
+> >  drivers/isdn/hardware/mISDN/hfcpci.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
+> > index af17459c1a5..5cf37fe7de2 100644
+> > --- a/drivers/isdn/hardware/mISDN/hfcpci.c
+> > +++ b/drivers/isdn/hardware/mISDN/hfcpci.c
+> > @@ -157,7 +157,7 @@ release_io_hfcpci(struct hfc_pci *hc)
+> >  {
+> >  	/* disable memory mapped ports + busmaster */
+> >  	pci_write_config_word(hc->pdev, PCI_COMMAND, 0);
+> > -	del_timer(&hc->hw.timer);
+> > +	del_timer_sync(&hc->hw.timer);
+> 
+> Nice, how did you test that this will work properly?  Do you have this
+> hardware for testing?  How was this issue found and verified that this
+> is the correct resolution?
 
-Linus, please merge this smallish batch of features and fixes.
+According to his previous response [1], the answer will be no. I'm not
+super-excited that this unmaintained and old driver chosen as playground
+for new tool.
 
-There's a conflict in drivers/gpu/drm/amd/amdkfd/kfd_migrate.c. 
-Stephen's resolution is at
-https://lkml.kernel.org/r/20221004210029.7412fcfd@canb.auug.org.au
+[1] https://lore.kernel.org/all/17ad6913.ff8e0.1838933840d.Coremail.duoming@zju.edu.cn/#t
 
-Thanks.
-
-
-The following changes since commit bbff39cc6cbcb86ccfacb2dcafc79912a9f9df69:
-
-  hugetlb: allocate vma lock for all sharable vmas (2022-10-07 14:28:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2022-10-13
-
-for you to fetch changes up to ef6e06b2ef87077104d1145a0fd452ff8dbbc4b7:
-
-  highmem: fix kmap_to_page() for kmap_local_page() addresses (2022-10-12 18:51:51 -0700)
-
-----------------------------------------------------------------
-- Alistair Popple has a series which addresses a race which causes page
-  refcounting errors in ZONE_DEVICE pages.
-
-- Peter Xu fixes some userfaultfd test harness instability.
-
-- Various other patches in MM, mainly fixes.
-
-----------------------------------------------------------------
-Alexander Potapenko (1):
-      kmsan: unpoison @tlb in arch_tlb_gather_mmu()
-
-Alexey Dobriyan (1):
-      mm: more vma cache removal
-
-Alistair Popple (8):
-      mm/memory.c: fix race when faulting a device private page
-      mm: free device private pages have zero refcount
-      mm/memremap.c: take a pgmap reference on page allocation
-      mm/migrate_device.c: refactor migrate_vma and migrate_deivce_coherent_page()
-      mm/migrate_device.c: add migrate_device_range()
-      nouveau/dmem: refactor nouveau_dmem_fault_copy_one()
-      nouveau/dmem: evict device private memory during release
-      hmm-tests: add test for migrate_device_range()
-
-Andrew Morton (1):
-      mm/hugetlb.c: make __hugetlb_vma_unlock_write_put() static
-
-Andrey Konovalov (1):
-      kasan: fix array-bounds warnings in tests
-
-Brian Geffon (1):
-      zram: always expose rw_page
-
-Carlos Llamas (1):
-      mm/mmap: undo ->mmap() when arch_validate_flags() fails
-
-Chuyi Zhou (1):
-      mm/compaction: fix set skip in fast_find_migrateblock
-
-Ira Weiny (1):
-      highmem: fix kmap_to_page() for kmap_local_page() addresses
-
-Liam Howlett (2):
-      mmap: fix copy_vma() failure path
-      mm/mmap: preallocate maple nodes for brk vma expansion
-
-Matthew Wilcox (Oracle) (1):
-      ext4,f2fs: fix readahead of verity data
-
-Peter Xu (4):
-      mm/uffd: fix warning without PTE_MARKER_UFFD_WP compiled in
-      mm/hugetlb: fix race condition of uffd missing/minor handling
-      mm/hugetlb: use hugetlb_pte_stable in migration race check
-      mm/selftest: uffd: explain the write missing fault check
-
-Qi Zheng (2):
-      mm: use update_mmu_tlb() on the second thread
-      LoongArch: update local TLB if PTE entry exists
-
-Xiaoke Wang (1):
-      lib/test_meminit: add checks for the allocation functions
-
-Xin Hao (2):
-      mm/damon: move sz_damon_region to damon_sz_region
-      mm/damon: use damon_sz_region() in appropriate place
-
-Yafang Shao (1):
-      mm/page_alloc: fix incorrect PGFREE and PGALLOC for high-order page
-
- arch/loongarch/include/asm/pgtable.h     |   3 +
- arch/powerpc/kvm/book3s_hv_uvmem.c       |  21 +--
- drivers/block/zram/zram_drv.c            |  26 +---
- drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |  19 +--
- drivers/gpu/drm/amd/amdkfd/kfd_migrate.h |   2 +-
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c     |  11 +-
- drivers/gpu/drm/nouveau/nouveau_dmem.c   | 108 ++++++++++----
- fs/ext4/verity.c                         |   3 +-
- fs/f2fs/verity.c                         |   3 +-
- include/linux/damon.h                    |   6 +
- include/linux/memremap.h                 |   1 +
- include/linux/migrate.h                  |  15 ++
- include/linux/sched.h                    |   2 -
- lib/test_hmm.c                           | 129 +++++++++++++----
- lib/test_hmm_uapi.h                      |   1 +
- lib/test_meminit.c                       |  21 +++
- mm/compaction.c                          |   1 -
- mm/damon/core.c                          |  26 ++--
- mm/damon/vaddr.c                         |   4 +-
- mm/highmem.c                             |  43 ++++--
- mm/hugetlb.c                             |  72 ++++++++--
- mm/kasan/kasan_test.c                    |   9 +-
- mm/memory.c                              |  20 ++-
- mm/memremap.c                            |  30 +++-
- mm/migrate.c                             |  34 +++--
- mm/migrate_device.c                      | 239 ++++++++++++++++++++++---------
- mm/mmap.c                                |  28 ++--
- mm/mmu_gather.c                          |  10 ++
- mm/mprotect.c                            |   2 +
- mm/page_alloc.c                          |  12 +-
- tools/testing/selftests/vm/hmm-tests.c   |  49 +++++++
- tools/testing/selftests/vm/userfaultfd.c |  22 ++-
- 32 files changed, 719 insertions(+), 253 deletions(-)
-
+> 
+> thanks,
+> 
+> greg k-h
