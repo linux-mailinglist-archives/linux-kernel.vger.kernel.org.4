@@ -2,173 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862445FF07B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3825FF078
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiJNOkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S230254AbiJNOkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiJNOkS (ORCPT
+        with ESMTP id S229976AbiJNOkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:40:18 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928994A10D;
-        Fri, 14 Oct 2022 07:40:12 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id 187so4023614iov.10;
-        Fri, 14 Oct 2022 07:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gqNU3jyIKdP2LeNPDch6KlM75RQE0z3FFP6RVfvlhuM=;
-        b=bOZwXqjmw7sX8px0+Lq1iBo8giDDyRK0xiJO9OwdoKqeV1HX0S+EZc16NmoDZ3CreO
-         E3MsKXQNl8pOLt9wKYBMoUbK8LMoUsAhlVXPRyC3f/gN4Jhi9BrrjbNAspvqnLGhRNRi
-         67pzpwb+iThnF6UR0j3G/qaIxYxN0kn8C80RC3s1jnu899Zj4TgbKzaQgAB9ReHmRjcP
-         XrdIZgeVELwuXJEq7d9BEfq7PGtbOhbzc2+ObHITZOjbGju5C7nmlA5elNU1ObdBPamj
-         StKKbp+pt2rm7wAgOIJKzscSzTIZgFDpxUDFoXX7coX+Hq/+qzDa8Ki3cZiAi5jKCYZk
-         R5lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gqNU3jyIKdP2LeNPDch6KlM75RQE0z3FFP6RVfvlhuM=;
-        b=T1A9zeMOVz3u8HlogQ7adtD5wdK91XpPFuyTcMO2Szx7AxLNDuXa9h5HTu+5D1McgK
-         B7aaQTnuqQGzGywTy6nKgym7VLfA/a+/z4F2FVS6qqctdg64S9c8daXb6c1eTG/9RRN8
-         xUIXxAHDZc9aK5wP+YIBvEWBlYPLrSdb1Z/sXLTwjS0Qc98Nkx8mg8GBN62OWy0zoDbc
-         jcjuP/SXOURDZ5oEkzKwA/Dvte1x0W9tRUPYtIzqp6nalyGPeyXbMmhuDPGA8jkhKwB7
-         gXoMLX/Q4pCxLzUlSVgxm3u968ZR1Tounq2CJoBayRFE2tlKyIsrjlLQWa39yraMiw8n
-         yeEA==
-X-Gm-Message-State: ACrzQf0IQDh7H/5zf0TLsl34D2cZza5MyxQjR2aYijiIbxDmDG15/Y3R
-        snNDd8bCnTsv4oCb3/9umNFVwMMUw3NHkK91RvE=
-X-Google-Smtp-Source: AMsMyM7FQagympQoF02w3NjUUBCYlwsxqfgUO0qOaLc+FgBJvwDwQYVryxvfwBHP7BeFHYosXU5c9eiwuRqFCvXiKUI=
-X-Received: by 2002:a05:6602:1509:b0:69b:35ba:4720 with SMTP id
- g9-20020a056602150900b0069b35ba4720mr2422187iow.155.1665758411053; Fri, 14
- Oct 2022 07:40:11 -0700 (PDT)
+        Fri, 14 Oct 2022 10:40:10 -0400
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A312E6A1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:40:05 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MppvR2nLHzMqyHl;
+        Fri, 14 Oct 2022 16:40:03 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MppvP5kXxzxl;
+        Fri, 14 Oct 2022 16:40:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1665758403;
+        bh=jcCyesxrLlJfomHPKJJgCzzHqJeECuX0/FAdPkYkMYg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=0csy4yyyeK2AmSYMeuhklSJZQhYq/NrsNgOTjTFHzuuLeF8Nu9NCkXSmcEUZuZN7V
+         anHbM8mogDSj/xeRu1co7NT85d/1itjhoCUOh6JjJrU4XOSCA1qsPu8DGe4Yv/9CEK
+         oeWOxoxwmciRMsy8Z5R4M5DiS3bjdiUUFWK/h8Xg=
+Message-ID: <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
+Date:   Fri, 14 Oct 2022 16:40:01 +0200
 MIME-Version: 1.0
-References: <20221011171427.58891-1-masahiroy@kernel.org>
-In-Reply-To: <20221011171427.58891-1-masahiroy@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 14 Oct 2022 16:39:59 +0200
-Message-ID: <CANiq72kvaPGr=2S6J7q7gfEg_CauHUfhuLmABpktfUPfK+_Hvg@mail.gmail.com>
-Subject: Re: [PATCH v2] Remove Intel compiler support
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Terrell <terrelln@fb.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ia64@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Tom Rix <trix@redhat.com>, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: 
+Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
+ available in "integrity" LSM
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20221013222702.never.990-kees@kernel.org>
+ <20221013223654.659758-1-keescook@chromium.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20221013223654.659758-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 7:16 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 898b3458b24a..9221302f6ae8 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -64,16 +64,10 @@
->   * compiler should see some alignment anyway, when the return value is
->   * massaged by 'flags = ptr & 3; ptr &= ~3;').
->   *
-> - * Optional: not supported by icc
-> - *
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-assume_005faligned-function-attribute
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#assume-aligned
->   */
-> -#if __has_attribute(__assume_aligned__)
-> -# define __assume_aligned(a, ...)       __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
-> -#else
-> -# define __assume_aligned(a, ...)
-> -#endif
-> +#define __assume_aligned(a, ...)        __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
 
-Thanks for cleaning the conditional inclusion here. I double-checked
-it is indeed available for both GCC and Clang current minimum versions
-just in case: https://godbolt.org/z/PxaqeEdcE.
+On 14/10/2022 00:36, Kees Cook wrote:
+> Move "integrity" LSM to the end of the Kconfig list and prepare for
+> having ima and evm LSM initialization called from the top-level
+> "integrity" LSM.
+> 
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Cc: "Mickaël Salaün" <mic@digikod.net>
+> Cc: linux-security-module@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   security/Kconfig                  | 10 +++++-----
+>   security/integrity/evm/evm_main.c |  4 ++++
+>   security/integrity/iint.c         | 17 +++++++++++++----
+>   security/integrity/ima/ima_main.c |  4 ++++
+>   security/integrity/integrity.h    |  6 ++++++
+>   5 files changed, 32 insertions(+), 9 deletions(-)
+> 
+> diff --git a/security/Kconfig b/security/Kconfig
+> index e6db09a779b7..d472e87a2fc4 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -246,11 +246,11 @@ endchoice
+>   
+>   config LSM
+>   	string "Ordered list of enabled LSMs"
+> -	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+> -	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+> -	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+> -	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
+> -	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+> +	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf,integrity" if DEFAULT_SECURITY_SMACK
+> +	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf,integrity" if DEFAULT_SECURITY_APPARMOR
+> +	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf,integrity" if DEFAULT_SECURITY_TOMOYO
+> +	default "landlock,lockdown,yama,loadpin,safesetid,bpf,integrity" if DEFAULT_SECURITY_DAC
+> +	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf,integrity"
 
-> diff --git a/lib/zstd/common/compiler.h b/lib/zstd/common/compiler.h
-> index f5a9c70a228a..c281a6430cd4 100644
-> --- a/lib/zstd/common/compiler.h
-> +++ b/lib/zstd/common/compiler.h
-> @@ -116,7 +116,7 @@
->
->  /* vectorization
->   * older GCC (pre gcc-4.3 picked as the cutoff) uses a different syntax */
-> -#if !defined(__INTEL_COMPILER) && !defined(__clang__) && defined(__GNUC__)
-> +#if !defined(__clang__) && defined(__GNUC__)
->  #  if (__GNUC__ == 4 && __GNUC_MINOR__ > 3) || (__GNUC__ >= 5)
->  #    define DONT_VECTORIZE __attribute__((optimize("no-tree-vectorize")))
->  #  else
+This is not backward compatible, but can easily be fixed thanks to 
+DEFINE_LSM().order
 
-These files come from upstream Zstandard -- should we keep those lines
-to minimize divergence?
-https://github.com/facebook/zstd/blob/v1.4.10/lib/common/compiler.h#L154.
+Side node: I proposed an alternative to that but it was Nacked: 
+https://lore.kernel.org/all/20210222150608.808146-1-mic@digikod.net/
 
-Commit e0c1b49f5b67 ("lib: zstd: Upgrade to latest upstream zstd
-version 1.4.10") is the latest upgrade, and says:
 
-    This patch is 100% generated from upstream zstd commit 20821a46f412 [0].
+>   	help
+>   	  A comma-separated list of LSMs, in initialization order.
+>   	  Any LSMs left off this list will be ignored. This can be
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> index 2e6fb6e2ffd2..1ef965089417 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -904,3 +904,7 @@ static int __init init_evm(void)
+>   }
+>   
+>   late_initcall(init_evm);
+> +
+> +void __init integrity_lsm_evm_init(void)
+> +{
+> +}
+> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+> index 8638976f7990..4f322324449d 100644
+> --- a/security/integrity/iint.c
+> +++ b/security/integrity/iint.c
+> @@ -18,7 +18,6 @@
+>   #include <linux/file.h>
+>   #include <linux/uaccess.h>
+>   #include <linux/security.h>
+> -#include <linux/lsm_hooks.h>
+>   #include "integrity.h"
+>   
+>   static struct rb_root integrity_iint_tree = RB_ROOT;
+> @@ -172,19 +171,29 @@ static void init_once(void *foo)
+>   	mutex_init(&iint->mutex);
+>   }
+>   
+> -static int __init integrity_iintcache_init(void)
+> +void __init integrity_add_lsm_hooks(struct security_hook_list *hooks,
+> +				    int count)
+> +{
+> +	security_add_hooks(hooks, count, "integrity");
+> +}
+> +
+> +static int __init integrity_lsm_init(void)
+>   {
+>   	iint_cache =
+>   	    kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
+>   			      0, SLAB_PANIC, init_once);
+> +
+> +	integrity_lsm_ima_init();
+> +	integrity_lsm_evm_init();
+> +
+>   	return 0;
+>   }
+> +
+>   DEFINE_LSM(integrity) = {
+>   	.name = "integrity",
+> -	.init = integrity_iintcache_init,
+> +	.init = integrity_lsm_init,
 
-    This patch is very large because it is transitioning from the custom
-    kernel zstd to using upstream directly. The new zstd follows upstreams
-    file structure which is different. Future update patches will be much
-    smaller because they will only contain the changes from one upstream
-    zstd release.
-
-So I think Nick would prefer to keep the changes as minimal as
-possible with respect to upstream.
-
-Further reading seems to suggest this is the case, e.g. see this
-commit upstream that introduces a space to match the kernel:
-https://github.com/facebook/zstd/commit/b53da1f6f499f0d44c5f40795b080d967b24e5fa.
-
-> diff --git a/lib/zstd/compress/zstd_fast.c b/lib/zstd/compress/zstd_fast.c
-> index 96b7d48e2868..800f3865119f 100644
-> --- a/lib/zstd/compress/zstd_fast.c
-> +++ b/lib/zstd/compress/zstd_fast.c
-> @@ -80,13 +80,6 @@ ZSTD_compressBlock_fast_generic(
->      }
->
->      /* Main Search Loop */
-> -#ifdef __INTEL_COMPILER
-> -    /* From intel 'The vector pragma indicates that the loop should be
-> -     * vectorized if it is legal to do so'. Can be used together with
-> -     * #pragma ivdep (but have opted to exclude that because intel
-> -     * warns against using it).*/
-> -    #pragma vector always
-> -#endif
->      while (ip1 < ilimit) {   /* < instead of <=, because check at ip0+2 */
->          size_t mLength;
->          BYTE const* ip2 = ip0 + 2;
-
-Ditto: https://github.com/facebook/zstd/blob/v1.4.10/lib/compress/zstd_fast.c#L83.
-
-Apart from the zstd divergence which I am not sure about, everything
-looks good to me!
-
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-
-Cheers,
-Miguel
+For backward compatibility, there should be an ".order = 
+LSM_ORDER_FIRST," here.
