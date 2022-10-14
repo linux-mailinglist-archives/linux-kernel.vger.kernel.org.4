@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E995FF2BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4075FF2BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiJNRJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        id S231207AbiJNRJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiJNRJe (ORCPT
+        with ESMTP id S231171AbiJNRJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:09:34 -0400
+        Fri, 14 Oct 2022 13:09:41 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCD614DF0A;
-        Fri, 14 Oct 2022 10:09:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F91A2F7;
+        Fri, 14 Oct 2022 10:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665767372; x=1697303372;
+  t=1665767375; x=1697303375;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=jva74q/mI6mu3YiJK8quzWNt5hjNiitIrcO+L1oKapc=;
-  b=a5VYWomRMemqXBspxOn12oKAMm+mZejsjuqV+H1LwXJ4gzUvcgDxhX8p
-   3GUgvRixsWK2+1QNP/8CllsmGEC5Xy8uFVBKQkB0qB5BrEktUlWQdwmGf
-   eByB6DoJY2w1b6e/yr+YaAOrmt1II5cdB9q+wLg6GKUItArOp7WZf8cn1
-   p9lBHtUNujbmSml1TgwPQzgkeUDf5VfwI8/Z9s9H51R5i9sJzVde4Zw5v
-   rHp1lN8JBjPlhLaxBEGf8bf2eWUpNJ3H0lR92hYvFI/QrFczrG5W/Fyce
-   8jJh9rk1Q2nau1QvxZnZ4CXI5KCilLs0LSO2+Ulplv4mURuXY2upiXpc2
+  bh=lAd0o379HfkSn8aHAVMv65Af3jNDxH5nPEb/kxUyFvs=;
+  b=HAgrlFexjV9+JjH6PwN5N18gbubqvuUHpdwM9AV13nYnZmS3u0BVjKc+
+   qMDo/FRR70fmFVxmP0usaNN683K6u03q2HShQ3IWeoaiLCMgmgu5Sj12N
+   0kb3mHBEAQDz4l+ST9MEQT34hoP4C7+6roiH9SJ/ssrfwXmFO8nc9fTlt
+   U12PKxOiXt8MEC+NcGD3jTV0mTVikkG56hCYFwKDEPUjiV1r5ZpZOjx4G
+   ufvcJO/bPmlbA6Vwg0XJCzKyaoVvKhL/SOE6OqcoCDzkPW1MROjKz6hHS
+   ZH1JgKs+IgMg7hG2RC+J/yu2+LAsy92DZrfgsFB72j97ZjqvtWhtMiwhS
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="303041973"
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="303041981"
 X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="303041973"
+   d="scan'208";a="303041981"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:32 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="696376928"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:34 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10500"; a="696376948"
 X-IronPort-AV: E=Sophos;i="5.95,184,1661842800"; 
-   d="scan'208";a="696376928"
+   d="scan'208";a="696376948"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.43.79])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:30 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 10:09:32 -0700
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 2/7] perf test: test_intel_pt.sh: Tidy some perf record options
-Date:   Fri, 14 Oct 2022 20:09:00 +0300
-Message-Id: <20221014170905.64069-3-adrian.hunter@intel.com>
+Subject: [PATCH 3/7] perf test: test_intel_pt.sh: Print a message when skipping kernel tracing
+Date:   Fri, 14 Oct 2022 20:09:01 +0300
+Message-Id: <20221014170905.64069-4-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221014170905.64069-1-adrian.hunter@intel.com>
 References: <20221014170905.64069-1-adrian.hunter@intel.com>
@@ -61,69 +61,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When not decoding, the options "-B -N --no-bpf-event" speed up perf record.
-Make a common function for them.
+Messages display with the perf test -v option. Add a message to show when
+skipping a test because the user cannot do kernel tracing.
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/tests/shell/test_intel_pt.sh | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ tools/perf/tests/shell/test_intel_pt.sh | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
-index 4609a24c9340..334836f92bdc 100755
+index 334836f92bdc..9c746ff1c4d2 100755
 --- a/tools/perf/tests/shell/test_intel_pt.sh
 +++ b/tools/perf/tests/shell/test_intel_pt.sh
-@@ -42,6 +42,14 @@ trap_cleanup()
- 
- trap trap_cleanup EXIT TERM INT
- 
-+# perf record for testing without decoding
-+perf_record_no_decode()
-+{
-+	# Options to speed up recording: no post-processing, no build-id cache update,
-+	# and no BPF events.
-+	perf record -B -N --no-bpf-event "$@"
-+}
-+
- have_workload=false
- cat << _end_of_file_ | /usr/bin/cc -o "${workload}" -xc - -pthread && have_workload=true
- #include <time.h>
-@@ -76,7 +84,7 @@ _end_of_file_
- can_cpu_wide()
- {
- 	echo "Checking for CPU-wide recording on CPU $1"
--	if ! perf record -o "${tmpfile}" -B -N --no-bpf-event -e dummy:u -C "$1" true >/dev/null 2>&1 ; then
-+	if ! perf_record_no_decode -o "${tmpfile}" -e dummy:u -C "$1" true >/dev/null 2>&1 ; then
- 		echo "No so skipping"
- 		return 2
- 	fi
-@@ -93,7 +101,7 @@ test_system_wide_side_band()
- 	can_cpu_wide 1 || return $?
- 
- 	# Record on CPU 0 a task running on CPU 1
--	perf record -B -N --no-bpf-event -o "${perfdatafile}" -e intel_pt//u -C 0 -- taskset --cpu-list 1 uname
-+	perf_record_no_decode -o "${perfdatafile}" -e intel_pt//u -C 0 -- taskset --cpu-list 1 uname
- 
- 	# Should get MMAP events from CPU 1 because they can be needed to decode
- 	mmap_cnt=$(perf script -i "${perfdatafile}" --no-itrace --show-mmap-events -C 1 2>/dev/null | grep -c MMAP)
-@@ -109,7 +117,7 @@ test_system_wide_side_band()
+@@ -117,7 +117,14 @@ test_system_wide_side_band()
  
  can_kernel()
  {
--	perf record -o "${tmpfile}" -B -N --no-bpf-event -e dummy:k true >/dev/null 2>&1 || return 2
-+	perf_record_no_decode -o "${tmpfile}" -e dummy:k true >/dev/null 2>&1 || return 2
+-	perf_record_no_decode -o "${tmpfile}" -e dummy:k true >/dev/null 2>&1 || return 2
++	if [ -z "${can_kernel_trace}" ] ; then
++		can_kernel_trace=0
++		perf_record_no_decode -o "${tmpfile}" -e dummy:k true >/dev/null 2>&1 && can_kernel_trace=1
++	fi
++	if [ ${can_kernel_trace} -eq 0 ] ; then
++		echo "SKIP: no kernel tracing"
++		return 2
++	fi
  	return 0
  }
  
-@@ -235,7 +243,7 @@ test_per_thread()
- 	wait_for_threads ${w1} 2
- 	wait_for_threads ${w2} 2
- 
--	perf record -B -N --no-bpf-event -o "${perfdatafile}" -e intel_pt//u"${k}" -vvv --per-thread -p "${w1},${w2}" 2>"${errfile}" >"${outfile}" &
-+	perf_record_no_decode -o "${perfdatafile}" -e intel_pt//u"${k}" -vvv --per-thread -p "${w1},${w2}" 2>"${errfile}" >"${outfile}" &
- 	ppid=$!
- 	echo "perf PID is $ppid"
- 	wait_for_perf_to_start ${ppid} "${errfile}" || return 1
 -- 
 2.25.1
 
