@@ -2,98 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7155D5FE665
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5165FE666
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 02:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJNAoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 20:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S229619AbiJNAxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 20:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJNAol (ORCPT
+        with ESMTP id S229511AbiJNAxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 20:44:41 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4D8E3F;
-        Thu, 13 Oct 2022 17:44:39 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-345528ceb87so32654707b3.11;
-        Thu, 13 Oct 2022 17:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8LDuQyUJtNYxJgy4BlDNCydbYtmE3vLtBYETof5SnFI=;
-        b=aRJ9OBkeAuELPWfuoujR12QWft/Ey5aPla71BTas+EejTpfSwC9FVGNF8SltaCwzZQ
-         zD9o78QeP6QiZYQNMMAH+h839ISvygSDDs65k6nrRQsIBf5Pdw0fFWsbgWUC1ePoIf8g
-         6AaFsRw02DRQaTN/s/dXhsnREKsp6OeZYlcqkQNNSPrHnmZwJXtcRIlqaVkg4AC/mrvw
-         +7V8cjVk1nh1E4yGM3w96/npUZI3lEz++igpvFat6+NbnUbm71MbzgSXRVSsGcM4Ax1w
-         2iqbbqO56uMv6TT0qnU5IjoSjWCopl5I9oyQYzKpE6KMXzykYxLRTALvN4C0Ox/s/tpG
-         1RXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8LDuQyUJtNYxJgy4BlDNCydbYtmE3vLtBYETof5SnFI=;
-        b=1tnFPxKBIOD3wQh6OTdZDUN3s3PnziYzZxuZ/AKOI1DMfIUBLLg0zXBX2hfzzyNMQn
-         nBedL8qzomiwEhGCkt1PsbvnhgwGFKBj25V4rnBjYWQiiPJ/jP6a5P9vrS2NWH6KaGq3
-         XSfm6re6SljgpFMD2PHvHfkooF6gEGTBDhvJa8Q3zJmNIq9FMx0AJMtdkZrWxvCYJiT7
-         ISrt2plbIn/zo8AgUm91eESUJ95uahn4Gu1D0wwrgOvlaJiMlCQLCtzFdqggwxLxQvrT
-         wv8lLdcUevQyi5YFW/axtOUfAMpSrAHoLGqJpi7BBkUSUovOcHqC+2PZJv1fRnqohUta
-         5YVw==
-X-Gm-Message-State: ACrzQf0wUMRaXJua8a6AvyFkYxv3lJEcma6msLZROT2rr5tVEU1vTsPC
-        ReW+qCsU2/WfZitrstgF3Y7sPhZ+GNlQrHhbKJo=
-X-Google-Smtp-Source: AMsMyM4n9AR/vXW+jIEymBK/T8UROD3M5E+x6DA76Ee13P69cmAzOptvubKJKVG4i4e+MHfBE1wR1w8ea59kqZXCG7g=
-X-Received: by 2002:a0d:ca86:0:b0:354:5995:d6a4 with SMTP id
- m128-20020a0dca86000000b003545995d6a4mr2514235ywd.504.1665708278429; Thu, 13
- Oct 2022 17:44:38 -0700 (PDT)
+        Thu, 13 Oct 2022 20:53:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73F018C41C;
+        Thu, 13 Oct 2022 17:53:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C93EB821AF;
+        Fri, 14 Oct 2022 00:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F12DC433B5;
+        Fri, 14 Oct 2022 00:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665708822;
+        bh=hMXZhpwn2uXGvkJr9jE4p5uwZkiaKvbjHzW6FAmAFfA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fkOh/PRteI2yXoY3VrlN/Crine1xFv1ldzIx/Om9oNOgtpeYGD4D7LBaEx3Zg7/lK
+         xTlxHNgDlgFUjrsTWz5yWfSsUJXtbwWqFuylMDzsU3e29Sr2YJKqoWj+5nOEh6hTSr
+         Oh0Gnm0Cw+J2YJMLGQM1w5QPYeCwO31ywC2rnv9MBIlFeF5g86g0gI5wn8W8T2lngc
+         ENPFMyG5CWj2Sb5liY433Z58X48YZJuxRM0GoN02Re5oEHagHq+EMe3X8tQRUhH+kp
+         U/0q96YaQ8jI0iHBLlfapNe8xNctl6O3fJb4XFYDdP3yB/eWTHDCUnBjTLltUddqSs
+         BJkvrn4Vq7CNA==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-131dda37dddso4336566fac.0;
+        Thu, 13 Oct 2022 17:53:42 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3LtUJyTjxD7lW1TeJHenk+pLEhixmGImzPsEFplMVCYuPCXLj9
+        N+O7L4ajB/IPl32IouwNSDsRlIBgvTerVI9v7Eo=
+X-Google-Smtp-Source: AMsMyM7ZKlQkcNbs9/Ob4NRzq5VRbqmETYm1tA3qgdxfAwpwNzCnqHQog7k1KPgO81SUe5qtsk6GBw3+DFFZ+hdVG3s=
+X-Received: by 2002:a05:6870:4413:b0:136:66cc:6af8 with SMTP id
+ u19-20020a056870441300b0013666cc6af8mr7168038oah.112.1665708821406; Thu, 13
+ Oct 2022 17:53:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929101515.354-1-lukas.bulwahn@gmail.com> <CAMo8Bf+MHVLOh-U0EyP1DoJPDSHscC=st0TYZ9L76+xgfBxaOQ@mail.gmail.com>
-In-Reply-To: <CAMo8Bf+MHVLOh-U0EyP1DoJPDSHscC=st0TYZ9L76+xgfBxaOQ@mail.gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Thu, 13 Oct 2022 17:44:26 -0700
-Message-ID: <CAMo8BfJ0F6Ya9kwKckCqT0YWiU31RWM4RK1U+CypwNMqNS68QQ@mail.gmail.com>
-Subject: Re: [PATCH] xtensa: update config files
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org
+References: <20221013171434.3132854-1-guoren@kernel.org> <CAAH8bW8x15GCLkD-4=3ydLBEfbER2HeNj7ishOoPVLfsQ=C7Mw@mail.gmail.com>
+In-Reply-To: <CAAH8bW8x15GCLkD-4=3ydLBEfbER2HeNj7ishOoPVLfsQ=C7Mw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 14 Oct 2022 08:53:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSTkB_JCLVhu6_nNykxh5p5a7YG82+MXx7OLDwn0K4Q3w@mail.gmail.com>
+Message-ID: <CAJF2gTSTkB_JCLVhu6_nNykxh5p5a7YG82+MXx7OLDwn0K4Q3w@mail.gmail.com>
+Subject: Re: [PATCH] net: Fixup virtnet_set_affinity() cause cpumask warning
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     andriy.shevchenko@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@rasmusvillemoes.dk, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 8:33 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
+On Fri, Oct 14, 2022 at 2:13 AM Yury Norov <yury.norov@gmail.com> wrote:
 >
-> On Thu, Sep 29, 2022 at 3:15 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> On Thu, Oct 13, 2022 at 10:14 AM <guoren@kernel.org> wrote:
 > >
-> > Clean up config files by:
-> >   - removing configs that were deleted in the past
-> >   - removing configs not in tree and without recently pending patches
-> >   - adding new configs that are replacements for old configs in the file
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > For some detailed information, see Link.
+> > Don't pass nr_bits-1 as arg1 for cpumask_next_wrap, which would
+> > cause warning now.
 > >
-> > Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x5c/0x80
+> > Modules linked in:
+> > CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-11659-ge7e38f6cce55-dirty #328
+> > Hardware name: riscv-virtio,qemu (DT)
+> > epc : cpumask_next_wrap+0x5c/0x80
+> >  ra : virtnet_set_affinity+0x1ba/0x1fc
+> > epc : ffffffff808992ca ra : ffffffff805d84ca sp : ff60000002327a50
+> >  gp : ffffffff81602390 tp : ff600000023a0000 t0 : 5f74656e74726976
+> >  t1 : 0000000000000000 t2 : 735f74656e747269 s0 : ff60000002327a90
+> >  s1 : 0000000000000003 a0 : 0000000000000003 a1 : ffffffff816051c0
+> >  a2 : 0000000000000004 a3 : 0000000000000000 a4 : 0000000000000000
+> >  a5 : 0000000000000004 a6 : 0000000000000000 a7 : 0000000000000000
+> >  s2 : 0000000000000000 s3 : ffffffff816051c0 s4 : ffffffff8160224c
+> >  s5 : 0000000000000004 s6 : 0000000000000004 s7 : 0000000000000000
+> >  s8 : 0000000000000003 s9 : ffffffff810aa398 s10: ffffffff80e97d20
+> >  s11: 0000000000000004 t3 : ffffffff819acc97 t4 : ffffffff819acc97
+> >  t5 : ffffffff819acc98 t6 : ff60000002327878
+> > status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
+> > [<ffffffff805d84ca>] virtnet_set_affinity+0x1ba/0x1fc
+> > [<ffffffff805da7ac>] virtnet_probe+0x832/0xf1e
+> > [<ffffffff804fe61c>] virtio_dev_probe+0x164/0x2de
+> > [<ffffffff8054c4c4>] really_probe+0x82/0x224
+> > [<ffffffff8054c6c0>] __driver_probe_device+0x5a/0xaa
+> > [<ffffffff8054c73c>] driver_probe_device+0x2c/0xb8
+> > [<ffffffff8054cd66>] __driver_attach+0x76/0x108
+> > [<ffffffff8054a482>] bus_for_each_dev+0x52/0x9a
+> > [<ffffffff8054be8c>] driver_attach+0x1a/0x28
+> > [<ffffffff8054b996>] bus_add_driver+0x154/0x1c2
+> > [<ffffffff8054d592>] driver_register+0x52/0x108
+> > [<ffffffff804fe120>] register_virtio_driver+0x1c/0x2c
+> > [<ffffffff80a29142>] virtio_net_driver_init+0x7a/0xb0
+> > [<ffffffff80002854>] do_one_initcall+0x66/0x2e4
+> > [<ffffffff80a01222>] kernel_init_freeable+0x28a/0x304
+> > [<ffffffff808cb1be>] kernel_init+0x1e/0x110
+> > [<ffffffff80003c4e>] ret_from_exception+0x0/0x10
+> > ---[ end trace 0000000000000000 ]---
 > >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >  arch/xtensa/configs/audio_kc705_defconfig   | 1 -
-> >  arch/xtensa/configs/cadence_csp_defconfig   | 4 ----
-> >  arch/xtensa/configs/generic_kc705_defconfig | 1 -
-> >  arch/xtensa/configs/nommu_kc705_defconfig   | 1 -
-> >  arch/xtensa/configs/smp_lx200_defconfig     | 1 -
-> >  arch/xtensa/configs/xip_kc705_defconfig     | 1 -
-> >  6 files changed, 9 deletions(-)
+> > Fixes: 78e5a3399421 ("cpumask: fix checking valid cpu range")
 >
-> Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+> Please stop saying you're fixing my patch. It reveals the problem, not
+> creates it.
+Okay, I would change it to:
+Fixes: 2ca653d607ce ("virtio_net: Stripe queue affinities across cores.")
 
-Applied to my xtensa tree.
+But I still need to mention your patch, because it causes the problem
+from the git bisect view. But I agree that "yours reveals the problem,
+not creates it."
+
+>
+> I have a deep rework for cpumask_next_wrap(). Will send v2 soon and CC you.
+>
+> Thanks,
+> Yury
+>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  drivers/net/virtio_net.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 7106932c6f88..e4b56523b2b5 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -2300,6 +2300,8 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
+> >
+> >                 for (j = 0; j < group_size; j++) {
+> >                         cpumask_set_cpu(cpu, mask);
+> > +                       if (cpu == (nr_cpu_ids - 1))
+> > +                               break;
+> >                         cpu = cpumask_next_wrap(cpu, cpu_online_mask,
+> >                                                 nr_cpu_ids, false);
+> >                 }
+> > --
+> > 2.36.1
+> >
+
+
 
 -- 
-Thanks.
--- Max
+Best Regards
+ Guo Ren
