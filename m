@@ -2,133 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278595FF1E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670555FF20D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiJNP7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S230047AbiJNQKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiJNP6x (ORCPT
+        with ESMTP id S229924AbiJNQKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:58:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30FB155DB2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id l22so7455003edj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XBIOqGjmdzThiZsnnbTdUiYSPQXS/qp/QRUJHndogxY=;
-        b=de2qcklml8jKYdhJlyXqmJXoz8FYGzMVRLfN9JcOUqf4UOLuKCrWZr59qwP/CI15i8
-         9ZEYt9iqHJUORqeLDasCpf2TvKXJ2eNiOMML8Fk+bz7YKFJbV57Ez3yS2OMYxbifi8aU
-         80V2z5mOPzJ5j+SPiaK/ExtA7pvzSXkVFgQy9BgPDzmgfE18Klp1ebv/IKnNb6TVl3x7
-         K0gO3P8T9E6LTR2oS1WZnI3pbS2vkD6iCSFlqd/rinFyB9u6Ftb/GsYDL097UX4vn1na
-         X5w9kGup7pabQp9pwZ84Krxhofd+fyywuWkx0d61FPGLmHqmWuc2PbVNpdjodZPMfLJV
-         6NYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XBIOqGjmdzThiZsnnbTdUiYSPQXS/qp/QRUJHndogxY=;
-        b=JeavNpwsiLzHRwV0PhhxsUWzZ1bIwGkV0HS9+eeBvvFJz65xNH2k2HkgUiW3AiBovD
-         NjFNk7VFgv9hlmHc2h+tmlOGeStYxyxK86fttydyYwQfpQO/AMCf96Ur47YxdcwFse8q
-         iQVZUSb9gfqVrvtp2wwGnBay+9YimzADvXBy7ha++4URS4WZy7trnqyami70gDaJgw7z
-         kw0cBDfOruLtqKwpzeyoNBkfJg7ldKcoWnRWetAfbx28nV/4DdGK/CAmU5wwUTw53hzu
-         x1zqVHFD1qozmHW5ZTG/bzeTzEHIp/F9L5xYiEXCQl+jONwUV66OMzrSOzjGxcdJby5a
-         yleQ==
-X-Gm-Message-State: ACrzQf04gd8vECZ8P+h2HrA+g6ysJ21ITVRDCakqzcbSEWFgo0U9M/PZ
-        bx+qKF5ckjtkwNZwhY7+/5Ixkw==
-X-Google-Smtp-Source: AMsMyM7AeOygOXkM1z/GTKaGU+3a1Uh1fQyGWBmDx0oj1luEK/7mcX83iQG4d2XLgbn9xXhJP10WDg==
-X-Received: by 2002:a05:6402:3485:b0:45c:d688:6848 with SMTP id v5-20020a056402348500b0045cd6886848mr4672473edc.279.1665763129826;
-        Fri, 14 Oct 2022 08:58:49 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170906300c00b0077a1dd3e7b7sm1746796ejz.102.2022.10.14.08.58.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 08:58:49 -0700 (PDT)
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     x86@kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
-Date:   Fri, 14 Oct 2022 17:58:45 +0200
-Message-Id: <20221014155845.1986223-3-ajones@ventanamicro.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221014155845.1986223-1-ajones@ventanamicro.com>
-References: <20221014155845.1986223-1-ajones@ventanamicro.com>
+        Fri, 14 Oct 2022 12:10:31 -0400
+X-Greylist: delayed 1059 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 Oct 2022 09:10:29 PDT
+Received: from mail.codeweavers.com (mail.codeweavers.com [65.103.31.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156B9AB815;
+        Fri, 14 Oct 2022 09:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codeweavers.com; s=6377696661; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9o7jNG3c03YDctmy+eSZhszBNJT34FJHHrtLHS3IYbU=; b=cfN07tKEK4vns5r7zxCktEL8FE
+        jK/k4vD5yriMX/9fOgmS1Ew6p/DdJxROc2wLpdjw+ZPxaZkvVDpOkrEJLVIpAK7RHfRipkvwGwt03
+        4kGTxwl5nh53caLT0AKuTHnGBWPQgPRWIgWP7plxmM2QunYa/6Rs5F1elJhnaeT7IKa8=;
+Received: from cw141ip123.vpn.codeweavers.com ([10.69.141.123])
+        by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pgofman@codeweavers.com>)
+        id 1ojMzP-00G6NC-38; Fri, 14 Oct 2022 10:52:47 -0500
+Message-ID: <5db967de-ea7e-9f35-cd74-d4cca2fcb9ee@codeweavers.com>
+Date:   Fri, 14 Oct 2022 10:52:44 -0500
 MIME-Version: 1.0
-Content-type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
+Content-Language: en-GB
+To:     Eric Dumazet <edumazet@google.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+ <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
+ <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
+From:   Paul Gofman <pgofman@codeweavers.com>
+In-Reply-To: <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 78e5a3399421 ("cpumask: fix checking valid cpu range") has
-started issuing warnings[*] when cpu indices equal to nr_cpu_ids - 1
-are passed to cpumask_next* functions. seq_read_iter() and cpuinfo's
-start and next seq operations implement a pattern like
+Hello Eric,
 
-  n = cpumask_next(n - 1, mask);
-  show(n);
-  while (1) {
-      ++n;
-      n = cpumask_next(n - 1, mask);
-      if (n >= nr_cpu_ids)
-          break;
-      show(n);
-  }
+our problem is actually not with the accept socket / port for which 
+those timeouts apply, we don't care for that temporary port number. The 
+problem is that the listen port (to which apps bind explicitly) is also 
+busy until the accept socket waits through all the necessary timeouts 
+and is fully closed. From my reading of TCP specs I don't understand why 
+it should be this way. The TCP hazards stipulating those timeouts seem 
+to apply to accept (connection) socket / port only. Shouldn't listen 
+socket's port (the only one we care about) be available for bind 
+immediately after the app stops listening on it (either due to closing 
+the listen socket or process force kill), or maybe have some other 
+timeouts not related to connected accept socket / port hazards? Or am I 
+missing something why it should be the way it is done now?
 
-which will issue the warning when reading /proc/cpuinfo. Ensure no
-warning is generated by validating the cpu index before calling
-cpumask_next().
+Thanks,
+     Paul.
 
-[*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
 
-Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-Cc: Yury Norov <yury.norov@gmail.com>
----
- arch/x86/kernel/cpu/proc.c | 3 +++
- 1 file changed, 3 insertions(+)
+On 9/30/22 10:16, Eric Dumazet wrote:
+> On Fri, Sep 30, 2022 at 6:24 AM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> Hi Eric,
+>>
+>> RFC 1337 describes the TIME-WAIT Assassination Hazards in TCP. Because
+>> of this hazard we have 60 seconds timeout in TIME_WAIT state if
+>> connection isn't closed properly. From RFC 1337:
+>>> The TIME-WAIT delay allows all old duplicate segments time
+>> enough to die in the Internet before the connection is reopened.
+>>
+>> As on localhost there is virtually no delay. I think the TIME-WAIT delay
+>> must be zero for localhost connections. I'm no expert here. On localhost
+>> there is no delay. So why should we wait for 60 seconds to mitigate a
+>> hazard which isn't there?
+> Because we do not specialize TCP stack for loopback.
+>
+> It is easy to force delays even for loopback (tc qdisc add dev lo root
+> netem ...)
+>
+> You can avoid TCP complexity (cpu costs) over loopback using AF_UNIX instead.
+>
+> TIME_WAIT sockets are optional.
+> If you do not like them, simply set /proc/sys/net/ipv4/tcp_max_tw_buckets to 0 ?
+>
+>> Zapping the sockets in TIME_WAIT and FIN_WAIT_2 does removes them. But
+>> zap is required from privileged (CAP_NET_ADMIN) process. We are having
+>> hard time finding a privileged process to do this.
+> Really, we are not going to add kludges in TCP stacks because of this reason.
+>
+>> Thanks,
+>> Usama
+>>
+>>
+>> On 5/24/22 1:18 PM, Muhammad Usama Anjum wrote:
+>>> Hello,
+>>>
+>>> We have a set of processes which talk with each other through a local
+>>> TCP socket. If the process(es) are killed (through SIGKILL) and
+>>> restarted at once, the bind() fails with EADDRINUSE error. This error
+>>> only appears if application is restarted at once without waiting for 60
+>>> seconds or more. It seems that there is some timeout of 60 seconds for
+>>> which the previous TCP connection remains alive waiting to get closed
+>>> completely. In that duration if we try to connect again, we get the error.
+>>>
+>>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
+>>> socket in a hack. But this hack cannot be added to the application
+>>> process as we don't own it.
+>>>
+>>> I've looked at the TCP connection states after killing processes in
+>>> different ways. The TCP connection ends up in 2 different states with
+>>> timeouts:
+>>>
+>>> (1) Timeout associated with FIN_WAIT_1 state which is set through
+>>> `tcp_fin_timeout` in procfs (60 seconds by default)
+>>>
+>>> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
+>>> seems like this timeout has come from RFC 1337.
+>>>
+>>> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
+>>> also doesn't seem feasible to change the timeout of TIME_WAIT state as
+>>> the RFC mentions several hazards. But we are talking about a local TCP
+>>> connection where maybe those hazards aren't applicable directly? Is it
+>>> possible to change timeout for TIME_WAIT state for only local
+>>> connections without any hazards?
+>>>
+>>> We have tested a hack where we replace timeout of TIME_WAIT state from a
+>>> value in procfs for local connections. This solves our problem and
+>>> application starts to work without any modifications to it.
+>>>
+>>> The question is that what can be the best possible solution here? Any
+>>> thoughts will be very helpful.
+>>>
+>>> Regards,
+>>>
+>> --
+>> Muhammad Usama Anjum
 
-diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index 099b6f0d96bd..de3f93ac6e49 100644
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -153,6 +153,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 
- static void *c_start(struct seq_file *m, loff_t *pos)
- {
-+	if (*pos == nr_cpu_ids)
-+		return NULL;
-+
- 	*pos = cpumask_next(*pos - 1, cpu_online_mask);
- 	if ((*pos) < nr_cpu_ids)
- 		return &cpu_data(*pos);
--- 
-2.37.3
 
