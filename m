@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA215FF66A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713185FF66D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiJNWjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S229660AbiJNWpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiJNWjp (ORCPT
+        with ESMTP id S229555AbiJNWpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:39:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342B310B3;
-        Fri, 14 Oct 2022 15:39:39 -0700 (PDT)
+        Fri, 14 Oct 2022 18:45:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9957B27CC9;
+        Fri, 14 Oct 2022 15:44:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E48E461CE1;
-        Fri, 14 Oct 2022 22:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA51C433C1;
-        Fri, 14 Oct 2022 22:39:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 588A4B82447;
+        Fri, 14 Oct 2022 22:44:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4BEC433C1;
+        Fri, 14 Oct 2022 22:44:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665787178;
-        bh=ScZ7ZpzpYCbhHr2dgKusZtqNyUk5mj5ETrqZNK3W/aA=;
+        s=k20201202; t=1665787495;
+        bh=76auTpYAGb5cdGloWPsQFXvwKjAB8wQIcC8hAOFyJ4Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IKRoMTk3ERHolXcN0xKekhjMg0NBp1WEHv9rsuu/0IMCA/UCaDojvajV92EMiC0AN
-         r8wYZnYHeumVpj9Pn3k6EMognTrdbWYoNWnWMvDFGFqb6V7l1HBasqdVLFO1jKMcdH
-         ETaLl8dwX9r6p19hSRp5v5AY10gVky2YNb1PoOLQ/MvyhPss2AUMolEf+WnnF5UpRW
-         sOaP/8kq+N5/kWnWZ6oVXBaRyzWfVJLfMKwNu3YYzKaPI6iRf/iA07mGeVt6kIKZo2
-         1HD5L7SNdD8WZoR+Yfelw11OpnVI7c58aRt/dVswBYfAnGDmhaYqV1KyIfKBayR6zT
-         SYdTsyQ6aS8uQ==
-Date:   Fri, 14 Oct 2022 15:39:35 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tom Rix <trix@redhat.com>, Xiaoming Ni <nixiaoming@huawei.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] fs/select: mark do_select noinline_for_stack
-Message-ID: <Y0nlJ6whtJuZddjr@dev-arch.thelio-3990X>
-References: <c8f87abd-9d66-40cf-bcea-e2b1388d3030@app.fastmail.com>
- <20221011205547.14553-1-ndesaulniers@google.com>
+        b=JpKcL3K2iulReMROCM55Cs+TE2+e0d+NAM+jMxEljicqOmnKqHujg5jMf6hwNw/bP
+         ATSlDOcQ5mTqZqc7zQrln7DFflbdDgzamUeSxhfunuNSTjEadOSOYlp57FcHovP4jW
+         WhZSNA6t+4jzhubRKOLhZ1nZAJTWcnTCi09ovzU0EGcbZA4nqpMpe2MbQKf0x+z/mi
+         uuCNvTa9TqpAa3ISdJh+j0qp9uePc9/5qC9UZagS5/o1Rmm8Qt5QS/d7ZX6Hf+vGbe
+         /8U3svS4kx4SEHa8vj8bKFbMaAhESTvefXV4rXo/NPDWUvRal+gVE7IrKCyYNF1rmI
+         3mVvLa35kicmw==
+Date:   Fri, 14 Oct 2022 15:44:53 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, mbenes@suse.cz
+Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
+ inactive tasks"
+Message-ID: <20221014224453.5upiioslqjzo2bow@treble>
+References: <20220727031506.59322-1-chenzhongjin@huawei.com>
+ <20220804045518.bfhe3rxhpkxzn4hk@treble>
+ <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
+ <20220804220623.a2s7ucblryudm63m@treble>
+ <a3d754f7-5dde-4adc-205a-c4c380a30372@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221011205547.14553-1-ndesaulniers@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a3d754f7-5dde-4adc-205a-c4c380a30372@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,94 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 01:55:47PM -0700, Nick Desaulniers wrote:
-> Effectively a revert of
-> commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+On Sun, Oct 09, 2022 at 11:14:05AM +0800, Chen Zhongjin wrote:
+> Hi Josh,
 > 
-> Various configs can still push the stack useage of core_sys_select()
-> over the CONFIG_FRAME_WARN threshold (1024B on 32b targets).
+> On 2022/8/5 6:06, Josh Poimboeuf wrote:
+> > On Thu, Aug 04, 2022 at 03:27:39PM +0800, Chen Zhongjin wrote:
+> > > I believe disassemble show_stack in vmlinux and if we have:
+> > > 
+> > >      push   %rbp
+> > > 
+> > >      mov    %rsp,%rbp
+> > > 
+> > >      ... (no regs pushed to stack)
+> > > 
+> > >      callq  <show_trace_log_lvl>
+> > > 
+> > > This can be reproduced.
+> > Weird, that's what I have.  This is GCC 12.1.
+> > 
+> > ffffffff81056de0 <show_stack>:
+> > ffffffff81056de0:	e8 0b 43 05 00       	call   ffffffff810ab0f0 <__fentry__>
+> > ffffffff81056de5:	55                   	push   %rbp
+> > ffffffff81056de6:	48 83 05 b2 0f c9 02 01 	addq   $0x1,0x2c90fb2(%rip)        # ffffffff83ce7da0 <__gcov0.show_stack>
+> > ffffffff81056dee:	48 89 e5             	mov    %rsp,%rbp
+> > ffffffff81056df1:	48 85 ff             	test   %rdi,%rdi
+> > ffffffff81056df4:	74 41                	je     ffffffff81056e37 <show_stack+0x57>
+> > ffffffff81056df6:	48 85 f6             	test   %rsi,%rsi
+> > ffffffff81056df9:	0f 85 c2 24 15 01    	jne    ffffffff821a92c1 <show_stack.cold+0xd>
+> > ffffffff81056dff:	65 48 8b 04 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rax
+> > ffffffff81056e08:	48 39 c7             	cmp    %rax,%rdi
+> > ffffffff81056e0b:	0f 85 a3 24 15 01    	jne    ffffffff821a92b4 <show_stack.cold>
+> > ffffffff81056e11:	48 83 05 af 0f c9 02 01 	addq   $0x1,0x2c90faf(%rip)        # ffffffff83ce7dc8 <__gcov0.show_stack+0x28>
+> > ffffffff81056e19:	48 89 ee             	mov    %rbp,%rsi
+> > ffffffff81056e1c:	48 89 d1             	mov    %rdx,%rcx
+> > ffffffff81056e1f:	48 89 f2             	mov    %rsi,%rdx
+> > ffffffff81056e22:	31 f6                	xor    %esi,%esi
+> > ffffffff81056e24:	e8 8e 20 15 01       	call   ffffffff821a8eb7 <show_trace_log_lvl>
+> > ffffffff81056e29:	48 83 05 9f 0f c9 02 01 	addq   $0x1,0x2c90f9f(%rip)        # ffffffff83ce7dd0 <__gcov0.show_stack+0x30>
+> > ffffffff81056e31:	5d                   	pop    %rbp
+> > ffffffff81056e32:	e9 49 b2 5a 01       	jmp    ffffffff82602080 <__x86_return_thunk>
+> > ffffffff81056e37:	48 83 05 69 0f c9 02 01 	addq   $0x1,0x2c90f69(%rip)        # ffffffff83ce7da8 <__gcov0.show_stack+0x8>
+> > ffffffff81056e3f:	65 48 8b 3c 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rdi
+> > ffffffff81056e48:	eb ac                	jmp    ffffffff81056df6 <show_stack+0x16>
+> > ffffffff81056e4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 > 
->   fs/select.c:619:5: error: stack frame size of 1048 bytes in function
->   'core_sys_select' [-Werror,-Wframe-larger-than=]
+> This problem still exist on my machine:
 > 
-> core_sys_select() has a large stack allocation for `stack_fds` where it
-> tries to do something equivalent to "small string optimization" to
-> potentially avoid a kmalloc.
+> CONFIG: defconfig + CONFIG_GCOV_PROFILE_ALL
 > 
-> core_sys_select() calls do_select() which has another potentially large
-> stack allocation, `table`. Both of these values depend on
-> FRONTEND_STACK_ALLOC.
+> GCC: gcc 7.5.0 & 12.1.0
 > 
-> Mix those two large allocation with register spills which are
-> exacerbated by various configs and compiler versions and we can just
-> barely exceed the 1024B limit.
+> TRIGGER:
 > 
-> Rather than keep trying to find the right value of MAX_STACK_ALLOC or
-> FRONTEND_STACK_ALLOC, mark do_select() as noinline_for_stack.
-> 
-> The intent of FRONTEND_STACK_ALLOC is to help potentially avoid a
-> dynamic memory allocation. In that spirit, restore the previous
-> threshold but separate the stack frames.
-> 
-> Many tests of various configs for different architectures and various
-> versions of GCC were performed; do_select() was never inlined into
-> core_sys_select() or compat_core_sys_select(). The kernel is built with
-> the GCC specific flag `-fconserve-stack` which can limit inlining
-> depending on per-target thresholds of callee stack size, which helps
-> avoid the issue when using GCC. Clang is being more aggressive and not
-> considering the stack size when decided whether to inline or not. We may
-> consider using the clang-16+ flag `-finline-max-stacksize=` in the
-> future.
-> 
-> Link: https://lore.kernel.org/lkml/20221006222124.aabaemy7ofop7ccz@google.com/
-> Fixes: ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> # echo l > /proc/sysrq-trigger
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Hi Chen,
 
-> ---
-> Changes v1 -> v2:
-> * Drop the 32b specific guard, since I could reproduce the no-inlining
->   w/ aarch64-linux-gnu-gcc-10 ARCH=arm64 defconfig, and per Arnd.
-> * Drop references to 32b in commit message.
-> * Add new paragraph in commit message at the end about -fconserve-stack
->   and -finline-max-stacksize=.
-> * s/malloc/kmalloc/ in commit message.
-> 
->  fs/select.c          | 1 +
->  include/linux/poll.h | 4 ----
->  2 files changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/fs/select.c b/fs/select.c
-> index 0ee55af1a55c..794e2a91b1fa 100644
-> --- a/fs/select.c
-> +++ b/fs/select.c
-> @@ -476,6 +476,7 @@ static inline void wait_key_set(poll_table *wait, unsigned long in,
->  		wait->_key |= POLLOUT_SET;
->  }
->  
-> +noinline_for_stack
->  static int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
->  {
->  	ktime_t expire, *to = NULL;
-> diff --git a/include/linux/poll.h b/include/linux/poll.h
-> index a9e0e1c2d1f2..d1ea4f3714a8 100644
-> --- a/include/linux/poll.h
-> +++ b/include/linux/poll.h
-> @@ -14,11 +14,7 @@
->  
->  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
->     additional memory. */
-> -#ifdef __clang__
-> -#define MAX_STACK_ALLOC 768
-> -#else
->  #define MAX_STACK_ALLOC 832
-> -#endif
->  #define FRONTEND_STACK_ALLOC	256
->  #define SELECT_STACK_ALLOC	FRONTEND_STACK_ALLOC
->  #define POLL_STACK_ALLOC	FRONTEND_STACK_ALLOC
-> -- 
-> 2.38.0.rc2.412.g84df46c1b4-goog
-> 
-> 
+Thanks for your patience.  I'm able to recreate now.  I still have no
+idea why I couldn't recreate before.
+
+Anyway the patch looks good.  I'll run it through some more testing.
+
+-- 
+Josh
