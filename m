@@ -2,153 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB08A5FE941
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A7F5FE949
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJNHLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S229526AbiJNHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJNHLl (ORCPT
+        with ESMTP id S229809AbiJNHPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:11:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD5F15B120
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:11:40 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ojEqm-0006Gw-HT; Fri, 14 Oct 2022 09:11:20 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3D443FDE12;
-        Fri, 14 Oct 2022 07:11:17 +0000 (UTC)
-Date:   Fri, 14 Oct 2022 09:11:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: mcan: Add support for handling DLEC error on CAN
- FD
-Message-ID: <20221014071114.a6ls5ay56xk4cin3@pengutronix.de>
-References: <CGME20221014053017epcas5p359d337008999640fa140c691f47bc79c@epcas5p3.samsung.com>
- <20221014050332.45045-1-vivek.2311@samsung.com>
+        Fri, 14 Oct 2022 03:15:06 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0C927B36;
+        Fri, 14 Oct 2022 00:14:55 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y191so4148265pfb.2;
+        Fri, 14 Oct 2022 00:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O1uTvZzh8RS2GyiFatdDCOZIfUcH2ah3khqENyTDbD8=;
+        b=CT5TyGBbuObOvfYQz4+vbt7NRdOIo78d5sbDgKK70zuwHBLcj4eLjDqLfMhqe4uZGx
+         aTxQVDUHbPk2ZuNmVtV5Symquz0zFsXSXoh2AAEwZRACnUzDg8UhztN6hzO16/yLAnsp
+         mVfSRAioiOTx7gZPhkV8DtbDuakA7ngaUNzCrZ6oan5JUd2Mx4R2Uncaptk3wssq+mtS
+         IZHoyRtXNhQqDCUJHe/dDRCmX9EDsC/1E+j+8a7/5TvbDBVGOVN1kOw9yqOaNbx9ZjLq
+         Lhq8K9wr102zyOYPzDFx8ySFHr8UaAXdsk7HeAkaDyZUTya2qW2QnP9PB+M1WuhJXXcu
+         Mz7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O1uTvZzh8RS2GyiFatdDCOZIfUcH2ah3khqENyTDbD8=;
+        b=uxlynC+DOcUeb2+5Ek1q0YqZIZgMoghUapTsQewi7ccfx/Lu8ejjfyC3EOIsXAtg7p
+         wNn/j3HRRm+6gLq2ZM9H3ujXqGP9xmIl864DzJm4yP5FOp/M+sEJWkxqlgwh53EnLfoH
+         jaY5dnjFgdkPb2uGhEJP0S17YYiQ9o46LMOUZAZq1jikZZEYPPl1XdJID9Iv9AerPqir
+         W6D0W0OHQlhsenQcGLaxHBz2Hxb/ehweGOiucpI33m/lHf8JE0Fe9mCXavwLdfphGrCW
+         KseokzfRh+5jkB3Y3PEwgb68Y+8ca0B3tekQE57Y/vwZN+tzTKvI39GhuOjkgC7/uL0+
+         ggkA==
+X-Gm-Message-State: ACrzQf1lKGFGiKlPUtmQEIBWln1+GYT1aMuAizwKfozpusI2fc5lIXqI
+        ZvZ8FDSoYrFHhXWwSwgv06oNXhmfE13FEkQx
+X-Google-Smtp-Source: AMsMyM5rpnAaPmHIoqUzmfO/5//fBOf4dPQQucAL4kzQZ1t2tSfZ85asIXufiJ0i9P5BG9Q6yov2Yg==
+X-Received: by 2002:a05:6a00:807:b0:563:136f:a4fe with SMTP id m7-20020a056a00080700b00563136fa4femr3709865pfk.36.1665731694593;
+        Fri, 14 Oct 2022 00:14:54 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id f14-20020a170902ab8e00b001783f964fe3sm981519plr.113.2022.10.14.00.14.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 00:14:53 -0700 (PDT)
+Message-ID: <2a83292b-a4d0-8d5e-b52a-31b7fcad2de6@gmail.com>
+Date:   Fri, 14 Oct 2022 15:14:47 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="auelfjaotv27cxiq"
-Content-Disposition: inline
-In-Reply-To: <20221014050332.45045-1-vivek.2311@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH 2/4] KVM: x86/pmu: Clear "reprogram" bit if counter is
+ disabled or disallowed
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20220923001355.3741194-1-seanjc@google.com>
+ <20220923001355.3741194-3-seanjc@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20220923001355.3741194-3-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For subject title, the "reprogram" bit is _only_ used to keep track of 
+pmc->perf_event,
+not whether the counter is disabled.
 
---auelfjaotv27cxiq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 23/9/2022 8:13 am, Sean Christopherson wrote:
+> When reprogramming a counter, clear the counter's "reprogram pending" bit
+> if the counter is disabled (by the guest) or is disallowed (by the
+> userspace filter).  In both cases, there's no need to re-attempt
+> programming on the next coincident KVM_REQ_PMU as enabling the counter by
+> either method will trigger reprogramming.
 
-On 14.10.2022 10:33:32, Vivek Yadav wrote:
-> When a frame in CAN FD format has reached the data phase, the next
-> CAN event (error or valid frame) will be shown in DLEC.
->=20
-> Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-> determine the type of last error that occurred in the data phase
-> of a CAN FD frame and handle the bus errors.
->=20
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
+Perhaps we could move the check_pmu_event_filter() towards the top of the call 
+stack.
+
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
-> This patch is dependent on following patch from Marc:
-> [1]: https://lore.kernel.org/all/20221012074205.691384-1-mkl@pengutronix.=
-de/
->=20
->  drivers/net/can/m_can/m_can.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 18a138fdfa66..8cff1f274aab 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -156,6 +156,7 @@ enum m_can_reg {
->  #define PSR_EW		BIT(6)
->  #define PSR_EP		BIT(5)
->  #define PSR_LEC_MASK	GENMASK(2, 0)
-> +#define PSR_DLEC_MASK   GENMASK(8, 10)
-> =20
->  /* Interrupt Register (IR) */
->  #define IR_ALL_INT	0xffffffff
-> @@ -876,8 +877,16 @@ static int m_can_handle_bus_errors(struct net_device=
- *dev, u32 irqstatus,
->  	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
->  		u8 lec =3D FIELD_GET(PSR_LEC_MASK, psr);
-> =20
-> -		if (is_lec_err(lec))
-> +		if (is_lec_err(lec)) {
->  			work_done +=3D m_can_handle_lec_err(dev, lec);
-> +		} else {
+>   arch/x86/kvm/pmu.c | 38 ++++++++++++++++++++++++--------------
+>   1 file changed, 24 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 4504987cbbe2..4cd99320019b 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -150,9 +150,9 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
+>   	__kvm_perf_overflow(pmc, true);
+>   }
+>   
+> -static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+> -				  u64 config, bool exclude_user,
+> -				  bool exclude_kernel, bool intr)
+> +static int pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type, u64 config,
+> +				 bool exclude_user, bool exclude_kernel,
+> +				 bool intr)
+>   {
+>   	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+>   	struct perf_event *event;
+> @@ -204,14 +204,14 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>   	if (IS_ERR(event)) {
+>   		pr_debug_ratelimited("kvm_pmu: event creation failed %ld for pmc->idx = %d\n",
+>   			    PTR_ERR(event), pmc->idx);
+> -		return;
+> +		return PTR_ERR(event);
+>   	}
+>   
+>   	pmc->perf_event = event;
+>   	pmc_to_pmu(pmc)->event_count++;
+> -	clear_bit(pmc->idx, pmc_to_pmu(pmc)->reprogram_pmi);
+>   	pmc->is_paused = false;
+>   	pmc->intr = intr || pebs;
+> +	return 0;
+>   }
+>   
+>   static void pmc_pause_counter(struct kvm_pmc *pmc)
+> @@ -245,7 +245,6 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
+>   	perf_event_enable(pmc->perf_event);
+>   	pmc->is_paused = false;
+>   
+> -	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
 
-In case of high interrupt latency there might be lec and dlec errors
-pending. As this is error handling and not the hot path, please check
-for both, i.e.:
+This change is very suspicious.
 
-                if (is_lec_err(lec))
-                        work_done +=3D m_can_handle_lec_err(dev, lec);
-
-                if (is_lec_err(dlec))
-                        work_done +=3D m_can_handle_lec_err(dev, dlec);
-
-> +			u8 dlec =3D FIELD_GET(PSR_DLEC_MASK, psr);
+>   	return true;
+>   }
+>   
+> @@ -303,10 +302,10 @@ void reprogram_counter(struct kvm_pmc *pmc)
+>   	pmc_pause_counter(pmc);
+>   
+>   	if (!pmc_speculative_in_use(pmc) || !pmc_is_enabled(pmc))
+> -		return;
+> +		goto reprogram_complete;
+>   
+>   	if (!check_pmu_event_filter(pmc))
+> -		return;
+> +		goto reprogram_complete;
+>   
+>   	if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+>   		printk_once("kvm pmu: pin control bit is ignored\n");
+> @@ -324,16 +323,27 @@ void reprogram_counter(struct kvm_pmc *pmc)
+>   	}
+>   
+>   	if (pmc->current_config == new_config && pmc_resume_counter(pmc))
+> -		return;
+> +		goto reprogram_complete;
+>   
+>   	pmc_release_perf_event(pmc);
+>   
+>   	pmc->current_config = new_config;
+> -	pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
+> -			      (eventsel & pmu->raw_event_mask),
+> -			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+> -			      !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
+> -			      eventsel & ARCH_PERFMON_EVENTSEL_INT);
 > +
-> +			if (is_lec_err(dlec)) {
-> +				netdev_dbg(dev, "Data phase error detected\n");
+> +	/*
+> +	 * If reprogramming fails, e.g. due to contention, leave the counter's
+> +	 * regprogram bit set, i.e. opportunistically try again on the next PMU
 
-If you add a debug, please add one for the Arbitration phase, too.
+This is what we need, in the upstream case we need to keep trying regprogram
+to try to occupy the hardware.
 
-> +				work_done +=3D m_can_handle_lec_err(dev, dlec);
-> +			}
-> +		}
->  	}
-> =20
->  	/* handle protocol errors in arbitration phase */
+> +	 * refresh.  Don't make a new request as doing so can stall the guest
+> +	 * if reprogramming repeatedly fails.
 
-regards,
-Marc
+This does not happen, the guest still enters w/p perf_event backend support
+and the vPMU is broken until the next vm-exit.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+There is no need to endlessly call kvm_pmu_handle_event() when reprogram fails.
 
---auelfjaotv27cxiq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNJC5AACgkQrX5LkNig
-012inQgAqQAHXULDQgDxLcGMMPHf9Vc3xfSIeMCKvDX3RUBDNygZ0JYa3OO0xBBX
-pOmqPmXTJqHCnvzbNIS0D3GqfnITBx2fNfkTT/h4TLYcBCTICtMiKEdG4Kihr1o8
-OkEFSaq43m+0kwDVpRRQFGsRezCphHlSGoAsHrA07udvncLLmWpaktNwB/KXcy1w
-PoltReQJGwDVA5stJh6lpYpX3rSvFg2K6lOYnMuCOEKUYkM+vilenXw2k/PJQ+qh
-EbxayxkqAWJqwNbD48a2aqcsGzl3z5gTf6LnRemJ7FgYk8uN2r9mG+Qa7AKxHIW+
-YeX5J7PmPWPtXN80OOx1nXUUOHd7gA==
-=2FT1
------END PGP SIGNATURE-----
-
---auelfjaotv27cxiq--
+> +	 */
+> +	if (pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
+> +				  (eventsel & pmu->raw_event_mask),
+> +				  !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+> +				  !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
+> +				  eventsel & ARCH_PERFMON_EVENTSEL_INT))
+> +		return;
+> +
+> +reprogram_complete:
+> +	clear_bit(pmc->idx, (unsigned long *)&pmc_to_pmu(pmc)->reprogram_pmi);
+>   }
+>   EXPORT_SYMBOL_GPL(reprogram_counter);
+>   
