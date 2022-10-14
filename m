@@ -2,155 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A175FF523
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D82D5FF525
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 23:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiJNVSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 17:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S229818AbiJNVTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 17:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJNVSK (ORCPT
+        with ESMTP id S229776AbiJNVS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:18:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DDAF88EE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 14:18:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 14 Oct 2022 17:18:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A581D0658;
+        Fri, 14 Oct 2022 14:18:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 232BB61B8D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C5EC433C1;
-        Fri, 14 Oct 2022 21:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665782288;
-        bh=J6PgskZaAY1qyGHi1l6L6dU7ZAigdju+rA7uW8rvJK0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NwXHMijSjb74jNvLdzhT4c+M0NTILDkkhwY1rh1MZwqVvxOoDiIClA8F9b6uN8zsQ
-         RrufGW9bGPu17NRSqJyM/Apv6sGywatUPt4w+r7jSGECot2Njyl8+5vdZ7IDRgQfao
-         jpS8pGDS4NJV9MQrTu7tcAZcF7o63jjYUqu7TSCYu4YUOBgugkE5hDfcqrTYgzPpxH
-         EuxS97FL2NY1riU9ZqbsrA3APgt7zEg0lWXP5y6LGcFevg5BoQ+x4b1EpSLUXhHNiJ
-         WgJQ0tdAI+ID1ar20Fi5RYccfExXmf3kawsjGNNqU3lGPdz2DwGPClU1m85oL1RsfE
-         kHEQz383xLBTw==
-Date:   Fri, 14 Oct 2022 14:18:06 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 1/4] ARM: remove lazy evaluation in Makefile
-Message-ID: <Y0nSDuEumerVwyHT@dev-arch.thelio-3990X>
-References: <20221014201354.3190007-1-ndesaulniers@google.com>
- <20221014201354.3190007-2-ndesaulniers@google.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0D387221B9;
+        Fri, 14 Oct 2022 21:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665782335;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+TCaQ540EPlXNGS4Chc6NGWohA+QlBQOvH68/+BJkiI=;
+        b=m50QE4YrHygzGZ2j/DIhUrQmESWB6sam+JX02SMDHdGwaov1wayXLw7lWSxkkCE59JcS9G
+        NoMGqF+GNd8UDta50o3dIjeJDBcs/NwPhyP1xI3ompnAHKqM2FzFRf7t0IoM1RVLpH1h7e
+        oBo3RUE37sw8DRwkoE2WbLYUMToonUI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665782335;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+TCaQ540EPlXNGS4Chc6NGWohA+QlBQOvH68/+BJkiI=;
+        b=LQpPIxNTgWdJf1BCjIbWMx3jzZE8usWU93KNFlfC3D7y301yPbx+QteyRoW2CdhFmgMYzC
+        EzgDpZr0zFN2/KDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D247113A4A;
+        Fri, 14 Oct 2022 21:18:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HzukMT7SSWPafQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Fri, 14 Oct 2022 21:18:54 +0000
+Date:   Fri, 14 Oct 2022 23:18:47 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild: fix single directory build
+Message-ID: <20221014211847.GL13389@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20221014201811.1118103-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221014201354.3190007-2-ndesaulniers@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221014201811.1118103-1-masahiroy@kernel.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 01:13:51PM -0700, Nick Desaulniers wrote:
-> arch-y and tune-y used lazy evaluation since they used to contain
-> cc-option checks. They don't any longer, so just eagerly evaluate these
-> command line flags.
+On Sat, Oct 15, 2022 at 05:18:11AM +0900, Masahiro Yamada wrote:
+> Commit f110e5a250e3 ("kbuild: refactor single builds of *.ko") was wrong.
 > 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> KBUILD_MODULES _is_ needed for single builds.
+> 
+> Otherwise, "make foo/bar/baz/" does not build module objects at all.
+> 
+> Fixes: f110e5a250e3 ("kbuild: refactor single builds of *.ko")
+> Reported-by: David Sterba <dsterba@suse.cz>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Now it works, thanks.
 
-> ---
-> No change from v3.
-> 
->  arch/arm/Makefile | 60 +++++++++++++++++++++--------------------------
->  1 file changed, 27 insertions(+), 33 deletions(-)
-> 
-> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> index c846119c448f..8dd943b50b7d 100644
-> --- a/arch/arm/Makefile
-> +++ b/arch/arm/Makefile
-> @@ -63,44 +63,38 @@ KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
->  # Note that GCC does not numerically define an architecture version
->  # macro, but instead defines a whole series of macros which makes
->  # testing for a specific architecture or later rather impossible.
-> -arch-$(CONFIG_CPU_32v7M)	=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
-> -arch-$(CONFIG_CPU_32v7)		=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
-> -arch-$(CONFIG_CPU_32v6)		=-D__LINUX_ARM_ARCH__=6 -march=armv6
-> -# Only override the compiler option if ARMv6. The ARMv6K extensions are
-> +arch-$(CONFIG_CPU_32v7M)	:=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
-> +arch-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
-> +arch-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6 -march=armv6
-> +# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
->  # always available in ARMv7
->  ifeq ($(CONFIG_CPU_32v6),y)
-> -arch-$(CONFIG_CPU_32v6K)	=-D__LINUX_ARM_ARCH__=6 -march=armv6k
-> +arch-$(CONFIG_CPU_32v6K)	:=-D__LINUX_ARM_ARCH__=6 -march=armv6k
->  endif
-> -arch-$(CONFIG_CPU_32v5)		=-D__LINUX_ARM_ARCH__=5 -march=armv5te
-> -arch-$(CONFIG_CPU_32v4T)	=-D__LINUX_ARM_ARCH__=4 -march=armv4t
-> -arch-$(CONFIG_CPU_32v4)		=-D__LINUX_ARM_ARCH__=4 -march=armv4
-> -arch-$(CONFIG_CPU_32v3)		=-D__LINUX_ARM_ARCH__=3 -march=armv3m
-> -
-> -# Evaluate arch cc-option calls now
-> -arch-y := $(arch-y)
-> +arch-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5 -march=armv5te
-> +arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
-> +arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
-> +arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3m
->  
->  # This selects how we optimise for the processor.
-> -tune-$(CONFIG_CPU_ARM7TDMI)	=-mtune=arm7tdmi
-> -tune-$(CONFIG_CPU_ARM720T)	=-mtune=arm7tdmi
-> -tune-$(CONFIG_CPU_ARM740T)	=-mtune=arm7tdmi
-> -tune-$(CONFIG_CPU_ARM9TDMI)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_ARM940T)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_ARM946E)	=-mtune=arm9e
-> -tune-$(CONFIG_CPU_ARM920T)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_ARM922T)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_ARM925T)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_ARM926T)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_FA526)	=-mtune=arm9tdmi
-> -tune-$(CONFIG_CPU_SA110)	=-mtune=strongarm110
-> -tune-$(CONFIG_CPU_SA1100)	=-mtune=strongarm1100
-> -tune-$(CONFIG_CPU_XSCALE)	=-mtune=xscale
-> -tune-$(CONFIG_CPU_XSC3)		=-mtune=xscale
-> -tune-$(CONFIG_CPU_FEROCEON)	=-mtune=xscale
-> -tune-$(CONFIG_CPU_V6)		=-mtune=arm1136j-s
-> -tune-$(CONFIG_CPU_V6K)		=-mtune=arm1136j-s
-> -
-> -# Evaluate tune cc-option calls now
-> -tune-y := $(tune-y)
-> +tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
-> +tune-$(CONFIG_CPU_ARM720T)	:=-mtune=arm7tdmi
-> +tune-$(CONFIG_CPU_ARM740T)	:=-mtune=arm7tdmi
-> +tune-$(CONFIG_CPU_ARM9TDMI)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_ARM940T)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_ARM946E)	:=-mtune=arm9e
-> +tune-$(CONFIG_CPU_ARM920T)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_ARM922T)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_ARM925T)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_ARM926T)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_FA526)	:=-mtune=arm9tdmi
-> +tune-$(CONFIG_CPU_SA110)	:=-mtune=strongarm110
-> +tune-$(CONFIG_CPU_SA1100)	:=-mtune=strongarm1100
-> +tune-$(CONFIG_CPU_XSCALE)	:=-mtune=xscale
-> +tune-$(CONFIG_CPU_XSC3)		:=-mtune=xscale
-> +tune-$(CONFIG_CPU_FEROCEON)	:=-mtune=xscale
-> +tune-$(CONFIG_CPU_V6)		:=-mtune=arm1136j-s
-> +tune-$(CONFIG_CPU_V6K)		:=-mtune=arm1136j-s
->  
->  ifeq ($(CONFIG_AEABI),y)
->  CFLAGS_ABI	:=-mabi=aapcs-linux -mfpu=vfp
-> -- 
-> 2.38.0.413.g74048e4d9e-goog
-> 
-> 
+Tested-by: David Sterba <dsterba@suse.com>
