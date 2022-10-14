@@ -2,148 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00F85FEC7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE8E5FEC80
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 12:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiJNKX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 06:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S229711AbiJNKXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 06:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJNKXX (ORCPT
+        with ESMTP id S229941AbiJNKXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 06:23:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A771B94F6;
-        Fri, 14 Oct 2022 03:23:22 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E8n8gZ019889;
-        Fri, 14 Oct 2022 10:23:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=+Tc/cMUkzTByyEsg83d7vZewE4VUEPsxjgIkOw2fU54=;
- b=P7tZfxzJ6zp2GXi5BrvRzhjttm5qkmGyBjsEGStjK1LQ0NL0KakvcEKmkcBRsthxAlid
- czmTSDlMF3QkDfpclMiFD2lhZDTtp3vdhhTrK8v9NLeOnr0rcy6f2kzcRazz0IYlQcDd
- Dqf+EMcmu6HqNDO2nIdRh6mNOL/KGWlU6qfLZjnGvr+Lvjg7QXHCSRsM6wZHNsuDkeDA
- 7PTgovQpuu5S/jydv19IxBgnQQfZAhCLTFBY/nwW7QtOi2dJ/w0LbO0JtbFEhhvtQJDQ
- TfjLDmJOp5/ogc7wvhe0A0LmIjfT8NXUkxK3XT7BzGAufsVnpfevQ/NTc7sQWBxow4PP 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6gp9mqcf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 10:23:14 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29E9nqwg027530;
-        Fri, 14 Oct 2022 10:23:14 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k6gp9mqc1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 10:23:13 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29EAMCTQ017841;
-        Fri, 14 Oct 2022 10:23:13 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma05wdc.us.ibm.com with ESMTP id 3k30ub5crk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 10:23:13 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com ([9.208.128.117])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29EANCMr31392056
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Oct 2022 10:23:12 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA84C5805F;
-        Fri, 14 Oct 2022 10:23:11 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AD50A5805D;
-        Fri, 14 Oct 2022 10:23:10 +0000 (GMT)
-Received: from sig-9-65-219-75.ibm.com (unknown [9.65.219.75])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 14 Oct 2022 10:23:10 +0000 (GMT)
-Message-ID: <16fe5265c49fcecdf613fe9dd660efe4ae8d452e.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Yael Tzur <yaelt@google.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 14 Oct 2022 06:23:10 -0400
-In-Reply-To: <c620d6ed-d97f-b0c3-574-7b3cd63a7799@vosn.de>
-References: <20221013064308.857011E25@mail.steuer-voss.de>
-         <924a29d81cc7e0d3e2f62f693a0d8fcef97b9779.camel@linux.ibm.com>
-         <c620d6ed-d97f-b0c3-574-7b3cd63a7799@vosn.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: J9F-lBxyfXNuPscWtBesfjrAt0Hnhy89
-X-Proofpoint-GUID: tBV-CueVSP4l9j6rEgLkNaSESiEGt8wE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_05,2022-10-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 clxscore=1015
- malwarescore=0 phishscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210140058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 06:23:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBE7A1C7138
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 03:23:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3ACD213D5;
+        Fri, 14 Oct 2022 03:23:39 -0700 (PDT)
+Received: from [10.57.5.134] (unknown [10.57.5.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FF733F67D;
+        Fri, 14 Oct 2022 03:23:31 -0700 (PDT)
+Message-ID: <71fb875f-5884-cbc6-534f-6ba72167bf6a@arm.com>
+Date:   Fri, 14 Oct 2022 11:23:25 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 5/5] iommu/sun50i: Invalidate iova in map and unmap
+ callback
+Content-Language: en-GB
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>, maxime@cerno.tech,
+        joro@8bytes.org, will@kernel.org, wens@csie.org,
+        samuel@sholland.org
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221013181221.3247429-1-jernej.skrabec@gmail.com>
+ <20221013181221.3247429-7-jernej.skrabec@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221013181221.3247429-7-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-14 at 08:40 +0200, Nikolaus Voss wrote:
-> On Thu, 13 Oct 2022, Mimi Zohar wrote:
-> > On Thu, 2022-10-13 at 08:39 +0200, Nikolaus Voss wrote:
-> >> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> >> decrypted data") added key instantiation with user provided decrypted data.
-> >> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> >> Fix this to use hex2bin instead.
-> >>
-> >> Old keys created from user provided decrypted data saved with "keyctl pipe"
-> >> are still valid, however if the key is recreated from decrypted data the
-> >> old key must be converted to the correct format. This can be done with a
-> >> small shell script, e.g.:
-> >>
-> >> BROKENKEY=abcdefABCDEF1234567890aaaaaaaaaa
-> >> NEWKEY=$(echo -ne $BROKENKEY | xxd -p -c32)
-> >> keyctl add user masterkey "$(cat masterkey.bin)" @u
-> >> keyctl add encrypted testkey "new user:masterkey 32 $NEWKEY" @u
-> >>
-> >> It is encouraged to switch to a new key because the effective key size
-> >> of the old keys is only half of the specified size.
-> >
-> > Both the old and new decrypted data size is 32 bytes.  Is the above
-> > statement necessary, especially since the Documentation example does
-> > the equivalent?
+On 2022-10-13 19:12, Jernej Skrabec wrote:
+> Mapped and unmapped iova addresses needs to be invalidated immediately
+> or otherwise they might or might not work when used by master or CPU.
 > 
-> The old key has the same byte size but all bytes must be within the 
-> hex-ascíi range of characters, otherwise it is refused by the kernel.
-> So if you wanted a 32 bytes key you get 16 effective bytes for the key. 
-> In the above example the string size of the $BROKENKEY is 32, while 
-> the string size of the $NEWKEY is 64.
+> This was discovered when running video decoder conformity test with
+> Cedrus. Some videos were now and then decoded incorrectly and generated
+> page faults.
 > 
-> If you do
+> Fixes: 4100b8c229b3 ("iommu: Add Allwinner H6 IOMMU driver")
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> ---
+>   drivers/iommu/sun50i-iommu.c | 51 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 51 insertions(+)
 > 
-> $ echo $NEWKEY
-> 6162636465664142434445463132333435363738393061616161616161616161
-> 
-> for the example, the range problem is obvious, so $NEWKEY is still broken. 
-> That's why it should only be used to recover data which should be 
-> reencypted with a new key. If you count exactly, the effective key size is 
-> _slightly_ longer than half of the specified size, but it is still a 
-> severe security problem.
+> diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
+> index 7c3b2ac552da..21e47ce6946a 100644
+> --- a/drivers/iommu/sun50i-iommu.c
+> +++ b/drivers/iommu/sun50i-iommu.c
+> @@ -518,6 +518,53 @@ static u32 *sun50i_dte_get_page_table(struct sun50i_iommu_domain *sun50i_domain,
+>   	return page_table;
+>   }
+>   
+> +static void sun50i_iommu_zap_iova(struct sun50i_iommu *iommu, unsigned long iova)
+> +{
+> +	unsigned long flags;
+> +	u32 reg;
+> +	int ret;
+> +
+> +	spin_lock_irqsave(&iommu->iommu_lock, flags);
+> +
+> +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, 0);
+> +
+> +	iommu_write(iommu, IOMMU_TLB_IVLD_ADDR_REG, iova);
+> +	iommu_write(iommu, IOMMU_TLB_IVLD_ADDR_MASK_REG, GENMASK(11, 0));
+> +	iommu_write(iommu, IOMMU_TLB_IVLD_ENABLE_REG, IOMMU_TLB_IVLD_ENABLE_ENABLE);
+> +
+> +	ret = readl_poll_timeout_atomic(iommu->base + IOMMU_TLB_IVLD_ENABLE_REG,
+> +					reg, !reg, 1, 2000);
+> +	if (ret)
+> +		dev_warn(iommu->dev, "TLB invalidation timed out!\n");
+> +
+> +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, IOMMU_AUTO_GATING_ENABLE);
+> +
+> +	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
+> +}
+> +
+> +static void sun50i_iommu_zap_ptw_cache(struct sun50i_iommu *iommu, unsigned long iova)
+> +{
+> +	unsigned long flags;
+> +	u32 reg;
+> +	int ret;
+> +
+> +	spin_lock_irqsave(&iommu->iommu_lock, flags);
+> +
+> +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, 0);
+> +
+> +	iommu_write(iommu, IOMMU_PC_IVLD_ADDR_REG, iova);
+> +	iommu_write(iommu, IOMMU_PC_IVLD_ENABLE_REG, IOMMU_PC_IVLD_ENABLE_ENABLE);
+> +
+> +	ret = readl_poll_timeout_atomic(iommu->base + IOMMU_PC_IVLD_ENABLE_REG,
+> +					reg, !reg, 1, 2000);
+> +	if (ret)
+> +		dev_warn(iommu->dev, "PTW cache invalidation timed out!\n");
+> +
+> +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, IOMMU_AUTO_GATING_ENABLE);
+> +
+> +	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
+> +}
+> +
+>   static int sun50i_iommu_map(struct iommu_domain *domain, unsigned long iova,
+>   			    phys_addr_t paddr, size_t size, int prot, gfp_t gfp)
+>   {
+> @@ -546,6 +593,8 @@ static int sun50i_iommu_map(struct iommu_domain *domain, unsigned long iova,
+>   
+>   	*pte_addr = sun50i_mk_pte(paddr, prot);
+>   	sun50i_table_flush(sun50i_domain, pte_addr, 1);
+> +	sun50i_iommu_zap_iova(iommu, iova);
+> +	sun50i_iommu_zap_ptw_cache(iommu, iova);
 
-So the issue with NEWKEY isn't the "effective key size of the old keys
-is only half of the specified size", but that the old key, itself, is
-limited to the hex-ascii range of characters.
+Consider hooking up .sync_map if you need that behaviour. I'd guess the 
+address/mask combination allows invalidating multiple pages at once, 
+which would be a heck of a lot more efficient.
 
-Mimi
+In principle we probably shouldn't need walk cache maintenance for just 
+changing leaf entries, so that could perhaps be pushed further down into 
+sun50i_dte_get_page_table().
 
+>   out:
+>   	return ret;
+> @@ -571,6 +620,8 @@ static size_t sun50i_iommu_unmap(struct iommu_domain *domain, unsigned long iova
+>   
+>   	memset(pte_addr, 0, sizeof(*pte_addr));
+>   	sun50i_table_flush(sun50i_domain, pte_addr, 1);
+> +	sun50i_iommu_zap_iova(sun50i_domain->iommu, iova);
+> +	sun50i_iommu_zap_ptw_cache(sun50i_domain->iommu, iova);
+
+Hmm, we already have .iotlb_sync hooked up for this, so at best adding 
+more maintenance here is simply redundant, but at worst it would be 
+papering over some bug in sun50i_iommu_iotlb_sync() - if unmaps really 
+aren't working properly then that wants fixing instead. Of course it 
+could also be enhanced to use the gather mechanism to perform more 
+selective invalidations, but that's another patch in its own right.
+
+Thanks,
+Robin.
+
+>   
+>   	return SZ_4K;
+>   }
