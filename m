@@ -2,188 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B6A5FEDAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B265FEDB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiJNL4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S230026AbiJNL7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiJNL4p (ORCPT
+        with ESMTP id S229607AbiJNL7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:56:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E070B15627D;
-        Fri, 14 Oct 2022 04:56:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 926CA13D5;
-        Fri, 14 Oct 2022 04:56:49 -0700 (PDT)
-Received: from bogus (unknown [10.57.35.221])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 259563F792;
-        Fri, 14 Oct 2022 04:56:41 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 12:56:39 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     YaxiongTian <iambestgod@outlook.com>, iambestgod@qq.com,
-        james.quinlan@broadcom.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tianyaxiong@kylinos.cn
-Subject: Re: [PATCH -next 1/1] firmware: arm_scmi: Fix possible deadlock in
- shmem_tx_prepare()
-Message-ID: <20221014115639.waexbqi4vxbu6rxv@bogus>
-References: <Y0V6Q7ZJ3GjBwWub@e120937-lin>
- <KL1PR01MB3510AD021B2258CB789466E3D5259@KL1PR01MB3510.apcprd01.prod.exchangelabs.com>
- <Y0g2d/pw6yCoA3Nc@e120937-lin>
+        Fri, 14 Oct 2022 07:59:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0791E644E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665748780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uu1ydqkQUNoqd4AjsuOOEhP4tSswrWwn//sbux1y4Xk=;
+        b=bcJpkuY1MR9BA70fVhMuTUI85tzP85v8rLKT/caeuJJTgTo/lF8lF7HIB3dQunL7G6Czq4
+        GLNs5hyofusThTeZSuB8/pGxZ7YVaW9BoN+bauzUe+5rnCJ4RwgU1s9oYcDHcnbOaP2YQZ
+        gbrXx8DKPqdlJChAgnQ+UPiHRHq7yT4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-527-_9CgREcVOkmkYuTZifMKiA-1; Fri, 14 Oct 2022 07:59:38 -0400
+X-MC-Unique: _9CgREcVOkmkYuTZifMKiA-1
+Received: by mail-wr1-f69.google.com with SMTP id s5-20020adf9785000000b0022e1af0e7e8so1902378wrb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:59:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uu1ydqkQUNoqd4AjsuOOEhP4tSswrWwn//sbux1y4Xk=;
+        b=4WpEuzYdMlHMxpI/7bo4KA4YBBeew2rS1XkDj9ISbeWvXG+7Z6w8NYtyjIoFM0Fh+r
+         SLSthg5syE3Q2G1mKNsPxIqG9ntNTR68Ztk7E2oTE3towwl/RGPAUocLD00n7WmwoTnM
+         Kd7+ROk7SGeWliDo/c6t+UjaVfejJer98UhHyW4xEuAO8TJjLwZetudPl4v452FJEDP3
+         /Kdh6ZOT4h3uO2Ev/qPdLBx0IXKuXgR9W+7ybrBXVbNi9fMZsjTjPLpCrNSm6W4Bcsh4
+         W0IREBXe8iaKw33c/sEoH4SxV6A1l52TWPYzWzRP+OwESJWIYOaokjKyhGyXbM1ji/oF
+         OweQ==
+X-Gm-Message-State: ACrzQf3l3uB53FYOZpyvDjPe6TB9omb9OJ4ACcCmnGiKQz1kZo7fUJQL
+        RjuhYMW8cRZSgBBLReE8083kk8faT1jlKePw++oQ4pUQdSHDlfzMjpMTnbx6djuEmOg0K86GZ+e
+        +GQDnxKBNPfMHXM3mwO0/52P60q6jg1/bEhiwXJIn
+X-Received: by 2002:a05:600c:4ed4:b0:3c6:e26d:7f5a with SMTP id g20-20020a05600c4ed400b003c6e26d7f5amr3341350wmq.166.1665748777639;
+        Fri, 14 Oct 2022 04:59:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6VkcidPD00XeVGxo5EzU5OXFuhrDWzkM7DNfR1RdP3sRMB84zjVhzTUKaBFpDIM1DX4DqrnNs9nm9FHqWn4BU=
+X-Received: by 2002:a05:600c:4ed4:b0:3c6:e26d:7f5a with SMTP id
+ g20-20020a05600c4ed400b003c6e26d7f5amr3341338wmq.166.1665748777466; Fri, 14
+ Oct 2022 04:59:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y0g2d/pw6yCoA3Nc@e120937-lin>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221011145413.8025-1-aahringo@redhat.com> <931c87d8-5856-e393-7108-66275ee4099a@suse.cz>
+In-Reply-To: <931c87d8-5856-e393-7108-66275ee4099a@suse.cz>
+From:   Alexander Aring <aahringo@redhat.com>
+Date:   Fri, 14 Oct 2022 07:59:26 -0400
+Message-ID: <CAK-6q+ho0+mDP08yXvg7vupC-+GdUUY4zUHdfwU_7Q=B2VbQ-Q@mail.gmail.com>
+Subject: Re: [PATCHv2] mm: slab: comment __GFP_ZERO case for kmem_cache_alloc
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 05:02:15PM +0100, Cristian Marussi wrote:
-> On Thu, Oct 13, 2022 at 03:05:43PM +0800, YaxiongTian wrote:
-> > Hi Cristian
-> > 
-> > �� There may be a problem with my qq email client, � I don't see my mail in
-> > the
-> > 
-> > communityI had to switch outlook email.Forgive me if you've received
-> > multiple emails.
-> > 
-> No worries.
-> 
-> > >Problem is anyway, as you said, you'll have to pick this timeout from the
-> > >related transport scmi_desc (even if as of now the max_rx_timeout for
-> > >all existent shared mem transport is the same..) and this means anyway
-> > >adding more complexity to the chain of calls to just to print a warn of
-> > >some kind in a rare error-situation from which you cannot recover anyway.
-> > 
-> > � Yes,it has add more complexity about Monitorring this time.For system
-> > stability,the safest thing to do is to abort the transmission.But this will
-> > lose performance due to more complexity in such unusual situation.
-> > 
-> > >Due to other unrelated discussions, I was starting to think about
-> > >exposing some debug-only (Kconfig dependent) SCMI stats like timeouts,
-> > errors,
-> > >unpexpected/OoO/late_replies in order to ease the debug and monitoring
-> > >of the health of a running SCMI stack: maybe this could be a place where
-> > >to flag this FW issues without changing the spinloop above (or
-> > >to add the kind of timeout you mentioned but only when some sort of
-> > >CONFIG_SCMI_DEBUG is enabled...)...still to fully think it through, though.
-> > 
-> > � I think it should active report warn or err rather than user queries the
-> > information manually.(i.e fs_debug way).Becasue in system startup\S1\S3\S4,
-> > user can not queries this flag in Fw,they need get stuck message
-> > immediately.
-> > 
-> 
-> Looking more closely at this, I experimented a bit with an SCMI stack based on
-> mailbox transport in which I had forcefully set the spin_until_cond() to
-> spin forever.
-> 
-> Even though on a normal SCMI system when the SCMI stack fails at boot
-> the system is supposed to boot anyway (maybe slower), this particular
-> failure in TX path led indeed to a system that does not boot at all and
-> spits out an infinite sequence of:
-> 
-> [ 2924.499486] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> [ 2924.505596] rcu:     2-...0: (0 ticks this GP) idle=1be4/1/0x4000000000000000 softirq=50/50 fqs=364757
-> [ 2924.514672]  (detected by 4, t=730678 jiffies, g=-1119, q=134 ncpus=6)
-> [ 2924.521215] Task dump for CPU 2:
-> [ 2924.524445] task:kworker/u12:0   state:R  running task     stack:    0 pid:    9 ppid:     2 flags:0x0000000a
-> [ 2924.534391] Workqueue: events_unbound deferred_probe_work_func
-> [ 2924.540244] Call trace:
-> [ 2924.542691]  __switch_to+0xe4/0x1b8
-> [ 2924.546189]  deferred_probe_work_func+0xa4/0xf8
-> [ 2924.550731]  process_one_work+0x208/0x480
-> [ 2924.554754]  worker_thread+0x230/0x428
-> [ 2924.558514]  kthread+0x114/0x120
-> [ 2924.561752]  ret_from_fork+0x10/0x20
-> 
-> I imagine this is the annoying thing you want to avoid.
-> 
-> So experimenting a bit with a patch similar to yours (ignoring the timeout
-> config issues and using the static cnt to temporarily stuck and revive the SCMI
-> transport)
-> 
-> ------>8-----
-> diff --git a/drivers/firmware/arm_scmi/shmem.c b/drivers/firmware/arm_scmi/shmem.c
-> index 0e3eaea5d852..6dde669abd03 100644
-> --- a/drivers/firmware/arm_scmi/shmem.c
-> +++ b/drivers/firmware/arm_scmi/shmem.c
-> @@ -8,6 +8,7 @@
->  #include <linux/io.h>
->  #include <linux/processor.h>
->  #include <linux/types.h>
->  
->  #include "common.h"
->  
-> @@ -29,17 +30,28 @@ struct scmi_shared_mem {
->         u8 msg_payload[];
->  };
->  
-> +static int cnt = 50;
->  void shmem_tx_prepare(struct scmi_shared_mem __iomem *shmem,
->                       struct scmi_xfer *xfer)
->  {
-> +       ktime_t stop;
-> +
->         /*
->          * Ideally channel must be free by now unless OS timeout last
->          * request and platform continued to process the same, wait
->          * until it releases the shared memory, otherwise we may endup
->          * overwriting its response with new message payload or vice-versa
->          */
-> -       spin_until_cond(ioread32(&shmem->channel_status) &
-> -                       SCMI_SHMEM_CHAN_STAT_CHANNEL_FREE);
-> +       stop = ktime_add_ms(ktime_get(), 35);
-> +       spin_until_cond(((--cnt > 0) && ioread32(&shmem->channel_status) &
-> +                       SCMI_SHMEM_CHAN_STAT_CHANNEL_FREE) ||
-> +                       ktime_after(ktime_get(), stop));
-> +       if (ktime_after(ktime_get(), stop)) {
-> +               pr_warn_once("TX Timeout !\n");
-> +               cnt = 10;
-> +               return;
-> +       }
-> +
->         /* Mark channel busy + clear error */
->         iowrite32(0x0, &shmem->channel_status);
->         iowrite32(xfer->hdr.poll_completion ? 0 : SCMI_SHMEM_FLAG_INTR_ENABLED,
-> ----8<-------------
-> 
-> With the above I had in fact a system that could boot even with a
-> failing/stuck SCMI transport, but, as expected the SCMI stack
-> functionality was totally compromised after the first timeout with no
-> possibility to recover.
-> 
-> Moreover I was thinking at what could happen if later on after boot the
-> SCMI server should end in some funny/hogged condition so that it is,
-> only temporarily, a bit slower to answer and release the channel: with
-> the current implemenation the Kernel agent will spin just a little bit
-> more waiting for the channel to be freed and then everything carries
-> without much hassle, while with this possible new timing-out solution
-> we could end up dropping that transmission and compromising the whole
-> transport fucntionality for all the subsequent transmissions.
-> 
-> So, again, I'm not sure it is worth making such a change even for debug
-> purposes, given that in the worst scenario above you end up with a
-> system stuck at boot but for which the SCMI stack is anyway compromised
-> and where the only solution is fixing the server FW really.
-> 
-> I'll ask Sudeep is thoughts about the possible hang.
+Hi,
+
+On Fri, Oct 14, 2022 at 3:35 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>
+> On 10/11/22 16:54, Alexander Aring wrote:
+> > This patch will add a comment for the __GFP_ZERO flag case for
+> > kmem_cache_alloc(). As the current comment mentioned that the flags only
+> > matters if the cache has no available objects it's different for the
+> > __GFP_ZERO flag which will ensure that the returned object is always
+> > zeroed in any case.
+> >
+> > I have the feeling I run into this question already two times if the
+> > user need to zero the object or not, but the user does not need to zero
+> > the object afterwards. However another use of __GFP_ZERO and only zero
+> > the object if the cache has no available objects would also make no
+> > sense.
+>
+> Hmm, but even with the update, the comment is still rather misleading, no?
+> - can the caller know if the cache has available objects and thus the flags
+> are irrelevant, in order to pass flags that are potentially wrong (if there
+> were no objects)? Not really.
+
+No, the caller cannot know it and that's why __GFP_ZERO makes no sense
+if they matter only if the cache has no available objects.
+
+> - even if cache has available objects, we'll always end up in
+> slab_pre_alloc_hook doing might_alloc(flags) which will trigger warnings
+> (given CONFIG_DEBUG_ATOMIC_SLEEP etc.) if the flags are inappropriate for
+> given context. So they are still "relevant"
 >
 
-I am fine with the patch as it provides more info on what is going wrong
-in the system. Please post the patch separately with all the info/background.
+yes, so they are _always_ relevant in the current implementation. Also
+as you said the user doesn't know when they become relevant or not..
 
--- 
-Regards,
-Sudeep
+> So maybe just delete the whole comment? slub.c doesn't have it, and if any
+> such comment should exist for kmem_cache_alloc() and contain anything useful
+> and not misleading, it should be probably in include/linux/slab.h anyway?
+>
+
+ctags brought me there, but this isn't a real argument why it should
+not be in the header file...
+
+I am not sure about deleting the whole comment as people have an vague
+idea about how kmem_cache works and still need to know for __GFP_ZERO
+that it will always zero the memory, but thinking again somebody will
+make the conclusion it does not make sense as the user doesn't know
+when objects are reused or allocated. Having that in mind and reading
+the current comment was making me do more investigations into the
+internal behaviour to figure out how it works regarding __GFP_ZERO.
+
+- Alex
+
