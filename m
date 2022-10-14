@@ -2,152 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD335FE6C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB305FE6CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 04:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJNCEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 22:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S229739AbiJNCFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 22:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJNCEd (ORCPT
+        with ESMTP id S229511AbiJNCFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 22:04:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A48A8359;
-        Thu, 13 Oct 2022 19:04:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F2D3B821B7;
-        Fri, 14 Oct 2022 02:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DF0C433C1;
-        Fri, 14 Oct 2022 02:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665713069;
-        bh=71JUZnb+/GHrSs/6gc/+znRrLGAfu5erJaV2UmEv+m0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M+FQzbL3lM0qGKwdlolPZlvEUUsmTgpP8TcQVX6CKmos/pVjrUau3/h11d3x0428d
-         TiON4OkKo1L1Np0Rc6/01kI6W+BrYjmdQmtSfToHvLsoA0wJcCFcFVO/pYsGPjddr4
-         voAcZ5M5gllo4H822+NaDZN1ln0a76yLBK7yJITO6lCsJ08nCasgXTYBUlYET6MHeT
-         csux4KwOIaaLdDm7FXBLim6gCIJQ9VYVrnZi6p02BkWoWkVWrOQTHGULQQ4LTih+AD
-         0LRYd088p7F6ongtuiGRE36UnlxVu+ETwGVI+ZP4UWiFRtdXNbEc965npGWQp/ecGH
-         Y5UlutY8qFE4A==
-Date:   Thu, 13 Oct 2022 19:04:27 -0700
-From:   Mark Gross <markgross@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Mark Gross <markgross@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Danie l Wagner <dwagner@suse.de>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Junxiao Chang <junxiao.chang@intel.com>
-Subject: Re: [ANNOUNCE] 4.9.327-rt197
-Message-ID: <Y0jDq2cCoTrLFHGZ@T470>
-References: <165222469651.210737.17409564443317121708@T470>
- <Yy4ShVWORi6XNhCv@T470>
- <YzcEIU17EIZ7ZIF5@linutronix.de>
+        Thu, 13 Oct 2022 22:05:38 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC78C14FD24;
+        Thu, 13 Oct 2022 19:05:35 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1665713125t0dqa2lu
+Received: from [192.168.50.235] ( [113.72.147.11])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 14 Oct 2022 10:05:24 +0800 (CST)
+X-QQ-SSF: 01000000000000B09000000A0000000
+X-QQ-FEAT: 2w1wQVt6itRSuTllDZ9c9Ncos8L/9I0A7xLMcJaSF7QfOTy00g1XU9/te0E+F
+        u9+R5cNiUMb+3Gxnu/jD8XTWeJNgCEPTWzy+rsT//Kh6LYfRsZwdtcxaTcoD0ON+maBm+K2
+        oJV5WixWyamuOzzL1Vttws3ETFJ0i1LVuW3fv/J5BSJAOiKspFGGzhTskEWVCCMih9SPqjJ
+        Cg041J/HHc+Rb/6NmNobZiZLHwUctb/P4TEtSPN9we9Lz02rplMZB0uAxa6KfvdRad9xXK+
+        MZS/lyqLVCJxm9r6rhz06SHHwEN1wiNcU/0ln0vPr68YN+a9RZWaojCNkpj7E53WYUxMoqn
+        +EYoj3o1P4udrqrgjLeIDscuE7OORTnuaeIUPaeSLH+g2nn4/k=
+X-QQ-GoodBg: 0
+Message-ID: <9A0A65FD121C76C0+be2a3620-d30f-b6ac-3241-89b40191030b@linux.starfivetech.com>
+Date:   Fri, 14 Oct 2022 10:05:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzcEIU17EIZ7ZIF5@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 26/30] pinctrl: starfive: Add StarFive JH7110 driver
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930074341.6386-1-hal.feng@linux.starfivetech.com>
+ <CACRpkdYMQ98Q1iXr7-YdUkQrSK8aauZuSFeDp2f7ubNH_W7_HQ@mail.gmail.com>
+ <CAJM55Z91TL4eLOjZsRVZuxspcL40gG2MQRZf31h0L2yyaW--Cg@mail.gmail.com>
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <CAJM55Z91TL4eLOjZsRVZuxspcL40gG2MQRZf31h0L2yyaW--Cg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:58:41PM +0200, Sebastian Andrzej Siewior wrote:
-> On 2022-09-23 13:09:41 [-0700], Mark Gross wrote:
-> > > As this was a tricky one I request people to give a good look over.
+On Wed, 5 Oct 2022 15:31:59 +0200, Emil Renner Berthing wrote:
+> On Tue, 4 Oct 2022 at 10:57, Linus Walleij <linus.walleij@linaro.org> wrote:
+> >
+> > On Fri, Sep 30, 2022 at 9:45 AM Hal Feng
+> > <hal.feng@linux.starfivetech.com> wrote:
+> >
+> > > From: Jianlong Huang <jianlong.huang@starfivetech.com>
+> > >
+> > > Add pinctrl driver for StarFive JH7110 SoC.
+> > >
+> > > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> > > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> >
+> > Since Emil submitted the first driver I would really appreciate his review
+> > on this version.
 > 
-> You did good. I not so much. If you could please add the following patch
-> on top, then it will compile also on !RT.
+> I tried really hard to come up with a good way to share code between
+> the JH7100 and JH7110 drivers, but so many details different on the
+> JH7110 that it's probably best to just have a separate driver, so that
+> part is fine.
 > 
-> Thank you for work.
+> As mentioned elsewhere this driver certainly shouldn't be accepted
+> without following the generic pinctrl and pinmux bindings. You can see
+> the driver I wrote here:
+> https://github.com/esmil/linux/commit/c2633315385fef1a25aa3711facef07d915820e1
 > 
-> ------->8----------
-> 
-> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Date: Fri, 30 Sep 2022 16:55:34 +0200
-> Subject: [PATCH] local_lock: Provide INIT_LOCAL_LOCK().
-> 
-> The original code was using INIT_LOCAL_LOCK() and I tried to sneak
-> around it and forgot that this code also needs to compile on !RT
-> platforms.
-> 
-> Provide INIT_LOCAL_LOCK() to initialize properly on RT and do nothing on
-> !RT. Let random.c use which is the only user so far and oes not compile
-> on !RT otherwise.
-> 
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  drivers/char/random.c     | 4 ++--
->  include/linux/locallock.h | 5 +++++
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index daea466812fed..86c475f70343d 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -236,7 +236,7 @@ struct crng {
->  
->  static DEFINE_PER_CPU(struct crng, crngs) = {
->  	.generation = ULONG_MAX,
-> -	.lock.lock = __SPIN_LOCK_UNLOCKED(crngs.lock.lock),
-> +	.lock = INIT_LOCAL_LOCK(crngs.lock),
->  };
->  
->  /* Used by crng_reseed() and crng_make_state() to extract a new seed from the input pool. */
-> @@ -515,7 +515,7 @@ struct batch_ ##type {								\
->  };										\
->  										\
->  static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
-> -	.lock.lock = __SPIN_LOCK_UNLOCKED(batched_entropy_ ##type.lock.lock),	\
-> +	.lock = INIT_LOCAL_LOCK(batched_entropy_ ##type.lock),			\
->  	.position = UINT_MAX							\
->  };										\
->  										\
-> diff --git a/include/linux/locallock.h b/include/linux/locallock.h
-> index 0c3ff5b23f6a1..70af9a177197e 100644
-> --- a/include/linux/locallock.h
-> +++ b/include/linux/locallock.h
-> @@ -22,6 +22,8 @@ struct local_irq_lock {
->  	unsigned long		flags;
->  };
->  
-> +#define INIT_LOCAL_LOCK(lvar)			{ .lock = __SPIN_LOCK_UNLOCKED((lvar).lock.lock) }
-> +
->  #define DEFINE_LOCAL_IRQ_LOCK(lvar)					\
->  	DEFINE_PER_CPU(struct local_irq_lock, lvar) = {			\
->  		.lock = __SPIN_LOCK_UNLOCKED((lvar).lock) }
-> @@ -256,6 +258,9 @@ static inline int __local_unlock_irqrestore(struct local_irq_lock *lv,
->  
->  #else /* PREEMPT_RT_BASE */
->  
-> +struct local_irq_lock { };
-> +#define INIT_LOCAL_LOCK(lvar)			{ }
-> +
->  #define DEFINE_LOCAL_IRQ_LOCK(lvar)		__typeof__(const int) lvar
->  #define DECLARE_LOCAL_IRQ_LOCK(lvar)		extern __typeof__(const int) lvar
->  
-> -- 
-> 2.37.2
-> 
-> 
-> Sebastian
+> It is certainly not perfect and far from complete, but at least it
+> does follow the generic bindings. Feel free to copy all or parts of
+> that.
 
-Thanks!  I've applied this and starting some testing. I've also pushed the
-update to v4.9-rt-next if anyone feels like giving a spin before I make the
-release.
+Thanks for your great contribution! We will rewrite the pinctrl driver
+and bindings so make them follow the generic pinctrl framework.
 
-I think I'll finally get the release done in the next few days.
+Best regards,
+Hal
 
---mark
