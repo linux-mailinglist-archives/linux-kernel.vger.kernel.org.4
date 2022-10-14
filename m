@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4985FE9A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC8A5FE9A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiJNHeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S229982AbiJNHfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiJNHeS (ORCPT
+        with ESMTP id S229957AbiJNHfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:34:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC601B8650;
-        Fri, 14 Oct 2022 00:34:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3794B82213;
-        Fri, 14 Oct 2022 07:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F174C433C1;
-        Fri, 14 Oct 2022 07:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665732854;
-        bh=hW/vy/6le5CL8VPvE21jCFO4r6/XDqR0GmB30kY5ijM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KV15aovS/GlF3Ex8GFpdy4ZFr6ryKjQu5j2aZKXGZHGf360jwe8XNWr3dhl+PJUkX
-         6oiwv3geIuVxv6nt5Pc3NhJ6zb1rkM+nb0gkJslKgJqMVuA2eePvcTe5/2QaxtBzku
-         0WTnFgSqSoDpAYyWxZGvmVN9xJUutUN3nf2g9DTA=
-Date:   Fri, 14 Oct 2022 09:34:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        longli@microsoft.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com
-Subject: Re: [PATCH] uio_hv_generic: Enable interrupt for low speed VMBus
- devices
-Message-ID: <Y0kRIcXG+wNbcGx0@kroah.com>
-References: <1665685754-13971-1-git-send-email-ssengar@linux.microsoft.com>
+        Fri, 14 Oct 2022 03:35:25 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680A2748DB;
+        Fri, 14 Oct 2022 00:35:20 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a6so5034717ljq.5;
+        Fri, 14 Oct 2022 00:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VIrAOKwVuY5kEsu3nbUg3gcHFVvE5jEAz03maY5C6/Q=;
+        b=UOO74Gnm40KO5uUURhv6pfgy1fP2pYjxeJ/fpThwsIfZoremffV/su/bQr56v9fyNm
+         A+MkE1XZQ1P+lJPHStdfCR3ZlsVEjPo+Jr0TpGWuAnOGd/FpDaiSuXw4avKyYOsceEJl
+         v/8RHDdtjZ/2t9V/T68nLUwM10dvvpjeoYbovP1ZH2G6hJiffEBIv63vfVx7sIiNjADW
+         SpJUP5lfxXM3+wcr9jsbspNa/0Kcgu7GQcPX/NnkOOe2Pg/Je2zzjjVG8LDSjw3j/7UT
+         e0tw+dzVA6xS30Sm4HTtf7hzqqsU5y5S3QiI+lDPaI2+vHtbyJ0/e1ZBzsP/VuTPaYgt
+         dnig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VIrAOKwVuY5kEsu3nbUg3gcHFVvE5jEAz03maY5C6/Q=;
+        b=0cshdIsjxjMydpO5FL3rwOvetFVhohRwiUIit8cvhpEkdlvNPPo8qFaZtBUxuj1Sjw
+         JHtIXQVdthafmiqvGgH62GrEkkQmuXQ5eNkQs5h4RDcdYpBMB3KXW2W36CcQRGKWIi05
+         K0VXISRYFGhxIEo6wfAsu0wip4fOZOLS4h6g4iMGPZFklvHWn8Nb5zCUb300KEnd7lug
+         23GbuGwHxRStgFEuIivD+ajtjd3ZWugM8P8T83gCJ18Fgvye/7JYEEK2tNoLr+kf3jH+
+         EmIBjjEBVsud4ziXMIn60GPV9LF1S0B3ucl8o3fvqWF7EpcfV4KlhG0S59VU3c1ojUtW
+         izTA==
+X-Gm-Message-State: ACrzQf3cPZjjI/N5ujam1TXY6o9KfGe6Np6GAQzyCGWjSNd1TGlpBLG5
+        DyzPcmPYDdGEt8OCZ4B4vUE=
+X-Google-Smtp-Source: AMsMyM607f+HvLj+Q7vb7EKtlnJxT117/QNV5iJ2skOd/Y7BWPwtqH2zEjnybMzC8DYCQamdmIs52w==
+X-Received: by 2002:a05:651c:242:b0:26d:fb4b:9c8 with SMTP id x2-20020a05651c024200b0026dfb4b09c8mr1373763ljn.353.1665732918422;
+        Fri, 14 Oct 2022 00:35:18 -0700 (PDT)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id j18-20020ac253b2000000b004a05622a852sm229295lfh.241.2022.10.14.00.35.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 00:35:17 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH v3] thermal: imx8mm_thermal: validate temperature range
+Date:   Fri, 14 Oct 2022 09:35:07 +0200
+Message-Id: <20221014073507.1594844-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1665685754-13971-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 11:29:14AM -0700, Saurabh Sengar wrote:
-> Hyper-V is adding some "specialty" synthetic devices.
+Check against the upper temperature limit (125 degrees C) before
+consider the temperature valid.
 
-What devices are those specifically?
+Fixes: 5eed800a6811 ("thermal: imx8mm: Add support for i.MX8MM thermal monitoring unit")
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
 
-> Instead of writing new kernel-level VMBus drivers for these devices,
-> the devices will be presented to user space via this existing Hyper-V
-> generic UIO driver, so that a user space driver can handle the device.
-> Since these new synthetic devices are low speed devices, they don't
-> support monitor bits and we must use vmbus_setevent() to enable
-> interrupts from the host.
+Notes:
+    v2: Also invalidate if temperature > max (125 degrees C)
+    v3: Only check temperature range as the valid bit is invalid.
 
-That is not what the UIO interface is for.  Please write real drivers so
-that they tie into the specific user/kernel apis for those device types.
+ drivers/thermal/imx8mm_thermal.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Without a specific list of what these devices are, I can not recommend
-that anyone use the UIO api for them as that's probably not a good idea.
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index af666bd9e8d4..c5cd873c6e01 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -65,8 +65,14 @@ static int imx8mm_tmu_get_temp(void *data, int *temp)
+ 	u32 val;
+ 
+ 	val = readl_relaxed(tmu->base + TRITSR) & TRITSR_TEMP0_VAL_MASK;
++
++	/*
++	 * Do not validate against the V bit (bit 31) due to errata
++	 * ERR051272: TMU: Bit 31 of registers TMU_TSCR/TMU_TRITSR/TMU_TRATSR invalid
++	 */
++
+ 	*temp = val * 1000;
+-	if (*temp < VER1_TEMP_LOW_LIMIT)
++	if (*temp < VER1_TEMP_LOW_LIMIT || *temp > VER2_TEMP_HIGH_LIMIT)
+ 		return -EAGAIN;
+ 
+ 	return 0;
+-- 
+2.37.1
 
-Also, if you do do this, you need to list where the source for that
-userspace code is so that users can get it and have their distros
-package it up for them.  I do not see that here at all.
-
-
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  drivers/uio/uio_hv_generic.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/uio/uio_hv_generic.c b/drivers/uio/uio_hv_generic.c
-> index c08a6cfd119f..8e5aa4a1247f 100644
-> --- a/drivers/uio/uio_hv_generic.c
-> +++ b/drivers/uio/uio_hv_generic.c
-> @@ -84,6 +84,9 @@ hv_uio_irqcontrol(struct uio_info *info, s32 irq_state)
->  	dev->channel->inbound.ring_buffer->interrupt_mask = !irq_state;
->  	virt_mb();
->  
-> +	if (!dev->channel->offermsg.monitor_allocated && irq_state)
-> +		vmbus_setevent(dev->channel);
-> +
->  	return 0;
->  }
->  
-> @@ -239,12 +242,6 @@ hv_uio_probe(struct hv_device *dev,
->  	void *ring_buffer;
->  	int ret;
->  
-> -	/* Communicating with host has to be via shared memory not hypercall */
-> -	if (!channel->offermsg.monitor_allocated) {
-> -		dev_err(&dev->device, "vmbus channel requires hypercall\n");
-
-I do not understand, why is this check not made anymore here?  Why
-constantly make the call above in the irq handler instead?  Isn't that
-going to be massively slow?
-
-thanks,
-
-greg k-h
