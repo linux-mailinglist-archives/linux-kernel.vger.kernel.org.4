@@ -2,88 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0345FEDA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57745FEDAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiJNLyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S229990AbiJNLz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiJNLy3 (ORCPT
+        with ESMTP id S229808AbiJNLzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:54:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90171958F8;
-        Fri, 14 Oct 2022 04:54:12 -0700 (PDT)
+        Fri, 14 Oct 2022 07:55:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938DF357EA;
+        Fri, 14 Oct 2022 04:55:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98937B8231D;
-        Fri, 14 Oct 2022 11:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43D1C433C1;
-        Fri, 14 Oct 2022 11:54:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16CAA61B07;
+        Fri, 14 Oct 2022 11:55:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24DEC433C1;
+        Fri, 14 Oct 2022 11:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665748449;
-        bh=8ziD9oexEiCA700ImIeJmUn8Kxl7qdwb3DSu9XVCTKA=;
+        s=korg; t=1665748522;
+        bh=w1gnSyo/sHEY1sf3aTn5NzwjtonvxvcQ/yPvIe4/0tk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IvD543xlF57jpRAblzqk63fULdBTlD9IjA/Ikw6Ie2o/14fu6m7T8PddN5F6F2mSz
-         dYFdq66x+/JW/DzS/4h/t7t/djnfE0cvy/04rhi1JXmsfs1v+otrZNR/Dc7/FLEWDW
-         818cXP0p3r9nstJZbnKPKhJZXGci72bvjmBQKhq8=
-Date:   Fri, 14 Oct 2022 13:54:53 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
- domain as parent
-Message-ID: <Y0lODVFsp4KMfPdu@kroah.com>
-References: <20220906134801.4079497-5-nipun.gupta@amd.com>
- <87h71juxuk.wl-maz@kernel.org>
- <DM6PR12MB30820EE430405FF50C7F856BE8229@DM6PR12MB3082.namprd12.prod.outlook.com>
- <MN2PR12MB43586084670E14691920952889229@MN2PR12MB4358.namprd12.prod.outlook.com>
- <Y0a65a9leWXpKfTo@ziepe.ca>
- <MN2PR12MB4358A871519748CD7A6DB7A089229@MN2PR12MB4358.namprd12.prod.outlook.com>
- <Y0bRZTP9Kc6mdCiu@ziepe.ca>
- <MN2PR12MB4358277977C1B7E0BC214AC789229@MN2PR12MB4358.namprd12.prod.outlook.com>
- <Y0gH8R8tEqn6sqZ5@ziepe.ca>
- <MN2PR12MB4358CF6B6D2576B35E39328A89249@MN2PR12MB4358.namprd12.prod.outlook.com>
+        b=Bg0bxXdOrxLdVVn4IKoVrPzljijNyfKRQxPChgFzeuOXeg9wJnt/AdrF4blJjga6L
+         la+DfSwt0k33JWhmSHJHHT5mY5nOCjelnRc1USe9nKTknKUUKTbhSk06xVNoCZYMO0
+         IME26e+maUN5h3F+c7xbIWgTKlgRMEyWDnEIh3yo=
+Date:   Fri, 14 Oct 2022 13:56:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, xu.yang_2@nxp.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2 1/6] dt-bindings: usb: usbmisc-imx: convert to DT
+ schema
+Message-ID: <Y0lOV8iWlpfDV/kj@kroah.com>
+References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
+ <20221014095148.2063669-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MN2PR12MB4358CF6B6D2576B35E39328A89249@MN2PR12MB4358.namprd12.prod.outlook.com>
+In-Reply-To: <20221014095148.2063669-2-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -93,11 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 11:18:36AM +0000, Radovanovic, Aleksandar wrote:
-> Anyway, I think we're straying off topic here, none of this is visible to the kernel anyway. The question that we still need to answer is, are you OK with the limitations I listed originally?
+On Fri, Oct 14, 2022 at 05:51:43PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Convert usbmisc-imx to DT schema format.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 52 +++++++++++++++++++
+>  .../devicetree/bindings/usb/usbmisc-imx.txt   | 18 -------
+>  2 files changed, 52 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+> new file mode 100644
+> index 000000000000..c83ffb6729b5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/fsl,usbmisc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX non-core registers
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
 
-What original limitations?  This thread is crazy and complex and you
-need to use your \n key more :)
+Signing someone else up to be a maintainer requires them to sign off on
+the patch to agree with this.  Why not list yourself instead?
 
 thanks,
 
