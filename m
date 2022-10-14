@@ -2,153 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A885FE998
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437CB5FE99E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 09:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJNHc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 03:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
+        id S229894AbiJNHdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 03:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiJNHcY (ORCPT
+        with ESMTP id S229650AbiJNHdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:32:24 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1041B76FB;
-        Fri, 14 Oct 2022 00:32:22 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id D60585C00A7;
-        Fri, 14 Oct 2022 03:32:19 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 14 Oct 2022 03:32:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665732739; x=1665819139; bh=iYvmehNBlw
-        06CbCuBOD7St3FUBj4CVVluYujD7ayDLQ=; b=Ep1sOt8A+qbphOkwJNMS+bZLPI
-        fEDpw6wWBA0iKtWim8X/cGXLMdxzH9uDxaQeNqmOtXCrfXPx3DXYoI+hgJ0tmx0y
-        RVTnV7fN4/91vAfA4uaZHokKX++vPp73iEsHqaHk1jUw3Qyuv6Zz2+HeMgTOj2w/
-        tzJSbOqAzefr80yOxvWnlTnjd7L26tMKxr398379T+0MeJyfZyMoYc1fBcG4kWaT
-        2RZp/Onca1bJn4ICIhqQJXkjVuygoH25+5zSA7B64mTCpdsYLR7Xb/utpFBrtHpL
-        qL1hzHzLsflpqR9kgutHmYrAn/bni9PvxfBiCZWCkjgp7ccRMPIpnmAYa7ZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665732739; x=1665819139; bh=iYvmehNBlw06CbCuBOD7St3FUBj4
-        CVVluYujD7ayDLQ=; b=VGwd6u0xuftNgTZ8id3L5Cmu4x1grNfv49BGbEcLoSFC
-        MpftI5ayl0p/D9AxMHyu57NWqdJlZzRa3ubk+71v1jplmcoRo19QOSM5r+vkh4hh
-        qWYajAHaeT4Df2R/l0lKBRBuffHgdG2SwRjil88hNxLhHAj1lIarEvq+eiZzy4bN
-        AjHu73YPiMOQxIpr5oyW8bttA8Um5DlMIUKRB1zRY/yRJzfPQxsksf29YGpghAoy
-        /AHbCED/8jgEQCOk40nbaL2GGpqyJ8cidTtzZv7wQ1rjs2y5lFUKEq7VjrZhv1Hg
-        kaW+YUeGW8Yw8s4mZx3IuALE3CXPWtdY+uZxmytDzg==
-X-ME-Sender: <xms:ghBJY8rQQUX89VmEP719Vlga8mGPnIly6_zLHeQmJXF1-VcKbe8Ogg>
-    <xme:ghBJYyp-yYxDAFGGI_kbPfy9Da1sDiQF73MnMsQjynnn435wgmGgISPmtGbPWFYGi
-    w8UfK3KuAjaDU8dhH4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekuddguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ghBJYxPMPKv6ivZxtF1uk9-anNwMvt76e7OgfhXmTRHxOkDeds3wiA>
-    <xmx:ghBJYz5io2gJQ1k5Q6b-nW7Okh-UaZSuOKWizh4QRqKxI7OBHL5QNQ>
-    <xmx:ghBJY75MQOlIccS_xJ_ua4u5VMX6D_PRyl0TjVOQX8z-8RpSXT6sOA>
-    <xmx:gxBJY1vfUsQ7_xS9EOI6dAmJGrvGYHEsWZh12MYIJS476czTtYI13Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CF023B60086; Fri, 14 Oct 2022 03:32:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
-In-Reply-To: <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
-References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
- <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
- <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
- <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
- <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
-Date:   Fri, 14 Oct 2022 09:31:55 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        Sergey.Semin@baikalelectronics.ru
-Cc:     "open list" <linux-kernel@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        regressions@lists.linux.dev,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
-        "Niklas Cassel" <niklas.cassel@wdc.com>
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006 tag
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 03:33:13 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4032A1B76FB
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:33:12 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a10so6209005wrm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 00:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SKEmi6vccBwd4SuCcKc/2Tnsrh3azVvNbQckYv+e6ak=;
+        b=gNx2C+pR029dJrAMYsM/ISYcaMzSXUq1lw4AX6GAvR0rl8PXVM3vUZ283CFCrrzcpo
+         ncW5tMv7rYUFtP525ZQYUFEh/mtcdqZ/T0guZr8y2hnTgHfaJvuIi9G3kbdiBmtDeX2q
+         Eb3snzOIVOuFoiLa0GB0N6eJj0hYjh/VnSQtp3nuH4xuHXfduU7mknGehTL9WNI2Wbrt
+         c3gQyocfEbOVsgseyD1o1uXHN/HAWozN1uYfgau0sQLhvwpdJO+wdrnTIbYh7leWx8P3
+         iG6IQRSx4queQONUNMipBhA7LjaKBTCe7wuJfosMY/+Yhkkq+xKmI7hMNG5hFmcvRUbP
+         5d3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SKEmi6vccBwd4SuCcKc/2Tnsrh3azVvNbQckYv+e6ak=;
+        b=fcXv2c/SH+Ojz5jIHsTzUDmJD09Dh+Pg85X5b+ziijpCvPmq5Fackjn7aXJOE0+J3a
+         0wAIYSbwmoDe7dyBKgkDgCDKWq/nbqUE+1GhxRyyrFj4aIKma0ifDsUs7YXvhUQVNZfX
+         E4m/icoAVBeW+tpp/N1ORxt6XPjEGmuuhBkv7zof34gwSpD/kJnp+y0JDHmnGfa1cN2M
+         J56HcHDwQhX3BqVcoppxyX/Hl9vr+5i/IRAoXQtBL5OqaNFXGVVHaUQxQ5Q53oXS7wMH
+         Gi+D6ekECGWD49d1Z1d9cJ98m2T5No17sW4xOIl6X21jZZ0pH+AwgJynPZ8KHjLOydlI
+         D7Ig==
+X-Gm-Message-State: ACrzQf0zw6PPZ/nJdY3IB9tDIg7V8RHkC5rvKTGnjDb9twS67qbT407g
+        taMbPkK/6k9+yh0EgmpegUOXYg==
+X-Google-Smtp-Source: AMsMyM7U73AFlAev/JPrLh9ASLCfIzg6SpI5mfM2QVAT97wVOID0wpuDdrcu0/aorO8JS6jw8R/vkg==
+X-Received: by 2002:a5d:4887:0:b0:226:ed34:7bbd with SMTP id g7-20020a5d4887000000b00226ed347bbdmr2218132wrq.561.1665732790764;
+        Fri, 14 Oct 2022 00:33:10 -0700 (PDT)
+Received: from mai.. ([2a05:6e02:1041:c10:b460:17f0:186d:9d2e])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003a682354f63sm898148wmo.11.2022.10.14.00.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 00:33:10 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Nathan Errera <nathan.errera@intel.com>,
+        linux-wireless@vger.kernel.org (open list:INTEL WIRELESS WIFI LINK
+        (iwlwifi)), netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Subject: [PATCH 1/2] thermal/drivers/iwlwifi: Use generic thermal_zone_get_trip() function
+Date:   Fri, 14 Oct 2022 09:32:50 +0200
+Message-Id: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022, at 2:22 AM, Damien Le Moal wrote:
-> On 10/14/22 07:07, Anders Roxell wrote:
-> [...]
->>> 8)
->>>> If reverting these patches restores the eSATA port on this board, then you need
->>>> to fix the defconfig for that board.
->>>
->>> OTOH,
->>> Anders, enabled the new config CONFIG_AHCI_DWC=y  and tried but the
->>> device failed to boot.
->> 
->> I thought it would work with enabling CONFIG_AHCI_DWC=y, but it didn't...
->
-> As mentioned in my previous reply to Naresh, this is a new driver added in
-> 6.1. Your board was working before so this should not be the driver needed
-> for it.
->
->> However, reverting patch 33629d35090f ("ata: ahci: Add DWC AHCI SATA
->> controller support")
->> from next-20221013 was a success, kernel booted  and the 'mkfs.ext4' cmd was
->> successful.
->
-> Which is very strange... There is only one hunk in that commit that could
-> be considered suspicious:
->
-> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> index 9b56490ecbc3..8f5572a9f8f1 100644
-> --- a/drivers/ata/ahci_platform.c
-> +++ b/drivers/ata/ahci_platform.c
-> @@ -80,9 +80,7 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
->  static const struct of_device_id ahci_of_match[] = {
->         { .compatible = "generic-ahci", },
->         /* Keep the following compatibles for device tree compatibility */
-> -       { .compatible = "snps,spear-ahci", },
->         { .compatible = "ibm,476gtr-ahci", },
-> -       { .compatible = "snps,dwc-ahci", },
->         { .compatible = "hisilicon,hisi-ahci", },
->         { .compatible = "cavium,octeon-7130-ahci", },
->         { /* sentinel */ }
->
-> Is your board using one of these compatible string ?
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
 
-The x15 uses "snps,dwc-ahci". I would expect it to detect the device
-with the new driver if that is loaded, but it's possible that the
-driver does not work on all versions of the dwc-ahci hardware.
+The get_trip_temp, get_trip_hyst and get_trip_type are handled by the
+get_trip_point().
 
-Anders, can you provide the boot log from a boot with the new driver
-built in? There should be some messages from dwc-ahci about finding
-the device, but then not ultimately working.
+The set_trip_temp() generic function does some checks which are no
+longer needed in the set_trip_point() ops.
 
-Depending on which way it goes wrong, the safest fallback for 6.1 is
-probably to move the "snps,spear-ahci" and "snps,dwc-ahci" compatible
-strings back into the old driver, and leave the new one only for 
-the "baikal,bt1-ahci" implementation of it, until it has been
-successfully verified on TI am5/dra7, spear13xx and exynos.
+Convert ops content logic into generic trip points and register them
+with the thermal zone.
 
-     Arnd
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/mvm.h |  2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c  | 71 ++++----------------
+ 2 files changed, 13 insertions(+), 60 deletions(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+index bf35e130c876..38e7426f98c0 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+@@ -501,7 +501,7 @@ struct iwl_mvm_tt_mgmt {
+  * @tzone: thermal zone device data
+ */
+ struct iwl_mvm_thermal_device {
+-	s16 temp_trips[IWL_MAX_DTS_TRIPS];
++	struct thermal_trip trips[IWL_MAX_DTS_TRIPS];
+ 	u8 fw_trips_index[IWL_MAX_DTS_TRIPS];
+ 	struct thermal_zone_device *tzone;
+ };
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+index 69cf3a372759..3da4af7bc1ca 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+@@ -573,11 +573,11 @@ int iwl_mvm_send_temp_report_ths_cmd(struct iwl_mvm *mvm)
+ 	 * and uncompressed, the FW should get it compressed and sorted
+ 	 */
+ 
+-	/* compress temp_trips to cmd array, remove uninitialized values*/
++	/* compress trips to cmd array, remove uninitialized values*/
+ 	for (i = 0; i < IWL_MAX_DTS_TRIPS; i++) {
+-		if (mvm->tz_device.temp_trips[i] != S16_MIN) {
++		if (mvm->tz_device.trips[i].temperature != INT_MIN) {
+ 			cmd.thresholds[idx++] =
+-				cpu_to_le16(mvm->tz_device.temp_trips[i]);
++				cpu_to_le16((s16)(mvm->tz_device.trips[i].temperature / 1000));
+ 		}
+ 	}
+ 	cmd.num_temps = cpu_to_le32(idx);
+@@ -593,8 +593,8 @@ int iwl_mvm_send_temp_report_ths_cmd(struct iwl_mvm *mvm)
+ 	 */
+ 	for (i = 0; i < idx; i++) {
+ 		for (j = 0; j < IWL_MAX_DTS_TRIPS; j++) {
+-			if (le16_to_cpu(cmd.thresholds[i]) ==
+-				mvm->tz_device.temp_trips[j])
++			if ((int)(le16_to_cpu(cmd.thresholds[i]) * 1000) ==
++			    mvm->tz_device.trips[j].temperature)
+ 				mvm->tz_device.fw_trips_index[i] = j;
+ 		}
+ 	}
+@@ -638,37 +638,12 @@ static int iwl_mvm_tzone_get_temp(struct thermal_zone_device *device,
+ 	return ret;
+ }
+ 
+-static int iwl_mvm_tzone_get_trip_temp(struct thermal_zone_device *device,
+-				       int trip, int *temp)
+-{
+-	struct iwl_mvm *mvm = (struct iwl_mvm *)device->devdata;
+-
+-	if (trip < 0 || trip >= IWL_MAX_DTS_TRIPS)
+-		return -EINVAL;
+-
+-	*temp = mvm->tz_device.temp_trips[trip] * 1000;
+-
+-	return 0;
+-}
+-
+-static int iwl_mvm_tzone_get_trip_type(struct thermal_zone_device *device,
+-				       int trip, enum thermal_trip_type *type)
+-{
+-	if (trip < 0 || trip >= IWL_MAX_DTS_TRIPS)
+-		return -EINVAL;
+-
+-	*type = THERMAL_TRIP_PASSIVE;
+-
+-	return 0;
+-}
+-
+ static int iwl_mvm_tzone_set_trip_temp(struct thermal_zone_device *device,
+ 				       int trip, int temp)
+ {
+ 	struct iwl_mvm *mvm = (struct iwl_mvm *)device->devdata;
+ 	struct iwl_mvm_thermal_device *tzone;
+-	int i, ret;
+-	s16 temperature;
++	int ret;
+ 
+ 	mutex_lock(&mvm->mutex);
+ 
+@@ -678,40 +653,17 @@ static int iwl_mvm_tzone_set_trip_temp(struct thermal_zone_device *device,
+ 		goto out;
+ 	}
+ 
+-	if (trip < 0 || trip >= IWL_MAX_DTS_TRIPS) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+ 	if ((temp / 1000) > S16_MAX) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	temperature = (s16)(temp / 1000);
+ 	tzone = &mvm->tz_device;
+-
+ 	if (!tzone) {
+ 		ret = -EIO;
+ 		goto out;
+ 	}
+ 
+-	/* no updates*/
+-	if (tzone->temp_trips[trip] == temperature) {
+-		ret = 0;
+-		goto out;
+-	}
+-
+-	/* already existing temperature */
+-	for (i = 0; i < IWL_MAX_DTS_TRIPS; i++) {
+-		if (tzone->temp_trips[i] == temperature) {
+-			ret = -EINVAL;
+-			goto out;
+-		}
+-	}
+-
+-	tzone->temp_trips[trip] = temperature;
+-
+ 	ret = iwl_mvm_send_temp_report_ths_cmd(mvm);
+ out:
+ 	mutex_unlock(&mvm->mutex);
+@@ -720,8 +672,6 @@ static int iwl_mvm_tzone_set_trip_temp(struct thermal_zone_device *device,
+ 
+ static  struct thermal_zone_device_ops tzone_ops = {
+ 	.get_temp = iwl_mvm_tzone_get_temp,
+-	.get_trip_temp = iwl_mvm_tzone_get_trip_temp,
+-	.get_trip_type = iwl_mvm_tzone_get_trip_type,
+ 	.set_trip_temp = iwl_mvm_tzone_set_trip_temp,
+ };
+ 
+@@ -743,7 +693,8 @@ static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
+ 	BUILD_BUG_ON(ARRAY_SIZE(name) >= THERMAL_NAME_LENGTH);
+ 
+ 	sprintf(name, "iwlwifi_%u", atomic_inc_return(&counter) & 0xFF);
+-	mvm->tz_device.tzone = thermal_zone_device_register(name,
++	mvm->tz_device.tzone = thermal_zone_device_register_with_trips(name,
++							mvm->tz_device.trips,    
+ 							IWL_MAX_DTS_TRIPS,
+ 							IWL_WRITABLE_TRIPS_MSK,
+ 							mvm, &tzone_ops,
+@@ -766,8 +717,10 @@ static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
+ 	/* 0 is a valid temperature,
+ 	 * so initialize the array with S16_MIN which invalid temperature
+ 	 */
+-	for (i = 0 ; i < IWL_MAX_DTS_TRIPS; i++)
+-		mvm->tz_device.temp_trips[i] = S16_MIN;
++	for (i = 0 ; i < IWL_MAX_DTS_TRIPS; i++) {
++		mvm->tz_device.trips[i].temperature = INT_MIN;
++		mvm->tz_device.trips[i].type = THERMAL_TRIP_PASSIVE;
++	}
+ }
+ 
+ static int iwl_mvm_tcool_get_max_state(struct thermal_cooling_device *cdev,
+-- 
+2.34.1
+
