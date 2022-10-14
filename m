@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BA05FF250
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F8E5FF24E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 18:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiJNQfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 12:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S230523AbiJNQfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 12:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiJNQfF (ORCPT
+        with ESMTP id S230518AbiJNQex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:35:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB8F2BE05
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:35:01 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id b145so6275278yba.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:35:01 -0700 (PDT)
+        Fri, 14 Oct 2022 12:34:53 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78DB21812
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:34:52 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso8361320pja.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 09:34:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LHCsWtaFEYAi93gOnkOLAsNfgraMkc8s0asScvbJ6cY=;
-        b=C9Xd3zIORVSXFdAzIfAjQxokqqmcpA4caJnK2HJJZM3HVwxdIfGBi15HlgMSQzMKzH
-         nxLLdLV2wOIdV/pALDzUfNXG/BM0IYANItQ8UBnkdRopt0dgV3bO36X7LMnp+Km2eiy8
-         DwaUgUGN9ioMJKhUO+xf9kg7L1cydmVdqJSG3MfaFT8CMUJ3ugASFivmTX44H2TNpx9U
-         6bQ8vxSLLOI/7iA36DNIM1XK5wTsu3tPpbntYTNVZvO+vnBecBpSzr0YWOI1t59X9em6
-         pK1ud7AgwOSB5SKRtrjIjd3UM0+SHYvglmqRQEejS8wgsIMZ0fJ1u+J5tGW0T8MfPX0s
-         1AGQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EBxxsrmiTMVnC6L39aahbgagT1+SvZAUCiWNUgh/lWI=;
+        b=sDpdUr8vp75k8W7ILpihfiK5ZooZsrHszH4P9vakiznZc5R7yn/raMbnxzfh9kIa+J
+         4OhvbpcSHySHDD4jGUd+4M873vSvBiWPSF1bUXazE9ujfOOQPO2sqWQxsoz/fvByLOzX
+         JqXQXzoUkWNPCjorNYDFYSZnrVpszBDWvEQgwK5H6vXwknGt4ZEPx6cHMIHpLnA32A/p
+         e34oCDd7DMTWx/nXqHnZwMush4wxgcBPJm9IgvnN3BWOilQOaLu87oaxcpICtUZD0bGL
+         GJzNNH8/2Tu6ZtNpCGyoBvY3wqAiqBGDMncVpaeJy1jeATwxiEKJxQZwcfkUEZi5EzWk
+         3h3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LHCsWtaFEYAi93gOnkOLAsNfgraMkc8s0asScvbJ6cY=;
-        b=hHzFTaL20TqTx38PIBOOqPxmKSSegWtO2iKnZoSN7mwJmeW7xgm1l3G3vjaufbBG7Z
-         JIKaUmN/1jG4KtDmrfyuCiA8Ii0fRUYQOsFl5L6ThGDthjMBWGgqnwXzfp2jO8H9/E1a
-         SPV6CXjojHAJVjcoUWBL93ZAZPIrJCwfEI5pxhhznk4I7Z4Phzq1SlMKoUO/RcTXZ8/c
-         s3sDCylW/dDalYmH0Rd9wjpTBlBf7bXP7nWvRhzH2MRdOgx6+J1x6t2dOcHKC1zeZr0+
-         k60hL21jL+jw33zWsUMjeN9nKMOz4Yx5ktEKRYIytk95t+G2x9w/adMkNSZT3nPx1rKR
-         N6eg==
-X-Gm-Message-State: ACrzQf2hgGl3n22x7qwUhLxlKNXud7bVARlMQIgCiG7ROQ76IwrJdWSe
-        yvjr5NoNX6Z8OMHukeoGk09xsAS5CnSO3TOsa5nCRg==
-X-Google-Smtp-Source: AMsMyM7T75EL2OfdJ/PvsOxdk8p14j39bi0DheYXm3SysdaBgvQc0xvGclO2ikTHHKMF4dMXECJXtmNAFnmuHg6tH1Y=
-X-Received: by 2002:a05:6902:563:b0:6be:5f26:b9b7 with SMTP id
- a3-20020a056902056300b006be5f26b9b7mr5519304ybt.36.1665765300585; Fri, 14 Oct
- 2022 09:35:00 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EBxxsrmiTMVnC6L39aahbgagT1+SvZAUCiWNUgh/lWI=;
+        b=a902wlJWnX1ngnvJ6VxK0NLLNmr8FpoUGhWqYzdiAonhTJlHlHuPNuIBzlLYVvloyT
+         suzUeuwzmcMEz/9LzkvIg09BUivKCKYq0psher1YzNar0EBEwQ/dTNZ3SbVqb48fMSqF
+         LbJ5n8+ILcDyEZqyvpSh5MX1uWHpjJ8QQmME5BE67da69vEmH1rvTAvmBB2lcbp/mUlp
+         UYbz2eOQhRO/+4jzHYGSOv0wE2a0o7RH98cEytqCbInrQSTWfMDsIVZyPGbDC5x733Gz
+         GotDura5zVl6iYZ0M59uO8L0ou1Dk+uYoN9cWBaBMIqLjxd2YiE50D2gI8xe1ARv9vM3
+         glbg==
+X-Gm-Message-State: ACrzQf1oB5i962QeYNjzZ2vzdLabVvRWrePRGxt1sokg1OzlFh1TnFZc
+        mrudgWvJDpf1vW3WPHJySScDPA==
+X-Google-Smtp-Source: AMsMyM6aCNOXTixliam4nOju0FXDdS1Agx0aGaQ+07Vs5gwGT2BkQCCEludl+AL+kCYtMB0KILlmPQ==
+X-Received: by 2002:a17:902:ecca:b0:183:7473:580c with SMTP id a10-20020a170902ecca00b001837473580cmr6170976plh.167.1665765292199;
+        Fri, 14 Oct 2022 09:34:52 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w29-20020aa7955d000000b00562657a7b11sm1981099pfq.8.2022.10.14.09.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 09:34:51 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 16:34:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Vipin Sharma <vipinsh@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 0/5] dirty_log_perf_test vCPU pinning
+Message-ID: <Y0mPqNRSgpArgyS8@google.com>
+References: <20221010220538.1154054-1-vipinsh@google.com>
+ <DS0PR11MB63735576A8FBF80738FF9B76DC249@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
- <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com> <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
- <5db967de-ea7e-9f35-cd74-d4cca2fcb9ee@codeweavers.com> <CANn89iJTNUCDLptS_rV4JUDcEH8JNXvOTx4xgzvaDHG6eodtXg@mail.gmail.com>
- <81b0e6c9-6c13-aecd-1e0e-6417eb89285f@codeweavers.com>
-In-Reply-To: <81b0e6c9-6c13-aecd-1e0e-6417eb89285f@codeweavers.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 14 Oct 2022 09:34:47 -0700
-Message-ID: <CANn89iKD=ceuLnhK-zpk3QerpS-FUb_wb_HevkpvsVqGJ_T4NQ@mail.gmail.com>
-Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
-To:     Paul Gofman <pgofman@codeweavers.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DS0PR11MB63735576A8FBF80738FF9B76DC249@DS0PR11MB6373.namprd11.prod.outlook.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,164 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 9:31 AM Paul Gofman <pgofman@codeweavers.com> wrote:
->
-> Hello Eric,
->
->      that message was not mine.
->
->      Speaking from the Wine side, we cannot workaround that with
-> SO_REUSEADDR. First of all, it is under app control and we can't
-> voluntary tweak app's socket settings. Then, app might be intentionally
-> not using SO_REUSEADDR to prevent port reuse which of course may be
-> harmful (more harmful than failure to restart for another minute). What
-> is broken with the application which doesn't want to use SO_REUSEADDR
-> and wants to disallow port reuse while it binds to it which reuse will
-> surely break it?
->
->      But my present question about the listening socket being not
-> reusable while closed due to linked accepeted socket was not related to
-> Wine at all. I am not sure how one can fix that in the application if
-> they don't really want other applications or another copy of the same
-> one to be able to reuse the port they currently bind to? I believe the
-> issue with listen socket been not available happens rather often for
-> native services and they all have to workaround that. While not related
-> here, I also encountered some out-of-tree hacks to tweak the TIME_WAIT
-> timeout to tackle this very problem for some cloud custom kernels.
->
->      My question is if the behaviour of blocking listen socket port
-> while the accepted port (which, as I understand, does not have any
-> direct relation to listen port anymore from TCP standpoint) is still in
-> TIME_ or other wait is stipulated by TCP requirements which I am
-> missing? Or, if not, maybe that can be changed?
->
+On Fri, Oct 14, 2022, Wang, Wei W wrote:
+> On Tuesday, October 11, 2022 6:06 AM, Vipin Sharma wrote: 
+> > Pin vCPUs to a host physical CPUs (pCPUs) in dirty_log_perf_test and optionally
+> > pin the main application thread to a physical cpu if provided. All tests based on
+> > perf_test_util framework can take advantage of it if needed.
+> > 
+> > While at it, I changed atoi() to atoi_paranoid(), atoi_positive,
+> > atoi_non_negative() in other tests, sorted command line options alphabetically
+> > in dirty_log_perf_test, and added break between -e and -g which was missed in
+> > original commit when -e was introduced.
+> 
+> Just curious why not re-using the existing tools (e.g. taskset) to do the pinning?
 
-Please raise these questions at IETF, this is where major TCP changes
-need to be approved.
+IIUC, you're suggesting the test give tasks meaningful names so that the user can
+do taskset on the appropriate tasks?  The goal is to ensure vCPUs are pinned before
+they do any meaningful work.  I don't see how that can be accomplished with taskset
+without some form of hook in the test to effectively pause the test until the user
+(or some run script) is ready to continue.
 
-There are multiple ways to avoid TIME_WAIT, if you really need to.
+Pinning aside, naming the threads is a great idea!  That would definitely help
+debug, e.g. if one vCPU gets stuck or is lagging behind.
 
-
-> Thanks,
->      Paul.
->
->
-> On 10/14/22 11:20, Eric Dumazet wrote:
-> > On Fri, Oct 14, 2022 at 8:52 AM Paul Gofman <pgofman@codeweavers.com> wrote:
-> >> Hello Eric,
-> >>
-> >> our problem is actually not with the accept socket / port for which
-> >> those timeouts apply, we don't care for that temporary port number. The
-> >> problem is that the listen port (to which apps bind explicitly) is also
-> >> busy until the accept socket waits through all the necessary timeouts
-> >> and is fully closed. From my reading of TCP specs I don't understand why
-> >> it should be this way. The TCP hazards stipulating those timeouts seem
-> >> to apply to accept (connection) socket / port only. Shouldn't listen
-> >> socket's port (the only one we care about) be available for bind
-> >> immediately after the app stops listening on it (either due to closing
-> >> the listen socket or process force kill), or maybe have some other
-> >> timeouts not related to connected accept socket / port hazards? Or am I
-> >> missing something why it should be the way it is done now?
-> >>
-> >
-> > To quote your initial message :
-> >
-> > <quote>
-> > We are able to avoid this error by adding SO_REUSEADDR attribute to the
-> > socket in a hack. But this hack cannot be added to the application
-> > process as we don't own it.
-> > </quote>
-> >
-> > Essentially you are complaining of the linux kernel being unable to
-> > run a buggy application.
-> >
-> > We are not going to change the linux kernel because you can not
-> > fix/recompile an application.
-> >
-> > Note that you could use LD_PRELOAD, or maybe eBPF to automatically
-> > turn SO_REUSEADDR before bind()
-> >
-> >
-> >> Thanks,
-> >>       Paul.
-> >>
-> >>
-> >> On 9/30/22 10:16, Eric Dumazet wrote:
-> >>> On Fri, Sep 30, 2022 at 6:24 AM Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> >>>> Hi Eric,
-> >>>>
-> >>>> RFC 1337 describes the TIME-WAIT Assassination Hazards in TCP. Because
-> >>>> of this hazard we have 60 seconds timeout in TIME_WAIT state if
-> >>>> connection isn't closed properly. From RFC 1337:
-> >>>>> The TIME-WAIT delay allows all old duplicate segments time
-> >>>> enough to die in the Internet before the connection is reopened.
-> >>>>
-> >>>> As on localhost there is virtually no delay. I think the TIME-WAIT delay
-> >>>> must be zero for localhost connections. I'm no expert here. On localhost
-> >>>> there is no delay. So why should we wait for 60 seconds to mitigate a
-> >>>> hazard which isn't there?
-> >>> Because we do not specialize TCP stack for loopback.
-> >>>
-> >>> It is easy to force delays even for loopback (tc qdisc add dev lo root
-> >>> netem ...)
-> >>>
-> >>> You can avoid TCP complexity (cpu costs) over loopback using AF_UNIX instead.
-> >>>
-> >>> TIME_WAIT sockets are optional.
-> >>> If you do not like them, simply set /proc/sys/net/ipv4/tcp_max_tw_buckets to 0 ?
-> >>>
-> >>>> Zapping the sockets in TIME_WAIT and FIN_WAIT_2 does removes them. But
-> >>>> zap is required from privileged (CAP_NET_ADMIN) process. We are having
-> >>>> hard time finding a privileged process to do this.
-> >>> Really, we are not going to add kludges in TCP stacks because of this reason.
-> >>>
-> >>>> Thanks,
-> >>>> Usama
-> >>>>
-> >>>>
-> >>>> On 5/24/22 1:18 PM, Muhammad Usama Anjum wrote:
-> >>>>> Hello,
-> >>>>>
-> >>>>> We have a set of processes which talk with each other through a local
-> >>>>> TCP socket. If the process(es) are killed (through SIGKILL) and
-> >>>>> restarted at once, the bind() fails with EADDRINUSE error. This error
-> >>>>> only appears if application is restarted at once without waiting for 60
-> >>>>> seconds or more. It seems that there is some timeout of 60 seconds for
-> >>>>> which the previous TCP connection remains alive waiting to get closed
-> >>>>> completely. In that duration if we try to connect again, we get the error.
-> >>>>>
-> >>>>> We are able to avoid this error by adding SO_REUSEADDR attribute to the
-> >>>>> socket in a hack. But this hack cannot be added to the application
-> >>>>> process as we don't own it.
-> >>>>>
-> >>>>> I've looked at the TCP connection states after killing processes in
-> >>>>> different ways. The TCP connection ends up in 2 different states with
-> >>>>> timeouts:
-> >>>>>
-> >>>>> (1) Timeout associated with FIN_WAIT_1 state which is set through
-> >>>>> `tcp_fin_timeout` in procfs (60 seconds by default)
-> >>>>>
-> >>>>> (2) Timeout associated with TIME_WAIT state which cannot be changed. It
-> >>>>> seems like this timeout has come from RFC 1337.
-> >>>>>
-> >>>>> The timeout in (1) can be changed. Timeout in (2) cannot be changed. It
-> >>>>> also doesn't seem feasible to change the timeout of TIME_WAIT state as
-> >>>>> the RFC mentions several hazards. But we are talking about a local TCP
-> >>>>> connection where maybe those hazards aren't applicable directly? Is it
-> >>>>> possible to change timeout for TIME_WAIT state for only local
-> >>>>> connections without any hazards?
-> >>>>>
-> >>>>> We have tested a hack where we replace timeout of TIME_WAIT state from a
-> >>>>> value in procfs for local connections. This solves our problem and
-> >>>>> application starts to work without any modifications to it.
-> >>>>>
-> >>>>> The question is that what can be the best possible solution here? Any
-> >>>>> thoughts will be very helpful.
-> >>>>>
-> >>>>> Regards,
-> >>>>>
-> >>>> --
-> >>>> Muhammad Usama Anjum
-> >>
->
+> 
+> For example, with below changes:
+> diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/se                                                                                                             lftests/kvm/lib/perf_test_util.c
+> index 9618b37c66f7..aac58d1acb3c 100644
+> --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
+> +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+> @@ -264,6 +264,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+>                                   void (*vcpu_fn)(struct perf_test_vcpu_args *))
+>  {
+>         int i;
+> +       char vcpu_name[5];
+> 
+>         vcpu_thread_fn = vcpu_fn;
+>         WRITE_ONCE(all_vcpu_threads_running, false);
+> @@ -275,6 +276,8 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+>                 WRITE_ONCE(vcpu->running, false);
+> 
+>                 pthread_create(&vcpu->thread, NULL, vcpu_thread_main, vcpu);
+> +               sprintf(vcpu_name, "%s%d", "vcpu", i);
+> +               pthread_setname_np(vcpu->thread, vcpu_name);
+>         }
+> 
+> and with top we can get
+>     PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+>    4464 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.97 dirty_log_perf_
+>    4467 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.93 vcpu0
+>    4469 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.93 vcpu2
+>    4470 root      20   0 4248684   4.0g   1628 R  99.9  26.2   0:50.94 vcpu3
+>    4468 root      20   0 4248684   4.0g   1628 R  99.7  26.2   0:50.93 vcpu1
