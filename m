@@ -2,127 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50035FF0C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E16F5FF0C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJNPDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S229783AbiJNPEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiJNPDv (ORCPT
+        with ESMTP id S229496AbiJNPEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:03:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E587A1CFC7E;
-        Fri, 14 Oct 2022 08:03:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABC52B82352;
-        Fri, 14 Oct 2022 15:03:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295C5C433C1;
-        Fri, 14 Oct 2022 15:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665759828;
-        bh=8JHrqp2BtSY6zR/ZUbmdFTfoDk9yKJl0APpTHHSZIFc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=fdHhq1wGeNLjcgDC6hMGXoXuyYyRBm7gnx7/Ky1DLSXnJuVoNXYUES5Ys0RymAr/g
-         LWPfsze9hHcB9snAQHxvewCvS8UjgfIoXsJlV9re8vwh5yq+I0DpeX8qGdoXT09aNK
-         6IeCJfCliAkvvLF+tdRWBV/RBbRO1+2u5ngfnUWHa9VH+2P7TTZ54b4fpsdCACv4hL
-         uC4DxZPJQB3M5Rj1LIayd5lRYvY3f2X3rlpm6smJSjj430mSejh4LoMiXrWmrfFKd8
-         sPScLnL/ET2kTweYTQd41bYmyslUB2fQvSOVg4QY5f2wFKNJ3A09VKbL/c+WSLFdES
-         cgh1YHCd+Lbag==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E709D5C32BF; Fri, 14 Oct 2022 08:03:44 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 08:03:44 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, rostedt@goodmis.org,
-        youssefesmat@google.com, surenb@google.com
-Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
-Message-ID: <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221011180142.2742289-1-joel@joelfernandes.org>
- <20221011180142.2742289-2-joel@joelfernandes.org>
- <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
- <20221014144019.GB1108603@lothringen>
+        Fri, 14 Oct 2022 11:04:02 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA101CFF06
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:03:57 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id u21so7214153edi.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0C0t3Bzybkn9+4XGQd/N9gYxMLzphWP8zpFWqf6WcLc=;
+        b=ejq8RgwKb8KXuNH8oE5Rz95tCZ1s90ZkUzJ9IiwIBQMC0bjIxfbYWsOJp5pCY+zj86
+         CRn+83E/dXCvxOoijOk7P9CPrHooIaJrMcmWcIBTjCbNwsKJ93N0kjnJNWSmVGriPnjS
+         2wKEHjQ280dXJ6FiN79dE2LEARuam1uVFQRvRkFvq17W+q6WBSNX8KBPmP29tqfV+CQg
+         bZvTdwKDgyJ3rqK4K06sZhskjrtalXa+MyqIgeiPTKI06uC9xjBdM+PRHIDhj3E8u4Oy
+         IJEcZ7WsJ3NsXB4bNv43F8wEEYBXiDTOvliUouBKFBSu025JpFGm/j/oBqlW4PwLXwja
+         p8gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0C0t3Bzybkn9+4XGQd/N9gYxMLzphWP8zpFWqf6WcLc=;
+        b=EqRBqWQPFIb3c9JfErn5+UPS5VBSxc/XwMN6GThU74TnaxqeOe1o/JPOpHS2EvGJ1V
+         779jI8V6ji9/DkN2A1T52x/KHQMtBszBzbXea+D5W1UKsyLqP/4CWK5ht93DKb/ui8Q2
+         /0RoCa3xmGekmG8gJ/mrRy9QxrJwbWH/f7uLvH3hK5asTc/Yw8y5QbYOD2xlcdEYsdED
+         lKslU80SS4HIh/xFxy/XN9bGmvbmSAqwJgExs/chNNIOK9DqOYXk4L++wbaGW/3E61kt
+         qamACYhZHlTgN2c+D72kh7mYfxc1OuuF5Z1gpegW9pWIOFfdOLVQ/Zgn09HGpG7Cr3C9
+         D+3Q==
+X-Gm-Message-State: ACrzQf207xR2UsGYDCyrL5AxEosa3sZ3rathvc8UjKFv8GEHW2Pso3e9
+        DC58fht9LzUaZXKG6uSiGy4=
+X-Google-Smtp-Source: AMsMyM6n5TYixxzjKVJkR42cOB6Z7A9WsXklnbiisDz4tMmNnp55xREYU6ERXMG91w4OE9PPLNty0A==
+X-Received: by 2002:a05:6402:1a4d:b0:459:319f:ff80 with SMTP id bf13-20020a0564021a4d00b00459319fff80mr4681904edb.144.1665759835585;
+        Fri, 14 Oct 2022 08:03:55 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id kz12-20020a17090777cc00b00741a251d9e8sm1668219ejc.171.2022.10.14.08.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 08:03:55 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     maxime@cerno.tech, joro@8bytes.org, will@kernel.org, wens@csie.org,
+        samuel@sholland.org, Robin Murphy <robin.murphy@arm.com>
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH 5/5] iommu/sun50i: Invalidate iova in map and unmap callback
+Date:   Fri, 14 Oct 2022 17:03:54 +0200
+Message-ID: <1866625.IobQ9Gjlxr@kista>
+In-Reply-To: <71fb875f-5884-cbc6-534f-6ba72167bf6a@arm.com>
+References: <20221013181221.3247429-1-jernej.skrabec@gmail.com> <20221013181221.3247429-7-jernej.skrabec@gmail.com> <71fb875f-5884-cbc6-534f-6ba72167bf6a@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014144019.GB1108603@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 04:40:19PM +0200, Frederic Weisbecker wrote:
-> On Fri, Oct 14, 2022 at 07:21:27AM -0700, Paul E. McKenney wrote:
-> > On Tue, Oct 11, 2022 at 06:01:30PM +0000, Joel Fernandes (Google) wrote:
-> > > From: Frederic Weisbecker <frederic@kernel.org>
-> > > 
-> > > Upon entraining a callback to a NOCB CPU, no further wake up is
-> > > issued on the corresponding nocb_gp kthread. As a result, the callback
-> > > and all the subsequent ones on that CPU may be ignored, at least until
-> > > an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
-> > > to the same group enqueues a callback on an empty queue.
-> > > 
-> > > Here is a possible bad scenario:
-> > > 
-> > > 1) CPU 0 is NOCB unlike all other CPUs.
-> > > 2) CPU 0 queues a callback
+Dne petek, 14. oktober 2022 ob 12:23:25 CEST je Robin Murphy napisal(a):
+> On 2022-10-13 19:12, Jernej Skrabec wrote:
+> > Mapped and unmapped iova addresses needs to be invalidated immediately
+> > or otherwise they might or might not work when used by master or CPU.
 > > 
-> > Call it CB1.
+> > This was discovered when running video decoder conformity test with
+> > Cedrus. Some videos were now and then decoded incorrectly and generated
+> > page faults.
 > > 
-> > > 2) The grace period related to that callback elapses
-> > > 3) The callback is moved to the done list (but is not invoked yet),
-> > >    there are no more pending callbacks for CPU 0
+> > Fixes: 4100b8c229b3 ("iommu: Add Allwinner H6 IOMMU driver")
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > ---
 > > 
-> > So CB1 is on ->cblist waiting to be invoked, correct?
+> >   drivers/iommu/sun50i-iommu.c | 51 ++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 51 insertions(+)
 > > 
-> > > 4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
-> > > 5) CPU 0 entrains the callback but doesn't wake up nocb_gp
+> > diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
+> > index 7c3b2ac552da..21e47ce6946a 100644
+> > --- a/drivers/iommu/sun50i-iommu.c
+> > +++ b/drivers/iommu/sun50i-iommu.c
+> > @@ -518,6 +518,53 @@ static u32 *sun50i_dte_get_page_table(struct
+> > sun50i_iommu_domain *sun50i_domain,> 
+> >   	return page_table;
+> >   
+> >   }
 > > 
-> > And CB1 must still be there because otherwise the IPI handler would not
-> > have entrained the callback, correct?  If so, we have both CB1 and the
-> > rcu_barrier() callback (call it CB2) in ->cblist, but on the done list.
+> > +static void sun50i_iommu_zap_iova(struct sun50i_iommu *iommu, unsigned
+> > long iova) +{
+> > +	unsigned long flags;
+> > +	u32 reg;
+> > +	int ret;
+> > +
+> > +	spin_lock_irqsave(&iommu->iommu_lock, flags);
+> > +
+> > +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, 0);
+> > +
+> > +	iommu_write(iommu, IOMMU_TLB_IVLD_ADDR_REG, iova);
+> > +	iommu_write(iommu, IOMMU_TLB_IVLD_ADDR_MASK_REG, GENMASK(11, 0));
+> > +	iommu_write(iommu, IOMMU_TLB_IVLD_ENABLE_REG,
+> > IOMMU_TLB_IVLD_ENABLE_ENABLE); +
+> > +	ret = readl_poll_timeout_atomic(iommu->base + 
+IOMMU_TLB_IVLD_ENABLE_REG,
+> > +					reg, !reg, 1, 2000);
+> > +	if (ret)
+> > +		dev_warn(iommu->dev, "TLB invalidation timed out!\n");
+> > +
+> > +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, 
+IOMMU_AUTO_GATING_ENABLE);
+> > +
+> > +	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
+> > +}
+> > +
+> > +static void sun50i_iommu_zap_ptw_cache(struct sun50i_iommu *iommu,
+> > unsigned long iova) +{
+> > +	unsigned long flags;
+> > +	u32 reg;
+> > +	int ret;
+> > +
+> > +	spin_lock_irqsave(&iommu->iommu_lock, flags);
+> > +
+> > +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, 0);
+> > +
+> > +	iommu_write(iommu, IOMMU_PC_IVLD_ADDR_REG, iova);
+> > +	iommu_write(iommu, IOMMU_PC_IVLD_ENABLE_REG,
+> > IOMMU_PC_IVLD_ENABLE_ENABLE); +
+> > +	ret = readl_poll_timeout_atomic(iommu->base + 
+IOMMU_PC_IVLD_ENABLE_REG,
+> > +					reg, !reg, 1, 2000);
+> > +	if (ret)
+> > +		dev_warn(iommu->dev, "PTW cache invalidation timed out!
+\n");
+> > +
+> > +	iommu_write(iommu, IOMMU_AUTO_GATING_REG, 
+IOMMU_AUTO_GATING_ENABLE);
+> > +
+> > +	spin_unlock_irqrestore(&iommu->iommu_lock, flags);
+> > +}
+> > +
 > > 
-> > > 6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
-> > >    callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
+> >   static int sun50i_iommu_map(struct iommu_domain *domain, unsigned long
+> >   iova,>   
+> >   			    phys_addr_t paddr, size_t size, int 
+prot, gfp_t gfp)
+> >   
+> >   {
 > > 
-> > Except that -something- must have already been prepared to wake up in
-> > order to invoke CB1.  And that something would invoke CB2 along with CB1,
-> > given that they are both on the done list.  If there is no such wakeup
-> > already, then the hang could occur with just CB1, without the help of CB2.
+> > @@ -546,6 +593,8 @@ static int sun50i_iommu_map(struct iommu_domain
+> > *domain, unsigned long iova,> 
+> >   	*pte_addr = sun50i_mk_pte(paddr, prot);
+> >   	sun50i_table_flush(sun50i_domain, pte_addr, 1);
+> > 
+> > +	sun50i_iommu_zap_iova(iommu, iova);
+> > +	sun50i_iommu_zap_ptw_cache(iommu, iova);
 > 
-> Heh good point. I was confused with CB1 on RCU_DONE_TAIL and the possibility
-> for CB2 to be entrained on RCU_WAIT_TAIL. But that's indeed not supposed to
-> happen. Ok so this patch indeed doesn't make sense outside lazy.
-
-Whew!!!  ;-)
-
-> > > This is also required to make sure lazy callbacks in future patches
-> > > don't end up making rcu_barrier() wait for multiple seconds.
-> > 
-> > But I do see that the wakeup is needed in the lazy case, and if I remember
-> > correctly, the ten-second rcu_barrier() delay really did happen.  If I
-> > understand correctly, for this to happen, all of the callbacks must be
-> > in the bypass list, that is, ->cblist must be empty.
-> > 
-> > So has the scenario steps 1-6 called out above actually happened in the
-> > absence of lazy callbacks?
+> Consider hooking up .sync_map if you need that behaviour. I'd guess the
+> address/mask combination allows invalidating multiple pages at once,
+> which would be a heck of a lot more efficient.
 > 
-> Nope, so I guess we can have the pending check around rcu_nocb_flush_bypass()
-> only...
+> In principle we probably shouldn't need walk cache maintenance for just
+> changing leaf entries, so that could perhaps be pushed further down into
+> sun50i_dte_get_page_table().
 
-OK, sounds good.
+Note that this is my first foray into iommu and sun50i-iommu documentation is 
+confusing to say the least (it has english words in it, but their combination 
+often doesn't make sense.) 
 
-I have put this series on branch lazy.2022.10.14a and am testing it.
+I'll try that, thanks. Without this invalidation, handing buffer between two 
+iommu supported peripherals works, but CPU access often doesn't. PTW cache can 
+be invalidated only one by one. It's TLB invalidation that has mask.
 
-							Thanx, Paul
+> 
+> >   out:
+> >   	return ret;
+> > 
+> > @@ -571,6 +620,8 @@ static size_t sun50i_iommu_unmap(struct iommu_domain
+> > *domain, unsigned long iova> 
+> >   	memset(pte_addr, 0, sizeof(*pte_addr));
+> >   	sun50i_table_flush(sun50i_domain, pte_addr, 1);
+> > 
+> > +	sun50i_iommu_zap_iova(sun50i_domain->iommu, iova);
+> > +	sun50i_iommu_zap_ptw_cache(sun50i_domain->iommu, iova);
+> 
+> Hmm, we already have .iotlb_sync hooked up for this, so at best adding
+> more maintenance here is simply redundant, but at worst it would be
+> papering over some bug in sun50i_iommu_iotlb_sync() - if unmaps really
+> aren't working properly then that wants fixing instead. Of course it
+> could also be enhanced to use the gather mechanism to perform more
+> selective invalidations, but that's another patch in its own right.
+
+.iotlb_sync assumes that flush operation will to the same thing as invalidation 
+of each entry separately. It obviously doesn't, as my testing shows. I'll 
+rewrite .iotlb_sync to do invalidation instead of flush and check if that 
+works.
+
+I have two questions:
+1. documentation says it's mandatory to do TLB and PTW invalidation in 
+interrupt handler when page fault occurs. Do you see a reason for that?
+2. vendor driver and other iommu drivers have spin lock guards across whole 
+.iova_to_phys, .map and .unmap functions. Should I add them here too?
+
+Best regards,
+Jernej
+
+> 
+> Thanks,
+> Robin.
+> 
+> >   	return SZ_4K;
+> >   
+> >   }
+
+
