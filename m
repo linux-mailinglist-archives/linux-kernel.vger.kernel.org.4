@@ -2,137 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D565FE869
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 07:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8495FE86A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 07:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiJNFcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 01:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S229604AbiJNFcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 01:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJNFcR (ORCPT
+        with ESMTP id S229462AbiJNFcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 01:32:17 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4EF1946FF;
-        Thu, 13 Oct 2022 22:32:14 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 29E5V9aI065718
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Fri, 14 Oct 2022 13:31:09 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 14 Oct 2022 13:31:08 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        <steve.kang@unisoc.com>, <baocong.liu@unisoc.com>,
-        <linux-fsdevel@vger.kernel.org>
-Subject: [RFC PATCH] mm: move xa forward when run across zombie page
-Date:   Fri, 14 Oct 2022 13:30:48 +0800
-Message-ID: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 14 Oct 2022 01:32:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B671946F9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665725568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BWNFgRVlGjYNydd5Fi8o/nyAidzrHzoVF78WNHdTm7o=;
+        b=hxWgxf3+mZAniUfoNH/fUYRtpT+eYdGbMt2wXESwppKF9H6fXpkONWNacbo8paDwnXqxkT
+        rX1PR3TLmBTzUoqoX0GlMt/pFVogBN4IU5/mzXOiiS86C4T2rSnVpJGx+JhEB9g1kr4VM2
+        RJ720gVS1uhn+jCMALmVnH7WcISYgQg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-287-4RzmNkz9MC-R6rHs7kVWmw-1; Fri, 14 Oct 2022 01:32:47 -0400
+X-MC-Unique: 4RzmNkz9MC-R6rHs7kVWmw-1
+Received: by mail-wr1-f71.google.com with SMTP id e14-20020adf9bce000000b0022d18139c79so1468690wrc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 22:32:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BWNFgRVlGjYNydd5Fi8o/nyAidzrHzoVF78WNHdTm7o=;
+        b=dcA9Wm9IWYQJRxXGkWqQGxnrIacmxzBW1jvgcGHwo/8Jq7oMzaUbXXwph+hdiAA5Lu
+         uqo+qlVnR2QUcg89dHnekoN/dxHJRJSlPr+0wQYDbbet7IHcfBipJZofFqAI6Gl9iwAI
+         TFlbnguhEI4SY5c9GKPQkX/VGaQEvu7/9/j/HG5VGhA9PuCg6O578rIECaF51krTahf0
+         mAti25XndPZaN/QPaRiqItAqHdb0cyr92LKz75oX4fONwVkvQsjQw3PDloPOHMux3SLd
+         NLW7I8EQtMWQSaOcPqaCmaX3U68yTOBpKhn2P+uRO4DFiH1JxataQSSHr3o9fVz8z/0m
+         uXyg==
+X-Gm-Message-State: ACrzQf0/3TnxkhQns1cyhg8A96n5Z0feiS8/TkpIdO0zrT4GTOdG0k1o
+        vi+4Fx85tWnl6VuH2zHcLoWL6NPpZ9HLcTn6PJ0V7bL+EV135pKPOu7UlNrXLdIktVbn+zW40os
+        r1xwrt73golg3pCxV+VjmZBcV
+X-Received: by 2002:a05:600c:6885:b0:3c4:de24:638 with SMTP id fn5-20020a05600c688500b003c4de240638mr8799784wmb.183.1665725566138;
+        Thu, 13 Oct 2022 22:32:46 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4R1CQSNUlZz9bqJOSmz/KQyXR4UqWpCPLl4Qqk64SVMiSobCwwLzb2VOcQZa8mbMypnWERfA==
+X-Received: by 2002:a05:600c:6885:b0:3c4:de24:638 with SMTP id fn5-20020a05600c688500b003c4de240638mr8799770wmb.183.1665725565818;
+        Thu, 13 Oct 2022 22:32:45 -0700 (PDT)
+Received: from redhat.com ([2.54.162.123])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b003bf6da9d2cesm6022807wmq.28.2022.10.13.22.32.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 22:32:45 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 01:32:42 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jason Wang <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+Subject: Re: [PATCH] virtio_pci: use irq to detect interrupt support
+Message-ID: <20221014013156-mutt-send-email-mst@kernel.org>
+References: <20221012220312.308522-1-mst@redhat.com>
+ <TY2PR06MB3424171328BEE476FCB9942785249@TY2PR06MB3424.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 29E5V9aI065718
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TY2PR06MB3424171328BEE476FCB9942785249@TY2PR06MB3424.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Fri, Oct 14, 2022 at 12:09:20AM +0000, Angus Chen wrote:
+> Hi Mst
+> 
+> > -----Original Message-----
+> > From: Michael S. Tsirkin <mst@redhat.com>
+> > Sent: Thursday, October 13, 2022 6:04 AM
+> > To: linux-kernel@vger.kernel.org
+> > Cc: Linus Torvalds <torvalds@linux-foundation.org>; Michael Ellerman
+> > <mpe@ellerman.id.au>; Angus Chen <angus.chen@jaguarmicro.com>; Jason
+> > Wang <jasowang@redhat.com>; virtualization@lists.linux-foundation.org
+> > Subject: [PATCH] virtio_pci: use irq to detect interrupt support
+> > 
+> > commit 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
+> > breaks virtio_pci on powerpc, when running as a qemu guest.
+> > 
+> > vp_find_vqs() bails out because pci_dev->pin == 0.
+> > 
+> > But pci_dev->irq is populated correctly, so vp_find_vqs_intx() would
+> > succeed if we called it - which is what the code used to do.
+> > 
+> > This seems to happen because pci_dev->pin is not populated in
+> > pci_assign_irq().
+> > 
+> > Which is absolutely a bug in the relevant PCI code, but it
+> > may also affect other platforms that use of_irq_parse_and_map_pci().
+> > 
+> > However Linus said:
+> > 	The correct way to check for "no irq" doesn't use NO_IRQ at all, it just does
+> > 		if (dev->irq) ...
+> > so let's just check irq and be done with it.
+> > 
+> > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+> > Fixes: 71491c54eafa ("virtio_pci: don't try to use intxif pin is zero")
+> > Cc: "Angus Chen" <angus.chen@jaguarmicro.com>
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> > 
+> > Build tested only - very late here. Angus any chance you could
+> > help test this? Thanks!
+> I tested the patch ，it work well on x86。Inlcude legacy and modern driver.
+> And I tested it on arm server also，and find some problem because of 0.9.5 limitation.
+>  "platform bug: legacy virtio-pci must not be used with RAM above 0x%llxGB\n",
+>  But the error is not effected by our patch.with or without our patch ,it print the same.
 
-Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
-superblock's inode list. The direct reason is zombie page keeps staying on the
-xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
-and supposed could be an xa update without synchronize_rcu etc. I would like to
-suggest skip this page to break the live lock as a workaround.
+Yes that's a limitation of 0.9.5 - just make a smaller VM to test
+legacy.
 
-[167222.620296] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167285.640296] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167348.660296] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167411.680296] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167474.700296] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167537.720299] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167600.740296] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167663.760298] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167726.780298] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167789.800297] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-[167726.780305] rcu: Tasks blocked on level-0 rcu_node (CPUs 0-7): P155
-[167726.780319] (detected by 3, t=17256977 jiffies, g=19883597, q=2397394)
-[167726.780325] task:kswapd0         state:R  running task     stack:   24 pid:  155 ppid:     2 flags:0x00000008
-[167789.800308] rcu: Tasks blocked on level-0 rcu_node (CPUs 0-7): P155
-[167789.800322] (detected by 3, t=17272732 jiffies, g=19883597, q=2397470)
-[167789.800328] task:kswapd0         state:R  running task     stack:   24 pid:  155 ppid:     2 flags:0x00000008
-[167789.800339] Call trace:
-[167789.800342]  dump_backtrace.cfi_jt+0x0/0x8
-[167789.800355]  show_stack+0x1c/0x2c
-[167789.800363]  sched_show_task+0x1ac/0x27c
-[167789.800370]  print_other_cpu_stall+0x314/0x4dc
-[167789.800377]  check_cpu_stall+0x1c4/0x36c
-[167789.800382]  rcu_sched_clock_irq+0xe8/0x388
-[167789.800389]  update_process_times+0xa0/0xe0
-[167789.800396]  tick_sched_timer+0x7c/0xd4
-[167789.800404]  __run_hrtimer+0xd8/0x30c
-[167789.800408]  hrtimer_interrupt+0x1e4/0x2d0
-[167789.800414]  arch_timer_handler_phys+0x5c/0xa0
-[167789.800423]  handle_percpu_devid_irq+0xbc/0x318
-[167789.800430]  handle_domain_irq+0x7c/0xf0
-[167789.800437]  gic_handle_irq+0x54/0x12c
-[167789.800445]  call_on_irq_stack+0x40/0x70
-[167789.800451]  do_interrupt_handler+0x44/0xa0
-[167789.800457]  el1_interrupt+0x34/0x64
-[167789.800464]  el1h_64_irq_handler+0x1c/0x2c
-[167789.800470]  el1h_64_irq+0x7c/0x80
-[167789.800474]  xas_find+0xb4/0x28c
-[167789.800481]  find_get_entry+0x3c/0x178
-[167789.800487]  find_lock_entries+0x98/0x2f8
-[167789.800492]  __invalidate_mapping_pages.llvm.3657204692649320853+0xc8/0x224
-[167789.800500]  invalidate_mapping_pages+0x18/0x28
-[167789.800506]  inode_lru_isolate+0x140/0x2a4
-[167789.800512]  __list_lru_walk_one+0xd8/0x204
-[167789.800519]  list_lru_walk_one+0x64/0x90
-[167789.800524]  prune_icache_sb+0x54/0xe0
-[167789.800529]  super_cache_scan+0x160/0x1ec
-[167789.800535]  do_shrink_slab+0x20c/0x5c0
-[167789.800541]  shrink_slab+0xf0/0x20c
-[167789.800546]  shrink_node_memcgs+0x98/0x320
-[167789.800553]  shrink_node+0xe8/0x45c
-[167789.800557]  balance_pgdat+0x464/0x814
-[167789.800563]  kswapd+0xfc/0x23c
-[167789.800567]  kthread+0x164/0x1c8
-[167789.800573]  ret_from_fork+0x10/0x20
+> And I test modern dirver,it work well also.
+> Sorry for the late reply.
 
-Signed-off-by: Baocong Liu <baocong.liu@unisoc.com>
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- mm/filemap.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 15800334..25b0a2e 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2019,8 +2019,10 @@ static inline struct folio *find_get_entry(struct xa_state *xas, pgoff_t max,
- 	if (!folio || xa_is_value(folio))
- 		return folio;
- 
--	if (!folio_try_get_rcu(folio))
-+	if (!folio_try_get_rcu(folio)) {
-+		xas_advance(xas, folio->index + folio_nr_pages(folio) - 1);
- 		goto reset;
-+	}
- 
- 	if (unlikely(folio != xas_reload(xas))) {
- 		folio_put(folio);
--- 
-1.9.1
+Great, thanks a lot!
+
+> > 
+> >  drivers/virtio/virtio_pci_common.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/virtio/virtio_pci_common.c
+> > b/drivers/virtio/virtio_pci_common.c
+> > index 4df77eeb4d16..a6c86f916dbd 100644
+> > --- a/drivers/virtio/virtio_pci_common.c
+> > +++ b/drivers/virtio/virtio_pci_common.c
+> > @@ -409,8 +409,8 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int
+> > nvqs,
+> >  	err = vp_find_vqs_msix(vdev, nvqs, vqs, callbacks, names, false, ctx, desc);
+> >  	if (!err)
+> >  		return 0;
+> > -	/* Is there an interrupt pin? If not give up. */
+> > -	if (!(to_vp_device(vdev)->pci_dev->pin))
+> > +	/* Is there an interrupt? If not give up. */
+> > +	if (!(to_vp_device(vdev)->pci_dev->irq))
+> >  		return err;
+> >  	/* Finally fall back to regular interrupts. */
+> >  	return vp_find_vqs_intx(vdev, nvqs, vqs, callbacks, names, ctx);
+> > --
+> > MST
+> 
 
