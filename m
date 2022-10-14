@@ -2,154 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363355FF16E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61B25FF177
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 17:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiJNPbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 11:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S230467AbiJNPeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 11:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbiJNPb3 (ORCPT
+        with ESMTP id S231209AbiJNPdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 11:31:29 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2040.outbound.protection.outlook.com [40.107.100.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F23D144E37
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 08:31:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jhE0gFXLthsetxxBmoG1RwI+chgKQq4GZiOs6870oHmeGNt8ptIywpSBX76DufAuK4ZQrbzDCVAJTRQaqxVq5We3q9lOY6zVmyjsnBfMb7a32+kzf7+KB370cg2BkOp6vIFT4zdj/iVj5cnMKHprAl4iVQ5zQ+ynfacdYQti22w9dNZKHREzzjzWGGV9JGCcXXa4QID+4r3lQwVFdoU3TQSbwWRkXNTCq+va34Nc3mIlpkPsUuYuoRg+h67eMQ36g7aCaWaAesQ+LI3lScW1jV4hl5DXyjrnfwo8+ek4CpjCRPk3dXxVDcTmoiBE2nlh0771JIb7oyHlS4FKPk47vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9MToeA3Tj4MASB0FUVMaeoyR2z/lR62GD+rHISPLaic=;
- b=EszSe6C4VzWveeksB3wPiF/kfOCuMUQskQLewfTYplnp1oG1Fstc3xQ4bnn2tFxghY5D/mId8ELRBSqNWTvFT1LBlA+fQHQ9tx+qC6u6ZfLiKQqURXrJ8/Zb45cWrM6OjhW7ljGtRva4Fr0RZk3L1DmZru1h9LYj85ZxG07K2duhxVtZKU9XvkyytVo0KoRJ1XPETXfGv2RL+C0R70SaXGfawxlLzNKbuU+zP31+PuaLW9W6WIjDzytczSev2UofU5aWP98qyiSs9IA/2wtzdWzQFKhkpIigPsSLXFDEog5YQSbDD9obhsIi/2s134cepvtpI6uL8kz+9i6q0eB8Xg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9MToeA3Tj4MASB0FUVMaeoyR2z/lR62GD+rHISPLaic=;
- b=39cFVOPshxd8YrrBCGRp8M9a8PSME8LUUjTydMIUeiHBrxdd+8hrgL+Y4GrkgE3DDljR4T20DmdK8Px8yOvxsxn+r4pII9YMWurB2sk5mchys+tgY5MxK8WlOxt5kD+PR1GT0s7meaj+A2izKmindNQSeQPEjdgWkhZVie66dFU=
-Received: from DM6PR02CA0121.namprd02.prod.outlook.com (2603:10b6:5:1b4::23)
- by SA1PR12MB6824.namprd12.prod.outlook.com (2603:10b6:806:25f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 14 Oct
- 2022 15:31:15 +0000
-Received: from DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b4:cafe::22) by DM6PR02CA0121.outlook.office365.com
- (2603:10b6:5:1b4::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.20 via Frontend
- Transport; Fri, 14 Oct 2022 15:31:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT085.mail.protection.outlook.com (10.13.172.236) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Fri, 14 Oct 2022 15:31:14 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 14 Oct
- 2022 10:31:11 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Nicholas Kazlauskas" <nicholas.kazlauskas@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/display: add a WARN() to irq service functions
-Date:   Fri, 14 Oct 2022 11:31:29 -0400
-Message-ID: <20221014153129.68674-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.0
+        Fri, 14 Oct 2022 11:33:39 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E142B9B86E;
+        Fri, 14 Oct 2022 08:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tcM8guTF51y4dORNbVL0TNPgqKXsDWO1cxQKagb6RpQ=; b=WVap/vaDDQsosYCxpzXStdd50N
+        Xk2922O8Nbnqsjsb7+6hUodsPGVCrgVKrgsn6NfJbcuv4mwas/y+srH7BfoI2LqFrwhgi10jfsRA5
+        BF5HbdvfzMysaPdmw34TGJWtYFtfTuuYzrMdn5E4wZaR/0h+CS+5Lnjj8/qEz9fk+crwilALA5lcd
+        9vyrq/l1kfFZRojAVxnCzyxStxB5YJ4n7DHWVFx7y6nbeh/ctE5/IXQaj3VZTKyKCpdrmYIup4hIp
+        AsBs24qOaZHKyxFCm7DrkIKq/qg/Idd5PdX88EJkUS3LBwmoVyLOnJfA5QcfscgRUwmW1tqkjEaWb
+        ymkHe8ig==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ojMfw-003RUm-BQ; Fri, 14 Oct 2022 15:32:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 248EA30004F;
+        Fri, 14 Oct 2022 17:32:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0D9852C1B0A4D; Fri, 14 Oct 2022 17:32:39 +0200 (CEST)
+Date:   Fri, 14 Oct 2022 17:32:38 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 16/39] x86/mm: Update maybe_mkwrite() for shadow stack
+Message-ID: <Y0mBFjfOAA+hJcUn@hirez.programming.kicks-ass.net>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-17-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT085:EE_|SA1PR12MB6824:EE_
-X-MS-Office365-Filtering-Correlation-Id: e982dbc4-1b72-48d9-37bf-08daadf92137
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6BuStJodXFhGSel44I3JZ9TQWWTNnAQlgUSSzM/xWoGX2OHbZODT3DFN6T6yWdqYvJ1talgarZRFIPStWh3hYFzGoW9r7BNd/fRsIHoebyjiAQq4nsU5T6+CZvvWu0OMpjauoWWtdWrUMqhYULN9hDQ0QG072BzabDmXJ6p9LaC9UO4LOrnGQ7JWgbIC5O597lHYE77BT9nIaSk0Oq+4Gekn+BnzMJp3hNJAjs3b9kYATCtxpQ1G8KoJp4J4/F0IwJf1d8kaLElgZsGgDr9Yj4UzMUB3alXp/bibLB2QEsWH/DdJIWIKJcmCmct9gVgEgCd25iu778p+v7FOs/3eg/wdSGfyGTyNp19NUaRFzQ7349xECG+PiIOUT3um6wvuKVtsqLxh8g+I/4C5xF2qrne9NlSpjjrreowe9257SNUf+702m3A26cAPii/kexWtRHKaj6dnuzivrc2IgZoIl5cvGQ/5jl21HDsP9fMZEKwef8P9PB6YaXb1JUaKm+HQs3o6FAKOXRW0piOAYDcllh+gFw8BqUsCxikdKkcU11pI/YBCuwPwfzyfwyxSJdXrbLudy4OxG/z3pjEvf80QQ63zN2uKYwLHti+twveI8jkF73O+aipgDKJwyAW3TGDOiH1qGzC2rtSiJDZLp8ufVFl08H//unULYZ0nqzEHQ7nRQOhhLfWSAiyIQqIY5Xt8g4hkqmpApOTW3T/ezZSemhUrG4pR3ABDdBYSGrDxecsXLeHo2/U7NMLxi2BVnGeRQJjE5oz6ghvSinucChfbauQRLlk+ghxrF1/umpt5/t9tGE4ueuGsCml+Omfpdz1afMPUw0Yvbem+iQfDBGizHw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(41300700001)(7696005)(82740400003)(36860700001)(336012)(81166007)(1076003)(2616005)(2906002)(44832011)(356005)(8936002)(40460700003)(26005)(186003)(36756003)(82310400005)(5660300002)(16526019)(83380400001)(478600001)(70586007)(70206006)(86362001)(8676002)(6666004)(47076005)(316002)(54906003)(6916009)(426003)(40480700001)(4326008)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 15:31:14.1294
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e982dbc4-1b72-48d9-37bf-08daadf92137
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6824
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-17-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, if we encounter unimplemented functions, it is difficult to
-tell what caused them just by looking at dmesg and that is compounded by
-the fact that it is often hard to reproduce said issues. So, to have
-access to more detailed debugging information, add a WARN() to
-dal_irq_service_ack() and dal_irq_service_set() that only triggers when
-we encounter an unimplemented function.
+On Thu, Sep 29, 2022 at 03:29:13PM -0700, Rick Edgecombe wrote:
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- drivers/gpu/drm/amd/display/dc/irq/irq_service.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 8cd413c5a329..fef14ab3abcb 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -981,13 +981,25 @@ void free_compound_page(struct page *page);
+>   * servicing faults for write access.  In the normal case, do always want
+>   * pte_mkwrite.  But get_user_pages can cause write faults for mappings
+>   * that do not have writing enabled, when used by access_process_vm.
+> + *
+> + * If a vma is shadow stack (a type of writable memory), mark the pte shadow
+> + * stack.
+>   */
+> +#ifndef maybe_mkwrite
+>  static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>  {
+> -	if (likely(vma->vm_flags & VM_WRITE))
+> +	if (!(vma->vm_flags & VM_WRITE))
+> +		goto out;
+> +
+> +	if (vma->vm_flags & VM_SHADOW_STACK)
+> +		pte = pte_mkwrite_shstk(pte);
+> +	else
+>  		pte = pte_mkwrite(pte);
+> +
+> +out:
+>  	return pte;
+>  }
+> +#endif
 
-diff --git a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-index 7bad39bba86b..b895bdd8dc55 100644
---- a/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-+++ b/drivers/gpu/drm/amd/display/dc/irq/irq_service.c
-@@ -112,8 +112,11 @@ bool dal_irq_service_set(
- 
- 	dal_irq_service_ack(irq_service, source);
- 
--	if (info->funcs && info->funcs->set)
-+	if (info->funcs && info->funcs->set) {
-+		WARN(info->funcs->set == dal_irq_service_dummy_set,
-+		     "%s: src: %d, st: %d\n", __func__, source, enable);
- 		return info->funcs->set(irq_service, info, enable);
-+	}
- 
- 	dal_irq_service_set_generic(irq_service, info, enable);
- 
-@@ -146,8 +149,11 @@ bool dal_irq_service_ack(
- 		return false;
- 	}
- 
--	if (info->funcs && info->funcs->ack)
-+	if (info->funcs && info->funcs->ack) {
-+		WARN(info->funcs->ack == dal_irq_service_dummy_ack,
-+		     "%s: src: %d\n", __func__, source);
- 		return info->funcs->ack(irq_service, info);
-+	}
- 
- 	dal_irq_service_ack_generic(irq_service, info);
- 
--- 
-2.38.0
+Why the #ifndef guard? There is no other implementation, nor does this
+patch introduce one.
 
+Also, wouldn't it be simpler to write it like:
+
+static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+{
+	if (!(vma->vm_flags & VM_WRITE))
+		return pte;
+
+	if (vma->vm_flags & VM_SHADOW_STACK)
+		return pte_mkwrite_shstk(pte);
+
+	return pte_mkwrite(pte);
+}
+
+? (idem for the pmd version etc..)
