@@ -2,99 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3375C5FEFC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380835FEFC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 16:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiJNOHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 10:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S230339AbiJNOHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 10:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiJNOHK (ORCPT
+        with ESMTP id S230251AbiJNOHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 10:07:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51BFAF1AA
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 07:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665756395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gTDMT5dUS3Kh1fBWxDZJMEprgSmNC1zcod1UBzX5NVw=;
-        b=PO+GOYgUU/ZiEdyDGUs9fLcCq/n+2WWhk5rG4A3rVJbysBs83STEvtYHyiVYXny7LK18HX
-        fLBDrJAjzaT9boXJ/5Fb1ZNWU/f8YoLM7Ax8nwDaI0lNy5DmWSBW47kws3YKA4OO9DJfUv
-        oAhrUWrEPviVBaBQfUuMo5NWvHW20JE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-CAqzT3VWOAucnqmqLG9C7g-1; Fri, 14 Oct 2022 10:06:32 -0400
-X-MC-Unique: CAqzT3VWOAucnqmqLG9C7g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F3DA832D3E;
-        Fri, 14 Oct 2022 14:06:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3EF761155889;
-        Fri, 14 Oct 2022 14:06:14 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YwWgdekd+f3MqVmu@infradead.org>
-References: <YwWgdekd+f3MqVmu@infradead.org> <166126392703.708021.14465850073772688008.stgit@warthog.procyon.org.uk> <166126393409.708021.16165278011941496946.stgit@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] iov_iter: Add a function to extract an iter's buffers to a bvec iter
+        Fri, 14 Oct 2022 10:07:11 -0400
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15F72D57D7;
+        Fri, 14 Oct 2022 07:06:57 -0700 (PDT)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 87681E0EAF;
+        Fri, 14 Oct 2022 17:06:34 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=post; bh=8x0DQi0sc4Cp7zYGG0KG
+        ETioxXW4LTwMCzYPtV24TFo=; b=Hdsk+2c3den3XYUl6CgB5pRzIh2FdQniC45R
+        af5E24UGKk3h9ZpZ/gVYs0f6EuIke8RbT1kTOxMUvHZlLwpLmkVdjJ8iZpEIlmG3
+        my+GvLRM9fPenxkpGCy1dEm1seeRArsdIp5rj7qPiItdgri23i9Y5PcLWOrudVTG
+        1M7mKXk=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 77A7EE0E1C;
+        Fri, 14 Oct 2022 17:06:34 +0300 (MSK)
+Received: from mobilestation (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 14 Oct 2022 17:06:34 +0300
+Date:   Fri, 14 Oct 2022 17:06:33 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Anders Roxell <anders.roxell@linaro.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <regressions@lists.linux.dev>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, <lkft-triage@lists.linaro.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>
+Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
+ tag
+Message-ID: <20221014140633.mlypet7skkxvt453@mobilestation>
+References: <CA+G9fYvRXkjeO+yDEQxwJ8+GjSmwhZ7XHHAaVWAsxAaSngj5gg@mail.gmail.com>
+ <bf1b053d-ffa6-48ab-d2d2-d59ab21afc19@opensource.wdc.com>
+ <CA+G9fYvUnn0cS+_DZm8hAfi=FnMB08+6Xnhud6yvi9Bxh=DU+Q@mail.gmail.com>
+ <CADYN=9L8tt2T-8O+u5NSMSUOkZDvEggnvzxH6aMmd5Rn9yDeuw@mail.gmail.com>
+ <ca8d3fff-0365-24d9-fd53-5799ac34f336@opensource.wdc.com>
+ <7ee4a1bd-0674-42d8-8980-8b029ca09e71@app.fastmail.com>
+ <75eaeab3-7781-d60a-ae61-ae837f5dcec9@opensource.wdc.com>
+ <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1584070.1665756368.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 14 Oct 2022 15:06:08 +0100
-Message-ID: <1584071.1665756368@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CADYN=9JiX-=PcKMzAcSm=p7Dh6kYT7Kbv-8kcNF0MQ4=1hFS5g@mail.gmail.com>
+X-Originating-IP: [192.168.168.10]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+On Fri, Oct 14, 2022 at 11:22:38AM +0200, Anders Roxell wrote:
+> On Fri, 14 Oct 2022 at 09:53, Damien Le Moal
+> <damien.lemoal@opensource.wdc.com> wrote:
+> >
+> > On 10/14/22 16:31, Arnd Bergmann wrote:
+> > > On Fri, Oct 14, 2022, at 2:22 AM, Damien Le Moal wrote:
+> > >> On 10/14/22 07:07, Anders Roxell wrote:
+> > >> [...]
+> > >>>> 8)
+> > >>>>> If reverting these patches restores the eSATA port on this board, then you need
+> > >>>>> to fix the defconfig for that board.
+> > >>>>
+> > >>>> OTOH,
+> > >>>> Anders, enabled the new config CONFIG_AHCI_DWC=y  and tried but the
+> > >>>> device failed to boot.
+> > >>>
+> > >>> I thought it would work with enabling CONFIG_AHCI_DWC=y, but it didn't...
+> > >>
+> > >> As mentioned in my previous reply to Naresh, this is a new driver added in
+> > >> 6.1. Your board was working before so this should not be the driver needed
+> > >> for it.
+> > >>
+> > >>> However, reverting patch 33629d35090f ("ata: ahci: Add DWC AHCI SATA
+> > >>> controller support")
+> > >>> from next-20221013 was a success, kernel booted  and the 'mkfs.ext4' cmd was
+> > >>> successful.
+> > >>
+> > >> Which is very strange... There is only one hunk in that commit that could
+> > >> be considered suspicious:
+> > >>
+> > >> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+> > >> index 9b56490ecbc3..8f5572a9f8f1 100644
+> > >> --- a/drivers/ata/ahci_platform.c
+> > >> +++ b/drivers/ata/ahci_platform.c
+> > >> @@ -80,9 +80,7 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
+> > >>  static const struct of_device_id ahci_of_match[] = {
+> > >>         { .compatible = "generic-ahci", },
+> > >>         /* Keep the following compatibles for device tree compatibility */
+> > >> -       { .compatible = "snps,spear-ahci", },
+> > >>         { .compatible = "ibm,476gtr-ahci", },
+> > >> -       { .compatible = "snps,dwc-ahci", },
+> > >>         { .compatible = "hisilicon,hisi-ahci", },
+> > >>         { .compatible = "cavium,octeon-7130-ahci", },
+> > >>         { /* sentinel */ }
+> > >>
+> > >> Is your board using one of these compatible string ?
+> > >
+> > > The x15 uses "snps,dwc-ahci". I would expect it to detect the device
+> > > with the new driver if that is loaded, but it's possible that the
+> > > driver does not work on all versions of the dwc-ahci hardware.
+> > >
+> > > Anders, can you provide the boot log from a boot with the new driver
+> > > built in? There should be some messages from dwc-ahci about finding
+> > > the device, but then not ultimately working.
+> > >
+> > > Depending on which way it goes wrong, the safest fallback for 6.1 is
+> > > probably to move the "snps,spear-ahci" and "snps,dwc-ahci" compatible
+> > > strings back into the old driver, and leave the new one only for
+> > > the "baikal,bt1-ahci" implementation of it, until it has been
+> > > successfully verified on TI am5/dra7, spear13xx and exynos.
+> >
+> > OK. So a fix patch until further tests/debug is completed would be this:
+> >
+> > diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
+> > index 8fb66860db31..7a0cbab00843 100644
+> > --- a/drivers/ata/ahci_dwc.c
+> > +++ b/drivers/ata/ahci_dwc.c
+> > @@ -469,8 +469,6 @@ static struct ahci_dwc_plat_data ahci_bt1_plat = {
+> >  };
+> >
+> >  static const struct of_device_id ahci_dwc_of_match[] = {
+> > -       { .compatible = "snps,dwc-ahci", &ahci_dwc_plat },
+> > -       { .compatible = "snps,spear-ahci", &ahci_dwc_plat },
+> >         { .compatible = "baikal,bt1-ahci", &ahci_bt1_plat },
+> >         {},
+> >  };
+> > diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+> > index 8f5572a9f8f1..9b56490ecbc3 100644
+> > --- a/drivers/ata/ahci_platform.c
+> > +++ b/drivers/ata/ahci_platform.c
+> > @@ -80,7 +80,9 @@ static SIMPLE_DEV_PM_OPS(ahci_pm_ops, ahci_platform_suspend,
+> >  static const struct of_device_id ahci_of_match[] = {
+> >         { .compatible = "generic-ahci", },
+> >         /* Keep the following compatibles for device tree compatibility */
+> > +       { .compatible = "snps,spear-ahci", },
+> >         { .compatible = "ibm,476gtr-ahci", },
+> > +       { .compatible = "snps,dwc-ahci", },
+> >         { .compatible = "hisilicon,hisi-ahci", },
+> >         { .compatible = "cavium,octeon-7130-ahci", },
+> >         { /* sentinel */ }
+> >
+> > Anders, Naresh,
+> >
+> > Can you try this ?
+> 
 
-> On Tue, Aug 23, 2022 at 03:12:14PM +0100, David Howells wrote:
-> > Copy cifs's setup_aio_ctx_iter() and to lib/iov_iter.c and generalise =
-it as
-> > extract_iter_to_iter().  This allocates and sets up an array of bio_ve=
-cs
-> > for all the page fragments in an I/O iterator and sets a second suppli=
-ed
-> > iterator to bvec-type pointing to the array.
-> =
+> Tested this patch on todays linux-next tag: next-20221014 without enabling
+> CONFIG_AHCI_DWC and it worked as expected when booting [1].
+> On the other hand I also tried a build/boot with CONFIG_AHCI_DWC enabled
+> and it worked as expected to boot [2].
 
-> Did you read my NACK and comments from last time?
+Expected result. The DWC driver will probe the device on our platform
+only while your platform falls back to using the generic driver.
+Anders, in order understand the root cause of the problem could you please
+1. upload the bogus boot log.
+2. try what I suggested here
+Link: https://lore.kernel.org/linux-ide/20221014133623.l6w4o7onoyhv2q34@mobilestation/
+and if the system fails to boot at some point upload the boot log.
 
-No, because they ended up in a different mailbox from everything else for =
-some
-reason.
+-Sergey
 
-> I really do not like this as a general purpose helper.  This is an odd
-> quirk that we really generally should not needed unless you have very
-> convoluted locking.  So please keep it inside of cifs.
-
-I'm using it in under-development netfslib code also.
-
-Let me ask the question more generally in a separate email.
-
-David
+> However, during building a warning [3] popped up:
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/2/build ARCH=arm
+> CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+> arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+> /builds/linux/drivers/ata/ahci_dwc.c:462:34: warning: 'ahci_dwc_plat'
+> defined but not used [-Wunused-variable]
+>   462 | static struct ahci_dwc_plat_data ahci_dwc_plat = {
+>          |                                  ^~~~~~~~~~~~~
+> 
+> 
+> Cheers,
+> Anders
+> [1] https://lkft.validation.linaro.org/scheduler/job/5678031
+> [2] https://lkft.validation.linaro.org/scheduler/job/5678152
+> [3] https://builds.tuxbuild.com/2G7PDSV5uzjnQqCCBybK4WpoTxz/build.log
+> 
 
