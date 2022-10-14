@@ -2,136 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438605FED4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5C75FED4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiJNLnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S229908AbiJNLpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiJNLnt (ORCPT
+        with ESMTP id S229635AbiJNLpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:43:49 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373641C8437
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:43:49 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso7589481pjq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XtwckXY6GxG78kcpO8+3k1Gq+VT6rNZTsbhQDdeEaDs=;
-        b=RyFNLKV4kCKAULz2zXwQH1I7Vbb+R8O/w1860da086cFUgLzEPfQAZHXTJ7s8Y7ADQ
-         jfEuo6v3iUa08i0aj9Eu3Ql3MEyY07KlN3EK79rrRZd72kTZ3KZOTBI4oAuI8Q7aooBY
-         WWxhsTC+tg5Psc09DFqaQCLWkEAN+ZwAEN1gOCLT9x+h6W1Ylg4/2DbCCU3DciOzyJTx
-         46vVNqE+sV20n/trrqY+2XDvcIA3+Ht+Lz8RWq2s7bmZqNBlIEyS7m0iR4gQTbrlsaVq
-         E1k1lzwK7hw/kytwHvz0v6V9gC8nMoX1qR1bfYcsnp7Kv/W9w+xRV6s1gr6YVPWqTbKQ
-         ChUA==
+        Fri, 14 Oct 2022 07:45:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93DD21815
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665747897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+SaMoWTI1va/GeQPVZGv1GV3k10aJeG+I3b8tcuOi4k=;
+        b=PTGVZGBAZ1EO7Sg2NP6lB6ZPMFHAFigWiPppJ8yz27ZUGjqo+ikoQQgc1vQu9Rzxv6XK/+
+        vvfMZNAe4mf3lGzJUBlcO8l1t76gKc0QduyDNZ7E77hzh2lCvwYv6rwhf4PPT57PHRJlzL
+        gnQPA5b1/L5etwa0w6mZacfXwNN8B98=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-386-NhSNpbLKNsikGRPwcIYLdw-1; Fri, 14 Oct 2022 07:44:56 -0400
+X-MC-Unique: NhSNpbLKNsikGRPwcIYLdw-1
+Received: by mail-io1-f72.google.com with SMTP id t15-20020a5d81cf000000b006bc1ca3ae00so2944004iol.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 04:44:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XtwckXY6GxG78kcpO8+3k1Gq+VT6rNZTsbhQDdeEaDs=;
-        b=rM15PHp5HRvDvrm5GfRH+E828EXoNg6QgEuaJE8KXAwSm7lOmW+gSjiVYf0p7j2p/N
-         r7Zjx3CHu1+KU9fpTOsaKnFeCiX6wvE1c/7w66Ssd4pi5vlvd44+Iu22F5L8CEzEtY6W
-         yqWd8V9yWaiLqRysaUqSXReC7pUJraadLW2Sl6SRB8BRmk0AlPKOFwRh/dJ1foxg3JB/
-         d4yj+2Ie3GnMey1E6xdWLp6ktkqYl2PPZ72ZJwG/23AfH26AG0OUB7l7/BPbwid98MZV
-         3nACDuwQGUbHZK48vWOxdoSo5C1orQz58LluNv9NRSh0PFa8NBem7vpWe8TzlGTxk+CV
-         EIsA==
-X-Gm-Message-State: ACrzQf3pwdELJReIL4RipLPXIAGXNti/9KRhP/YEESYGnCpuQr9vkF4j
-        bxC58Fo2ijoPgLjiQhAnhGo=
-X-Google-Smtp-Source: AMsMyM7jsEKb+jhtAMZz14QrVwXhq59qrHDM300z2XniVkRWpRp+l8VZmMbO4pzcrNMY2TcEeeAHEg==
-X-Received: by 2002:a17:902:d484:b0:17f:7437:565d with SMTP id c4-20020a170902d48400b0017f7437565dmr4892551plg.154.1665747828641;
-        Fri, 14 Oct 2022 04:43:48 -0700 (PDT)
-Received: from hyeyoo.. ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b00178a8f4d4f2sm1542251plg.74.2022.10.14.04.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 04:43:47 -0700 (PDT)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/slub: remove dead code for debug caches on deactivate_slab()
-Date:   Fri, 14 Oct 2022 20:43:22 +0900
-Message-Id: <20221014114322.97512-1-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+SaMoWTI1va/GeQPVZGv1GV3k10aJeG+I3b8tcuOi4k=;
+        b=lBUsAjCUsvvRTYFHyUECIqcZZc1U0JStMxV5Ovz254Bbj8RN+2mJANndLkQSoQP1ZC
+         AzrD5dp8D2BQqmZvbD8TGgmTDTsLaP85hrWFe8bhMSpxe2lxbqXvqdLrkI5PRX/HhBhk
+         k7kBEokfGETSo5knkf15oU6a4qRUu0jxEPeZuKd58GIsqyvvD0vsuSp+kHHaPS1o+cOC
+         +zsjYz9OCWP2pzu2kGZ8cLcNHT3Bf1OlRFR0cCIHEdk6WiDyr703KLg7wULN7NwNGfY9
+         3jv02O/vjZAtceDFC4FS5z5sejKnn64CKByPZ/o5umo85frwFjdV6r7ihZZ36ZgYGuNY
+         xBsw==
+X-Gm-Message-State: ACrzQf1d5yMU770Dijt1CGuXDK0nGvnLx/TeUpcNUUAcfOINEOinG85e
+        4wdXVIAyg5gL1CeuXXbkygrGqxbACw7+iYIgV/YXVSvkJ7me6kwUvxbji+vAcyXIoK2ps9l9kHZ
+        H2pNfc6OoK7CdOTEcWH4zFT3ZCOJKTOZC267klSke
+X-Received: by 2002:a05:6e02:1ba3:b0:2fa:3547:477a with SMTP id n3-20020a056e021ba300b002fa3547477amr2333626ili.34.1665747895139;
+        Fri, 14 Oct 2022 04:44:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6bwkw/YLVKENVtQ5QSSOSYDV5uyqFVv+l7NGeCxPr7b/ll4YvLxvKADWuES9vE93ktW2TZnt4eeMdL4zO9Gmg=
+X-Received: by 2002:a05:6e02:1ba3:b0:2fa:3547:477a with SMTP id
+ n3-20020a056e021ba300b002fa3547477amr2333619ili.34.1665747894973; Fri, 14 Oct
+ 2022 04:44:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221009182747.90730-1-jose.exposito89@gmail.com>
+In-Reply-To: <20221009182747.90730-1-jose.exposito89@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 14 Oct 2022 13:44:43 +0200
+Message-ID: <CAO-hwJKJ8SROR5WVyogAAh=L3jyuHuJwLi6B1C9wGD=14PjYGA@mail.gmail.com>
+Subject: Re: [PATCH] HID: magicmouse: Do not set BTN_MOUSE on double report
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     jikos@kernel.org, rydberg@bitmath.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nulo <git@nulo.in>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit c7323a5ad0786 ("mm/slub: restrict sysfs validation to debug
-caches and make it safe"), SLUB does not take a slab from partial list for
-debug caches. As deactivation isn't needed anymore, remove dead code.
+On Sun, Oct 9, 2022 at 8:28 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gma=
+il.com> wrote:
+>
+> Under certain conditions the Magic Trackpad can group 2 reports in a
+> single packet. The packet is split and the raw event function is
+> invoked recursively for each part.
+>
+> However, after processing each part, the BTN_MOUSE status is updated,
+> sending multiple click events. [1]
+>
+> Return after processing double reports to avoid this issue.
+>
+> Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/811  # [1=
+]
+> Fixes: a462230e16ac ("HID: magicmouse: enable Magic Trackpad support")
+> Reported-by: Nulo <git@nulo.in>
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> ---
 
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- mm/slub.c | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+Applied to for-6.1/upstream-fixes, thanks for spotting that old bug :)
 
-diff --git a/mm/slub.c b/mm/slub.c
-index 96dd392d7f99..e2215240954d 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2411,7 +2411,7 @@ static void init_kmem_cache_cpus(struct kmem_cache *s)
- static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 			    void *freelist)
- {
--	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE, M_FULL_NOLIST };
-+	enum slab_modes { M_NONE, M_PARTIAL, M_FREE, M_FULL_NOLIST };
- 	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
- 	int free_delta = 0;
- 	enum slab_modes mode = M_NONE;
-@@ -2487,14 +2487,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 		 * acquire_slab() will see a slab that is frozen
- 		 */
- 		spin_lock_irqsave(&n->list_lock, flags);
--	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
--		mode = M_FULL;
--		/*
--		 * This also ensures that the scanning of full
--		 * slabs from diagnostic functions will not see
--		 * any frozen slabs.
--		 */
--		spin_lock_irqsave(&n->list_lock, flags);
- 	} else {
- 		mode = M_FULL_NOLIST;
- 	}
-@@ -2504,7 +2496,7 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 				old.freelist, old.counters,
- 				new.freelist, new.counters,
- 				"unfreezing slab")) {
--		if (mode == M_PARTIAL || mode == M_FULL)
-+		if (mode == M_PARTIAL)
- 			spin_unlock_irqrestore(&n->list_lock, flags);
- 		goto redo;
- 	}
-@@ -2518,10 +2510,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 		stat(s, DEACTIVATE_EMPTY);
- 		discard_slab(s, slab);
- 		stat(s, FREE_SLAB);
--	} else if (mode == M_FULL) {
--		add_full(s, n, slab);
--		spin_unlock_irqrestore(&n->list_lock, flags);
--		stat(s, DEACTIVATE_FULL);
- 	} else if (mode == M_FULL_NOLIST) {
- 		stat(s, DEACTIVATE_FULL);
- 	}
--- 
-2.32.0
+Cheers,
+Benjamin
+
+>  drivers/hid/hid-magicmouse.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+> index 664a624a363d..c9c968d4b36a 100644
+> --- a/drivers/hid/hid-magicmouse.c
+> +++ b/drivers/hid/hid-magicmouse.c
+> @@ -480,7 +480,7 @@ static int magicmouse_raw_event(struct hid_device *hd=
+ev,
+>                 magicmouse_raw_event(hdev, report, data + 2, data[1]);
+>                 magicmouse_raw_event(hdev, report, data + 2 + data[1],
+>                         size - 2 - data[1]);
+> -               break;
+> +               return 0;
+>         default:
+>                 return 0;
+>         }
+> --
+> 2.25.1
+>
 
