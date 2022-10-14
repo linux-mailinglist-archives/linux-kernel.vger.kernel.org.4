@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534A05FF64E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1145FF64B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 00:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiJNWNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 18:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S229939AbiJNWNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 18:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiJNWMj (ORCPT
+        with ESMTP id S229816AbiJNWMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 18:12:39 -0400
+        Fri, 14 Oct 2022 18:12:38 -0400
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C7B1D2992;
-        Fri, 14 Oct 2022 15:12:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A5917C578;
+        Fri, 14 Oct 2022 15:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1665785539; x=1697321539;
+  t=1665785538; x=1697321538;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3+JzfZN351f5CPgINbyI8EkYTpUxj/3CJwM0A6tPQbY=;
-  b=bD200UpdzrQMBLvVTcuqy9904QmKqcTXSL1KXPY+EddRfucNiGyYwOr4
-   tTJY+PFm6MxvGlUBa1r0/uo3pqacNpKu2Fkc4AkG0s2Fasofo5SO/xwBw
-   AO+Ci+d9YOBC5EBR9D9TKgAJX4NnhKJU541XLjMkbwIPC0HbCdgnYdchT
-   c=;
+  bh=FNXkjMP1eP8UMY4l2fo0iA2yTv9fvhPoDZMcm7ksT9o=;
+  b=KRfrQph7Pl+KGexK0cmCn7Io3n7ucaAKk3BspvBn1y0Y83vImUFjUa5e
+   SwAQTAi6wdcW9XD+BJjfvR3fYznC9LHydyP2Q0H+Gj8EjySLwqqN4m1MZ
+   X7Zqd+9RztS9LhPNFl6svVE/B2jlW3fQNXc3aKkYBWmABmVoMHX2BWcKQ
+   w=;
 Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
   by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Oct 2022 15:11:52 -0700
 X-QCInternal: smtphost
@@ -33,7 +33,7 @@ Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
 Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 14 Oct 2022 15:11:37 -0700
+ 15.2.986.29; Fri, 14 Oct 2022 15:11:38 -0700
 From:   Melody Olvera <quic_molvera@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -44,9 +44,9 @@ CC:     Robert Marko <robimarko@gmail.com>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH v2 1/4] dt-bindings: firmware: scm: Add QDU1000/QRU1000 compatibles
-Date:   Fri, 14 Oct 2022 15:11:18 -0700
-Message-ID: <20221014221121.7497-2-quic_molvera@quicinc.com>
+Subject: [PATCH v2 2/4] dt-bindings: power: rpmpd: Add QDU1000/QRU1000 to rpmpd binding
+Date:   Fri, 14 Oct 2022 15:11:19 -0700
+Message-ID: <20221014221121.7497-3-quic_molvera@quicinc.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221014221121.7497-1-quic_molvera@quicinc.com>
 References: <20221014221121.7497-1-quic_molvera@quicinc.com>
@@ -65,47 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
+Add compatible and constants for the power domains exposed by the RPMH
+in the Qualcomm QDU1000 and QRU1000 platforms.
 
 Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 ---
- .../devicetree/bindings/firmware/qcom,scm.yaml   | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 2 ++
+ include/dt-bindings/power/qcom-rpmpd.h                  | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-index c5b76c9f7ad0..47083f47f109 100644
---- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-+++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-@@ -38,6 +38,8 @@ properties:
-           - qcom,scm-msm8994
-           - qcom,scm-msm8996
-           - qcom,scm-msm8998
-+          - qcom,scm-qdu1000
-+          - qcom,scm-qru1000
-           - qcom,scm-sc7180
-           - qcom,scm-sc7280
-           - qcom,scm-sc8280xp
-@@ -80,6 +82,20 @@ properties:
-     description: TCSR hardware block
+diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+index 5b4eda919911..ffac5fcf5f6f 100644
+--- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
++++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+@@ -28,6 +28,8 @@ properties:
+       - qcom,msm8998-rpmpd
+       - qcom,qcm2290-rpmpd
+       - qcom,qcs404-rpmpd
++      - qcom,qdu1000-rpmhpd
++      - qcom,qru1000-rpmhpd
+       - qcom,sa8540p-rpmhpd
+       - qcom,sdm660-rpmpd
+       - qcom,sc7180-rpmhpd
+diff --git a/include/dt-bindings/power/qcom-rpmpd.h b/include/dt-bindings/power/qcom-rpmpd.h
+index f5f82dde7399..965c065a9caa 100644
+--- a/include/dt-bindings/power/qcom-rpmpd.h
++++ b/include/dt-bindings/power/qcom-rpmpd.h
+@@ -103,6 +103,12 @@
+ #define SM8450_MXC_AO	11
+ #define SM8450_MSS	12
  
- allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,scm-qdu1000
-+              - qcom,scm-qru1000
-+    then:
-+      properties:
-+        '#reset-cells':
-+          maxItems: 1
++/* QDU1000/QRU1000 Power Domain Indexes */
++#define QDRU1000_EBI	0
++#define QDRU1000_MSS	1
++#define QDRU1000_CX	2
++#define QDRU1000_MX	3
 +
-+      required:
-+        - '#reset-cells'
-   - if:
-       properties:
-         compatible:
+ /* SC7180 Power Domain Indexes */
+ #define SC7180_CX	0
+ #define SC7180_CX_AO	1
 -- 
 2.38.0
 
