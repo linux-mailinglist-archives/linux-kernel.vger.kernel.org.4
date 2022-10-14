@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05635FF2DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757275FF2E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbiJNRUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S231288AbiJNRUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJNRUd (ORCPT
+        with ESMTP id S229822AbiJNRUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:20:33 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664EC474C8;
-        Fri, 14 Oct 2022 10:20:32 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y8so5460306pfp.13;
-        Fri, 14 Oct 2022 10:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fPATVudPSO8kPCMernk2QpFo+S936O55u8ii3pliT8=;
-        b=Yb1g2J3WyyLaHftxPyVqzcvJFeRCCS/ltPklCPgWW4ho9ldmCbVtfj0YZ1A9sowbI1
-         tkjrZPZLQi7GZ55jrd9Fc/qdaDHwQnFwx8W6ffa0v3nC2/XoOeIvAbT4k0QrqW364Orw
-         RuILkjYGbeoUZM5ZVcYoxIBKtpdospnzfSq2+Dfs7m5Qa5tyjYBOQQrTne5+vhaSmKW5
-         JV44cLlEP73eU5tf1bDXdc7zmqKsWbLIA3OK/MYojmg7HTLIdG8oOi0p49wvyNDHpbm6
-         ImtG+xCvSqfhKorDMOGiVxDoJb9KAl14UGTRJPPR1t1z6dQWTNtTgmtflzsJCvyZzDZV
-         vfMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8fPATVudPSO8kPCMernk2QpFo+S936O55u8ii3pliT8=;
-        b=uq5zRKhBNPwWqq1MZjZG4i3xnE4sFJKeOPYGIe/EbMjHMuHGCoTxgw5lfhcmd2EXAh
-         Zrbv8Jr+4VJ3Upv72L5rUzMZ76dEkA04CNGfnSQ0LaqT51EYHCPOVCmMvDGZ4VuWYEnc
-         SiT8GHMZGCopP7Si7w88wCeuCA2l3F6a/usubnRVU1NoNee5j/UZGomVpmdHXsCFflTI
-         Ds3bqHsSZyIj2I0mpbj2hER4slyq26+Jj2fesnMFyD9eLkGmN4I7R05NnF/upcoYH/EP
-         2dJy82FW4Fc0F0CGJhl0swOOqPxxQkcfiJzWD0W1oM6cznMzW3K/Xrk5SzOeEQg7wje9
-         4v8w==
-X-Gm-Message-State: ACrzQf1l0TU4yQyouXR/Aj9/4JCPrxAA9hzYKOQ0CT3Bv8mAneCoyfjn
-        QP0yUOXaaOwEN4ETZBBSLmOSNQAu5ZM=
-X-Google-Smtp-Source: AMsMyM5ewOIFNBJTWOZa+ubmmdVyGYhR8cPMq/e0Hz0ynxbPZJiac9+bq8Oud3TxWBLqDpyvKGLZCA==
-X-Received: by 2002:a63:5547:0:b0:456:c63b:7139 with SMTP id f7-20020a635547000000b00456c63b7139mr5502466pgm.179.1665768031920;
-        Fri, 14 Oct 2022 10:20:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g186-20020a6252c3000000b0055f98a2c64bsm2068276pfb.142.2022.10.14.10.20.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 10:20:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ed901a64-7002-4a4e-1342-c06f9a398fd1@roeck-us.net>
-Date:   Fri, 14 Oct 2022 10:20:30 -0700
+        Fri, 14 Oct 2022 13:20:45 -0400
+Received: from mail.codeweavers.com (mail.codeweavers.com [65.103.31.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7EF57258;
+        Fri, 14 Oct 2022 10:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codeweavers.com; s=6377696661; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EyQhJSXWD0na1sAKSM1PZmYSSPO/aWIU0nptxObWazE=; b=uEgxfjID/ryR0D1gRZ5Kc09HlE
+        6aAUzHPkO0ssSS1gUAxN1YIpuxr/6H8jkg/fuvGKw+lSPUpK9OCDp8O/A0OChVftlUhk1anfpqUDK
+        b4eciePkveCm2K67nUpu4jLTLLycFy1haQSV2hE+KcrVnMUOoUCLenkosWfDFqYPIeWo=;
+Received: from cw141ip123.vpn.codeweavers.com ([10.69.141.123])
+        by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pgofman@codeweavers.com>)
+        id 1ojOMS-00GB8q-88; Fri, 14 Oct 2022 12:20:40 -0500
+Message-ID: <03031c84-baa0-fe99-b1d7-44963cad0001@codeweavers.com>
+Date:   Fri, 14 Oct 2022 12:20:37 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-hwmon@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        jdelvare@suse.com, len.brown@intel.com
-References: <20221014090147.1836-1-rui.zhang@intel.com>
- <20221014090147.1836-2-rui.zhang@intel.com>
- <ad558e83-3e42-aefd-754d-e71f49dda206@intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ad558e83-3e42-aefd-754d-e71f49dda206@intel.com>
+ Thunderbird/102.3.1
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
+Content-Language: en-GB
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+ <8dff3e46-6dac-af6a-1a3b-e6a8b93fdc60@collabora.com>
+ <CANn89iLOdgExV3ydkg0r2iNwavSp5Zu9hskf34TTqmCZQCfUdA@mail.gmail.com>
+ <5db967de-ea7e-9f35-cd74-d4cca2fcb9ee@codeweavers.com>
+ <CANn89iJTNUCDLptS_rV4JUDcEH8JNXvOTx4xgzvaDHG6eodtXg@mail.gmail.com>
+ <81b0e6c9-6c13-aecd-1e0e-6417eb89285f@codeweavers.com>
+ <CANn89iKD=ceuLnhK-zpk3QerpS-FUb_wb_HevkpvsVqGJ_T4NQ@mail.gmail.com>
+ <342a762d-22f5-b979-411f-aab0474feda2@codeweavers.com>
+ <CANn89iKoaLRupASAJKW5ZprXhSMiXSs7vi5UT=wEU11R5+iLZQ@mail.gmail.com>
+From:   Paul Gofman <pgofman@codeweavers.com>
+In-Reply-To: <CANn89iKoaLRupASAJKW5ZprXhSMiXSs7vi5UT=wEU11R5+iLZQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 10:12, Dave Hansen wrote:
-> On 10/14/22 02:01, Zhang Rui wrote:
->> Use variable name 'index' instead of 'indx' for the index in the
->> core_data[] array.
->>
->> No functional change expected.
->>
->> Cc: stable@vger.kernel.org
->> Suggested-by: Ingo Molnar <mingo@kernel.org>
->> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> 
-> Hi,
-> 
-> Thanks for paring this series down.
-> 
-> I think I'm also going to pull this patch out of the series before I
-> apply it and just rework 2/4 to apply cleanly without it.  I just can't
-> put this in our "urgent" fixes pile and keep the stable@ tag on such a
-> trivial rename and keep a straight face.
-> 
-
-To be fair, this patch was only submitted as a prerequisite to the next
-patch in the series because someone had objected to the use of both 'indx'
-and 'index' in the driver.
-
-Guenter
-
+On 10/14/22 11:45, Eric Dumazet wrote:
+> On Fri, Oct 14, 2022 at 9:39 AM Paul Gofman <pgofman@codeweavers.com> wrote:
+>
+> I think it is documented.
+>
+> man 7 socket
+>
+>         SO_REUSEADDR
+>                Indicates that the rules used in validating addresses
+> supplied in a bind(2) call should allow reuse of local addresses.  For
+> AF_INET sockets this means
+>                that a socket may bind, except when there is an active
+> listening socket bound to the address.  When the listening socket is
+> bound to INADDR_ANY with  a
+>                specific port then it is not possible to bind to this
+> port for any local address.  Argument is an integer boolean flag.
+>
+> You seem to need another way, so you will have to ask this question in IETF.
+Thanks a lot, I think it answers my question, I am afraid I was reading 
+this a bit wrong.
