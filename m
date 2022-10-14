@@ -2,82 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B54F5FE89F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723315FE8A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 08:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiJNGCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 02:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S229547AbiJNGD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 02:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJNGC1 (ORCPT
+        with ESMTP id S229548AbiJNGDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 02:02:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972411AAE4F;
-        Thu, 13 Oct 2022 23:02:09 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29E5TmBs004656;
-        Fri, 14 Oct 2022 06:02:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bTHb/iTIJ515U9ZD/ZdvnV3tGnX4kfcrHGl79HkwpXw=;
- b=DFglannX+u5FPA3ro0Wy/VAiGOMUgjG+mQAP19mutYEZ7s5gfG9T/C+SP85hwsCLzFQQ
- NxTUnYZ+GXMLAWHOP2p/xFdFfrMJ3Q8ICZcyf3jE1/os206nOgJFch8t3+ynMFICHf7n
- 9bmafvZN5N7XXiMZEJHesHI/LbzbYbdrLqu4WyGj4b/Xcrp9WY1rCjHqpWz9dsEHdQo+
- cV8VNdFRzLyNeWvJ2UvK5nnnBDE6eOxoRAD4SGbPoG1ko+ts+94BVPl7Cmn72onocF91
- Qjb0Y3tpSfkgMr4uxaQdseme7k9NWfEnGl5iPLSC5JLomAB2yIgXW/u+TSbC3UykAtf1 nw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k6h782p44-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 06:01:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29E61xrY005911
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Oct 2022 06:01:59 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 13 Oct 2022 23:01:54 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alex Elder <elder@ieee.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
-        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V17 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
-Date:   Fri, 14 Oct 2022 11:30:33 +0530
-Message-ID: <2098eaa0bcc898b868c3ddb37891dfb0b72bc794.1665549527.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1665549527.git.quic_schowdhu@quicinc.com>
-References: <cover.1665549527.git.quic_schowdhu@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: WwUpo88IjIGm2ZQ2hE6jFEj2ULlKrKBn
-X-Proofpoint-GUID: WwUpo88IjIGm2ZQ2hE6jFEj2ULlKrKBn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-14_02,2022-10-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0 adultscore=0
- mlxlogscore=901 clxscore=1015 mlxscore=0 priorityscore=1501 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210140034
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        Fri, 14 Oct 2022 02:03:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F27E19E92B;
+        Thu, 13 Oct 2022 23:03:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC77B8216A;
+        Fri, 14 Oct 2022 06:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E751DC433D7;
+        Fri, 14 Oct 2022 06:03:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1665727383;
+        bh=Sj0ADGiNe3/XsOSpd7wJHdWZ6tdgK0sm1kkalZ7RaSY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P9BG0Ck8iDe81L0WJ+YcLn9CxMR9gFyyW+s6iLJGOf4sH0/ypMrFTbr4LfizLM5cd
+         mbmVSNSosjIZJIblJoy/A33gzMGbsllwIfhjD4hAFI5fwgHXXkdppbFL6fJnAvFufj
+         iEsb9lLIie/w99bBfxxxbBWi+cuzuoV+evmX4efU=
+Date:   Thu, 13 Oct 2022 23:03:02 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Final MM updates for 6.1-rc1
+Message-Id: <20221013230302.96f2869cd26026b36e8ecd40@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +49,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DCC(Data Capture and Compare) device tree node entry along with
-the address of the register region.
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+Linus, please merge this smallish batch of features and fixes.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index d761da4..7d476b2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2137,6 +2137,12 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		dma@10a2000 {
-+			compatible = "qcom,sdm845-dcc", "qcom,dcc";
-+			reg = <0x0 0x010a2000 0x0 0x1000>,
-+			      <0x0 0x010ae000 0x0 0x2000>;
-+		};
-+
- 		pmu@114a000 {
- 			compatible = "qcom,sdm845-llcc-bwmon";
- 			reg = <0 0x0114a000 0 0x1000>;
--- 
-2.7.4
+There's a conflict in drivers/gpu/drm/amd/amdkfd/kfd_migrate.c. 
+Stephen's resolution is at
+https://lkml.kernel.org/r/20221004210029.7412fcfd@canb.auug.org.au
+
+Thanks.
+
+
+The following changes since commit bbff39cc6cbcb86ccfacb2dcafc79912a9f9df69:
+
+  hugetlb: allocate vma lock for all sharable vmas (2022-10-07 14:28:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2022-10-13
+
+for you to fetch changes up to ef6e06b2ef87077104d1145a0fd452ff8dbbc4b7:
+
+  highmem: fix kmap_to_page() for kmap_local_page() addresses (2022-10-12 18:51:51 -0700)
+
+----------------------------------------------------------------
+- Alistair Popple has a series which addresses a race which causes page
+  refcounting errors in ZONE_DEVICE pages.
+
+- Peter Xu fixes some userfaultfd test harness instability.
+
+- Various other patches in MM, mainly fixes.
+
+----------------------------------------------------------------
+Alexander Potapenko (1):
+      kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+
+Alexey Dobriyan (1):
+      mm: more vma cache removal
+
+Alistair Popple (8):
+      mm/memory.c: fix race when faulting a device private page
+      mm: free device private pages have zero refcount
+      mm/memremap.c: take a pgmap reference on page allocation
+      mm/migrate_device.c: refactor migrate_vma and migrate_deivce_coherent_page()
+      mm/migrate_device.c: add migrate_device_range()
+      nouveau/dmem: refactor nouveau_dmem_fault_copy_one()
+      nouveau/dmem: evict device private memory during release
+      hmm-tests: add test for migrate_device_range()
+
+Andrew Morton (1):
+      mm/hugetlb.c: make __hugetlb_vma_unlock_write_put() static
+
+Andrey Konovalov (1):
+      kasan: fix array-bounds warnings in tests
+
+Brian Geffon (1):
+      zram: always expose rw_page
+
+Carlos Llamas (1):
+      mm/mmap: undo ->mmap() when arch_validate_flags() fails
+
+Chuyi Zhou (1):
+      mm/compaction: fix set skip in fast_find_migrateblock
+
+Ira Weiny (1):
+      highmem: fix kmap_to_page() for kmap_local_page() addresses
+
+Liam Howlett (2):
+      mmap: fix copy_vma() failure path
+      mm/mmap: preallocate maple nodes for brk vma expansion
+
+Matthew Wilcox (Oracle) (1):
+      ext4,f2fs: fix readahead of verity data
+
+Peter Xu (4):
+      mm/uffd: fix warning without PTE_MARKER_UFFD_WP compiled in
+      mm/hugetlb: fix race condition of uffd missing/minor handling
+      mm/hugetlb: use hugetlb_pte_stable in migration race check
+      mm/selftest: uffd: explain the write missing fault check
+
+Qi Zheng (2):
+      mm: use update_mmu_tlb() on the second thread
+      LoongArch: update local TLB if PTE entry exists
+
+Xiaoke Wang (1):
+      lib/test_meminit: add checks for the allocation functions
+
+Xin Hao (2):
+      mm/damon: move sz_damon_region to damon_sz_region
+      mm/damon: use damon_sz_region() in appropriate place
+
+Yafang Shao (1):
+      mm/page_alloc: fix incorrect PGFREE and PGALLOC for high-order page
+
+ arch/loongarch/include/asm/pgtable.h     |   3 +
+ arch/powerpc/kvm/book3s_hv_uvmem.c       |  21 +--
+ drivers/block/zram/zram_drv.c            |  26 +---
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |  19 +--
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.h |   2 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c     |  11 +-
+ drivers/gpu/drm/nouveau/nouveau_dmem.c   | 108 ++++++++++----
+ fs/ext4/verity.c                         |   3 +-
+ fs/f2fs/verity.c                         |   3 +-
+ include/linux/damon.h                    |   6 +
+ include/linux/memremap.h                 |   1 +
+ include/linux/migrate.h                  |  15 ++
+ include/linux/sched.h                    |   2 -
+ lib/test_hmm.c                           | 129 +++++++++++++----
+ lib/test_hmm_uapi.h                      |   1 +
+ lib/test_meminit.c                       |  21 +++
+ mm/compaction.c                          |   1 -
+ mm/damon/core.c                          |  26 ++--
+ mm/damon/vaddr.c                         |   4 +-
+ mm/highmem.c                             |  43 ++++--
+ mm/hugetlb.c                             |  72 ++++++++--
+ mm/kasan/kasan_test.c                    |   9 +-
+ mm/memory.c                              |  20 ++-
+ mm/memremap.c                            |  30 +++-
+ mm/migrate.c                             |  34 +++--
+ mm/migrate_device.c                      | 239 ++++++++++++++++++++++---------
+ mm/mmap.c                                |  28 ++--
+ mm/mmu_gather.c                          |  10 ++
+ mm/mprotect.c                            |   2 +
+ mm/page_alloc.c                          |  12 +-
+ tools/testing/selftests/vm/hmm-tests.c   |  49 +++++++
+ tools/testing/selftests/vm/userfaultfd.c |  22 ++-
+ 32 files changed, 719 insertions(+), 253 deletions(-)
 
