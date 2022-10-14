@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558E75FF461
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9EA5FF462
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 22:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiJNUOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 16:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
+        id S230139AbiJNUOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 16:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiJNUOM (ORCPT
+        with ESMTP id S231145AbiJNUOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 16:14:12 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37D4101D2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:14:10 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id f9-20020a17090a664900b0020ada57adaeso3049716pjm.7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:14:10 -0700 (PDT)
+        Fri, 14 Oct 2022 16:14:14 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208F32656F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:14:13 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id t4-20020a635344000000b0045fe7baa222so3129447pgl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 13:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4V1w1ZK85iv+g/osbxdE+4HdIBW8TKuHK7GH5Ncfix4=;
-        b=UjBn+YBMCMvoKokEWmD6iVVb+CmRp8QL3WpqKJ8mv/Tr5MteD0GnXQRW9J3KWJtO+/
-         Gm9C8BKbLFUNTmZ3JZNTfY/PuAnkARN+kxEyQGoAuriDczy8jUY/VTRYJ1DJK9WQZllV
-         cdJ4SjrA04VVZiu6+gDYU9E+JABdxMrCSyUybd1Ck3JJUyzVKIDfVMVle/cF3ZJWu+BA
-         SR9mGLf52iGHCOdPRhYwkQj08ViJqDkJt+//QFpYhKCyzYa9PUVUs7qm4fy9GxY1vgo2
-         9WmMSNwUM5PDmsLW7733Ah1n+XOetkkn5BuyX1qEONHh1kRwka+GAYwKWso4JZ97rpO+
-         u96A==
+        bh=g8mJKRUhkPO00K8I7nJ7lKtujFUxdFbhGR6doaLvrDA=;
+        b=BYM366/GijWPTopDA+VEKZCw8lt94RZAa7uz9fHy13iIxLmF/SiRvm6EKXw4XkFrVC
+         0/AFpRSo+OkTcJcEowFM26R/wt2WYyUk++ENn0H40iFDFIrigMFwh8BWRUOE7iRYNd2P
+         qKAY3+4ocVgvva99hRSjvPK9PZJ6zk4lV45RCTz0FkCeST3ME72YjlFgv3742PGmb+0j
+         n7bXvVs99h6QQWxXId6qDWLzlfR0W5inoQJkEbJAKTb3U1mef5pUMKhTwlFV7xn8i8H5
+         VWMmkzgTvlXM/Le7Z9DDzVYzaw2o6i0FoK8vu+l/U+FukJtX932a+ixfNqPrxYRR+d0a
+         XGFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4V1w1ZK85iv+g/osbxdE+4HdIBW8TKuHK7GH5Ncfix4=;
-        b=CkEQB5uOuinH6h3f2csA2wIVVdDWcJNVHRnYTpTVEU+iwt+I9SwtVcMmzQE4M+LnK5
-         ZQq0Jxxt49qVi8WcvjAw0yUbyJvrDKfnwetGqNZooDhynBLNw3GgP60MmGvnQKL+JSEW
-         o6Y/fMoX6kUDkpUjGsXNOQd6IX/3EqKtxrai3Bgzgiz2i81uRDHaQzLUm24PcsS+SPyW
-         IQF0Hg1WusnWIHnLIoKdLCRcIT3pZ0SHBLwgSlGVg7/J1N6cD0uaAWGdmXeuTBFiyd9r
-         dpD2VQakAGZnHR8oaHLpcoE7Pt+IkKZNEIlFmBG+f5VfKHznXRRt8RWjdXku9AhC1Tj7
-         CouA==
-X-Gm-Message-State: ACrzQf2skpFfcgN1yp+wJftkQSoC7/ilXU6vBVcIju6E2V6IrZcV0YX6
-        QKQeoNuId30fIZKKHk6ZX9G8popjyy6tMAIsUZA=
-X-Google-Smtp-Source: AMsMyM5KhhNWGT3EKmladXCzyff6T3V13esS8iuzi00rkzT1EcbaUyM8H/agSlq9e94Sgk3Chx9Y4PlYi8qCPIskobI=
+        bh=g8mJKRUhkPO00K8I7nJ7lKtujFUxdFbhGR6doaLvrDA=;
+        b=h1ADXrqFHkjuLGFk/ibqUCSpfktmgIxF3tQHT8CI0zVWdHd+WDvbjSMazdwFrWlyc/
+         UMcBiNdPLpBxrfO/enZw22chba83183o9vhmr86dTWxafM89zBKEYFz6kyM/nO+3NeCU
+         F7OYzj2l3OJAGLSiCyDPIX8PU8cZxWcEu78WDte4EvrF8OuSti4dSL2GGOvU6x94WBVh
+         40qlDYRcZKITMCpZU+1HNm5cDMLxsS/v/2Kp6qCT7DdgQ4m85Z1/2A8tlcb+MzommHqs
+         xf/djs7wqk80sSpkYX6etnbHDpVHoZA09J9qADr3rVkGkhx4EROAlspSHmmld2RLLtv6
+         PGJw==
+X-Gm-Message-State: ACrzQf00Fkuy2silRZLDLE4HkWo/oVignwO5qg9wMEWlsOkbO+wGJ0bi
+        jt7bLf1yV6aC1IZhG+5uRBJmAQzJv9lxRUPS8L0=
+X-Google-Smtp-Source: AMsMyM6+9zpr2T0LPT/BeZEh1rZWUcFwUjwPvlqA2QZ7aSFLVdSq53MFZ5X702ajJs3ldp0bupobvrmNpHPhBX3GB+E=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:2ba5:63af:4077:4515])
- (user=ndesaulniers job=sendgmr) by 2002:a17:90b:3b47:b0:20d:a991:3f24 with
- SMTP id ot7-20020a17090b3b4700b0020da9913f24mr10295875pjb.108.1665778450422;
- Fri, 14 Oct 2022 13:14:10 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 13:13:52 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a63:f20a:0:b0:464:8c6:f27e with SMTP
+ id v10-20020a63f20a000000b0046408c6f27emr5950038pgh.411.1665778452643; Fri,
+ 14 Oct 2022 13:14:12 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 13:13:53 -0700
 In-Reply-To: <20221014201354.3190007-1-ndesaulniers@google.com>
 Mime-Version: 1.0
 References: <20221014201354.3190007-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665778433; l=22152;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=+4Yn29WimkqMMpF6pODmaTBXzzr3LxUMjlHYak9mUQ8=;
- b=WDa29aBJ406/AaI8Ll5V6aeyUH31p7Go0ve9hapjo24wVpzH4c0KrnNBfy/kjrIWPmOEKPzS46Vc
- ghUUqvN9DBLfSee3EWQ1nr9/A3oNq83M95E3qTpEMgwPv3tld3hS
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1665778434; l=938;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=ACjI4N5sTL9n0wpGEn6FRvgPw+8Rz09PIyJcQd9YCec=;
+ b=sGDWzyqBWRtnFPlXYn6kJkJaWPxF/mHGnIFQ2BAlp1wGuBNBknNXQsLiZyXK2nnSLBk0d43jnQ3U
+ fmzoIrnOCxUcdMi39cmhiVMeJKrVlAhtyIzU8eFJPCyQj5/IiRBo
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221014201354.3190007-3-ndesaulniers@google.com>
-Subject: [PATCH v4 2/4] ARM: use .arch directives instead of assembler command
- line flags
+Message-ID: <20221014201354.3190007-4-ndesaulniers@google.com>
+Subject: [PATCH v4 3/4] ARM: only use -mtp=cp15 for the compiler
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     Russell King <rmk+kernel@armlinux.org.uk>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
@@ -78,668 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to commit a6c30873ee4a ("ARM: 8989/1: use .fpu assembler
-directives instead of assembler arguments").
+Avoids an error from the assembler for CONFIG_THUMB2 kernels:
 
-GCC and GNU binutils support setting the "sub arch" via -march=,
--Wa,-march, target function attribute, and .arch assembler directive.
+clang-15: error: hardware TLS register is not supported for the thumbv4t
+sub-architecture
 
-Clang was missing support for -Wa,-march=, but this was implemented in
-clang-13.
+This flag only makes sense to pass to the compiler, not the assembler.
 
-The behavior of both GCC and Clang is to
-prefer -Wa,-march= over -march= for assembler and assembler-with-cpp
-sources, but Clang will warn about the -march= being unused.
+Perhaps CFLAGS_ABI can be renamed to CPPFLAGS_ABI to reflect that they
+will be passed to both the compiler and assembler for sources that
+require pre-processing.
 
-clang: warning: argument unused during compilation: '-march=armv6k'
-[-Wunused-command-line-argument]
-
-Since most assembler is non-conditionally assembled with one sub arch
-(modulo arch/arm/delay-loop.S which conditionally is assembled as armv4
-based on CONFIG_ARCH_RPC, and arch/arm/mach-at91/pm-suspend.S which is
-conditionally assembled as armv7-a based on CONFIG_CPU_V7), prefer the
-.arch assembler directive.
-
-Add a few more instances found in compile testing as found by Arnd and
-Nathan.
-
-Link: https://github.com/llvm/llvm-project/commit/1d51c699b9e2ebc5bcfdbe85c74cc871426333d4
-Link: https://bugs.llvm.org/show_bug.cgi?id=48894
-Link: https://github.com/ClangBuiltLinux/linux/issues/1195
-Link: https://github.com/ClangBuiltLinux/linux/issues/1315
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Changes v3 -> v4:
-* Add .arch armv7-a to arch/arm/mach-tegra/sleep.S as per Nathan.
-  https://github.com/ClangBuiltLinux/linux/issues/1315#issuecomment-1255646893
-* Add Nathan's SB tag.
+ arch/arm/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- arch/arm/boot/compressed/Makefile   |  1 -
- arch/arm/common/Makefile            |  2 --
- arch/arm/common/mcpm_head.S         |  2 ++
- arch/arm/common/vlock.S             |  2 ++
- arch/arm/kernel/Makefile            |  2 --
- arch/arm/kernel/hyp-stub.S          |  2 ++
- arch/arm/kernel/swp_emulate.c       |  1 +
- arch/arm/lib/Makefile               |  4 ----
- arch/arm/lib/delay-loop.S           |  4 ++++
- arch/arm/mach-at91/Makefile         |  3 ---
- arch/arm/mach-at91/pm_suspend.S     |  4 ++++
- arch/arm/mach-imx/Makefile          |  3 ---
- arch/arm/mach-imx/headsmp.S         |  2 ++
- arch/arm/mach-imx/resume-imx6.S     |  2 ++
- arch/arm/mach-imx/suspend-imx6.S    |  2 ++
- arch/arm/mach-mvebu/Makefile        |  3 ---
- arch/arm/mach-mvebu/coherency_ll.S  |  1 +
- arch/arm/mach-mvebu/pmsu.c          |  1 +
- arch/arm/mach-npcm/Makefile         |  2 --
- arch/arm/mach-npcm/headsmp.S        |  2 ++
- arch/arm/mach-tegra/Makefile        |  2 --
- arch/arm/mach-tegra/reset-handler.S |  2 ++
- arch/arm/mach-tegra/sleep-tegra20.S |  2 ++
- arch/arm/mach-tegra/sleep-tegra30.S |  2 ++
- arch/arm/mach-tegra/sleep.S         |  2 ++
- arch/arm/mm/Makefile                | 15 ---------------
- arch/arm/mm/abort-ev6.S             |  1 +
- arch/arm/mm/abort-ev7.S             |  1 +
- arch/arm/mm/cache-v6.S              |  2 ++
- arch/arm/mm/cache-v7.S              |  2 ++
- arch/arm/mm/cache-v7m.S             |  2 ++
- arch/arm/mm/copypage-feroceon.c     |  1 +
- arch/arm/mm/proc-v6.S               |  2 ++
- arch/arm/mm/proc-v7-2level.S        |  2 ++
- arch/arm/mm/proc-v7.S               |  2 ++
- arch/arm/mm/tlb-v6.S                |  2 ++
- arch/arm/mm/tlb-v7.S                |  2 ++
- drivers/memory/Makefile             |  2 --
- drivers/memory/ti-emif-sram-pm.S    |  1 +
- drivers/soc/bcm/brcmstb/pm/Makefile |  1 -
- drivers/soc/bcm/brcmstb/pm/s2-arm.S |  1 +
- 41 files changed, 54 insertions(+), 40 deletions(-)
-
-diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
-index 41bcbb460fac..e5c80ff42a4f 100644
---- a/arch/arm/boot/compressed/Makefile
-+++ b/arch/arm/boot/compressed/Makefile
-@@ -163,4 +163,3 @@ $(obj)/piggy_data: $(obj)/../Image FORCE
- $(obj)/piggy.o: $(obj)/piggy_data
- 
- CFLAGS_font.o := -Dstatic=
--AFLAGS_hyp-stub.o := -Wa,-march=armv7-a
-diff --git a/arch/arm/common/Makefile b/arch/arm/common/Makefile
-index 7bae8cbaafe7..9733381074e0 100644
---- a/arch/arm/common/Makefile
-+++ b/arch/arm/common/Makefile
-@@ -13,7 +13,5 @@ obj-$(CONFIG_SHARP_SCOOP)	+= scoop.o
- obj-$(CONFIG_CPU_V7)		+= secure_cntvoff.o
- obj-$(CONFIG_MCPM)		+= mcpm_head.o mcpm_entry.o mcpm_platsmp.o vlock.o
- CFLAGS_REMOVE_mcpm_entry.o	= -pg
--AFLAGS_mcpm_head.o		:= -march=armv7-a
--AFLAGS_vlock.o			:= -march=armv7-a
- obj-$(CONFIG_BL_SWITCHER)	+= bL_switcher.o
- obj-$(CONFIG_BL_SWITCHER_DUMMY_IF) += bL_switcher_dummy_if.o
-diff --git a/arch/arm/common/mcpm_head.S b/arch/arm/common/mcpm_head.S
-index 291d969bc719..299495c43dfd 100644
---- a/arch/arm/common/mcpm_head.S
-+++ b/arch/arm/common/mcpm_head.S
-@@ -15,6 +15,8 @@
- 
- #include "vlock.h"
- 
-+.arch armv7-a
-+
- .if MCPM_SYNC_CLUSTER_CPUS
- .error "cpus must be the first member of struct mcpm_sync_struct"
- .endif
-diff --git a/arch/arm/common/vlock.S b/arch/arm/common/vlock.S
-index f1c7fd44f1b1..1fa09c4697ed 100644
---- a/arch/arm/common/vlock.S
-+++ b/arch/arm/common/vlock.S
-@@ -12,6 +12,8 @@
- #include <linux/linkage.h>
- #include "vlock.h"
- 
-+.arch armv7-a
-+
- /* Select different code if voting flags  can fit in a single word. */
- #if VLOCK_VOTING_SIZE > 4
- #define FEW(x...)
-diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-index 48737ec800eb..d53f56d6f840 100644
---- a/arch/arm/kernel/Makefile
-+++ b/arch/arm/kernel/Makefile
-@@ -70,7 +70,6 @@ obj-$(CONFIG_HAVE_TCM)		+= tcm.o
- obj-$(CONFIG_OF)		+= devtree.o
- obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- obj-$(CONFIG_SWP_EMULATE)	+= swp_emulate.o
--CFLAGS_swp_emulate.o		:= -Wa,-march=armv7-a
- obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
- 
- obj-$(CONFIG_CPU_XSCALE)	+= xscale-cp0.o
-@@ -99,7 +98,6 @@ CFLAGS_head-inflate-data.o := $(call cc-option,-Wframe-larger-than=10240)
- obj-$(CONFIG_XIP_DEFLATED_DATA) += head-inflate-data.o
- 
- obj-$(CONFIG_ARM_VIRT_EXT)	+= hyp-stub.o
--AFLAGS_hyp-stub.o		:=-Wa,-march=armv7-a
- ifeq ($(CONFIG_ARM_PSCI),y)
- obj-$(CONFIG_SMP)		+= psci_smp.o
- endif
-diff --git a/arch/arm/kernel/hyp-stub.S b/arch/arm/kernel/hyp-stub.S
-index b699b22a4db1..3a506b9095a5 100644
---- a/arch/arm/kernel/hyp-stub.S
-+++ b/arch/arm/kernel/hyp-stub.S
-@@ -9,6 +9,8 @@
- #include <asm/assembler.h>
- #include <asm/virt.h>
- 
-+.arch armv7-a
-+
- #ifndef ZIMAGE
- /*
-  * For the kernel proper, we need to find out the CPU boot mode long after
-diff --git a/arch/arm/kernel/swp_emulate.c b/arch/arm/kernel/swp_emulate.c
-index b74bfcf94fb1..fdce83c95acb 100644
---- a/arch/arm/kernel/swp_emulate.c
-+++ b/arch/arm/kernel/swp_emulate.c
-@@ -34,6 +34,7 @@
-  */
- #define __user_swpX_asm(data, addr, res, temp, B)		\
- 	__asm__ __volatile__(					\
-+	".arch armv7-a\n"					\
- 	"0:	ldrex"B"	%2, [%3]\n"			\
- 	"1:	strex"B"	%0, %1, [%3]\n"			\
- 	"	cmp		%0, #0\n"			\
-diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
-index 6d2ba454f25b..42fb75c06647 100644
---- a/arch/arm/lib/Makefile
-+++ b/arch/arm/lib/Makefile
-@@ -36,10 +36,6 @@ else
-   lib-y	+= io-readsw-armv4.o io-writesw-armv4.o
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 8dd943b50b7d..ee888070b2ff 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -111,7 +111,7 @@ CFLAGS_ABI	+= -meabi gnu
  endif
  
--ifeq ($(CONFIG_ARCH_RPC),y)
--  AFLAGS_delay-loop.o		+= -march=armv4
--endif
--
- $(obj)/csumpartialcopy.o:	$(obj)/csumpartialcopygeneric.S
- $(obj)/csumpartialcopyuser.o:	$(obj)/csumpartialcopygeneric.S
- 
-diff --git a/arch/arm/lib/delay-loop.S b/arch/arm/lib/delay-loop.S
-index 3ccade0f8130..3ac05177d097 100644
---- a/arch/arm/lib/delay-loop.S
-+++ b/arch/arm/lib/delay-loop.S
-@@ -8,6 +8,10 @@
- #include <asm/assembler.h>
- #include <asm/delay.h>
- 
-+#ifdef CONFIG_ARCH_RPC
-+		.arch	armv4
-+#endif
-+
- 		.text
- 
- .LC0:		.word	loops_per_jiffy
-diff --git a/arch/arm/mach-at91/Makefile b/arch/arm/mach-at91/Makefile
-index 0dcc37180588..794bd12ab0a8 100644
---- a/arch/arm/mach-at91/Makefile
-+++ b/arch/arm/mach-at91/Makefile
-@@ -14,9 +14,6 @@ obj-$(CONFIG_SOC_SAMV7)		+= samv7.o
- # Power Management
- obj-$(CONFIG_ATMEL_PM)		+= pm.o pm_suspend.o
- 
--ifeq ($(CONFIG_CPU_V7),y)
--AFLAGS_pm_suspend.o := -march=armv7-a
--endif
- ifeq ($(CONFIG_PM_DEBUG),y)
- CFLAGS_pm.o += -DDEBUG
+ ifeq ($(CONFIG_CURRENT_POINTER_IN_TPIDRURO),y)
+-CFLAGS_ABI	+= -mtp=cp15
++KBUILD_CFLAGS	+= -mtp=cp15
  endif
-diff --git a/arch/arm/mach-at91/pm_suspend.S b/arch/arm/mach-at91/pm_suspend.S
-index ffed4d949042..78d65809155f 100644
---- a/arch/arm/mach-at91/pm_suspend.S
-+++ b/arch/arm/mach-at91/pm_suspend.S
-@@ -12,6 +12,10 @@
- #include "pm.h"
- #include "pm_data-offsets.h"
  
-+#ifdef CONFIG_CPU_V7
-+.arch armv7-a
-+#endif
-+
- #define	SRAMC_SELF_FRESH_ACTIVE		0x01
- #define	SRAMC_SELF_FRESH_EXIT		0x00
- 
-diff --git a/arch/arm/mach-imx/Makefile b/arch/arm/mach-imx/Makefile
-index 6fb3965b9ae6..5c650bf40e02 100644
---- a/arch/arm/mach-imx/Makefile
-+++ b/arch/arm/mach-imx/Makefile
-@@ -34,7 +34,6 @@ obj-$(CONFIG_HAVE_IMX_GPC) += gpc.o
- obj-$(CONFIG_HAVE_IMX_MMDC) += mmdc.o
- obj-$(CONFIG_HAVE_IMX_SRC) += src.o
- ifneq ($(CONFIG_SOC_IMX6)$(CONFIG_SOC_IMX7D_CA7)$(CONFIG_SOC_LS1021A),)
--AFLAGS_headsmp.o :=-Wa,-march=armv7-a
- obj-$(CONFIG_SMP) += headsmp.o platsmp.o
- obj-$(CONFIG_HOTPLUG_CPU) += hotplug.o
- endif
-@@ -48,12 +47,10 @@ obj-$(CONFIG_SOC_IMX7D_CM4) += mach-imx7d-cm4.o
- obj-$(CONFIG_SOC_IMX7ULP) += mach-imx7ulp.o pm-imx7ulp.o
- 
- ifeq ($(CONFIG_SUSPEND),y)
--AFLAGS_suspend-imx6.o :=-Wa,-march=armv7-a
- obj-$(CONFIG_SOC_IMX6) += suspend-imx6.o
- obj-$(CONFIG_SOC_IMX53) += suspend-imx53.o
- endif
- ifeq ($(CONFIG_ARM_CPU_SUSPEND),y)
--AFLAGS_resume-imx6.o :=-Wa,-march=armv7-a
- obj-$(CONFIG_SOC_IMX6) += resume-imx6.o
- endif
- obj-$(CONFIG_SOC_IMX6) += pm-imx6.o
-diff --git a/arch/arm/mach-imx/headsmp.S b/arch/arm/mach-imx/headsmp.S
-index fcba58be8e79..5f9c7b48ae80 100644
---- a/arch/arm/mach-imx/headsmp.S
-+++ b/arch/arm/mach-imx/headsmp.S
-@@ -8,6 +8,8 @@
- #include <linux/init.h>
- #include <asm/assembler.h>
- 
-+.arch armv7-a
-+
- diag_reg_offset:
- 	.word	g_diag_reg - .
- 
-diff --git a/arch/arm/mach-imx/resume-imx6.S b/arch/arm/mach-imx/resume-imx6.S
-index 5bd1ba7ef15b..2c0c5c771251 100644
---- a/arch/arm/mach-imx/resume-imx6.S
-+++ b/arch/arm/mach-imx/resume-imx6.S
-@@ -9,6 +9,8 @@
- #include <asm/hardware/cache-l2x0.h>
- #include "hardware.h"
- 
-+.arch armv7-a
-+
- /*
-  * The following code must assume it is running from physical address
-  * where absolute virtual addresses to the data section have to be
-diff --git a/arch/arm/mach-imx/suspend-imx6.S b/arch/arm/mach-imx/suspend-imx6.S
-index e06f946b75b9..63ccc2d0e920 100644
---- a/arch/arm/mach-imx/suspend-imx6.S
-+++ b/arch/arm/mach-imx/suspend-imx6.S
-@@ -9,6 +9,8 @@
- #include <asm/hardware/cache-l2x0.h>
- #include "hardware.h"
- 
-+.arch armv7-a
-+
- /*
-  * ==================== low level suspend ====================
-  *
-diff --git a/arch/arm/mach-mvebu/Makefile b/arch/arm/mach-mvebu/Makefile
-index c21733cbb4fa..569768a69ffc 100644
---- a/arch/arm/mach-mvebu/Makefile
-+++ b/arch/arm/mach-mvebu/Makefile
-@@ -1,9 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- ccflags-y := -I$(srctree)/arch/arm/plat-orion/include
- 
--AFLAGS_coherency_ll.o		:= -Wa,-march=armv7-a
--CFLAGS_pmsu.o			:= -march=armv7-a
--
- obj-$(CONFIG_MACH_MVEBU_ANY)	 += system-controller.o mvebu-soc-id.o
- 
- ifeq ($(CONFIG_MACH_MVEBU_V7),y)
-diff --git a/arch/arm/mach-mvebu/coherency_ll.S b/arch/arm/mach-mvebu/coherency_ll.S
-index eb81656e32d4..35930e03d9c6 100644
---- a/arch/arm/mach-mvebu/coherency_ll.S
-+++ b/arch/arm/mach-mvebu/coherency_ll.S
-@@ -20,6 +20,7 @@
- #include <asm/assembler.h>
- #include <asm/cp15.h>
- 
-+	.arch armv7-a
- 	.text
- /*
-  * Returns the coherency base address in r1 (r0 is untouched), or 0 if
-diff --git a/arch/arm/mach-mvebu/pmsu.c b/arch/arm/mach-mvebu/pmsu.c
-index af27a7156675..6f366d8c4231 100644
---- a/arch/arm/mach-mvebu/pmsu.c
-+++ b/arch/arm/mach-mvebu/pmsu.c
-@@ -291,6 +291,7 @@ int armada_370_xp_pmsu_idle_enter(unsigned long deepidle)
- 
- 	/* Test the CR_C bit and set it if it was cleared */
- 	asm volatile(
-+	".arch	armv7-a\n\t"
- 	"mrc	p15, 0, r0, c1, c0, 0 \n\t"
- 	"tst	r0, %0 \n\t"
- 	"orreq	r0, r0, #(1 << 2) \n\t"
-diff --git a/arch/arm/mach-npcm/Makefile b/arch/arm/mach-npcm/Makefile
-index 8d61fcd42fb1..ac83e1caf2ee 100644
---- a/arch/arm/mach-npcm/Makefile
-+++ b/arch/arm/mach-npcm/Makefile
-@@ -1,6 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
--AFLAGS_headsmp.o		+= -march=armv7-a
--
- obj-$(CONFIG_ARCH_WPCM450)	+= wpcm450.o
- obj-$(CONFIG_ARCH_NPCM7XX)	+= npcm7xx.o
- obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
-diff --git a/arch/arm/mach-npcm/headsmp.S b/arch/arm/mach-npcm/headsmp.S
-index c083fe09a07b..84d2b6daaf0b 100644
---- a/arch/arm/mach-npcm/headsmp.S
-+++ b/arch/arm/mach-npcm/headsmp.S
-@@ -6,6 +6,8 @@
- #include <linux/init.h>
- #include <asm/assembler.h>
- 
-+.arch armv7-a
-+
- /*
-  * The boot ROM does not start secondary CPUs in SVC mode, so we need to do that
-  * here.
-diff --git a/arch/arm/mach-tegra/Makefile b/arch/arm/mach-tegra/Makefile
-index 07572b5373b8..a2bb55bc0081 100644
---- a/arch/arm/mach-tegra/Makefile
-+++ b/arch/arm/mach-tegra/Makefile
-@@ -1,6 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
--asflags-y				+= -march=armv7-a
--
- obj-y                                   += io.o
- obj-y                                   += irq.o
- obj-y					+= pm.o
-diff --git a/arch/arm/mach-tegra/reset-handler.S b/arch/arm/mach-tegra/reset-handler.S
-index 06ca44b09381..0ea456264f3e 100644
---- a/arch/arm/mach-tegra/reset-handler.S
-+++ b/arch/arm/mach-tegra/reset-handler.S
-@@ -19,6 +19,8 @@
- 
- #define PMC_SCRATCH41	0x140
- 
-+.arch armv7-a
-+
- #ifdef CONFIG_PM_SLEEP
- /*
-  *	tegra_resume
-diff --git a/arch/arm/mach-tegra/sleep-tegra20.S b/arch/arm/mach-tegra/sleep-tegra20.S
-index a5a36cce142a..d8cd487a8f63 100644
---- a/arch/arm/mach-tegra/sleep-tegra20.S
-+++ b/arch/arm/mach-tegra/sleep-tegra20.S
-@@ -47,6 +47,8 @@
- #define PLLM_STORE_MASK			(1 << 1)
- #define PLLP_STORE_MASK			(1 << 2)
- 
-+.arch armv7-a
-+
- .macro test_pll_state, rd, test_mask
- 	ldr	\rd, tegra_pll_state
- 	tst	\rd, #\test_mask
-diff --git a/arch/arm/mach-tegra/sleep-tegra30.S b/arch/arm/mach-tegra/sleep-tegra30.S
-index 0cc40b6b2ba3..134ea5fe49b2 100644
---- a/arch/arm/mach-tegra/sleep-tegra30.S
-+++ b/arch/arm/mach-tegra/sleep-tegra30.S
-@@ -78,6 +78,8 @@
- #define PLLX_STORE_MASK			(1 << 4)
- #define PLLM_PMC_STORE_MASK		(1 << 5)
- 
-+.arch armv7-a
-+
- .macro emc_device_mask, rd, base
- 	ldr	\rd, [\base, #EMC_ADR_CFG]
- 	tst	\rd, #0x1
-diff --git a/arch/arm/mach-tegra/sleep.S b/arch/arm/mach-tegra/sleep.S
-index 8f88944831c5..945f2c1474f7 100644
---- a/arch/arm/mach-tegra/sleep.S
-+++ b/arch/arm/mach-tegra/sleep.S
-@@ -22,6 +22,8 @@
- #define CLK_RESET_CCLK_BURST	0x20
- #define CLK_RESET_CCLK_DIVIDER  0x24
- 
-+.arch armv7-a
-+
- #if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_PM_SLEEP)
- /*
-  * tegra_disable_clean_inv_dcache
-diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
-index 3510503bc5e6..71b858c9b10c 100644
---- a/arch/arm/mm/Makefile
-+++ b/arch/arm/mm/Makefile
-@@ -33,9 +33,6 @@ obj-$(CONFIG_CPU_ABRT_EV5TJ)	+= abort-ev5tj.o
- obj-$(CONFIG_CPU_ABRT_EV6)	+= abort-ev6.o
- obj-$(CONFIG_CPU_ABRT_EV7)	+= abort-ev7.o
- 
--AFLAGS_abort-ev6.o	:=-Wa,-march=armv6k
--AFLAGS_abort-ev7.o	:=-Wa,-march=armv7-a
--
- obj-$(CONFIG_CPU_PABRT_LEGACY)	+= pabort-legacy.o
- obj-$(CONFIG_CPU_PABRT_V6)	+= pabort-v6.o
- obj-$(CONFIG_CPU_PABRT_V7)	+= pabort-v7.o
-@@ -49,10 +46,6 @@ obj-$(CONFIG_CPU_CACHE_FA)	+= cache-fa.o
- obj-$(CONFIG_CPU_CACHE_NOP)	+= cache-nop.o
- obj-$(CONFIG_CPU_CACHE_V7M)	+= cache-v7m.o
- 
--AFLAGS_cache-v6.o	:=-Wa,-march=armv6
--AFLAGS_cache-v7.o	:=-Wa,-march=armv7-a
--AFLAGS_cache-v7m.o	:=-Wa,-march=armv7-m
--
- obj-$(CONFIG_CPU_COPY_V4WT)	+= copypage-v4wt.o
- obj-$(CONFIG_CPU_COPY_V4WB)	+= copypage-v4wb.o
- obj-$(CONFIG_CPU_COPY_FEROCEON)	+= copypage-feroceon.o
-@@ -62,8 +55,6 @@ obj-$(CONFIG_CPU_XSCALE)	+= copypage-xscale.o
- obj-$(CONFIG_CPU_XSC3)		+= copypage-xsc3.o
- obj-$(CONFIG_CPU_COPY_FA)	+= copypage-fa.o
- 
--CFLAGS_copypage-feroceon.o := -march=armv5te
--
- obj-$(CONFIG_CPU_TLB_V4WT)	+= tlb-v4.o
- obj-$(CONFIG_CPU_TLB_V4WB)	+= tlb-v4wb.o
- obj-$(CONFIG_CPU_TLB_V4WBI)	+= tlb-v4wbi.o
-@@ -72,9 +63,6 @@ obj-$(CONFIG_CPU_TLB_V6)	+= tlb-v6.o
- obj-$(CONFIG_CPU_TLB_V7)	+= tlb-v7.o
- obj-$(CONFIG_CPU_TLB_FA)	+= tlb-fa.o
- 
--AFLAGS_tlb-v6.o		:=-Wa,-march=armv6
--AFLAGS_tlb-v7.o		:=-Wa,-march=armv7-a
--
- obj-$(CONFIG_CPU_ARM7TDMI)	+= proc-arm7tdmi.o
- obj-$(CONFIG_CPU_ARM720T)	+= proc-arm720.o
- obj-$(CONFIG_CPU_ARM740T)	+= proc-arm740.o
-@@ -101,9 +89,6 @@ obj-$(CONFIG_CPU_V6K)		+= proc-v6.o
- obj-$(CONFIG_CPU_V7)		+= proc-v7.o proc-v7-bugs.o
- obj-$(CONFIG_CPU_V7M)		+= proc-v7m.o
- 
--AFLAGS_proc-v6.o	:=-Wa,-march=armv6
--AFLAGS_proc-v7.o	:=-Wa,-march=armv7-a
--
- obj-$(CONFIG_OUTER_CACHE)	+= l2c-common.o
- obj-$(CONFIG_CACHE_B15_RAC)	+= cache-b15-rac.o
- obj-$(CONFIG_CACHE_FEROCEON_L2)	+= cache-feroceon-l2.o
-diff --git a/arch/arm/mm/abort-ev6.S b/arch/arm/mm/abort-ev6.S
-index c58bf8b43fea..836dc1299243 100644
---- a/arch/arm/mm/abort-ev6.S
-+++ b/arch/arm/mm/abort-ev6.S
-@@ -16,6 +16,7 @@
-  * abort here if the I-TLB and D-TLB aren't seeing the same
-  * picture.  Unfortunately, this does happen.  We live with it.
-  */
-+	.arch	armv6k
- 	.align	5
- ENTRY(v6_early_abort)
- 	mrc	p15, 0, r1, c5, c0, 0		@ get FSR
-diff --git a/arch/arm/mm/abort-ev7.S b/arch/arm/mm/abort-ev7.S
-index f81bceacc660..53fb41c24774 100644
---- a/arch/arm/mm/abort-ev7.S
-+++ b/arch/arm/mm/abort-ev7.S
-@@ -12,6 +12,7 @@
-  *
-  * Purpose : obtain information about current aborted instruction.
-  */
-+	.arch	armv7-a
- 	.align	5
- ENTRY(v7_early_abort)
- 	mrc	p15, 0, r1, c5, c0, 0		@ get FSR
-diff --git a/arch/arm/mm/cache-v6.S b/arch/arm/mm/cache-v6.S
-index f0f65eb073e4..250c83bf7158 100644
---- a/arch/arm/mm/cache-v6.S
-+++ b/arch/arm/mm/cache-v6.S
-@@ -19,6 +19,8 @@
- #define D_CACHE_LINE_SIZE	32
- #define BTB_FLUSH_SIZE		8
- 
-+.arch armv6
-+
- /*
-  *	v6_flush_icache_all()
-  *
-diff --git a/arch/arm/mm/cache-v7.S b/arch/arm/mm/cache-v7.S
-index 7c9499b728c4..127afe2096ba 100644
---- a/arch/arm/mm/cache-v7.S
-+++ b/arch/arm/mm/cache-v7.S
-@@ -16,6 +16,8 @@
- 
- #include "proc-macros.S"
- 
-+.arch armv7-a
-+
- #ifdef CONFIG_CPU_ICACHE_MISMATCH_WORKAROUND
- .globl icache_size
- 	.data
-diff --git a/arch/arm/mm/cache-v7m.S b/arch/arm/mm/cache-v7m.S
-index 1bc3a0a50753..eb60b5e5e2ad 100644
---- a/arch/arm/mm/cache-v7m.S
-+++ b/arch/arm/mm/cache-v7m.S
-@@ -18,6 +18,8 @@
- 
- #include "proc-macros.S"
- 
-+.arch armv7-m
-+
- /* Generic V7M read/write macros for memory mapped cache operations */
- .macro v7m_cache_read, rt, reg
- 	movw	\rt, #:lower16:BASEADDR_V7M_SCB + \reg
-diff --git a/arch/arm/mm/copypage-feroceon.c b/arch/arm/mm/copypage-feroceon.c
-index 064b19e63571..5fc8ef1e665f 100644
---- a/arch/arm/mm/copypage-feroceon.c
-+++ b/arch/arm/mm/copypage-feroceon.c
-@@ -15,6 +15,7 @@ static void feroceon_copy_user_page(void *kto, const void *kfrom)
- 	int tmp;
- 
- 	asm volatile ("\
-+.arch	armv5te					\n\
- 1:	ldmia	%1!, {r2 - r7, ip, lr}		\n\
- 	pld	[%1, #0]			\n\
- 	pld	[%1, #32]			\n\
-diff --git a/arch/arm/mm/proc-v6.S b/arch/arm/mm/proc-v6.S
-index a0618f3e6836..203dff89ab1a 100644
---- a/arch/arm/mm/proc-v6.S
-+++ b/arch/arm/mm/proc-v6.S
-@@ -32,6 +32,8 @@
- #define TTB_FLAGS_SMP	TTB_RGN_WBWA|TTB_S
- #define PMD_FLAGS_SMP	PMD_SECT_WBWA|PMD_SECT_S
- 
-+.arch armv6
-+
- ENTRY(cpu_v6_proc_init)
- 	ret	lr
- 
-diff --git a/arch/arm/mm/proc-v7-2level.S b/arch/arm/mm/proc-v7-2level.S
-index 5db029c8f987..0a3083ad19c2 100644
---- a/arch/arm/mm/proc-v7-2level.S
-+++ b/arch/arm/mm/proc-v7-2level.S
-@@ -24,6 +24,8 @@
- #define TTB_FLAGS_SMP	TTB_IRGN_WBWA|TTB_S|TTB_NOS|TTB_RGN_OC_WBWA
- #define PMD_FLAGS_SMP	PMD_SECT_WBWA|PMD_SECT_S
- 
-+.arch armv7-a
-+
- /*
-  *	cpu_v7_switch_mm(pgd_phys, tsk)
-  *
-diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
-index 26d726a08a34..6b4ef9539b68 100644
---- a/arch/arm/mm/proc-v7.S
-+++ b/arch/arm/mm/proc-v7.S
-@@ -24,6 +24,8 @@
- #include "proc-v7-2level.S"
- #endif
- 
-+.arch armv7-a
-+
- ENTRY(cpu_v7_proc_init)
- 	ret	lr
- ENDPROC(cpu_v7_proc_init)
-diff --git a/arch/arm/mm/tlb-v6.S b/arch/arm/mm/tlb-v6.S
-index 74f4b383afe3..1d91e49b2c2d 100644
---- a/arch/arm/mm/tlb-v6.S
-+++ b/arch/arm/mm/tlb-v6.S
-@@ -17,6 +17,8 @@
- 
- #define HARVARD_TLB
- 
-+.arch armv6
-+
- /*
-  *	v6wbi_flush_user_tlb_range(start, end, vma)
-  *
-diff --git a/arch/arm/mm/tlb-v7.S b/arch/arm/mm/tlb-v7.S
-index 87bf4ab17721..35fd6d4f0d03 100644
---- a/arch/arm/mm/tlb-v7.S
-+++ b/arch/arm/mm/tlb-v7.S
-@@ -16,6 +16,8 @@
- #include <asm/tlbflush.h>
- #include "proc-macros.S"
- 
-+.arch armv7-a
-+
- /*
-  *	v7wbi_flush_user_tlb_range(start, end, vma)
-  *
-diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
-index e148f636c082..ae14ded464a8 100644
---- a/drivers/memory/Makefile
-+++ b/drivers/memory/Makefile
-@@ -33,8 +33,6 @@ obj-$(CONFIG_FPGA_DFL_EMIF)	+= dfl-emif.o
- 
- ti-emif-sram-objs		:= ti-emif-pm.o ti-emif-sram-pm.o
- 
--AFLAGS_ti-emif-sram-pm.o	:=-Wa,-march=armv7-a
--
- $(obj)/ti-emif-sram-pm.o: $(obj)/ti-emif-asm-offsets.h
- 
- $(obj)/ti-emif-asm-offsets.h: $(obj)/emif-asm-offsets.s FORCE
-diff --git a/drivers/memory/ti-emif-sram-pm.S b/drivers/memory/ti-emif-sram-pm.S
-index 9bcac35c3304..d60a8cfd63f3 100644
---- a/drivers/memory/ti-emif-sram-pm.S
-+++ b/drivers/memory/ti-emif-sram-pm.S
-@@ -28,6 +28,7 @@
- 
- 	.arm
- 	.align 3
-+	.arch armv7-a
- 
- ENTRY(ti_emif_sram)
- 
-diff --git a/drivers/soc/bcm/brcmstb/pm/Makefile b/drivers/soc/bcm/brcmstb/pm/Makefile
-index 8e10abb14f8b..f849cfa69446 100644
---- a/drivers/soc/bcm/brcmstb/pm/Makefile
-+++ b/drivers/soc/bcm/brcmstb/pm/Makefile
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_ARM)		+= s2-arm.o pm-arm.o
--AFLAGS_s2-arm.o			:= -march=armv7-a
- obj-$(CONFIG_BMIPS_GENERIC)	+= s2-mips.o s3-mips.o pm-mips.o
-diff --git a/drivers/soc/bcm/brcmstb/pm/s2-arm.S b/drivers/soc/bcm/brcmstb/pm/s2-arm.S
-index 5f0c4a8ae9df..0d693795de27 100644
---- a/drivers/soc/bcm/brcmstb/pm/s2-arm.S
-+++ b/drivers/soc/bcm/brcmstb/pm/s2-arm.S
-@@ -8,6 +8,7 @@
- 
- #include "pm.h"
- 
-+	.arch armv7-a
- 	.text
- 	.align	3
- 
+ # Accept old syntax despite ".syntax unified"
 -- 
 2.38.0.413.g74048e4d9e-goog
 
