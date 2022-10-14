@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9DD5FEBEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B355FEBE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 11:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiJNJmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 05:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S229582AbiJNJlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 05:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiJNJls (ORCPT
+        with ESMTP id S230146AbiJNJlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:41:48 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D331C69D3;
-        Fri, 14 Oct 2022 02:41:43 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1665740487ti9mbcvl
-Received: from [192.168.125.106] ( [113.72.147.11])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 14 Oct 2022 17:41:25 +0800 (CST)
-X-QQ-SSF: 01000000000000B09000000A0000000
-X-QQ-FEAT: DRnj/z+Sqafxf60URcKpJmk3M9Gtaudnpmqzg0zvN20ZC3tpAxv/lIwk8P1wS
-        m3l8EGZwu41bnQWypYQttWJDjQollXss8UsSl7cBIrVzT4b2g1DLEzT6ShKt5LbH7wTJvbB
-        wnV6vB9ISg9d+1i8dVp6ZSVyhLHjBIyNy8pikp+orY7/fvzwbsVz3jlVEv7YYJ3sYOrJu9b
-        OeueYAFz3GEopWBDXvo3vXn/pUGS0z1q4/GBW46Glh3/Ka/a0zrm/TwoUJF1+BkhrmkyOXX
-        ZxIFM8Exh+BnZy0bIKFTeqaKBBRV2zEKbkCjXUnJ/l6ayU0xgCDWxzIE1cDq93qjBGZt774
-        2QRI7gNwsyj49o/sZ1rlblUSoWEsKmVvt3n57IDmpRlBdY4uZ7o1KnqNdTr0Ze5A/Zzruj6
-X-QQ-GoodBg: 0
-Message-ID: <B1817962D78CFE67+41b72968-e452-3fa9-c1ba-054cb1642de4@linux.starfivetech.com>
-Date:   Fri, 14 Oct 2022 17:41:15 +0800
+        Fri, 14 Oct 2022 05:41:36 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2832C8972
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:41:31 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c24so4233609pls.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 02:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KdrfFMceV7elb/rA2YCTui/ZhC4l1ygRRIMRPNusZhU=;
+        b=tILJoqotiPdze1TCCwL+mF59nGOxYtncfKrouddVFax7Gcsz+crVbOVRREI0Tubts5
+         vV3yE8640V3CYRlQELJMmFfQQTczEty9SrunN7E3D3rGtjh2DtqxOyXcFHLCaUj06bmI
+         n2K5LQbByQ+bIzM6sx24DqM+gWvxy+s7nteoahhh7v3RsKCxB7wfK3JM651TalbDEgCt
+         iq+ySPOEI9A34HStVa3+jhYVticSF1HMoHESfANw0eGaYRCfMc6JZDSu2ulbuQq9aPiZ
+         CEjBxmmj7CjShgC3jfj1T37OUIOlhGbi6AzfZNYGfNVtK/Ji6CXdTMJ7lej9vyZzHKB2
+         fE3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KdrfFMceV7elb/rA2YCTui/ZhC4l1ygRRIMRPNusZhU=;
+        b=bXx7rEPl5OYMif1/b4wd7zURz8Cjzqdi0M8yTlRtgrKZ9D3viwRx/BINgL0rKLI2f+
+         C7s9AgQuor5ZGI77bnB6ry7DqZpNI+dbcxL0DonqyYPo420UCm+A4GGhe6U4tV4WuJ9l
+         zvoQMIXraB46FUcGbpGjAI2UzioKDs1+U0fzXl+5dO4mdOBnr3Qcrh6aVgQ+TbRMiEZC
+         2wWBVKw6UgrPqbyfHJfEBWoS2X/dVp8NXH/VbE9MXgiBBtYhBxMS3qLlHU3DXJFY/GYr
+         BV+SBbhzR2QLWnW+WST3JX/dnQcg8yzyWsvoyihkZR5DHvqNobz6rYlS4WC2g2zY/1Oc
+         uWQg==
+X-Gm-Message-State: ACrzQf04faDLFm8vQZ0aJBiusbA8tWTv6sE6dkAbLAK8V6J5TDVnblcX
+        W5UwzTGsDyx9EQAaRtWpeo2q9rHA2KHDaXqxeWlJwA==
+X-Google-Smtp-Source: AMsMyM4UqG/vIk3S7koHuixUnBbVmb4fDf+woVq1uoMPm6jtVGqdAhA4fxEgS9gbQtKnvvq2Dv3MB4MMySXFLzb02qg=
+X-Received: by 2002:a17:90b:38c3:b0:20d:406e:26d9 with SMTP id
+ nn3-20020a17090b38c300b0020d406e26d9mr4843007pjb.121.1665740490315; Fri, 14
+ Oct 2022 02:41:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 27/30] RISC-V: Add initial StarFive JH7110 device tree
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220930074914.6757-1-hal.feng@linux.starfivetech.com>
- <Yzgb0GzpLsV3RJyk@spud>
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <Yzgb0GzpLsV3RJyk@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-7-vannapurve@google.com> <Yz85WEQWsXAbLWnu@google.com>
+In-Reply-To: <Yz85WEQWsXAbLWnu@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Fri, 14 Oct 2022 15:11:19 +0530
+Message-ID: <CAGtprH-eA+k3BwczSyds+Hrr5QZn96hNK81Op_iBH20-wKfKeg@mail.gmail.com>
+Subject: Re: [RFC V3 PATCH 6/6] sefltests: kvm: x86: Add selftest for private memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,60 +85,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 11:52:00 +0100, Conor Dooley wrote:
-> On Fri, Sep 30, 2022 at 03:49:14PM +0800, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > Add initial device tree for the JH7110 RISC-V SoC by
-> > StarFive Technology Ltd.
-> > 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> 
-> There's little point reviewing this dt since there's a load of issues
-> that you can trivially find by running dtbs_check/dt_binding_check, but
-> this SoB change is wrong - if Emil wrote the patch, then Jianlong's SoB
-> is either redundant or should be accompanied by a Co-developed-by tag.
-> 
-> Ditto for patch 28/30 "RISC-V: Add StarFive JH7110 VisionFive2 board
-> device tree".
-
-Will add Co-developed-by tag for Jianlong. Thanks.
-
-> 
-> > ---
-> >  arch/riscv/boot/dts/starfive/jh7110.dtsi | 449 +++++++++++++++++++++++
-> >  1 file changed, 449 insertions(+)
-> >  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
-> > 
-> > diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> > new file mode 100644
-> > index 000000000000..46f418d4198a
-> > --- /dev/null
-> > +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> 
+On Fri, Oct 7, 2022 at 1:54 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Fri, Aug 19, 2022, Vishal Annapurve wrote:
+> > +static bool verify_mem_contents(void *mem, uint32_t size, uint8_t pat)
+>
+> As per feedback in v1[*], spell out "pattern".
+>
+> [*] https://lore.kernel.org/all/YtiJx11AZHslcGnN@google.com
+>
+> > +{
+> > +     uint8_t *buf = (uint8_t *)mem;
 > > +
-> > +	osc: osc {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +	};
+> > +     for (uint32_t i = 0; i < size; i++) {
+> > +             if (buf[i] != pat)
+> > +                     return false;
+> > +     }
 > > +
-> > +	clk_rtc: clk_rtc {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +	};
+> > +     return true;
+> > +}
 > > +
-> > +	gmac0_rmii_refin: gmac0_rmii_refin {
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <50000000>;
-> 
-> I assume, given osc has it's frequency set in the board dts, that these
-> are all oscillators on the SoC?
+> > +/*
+> > + * Add custom implementation for memset to avoid using standard/builtin memset
+> > + * which may use features like SSE/GOT that don't work with guest vm execution
+> > + * within selftests.
+> > + */
+> > +void *memset(void *mem, int byte, size_t size)
+> > +{
+> > +     uint8_t *buf = (uint8_t *)mem;
+> > +
+> > +     for (uint32_t i = 0; i < size; i++)
+> > +             buf[i] = byte;
+> > +
+> > +     return buf;
+> > +}
+>
+> memset(), memcpy(), and memcmp() are safe to use as of commit 6b6f71484bf4 ("KVM:
+> selftests: Implement memcmp(), memcpy(), and memset() for guest use").
+>
 
-These are all on the board. Should move all "clock-frequency" to the board dts.
-I will recheck and modify this patch.
+This is much better. It made less sense to add a custom memset for a
+single selftest.
 
-Best regards,
-Hal
+> Note the "fun" with gcc "optimizing" into infinite recursion... :-)
+>
+> > +
+> > +static void populate_test_area(void *test_area_base, uint64_t pat)
+> > +{
+> > +     memset(test_area_base, pat, TEST_AREA_SIZE);
+> > +}
+> > +
+> > +static void populate_guest_test_mem(void *guest_test_mem, uint64_t pat)
+> > +{
+> > +     memset(guest_test_mem, pat, GUEST_TEST_MEM_SIZE);
+> > +}
+> > +
+> > +static bool verify_test_area(void *test_area_base, uint64_t area_pat,
+> > +     uint64_t guest_pat)
+>
+> Again, avoid "pat".
+>
+> > +{
+> > +     void *test_area1_base = test_area_base;
+> > +     uint64_t test_area1_size = GUEST_TEST_MEM_OFFSET;
+> > +     void *guest_test_mem = test_area_base + test_area1_size;
+> > +     uint64_t guest_test_size = GUEST_TEST_MEM_SIZE;
+> > +     void *test_area2_base = guest_test_mem + guest_test_size;
+> > +     uint64_t test_area2_size = (TEST_AREA_SIZE - (GUEST_TEST_MEM_OFFSET +
+> > +                     GUEST_TEST_MEM_SIZE));
+>
+> This is all amazingly hard to read.  AFAICT, the local variables are largely useless.
+> Actually, why even take in @test_area_base, isn't it hardcoded to TEST_AREA_GPA?
+> Then everything except the pattern can be hardcoded.
+>
+> > +     return (verify_mem_contents(test_area1_base, test_area1_size, area_pat) &&
+> > +             verify_mem_contents(guest_test_mem, guest_test_size, guest_pat) &&
+> > +             verify_mem_contents(test_area2_base, test_area2_size, area_pat));
+> > +}
+
+Ack. Will address these comments in the next series.
