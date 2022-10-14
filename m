@@ -2,170 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A540A5FF2C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0BA5FF2C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 19:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiJNRLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 13:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S231241AbiJNRLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 13:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiJNRKx (ORCPT
+        with ESMTP id S231245AbiJNRK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:10:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081FB1ACABA;
-        Fri, 14 Oct 2022 10:10:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8949E61BD1;
-        Fri, 14 Oct 2022 17:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1669C433D6;
-        Fri, 14 Oct 2022 17:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665767443;
-        bh=h1ZcOrur4TJeGwPpm76nE+8Oc267yBVgjArLBmRvdEI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V2GSIz1DbBVxLG+rKYKYlDhGQOHkEfjNRC8vZtLNlPkFYqCHiZI+GaH14mtNHa+tM
-         CewaQ4ktqTh2kGctbw2eyV128CJH/RfGZ7FMcL5UbcP70/kqZa80jK6W+8gFMOVUAM
-         55h5/ngRkRkQ/HnX+rtVMZ5rqOSxEpLUsF/cThTa9KgjPQresGEDslFDkZlddIsUzS
-         sL7BQ5kco/pbTVmjF/pwoow0Q/OxLvkcOz2GxA0nE1H0oM8tM3YOv8OSmhh1rSNSNu
-         5jS44D7gsgtCTQ9GH8pD/9Fl6d39Y9xID2qUlXyj73WVAjfjB087bB7IkceXRTLibt
-         f4VjU0V4sDwUg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EDB314062C; Fri, 14 Oct 2022 14:10:40 -0300 (-03)
-Date:   Fri, 14 Oct 2022 14:10:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v2] perf stat: Support old kernels for bperf cgroup
- counting
-Message-ID: <Y0mYEBVbJTwNIjSM@kernel.org>
-References: <Y0Sx2KWX4gPlLytq@slm.duckdns.org>
- <20221011052808.282394-1-namhyung@kernel.org>
- <Y0Wfl88objrECjSo@slm.duckdns.org>
- <Y0ljzN920sWalEHR@kernel.org>
- <Y0mRGJx4Mc7t7fGB@slm.duckdns.org>
+        Fri, 14 Oct 2022 13:10:58 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE5AAEA2E;
+        Fri, 14 Oct 2022 10:10:44 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1326637be6eso6530824fac.13;
+        Fri, 14 Oct 2022 10:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvHkbVkJp6EcnRQi+5PIMElEgmgHrVtQA2UXnyTLJnE=;
+        b=UigVBOMALTsPKNEDJ5HLNuYVHLL3LdbmGKmb7QccsIWD9OUI1M/d4hfnqa4j+dxasl
+         k0mZMczbS3Ed3p7E6US1OI14quCpOgFMt3PF9zrQIQxDuGtqmy1kbvQdyZN7NHtwr7Sw
+         HelkeT8jWTDEHWaqA4m01Vvzh1BBiuEEcQ0XVYxRjNj6DQ80oH+4CusowLliMcMuPnmN
+         8vENjthImk7oxzd9mv15wldxXJgggP0XD1H8yMk5G7D6jl4MqtEVyP5Gknmkh1AaRiH/
+         RkAVsgJ/8aKOvb78eA4Iy+ivCKQP0/Aw4UJElz3I13f9k+4b7h6xV17QjsTTM/W7AzwY
+         8rEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lvHkbVkJp6EcnRQi+5PIMElEgmgHrVtQA2UXnyTLJnE=;
+        b=eoaLFGpZ0bKuUdu/9Rf4eiwLG2uQqqcQk1CyPySFZaGFFvvy+9hspNYxMsGm20P7oC
+         kga4FR//XnSKeOw9+I7fT06mFqeoTdP4qbd6glGALpaigIIM8abqOzmDAumVtGD4vhg7
+         BgYPN33Y9e91C5LttRppWk61DyUyWrwqtIEPQhBYMmGbizrIrdo28d+1dGP5Xg0lLdvT
+         frg2pBTp6//s9zd6ebirtWqkDPIOKI6pwMJoNFPPd6B17XA2H919s2E4e5QfEFHIjT3L
+         tVHZHagbFzK39cu2WSfF9kagxQexaqgKZ7fpF34MCwrq+qauO9uhX5xrzN5bPReVpwIJ
+         DIXw==
+X-Gm-Message-State: ACrzQf0Tnoxgeu/bZqJCsL1+zP7p/4j5ApmQoWY6QYID206M6luSZxcK
+        6Wk+KskSsXlIwmQWkgZsd1v2fyUVdFku/XBuOqw=
+X-Google-Smtp-Source: AMsMyM5YRJU50ghT4+PK7ZzjpjEuEF0K9MRdSqXqrXv+y3RgpJpGuixHukGTzRdv7CkiKNlLB9FtM4jof+P+XDYdfHA=
+X-Received: by 2002:a05:6870:4286:b0:132:756f:6b97 with SMTP id
+ y6-20020a056870428600b00132756f6b97mr3301793oah.38.1665767443808; Fri, 14 Oct
+ 2022 10:10:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y0mRGJx4Mc7t7fGB@slm.duckdns.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909141528.5090-1-tomeu.vizoso@collabora.com> <20220912072903.14626-1-tomeu.vizoso@collabora.com>
+In-Reply-To: <20220912072903.14626-1-tomeu.vizoso@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 14 Oct 2022 10:10:50 -0700
+Message-ID: <CAF6AEGsjfHSYwB0q4qKnLeMnpZigBwcFrkkLpxofKizLVArX5A@mail.gmail.com>
+Subject: Re: [PATCH v9] drm: Add initial ci/ subdirectory
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Carlo Caione <carlo@caione.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        Neil Armstrong <narmstrong@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Oct 14, 2022 at 06:40:56AM -1000, Tejun Heo escreveu:
-> On Fri, Oct 14, 2022 at 10:27:40AM -0300, Arnaldo Carvalho de Melo wrote:
-> > Hey, I noticed that the perf build is broken for the
-> > tools/perf/util/bpf_skel/bperf_cgroup.bpf.c skell, so I tried using b4
-> > on this Namhyung patch, it ended up getting a newer version, by Tejun,
-> > that mixes up kernel code and tooling, which, when I tried to apply
-> > upstream didn't work.
+On Mon, Sep 12, 2022 at 12:29 AM Tomeu Vizoso
+<tomeu.vizoso@collabora.com> wrote:
+>
+> And use it to store expectations about what the DRM drivers are
+> supposed to pass in the IGT test suite.
+>
+> Also include a configuration file that points to the out-of-tree CI
+> scripts.
+>
+> By storing the test expectations along the code we can make sure both
+> stay in sync with each other, and so we can know when a code change
+> breaks those expectations.
+>
+> This will allow all contributors to drm to reuse the infrastructure
+> already in gitlab.freedesktop.org to test the driver on several
+> generations of the hardware.
+>
+> v2:
+>   - Fix names of result expectation files to match SoC
+>   - Don't execute tests that are going to skip on all boards
+>
+> v3:
+>   - Remove tracking of dmesg output during test execution
+>
+> v4:
+>   - Move up to drivers/gpu/drm
+>   - Add support for a bunch of other drivers
+>   - Explain how to incorporate fixes for CI from a
+>     ${TARGET_BRANCH}-external-fixes branch
+>   - Remove tests that pass from expected results file, to reduce the
+>     size of in-tree files
+>   - Add docs about how to deal with outages in automated testing labs
+>   - Specify the exact SHA of the CI scripts to be used
+>
+> v5:
+>   - Remove unneeded skips from Meson expectations file
+>   - Use a more advanced runner that detects flakes automatically
+>   - Use a more succint format for the expectations
+>   - Run many more tests (and use sharding to finish in time)
+>   - Use skip lists to avoid hanging machines
+>   - Add some build testing
+>   - Build IGT in each pipeline for faster uprevs
+>   - List failures in the GitLab UI
+>
+> v6:
+>   - Rebase on top of latest drm-next
+>   - Lower priority of LAVA jobs to not impact Mesa CI as much
+>   - Update docs
+>
+> v7:
+>   - Rebase on top of latest drm-next
+>
+> v8:
+>   - Move all files specific to testing the kernel into the kernel tree
+>     (thus I have dropped the r-bs I had collected so far)
+>   - Uprev Gitlab CI infrastructure scripts to the latest from Mesa
+>   - Add MAINTAINERS entry
+>   - Fix boot on MT8173 by adding some Kconfigs that are now needed
+>   - Link to the docs from index.rst and hard-wrap the file
+>
+> v9:
+>   - Only automatically run the pipelines for merge requests
+>   - Switch to zstd for the build artifacts to align with Mesa
+>   - Add Qcom USB PHYs to config as they are now =m in the defconfig
+>
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
 
-> > Please try not to mix up kernel and tools/ changes in the same patch to
-> > avoid these issues.
- 
-> I didn't write a newer version of this patch. What are you talking about?
+Reviewed-by: Rob Clark <robdclark@gmail.com>
 
-So, I saw this message from you in reply to Namhyung's v2 patch:
-
---------------------------
-
-Date: Tue, 11 Oct 2022 06:53:43 -1000
-From: Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v2] perf stat: Support old kernels for bperf cgroup counting
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, Song Liu
-        <songliubraving@fb.com>, bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Sender: Tejun Heo <htejun@gmail.com>
-Message-ID: <Y0Wfl88objrECjSo@slm.duckdns.org>
-
-On Mon, Oct 10, 2022 at 10:28:08PM -0700, Namhyung Kim wrote:
-> The recent change in the cgroup will break the backward compatiblity in
-> the BPF program.  It should support both old and new kernels using BPF
-> CO-RE technique.
-
-> Like the task_struct->__state handling in the offcpu analysis, we can
-> check the field name in the cgroup struct.
-
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-
-Applied to cgroup/for-6.1-fixes.
-
-Thanks.
-
---
-tejun
---------------------------
-
-So, I picked the message id, Y0Wfl88objrECjSo@slm.duckdns.org, and asked
-b4 to pick the patch:
-
-⬢[acme@toolbox perf]$ b4 am --help | grep -A1 -- -c,
-  -c, --check-newer-revisions
-                        Check if newer patch revisions exist
-⬢[acme@toolbox perf]$
-
-⬢[acme@toolbox perf]$ b4 am -ctsl --cc-trailers Y0Wfl88objrECjSo@slm.duckdns.org
-Grabbing thread from lore.kernel.org/all/Y0Wfl88objrECjSo%40slm.duckdns.org/t.mbox.gz
-Checking for newer revisions on https://lore.kernel.org/all/
-Analyzing 27 messages in the thread
-('Acked-by', 'Andrii Nakryiko <andrii@kernel.org>', None)
-Will use the latest revision: v3
-You can pick other revisions using the -vN flag
-Checking attestation on all messages, may take a moment...
----
-  ✓ [PATCH v3] cgroup: Replace cgroup->ancestor_ids[] with ->ancestors[]
-  ---
-  ✓ Signed: DKIM/gmail.com (From: tj@kernel.org)
----
-Total patches: 1
----
- Link: https://lore.kernel.org/r/YuRo2PLFH6wLgEkm@slm.duckdns.org
- Base: not specified
-       git am ./v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors.mbx
-⬢[acme@toolbox perf]$
-
-Which got me this:
-
-⬢[acme@toolbox perf]$ diffstat ./v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors.mbx
- include/linux/cgroup-defs.h                 |   16 ++++++++++------
- include/linux/cgroup.h                      |    8 +++-----
- kernel/cgroup/cgroup.c                      |    7 +++----
- net/netfilter/nft_socket.c                  |    9 +++++----
- tools/perf/util/bpf_skel/bperf_cgroup.bpf.c |    2 +-
- 5 files changed, 22 insertions(+), 20 deletions(-)
-⬢[acme@toolbox perf]$
-
-⬢[acme@toolbox perf]$ grep From: ./v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors.mbx
-From: Tejun Heo <tj@kernel.org>
-⬢[acme@toolbox perf]$
-
-That mixes kernel and tools bits and touches
-tools/perf/util/bpf_skel/bperf_cgroup.bpf.c, hence my request to add me
-to the CC list for patches touching tools/perf/.
-
-My assumption that it was a new patch was because b4 somehow got to
-v3_20220729_tj_cgroup_replace_cgroup_ancestor_ids_with_ancestors,
-which has v3 and touches the tools cgroup bpf skel.
-
-So it seems b4 is confused somehow.
-
-Hope this clarifies.
-
-- Arnaldo
+> ---
+>  Documentation/gpu/automated_testing.rst       |  144 +
+>  Documentation/gpu/index.rst                   |    1 +
+>  MAINTAINERS                                   |    8 +
+>  drivers/gpu/drm/ci/arm.config                 |   57 +
+>  drivers/gpu/drm/ci/arm64.config               |  179 ++
+>  drivers/gpu/drm/ci/build-igt.sh               |   43 +
+>  drivers/gpu/drm/ci/build.sh                   |  158 +
+>  drivers/gpu/drm/ci/build.yml                  |  110 +
+>  drivers/gpu/drm/ci/check-patch.py             |   57 +
+>  drivers/gpu/drm/ci/container.yml              |   54 +
+>  drivers/gpu/drm/ci/gitlab-ci.yml              |  225 ++
+>  drivers/gpu/drm/ci/igt_runner.sh              |   77 +
+>  drivers/gpu/drm/ci/image-tags.yml             |   13 +
+>  drivers/gpu/drm/ci/lava-submit.sh             |   53 +
+>  drivers/gpu/drm/ci/static-checks.yml          |   12 +
+>  drivers/gpu/drm/ci/test.yml                   |  322 ++
+>  drivers/gpu/drm/ci/testlist.txt               | 2763 +++++++++++++++++
+>  drivers/gpu/drm/ci/x86_64.config              |  105 +
+>  .../gpu/drm/ci/xfails/amdgpu-stoney-fails.txt |   19 +
+>  .../drm/ci/xfails/amdgpu-stoney-flakes.txt    |   15 +
+>  .../gpu/drm/ci/xfails/amdgpu-stoney-skips.txt |    2 +
+>  .../gpu/drm/ci/xfails/i915-amly-flakes.txt    |   32 +
+>  drivers/gpu/drm/ci/xfails/i915-amly-skips.txt |    2 +
+>  drivers/gpu/drm/ci/xfails/i915-apl-fails.txt  |   29 +
+>  drivers/gpu/drm/ci/xfails/i915-apl-flakes.txt |    1 +
+>  drivers/gpu/drm/ci/xfails/i915-apl-skips.txt  |    2 +
+>  drivers/gpu/drm/ci/xfails/i915-cml-flakes.txt |   37 +
+>  drivers/gpu/drm/ci/xfails/i915-glk-flakes.txt |   40 +
+>  drivers/gpu/drm/ci/xfails/i915-glk-skips.txt  |    2 +
+>  drivers/gpu/drm/ci/xfails/i915-kbl-fails.txt  |    8 +
+>  drivers/gpu/drm/ci/xfails/i915-kbl-flakes.txt |   25 +
+>  drivers/gpu/drm/ci/xfails/i915-kbl-skips.txt  |    2 +
+>  drivers/gpu/drm/ci/xfails/i915-tgl-fails.txt  |   19 +
+>  drivers/gpu/drm/ci/xfails/i915-tgl-flakes.txt |    5 +
+>  drivers/gpu/drm/ci/xfails/i915-tgl-skips.txt  |    8 +
+>  drivers/gpu/drm/ci/xfails/i915-whl-fails.txt  |   30 +
+>  drivers/gpu/drm/ci/xfails/i915-whl-flakes.txt |    1 +
+>  .../drm/ci/xfails/mediatek-mt8173-fails.txt   |   29 +
+>  .../drm/ci/xfails/mediatek-mt8183-fails.txt   |   10 +
+>  .../drm/ci/xfails/mediatek-mt8183-flakes.txt  |   14 +
+>  .../gpu/drm/ci/xfails/meson-g12b-fails.txt    |    5 +
+>  .../gpu/drm/ci/xfails/meson-g12b-flakes.txt   |    4 +
+>  .../gpu/drm/ci/xfails/msm-apq8016-fails.txt   |   15 +
+>  .../gpu/drm/ci/xfails/msm-apq8016-flakes.txt  |    4 +
+>  .../gpu/drm/ci/xfails/msm-apq8096-fails.txt   |    2 +
+>  .../gpu/drm/ci/xfails/msm-apq8096-flakes.txt  |    4 +
+>  .../gpu/drm/ci/xfails/msm-apq8096-skips.txt   |    2 +
+>  .../gpu/drm/ci/xfails/msm-sc7180-fails.txt    |   21 +
+>  .../gpu/drm/ci/xfails/msm-sc7180-flakes.txt   |    6 +
+>  .../gpu/drm/ci/xfails/msm-sc7180-skips.txt    |   23 +
+>  .../gpu/drm/ci/xfails/msm-sdm845-fails.txt    |   43 +
+>  .../gpu/drm/ci/xfails/msm-sdm845-flakes.txt   |   11 +
+>  .../gpu/drm/ci/xfails/msm-sdm845-skips.txt    |    2 +
+>  .../drm/ci/xfails/rockchip-rk3288-fails.txt   |   43 +
+>  .../drm/ci/xfails/rockchip-rk3288-flakes.txt  |    2 +
+>  .../drm/ci/xfails/rockchip-rk3288-skips.txt   |   49 +
+>  .../drm/ci/xfails/rockchip-rk3399-fails.txt   |   29 +
+>  .../drm/ci/xfails/rockchip-rk3399-flakes.txt  |   20 +
+>  .../drm/ci/xfails/rockchip-rk3399-skips.txt   |    5 +
+>  .../drm/ci/xfails/virtio_gpu-none-fails.txt   |   38 +
+>  .../drm/ci/xfails/virtio_gpu-none-flakes.txt  |    0
+>  .../drm/ci/xfails/virtio_gpu-none-skips.txt   |    6 +
+>  62 files changed, 5047 insertions(+)
+>  create mode 100644 Documentation/gpu/automated_testing.rst
+>  create mode 100644 drivers/gpu/drm/ci/arm.config
+>  create mode 100644 drivers/gpu/drm/ci/arm64.config
+>  create mode 100644 drivers/gpu/drm/ci/build-igt.sh
+>  create mode 100644 drivers/gpu/drm/ci/build.sh
+>  create mode 100644 drivers/gpu/drm/ci/build.yml
+>  create mode 100755 drivers/gpu/drm/ci/check-patch.py
+>  create mode 100644 drivers/gpu/drm/ci/container.yml
+>  create mode 100644 drivers/gpu/drm/ci/gitlab-ci.yml
+>  create mode 100755 drivers/gpu/drm/ci/igt_runner.sh
+>  create mode 100644 drivers/gpu/drm/ci/image-tags.yml
+>  create mode 100755 drivers/gpu/drm/ci/lava-submit.sh
+>  create mode 100644 drivers/gpu/drm/ci/static-checks.yml
+>  create mode 100644 drivers/gpu/drm/ci/test.yml
+>  create mode 100644 drivers/gpu/drm/ci/testlist.txt
+>  create mode 100644 drivers/gpu/drm/ci/x86_64.config
+>  create mode 100644 drivers/gpu/drm/ci/xfails/amdgpu-stoney-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/amdgpu-stoney-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/amdgpu-stoney-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-amly-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-amly-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-apl-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-apl-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-apl-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-cml-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-glk-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-glk-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-kbl-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-kbl-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-kbl-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-tgl-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-tgl-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-tgl-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-whl-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/i915-whl-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/mediatek-mt8173-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/mediatek-mt8183-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/mediatek-mt8183-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/meson-g12b-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/meson-g12b-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-apq8016-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-apq8016-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-apq8096-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-apq8096-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-apq8096-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-sc7180-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-sc7180-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-sc7180-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-sdm845-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-sdm845-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/msm-sdm845-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/rockchip-rk3288-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/rockchip-rk3288-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/rockchip-rk3288-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/rockchip-rk3399-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/rockchip-rk3399-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/rockchip-rk3399-skips.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/virtio_gpu-none-fails.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/virtio_gpu-none-flakes.txt
+>  create mode 100644 drivers/gpu/drm/ci/xfails/virtio_gpu-none-skips.txt
+>
+[snip]
