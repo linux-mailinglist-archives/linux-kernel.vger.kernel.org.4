@@ -2,146 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B345FE74F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091CD5FE74E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 05:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiJNDJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Oct 2022 23:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S229498AbiJNDJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Oct 2022 23:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJNDIk (ORCPT
+        with ESMTP id S229722AbiJNDIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Oct 2022 23:08:40 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA5BEF589
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:08:38 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id y10so2497699qvo.11
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:08:38 -0700 (PDT)
+        Thu, 13 Oct 2022 23:08:39 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8085EEF5A4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:08:34 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n7so3579596plp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Oct 2022 20:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i1R7QPYLS3htwC9+m+eMmhkdxMHPXqw45xmXhqmncaA=;
-        b=22pn9Os6EXT6UWfc9ZeKQ71GM5Bhmq9AlSEpgZrKl0IUo/yufgpYJMahaOmGApuHFQ
-         0HjgOrbOd3sJY2g4HJFuY1sgb4TaAlQP3aRsz10/ANjJZl4lMgHQsK7sWfd8Y0DMkh+C
-         Dnl17PUMBTdKkOZPaPAnFJ/golfWNeftyDK3tNB7RN8JVIyFOYWbhGQkwRm4hg/oIKKh
-         XWwkEhfZvnj2wPG3jNFSKte8oOALG7BsAxuzpit/Iy/IXoZtVY0BmdVKoGN2ayiG8T6J
-         v607OE1Wb3Zg/vDA9PphT7Zvanzlont5JanwatBkMlDh5o+XUUb8SSx2FdIDrQQBfhxj
-         TvmQ==
+        bh=RPYvhf6hYj1gmxvw7dTnMnSbUK/V1sm26ubqcw4lSFY=;
+        b=uR1wnjzoh66Ntwurmw7mKwF1tShfnXY9UWfot3dsRbBXUbtebLzF0fV/OdZO1YB5Yw
+         PcIMj+Ydd5Hn2ryM/TVGAKfZN0TZjdE6wCe+F3ctIO6FHCtRgJFCsBZIabYASTtj7hln
+         XLsFKwqQlgniZqtFO6A/gIowSCRYZAj2hcvGo8DCes9+7qUqhO1J776gtuITkdeK0N+R
+         UCWdGHLsKwtvYhGN+SfYD2BTsK0or91WpNavAyzl3NsTvh4cFtEMEUkWSbpWAPS3BfS5
+         gfLNCK1IEWcc2/kryI9FvqKKmhhxnFa5vC2Pe9soKZt87Sg2tIscUDwTaTd9N+OwA2hF
+         baMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i1R7QPYLS3htwC9+m+eMmhkdxMHPXqw45xmXhqmncaA=;
-        b=v8eFqwasSqR6d6qnnZUA3+fD9lePasmA8LOWHABddfNqiQ33yxVrt/JKLum33vYO96
-         fCSI/mmRBM5UIeMUALWMJ4YntWKqNFZ4K87ZUZcIYtSBI7l24dRw9o7+11FQGK78Jv/s
-         bkvtV+ZSMcHNPQagG1Ro0TpWs49SrsjcH8gQCQh+ONXCh2Q69l3NOdiPBlyNn4ZUURFo
-         j8iJazB6cM2Ib/qOiN8kFMIcmaZ2RhPYw+UzhHnhXcO68/ijta6ysS8AdiiChPtWEb1R
-         PonYFGQ4yXSXoHCP8rc1Grv/8IQ7UGrVoatI44PKyShoNVUgl/3ClnmW4L1wiBGY8bKf
-         dAOw==
-X-Gm-Message-State: ACrzQf1uvsFB4U4/B0aU3Q7Isya9b9OPAb97WawJgzDI5N7K8SS+8xhx
-        T4TnmZk8zYdxCWFRih5CHaCVwZFbThkO5dOh
-X-Google-Smtp-Source: AMsMyM5Ejyc0D+AQNsiKQu3QB+Vg9yCW8ZNFcTSVKsMfVupUu0uJQ3sNLvSheHGNJWaShgZirb4OmA==
-X-Received: by 2002:a17:903:1003:b0:181:6c26:1114 with SMTP id a3-20020a170903100300b001816c261114mr2921922plb.75.1665716906763;
-        Thu, 13 Oct 2022 20:08:26 -0700 (PDT)
+        bh=RPYvhf6hYj1gmxvw7dTnMnSbUK/V1sm26ubqcw4lSFY=;
+        b=69tHbWsI3kh0SNef8OaoMwdsQr5ovRVoIpe6tB1n6yt3A7PxqrP84pKib2XhvlpkXv
+         Y9I+bj7M9KzP2Xxc3hGIkQUGg79UZ7q4eXWxLSl0HkLIFLH2MQHOVymKip/BPThvZlN4
+         0pFOypV36HaoeE96nBPURBLpzuxWYSKP4um1noXX9tO8Cq1rqBRewBj0k39chEV/z1iY
+         T7zV/w4OWbITXgB9z8uj2BLLrYmBIEM5oKoXvM8jw/2cExsZI9F/G6wC1SXXm0qr2xAq
+         k8OYjR+fq8aIqVXw6+GFR7xlclFd5H1JGrjhJbejT35ZFTorbwPHng0MKp2sel/5ZXFM
+         wmZw==
+X-Gm-Message-State: ACrzQf2+72zDM0we4vPRdKs0Rb9fmAQgCYFIs/M62nDaZ3a/KENXho+h
+        /Ft8nRFTb4wkc5pzTrYWdX88LA==
+X-Google-Smtp-Source: AMsMyM4JUmouJomkbkEP9IQpxtTBmIPr2OqA4geZ0pPrmUDavC6IaCWTRrMaDFGGxduazCATfRujOA==
+X-Received: by 2002:a17:902:db11:b0:17d:5e67:c51c with SMTP id m17-20020a170902db1100b0017d5e67c51cmr2829795plx.64.1665716912810;
+        Thu, 13 Oct 2022 20:08:32 -0700 (PDT)
 Received: from C02G705SMD6V.bytedance.net ([63.216.146.183])
-        by smtp.gmail.com with ESMTPSA id h4-20020a17090a710400b0020ae09e9724sm425524pjk.53.2022.10.13.20.08.19
+        by smtp.gmail.com with ESMTPSA id h4-20020a17090a710400b0020ae09e9724sm425524pjk.53.2022.10.13.20.08.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 20:08:26 -0700 (PDT)
+        Thu, 13 Oct 2022 20:08:32 -0700 (PDT)
 From:   Jia Zhu <zhujia.zj@bytedance.com>
 To:     dhowells@redhat.com, xiang@kernel.org, jefflexu@linux.alibaba.com
 Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, Jia Zhu <zhujia.zj@bytedance.com>
-Subject: [PATCH V2 4/5] cachefiles: narrow the scope of triggering EPOLLIN events in ondemand mode
-Date:   Fri, 14 Oct 2022 11:07:44 +0800
-Message-Id: <20221014030745.25748-5-zhujia.zj@bytedance.com>
+        yinxin.x@bytedance.com, Jia Zhu <zhujia.zj@bytedance.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH V2 5/5] cachefiles: add restore command to recover inflight ondemand read requests
+Date:   Fri, 14 Oct 2022 11:07:45 +0800
+Message-Id: <20221014030745.25748-6-zhujia.zj@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20221014030745.25748-1-zhujia.zj@bytedance.com>
 References: <20221014030745.25748-1-zhujia.zj@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't trigger EPOLLIN when there are only reopening read requests in
-xarray.
+Previously, in ondemand read scenario, if the anonymous fd was closed by
+user daemon, inflight and subsequent read requests would return EIO.
+As long as the device connection is not released, user daemon can hold
+and restore inflight requests by setting the request flag to
+CACHEFILES_REQ_NEW.
 
-Suggested-by: Xin Yin <yinxin.x@bytedance.com>
+Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
 ---
- fs/cachefiles/daemon.c   | 13 +++++++++++--
- fs/cachefiles/internal.h | 12 ++++++++++++
- 2 files changed, 23 insertions(+), 2 deletions(-)
+ fs/cachefiles/daemon.c   |  1 +
+ fs/cachefiles/internal.h |  3 +++
+ fs/cachefiles/ondemand.c | 23 +++++++++++++++++++++++
+ 3 files changed, 27 insertions(+)
 
 diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
-index aa4efcabb5e3..c74bd1f4ecf5 100644
+index c74bd1f4ecf5..014369266cb2 100644
 --- a/fs/cachefiles/daemon.c
 +++ b/fs/cachefiles/daemon.c
-@@ -355,14 +355,23 @@ static __poll_t cachefiles_daemon_poll(struct file *file,
- 					   struct poll_table_struct *poll)
- {
- 	struct cachefiles_cache *cache = file->private_data;
-+	struct xarray *xa = &cache->reqs;
-+	struct cachefiles_req *req;
-+	unsigned long index;
- 	__poll_t mask;
- 
- 	poll_wait(file, &cache->daemon_pollwq, poll);
- 	mask = 0;
- 
- 	if (cachefiles_in_ondemand_mode(cache)) {
--		if (!xa_empty(&cache->reqs))
--			mask |= EPOLLIN;
-+		if (!xa_empty(xa)) {
-+			xa_for_each_marked(xa, index, req, CACHEFILES_REQ_NEW) {
-+				if (!cachefiles_ondemand_is_reopening_read(req)) {
-+					mask |= EPOLLIN;
-+					break;
-+				}
-+			}
-+		}
- 	} else {
- 		if (test_bit(CACHEFILES_STATE_CHANGED, &cache->flags))
- 			mask |= EPOLLIN;
+@@ -77,6 +77,7 @@ static const struct cachefiles_daemon_cmd cachefiles_daemon_cmds[] = {
+ 	{ "tag",	cachefiles_daemon_tag		},
+ #ifdef CONFIG_CACHEFILES_ONDEMAND
+ 	{ "copen",	cachefiles_ondemand_copen	},
++	{ "restore",	cachefiles_ondemand_restore	},
+ #endif
+ 	{ "",		NULL				}
+ };
 diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 21ef5007f488..98d6cf58db11 100644
+index 98d6cf58db11..a3cacba57def 100644
 --- a/fs/cachefiles/internal.h
 +++ b/fs/cachefiles/internal.h
-@@ -327,6 +327,13 @@ cachefiles_ondemand_set_object_##_state(struct cachefiles_object *object) \
- CACHEFILES_OBJECT_STATE_FUNCS(open);
- CACHEFILES_OBJECT_STATE_FUNCS(close);
- CACHEFILES_OBJECT_STATE_FUNCS(reopening);
-+
-+static inline bool cachefiles_ondemand_is_reopening_read(struct cachefiles_req *req)
-+{
-+	return cachefiles_ondemand_object_is_reopening(req->object) &&
-+			req->msg.opcode == CACHEFILES_OP_READ;
-+}
-+
- #else
- static inline ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
- 					char __user *_buffer, size_t buflen)
-@@ -354,6 +361,11 @@ static inline int cachefiles_ondemand_init_obj_info(struct cachefiles_object *ob
- {
- 	return 0;
- }
-+
-+static inline bool cachefiles_ondemand_is_reopening_read(struct cachefiles_req *req)
-+{
-+	return false;
-+}
- #endif
+@@ -302,6 +302,9 @@ extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+ extern int cachefiles_ondemand_copen(struct cachefiles_cache *cache,
+ 				     char *args);
  
- /*
++extern int cachefiles_ondemand_restore(struct cachefiles_cache *cache,
++					char *args);
++
+ extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
+ extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
+ 
+diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+index c9eea89befec..08677c9d0004 100644
+--- a/fs/cachefiles/ondemand.c
++++ b/fs/cachefiles/ondemand.c
+@@ -182,6 +182,29 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+ 	return ret;
+ }
+ 
++int cachefiles_ondemand_restore(struct cachefiles_cache *cache, char *args)
++{
++	struct cachefiles_req *req;
++
++	XA_STATE(xas, &cache->reqs, 0);
++
++	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
++		return -EOPNOTSUPP;
++
++	/*
++	 * Reset the requests to CACHEFILES_REQ_NEW state, so that the
++	 * requests have been processed halfway before the crash of the
++	 * user daemon could be reprocessed after the recovery.
++	 */
++	xas_lock(&xas);
++	xas_for_each(&xas, req, ULONG_MAX)
++		xas_set_mark(&xas, CACHEFILES_REQ_NEW);
++	xas_unlock(&xas);
++
++	wake_up_all(&cache->daemon_pollwq);
++	return 0;
++}
++
+ static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
+ {
+ 	struct cachefiles_object *object;
 -- 
 2.20.1
 
