@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67845FED95
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CF35FED96
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Oct 2022 13:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiJNLtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 07:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S229918AbiJNLtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 07:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiJNLsj (ORCPT
+        with ESMTP id S230055AbiJNLsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 07:48:39 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EFBEAC97;
-        Fri, 14 Oct 2022 04:48:22 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id m6so4724982pfb.0;
-        Fri, 14 Oct 2022 04:48:22 -0700 (PDT)
+        Fri, 14 Oct 2022 07:48:45 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1845BEACA2;
+        Fri, 14 Oct 2022 04:48:25 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 129so4100537pgc.5;
+        Fri, 14 Oct 2022 04:48:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NnqdZrpjB39egxtL+QCzwuA4NRAaJFbgBz0XDUCs42M=;
-        b=gmJd4C5XOlGjJN+ycAuRwR9WfRxIaDNiG388OYwTvK2aZBntqYU33knr6MlRUQ6uXX
-         yuLavc0u0tiIyptUqvhjZPQg5CxTYDYJOKq2m/gvikn1P7J26N8iFZICJdOksq8TOr9Z
-         +2pDES0pidz10ETxC/NqQXPPM5QSLDtfcbnkJTGtYK51ByCkT22dM3UBMW1b+wwbGDI/
-         90N9KceqlYhiMmBcH/E4dlxSKMhbuKJyg1BsjsPrh3FSKFfoN6edVfkvim2uUtyq6FzM
-         cdoZ/oVaxdXsVP+uhJVNxa4+iePvzsnoSWSi5Iz+DJarL1DXhWkkutjPITw5/DRUVeIO
-         xqKw==
+        bh=MJyxTTeGNHxq9RsExK67ky3HBRhQX3BCNFgWjcG3gFE=;
+        b=DqpDvnboUMb/w6bGJfLPTdDFZ/YKQx7wupeIaxHYmwEIldgPB3XzFqc77G4IATvUa6
+         Q8mRxdlg6Pe71gPe6If/2R90wxLczssNszNlR10bzSboAgJXtneIV2Xw4Akzm3wVfftm
+         AGPCV8Js6LjB6cY/AZ0E6lbYtdHQpTcCLiIc0+kV5dRqOFwMEDDUnaN39s1CV15VLsju
+         YJcA3/1zJbvJBfeXbhx52uYm09Q2vTGgjf0RtqiJ0leH6mQdY1CtgMylYdZ5MUBwdrCC
+         dcpXpF5TqJtzuNvj0zbI+V1jQnfxM9AdWlQ4lyPXDtBzJ80K1xkgqWTT3YZ5SY4leM7B
+         Ao9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NnqdZrpjB39egxtL+QCzwuA4NRAaJFbgBz0XDUCs42M=;
-        b=sRfkBTouR44W4r40dcaD1alcy4CYlqX7pFkdkxZOEYA002frraxT/G+YqtRfqBZJdG
-         rXtQsOhtSXHC7H/jgZnndeVI+VCY+/xCWAfcQz2hAmMKursyvByGlS00SZfrRcJJRyYW
-         UI29KSArrtpnICkQ80vK7/jH5BRWOk6B7SgGzFattgSFBfwIjLirqR2Lx0L99qKYhcwm
-         TOhsw6+sMlgpi5GK/EABAkkRfM7ovcRjH31tzaezNi9B0uCXVwm6glV/qFYr9rnX1eYn
-         n/Ww8bDd+/nTH3fx8qjnhHd465coemsth8bO7yY+9OXhgFmCexir2k4gHNm64UwVwJoy
-         TuJw==
-X-Gm-Message-State: ACrzQf2mFWl9VF3oJioMNaf5ZSkQiNyszGLVOOpuJo1ffc8lP98lo/Ms
-        0HFf8ompCv/jSC3oG7yEi/8=
-X-Google-Smtp-Source: AMsMyM6NqJF4IH45VPrLnr+zaHePKt5M0BCmaF+/oUMK6Q4L7/YnXX73EAUuhI1YBRwl88rSb6eEZQ==
-X-Received: by 2002:a05:6a00:26f4:b0:563:3fdc:8af0 with SMTP id p52-20020a056a0026f400b005633fdc8af0mr4698709pfw.63.1665748098162;
-        Fri, 14 Oct 2022 04:48:18 -0700 (PDT)
+        bh=MJyxTTeGNHxq9RsExK67ky3HBRhQX3BCNFgWjcG3gFE=;
+        b=UBdgYcO1Ki6x+TRKjjbXMwCUYpXWv3+8LNOzRuI4X4EC52AORUpLBfgLGkoneslktf
+         R0hvp/w0t0HZRwUcaf58EaLMR1ycRwCKVmUQSeM/085eYWm075KCq+dxqtAQGhj591ga
+         koSLW9GWDa9t2nC8zTSuYOL6/OtuK6gFte+3tO6+1oa1GJl8X0wvYMBK0WJqcA0Hvc+x
+         1AiTFuqW2FsaGbDeixQIraM/qoKLjwlme8xqH5A6apq0HPsI0EHz4QsHbt5Ov7HE5e76
+         SaTNR1aLmAKT+dQ365U9Tp0DgZ5KiIPD3oC5SaHHy6FluwZIoZ8DDTuczifJQxKhcC1t
+         bYZw==
+X-Gm-Message-State: ACrzQf3bCAa+++E5eIGwiUz77/Xtatu2JK5qTH2yeHC1v4zfT2zGUZH+
+        Yr9UoaA4T9mUaZttwyWZPTc=
+X-Google-Smtp-Source: AMsMyM6rFQRJmC/gywUSv+kxLwHbldoY2wNx/nbtTPMyJ/9xjp2aZkluAsyjEfI2aDrQrfn+nGXzmQ==
+X-Received: by 2002:a05:6a00:24d0:b0:563:6d36:eae8 with SMTP id d16-20020a056a0024d000b005636d36eae8mr4898735pfv.66.1665748100971;
+        Fri, 14 Oct 2022 04:48:20 -0700 (PDT)
 Received: from localhost.localdomain (2001-b400-e282-2aaa-c1aa-06c8-0e68-c5ee.emome-ip6.hinet.net. [2001:b400:e282:2aaa:c1aa:6c8:e68:c5ee])
-        by smtp.gmail.com with ESMTPSA id x8-20020a170902ec8800b001746f66244asm1606678plg.18.2022.10.14.04.48.15
+        by smtp.gmail.com with ESMTPSA id x8-20020a170902ec8800b001746f66244asm1606678plg.18.2022.10.14.04.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 04:48:17 -0700 (PDT)
+        Fri, 14 Oct 2022 04:48:20 -0700 (PDT)
 From:   Victor Shih <victorshihgli@gmail.com>
 X-Google-Original-From: Victor Shih <victor.shih@genesyslogic.com.tw>
 To:     ulf.hansson@linaro.org, adrian.hunter@intel.com
@@ -58,9 +58,9 @@ Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
         dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
         Ben Chuang <ben.chuang@genesyslogic.com.tw>
-Subject: [PATCH V5 23/26] mmc: core: add post-mmc_attach_sd hook
-Date:   Fri, 14 Oct 2022 19:45:58 +0800
-Message-Id: <20221014114601.15594-24-victor.shih@genesyslogic.com.tw>
+Subject: [PATCH V5 24/26] mmc: sdhci-uhs2: add post-mmc_attach_sd hook
+Date:   Fri, 14 Oct 2022 19:45:59 +0800
+Message-Id: <20221014114601.15594-25-victor.shih@genesyslogic.com.tw>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221014114601.15594-1-victor.shih@genesyslogic.com.tw>
 References: <20221014114601.15594-1-victor.shih@genesyslogic.com.tw>
@@ -76,47 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AKASHI Takahiro <takahiro.akashi@linaro.org>
+From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 
-This "post" hook for mmc_attach_sd() will be required to enable UHS-II
-support, at least, on GL9755.
+This "post" hook for mmc_attach_sd(), uhs2_post_attach_sd, will be required
+to enable UHS-II support, at least, on GL9755.
 
 Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
 ---
- drivers/mmc/core/sd.c    | 6 ++++++
- include/linux/mmc/host.h | 1 +
- 2 files changed, 7 insertions(+)
+ drivers/mmc/host/sdhci.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
-index cab4725209c1..975987fb02a1 100644
---- a/drivers/mmc/core/sd.c
-+++ b/drivers/mmc/core/sd.c
-@@ -1855,6 +1855,12 @@ int mmc_attach_sd(struct mmc_host *host)
- 		goto remove_card;
+diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+index 943701aef22a..e81de556cf78 100644
+--- a/drivers/mmc/host/sdhci.h
++++ b/drivers/mmc/host/sdhci.h
+@@ -746,6 +746,7 @@ struct sdhci_ops {
+ 	void    (*dump_vendor_regs)(struct sdhci_host *host);
+ 	void	(*dump_uhs2_regs)(struct sdhci_host *host);
+ 	void    (*uhs2_pre_detect_init)(struct sdhci_host *host);
++	void    (*uhs2_post_attach_sd)(struct sdhci_host *host);
+ };
  
- 	mmc_claim_host(host);
-+
-+	/* TODO: Is this the right place? */
-+	if ((host->flags & MMC_UHS2_INITIALIZED) &&
-+	    host->ops->uhs2_post_attach_sd)
-+		host->ops->uhs2_post_attach_sd(host);
-+
- 	return 0;
- 
- remove_card:
-diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-index cf5adf26b6e4..e58be4ccb308 100644
---- a/include/linux/mmc/host.h
-+++ b/include/linux/mmc/host.h
-@@ -279,6 +279,7 @@ struct mmc_host_ops {
- 	int	(*uhs2_set_reg)(struct mmc_host *host, enum sd_uhs2_operation act);
- 	int (*uhs2_disable_clk)(struct mmc_host *host);
- 	int (*uhs2_enable_clk)(struct mmc_host *host);
-+	void (*uhs2_post_attach_sd)(struct mmc_host *host);
- 
- 	/*
- 	 * The uhs2_control callback is used to execute SD UHS-II specific
+ #ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
 -- 
 2.25.1
 
