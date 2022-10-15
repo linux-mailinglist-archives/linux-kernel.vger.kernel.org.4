@@ -2,85 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1CB5FF9A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 12:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F365FF9B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 12:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiJOKU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 06:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S229622AbiJOKwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 06:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJOKUW (ORCPT
+        with ESMTP id S229470AbiJOKws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 06:20:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEC32B19B;
-        Sat, 15 Oct 2022 03:20:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E818B808BD;
-        Sat, 15 Oct 2022 10:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3331AC43143;
-        Sat, 15 Oct 2022 10:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665829216;
-        bh=FmXaLLKk0Lfa4F9XQZXzPNPYWe/8cexBMT8DjooMkiI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=dXfTr42e5+/diKFXVZYnFcu7KWxwnODkXQ2lPxxT0nO2e59ukZrlLRGApbsg88iEW
-         oA+NJW8Ourzgfx/H+XbGLrVbH9kSzoxvu7usig4nlIGo7beYWHw/0zkDwFVefRIJ6d
-         jqgDD7lr/AYJxtSbmbOm9ZqsxSPOmV6IYyIsAilywFb/YnAZKXxcNHQtqTvx8m3ocm
-         0kOtcKROrWVkvFSrjWsBP2wZ8Ku2Nxexrlb3aAitU5yw5HtuYwRj5n6jKuHfrfwNf1
-         CT1f0EakGSHeQBOYXB4jtxjEfY4IJX2iC/51UX1lNEI93wlttNuS3evLKTZ6Da+teM
-         /Vfs0tSyKsSvg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14340E50D94;
-        Sat, 15 Oct 2022 10:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 15 Oct 2022 06:52:48 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6566510DC;
+        Sat, 15 Oct 2022 03:52:42 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.14.30.251])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDXTqrrkEpjGRb1Bw--.16562S2;
+        Sat, 15 Oct 2022 18:52:34 +0800 (CST)
+From:   Jinlong Chen <nickyc975@zju.edu.cn>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nickyc975@zju.edu.cn
+Subject: [PATCH] blk-mq, elevator: pair up elevator_get and elevator_put to avoid refcnt problems
+Date:   Sat, 15 Oct 2022 18:52:26 +0800
+Message-Id: <20221015105226.2852648-1-nickyc975@zju.edu.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: phy: dp83867: Extend RX strap quirk for SGMII mode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166582921607.1299.16882732811766875807.git-patchwork-notify@kernel.org>
-Date:   Sat, 15 Oct 2022 10:20:16 +0000
-References: <20221014064735.18928-1-harini.katakam@amd.com>
-In-Reply-To: <20221014064735.18928-1-harini.katakam@amd.com>
-To:     Harini Katakam <harini.katakam@amd.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, harinikatakamlinux@gmail.com,
-        michal.simek@amd.com, radhey.shyam.pandey@amd.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: cC_KCgDXTqrrkEpjGRb1Bw--.16562S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGry3GF17Jw4fKr17WrWfKrg_yoWrXFyfpr
+        WrJa90krn8Kr40qw4xAw17X3s8ur92gr13XrW0yw1FkFs3K3y7J3W8CFy7ZF45CrW8JF4q
+        qF40qFWUJa4UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
+        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI
+        7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
+        ZEXa7VUbHa0DUUUUU==
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Currently, the getting and putting of io scheduler module references are
+not paired. The root cause is that elevator_alloc relies on its caller to
+get the references to io scheduler modules instead of getting the
+references by itself, while the corresponding elevator_release does put
+the references to io scheduler modules back on its own.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+This results in some weird code containing bugs:
 
-On Fri, 14 Oct 2022 12:17:35 +0530 you wrote:
-> When RX strap in HW is not set to MODE 3 or 4, bit 7 and 8 in CF4
-> register should be set. The former is already handled in
-> dp83867_config_init; add the latter in SGMII specific initialization.
-> 
-> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
-> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
-> 
-> [...]
+1. Both elevator_switch_mq and elevator_init_mq call blk_mq_init_sched,
+   but elevator_init_mq calls elevator_put on failure while
+   elevator_switch_mq does not. These inconsistent behaviors may cause
+   negative refcnt or ghost refcnt due to the position where the failure
+   happens in blk_mq_init_sched.
 
-Here is the summary with links:
-  - [v2] net: phy: dp83867: Extend RX strap quirk for SGMII mode
-    https://git.kernel.org/netdev/net/c/0c9efbd5c50c
+2. blk_mq_elv_switch_none gets references to the io scheduler modules to
+   prevent them from being removed. But blk_mq_elv_switch_back does not
+   put the references back. This is confusing.
 
-You are awesome, thank you!
+To address the problem, firstly, we make elevator_alloc to get its own
+references to io scheduler modules. These references will be put back by
+elevator_release later. Then, we can just pair each elevator_get with an
+elevator_put.
+
+The bugs and the patch can be validated with tools here:
+https://github.com/nickyc975/linux_elv_refcnt_bug.git
+
+Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
+---
+ block/blk-mq.c   |  6 ++++++
+ block/elevator.c | 29 ++++++++++++++++++++---------
+ 2 files changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 8070b6c10e8d..2adfd52786dc 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -4595,6 +4595,12 @@ static void blk_mq_elv_switch_back(struct list_head *head,
+ 
+ 	mutex_lock(&q->sysfs_lock);
+ 	elevator_switch(q, t);
++	/**
++	 * We got a reference of the io scheduler module in blk_mq_elv_switch_none
++	 * to prevent the module from being removed. We need to put that reference
++	 * back once we are done.
++	 */
++	module_put(t->elevator_owner);
+ 	mutex_unlock(&q->sysfs_lock);
+ }
+ 
+diff --git a/block/elevator.c b/block/elevator.c
+index bd71f0fc4e4b..aaafd415f922 100644
+--- a/block/elevator.c
++++ b/block/elevator.c
+@@ -166,9 +166,12 @@ struct elevator_queue *elevator_alloc(struct request_queue *q,
+ {
+ 	struct elevator_queue *eq;
+ 
++	if (!try_module_get(e->elevator_owner))
++		goto err_out;
++
+ 	eq = kzalloc_node(sizeof(*eq), GFP_KERNEL, q->node);
+ 	if (unlikely(!eq))
+-		return NULL;
++		goto err_put_elevator;
+ 
+ 	eq->type = e;
+ 	kobject_init(&eq->kobj, &elv_ktype);
+@@ -176,6 +179,11 @@ struct elevator_queue *elevator_alloc(struct request_queue *q,
+ 	hash_init(eq->hash);
+ 
+ 	return eq;
++
++err_put_elevator:
++	elevator_put(e);
++err_out:
++	return NULL;
+ }
+ EXPORT_SYMBOL(elevator_alloc);
+ 
+@@ -713,8 +721,9 @@ void elevator_init_mq(struct request_queue *q)
+ 	if (err) {
+ 		pr_warn("\"%s\" elevator initialization failed, "
+ 			"falling back to \"none\"\n", e->elevator_name);
+-		elevator_put(e);
+ 	}
++
++	elevator_put(e);
+ }
+ 
+ /*
+@@ -747,6 +756,7 @@ static int __elevator_change(struct request_queue *q, const char *name)
+ {
+ 	char elevator_name[ELV_NAME_MAX];
+ 	struct elevator_type *e;
++	int ret = 0;
+ 
+ 	/* Make sure queue is not in the middle of being removed */
+ 	if (!blk_queue_registered(q))
+@@ -762,17 +772,18 @@ static int __elevator_change(struct request_queue *q, const char *name)
+ 	}
+ 
+ 	strlcpy(elevator_name, name, sizeof(elevator_name));
+-	e = elevator_get(q, strstrip(elevator_name), true);
+-	if (!e)
+-		return -EINVAL;
+-
+ 	if (q->elevator &&
+-	    elevator_match(q->elevator->type, elevator_name, 0)) {
+-		elevator_put(e);
++	    elevator_match(q->elevator->type, strstrip(elevator_name), 0)) {
+ 		return 0;
+ 	}
+ 
+-	return elevator_switch(q, e);
++	e = elevator_get(q, strstrip(elevator_name), true);
++	if (!e)
++		return -EINVAL;
++
++	ret = elevator_switch(q, e);
++	elevator_put(e);
++	return ret;
+ }
+ 
+ ssize_t elv_iosched_store(struct request_queue *q, const char *name,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.31.1
 
