@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CE95FF7D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D235FF7DF
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJOBcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 21:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S229715AbiJOBed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 21:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiJOBcu (ORCPT
+        with ESMTP id S229693AbiJOBeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 21:32:50 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342266C13D
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:32:49 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mq5Kc2bnFzDsSP;
-        Sat, 15 Oct 2022 09:30:12 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 15 Oct 2022 09:32:46 +0800
-Subject: Re: [PATCH 2/3] hugetlb: take hugetlb vma_lock when clearing
- vma_lock->vma pointer
-To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221005011707.514612-1-mike.kravetz@oracle.com>
- <20221005011707.514612-3-mike.kravetz@oracle.com> <Yz5L1uxQYR1VqFtJ@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <6b2d8b41-1989-b28a-d558-3423432848fe@huawei.com>
-Date:   Sat, 15 Oct 2022 09:32:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 14 Oct 2022 21:34:19 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4DE76560
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:34:08 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id fw14so6408757pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WWoZiJApWyCBKdB70ZB9Vo9hMSoVXmauhEs7d1wasQE=;
+        b=DU5MvItccSyjFFbxc7gy0hUbfcvU8j3qj+2YZhgcfolUKe8NEGXzxCIFIgEJTg2cFo
+         Rs9sUDSmeC8ZWkFAfI2zXS0/O6ui0yseW8X1JNpHQHvWXy32GcTJADggkXdMmNfVuUXA
+         51UHi4ZzzL2NkKtx9m8wXJ4AAucHssSl9Pxr8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWoZiJApWyCBKdB70ZB9Vo9hMSoVXmauhEs7d1wasQE=;
+        b=fcagiGpCsCmz9R3viq/dGInYi4jdxGFs9eTQ389bjdF6EAhcqcfP08wJFbZ/ywH7eq
+         zb0rvOUnbwymjj4b1nvWdw29lzmnkhHRlw/ZXoC844hM1QpxvaT7Sf5f5w67Kv//Sr4h
+         E96PNTxpSNmEHhKuLDeSGqgBPE4pFv90O0Lp8+EmQR9dhmm47ek8Exh2PyBz95bxKfji
+         anYk0XJFxcD7SfkXzrVtwlOvRTNizEorCKYwA0eZNJ9ePgEI2CDdpvzpu+Lp/dnoI3fE
+         U4Lp6c+FzwmIJDRtPeTkUjKB29somp38v4kC2SqbLNk6KvOPni2zqz63Ggxh9y+RZ1QX
+         yDLw==
+X-Gm-Message-State: ACrzQf3Yg+Buif6o8H/suAysd91v6r1ULuF7VXTCjdPcADOr05ywwqka
+        ZFbUYhEor8wwMyIeSmW7JcmNBA==
+X-Google-Smtp-Source: AMsMyM60v+OB85OF8dkEL5Ks5ZQlhXou3ViEFXWWTw9dnSluXa5cG2aN519MXXpxU4VxmIHVNy8nPA==
+X-Received: by 2002:a17:90b:388e:b0:20d:4a1f:d5a2 with SMTP id mu14-20020a17090b388e00b0020d4a1fd5a2mr791136pjb.135.1665797647949;
+        Fri, 14 Oct 2022 18:34:07 -0700 (PDT)
+Received: from 90cf639d7f59 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b0017da2798025sm2306202plg.295.2022.10.14.18.34.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 18:34:06 -0700 (PDT)
+Date:   Sat, 15 Oct 2022 01:33:59 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
+Message-ID: <20221015013359.GA78889@90cf639d7f59>
+References: <20221013175146.507746257@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <Yz5L1uxQYR1VqFtJ@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/6 11:30, Mike Kravetz wrote:
-> To address build issues:
+On Thu, Oct 13, 2022 at 07:52:38PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.2 release.
+> There are 34 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 
->>From b6d359f77d32c7734fe4f00806a0ed1e99925534 Mon Sep 17 00:00:00 2001
-> From: Mike Kravetz <mike.kravetz@oracle.com>
-> Date: Wed, 5 Oct 2022 20:26:19 -0700
-> Subject: [PATCH 2/3] hugetlb: take hugetlb vma_lock when clearing
->  vma_lock->vma pointer
-> 
-> hugetlb file truncation/hole punch code may need to back out and take
-> locks in order in the routine hugetlb_unmap_file_folio().  This code
-> could race with vma freeing as pointed out in [1] and result in
-> accessing a stale vma pointer.  To address this, take the vma_lock when
-> clearing the vma_lock->vma pointer.
-> 
-> [1] https://lore.kernel.org/linux-mm/01f10195-7088-4462-6def-909549c75ef4@huawei.com/
-> 
-> Fixes: "hugetlb: use new vma_lock for pmd sharing synchronization"
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
+> Anything received after that time might be too late.
 
-This patch looks good to me. Thanks.
+Hi Greg,
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+6.0.2-rc1 tested.
 
-Thanks,
-Miaohe Lin
+Run tested on:
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
 
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos5422
 
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
