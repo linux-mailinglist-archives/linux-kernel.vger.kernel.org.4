@@ -2,50 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F63A5FF80D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 04:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188385FF80F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 04:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJOCjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 22:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
+        id S229671AbiJOCm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 22:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiJOCje (ORCPT
+        with ESMTP id S229493AbiJOCmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 22:39:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97DD72B77;
-        Fri, 14 Oct 2022 19:39:32 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mq6mD4VyszmVJx;
-        Sat, 15 Oct 2022 10:34:52 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 15 Oct 2022 10:39:30 +0800
-Subject: Re: [PATCH] KVM: x86/mmu: use helper macro SPTE_ENT_PER_PAGE
-To:     Sean Christopherson <seanjc@google.com>
-CC:     <pbonzini@redhat.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220913085452.25561-1-linmiaohe@huawei.com>
- <Yz4Qi7cn7TWTWQjj@google.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <ab27ae74-b23a-9c23-a3c6-3328b0aa0f2f@huawei.com>
-Date:   Sat, 15 Oct 2022 10:39:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 14 Oct 2022 22:42:24 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA76CD33
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 19:42:23 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 29F2fUY61015456
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 14 Oct 2022 19:41:31 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 29F2fUY61015456
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022100601; t=1665801694;
+        bh=zy2Dinix+O5oevVDTCLZtmhUim/7pTHY5oNWDsDD/ok=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=OdqiZfxCGVrsUOaj+Rqkw9uyOL6SPzXeTgofQzL+vg350sMn82Dv6FNMDwfF6s5co
+         xAXPh4cQ9RnMmBFfRe1E2ZulmYOx6DmiLcsE6eJ2HojZ/aV21H29geYeqNDjjfsGfO
+         OBam8w4JNftYywGXHeDGa9t7cSQvJYe9jptFfgFcM/0zF1jqYtlUdkeJOxlTodkUDM
+         szpF7UUSS3TBdOZIhBlQws2GHsoboh6+e27W3fbEg1XPefK3kfZ533O4EMdqmRqc4V
+         WDu4CoervSmTOHhwK1NRYVFGKPA7IX7n6f8f/ynjmEHEXRDY7YjhS++El2yU5HzoFp
+         q9E7vp0wA9lfA==
+Date:   Fri, 14 Oct 2022 19:41:29 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Xin Li'" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "brgerst@gmail.com" <brgerst@gmail.com>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>
+Subject: RE: [PATCH v3 3/6] x86/gsseg: make asm_load_gs_index() take an u16
+User-Agent: K-9 Mail for Android
+In-Reply-To: <86f60a8edf0e458c86cd84970364cfa2@AcuMS.aculab.com>
+References: <20221013200134.1487-1-xin3.li@intel.com> <20221013200134.1487-4-xin3.li@intel.com> <86f60a8edf0e458c86cd84970364cfa2@AcuMS.aculab.com>
+Message-ID: <1FCB6543-A666-4423-986B-4CDA1B4DD016@zytor.com>
 MIME-Version: 1.0
-In-Reply-To: <Yz4Qi7cn7TWTWQjj@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,57 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/6 7:17, Sean Christopherson wrote:
-> On Tue, Sep 13, 2022, Miaohe Lin wrote:
->> Use helper macro SPTE_ENT_PER_PAGE to get the number of spte entries
->> per page. Minor readability improvement.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
-> 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+On October 14, 2022 5:28:25 AM PDT, David Laight <David=2ELaight@ACULAB=2EC=
+OM> wrote:
+>From: Xin Li
+>> Sent: 13 October 2022 21:02
+>>=20
+>> From: "H=2E Peter Anvin (Intel)" <hpa@zytor=2Ecom>
+>>=20
+>> Let gcc know that only the low 16 bits of load_gs_index() argument
+>> actually matter=2E It might allow it to create slightly better
+>> code=2E However, do not propagate this into the prototypes of functions
+>> that end up being paravirtualized, to avoid unnecessary changes=2E
+>
+>Using u16 will almost always make the code worse=2E
+>At some point the value has to be masked and/or extended
+>to ensure an out of range value doesn't appear in
+>a register=2E
+>
+>	David
+>
+>-
+>Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+>Registration No: 1397386 (Wales)
+>
+>
 
-Many thanks for your review and comment. And sorry for late respond. A really busy week. :)
-
-> 
->>  arch/x86/kvm/mmu/mmu.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
->> index 858bc53cfab4..45c532d00f78 100644
->> --- a/arch/x86/kvm/mmu/mmu.c
->> +++ b/arch/x86/kvm/mmu/mmu.c
->> @@ -1645,7 +1645,7 @@ static int is_empty_shadow_page(u64 *spt)
->>  	u64 *pos;
->>  	u64 *end;
->>  
->> -	for (pos = spt, end = pos + PAGE_SIZE / sizeof(u64); pos != end; pos++)
->> +	for (pos = spt, end = pos + SPTE_ENT_PER_PAGE; pos != end; pos++)
-> 
-> This is buried under MMU_DEBUG, and turning that on to compile test, which requires
-> manually changing kernel code to enable, results in some minor warnings.  Given the
-> existence of CONFIG_KVM_WERROR=y, I think it's safe to say this code hasn't been
-> exercised in a very long time.  E.g. this is literally the first time I've actually
-> enabled MMU_DEBUG.
-> 
-> This particular check seems like it would be quite useful, but the pgprintk() and
-> rmap_printk() hooks, not so much.  E.g. the knob is too coarse grained, and many
-> of the prints now have tracepoints.
-> 
-> So, unless someone actually actively uses MMU_DEBUG+dbg, I'm inclined to just delete
-> pgprintk() and rmap_printk(), and then rename MMU_WARN_ON => KVM_MMU_WARN_ON and
-> add a Kconfig for that, e.g. CONFIG_KVM_PROVE_MMU.
-> 
-> Hmm, and maybe clean up this helper too, e.g. get rid of the pointer arithmetic,
-> and take the full kvm_mmu_page so that the error message can print out things like
-> the gfn (a host kernel pointer is going to be useless for debug).
-> 
-> Thoughts?  Objections?
-
-I tend to agree with you. MMU_DEBUG might even be an obsolete DEBUG component. I believe above
-changes will improve the current code. Am I supposed to do this or will you kindly do this?
-
-Thanks again,
-Miaohe Lin
-
-
+Is that a general statement or are you actually invoking it in this case? =
+This is about it being a narrowing input, *removing* such constraints=2E
