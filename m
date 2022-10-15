@@ -2,116 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A8B5FFC83
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 00:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0F35FFC97
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 01:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiJOW1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 18:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S229577AbiJOXXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 19:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiJOW1R (ORCPT
+        with ESMTP id S229463AbiJOXXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 18:27:17 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C494003D;
-        Sat, 15 Oct 2022 15:27:15 -0700 (PDT)
-Message-ID: <5b3c2ccb-4e77-5707-d41a-5a91bd677c8f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665872833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jyH/LzULF59OH5GGYkSCeFkBRluBAuYmG36QDeuLDGA=;
-        b=ItVPqsA8nPWYRcgRztZnKGeigQevIb9NNMeUq1fNX+x4UrWR9/a/r4xf9hM1/M/UN/A0FE
-        J0jjez2AWgJo3JWhZKhTKzlqPa+y42b15ojkvYOEoa+ulIkQTOuTTRZJIw0bPYje9gkI6f
-        tYhoEvKW6MGKkq4vtGWr/i4EaGVLM5Y=
-Date:   Sat, 15 Oct 2022 16:27:12 -0600
+        Sat, 15 Oct 2022 19:23:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB5C3ECEF;
+        Sat, 15 Oct 2022 16:23:39 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4A51491;
+        Sun, 16 Oct 2022 01:23:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1665876217;
+        bh=W5d/TYSZnCg/jUE3T7Y+rbO6nluH0VRHje+Oo84Zkzc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aNgBMhLduKhxpQgFlSQeGqwZOzJVaxM0wx5p4FrEXla/bBbCk4n1U2LV0WMafgMBp
+         naj2Mw4xzjstd023BwOr9dR/D1WQbbQgGaki4mcujRqtvlmcQy13hzScx3ZKZfbXYn
+         T0DK0cfSqi9Kq7khox9/rNC2YqZeJIw9nezUpBXI=
+Date:   Sun, 16 Oct 2022 02:23:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 4/5] media: i2c: ov5645: Return zero for s_stream(0)
+Message-ID: <Y0tA4cZBdwCOkaOs@pendragon.ideasonboard.com>
+References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221014183459.181567-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y0pSYfw+VDxXv85b@pendragon.ideasonboard.com>
+ <Y0snkMEp9WqGtzom@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 0/3] Bitmap percentage flushing
-Content-Language: en-US
-To:     John Stoffel <john@stoffel.org>
-Cc:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jonathan.derrick@solidigm.com,
-        jonathanx.sk.derrick@intel.com,
-        Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
-References: <20221013224151.300-1-jonathan.derrick@linux.dev>
- <25417.53318.731340.683540@quad.stoffel.home>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <25417.53318.731340.683540@quad.stoffel.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y0snkMEp9WqGtzom@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Sakari,
 
+On Sat, Oct 15, 2022 at 09:35:12PM +0000, Sakari Ailus wrote:
+> On Sat, Oct 15, 2022 at 09:25:37AM +0300, Laurent Pinchart wrote:
+> > On Fri, Oct 14, 2022 at 07:34:58PM +0100, Prabhakar wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > 
+> > > Always return zero while stopping the stream as the caller will ignore the
+> > > return value.
+> > > 
+> > > This patch drops checking the return value of ov5645_write_reg() and
+> > > continues further in the code path while stopping stream. The user anyway
+> > > gets an error message in case ov5645_write_reg() fails.
+> > 
+> > Continuing all the way to pm_runtime_put() is fine, but I don't think
+> > the function should return 0. It's not up to the driver to decide if a
+> > failure would be useful to signal to the caller or not.
+> 
+> If the function returns an error when disabling streaming, what is the
+> expected power state of the device after this?
 
-On 10/14/2022 3:10 PM, John Stoffel wrote:
->>>>>> "Jonathan" == Jonathan Derrick <jonathan.derrick@linux.dev> writes:
-> 
->> This introduces a percentage-flushing mechanism that works in-tandem to the
->> mdadm delay timer. The percentage argument is based on the number of chunks
->> dirty (rather than percentage), due to large drives requiring smaller and
->> smaller percentages (eg, 32TB drives-> 1% is 320GB).
-> 
-> I've been reading and re-reading this and I still don't understand
-> what you're saying here.  You say you're adding a percentage based
-> mechanism, but then you say it's based on chunk counts, not
-> percentages.  I think you need to clean this up and re-word it.> 
-> Maybe you're trying to say that you only take a percentage of the
-> available write bandwidth per second or something like that? 
-I'll adjust it to chunk-count-based in the cover letter and make sure it
-specifies bandwidth. I figured the chunk-count-based was a good way to
-cover the desired percentage-based feature [1]. 
+That's up to us to decide :-)
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/md/md-bitmap.c#L16
+> The contract between the caller and the callee is that the state is not
+> changed if there is an error.
 
+For most APIs, but that's not universal.
 
-> 
-> 
->> This set hopes to provide a way to make the bitmap flushing more consistent. It
->> was observed that a synchronous, random write qd1 workload, could make bitmap
->> writes easily become almost half of the I/O. And in similar workloads with
->> different timing, it was several minutes between bitmap updates. This is too
->> inconsistent to be reliable.
-> 
->> This first and second patches adds the flush_threshold parameter. The default
->> value of 0 defines the default behavior: unplugging immediately just as before.
->> With a flush-threshold value of 1, it becomes more consistent and paranoid,
->> flushing on nearly every I/O, leading to a 40% or greater situation. From
-> 
-> What situation?  Please be more clear here.  
+> This is a special case as very few callers
+> check the return value for streamoff operation and those that do generally
+> just print something. I've never seen a caller trying to prevent streaming
+> off in this case, for instance.
 
-40% or more of given workload I/Os being bitmap flushes.
-Will be more clear in v3
+I think the stream off call should proceed and try to power off the
+device even if an error occurs along the way, i.e. it shouldn't return
+upon the first detected error.
 
-> 
->> there, the flush_threshold can be defined higher for those situations where
->> power loss is rare and full resync can be tolerated.
-> 
->> The third patch converts the daemon worker to an actual timer. This makes it
->> more consistent and removes some ugly code.
-> 
->> Jonathan Derrick (3):
->>   md/bitmap: Add chunk-threshold unplugging
->>   md/bitmap: Add sysfs interface for flush threshold
->>   md/bitmap: Convert daemon_work to proper timer
-> 
->>  Documentation/admin-guide/md.rst |  5 ++
->>  drivers/md/md-bitmap.c           | 98 +++++++++++++++++++++++++-------
->>  drivers/md/md-bitmap.h           |  4 +-
->>  drivers/md/md.c                  |  9 ++-
->>  drivers/md/md.h                  |  2 +
->>  5 files changed, 93 insertions(+), 25 deletions(-)
-> 
->> -- 
->> 2.31.1
-> 
+> Of course we could document that streaming off always counts as succeeded
+> (e.g. decreasing device's runtime PM usage_count) while it could return an
+> informational error code. But I wonder if anyone would ever benefit from
+> that somehow. :-)
+
+I think it could be useful to propagate errors up to inform the user
+that something wrong happened. That would involve fixing lots of drivers
+along the call chain though, so there's no urgency for the ov5645 to do
+so, but isn't it better to propagate the error code instead of hiding
+the issue ?
+
+> > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > > v1->v2
+> > > * New patch
+> > > ---
+> > >  drivers/media/i2c/ov5645.c | 11 ++++-------
+> > >  1 file changed, 4 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> > > index a0b9d0c43b78..b3825294aaf1 100644
+> > > --- a/drivers/media/i2c/ov5645.c
+> > > +++ b/drivers/media/i2c/ov5645.c
+> > > @@ -995,14 +995,11 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+> > >  		if (ret < 0)
+> > >  			goto err_rpm_put;
+> > >  	} else {
+> > > -		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+> > > -		if (ret < 0)
+> > > -			return ret;
+> > > +		ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+> > > +
+> > > +		ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
+> > > +				 OV5645_SYSTEM_CTRL0_STOP);
+> > >  
+> > > -		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
+> > > -				       OV5645_SYSTEM_CTRL0_STOP);
+> > > -		if (ret < 0)
+> > > -			return ret;
+> > >  		pm_runtime_put(ov5645->dev);
+> > >  	}
+> > >  
+
+-- 
+Regards,
+
+Laurent Pinchart
