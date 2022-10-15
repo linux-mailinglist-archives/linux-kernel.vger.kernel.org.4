@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988D25FFBD8
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 22:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACFF5FFBE6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 22:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJOUHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 16:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        id S229717AbiJOUWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 16:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJOUHe (ORCPT
+        with ESMTP id S229673AbiJOUWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 16:07:34 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B273844557;
-        Sat, 15 Oct 2022 13:07:33 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id x13so4548546qkg.11;
-        Sat, 15 Oct 2022 13:07:33 -0700 (PDT)
+        Sat, 15 Oct 2022 16:22:36 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B376C476C9
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 13:22:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n9so5671797wms.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 13:22:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :subject:cc:to:from:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/ynhneD3j0dnbSPLYCvJs/d10Int+5lPSKHCEwL7c0s=;
-        b=lq7wqZRy8VrRcpRgq4ZuJYbmIdjrAljfPMqaxAFeeUWiey5ujd40mtKW69vj7ncYU2
-         x2Qegj3iILVktYvjp2IdmJ3mbO2wWJHrKa26hV7UB93wAt7DxWgPHYLH1o1RUM6gn2p9
-         zx+zkGPP7Wrzvgsg5hJ/F4TEpwwh5OrwIdzQPPI1Dw5gqh1/4kaVxQC86wb23OsJYDPX
-         q5CNNVN7P3Hqwjb7ggTlgDk3ZOT1FE4IwA4GJiUlJIDdlJDzjeDifkNnL8hv4Mk2o/Zb
-         gRETxviroj0YsXP7j5NHnjlnGNQXy6MTbypuBLBxoZ0DkLQzov7++dvcYHfR7Rfl36p8
-         DaRA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AxtZfyRz4DqFhQRD0xbcThZRBAwEjGb4U9UgrEyeyDo=;
+        b=JhzprXKxm9NR7qpiY5jVshzjeyasBR3mZQc3J+H8WDFgReGoxuRUY1PYBEAg9c/8rY
+         gO+zt48P3ljzoJ1vvNdPjQ4KBC+wkVYcb1lnOou8qQQu32V8qvRmbVqRKMtXmkL/BbqM
+         T1d6tcQ7nlBd0d//wYEUUr/ohC7HwjPhN9+pTa/iVllwZs/qoHIoAkXdZKTczlp7arE+
+         D3ChtG8UKBbhwYOMaC9xJuauIBguba+EuCBRCqXyK2qtBeyl/W0Eo6rrtQWI+63LjIp1
+         QY5BJoRdoMyReBRQ4gaJ23DLNbi4OQC6AR6oIe1U8HBhiNXBV1YIg+hMnX2za+Jcqxbg
+         XPLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :subject:cc:to:from:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/ynhneD3j0dnbSPLYCvJs/d10Int+5lPSKHCEwL7c0s=;
-        b=WWaoF+XBGhWELyTAizerTUjKfaHko/w/s/+OBTt/E79Kco0UHbqyyMTEqeZRpkeW7m
-         QL7tgr8wmB376IkunbmyojJvqJdxT+Jl4wscFmeTJbwZpAPaOgiH3OQllQ4+84uetq8l
-         D/mS2lkwuFKiLd6isJwaAvpGMsd4UnJsFw9sHs4Pnc8+1Feryn6h1RlnA22ZqxFAlRkC
-         0t9jY2+mfRnpQS01b+BP7P1z/37s1r7xlvp4DSDz6i52qSxWqQ9cFbZcbmK0JHAEzo+O
-         WklSXseFD9fCH0LcZFBWoz3p3ZMgQPG9lFwQNFVR3WUR8gc9EmPjdh5gKRo4nEuCV0ky
-         +yNg==
-X-Gm-Message-State: ACrzQf131SvRTx0GvegUSBeLq8hfwpZfAYy8Br5EdV5OzuGUc/XHRw2t
-        8GBTY1gQ1s5n1vQrshIc4aU=
-X-Google-Smtp-Source: AMsMyM6pavQG7/wOjJa0wtDpmpwdHysUIdOEJhmKDSsrx11f0uvWjRBNoOShlM+vq8VlwFWqCLl2Ww==
-X-Received: by 2002:a05:620a:95b:b0:6ec:90d2:5fe7 with SMTP id w27-20020a05620a095b00b006ec90d25fe7mr2780802qkw.425.1665864452850;
-        Sat, 15 Oct 2022 13:07:32 -0700 (PDT)
-Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:b8b9:b1cd:e6fc:2d50])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac84e83000000b0039c7b9522ecsm4815812qtp.35.2022.10.15.13.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Oct 2022 13:07:32 -0700 (PDT)
-Message-ID: <634b1304.c80a0220.cedc6.e007@mx.google.com>
-X-Google-Original-Message-ID: <CANn89iKJpWK9hWLPhfCYNcVUPucpgTf7s_aYv4uiQ=xocmE5WA@mail.gmail.com> (raw)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-X-Google-Original-From: Cong Wang <cong.wang@bytedance.com>
-To:     edumazet@google.com
-Cc:     cong.wang@bytedance.com, davem@davemloft.net, dsahern@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, peilin.ye@bytedance.com,
-        yepeilin.cs@gmail.com, yoshfuji@linux-ipv6.org
-Subject: Re: [PATCH net-next] net/sock: Introduce trace_sk_data_ready()
-Date:   Sat, 15 Oct 2022 13:07:29 -0700
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220928221514.27350-1-yepeilin.cs@gmail.com>
-References: <CANn89iKJpWK9hWLPhfCYNcVUPucpgTf7s_aYv4uiQ=xocmE5WA@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AxtZfyRz4DqFhQRD0xbcThZRBAwEjGb4U9UgrEyeyDo=;
+        b=IB8VZ7xYIQq5WbmsdH0WbL71/ecpM6LBcMfejj8xbC/+yreXmmIiVmzPcL1d4Y8W+B
+         b/4OtHQ2l+RhTcz6DtQLTks2ZNLU4hEMyxEkZcP4Vq3i0NDcUFfUeFmHwP+CnXac5Rsq
+         OzZ3TpijWwCHC0o1mUUjpWH2HnYOjk80sNvlLXaeEqFIty4fWDUaLBEGjHdC8cgZY69i
+         zpmi+ZuiUWRXyfFhzbSxcbL2m7QySK2MpoxxQrlFgohwtbn2jlTK/kfsHDf4PaRckjn+
+         Ym/hvSsoVj+dR5CFNLnGp5/m/m3997rYumrG3IHGe7KnSFLZACZ4jReizybXRZK+P5Rs
+         A1WA==
+X-Gm-Message-State: ACrzQf30Nk+c1wcZ3tRpMiRekfDxHhfSwmA98uXWwKp4xMPsDU7qJUmi
+        JknGq9uOb19dac/ScZl7TFGDltOlgplEYQ==
+X-Google-Smtp-Source: AMsMyM5ksp5Sj9loeHlnugslgVWid4F2uKM9G0+zTcQcUQkrN539glSsecZGra0gGk8c9w7IL2s4Cw==
+X-Received: by 2002:a05:600c:548c:b0:3c6:d8dd:2a72 with SMTP id iv12-20020a05600c548c00b003c6d8dd2a72mr12069638wmb.179.1665865352272;
+        Sat, 15 Oct 2022 13:22:32 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f3e:6a25:7a44:7fe7:2435:1530? (p200300c78f3e6a257a447fe724351530.dip0.t-ipconnect.de. [2003:c7:8f3e:6a25:7a44:7fe7:2435:1530])
+        by smtp.gmail.com with ESMTPSA id e38-20020a5d5966000000b002252884cc91sm4833806wri.43.2022.10.15.13.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Oct 2022 13:22:31 -0700 (PDT)
+Message-ID: <41f4482a-a213-8e71-be43-2e8539b646eb@gmail.com>
+Date:   Sat, 15 Oct 2022 22:22:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 10/10] staging: r8188eu: summarize tx/rx and scan blinking
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221015151115.232095-1-martin@kaiser.cx>
+ <20221015151115.232095-11-martin@kaiser.cx>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221015151115.232095-11-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,14 +80,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:19:34AM -0700, Eric Dumazet wrote:
-> Second patch adding the tracing point once in the helper ?
+On 10/15/22 17:11, Martin Kaiser wrote:
+> Summarize the code for tx/rx blinking and for scan blinking in blink_work.
+> The only difference is the delay for scheduling the next worker.
 > 
-> Alternatively, why not add the tracepoint directly in the called
-> functions (we have few of them),
-> instead of all call points ?
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+>   drivers/staging/r8188eu/core/rtw_led.c | 19 +++----------------
+>   1 file changed, 3 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
+> index f8bd183fba1e..ce8de2eb7845 100644
+> --- a/drivers/staging/r8188eu/core/rtw_led.c
+> +++ b/drivers/staging/r8188eu/core/rtw_led.c
+> @@ -81,21 +81,6 @@ static void blink_work(struct work_struct *work)
+>   		schedule_delayed_work(&pLed->blink_work, LED_BLINK_LINK_INTVL);
+>   		break;
+>   	case LED_BLINK_SCAN:
+> -		pLed->BlinkTimes--;
+> -		if (pLed->BlinkTimes == 0) {
+> -			if (check_fwstate(pmlmepriv, _FW_LINKED)) {
+> -				pLed->CurrLedState = LED_BLINK_NORMAL;
+> -				schedule_delayed_work(&pLed->blink_work, LED_BLINK_LINK_INTVL);
+> -			} else {
+> -				pLed->CurrLedState = LED_BLINK_SLOWLY;
+> -				schedule_delayed_work(&pLed->blink_work, LED_BLINK_NO_LINK_INTVL);
+> -			}
+> -			pLed->bLedBlinkInProgress = false;
+> -			pLed->bLedScanBlinkInProgress = false;
+> -		} else {
+> -			schedule_delayed_work(&pLed->blink_work, LED_BLINK_SCAN_INTVL);
+> -		}
+> -		break;
+>   	case LED_BLINK_TXRX:
+>   		pLed->BlinkTimes--;
+>   		if (pLed->BlinkTimes == 0) {
+> @@ -109,7 +94,9 @@ static void blink_work(struct work_struct *work)
+>   			pLed->bLedBlinkInProgress = false;
+>   			pLed->bLedScanBlinkInProgress = false;
+>   		} else {
+> -			schedule_delayed_work(&pLed->blink_work, LED_BLINK_FASTER_INTVL);
+> +			schedule_delayed_work(&pLed->blink_work,
+> +					      pLed->CurrLedState == LED_BLINK_SCAN ?
+> +					      LED_BLINK_SCAN_INTVL : LED_BLINK_FASTER_INTVL);
+>   		}
+>   		break;
+>   	case LED_BLINK_WPS:
 
-Why do we want to give implementations of sk_data_ready() freedom
-to not to call this trace_sk_data_ready()?
 
-Thanks.
+I cannot apply this patch.
+
+Applying: staging: r8188eu: summarize tx/rx and scan blinking
+error: patch failed: drivers/staging/r8188eu/core/rtw_led.c:81
+error: drivers/staging/r8188eu/core/rtw_led.c: patch does not apply
+Patch failed at 0001 staging: r8188eu: summarize tx/rx and scan blinking
+
