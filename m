@@ -2,109 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADED5FFB61
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 19:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00575FFB6D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 19:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJORTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 13:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        id S229696AbiJORYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 13:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJORTa (ORCPT
+        with ESMTP id S229665AbiJORYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 13:19:30 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3767F63CD
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 10:19:29 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 50097480;
-        Sat, 15 Oct 2022 19:19:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1665854367;
-        bh=BVOOMbpo1cWjq0urB9svsEQu97CcZuMCenTe5Ij8sA4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DyiCDzW028z9H41qVM3cfYeTvLivo1EdVFOGacX1QeUZUAZ/6X5By32pWpMVk5YGi
-         QiLIbgPxKT5l3CEmnVsgoCRWDpnDaOyWTj7ctXW4eye5thMsksVnel+CgbqbSr1aPk
-         wdCobjIJeM3q2OlIqwKpoVChfo845s/fRZOoks+I=
-Date:   Sat, 15 Oct 2022 20:19:03 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Maxime Ripard <mripard@kernel.org>, Eric Anholt <eric@anholt.net>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
-        Emma Anholt <emma@anholt.net>, dri-devel@lists.freedesktop.org,
-        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] drm/vc4: dpi: Fix format mapping for RGB565
-Message-ID: <Y0rrh4cvqHFgcz9M@pendragon.ideasonboard.com>
-References: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
- <20221013-rpi-dpi-improvements-v1-7-8a7a96949cb0@cerno.tech>
+        Sat, 15 Oct 2022 13:24:43 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BACE1D320
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 10:24:39 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id f25-20020a5d8799000000b006a44e33ddb6so4894720ion.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 10:24:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FXDSuoFbN7ibdHQJGHhqaFHsM+PEsrRvhPrQr4NT61Q=;
+        b=36EVtZ7RceFTXN6jkztQ9v6rvewjXrVK9uFK0gHDLNb867oMCsaaUd2yJR7L5tm7Np
+         g4vXjRi5HmoauFZ4nuDu6QE3Z0TzfzpPEltlJOB/2vMNA03V7bQVvONP92J3P0L7J2Xe
+         NK+1xpSUy/RAPvGvS9rSzDBdu27AKjdpTnHq2aXWNlQb/jClwblWh+dpLjFUiExgnsVk
+         vlZjbB2kQSBX7kmg5bUw71/EQ1SScJxyqQsV8EbrPkL9PoD6z1MMmtg2qCJ1UGFWT87P
+         zQbvt5onZG5tLcrJuc6n0ld7WkNquTyRsq8qG+bbpjuwum02+VVb+UXKS2lW+yTBViGe
+         bLYg==
+X-Gm-Message-State: ACrzQf3FxbN4UQJVZ7zsLZTl3RMSysya6IIed5qMwSqES9jdpaf/HkdL
+        lFVVE7bieTz98TkW5POVP/JJLUTJ1Hq9CJsZEvINnnuUJK3M
+X-Google-Smtp-Source: AMsMyM7LsjR7kpP4xhca/8DFkSor8LrpGNZj5UjiIW5s6h0+tgtpLA8uyA22mZlK8EKO7jg9DEgb2XIEE8zWDvg9vntFqhtQxRaP
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221013-rpi-dpi-improvements-v1-7-8a7a96949cb0@cerno.tech>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1588:b0:6bc:d49a:61cc with SMTP id
+ e8-20020a056602158800b006bcd49a61ccmr1519089iow.154.1665854678860; Sat, 15
+ Oct 2022 10:24:38 -0700 (PDT)
+Date:   Sat, 15 Oct 2022 10:24:38 -0700
+In-Reply-To: <0000000000008caae305ab9a5318@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000618a8205eb160404@google.com>
+Subject: Re: [syzbot] general protection fault in security_inode_getattr
+From:   syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, dvyukov@google.com, hdanton@sina.com,
+        jmorris@namei.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@chromium.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        netdev@vger.kernel.org, omosnace@redhat.com, paul@paul-moore.com,
+        serge@hallyn.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime and Dave,
+syzbot has found a reproducer for the following issue on:
 
-Thank you for the patch.
+HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=147637c6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+dashboard link: https://syzkaller.appspot.com/bug?extid=f07cc9be8d1d226947ed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1585a0c2880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1480a464880000
 
-On Thu, Oct 13, 2022 at 11:56:51AM +0200, Maxime Ripard wrote:
-> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> 
-> The mapping is incorrect for RGB565_1X16 as it should be
-> DPI_FORMAT_18BIT_666_RGB_1 instead of DPI_FORMAT_18BIT_666_RGB_3.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6c791937c012/disk-55be6084.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cb21a2879b4c/vmlinux-55be6084.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/2d56267ed26f/mount_1.gz
 
-The driver includes the following macro definitions and comments:
+The issue was bisected to:
 
-/* Outputs 00000000rrrrrggggggbbbbb */
-# define DPI_FORMAT_16BIT_565_RGB_1     1
-/* Outputs 000rrrrr00gggggg000bbbbb */
-# define DPI_FORMAT_16BIT_565_RGB_2     2
-/* Outputs 00rrrrr000gggggg00bbbbb0 */
-# define DPI_FORMAT_16BIT_565_RGB_3     3
+commit 35697c12d7ffd31a56d3c9604066a166b75d0169
+Author: Yonghong Song <yhs@fb.com>
+Date:   Thu Jan 16 17:40:04 2020 +0000
 
-MEDIA_BUS_FMT_RGB565_1X16 is defined as described in
-https://linuxtv.org/downloads/v4l-dvb-apis/userspace-api/v4l/subdev-formats.html#id3:
+    selftests/bpf: Fix test_progs send_signal flakiness with nmi mode
 
-Bit  | 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-Data | r4 r3 r2 r1 r0 g5 g4 g3 g2 g1 g0 b4 b3 b2 b1 b0 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13032139900000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10832139900000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17032139900000
 
-This seems to match DPI_FORMAT_16BIT_565_RGB_1 indeed.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com
+Fixes: 35697c12d7ff ("selftests/bpf: Fix test_progs send_signal flakiness with nmi mode")
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+general protection fault, probably for non-canonical address 0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
+CPU: 0 PID: 3761 Comm: syz-executor352 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:d_backing_inode include/linux/dcache.h:542 [inline]
+RIP: 0010:security_inode_getattr+0x46/0x140 security/security.c:1345
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 04 01 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 08 48 8d 7b 68 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d7 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
+RSP: 0018:ffffc9000400f578 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000000d RSI: ffffffff83bd72fe RDI: 0000000000000068
+RBP: ffffc9000400f750 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 000000000008c07d R12: ffff8880763dca48
+R13: ffffc9000400f750 R14: 00000000000007ff R15: 0000000000000000
+FS:  00007f246f27e700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f246f27e718 CR3: 00000000717a9000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ vfs_getattr+0x22/0x60 fs/stat.c:158
+ ovl_copy_up_one+0x12c/0x2870 fs/overlayfs/copy_up.c:965
+ ovl_copy_up_flags+0x150/0x1d0 fs/overlayfs/copy_up.c:1047
+ ovl_maybe_copy_up+0x140/0x190 fs/overlayfs/copy_up.c:1079
+ ovl_open+0xf1/0x2d0 fs/overlayfs/file.c:152
+ do_dentry_open+0x6cc/0x13f0 fs/open.c:882
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x1c92/0x28f0 fs/namei.c:3691
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f246f2f2b49
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f246f27e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007f246f3774b0 RCX: 00007f246f2f2b49
+RDX: 0000000000000000 RSI: 0000000000000300 RDI: 0000000020000140
+RBP: 00007f246f3442ac R08: 00007f246f27e700 R09: 0000000000000000
+R10: 00007f246f27e700 R11: 0000000000000246 R12: 0031656c69662f2e
+R13: 79706f636174656d R14: 0079616c7265766f R15: 00007f246f3774b8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:d_backing_inode include/linux/dcache.h:542 [inline]
+RIP: 0010:security_inode_getattr+0x46/0x140 security/security.c:1345
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 04 01 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 08 48 8d 7b 68 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d7 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
+RSP: 0018:ffffc9000400f578 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000000d RSI: ffffffff83bd72fe RDI: 0000000000000068
+RBP: ffffc9000400f750 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 000000000008c07d R12: ffff8880763dca48
+R13: ffffc9000400f750 R14: 00000000000007ff R15: 0000000000000000
+FS:  00007f246f27e700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005643c9471000 CR3: 00000000717a9000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess):
+   0:	48 89 fa             	mov    %rdi,%rdx
+   3:	48 c1 ea 03          	shr    $0x3,%rdx
+   7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   b:	0f 85 04 01 00 00    	jne    0x115
+  11:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  18:	fc ff df
+  1b:	49 8b 5d 08          	mov    0x8(%r13),%rbx
+  1f:	48 8d 7b 68          	lea    0x68(%rbx),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 d7 00 00 00    	jne    0x10b
+  34:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  3b:	fc ff df
+  3e:	48                   	rex.W
+  3f:	8b                   	.byte 0x8b
 
-> Fixes: 08302c35b59d ("drm/vc4: Add DPI driver")
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->  drivers/gpu/drm/vc4/vc4_dpi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
-> index fdae02760b6d..a7bebfa5d5b0 100644
-> --- a/drivers/gpu/drm/vc4/vc4_dpi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_dpi.c
-> @@ -185,7 +185,7 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
->  						       DPI_FORMAT);
->  				break;
->  			case MEDIA_BUS_FMT_RGB565_1X16:
-> -				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_3,
-> +				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_1,
->  						       DPI_FORMAT);
->  				break;
->  			case MEDIA_BUS_FMT_RGB565_1X24_CPADHI:
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
