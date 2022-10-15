@@ -2,134 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1965FF85B
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 05:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34955FF85E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiJOD6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 23:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S229721AbiJOEEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 00:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiJOD6o (ORCPT
+        with ESMTP id S229578AbiJOEEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 23:58:44 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D4E7A773;
-        Fri, 14 Oct 2022 20:58:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mq8ZH06P9zKFQl;
-        Sat, 15 Oct 2022 11:56:23 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCXmMrxL0pjAy0tAQ--.54884S3;
-        Sat, 15 Oct 2022 11:58:42 +0800 (CST)
-Subject: Re: [PATCH v2] blk-mq: fix null pointer dereference in
- blk_mq_clear_rq_mapping()
-To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk,
-        ming.lei@redhat.com, hare@suse.de, john.garry@huawei.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221011142253.4015966-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <c69e005d-7088-c4cd-f584-c4cf5385cdcc@huaweicloud.com>
-Date:   Sat, 15 Oct 2022 11:58:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 15 Oct 2022 00:04:49 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BAF26E9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:04:45 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id p4so2618507uao.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gaRuIOy5mipxC/DcG4OUxK58zUai1nT9d4WWV0cqyO8=;
+        b=IszlE+nsJk2T1FzF4PpZXEdi2LN8qHNRhvPsuS12/3ruJQ23aBGF/V8KITeyrHkY9X
+         Tzkie3tfTYo7X1JXlsKbzRpRsXTnfgha+GpWtbkIt1Ps9Lj0634OCqEBAwO+l15G732A
+         e2Zi0S6hVyUbSZP/5P68DfpgFs+pYBjjvaQmB1yG2gwU0iBE/pbNFD481RAnRmBjNseA
+         /lpY2DERASTvoFUrVEdSnAmOZHz3eEeIzgSNrE3RhD56vUzvJuflRO9hm1wNnu34jG16
+         IP74UVFKUar3t/Z9w7l1K3+dd1zZCgMVCvclxFkZe0KC5hlR6qU/mwhLR7cEtvJ3F9Pl
+         tcxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gaRuIOy5mipxC/DcG4OUxK58zUai1nT9d4WWV0cqyO8=;
+        b=fnJ0yxExNaXM2qdNmnWmWHKN0j/fOIcxH1l3PewLipNoR55SQZov9t9HJo9QKxa08E
+         PTQGFQBFqM/9cID3z/cr9Bxtgd4MDy/LJ+5GaNWC5YaLjgkokAdxJGNYVaid0SqzHeVj
+         YxUw2ERkf4gYwNUc9MH4dcUTk6ljou9cm+ZnAm9JtoxjYBh0ig/9+ojdD0fszSHLsKZI
+         YIgsxOFDzoMwCA0NwJx0Wld6tlcJuMJkURH63gj/oZS85/HU1E9jUDs3LtY+FBpbR74B
+         WLqeoF93jO7jo/m2TIDPZLez6YuTkdvdspIl1yDLY30/dpgYdGoxSxk179dzkK1RTXER
+         C0PA==
+X-Gm-Message-State: ACrzQf0QeOZ3rHl5XRPErMVLDILvL2BbW6oqK4tq7bE+/5lgpiK5cn62
+        jj3mNhsUziO4ZVy0JRzolwyjo++/bbZwFPSTHEmi2w==
+X-Google-Smtp-Source: AMsMyM7hRmdyeIhbI6VaevYf0uTIoRSecIosJKChDWbOj0yxPl7Gy6TyTDB/xFC68FLvzTCiqzfQ5/kJUV3egu1oUBs=
+X-Received: by 2002:ab0:628a:0:b0:3e3:651f:a07d with SMTP id
+ z10-20020ab0628a000000b003e3651fa07dmr330706uao.52.1665806684727; Fri, 14 Oct
+ 2022 21:04:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20221011142253.4015966-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCXmMrxL0pjAy0tAQ--.54884S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF15WF1rtr4kJw18JrWkWFg_yoW8Cw48pF
-        4UGa1FkFZ0qr18ua1xXa9Fyryqga1kWr1rCa1Yv3s5Zry0kr17KF1vyrWUXr10yrs7CFZx
-        tr4YkFW8Jr1Dt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005175149.611068-1-mark.rutland@arm.com>
+In-Reply-To: <20221005175149.611068-1-mark.rutland@arm.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 15 Oct 2022 12:04:33 +0800
+Message-ID: <CABVgOSmgkxb6U1S1Ww3dZ6M3i6asmXF-4MtEzn7O+GiA0SLPaA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: log numbers in decimal and hex
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, brendan.higgins@linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jens!
-
-ÔÚ 2022/10/11 22:22, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> Our syzkaller report a null pointer dereference, root cause is
-> following:
-> 
-> __blk_mq_alloc_map_and_rqs
->   set->tags[hctx_idx] = blk_mq_alloc_map_and_rqs
->    blk_mq_alloc_map_and_rqs
->     blk_mq_alloc_rqs
->      // failed due to oom
->      alloc_pages_node
->      // set->tags[hctx_idx] is still NULL
->      blk_mq_free_rqs
->       drv_tags = set->tags[hctx_idx];
->       // null pointer dereference is triggered
->       blk_mq_clear_rq_mapping(drv_tags, ...)
-> 
-> This is because commit 63064be150e4 ("blk-mq:
-> Add blk_mq_alloc_map_and_rqs()") merged the two steps:
-> 
-> 1) set->tags[hctx_idx] = blk_mq_alloc_rq_map()
-> 2) blk_mq_alloc_rqs(..., set->tags[hctx_idx])
-> 
-> into one step:
-> 
-> set->tags[hctx_idx] = blk_mq_alloc_map_and_rqs()
-> 
-> Since tags is not initialized yet in this case, fix the problem by
-> checking if tags is NULL pointer in blk_mq_clear_rq_mapping().
-> 
-> Fixes: 63064be150e4 ("blk-mq: Add blk_mq_alloc_map_and_rqs()")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Reviewed-by: John Garry <john.garry@huawei.com>
+On Thu, Oct 6, 2022 at 1:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> When KUNIT_EXPECT_EQ() or KUNIT_ASSERT_EQ() log a failure, they log the
+> two values being compared, with numerical values logged in decimal.
+>
+> In some cases, decimal output is painful to consume, and hexadecimal
+> output would be more helpful. For example, this is the case for tests
+> I'm currently developing for the arm64 insn encoding/decoding code,
+> where comparing two 32-bit instruction opcodes results in output such
+> as:
+>
+> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
+> |  Expected obj_insn == gen_insn, but
+> |      obj_insn == 2332164128
+> |      gen_insn == 1258422304
+>
+> To make this easier to consume, this patch logs the values in both
+> decimal and hexadecimal:
+>
+> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
+> |  Expected obj_insn == gen_insn, but
+> |      obj_insn == 2332164128 (0x8b020020)
+> |      gen_insn == 1258422304 (0x4b020020)
+>
+> As can be seen from the example, having hexadecimal makes it
+> significantly easier for a human to spot which specific bits are
+> incorrect.
+>
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
 > ---
-> Changes in v2:
->   - fix spelling mistakes
->   - add review tag
-> 
->   block/blk-mq.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-Can you apply this patch?
 
-Thanks,
-Kuai
+Thanks very much: this will definitely be useful. I tend to agree with
+Daniel that this could clutter things up a bit, but I think the other
+options (a separate ASSERT_EQ_HEX() macro, or a heuristic to remove it
+for, e.g., values <= 9) add more complexity than benefit there.
 
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 8070b6c10e8d..33292c01875d 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -3112,8 +3112,11 @@ static void blk_mq_clear_rq_mapping(struct blk_mq_tags *drv_tags,
->   	struct page *page;
->   	unsigned long flags;
->   
-> -	/* There is no need to clear a driver tags own mapping */
-> -	if (drv_tags == tags)
-> +	/*
-> +	 * There is no need to clear mapping if driver tags is not initialized
-> +	 * or the mapping belongs to the driver tags.
-> +	 */
-> +	if (!drv_tags || drv_tags == tags)
->   		return;
->   
->   	list_for_each_entry(page, &tags->page_list, lru) {
-> 
+So let's go with this as-is.
 
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  lib/kunit/assert.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index d00d6d181ee8..24dec5b48722 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -127,13 +127,15 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+>                           binary_assert->text->right_text);
+>         if (!is_literal(stream->test, binary_assert->text->left_text,
+>                         binary_assert->left_value, stream->gfp))
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
+>                                   binary_assert->text->left_text,
+> +                                 binary_assert->left_value,
+>                                   binary_assert->left_value);
+>         if (!is_literal(stream->test, binary_assert->text->right_text,
+>                         binary_assert->right_value, stream->gfp))
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
+>                                   binary_assert->text->right_text,
+> +                                 binary_assert->right_value,
+>                                   binary_assert->right_value);
+>         kunit_assert_print_msg(message, stream);
+>  }
+> --
+> 2.30.2
+>
