@@ -2,140 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987325FFAB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A695FFAB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJOPFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 11:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S229733AbiJOPGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 11:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiJOPFF (ORCPT
+        with ESMTP id S229703AbiJOPGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 11:05:05 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279363846D
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=P7pRTxq7KYO3k44s3qhhCAVY4oTb2mw2IirE3FSx1ng=; b=GxgJFEJBFZcqMt7jvrGYCAAGvx
-        DhywpEK9lBqlpQmTL4JiLK3wR0cIB5uIM7Vt45U6b7uvvqRM17u4wpNFNJ+6HWbBXQB2B8bPvXXcc
-        SF6kMCb+eFJkntalEPfxQRkTmvEAT5YSt+VnrxWIv835yQ0c5WBfTxfdeZW3tPWyZRRGZJQj7T8m0
-        Nwjnxm9d/Kec3pBZRybCzuqaSZT7YWXxBDldAQ0+bMLTxvqNh/nPKfl9IKbpdXGAnTgVbO6w4Iei4
-        xE654Ew2Owk/VskBBICvPXnHWLrbN62n6D61UnEqU0XnG0aVsZ7niE1H3xvX8rAikZ5owhybXqkb3
-        8dPL05TQ==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:64825 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1ojiih-0008O3-ML; Sat, 15 Oct 2022 17:04:59 +0200
-Message-ID: <71e53906-ae9b-55b9-7a93-7bb04a891423@tronnes.org>
-Date:   Sat, 15 Oct 2022 17:04:50 +0200
+        Sat, 15 Oct 2022 11:06:32 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E07E474C2;
+        Sat, 15 Oct 2022 08:06:31 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id y129so3534757vkg.8;
+        Sat, 15 Oct 2022 08:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lGK0rxV8loJw/Gfc0fSDI/prajgoiTvVa4MW8RA1igY=;
+        b=XLHdP+hMaI3mADbeheuWlTBr+vVuhTvn61c6wgwk4gd/h2XG0/JynLHwxrVVqmTBb8
+         nJQjw+nJ9eD7rxODGLN0/pTQgL9QeqJ9M4oHxmKFUIPNpqf2FijBG9A030fBphVeStP7
+         /WqGUS70tNsWHA0aY41MwLRQRbiPriYHFKyo3RtAbaQZylmLPDatAinY5akQZOgJfyS0
+         YDNw1WaRU/bUzTn+7QaeTne1Qvmmg6VFcXRwwwpLfDtML3qB3yMUXW+S5gQsIuOPwNyb
+         bwuEIATA3DraI61gyJiqzgw/0QFIdADKm0q/urMwVt9gWgcGCQdVQWyTZ2skkTNRN1QN
+         JvTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lGK0rxV8loJw/Gfc0fSDI/prajgoiTvVa4MW8RA1igY=;
+        b=FCygAzRyroo8yaieyuZaIVrwW+KvNFaEfHt0ODfvYdv2n/qv7omN6k+Dtfr3U6yH4x
+         P1vaVEYa/NPyAXDdW6xQf6iif72d0dGYwXJcSfBRJnPOqX+BMkuOQEb1wGnvBDWJM7tD
+         YkIIEziEZeEZO325nOm2tGLKBRvoQESKGJH0RimV/An/xokOo3bXW2DsAF161smL5Pj6
+         987WAIJehFXTX96wtuoT0dAYJFnM2eWI6uK1v3s7OUCrx+xw+0gWwv5yQgxi2Or9V1wm
+         KtQ/rj9Dd9OhJZEoLcD+j7I0A9I0GgbONhRotyXvu/YlIOl+nc22pqxtb11FBMQ2ziEn
+         HwKQ==
+X-Gm-Message-State: ACrzQf3rR9dygA9FlT17WQSuXA36aONrFkpnx+6DkCHQeySHVW4uEgyV
+        cGTLNY3zXCSwl++7uQNwcZlFAkdV9lgs6tfamXw=
+X-Google-Smtp-Source: AMsMyM6Qv4QwYdMpwvHCgD/jLPwOSQGs2Rpij78AqTWanOfKk4f7bxAXCBceUGNBj/XsuSLjnHM9kwiNE7cQpTp4rSY=
+X-Received: by 2002:a1f:17d4:0:b0:3ab:36e3:c22f with SMTP id
+ 203-20020a1f17d4000000b003ab36e3c22fmr1114928vkx.38.1665846390292; Sat, 15
+ Oct 2022 08:06:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 11/30] drm/modes: Add a function to generate analog
- display modes
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
- <20220728-rpi-analog-tv-properties-v4-11-60d38873f782@cerno.tech>
- <0aa690b8-988a-878f-4d4f-d391295bc591@tronnes.org>
- <20221013083638.kloiaxervnhii7ew@houat>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20221013083638.kloiaxervnhii7ew@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221015195701.4bdbe46d@canb.auug.org.au>
+In-Reply-To: <20221015195701.4bdbe46d@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 15 Oct 2022 10:06:17 -0500
+Message-ID: <CAH2r5muXw_2-t1Ph85FEmffw_UAP3+9a+uNoe4ZqR1V2vQTchg@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>, Paulo Alcantara <pc@cjr.nz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+fixed
+
+On Sat, Oct 15, 2022 at 3:57 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   ddf95e7d5a81 ("cifs: fix double-fault crash during ntlmssp")
+>
+> Fixes tag
+>
+>   Fixes: d867d4ae29c7 ("cifs: replace kfree() with kfree_sensitive() for sensitive data")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: a4e430c8c8ba ("cifs: replace kfree() with kfree_sensitive() for sensitive data")
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
 
-Den 13.10.2022 10.36, skrev Maxime Ripard:
-> Hi Noralf,
-> 
-> On Sat, Oct 01, 2022 at 02:52:06PM +0200, Noralf Trønnes wrote:
->> Den 29.09.2022 18.31, skrev Maxime Ripard:
->>> Multiple drivers (meson, vc4, sun4i) define analog TV 525-lines and
->>> 625-lines modes in their drivers.
->>>
->>> Since those modes are fairly standard, and that we'll need to use them
->>> in more places in the future, it makes sense to move their definition
->>> into the core framework.
->>>
->>> However, analog display usually have fairly loose timings requirements,
->>> the only discrete parameters being the total number of lines and pixel
->>> clock frequency. Thus, we created a function that will create a display
->>> mode from the standard, the pixel frequency and the active area.
->>>
->>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>>
->>> ---
->>>
->>> Changes in v4:
->>> - Reworded the line length check comment
->>> - Switch to HZ_PER_KHZ in tests
->>> - Use previous timing to fill our mode
->>> - Move the number of lines check earlier
->>> ---
->>>  drivers/gpu/drm/drm_modes.c            | 474 +++++++++++++++++++++++++++++++++
->>>  drivers/gpu/drm/tests/Makefile         |   1 +
->>>  drivers/gpu/drm/tests/drm_modes_test.c | 144 ++++++++++
->>>  include/drm/drm_modes.h                |  17 ++
->>>  4 files changed, 636 insertions(+)
->>>
->>
->> I haven't followed the discussion on this patch, but it seems rather
->> excessive to add over 600 lines of code (including tests) to add 2 fixed
->> modes. And it's very difficult to see from the code what the actual
->> display mode timings really are, which would be useful for other
->> developers down the road wanting to use them.
->>
->> Why not just hardcode the modes?
-> 
-> Yeah, I have kind of the same feeling tbh, but it was asked back on the
-> v1 to ease the transition of old fbdev drivers, since they will need
-> such a function:
-> https://lore.kernel.org/dri-devel/CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com/
-> 
 
-If that's the case I suggest you just hardcode them for now and leave
-the complexity to the developer doing the actual conversion of the fbdev
-driver. Who knows when that will happen, but that person will have your
-well documented and discussed work to fall back on.
+-- 
+Thanks,
 
-Noralf.
+Steve
