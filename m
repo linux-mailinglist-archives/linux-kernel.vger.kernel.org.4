@@ -2,128 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F7C5FF9D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 13:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA255FF9DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 13:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiJOLdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 07:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S229594AbiJOLt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 07:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiJOLdG (ORCPT
+        with ESMTP id S229567AbiJOLtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 07:33:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EFB5508F;
-        Sat, 15 Oct 2022 04:33:05 -0700 (PDT)
+        Sat, 15 Oct 2022 07:49:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA6624F1F;
+        Sat, 15 Oct 2022 04:49:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F27CAB80818;
-        Sat, 15 Oct 2022 11:33:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27358C433D6;
-        Sat, 15 Oct 2022 11:33:00 +0000 (UTC)
-Date:   Sat, 15 Oct 2022 07:32:57 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-Subject: Re: [RFC V2 PATCH 07/11] cxl/mem: Trace Memory Module Event Record
-Message-ID: <20221015073257.0fc057ee@rorschach.local.home>
-In-Reply-To: <20221010224131.1866246-8-ira.weiny@intel.com>
-References: <20221010224131.1866246-1-ira.weiny@intel.com>
-        <20221010224131.1866246-8-ira.weiny@intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E34460C99;
+        Sat, 15 Oct 2022 11:49:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004A8C433C1;
+        Sat, 15 Oct 2022 11:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665834591;
+        bh=7y/CgyYo78xkDQEDlPgEPJm42Pbu48zMquJ1lkQsCD8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O332pcdyzfIAyKl9yzlsWwsBINGLEAJBfhevDSZpfHg9oH9ip8hhW9i+QhnUrhr8t
+         vhH8VtY5RhaUeOaek68sMHFAZR1BVRYRkTal00eC7b0IakjtXOk94y0BureZhnUYnF
+         rZ4b8vbdAu83yxeZfxtFk60/XO0fhlp6dxOpsH3CQZJ4FEzi+5wbd+zz3dE9pcMLdN
+         f8nxCZw2X4E9G1a8Feq1RXO6U4yQm4F/d2Wl0Nd5hDa07B/IjX1qdQPy0ojzZ80zTQ
+         gcUubM2zvFRLEfUHW4saj58NRKKaMEy987KMLle/WNRyn1J2SjjLw8Co807lrQ1vdL
+         18gx/HOmxnZrw==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V7 00/12] riscv: Add GENERIC_ENTRY support and related features
+Date:   Sat, 15 Oct 2022 07:46:50 -0400
+Message-Id: <20221015114702.3489989-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 15:41:27 -0700
-ira.weiny@intel.com wrote:
+From: Guo Ren <guoren@linux.alibaba.com>
 
-> +TRACE_EVENT(memory_module,
+The patches convert riscv to use the generic entry infrastructure from
+kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
+for percpu to prevent kernel stack overflows. Add generic_entry based
+STACKLEAK support.
 
-Make sure all your new events have the "cxl_" prefix. "cxl_memory_module".
+You can directly try it with:
+[1] https://github.com/guoren83/linux/tree/generic_entry_v7
 
-This goes for all events in this series.
+v7:
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment 
 
-Thanks,
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
 
--- Steve
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
 
-> +
-> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
-> +		 struct cxl_event_mem_module *rec),
-> +
-> +	TP_ARGS(dev_name, log, rec),
-> +
-> +	TP_STRUCT__entry(
-> +		CXL_EVT_TP_entry
-> +
-> +		/* Memory Module Event */
-> +		__field(u8, event_type)
-> +
-> +		/* Device Health Info */
-> +		__field(u8, health_status)
-> +		__field(u8, media_status)
-> +		__field(u8, life_used)
-> +		__field(u32, dirty_shutdown_cnt)
-> +		__field(u32, cor_vol_err_cnt)
-> +		__field(u32, cor_per_err_cnt)
-> +		__field(s16, device_temp)
-> +		__field(u8, add_status)
-> +
-> +		__array(u8, reserved, CXL_EVENT_MEM_MOD_RES_SIZE)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		CXL_EVT_TP_fast_assign(dev_name, log, rec->hdr);
-> +
-> +		/* Memory Module Event */
-> +		__entry->event_type = rec->event_type;
-> +
-> +		/* Device Health Info */
-> +		__entry->health_status = rec->info.health_status;
-> +		__entry->media_status = rec->info.media_status;
-> +		__entry->life_used = rec->info.life_used;
-> +		__entry->dirty_shutdown_cnt = get_unaligned_le32(rec->info.dirty_shutdown_cnt);
-> +		__entry->cor_vol_err_cnt = get_unaligned_le32(rec->info.cor_vol_err_cnt);
-> +		__entry->cor_per_err_cnt = get_unaligned_le32(rec->info.cor_per_err_cnt);
-> +		__entry->device_temp = get_unaligned_le16(rec->info.device_temp);
-> +		__entry->add_status = rec->info.add_status;
-> +		memcpy(__entry->reserved, &rec->reserved,
-> +			CXL_EVENT_MEM_MOD_RES_SIZE);
-> +	),
-> +
-> +	CXL_EVT_TP_printk("evt_type='%s' health_status='%s' media_status='%s' " \
-> +		"as_life_used=%s as_dev_temp=%s as_cor_vol_err_cnt=%s " \
-> +		"as_cor_per_err_cnt=%s life_used=%u dev_temp=%d " \
-> +		"dirty_shutdown_cnt=%u cor_vol_err_cnt=%u cor_per_err_cnt=%u " \
-> +		"reserved=%s",
-> +		show_dev_evt_type(__entry->event_type),
-> +		show_health_status_flags(__entry->health_status),
-> +		show_media_status(__entry->media_status),
-> +		show_add_status(CXL_DHI_AS_LIFE_USED(__entry->add_status)),
-> +		show_add_status(CXL_DHI_AS_DEV_TEMP(__entry->add_status)),
-> +		show_add_status(CXL_DHI_AS_COR_VOL_ERR_CNT(__entry->add_status)),
-> +		show_add_status(CXL_DHI_AS_COR_PER_ERR_CNT(__entry->add_status)),
-> +		__entry->life_used, __entry->device_temp,
-> +		__entry->dirty_shutdown_cnt, __entry->cor_vol_err_cnt,
-> +		__entry->cor_per_err_cnt,
-> +		__print_hex(__entry->reserved, CXL_EVENT_MEM_MOD_RES_SIZE)
-> +		)
-> +);
-> +
-> +
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
+
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
+
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Dao Lu (1):
+  riscv: Add support for STACKLEAK gcc plugin
+
+Guo Ren (9):
+  riscv: elf_kexec: Fixup compile warning
+  riscv: compat_syscall_table: Fixup compile warning
+  riscv: ptrace: Remove duplicate operation
+  riscv: traps: Add noinstr to prevent instrumentation inserted
+  riscv: convert to generic entry
+  riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: Add config of thread stack size
+  riscv: Typo fixup for addi -> andi in comment
+
+Jisheng Zhang (1):
+  riscv: remove extra level wrappers of trace_hardirqs_{on,off}
+
+Lai Jiangshan (1):
+  compiler_types.h: Add __noinstr_section() for noinstr
+
+ arch/riscv/Kconfig                    |  21 +++
+ arch/riscv/include/asm/csr.h          |   1 -
+ arch/riscv/include/asm/entry-common.h |   8 +
+ arch/riscv/include/asm/ptrace.h       |  10 +-
+ arch/riscv/include/asm/stacktrace.h   |   5 +
+ arch/riscv/include/asm/syscall.h      |   6 +
+ arch/riscv/include/asm/thread_info.h  |  27 +--
+ arch/riscv/include/asm/vmap_stack.h   |  28 +++
+ arch/riscv/kernel/Makefile            |   3 +-
+ arch/riscv/kernel/elf_kexec.c         |   2 +-
+ arch/riscv/kernel/entry.S             | 239 ++++----------------------
+ arch/riscv/kernel/irq.c               | 110 ++++++++++++
+ arch/riscv/kernel/ptrace.c            |  44 -----
+ arch/riscv/kernel/signal.c            |  21 +--
+ arch/riscv/kernel/sys_riscv.c         |  27 +++
+ arch/riscv/kernel/trace_irq.c         |  27 ---
+ arch/riscv/kernel/trace_irq.h         |  11 --
+ arch/riscv/kernel/traps.c             |  74 ++++++--
+ arch/riscv/mm/fault.c                 |  16 +-
+ drivers/firmware/efi/libstub/Makefile |   2 +-
+ include/linux/compiler_types.h        |   8 +-
+ 21 files changed, 332 insertions(+), 358 deletions(-)
+ create mode 100644 arch/riscv/include/asm/entry-common.h
+ create mode 100644 arch/riscv/include/asm/vmap_stack.h
+ delete mode 100644 arch/riscv/kernel/trace_irq.c
+ delete mode 100644 arch/riscv/kernel/trace_irq.h
+
+-- 
+2.36.1
+
