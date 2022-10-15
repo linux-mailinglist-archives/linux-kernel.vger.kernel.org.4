@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12925FFB50
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 18:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DAC5FFB52
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 18:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiJOQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 12:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S229749AbiJOQ6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 12:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiJOQ4Q (ORCPT
+        with ESMTP id S229665AbiJOQ6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 12:56:16 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F4C4A82D;
-        Sat, 15 Oct 2022 09:56:15 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id f22so5519726qto.3;
-        Sat, 15 Oct 2022 09:56:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h1kGMyZ8iPn6jxS1RJptkgeK4wGXJYpfTtGZVw/vNYE=;
-        b=OAHyOVWJ3B+spXrMUUgSWBrY+EC9Woc50xcs4SbAgIQWmEvrgFtNQA61kkWkAcgat3
-         utwNtoforuVZjEYZf99l0xQJ7tw7CrhNsRuN3hBXp2CVSK1Jrsxep/cAvqR4j9gdWDVo
-         a3vpCX1zIda9WN2d1P//B4cUQjDVatMROYTtn1HtJw8w8RTNE6OzZ9vP/fWXvDNdVEMt
-         6jDcqtKffiVqc4NYetaDFMBo1obMp63WmNFU8Fht7KQpw+KmANPX4bvor74eZFQ3lw4j
-         PqHpO4bTF8QtlGyB83NBUySq67bc95f7/Aa2eelX58I7IKVS2BidI8Be91uNsH3xpVS7
-         sAwQ==
-X-Gm-Message-State: ACrzQf3UIGkkyuG91wvqcdS83T5a8kzh2cJk0WFAkiXx/7+2NJFZuitF
-        0Fytlm8P/LbAKit1E8wOGLN00O6Qq53NX6KiRL0=
-X-Google-Smtp-Source: AMsMyM5VpXNSDHG6hH+avu+LLqK1F1gCjNc62IhcpK3HG0VAkIbFT/UxIhJSbkA8ILrSffofXqNATnqaVHOyZGSQocM=
-X-Received: by 2002:ac8:5ac1:0:b0:39a:123c:9df5 with SMTP id
- d1-20020ac85ac1000000b0039a123c9df5mr2595647qtd.27.1665852974906; Sat, 15 Oct
- 2022 09:56:14 -0700 (PDT)
+        Sat, 15 Oct 2022 12:58:38 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E808B4D24A
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 09:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gRy1MHYPV0WjU4nMQ/DZ5j9qWrakSMjHmkC1JCQLKKk=; b=G9nlUqcHHVoUyqjchI57Tgoe/d
+        m0lGjU3ZwAjc3YFmnUb6DEBU1fUKAWLFOBaxCcQJhLYc02d8hfd7deQYYai/8RdQK8jEt9nxd6oSI
+        d57mdNzMsoRDprp6M2gwI4UKaHZXKKU2b4ZGt2Q5p4kdC6V9xEiC0TKUy0MuPdTGI3nMaMR1fkDRj
+        0YPw6ta/NXrolu/c5x9cb4ETDRdQY67UfzMdwdetJCo8ou3OqZX6EpjIHn1UioQaztW25/wG92ADt
+        jP05MU+8u9yN1bmPdqx1lgpm0jS8dOMGJanP0dXqafqWGPQGWtQ0ABLTwpdQcaMusFHsoEqyf5A/B
+        qJcVU25A==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:62527 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1ojkUb-0004Ts-Bm; Sat, 15 Oct 2022 18:58:33 +0200
+Message-ID: <61813964-8f3e-87b0-4124-4566a7f9c86e@tronnes.org>
+Date:   Sat, 15 Oct 2022 18:58:24 +0200
 MIME-Version: 1.0
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
- <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
- <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
- <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
- <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
- <YzYowYJpRTImmg4m@google.com> <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
- <YzcqdTxLMF5028yz@smile.fi.intel.com> <YzcthIfnpi8E6XVk@google.com>
-In-Reply-To: <YzcthIfnpi8E6XVk@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 15 Oct 2022 18:56:04 +0200
-Message-ID: <CAJZ5v0iKXWBGYPmmg9__g3oHK2GhY+xFMnSA6c5KctOv2kTfNQ@mail.gmail.com>
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Raul Rangel <rrangel@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v5 07/22] drm/client: Add some tests for
+ drm_connector_pick_cmdline_mode()
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Emma Anholt <emma@anholt.net>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org,
         Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Phil Elwell <phil@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v5-7-d841cc64fe4b@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v5-7-d841cc64fe4b@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 7:55 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> On Fri, Sep 30, 2022 at 08:42:13PM +0300, Andy Shevchenko wrote:
-> > On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
-> > > On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
-> > > <dmitry.torokhov@gmail.com> wrote:
-> >
-> > ...
-> >
-> > > I think that patches [5-8/13] from this series are significant
-> > > framework changes, so it would make sense to route them via the ACPI
-> > > tree.
-> > >
-> > > If this is fine with everybody, I will queue them up for merging into
-> > > 6.1 (probably in the second half of the upcoming merge window).
-> >
-> > I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
-> > but if you wish you always may take this PR [1] to your tree (it's already in
-> > GPIO tree pending v6.1), it may be considered as immutable tag.
-> >
-> > [1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
->
-> Yeah, having an immutable branch hanging off 6.0-rcN would be awesome -
-> I could pull it and this would avoid any potential conflicts later.
 
-This material is in the mainline now, but the branch is still there in
-case you need it:
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-wakeup
+Den 13.10.2022 15.18, skrev Maxime Ripard:
+> drm_connector_pick_cmdline_mode() is in charge of finding a proper
+> drm_display_mode from the definition we got in the video= command line
+> argument.
+> 
+> Let's add some unit tests to make sure we're not getting any regressions
+> there.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> ---
+> Changes in v5:
+> - Removed useless (for now) count and modes intermediate variables in
+>   get_modes
+> - Switched to kunit assertions in test init, and to KUNIT_ASSERT_NOT_NULL
+>   instead of KUNIT_ASSERT_PTR_NE(..., NULL)
+> 
+> Changes in v4:
+> - Removed MODULE macros
+> ---
+>  drivers/gpu/drm/drm_client_modeset.c            |  4 +
+>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 99 +++++++++++++++++++++++++
+>  2 files changed, 103 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
+> index bbc535cc50dd..d553e793e673 100644
+> --- a/drivers/gpu/drm/drm_client_modeset.c
+> +++ b/drivers/gpu/drm/drm_client_modeset.c
+> @@ -1237,3 +1237,7 @@ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode)
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(drm_client_modeset_dpms);
+> +
+> +#ifdef CONFIG_DRM_KUNIT_TEST
+> +#include "tests/drm_client_modeset_test.c"
+> +#endif
 
-It won't be necessary any more after 6.1-rc1 is out, though, I suppose.
+I can't say I like including the file like this, but exporting the
+static function for testing isn't attractive either and doing it like
+this is shown in the kunit docs, so:
+
+Acked-by: Noralf Trønnes <noralf@tronnes.org>
