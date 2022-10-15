@@ -2,101 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D7A5FFAB1
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987325FFAB2
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiJOPDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 11:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S229722AbiJOPFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 11:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiJOPDu (ORCPT
+        with ESMTP id S229684AbiJOPFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 11:03:50 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8624C537C9
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:03:48 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id o22so4260327qkl.8
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IRXfSr+AeJv0MDB88/3kkIzBk6djfX71HiJlpWU4fUE=;
-        b=MmNUcHP2ChrnBow08VljA5fxjIYdGdDepyU/T8jyoNfEZdrye6p7nDfP9FjBDOKVgG
-         5mJKLtnhMb8gmCWTmmZs3Ke43wVPjRut9cStvukH2/lAqR7/TVw35JytHekj+Ye67jk2
-         nMX6wmw1o3MayEAAqiGcp75av5wh1I+vDoBuIOU5C9TYmWKDP0GBx0i/N1HPViH47g2b
-         ZVL256lmHrunPp9hJ6dNf9x46d9RElwFHae8Dax8VkpvGD6qW0nQjY70x/WLK0M4PS9P
-         47w6FEu0K0xS20KOj1jyca5js15JmJDnzcRjUC9TyRGK6TyprRPxsDv55c7x+hny2gc6
-         xWvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IRXfSr+AeJv0MDB88/3kkIzBk6djfX71HiJlpWU4fUE=;
-        b=IDQFGneoMftYwArhIwPFOZu72rBc6fVFYTNy9/oU4YoU7qc2UuVXh/KDl5uHzhYp+w
-         eGGSaxNFCSz9Id+wkS+mU1RR0L1R4KcARNdeSG/FedkL8ImZA9BVDBckRRp+oTFBJ0sG
-         EbEf+VUdSkqo888GbfL2BzfqiajaYkCA46W3qeeFm01iZnSEN/xJOE+QRHy4L5YdwfSs
-         WhzW2CDb/K5tyP7xY/lfsnrXxGglcCEdKwPlMHmBBYuQLiUMfmfQ7Y2/xvhYJxRsgTjQ
-         TNT2jFj9XaS65Mw6o73VJc9rzNarsS3k/yyVZzcjk4j63gUZAkcWB0rKzDFAGHkh0gyk
-         st4A==
-X-Gm-Message-State: ACrzQf2omuojAvgzCrYhShnz8CgsO3qu2aBkV8o5YgBLo16EFE+q/2e5
-        HcR0sp2e2UD7ORo+REJ36z9EeQ==
-X-Google-Smtp-Source: AMsMyM6wOKBU8VXQG0sRCrLxwIlgwQtSfm9xcCrWrVzcLIRW5wCFiAzyTPdGmhqToNeXn8s8PO/zvw==
-X-Received: by 2002:a05:620a:45a6:b0:6ee:a169:f22b with SMTP id bp38-20020a05620a45a600b006eea169f22bmr2009569qkb.244.1665846227687;
-        Sat, 15 Oct 2022 08:03:47 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9477:c2f0:ddea:ea08? ([2601:42:0:3450:9477:c2f0:ddea:ea08])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05620a0f0c00b006c73c3d288esm4981055qkl.131.2022.10.15.08.03.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Oct 2022 08:03:47 -0700 (PDT)
-Message-ID: <dde4c160-e7f5-5759-d45b-c4608d1f28c1@linaro.org>
-Date:   Sat, 15 Oct 2022 11:03:45 -0400
+        Sat, 15 Oct 2022 11:05:05 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279363846D
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=P7pRTxq7KYO3k44s3qhhCAVY4oTb2mw2IirE3FSx1ng=; b=GxgJFEJBFZcqMt7jvrGYCAAGvx
+        DhywpEK9lBqlpQmTL4JiLK3wR0cIB5uIM7Vt45U6b7uvvqRM17u4wpNFNJ+6HWbBXQB2B8bPvXXcc
+        SF6kMCb+eFJkntalEPfxQRkTmvEAT5YSt+VnrxWIv835yQ0c5WBfTxfdeZW3tPWyZRRGZJQj7T8m0
+        Nwjnxm9d/Kec3pBZRybCzuqaSZT7YWXxBDldAQ0+bMLTxvqNh/nPKfl9IKbpdXGAnTgVbO6w4Iei4
+        xE654Ew2Owk/VskBBICvPXnHWLrbN62n6D61UnEqU0XnG0aVsZ7niE1H3xvX8rAikZ5owhybXqkb3
+        8dPL05TQ==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:64825 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1ojiih-0008O3-ML; Sat, 15 Oct 2022 17:04:59 +0200
+Message-ID: <71e53906-ae9b-55b9-7a93-7bb04a891423@tronnes.org>
+Date:   Sat, 15 Oct 2022 17:04:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 6/6] dt-bindings: qcom,pdc: Introduce pdc bindings for
- QDU1000 and QRU1000
-Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221014221011.7360-1-quic_molvera@quicinc.com>
- <20221014221011.7360-7-quic_molvera@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014221011.7360-7-quic_molvera@quicinc.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v4 11/30] drm/modes: Add a function to generate analog
+ display modes
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        intel-gfx@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Hans de Goede <hdegoede@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, Dom Cobley <dom@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v4-11-60d38873f782@cerno.tech>
+ <0aa690b8-988a-878f-4d4f-d391295bc591@tronnes.org>
+ <20221013083638.kloiaxervnhii7ew@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20221013083638.kloiaxervnhii7ew@houat>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 18:10, Melody Olvera wrote:
-> Add compatible fields for QDU1000 and QRU1000 pdcs.
+
+
+Den 13.10.2022 10.36, skrev Maxime Ripard:
+> Hi Noralf,
 > 
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml      | 2 ++
->  1 file changed, 2 insertions(+)
+> On Sat, Oct 01, 2022 at 02:52:06PM +0200, Noralf Trønnes wrote:
+>> Den 29.09.2022 18.31, skrev Maxime Ripard:
+>>> Multiple drivers (meson, vc4, sun4i) define analog TV 525-lines and
+>>> 625-lines modes in their drivers.
+>>>
+>>> Since those modes are fairly standard, and that we'll need to use them
+>>> in more places in the future, it makes sense to move their definition
+>>> into the core framework.
+>>>
+>>> However, analog display usually have fairly loose timings requirements,
+>>> the only discrete parameters being the total number of lines and pixel
+>>> clock frequency. Thus, we created a function that will create a display
+>>> mode from the standard, the pixel frequency and the active area.
+>>>
+>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>>>
+>>> ---
+>>>
+>>> Changes in v4:
+>>> - Reworded the line length check comment
+>>> - Switch to HZ_PER_KHZ in tests
+>>> - Use previous timing to fill our mode
+>>> - Move the number of lines check earlier
+>>> ---
+>>>  drivers/gpu/drm/drm_modes.c            | 474 +++++++++++++++++++++++++++++++++
+>>>  drivers/gpu/drm/tests/Makefile         |   1 +
+>>>  drivers/gpu/drm/tests/drm_modes_test.c | 144 ++++++++++
+>>>  include/drm/drm_modes.h                |  17 ++
+>>>  4 files changed, 636 insertions(+)
+>>>
+>>
+>> I haven't followed the discussion on this patch, but it seems rather
+>> excessive to add over 600 lines of code (including tests) to add 2 fixed
+>> modes. And it's very difficult to see from the code what the actual
+>> display mode timings really are, which would be useful for other
+>> developers down the road wanting to use them.
+>>
+>> Why not just hardcode the modes?
+> 
+> Yeah, I have kind of the same feeling tbh, but it was asked back on the
+> v1 to ease the transition of old fbdev drivers, since they will need
+> such a function:
+> https://lore.kernel.org/dri-devel/CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com/
 > 
 
+If that's the case I suggest you just hardcode them for now and leave
+the complexity to the developer doing the actual conversion of the fbdev
+driver. Who knows when that will happen, but that person will have your
+well documented and discussed work to fall back on.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Noralf.
