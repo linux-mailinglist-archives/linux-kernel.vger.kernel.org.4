@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C8D5FF90A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 09:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303145FF90F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 09:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJOHnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 03:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S229560AbiJOHvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 03:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiJOHnW (ORCPT
+        with ESMTP id S229454AbiJOHva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 03:43:22 -0400
+        Sat, 15 Oct 2022 03:51:30 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8745B04F;
-        Sat, 15 Oct 2022 00:43:20 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29F7TQmA027026;
-        Sat, 15 Oct 2022 07:42:13 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADD24D255;
+        Sat, 15 Oct 2022 00:51:29 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29F7YrSO029613;
+        Sat, 15 Oct 2022 07:50:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-type; s=qcppdkim1;
  bh=F23YjbuDGcrGHCQRskp9JybpBpW1/tFFRt7e3Br/QJY=;
- b=GwHYqbon9664LEUtbTWRgM7kPAh97O43G45VuhcY/ADlgzQJ8wpfkJ5wIukOpzt4BlcU
- cnJl1+1r3gLj1LLnOGXurUloCLmS9UKPdzxsUnI40SdzPm9Y/0Ps24YsEP1eV6MChwRv
- 06eReooVtVukXOORJCx39BH9gXc9atta81p4fVZ8ueo8enFg/Ss3GEtAtOEYtE3YYHSO
- ABGbiUSHx8Eq66EdnXuGWTwEEmXecPv0yefLZ7RxdGD+nUYVBM/0NATB8TFX/F7F4zmd
- UDA6EzD9L/7k7beHhae07l2JpGg5CfQ/nDODZN5Ohu4QovEMC3DpDrN4yzeVeUUIR4Ym Bw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k7j7w8rhc-1
+ b=lRlN3FeBslJ7dfv1XSGEL+Dv5RiHtvK00Z+8MniZidO1CgrJtnhegVoDvyRyBL+fqFgI
+ HT+U21961g+m145kg+ybBPPF1toa4Xxw1U327FQVLUUDBqqSpsDiXf0T0wTy7iZmK7G8
+ 4jH7fxw/dVV6b02i1A9rKRlhxHuBFY5ia7zqfOiww68+Ef/nGHkmRyuQRhuHVclEsYEG
+ Y2HDzrIm/SGIvHBR2mm7UZUpjsTehDa4VAripEgUd8j4uAApFigHdwYxLpTnnm5rWjGM
+ ph4ZWx9CNwe51EquT+C7Qc//qk2M/+gDt1sUoiAaHtWijwJzYigBUnK1QFNufbM09eDZ lQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k7kvg8jy5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 15 Oct 2022 07:42:13 +0000
+        Sat, 15 Oct 2022 07:50:38 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29F7gCgh026588
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29F7obvo006528
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 15 Oct 2022 07:42:12 GMT
+        Sat, 15 Oct 2022 07:50:37 GMT
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sat, 15 Oct 2022 00:42:06 -0700
+ 15.2.986.29; Sat, 15 Oct 2022 00:50:31 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <vkoul@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
         <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ To:     <vkoul@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
         <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Ratna Deepthi Kudaravalli" <quic_rkudarv@quicinc.com>
-Subject: [PATCH] dt-bindings: soundwire: Convert text file to yaml format
-Date:   Sat, 15 Oct 2022 13:11:53 +0530
-Message-ID: <1665819713-21491-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: [RESEND] dt-bindings: soundwire: Convert text file to yaml format
+Date:   Sat, 15 Oct 2022 13:20:16 +0530
+Message-ID: <1665820216-32598-1-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -60,15 +60,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: EGqounB65kpj7I3V4cHtOqps3ZDCsUNt
-X-Proofpoint-GUID: EGqounB65kpj7I3V4cHtOqps3ZDCsUNt
+X-Proofpoint-ORIG-GUID: VFSlm7dQJEsOlItnMKMY3UhfVscI0RY4
+X-Proofpoint-GUID: VFSlm7dQJEsOlItnMKMY3UhfVscI0RY4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-15_03,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 malwarescore=0 suspectscore=0 phishscore=0 clxscore=1011
- priorityscore=1501 adultscore=0 spamscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ malwarescore=0 priorityscore=1501 phishscore=0 mlxlogscore=999 mlxscore=0
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2209130000 definitions=main-2210150043
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
