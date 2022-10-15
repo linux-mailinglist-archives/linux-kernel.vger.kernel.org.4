@@ -2,91 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6738A5FF957
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 11:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515EF5FF95C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 11:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiJOJHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 05:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S229518AbiJOJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 05:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiJOJHc (ORCPT
+        with ESMTP id S229702AbiJOJK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 05:07:32 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C671571B
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 02:07:29 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 96B19240005;
-        Sat, 15 Oct 2022 09:07:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1665824847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uilEODdv3PazkYXihcKS3EbN59FUcP/gU7kmYw1f/YQ=;
-        b=TZWfRro9s4S64w92ossm9qh6lF0kyqWmPdLZiTpbuGX4gnF5utaNQpMpVU4TE94ocyFNjs
-        BzLoKD9ya22hnZeidvXsmzwGLckFIyZEMOmIZ4unMWgZnufvSEEHiPhH/0AFNi7mjsbDnK
-        4auovfBelhhIYl6dpMZ0C3BqHFYJF7oJGDdwla2mJixSUt0NqWNixs9LvWYmF3SSotWRb0
-        n2LEJSNhadx0j+glpbsO/ewLTWN3w42/HAwwl5rsSgL+F+cAxZ8d3jYc9NKXje7eAJjcIA
-        yhUPqaCznM3+udkxF5ssSrEez7yhUtLljCGyhTWgrrtKwu5GREijHZhC+roS2w==
-Date:   Sat, 15 Oct 2022 11:07:24 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     yexingchen116@gmail.com
-Cc:     richard@nod.at, vigneshr@ti.com, wsa+renesas@sang-engineering.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: Re: [PATCH linux-next] mtd: replace strcmp with sysfs_streq
-Message-ID: <20221015110724.5c535807@xps-13>
-In-Reply-To: <20221008074643.308969-1-ye.xingchen@zte.com.cn>
-References: <20221008074643.308969-1-ye.xingchen@zte.com.cn>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 15 Oct 2022 05:10:28 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363B765C7;
+        Sat, 15 Oct 2022 02:10:27 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 71151C9D52;
+        Sat, 15 Oct 2022 09:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1665825023; bh=6JCUCll7KO+Z8XkfLAf6x6nD8Nh28IVWwpklTXnuBvQ=;
+        h=From:To:Cc:Subject:Date;
+        b=xL2TEOfrWgC9oD2frtEPnEsWPK6BfI/fewj2w9WtEv/nSjtJUgzVEDdZs+qWl6MLi
+         Dwdx56ybv7akkYHyMk8Y/NWtMI/pLWcbgGav+YYcxETaYjMKumcAvBa4ooPi2lvtDD
+         +BN58acoOof/6ktNA2+N7v2Xf5Gk2TY3+NSWrweo=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: clock: Convert qcom,lcc to DT schema
+Date:   Sat, 15 Oct 2022 11:09:44 +0200
+Message-Id: <20221015090946.448820-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi yexingchen116@gmail.com,
+Convert the text bindings for the lcc to yaml format. Doing this showed
+that clocks and clock-names were not documented, so fix that now.
 
-yexingchen116@gmail.com wrote on Sat,  8 Oct 2022 07:46:43 +0000:
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ .../devicetree/bindings/clock/qcom,lcc.txt    | 22 -----
+ .../devicetree/bindings/clock/qcom,lcc.yaml   | 88 +++++++++++++++++++
+ 2 files changed, 88 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,lcc.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,lcc.yaml
 
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->=20
-> Replace the open-code with sysfs_streq().
->=20
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/mtd/parsers/cmdlinepart.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mtd/parsers/cmdlinepart.c
-> b/drivers/mtd/parsers/cmdlinepart.c
-> index b34856def816..6a401e0b1b95 100644
-> --- a/drivers/mtd/parsers/cmdlinepart.c
-> +++ b/drivers/mtd/parsers/cmdlinepart.c
-> @@ -154,7 +154,7 @@ static struct mtd_partition * newpart(char *s,
->  	}
-> =20
->  	/* if slc is found use emulated SLC mode on this partition*/
-> -	if (!strncmp(s, "slc", 3)) {
-> +	if (sysfs_streq(s, "slc")) {
+diff --git a/Documentation/devicetree/bindings/clock/qcom,lcc.txt b/Documentation/devicetree/bindings/clock/qcom,lcc.txt
+deleted file mode 100644
+index a3c78aa88038..000000000000
+--- a/Documentation/devicetree/bindings/clock/qcom,lcc.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Qualcomm LPASS Clock & Reset Controller Binding
+-------------------------------------------------
+-
+-Required properties :
+-- compatible : shall contain only one of the following:
+-
+-			"qcom,lcc-msm8960"
+-			"qcom,lcc-apq8064"
+-			"qcom,lcc-ipq8064"
+-			"qcom,lcc-mdm9615"
+-
+-- reg : shall contain base register location and length
+-- #clock-cells : shall contain 1
+-- #reset-cells : shall contain 1
+-
+-Example:
+-	clock-controller@28000000 {
+-		compatible = "qcom,lcc-ipq8064";
+-		reg = <0x28000000 0x1000>;
+-		#clock-cells = <1>;
+-		#reset-cells = <1>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/qcom,lcc.yaml b/Documentation/devicetree/bindings/clock/qcom,lcc.yaml
+new file mode 100644
+index 000000000000..03c99435d342
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,lcc.yaml
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,lcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm LPASS Clock & Reset Controller Binding
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++
++properties:
++  compatible:
++    enum:
++      - qcom,lcc-apq8064
++      - qcom,lcc-ipq8064
++      - qcom,lcc-mdm9615
++      - qcom,lcc-msm8960
++
++  clocks:
++    minItems: 8
++    maxItems: 8
++
++  clock-names:
++    minItems: 8
++    maxItems: 8
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++  - '#reset-cells'
++
++additionalProperties: false
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,lcc-apq8064
++              - qcom,lcc-msm8960
++    then:
++      properties:
++        clocks:
++          items:
++            - description: Board PXO source
++            - description: PLL 4 Vote clock
++            - description: MI2S codec clock
++            - description: Mic I2S codec clock
++            - description: Mic I2S spare clock
++            - description: Speaker I2S codec clock
++            - description: Speaker I2S spare clock
++            - description: PCM codec clock
++
++        clock-names:
++          items:
++            - const: pxo
++            - const: pll4_vote
++            - const: mi2s_codec_clk
++            - const: codec_i2s_mic_codec_clk
++            - const: spare_i2s_mic_codec_clk
++            - const: codec_i2s_spkr_codec_clk
++            - const: spare_i2s_spkr_codec_clk
++            - const: pcm_codec_clk
++
++      required:
++        - clocks
++        - clock-names
++
++examples:
++  - |
++    clock-controller@28000000 {
++        compatible = "qcom,lcc-ipq8064";
++        reg = <0x28000000 0x1000>;
++        #clock-cells = <1>;
++        #reset-cells = <1>;
++    };
+-- 
+2.38.0
 
-I'm sorry but, why this would be a use for sysfs_streq? The point of
-this helper is to consider "\n" null, which is not relevant here. Or do
-I miss something?
-
->  		add_flags |=3D MTD_SLC_ON_MLC_EMULATION;
->  		s +=3D 3;
->  	}
-
-
-Thanks,
-Miqu=C3=A8l
