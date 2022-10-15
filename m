@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD245FFBBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 21:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C105FFBC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 21:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiJOTVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 15:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S229693AbiJOTVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 15:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJOTVn (ORCPT
+        with ESMTP id S229608AbiJOTVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 15 Oct 2022 15:21:43 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8546621E38
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 12:21:41 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id k4-20020a056e02156400b002fcfa0da521so5378928ilu.12
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 12:21:41 -0700 (PDT)
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268A402D2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 12:21:42 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id y26-20020a5d9b1a000000b006bc71505e97so5012149ion.16
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 12:21:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A4VjHpTY+k3KbZ6IrKXiwEgYAuIUAsSyXXWxa32DpOM=;
-        b=Z4wLAOn3f98tzaKlNgOMhJCp95yJAWSwVui1bg4dGnywzGEU97bQv/+JINiLS62QMI
-         C2mqzTKwd0VF1otL6wFB0vMovC8Q5i6CnVGsprQaWCSHcXSXz2LckIPMxhItpclsaBon
-         YGLWrjttJEK/4LzcJHm6sYRuVEJ2rcv76XHSVfhf1WDfE4aW8tEOTcysnYY8iyRuB2YO
-         PTPsZfUqUzF3VQyg1l+/UwIiGDuwDZEtBfuAdC5VVPn4DGJhWTFoZs8w4brWCw711/+v
-         Lom8Yb3SNrM/OjRxcH0nFYiDCWzQyo7+Xb2JzchuCvbVkMC9lbq+7WuyBKdC3P0DeuW5
-         60JA==
-X-Gm-Message-State: ACrzQf278h6p48yeMnQ2y+1zu3uMp9pyhgeOPRNbNHLTueGhyPe+3mXw
-        RThsk0HthQCw55vNiD9TLD4knRWfBYCj8bQ+diVb7hNjB2R8
-X-Google-Smtp-Source: AMsMyM63ryNw2sUB2rN3e7uamk1XoQt957lB2LbtcBUByjXHx69Bihv5BaH782vQIWfBpQ2KB6A+ebnggfBiUoMXPrzChGEtSbpi
+        bh=QD0OwdlHzrmBjIfr6nqqYToMlqH/qeE2XQWPLbVKueI=;
+        b=11pva9fg2fQO+bv88VbaX0YRzhFScLpRUjnyVU7UJRv7zLdpqIkub79HnA/240rub1
+         bVjcItWv+U0OGmcRVj/+hFahi9qThGf9JeCWUcGFyVe2HhF7MmpqJTUVjzGT1OKgEoKz
+         JIO5R2evToggD/OhyVavowk50z5E/BD28/H6LFLLtSEqsj3Lm0wxgNjydmNlHbIs4Vi1
+         bFPEBWd5DkCIIsVCRSdeNdfWmdTKApukj6960KReePlZH7jvub4W0cQNMX2gDiOEWisx
+         /ViSfsB4DFMw13mdEWLOOc6DKd9w73ly70isg6E9x/zx24VGieR44UBO4Vom0d5X53Ms
+         Q9JA==
+X-Gm-Message-State: ACrzQf24G2/dh92VfRc9qoIcAzq5rJLAefvcFtLGwnv7N4U/jCF0W3vs
+        MFQNi2cH0AGdCASA5eSoxi3Z4IfAIrJbzMASwftjWoJw5jnY
+X-Google-Smtp-Source: AMsMyM7OY83DABo57q7Kd6bItV/uWhu4OJc8vxNuMUyPVzb2zTLxThdCimwt/fMBeOFpzik3i8aECoeuYYn1mBpROJfyjwjEjSf8
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:304c:b0:363:ff68:8ebc with SMTP id
- u12-20020a056638304c00b00363ff688ebcmr1986914jak.294.1665861700851; Sat, 15
- Oct 2022 12:21:40 -0700 (PDT)
-Date:   Sat, 15 Oct 2022 12:21:40 -0700
+X-Received: by 2002:a05:6e02:ef0:b0:2f9:4403:8d28 with SMTP id
+ j16-20020a056e020ef000b002f944038d28mr1623738ilk.193.1665861701379; Sat, 15
+ Oct 2022 12:21:41 -0700 (PDT)
+Date:   Sat, 15 Oct 2022 12:21:41 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec9d6b05eb17a66f@google.com>
-Subject: [syzbot] WARNING in jfs_symlink
-From:   syzbot <syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000f4b06105eb17a6c8@google.com>
+Subject: [syzbot] net boot error: WARNING in cpumask_next_wrap
+From:   syzbot <syzbot+4d0c5794bff07852726c@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,61 +63,116 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=115bf294880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dba84f541f631c81
-dashboard link: https://syzkaller.appspot.com/bug?extid=5fc38b2ddbbca7f5c680
+HEAD commit:    a1b6b102df03 Merge branch 'phylink_set_mac_pm'
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=179af0c2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=85495c44a2c25446
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d0c5794bff07852726c
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1150df3a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12eab444880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/608ce5a619e1/disk-55be6084.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/df10f9bb630d/vmlinux-55be6084.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/d33a0105c419/mount_1.gz
+disk image: https://storage.googleapis.com/syzbot-assets/d67c9cef7c77/disk-a1b6b102.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/708d1f638584/vmlinux-a1b6b102.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
+Reported-by: syzbot+4d0c5794bff07852726c@syzkaller.appspotmail.com
 
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=119)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
 ------------[ cut here ]------------
-memcpy: detected field-spanning write (size 132) of single field "ip->i_link" at fs/jfs/namei.c:950 (size 18446744073709551615)
-WARNING: CPU: 1 PID: 3621 at fs/jfs/namei.c:950 jfs_symlink+0xd0f/0x1120 fs/jfs/namei.c:950
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
 Modules linked in:
-CPU: 1 PID: 3621 Comm: syz-executor125 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-11847-ga1b6b102df03 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:jfs_symlink+0xd0f/0x1120 fs/jfs/namei.c:950
-Code: ff e8 a5 7b a4 fe 48 c7 c1 ff ff ff ff 4c 89 e6 48 c7 c2 80 42 29 8a 48 c7 c7 e0 42 29 8a c6 05 2a 7d f4 0a 01 e8 70 fd 67 06 <0f> 0b 48 8b 95 b8 fd ff ff 48 b8 00 00 00 00 00 fc ff df 48 c1 ea
-RSP: 0018:ffffc90003357b90 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff88806f5515b0 RCX: 0000000000000000
-RDX: ffff88807e07e0c0 RSI: ffffffff81605668 RDI: fffff5200066af64
-RBP: ffffc90003357e10 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: 0000000000000084
-R13: ffff88806f6b05f0 R14: ffff88806f6b0470 R15: ffff888016d04ce0
-FS:  0000555556a3e3c0(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+Code: df e8 8b 4a 3d f8 39 eb 77 64 e8 32 4e 3d f8 41 8d 6c 24 01 89 de 89 ef e8 74 4a 3d f8 39 dd 0f 82 54 ff ff ff e8 17 4e 3d f8 <0f> 0b e9 48 ff ff ff e8 0b 4e 3d f8 48 c7 c2 00 02 e2 8d 48 b8 00
+RSP: 0000:ffffc90000067920 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff88813fe50000 RSI: ffffffff893f1c59 RDI: 0000000000000004
+RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
+R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff8de20010
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200000c0 CR3: 0000000027bcd000 CR4: 00000000003506e0
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- vfs_symlink fs/namei.c:4378 [inline]
- vfs_symlink+0x365/0x5b0 fs/namei.c:4363
- do_symlinkat+0x261/0x2e0 fs/namei.c:4407
- __do_sys_symlink fs/namei.c:4429 [inline]
- __se_sys_symlink fs/namei.c:4427 [inline]
- __x64_sys_symlink+0x75/0x90 fs/namei.c:4427
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5d8476b999
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffce4d88208 EFLAGS: 00000246 ORIG_RAX: 0000000000000058
-RAX: ffffffffffffffda RBX: 00007ffce4d88218 RCX: 00007f5d8476b999
-RDX: 0000000000fff340 RSI: 00000000200000c0 RDI: 0000000020000040
-RBP: 00007ffce4d88210 R08: 00007ffce4d88210 R09: 00007f5d84729910
-R10: 00007ffce4d88210 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2303
+ init_vqs drivers/net/virtio_net.c:3581 [inline]
+ init_vqs drivers/net/virtio_net.c:3567 [inline]
+ virtnet_probe+0x12ae/0x31e0 drivers/net/virtio_net.c:3884
+ virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+ bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+ driver_register+0x220/0x3a0 drivers/base/driver.c:246
+ virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
+ do_one_initcall+0x13d/0x780 init/main.c:1303
+ do_initcall_level init/main.c:1376 [inline]
+ do_initcalls init/main.c:1392 [inline]
+ do_basic_setup init/main.c:1411 [inline]
+ kernel_init_freeable+0x6ff/0x788 init/main.c:1631
+ kernel_init+0x1a/0x1d0 init/main.c:1519
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 
 
@@ -122,5 +183,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
