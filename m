@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8648E5FFBE7
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 22:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609E65FFBE8
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 22:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJOU1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 16:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S229695AbiJOUbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 16:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJOU1B (ORCPT
+        with ESMTP id S229562AbiJOUbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 16:27:01 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257E74317E
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 13:27:00 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 203so9250537ybc.10
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 13:27:00 -0700 (PDT)
+        Sat, 15 Oct 2022 16:31:06 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BE53FEF9
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 13:31:05 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso8736348wma.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 13:31:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mS8XGtqd3i/pk7URDEoiQ34L/lpb4BogfvC0QODXjc4=;
-        b=dwdL4K9pRB9tgFet7f7vkNfdIBpt8C0Lj7H1w9Q6g+d+D9kAO8YuHXByo7dCdPWkj/
-         dWJKhJxi3mYnrcFxahkQTvX/H0r+TSU9o3T4KEtXiKKN4G64iBbWLxwQaQ2QYymqOoTf
-         n9g1m56tAU42EkcyTM/vnC7AWgWiQ3Ce73ewbrVQvhleAS6JgOvbOERa3WQESZ7lxC53
-         4kfqLgLa9RCvw2XaBq6SJj+QAyLBilMVDhz1cUAcDH7HW7Yrwhj/URm15dI0UG17aBtW
-         nRu+OiFlOu1MWc7QTc76Yk63GwD42QQHOX87u5+9/nl8Jfdlvydske96dNSDrpidJV0Y
-         b9xA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cEht+Hed26jyN2iktDH0mX7R8M68D/uz7j0TTK9tqVc=;
+        b=pSrTvIWYfURgZVScr8B8ehmEe7G7HX7VqfvNNfP4UGUJEKZp53Cq1Ui1apU3xDkGLq
+         0VItiOfb5JpdchEGhYK0FIGZMpxndFgrp6rTlcU8PV1hnLFGV8isOiwm5Jf5qw2Dr80b
+         PLXepJH9tdU1GIdvziNyBe34WQgtR3YG8zNMPthpLtO7BEYwszr0eU9CpLb8q4HMEQH3
+         o+G2w8UgcsLnqyi2erzK2NtInIjpC5Gs3WomWxmv8YBIDLkbKC/2//ISsbU6xvWX1JxU
+         QIQspEwuhniPjNJvJbEVhv8X10l7t/j9QiU/0Jg3ULfun3nBezwaOEXyreCoPrnfRO0s
+         NSHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mS8XGtqd3i/pk7URDEoiQ34L/lpb4BogfvC0QODXjc4=;
-        b=FYLRzzGAaXQ9UxIonP0cymM75gvtQmhm6pOQT9xwADXeitQQYT17Bq8gTsmcxhspnO
-         2pkGVKynQ092DoVbU//Dpy72bjwBWZs3JeTwFea8TrhPhOqjOHspQ5ZMOnkwL3pVe+/A
-         NKlZgIodfORvqDiEvSb5EZLTsyihqjcdjVEKXi5YmgnjzFnhEOMJc+JOaovKIE8HvAyR
-         g0B74ZtTZ+/VQVam5oo9p/QeYtGRlPes/Z/WGEW+tNIIh+9LlCHuUiRzEe9rzNTSE4sA
-         oT98x985wfW9R9A5WyMK4PVV51Ow5ijtXwvg29xKlYN//spBB28meANQnhu6i+MOrC/F
-         7u1g==
-X-Gm-Message-State: ACrzQf15BB06ogSC4XhZZA0Adjk0M1T698+mcusHJmD9AT+kaSJ/cSIx
-        e3IzhfS5Wx14TsgFs3TIixwfoIBuNOqLwtv1nyIG/g==
-X-Google-Smtp-Source: AMsMyM6TpoCQc+8Yf7RgpQ7w8fNS/RPrKY3wwmxKembXmvCWXgCqdO9SFDcNRLr0kipN0CTA826iCVitjzJsROJnT7U=
-X-Received: by 2002:a25:84c9:0:b0:6bd:5074:bc30 with SMTP id
- x9-20020a2584c9000000b006bd5074bc30mr3377208ybm.55.1665865619165; Sat, 15 Oct
- 2022 13:26:59 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cEht+Hed26jyN2iktDH0mX7R8M68D/uz7j0TTK9tqVc=;
+        b=C7DWJFX3yegC4bPavbETzZnsg9ck1QfX2JbDsWDSdWX0ahVA2unQoZb7X1EJ5F76nK
+         aCSts8MQVxiPqwb8Fo3kEnrkDLqiFw5DD/S3HnmYzWz1Q2YJ0kUa2tJ3S3h5PWZrNugU
+         XxH6yG9ZLSVlSx4OPh0rU/Jf9NhE0w9e0nGG/MfvxLl2jxa8IocNLRhM3HILduVuN0gS
+         gxMW3S9uNE6EzETbnwF5Y/SCio7wsiTN9DSSeKDYEZOckpEIqVsdtFdVMIx3GIINjmM/
+         2MP3Juh/OOMpbmwNiL4IcGbBzXaJWxQK03wuIairROaiJqmFM8Rn6MmpQoF2+yk/3q3X
+         rdQg==
+X-Gm-Message-State: ACrzQf3hJ2eRMZOsljKjwe0isCwW5WfDBG4jzgIgq/qNglAuXB6uyLhb
+        iHvHecilvT+B6/KXpo6LWPA=
+X-Google-Smtp-Source: AMsMyM4JPDi93GvH3YBL86OxrRZIMAHjB30flKU18k+eV5/g4gNGpwDK1JnjCyvkRgnu3qOU+NUJhw==
+X-Received: by 2002:a05:600c:1c16:b0:3c6:bb05:702c with SMTP id j22-20020a05600c1c1600b003c6bb05702cmr14184549wms.203.1665865864023;
+        Sat, 15 Oct 2022 13:31:04 -0700 (PDT)
+Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05600c1c8800b003b47e75b401sm10350318wms.37.2022.10.15.13.31.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Oct 2022 13:31:03 -0700 (PDT)
+Message-ID: <6dfa32b5-ffef-dce3-fb27-5c91779c01d0@gmail.com>
+Date:   Sat, 15 Oct 2022 22:31:02 +0200
 MIME-Version: 1.0
-References: <CANn89iKJpWK9hWLPhfCYNcVUPucpgTf7s_aYv4uiQ=xocmE5WA@mail.gmail.com>
- <20220928221514.27350-1-yepeilin.cs@gmail.com> <634b1304.c80a0220.cedc6.e007@mx.google.com>
-In-Reply-To: <634b1304.c80a0220.cedc6.e007@mx.google.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sat, 15 Oct 2022 13:26:48 -0700
-Message-ID: <CANn89iLrKnzYUt-bkXA9pVsviw2+RM3tWO==ZYy-yHR_1Uz+9w@mail.gmail.com>
-Subject: Re: [PATCH net-next] net/sock: Introduce trace_sk_data_ready()
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     cong.wang@bytedance.com, davem@davemloft.net, dsahern@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, peilin.ye@bytedance.com,
-        yepeilin.cs@gmail.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/9] staging: r8188eu: clean up the OnDeAuth function
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221015152440.232281-1-martin@kaiser.cx>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221015152440.232281-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,24 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 1:07 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> On Thu, Sep 29, 2022 at 09:19:34AM -0700, Eric Dumazet wrote:
-> > Second patch adding the tracing point once in the helper ?
-> >
-> > Alternatively, why not add the tracepoint directly in the called
-> > functions (we have few of them),
-> > instead of all call points ?
->
-> Why do we want to give implementations of sk_data_ready() freedom
-> to not to call this trace_sk_data_ready()?
->
-> Thanks.
+On 10/15/22 17:24, Martin Kaiser wrote:
+> This series cleans up the OnDeAuth function and tries to replace
+> driver-specific parsing code with helpers from ieee80211.h.
+> 
+> Martin Kaiser (9):
+>    staging: r8188eu: replace one GetAddr3Ptr call
+>    staging: r8188eu: get reason code from mgmt struct
+>    staging: r8188eu: clarify the bBusyTraffic assignment
+>    staging: r8188eu: use sa instead of Addr2
+>    staging: r8188eu: get bssid from mgmt struct
+>    staging: r8188eu: exit for deauth from unknown station
+>    staging: r8188eu: remove unnecessary return
+>    staging: r8188eu: summarize two flags checks
+>    staging: r8188eu: ignore_received_deauth is a boolean
+> 
+>   drivers/staging/r8188eu/core/rtw_mlme_ext.c | 45 ++++++++++-----------
+>   1 file changed, 21 insertions(+), 24 deletions(-)
+> 
 
-I proposed an alternative. Choose one, but not the one you do not like :/
-
-The first proposition was to split the patch in a more logical way.
-
-I think we have less sk_data_ready() functions than call sites, so
-code size would be smaller,
-but this is probably something we care about enough.
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
