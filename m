@@ -2,139 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8850B5FF82F
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 05:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4CE5FF834
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 05:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiJODZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 23:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S229715AbiJODZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 23:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJODZA (ORCPT
+        with ESMTP id S229507AbiJODZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 23:25:00 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2119.outbound.protection.outlook.com [40.107.94.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EDE1F629;
-        Fri, 14 Oct 2022 20:24:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EZ0Qm19RYhlRf+131vPmfZgkXJM80+1Rl4KFR6Jo+h/YAPJaJ4HHf6vhc603BOX9PtwuHNm2v2fv2M1jnJxblpFvc2OseOzBmnwjHjAh4Ha0rm6lRLmtqX4YlN9mtBmlaTL8cWDXCTLLekv5AP5nEkXJd1sXSCjcCBMPfkM8xa+JuHMgxLE4QGnrFztVZxSb+ELl/bLE2NuG437mgatXS+Op6aBWZVCcKImVd3+ZmYeepYZEvRqNXEHIi92ckR01qX3m1/RnVdOJ5i4f95cd18xDwfqqiSd0ExKTlqp/76DV4GdMrAYnLH0+IUMY63p564VEOgwhog/cAyLo/d6DUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IWsrtyQjQFElcDizd5Q2pe16mJbXNMVHde6vi1cOR6w=;
- b=Ndb2KHPwbmXquIseaeNOpGp9fFQ/c5mFMKc+Bbi4tq/t0bLPZZN0IOnty2bsawyT829APlWAu8EyA/yrTEQfYZyf3IIM7ze5zxP7WmQEd/PfoW0pdTn0zI8Agle/mcPiaEZIagsONG5ECXMddJYPCjy1vmeUpiWwrHrzX7lAjxl2qIZUHhtZMJOY8fStSUryVNVlSugPwEjptMTEPO0qSc8bl7WyOYACu09MQfE2GbJzSkN8RUNNHe6n2r54xMShWdtA5VbVW3IGTjhaHvsGdGvn7vBLjqD1RcqcDYLcUNnBKrbe8QeRTwfpjyHY5UX8vDwfZlzD0AmZ208+dKU6cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IWsrtyQjQFElcDizd5Q2pe16mJbXNMVHde6vi1cOR6w=;
- b=PmZ1qUCKZuuwtt+nP5IX64VjD+8EH91KvXCaR9pVmuP94xX8Pv6w9r900eY8i65mLrt8uAE5m52Brp1erC77mYcbzxkfgj97sFgB/3yFOcoTfSw1IXDMq7ezptzGqhk/0jT2YJ86OszoK9WsTpoaiYFN+3RAE1vCKOJeAmR7vPQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
- BL0PR01MB4547.prod.exchangelabs.com (2603:10b6:208:84::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.26; Sat, 15 Oct 2022 03:24:51 +0000
-Received: from SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::ebe2:243d:ff84:aaa8]) by SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::ebe2:243d:ff84:aaa8%3]) with mapi id 15.20.5723.029; Sat, 15 Oct 2022
- 03:24:51 +0000
-Message-ID: <634209c7-e458-8c4c-7bef-63f283aefaf7@os.amperecomputing.com>
-Date:   Sat, 15 Oct 2022 10:24:26 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH v10 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
-Content-Language: en-CA
-To:     Graeme Gregory <quic_ggregory@quicinc.com>
-Cc:     devicetree@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        linux-aspeed@lists.ozlabs.org, Corey Minyard <minyard@acm.org>,
-        Andrew Jeffery <andrew@aj.id.au>, openbmc@lists.ozlabs.org,
-        thang@os.amperecomputing.com,
-        Phong Vo <phong@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
+        Fri, 14 Oct 2022 23:25:36 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5798F43E4A;
+        Fri, 14 Oct 2022 20:25:28 -0700 (PDT)
+X-UUID: b8006f60a9b14c6f84927f96d07ad544-20221015
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DWjBZCkykQbBc1ryP13P2V1hr38xsz+ryzAbDiTxDkw=;
+        b=gWajdWnJGrqJzQ6YV77ZpyNOzAWE43yaTRMwh7Kh4p5CsjPZyDWFqZmjmrmf2qwWQk3R+x1utJ58NOwgwTijRccrQ0X/D3+MSPh4U/yJkf/54Qu4SH7cyAr1cytPGKBz/OUu822vmqx4Jlzf2EOM29S1GX26dLb0k/xGYpESXxg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:94740b9f-d071-4607-b69f-10a70dccd607,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:2f72d5a3-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: b8006f60a9b14c6f84927f96d07ad544-20221015
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 745707071; Sat, 15 Oct 2022 11:25:23 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 15 Oct 2022 11:25:22 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Sat, 15 Oct 2022 11:25:21 +0800
+Message-ID: <5bd2c5d63cde6fdf8e92d6aa385687b1369922ad.camel@mediatek.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: iommu: mediatek: add binding
+ documentation for MT8365 SoC
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Open Source Submission <patches@amperecomputing.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20221004093106.1653317-1-quan@os.amperecomputing.com>
- <20221004093106.1653317-2-quan@os.amperecomputing.com>
- <5fbc5a54-60f2-fc0d-a4a1-839f28a4d8ba@quicinc.com>
- <48a5e252-9a1e-65e6-e8bf-add3d39a0286@os.amperecomputing.com>
- <72c8a5bc-830d-25a9-0528-5d428dd9f163@quicinc.com>
- <20221014130517.y4mdinylnwfrg6u2@ggregory-linuxws>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <20221014130517.y4mdinylnwfrg6u2@ggregory-linuxws>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0126.apcprd02.prod.outlook.com
- (2603:1096:4:188::11) To SN4PR01MB7455.prod.exchangelabs.com
- (2603:10b6:806:202::11)
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        <devicetree@vger.kernel.org>, <iommu@lists.linux.dev>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Sat, 15 Oct 2022 11:25:21 +0800
+In-Reply-To: <20221001-iommu-support-v4-1-f1e13438dfd2@baylibre.com>
+References: <20221001-iommu-support-v4-0-f1e13438dfd2@baylibre.com>
+         <20221001-iommu-support-v4-1-f1e13438dfd2@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|BL0PR01MB4547:EE_
-X-MS-Office365-Filtering-Correlation-Id: 441b2cca-33ff-45c2-841c-08daae5cd1c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5rekcgNgVnoWB+FYkEdvFyaq9GfouglnQqonvsv9iCS4QOyXFY4YNgMZIIOnFXA3sSSwzIPAjODtwe3bllsPxHpePM58nYMjGhQtmzRQ3RgiXpwXvtj6wjBG0cWD9rC8PmFC7wC0xxYXYxTl9LE5s+k2tLA+gQ1KQW+j7hzpFobHgOP5tks0lQX6bTpcABeEVFRTPVTk2eVQOj5CUeVbLPuw2m/aiKwI/wUSzjCO4xBAqCJHoS7e+TuHLgd0HX4uQGYXKBHGbap3BuaP8FaYaZOW0os5yFs2wCQSqXnmCW0BV0ONO9YxUv3LYxJ9N+4b2DdPfwgdpoVgLKbSiUycmxTW3LBsfqoPSks2SoDBaph5guMJ3yQta7yx78exMRE81dmGyRzJe4R4+if5+7HuT6J4px58r1TCHswpW5l4bHr6rNGlcnqdmlsgjj2t7NL+cfQK4L1UI9Dch/l5APPslwRLGWThI8TJ8Eq/mo/pfNaebs4Y4NnIYsuE/dSlkYSMCfkZsxy+1BuTm9jrt0a41Q8E/kD9sKjN/Q2r27Tna5r/N3TRz+DE8GG5YdECiCrfav8l8nDlQ2FWmFmfgWD5DMBP93pMRVPpK4tyk+n6XOye1A34tkjbtRscTmAOeIztIw3mx5M++PwDl70kRLLj7qR+OKY7EL9Evyuo/A9jfXZrFW3oOMBY3Q0wCnQQmJLzNIpMLnARgDVeNYTdYOlYAOLgz+TyTUAaDAs3OI/cZoGxWbMK+lJG2Tw9cKEtKqeiQ3d9/+vTkOTFkcQaB6hn6c6pmUmTCby9+/m0vRnjUzavJ+TBiZfoWQyoUtYWtU//bGXuxfRbbYEO+qJEVbycbhjxxFMBLg+0EXgPIzRewjT8Ig2PpRh5H2Wj+4x7jTbM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(366004)(376002)(346002)(136003)(396003)(451199015)(31686004)(83380400001)(2906002)(2616005)(186003)(66899015)(8676002)(86362001)(31696002)(4326008)(53546011)(52116002)(26005)(6506007)(41300700001)(5660300002)(316002)(38100700002)(38350700002)(6916009)(8936002)(54906003)(66556008)(6512007)(7416002)(66946007)(6666004)(66476007)(6486002)(478600001)(966005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NG4yTWlSUkFGOEgvZ3d4T3BJVjFhL0FMb3kvQ3h4K1p3ZEY2aXl5ckhvbkhO?=
- =?utf-8?B?UzlIcWJFUW1hNlhSZ1BNdndSbGxHTEtXNGwvbXk5WGlMNnBsd21KWWdFTmdu?=
- =?utf-8?B?QVNsWEVVYWZKVjJWdlppalFtN1FIcWVrMDhNcEliem4vRy8rWWExUmplQWFz?=
- =?utf-8?B?ZlNxREJhWjFjSHp0SFRIRmppeEJIYVZlTVFCQ0V5VmlNWjdaOTdsRGJFUVVF?=
- =?utf-8?B?WVRYNzUrc0tCWCtqaU5lUFRXZVdwWndGakQ0UFkrdXMrdUw3SWxoRUhyK2sr?=
- =?utf-8?B?NWZLVWVjRSt0NVphQUErR3hnR2I2M1BPNEFOTUFmc3R3NFFvY0Y0djJIOVVk?=
- =?utf-8?B?cFBaSGxpMXljenFLMEtBMVR0dTJmUDZqRGNlQWYvUjV4Q3RtWENla3E2VDl3?=
- =?utf-8?B?cDIwSm5sa1g3ZXlSY3B2elNTekpGVm9iUGlFcDM2VStaeURoYmJZR3F5bVlj?=
- =?utf-8?B?Q1hZY29WR05ub3lKVVQvVUZadTZCY0w3T2t3WVhScGxGeFhhWjJDdVRrcFoy?=
- =?utf-8?B?eDJTLzJQd3kzbHhHdHg0aG05ZHN4K3hBWWk0QTBWclVXL1ZnOU5nQm9uQ3Rn?=
- =?utf-8?B?VkZucno4SUZ3TWJ6clN3V3ZFdVZnYWdoejgrMmpMd3lHdXlvSDQvZUgzNys1?=
- =?utf-8?B?RHVaUThrbkRnS2ovdUU3L3NZd3pITFZickJvYWJSOTljdDJ3WmtqcVVVRTk1?=
- =?utf-8?B?SVczRk0rUFpWQ3pHTWRCeGF5WUlHbkhBNzdMcEN5bVNORE9DVkZKRTBuOXZu?=
- =?utf-8?B?QVphVXo0dEJYRWg0RnlkUXNuanh6ZmNkNng4aTNVL1BseDNGSWM4MUlhZTdu?=
- =?utf-8?B?Q1JFcU9UeTErcW9yaUVRbUo4YVpYSlJsU3h6bGMwZlBHQjFMNTgvZUU3SmMv?=
- =?utf-8?B?d3BmcmQ3T2xraDFDMEFYZkdrR1hyMVZvTVFHQTE3Z1dBZVI2ZFlSZWR1c2Va?=
- =?utf-8?B?eDJvNWIveHJpTEd3dUg3dnh0YlA1UVQyN3Zqd29TUmFrZW9WODFzTzFpT09T?=
- =?utf-8?B?VkFVY1Zoc0RscThma2Nla0ZDTXEzOGV0bjFQbWd4K05mYVJyVTU2Z3RpVExT?=
- =?utf-8?B?TzR1SWcvajJWWXZ1SWVGeHVvOUkxMm4yaDJVb3dBOU1WaDVSMXA2WUZ5T2tG?=
- =?utf-8?B?ZSs0S3BNUTQwWUc5b0V0em1tT3Znc3FLeWJFYkFiVmNsMlhrQUVWb1ZGQjk0?=
- =?utf-8?B?OGh1SGVRZGZXRExGSk1tZGRTeHhMQjNtZGJuaWpBZG5JZFMyVzFNZkxDVVhZ?=
- =?utf-8?B?VzNxMnNUTS94b3cvYXFEclJYVDlrUlJoU2hxTVFoallSczgxMHNkblpacmFw?=
- =?utf-8?B?OGlmdnU5ZzVsOEwxUTBQeGNXSjJhcVdmV28yUTUvdzB5YnkwNXFHSXJWYVRK?=
- =?utf-8?B?djNyUGRreXJ2Wm1SYWlGdFl3dzl3YnJKVFZmNEJtUDZnbGhxT1RLaVcvblgv?=
- =?utf-8?B?dXJMd2JkMmQxSm9HT1Qrci82SjRvaDlacmZ2ZkdabTJaK1hVVWlrNFB6NStE?=
- =?utf-8?B?SlpEOCt2S3FNdkd0eDgzVXhUTFZXYlBoSVg1R0RSUlRYZGY4akRHLy9tQnUv?=
- =?utf-8?B?aXBPSUc0Q2FxL0Mvd0UreFg5WHFmL2o0WEhrTitJcTZNdWtJbG10RmQ0TWZt?=
- =?utf-8?B?SHdxcm5XS0VzRVBtVFF2eGJoVFlBV3lnbWVESnZWWW1UV3VITmh1RDd5TStv?=
- =?utf-8?B?dTZrYXRtMTBUOUJRMHM0V2I2UkFOZytkbTB5bWd2VXU5Tmt3aGxYSzk3K21L?=
- =?utf-8?B?S1VOWG04YU5vSWtDajhmZSt6Nm1rMk9qOW4rNThBQkJ5cDZkSURBQW5ZK0Ex?=
- =?utf-8?B?blF3NXdzVDdWNXJIYjdCTEpGREtMUDFwYUlJNzUycjdyZVpiTXZ0QUpKME10?=
- =?utf-8?B?VGhrYWJjR3V6K0J6ak02UkNvODhjb2NJVDFOWmRxSmxxdS9TVCt0ejJld25W?=
- =?utf-8?B?ODJibmNpeUJDaVNJQTBDSUJadEwvcGNGQjNQYVBkaUZSaDdvZGlReDBIQ0dl?=
- =?utf-8?B?WWhKMGRHeFdiWGdlaUxxbGhhRUM1WkpHTFRXMnVXSVM5R2Y1b0FvVlFsMmVh?=
- =?utf-8?B?UWxJUHhSOUc1cXpmenRxb25jSU1tbWg1dGJIU2xtTkpkK1FNMHZDYi90M0xK?=
- =?utf-8?B?R05HZUlPZk5LcWl3STJ2ODRDUytUZ3JnejN3cWFZVnNCN1ptMHpoaVlDd2NS?=
- =?utf-8?Q?1MSmzHovlAD4tauoE0IeoWY=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 441b2cca-33ff-45c2-841c-08daae5cd1c4
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2022 03:24:51.2136
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZTS+nIy73ubGXKHK4rqAWISFmqJY00hBTlw55/jDDS8Ga8pdIobJS21rR7R7Nh8SWQOk/it67i2eeLp3S/BWvGtjBeD2F27ou0VfE0ogOIw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR01MB4547
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -142,86 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14/10/2022 20:05, Graeme Gregory wrote:
-> On Mon, Oct 10, 2022 at 12:08:24PM +0100, Graeme Gregory wrote:
->>
->> On 10/10/2022 02:28, Quan Nguyen wrote:
->>>
->>>
->>> On 07/10/2022 20:26, Graeme Gregory wrote:
->>>>
->>>> On 04/10/2022 10:31, Quan Nguyen wrote:
->>>>> The SMBus system interface (SSIF) IPMI BMC driver can be used to
->>>>> perform
->>>>> in-band IPMI communication with their host in management (BMC) side.
->>>>>
->>>>> Thanks Dan for the copy_from_user() fix in the link below.
->>>>>
->>>>> Link: https://lore.kernel.org/linux-arm-kernel/20220310114119.13736-4-quan@os.amperecomputing.com/
->>>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->>>>
->>>> I have been testing this on our hardware and I don't seem to be able
->>>> to get this driver working. I was using an older version.
->>>>
->>>> I have hacked ssifbridged to deal with the change in len from u8 to
->>>> unsigned int.
->>>>
->>>> It works as long as I only ever send SSIF commands, any attempt to
->>>> read a response crashes the state machine and the driver never
->>>> recovers. No further SSIF comms is possible! (slave doesnt even ACK
->>>> writes).
->>>>
->>>> A couple of comments below on possible state machine errors.
->>>>
->>>> Its possible I am doing something wrong!
->>>>
->>>
->>> Thanks Graeme for the test and the comments.
->>>
->>> What's your testing hardware?
->>>
->>> This was tested with Aspeed ast2500 and ast2600 with the patch series
->>> [1] below applied.
->>>
->>> If you use the same hw, could you pick the series and see if any thing
->>> improve ?
->>>
->>> [1] https://lore.kernel.org/all/20210616031046.2317-1-quan@os.amperecomputing.com/
->>>
->> Thanks, that patch series does stop the state machine crashing.
->>
->> I am testing on AST2600EVB with A1 rev, but we also have our own DC-SCM with
->> A3 chip.
->>
->> Responses are still not working for me, but I think that may be an error in
->> my ssifbridged hacks.
->>
->> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c ssifbridged[335]: Read ssif
->> request message with len=13 netfn=44 lun=0 cmd=2
->>
->> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c ipmid[312]: BootCode:
->> 000000000000000000
->>
->> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c ssifbridged[335]: Send ssif
->> respond message with len=4 netfn=45 lun=0 cmd=2 cc=0
->>
->> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c kernel: ipmi-ssif-host 0-0010:
->> Warn: on_read_requested_event unexpected READ REQUESTED in state=SSIF_READY
->>
->> Oct 10 10:54:55 qcom-evb-proto-ccf37d18ea0c kernel: ipmi-ssif-host 0-0010:
->> Warn: on_stop_event unexpected SLAVE STOP in state=SSIF_ABORTING
->>
-> Just to close the loop on this, I have now fully tested this driver on
-> our setup internally.
+On Fri, 2022-10-14 at 10:45 +0200, Alexandre Mergnat wrote:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> Final hitch turned out to be an aardvark not issuing STOP events between
-> reads/writes.
+> Add IOMMU binding documentation for the MT8365 SoC.
 > 
-> Thanks for the work.
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  .../devicetree/bindings/iommu/mediatek,iommu.yaml  |  2 +
+>  .../dt-bindings/memory/mediatek,mt8365-larb-port.h | 90
+> ++++++++++++++++++++++
+>  2 files changed, 92 insertions(+)
 > 
+> diff --git
+> a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> index fee0241b5098..4b8cf3ce6963 100644
+> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> @@ -81,6 +81,7 @@ properties:
+>            - mediatek,mt8195-iommu-vdo        # generation two
+>            - mediatek,mt8195-iommu-vpp        # generation two
+>            - mediatek,mt8195-iommu-infra      # generation two
+> +          - mediatek,mt8365-m4u  # generation two
+>  
+>        - description: mt7623 generation one
+>          items:
+> @@ -130,6 +131,7 @@ properties:
+>        dt-binding/memory/mt8186-memory-port.h for mt8186,
+>        dt-binding/memory/mt8192-larb-port.h for mt8192.
+>        dt-binding/memory/mt8195-memory-port.h for mt8195.
+> +      dt-binding/memory/mt8365-larb-port.h for mt8365.
 
-Thanks a lot Graeme, for the test.
+"mediatek," is needed here.
 
-- Quan
+After this:
+Reviewed-by: Yong Wu <yong.wu@mediatek.com>
+
+
