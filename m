@@ -2,160 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F4D5FFB4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 18:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12925FFB50
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 18:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiJOQxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 12:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        id S229734AbiJOQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 12:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJOQxF (ORCPT
+        with ESMTP id S229702AbiJOQ4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 12:53:05 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D447F4CA08
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 09:53:04 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id 13so16570977ejn.3
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 09:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IO03v7Eu4frTx8XORYprvbtJg3DfjQHE8pVEQpoJiQk=;
-        b=cPDjmz8IVr/JT8UWgmvVty1YGgFPj0VMyeQPcVmM+T1lstD6OYtjE3fsC8Qf4E7t+Z
-         bC1eJxixVqNSU2A8j8bxcZzu1XQtQ9ewuXfhhFjjPEjPi/J5J9heHPoOZZZTXrDzgyq9
-         p+49EnfMtGwEGOKzl1sctt67urktS0qbuF/Ul/9VqFnUK9dcUkOqddxn2TjYlb4YaC+6
-         R7LNb/WW9YmxP+Fh1AsTqmPc2ICUd0JtFEymstxPZ/w5V79/yL4PNCsaTuzQiBISIb/E
-         Dcvb0DAlQtybbcZB+HuNcG45b1xrg4lEUCk7lNBzBOPJJcRYujT/Dp3gpq39l4CZ/Un1
-         dlsw==
+        Sat, 15 Oct 2022 12:56:16 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F4C4A82D;
+        Sat, 15 Oct 2022 09:56:15 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id f22so5519726qto.3;
+        Sat, 15 Oct 2022 09:56:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IO03v7Eu4frTx8XORYprvbtJg3DfjQHE8pVEQpoJiQk=;
-        b=D9KdnZsm7JAv74OA6aVOHGLzqKHA75IHkG+QGHD5NCovO6qE1OHdLBDfEl3+YgBR5t
-         ShNgsqvCQHcYS5K427yiKqe3CVwDWWRR9BDXmNnFSq5TNruEbtk4gH6ZG7KlvOHSX2TM
-         TbIb3G4Qp1Pf4lpvQZiFlTtvHsrwK62eD1ZTS2ewIQZ/dDvINdKacgSCAhW1N8zLm5sP
-         xwP/H7vmQTFNhGNPHGrcttgRg6PrQ/Fr3Ei5q3h9rtqMkFP8JuetfYIvy7WBzmcjnKbE
-         vowE+NYoloY5uXaEqtNmFMqY/+xxrdJBfBdWYHeaKiP9v82oeYMwdWdWk2+PAcX0mDHT
-         hGqw==
-X-Gm-Message-State: ACrzQf0NQ6vgQFDp5naalyTwxRhmL+Pms46J16P0Md3R3AxeRwTdUVUz
-        atNBu6FJgIGdFmGm+fpItxyBkAyFo/9l3A==
-X-Google-Smtp-Source: AMsMyM69v2BI1v3tk6VjMrS7brGMzwRfazQPa44EIZIMXrqdKjo6xkDk+JGIysnAT75IecWEx6aNqQ==
-X-Received: by 2002:a17:906:9fc1:b0:761:9192:504f with SMTP id hj1-20020a1709069fc100b007619192504fmr2670030ejc.116.1665852783427;
-        Sat, 15 Oct 2022 09:53:03 -0700 (PDT)
-Received: from dkorent-GL753VD ([188.252.198.222])
-        by smtp.gmail.com with ESMTPSA id g7-20020a170906348700b0074ae59d85a4sm3363189ejb.20.2022.10.15.09.53.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Oct 2022 09:53:03 -0700 (PDT)
-From:   Danijel Korent <danijel.korent@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        philipp.g.hortmann@gmail.com,
-        Danijel Korent <danijel.korent@gmail.com>
-Subject: [PATCH] staging: rtl8192e: Added spaces around operators in rtl_cam.c/rtl_eeprom.c
-Date:   Sat, 15 Oct 2022 18:50:23 +0200
-Message-Id: <20221015165023.487200-1-danijel.korent@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=h1kGMyZ8iPn6jxS1RJptkgeK4wGXJYpfTtGZVw/vNYE=;
+        b=OAHyOVWJ3B+spXrMUUgSWBrY+EC9Woc50xcs4SbAgIQWmEvrgFtNQA61kkWkAcgat3
+         utwNtoforuVZjEYZf99l0xQJ7tw7CrhNsRuN3hBXp2CVSK1Jrsxep/cAvqR4j9gdWDVo
+         a3vpCX1zIda9WN2d1P//B4cUQjDVatMROYTtn1HtJw8w8RTNE6OzZ9vP/fWXvDNdVEMt
+         6jDcqtKffiVqc4NYetaDFMBo1obMp63WmNFU8Fht7KQpw+KmANPX4bvor74eZFQ3lw4j
+         PqHpO4bTF8QtlGyB83NBUySq67bc95f7/Aa2eelX58I7IKVS2BidI8Be91uNsH3xpVS7
+         sAwQ==
+X-Gm-Message-State: ACrzQf3UIGkkyuG91wvqcdS83T5a8kzh2cJk0WFAkiXx/7+2NJFZuitF
+        0Fytlm8P/LbAKit1E8wOGLN00O6Qq53NX6KiRL0=
+X-Google-Smtp-Source: AMsMyM5VpXNSDHG6hH+avu+LLqK1F1gCjNc62IhcpK3HG0VAkIbFT/UxIhJSbkA8ILrSffofXqNATnqaVHOyZGSQocM=
+X-Received: by 2002:ac8:5ac1:0:b0:39a:123c:9df5 with SMTP id
+ d1-20020ac85ac1000000b0039a123c9df5mr2595647qtd.27.1665852974906; Sat, 15 Oct
+ 2022 09:56:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220929161917.2348231-1-rrangel@chromium.org>
+ <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
+ <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
+ <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
+ <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
+ <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
+ <YzYowYJpRTImmg4m@google.com> <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
+ <YzcqdTxLMF5028yz@smile.fi.intel.com> <YzcthIfnpi8E6XVk@google.com>
+In-Reply-To: <YzcthIfnpi8E6XVk@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 15 Oct 2022 18:56:04 +0200
+Message-ID: <CAJZ5v0iKXWBGYPmmg9__g3oHK2GhY+xFMnSA6c5KctOv2kTfNQ@mail.gmail.com>
+Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Raul Rangel <rrangel@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed "spaces preferred around operator" type of problems reported by
-checkpatch
+On Fri, Sep 30, 2022 at 7:55 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> On Fri, Sep 30, 2022 at 08:42:13PM +0300, Andy Shevchenko wrote:
+> > On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
+> > > On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
+> > > <dmitry.torokhov@gmail.com> wrote:
+> >
+> > ...
+> >
+> > > I think that patches [5-8/13] from this series are significant
+> > > framework changes, so it would make sense to route them via the ACPI
+> > > tree.
+> > >
+> > > If this is fine with everybody, I will queue them up for merging into
+> > > 6.1 (probably in the second half of the upcoming merge window).
+> >
+> > I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
+> > but if you wish you always may take this PR [1] to your tree (it's already in
+> > GPIO tree pending v6.1), it may be considered as immutable tag.
+> >
+> > [1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
+>
+> Yeah, having an immutable branch hanging off 6.0-rcN would be awesome -
+> I could pull it and this would avoid any potential conflicts later.
 
-Signed-off-by: Danijel Korent <danijel.korent@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_cam.c   | 23 +++++++++----------
- .../staging/rtl8192e/rtl8192e/rtl_eeprom.c    |  2 +-
- 2 files changed, 12 insertions(+), 13 deletions(-)
+This material is in the mainline now, but the branch is still there in
+case you need it:
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-index 41faeb4b9b9b..671a64b04a8b 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-@@ -17,7 +17,7 @@ void rtl92e_cam_reset(struct net_device *dev)
- {
- 	u32 ulcommand = 0;
- 
--	ulcommand |= BIT31|BIT30;
-+	ulcommand |= BIT31 | BIT30;
- 	rtl92e_writel(dev, RWCAM, ulcommand);
- }
- 
-@@ -40,7 +40,6 @@ void rtl92e_enable_hw_security_config(struct net_device *dev)
- 		SECR_value |= SCR_TxUseDK;
- 	}
- 
--
- 	ieee->hwsec_active = 1;
- 	if ((ieee->pHTInfo->iot_action & HT_IOT_ACT_PURE_N_MODE) || !hwwep) {
- 		ieee->hwsec_active = 0;
-@@ -100,33 +99,33 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
- 	}
- 
- 	if (DefaultKey)
--		usConfig |= BIT15 | (KeyType<<2);
-+		usConfig |= BIT15 | (KeyType << 2);
- 	else
--		usConfig |= BIT15 | (KeyType<<2) | KeyIndex;
-+		usConfig |= BIT15 | (KeyType << 2) | KeyIndex;
- 
- 
- 	for (i = 0; i < CAM_CONTENT_COUNT; i++) {
- 		TargetCommand  = i + CAM_CONTENT_COUNT * EntryNo;
--		TargetCommand |= BIT31|BIT16;
-+		TargetCommand |= BIT31 | BIT16;
- 
- 		if (i == 0) {
--			TargetContent = (u32)(*(MacAddr+0)) << 16 |
--				(u32)(*(MacAddr+1)) << 24 |
-+			TargetContent = (u32)(*(MacAddr + 0)) << 16 |
-+				(u32)(*(MacAddr + 1)) << 24 |
- 				(u32)usConfig;
- 
- 			rtl92e_writel(dev, WCAMI, TargetContent);
- 			rtl92e_writel(dev, RWCAM, TargetCommand);
- 		} else if (i == 1) {
--			TargetContent = (u32)(*(MacAddr+2)) |
--				(u32)(*(MacAddr+3)) <<  8 |
--				(u32)(*(MacAddr+4)) << 16 |
--				(u32)(*(MacAddr+5)) << 24;
-+			TargetContent = (u32)(*(MacAddr + 2)) |
-+				(u32)(*(MacAddr + 3)) <<  8 |
-+				(u32)(*(MacAddr + 4)) << 16 |
-+				(u32)(*(MacAddr + 5)) << 24;
- 			rtl92e_writel(dev, WCAMI, TargetContent);
- 			rtl92e_writel(dev, RWCAM, TargetCommand);
- 		} else {
- 			if (KeyContent != NULL) {
- 				rtl92e_writel(dev, WCAMI,
--					      (u32)(*(KeyContent+i-2)));
-+					      (u32)(*(KeyContent + i - 2)));
- 				rtl92e_writel(dev, RWCAM, TargetCommand);
- 				udelay(100);
- 			}
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_eeprom.c b/drivers/staging/rtl8192e/rtl8192e/rtl_eeprom.c
-index 59532ed2156d..db57c655c695 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_eeprom.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_eeprom.c
-@@ -79,6 +79,6 @@ u32 rtl92e_eeprom_read(struct net_device *dev, u32 addr)
- 		ret = _rtl92e_eeprom_xfer(dev, (addr & 0x3F) | (0x6 << 6), 9);
- 
- 	rtl92e_writeb(dev, EPROM_CMD,
--		      (EPROM_CMD_NORMAL<<EPROM_CMD_OPERATING_MODE_SHIFT));
-+		      (EPROM_CMD_NORMAL << EPROM_CMD_OPERATING_MODE_SHIFT));
- 	return ret;
- }
--- 
-2.34.1
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-wakeup
 
+It won't be necessary any more after 6.1-rc1 is out, though, I suppose.
