@@ -2,102 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAF55FFB76
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 19:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD715FFB7B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 19:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJOR3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 13:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S229679AbiJORae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 13:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJOR3s (ORCPT
+        with ESMTP id S229579AbiJORab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 13:29:48 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1EA1F615
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 10:29:45 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7EFDA480;
-        Sat, 15 Oct 2022 19:29:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1665854983;
-        bh=Cpxftv70YRjRtiWqBhl77lTxBNOYifeMbq6wRStaWx4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qxU89CU4XAg/DORwBL5LFLqBISS+SRsDZ0m5mesuWjGziyFqH+akGoczHGc3b8eic
-         8DTbi6mmxkxb+oiIA672IhpK4fcykeovz10g8ZCJeQEj5Ra9ozQHLLv3lBWXKd0Goi
-         hAp7Pk/49GyMhcywoN74MoNjpw/nwjrPqXdPHVE0=
-Date:   Sat, 15 Oct 2022 20:29:20 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Maxime Ripard <mripard@kernel.org>, Eric Anholt <eric@anholt.net>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
-        Emma Anholt <emma@anholt.net>, dri-devel@lists.freedesktop.org,
-        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] drm/vc4: dpi: Support RGB565 format
-Message-ID: <Y0rt8FIkRniuv0l4@pendragon.ideasonboard.com>
-References: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
- <20221013-rpi-dpi-improvements-v1-4-8a7a96949cb0@cerno.tech>
+        Sat, 15 Oct 2022 13:30:31 -0400
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EDD25599;
+        Sat, 15 Oct 2022 10:30:28 -0700 (PDT)
+Date:   Sat, 15 Oct 2022 17:30:13 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1665855025; x=1666114225;
+        bh=DkDUqYsIo4WD6IeoCvcUlhuchiJ68MTUFWYeBqoljY4=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=Sw/PwmuQCDhWwZXq8NvwyUot9fBwp5Y6usJuOMs9v147/fLo+mUb1xDf1TCPusCv2
+         ruD9+xzlnNAgyXJOE+ubRWXf5jB6ujp1ZkvC7p/y0u458hgs19v/L3q4am7/A9aZPR
+         JCbfowjoJSzw8uOZwJUuEIFZ26EWbUpffIgs1U3I=
+To:     caleb@connolly.tech
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     krzysztof.kozlowski@linaro.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
+Subject: [PATCH v7 0/2] input: introduce support for Qualcomm SPMI haptics
+Message-ID: <20221015172915.1436236-1-caleb@connolly.tech>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221013-rpi-dpi-improvements-v1-4-8a7a96949cb0@cerno.tech>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime and Chris,
+This series introduces a driver for the SPMI haptics hardware block
+found in Qualcomm PMICs. SPMI haptics support LRA (Linear Resonant
+Actuator) style haptics, as well as ERM (Eccentric Rotating Mass).
+It also supports several modes of driving the haptics, e.g. by loading
+the pattern to play into an internal buffer, or using PWM.
 
-Thank you for the patch.
+More information about the hardware can be found here:
+        https://gitlab.com/sdm845-mainline/linux/-/wikis/PMI8998-QPNP-Hapti=
+cs
 
-On Thu, Oct 13, 2022 at 11:56:48AM +0200, Maxime Ripard wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> The RGB565 format with padding over 24 bits
-> (MEDIA_BUS_FMT_RGB565_1X24_CPADHI) is supported by the vc4 DPI
-> controller as "mode 3".  This is what the Geekworm MZP280 DPI display
+This driver has been written based on downstream sources as no public
+documentation is available. It includes initial support for LRA haptics
+in buffer mode, this combination seems to be the most common and will
+enable haptics on the OnePlus 6 and 6T, PocoPhone F1, OnePlus 5 and
+several other Qualcomm devices with mainline kernel support.
 
-The code below uses DPI_FORMAT_16BIT_565_RGB_2. Is that mode 3, or
-should the commit message refer to mode 2 ?
+The driver is implemented using the ff-memless (forcefeedback) input
+framework and makes an attempt to control the strength of vibration relativ=
+e
+to the magnitude set from userspace.
 
-With this fixed,
+Changes since v6:
+ - Apply Krzysztof's dt-bindings suggestions
+ - Rename qcom,wave-play-rate-us to qcom,wave-play-duration-us and
+   add a comment explaining the name change compared to downstream.
+ - Add COMPILE_TEST to kconfig
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Changes since v5:
+ - Fix dt schema errors
+ - Fix typo (thanks Vincent)
 
-> uses, so let's add support for it in the DPI controller driver.
-> 
-> Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->  drivers/gpu/drm/vc4/vc4_dpi.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
-> index 1f8f44b7b5a5..7da3dd1db50e 100644
-> --- a/drivers/gpu/drm/vc4/vc4_dpi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_dpi.c
-> @@ -182,6 +182,10 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
->  				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_3,
->  						       DPI_FORMAT);
->  				break;
-> +			case MEDIA_BUS_FMT_RGB565_1X24_CPADHI:
-> +				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_2,
-> +						       DPI_FORMAT);
-> +				break;
->  			default:
->  				DRM_ERROR("Unknown media bus format %d\n",
->  					  bus_format);
-> 
+Changes since v4:
+ - Significant rewrite and cleanup
+ - switch to dev_err_probe()
+ - Run through clang-format
 
--- 
-Regards,
+Changes since v3:
+ - Adjust example DTS to avoid creating new warnings in dt_binding_check
+ - Address warnings from kernel test robot.
 
-Laurent Pinchart
+Changes since v2:
+ - Addressed Rob's comments on dt-bindings (I'm not sure what to do
+   about the pmic compatible?)
+ - Fixed some typos
+
+Changes since v1:
+ - Replace old QPNP naming with SPMI
+ - Address Bjorn's comments on the driver, various style and code cleanups
+ - Address Bjorn's comments on the DT bindings and DTS
+ - Pickup patches from Joel and Jami to enable haptics on the OnePlus 5
+   and Poco F1.
+
+Caleb Connolly (2):
+  dt-bindings: input: document Qualcomm PMI8998 haptics driver
+  input: add Qualcomm SPMI haptics driver
+
+ .../bindings/input/qcom,pmi8998-haptics.yaml  |  73 ++
+ drivers/input/misc/Kconfig                    |  15 +
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/qcom-pmi8998-haptics.c     | 690 ++++++++++++++++++
+ 4 files changed, 779 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/qcom,pmi8998-ha=
+ptics.yaml
+ create mode 100644 drivers/input/misc/qcom-pmi8998-haptics.c
+
+--
+2.38.0
+
+
