@@ -2,506 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C135FF915
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 09:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6775FF935
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 10:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiJOHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 03:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S229560AbiJOIvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 04:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJOHzQ (ORCPT
+        with ESMTP id S229504AbiJOIvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 03:55:16 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386B42FFEF;
-        Sat, 15 Oct 2022 00:55:09 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29F7qfbA021819;
-        Sat, 15 Oct 2022 07:54:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=CYtjmRmOStgMuc7um41oNKAty4f/KrCZ+lC9NPxubVQ=;
- b=FJLmpJGmHmV7beGC3nNWrUp5RA3oUn4Jei4EziB5qfsYp2+IKg06TgiR+S43Dv24C15b
- xRuPB8ST/VMTfWxwlZR7fzA6Kli4HES3BD0wPDm1ZVKgq/sJqqvdLzB7cEGLmxecpLix
- PJty5ASQSZwmnwlBLvSQKgFg6q2FHrlniPhVdikl8sNbfdlu5wnSrep/UQPyxjF0ysEU
- x4myDxvMSHMqbIXkUpvgc1Xk0yAxB0sq5CdaDNFXmoSwuGqY0lFJsjTMZK6UTnnQvJnW
- wwKkoC88phC8NYNCy9NaVdaaNK95LKoxul8D2lin2AGQoPoPh3HuAptRkYDRx5XBknG3 Ig== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k7m6u8h6s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 15 Oct 2022 07:54:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29F7sM6e006321
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 15 Oct 2022 07:54:22 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sat, 15 Oct 2022 00:54:16 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <vkoul@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Ratna Deepthi Kudaravalli" <quic_rkudarav@quicinc.com>
-Subject: [RESEND] dt-bindings: soundwire: Convert text file to yaml format
-Date:   Sat, 15 Oct 2022 13:24:01 +0530
-Message-ID: <1665820441-617-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O3USrCdYDNuyiWyf8nQSdtFJ7WMOEkNH
-X-Proofpoint-GUID: O3USrCdYDNuyiWyf8nQSdtFJ7WMOEkNH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-15_03,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- bulkscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- suspectscore=0 clxscore=1015 adultscore=0 impostorscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210150044
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 15 Oct 2022 04:51:42 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DF65464E;
+        Sat, 15 Oct 2022 01:51:39 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 9CB44C01F; Sat, 15 Oct 2022 10:51:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1665823898; bh=fPtKzKbWRupedizWDLTiPtPdKS0iGBNll/UA6bu7PnE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jLAHJ8eyaxbT41DMkMenvsQhq0m5JonyrOVu+2xp3ZjqCrEF8CsFabjwpSVWmKfvJ
+         D6Da3CsDmLsjrln/M7h654VBkv4sh2WNte96AlVsz80NsXp6pKWTamnTicGXXKu65y
+         oRWQVEix5wJ0N8jhBMBVSBIrCB72/gXfUV/3Rfayu3ARDRw0NvhUEcEUwIowgzTsQl
+         Rso3WlTLPyvKJEKsiTwQryhDlzcv8TGRwMxKQhsQZqVnd7uSA+tZcJPbBHFB08YI1Y
+         S9vBKxtp20ZukvJ5k8rT1HXMWKeDYOcP7gQ+PRBT1mdFgAexbc1ZNcNlGPIzUd699E
+         TE5EXG8k8oVGA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 71009C009;
+        Sat, 15 Oct 2022 10:51:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1665823896; bh=fPtKzKbWRupedizWDLTiPtPdKS0iGBNll/UA6bu7PnE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=siOWoZQO2YqbCXK0rvmThv/LcePzUU1/gCRJdvHh9ounEvcSBPrS525uTb9e5zjiO
+         x6pqZFPpt5f9jPXuBox7WUBtGyydHpc7UYoHYZlJNPzy58bT0oqHM+sPcfGjMstT9N
+         oVW5RFcAiN8lkgs304NWNz3Sq7bdDW6vMIVIvNudKyv9BPrG1aNnC9R1QB4Y+bCTLZ
+         /M5Q05XlNUwVdgnnmvKOGtMdaTu+EtVVNJDCdtPNj567FI/sf7G86K9/lupUbSEYfH
+         RzZtzgSVQPPaNQb0pZZtJsnM/hFRixLgJNp5ashXilqCRw/FRiCFuPBKZLoAYdwWbQ
+         C9fu2+UjKLLeA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 1331e84e;
+        Sat, 15 Oct 2022 08:51:29 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 1/3] perf parse-events: pass parse_state to add_tracepoint
+Date:   Sat, 15 Oct 2022 17:48:10 +0900
+Message-Id: <20221015084810.2114158-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update soundwire bindings with yaml formats.
+This is a noop refactoring: instead of passing the index argument to
+various add tracepoint functions pass the event parse state directly.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
-Signed-off-by: Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
+Next commit will add an extra parameter to parse_state that will be
+used.
+
+Link: https://lore.kernel.org/all/YsGduWiTvkM2/tHv@krava/
+Co-authored-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 ---
- .../devicetree/bindings/soundwire/qcom,sdw.txt     | 214 ---------------------
- .../devicetree/bindings/soundwire/qcom,sdw.yaml    | 185 ++++++++++++++++++
- 2 files changed, 185 insertions(+), 214 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
- create mode 100644 Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml
+This is the first half of the diff Jiri sent in the mail linked above,
+in preparation to add a 9p probe test that would only work if 9p module
+is loaded without this.
 
-diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt b/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
-deleted file mode 100644
-index c85c257..0000000
---- a/Documentation/devicetree/bindings/soundwire/qcom,sdw.txt
-+++ /dev/null
-@@ -1,214 +0,0 @@
--Qualcomm SoundWire Controller Bindings
--
--
--This binding describes the Qualcomm SoundWire Controller along with its
--board specific bus parameters.
--
--- compatible:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be "qcom,soundwire-v<MAJOR>.<MINOR>.<STEP>",
--		    Example:
--			"qcom,soundwire-v1.3.0"
--			"qcom,soundwire-v1.5.0"
--			"qcom,soundwire-v1.5.1"
--			"qcom,soundwire-v1.6.0"
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: the base address and size of SoundWire controller
--		    address space.
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the SoundWire Controller core and optional
--		    wake IRQ
--
--- interrupt-names:
--	Usage: Optional
--	Value type: boolean
--	Value type: <stringlist>
--	Definition: should be "core" for core and "wakeup" for wake interrupt.
--
--- wakeup-source:
--	Usage: Optional
--	Value type: boolean
--	Definition: should specify if SoundWire Controller is wake up capable.
--
--- clock-names:
--	Usage: required
--	Value type: <stringlist>
--	Definition: should be "iface" for SoundWire Controller interface clock
--
--- clocks:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the SoundWire Controller interface clock
--
--- #sound-dai-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 1 for digital audio interfaces on the controller.
--
--- qcom,dout-ports:
--	Usage: required
--	Value type: <u32>
--	Definition: must be count of data out ports
--
--- qcom,din-ports:
--	Usage: required
--	Value type: <u32>
--	Definition: must be count of data in ports
--
--- qcom,ports-offset1:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify payload transport window offset1 of each
--		    data port. Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-offset2:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify payload transport window offset2 of each
--		    data port. Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-sinterval-low:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should be sample interval low of each data port.
--		    Out ports followed by In ports. Used for Sample Interval
--		    calculation.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-word-length:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be size of payload channel sample.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-block-pack-mode:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be 0 or 1 to indicate the block packing mode.
--		    0 to indicate Blocks are per Channel
--		    1 to indicate Blocks are per Port.
--		    Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-block-group-count:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be in range 1 to 4 to indicate how many sample
--		    intervals are combined into a payload.
--		    Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-lane-control:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be in range 0 to 7 to identify which	data lane
--		    the data port uses.
--		    Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-hstart:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be number identifying lowerst numbered coloum in
--		    SoundWire Frame, i.e. left edge of the Transport sub-frame
--		    for each port. Values between 0 and 15 are valid.
--		    Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,ports-hstop:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be number identifying highest numbered coloum in
--		    SoundWire Frame, i.e. the right edge of the Transport
--		    sub-frame for each port. Values between 0 and 15 are valid.
--		    Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- qcom,dports-type:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: should be one of the following types
--		    0 for reduced port
--		    1 for simple ports
--		    2 for full port
--		    Out ports followed by In ports.
--		    Value of 0xFF indicates that this option is not implemented
--		    or applicable for the respective data port.
--		    More info in MIPI Alliance SoundWire 1.0 Specifications.
--
--- reset:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: Should specify the SoundWire audio CSR reset controller interface,
--		    which is required for SoundWire version 1.6.0 and above.
--
--- reset-names:
--	Usage: optional
--	Value type: <stringlist>
--	Definition: should be "swr_audio_cgcr" for SoundWire audio CSR reset
--		    controller interface.
--
--Note:
--	More Information on detail of encoding of these fields can be
--found in MIPI Alliance SoundWire 1.0 Specifications.
--
--= SoundWire devices
--Each subnode of the bus represents SoundWire device attached to it.
--The properties of these nodes are defined by the individual bindings.
--
--= EXAMPLE
--The following example represents a SoundWire controller on DB845c board
--which has controller integrated inside WCD934x codec on SDM845 SoC.
--
--soundwire: soundwire@c85 {
--	compatible = "qcom,soundwire-v1.3.0";
--	reg = <0xc85 0x20>;
--	interrupts = <20 IRQ_TYPE_EDGE_RISING>;
--	clocks = <&wcc>;
--	clock-names = "iface";
--	resets = <&lpass_audiocc LPASS_AUDIO_SWR_TX_CGCR>;
--	reset-names = "swr_audio_cgcr";
--	#sound-dai-cells = <1>;
--	qcom,dports-type = <0>;
--	qcom,dout-ports	= <6>;
--	qcom,din-ports	= <2>;
--	qcom,ports-sinterval-low = /bits/ 8  <0x07 0x1F 0x3F 0x7 0x1F 0x3F 0x0F 0x0F>;
--	qcom,ports-offset1 = /bits/ 8 <0x01 0x02 0x0C 0x6 0x12 0x0D 0x07 0x0A >;
--	qcom,ports-offset2 = /bits/ 8 <0x00 0x00 0x1F 0x00 0x00 0x1F 0x00 0x00>;
--
--	/* Left Speaker */
--	left{
--		....
--	};
--
--	/* Right Speaker */
--	right{
--		....
--	};
--};
-diff --git a/Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml b/Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml
-new file mode 100644
-index 0000000..bf8f6c1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soundwire/qcom,sdw.yaml
-@@ -0,0 +1,185 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soundwire/qcom,sdw.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SoundWire Controller
-+
-+maintainers:
-+  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-+  - Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-+
-+description:
-+  This binding describes the Qualcomm SoundWire controller along with its
-+  board specific bus parameters.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,soundwire-v1.3.0
-+      - qcom,soundwire-v1.5.0
-+      - qcom,soundwire-v1.5.1
-+      - qcom,soundwire-v1.6.0
-+
-+  reg:
-+    items:
-+      - description: the base address and size of SoundWire controller
-+                   address space.
-+
-+  interrupts:
-+    items:
-+      - description: specify the SoundWire controller core and optional
-+                   wake IRQ.
-+
-+  interrupt-names:
-+    items:
-+      - const: wakeup
-+
-+  clocks:
-+    items:
-+      - description: iface clock
-+
-+  clock-names:
-+    items:
-+      - const: iface
-+
-+  resets:
-+    items:
-+      - description: SWR_AUDIO_CGCR RESET
-+
-+  reset-names:
-+    items:
-+      - const: swr_audio_cgcr
-+
-+  '#sound-dai-cells':
-+    const: 1
-+
-+  '#address-cells':
-+    const: 2
-+
-+  '#size-cells':
-+    const: 0
-+
-+  qcom,din-ports:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: count of data in ports
-+
-+  qcom,dout-ports:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: count of data out ports
-+
-+  qcom,ports-word-length:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: size of payload channel sample.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-sinterval-low:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: sample interval low of each data port.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-offset1:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: payload transport window offset1 of each data port.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-offset2:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: payload transport window offset2 of each data port.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-lane-control:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: identify which data lane the data port uses.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-block-pack-mode:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: indicate the block packing mode.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-hstart:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: identifying lowerst numbered coloum in SoundWire frame.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-hstop:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: identifying highest numbered coloum in SoundWire frame.
-+    minItems: 5
-+    maxItems: 5
-+
-+  qcom,ports-block-group-count:
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    description: indicate how many sample intervals are combined into a payload.
-+    minItems: 5
-+    maxItems: 5
-+
-+required:
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+  - resets
-+  - reset-names
-+  - '#sound-dai-cells'
-+  - '#address-cells'
-+  - '#size-cells'
-+  - qcom,dout-ports
-+  - qcom,din-ports
-+  - qcom,ports-word-length
-+  - qcom,ports-sinterval-low
-+  - qcom,ports-offset1
-+  - qcom,ports-offset2
-+  - qcom,ports-lane-control
-+  - qcom,ports-block-pack-mode
-+  - qcom,ports-hstart
-+  - qcom,ports-block-group-count
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
-+
-+    soundwire@3210000 {
-+        compatible = "qcom,soundwire-v1.6.0";
-+        reg = <0x03210000 0x2000>;
-+
-+        interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&lpass_rx_macro>;
-+        clock-names = "iface";
-+
-+        qcom,din-ports = <0>;
-+        qcom,dout-ports = <5>;
-+
-+        resets = <&lpass_audiocc LPASS_AUDIO_SWR_RX_CGCR>;
-+        reset-names = "swr_audio_cgcr";
-+
-+        qcom,ports-word-length =        /bits/ 8 <0x01 0x07 0x04 0xff 0xff>;
-+        qcom,ports-sinterval-low =      /bits/ 8 <0x03 0x3f 0x1f 0x03 0x03>;
-+        qcom,ports-offset1 =            /bits/ 8 <0x00 0x00 0x0b 0x01 0x01>;
-+        qcom,ports-offset2 =            /bits/ 8 <0x00 0x00 0x0b 0x00 0x00>;
-+        qcom,ports-lane-control =       /bits/ 8 <0x01 0x00 0x00 0x00 0x00>;
-+        qcom,ports-block-pack-mode =    /bits/ 8 <0xff 0x00 0x01 0xff 0xff>;
-+        qcom,ports-hstart =             /bits/ 8 <0xff 0x03 0xff 0xff 0xff>;
-+        qcom,ports-hstop =              /bits/ 8 <0xff 0x06 0xff 0xff 0xff>;
-+        qcom,ports-block-group-count =  /bits/ 8 <0xff 0xff 0xff 0xff 0x00>;
-+
-+        #sound-dai-cells = <1>;
-+        #address-cells = <2>;
-+        #size-cells = <0>;
-+
-+        status = "disabled";
-+    };
+Jiri, not sure if that is the split you had in mind? but it sort of made
+sense to me, so I went with that.
+Please ask if you were thinking of something else.
+
+I also didn't change anything else here (except for a minor rebase
+conflict for patch 2), so happy to demote myself and put you as main
+author or anything you want; I don't care for commit count.
+
+
+ tools/perf/util/parse-events.c | 31 ++++++++++++++++++-------------
+ tools/perf/util/parse-events.h |  3 ++-
+ tools/perf/util/parse-events.y |  2 +-
+ 3 files changed, 21 insertions(+), 15 deletions(-)
+
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 437389dacf48..aa06be9583a2 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -472,12 +472,13 @@ static void tracepoint_error(struct parse_events_error *e, int err,
+ 	parse_events_error__handle(e, 0, strdup(str), strdup(help));
+ }
+ 
+-static int add_tracepoint(struct list_head *list, int *idx,
++static int add_tracepoint(struct parse_events_state *parse_state,
++			  struct list_head *list,
+ 			  const char *sys_name, const char *evt_name,
+ 			  struct parse_events_error *err,
+ 			  struct list_head *head_config)
+ {
+-	struct evsel *evsel = evsel__newtp_idx(sys_name, evt_name, (*idx)++);
++	struct evsel *evsel = evsel__newtp_idx(sys_name, evt_name, parse_state->idx++);
+ 
+ 	if (IS_ERR(evsel)) {
+ 		tracepoint_error(err, PTR_ERR(evsel), sys_name, evt_name);
+@@ -496,7 +497,8 @@ static int add_tracepoint(struct list_head *list, int *idx,
+ 	return 0;
+ }
+ 
+-static int add_tracepoint_multi_event(struct list_head *list, int *idx,
++static int add_tracepoint_multi_event(struct parse_events_state *parse_state,
++				      struct list_head *list,
+ 				      const char *sys_name, const char *evt_name,
+ 				      struct parse_events_error *err,
+ 				      struct list_head *head_config)
+@@ -530,7 +532,7 @@ static int add_tracepoint_multi_event(struct list_head *list, int *idx,
+ 
+ 		found++;
+ 
+-		ret = add_tracepoint(list, idx, sys_name, evt_ent->d_name,
++		ret = add_tracepoint(parse_state, list, sys_name, evt_ent->d_name,
+ 				     err, head_config);
+ 	}
+ 
+@@ -544,19 +546,21 @@ static int add_tracepoint_multi_event(struct list_head *list, int *idx,
+ 	return ret;
+ }
+ 
+-static int add_tracepoint_event(struct list_head *list, int *idx,
++static int add_tracepoint_event(struct parse_events_state *parse_state,
++				struct list_head *list,
+ 				const char *sys_name, const char *evt_name,
+ 				struct parse_events_error *err,
+ 				struct list_head *head_config)
+ {
+ 	return strpbrk(evt_name, "*?") ?
+-	       add_tracepoint_multi_event(list, idx, sys_name, evt_name,
++	       add_tracepoint_multi_event(parse_state, list, sys_name, evt_name,
+ 					  err, head_config) :
+-	       add_tracepoint(list, idx, sys_name, evt_name,
++	       add_tracepoint(parse_state, list, sys_name, evt_name,
+ 			      err, head_config);
+ }
+ 
+-static int add_tracepoint_multi_sys(struct list_head *list, int *idx,
++static int add_tracepoint_multi_sys(struct parse_events_state *parse_state,
++				    struct list_head *list,
+ 				    const char *sys_name, const char *evt_name,
+ 				    struct parse_events_error *err,
+ 				    struct list_head *head_config)
+@@ -582,7 +586,7 @@ static int add_tracepoint_multi_sys(struct list_head *list, int *idx,
+ 		if (!strglobmatch(events_ent->d_name, sys_name))
+ 			continue;
+ 
+-		ret = add_tracepoint_event(list, idx, events_ent->d_name,
++		ret = add_tracepoint_event(parse_state, list, events_ent->d_name,
+ 					   evt_name, err, head_config);
+ 	}
+ 
+@@ -619,7 +623,7 @@ static int add_bpf_event(const char *group, const char *event, int fd, struct bp
+ 	pr_debug("add bpf event %s:%s and attach bpf program %d\n",
+ 		 group, event, fd);
+ 
+-	err = parse_events_add_tracepoint(&new_evsels, &parse_state->idx, group,
++	err = parse_events_add_tracepoint(parse_state, &new_evsels, group,
+ 					  event, parse_state->error,
+ 					  param->head_config);
+ 	if (err) {
+@@ -1316,7 +1320,8 @@ static int get_config_chgs(struct perf_pmu *pmu, struct list_head *head_config,
+ 	return 0;
+ }
+ 
+-int parse_events_add_tracepoint(struct list_head *list, int *idx,
++int parse_events_add_tracepoint(struct parse_events_state *parse_state,
++				struct list_head *list,
+ 				const char *sys, const char *event,
+ 				struct parse_events_error *err,
+ 				struct list_head *head_config)
+@@ -1330,10 +1335,10 @@ int parse_events_add_tracepoint(struct list_head *list, int *idx,
+ 	}
+ 
+ 	if (strpbrk(sys, "*?"))
+-		return add_tracepoint_multi_sys(list, idx, sys, event,
++		return add_tracepoint_multi_sys(parse_state, list, sys, event,
+ 						err, head_config);
+ 	else
+-		return add_tracepoint_event(list, idx, sys, event,
++		return add_tracepoint_event(parse_state, list, sys, event,
+ 					    err, head_config);
+ }
+ 
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index 07df7bb7b042..c6606638d8cf 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -152,7 +152,8 @@ void parse_events__clear_array(struct parse_events_array *a);
+ int parse_events__modifier_event(struct list_head *list, char *str, bool add);
+ int parse_events__modifier_group(struct list_head *list, char *event_mod);
+ int parse_events_name(struct list_head *list, const char *name);
+-int parse_events_add_tracepoint(struct list_head *list, int *idx,
++int parse_events_add_tracepoint(struct parse_events_state *parse_state,
++				struct list_head *list,
+ 				const char *sys, const char *event,
+ 				struct parse_events_error *error,
+ 				struct list_head *head_config);
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index be8c51770051..83ccbf433482 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -625,7 +625,7 @@ tracepoint_name opt_event_config
+ 	if (error)
+ 		error->idx = @1.first_column;
+ 
+-	err = parse_events_add_tracepoint(list, &parse_state->idx, $1.sys, $1.event,
++	err = parse_events_add_tracepoint(parse_state, list, $1.sys, $1.event,
+ 					error, $2);
+ 
+ 	parse_events_terms__delete($2);
 -- 
-2.7.4
+2.37.3
 
