@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930045FFB5B
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 19:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5428D5FFB5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 19:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJORFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 13:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S229663AbiJORH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 13:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJORE5 (ORCPT
+        with ESMTP id S229577AbiJORH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 13:04:57 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A699D24BE4;
-        Sat, 15 Oct 2022 10:04:55 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id s30so10723095eds.1;
-        Sat, 15 Oct 2022 10:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AhI+hlPFB1VmnftZiBxf9R+xZVV23cThttepsCBJepo=;
-        b=D7RzF3t/EWVqoB7nziHldVdy/u1JR9lhj4bboxXOSosBovIY22BJCEdFgVTaSyo1c8
-         eQTsqz4lEI3XcvYXXQs/9k0CTH+A0XFJHi45rOjlC8NlUnl+N8J7KGV9YESaF2Q6NFVD
-         LKh3GQ6AHaXnFRgrUQIKSwtdCnRbFOehuyea8TwqyGfh9H+xqU5ftCAoSbGsJkJ5mJ9A
-         9wWUpglUu6zJpnfqwJFubZhCI+prpJX9Ftya55nysdS197/M5BraomZieUBjNMFBNK+z
-         1hKaolSAmUVIc730RftdNh/oeKa10j/lBnlMdJxJfs7kiy89H5Df0tg0iP9Nnaj2f1kJ
-         DbaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AhI+hlPFB1VmnftZiBxf9R+xZVV23cThttepsCBJepo=;
-        b=xjKRIQ+0TRqRozlama8D2wMlVsqcugll4VZSqASjsUbLB3+e3pSN5PaVjyBWv3MrnJ
-         +4OGV9/ic6A33WIwG04NuP+M+gLsisI9UUl9Tf0FfQVmLr4DUwonmv6KJ1M5Z+lHK3tN
-         4CuVYLXuRl9Li0TQYWm2AVgopBczuTPtWSSbUwcMft+D7mQoOqP+ERFjrA/7FJx3UMaZ
-         MUj61PKJNtnrA+eeX9as1M+lk/AHO6XBEkcwup/EktHXx0riR/2AZAWGmSTdA5pTqHfw
-         qfgZnG9vzR3cYhkbOtelB316o1d30NifhDXLHgHtKcoqFA6/WuD/e4wpGTgD5EYqVWNh
-         MTMQ==
-X-Gm-Message-State: ACrzQf1dabj6dD4KJb1TW07QzSOLMZQ2nvNSYGoKH2FWWrazJBwOHehe
-        B7kU+SfRS2vUNIOS3Dn9ODk=
-X-Google-Smtp-Source: AMsMyM6m9cRsVKns8lyjcAFDMk8qF1xJyJ8u2gOZQiJ4QjKIP4K1ErxBq8eX1lmLlp0OmKrln/cFig==
-X-Received: by 2002:aa7:de10:0:b0:458:e101:fe54 with SMTP id h16-20020aa7de10000000b00458e101fe54mr2953882edv.80.1665853494105;
-        Sat, 15 Oct 2022 10:04:54 -0700 (PDT)
-Received: from localhost.localdomain ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170906701300b0078d25e0f74bsm3362484ejj.46.2022.10.15.10.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Oct 2022 10:04:53 -0700 (PDT)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Sat, 15 Oct 2022 13:07:57 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCF04B0F8
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 10:07:56 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4B190480;
+        Sat, 15 Oct 2022 19:07:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1665853674;
+        bh=WHis60322mvb0p4MR7bCAHwRlHfbwfjXfTZFUbN4JQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D8iuPZfw69ncGxTx5nLxNY/j3Rq+Ztn4SjAKFXW/V1+Bz02gy16jc3gr9h6GFCk63
+         yiSuIqK7FCiBOb7Pcm8FI5DvMRig4lrm0g0j+STEe3OS8X6yGZJ5aS82UjB7uLoJGv
+         GRjTws/7M5HPyt8SdabcX+FKmtfTBiKC6XqCzt6Q=
+Date:   Sat, 15 Oct 2022 20:07:31 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Maxime Ripard <mripard@kernel.org>, Eric Anholt <eric@anholt.net>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Rob Herring <robh@kernel.org>,
+        Emma Anholt <emma@anholt.net>, dri-devel@lists.freedesktop.org,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] ARM: tegra: asus-tf101: fix accelerometer mount matrix
-Date:   Sat, 15 Oct 2022 20:04:25 +0300
-Message-Id: <20221015170425.83233-2-clamor95@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221015170425.83233-1-clamor95@gmail.com>
-References: <20221015170425.83233-1-clamor95@gmail.com>
+Subject: Re: [PATCH 2/7] media: uapi: add MEDIA_BUS_FMT_BGR666_1X18
+Message-ID: <Y0ro08TTmavkf0Ca@pendragon.ideasonboard.com>
+References: <20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech>
+ <20221013-rpi-dpi-improvements-v1-2-8a7a96949cb0@cerno.tech>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221013-rpi-dpi-improvements-v1-2-8a7a96949cb0@cerno.tech>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accelerometer mount matrix used in tf101 downstream is inverted.
-This new matrix was generated on actual device using calibration
-script, like on other transformers.
+Hi Maxime,
 
-Tested-by: Robert Eckelmann <longnoserob@gmail.com>
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- arch/arm/boot/dts/tegra20-asus-tf101.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thank you for the patch.
 
-diff --git a/arch/arm/boot/dts/tegra20-asus-tf101.dts b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-index 455f7e621c02..83262c790058 100644
---- a/arch/arm/boot/dts/tegra20-asus-tf101.dts
-+++ b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-@@ -591,9 +591,9 @@ accelerometer@f {
- 					vdd-supply = <&vdd_1v8_sys>;
- 					vddio-supply = <&vdd_1v8_sys>;
- 
--					mount-matrix =	 "1",  "0",  "0",
--							 "0",  "1",  "0",
--							 "0",  "0",  "1";
-+					mount-matrix =	"-1",  "0",  "0",
-+							 "0", "-1",  "0",
-+							 "0",  "0", "-1";
- 				};
- 			};
- 		};
+On Thu, Oct 13, 2022 at 11:56:46AM +0200, Maxime Ripard wrote:
+> From: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+> 
+> Add the BGR666 format MEDIA_BUS_FMT_BGR666_1X18 supported by the
+> RaspberryPi.
+> 
+> Signed-off-by: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  include/uapi/linux/media-bus-format.h | 3 ++-
+
+New formats need documentation in
+Documentation/userspace-api/media/v4l/subdev-formats.rst. Same for 
+patches 1/7 and 3/7.
+
+Apart from that, the patch looks good to me.
+
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> index b0a945eb7040..2ee0b38c0a71 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -34,7 +34,7 @@
+>  
+>  #define MEDIA_BUS_FMT_FIXED			0x0001
+>  
+> -/* RGB - next is	0x1023 */
+> +/* RGB - next is	0x1024 */
+>  #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+> @@ -46,6 +46,7 @@
+>  #define MEDIA_BUS_FMT_BGR565_2X8_LE		0x1006
+>  #define MEDIA_BUS_FMT_RGB565_2X8_BE		0x1007
+>  #define MEDIA_BUS_FMT_RGB565_2X8_LE		0x1008
+> +#define MEDIA_BUS_FMT_BGR666_1X18		0x1023
+>  #define MEDIA_BUS_FMT_RGB666_1X18		0x1009
+>  #define MEDIA_BUS_FMT_RBG888_1X24		0x100e
+>  #define MEDIA_BUS_FMT_RGB666_1X24_CPADHI	0x1015
+> 
+
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
