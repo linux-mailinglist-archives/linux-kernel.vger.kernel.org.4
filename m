@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432935FFA55
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 15:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF5D5FFA5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 15:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJONkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 09:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S229702AbiJONmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 09:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiJONko (ORCPT
+        with ESMTP id S229518AbiJONmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 09:40:44 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713364AD40
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 06:40:42 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id r19so5330984qtx.6
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 06:40:42 -0700 (PDT)
+        Sat, 15 Oct 2022 09:42:10 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C5E1AD96
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 06:42:08 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id t25so4195302qkm.2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 06:42:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zCYluIy5X4DDBnJLEPtFcsvj/4A/lreQlJGJ296FwLQ=;
-        b=N96XVvNzi2oixzSzvKU0F1f2fnWQboaK4/xph2X+sflvQnEKOPVN9hhBH09FxX1k44
-         X532hJtk/IZcrLcSxiJztfQWEAy05NqZFOC9/uDM1kjRfTz/Ma5Hg22Vqe/xauWr6JFl
-         +bHWEqybzklKw1Uz1XeDYaQ6Bv42BOAOigdzbZjJjYhsF7cJ8lxZl3rSGFkeDex+BInc
-         M8sKpp6LkxpzWfAWiYtNg0KNfk5MMEsf9Iqe/MwaAt1iR9tetQtx9D8eQzduThL2+8+Z
-         GaYhXuOAb+fr7crGn1mw5a2Uuz4qOp3Mx43rUuU6b1LoaLPbSWHiXFUjw/EYd+fpDlhD
-         aNyA==
+        bh=HhAlAARnIPGam177y6OJiyvrCLX8kzTXnnGL7iq4rIY=;
+        b=ZpjQGE/Bmcgc8bSanW1fEasPRrB2kqK6dOwBkwFu48kQK0n9dK9qYAjyftlsCJaZ6/
+         TpK0yUXT1UsjADBPBUDyOixO3WXUOdtz5ZssQeTbcWdg2vcvSM0MCIgPlNiKYwa7Vv4e
+         aPrC++qsJCuHqgd8vaIQclarraAgBR9uG7vB/NaatKlIv/9NE2H0IeOt+SOliKfyhbRj
+         Rq80IdYXWMn4IWVggon9OdUX9YTGJRSSldFurbflV8Oi83MXZeeZ/LnClwP6HTPFAOD/
+         hdfq5Nu1CFOIdw/SFDrLr8g9JWaYhi4MoK9wD0gQIoPoVViJIhx7JfsFLpZiBM4Ler6k
+         hj1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zCYluIy5X4DDBnJLEPtFcsvj/4A/lreQlJGJ296FwLQ=;
-        b=ZEt28G3lDA0VonT7X6y+Qc8TcuY+0IUzab1RP+/YM5mV8cOrpzeSX8H5pMG6TWt+0Q
-         2BFnyV0ahE/SEReLjmbz/Z2HbIri09twSjIR2VltyWoWz83MffS13zqtRL+lcCyKuO9K
-         0qe038xO+StTHUSQ0S1cfcex17Qvia9GZmj+kqjFurbCnLEqYdCucj3Bv7Rd8gTIN14/
-         7SnNX32f7REgPAMvvvp4snNvPa9S4FxWDYR13alVDpueRyR9aTkwMMMouX9E1Mo26Igv
-         hGEP0rLGXVFYfaIZYc1/3UPvQlOAP6axLKjpnwWXl26nPrBGVGNGSn/5kPcLuA+kG1nK
-         esGA==
-X-Gm-Message-State: ACrzQf3WyEXWeO/C5Kqh0uCZf74hBITVFOas/EfdXpBjXSgjLe4z20qx
-        y3v1rnVmC4HuxgrPzofddP4MQg==
-X-Google-Smtp-Source: AMsMyM4foZZfRIHFP7dnGO/reqF/Zyacduw/lGzF6XF24hZsKphPpGgxzNtaBSBTgkKWL3pgK0m5Uw==
-X-Received: by 2002:a05:622a:13cc:b0:39c:c0fb:95e8 with SMTP id p12-20020a05622a13cc00b0039cc0fb95e8mr1984495qtk.63.1665841241596;
-        Sat, 15 Oct 2022 06:40:41 -0700 (PDT)
+        bh=HhAlAARnIPGam177y6OJiyvrCLX8kzTXnnGL7iq4rIY=;
+        b=km3bEYgnFt/xJImVOzH1f6r+OkgVP4vSGRB9O6ezBfoLNagWc4DLljpbhbegIvAtft
+         O8TxAz5iU7sAltSsK+wBRUvupVgKF9qj2UEFRapc7rzKrzzf360cA6+s+tQ9bWw4WOR3
+         nL1VNwktwqhrOorek7OKzCbE7Lx/RUcNiCWHuHif8hPOEGtQZSWGqqZWl5nvXKcVAXQ3
+         GxPYTsIn7/lBYCLnIevDalUd4dHkvgmhGD2PZeDJCZSDmVPrZZXsEC6Aw+Dfo21iOcHe
+         JvfVe8aqQfb8piJOpCu2pl4/tzPY+jkd76gPWjQXZVL2Cb3i3hF+vUsxEkWuLSH66CZ4
+         dxQA==
+X-Gm-Message-State: ACrzQf36B/kJffOMxDS/Dfw6TF1cf7/5LoQQrCZMkGLia3GL/DxG5sMD
+        xHhMfwfzQJ4vkzEuh+WJa46DZpaQ209s1Q==
+X-Google-Smtp-Source: AMsMyM4OlsWoO2000zSa+l8h9YfqFaHroP6BZ5Dm86x0WH+MZjXhXd8zW5Py9llNqIXGjfAjif3BWA==
+X-Received: by 2002:a05:620a:4155:b0:6ce:3e56:c1e5 with SMTP id k21-20020a05620a415500b006ce3e56c1e5mr1865011qko.350.1665841328143;
+        Sat, 15 Oct 2022 06:42:08 -0700 (PDT)
 Received: from ?IPV6:2601:42:0:3450:161:5720:79e9:9739? ([2601:42:0:3450:161:5720:79e9:9739])
-        by smtp.gmail.com with ESMTPSA id b84-20020ae9eb57000000b006eea4b5abcesm4681943qkg.89.2022.10.15.06.40.39
+        by smtp.gmail.com with ESMTPSA id g3-20020a05620a40c300b006eed14045f4sm3299177qko.48.2022.10.15.06.42.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Oct 2022 06:40:40 -0700 (PDT)
-Message-ID: <498ea0a0-24c2-c9c0-3a5d-150ba32b3c4c@linaro.org>
-Date:   Sat, 15 Oct 2022 09:40:39 -0400
+        Sat, 15 Oct 2022 06:42:07 -0700 (PDT)
+Message-ID: <15b50b09-ba8c-c93c-a5f8-7b0d4d12f223@linaro.org>
+Date:   Sat, 15 Oct 2022 09:42:06 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.2
-Subject: Re: [PATCH v2 2/2] pinctrl: qcom: Add QDU1000/QRU1000 pinctrl driver
+Subject: Re: [PATCH v2 2/2] dmaengine: qcom: gpi: Add compatible for QDU1000
+ and QRU1000
 Content-Language: en-US
 To:     Melody Olvera <quic_molvera@quicinc.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+Cc:     linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221014221025.7372-1-quic_molvera@quicinc.com>
- <20221014221025.7372-3-quic_molvera@quicinc.com>
+References: <20221014221102.7445-1-quic_molvera@quicinc.com>
+ <20221014221102.7445-3-quic_molvera@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014221025.7372-3-quic_molvera@quicinc.com>
+In-Reply-To: <20221014221102.7445-3-quic_molvera@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,65 +82,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 18:10, Melody Olvera wrote:
-> Add pin control driver for the TLMM block found in the QDU1000
-> and QRU1000 SoC.
+On 14/10/2022 18:11, Melody Olvera wrote:
+> Add compatible fields for the Qualcomm QDU1000 and QRU1000 SoCs.
 > 
 > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
->  drivers/pinctrl/qcom/Kconfig           |    9 +
->  drivers/pinctrl/qcom/Makefile          |    1 +
->  drivers/pinctrl/qcom/pinctrl-qdu1000.c | 1274 ++++++++++++++++++++++++
->  3 files changed, 1284 insertions(+)
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-qdu1000.c
+>  drivers/dma/qcom/gpi.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-> index 9dc2d803a586..4ab857dc2847 100644
-> --- a/drivers/pinctrl/qcom/Kconfig
-> +++ b/drivers/pinctrl/qcom/Kconfig
-> @@ -248,6 +248,15 @@ config PINCTRL_QCOM_SSBI_PMIC
->  	 which are using SSBI for communication with SoC. Example PMIC's
->  	 devices are pm8058 and pm8921.
+> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
+> index cc938a31dc2d..02438735e92b 100644
+> --- a/drivers/dma/qcom/gpi.c
+> +++ b/drivers/dma/qcom/gpi.c
+> @@ -2286,6 +2286,8 @@ static int gpi_probe(struct platform_device *pdev)
+>  }
 >  
-> +config PINCTRL_QDU1000
-> +	tristate "Qualcomm Tehcnologies Inc QDU1000/QRU1000 pin controller driver"
-> +	depends on GPIOLIB && OF
+>  static const struct of_device_id gpi_of_match[] = {
+> +	{ .compatible = "qcom,qdu1000-gpi-dma", .data = (void *)0x10000 },
+> +	{ .compatible = "qcom,qru1000-gpi-dma", .data = (void *)0x10000 },
 
-depends on ARM64 || COMPILE_TEST
+The feedback was: drop entire patch.
 
-> +	depends on PINCTRL_MSM
-> +	help
-> +	  This is the pinctrl, pinmux, pinconf, and gpiolib driver for the
-> +	  Qualcomm Technologies Inc TLMM block found on the Qualcomm
-> +	  Technologies Inc QDU1000 and QRU1000 platforms.
-> +
-
-(...)
-
-> +	PINCTRL_PIN(138, "GPIO_138"),
-> +	PINCTRL_PIN(139, "GPIO_139"),
-> +	PINCTRL_PIN(140, "GPIO_140"),
-> +	PINCTRL_PIN(141, "GPIO_141"),
-> +	PINCTRL_PIN(142, "GPIO_142"),
-> +	PINCTRL_PIN(143, "GPIO_143"),
-> +	PINCTRL_PIN(144, "GPIO_144"),
-> +	PINCTRL_PIN(145, "GPIO_145"),
-> +	PINCTRL_PIN(146, "GPIO_146"),
-> +	PINCTRL_PIN(147, "GPIO_147"),
-> +	PINCTRL_PIN(148, "GPIO_148"),
-> +	PINCTRL_PIN(149, "GPIO_149"),
-> +	PINCTRL_PIN(150, "GPIO_150"),
-
-Your bindings said you have GPIOs 0-149, not 0-150.
-
-> +	PINCTRL_PIN(151, "SDC1_RCLK"),
-> +	PINCTRL_PIN(152, "SDC1_CLK"),
-> +	PINCTRL_PIN(153, "SDC1_CMD"),
-> +	PINCTRL_PIN(154, "SDC1_DATA"),
-
-This also does not match bindings.
-
-
+There is really no need for this pattern to keep growing.
 
 Best regards,
 Krzysztof
