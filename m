@@ -2,80 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CED5FFA12
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 14:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FFE5FFA1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 15:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiJOM57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 08:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S229774AbiJONEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 09:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJOM5y (ORCPT
+        with ESMTP id S229766AbiJONEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 08:57:54 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE103F1F4
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 05:57:52 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id e129so6600263pgc.9
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 05:57:52 -0700 (PDT)
+        Sat, 15 Oct 2022 09:04:44 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C3413D64
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 06:04:42 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id l14-20020a05600c1d0e00b003c6ecc94285so1393454wms.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 06:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:in-reply-to:references:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N3/h+H1MFE4DJWa6SQPVF/UUmeIpSTtWx78clITVlSs=;
-        b=LtnUc+dWYQSsI3Opi8iItvicki34Z21Q42I8uaYXxalxvQTbvbvRifUW86C5yfYb77
-         XhMOq/h0lDymBxkD+ShabJ6m1QnfpuY6kUKD9fUbkzhnh9pctPBGKT5qZ0WOP2qzZVX1
-         IRa1BsxDbiUnj1Gb2X6XDxilytI4n287R5vddCS0CahqEG5ulrPNCJbrypVg3w3p8/US
-         Qekkw/j8ZEuS6tb5fDcRC2NtXEEOjt771gVG7dBk5jEc86mditNxrEGB1dHRe+4PrBb4
-         rK3iV+yzlfziIEn6dmmJn1vGXIFGskxyAHK303cRFvpnYKE3SJXbETWoNxXdNvayMpa3
-         yukA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3YfUt++W8dDaqgtSWE1khIACcQPCyEYMQHXrvEQmhs=;
+        b=Y4wbOjgx2lEWRAFVJ3dc7xv73XQApHAV+DYnGZ3iqL/BL4RdytNcTox/0ZvbdGiC0Z
+         MTGU7zq3js0WGVaMIoB3g8iMnaYBUuz507VAFbttX8TVPaMjEwPclvCjsf4mF8fxZo94
+         J5ROzk0h+ykzWxTGS3ld6a06kDMuClfztt4hfdXpSheURLY7Pf/5UTVagqoy9AJj1iCp
+         oPRSX3KKATin472tvlIHB9qGC2sPKF/OgAICsBpXZilaqZAzbzZGmLfqdQVG1hTGdsXk
+         LaRGWd+4I1EZI4H15ZVj0UJhBuBKgpeU9k8L5YrSObzI6UaqolYZKIuzWtlEsreeHc1J
+         29cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:in-reply-to:references:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=N3/h+H1MFE4DJWa6SQPVF/UUmeIpSTtWx78clITVlSs=;
-        b=Tjq3GXiMQYEgzemHhu7USeXM1su5cxc7JPeCMB2GT6cgnKD66O3K8CDJ40HFnPTfpO
-         JWQ6e8oTxat091cXER+YIpY1mk1cbXs0O3zjffluxCSwTI4Rtf/rnUlopm5JeMln208Q
-         Qp7j+4mmGYiBhYh5hp9etn6crXO+JiuMgewAprFnkcHhf4nG8+PFvYo2SOKi2Lu7vz0o
-         fGDsO4W4hO6dhrCiUsnit/82Qu/a9UoWPGGdCj2+TUXe3aWXxEkAZ5QD5YAicqa4Gk6q
-         VTPnJmQZKEW34xrwLWE/ALS3LHp6adbBprrETnXjYiRvEvPHRgz10RZ1ZETKouBBAKiX
-         BwZw==
-X-Gm-Message-State: ACrzQf3WjZE1edyaE/AhCAHBKL1MdPzPEPHhD8rxW1En44zJwxUcy5LH
-        iM88weFjNENxAOSE4GR0g+unEUPpGq8l6Go/kwWJPg==
-X-Google-Smtp-Source: AMsMyM4Jrwmtqk3BdWxj8QVpKhXP88Fbe535tPjA+ApCcC6PNhRIxEwGrr08nTsVInEiMhkuNo8o+B0sUdLiaR4axyE=
-X-Received: by 2002:a63:a06:0:b0:458:2853:45e4 with SMTP id
- 6-20020a630a06000000b00458285345e4mr2496376pgk.20.1665838671587; Sat, 15 Oct
- 2022 05:57:51 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sat, 15 Oct 2022 05:57:50 -0700
-Mime-Version: 1.0
+        bh=M3YfUt++W8dDaqgtSWE1khIACcQPCyEYMQHXrvEQmhs=;
+        b=er4SA41A3DwHSkeBY6jA6ptufnY+8SFVtPbOKAcr4Az5O0o+whu/tl0dlfonFKEw2C
+         ShgbLAzRd7V9JAHxVVEfb9IB4sv9FLZiTRUi5bcnWpkvY7mkyAT4zURGQ7hJno9PP8Cu
+         Zn8TXkoV4Ci0s8Y8aZZrma0r4K4j7DeD2vJJYDNMll+fvt9k2i+sgm1PQaCXbJfdYNvs
+         LjDm9SONwaa8ZA9EsTvJwZj9R5Hz27JFe16vDjgpn/CJrJcUJAj0Z5abZZUG/fYOAQZO
+         hiTo2P3FHvLjSMR9mTPrgXkWt4mdJcLVvs6mLk6W8NwSTin2uCBdp3sssLKZkoi6AbOs
+         yZXw==
+X-Gm-Message-State: ACrzQf3aNPLm6lhHMGVQ8g9jGlm4kX0ysUzWGnd21M2knbBmtoCD0cWi
+        0zdp01aZ8UfJRiUbI+AqIJ0Tng==
+X-Google-Smtp-Source: AMsMyM7VtjssO0g1B+G+QEidrcorpyk907nPgfpyKAdNojVkFviM9ToQjtlr9UnD1i8OK8as7HkLMQ==
+X-Received: by 2002:a05:600c:21c5:b0:3c6:ec59:5180 with SMTP id x5-20020a05600c21c500b003c6ec595180mr3717470wmj.130.1665839080533;
+        Sat, 15 Oct 2022 06:04:40 -0700 (PDT)
+Received: from radium.lan ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id r12-20020adff10c000000b00225239d9265sm4151282wro.74.2022.10.15.06.04.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Oct 2022 06:04:40 -0700 (PDT)
 From:   Fabien Parent <fabien.parent@linaro.org>
-X-Mailer: aerc 0.12.0
-References: <20221001171027.2101923-1-fabien.parent@linaro.org>
- <20221010055530.2mf6lq4mn6zfdkzt@vireshk-i7> <20221010060225.bglyfnr274ivu23i@vireshk-i7>
-In-Reply-To: <20221010060225.bglyfnr274ivu23i@vireshk-i7>
-Date:   Sat, 15 Oct 2022 05:57:50 -0700
-Message-ID: <CAPFo5V+5Surbn3jjybTKAVJHhV_5M88Gg2W0-2amwoVKTpie6g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] cpufreq: qcom: fix memory leak in error path
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     ilia.lin@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, Fabien Parent <fabien.parent@linaro.org>
+Subject: [PATCH v2 1/3] cpufreq: qcom: fix memory leak in error path
+Date:   Sat, 15 Oct 2022 15:04:22 +0200
+Message-Id: <20221015130424.1923706-1-fabien.parent@linaro.org>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viresh,
+If for some reason the speedbin length is incorrect, then there is a
+memory leak in the error path because we never free the speedbin buffer.
+This commit fixes the error path to always free the speedbin buffer.
 
-> > Applied. Thanks.
->
-> Btw, it will be good to have a Fixes or Cc:Stable for this patch too.
-> I can directly add the lines myself, just let me know what you want.
+Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
+---
 
-I will send the patch with the "Fixes" tag in v2.
+v2: Added missing "Fixes" tag
+
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 863548f59c3e..3bd38acde4b9 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -213,6 +213,7 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 	int speed = 0, pvs = 0, pvs_ver = 0;
+ 	u8 *speedbin;
+ 	size_t len;
++	int ret = 0;
+ 
+ 	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+ 
+@@ -230,7 +231,8 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 		break;
+ 	default:
+ 		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto len_error;
+ 	}
+ 
+ 	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
+@@ -238,8 +240,9 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 
+ 	drv->versions = (1 << speed);
+ 
++len_error:
+ 	kfree(speedbin);
+-	return 0;
++	return ret;
+ }
+ 
+ static const struct qcom_cpufreq_match_data match_data_kryo = {
+-- 
+2.37.2
+
