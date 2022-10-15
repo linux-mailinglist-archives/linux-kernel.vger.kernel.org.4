@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58BE5FF868
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A105FF86A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiJOEQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 00:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S229766AbiJOEQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 00:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJOEQb (ORCPT
+        with ESMTP id S229594AbiJOEQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 00:16:31 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269D769F4A
+        Sat, 15 Oct 2022 00:16:32 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7716A497
         for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:16:29 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso9611202pja.5
+Received: by mail-pl1-x62f.google.com with SMTP id d24so6430807pls.4
         for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PmdVXdQ9FGhVw1kjKsoHhC7P0YHFdJCMDiY4TmAlh6A=;
-        b=XI/pFEb4jatZIH49JKKMBeUqEms7Y+mCoAPbLwk574MiyOV08iPJhaqM39D3WDM1PD
-         IwiSkE1jO/+TG90CP6pX4wE3bO6UdOwvSh53l3A8g6RkCGmuPmoaBcI6KZQmbB6gve3q
-         cCBjj1xyd657rO8okG35stDJZ97RlzBFtfJIM=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Zhd+IrU4jdtHIjl5cwKXHkAtq/ao6g5qBaiCZACrNE=;
+        b=eKzl19ovq5OG+t8XnvGfWR1OvcArXyvG9mkw0CKMUwYYVjX691mO+wrpOo+zkwmmTR
+         Jj8vKsc46HvtvWOQyzHPRc3V68Z6fjecVH0KshVGn3l8ArzRAovZJDBl4zHu8GY4jtQ8
+         A4uLljfGvnTtw1ZJT1XKaP8JOvK7U8GggE9eU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PmdVXdQ9FGhVw1kjKsoHhC7P0YHFdJCMDiY4TmAlh6A=;
-        b=CBPbQQIxTvCJijQZFrwH0Qmu0IkUhSwCI7L3BtTAUUfeX/0kLhXFuHBPJd3cDRh9/x
-         EWXPJKzKKRV9c3PGcvb3TU/VgW/EnDd27aODB6xKfT35CHPowZu4XOaSbEdTL+JhRXIi
-         cFjfhQWY6V4d8hOwFw14rjh5ESb7sI94oJKFg6cO6eeMI/V+LuOt9n+toioUPs+6bbqh
-         dlVMt5e8TLSLzKRoKK0Hdu2yXkD0/tmTwoR+YtIywTeY1jgFmVFxlN0yYh0RQb5Yvksd
-         uEmR7io52n449f67L8f5V+/u+hdAtlBxNg73506nUtxkWn+DlrWyfEmTJ1xkGQPiSgXT
-         eCVg==
-X-Gm-Message-State: ACrzQf2eAs0tkMT7U+PUJ8ndraIVc7cdpC0j/UKCRWAKY+EvWiEUw4pZ
-        fzKU2iST9sRko5hZ/lanT4zP8g==
-X-Google-Smtp-Source: AMsMyM7OHlmWqyNuxNgycJNo30GYd1h5NGc4BpXGoGHW1U5AUjFwXyXwLGzudnU9CE3hvmHr7LZl8g==
-X-Received: by 2002:a17:902:724a:b0:177:fd96:37bf with SMTP id c10-20020a170902724a00b00177fd9637bfmr948978pll.25.1665807388574;
-        Fri, 14 Oct 2022 21:16:28 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4Zhd+IrU4jdtHIjl5cwKXHkAtq/ao6g5qBaiCZACrNE=;
+        b=zupawbWxKVwCsyK75z4nMIeaZkPQsC5JBMVufSJXfTrEYg32cN8iTqfHplw/oHfD/h
+         KveQITlWkNDtGBgfKe4wTTxh87zGNqW82g6MW17uBFiKysN+NrJRNV7QBF9Vd9go3W3O
+         bxmzI7Cv/OVlDxKVitV0bYziCe+3dP0pIOPu68Kgsu7uTtGUoLzMafW3uxQT86apexTt
+         GsxgFZeOTUEu5Ef5nN8HBVhexPuBZ2ONN2Kd+n0PnSR3ybtad6vCxezuFjtHCwwjn3p2
+         7Rbm6AgyToos6xBI6S5aE6Ccg5k8Fc+SVa84/PRE+bjMdgbj49Ra5GsH6nQNsR+o27Dm
+         TH4A==
+X-Gm-Message-State: ACrzQf3i5HvFCdLECJB8klLqZO03W4qMoU3EqscLAKm1xFjKB7WQztHF
+        W8PJ5ErWM18FGkrSxhDjscEQHw==
+X-Google-Smtp-Source: AMsMyM4RA0/+xXyzB7ntwgC1whlwlVKc36cked5j5EoDP9EUDD80ayXiBpWbUeD0aFFoU+5ZEnRwOg==
+X-Received: by 2002:a17:902:8205:b0:185:33e:2a0e with SMTP id x5-20020a170902820500b00185033e2a0emr1146421pln.92.1665807389274;
+        Fri, 14 Oct 2022 21:16:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902ec8600b001755e4278a6sm2428140plg.261.2022.10.14.21.16.27
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709027fce00b00176be23bbb3sm2421738plb.172.2022.10.14.21.16.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 14 Oct 2022 21:16:27 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -52,61 +53,159 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Simon Brand <simon.brand@postadigitale.de>,
         linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 0/2] tty: Allow TIOCSTI to be disabled
-Date:   Fri, 14 Oct 2022 21:16:22 -0700
-Message-Id: <20221015041352.never.966-kees@kernel.org>
+Subject: [PATCH 1/2] tty: Move sysctl setup into "core" tty logic
+Date:   Fri, 14 Oct 2022 21:16:23 -0700
+Message-Id: <20221015041626.1467372-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221015041352.never.966-kees@kernel.org>
+References: <20221015041352.never.966-kees@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1599; h=from:subject:message-id; bh=iR5V8jk/8mmUSQkSX00bPiVEek52B/UfT7Bj63olC6k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjSjQYu6itPh6oUgVG0i3EJyhhJjxXE6vzFEb18SRx CKlxVrqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0o0GAAKCRCJcvTf3G3AJg5RD/ 0cdXj/S8Ue5HyIJrRbNQiEt5Rniaggu1EB0kSTve2toPnelz1jTA2JSj79sXy5EH9CfQRAj75QROFf R0f/HMdBq1lOf4wdjKxhGON0kW/76V5VUKlSqvigXBgv7z4KAPcl6JDMRhSys7+lyOEjRNy+VJ55K3 BzuH54NPDfForE2lff1F+AWrm5mRB6wXbCOTacTbCt+gE/Rry3EH1tX6yVd+g/LdwU6zav8vCdtovs IZ5rsZOX11WwaNuxrvA3hn9optYVADOr2KPGsrO4WdvCC9H2UMKayu4Xz2z0rhUAFnlfHPaURyTxiL fMt9WpvWTeoPH3VjHNrckBCInFwjK1aGhdTqwNTJSLSAFpaYbOOelJusQI7ax3chuJOl2dm2fToW0g 8pZPsLqDtpMtQ8I5KaMtvzm4Z6fuT/TFGp+2+UYRRBBpZsx3bEr2DyLgxlAmlw7nnAfnZ821XHBPsK urzHmJ4dtSdSKQ2LYA9YFgK9doMdjfseYLhr6lFv+2gGJHu6oRRgOm1L3+RFmY8QY/4sp4GOqOjmXR SbqT/QOfWY0kBcQZO/xBp+DszEHRkp9oRhKM/SZpaj6Ecu4kEPz6Gta5Iq30ut/BRCLYOSuJPHpZfP idNBwZSyP5BG2hdHrK/jhP/R+QssnG9rztPH4fHK/nRlSIPqLTA/zWhM10qA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3538; h=from:subject; bh=UfHWy9+3SRLAJXHVd4eYVy04EbNnVYsHoiv7mjWvzd0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjSjQY8BlG6QlYL+LP5sq2Ex0rIi4OkDlCnsJriKUh vYr86t6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0o0GAAKCRCJcvTf3G3AJnMZD/ 4ywyAmxaAppPe90zfX9UHpj/BtWNCK2vBmpwT5/+vq5qGOnOwB82XyKnY+IpBe76u6jrPBvs48s0mS jm1fuCT/vDpeOkN+HvLC/aNUGuEGf4YYr6AcbvZYi46q2pCajEQKGcOAlUtvXk7mVNjpdb7w9sb/R0 h9Yzxb4YKmMLFVeTA5oMq8BpMVyg/wXcpvCgnYudyz98y0NyMKSrS2JaMy62t4lY8VEBUFypHddd0L 4qqQfD9LSEx7fLR/o4K2zHkJFojDUriV8ZIlmTlNl4qIfU3DRbY1VBMa+Ng2sAzzn93SgPgDXgoFuH US9tSvBqxvUtscehs3TFIsmbuBtzEVA5PhET/4BkqUNfGSEzmc3AmX1bxCbYhukNoXbc/1zfnqjZzc Q+OGWNQg7ml4Zd+FvEupwNNUUISQyvi2roENwKQtf+Ipiu1Po7TE5ZLwbDK2stc98MyD+EHplAU2vk 5hvvx+WMGtlzLPA78hhfA8dmnTrKaOlnKbTQ2ONR5K86b+H52b2XJ3x05Qy2zAkHTVxyoZ6P/ZMj+x 8xtcqSOOz1BzZfXcUSWBlV0Es/LFzEe6w2fcM52x+F/6zNOrvbFL2z6pe+ZnvJ1Q/6vGnKBTI6BB47 3gPxAFKWcW/wnczv+KwY9VpIrrjlcHZPippJkcACFos8zwJUmRc/3iqzbGzw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In preparation for adding another sysctl to the tty subsystem, move the
+tty setup code into the "core" tty code, which contains tty_init() itself.
 
-This is so very long over-due. We just need to do this and put an end
-to this legacy operation.
-
-Repeating the commit log from patch 2:
-
-    TIOCSTI continues its long history of being used in privilege escalation
-    attacks[1]. Prior attempts to provide a mechanism to disable this have
-    devolved into discussions around creating full-blown LSMs to provide
-    arbitrary ioctl filtering, which is hugely over-engineered -- only
-    TIOCSTI is being used this way. 3 years ago OpenBSD entirely removed
-    TIOCSTI[2], Android has had it filtered for longer[3], and the tools that
-    had historically used TIOCSTI either do not need it, are not commonly
-    built with it, or have had its use removed.
-
-    Provide a simple CONFIG and global sysctl to disable this for the system
-    builders who have wanted this functionality for literally decades now,
-    much like the ldisc_autoload CONFIG and sysctl.
-
-    [1] https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad
-    [2] https://undeadly.org/cgi?action=article;sid=20170701132619
-    [3] https://lore.kernel.org/lkml/CAFJ0LnFGRuEEn1tCLhoki8ZyWrKfktbF+rwwN7WzyC_kBFoQVA@mail.gmail.com/
-
-Thanks,
-
--Kees
-
-Kees Cook (2):
-  tty: Move sysctl setup into "core" tty logic
-  tty: Allow TIOCSTI to be disabled
-
- drivers/tty/Kconfig     | 19 +++++++++++++++++
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
  drivers/tty/tty.h       |  2 +-
- drivers/tty/tty_io.c    | 47 +++++++++++++++++++++++++++++++++++++++--
- drivers/tty/tty_ldisc.c | 38 +--------------------------------
- 4 files changed, 66 insertions(+), 40 deletions(-)
+ drivers/tty/tty_io.c    | 34 ++++++++++++++++++++++++++++++++--
+ drivers/tty/tty_ldisc.c | 38 +-------------------------------------
+ 3 files changed, 34 insertions(+), 40 deletions(-)
 
+diff --git a/drivers/tty/tty.h b/drivers/tty/tty.h
+index f310a8274df1..4938ed3a44a5 100644
+--- a/drivers/tty/tty.h
++++ b/drivers/tty/tty.h
+@@ -93,7 +93,7 @@ void tty_ldisc_release(struct tty_struct *tty);
+ int __must_check tty_ldisc_init(struct tty_struct *tty);
+ void tty_ldisc_deinit(struct tty_struct *tty);
+ 
+-void tty_sysctl_init(void);
++int tty_ldisc_autoload;
+ 
+ /* tty_audit.c */
+ #ifdef CONFIG_AUDIT
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 82a8855981f7..b397b223eada 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -3581,13 +3581,44 @@ void console_sysfs_notify(void)
+ 		sysfs_notify(&consdev->kobj, NULL, "active");
+ }
+ 
++static struct ctl_table tty_table[] = {
++	{
++		.procname	= "ldisc_autoload",
++		.data		= &tty_ldisc_autoload,
++		.maxlen		= sizeof(tty_ldisc_autoload),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++	{ }
++};
++
++static struct ctl_table tty_dir_table[] = {
++	{
++		.procname	= "tty",
++		.mode		= 0555,
++		.child		= tty_table,
++	},
++	{ }
++};
++
++static struct ctl_table tty_root_table[] = {
++	{
++		.procname	= "dev",
++		.mode		= 0555,
++		.child		= tty_dir_table,
++	},
++	{ }
++};
++
+ /*
+  * Ok, now we can initialize the rest of the tty devices and can count
+  * on memory allocations, interrupts etc..
+  */
+ int __init tty_init(void)
+ {
+-	tty_sysctl_init();
++	register_sysctl_table(tty_root_table);
+ 	cdev_init(&tty_cdev, &tty_fops);
+ 	if (cdev_add(&tty_cdev, MKDEV(TTYAUX_MAJOR, 0), 1) ||
+ 	    register_chrdev_region(MKDEV(TTYAUX_MAJOR, 0), 1, "/dev/tty") < 0)
+@@ -3609,4 +3640,3 @@ int __init tty_init(void)
+ #endif
+ 	return 0;
+ }
+-
+diff --git a/drivers/tty/tty_ldisc.c b/drivers/tty/tty_ldisc.c
+index 776d8a62f77c..e758f44729e7 100644
+--- a/drivers/tty/tty_ldisc.c
++++ b/drivers/tty/tty_ldisc.c
+@@ -117,7 +117,7 @@ static void put_ldops(struct tty_ldisc_ops *ldops)
+ 	raw_spin_unlock_irqrestore(&tty_ldiscs_lock, flags);
+ }
+ 
+-static int tty_ldisc_autoload = IS_BUILTIN(CONFIG_LDISC_AUTOLOAD);
++int tty_ldisc_autoload = IS_BUILTIN(CONFIG_LDISC_AUTOLOAD);
+ 
+ /**
+  * tty_ldisc_get	-	take a reference to an ldisc
+@@ -817,39 +817,3 @@ void tty_ldisc_deinit(struct tty_struct *tty)
+ 		tty_ldisc_put(tty->ldisc);
+ 	tty->ldisc = NULL;
+ }
+-
+-static struct ctl_table tty_table[] = {
+-	{
+-		.procname	= "ldisc_autoload",
+-		.data		= &tty_ldisc_autoload,
+-		.maxlen		= sizeof(tty_ldisc_autoload),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-	{ }
+-};
+-
+-static struct ctl_table tty_dir_table[] = {
+-	{
+-		.procname	= "tty",
+-		.mode		= 0555,
+-		.child		= tty_table,
+-	},
+-	{ }
+-};
+-
+-static struct ctl_table tty_root_table[] = {
+-	{
+-		.procname	= "dev",
+-		.mode		= 0555,
+-		.child		= tty_dir_table,
+-	},
+-	{ }
+-};
+-
+-void tty_sysctl_init(void)
+-{
+-	register_sysctl_table(tty_root_table);
+-}
 -- 
 2.34.1
 
