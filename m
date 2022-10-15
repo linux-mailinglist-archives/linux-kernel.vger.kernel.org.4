@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8B05FF861
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58BE5FF868
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiJOEGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 00:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S229460AbiJOEQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 00:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJOEGl (ORCPT
+        with ESMTP id S229525AbiJOEQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 00:06:41 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2595E68CDD;
-        Fri, 14 Oct 2022 21:06:41 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r18so5931284pgr.12;
-        Fri, 14 Oct 2022 21:06:41 -0700 (PDT)
+        Sat, 15 Oct 2022 00:16:31 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269D769F4A
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:16:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso9611202pja.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xCEzpUM47vPP09CX43zJ3a0Bg5dTaQs9xpncOJIeo4g=;
-        b=npVKUFJIIv7iIEM3AXCg3/9lW/iTdihpZBXHmi3ZoU6bhI8ItUv49uFU0TP1Vsz7S3
-         JdZrCoHNQ1B5oKEsu3hAxowenRg/bmircRhikjpEB/EQgRcR2vh0fWWbzYm/qsDAy8Q3
-         kLSnri4+1gdBO8FjGbf0nxuNuBkEXv3VERersWYQWUfSetLwGFQspWaxnWutkWAZKwE9
-         gMLdAdIjqMJt0fB+QI1CmlV/k3WhuI2/5puU6vRMz0/egeIkXlHwIaAx0Ud2LqSwPj/v
-         hNNHzennTWHmks2xnx0DJJ0uoKeTQTpgJWyHwSqYETYKzcLgVdskEGhemLz4mTXim9Qg
-         3Z6A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PmdVXdQ9FGhVw1kjKsoHhC7P0YHFdJCMDiY4TmAlh6A=;
+        b=XI/pFEb4jatZIH49JKKMBeUqEms7Y+mCoAPbLwk574MiyOV08iPJhaqM39D3WDM1PD
+         IwiSkE1jO/+TG90CP6pX4wE3bO6UdOwvSh53l3A8g6RkCGmuPmoaBcI6KZQmbB6gve3q
+         cCBjj1xyd657rO8okG35stDJZ97RlzBFtfJIM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xCEzpUM47vPP09CX43zJ3a0Bg5dTaQs9xpncOJIeo4g=;
-        b=CokvkfxiJW4umADyyg/gwGhLXd6MEG1kbUjYSJ20N1ROweRubf3Js8fANp1LFiY+E/
-         Sk5SH7eiDzVWUakMkdzQqWfpJu6t2cRosp0tObfLKPPbGdyeKDVkL+LArBxb7GWWOsHx
-         j1O4UBhBVhHVpjKfN+oz+wX1+CvUjbnQvhp3LSmb61wJB3tsXlTY3fgG+5wA9vniKXRA
-         aawrzVJBlHwkyoq3gE0M9/hDlNqd/EpcT35g2tAcv63uITK7DVpruB33DlTblTSfV5Gh
-         NvTyuED5hbkyqurAFev8ztgvtLpDYJoy1JaF6a5ULCMfjQ9DEU/nb9jqk0WgKmS5votB
-         M4lg==
-X-Gm-Message-State: ACrzQf1/8buipH+8wjntsK7Lb/31yDj1AvQlQjSs7ekug0adDrMnYClG
-        9iA4jRriTSoTn2cam7xF/oBki6JPfMQ=
-X-Google-Smtp-Source: AMsMyM5b8AhQS/7jA+cbMioopBG/liguQofMui2bb+J5Bn/HNRQmYkrNVWdVDxDTSBktgow4niFHZw==
-X-Received: by 2002:a63:6b09:0:b0:453:b1f8:bb3b with SMTP id g9-20020a636b09000000b00453b1f8bb3bmr1121328pgc.36.1665806800570;
-        Fri, 14 Oct 2022 21:06:40 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170902a70e00b0017c7376ac9csm2406979plq.206.2022.10.14.21.06.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 21:06:40 -0700 (PDT)
-Message-ID: <48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com>
-Date:   Sat, 15 Oct 2022 13:06:36 +0900
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PmdVXdQ9FGhVw1kjKsoHhC7P0YHFdJCMDiY4TmAlh6A=;
+        b=CBPbQQIxTvCJijQZFrwH0Qmu0IkUhSwCI7L3BtTAUUfeX/0kLhXFuHBPJd3cDRh9/x
+         EWXPJKzKKRV9c3PGcvb3TU/VgW/EnDd27aODB6xKfT35CHPowZu4XOaSbEdTL+JhRXIi
+         cFjfhQWY6V4d8hOwFw14rjh5ESb7sI94oJKFg6cO6eeMI/V+LuOt9n+toioUPs+6bbqh
+         dlVMt5e8TLSLzKRoKK0Hdu2yXkD0/tmTwoR+YtIywTeY1jgFmVFxlN0yYh0RQb5Yvksd
+         uEmR7io52n449f67L8f5V+/u+hdAtlBxNg73506nUtxkWn+DlrWyfEmTJ1xkGQPiSgXT
+         eCVg==
+X-Gm-Message-State: ACrzQf2eAs0tkMT7U+PUJ8ndraIVc7cdpC0j/UKCRWAKY+EvWiEUw4pZ
+        fzKU2iST9sRko5hZ/lanT4zP8g==
+X-Google-Smtp-Source: AMsMyM7OHlmWqyNuxNgycJNo30GYd1h5NGc4BpXGoGHW1U5AUjFwXyXwLGzudnU9CE3hvmHr7LZl8g==
+X-Received: by 2002:a17:902:724a:b0:177:fd96:37bf with SMTP id c10-20020a170902724a00b00177fd9637bfmr948978pll.25.1665807388574;
+        Fri, 14 Oct 2022 21:16:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902ec8600b001755e4278a6sm2428140plg.261.2022.10.14.21.16.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 21:16:27 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Simon Brand <simon.brand@postadigitale.de>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 0/2] tty: Allow TIOCSTI to be disabled
+Date:   Fri, 14 Oct 2022 21:16:22 -0700
+Message-Id: <20221015041352.never.966-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     bilbao@vt.edu, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        miguel.ojeda.sandonis@gmail.com
-References: <20221014142454.871196-2-carlos.bilbao@amd.com>
-Subject: Re: [PATCH v2 1/2] Documentation: Start translations to Spanish
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20221014142454.871196-2-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1599; h=from:subject:message-id; bh=iR5V8jk/8mmUSQkSX00bPiVEek52B/UfT7Bj63olC6k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjSjQYu6itPh6oUgVG0i3EJyhhJjxXE6vzFEb18SRx CKlxVrqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY0o0GAAKCRCJcvTf3G3AJg5RD/ 0cdXj/S8Ue5HyIJrRbNQiEt5Rniaggu1EB0kSTve2toPnelz1jTA2JSj79sXy5EH9CfQRAj75QROFf R0f/HMdBq1lOf4wdjKxhGON0kW/76V5VUKlSqvigXBgv7z4KAPcl6JDMRhSys7+lyOEjRNy+VJ55K3 BzuH54NPDfForE2lff1F+AWrm5mRB6wXbCOTacTbCt+gE/Rry3EH1tX6yVd+g/LdwU6zav8vCdtovs IZ5rsZOX11WwaNuxrvA3hn9optYVADOr2KPGsrO4WdvCC9H2UMKayu4Xz2z0rhUAFnlfHPaURyTxiL fMt9WpvWTeoPH3VjHNrckBCInFwjK1aGhdTqwNTJSLSAFpaYbOOelJusQI7ax3chuJOl2dm2fToW0g 8pZPsLqDtpMtQ8I5KaMtvzm4Z6fuT/TFGp+2+UYRRBBpZsx3bEr2DyLgxlAmlw7nnAfnZ821XHBPsK urzHmJ4dtSdSKQ2LYA9YFgK9doMdjfseYLhr6lFv+2gGJHu6oRRgOm1L3+RFmY8QY/4sp4GOqOjmXR SbqT/QOfWY0kBcQZO/xBp+DszEHRkp9oRhKM/SZpaj6Ecu4kEPz6Gta5Iq30ut/BRCLYOSuJPHpZfP idNBwZSyP5BG2hdHrK/jhP/R+QssnG9rztPH4fHK/nRlSIPqLTA/zWhM10qA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,43 +70,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
-Minor nit on language code.
 
-On Fri, 14 Oct 2022 09:24:53 -0500, Carlos Bilbao wrote:
-> Start the process of translating kernel documentation to Spanish. Create
-> sp_SP/ and include an index and a disclaimer, following the approach of
-> prior translations. Add Carlos Bilbao as MAINTAINER of this translation
-> effort.
-IIUC, the language code for "Spanish (Spain)" should be "es-ES", as is
-listed at e.g., http://www.lingoes.net/en/translator/langcode.htm.
+This is so very long over-due. We just need to do this and put an end
+to this legacy operation.
 
-The other translations use directory names found in the table, with
-"-" replaced with "_".  It would be better to be consistent.
+Repeating the commit log from patch 2:
 
-Just my two cents.
+    TIOCSTI continues its long history of being used in privilege escalation
+    attacks[1]. Prior attempts to provide a mechanism to disable this have
+    devolved into discussions around creating full-blown LSMs to provide
+    arbitrary ioctl filtering, which is hugely over-engineered -- only
+    TIOCSTI is being used this way. 3 years ago OpenBSD entirely removed
+    TIOCSTI[2], Android has had it filtered for longer[3], and the tools that
+    had historically used TIOCSTI either do not need it, are not commonly
+    built with it, or have had its use removed.
 
-        Thanks, Akira
+    Provide a simple CONFIG and global sysctl to disable this for the system
+    builders who have wanted this functionality for literally decades now,
+    much like the ldisc_autoload CONFIG and sysctl.
 
-> 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
->  Documentation/translations/index.rst          |  1 +
->  .../translations/sp_SP/disclaimer-sp.rst      |  6 ++
->  Documentation/translations/sp_SP/index.rst    | 72 +++++++++++++++++++
->  MAINTAINERS                                   |  5 ++
->  4 files changed, 84 insertions(+)
->  create mode 100644 Documentation/translations/sp_SP/disclaimer-sp.rst
->  create mode 100644 Documentation/translations/sp_SP/index.rst
-> 
-> diff --git a/Documentation/translations/index.rst b/Documentation/translations/index.rst
-> index 1175a47d07f0..b826c34791c0 100644
-> --- a/Documentation/translations/index.rst
-> +++ b/Documentation/translations/index.rst
-> @@ -12,6 +12,7 @@ Translations
->     it_IT/index
->     ko_KR/index
->     ja_JP/index
-> +   sp_SP/index
->  
->  
+    [1] https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad
+    [2] https://undeadly.org/cgi?action=article;sid=20170701132619
+    [3] https://lore.kernel.org/lkml/CAFJ0LnFGRuEEn1tCLhoki8ZyWrKfktbF+rwwN7WzyC_kBFoQVA@mail.gmail.com/
+
+Thanks,
+
+-Kees
+
+Kees Cook (2):
+  tty: Move sysctl setup into "core" tty logic
+  tty: Allow TIOCSTI to be disabled
+
+ drivers/tty/Kconfig     | 19 +++++++++++++++++
+ drivers/tty/tty.h       |  2 +-
+ drivers/tty/tty_io.c    | 47 +++++++++++++++++++++++++++++++++++++++--
+ drivers/tty/tty_ldisc.c | 38 +--------------------------------
+ 4 files changed, 66 insertions(+), 40 deletions(-)
+
+-- 
+2.34.1
 
