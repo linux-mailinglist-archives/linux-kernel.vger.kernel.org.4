@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D235FF7DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C205FF7E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJOBed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 21:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
+        id S229608AbiJOBgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 21:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiJOBeT (ORCPT
+        with ESMTP id S229550AbiJOBgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 21:34:19 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4DE76560
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:34:08 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id fw14so6408757pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WWoZiJApWyCBKdB70ZB9Vo9hMSoVXmauhEs7d1wasQE=;
-        b=DU5MvItccSyjFFbxc7gy0hUbfcvU8j3qj+2YZhgcfolUKe8NEGXzxCIFIgEJTg2cFo
-         Rs9sUDSmeC8ZWkFAfI2zXS0/O6ui0yseW8X1JNpHQHvWXy32GcTJADggkXdMmNfVuUXA
-         51UHi4ZzzL2NkKtx9m8wXJ4AAucHssSl9Pxr8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WWoZiJApWyCBKdB70ZB9Vo9hMSoVXmauhEs7d1wasQE=;
-        b=fcagiGpCsCmz9R3viq/dGInYi4jdxGFs9eTQ389bjdF6EAhcqcfP08wJFbZ/ywH7eq
-         zb0rvOUnbwymjj4b1nvWdw29lzmnkhHRlw/ZXoC844hM1QpxvaT7Sf5f5w67Kv//Sr4h
-         E96PNTxpSNmEHhKuLDeSGqgBPE4pFv90O0Lp8+EmQR9dhmm47ek8Exh2PyBz95bxKfji
-         anYk0XJFxcD7SfkXzrVtwlOvRTNizEorCKYwA0eZNJ9ePgEI2CDdpvzpu+Lp/dnoI3fE
-         U4Lp6c+FzwmIJDRtPeTkUjKB29somp38v4kC2SqbLNk6KvOPni2zqz63Ggxh9y+RZ1QX
-         yDLw==
-X-Gm-Message-State: ACrzQf3Yg+Buif6o8H/suAysd91v6r1ULuF7VXTCjdPcADOr05ywwqka
-        ZFbUYhEor8wwMyIeSmW7JcmNBA==
-X-Google-Smtp-Source: AMsMyM60v+OB85OF8dkEL5Ks5ZQlhXou3ViEFXWWTw9dnSluXa5cG2aN519MXXpxU4VxmIHVNy8nPA==
-X-Received: by 2002:a17:90b:388e:b0:20d:4a1f:d5a2 with SMTP id mu14-20020a17090b388e00b0020d4a1fd5a2mr791136pjb.135.1665797647949;
-        Fri, 14 Oct 2022 18:34:07 -0700 (PDT)
-Received: from 90cf639d7f59 ([220.253.112.46])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b0017da2798025sm2306202plg.295.2022.10.14.18.34.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 18:34:06 -0700 (PDT)
-Date:   Sat, 15 Oct 2022 01:33:59 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 6.0 00/34] 6.0.2-rc1 review
-Message-ID: <20221015013359.GA78889@90cf639d7f59>
-References: <20221013175146.507746257@linuxfoundation.org>
+        Fri, 14 Oct 2022 21:36:33 -0400
+Received: from novek.ru (unknown [213.148.174.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400DB7E831;
+        Fri, 14 Oct 2022 18:36:28 -0700 (PDT)
+Received: from [192.168.0.18] (unknown [37.228.234.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by novek.ru (Postfix) with ESMTPSA id 95D22504EAC;
+        Sat, 15 Oct 2022 04:32:22 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 95D22504EAC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
+        t=1665797544; bh=kgterR90022MeqVawPfrmSN5YtUXZMrRRA+Z0EeYaA8=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=QbOQiVMdgL8Nzgqj9hen6WCkmVaEpc/PzWucGxW+F4ZmK25wh7DeGGjiBPR9AaO6O
+         UZOE5JYzs+GGcO+jgR1U8KtzkmqF/dfUiVkqUncH3qiCPbV/O1Wf7WzJo/VudRP/nX
+         rb0HQYRLPksDmCt/6mFCxIW4WbIEqlbqKutaG8pM=
+Message-ID: <3a0c7699-231b-9339-7195-9c7536474054@novek.ru>
+Date:   Sat, 15 Oct 2022 02:35:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221013175146.507746257@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: bridge:fragmented packets dropped by bridge
+Content-Language: en-US
+To:     Vyacheslav Salnikov <snordicstr16@gmail.com>,
+        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <CACzz7uzbSVpLu8iqBYXTULr2aUW_9FDdkEVozK+r-BiM2rMukw@mail.gmail.com>
+From:   Vadim Fedorenko <vfedorenko@novek.ru>
+In-Reply-To: <CACzz7uzbSVpLu8iqBYXTULr2aUW_9FDdkEVozK+r-BiM2rMukw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 07:52:38PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.2 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 07.10.2022 12:21, Vyacheslav Salnikov wrote:
+> Hi.
 > 
-> Responses should be made by Sat, 15 Oct 2022 17:51:33 +0000.
-> Anything received after that time might be too late.
+> I switched from kernel versions 4.9 to 5.15 and found that the MTU on
+> the interfaces in the bridge does not change.
+> For example:
+> I have the following bridge:
+> bridge      interface
+> br0          sw1
+>                 sw2
+>                 sw3
+> 
+> And I change with ifconfig MTU.
+> I see that br0 sw1..sw3 has changed MTU from 1500 -> 1982.
+> 
+> But if i send a ping through these interfaces, I get 1500(I added
+> prints for output)
+> I investigated the code and found the reason:
+> The following commit came in the new kernel:
+> https://github.com/torvalds/linux/commit/ac6627a28dbfb5d96736544a00c3938fa7ea6dfb
+> 
+> And the behavior of the MTU setting has changed:
+>>
+>> Kernel 4.9:
+>> if (net->ipv4.sysctl_ip_fwd_use_pmtu ||
+>>     ip_mtu_locked(dst) ||
+>>     !forwarding)  <--- True
+>> return dst_mtu(dst) <--- 1982
+>>
+>>
+>> / 'forwarding = true' case should always honour route mtu /
+>> mtu = dst_metric_raw(dst, RTAX_MTU);
+>> if (mtu)
+>> return mtu;
+> 
+> 
+> 
+> Kernel 5.15:
+>>
+>> if (READ_ONCE(net->ipv4.sysctl_ip_fwd_use_pmtu) ||
+>>     ip_mtu_locked(dst) ||
+>>     !forwarding) { <--- True
+>> mtu = rt->rt_pmtu;  <--- 0
+>> if (mtu && time_before(jiffies, rt->dst.expires)) <-- False
+>> goto out;
+>> }
+>>
+>> / 'forwarding = true' case should always honour route mtu /
+>> mtu = dst_metric_raw(dst, RTAX_MTU); <---- 1500
+>> if (mtu) <--- True
+>> goto out;
+> 
+> As I see from the code in the end takes mtu from br_dst_default_metrics
+>> static const u32 br_dst_default_metrics[RTAX_MAX] = {
+>> [RTAX_MTU - 1] = 1500,
+>> };
+> 
+> Why is rt_pmtu now used instead of dst_mtu?
+> Why is forwarding = False called with dst_metric_raw?
+> Maybe we should add processing when mtu = rt->rt_pmtu == 0?
+> Could this be an error?
+> 
 
-Hi Greg,
+Can you share kernel configs for both versions? Actually only one config value
+is needed - CONFIG_BRIDGE_NETFILTER.
 
-6.0.2-rc1 tested.
+It will help me investigate the issue.
 
-Run tested on:
-- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+> 
+> I found a thread discussing a similar problem. It suggested porting
+> the next patch:
+> Signed-off-by: Rundong Ge <rdong.ge@gmail.com>
+> ---
+>   include/net/ip.h | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/net/ip.h b/include/net/ip.h
+> index 29d89de..0512de3 100644
+> --- a/include/net/ip.h
+> +++ b/include/net/ip.h
+> @@ -450,6 +450,8 @@ static inline unsigned int
+> ip_dst_mtu_maybe_forward(const struct dst_entry *dst,
+>   static inline unsigned int ip_skb_dst_mtu(struct sock *sk,
+>      const struct sk_buff *skb)
+>   {
+> + if ((skb_dst(skb)->flags & DST_FAKE_RTABLE) && skb->dev)
+> + return min(skb->dev->mtu, IP_MAX_MTU);
+>    if (!sk || !sk_fullsock(sk) || ip_sk_use_pmtu(sk)) {
+>    bool forwarding = IPCB(skb)->flags & IPSKB_FORWARDED;
+> 
+> 
+> Why was this patch not accepted in the end?
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos5422
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
