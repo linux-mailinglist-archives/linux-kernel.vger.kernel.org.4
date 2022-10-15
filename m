@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA925FFAF9
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865F55FFAF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJOPZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 11:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S229737AbiJOPZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 11:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiJOPZF (ORCPT
+        with ESMTP id S229673AbiJOPY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 11:25:05 -0400
+        Sat, 15 Oct 2022 11:24:58 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC32633A11
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:24:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8BC27DD7
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:24:55 -0700 (PDT)
 Received: from ipservice-092-217-066-135.092.217.pools.vodafone-ip.de ([92.217.66.135] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1ojj1v-000722-Kn; Sat, 15 Oct 2022 17:24:51 +0200
+        id 1ojj1w-000722-DE; Sat, 15 Oct 2022 17:24:52 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 3/9] staging: r8188eu: clarify the bBusyTraffic assignment
-Date:   Sat, 15 Oct 2022 17:24:34 +0200
-Message-Id: <20221015152440.232281-4-martin@kaiser.cx>
+Subject: [PATCH 4/9] staging: r8188eu: use sa instead of Addr2
+Date:   Sat, 15 Oct 2022 17:24:35 +0200
+Message-Id: <20221015152440.232281-5-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221015152440.232281-1-martin@kaiser.cx>
 References: <20221015152440.232281-1-martin@kaiser.cx>
@@ -44,31 +44,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bBusyTraffic is set only if we're not in WIFI_AP_STATE, i.e. in the else
-branch. If we were not in WIFI_AP_STATE, we'd go into the if branch and
-return _SUCCESS before making it to the bBusyTraffic assignment.
+For management frames, Addr2 is the Source Address (SA).
 
-Move the assignment into the else branch to make this clearer.
+Use sa from the mgmt structure and remove the GetAddr2Ptr call.
+GetAddr2Ptr is a driver-specific function that we should eventually
+remove.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 5c59fc91ecae..fd2daeca7112 100644
+index fd2daeca7112..732ada6ab932 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -1515,8 +1515,9 @@ unsigned int OnDeAuth(struct adapter *padapter, struct recv_frame *precv_frame)
+@@ -1479,7 +1479,7 @@ unsigned int OnDeAuth(struct adapter *padapter, struct recv_frame *precv_frame)
+ 		struct sta_info *psta;
+ 		struct sta_priv *pstapriv = &padapter->stapriv;
  
- 		if (!ignore_received_deauth)
- 			receive_disconnect(padapter, GetAddr3Ptr(pframe), reason);
-+
-+		pmlmepriv->LinkDetectInfo.bBusyTraffic = false;
- 	}
--	pmlmepriv->LinkDetectInfo.bBusyTraffic = false;
- 	return _SUCCESS;
- }
+-		psta = rtw_get_stainfo(pstapriv, GetAddr2Ptr(pframe));
++		psta = rtw_get_stainfo(pstapriv, mgmt->sa);
+ 		if (psta) {
+ 			u8 updated = 0;
  
 -- 
 2.30.2
