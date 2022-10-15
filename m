@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34955FF85E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8B05FF861
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 06:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiJOEEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 00:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S229749AbiJOEGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 00:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiJOEEt (ORCPT
+        with ESMTP id S229726AbiJOEGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 00:04:49 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BAF26E9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:04:45 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id p4so2618507uao.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 21:04:45 -0700 (PDT)
+        Sat, 15 Oct 2022 00:06:41 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2595E68CDD;
+        Fri, 14 Oct 2022 21:06:41 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r18so5931284pgr.12;
+        Fri, 14 Oct 2022 21:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gaRuIOy5mipxC/DcG4OUxK58zUai1nT9d4WWV0cqyO8=;
-        b=IszlE+nsJk2T1FzF4PpZXEdi2LN8qHNRhvPsuS12/3ruJQ23aBGF/V8KITeyrHkY9X
-         Tzkie3tfTYo7X1JXlsKbzRpRsXTnfgha+GpWtbkIt1Ps9Lj0634OCqEBAwO+l15G732A
-         e2Zi0S6hVyUbSZP/5P68DfpgFs+pYBjjvaQmB1yG2gwU0iBE/pbNFD481RAnRmBjNseA
-         /lpY2DERASTvoFUrVEdSnAmOZHz3eEeIzgSNrE3RhD56vUzvJuflRO9hm1wNnu34jG16
-         IP74UVFKUar3t/Z9w7l1K3+dd1zZCgMVCvclxFkZe0KC5hlR6qU/mwhLR7cEtvJ3F9Pl
-         tcxA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xCEzpUM47vPP09CX43zJ3a0Bg5dTaQs9xpncOJIeo4g=;
+        b=npVKUFJIIv7iIEM3AXCg3/9lW/iTdihpZBXHmi3ZoU6bhI8ItUv49uFU0TP1Vsz7S3
+         JdZrCoHNQ1B5oKEsu3hAxowenRg/bmircRhikjpEB/EQgRcR2vh0fWWbzYm/qsDAy8Q3
+         kLSnri4+1gdBO8FjGbf0nxuNuBkEXv3VERersWYQWUfSetLwGFQspWaxnWutkWAZKwE9
+         gMLdAdIjqMJt0fB+QI1CmlV/k3WhuI2/5puU6vRMz0/egeIkXlHwIaAx0Ud2LqSwPj/v
+         hNNHzennTWHmks2xnx0DJJ0uoKeTQTpgJWyHwSqYETYKzcLgVdskEGhemLz4mTXim9Qg
+         3Z6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gaRuIOy5mipxC/DcG4OUxK58zUai1nT9d4WWV0cqyO8=;
-        b=fnJ0yxExNaXM2qdNmnWmWHKN0j/fOIcxH1l3PewLipNoR55SQZov9t9HJo9QKxa08E
-         PTQGFQBFqM/9cID3z/cr9Bxtgd4MDy/LJ+5GaNWC5YaLjgkokAdxJGNYVaid0SqzHeVj
-         YxUw2ERkf4gYwNUc9MH4dcUTk6ljou9cm+ZnAm9JtoxjYBh0ig/9+ojdD0fszSHLsKZI
-         YIgsxOFDzoMwCA0NwJx0Wld6tlcJuMJkURH63gj/oZS85/HU1E9jUDs3LtY+FBpbR74B
-         WLqeoF93jO7jo/m2TIDPZLez6YuTkdvdspIl1yDLY30/dpgYdGoxSxk179dzkK1RTXER
-         C0PA==
-X-Gm-Message-State: ACrzQf0QeOZ3rHl5XRPErMVLDILvL2BbW6oqK4tq7bE+/5lgpiK5cn62
-        jj3mNhsUziO4ZVy0JRzolwyjo++/bbZwFPSTHEmi2w==
-X-Google-Smtp-Source: AMsMyM7hRmdyeIhbI6VaevYf0uTIoRSecIosJKChDWbOj0yxPl7Gy6TyTDB/xFC68FLvzTCiqzfQ5/kJUV3egu1oUBs=
-X-Received: by 2002:ab0:628a:0:b0:3e3:651f:a07d with SMTP id
- z10-20020ab0628a000000b003e3651fa07dmr330706uao.52.1665806684727; Fri, 14 Oct
- 2022 21:04:44 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xCEzpUM47vPP09CX43zJ3a0Bg5dTaQs9xpncOJIeo4g=;
+        b=CokvkfxiJW4umADyyg/gwGhLXd6MEG1kbUjYSJ20N1ROweRubf3Js8fANp1LFiY+E/
+         Sk5SH7eiDzVWUakMkdzQqWfpJu6t2cRosp0tObfLKPPbGdyeKDVkL+LArBxb7GWWOsHx
+         j1O4UBhBVhHVpjKfN+oz+wX1+CvUjbnQvhp3LSmb61wJB3tsXlTY3fgG+5wA9vniKXRA
+         aawrzVJBlHwkyoq3gE0M9/hDlNqd/EpcT35g2tAcv63uITK7DVpruB33DlTblTSfV5Gh
+         NvTyuED5hbkyqurAFev8ztgvtLpDYJoy1JaF6a5ULCMfjQ9DEU/nb9jqk0WgKmS5votB
+         M4lg==
+X-Gm-Message-State: ACrzQf1/8buipH+8wjntsK7Lb/31yDj1AvQlQjSs7ekug0adDrMnYClG
+        9iA4jRriTSoTn2cam7xF/oBki6JPfMQ=
+X-Google-Smtp-Source: AMsMyM5b8AhQS/7jA+cbMioopBG/liguQofMui2bb+J5Bn/HNRQmYkrNVWdVDxDTSBktgow4niFHZw==
+X-Received: by 2002:a63:6b09:0:b0:453:b1f8:bb3b with SMTP id g9-20020a636b09000000b00453b1f8bb3bmr1121328pgc.36.1665806800570;
+        Fri, 14 Oct 2022 21:06:40 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id w14-20020a170902a70e00b0017c7376ac9csm2406979plq.206.2022.10.14.21.06.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 21:06:40 -0700 (PDT)
+Message-ID: <48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com>
+Date:   Sat, 15 Oct 2022 13:06:36 +0900
 MIME-Version: 1.0
-References: <20221005175149.611068-1-mark.rutland@arm.com>
-In-Reply-To: <20221005175149.611068-1-mark.rutland@arm.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 15 Oct 2022 12:04:33 +0800
-Message-ID: <CABVgOSmgkxb6U1S1Ww3dZ6M3i6asmXF-4MtEzn7O+GiA0SLPaA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: log numbers in decimal and hex
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, brendan.higgins@linux.dev,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     bilbao@vt.edu, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        miguel.ojeda.sandonis@gmail.com
+References: <20221014142454.871196-2-carlos.bilbao@amd.com>
+Subject: Re: [PATCH v2 1/2] Documentation: Start translations to Spanish
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20221014142454.871196-2-carlos.bilbao@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,78 +76,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 1:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> When KUNIT_EXPECT_EQ() or KUNIT_ASSERT_EQ() log a failure, they log the
-> two values being compared, with numerical values logged in decimal.
->
-> In some cases, decimal output is painful to consume, and hexadecimal
-> output would be more helpful. For example, this is the case for tests
-> I'm currently developing for the arm64 insn encoding/decoding code,
-> where comparing two 32-bit instruction opcodes results in output such
-> as:
->
-> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
-> |  Expected obj_insn == gen_insn, but
-> |      obj_insn == 2332164128
-> |      gen_insn == 1258422304
->
-> To make this easier to consume, this patch logs the values in both
-> decimal and hexadecimal:
->
-> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
-> |  Expected obj_insn == gen_insn, but
-> |      obj_insn == 2332164128 (0x8b020020)
-> |      gen_insn == 1258422304 (0x4b020020)
->
-> As can be seen from the example, having hexadecimal makes it
-> significantly easier for a human to spot which specific bits are
-> incorrect.
->
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
+Hi,
+Minor nit on language code.
+
+On Fri, 14 Oct 2022 09:24:53 -0500, Carlos Bilbao wrote:
+> Start the process of translating kernel documentation to Spanish. Create
+> sp_SP/ and include an index and a disclaimer, following the approach of
+> prior translations. Add Carlos Bilbao as MAINTAINER of this translation
+> effort.
+IIUC, the language code for "Spanish (Spain)" should be "es-ES", as is
+listed at e.g., http://www.lingoes.net/en/translator/langcode.htm.
+
+The other translations use directory names found in the table, with
+"-" replaced with "_".  It would be better to be consistent.
+
+Just my two cents.
+
+        Thanks, Akira
+
+> 
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
 > ---
+>  Documentation/translations/index.rst          |  1 +
+>  .../translations/sp_SP/disclaimer-sp.rst      |  6 ++
+>  Documentation/translations/sp_SP/index.rst    | 72 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 ++
+>  4 files changed, 84 insertions(+)
+>  create mode 100644 Documentation/translations/sp_SP/disclaimer-sp.rst
+>  create mode 100644 Documentation/translations/sp_SP/index.rst
+> 
+> diff --git a/Documentation/translations/index.rst b/Documentation/translations/index.rst
+> index 1175a47d07f0..b826c34791c0 100644
+> --- a/Documentation/translations/index.rst
+> +++ b/Documentation/translations/index.rst
+> @@ -12,6 +12,7 @@ Translations
+>     it_IT/index
+>     ko_KR/index
+>     ja_JP/index
+> +   sp_SP/index
+>  
+>  
 
-Thanks very much: this will definitely be useful. I tend to agree with
-Daniel that this could clutter things up a bit, but I think the other
-options (a separate ASSERT_EQ_HEX() macro, or a heuristic to remove it
-for, e.g., values <= 9) add more complexity than benefit there.
-
-So let's go with this as-is.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  lib/kunit/assert.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index d00d6d181ee8..24dec5b48722 100644
-> --- a/lib/kunit/assert.c
-> +++ b/lib/kunit/assert.c
-> @@ -127,13 +127,15 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->                           binary_assert->text->right_text);
->         if (!is_literal(stream->test, binary_assert->text->left_text,
->                         binary_assert->left_value, stream->gfp))
-> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
->                                   binary_assert->text->left_text,
-> +                                 binary_assert->left_value,
->                                   binary_assert->left_value);
->         if (!is_literal(stream->test, binary_assert->text->right_text,
->                         binary_assert->right_value, stream->gfp))
-> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
->                                   binary_assert->text->right_text,
-> +                                 binary_assert->right_value,
->                                   binary_assert->right_value);
->         kunit_assert_print_msg(message, stream);
->  }
-> --
-> 2.30.2
->
