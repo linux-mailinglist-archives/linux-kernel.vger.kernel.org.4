@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2415FFAC9
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBB15FFACD
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 17:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJOPLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 11:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
+        id S229824AbiJOPLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 11:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiJOPLi (ORCPT
+        with ESMTP id S229776AbiJOPLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 11:11:38 -0400
+        Sat, 15 Oct 2022 11:11:42 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0768422DD
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:11:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA6F44CFE
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 08:11:38 -0700 (PDT)
 Received: from ipservice-092-217-066-135.092.217.pools.vodafone-ip.de ([92.217.66.135] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1ojip2-0006sp-Fk; Sat, 15 Oct 2022 17:11:32 +0200
+        id 1ojip3-0006sp-Bf; Sat, 15 Oct 2022 17:11:33 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 02/10] staging: r8188eu: handle rtw_write8 errors in SwLedOn
-Date:   Sat, 15 Oct 2022 17:11:07 +0200
-Message-Id: <20221015151115.232095-3-martin@kaiser.cx>
+Subject: [PATCH 03/10] staging: r8188eu: fix status updates in SwLedOff
+Date:   Sat, 15 Oct 2022 17:11:08 +0200
+Message-Id: <20221015151115.232095-4-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221015151115.232095-1-martin@kaiser.cx>
 References: <20221015151115.232095-1-martin@kaiser.cx>
@@ -44,27 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the status returned by rtw_write8. Update bLedOn only if we could
-update the REG_LEDCFG2 register.
+Update bLedOn only if we could update the REG_LEDCFG2 register.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_led.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_led.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-index 5b214488571b..4f1cad890cae 100644
+index 4f1cad890cae..38433296d327 100644
 --- a/drivers/staging/r8188eu/core/rtw_led.c
 +++ b/drivers/staging/r8188eu/core/rtw_led.c
-@@ -34,7 +34,9 @@ static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
+@@ -43,10 +43,11 @@ static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
+ static void SwLedOff(struct adapter *padapter, struct led_priv *pLed)
+ {
  	if (padapter->bDriverStopped)
- 		return;
- 
--	rtw_write8(padapter, REG_LEDCFG2, BIT(5)); /*  SW control led0 on. */
-+	if (rtw_write8(padapter, REG_LEDCFG2, BIT(5)) != _SUCCESS)
+-		goto exit;
 +		return;
 +
- 	pLed->bLedOn = true;
++	if (rtw_write8(padapter, REG_LEDCFG2, BIT(5) | BIT(3)) != _SUCCESS)
++		return;
+ 
+-	rtw_write8(padapter, REG_LEDCFG2, BIT(5) | BIT(3));
+-exit:
+ 	pLed->bLedOn = false;
  }
  
 -- 
