@@ -2,238 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB305FFBD0
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 21:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFCE5FFBD4
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 21:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiJOTvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 15:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S229732AbiJOTyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 15:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiJOTvF (ORCPT
+        with ESMTP id S229683AbiJOTyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 15:51:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF67232AA1
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 12:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665863460;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3dmRoCAbvHyB4s1yUnRmBVS7aeUXJ2qzFIadydzCF9Q=;
-        b=hsk65+es2cF9qwbk8nIOfWbGcmPqIr7Blo7BEybT38iUfZ6llSPhIosoOk4/KSJt9lTII0
-        ryhGxr4n19XKqapuxnJ4tbWB5E78Nh5hGtN9qwpydo25GwHFxZqQKFyNufWy/WpnhLcxk3
-        R7SiHtaS9+VLi9fZtqdasFEF1iN9Ly4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-247-mKgJwryvPa2uFxsRr8psSQ-1; Sat, 15 Oct 2022 15:50:59 -0400
-X-MC-Unique: mKgJwryvPa2uFxsRr8psSQ-1
-Received: by mail-ed1-f70.google.com with SMTP id c9-20020a05640227c900b0045d4a88c750so1747276ede.12
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 12:50:59 -0700 (PDT)
+        Sat, 15 Oct 2022 15:54:51 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069D31ADA1;
+        Sat, 15 Oct 2022 12:54:49 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id k2so17100056ejr.2;
+        Sat, 15 Oct 2022 12:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=era+bHkgnU20D91HzKyZ/L95IhZJ+qsSoSw3gLGE9R4=;
+        b=drCl9hD7YVkMd6M51Ol46DL6F61BeXZ4v8L9yfn20swj04ygSwozu0raQsP+nMv93F
+         xzZ5lcBLjI+Vk0UtH24ocVfTQc0dOwh/sEc+MR9hfK0EItfY2hBAyDlQ2oODdK2Pfg7U
+         wN2r1zEGTcrNQtSGBhOD+ClMEC/pJbP7JIH6c+qG03nb5At8FCH/EJTpn+yYfeZPP7M+
+         F6ziCkBoISnH89fJFC09sJ858ZgPDVhc6KLGXQV1tgjuidKd9fQQ4JGtHf0ANhGJdR9R
+         1xj3IP7j5D1txIfKo7EBo0QBuEdADsf3KQs+uP2AEgPgFAQBv96xWoB6I98xF5Rpi5Ky
+         CeAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3dmRoCAbvHyB4s1yUnRmBVS7aeUXJ2qzFIadydzCF9Q=;
-        b=OIuNyGGeKAbY4vFZALt/7mXebUgArqbiJcSTiP/gpHxpzleyMxcQly+h71r1l4mfcf
-         OUEVnCBLc2ftDKdqLapALvUkXC/isXZp2A52x4ljqHqHrKZnZW/jfSif/F56Na1ZScx7
-         IkV2+Fm3x/TM5kTiAX8I6i7XK+uYoi31ZVeLOR8mn+tXpBZ316WvsP+bTx/0B1ZZTMRP
-         ZSI61Kz+9MwH/ZPwlaAUdbN3px/12rK1xX0G2Oc8fqBcbI6FF3KZbGLzWI+Yl6zKqhYv
-         wcP05/8gfCFD4SeqL/MGY+ywq3ljEJYAsAiMPiey2yLgpQUhozHHrZ/cwfgrUj6vQwPM
-         wMlw==
-X-Gm-Message-State: ACrzQf3ll/2jnKeJvcGBlai42AjlBw/MPDhzcGm3C+CRNxrGjeCTVEPV
-        /aBO7p5/rZNq0IOiMdK2pPrdDI1vL+EefODocn1GlXY+f7n3/5RPBtJe6OrfkUocqy5gtswwWi8
-        L3975OQASAOmM8yMKyNXs/7TR
-X-Received: by 2002:a17:907:a073:b0:78d:51c4:5b8c with SMTP id ia19-20020a170907a07300b0078d51c45b8cmr2977986ejc.355.1665863458191;
-        Sat, 15 Oct 2022 12:50:58 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4zlYvw9Wjs/reSHlqd3kKSBJ/ieaWY3Yf6XVCWg5t5vNB1U7SZKx76+1tHWkWJzFWg+DDkuQ==
-X-Received: by 2002:a17:907:a073:b0:78d:51c4:5b8c with SMTP id ia19-20020a170907a07300b0078d51c45b8cmr2977972ejc.355.1665863457880;
-        Sat, 15 Oct 2022 12:50:57 -0700 (PDT)
-Received: from redhat.com ([2.54.171.110])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090679c300b0077909095acasm3564039ejo.143.2022.10.15.12.50.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Oct 2022 12:50:57 -0700 (PDT)
-Date:   Sat, 15 Oct 2022 15:50:53 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     syzbot <syzbot+4d0c5794bff07852726c@syzkaller.appspotmail.com>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [syzbot] net boot error: WARNING in cpumask_next_wrap
-Message-ID: <20221015154817-mutt-send-email-mst@kernel.org>
-References: <000000000000f4b06105eb17a6c8@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=era+bHkgnU20D91HzKyZ/L95IhZJ+qsSoSw3gLGE9R4=;
+        b=tVGabshBA2wRNUMuOTPbsL3mtD6Z3gsVaOcuD33Ci9+FRAsfraNt1O1HemBcizgmW1
+         JI3fRu7TJj1vJ6RnDzW5CgRUoVnm0UFNAmwz6/Wse1/a6dgcFeKxQEhbfY0qYvoKW9W8
+         Mv+AhXCggd40Rq2mRSZpzVtRNCDBDdVrdnjn8lUuW6HCYnXAd4/sjHXdk8PtAaST04+i
+         fszSdl1mzX/16j+CCScFohqC0qvi8ejsqerwvI1EeCPyijEBnelzkNPAqPKfS7359zQt
+         /oXnDh9W3g+izRf/vnmRzL/S/IFszmleUT6i0vKPYVyiLcZ8CiGpIdapiDZuqCPA8Qvz
+         RsUA==
+X-Gm-Message-State: ACrzQf3GErpseqv6D9dh2i13tKM9aoaEcT50uggpATWoStEuNwE5h+ah
+        aVlBYy13fpY0uM6RzXI+XPJ19uTIDbw8qcWJayI=
+X-Google-Smtp-Source: AMsMyM5OfF/s5QPiqq4B01Lz9hx1BoMDniQEyTmUkDWcS3k9DETJmigpEXIA+cKR/gNBTrCW+hVE33RhybuQJDaVMPA=
+X-Received: by 2002:a17:907:75f5:b0:78d:fc53:7d96 with SMTP id
+ jz21-20020a17090775f500b0078dfc537d96mr3053049ejc.718.1665863687321; Sat, 15
+ Oct 2022 12:54:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000f4b06105eb17a6c8@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com> <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com> <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+ <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+ <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com> <CAHQ1cqGSXoUTopwvrQtLww5M0Tf=6F505ziLn+wGHhW_8-JhFQ@mail.gmail.com>
+ <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com> <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
+ <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com>
+In-Reply-To: <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Sat, 15 Oct 2022 12:54:35 -0700
+Message-ID: <CAHQ1cqFqKv+J1=Qg5_sDUeKQ=64aSiGJq0pPH+OqEieZDM1Mfg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 12:21:41PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    a1b6b102df03 Merge branch 'phylink_set_mac_pm'
-> git tree:       net
-> console output: https://syzkaller.appspot.com/x/log.txt?x=179af0c2880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=85495c44a2c25446
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4d0c5794bff07852726c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/d67c9cef7c77/disk-a1b6b102.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/708d1f638584/vmlinux-a1b6b102.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4d0c5794bff07852726c@syzkaller.appspotmail.com
-> 
-> ACPI: button: Sleep Button [SLPF]
-> ACPI: \_SB_.LNKC: Enabled at IRQ 11
-> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKD: Enabled at IRQ 10
-> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKB: Enabled at IRQ 10
-> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-> N_HDLC line discipline registered with maxframe=4096
-> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-> Non-volatile memory driver v1.3
-> Linux agpgart interface v0.103
-> ACPI: bus type drm_connector registered
-> [drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-> [drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-> Console: switching to colour frame buffer device 128x48
-> platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-> usbcore: registered new interface driver udl
-> brd: module loaded
-> loop: module loaded
-> zram: Added device: zram0
-> null_blk: disk nullb0 created
-> null_blk: module loaded
-> Guest personality initialized and is inactive
-> VMCI host device registered (name=vmci, major=10, minor=119)
-> Initialized host personality
-> usbcore: registered new interface driver rtsx_usb
-> usbcore: registered new interface driver viperboard
-> usbcore: registered new interface driver dln2
-> usbcore: registered new interface driver pn533_usb
-> nfcsim 0.2 initialized
-> usbcore: registered new interface driver port100
-> usbcore: registered new interface driver nfcmrvl
-> Loading iSCSI transport class v2.0-870.
-> scsi host0: Virtio SCSI HBA
-> st: Version 20160209, fixed bufsize 32768, s/g segs 256
-> Rounding down aligned max_sectors from 4294967295 to 4294967288
-> db_root: cannot open: /etc/target
-> slram: not enough parameters.
-> ftl_cs: FTL header not found.
-> wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-> wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-> MACsec IEEE 802.1AE
-> tun: Universal TUN/TAP device driver, 1.6
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
-> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-11847-ga1b6b102df03 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-> RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
-> RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
-> RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
-> Code: df e8 8b 4a 3d f8 39 eb 77 64 e8 32 4e 3d f8 41 8d 6c 24 01 89 de 89 ef e8 74 4a 3d f8 39 dd 0f 82 54 ff ff ff e8 17 4e 3d f8 <0f> 0b e9 48 ff ff ff e8 0b 4e 3d f8 48 c7 c2 00 02 e2 8d 48 b8 00
-> RSP: 0000:ffffc90000067920 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> RDX: ffff88813fe50000 RSI: ffffffff893f1c59 RDI: 0000000000000004
-> RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
-> R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
-> R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff8de20010
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2303
->  init_vqs drivers/net/virtio_net.c:3581 [inline]
->  init_vqs drivers/net/virtio_net.c:3567 [inline]
->  virtnet_probe+0x12ae/0x31e0 drivers/net/virtio_net.c:3884
->  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
->  call_driver_probe drivers/base/dd.c:560 [inline]
->  really_probe+0x249/0xb90 drivers/base/dd.c:639
->  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
->  __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
->  bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
->  bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
->  driver_register+0x220/0x3a0 drivers/base/driver.c:246
->  virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
->  do_one_initcall+0x13d/0x780 init/main.c:1303
->  do_initcall_level init/main.c:1376 [inline]
->  do_initcalls init/main.c:1392 [inline]
->  do_basic_setup init/main.c:1411 [inline]
->  kernel_init_freeable+0x6ff/0x788 init/main.c:1631
->  kernel_init+0x1a/0x1d0 init/main.c:1519
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
+On Thu, Oct 13, 2022 at 12:35 PM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> <SNIP>
+> > My end goal here is to find a way to test vanilla v6.0 with the two
+> > patches reverted on your end. I thought that during my testing I saw
+> > tusb1210 print those timeout messages during its probe and that
+> > disabling the driver worked to break the loop, but I went back to
+> > double check and it doesn't work so scratch that idea. Configuring
+> > extcon as a built-in breaks host functionality with or without patches
+> > on my end, so I'm not sure it could be a path.
+> >
+> > I won't have time to try things with
+> > 0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch until
+> > the weekend, meanwhile can you give this diff a try with vanilla (no
+> > reverts) v6.0:
+> >
 
+OK, got a chance to try things with that patch. Both v6.0 and v6.0
+with my patches reverted work the same, my Kingston DataTraveller USB
+stick enumerates and works as expected.
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git net
+> > modified   drivers/phy/ti/phy-tusb1210.c
+> > @@ -127,6 +127,7 @@ static int tusb1210_set_mode(struct phy *phy, enum
+> > phy_mode mode, int submode)
+> >    u8 reg;
+> >
+> >    ret = tusb1210_ulpi_read(tusb, ULPI_OTG_CTRL, &reg);
+> > + WARN_ON(ret < 0);
+> >    if (ret < 0)
+> >    return ret;
+> >
+> > @@ -152,7 +153,10 @@ static int tusb1210_set_mode(struct phy *phy,
+> > enum phy_mode mode, int submode)
+> >    }
+> >
+> >    tusb->otg_ctrl = reg;
+> > - return tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
+> > + ret = tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
+> > + WARN_ON(ret < 0);
+> > + return ret;
+> > +
+> >   }
+> >
+> >   #ifdef CONFIG_POWER_SUPPLY
+> >
+> > ? I'm curious to see if there's masked errors on your end since dwc3
+> > driver doesn't check for those.
+> root@yuna:~# dmesg | grep -i -E 'warn|assert|error|tusb|dwc3'
+> 8250_mid: probe of 0000:00:04.0 failed with error -16
+> platform regulatory.0: Direct firmware load for regulatory.db failed
+> with error -2
+> brcmfmac mmc2:0001:1: Direct firmware load for
+> brcm/brcmfmac43340-sdio.Intel Corporation-Merrifield.bin failed with
+> error -2
+> sof-audio-pci-intel-tng 0000:00:0d.0: error: I/O region is too small.
+> sof-audio-pci-intel-tng 0000:00:0d.0: error: failed to probe DSP -19
+>
+>
+> >> This is done through configfs only when the switch is set to device mode.
+> > Sure, but can it be disabled? We are looking for unknown variables, so
+> > excluding this would be a reasonable thing to do.
+> It's not enabled until I flip the switch to device mode.
 
+OK to cut this back and forth short, I think it'd be easier to just
+ask you to run what I run. Here's vanilla v6.0 bzImage and initrd
+(built with your config + CONFIG_PHY_TUSB1210=y) I tested with
+https://drive.google.com/drive/folders/1H28AL1coPPZ2kLTYskDuDdWo-oE7DRPH?usp=sharing
+let's see how it behaves on your setup. There's also the U-Boot binary
+I use in that folder in case you want to give it a try.
 
-figure out why is syzbot triggering warnings
+Now on Merrifield dwc3_get_extcon() doesn't do anything but call
+extcon_get_extcon_dev() which doesn't touch any hardware or interact
+with other drivers, so assuming
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
- drivers/net/virtio_net.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+>
+> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init -
+> .. - dwc3_core_init_mode (no change)
+>
+> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon -
+> dwc3_core_init_mode (works)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 7106932c6f88..3c1c16b43bbd 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2295,13 +2295,20 @@ static void virtnet_set_affinity(struct virtnet_info *vi)
- 			0;
- 	cpu = cpumask_first(cpu_online_mask);
- 
-+	printk(KERN_ERR "%s +%d : %s cpu %d num %d stride %d stragglers %d\n",
-+	       __FILE__, __LINE__, __func__, cpu, num_cpu, stride, stragglers);
+still holds(did you double check that with vanilla v6.0?) the only
+difference that I can see is execution timings. It seems to me it's
+either an extra delay added by execution of  extcon_get_extcon_dev()
+(unlikely) or multiple partial probes that include dwc3_core_init()
+that change things. You can try to check the latter by adding an
+artificial probe deferral point after dwc3_core_init(). Something like
+(didn't test this):
+
+modified   drivers/usb/dwc3/core.c
+@@ -1860,6 +1860,10 @@ static int dwc3_probe(struct platform_device *pdev)
+  goto err3;
+
+  ret = dwc3_core_init(dwc);
++ static int deferral_counter = 0;
++ if (deferral_counter++ < 9) /* I counted 9 deferrals in my testing */
++ ret = -EPROBE_DEFER;
 +
- 	for (i = 0; i < vi->curr_queue_pairs; i++) {
- 		group_size = stride + (i < stragglers ? 1 : 0);
-+		printk(KERN_ERR "%s +%d : %s vq %d group_size %d",
-+		       __FILE__, __LINE__, __func__, i, group_size);
- 
- 		for (j = 0; j < group_size; j++) {
- 			cpumask_set_cpu(cpu, mask);
- 			cpu = cpumask_next_wrap(cpu, cpu_online_mask,
- 						nr_cpu_ids, false);
-+			printk(KERN_ERR "%s +%d : %s groupindex %d cpu %d",
-+			       __FILE__, __LINE__, __func__, j, group_size);
- 		}
- 		virtqueue_set_affinity(vi->rq[i].vq, mask);
- 		virtqueue_set_affinity(vi->sq[i].vq, mask);
--- 
-MST
-
+  if (ret) {
+  dev_err_probe(dev, ret, "failed to initialize core\n");
+  goto err4;
