@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A265FF997
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 12:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1CB5FF9A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 12:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJOKK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 06:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S229749AbiJOKU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 06:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJOKKS (ORCPT
+        with ESMTP id S229691AbiJOKUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 06:10:18 -0400
+        Sat, 15 Oct 2022 06:20:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E3F30F75;
-        Sat, 15 Oct 2022 03:10:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEC32B19B;
+        Sat, 15 Oct 2022 03:20:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7F0EB8074E;
-        Sat, 15 Oct 2022 10:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A87CC433D7;
-        Sat, 15 Oct 2022 10:10:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E818B808BD;
+        Sat, 15 Oct 2022 10:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3331AC43143;
+        Sat, 15 Oct 2022 10:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665828614;
-        bh=lrKxT4JiUp21pgfPdi39R2O/1sHsVyppp27pKoo4IhQ=;
+        s=k20201202; t=1665829216;
+        bh=FmXaLLKk0Lfa4F9XQZXzPNPYWe/8cexBMT8DjooMkiI=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=eIYvypOqkcPlYftoYQXflX/Q0IYln7viBajH7Oa94blkjwAywCq+ponbAClvrOgc+
-         HIDXX79rMvS4AJOWs+NYrOelaiAwF6UTjJm/2RKsAckQkXlvBWbqk3g5VRczJn4oNn
-         IufQCprMPKSI6KGYfAY/BzoC1wIxCV2nTDqlLFRTrEwuQFmSpbxkXO1rOYKb/hv8Q9
-         /mhISrq7OqKbfQK2wCAY5DnbVmYQE96FW6AIvdM8aMAO4gq1WGsvbdSjDY/7L7QaZX
-         pmsrhlIhNdp8D95kohiX90LV4Q1/WnR1y8nUeM1+QJmgetMKvmLD6Eu2W4gXydDJny
-         LZ23uWP2Pl1jA==
+        b=dXfTr42e5+/diKFXVZYnFcu7KWxwnODkXQ2lPxxT0nO2e59ukZrlLRGApbsg88iEW
+         oA+NJW8Ourzgfx/H+XbGLrVbH9kSzoxvu7usig4nlIGo7beYWHw/0zkDwFVefRIJ6d
+         jqgDD7lr/AYJxtSbmbOm9ZqsxSPOmV6IYyIsAilywFb/YnAZKXxcNHQtqTvx8m3ocm
+         0kOtcKROrWVkvFSrjWsBP2wZ8Ku2Nxexrlb3aAitU5yw5HtuYwRj5n6jKuHfrfwNf1
+         CT1f0EakGSHeQBOYXB4jtxjEfY4IJX2iC/51UX1lNEI93wlttNuS3evLKTZ6Da+teM
+         /Vfs0tSyKsSvg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 714EBE4D00C;
-        Sat, 15 Oct 2022 10:10:14 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14340E50D94;
+        Sat, 15 Oct 2022 10:20:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net/atm: fix proc_mpc_write incorrect return value
+Subject: Re: [PATCH v2] net: phy: dp83867: Extend RX strap quirk for SGMII mode
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166582861446.27777.4839698545728092807.git-patchwork-notify@kernel.org>
-Date:   Sat, 15 Oct 2022 10:10:14 +0000
-References: <20221014020540.32114-1-cppcoffee@gmail.com>
-In-Reply-To: <20221014020540.32114-1-cppcoffee@gmail.com>
-To:     Xiaobo Liu <cppcoffee@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+Message-Id: <166582921607.1299.16882732811766875807.git-patchwork-notify@kernel.org>
+Date:   Sat, 15 Oct 2022 10:20:16 +0000
+References: <20221014064735.18928-1-harini.katakam@amd.com>
+In-Reply-To: <20221014064735.18928-1-harini.katakam@amd.com>
+To:     Harini Katakam <harini.katakam@amd.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, harinikatakamlinux@gmail.com,
+        michal.simek@amd.com, radhey.shyam.pandey@amd.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,19 +64,19 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 14 Oct 2022 10:05:40 +0800 you wrote:
-> Then the input contains '\0' or '\n', proc_mpc_write has read them,
-> so the return value needs +1.
+On Fri, 14 Oct 2022 12:17:35 +0530 you wrote:
+> When RX strap in HW is not set to MODE 3 or 4, bit 7 and 8 in CF4
+> register should be set. The former is already handled in
+> dp83867_config_init; add the latter in SGMII specific initialization.
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> 
-> Signed-off-by: Xiaobo Liu <cppcoffee@gmail.com>
+> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - net/atm: fix proc_mpc_write incorrect return value
-    https://git.kernel.org/netdev/net/c/d8bde3bf7f82
+  - [v2] net: phy: dp83867: Extend RX strap quirk for SGMII mode
+    https://git.kernel.org/netdev/net/c/0c9efbd5c50c
 
 You are awesome, thank you!
 -- 
