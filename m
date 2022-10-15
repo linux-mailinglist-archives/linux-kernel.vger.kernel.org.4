@@ -2,133 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120B75FF7CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1965FF7D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJOB0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 21:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S229655AbiJOB0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 21:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJOBZ6 (ORCPT
+        with ESMTP id S229576AbiJOB0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 21:25:58 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8004C5D70F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:25:51 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mq57B6HxWz1P7Lp;
-        Sat, 15 Oct 2022 09:21:10 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 15 Oct 2022 09:25:47 +0800
-Subject: Re: [PATCH 1/3] hugetlb: fix vma lock handling during split vma and
- range unmapping
-To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221005011707.514612-1-mike.kravetz@oracle.com>
- <20221005011707.514612-2-mike.kravetz@oracle.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5154292a-4c55-28cd-0935-82441e512fc3@huawei.com>
-Date:   Sat, 15 Oct 2022 09:25:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20221005011707.514612-2-mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 14 Oct 2022 21:26:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391F110071
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:26:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 99D12CE27D0
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 01:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7CF2C433C1;
+        Sat, 15 Oct 2022 01:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665797202;
+        bh=GVMP4r2Hfa9BV2HDkorX+mxl6yljcepM4oHHjUdD28c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=DucsxmIhZg9fiS7EdA7CqieRsUfncznrtMaNJmYCGLun58+0O5vqTu3A3hut7d6j+
+         OaAqrX+lq5PjGyNlIiq+2Aty3PzENdKFTGDu59uZtS6mYAQ6agj8QiQadiGtpf2R0B
+         Ud+nkP0125uyZyVPjM8fwIsEhzW29yqZ/FM7Vl87MVS/kr/GLF5tE+UsO95M9Wi65t
+         bck4gvH9vWAJ/DP/b4akYMfmiV3IA4Zznz18WRBGib+nsHqZgrTdFgutqyaDHONnKL
+         IAf4H6BbkqSCdj5AOwRQDj3s/5mkFKKncGSyFf3QDxvvSydBHu/S5+BqsUxxii0NNU
+         UeATtdOJ7YApw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D477EE4D00A;
+        Sat, 15 Oct 2022 01:26:42 +0000 (UTC)
+Subject: Re: [GIT PULL] UBI and UBIFS updates for 6.1-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1135185122.30714.1665782233107.JavaMail.zimbra@nod.at>
+References: <1135185122.30714.1665782233107.JavaMail.zimbra@nod.at>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1135185122.30714.1665782233107.JavaMail.zimbra@nod.at>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/for-linus-6.1-rc1
+X-PR-Tracked-Commit-Id: 669d204469c46e91d99da24914130f78277a71d3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b7cef0d21c379669c9f620c9692b5c7c885a6311
+Message-Id: <166579720286.30479.2326196270255262901.pr-tracker-bot@kernel.org>
+Date:   Sat, 15 Oct 2022 01:26:42 +0000
+To:     Richard Weinberger <richard@nod.at>
+Cc:     torvalds <torvalds@linux-foundation.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for late respond. It's a really busy week. :)
+The pull request you sent on Fri, 14 Oct 2022 23:17:13 +0200 (CEST):
 
-On 2022/10/5 9:17, Mike Kravetz wrote:
-> The hugetlb vma lock hangs off the vm_private_data field and is specific
-> to the vma.  When vm_area_dup() is called as part of vma splitting,  the
+> git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/for-linus-6.1-rc1
 
-Oh, I checked vm_area_dup() from callsite of copy_vma and dup_mmap but split_vma
-is missed... And yes, vma splitting can occur but vma merging won't for hugetlb
-vma. Thanks for catching this, Mike.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b7cef0d21c379669c9f620c9692b5c7c885a6311
 
-> vma lock pointer is copied to the new vma.  This will result in issues
-> such as double freeing of the structure.  Update the hugetlb open vm_ops
-> to allocate a new vma lock for the new vma.
-> 
-> The routine __unmap_hugepage_range_final unconditionally unset
-> VM_MAYSHARE to prevent subsequent pmd sharing.  hugetlb_vma_lock_free
-> attempted to anticipate this by checking both VM_MAYSHARE and VM_SHARED.
-> However, if only VM_MAYSHARE was set we would miss the free.  With the
-> introduction of the vma lock, a vma can not participate in pmd sharing
-> if vm_private_data is NULL.  Instead of clearing VM_MAYSHARE in
-> __unmap_hugepage_range_final, free the vma lock to prevent sharing.  Also,
-> update the sharing code to make sure vma lock is indeed a condition for
-> pmd sharing.  hugetlb_vma_lock_free can then key off VM_MAYSHARE and not
-> miss any vmas.
-> 
-> Fixes: "hugetlb: add vma based lock for pmd sharing"
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->  mm/hugetlb.c | 43 +++++++++++++++++++++++++++----------------
->  mm/memory.c  |  4 ----
->  2 files changed, 27 insertions(+), 20 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 4443e87e814b..0129d371800c 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -4612,7 +4612,14 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
->  		kref_get(&resv->refs);
->  	}
->  
-> -	hugetlb_vma_lock_alloc(vma);
-> +	/*
-> +	 * vma_lock structure for sharable mappings is vma specific.
-> +	 * Clear old pointer (if copied via vm_area_dup) and create new.
-> +	 */
-> +	if (vma->vm_flags & VM_MAYSHARE) {
-> +		vma->vm_private_data = NULL;
-> +		hugetlb_vma_lock_alloc(vma);
-> +	}
+Thank you!
 
-IMHO this would lead to memoryleak. Think about the below move_vma() flow:
-move_vma
-  copy_vma
-    new_vma = vm_area_dup(vma);
-    new_vma->vm_ops->open(new_vma); --> new_vma has its own vma lock.
-  is_vm_hugetlb_page(vma)
-    clear_vma_resv_huge_pages
-      hugetlb_dup_vma_private --> vma->vm_private_data is set to NULL
-      				  without put ref. So vma lock is *leaked*?
-
-Other part looks good to me. Thanks for your work.
-
-Thanks,
-Miaohe Lin
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
