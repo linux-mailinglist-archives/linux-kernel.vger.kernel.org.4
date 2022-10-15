@@ -2,100 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C149C5FF7B0
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 02:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120B75FF7CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Oct 2022 03:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiJOAtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Oct 2022 20:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S229550AbiJOB0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Oct 2022 21:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJOAtm (ORCPT
+        with ESMTP id S229513AbiJOBZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Oct 2022 20:49:42 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DF82647
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 17:49:38 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a6-20020a17090abe0600b0020d7c0c6650so9419039pjs.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 17:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZQKr6gxcoyxbVjA/4utImOsMAnHB8ip1bwqG26rMhL0=;
-        b=UNaV+xml2akMbPhD2QHmFAA8pfCMe+3CkGKIM72CP1hO+V/OAyZ9/cBQxOEE7dgQq4
-         v5KaiMedRXdVjRLj2/4q03YlrRHnmyBYA05i4epji0U1mO7XL00ry82NsBb5slWwEPrG
-         ohpL4iEFpvBjbupLCA/wiaAvRHB12BMZEisx0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZQKr6gxcoyxbVjA/4utImOsMAnHB8ip1bwqG26rMhL0=;
-        b=kgCiDGU+x7VcFEXSZHBxxOukU0uY7LYXtOr7G1KSWPfhKcR+UEvxql/f+xbHcaJo4+
-         lFWYLanoKzVD6IVGzuVjyAhGJSmmDUpAm1J7V1gWBtvnieYMJmX8z4Tv/QRLYLkgua/Q
-         FwoBleiS0jkYqUDKBZ3r8PFUPTwJ+5SJ3IF7l4hxvhjXsv820Lu49eVvfUMIzsrJ70yr
-         iux6qa+VvC5WO9ByxwyyFJ6GVE7ZjB+udJtR+PaBrMv2u3nXxBr3WaOhH3vv/21OssQE
-         OqXWul6dmd7GlJj0afEIBBCxesmJsdkHekeLOY6pIc0tD0PE3yY0JryTeqGVxyePe2Se
-         3T9w==
-X-Gm-Message-State: ACrzQf18NjO/0UqH6L7HU5xX1Y6cfZBaSMLobfWZsQOavQAd14s//aHl
-        4L5Jxb/OzpDc427WBA8M8A10cQ==
-X-Google-Smtp-Source: AMsMyM5M+YvV5wFht/uuppEYJ/Zz+P9fRYkhf/H0EYK2VZM6XBBCA5PfpfebdJ8em7GzUb7eg+YdAA==
-X-Received: by 2002:a17:90b:17c4:b0:20d:4d79:55b1 with SMTP id me4-20020a17090b17c400b0020d4d7955b1mr631817pjb.125.1665794977885;
-        Fri, 14 Oct 2022 17:49:37 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:9d:2:9f6e:fc87:d13f:1fa6])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170902c94a00b00179f370dbe7sm2256142pla.287.2022.10.14.17.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 17:49:37 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: [PATCH RESEND 2/2] soc: qcom: stats: Mark device as having no PM support
-Date:   Fri, 14 Oct 2022 17:49:34 -0700
-Message-Id: <20221015004934.3930651-2-swboyd@chromium.org>
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-In-Reply-To: <20221015004934.3930651-1-swboyd@chromium.org>
-References: <20221015004934.3930651-1-swboyd@chromium.org>
+        Fri, 14 Oct 2022 21:25:58 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8004C5D70F
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Oct 2022 18:25:51 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mq57B6HxWz1P7Lp;
+        Sat, 15 Oct 2022 09:21:10 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 15 Oct 2022 09:25:47 +0800
+Subject: Re: [PATCH 1/3] hugetlb: fix vma lock handling during split vma and
+ range unmapping
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20221005011707.514612-1-mike.kravetz@oracle.com>
+ <20221005011707.514612-2-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5154292a-4c55-28cd-0935-82441e512fc3@huawei.com>
+Date:   Sat, 15 Oct 2022 09:25:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221005011707.514612-2-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver purely exposes information from memory to the kernel. Let's
-mark it as not having any device PM functionality, so that during
-suspend we skip even trying to call a suspend function on this device.
-This clears up suspend logs more than anything else, but it also shaves
-a few cycles off suspend.
+Sorry for late respond. It's a really busy week. :)
 
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/soc/qcom/qcom_stats.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 2022/10/5 9:17, Mike Kravetz wrote:
+> The hugetlb vma lock hangs off the vm_private_data field and is specific
+> to the vma.  When vm_area_dup() is called as part of vma splitting,  the
 
-diff --git a/drivers/soc/qcom/qcom_stats.c b/drivers/soc/qcom/qcom_stats.c
-index d6bfd1bbdc2a..d89453a77408 100644
---- a/drivers/soc/qcom/qcom_stats.c
-+++ b/drivers/soc/qcom/qcom_stats.c
-@@ -217,6 +217,8 @@ static int qcom_stats_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, root);
- 
-+	device_set_pm_not_required(&pdev->dev);
-+
- 	return 0;
- }
- 
--- 
-https://chromeos.dev
+Oh, I checked vm_area_dup() from callsite of copy_vma and dup_mmap but split_vma
+is missed... And yes, vma splitting can occur but vma merging won't for hugetlb
+vma. Thanks for catching this, Mike.
+
+> vma lock pointer is copied to the new vma.  This will result in issues
+> such as double freeing of the structure.  Update the hugetlb open vm_ops
+> to allocate a new vma lock for the new vma.
+> 
+> The routine __unmap_hugepage_range_final unconditionally unset
+> VM_MAYSHARE to prevent subsequent pmd sharing.  hugetlb_vma_lock_free
+> attempted to anticipate this by checking both VM_MAYSHARE and VM_SHARED.
+> However, if only VM_MAYSHARE was set we would miss the free.  With the
+> introduction of the vma lock, a vma can not participate in pmd sharing
+> if vm_private_data is NULL.  Instead of clearing VM_MAYSHARE in
+> __unmap_hugepage_range_final, free the vma lock to prevent sharing.  Also,
+> update the sharing code to make sure vma lock is indeed a condition for
+> pmd sharing.  hugetlb_vma_lock_free can then key off VM_MAYSHARE and not
+> miss any vmas.
+> 
+> Fixes: "hugetlb: add vma based lock for pmd sharing"
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  mm/hugetlb.c | 43 +++++++++++++++++++++++++++----------------
+>  mm/memory.c  |  4 ----
+>  2 files changed, 27 insertions(+), 20 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 4443e87e814b..0129d371800c 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4612,7 +4612,14 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+>  		kref_get(&resv->refs);
+>  	}
+>  
+> -	hugetlb_vma_lock_alloc(vma);
+> +	/*
+> +	 * vma_lock structure for sharable mappings is vma specific.
+> +	 * Clear old pointer (if copied via vm_area_dup) and create new.
+> +	 */
+> +	if (vma->vm_flags & VM_MAYSHARE) {
+> +		vma->vm_private_data = NULL;
+> +		hugetlb_vma_lock_alloc(vma);
+> +	}
+
+IMHO this would lead to memoryleak. Think about the below move_vma() flow:
+move_vma
+  copy_vma
+    new_vma = vm_area_dup(vma);
+    new_vma->vm_ops->open(new_vma); --> new_vma has its own vma lock.
+  is_vm_hugetlb_page(vma)
+    clear_vma_resv_huge_pages
+      hugetlb_dup_vma_private --> vma->vm_private_data is set to NULL
+      				  without put ref. So vma lock is *leaked*?
+
+Other part looks good to me. Thanks for your work.
+
+Thanks,
+Miaohe Lin
 
