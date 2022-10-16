@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F97160017E
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07CE600185
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiJPRAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 13:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S229754AbiJPRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 13:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiJPQ77 (ORCPT
+        with ESMTP id S229694AbiJPRBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 12:59:59 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90072.outbound.protection.outlook.com [40.107.9.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBE4237D9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:59:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DbiID483npnCFv2BjvOQiJmEobpPJLpb/nSui2i2DNhR45QXaSNk5uZTavmy9DbhmMForOdtpmu38Lmk61tIzDGpx3oxeV+qekJF6gzZuXw7ra4JIxn4dk+VLu3C/KqkHWOGOozh9PW0SR7lyreMA+G0vvHY/BhiTXZJkTC4YbEWh3vUPtvGOvA78MX2tLaRVSVzE++qSFF4z8WCAI7OhK2Dwzd7kzYBYHi3/yA0x5RmZO0HSYmyjFncj+BM/jF6L/pdDoPeAWyzeKnZVgKBAFFQMt/c88upj6lXVivosxPSmn4kQEbhd7ta4Cw7Xf0kug9qODszxbRMIKrmWdWOqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=macwW2i6h+jhzzblUjJmNkx5O5LdZitQEpeApHar6XQ=;
- b=l49XA5gS6ekshIGNZxE0S8dD3mvHGpo5cwJyaSpXvb04+oCxioqmaqjG7oN8QfcpeZqoAFLw33fyymWNCyjUi0JIJZX/ecdr6vY00+GhrFkB+d0owGveYwNl6Y++X7Lr8Z5KWV5PFPSAWFGhYyBbigXh61TlTBi8uzLWEsO75+wmogJOxzic+bfiylnOWloDdYrX4iv2Yf5ZJngxdIS5nYeD6+ZIQY1XR1MdlRuAq6MwAwrIWIq/MUbCslJAzzrXl7q/8ZSVXUIWK1pgstPmuzNvFWuehjbVNVMMzapkRzoygmcCh3l5JA/0H5lMbziCnI4jMp8wj9AUc9mw+vv05A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=macwW2i6h+jhzzblUjJmNkx5O5LdZitQEpeApHar6XQ=;
- b=d2sgDrzhzvMlPdahXDHjsFrOG6eCZNjUYroViqaXd4EotCht+yjlL/DvBFf6md1KZC1vnoYqy7GlYk6WqqSdxrMiHHjzOHdtFG6zxn6e4InwndTt/O2dRPyjgffHguUfdSfoGlX0B7/R0gSf1CI8SgcC2gNkSbaeI0buZVMETHpQZ6RurahJVaIA/PY/89NTAVK9LetoxYlq1nnqFtWIpF8P/ynf62pWRrsQy2CTbgl76c/BgolYDkdowHTelwvb9FrpQJIG0C4QkmbC1fwJU3S/zqQtc562ziz31AzFFInFP3AkjBVodJGRoszzCEl9WUqhIeAQsl8Np3L5HnljGA==
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3d::7) by
- PAZP264MB1430.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:121::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.32; Sun, 16 Oct 2022 16:59:53 +0000
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c489:75f:98f4:b143]) by MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c489:75f:98f4:b143%6]) with mapi id 15.20.5723.032; Sun, 16 Oct 2022
- 16:59:53 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-Thread-Topic: [PATCH 2/7] powerpc/85xx: Mark mpc85xx_ds_pic_init() as static
-Thread-Index: AQHYtABEs/XtKdJlskKmHA1duRa+Xq3xsPoAgAAA5QCAH4SHgIAAYvgA
-Date:   Sun, 16 Oct 2022 16:59:53 +0000
-Message-ID: <3111f16b-2e6d-c46f-67e9-6cb5fada4cc7@csgroup.eu>
-References: <20220819191557.28116-1-pali@kernel.org>
- <20220819191557.28116-3-pali@kernel.org>
- <fd9c174e-2c89-7e11-9e68-d6044b7eab21@csgroup.eu>
- <20220926094706.km22rqzuuulvfssq@pali> <20221016110529.76bcgq2v2h4pg2of@pali>
-In-Reply-To: <20221016110529.76bcgq2v2h4pg2of@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MR1P264MB2980:EE_|PAZP264MB1430:EE_
-x-ms-office365-filtering-correlation-id: b5ad816d-e626-4c4e-940e-08daaf97d8c7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RkrSkfjalzqaUDIxywBeupC/MlspTV/qPhCD7NHBznOEQsxBsIghQN7Pb9z8iLE8YsbJC0lr8E/T1WQws9um6AJF1dwv+BJo5Yr6atKqjilyXZLINBJque/YZYTeSP+UFjBtwyaI3mBXyoTNnUeLSo5Rhwa6o0C//QwMqesftYUxPYu98RzrqjmO3dtSIvmUjKjezqh/eDPmvcUPUI2jIr/auXFf3junB3Y3OfDKkRW8BGscA9n4SKXR6Fr1jofopbS6LtOK8ZOxoibhJjHDjl2XgbZ5oec09Cmx2FhzfvWVEy3P155oWZpWgMA3aT3W/p0gMN8uz3SlZf901Hxu3ebIa50DHmRMnDi0fY/p+Q+IgHq6B/RHZAurluBH3v4ZnVoxI3HG+1a5PQ9/40FroDsPORgHByJxPf57z/sP56cDfa+LUc6zkfxQf2tMjb2wZXyDxsPB2ZChaJ5reTmwF39HAk/pbsw/J3pKx1FUzzqhyy8F8o0+PR+fq2LP0zYLj+1ExcwG6lmVsEMdK9sgcplINuXZunHsGKf6SluOyaAph6KtTqu92g/wj+Gg83Ywb3C/d1zFTAs3EI2rhb7Cj6hjVgzvEqqI/NXz7mWI2esWdz27gu52q8GdyNSHm0GR8Ycq8rdBzczx8qRCxoheovIIozcU0vhLxTTi6WIkRtK3Or4lWtVnnBcu8Al7525/nNu88mMcKXWUVp9FBsObigRB7SmMz0nzpBExfgGZM/j/mXFdrRhY2wjSgO+Qg3Wd+WrIfmOw5cX7K55Y/mnZlBlWDxmNkwZIjg7Du0YWOtNyNEtBIOIoNX6kCPE6eZwicaxRGdpKcbPupdWI/SJXwQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39850400004)(376002)(346002)(396003)(136003)(451199015)(66574015)(38070700005)(36756003)(122000001)(86362001)(31696002)(38100700002)(83380400001)(91956017)(76116006)(66556008)(66476007)(64756008)(8676002)(66446008)(5660300002)(54906003)(316002)(6916009)(31686004)(66946007)(44832011)(4326008)(186003)(71200400001)(6486002)(2906002)(8936002)(2616005)(6506007)(478600001)(6512007)(26005)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RjNzYnNVVjcrbnd5czFUbDZjY0R4YkxKOXlpcHZoMlNhV0U2NVhpa3phakMz?=
- =?utf-8?B?d3krd2YyUDYzQlRzeVU0Z0U0Mi9kcUZMeFh2RHRMbDU2RExXWWtBZ3JuaFB1?=
- =?utf-8?B?NEhaS01SMk4zNmtBOHljVzhGMjVwMGpCZU8yTEZSOTdmUnRwYjVZNkRwV3N0?=
- =?utf-8?B?eERCaWgwQXZ3aVUvQ3YzMkdBSGF6cjVNakVxMDdEQmJTcnFIaGw2MWlSb3ph?=
- =?utf-8?B?V01la0ZDc1V2U0owWnhvNmRibjFWSXI2S3djY3J2M3FCU1lxL2lYeEJ1UDNE?=
- =?utf-8?B?SG5INkFwUUxvVjFIQ3pLVFVVNkRBWGpWOFNYeTFqUEVGQzFBSUF4NkJQeTY1?=
- =?utf-8?B?TjY2ZGZCR21KV2lKL0taVUJuVDgwazhka1hHUktNNEw3THYxa0ZMd0FTNFJx?=
- =?utf-8?B?eS8xMXhudzJkQjU5RndLN1VablZrTHhOWUkveHhNa1lISWFCMTN5ZmdyMkMr?=
- =?utf-8?B?OWtBbUhjYmF0aUZJNTNYbXh6d0V0djNDTVJIc2hiQmFnUTVsZjhPeXI5cXJJ?=
- =?utf-8?B?bC9wUWQrU2I0QlpycGc2b0M4RFRVMlJNRGtVU29QeWsxSGxUNEZzOHZNd1Fo?=
- =?utf-8?B?dDZJU3FRSXBpM0t3N21Zamx1MUovZXNka2plOGxWQnlyRk44SVg2OVNqSklT?=
- =?utf-8?B?cFZvNGkwU2Y2NmRmdzBVbXQwNnhvRW85Q3VZZHR0MStFcnJtZmoxSi9mWjVm?=
- =?utf-8?B?N081TlFaTXFlUEF0K3B2aHU2NC9MS0RGYlJDV0krYUtLUjkvekgrNE5UL3VU?=
- =?utf-8?B?VSt2amwyazRhK2JzTUI1YWltNlRVS09HQTNjQ2orckRRUHk1WjFESVR1QzVS?=
- =?utf-8?B?Qm0xRWJtUGx0SUFHbUIrelM1NGE0UE1VK2txSlZjem5SVWZvbExMZjZ5dDNR?=
- =?utf-8?B?TlFZVDljdzV2dEJ2T3Y1aStENTdhMWxHNzd5ek0xTzJjbXZ6a2lCYlY1UHQw?=
- =?utf-8?B?WU05U2JtYzhzWVI1OFlxVngvQVNGT1AyR3BiaUt6YW1CODRrbWRBUGVuOG9B?=
- =?utf-8?B?YUpDak80Ni9GTGcvTytNajB1S1hRNzRJb0loc3hyTDM2bTlzN04xcldBc09n?=
- =?utf-8?B?OHVqVVhsb2FHdnBwOXlLZ29TZnJLNk5KTFlsLyt4b3BlZlRCV2djSlVXcGwy?=
- =?utf-8?B?NkJYRmExd202dzNGRlU0eWlldjVpVDZldXcwcDBnVVpPN2dTVjZtYjFEYk1H?=
- =?utf-8?B?dzVGbjZYSjlCYkRFWHFZWFJjcUNyWDRSVjhFdXdLdnpYajM1TSsvNmE3VXBP?=
- =?utf-8?B?emRlQnJFTzZHWHdhTmphVVY3VnluY2tadmJZNEFwMkJSd2tKZlM0RnNSWXlF?=
- =?utf-8?B?Z1E5VS9kdEZncEJjQllUamNUL2tNeElDcnJKVk9VSFRQVjh4ZDBhUGdhQkdj?=
- =?utf-8?B?QUtobFlobjNMZmRvTVkxUWhrQWtlblVxOG1pajVzcTludHJrYVh4cWU3U1VI?=
- =?utf-8?B?NlcyVVNXQmJMNHF3c1dINkdYVjMyL2Jlbjk3Ulg5a2NYYXZETGpSNXE0ZENi?=
- =?utf-8?B?R1BCQi9heXdwS0RaWFdCTDJkOUc4UWRiNnp5WlRFd3p5b0wrMHdoRDB0bjcy?=
- =?utf-8?B?YVAzT1EySmU5SXVIQ1pUZytNSllxOHBidUhYV3kzNW41ZDBCL0NaenB4QzhM?=
- =?utf-8?B?WWFDNERQQ0V6RnJ6R0k2QlJTdzZmeVBOZTRob3dEM25BbkdCcDhxNU9WZi84?=
- =?utf-8?B?Q1BDRkIvR29MNXJOMU8vWFVib2h0TU9MRlpGMGlOVm1zRjJHMUlOOEp1Ukta?=
- =?utf-8?B?KzE4MlFNTGFoaG9WVjlIdGVCUWJnOXVtRlRnSFluNFEyeFJjTXV2N0Y3ZUNN?=
- =?utf-8?B?SzlRaE8rWDkrc09lSHVXYkl6SGhwRXRjZTNBdWNlTUt1NFQ0TVYrU2huUnNX?=
- =?utf-8?B?ZUhpUXNjd2dsbnN2TmJyUDhuaDJNQTRFYVd4TzAvVWx3ellrUU9BelF4UW1D?=
- =?utf-8?B?K0F2QzlDK0VKKzhEREovNEdCR3pPUGJlMlM1Z01IZ2hnQ0tpWW1CWVJPeE9P?=
- =?utf-8?B?TlIrd3g2Q3pHelV3TnBQbGN2VTdYcXdtSGZBQ01hNlJaVXU2OFJBTEtBei96?=
- =?utf-8?B?YjMzRXJteTd5WHk3ZVZVeFhnWHFmS1RoNjBsQkE0ZHc4ZXJpZ092dHlBZXpr?=
- =?utf-8?B?UjZvQWhSbEl1Nk91ZlZIMUZEM1M3U0Nza25SRHBIRG9TaFJxNGlwYnFjQUFo?=
- =?utf-8?Q?lyGbNa3jZ1sABCnH0/XrQN4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EE29AD3B91D9624CBBBE527B55E51B9F@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sun, 16 Oct 2022 13:01:16 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA88832EED
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:01:14 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id c23so6521529qtw.8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKWTzuIQ+UY7Vl2aQL/YutH5RFr6mmoFL47bEWvwb5E=;
+        b=TrvYmb1rvRW3Zcbp3ShULpfNM4Z8vU9dzlqLH58nTvu1nLSXFTMLxwbrS4LyYaJjFM
+         B40lkW0rhAaZJjfm82OWQ9h7VniqIRkbb08RbRMKBrYak8tN+QoBiBad3MZzfW5cWlIZ
+         kW3klK6Xmq3GE/dJql/pxnoyaG//eBGJP4ClJvifdaMKyjY2vL6Quwi5eevC1KOR5ojx
+         5vACME6fywo3d0H2qbej6bQGrEHAxH9S2rCYdQ4D2VZpvpY/RWX8k3wKjsNSeiAVVWa3
+         jSDPO1uWasXQdWmSeftEEOz5Cxr6jh7LrJChQOIsOO3shqnch8xHFarShUA+3e4yelIm
+         IIeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oKWTzuIQ+UY7Vl2aQL/YutH5RFr6mmoFL47bEWvwb5E=;
+        b=l1o2WUbIapDjuObxs1ZUri1LGQbIwA0ClCxkSPtMlTXvbGu9mwsA399MEf/+ufkWrf
+         5zisRZ+qFJaK6l2Oag+9vYv9hpktHncgxU0V/sb5YFKwnelNq5L7ovV/Zfw+HxGbqNZ/
+         lynwPWC9XqgBTsMsIGFT326eR9r/Fjfch/ai1owDUfgUuRmcCgtigCJMvk8wCtCUBDv1
+         8ksCW8hViS+za4/Uw1+RhQGWNS5vNUVgU4v3Yvbj9DT0hIFtkVjhtSOqHIOVQFGrZazc
+         xU5E7ZQe5NnHZJEcDwZ4wNc5aG3bvGg3DigX3nzS525CzF4SluMFifnGIDEXrolmpT/a
+         XDSQ==
+X-Gm-Message-State: ACrzQf0F1LCNlFgbE+v7jnhcAXy9PzaYPE7u/UAzoTc5dwRNLeVJeJHl
+        HnfipdZZVKlmApeUL7FDNgL2JQ==
+X-Google-Smtp-Source: AMsMyM6w8w/mwUZmNLo6F7MwrJthXFsOG4ohNvdOIFZo+F7hNq5BOjJTakGx+dvaMpw0KoicpDAsIQ==
+X-Received: by 2002:ac8:5908:0:b0:39c:d7dd:14e9 with SMTP id 8-20020ac85908000000b0039cd7dd14e9mr5848176qty.623.1665939673837;
+        Sun, 16 Oct 2022 10:01:13 -0700 (PDT)
+Received: from krzk-bin.hsd1.pa.comcast.net ([2601:42:0:3450:9b13:d679:7b5b:6921])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05620a0d8600b006ce7bb8518bsm7539967qkl.5.2022.10.16.10.01.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 10:01:12 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 00/34] pinctrl/arm64: qcom: continued - fix Qualcomm TLMM pinctrl schema warnings (third set)
+Date:   Sun, 16 Oct 2022 13:00:01 -0400
+Message-Id: <20221016170035.35014-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5ad816d-e626-4c4e-940e-08daaf97d8c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2022 16:59:53.7914
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FDlE3sno4VAWOHIabkya/6lKFb3cu2bvVR0mTFULq7WQONNwgCD/M2OTDW5ZdUm6Dsdw4FVqAQHtUXouA0G/ZhJF+LH+Wp0JlAVJnWv+KkM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB1430
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sDQoNCkxlIDE2LzEwLzIwMjIgw6AgMTM6MDUsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6
-DQo+IEhlbGxvIENocmlzdG9waGUhIERvIHlvdSBoYXZlIGFueSBvdGhlciBjb21tZW50cyBmb3Ig
-dGhpcyBwYXRjaCBzZXJpZXM/DQoNCkknbSBBRksgZm9yIHR3byB3ZWVrcywgYnV0IGFzIGZhciBh
-cyBJIHJlbWVtYmVyIEkgZG9uJ3QgaGF2ZSBhbnkgbW9yZSANCmNvbW1lbnRzLg0KDQo+IA0KPiBP
-biBNb25kYXkgMjYgU2VwdGVtYmVyIDIwMjIgMTE6NDc6MDYgUGFsaSBSb2jDoXIgd3JvdGU6DQo+
-PiBPbiBNb25kYXkgMjYgU2VwdGVtYmVyIDIwMjIgMDk6NDM6NTUgQ2hyaXN0b3BoZSBMZXJveSB3
-cm90ZToNCj4+PiBMZSAxOS8wOC8yMDIyIMOgIDIxOjE1LCBQYWxpIFJvaMOhciBhIMOpY3JpdMKg
-Og0KPj4+PiBGdW5jdGlvbiBtcGM4NXh4X2RzX3BpY19pbml0KCkgaXMgbm90IHVzZWQgb3V0IG9m
-IHRoZSBtcGM4NXh4X2RzLmMgZmlsZS4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogUGFsaSBS
-b2jDoXIgPHBhbGlAa2VybmVsLm9yZz4NCj4+Pg0KPj4+IFRoaXMgcGF0Y2ggc2hvdWxkIGJlIHNx
-dWFzaGVkIGludG8gcGF0Y2ggMS4NCj4+DQo+PiBObyBwcm9ibGVtLiBKdXN0IHRvIGV4cGxhaW4g
-dGhhdCBJIHNwbGl0IHRob3NlIGNoYW5nZXMgaW50byBkaWZmZXJlbnQNCj4+IHBhdGNoZXMgYmVj
-YXVzZSB0aGV5IHRvdWNoIGRpZmZlcmVudCBmaWxlcyBhbmQgZGlmZmVyZW50IGJvYXJkIGNvZGUu
-DQo+PiBBbmQgSSB0aG91Z2h0IHRoYXQgZGlmZmVyZW50IHRoaW5ncyBzaG91bGQgYmUgaW4gZGlm
-ZmVyZW50IHBhdGNoZXMuDQo+Pg0KPj4+PiAtLS0NCj4+Pj4gICAgYXJjaC9wb3dlcnBjL3BsYXRm
-b3Jtcy84NXh4L21wYzg1eHhfZHMuYyB8IDIgKy0NCj4+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDEg
-aW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQgYS9hcmNo
-L3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvbXBjODV4eF9kcy5jIGIvYXJjaC9wb3dlcnBjL3BsYXRm
-b3Jtcy84NXh4L21wYzg1eHhfZHMuYw0KPj4+PiBpbmRleCBmOGQyYzk3ZjM5YmQuLjlhNmQ2Mzdl
-ZjU0YSAxMDA2NDQNCj4+Pj4gLS0tIGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L21wYzg1
-eHhfZHMuYw0KPj4+PiArKysgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgvbXBjODV4eF9k
-cy5jDQo+Pj4+IEBAIC01NCw3ICs1NCw3IEBAIHN0YXRpYyB2b2lkIG1wYzg1eHhfODI1OV9jYXNj
-YWRlKHN0cnVjdCBpcnFfZGVzYyAqZGVzYykNCj4+Pj4gICAgfQ0KPj4+PiAgICAjZW5kaWYJLyog
-Q09ORklHX1BQQ19JODI1OSAqLw0KPj4+PiAgICANCj4+Pj4gLXZvaWQgX19pbml0IG1wYzg1eHhf
-ZHNfcGljX2luaXQodm9pZCkNCj4+Pj4gK3N0YXRpYyB2b2lkIF9faW5pdCBtcGM4NXh4X2RzX3Bp
-Y19pbml0KHZvaWQpDQo+Pj4+ICAgIHsNCj4+Pj4gICAgCXN0cnVjdCBtcGljICptcGljOw0KPj4+
-PiAgICAjaWZkZWYgQ09ORklHX1BQQ19JODI1OQ==
+Hi,
+
+Changes since v4
+================
+1. Drop drive-strength (included by common TLMM node).
+
+Changes since v3
+================
+1. All patches with subject: "use common TLMM schema":
+   Drop properties and required items which are already provided by common TLMM
+   schema.
+   The change against v3 is non-trivial, however I retained reviewed-by tags.
+2. Add Rb tags.
+
+Changes since v2
+================
+1. ipq6018-cp01-c1: do not switch to blsp1 (Robert).
+2. pinctrl: qcom,ipq6018: correct BLSP6->BLSP0 functions: new patch.
+3. Drop quotes from $ref when not needed (Rob).
+4. Add Rb tags. Few patches from v1 got review from Rob, but I changed them in
+   v2 significantly, so I did not keep these Rb tags.
+
+Changes since v1
+================
+v1: https://lore.kernel.org/linux-devicetree/20220924080459.13084-1-krzysztof.kozlowski@linaro.org/T/#t
+1. As Stephan suggested, move check for function on non-GPIO pins to common
+   TLMM schema.  This affects few commits in the set named:
+   "use common TLMM schema"
+   "do not require function on non-GPIOs"
+
+Overview
+========
+This is the third, independent patchset around Qualcomm pinctrl in recent days:
+1. First round of TLMM fixes: merged
+2. LPASS fixes:
+   https://lore.kernel.org/linux-devicetree/20220927153429.55365-1-krzysztof.kozlowski@linaro.org/T/#t
+3. ARMv7 TLMM fixes: *THIS PATCHSET*
+4. ARMv8 remaining TLMM fixes:
+   https://lore.kernel.org/linux-devicetree/20220930192954.242546-1-krzysztof.kozlowski@linaro.org/
+5. Fifth clean - styles and using common TLMM schema:
+   https://lore.kernel.org/linux-arm-msm/20221011172358.69043-1-krzysztof.kozlowski@linaro.org/T/#m277d25a5f3e9d10ca8221a7fba62ca468a67a60b
+
+Dependencies
+============
+1. No dependencies.
+2. dt-bindings are independent of DTS patches.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (34):
+  arm64: dts: qcom: ipq6018-cp01-c1: use BLSPI1 pins
+  arm64: dts: qcom: ipq6018: align TLMM pin configuration with DT schema
+  ARM: dts: qcom: sdx55: add gpio-ranges to TLMM pinctrl
+  ARM: dts: qcom: sdx55: align TLMM pin configuration with DT schema
+  ARM: dts: qcom: msm8226: align TLMM pin configuration with DT schema
+  ARM: dts: qcom: msm8974: align TLMM pin configuration with DT schema
+  dt-bindings: pinctrl: qcom,tlmm-common: add common check for function
+  dt-bindings: pinctrl: qcom,ipq6018: add qpic_pad function
+  dt-bindings: pinctrl: qcom,ipq6018: correct BLSP6->BLSP0 functions
+  dt-bindings: pinctrl: qcom,ipq6018: increase number of pins in pinmux
+  dt-bindings: pinctrl: qcom,ipq6018: fix matching pin config
+  dt-bindings: pinctrl: qcom,ipq6018: use common TLMM schema
+  dt-bindings: pinctrl: qcom,ipq6018: fix indentation in example
+  dt-bindings: pinctrl: qcom,msm8226: fix matching pin config
+  dt-bindings: pinctrl: qcom,msm8226: use common TLMM schema
+  dt-bindings: pinctrl: qcom,msm8226: add functions and input-enable
+  dt-bindings: pinctrl: qcom,msm8226: fix indentation in example
+  dt-bindings: pinctrl: qcom,msm8909-tlmm: fix matching pin config
+  dt-bindings: pinctrl: qcom,msm8909-tlmm: do not require function on
+    non-GPIOs
+  dt-bindings: pinctrl: qcom,msm8909-tlmm: fix indentation in example
+  dt-bindings: pinctrl: qcom,msm8953: fix matching pin config
+  dt-bindings: pinctrl: qcom,msm8953: use common TLMM schema
+  dt-bindings: pinctrl: qcom,msm8953: fix indentation in example
+  dt-bindings: pinctrl: qcom,mdm9607: do not require function on
+    non-GPIOs
+  dt-bindings: pinctrl: qcom,mdm9607: fix indentation in example
+  dt-bindings: pinctrl: qcom,qcm2290: fix matching pin config
+  dt-bindings: pinctrl: qcom,qcm2290: use common TLMM schema
+  dt-bindings: pinctrl: qcom,sdx55: fix matching pin config
+  dt-bindings: pinctrl: qcom,sdx55: use common TLMM schema
+  dt-bindings: pinctrl: qcom,sdx55: fix indentation in example
+  dt-bindings: pinctrl: qcom,sdx65: fix matching pin config
+  dt-bindings: pinctrl: qcom,sdx65: use common TLMM schema
+  dt-bindings: pinctrl: qcom,sc7280: fix matching pin config
+  dt-bindings: pinctrl: qcom,sc8280xp: fix indentation in example
+    (remaining piece)
+
+ .../pinctrl/qcom,ipq6018-pinctrl.yaml         | 106 +++++++-----------
+ .../pinctrl/qcom,mdm9607-pinctrl.yaml         |  23 ++--
+ .../pinctrl/qcom,msm8226-pinctrl.yaml         |  98 +++++++---------
+ .../bindings/pinctrl/qcom,msm8909-tlmm.yaml   |  64 +++++------
+ .../pinctrl/qcom,msm8953-pinctrl.yaml         |  92 ++++++---------
+ .../pinctrl/qcom,qcm2290-pinctrl.yaml         |  52 ++-------
+ .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml |  14 ++-
+ .../pinctrl/qcom,sc8280xp-pinctrl.yaml        |   4 +-
+ .../bindings/pinctrl/qcom,sdx55-pinctrl.yaml  |  90 ++++++---------
+ .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  |  50 +++------
+ .../bindings/pinctrl/qcom,tlmm-common.yaml    |  20 +++-
+ arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts   |   6 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi           |  24 ++--
+ .../qcom-msm8974-lge-nexus5-hammerhead.dts    |  30 ++---
+ .../boot/dts/qcom-sdx55-telit-fn980-tlb.dts   |  45 +++-----
+ arch/arm/boot/dts/qcom-sdx55.dtsi             |   1 +
+ arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts  |   6 +-
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi         |   4 +-
+ 18 files changed, 296 insertions(+), 433 deletions(-)
+
+-- 
+2.34.1
+
