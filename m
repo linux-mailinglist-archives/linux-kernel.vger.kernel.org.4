@@ -2,165 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F115FFE92
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 12:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28E85FFEA2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 12:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiJPKBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 06:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S229531AbiJPKgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 06:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJPKBv (ORCPT
+        with ESMTP id S229595AbiJPKfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 06:01:51 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08891F62E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 03:01:49 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a26so19055053ejc.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 03:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FJRh4siJnFIjBNJk1Xn4atDpOEvVNkQosaIacwqE+Po=;
-        b=DvnXAl7BM/sVTZw0VJMAhPjH1qmApbzcJwedg0uMqpxlmMA/80xx16hrjRasPzGfGq
-         NJj/emLvX7O1UbpUFzJIdfDzkFoGGuV5FP2p4qcBtCMh2cSARvJiIDMCxP/hSbpHwgdg
-         CjIeqMB/6FGXlIM5W9zQ/ksDtHBvCWCvgX2RSsSM+sozhYL9lSBxg3rU+Gamid5FWxU2
-         40Fl4VpG8Coy74PeC/mLiZPoB5Dvyxe+Y+vn6DYVjcGg0+IHNjrANzo4dXa/d2f2rQwT
-         FTAp/XdOoDGU6Lei0vw6B4BSPOfW+EUBsFSg1Bf3j4LlR25bJYGErzTyLjuodMDJEobY
-         BsQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FJRh4siJnFIjBNJk1Xn4atDpOEvVNkQosaIacwqE+Po=;
-        b=LxJVi9D5krOE8hEBzJD1kA4fVBPUAqLMRHZokhe7vKkuOzdHDCnKFUFYYNGT/QkpsB
-         FTAGgEqU7VFTgsGtbr97umjpiWrnPDZeHSHFM8JB4MjzS/RVwtdFMTSIKq7OveLB5/U2
-         ZmTR7J/rWPVtj4odshfChCrWm1bTFVBjYpxKtgDqCeiMrurN8KlMgXZ2xnPfB85Pk5cn
-         BjB1iTZZhaYFNTJhUac2dRBRlVjxI2UU1hY17fW0ETTE4NcaKSj+3WY3S9DzzwKWB1DP
-         +8Nsr2gG7cfM/ZZor/7TCfUMKVS9maHInk68jo6kbFxjJYjwh0FUpoESxfvw0MhpljQ3
-         IvSg==
-X-Gm-Message-State: ACrzQf1TTctWFMUT5t7Xc9YSXzH8tnPxU0EHaxM7U9e9S2VnHwYsG9L2
-        LJ9ee3ANMtitB3qC+ENHKQfiUw==
-X-Google-Smtp-Source: AMsMyM7cT3Je5DARqBMqDLzHzu/YZtfclonk6NB71sSXCykR5sOvYMHVST4OxWPNFglY7F2olwyvZw==
-X-Received: by 2002:a17:907:2702:b0:78e:e94:2ac4 with SMTP id w2-20020a170907270200b0078e0e942ac4mr4629103ejk.679.1665914502526;
-        Sun, 16 Oct 2022 03:01:42 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-2-37-204-83.cust.vodafonedsl.it. [2.37.204.83])
-        by smtp.gmail.com with ESMTPSA id v25-20020aa7dbd9000000b00456c6b4b777sm5101871edt.69.2022.10.16.03.01.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Oct 2022 03:01:41 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH] bfq: do try insert merge before bfq_init_rq() call
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <57bd392b-45a6-929c-8be1-b0f6cff1da31@gmail.com>
-Date:   Sun, 16 Oct 2022 12:01:39 +0200
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2EA88BDB-9C3B-4EF6-BF8B-3CCF7DB304C1@linaro.org>
-References: <20221013135321.174-1-Yuwei.Guan@zeekrlife.com>
- <20221014145004.gqqpa5uvgg576tej@quack3>
- <57bd392b-45a6-929c-8be1-b0f6cff1da31@gmail.com>
-To:     Yuwei Guan <ssawgyw@gmail.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sun, 16 Oct 2022 06:35:52 -0400
+X-Greylist: delayed 2480 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Oct 2022 03:35:50 PDT
+Received: from spamfilter04.delta.nl (spamfilter04.delta.nl [217.102.255.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4024136BE1;
+        Sun, 16 Oct 2022 03:35:50 -0700 (PDT)
+Received: from host-xbmmyvj.static.zeelandnet.nl ([217.102.255.196] helo=mail.caiway.net)
+        by spamfilter04.delta.nl with esmtp (Exim 4.92)
+        (envelope-from <8vvbbqzo567a@nospam.xutrox.com>)
+        id 1ok0Kj-0006b8-TE; Sun, 16 Oct 2022 11:53:36 +0200
+Received: from smtp-out.lan.xutrox.com (189-082-045-062.dynamic.caiway.nl [62.45.82.189])
+        (Authenticated sender: gv47feqf@mail.intern)
+        by mail.caiway.net (Postfix) with ESMTPA;
+        Sun, 16 Oct 2022 11:53:19 +0200 (CEST)
+Received: from [10.1.16.159] (unknown [10.1.16.159])
+        by smtp-out.lan.xutrox.com (Postfix) with ESMTPS id BD187FC02;
+        Sun, 16 Oct 2022 09:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xutrox.com; s=2021;
+        t=1665913994; bh=VQr+zN5IdSJbTkt6kZSoTfCjC9CX89lo5WSU4Oh51VA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SlVzWhM7gzHyrWf2Is+cmnv8P8Uo0HLvkivrHHJE8gYHky1ZvU7ZYdcwPa+T9GJwA
+         ewvNlk4ABzGekkmfyqXHWrMRFCV12l6Iu+DJuQsKXUT3I6FWx212vIO320VW9HWZGl
+         yjRXK6sSHozL7QtcqZaWZcXqtGN/Slm7/4NmURjAMwaf0ZVcjUS9tdRXaoB0CgHktm
+         6yC5utpO67rCd3gfmMibbuKhfFwtzr2eax66Kgm+byaiA2O+IfxqRwTsg/3MSjYBgq
+         TKIO/TfIQpsKWH6ixxHVCyrhdJplPd+jIRUey3K/7+sBWyYQMz0eCuCYwsZmwCP4RQ
+         TitNRIs/OtU3Q==
+Message-ID: <b38ecb38-2709-0c75-fe08-375dd4a87d5f@nospam.xutrox.com>
+Date:   Sun, 16 Oct 2022 11:53:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] x86/perf: Fixed kernel panic during boot on Nano
+ processor.
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Cody Yao-oc <CodyYao-oc@zhaoxin.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shyaololo@163.com
+References: <20210607013109.7870-1-CodyYao-oc@zhaoxin.com>
+ <Y0gpsTiUqa/ZbvRh@hirez.programming.kicks-ass.net>
+From:   Arjan <8vvbbqzo567a@nospam.xutrox.com>
+In-Reply-To: <Y0gpsTiUqa/ZbvRh@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: 217.102.255.196
+X-DELTA-Domain: out.caiw.net
+X-DELTA-Username: 217.102.255.196
+Authentication-Results: delta.nl; auth=pass smtp.auth=217.102.255.196@out.caiw.net
+X-DELTA-Outgoing-Class: ham
+X-DELTA-Outgoing-Evidence: Combined (0.08)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT8UY4s+Yiu0pHmfimn9rvSlPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5yc/ZmA9xtuv+B4ejtZ8Y/XuPlWyU6WxHGGYJjeNxb2qsSt
+ 0Cf6BPNJWEBZ4JVsQN2Mj8c81Cqq49L7i7V2/TcPuK4qf9MvYgQQjDkqI/9rxZYoT8DGBXy9+Yr+
+ O7G/xc58iEjXbHIdUQr1yb+WzViLwOkTB5HjLhmTNASxhQlKkawLonlImQFKvyumeIUlInTJUFW9
+ jMbE4Gan+bbHWts97JtuyuUsa+UkJaUpT81goTMcT+7lBOhaiNMPjogKlwA2Vz6Xcl+tcewiMUdS
+ 9dKp8n/ecEa8Dg/FYK5/AG7c3Xw3coVFbzLPseyHEBSmYPf2enzXTs9rqT37lCgCUdR3idMlhCno
+ /QsYaTlhyywkGTkQIfeYgYqBXZFMF+hHi7rcf/ofBF/wWxzMV48oEn/pX75TBHUZZhA+DSPCGwhb
+ mf1nsk4XUhGRAVSQpqHRZWu93416zKEUrygEsuACwklwhBZ1D9MqB0vOkd39ScIXDIgADrxOtZX/
+ G/2/IJHRpYsEybI1sOftHmSKUCHCvcq0i2Zoq6H6kLA4Wl2kUl3ga+YBpscYeJb04ZvY3orHnLCK
+ HGDdRzytiKbUp5w/JDfjebFJIl8Cs2xleGSAiDR0kCabsfRx4e7LLFIZzYf71k1ClA4krEnjzezq
+ sOHwFT1OAkiBzRd+qpW+h72Ly10vJ2hraNDvBTgk5sUe41aq+SbzpCXrf0wnye0NpXW7y7JFdi8F
+ 1nhlaeIl7TcXogHLA82+93NDCACMp6nbho+VuenoAhng0cApE3VnDyxWqS9ije49tZ/AcfXvRATR
+ Wfdyiz8vhaAa0BbMupM+1agz5SFBoGfS0DhK3BfvFNI4fRpBbmGFHU0Fd1FYwiLqVhSu3v+nCpyC
+ SdscG09FH1xvLyw/tCJWEi8ikJPyVPcxcTsmzrq2gEhTddRghHFF286eW2BECiVcqfxUH1CXsod1
+ GDa9T/D6wRI1MwUDobWxsDnf++DuIQUs/5JJj4C/n4CILggDdEKjdWhTTSQUWki9GRqNDKzYrBQ8
+ NNYoick+UCNl6vQnbmdnIXmBiVs3DrWG6v8kkzJ31DiVWTkrDNDmTiVVH+9CVL3ZB2Yyd7DOQnkJ
+ c+51jBq98UG160e1tbsqSvYKd+OWea/Dn/mjjvtwA+77nfS+qgRPwgrzwXmMZRRk1iZMHnbCQPlM
+ eZImJMYmx+j2jy7rLCNyHfKB6IlRR4onrYqVWrke6X16VTjUWV4aXRiJsFizJhuZn6xfjuGHi1Ff
+ EoXm0/FPF8PR0w363lka9gcwIn77Mi4NfMLw8oY1HjvSW5VJBhs3pLhA8z4xo5yTaZvlrLgXEO04
+ ZsCn8Z2KSYfpjFwwpPrz3Gl8pJ0O2/zI9E4NYCVW2CC1DqO4EoK1MmeO+fNxBbg9NxwRtrmOhbzN
+ 5d3B/nx3oA8VLWDbIggCLPUzTJVdE6cxsYCz0RNkJWOv/F0pffRTyrYlS8M=
+X-Report-Abuse-To: spam@spamfilter03.delta.nl
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13-10-2022 17:07, Peter Zijlstra wrote:
+> On Mon, Jun 07, 2021 at 09:31:09AM +0800, Cody Yao-oc wrote:
+>> From: CodyYao-oc <CodyYao-oc@zhaoxin.com>
+>>
+>> Nano processor may not fully support rdpmc instruction, it works well
+>> for reading general pmc counter, but will lead to GP(general protection)
+>> when accessing fixed pmc counter. Futhermore, family/model information
+>> is same between Nano processor and ZX-C processor, it leads to zhaoxin
+>> pmu driver is wrongly loaded for Nano processor, which resulting boot
+>> kernal fail.
+>>
+>> To solve this problem, stepping information will be checked to distinguish
+>> between Nano processor and ZX-C processor.
+>>
+>> [https://bugzilla.kernel.org/show_bug.cgi?id=212389]
+>>
+>> Reported-by: Arjan <8vvbbqzo567a@nospam.xutrox.com>
+>> Signed-off-by: CodyYao-oc <CodyYao-oc@zhaoxin.com>
+> 
+> *sigh*.. so this email address doesn't exist, as such I can't apply this
+> patch. Consider it dropped.
 
-
-> Il giorno 15 ott 2022, alle ore 05:32, Yuwei Guan <ssawgyw@gmail.com> =
-ha scritto:
->=20
->=20
-> On 2022/10/14 22:50, Jan Kara wrote:
->> On Thu 13-10-22 21:53:21, Yuwei Guan wrote:
->>> It's useless to do bfq_init_rq(rq), if the rq can do merge first.
->>>=20
->>> In the patch 5f550ede5edf8, it moved to bfq_init_rq() before
->>> blk_mq_sched_try_insert_merge(), but it's pointless,
->>> as the fifo_time of next is not set yet,
->>> and !list_empty(&next->queuelist) is 0, so it does not
->>> need to reposition rq's fifo_time.
->>>=20
->>> And for the "hash lookup, try again" situation, as follow,
->>> bfq_requests_merged() call can work normally.
->>>=20
->>> blk_mq_sched_try_insert_merge
->>>   elv_attempt_insert_merge
->>>     elv_rqhash_find
->>>=20
->>> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
->> OK, after some thinking I agree. How much testing has this patch got?
->> Because I'd like to verify we didn't overlook something.
->>=20
->> 							Honza
-> Thanks for reviewing.
-> I tested it with fio seq read case like bellow,
-> then check blk trace and bfq log.
->=20
-> [global]
-> name=3Dfio-seq-reads
-> filename=3Dfio-seq-reads
-> rw=3Dread
-> bs=3D16K
-> direct=3D1
-> numjobs=3D4
->=20
-> [file1]
-> size=3D32m
-> ioengine=3Dpsync
->=20
-> What kinds of test cases you perfer to do, I will deal with them,
-> or we verify this patch together, if you have free time. :)
-
-
-Hi guys,
-thank you Yuwei for proposing this.  Yet, I'm a little doubtful, for
-the case where blk_mq_sched_try_insert_merge returns true, and then to
-bfq_init_rq() does not get called.  In this case, all the code for
-handling bursts, splits, ioprio changes and the other stuff in to
-bfq_init_rq() is not executed.  This worries me a little bit.  Can you
-show me why not executing these operations is fine?
-
-Thanks,
-Paolo
-
->>> ---
->>>  block/bfq-iosched.c | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>=20
->>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>> index 7ea427817f7f..9845370a701c 100644
->>> --- a/block/bfq-iosched.c
->>> +++ b/block/bfq-iosched.c
->>> @@ -6147,7 +6147,7 @@ static void bfq_insert_request(struct =
-blk_mq_hw_ctx *hctx, struct request *rq,
->>>  		bfqg_stats_update_legacy_io(q, rq);
->>>  #endif
->>>  	spin_lock_irq(&bfqd->lock);
->>> -	bfqq =3D bfq_init_rq(rq);
->>> +
->>>  	if (blk_mq_sched_try_insert_merge(q, rq, &free)) {
->>>  		spin_unlock_irq(&bfqd->lock);
->>>  		blk_mq_free_requests(&free);
->>> @@ -6156,6 +6156,7 @@ static void bfq_insert_request(struct =
-blk_mq_hw_ctx *hctx, struct request *rq,
->>>    	trace_block_rq_insert(rq);
->>>  +	bfqq =3D bfq_init_rq(rq);
->>>  	if (!bfqq || at_head) {
->>>  		if (at_head)
->>>  			list_add(&rq->queuelist, &bfqd->dispatch);
->>> --=20
->>> 2.34.1
-
+If it's about my email address: The address exists and works.
+If the nospam part bothers you, that part can be left out. You may leave the reported-by line out if you want to.
