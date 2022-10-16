@@ -2,87 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B940C6002B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B016002BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJPSKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 14:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S229867AbiJPSLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 14:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiJPSJ6 (ORCPT
+        with ESMTP id S229793AbiJPSLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 14:09:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EAB17AA4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:09:54 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j16so15174522wrh.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:09:54 -0700 (PDT)
+        Sun, 16 Oct 2022 14:11:08 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F28B1EC50;
+        Sun, 16 Oct 2022 11:11:07 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id v40-20020a056830092800b00661e37421c2so2473586ott.3;
+        Sun, 16 Oct 2022 11:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vKbxvFs7idvHnkpYGCCi9EPfdsQNoN5vylEOpYCziO4=;
-        b=HNMiFYEP8MVS/aXSpnXOvDvpVc4U0b1DeNUL4mTpjwjXRlCdqzIVEWJfRjuaPWVmEF
-         Ny2iLROeymv7JJNx40kvpa4FBTAG6fvUjggzyZDfjYwVjVNwBX4tTk/vs+1NiQMELEix
-         UIydb9a85ZKjmX1QssDmIsXamzsWB6Zy3Ta0EmC6QCjWCZsX6R7Nb+hnSadGyxbdgeO4
-         kdW3J++u3bcT4ChnwBYZ5qt/wSejvQXew907KeM4TrNae3qeW4GWFW/7BtkA/ZApC3Dj
-         /Lcb2B2XsO43dg7Qlm2KM/9Hii3JBTQymbvH8T848CT+xL0bKCkpB2SnK8AkOb+Mp7/9
-         mBdQ==
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2r3mUxfW6g3CVFgzjeCUIRcSV3xp7RfjjaFTPG8jsCg=;
+        b=JSWA1iLSFjvHguwGixnihIpyNxhdHQ+UN7cw6UWkT8QK4B90gfR4uIuSq61pLMoNMk
+         FKfs++L+jBcHWtEVDep5WC3nw9+LCCfwhl4H/218v0hYI6+QdmykEPybCxCmD067Xmdp
+         kiQbVvM4hFddrXI6+hK85nkSRrLMU+hcH09HYdksbVXFKJiBLVwFHzfkBIl4fQ1+gw93
+         y42UBycUjH8rNwg5Efk3ghMrj/5h/rc6qrSFbnTu/XK/tVC2YCusu84MKLdNiU0sW16Q
+         Fgdd4ggrU6jz1qnxNIHCG0vsZ4RAoh5gLmzE5n8dZKjXE/xhrItrjjerlXHJNWAKJo0Z
+         /sVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vKbxvFs7idvHnkpYGCCi9EPfdsQNoN5vylEOpYCziO4=;
-        b=vJ9TW4U3UuG8EX+G8E6bvCVeYWmJDk1Y8cpv0+HlFEeDo7lCIKuJaYhONO5vKgjLL9
-         RI1uxyqEyKtVqcDKTDudYLLlCxx075W+Dip/XSPOXQdghYeaq1pvMO0qIDai5datKAjJ
-         yKN5FdqbZJ1Ye0CvyzdN2ny0QtiS4RrxO42l0euxqKWD4tDJXs5qx/U/fDbesNSBZM6h
-         4MahQQu14iUPwcWkZ9xBFkM52K/xv4i3oIu9BSxC26jN/QRZKh5HVt4iBh5hMFbduf/m
-         A0fRW8/cVD8fjRdyTX+oxaWzFjKqHpjHqTf+itok6I7UNQEYz7lfdBOekMqeGxIDZ4i7
-         dvWg==
-X-Gm-Message-State: ACrzQf3mmjDiVZicKA2Z+Xcc51GT093+tC2fxsH4KSmH6sm8k4iModE6
-        X7eKVhBgkH8DyBCjp/xJh7w=
-X-Google-Smtp-Source: AMsMyM6C/pQ2WxnAnmHbpPN0fARrxQ6Y51yOCm5J2+/TfyPhm4No1WMJ+9QRzvwOuruJvgrdwH2raw==
-X-Received: by 2002:a05:6000:178a:b0:22e:d215:4099 with SMTP id e10-20020a056000178a00b0022ed2154099mr4281979wrg.79.1665943793302;
-        Sun, 16 Oct 2022 11:09:53 -0700 (PDT)
-Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b003c6f8d30e40sm156225wmn.31.2022.10.16.11.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 11:09:52 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [RESEND PATCH 3/3] drm/i915/gem: Replace kmap() with kmap_local_page()
-Date:   Sun, 16 Oct 2022 20:09:38 +0200
-Message-Id: <20221016180938.17403-4-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221016180938.17403-1-fmdefrancesco@gmail.com>
-References: <20221016180938.17403-1-fmdefrancesco@gmail.com>
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2r3mUxfW6g3CVFgzjeCUIRcSV3xp7RfjjaFTPG8jsCg=;
+        b=z4Azjt+53aMw2VIPdDBxEPAUzqx8SAuHbjiDRr/O+XtQcXfvbZnJvrj/JxWk3dQycT
+         DNnNkWxs0GWJ8da/TVqiNoes0VGQKK0fw8c987f3RgZdvD8RtBYiEFwnSibAowSqb+1q
+         k3Xve2jOrEcR6PGfLvweVwL8o1VnCwBlclaiqCBQjD4vwaqOLYKwhiBd5r5Sstkbgw1J
+         pW3YWFuh67YWxrTEzxBm7t3qoi8tg+QfArWyh4OSgSnhfhFzki6HsFA9EahT8uagzlnO
+         zcXhIeIsDmMJjI/H1SJUGczlXNP4dBsO2uTRsT7rrDrZhS5sbwrewxpBt780+aqxmiBQ
+         CBrg==
+X-Gm-Message-State: ACrzQf239s+JwbYADTLSYf+FwOD2VkPhcD6AMYZ2H3V5Ov7/zMa5xWUb
+        89zUNDDb5viEUjgr/OE8WguKyth+ZFxXRJZ+mhg=
+X-Google-Smtp-Source: AMsMyM7lm61H+zH9W8dFPLna5u3lsmOviHgfgOMaxA41Ju/lRifw405aHfPjQIfMl1EmlvX6/Uf5LQxlDuQaWhNSZEQ=
+X-Received: by 2002:a05:6830:141:b0:661:acd7:de with SMTP id
+ j1-20020a056830014100b00661acd700demr3638490otp.367.1665943866596; Sun, 16
+ Oct 2022 11:11:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20221014204210.383380-1-nathan@kernel.org> <CAKwvOdmvqoO1220ac7RVbVzvmbJB0wYq5WOfuz=T8hd+CkijBg@mail.gmail.com>
+ <CAK7LNAQvpSFUiX9=92UnoZpJs=uzaZqpGG-r1dyeWsRXpS5fmw@mail.gmail.com>
+In-Reply-To: <CAK7LNAQvpSFUiX9=92UnoZpJs=uzaZqpGG-r1dyeWsRXpS5fmw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 16 Oct 2022 20:10:30 +0200
+Message-ID: <CA+icZUWfB1pxTFc2VX4_J2dqZZkZ=raC=EVKuPDP0EdBy777OQ@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/Kconfig.debug: Add check for non-constant
+ .{s,u}leb128 support to DWARF5
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>, linux-kbuild@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -93,97 +75,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().
+On Sun, Oct 16, 2022 at 8:04 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Sat, Oct 15, 2022 at 6:52 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Fri, Oct 14, 2022 at 1:48 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > When building with a RISC-V kernel with DWARF5 debug info using clang
+> > > and the GNU assembler, several instances of the following error appear:
+> > >
+> > >   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
+> > >
+> > > Dumping the .s file reveals these .uleb128 directives come from
+> > > .debug_loc and .debug_ranges:
+> > >
+> > >   .Ldebug_loc0:
+> > >           .byte   4                               # DW_LLE_offset_pair
+> > >           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
+> > >           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
+> > >           .byte   1                               # Loc expr size
+> > >           .byte   90                              # DW_OP_reg10
+> > >           .byte   0                               # DW_LLE_end_of_list
+> > >
+> > >   .Ldebug_ranges0:
+> > >           .byte   4                               # DW_RLE_offset_pair
+> > >           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
+> > >           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
+> > >           .byte   4                               # DW_RLE_offset_pair
+> > >           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
+> > >           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
+> > >           .byte   0                               # DW_RLE_end_of_list
+> > >
+> > > There is an outstanding binutils issue to support a non-constant operand
+> > > to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
+> > > be any movement on it, due to concerns over how it would work with
+> > > linker relaxation.
+> > >
+> > > To avoid these build errors, prevent DWARF5 from being selected when
+> > > using clang and an assembler that does not have support for these symbol
+> > > deltas, which can be easily checked in Kconfig with as-instr plus the
+> > > small test program from the dwz test suite from the binutils issue.
+> > >
+> > > Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1719
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > Thanks for keeping these LLVM_IAS=0 builds alive a little longer.  My
+> > hope is the GNU binutils can relax their requirement for debug info
+> > sections to improve support for DWARF v5.
+> >
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+>
+> Applied to linux-kbuild.
+> Thanks.
+>
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+[1] says:
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and are still valid.
+"This looks good to me! Feel free to submit with a:
+Tested-by: Conor Dooley <conor.dooley@microchip.com>"
 
-Since its use in i915/gem is safe everywhere, it should be preferred.
+-sed@-
 
-Therefore, replace kmap() with kmap_local_page() in i915/gem. Instead of
-open-coding local map + memcpy + local unmap, use memcpy_to_page() in a
-suited call site.
+[1] https://github.com/ClangBuiltLinux/linux/issues/1719#issuecomment-1261158627
 
-Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c          | 6 ++----
- drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 8 ++++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-index 4eed3dd90ba8..2bc6ab9964ff 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-@@ -640,16 +640,14 @@ i915_gem_object_create_shmem_from_data(struct drm_i915_private *dev_priv,
- 	do {
- 		unsigned int len = min_t(typeof(size), size, PAGE_SIZE);
- 		struct page *page;
--		void *pgdata, *vaddr;
-+		void *pgdata;
- 
- 		err = aops->write_begin(file, file->f_mapping, offset, len,
- 					&page, &pgdata);
- 		if (err < 0)
- 			goto fail;
- 
--		vaddr = kmap(page);
--		memcpy(vaddr, data, len);
--		kunmap(page);
-+		memcpy_to_page(page, 0, data, len);
- 
- 		err = aops->write_end(file, file->f_mapping, offset, len, len,
- 				      page, pgdata);
-diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-index 3ced9948a331..bb25b50b5688 100644
---- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-@@ -153,7 +153,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
- 	intel_gt_flush_ggtt_writes(to_gt(i915));
- 
- 	p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
--	cpu = kmap(p) + offset_in_page(offset);
-+	cpu = kmap_local_page(p) + offset_in_page(offset);
- 	drm_clflush_virt_range(cpu, sizeof(*cpu));
- 	if (*cpu != (u32)page) {
- 		pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
-@@ -171,7 +171,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
- 	}
- 	*cpu = 0;
- 	drm_clflush_virt_range(cpu, sizeof(*cpu));
--	kunmap(p);
-+	kunmap_local(cpu);
- 
- out:
- 	i915_gem_object_lock(obj, NULL);
-@@ -249,7 +249,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
- 		intel_gt_flush_ggtt_writes(to_gt(i915));
- 
- 		p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
--		cpu = kmap(p) + offset_in_page(offset);
-+		cpu = kmap_local_page(p) + offset_in_page(offset);
- 		drm_clflush_virt_range(cpu, sizeof(*cpu));
- 		if (*cpu != (u32)page) {
- 			pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
-@@ -267,7 +267,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
- 		}
- 		*cpu = 0;
- 		drm_clflush_virt_range(cpu, sizeof(*cpu));
--		kunmap(p);
-+		kunmap_local(cpu);
- 		if (err)
- 			return err;
- 
--- 
-2.37.1
-
+>
+>
+> > > ---
+> > >
+> > > v2:
+> > >     - Rebase on commit bb1435f3f575 ("Kconfig.debug: add toolchain
+> > >       checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT") from the kbuild
+> > >       tree.
+> > >     - Limit CONFIG_AS_HAS_NON_CONST_LEB128 dependency to GNU as. There
+> > >       is no point to applying this dependency to the integrated
+> > >       assembler because it will always pass.
+> > >     - Apply the CONFIG_AS_HAS_NON_CONST_LEB128 dependency to
+> > >       CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as well, due to the
+> > >       aforementioned kbuild change.
+> > >     - Move comment block to above CONFIG_AS_HAS_NON_CONST_LEB128, as the
+> > >       configuration is now used in two places.
+> > >     - Drop Conor's tested by, as the patch is different enough to
+> > >       potentially require new testing.
+> > >
+> > > v1: https://lore.kernel.org/20220928182523.3105953-1-nathan@kernel.org/
+> > >
+> > >  lib/Kconfig.debug | 9 +++++++--
+> > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > > index db8d9271cabf..5c1c63575895 100644
+> > > --- a/lib/Kconfig.debug
+> > > +++ b/lib/Kconfig.debug
+> > > @@ -231,6 +231,11 @@ config DEBUG_INFO
+> > >           in the "Debug information" choice below, indicating that debug
+> > >           information will be generated for build targets.
+> > >
+> > > +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
+> > > +# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+> > > +config AS_HAS_NON_CONST_LEB128
+> > > +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
+> > > +
+> > >  choice
+> > >         prompt "Debug information"
+> > >         depends on DEBUG_KERNEL
+> > > @@ -253,7 +258,7 @@ config DEBUG_INFO_NONE
+> > >  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> > >         bool "Rely on the toolchain's implicit default DWARF version"
+> > >         select DEBUG_INFO
+> > > -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+> > > +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
+> > >         help
+> > >           The implicit default version of DWARF debug info produced by a
+> > >           toolchain changes over time.
+> > > @@ -277,7 +282,7 @@ config DEBUG_INFO_DWARF4
+> > >  config DEBUG_INFO_DWARF5
+> > >         bool "Generate DWARF Version 5 debuginfo"
+> > >         select DEBUG_INFO
+> > > -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> > > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
+> > >         help
+> > >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+> > >           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+> > >
+> > > base-commit: bb1435f3f575b5213eaf27434efa3971f51c01de
+> > > --
+> > > 2.38.0
+> > >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
