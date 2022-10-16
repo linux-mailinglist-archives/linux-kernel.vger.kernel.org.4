@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBA0600289
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA74600293
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJPRxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 13:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S229622AbiJPR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 13:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiJPRxB (ORCPT
+        with ESMTP id S229705AbiJPR6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 13:53:01 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AA932066
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=/QSZlP10x6sKv7h8Gtd9mwjASy+NA/rKPLXm4tqQL28=;
-        t=1665942779; x=1667152379; b=ro9lCKsceVbmoK/R+y5zBUibyzlEswGUT+pfewgvQB3+V2j
-        HCm1Qg9Nwc4qmFIVxSnxPui41jGXcLIqp6qIFPQsh3JOpXhB/i7OT2Znfs1lXY+A2OyayrhM7Hbpa
-        O2PIHw534T0T7YZJBG4hISuEtDME8yLeVywGe3ZPpxt/0MJrlNuJtbaa584FwNbX9T+NfKznPGs+k
-        pTFGfUn8zXEoAmDvMi88ePUJeaQfvN+T2om6gjEwsbo9rhxPYo5MAtLEQEjudqj0+2q3H1oFNz9Vo
-        VXOl4odMLPswM4QC2zaK6v8fhJSswZxdiGjjojOzx76BiArXHQM12KAibNFAUYjw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1ok7of-008UHd-2S;
-        Sun, 16 Oct 2022 19:52:49 +0200
-Message-ID: <f0b1f33108fec467689b52568b5ad7c906eb5435.camel@sipsolutions.net>
-Subject: Re: [PATCH] um: protect find_task_by_pid_ns() with rcu lock
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Dawei Li <set_pte_at@outlook.com>, richard@nod.at,
-        anton.ivanov@cambridgegreys.com
-Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Sun, 16 Oct 2022 19:52:48 +0200
-In-Reply-To: <TYCP286MB2323CA02DF3A741B5F58B297CA269@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB2323CA02DF3A741B5F58B297CA269@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 16 Oct 2022 13:58:50 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605812935F
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:58:48 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so8244652wmb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=inHqJMeb2eEi15CeXM8hxUEa9+fOAmjhPmMj86FNlH4=;
+        b=FLBlIV98RjiuFB3okQgYY1NdF4LKCCe/h4qJ5u/sKQs3WzY6L/WxRnv452yUgasoCT
+         4aBg/+EC9CkqE1dYK+BsgnYlAHO1uIj7jP8DhnmPdaznwBvehseM6gt0D1Plcngq3Fto
+         QeuWYtg7yzTQw3tkvbx46zGRT5lWN0QwakRAgV3WYy3bdUbSJnDReNRwf/XRTSiUoiUr
+         mmEOSEJCeCW+0dSbBUVCEjDrZ+YFRaFehA+HQVWdSXzcsa4EWuAvoWRimXDVGgjmxj5x
+         ixon/FcZPSC/I6cFF4c9qO4oKG0iYHryekNeUJ7ze8fEVeRPu37L9gdisK+lViUy0pK7
+         i2zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=inHqJMeb2eEi15CeXM8hxUEa9+fOAmjhPmMj86FNlH4=;
+        b=YZfThyAwhaORueuVQjpDIJ+SK+XMhlDqDivYyKkCwRtujWo0nsoK8nuV7sSR7ZtAco
+         txndOfEASrv7BTS6pV7yyg3OcMNKGIgHO7ZlsxleQ2wIxtgAhPZuHvj6bQub2WpzciHL
+         840RG4pt5aJZ/d7yb0LuQaHwbaqWj0/gUDg3NvR08+hNdLlTrnBjdlEl5fZxNY43Wi86
+         4POpickWEbiCAMT6L039E3ELuw+6Qse5rfjcZEnGHaLWYdSopn/qL6tih5UiLtTcl8/C
+         y8PV5KphoRU0jvaajkWuXRJR4K66pDPO5g9+RJf5ZTg8UVafHdbHjRRiu7Q1vqoyLLer
+         KvcQ==
+X-Gm-Message-State: ACrzQf1C63+nX66/6ewaVoT3UjSdx768k459BfQPPqMz2tLc+9Ml7h6u
+        cHBgHfKyTXL0IQdpVuU112QCmGfKbtENig==
+X-Google-Smtp-Source: AMsMyM431LFQ1Iv5/30swx1zHXOZ8BKqg5dayG2AA+J3f/4e2MKG28IT27EWO+HMs54d5BvoVuqVhg==
+X-Received: by 2002:a1c:2743:0:b0:3b3:4066:fa61 with SMTP id n64-20020a1c2743000000b003b34066fa61mr17221591wmn.79.1665943126905;
+        Sun, 16 Oct 2022 10:58:46 -0700 (PDT)
+Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
+        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b003c452678025sm13217786wmm.4.2022.10.16.10.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 10:58:46 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     caleb.connolly@linaro.org
+Cc:     Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH] dt-bindings: mfd: qcom,spmi-pmic: support rradc type
+Date:   Sun, 16 Oct 2022 18:57:57 +0100
+Message-Id: <20221016175757.1911016-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-10-16 at 23:10 +0800, Dawei Li wrote:
-> find_task_by_pid_ns() is safe if and only if it's under protection
-> from rcu read lock, implements the protection.
->=20
-> base-commit: 193cb8372424184dde28088a4230a5fed0afb0ad
->=20
-> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
-> ---
->  arch/um/drivers/mconsole_kern.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/arch/um/drivers/mconsole_kern.c b/arch/um/drivers/mconsole_k=
-ern.c
-> index 5026e7b9adfe..6b80e766ae80 100644
-> --- a/arch/um/drivers/mconsole_kern.c
-> +++ b/arch/um/drivers/mconsole_kern.c
-> @@ -683,7 +683,10 @@ void mconsole_stack(struct mc_request *req)
->  		return;
->  	}
-> =20
-> +	rcu_read_lock();
->  	to =3D find_task_by_pid_ns(pid_requested, &init_pid_ns);
-> +	rcu_read_unlock();
-> +
->  	if ((to =3D=3D NULL) || (pid_requested =3D=3D 0)) {
->  		mconsole_reply(req, "Couldn't find that pid", 1, 0);
->  		return;
+'adc@' nodes can also be the rradc.
 
-This can't be right - the 'to' pointer is used later in the code (not in
-the existing context), so the protection, if needed, would have to
-include the later "with_console()" call?
+Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+---
+This patch is based on Luca's series:
+https://lore.kernel.org/linux-arm-msm/20220925211744.133947-2-luca@z3ntu.xyz/
 
-johannes
+Luca: feel free to apply this as a fixup if you re-send
+---
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index b5a06c1b67bb..cba25562e1da 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -102,6 +102,7 @@ patternProperties:
+     oneOf:
+       - $ref: /schemas/iio/adc/qcom,spmi-iadc.yaml#
+       - $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
++      - $ref: /schemas/iio/adc/qcom,spmi-rradc.yaml#
+ 
+   "^adc-tm@[0-9a-f]+$":
+     type: object
+-- 
+2.38.0
+
