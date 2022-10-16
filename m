@@ -2,228 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B7A600137
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9615C600147
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiJPQXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 12:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S230080AbiJPQ0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 12:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiJPQXe (ORCPT
+        with ESMTP id S230063AbiJPQZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 12:23:34 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDB1399FE
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:31 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id a18so5435920qko.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MX65gOaIT08XY4M5cn1g7cbmh/RnvIq8wli6SwXMtBg=;
-        b=p66SBm+jxcoSdZGKJv7ohAq+81+Wn8YhnMz8iueTmtobse4/DkXueovkEUAUaCkUu6
-         WVm/9HPU515u6TG0YAJiCNF1ofIRPqDK8Q9CyDVKliN69cgHRFabsOCxYaeuk4+rLYMz
-         Uh6IwFRMQQakirGwlhoxDQ8k5+w4YxLuaaHMs+zwPgBjDY5+lUr7nUiNuGJIgAyK7KSO
-         k9XhPBuImxFy62joLKYvUVC8icWt2L6w4AK/jqbKNg8a0V52eod7KTVCgYXp5rYKKWQ3
-         z/+kWcCPQg/y2JNutjffp7bFIhMhUNHM0GhPHh4vsLeRMaMCaF3eyGrcM+Qh0rztXVP2
-         q0rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MX65gOaIT08XY4M5cn1g7cbmh/RnvIq8wli6SwXMtBg=;
-        b=0c0ocKUc7bLdzA7UP0p4kchtIkT4lPtG+RkVc2n2raUgQ7l5bq+wgv2NDRnYGHc23b
-         fHbIBF57TfqGid01wDZQFPDlpcYyaJmYfn4B/3TyIPeeJzBURajNfLlEdCFjh9nTL2h7
-         RJHVVmv43tMQdZjqvGhGdb5rRiMaajehQ79H7KYY4YWva9GUaU6wPhzN6QGdFIggJSpH
-         kQ58r1JBt4SLcHqO7g8JdmK27xQZOGVW2vQoZtPN1KQJHcojvEvH6F/b1dGjGN2G/c1Y
-         dUye7ktMTOBD4Qz3nzps867xWfGBknlHZ+pvy7Bj+YbvsODHq79LAG4YRaFj1Z0QXHGo
-         Yavg==
-X-Gm-Message-State: ACrzQf0nrUguqSmdZNSRaAvsvkJ3JS6lEHOZfUk82IrDTTNNWsrdTlJd
-        QoFLx+W8uIcclDcp5FOjglogTQ==
-X-Google-Smtp-Source: AMsMyM7Fe2XdLHMwVi3SxpUC+8uRYLyaZr1loOQzqOHB/PYzX8BlQ7wQ8d2rt0Y1ba72gdby5qnCjw==
-X-Received: by 2002:a37:2d04:0:b0:6e7:4f3f:140e with SMTP id t4-20020a372d04000000b006e74f3f140emr4930915qkh.187.1665937410874;
-        Sun, 16 Oct 2022 09:23:30 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id bb33-20020a05622a1b2100b00399fe4aac3esm6042064qtb.50.2022.10.16.09.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 09:23:29 -0700 (PDT)
-Message-ID: <fe7a6720-1bf6-bc66-22d2-225cb6e575ff@linaro.org>
-Date:   Sun, 16 Oct 2022 12:23:28 -0400
+        Sun, 16 Oct 2022 12:25:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6270D17A9D;
+        Sun, 16 Oct 2022 09:24:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52D23B80D0F;
+        Sun, 16 Oct 2022 16:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B61C433C1;
+        Sun, 16 Oct 2022 16:24:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665937470;
+        bh=eRghN2lZHqfpOgRLupDxS556SB1xyrwitdm1QMOWL08=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r5IQBskBZgdRbPpks4rWPq69dRt6D0V1SahdsL0D2tjU8vXInppctABKlUP0f7o0t
+         3G6NH9Dy/UrzGk8bNTsEjGRGhf6ik52e5a5IZAJ5TgDcThv8qmVNwZkln2C9LorfrR
+         jz82uKgacoYniiE8iBIBsPz7w6l473Nyjkh9Qb61Skc/Eln+OGy3ZjWnP9RkXbJlAD
+         4esp0VasIFYkJ+Sy9l3V4dsQxXAp1kj4KneV/rcuAJ6xPrBGTPpyjAnFa1iBxpSmgI
+         x0tn85sCcJ3/2Wc6KGlY4oQT7eC45Pb6CWkmbVYxywPRg9rq78B6DStM+3/Opf1xno
+         ezy0vxA5AhqTQ==
+Date:   Sun, 16 Oct 2022 17:24:57 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     "Sa, Nuno" <Nuno.Sa@analog.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 11/14] iio: ad7606: simplify using
+ devm_regulator_get_enable()
+Message-ID: <20221016172457.6637c888@jic23-huawei>
+In-Reply-To: <20221016171520.07506844@jic23-huawei>
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+        <521c52f5a9bdc2db04d5775b36df4b233ae338da.1660934107.git.mazziesaccount@gmail.com>
+        <SN4PR03MB6784BE44D4A6DCECA0859C5F99799@SN4PR03MB6784.namprd03.prod.outlook.com>
+        <0aaeb018-94ba-eaaa-4000-7ad082a09850@gmail.com>
+        <20221016171520.07506844@jic23-huawei>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc7180: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221013184700.87260-1-krzysztof.kozlowski@linaro.org>
- <20221013184700.87260-2-krzysztof.kozlowski@linaro.org>
- <CAD=FV=VyrCA4jNkfVGwRw2Zf-sCwJe21dRHidtZnJyb73i_UrQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=VyrCA4jNkfVGwRw2Zf-sCwJe21dRHidtZnJyb73i_UrQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 13:50, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Oct 13, 2022 at 11:49 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
->> index eae22e6e97c1..37abe131951c 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> 
-> [ ... cut ... ]
-> 
->>  &spi0 {
->> -       pinctrl-0 = <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_cs_gpio>;
->> +       pinctrl-0 = <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_spi>;
->>         cs-gpios = <&tlmm 37 GPIO_ACTIVE_LOW>;
->>  };
-> 
-> Something still looks wrong with the above. I would have expected:
-> 
->   <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_spi>, <&qup_spi0_cs_gpio>;
+On Sun, 16 Oct 2022 17:15:29 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-Yes, you're right.
+> On Tue, 30 Aug 2022 15:54:07 +0300
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>=20
+> > Thanks for the review(s) Nuno!
+> >=20
+> > On 8/30/22 14:46, Sa, Nuno wrote: =20
+> > >> From: Matti Vaittinen <mazziesaccount@gmail.com>
+> > >> Sent: Friday, August 19, 2022 9:20 PM
+> > >> To: Matti Vaittinen <mazziesaccount@gmail.com>; Matti Vaittinen
+> > >> <matti.vaittinen@fi.rohmeurope.com>
+> > >> Cc: Lars-Peter Clausen <lars@metafoo.de>; Hennerich, Michael
+> > >> <Michael.Hennerich@analog.com>; Jonathan Cameron
+> > >> <jic23@kernel.org>; linux-iio@vger.kernel.org; linux-
+> > >> kernel@vger.kernel.org
+> > >> Subject: [PATCH v3 11/14] iio: ad7606: simplify using
+> > >> devm_regulator_get_enable()
+> > >>
+> > >> [External]
+> > >>
+> > >> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
+> > >> add_action_or_reset(regulator_disable)' and use the
+> > >> devm_regulator_get_enable() and drop the pointer to the regulator.
+> > >> This simplifies code and makes it less tempting to add manual control
+> > >> for the regulator which is also controlled by devm.
+> > >>
+> > >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> > >>
+> > >> ---   =20
+> > >=20
+> > > The commit message could state that while doing the change, dev_err_p=
+robe()
+> > > was also introduced. Bah, anyways:
+> > >=20
+> > > Acked-by: Nuno S=C3=A1 <nuno.sa@analog.com>   =20
+> >=20
+> > Good point. I have few other changes to the series pending - and I=20
+> > probably need to rebase/respin when -rc1 is out (and dependency patches=
+=20
+> > are merged from Mark's tree) =3D> I may as well alter the commit messag=
+e.
+> >  =20
+> I tweaked it and applied.
+>=20
+> Not I'm grabbing these early because I forgot you'd sent them and
+> found myself writing the same patches.  Memory of a goldfish :)
 
-> 
-> Specifically the old commit e440e30e26dd ("arm64: dts: qcom: sc7180:
-> Avoid glitching SPI CS at bootup on trogdor") only worked correctly
-> because "qup_spi0_cs_gpio_init_high" didn't specify a "function".
-> That meant it was guaranteed to _just_ set the GPIO output to be
-> high without changing the mux. Then later we'd change the mux and
-> the output would already be high and we'd have no glitch.
-> 
-> As I mentioned earlier, I didn't love that solution but I didn't
-> see a better way. Specifically, I don't think that the properties
-> within a device tree node are ordered. Thus with your new definition:
-> 
->   qup_spi0_cs_gpio_init_high: qup-spi0-cs-gpio-init-high-state {
->     pins = "gpio37";
->     function = "gpio";
->     output-high;
->   };
-> 
-> Nothing tells the pinctrl subsystem whether it should apply the
-> 'output-high' before the 'function = "gpio"' or vice versa. From
-> my previous investigation it seemed to set the function first
-> and then the output to be high. Maybe that's because I happened
-> to list the function first, but I wouldn't have thought it was
-> legal to rely on the ordering of properties.
-> 
-> On the other hand, values within a property _are_ ordered. That
-> means that when we specify:
-> 
->  <&qup_spi0_cs_gpio_init_high>, <&qup_spi0_spi>, <&qup_spi0_cs_gpio>;
-> 
-> The pinctrl subsystem can see that we want "init_high" done first,
-> then the SPI pins setup, and then the GPIO setup.
-> 
-> I confirmed that with your patches applied that the EC was reporting
-> a glitch, though I haven't (yet) managed to reproduce the cros-ec
-> probe failure that we were seeing in the past.
-> 
-> Unfortunately, I then reverted your patches and the EC was _still_
-> glitching. :( It looks like things broke in commit b991f8c3622c ("pinctrl:
-> core: Handling pinmux and pinconf separately"). :( Sure enough,
-> reverting that patch fixes the glitching.
+Tweaked a little more - you missed that the struct in the header had
+kernel-doc for the struct regulator *.  Dropped that.
 
-Regardless of this issue, binding requiring a function does not allow to
-keep the pin in previous state. Your glitch-workaround was actually an
-use-case for such keep-old-function feature.
-
-Yet, I am not sure if we should keep such ability. The firmware could
-configure the pin to whatever. Firmware behavior could also change it
-making the OS behavior non-predictable.
-
-> 
-> OK, several hours later and I've come up with a proposed solution [1].
-> Assuming that solution lands, then I think the answer is:
-> 
-> a) Totally get rid of the '_init_high' entries.
-> b) trogdor should just specify:
->    <&qup_spi0_spi>, <&qup_spi0_cs_gpio>;
-
-Yes.
-
-> 
-> [ ... cut ... ]
-> 
->> +&qup_spi0_spi {
->> +       drive-strength = <2>;
->> +       bias-disable;
->>  };
->>
->>  &qup_spi0_cs_gpio {
->> -       pinconf {
->> -               pins = "gpio34", "gpio35", "gpio36", "gpio37";
->> -               drive-strength = <2>;
->> -               bias-disable;
->> -       };
->> +       drive-strength = <2>;
->> +       bias-disable;
->> +};
->> +
->> +&qup_spi6_spi {
->> +       drive-strength = <2>;
->> +       bias-disable;
->>  };
->>
->>  &qup_spi6_cs_gpio {
->> -       pinconf {
->> -               pins = "gpio59", "gpio60", "gpio61", "gpio62";
->> -               drive-strength = <2>;
->> -               bias-disable;
->> -       };
->> +       drive-strength = <2>;
->> +       bias-disable;
->> +};
->> +
->> +&qup_spi10_spi {
->> +       drive-strength = <2>;
->> +       bias-disable;
->>  };
->>
->>  &qup_spi10_cs_gpio {
->> -       pinconf {
->> -               pins = "gpio86", "gpio87", "gpio88", "gpio89";
->> -               drive-strength = <2>;
->> -               bias-disable;
->> -       };
->> +       drive-strength = <2>;
->> +       bias-disable;
->>  };
-> 
-> Mostly addressed by the above, but it should be noted that in your
-> patch you were specifying settings in the trogdor.dtsi file for
-> "qup_spi#_cs_gpio" but then never using it (it used the _init_high
-> versions).
-> 
-> [1] https://lore.kernel.org/r/20221014103217.1.I656bb2c976ed626e5d37294eb252c1cf3be769dc@changeid
-
-Best regards,
-Krzysztof
+>=20
+> Jonathan
+>=20
+> > Yours,
+> > 	-- Matti
+> >  =20
+>=20
 
