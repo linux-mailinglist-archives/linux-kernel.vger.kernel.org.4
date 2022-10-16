@@ -2,187 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC0A600082
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11748600088
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJPPOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S229980AbiJPPRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiJPPOK (ORCPT
+        with ESMTP id S229711AbiJPPQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:14:10 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF5243608
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:14:04 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id z18so6158002qvn.6
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DspOqI6hz1WLm7j7CT74yx9oCWpDom4lXqndSWVe65o=;
-        b=vKviUKik+NtbN8d+7cD8EEEU0D6LG8XTdYhXVq6aOJezwwYZOYx2EjVdFPII3ADqkI
-         aQvkba1pJvH+d5GFuTCb8bazjIRA31ofQ86tX93GSJgqW7dIhzVJHXFs3M4HwqQ1mud1
-         Q61yQK0ytFn0rVfuh5E/lNzf9wj+8TpL9zC/nbycqQKMOVBXPmOhNAum6I/M09J/efuJ
-         YB7wGp/bU4Oz0oEyYYDyE9tcYZEgBuExiJblVxUhaH/LrgscEOlyL9d9lTMSmzLu5aNU
-         FPnwU5Zkkd/ffVO1arPH6eS8PmIC9fFZ1ctudD3QUFIkNxRKP5Zsv/4B4tM9iY7cUqXj
-         oVhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DspOqI6hz1WLm7j7CT74yx9oCWpDom4lXqndSWVe65o=;
-        b=fgXz9PCby+yJpqt0CeTyMQKvyEo0kfNOavOMlphI3AHJsbHDHL6NX83OXR7nvvlkw3
-         W5UNlm12LdMnK1Ekvp2CJ/0psZi81zjaUG61pgs++B3omRn6mZ4OpfExMuK4neFr5jGv
-         HRIXzk39e6gM5vviVB0was425l6m35IUpum50/Dhm4HmrsfN530sktUIhatixOrmE6nE
-         rf/Jwk1kcfmEYU/81bJ1kK1g57J/Ak62YMl7Z1Mdg1khuavmxZ1SB8eNPEvVSppSCVvQ
-         NzT9/KOo4hbvMqSqOyKImxmOQQIIAUGDEa3BpCY8mInTAK7oOLp8T7RzJfrtjI0X+DD5
-         PYjA==
-X-Gm-Message-State: ACrzQf2IC6xSCExBIqIbaAvICRH2BvXvxYTdzdilNUUcUEmzldozWM8W
-        1IdNsaYNLz84v189EMfz14eCtg==
-X-Google-Smtp-Source: AMsMyM4UTeOjEM4QLiZGPdKafjQN8x9XSIZC4D7aRxQF/zyPAl1f7s/nq7gXSsvhB1qw3J0xSWKOlQ==
-X-Received: by 2002:a05:6214:250c:b0:4b1:a1e7:1d89 with SMTP id gf12-20020a056214250c00b004b1a1e71d89mr5378511qvb.1.1665933243673;
-        Sun, 16 Oct 2022 08:14:03 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id cn4-20020a05622a248400b00304fe5247bfsm6037943qtb.36.2022.10.16.08.14.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 08:14:02 -0700 (PDT)
-Message-ID: <c11f92be-1d86-17e4-e3bb-05e7b17d5fc8@linaro.org>
-Date:   Sun, 16 Oct 2022 11:14:01 -0400
+        Sun, 16 Oct 2022 11:16:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF7431DE8;
+        Sun, 16 Oct 2022 08:16:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64DC4B80CBF;
+        Sun, 16 Oct 2022 15:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21330C433D6;
+        Sun, 16 Oct 2022 15:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665933416;
+        bh=p2AC17y9FzsnRIAnSQtdt8ru86VoJ0PGE02CSXYdDR4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nvR/j/RKINBhqT8Mu27cQ+8ZMN9UpU9vuUjWXoZUkZOCUjs5rNP1PGu8pvuDu7bBZ
+         SVVgFs3G4lU31PKReeMeseGppAL4DAAzMUICm4fxb1YlOEOdd5nH64dBi9WZozexgQ
+         wj9UMpADlMrwRa0Wso3+5RJ/0OTFvUdJEWrJDRM7AKrIncYLG5EZLxWhtMg1eI6FQo
+         Z2iouU7HjR5g+ZmNEFnLfK61JD614uyiIHEiICtrO0UJCl0GD2Wgc+xHY3fVpHvMpM
+         5K7reRm5fXEw72WQ5kmgsGzJryg1ewxXvsJRXpqwzhRX0gXU8eOitZbdNTGCwQYbNi
+         0HmGvMFK3rhtA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id AA1C95C0624; Sun, 16 Oct 2022 08:16:55 -0700 (PDT)
+Date:   Sun, 16 Oct 2022 08:16:55 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
+        youssefesmat@google.com, surenb@google.com
+Subject: Re: [PATCH v8 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
+Message-ID: <20221016151655.GA5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221011180142.2742289-1-joel@joelfernandes.org>
+ <20221011180142.2742289-2-joel@joelfernandes.org>
+ <20221014142127.GE4221@paulmck-ThinkPad-P17-Gen-1>
+ <20221014144019.GB1108603@lothringen>
+ <20221014150344.GG4221@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQoRUJ=0_GJG6JunR58yASmehPanp14zbR3Y+KAGL1TDA@mail.gmail.com>
+ <20221014154606.GJ4221@paulmck-ThinkPad-P17-Gen-1>
+ <20221014204750.GA1119620@lothringen>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 5/6] arm64: dts: fsd: Add I2S DAI node for Tesla FSD
-Content-Language: en-US
-To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, rcsekar@samsung.com,
-        aswani.reddy@samsung.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
- <CGME20221014104911epcas5p394100ff6ed53be32c4d64c7e23e48833@epcas5p3.samsung.com>
- <20221014102151.108539-6-p.rajanbabu@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014102151.108539-6-p.rajanbabu@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221014204750.GA1119620@lothringen>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 06:21, Padmanabhan Rajanbabu wrote:
-> Add device tree node for I2S0 and I2S1 CPU DAI instances for Tesla
-> FSD board
+On Fri, Oct 14, 2022 at 10:47:50PM +0200, Frederic Weisbecker wrote:
+> On Fri, Oct 14, 2022 at 08:46:06AM -0700, Paul E. McKenney wrote:
+> > On Fri, Oct 14, 2022 at 11:19:28AM -0400, Joel Fernandes wrote:
+> > > I agree with the discussion, though if all CBs are in the bypass list,
+> > > the patch will also save 2 jiffies.
+> > > 
+> > > So just commit messages that need rework then? This one can be taken instead:
+> > > https://lore.kernel.org/rcu/21ECDA9F-81B1-4D22-8B03-020FB5DADA4F@joelfernandes.org/T/#m14d21fbce23539a521693a4184b28ddc55d7d2c5
+> > 
+> > This one looks plausible to me.
 > 
-> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-> ---
->  arch/arm64/boot/dts/tesla/fsd-evb.dts      |  8 +++++
->  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 14 ++++++++
->  arch/arm64/boot/dts/tesla/fsd.dtsi         | 38 ++++++++++++++++++++++
->  3 files changed, 60 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> index 1db6ddf03f01..c0a4509499ab 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> @@ -41,3 +41,11 @@
->  &ufs {
->  	status = "okay";
->  };
-> +
-> +&tdm_0 {
+> With the following modified diff (passed 25 hours of TREE01):
 
-Alphabetical order against other label-overrides.
+Very good!
 
-> +	status = "okay";
-> +};
-> +
-> +&tdm_1 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-> index e3852c946352..ff6f5d4b16dd 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-> @@ -339,6 +339,20 @@
->  		samsung,pin-pud = <FSD_PIN_PULL_UP>;
->  		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
->  	};
-> +
-> +	i2s0_bus: i2s0-bus {
+Could one of you (presumably Joel) please send v9?
 
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
+Just to avoid me getting the wrong patch in the wrong place or similar.
+Or mangling the required rebase following a pull (otherwise, as soon as I
+create branches, Stephen Rothwell notes the lack of a committer signoff.)
 
-> +		samsung,pins = "gpd1-0", "gpd1-1", "gpd1-2", "gpd1-3", "gpd1-4";
-> +		samsung,pin-function = <FSD_PIN_FUNC_2>;
-> +		samsung,pin-pud = <FSD_PIN_PULL_DOWN>;
-> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
-> +	};
-> +
-> +	i2s1_bus: i2s1-bus {
-> +		samsung,pins = "gpd2-0", "gpd2-1", "gpd2-2", "gpd2-3", "gpd2-4";
-> +		samsung,pin-function = <FSD_PIN_FUNC_2>;
-> +		samsung,pin-pud = <FSD_PIN_PULL_DOWN>;
-> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
-> +	};
->  };
+							Thanx, Paul
+
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 96d678c9cfb6..7f1f6f792240 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3914,6 +3914,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  {
+>  	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
+>  	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
+> +	bool wake_nocb = false;
+> +	bool was_alldone = false;
 >  
->  &pinctrl_pmu {
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> index f35bc5a288c2..5decad45a1b6 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -32,6 +32,8 @@
->  		spi0 = &spi_0;
->  		spi1 = &spi_1;
->  		spi2 = &spi_2;
-> +		tdm0 = &tdm_0;
-> +		tdm1 = &tdm_1;
-
-Why?
-
->  	};
+>  	lockdep_assert_held(&rcu_state.barrier_lock);
+>  	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
+> @@ -3922,7 +3924,14 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  	rdp->barrier_head.func = rcu_barrier_callback;
+>  	debug_rcu_head_queue(&rdp->barrier_head);
+>  	rcu_nocb_lock(rdp);
+> +	/*
+> +	 * Flush bypass and wakeup rcuog if we add callbacks to an empty regular
+> +	 * queue. This way we don't wait for bypass timer that can reach seconds
+> +	 * if it's fully lazy.
+> +	 */
+> +	was_alldone = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
+>  	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
+> +	wake_nocb = was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
+>  	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+>  		atomic_inc(&rcu_state.barrier_cpu_count);
+>  	} else {
+> @@ -3930,6 +3939,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
+>  	}
+>  	rcu_nocb_unlock(rdp);
+> +	if (wake_nocb)
+> +		wake_nocb_gp(rdp, false);
+>  	smp_store_release(&rdp->barrier_seq_snap, gseq);
+>  }
 >  
->  	cpus {
-> @@ -809,6 +811,42 @@
->  			status = "disabled";
->  		};
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index d4a97e40ea9c..925dd98f8b23 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
+>  static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+>  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+>  static void rcu_init_one_nocb(struct rcu_node *rnp);
+> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+>  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  				  unsigned long j);
+>  static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index f77a6d7e1356..094fd454b6c3 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
+>  {
+>  }
 >  
-> +		tdm_0: tdm@140e0000 {
-
-Node names should be generic, so this looks like i2s.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +			compatible = "samsung,exynos7-i2s";
-> +			reg = <0x0 0x140E0000 0x0 0x100>;
-> +			interrupts = <GIC_SPI 206 IRQ_TYPE_LEVEL_HIGH>;
-> +			dmas = <&pdma1 14>, <&pdma1 13>, <&pdma1 12>;
-> +			dma-names = "tx", "rx", "tx-sec";
-> +			#clock-cells = <1>;
-> +			#sound-dai-cells = <1>;
-> +			clocks = <&clock_peric PERIC_HCLK_TDM0>,
-> +				 <&clock_peric PERIC_HCLK_TDM0>,
-> +				 <&clock_peric PERIC_PCLK_TDM0>;
-> +			clock-names = "i2s_opclk0", "i2s_opclk1", "iis";
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-Best regards,
-Krzysztof
-
+> +static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
+> +{
+> +	return false;
+> +}
+> +
+>  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  				  unsigned long j)
+>  {
