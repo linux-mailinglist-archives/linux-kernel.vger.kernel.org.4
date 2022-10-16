@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9CB5FFF9D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396835FFF9F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJPN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 09:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S229792AbiJPN23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 09:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJPN2F (ORCPT
+        with ESMTP id S229745AbiJPN2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 09:28:05 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875BB17898;
-        Sun, 16 Oct 2022 06:27:56 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id y14so19563028ejd.9;
-        Sun, 16 Oct 2022 06:27:56 -0700 (PDT)
+        Sun, 16 Oct 2022 09:28:12 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70083D593;
+        Sun, 16 Oct 2022 06:27:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id l22so12652277edj.5;
+        Sun, 16 Oct 2022 06:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J+d4zYZ2OcrExgu67AwFyCEVw5ZLbwcKQnaxEzIUbSA=;
-        b=mMrjWmGOWPj+C9rRMvyoO46WUEnlfRtEdLgPUR+JGPnHwMPR8SDTdC/OMHqnsvlbsO
-         uAwIB6Dii987acRt1fXMF5i0TMU353WzTrDYcnBf1Qy61/5fTgyC8ZS8q1Hmwna9zEgw
-         nSx2+QuChjF4E/rqYhj+nfwQ4DnUPgSrjHvw5J0li9Xq4Pk8Ki+MDQU4fkddJfQQBRGN
-         sMj6I/x54DLEW1hPsx03ZHWgDNs1SMxzWIZ7iOc/RFOv0ZhVw3EdwsHqdVzXP+4Hh6Kx
-         Ikr4iJKaEMbWgE/CeGhUWMVACdvtHreTDJOj+9pdQ5Uq29sHodsIf3dVM08LZqBjQtQk
-         ho6w==
+        bh=R19Q50f+4lJZEQStb2xYnMd/U/8/rdyoHM9BaeMxvps=;
+        b=gbkTAWWF6YY0ZHs9zxW1q9aUl6tCSvP9p4r8o3h1d5cTHJFV3BITvz6EgkHXD12VPF
+         r45o4jjfXEVXaDE/HgXGhGzJtcVV2tdAG/hD8z35OgMVtzXvqc0uJhza7xWHJyBjphM5
+         KN/0vaIoXgSILYv9JTWA/uVS6KYRY7P5dD5U9VIfjQ0RjJWD4XYLgl2+UftSL18DV1WT
+         EHX+vVJpBDNvGUneUs+D1qh5G3Yam3mNSxnkhS8egoHtqPFC+yuNa9afL/DT2fBD/U4R
+         vZlRwQPnZoOKFbfVmWMDHxNYmyY8P9UmCCc85qLYSYUpayfKCee0JP+vG0mhZYggG3AY
+         uSiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J+d4zYZ2OcrExgu67AwFyCEVw5ZLbwcKQnaxEzIUbSA=;
-        b=nRDj5lvZWKQnzdJj79gBwcgVxXt/l2/ql7x5NsA6aL3j7WYHvmdN9bU+QDHlochlSF
-         +R/hXj/EpaRtR2HGaBhSl7tFQF90h535Oj7VIFlB6z6WZWDTMpDp9nPM3l1jcR+4jSmz
-         EXRa3fiEix/N7JezGxvjhx3WF6D+jh2ZMJv70h7sLX2qMKkgXJTtkwvQh7nVFNe0nAD0
-         Gsd9Xd0w3Gg+jZYxPr7lHYA+GAytoFLvvxdzYiv6yVuHdgEslhIyKW8YgdMr6+e96GaA
-         aw4nFVJ+MgO7uUPuM2yrhwPBLY/pNgpwFTMuWceOBT0r/n0Arljx97sPPO2R3+VtlgEn
-         jMwg==
-X-Gm-Message-State: ACrzQf0CtGMSjEpukQKBZ5A6qu+OCbOxg+LM23iUBP+5hm3J+MGfEy7n
-        UvARD1Jjyly0ILpqnfufuf4=
-X-Google-Smtp-Source: AMsMyM5dMNtbDLm6MEm7cnMuWNaK+QO5ZZ+c9vzpWV5tcd39S+YzfLjNrzXGd0ed3T23TkI0TChLQQ==
-X-Received: by 2002:a17:906:8479:b0:78d:cf17:2d70 with SMTP id hx25-20020a170906847900b0078dcf172d70mr5129252ejc.319.1665926874773;
-        Sun, 16 Oct 2022 06:27:54 -0700 (PDT)
+        bh=R19Q50f+4lJZEQStb2xYnMd/U/8/rdyoHM9BaeMxvps=;
+        b=qx6LRE2ruSALtGJU+MH9CW0tIdp9+lRO7k1Vmg+pijtUbpFT7+Yb79LEvNHctXJa2d
+         h5+VBZRK8zbjZY08P7XCBZCUOrCICWjUE+3fMc61aEsnLApz2qifhl8lVya8gPPRvinI
+         zrGu13oRKVjuBTRbqg/nA27NgafKsTu2vJriLEH7p0WaWM7bL7NhD/pMJtj+3npLJA07
+         GOEDKMU7iqVPVJTHAymTsJWCUrv9RyqMfP+bdRhnuvIHUIOr2jmREsAY+vQyKKx0lmaz
+         UdTGiNrCJc80oM0v30C+OjnJWTRwnuSiGl3e9Bt5m+OtP5KlyJYjrFV7G4V4ZWDaJFMA
+         33ig==
+X-Gm-Message-State: ACrzQf3903FDiEBkBYKFoQS56kJJn5Amopti1MtYuw+7ejDHpQ/o4F7Y
+        El2elJowjBBEfGu9SdEtf8g=
+X-Google-Smtp-Source: AMsMyM4CLc3sbcJ+XcUb7r1QZ6mjeycYteXNf0YLcpCxBQ7DSnn0VWt1dxwJNrSay4i3SURbUIJ5SA==
+X-Received: by 2002:a05:6402:5190:b0:45c:fca7:e07b with SMTP id q16-20020a056402519000b0045cfca7e07bmr6145825edd.327.1665926876937;
+        Sun, 16 Oct 2022 06:27:56 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa7ce85000000b0045c72bba0bfsm5572057edv.4.2022.10.16.06.27.53
+        by smtp.gmail.com with ESMTPSA id y5-20020aa7ce85000000b0045c72bba0bfsm5572057edv.4.2022.10.16.06.27.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 06:27:54 -0700 (PDT)
+        Sun, 16 Oct 2022 06:27:56 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -58,9 +58,9 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/7] ASoC: codecs: jz4725b: add missed Mixer inputs
-Date:   Sun, 16 Oct 2022 16:26:47 +0300
-Message-Id: <20221016132648.3011729-7-lis8215@gmail.com>
+Subject: [PATCH v3 7/7] ASoC: codecs: jz4725b: add missed microphone widgets
+Date:   Sun, 16 Oct 2022 16:26:48 +0300
+Message-Id: <20221016132648.3011729-8-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221016132648.3011729-1-lis8215@gmail.com>
 References: <20221016132648.3011729-1-lis8215@gmail.com>
@@ -77,105 +77,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Mixer couples analog input from 4 sources (DAC, Line In, Mic 1,
- Mic 2) each input has its own gain & mute controls.
+Microphone input can be single ended or differential, although
+known SoCs with that codec expose MIC1P only.
 
-At the moment only DAC is implemented fully and Line In path can be
-switched on/off. The patch implements Mic 1 and Mic 2 paths and fully
-implements Line In path.
-
-Manual states that these controls (16.6.3.3 Programmable attenuation:
-GOi) gain varies from -22.5dB to +6.0dB with 1.5dB step. Also there's
-extra values below the minimum, but they behave the same as the minimum
-value.
+Also there is 20dB mic boost in the Mic1 path.
 
 Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 ---
- sound/soc/codecs/jz4725b.c | 42 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 2 deletions(-)
+ sound/soc/codecs/jz4725b.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
-index c39398e0a..52b2bb95b 100644
+index 52b2bb95b..685ba1d3a 100644
 --- a/sound/soc/codecs/jz4725b.c
 +++ b/sound/soc/codecs/jz4725b.c
-@@ -136,6 +136,18 @@ enum {
- #define REG_CGR3_GO1L_OFFSET		0
- #define REG_CGR3_GO1L_MASK		(0x1f << REG_CGR3_GO1L_OFFSET)
- 
-+#define REG_CGR4_GO2R_OFFSET		0
-+#define REG_CGR4_GO2R_MASK		(0x1f << REG_CGR4_GO2R_OFFSET)
-+
-+#define REG_CGR5_GO2L_OFFSET		0
-+#define REG_CGR5_GO2L_MASK		(0x1f << REG_CGR5_GO2L_OFFSET)
-+
-+#define REG_CGR6_GO3R_OFFSET		0
-+#define REG_CGR6_GO3R_MASK		(0x1f << REG_CGR6_GO3R_OFFSET)
-+
-+#define REG_CGR7_GO3L_OFFSET		0
-+#define REG_CGR7_GO3L_MASK		(0x1f << REG_CGR7_GO3L_OFFSET)
-+
- #define REG_CGR8_GOR_OFFSET		0
- #define REG_CGR8_GOR_MASK		(0x1f << REG_CGR8_GOR_OFFSET)
- 
-@@ -153,6 +165,11 @@ struct jz_icdc {
- 
- static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_adc_tlv,     0, 150, 0);
- static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_dac_tlv, -2250, 150, 0);
-+static const SNDRV_CTL_TLVD_DECLARE_DB_RANGE(jz4725b_mix_tlv,
-+	 0, 11, TLV_DB_SCALE_ITEM(-2250,   0, 0),
-+	12, 31, TLV_DB_SCALE_ITEM(-2250, 150, 0),
-+);
-+
- static const SNDRV_CTL_TLVD_DECLARE_DB_RANGE(jz4725b_out_tlv,
- 	 0, 11, TLV_DB_SCALE_ITEM(-3350, 200, 0),
+@@ -175,6 +175,15 @@ static const SNDRV_CTL_TLVD_DECLARE_DB_RANGE(jz4725b_out_tlv,
  	12, 23, TLV_DB_SCALE_ITEM(-1050, 100, 0),
-@@ -170,6 +187,21 @@ static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
- 		       REG_CGR10_GIL_OFFSET,
- 		       REG_CGR10_GIR_OFFSET,
- 		       0xf, 0, jz4725b_adc_tlv),
-+	SOC_DOUBLE_R_TLV("Mixer Line In Bypass Playback Volume",
-+			 JZ4725B_CODEC_REG_CGR3,
-+			 JZ4725B_CODEC_REG_CGR2,
-+			 REG_CGR2_GO1R_OFFSET,
-+			 0x1f, 1, jz4725b_mix_tlv),
-+	SOC_DOUBLE_R_TLV("Mixer Mic 1 Bypass Playback Volume",
-+			 JZ4725B_CODEC_REG_CGR5,
-+			 JZ4725B_CODEC_REG_CGR4,
-+			 REG_CGR4_GO2R_OFFSET,
-+			 0x1f, 1, jz4725b_mix_tlv),
-+	SOC_DOUBLE_R_TLV("Mixer Mic 2 Bypass Playback Volume",
-+			 JZ4725B_CODEC_REG_CGR7,
-+			 JZ4725B_CODEC_REG_CGR6,
-+			 REG_CGR6_GO3R_OFFSET,
-+			 0x1f, 1, jz4725b_mix_tlv),
+ 	24, 31, TLV_DB_SCALE_ITEM(  100,  50, 0),
+ );
++static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_mic_boost_tlv, 0, 2000, 0);
++
++static const char * const jz4725b_mic_mode_texts[] = {
++	"Single Ended", "Differential",
++};
++
++static const struct soc_enum jz4725b_mic_mode_enum =
++	SOC_ENUM_SINGLE(JZ4725B_CODEC_REG_CR3, REG_CR3_MICDIFF_OFFSET,
++			2, jz4725b_mic_mode_texts);
  
- 	SOC_DOUBLE_R_TLV("Master Playback Volume",
- 			 JZ4725B_CODEC_REG_CGR9,
-@@ -203,8 +235,12 @@ static const struct snd_kcontrol_new jz4725b_codec_adc_src_ctrl =
- 	SOC_DAPM_ENUM("ADC Source Capture Route", jz4725b_codec_adc_src_enum);
- 
- static const struct snd_kcontrol_new jz4725b_codec_mixer_controls[] = {
--	SOC_DAPM_SINGLE("Line In Bypass", JZ4725B_CODEC_REG_CR1,
-+	SOC_DAPM_SINGLE("Line In Bypass Playback Switch", JZ4725B_CODEC_REG_CR1,
- 			REG_CR1_BYPASS_OFFSET, 1, 0),
-+	SOC_DAPM_SINGLE("Mic 1 Bypass Playback Switch", JZ4725B_CODEC_REG_CR3,
-+			REG_CR3_SIDETONE1_OFFSET, 1, 0),
-+	SOC_DAPM_SINGLE("Mic 2 Bypass Playback Switch", JZ4725B_CODEC_REG_CR3,
-+			REG_CR3_SIDETONE2_OFFSET, 1, 0),
+ static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
+ 	SOC_DOUBLE_TLV("DAC Playback Volume",
+@@ -219,6 +228,13 @@ static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
+ 	SOC_SINGLE("High-Pass Filter Capture Switch",
+ 		   JZ4725B_CODEC_REG_CR2,
+ 		   REG_CR2_ADC_HPF_OFFSET, 1, 0),
++
++	SOC_ENUM("Mic Mode Capture Switch", jz4725b_mic_mode_enum),
++
++	SOC_SINGLE_TLV("Mic1 Boost Capture Volume",
++		       JZ4725B_CODEC_REG_PMR2,
++		       REG_PMR2_GIM_OFFSET,
++		       1, 0, jz4725b_mic_boost_tlv),
  };
  
- static int jz4725b_out_stage_enable(struct snd_soc_dapm_widget *w,
-@@ -299,7 +335,9 @@ static const struct snd_soc_dapm_route jz4725b_codec_dapm_routes[] = {
- 	{"Line In", NULL, "LLINEIN"},
- 	{"Line In", NULL, "RLINEIN"},
- 
--	{"Mixer", "Line In Bypass", "Line In"},
-+	{"Mixer", "Mic 1 Bypass Playback Switch", "Mic 1"},
-+	{"Mixer", "Mic 2 Bypass Playback Switch", "Mic 2"},
-+	{"Mixer", "Line In Bypass Playback Switch", "Line In"},
- 	{"DAC to Mixer", NULL, "DAC"},
- 	{"Mixer", NULL, "DAC to Mixer"},
- 
+ static const char * const jz4725b_codec_adc_src_texts[] = {
 -- 
 2.36.1
 
