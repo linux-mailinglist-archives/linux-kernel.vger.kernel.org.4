@@ -2,55 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8F65FFFB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22DA5FFFBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJPNyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 09:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S229776AbiJPOFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 10:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiJPNyu (ORCPT
+        with ESMTP id S229728AbiJPOFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 09:54:50 -0400
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD31B1659F
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 06:54:44 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id k468oUBNIEkSDk468oMuHO; Sun, 16 Oct 2022 15:54:42 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 16 Oct 2022 15:54:42 +0200
-X-ME-IP: 86.243.100.34
-Message-ID: <812d099f-2fdd-9213-edb6-b7fe6fe07f62@wanadoo.fr>
-Date:   Sun, 16 Oct 2022 15:54:36 +0200
+        Sun, 16 Oct 2022 10:05:36 -0400
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8822F643;
+        Sun, 16 Oct 2022 07:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1665929130; i=@fujitsu.com;
+        bh=UF5pvAkURl7RmfocPLT7PSgtA8wwWq9yT0FQtMyfEQ4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=Fb9mDSsJ6SASpKokx8XGftRyXT29bnvqp5oip/T/59FJyTgIOD5Y6CLM2KExpBEGF
+         HnTMdBL9JkurLr6ReVcFah9j243rqG8kGEslJCJLOlIHCnfGszVAmKV1oNzLLpPtNp
+         xjIwdcBlwjQ6A2BSwPNdffhCImJHUw5S9w7xfYVPo2dvqWDT9yGM+cnu0HugSUDNEL
+         onevU9zWezHkS+tm53jhhRTLqw6hkOThrExOGM59kXtRfF3Smhu/IDrae3HBspCyZy
+         vd/2GDCBFd3rrmDTtRjZjuTv6lJWqkvIKbaoRkshy29CwVKvMpRlU2pEFptNqYMZqJ
+         AIDcKjRpUrghQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBKsWRWlGSWpSXmKPExsViZ8MxSXcFv0+
+  ywcpr4hbTp15gtNhy7B6jxeUnfBZ79p5ksbi8aw6bxb01/1ktdv3ZwW6x8scfVgcOj1OLJDwW
+  73nJ5LFpVSebx6ZPk9g9XmyeyejxeZNcAFsUa2ZeUn5FAmvGg9c7mQue11VsbJrB1MC4O72Lk
+  YtDSGALo8SdSf9YIZzlTBI3111nhsssP7AcyOHk4BWwk2jovMAIYrMIqErcvNsBFReUODnzCQ
+  uILSqQLPF16kUmEFtYwFHi1dQWsHoRAU2JI9+uMYEMZRa4xChx734z1IZHzBJPF61jA6liE9C
+  RuLDgLyuIzSmgIbGooQGsm1nAQmLxm4PsELa8RPPW2WCbJQQUJK4fa4CyKyRmzWpjgrDVJK6e
+  28Q8gVFoFpIDZyEZNQvJqAWMzKsYzYpTi8pSi3QNTfSSijLTM0pyEzNz9BKrdBP1Ukt1y1OLS
+  3SN9BLLi/VSi4v1iitzk3NS9PJSSzYxAqMspVilfQfjp2V/9A4xSnIwKYnyZmzxTBbiS8pPqc
+  xILM6ILyrNSS0+xCjDwaEkwXuQ2ydZSLAoNT21Ii0zBxjxMGkJDh4lEd697EBp3uKCxNzizHS
+  I1ClGe461DQf2MnNseAAir165AiSnzv63n1mIJS8/L1VKnLebD6hNAKQtozQPbigsQV1ilJUS
+  5mVkYGAQ4ilILcrNLEGVf8UozsGoJMyrxwk0hSczrwRu9yugs5iAzsrY7wVyVkkiQkqqgYmrJ
+  9DyTWjaAeVLIlqc4ZnzVe8dEZyqEt5VxH2GsWxi12PLP63trKEr8sTOGSg9ey2zbsnuR291r0
+  n5fWYJjOk4qBI2+2e7+sK+HSce3ebb9znVcVbsUYGKioOPv89z8dbKU/oteLX+g/+T1+17+L6
+  y/eIq6fbbvL+DS9TTOTXm2bNs01tHYl5p2eQtW9N9rnnxeXtTsf8nrjVtymzJqOOvWBO3fRqr
+  NmfN9QqvL/nHp12dsVf7xNT/ezNE7zTtnbp2ateH6GU103LUdarKxJR6Arl11X5Ou1piHhnNc
+  WWZkdmRW3d/89qdmzSjva6Q9wRrir3f9avX2mpDbNq3TGbfGi5kf+fAQc1jz2QKLJRYijMSDb
+  WYi4oTAf6d5mzLAwAA
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-10.tower-565.messagelabs.com!1665929128!140028!1
+X-Originating-IP: [62.60.8.146]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 3104 invoked from network); 16 Oct 2022 14:05:28 -0000
+Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
+  by server-10.tower-565.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 16 Oct 2022 14:05:28 -0000
+Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id 0F2731000C1;
+        Sun, 16 Oct 2022 15:05:28 +0100 (BST)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id 003A0100078;
+        Sun, 16 Oct 2022 15:05:27 +0100 (BST)
+Received: from [10.167.201.5] (10.167.201.5) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Sun, 16 Oct 2022 15:05:24 +0100
+Message-ID: <dce214fe-c0f8-894c-c172-0c8372974d3e@fujitsu.com>
+Date:   Sun, 16 Oct 2022 22:05:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 2/2] input: add Qualcomm SPMI haptics driver
-To:     Caleb Connolly <caleb@connolly.tech>
-Cc:     krzysztof.kozlowski@linaro.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-References: <20221015172915.1436236-3-caleb@connolly.tech>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221015172915.1436236-3-caleb@connolly.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH] xfs: drop experimental warning for fsdax
+To:     "Darrick J. Wong" <djwong@kernel.org>
+CC:     Dave Chinner <david@fromorbit.com>, <linux-kernel@vger.kernel.org>,
+        <linux-xfs@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
+        <dan.j.williams@intel.com>
+References: <1663234002-17-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <20220919045003.GJ3600936@dread.disaster.area>
+ <20220919211533.GK3600936@dread.disaster.area>
+ <f10de555-370b-f236-1107-e3089258ebbc@fujitsu.com>
+ <YzMeqNg56v0/t/8x@magnolia> <20220927235129.GC3600936@dread.disaster.area>
+ <2428b01d-afc7-7b33-1088-e34d68029e19@fujitsu.com>
+ <YzXsavOWMSuwTBEC@magnolia> <Y0hZYCL3+no9qSSW@magnolia>
+ <49f0cef6-d27e-2dee-dba6-4af17ca76d41@fujitsu.com>
+ <Y0mFX1pAYhyPgv37@magnolia>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <Y0mFX1pAYhyPgv37@magnolia>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Originating-IP: [10.167.201.5]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,788 +102,298 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 15/10/2022 à 19:30, Caleb Connolly a écrit :
-> Add support for the haptics found in pmi8998 and related PMICs.
-> Based on the ff-memless interface. Currently this driver provides
-> a partial implementation of hardware features.
+
+
+在 2022/10/14 23:50, Darrick J. Wong 写道:
+> On Fri, Oct 14, 2022 at 10:24:29AM +0800, Shiyang Ruan wrote:
+>>
+>>
+>> 在 2022/10/14 2:30, Darrick J. Wong 写道:
+>>> On Thu, Sep 29, 2022 at 12:05:14PM -0700, Darrick J. Wong wrote:
+>>>> On Wed, Sep 28, 2022 at 10:46:17PM +0800, Shiyang Ruan wrote:
+>>>>>
+>> ...
+>>>>>>
+>>>>>>> FWIW I saw dmesg failures in xfs/517 and xfs/013 starting with 6.0-rc5,
+>>>>>>> and I haven't even turned on reflink yet:
+>>>>>>>
+>>>>>>> run fstests xfs/517 at 2022-09-26 19:53:34
+>>>>>>> XFS (pmem1): EXPERIMENTAL Large extent counts feature in use. Use at your own risk!
+>>>>>>> XFS (pmem1): Mounting V5 Filesystem
+>>>>>>> XFS (pmem1): Ending clean mount
+>>>>>>> XFS (pmem1): Quotacheck needed: Please wait.
+>>>>>>> XFS (pmem1): Quotacheck: Done.
+>>>>>>> XFS (pmem1): Unmounting Filesystem
+>>>>>>> XFS (pmem0): EXPERIMENTAL online scrub feature in use. Use at your own risk!
+>>>>>>> XFS (pmem1): EXPERIMENTAL Large extent counts feature in use. Use at your own risk!
+>>>>>>> XFS (pmem1): Mounting V5 Filesystem
+>>>>>>> XFS (pmem1): Ending clean mount
+>>>>>>> XFS (pmem1): Quotacheck needed: Please wait.
+>>>>>>> XFS (pmem1): Quotacheck: Done.
+>>>>>>> ------------[ cut here ]------------
+>>>>>>> WARNING: CPU: 1 PID: 415317 at fs/dax.c:380 dax_insert_entry+0x22d/0x320
+>>>
+>>> Ping?
+>>>
+>>> This time around I replaced the WARN_ON with this:
+>>>
+>>> 	if (page->mapping)
+>>> 		printk(KERN_ERR "%s:%d ino 0x%lx index 0x%lx page 0x%llx mapping 0x%llx <- 0x%llx\n", __func__, __LINE__, mapping->host->i_ino, index + i, (unsigned long long)page, (unsigned long long)page->mapping, (unsigned long long)mapping);
+>>>
+>>> and promptly started seeing scary things like this:
+>>>
+>>> [   37.576598] dax_associate_entry:381 ino 0x1807870 index 0x370 page 0xffffea00133f1480 mapping 0x1 <- 0xffff888042fbb528
+>>> [   37.577570] dax_associate_entry:381 ino 0x1807870 index 0x371 page 0xffffea00133f1500 mapping 0x1 <- 0xffff888042fbb528
+>>> [   37.698657] dax_associate_entry:381 ino 0x180044a index 0x5f8 page 0xffffea0013244900 mapping 0xffff888042eaf128 <- 0xffff888042dda128
+>>> [   37.699349] dax_associate_entry:381 ino 0x800808 index 0x136 page 0xffffea0013245640 mapping 0xffff888042eaf128 <- 0xffff888042d3ce28
+>>> [   37.699680] dax_associate_entry:381 ino 0x180044a index 0x5f9 page 0xffffea0013245680 mapping 0xffff888042eaf128 <- 0xffff888042dda128
+>>> [   37.700684] dax_associate_entry:381 ino 0x800808 index 0x137 page 0xffffea00132456c0 mapping 0xffff888042eaf128 <- 0xffff888042d3ce28
+>>> [   37.701611] dax_associate_entry:381 ino 0x180044a index 0x5fa page 0xffffea0013245700 mapping 0xffff888042eaf128 <- 0xffff888042dda128
+>>> [   37.764126] dax_associate_entry:381 ino 0x103c52c index 0x28a page 0xffffea001345afc0 mapping 0x1 <- 0xffff888019c14928
+>>> [   37.765078] dax_associate_entry:381 ino 0x103c52c index 0x28b page 0xffffea001345b000 mapping 0x1 <- 0xffff888019c14928
+>>> [   39.193523] dax_associate_entry:381 ino 0x184657f index 0x124 page 0xffffea000e2a4440 mapping 0xffff8880120d7628 <- 0xffff888019ca3528
+>>> [   39.194692] dax_associate_entry:381 ino 0x184657f index 0x125 page 0xffffea000e2a4480 mapping 0xffff8880120d7628 <- 0xffff888019ca3528
+>>> [   39.195716] dax_associate_entry:381 ino 0x184657f index 0x126 page 0xffffea000e2a44c0 mapping 0xffff8880120d7628 <- 0xffff888019ca3528
+>>> [   39.196736] dax_associate_entry:381 ino 0x184657f index 0x127 page 0xffffea000e2a4500 mapping 0xffff8880120d7628 <- 0xffff888019ca3528
+>>> [   39.197906] dax_associate_entry:381 ino 0x184657f index 0x128 page 0xffffea000e2a5040 mapping 0xffff8880120d7628 <- 0xffff888019ca3528
+>>> [   39.198924] dax_associate_entry:381 ino 0x184657f index 0x129 page 0xffffea000e2a5080 mapping 0xffff8880120d7628 <- 0xffff888019ca3528
+>>> [   39.247053] dax_associate_entry:381 ino 0x5dd1e index 0x2d page 0xffffea0015a0e640 mapping 0x1 <- 0xffff88804af88828
+>>> [   39.248006] dax_associate_entry:381 ino 0x5dd1e index 0x2e page 0xffffea0015a0e680 mapping 0x1 <- 0xffff88804af88828
+>>> [   39.490880] dax_associate_entry:381 ino 0x1a9dc index 0x7d page 0xffffea000e7012c0 mapping 0xffff888042fd1728 <- 0xffff88804afaec28
+>>> [   39.492038] dax_associate_entry:381 ino 0x1a9dc index 0x7e page 0xffffea000e701300 mapping 0xffff888042fd1728 <- 0xffff88804afaec28
+>>> [   39.493099] dax_associate_entry:381 ino 0x1a9dc index 0x7f page 0xffffea000e701340 mapping 0xffff888042fd1728 <- 0xffff88804afaec28
+>>> [   40.926247] dax_associate_entry:381 ino 0x182e265 index 0x54c page 0xffffea0015da0840 mapping 0x1 <- 0xffff888019c0dd28
+>>> [   41.675459] dax_associate_entry:381 ino 0x15e5d index 0x29 page 0xffffea000e4350c0 mapping 0x1 <- 0xffff888019c05828
+>>> [   41.676418] dax_associate_entry:381 ino 0x15e5d index 0x2a page 0xffffea000e435100 mapping 0x1 <- 0xffff888019c05828
+>>> [   41.677352] dax_associate_entry:381 ino 0x15e5d index 0x2b page 0xffffea000e435180 mapping 0x1 <- 0xffff888019c05828
+>>> [   41.678372] dax_associate_entry:381 ino 0x15e5d index 0x2c page 0xffffea000e4351c0 mapping 0x1 <- 0xffff888019c05828
+>>> [   41.965026] dax_associate_entry:381 ino 0x185adb4 index 0x87 page 0xffffea000e616d00 mapping 0x1 <- 0xffff88801a83b528
+>>> [   41.966065] dax_associate_entry:381 ino 0x185adb4 index 0x88 page 0xffffea000e616d40 mapping 0x1 <- 0xffff88801a83b528
+>>> [   43.565384] dax_associate_entry:381 ino 0x804d9d index 0x229 page 0xffffea0013653fc0 mapping 0x1 <- 0xffff88804bd97128
+>>> [   43.566399] dax_associate_entry:381 ino 0x804d9d index 0x22a page 0xffffea0013654000 mapping 0x1 <- 0xffff88804bd97128
+>>> [   43.567343] dax_associate_entry:381 ino 0x804d9d index 0x22b page 0xffffea0013654040 mapping 0x1 <- 0xffff88804bd97128
+>>> [   45.512017] dax_associate_entry:381 ino 0x18192bb index 0x1f page 0xffffea00133f1300 mapping 0x1 <- 0xffff88804bcdb528
+>>> [   45.512974] dax_associate_entry:381 ino 0x18192bb index 0x20 page 0xffffea00133f1340 mapping 0x1 <- 0xffff88804bcdb528
+>>> [   45.513942] dax_associate_entry:381 ino 0x18192bb index 0x21 page 0xffffea00133f1380 mapping 0x1 <- 0xffff88804bcdb528
+>>> [   45.514857] dax_associate_entry:381 ino 0x18192bb index 0x22 page 0xffffea00133f13c0 mapping 0x1 <- 0xffff88804bcdb528
+>>> [   45.515760] dax_associate_entry:381 ino 0x18192bb index 0x23 page 0xffffea00133f1400 mapping 0x1 <- 0xffff88804bcdb528
+>>> [   45.516673] dax_associate_entry:381 ino 0x18192bb index 0x24 page 0xffffea00133f1440 mapping 0x1 <- 0xffff88804bcdb528
+>>>
+>>> I'm not sure what's going on here, but we're clearly turning COW daxpages
+>>> back into single-mapping daxpages.  I'm not sure what's going on for the
+>>> cases where we're replacing one mapping with another.  My dimwitted
+>>> guess is that dax_fault_is_cow() is incorrectly returning false in some
+>>> cases.
+>>>
+>>> Replacing the contents of that function with:
+>>>
+>>> 	if (iter->srcmap.type != IOMAP_HOLE)
+>>> 		return true;
+>>> 	if (iter->iomap.flags & IOMAP_F_SHARED)
+>>> 		return true;
+>>> 	return false;
+>>>
+>>> Doesn't make the errors go away.  Curiously, replacing the entire
+>>> function body with "return true;" fixes /that/ problem though...
+>>
+>> I am looking into this error by adding debug message too.  I found that
+>> testcases which execute fsstress will randomly occur this error.  I'm
+>> guessing some concurrent operations caused the cow flag (returned by
+>> dax_fault_is_cow()) to be incorrectly judged.  But still haven't catch the
+>> exactly operation yet.
 > 
-> This driver only supports LRAs (Linear Resonant Actuators) in the "buffer"
-> mode with a single wave pattern.
+> I have an offhand guess that the following sequence might reproduce it:
+> 
+> <write data to a fsdax file1>
+> 
+> <process 1 maps file1, which sets up the pagecache mapping to pmem, and
+> goes to sleep>
+> 
+> cp --reflink=always file1 file2
+> 
+> <process 2 maps file2, which tries to map the same pmem "page" into
+> file2's pagecache and trips over page->mapping already being set to
+> file1's pagecache>
+> 
+> But I dunno, I haven't had much time for digging into this one.
 
-Hi,
-some nitpick below, should there be a v8.
-
-CJ
+I tried this sequence on v6.0 but it didn't reproduce the warning.
 
 > 
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-> ---
->   drivers/input/misc/Kconfig                |  15 +
->   drivers/input/misc/Makefile               |   1 +
->   drivers/input/misc/qcom-pmi8998-haptics.c | 690 ++++++++++++++++++++++
->   3 files changed, 706 insertions(+)
->   create mode 100644 drivers/input/misc/qcom-pmi8998-haptics.c
+>>> ...but generic/649 still fails with things like:
+>>>
+>>> [  571.224285] run fstests generic/649 at 2022-10-13 11:26:59
+>>> [  571.796353] XFS (pmem0): Mounting V5 Filesystem
+>>> [  571.799059] XFS (pmem0): Ending clean mount
+>>> [  572.378624] ------------[ cut here ]------------
+>>> [  572.379598] WARNING: CPU: 1 PID: 48538 at fs/dax.c:930 dax_writeback_mapping_range+0x2f1/0x600
+>>>
+>>> Which comes from this warning in dax_writeback_one:
+>>>
+>>> 	/*
+>>> 	 * A page got tagged dirty in DAX mapping? Something is seriously
+>>> 	 * wrong.
+>>> 	 */
+>>> 	if (WARN_ON(!xa_is_value(entry)))
+>>> 		return -EIO;
+>>>
+>>> Help?
+>>
+>> Sorry, no time for this yet...
+>>
+>> BTW, are these errors still occur when reflink is turned off? (dax on,
+>> reflink off)
 > 
-> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-> index a18ab7358d8f..608a64fa7914 100644
-> --- a/drivers/input/misc/Kconfig
-> +++ b/drivers/input/misc/Kconfig
-> @@ -186,6 +186,21 @@ config INPUT_PMIC8XXX_PWRKEY
->   	  To compile this driver as a module, choose M here: the
->   	  module will be called pmic8xxx-pwrkey.
+> Hmm I'll try that later today.
+
+Forgot to tell you that I have tested dax_on&reflink_off with the Kernel 
+Config which you sent to me: no failure case caused by the dmesg warning.
+
+
+--
+Thanks,
+Ruan.
+
 > 
-> +config INPUT_QCOM_PMI8998_HAPTICS
-> +	tristate "Qualcomm SPMI HAPTICS"
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on MFD_PM8XXX || MFD_SPMI_PMIC || COMPILE_TEST
-> +	select INPUT_FF_MEMLESS
-> +	help
-> +	  This option enables support for the haptics found in pmi8998 and
-> +	  related PMICs. Based on the ff-memless interface.
-> +
-> +	  This driver is for hardware too new for the INPUT_PM8XXX_VIBRATOR
-> +	  driver.
-> +
-> +	  To compile this driver as module, choose M here: the
-> +	  module will be called qcom_pmi8998_haptics.
-> +
->   config INPUT_SPARCSPKR
->   	tristate "SPARC Speaker support"
->   	depends on PCI && SPARC64
-> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-> index 28dfc444f0a9..039d0a97f2f4 100644
-> --- a/drivers/input/misc/Makefile
-> +++ b/drivers/input/misc/Makefile
-> @@ -65,6 +65,7 @@ obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)	+= pmic8xxx-pwrkey.o
->   obj-$(CONFIG_INPUT_POWERMATE)		+= powermate.o
->   obj-$(CONFIG_INPUT_PWM_BEEPER)		+= pwm-beeper.o
->   obj-$(CONFIG_INPUT_PWM_VIBRA)		+= pwm-vibra.o
-> +obj-$(CONFIG_INPUT_QCOM_PMI8998_HAPTICS)+= qcom-pmi8998-haptics.o
->   obj-$(CONFIG_INPUT_RAVE_SP_PWRBUTTON)	+= rave-sp-pwrbutton.o
->   obj-$(CONFIG_INPUT_RB532_BUTTON)	+= rb532_button.o
->   obj-$(CONFIG_INPUT_REGULATOR_HAPTIC)	+= regulator-haptic.o
-> diff --git a/drivers/input/misc/qcom-pmi8998-haptics.c b/drivers/input/misc/qcom-pmi8998-haptics.c
-> new file mode 100644
-> index 000000000000..e9eec2d9de2d
-> --- /dev/null
-> +++ b/drivers/input/misc/qcom-pmi8998-haptics.c
-> @@ -0,0 +1,690 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022, Caleb Connolly <caleb@connolly.tech>
-> + * Qualcomm QPMI haptics driver for pmi8998 and related PMICs.
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/errno.h>
-> +#include <linux/input.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/log2.h>
-> +#include <linux/minmax.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/time.h>
-> +#include <linux/types.h>
-> +
-> +// clang-format off
-> +#define HAP_STATUS_1_REG		0x0A
-> +#define HAP_BUSY_BIT			BIT(1)
-> +#define SC_FLAG_BIT			BIT(3)
-> +#define AUTO_RES_ERROR_BIT		BIT(4)
-> +
-> +#define HAP_LRA_AUTO_RES_LO_REG		0x0B
-> +#define HAP_LRA_AUTO_RES_HI_REG		0x0C
-> +
-> +#define HAP_EN_CTL_REG			0x46
-> +#define HAP_EN_BIT			BIT(7)
-> +
-> +#define HAP_EN_CTL2_REG			0x48
-> +#define BRAKE_EN_BIT			BIT(0)
-> +
-> +#define HAP_AUTO_RES_CTRL_REG		0x4B
-> +#define AUTO_RES_EN_BIT			BIT(7)
-> +#define AUTO_RES_ERR_RECOVERY_BIT	BIT(3)
-> +#define AUTO_RES_EN_FLAG_BIT		BIT(0)
-> +
-> +#define HAP_CFG1_REG			0x4C
-> +#define HAP_ACT_TYPE_MASK		BIT(0)
-> +
-> +#define HAP_CFG2_REG			0x4D
-> +#define HAP_LRA_RES_TYPE_MASK		BIT(0)
-> +
-> +#define HAP_SEL_REG			0x4E
-> +#define HAP_WF_SOURCE_MASK		GENMASK(5, 4)
-> +#define HAP_WF_SOURCE_SHIFT		4
-> +
-> +#define HAP_LRA_AUTO_RES_REG		0x4F
-> +#define LRA_AUTO_RES_MODE_MASK		GENMASK(6, 4)
-> +#define LRA_AUTO_RES_MODE_SHIFT		4
-> +#define LRA_HIGH_Z_MASK			GENMASK(3, 2)
-> +#define LRA_HIGH_Z_SHIFT		2
-> +#define LRA_RES_CAL_MASK		GENMASK(1, 0)
-> +#define HAP_RES_CAL_PERIOD_MIN		4
-> +#define HAP_RES_CAL_PERIOD_MAX		32
-> +
-> +#define HAP_VMAX_CFG_REG		0x51
-> +#define HAP_VMAX_OVD_BIT		BIT(6)
-> +#define HAP_VMAX_MASK			GENMASK(5, 1)
-> +#define HAP_VMAX_SHIFT			1
-> +
-> +#define HAP_ILIM_CFG_REG		0x52
-> +#define HAP_ILIM_SEL_MASK		BIT(0)
-> +#define HAP_ILIM_400_MA			0
-> +#define HAP_ILIM_800_MA			1
-> +
-> +#define HAP_SC_DEB_REG			0x53
-> +#define HAP_SC_DEB_MASK			GENMASK(2, 0)
-> +#define HAP_SC_DEB_CYCLES_MIN		0
-> +#define HAP_DEF_SC_DEB_CYCLES		8
-> +#define HAP_SC_DEB_CYCLES_MAX		32
-> +
-> +#define HAP_RATE_CFG1_REG		0x54
-> +#define HAP_RATE_CFG1_MASK		GENMASK(7, 0)
-> +#define HAP_RATE_CFG2_SHIFT		8 // As CFG2 is the most significant byte
-> +
-> +#define HAP_RATE_CFG2_REG		0x55
-> +#define HAP_RATE_CFG2_MASK		GENMASK(3, 0)
-> +
-> +#define HAP_SC_CLR_REG			0x59
-> +#define SC_CLR_BIT			BIT(0)
-> +
-> +#define HAP_BRAKE_REG			0x5C
-> +#define HAP_BRAKE_PAT_MASK		0x3
-> +
-> +#define HAP_WF_REPEAT_REG		0x5E
-> +#define WF_REPEAT_MASK			GENMASK(6, 4)
-> +#define WF_REPEAT_SHIFT			4
-> +#define WF_REPEAT_MIN			1
-> +#define WF_REPEAT_MAX			128
-> +#define WF_S_REPEAT_MASK		GENMASK(1, 0)
-> +#define WF_S_REPEAT_MIN			1
-> +#define WF_S_REPEAT_MAX			8
-> +
-> +#define HAP_WF_S1_REG			0x60
-> +#define HAP_WF_SIGN_BIT			BIT(7)
-> +#define HAP_WF_OVD_BIT			BIT(6)
-> +#define HAP_WF_SAMP_MAX			GENMASK(5, 1)
-> +#define HAP_WF_SAMPLE_LEN		8
-> +
-> +#define HAP_PLAY_REG			0x70
-> +#define HAP_PLAY_BIT			BIT(7)
-> +#define HAP_PAUSE_BIT			BIT(0)
-> +
-> +#define HAP_SEC_ACCESS_REG		0xD0
-> +#define HAP_SEC_ACCESS_UNLOCK		0xA5
-> +
-> +#define HAP_TEST2_REG			0xE3
-> +
-> +
-> +#define HAP_VMAX_MIN_MV			116
-> +#define HAP_VMAX_MAX_MV			3596
-> +#define HAP_VMAX_MAX_MV_STRONG		3596
-> +
-> +#define HAP_WAVE_PLAY_RATE_MIN_US	0
-> +#define HAP_WAVE_PLAY_RATE_MAX_US	20475
-> +#define HAP_WAVE_PLAY_TIME_MAX_MS	15000
-> +
-> +#define AUTO_RES_ERR_POLL_TIME_NS	(20 * NSEC_PER_MSEC)
-> +#define HAPTICS_BACK_EMF_DELAY_US	20000
-> +
-> +#define HAP_BRAKE_PAT_LEN		4
-> +#define HAP_WAVE_SAMP_LEN		8
-> +#define NUM_WF_SET			4
-> +#define HAP_WAVE_SAMP_SET_LEN		(HAP_WAVE_SAMP_LEN * NUM_WF_SET)
-> +#define HAP_RATE_CFG_STEP_US		5
-> +
-> +#define SC_MAX_COUNT			5
-> +#define SC_COUNT_RST_DELAY_US		1000000
-> +
-> +// Actuator types
-> +#define HAP_TYPE_LRA			0
-> +#define HAP_TYPE_ERM			1
-> +
-> +// LRA Wave type
-> +#define HAP_WAVE_SINE			0
-> +#define HAP_WAVE_SQUARE			1
-> +
-> +// Play modes
-> +#define HAP_PLAY_DIRECT			0
-> +#define HAP_PLAY_BUFFER			1
-> +#define HAP_PLAY_AUDIO			2
-> +#define HAP_PLAY_PWM			3
-> +
-> +#define HAP_PLAY_MAX			HAP_PLAY_PWM
-> +
-> +// Auto resonance type
-> +#define HAP_AUTO_RES_NONE		0
-> +#define HAP_AUTO_RES_ZXD		1
-> +#define HAP_AUTO_RES_QWD		2
-> +#define HAP_AUTO_RES_MAX_QWD		3
-> +#define HAP_AUTO_RES_ZXD_EOP		4
-> +// clang-format on
-> +
-> +static const uint8_t default_brake_pattern[] = {
-> +	0x3, 0x3, 0x3, 0x3, 0x3,
-> +};
-> +
-> +static const uint8_t wave_sample_pattern[] = {
-> +	0x7e, 0x7e, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,
-> +};
-> +
-> +/**
-> + * struct spmi_haptics - struct for spmi haptics data.
-> + *
-> + * @dev: Our device parent.
-> + * @regmap: Register map for the hardware block.
-> + * @input: The input device used to receive events.
-> + * @work: Work struct to play effects.
-> + * @base: Base address of the regmap.
-> + * @play_irq: Fired to load the next wave pattern.
-> + * @sc_irq: Short circuit irq.
-> + * @last_sc_time: Time since the short circuit IRQ last fired.
-> + * @sc_count: Number of times the short circuit IRQ has fired in this interval.
-> + * @actuator_type: The type of actuator in use.
-> + * @wave_shape: The shape of the waves to use (sine or square).
-> + * @play_mode: The play mode to use (direct, buffer, pwm, audio).
-> + * @vmax: Max voltage to use when playing.
-> + * @current_limit: The current limit for this hardware (400mA or 800mA).
-> + * @play_wave_rate: The wave rate to use for this hardware.
-> + * @play_lock: Lock to be held when updating the hardware state.
-> + */
-> +struct spmi_haptics {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	struct input_dev *input;
-> +	struct work_struct work;
-> +	uint32_t base;
-> +
-> +	int play_irq;
-> +	int sc_irq;
-> +	ktime_t last_sc_time;
-> +	uint8_t sc_count;
-> +
-> +	uint8_t actuator_type;
-> +	uint8_t wave_shape;
-> +	uint8_t play_mode;
-> +	uint32_t vmax;
-> +	uint32_t current_limit;
-> +	uint32_t play_wave_rate;
-> +	struct mutex play_lock;
-> +};
-> +
-> +static int haptics_write_vmax(struct spmi_haptics *haptics)
-> +{
-> +	uint8_t val = 0;
-
-no need to set val to 0.
-
-> +	uint32_t vmax_mv = haptics->vmax;
-> +
-> +	vmax_mv = clamp_t(uint32_t, vmax_mv, HAP_VMAX_MIN_MV, HAP_VMAX_MAX_MV);
-> +	vmax_mv = DIV_ROUND_CLOSEST(vmax_mv, HAP_VMAX_MIN_MV);
-> +
-> +	val = FIELD_PREP(HAP_VMAX_MASK, vmax_mv);
-> +
-> +	return regmap_update_bits(haptics->regmap,
-> +				  haptics->base + HAP_VMAX_CFG_REG,
-> +				  HAP_VMAX_MASK | HAP_WF_OVD_BIT, val);
-> +}
-> +
-> +static int haptics_module_enable(struct spmi_haptics *haptics, bool enable)
-> +{
-> +	return regmap_update_bits(haptics->regmap,
-> +				  haptics->base + HAP_EN_CTL_REG, HAP_EN_BIT,
-> +				  enable ? HAP_EN_BIT : 0);
-> +}
-> +
-> +static int haptics_play(struct spmi_haptics *haptics, bool play)
-> +{
-> +	return regmap_update_bits(haptics->regmap, haptics->base + HAP_PLAY_REG,
-> +				  HAP_PLAY_BIT | HAP_PAUSE_BIT,
-> +				  play ? HAP_PLAY_BIT : 0);
-> +}
-> +
-> +static bool is_haptics_module_enabled(struct spmi_haptics *haptics)
-> +{
-> +	uint32_t val;
-> +
-> +	regmap_read(haptics->regmap, haptics->base + HAP_EN_CTL_REG, &val);
-> +	return !!val;
-> +}
-> +
-> +/*
-> + * This IRQ is fired to tell us to load the next wave sample set.
-> + * As we only currently support a single sample set, it's unused.
-> + */
-> +static irqreturn_t haptics_play_irq(int irq, void *data)
-> +{
-> +	struct spmi_haptics *haptics = data;
-> +
-> +	dev_dbg(haptics->dev, "play_irq triggered");
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/*
-> + * Fires every ~50ms whilst the haptics are active.
-> + * If the SC_FLAG_BIT is set then that means there isn't a short circuit
-> + * and we just need to clear the IRQ to indicate that the device should
-> + * keep vibrating.
-> + *
-> + * Otherwise, it means a short circuit situation has occurred.
-> + */
-> +static irqreturn_t haptics_sc_irq(int irq, void *data)
-> +{
-> +	struct spmi_haptics *haptics = data;
-> +	int ret;
-> +	uint32_t val;
-> +	long sc_delta_time_us;
-> +	ktime_t temp;
-> +
-> +	mutex_lock(&haptics->play_lock);
-> +
-> +	ret = regmap_read(haptics->regmap, haptics->base + HAP_STATUS_1_REG,
-> +			  &val);
-> +	if (ret)
-> +		goto out;
-> +
-> +	if (!(val & SC_FLAG_BIT)) {
-> +		haptics->sc_count = 0;
-> +		goto out;
-> +	}
-> +
-> +	temp = ktime_get();
-> +	sc_delta_time_us = ktime_us_delta(temp, haptics->last_sc_time);
-> +	haptics->last_sc_time = temp;
-> +
-> +	if (sc_delta_time_us > SC_COUNT_RST_DELAY_US)
-> +		haptics->sc_count = 0;
-> +	else
-> +		haptics->sc_count++;
-> +
-> +	ret = regmap_update_bits(haptics->regmap,
-> +				 haptics->base + HAP_SC_CLR_REG, SC_CLR_BIT,
-> +				 SC_CLR_BIT);
-> +	if (ret)
-> +		goto out;
-> +
-> +	if (haptics->sc_count > SC_MAX_COUNT) {
-> +		cancel_work_sync(&haptics->work);
-> +		dev_err(haptics->dev,
-> +			"Short circuit persists, disabling haptics\n");
-> +		ret = haptics_module_enable(haptics, false);
-> +		if (ret)
-> +			dev_err(haptics->dev, "Error disabling module, rc=%d\n",
-> +				ret);
-> +	}
-> +
-> +out:
-> +	mutex_unlock(&haptics->play_lock);
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int haptics_vibrate(struct spmi_haptics *haptics)
-> +{
-> +	int ret;
-> +
-> +	if (haptics->sc_count > SC_MAX_COUNT) {
-> +		dev_err(haptics->dev, "Can't play while in short circuit");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = haptics_write_vmax(haptics);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = haptics_module_enable(haptics, true);
-> +	if (ret) {
-> +		dev_err(haptics->dev, "Error enabling module, ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = haptics_play(haptics, true);
-> +	if (ret) {
-> +		dev_err(haptics->dev, "Error enabling play, ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return ret;
-
-Be more explicit with "return 0;"?
-
-> +}
-> +
-> +static int haptics_stop_vibrate(struct spmi_haptics *haptics)
-> +{
-> +	int ret;
-> +
-> +	ret = haptics_play(haptics, false);
-> +	if (ret) {
-> +		dev_err(haptics->dev, "Error disabling play, ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = haptics_module_enable(haptics, false);
-> +	if (ret) {
-> +		dev_err(haptics->dev, "Error disabling module, ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return ret;
-
-Be more explicit with "return 0;"?
-
-> +}
-> +
-> +static void haptics_play_stop_work(struct work_struct *work)
-> +{
-> +	struct spmi_haptics *haptics =
-> +		container_of(work, struct spmi_haptics, work);
-> +
-
-No need for blanck line.
-
-> +	int ret;
-> +
-> +	mutex_lock(&haptics->play_lock);
-> +
-> +	if (!is_haptics_module_enabled(haptics) && haptics->vmax)
-> +		ret = haptics_vibrate(haptics);
-> +	else
-> +		ret = haptics_stop_vibrate(haptics);
-> +	if (ret)
-> +		dev_err(haptics->dev, "Error setting haptics, ret=%d", ret);
-> +
-> +	mutex_unlock(&haptics->play_lock);
-> +}
-> +
-> +static int spmi_haptics_play_effect(struct input_dev *dev, void *data,
-> +				    struct ff_effect *effect)
-> +{
-> +	struct spmi_haptics *haptics = input_get_drvdata(dev);
-> +	uint32_t magnitude;
-> +
-> +	dev_dbg(haptics->dev, "%s: Rumbling with strong: %d and weak: %d",
-> +		 __func__, effect->u.rumble.strong_magnitude,
-> +		 effect->u.rumble.weak_magnitude);
-> +
-> +	magnitude = effect->u.rumble.strong_magnitude >> 8;
-> +	if (!magnitude)
-> +		magnitude = effect->u.rumble.weak_magnitude >> 10;
-> +
-> +	if (!magnitude)
-> +		haptics->vmax = 0;
-> +	else
-> +		haptics->vmax =
-> +			((HAP_VMAX_MAX_MV - HAP_VMAX_MIN_MV) * magnitude) /
-> +				100 +
-> +			HAP_VMAX_MIN_MV;
-> +
-> +	schedule_work(&haptics->work);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * spmi_haptics_close - callback for input device close
-> + * @dev: input device pointer
-> + *
-> + * Turns off the vibrator.
-> + */
-> +static void spmi_haptics_close(struct input_dev *dev)
-> +{
-> +	struct spmi_haptics *haptics = input_get_drvdata(dev);
-> +
-> +	cancel_work_sync(&haptics->work);
-> +	haptics->vmax = 0;
-> +
-> +	if (is_haptics_module_enabled(haptics))
-> +		haptics_stop_vibrate(haptics);
-> +}
-> +
-> +static int haptics_write_brake_pattern(struct spmi_haptics *haptics,
-> +				       const uint8_t *brake_pattern)
-> +{
-> +	int ret, i;
-> +	uint8_t val = 0;
-> +
-> +	for (i = HAP_BRAKE_PAT_LEN - 1; i >= 0; i--)
-> +		val |= FIELD_PREP(HAP_BRAKE_PAT_MASK, brake_pattern[i])
-> +		       << (i * 2);
-> +
-> +	ret = regmap_update_bits(haptics->regmap, haptics->base + HAP_BRAKE_REG,
-> +				 0xff, val);
-> +
-> +	return ret   ?:
-> +		       regmap_update_bits(haptics->regmap,
-> +					  haptics->base + HAP_EN_CTL2_REG,
-> +					  BRAKE_EN_BIT, BRAKE_EN_BIT);
-> +}
-> +
-> +static int haptics_init(struct spmi_haptics *haptics)
-> +{
-> +	int ret;
-> +	uint8_t val, mask;
-> +	uint16_t play_rate;
-> +
-> +	ret = regmap_update_bits(haptics->regmap, haptics->base + HAP_CFG1_REG,
-> +				 HAP_ACT_TYPE_MASK, haptics->actuator_type);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Configure auto resonance
-> +	 * see qpnp_haptics_lra_auto_res_config downstream
-> +	 * This is greatly simplified.
-> +	 */
-> +	val = FIELD_PREP(LRA_RES_CAL_MASK, ilog2(32 / HAP_RES_CAL_PERIOD_MIN)) |
-> +	      FIELD_PREP(LRA_AUTO_RES_MODE_MASK, HAP_AUTO_RES_ZXD_EOP) |
-> +	      FIELD_PREP(LRA_HIGH_Z_MASK, 1);
-> +	mask = LRA_AUTO_RES_MODE_MASK | LRA_HIGH_Z_MASK | LRA_RES_CAL_MASK;
-> +
-> +	ret = regmap_update_bits(haptics->regmap,
-> +				 haptics->base + HAP_LRA_AUTO_RES_REG, mask,
-> +				 val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	val = FIELD_PREP(HAP_WF_SOURCE_MASK, haptics->play_mode);
-> +	ret = regmap_update_bits(haptics->regmap, haptics->base + HAP_SEL_REG,
-> +				 HAP_WF_SOURCE_MASK, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_update_bits(haptics->regmap,
-> +				 haptics->base + HAP_ILIM_CFG_REG,
-> +				 HAP_ILIM_SEL_MASK, haptics->current_limit);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Configure the debounce for short-circuit detection. */
-> +	ret = regmap_update_bits(haptics->regmap,
-> +				 haptics->base + HAP_SC_DEB_REG,
-> +				 HAP_SC_DEB_MASK, HAP_SC_DEB_CYCLES_MAX);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_update_bits(haptics->regmap, haptics->base + HAP_CFG2_REG,
-> +				 HAP_LRA_RES_TYPE_MASK, haptics->wave_shape);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Configure RATE_CFG1 and RATE_CFG2 registers.
-> +	 * Note: For ERM (unsupported) these registers act as play rate and
-> +	 * for LRA these represent resonance period
-> +	 */
-> +	play_rate = haptics->play_wave_rate / HAP_RATE_CFG_STEP_US;
-> +	val = FIELD_PREP(HAP_RATE_CFG1_MASK, play_rate);
-> +	ret = regmap_update_bits(haptics->regmap,
-> +				 haptics->base + HAP_RATE_CFG1_REG,
-> +				 HAP_RATE_CFG1_MASK, val);
-> +	val = FIELD_PREP(HAP_RATE_CFG2_MASK, play_rate >> 8);
-> +	ret = ret   ?:
-> +		      regmap_update_bits(haptics->regmap,
-> +					 haptics->base + HAP_RATE_CFG2_REG,
-> +					 HAP_RATE_CFG1_MASK, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = haptics_write_brake_pattern(haptics, default_brake_pattern);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Currently this is the only supported play mode */
-> +	if (haptics->play_mode == HAP_PLAY_BUFFER) {
-> +		/* zero repeats and zero sample repeats */
-> +		val = FIELD_PREP(WF_REPEAT_MASK, 0) |
-> +		      FIELD_PREP(WF_S_REPEAT_MASK, 0);
-> +		ret = regmap_update_bits(haptics->regmap,
-> +					 haptics->base + HAP_WF_REPEAT_REG,
-> +					 WF_REPEAT_MASK | WF_S_REPEAT_MASK,
-> +					 val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = regmap_bulk_write(haptics->regmap,
-> +					haptics->base + HAP_WF_S1_REG,
-> +					wave_sample_pattern, HAP_WAVE_SAMP_LEN);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int spmi_haptics_probe(struct platform_device *pdev)
-> +{
-> +	struct spmi_haptics *haptics;
-> +	struct input_dev *input_dev;
-> +	int ret, irq;
-> +
-> +	haptics = devm_kzalloc(&pdev->dev, sizeof(*haptics), GFP_KERNEL);
-> +	if (!haptics)
-> +		return -ENOMEM;
-> +
-> +	haptics->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (!haptics->regmap)
-> +		return -ENODEV;
-> +
-> +	haptics->dev = &pdev->dev;
-> +
-> +	platform_set_drvdata(pdev, haptics);
-> +
-> +	ret = device_property_read_u32(haptics->dev, "reg", &haptics->base);
-> +	if (ret)
-> +		return dev_err_probe(haptics->dev, ret,
-> +				     "Couldn't read base address");
-> +
-> +	/* This is the only currently supported configuration, these values
-
-Missing new line after \* ?
-
-> +	 * are left to allow future additions
-> +	 */
-> +	haptics->actuator_type = HAP_TYPE_LRA;
-> +	haptics->play_mode = HAP_PLAY_BUFFER;
-> +	haptics->wave_shape = HAP_WAVE_SINE;
-> +	haptics->current_limit = HAP_ILIM_400_MA;
-> +
-> +	ret = device_property_read_u32(haptics->dev, "qcom,wave-play-rate-us",
-> +				       &haptics->play_wave_rate);
-> +	if (ret)
-> +		return dev_err_probe(haptics->dev, ret,
-> +				     "qcom,wave-play-rate-us is required\n");
-> +
-> +	INIT_WORK(&haptics->work, haptics_play_stop_work);
-> +
-> +	ret = haptics_init(haptics);
-> +	if (ret)
-> +		return ret;
-> +
-> +	input_dev = devm_input_allocate_device(&pdev->dev);
-> +	if (!input_dev)
-> +		return -ENOMEM;
-> +
-> +	input_dev->name = "spmi_haptics";
-> +	input_dev->id.version = 1;
-> +	input_dev->close = spmi_haptics_close;
-> +	input_set_drvdata(input_dev, haptics);
-> +
-> +	haptics->input = input_dev;
-> +
-> +	/* In the future this should become FF_PERIODIC */
-> +	input_set_capability(haptics->input, EV_FF, FF_RUMBLE);
-> +
-> +	ret = input_ff_create_memless(input_dev, NULL,
-> +				      spmi_haptics_play_effect);
-> +	if (ret)
-> +		return dev_err_probe(
-> +			&pdev->dev, ret,
-> +			"Couldn't register haptics as EV_FF device\n");
-> +
-> +	ret = input_register_device(input_dev);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "Couldn't register input device\n");
-> +
-> +	/* NOTE: the play IRQ is only used for buffer mode */
-> +	irq = platform_get_irq_byname(pdev, "play");
-> +	if (irq < 0) {
-> +		return dev_err_probe(&pdev->dev, irq,
-> +				     "Unable to get play irq\n");
-> +	}
-
-No need for { }.
-
-> +	ret = devm_request_threaded_irq(haptics->dev, irq, NULL,
-> +					haptics_play_irq, IRQF_ONESHOT,
-> +					"haptics_play_irq", haptics);
-> +	if (ret)
-> +		return dev_err_probe(haptics->dev, ret,
-> +				     "Couldn't request play irq\n");
-> +
-> +	irq = platform_get_irq_byname(pdev, "short");
-> +	if (irq < 0)
-> +		return dev_err_probe(&pdev->dev, irq,
-> +				     "Unable to get short circut irq\n");
-> +	ret = devm_request_threaded_irq(haptics->dev, irq, NULL, haptics_sc_irq,
-> +					IRQF_ONESHOT, "haptics_short_irq",
-> +					haptics);
-> +	if (ret)
-> +		return dev_err_probe(haptics->dev, ret,
-> +				     "Couldn't request short circuit irq\n");
-> +
-> +	mutex_init(&haptics->play_lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused spmi_haptics_suspend(struct device *dev)
-> +{
-> +	struct spmi_haptics *haptics = dev_get_drvdata(dev);
-> +
-> +	cancel_work_sync(&haptics->work);
-> +	haptics_stop_vibrate(haptics);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(spmi_haptics_pm_ops, spmi_haptics_suspend, NULL);
-> +
-> +static int spmi_haptics_remove(struct platform_device *pdev)
-> +{
-> +	struct spmi_haptics *haptics = dev_get_drvdata(&pdev->dev);
-> +
-> +	cancel_work_sync(&haptics->work);
-
-Harmless and certainly more explicit this way, but is it needed?
-spmi_haptics_close() already calls it (and I guess that it is called by 
-input_unregister_device() below)
-
-> +	mutex_destroy(&haptics->play_lock);
-> +	input_unregister_device(haptics->input);
-> +
-> +	return 0;
-> +}
-> +
-> +static void spmi_haptics_shutdown(struct platform_device *pdev)
-> +{
-> +	struct spmi_haptics *haptics = dev_get_drvdata(&pdev->dev);
-> +
-> +	cancel_work_sync(&haptics->work);
-> +	haptics_stop_vibrate(haptics);
-> +}
-> +
-> +static const struct of_device_id spmi_haptics_match_table[] = {
-> +	{ .compatible = "qcom,pmi8998-haptics" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, spmi_haptics_match_table);
-> +
-> +static struct platform_driver spmi_haptics_driver = {
-> +	.probe		= spmi_haptics_probe,
-> +	.remove		= spmi_haptics_remove,
-> +	.shutdown	= spmi_haptics_shutdown,
-> +	.driver		= {
-> +		.name	= "spmi-haptics",
-> +		.pm	= &spmi_haptics_pm_ops,
-> +		.of_match_table = spmi_haptics_match_table,
-> +	},
-> +};
-> +module_platform_driver(spmi_haptics_driver);
-> +
-> +MODULE_DESCRIPTION("spmi haptics driver using ff-memless framework");
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Caleb Connolly <caleb@connolly.tech>");
-> --
-> 2.38.0
+> --D
 > 
-> 
-> 
-
+>>
+>> --
+>> Thanks,
+>> Ruan.
+>>
+>>>
+>>> --D
+>>>
+>>>>>>> Modules linked in: xfs nft_chain_nat xt_REDIRECT nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip6t_REJECT nf_reject_ipv6 ipt_REJECT nf_reject_ipv4 xt_tcpudp ip_set_hash_ip ip_set_hash_net xt_set nft_compat ip_set_hash_mac ip_set nf_tables libcrc32c bfq nfnetlink pvpanic_mmio pvpanic nd_pmem dax_pmem nd_btt sch_fq_codel fuse configfs ip_tables x_tables overlay nfsv4 af_packet [last unloaded: scsi_d
+>>>>>>>
+>>>>>>> CPU: 1 PID: 415317 Comm: fsstress Tainted: G        W          6.0.0-rc7-xfsx #rc7 727341edbd0773a36b78b09dab448fa1896eb3a5
+>>>>>>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 04/01/2014
+>>>>>>> RIP: 0010:dax_insert_entry+0x22d/0x320
+>>>>>>> Code: e0 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f c3 48 8b 58 20 48 8d 53 01 e9 62 ff ff ff 48 8b 58 20 48 8d 53 01 e9 4d ff ff ff <0f> 0b e9 6d ff ff ff 31 f6 48 89 ef e8 72 74 12 00 eb a1 83 e0 02
+>>>>>>> RSP: 0000:ffffc90004693b28 EFLAGS: 00010002
+>>>>>>> RAX: ffffea0010a20480 RBX: 0000000000000001 RCX: 0000000000000001
+>>>>>>> RDX: ffffea0000000000 RSI: 0000000000000033 RDI: ffffea0010a204c0
+>>>>>>> RBP: ffffc90004693c08 R08: 0000000000000000 R09: 0000000000000000
+>>>>>>> R10: ffff88800c226228 R11: 0000000000000001 R12: 0000000000000011
+>>>>>>> R13: ffff88800c226228 R14: ffffc90004693e08 R15: 0000000000000000
+>>>>>>> FS:  00007f3aad8db740(0000) GS:ffff88803ed00000(0000) knlGS:0000000000000000
+>>>>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>>> CR2: 00007f3aad8d1000 CR3: 0000000043104003 CR4: 00000000001706e0
+>>>>>>> Call Trace:
+>>>>>>>     <TASK>
+>>>>>>>     dax_fault_iter+0x26e/0x670
+>>>>>>>     dax_iomap_pte_fault+0x1ab/0x3e0
+>>>>>>>     __xfs_filemap_fault+0x32f/0x5a0 [xfs c617487f99e14abfa5deb24e923415b927df3d4b]
+>>>>>>>     __do_fault+0x30/0x1e0
+>>>>>>>     do_fault+0x316/0x6d0
+>>>>>>>     ? mmap_region+0x2a5/0x620
+>>>>>>>     __handle_mm_fault+0x649/0x1250
+>>>>>>>     handle_mm_fault+0xc1/0x220
+>>>>>>>     do_user_addr_fault+0x1ac/0x610
+>>>>>>>     ? _copy_to_user+0x63/0x80
+>>>>>>>     exc_page_fault+0x63/0x130
+>>>>>>>     asm_exc_page_fault+0x22/0x30
+>>>>>>> RIP: 0033:0x7f3aada7f1ca
+>>>>>>> Code: c5 fe 7f 07 c5 fe 7f 47 20 c5 fe 7f 47 40 c5 fe 7f 47 60 c5 f8 77 c3 66 0f 1f 84 00 00 00 00 00 40 0f b6 c6 48 89 d1 48 89 fa <f3> aa 48 89 d0 c5 f8 77 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90
+>>>>>>> RSP: 002b:00007ffe47afa688 EFLAGS: 00010206
+>>>>>>> RAX: 000000000000002e RBX: 0000000000033000 RCX: 000000000000999c
+>>>>>>> RDX: 00007f3aad8d1000 RSI: 000000000000002e RDI: 00007f3aad8d1000
+>>>>>>> RBP: 0000558851e13240 R08: 0000000000000000 R09: 0000000000033000
+>>>>>>> R10: 0000000000000008 R11: 0000000000000246 R12: 028f5c28f5c28f5c
+>>>>>>> R13: 8f5c28f5c28f5c29 R14: 000000000000999c R15: 0000000000001c81
+>>>>>>>     </TASK>
+>>>>>>> ---[ end trace 0000000000000000 ]---
+>>>>>>> XFS (pmem0): Unmounting Filesystem
+>>>>>>> XFS (pmem1): EXPERIMENTAL online scrub feature in use. Use at your own risk!
+>>>>>>> XFS (pmem1): *** REPAIR SUCCESS ino 0x80 type probe agno 0x0 inum 0x0 gen 0x0 flags 0x80000001 error 0
+>>>>>>> XFS (pmem1): Unmounting Filesystem
+>>>>>>> XFS (pmem1): EXPERIMENTAL Large extent counts feature in use. Use at your own risk!
+>>>>>>> XFS (pmem1): Mounting V5 Filesystem
+>>>>>>> XFS (pmem1): Ending clean mount
+>>>>>>> XFS (pmem1): Unmounting Filesystem
+>>>>>>
+>>>>>> Yup, that's the same as what I'm seeing.
+>>>>>
+>>>>> Could you send me your kernel config (or other configs needed for the test)?
+>>>>> I still cannot reproduce this warning when reflink is off, even without this
+>>>>> drop patch.  Maybe something different in config file?
+>>>>>
+>>>>>
+>>>>> PS: I specifically tried the two cases Darrick mentioned (on v6.0-rc6):
+>>>>>
+>>>>> [root@f33 xfstests-dev]# mkfs.xfs -m reflink=0,rmapbt=1 /dev/pmem0.1 -f
+>>>>> meta-data=/dev/pmem0.1           isize=512    agcount=4, agsize=257920 blks
+>>>>>            =                       sectsz=4096  attr=2, projid32bit=1
+>>>>>            =                       crc=1        finobt=1, sparse=1, rmapbt=1
+>>>>>            =                       reflink=0    bigtime=1 inobtcount=1
+>>>>> nrext64=0
+>>>>> data     =                       bsize=4096   blocks=1031680, imaxpct=25
+>>>>>            =                       sunit=0      swidth=0 blks
+>>>>> naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+>>>>> log      =internal log           bsize=4096   blocks=16384, version=2
+>>>>>            =                       sectsz=4096  sunit=1 blks, lazy-count=1
+>>>>> realtime =none                   extsz=4096   blocks=0, rtextents=0
+>>>>> [root@f33 xfstests-dev]# mkfs.xfs -m reflink=0,rmapbt=1 /dev/pmem0 -f
+>>>>> meta-data=/dev/pmem0             isize=512    agcount=4, agsize=257920 blks
+>>>>>            =                       sectsz=4096  attr=2, projid32bit=1
+>>>>>            =                       crc=1        finobt=1, sparse=1, rmapbt=1
+>>>>>            =                       reflink=0    bigtime=1 inobtcount=1
+>>>>> nrext64=0
+>>>>> data     =                       bsize=4096   blocks=1031680, imaxpct=25
+>>>>>            =                       sunit=0      swidth=0 blks
+>>>>> naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+>>>>> log      =internal log           bsize=4096   blocks=16384, version=2
+>>>>>            =                       sectsz=4096  sunit=1 blks, lazy-count=1
+>>>>> realtime =none                   extsz=4096   blocks=0, rtextents=0
+>>>>> [root@f33 xfstests-dev]# ./check xfs/013 xfs/517
+>>>>> FSTYP         -- xfs (debug)
+>>>>> PLATFORM      -- Linux/x86_64 f33 6.0.0-rc6 #84 SMP PREEMPT_DYNAMIC Wed Sep
+>>>>> 28 18:27:33 CST 2022
+>>>>> MKFS_OPTIONS  -- -f -m reflink=0,rmapbt=1 /dev/pmem0.1
+>>>>> MOUNT_OPTIONS -- -o dax -o context=system_u:object_r:root_t:s0 /dev/pmem0.1
+>>>>> /mnt/scratch
+>>>>>
+>>>>> xfs/013 127s ...  166s
+>>>>> xfs/517 66s ...  66s
+>>>>> Ran: xfs/013 xfs/517
+>>>>> Passed all 2 tests
+>>>>
+>>>> I'm not sure what exactly is going weird here -- I tried it on my dev
+>>>> machine just now and it passed, but the similarly configured testcloud
+>>>> failed it last night.
+>>>>
+>>>> FSTYP         -- xfs (debug)
+>>>> PLATFORM      -- Linux/x86_64 ca-nfsdev6-mtr03 6.0.0-rc7-xfsx #rc7 SMP
+>>>> PREEMPT_DYNAMIC Wed Sep 28 15:35:58 PDT 2022
+>>>> MKFS_OPTIONS  -- -f -m reflink=0, -d daxinherit=1, /dev/pmem1
+>>>> MOUNT_OPTIONS -- -o usrquota,grpquota,prjquota, /dev/pmem1 /opt
+>>>>
+>>>> Note that I use libvirt to configure pmem in the VMs.  This is an
+>>>> excerpt of the end of domain xml file:
+>>>>
+>>>>       <memory model='nvdimm' access='shared'>
+>>>>         <source>
+>>>>           <path>/run/mtrdisk/g.mem</path>
+>>>>         </source>
+>>>>         <target>
+>>>>           <size unit='KiB'>21104640</size>
+>>>>           <node>0</node>
+>>>>         </target>
+>>>>         <address type='dimm' slot='0'/>
+>>>>       </memory>
+>>>>       <memory model='nvdimm' access='shared'>
+>>>>         <source>
+>>>>           <path>/run/mtrdisk/h.mem</path>
+>>>>         </source>
+>>>>         <target>
+>>>>           <size unit='KiB'>21104640</size>
+>>>>           <node>1</node>
+>>>>         </target>
+>>>>         <address type='dimm' slot='1'/>
+>>>>       </memory>
+>>>>     </devices>
+>>>> </domain>
+>>>>
+>>>> --D
+>>>>
