@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC0D60027F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497B5600284
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJPRmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 13:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S229661AbiJPRv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 13:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJPRmG (ORCPT
+        with ESMTP id S229577AbiJPRvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 13:42:06 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D3531FAD
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:42:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bv10so15102673wrb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:42:05 -0700 (PDT)
+        Sun, 16 Oct 2022 13:51:55 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4D62C64B
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:51:54 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id x18so11552590ljm.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:51:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eBoyZFJd/AMWfSTDdNDFLh542tiq7KT1lMhtwEfLBl4=;
-        b=cyxXVAEqs04ujc9hmfAVf30HVL/pCnILfipPspTFlkQBjzFFQhNOx+3Hsnzv8IBT5Q
-         mKEvizN9ZqA35pVXIw+GnMESFPCSiwgqiFLfLgeFQnvtyFNuAjpc5GCL4mrlNm6layTT
-         tfKBWW0JurCzaM0BbS5VuSKwloE83tjuPMpK4CwXtoV1MMeTgVT1ms7B1Pvn5ROcOGB2
-         SkafGbGxB2jHqrTZaiTeYenHuoz4h7csoYTfWJxsVMuLmwu3efBD4YWun6Q0xYkebQe2
-         ZGrPENmNa2okAP3iFZNF+4OO8IfxofZNsEwgG4ir3pkbao1kcw9L0KinBv55MTRKeKK+
-         /hUA==
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FSvBiCYAFX6lPPhtdeLD4dtO79D7my2I84dZLy/XCHA=;
+        b=ay7zBp6erCUcdx6FCqT2TK/HFdYqQN5L/xbUe1GlX5+3Crva5NM/VI5goKhyYCSDr/
+         C3a2cTjgiv2cwV9Jf5grm1XNi83lynnESdVLS/CAJWiYr4Kx+nAA8S7JVhdymP9samaF
+         FxNpKzY+0hk83mw8X6eEOgPij9413yyZzcoRk1QpY0HS+li7n0fwtJe5SYxhABuK/CSB
+         5IchUWAz7SI+rV2710qacP4Zc4axHL432f76uZ0OERw0Zls5PqGWfywzmDCIO8Wod2Cm
+         KMzbrnuvXRvglZ1oOjabABd/gR6IRbHjcHXuE5WxxNzxwMZ5ymInbJi7k2FNnw63GuOC
+         2jAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eBoyZFJd/AMWfSTDdNDFLh542tiq7KT1lMhtwEfLBl4=;
-        b=uGbQvETC+WMsE+d+t/Pm/zTv694fmzEx44BJ49hAIrsEubHdZ7N/AHR2vjesOsE5Uq
-         kCSM6dNOaRdlc9R4YmclO4j/IDd11YtaKaTldoEl4VWGEVezEskJqyCQKnLeSb9PyNDF
-         6X1KcEFXmiOZ7sdbgXvnF0duGEAuPRrpmRRp+gi402wMROLNAMPiJm0jwn2r/LfkUdWQ
-         CdCbZ4NsBO87Omypt+NYXnLiVnU78c+jfQzzsyU4CZuzmFzLfGZpTYGF/KMS1s/ZrmeL
-         XsIJ09e9SfG0Rwag1qLmKToQ214eK2nrVQYnGCSmhbp4zcbdqITYWw7uwHSV5+vm8pC2
-         91Uw==
-X-Gm-Message-State: ACrzQf0y36uDeLc60x+mjaQ+CSiu0SR4gEzeQPlDCM+j7pcuA+eIXcHF
-        v05YFe01v18YdrZVPErmQek=
-X-Google-Smtp-Source: AMsMyM6FtrFrf3Ic4dkdXt5cwMkRyUmfIFJPYxWdF1OUS04XhPgPbujAr60TrkylIRaojiJMB3TjZw==
-X-Received: by 2002:a05:6000:1689:b0:22e:2c03:36e7 with SMTP id y9-20020a056000168900b0022e2c0336e7mr4464896wrd.252.1665942124233;
-        Sun, 16 Oct 2022 10:42:04 -0700 (PDT)
-Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05600c468e00b003c6f3e5ba42sm2820940wmo.46.2022.10.16.10.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 10:42:03 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>, Jack Xiao <Jack.Xiao@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [RESEND PATCH] drm/amd/amdgpu: Replace kmap() with kmap_local_page()
-Date:   Sun, 16 Oct 2022 19:41:58 +0200
-Message-Id: <20221016174158.16638-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.38.0
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FSvBiCYAFX6lPPhtdeLD4dtO79D7my2I84dZLy/XCHA=;
+        b=iJcj0A7aGWKHgD57jSvDuPme1EVsv2JKodsJo4kdUAJRTzhmqnB8VO2FfUOtd8r0b8
+         6JrekJvI24POkksFb9MkHlD+7vc8bAXERa6/WQj+PV++X9mRQtDXDZAc1pfhoaykEGaG
+         824r7/hUXqgHD8cGXG5grOoIEa3ll4aZJO6IFrzZeU0F3a3mkGuLOxDa6nCP3gtkNKeP
+         cUlFdY/GWNdK/Q2dgRIBGHaJuXg788HcfjeX1R2c0USJosAJt9N2Al/3wn4OUIWIlPn1
+         Yenb2pR1QGZEJIYgFjPPhrrQ+J7XKQ8OWqRVva2p/llo5QAIg1vP7tP/v3c2df3L+/DV
+         LCow==
+X-Gm-Message-State: ACrzQf1XQCPHSb/aVDTFc9xo/oYU/7MwtV37cz8gREVTODW06OwlgTaH
+        B1bSfGvZPSfClxOafI+m/DZkova7K5qv4g==
+X-Google-Smtp-Source: AMsMyM5LYmnlAPf1vl21rN/RrRZ7Perh4kso+zSaAUOKAYAg23YrPXCFUqcYyrDs9LnLqQm4wTNUeA==
+X-Received: by 2002:a2e:a7cc:0:b0:26f:cb7a:f375 with SMTP id x12-20020a2ea7cc000000b0026fcb7af375mr2869772ljp.392.1665942712788;
+        Sun, 16 Oct 2022 10:51:52 -0700 (PDT)
+Received: from ?IPV6:2a02:a31a:a240:1700:64bb:87df:aad7:a9f0? ([2a02:a31a:a240:1700:64bb:87df:aad7:a9f0])
+        by smtp.googlemail.com with ESMTPSA id i4-20020a2ea364000000b0026dfedff58csm1205644ljn.99.2022.10.16.10.51.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 10:51:52 -0700 (PDT)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <fdeadf0d-8f38-8edf-ae92-e2d9c5aa90b4@gmail.com>
+Date:   Sun, 16 Oct 2022 19:51:50 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.3
+Reply-To: kfyatek+publicgit@gmail.com
+Subject: Re: [PATCH v5 13/22] drm/modes: Introduce the tv_mode property as a
+ command-line option
+Content-Language: pl
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Karol Herbst <kherbst@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Emma Anholt <emma@anholt.net>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Cc:     Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Phil Elwell <phil@raspberrypi.com>
+References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v5-13-d841cc64fe4b@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v5-13-d841cc64fe4b@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,64 +103,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().
+Hi Maxime, Noralf & everyone,
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+I'd like to address Noralf here in particular, and refer to these discussions
+from the past:
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and are still valid.
+- https://lore.kernel.org/linux-arm-kernel/2f607c7d-6da1-c8df-1c02-8dd344a92343@gmail.com/
+- https://lore.kernel.org/linux-arm-kernel/9e76a508-f469-a54d-ecd7-b5868ca99af4@tronnes.org/
 
-Since its use in amdgpu/amdgpu_ttm.c is safe, it should be preferred.
+> @@ -2230,20 +2256,22 @@ struct drm_named_mode {
+>  	unsigned int xres;
+>  	unsigned int yres;
+>  	unsigned int flags;
+> +	unsigned int tv_mode;
+>  };
 
-Therefore, replace kmap() with kmap_local_page() in amdgpu/amdgpu_ttm.c.
+I saw that you (Noralf) opposed my suggestion about the DRM_MODE_TV_MODE_NONE
+enum value in enum drm drm_connector_tv_mode. I get your argumentation, and I'm
+not gonna argue, but I still don't like the fact that struct drm_named_mode now
+includes a field that is only relevant for analog TV modes, has no "none" value,
+and yet the type is supposed to be generic enough to be usable for other types
+of outputs as well.
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Acked-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+It's true that it can just be ignored (as Maxime mentioned in his response to
+my e-mail linked above), and now the value of 0 corresponds to
+DRM_MODE_TV_MODE_NTSC, which is a rather sane default, but it still feels messy
+to me.
 
-I'm resending because I suspect that this patch might have been lost. In
-the meantime I added an "Acked-by" tag from Christian K.. Obviviously,
-there are no further changes in the code.
+I'm not gonna force my opinion here, but I wanted to bring your attention to
+this issue, maybe you have some other solution in mind for this problem. Or if
+you don't see that as a problem at all, that's fine, too.
 
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 3b4c19412625..c11657b5915f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -2301,9 +2301,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
- 		if (p->mapping != adev->mman.bdev.dev_mapping)
- 			return -EPERM;
- 
--		ptr = kmap(p);
-+		ptr = kmap_local_page(p);
- 		r = copy_to_user(buf, ptr + off, bytes);
--		kunmap(p);
-+		kunmap_local(ptr);
- 		if (r)
- 			return -EFAULT;
- 
-@@ -2352,9 +2352,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
- 		if (p->mapping != adev->mman.bdev.dev_mapping)
- 			return -EPERM;
- 
--		ptr = kmap(p);
-+		ptr = kmap_local_page(p);
- 		r = copy_from_user(ptr + off, buf, bytes);
--		kunmap(p);
-+		kunmap_local(ptr);
- 		if (r)
- 			return -EFAULT;
- 
--- 
-2.37.1
+Best regards,
+Mateusz Kwiatkowski
 
