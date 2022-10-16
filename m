@@ -2,218 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FE9600275
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE1760027A
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiJPReV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 13:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S230047AbiJPRec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 13:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJPReT (ORCPT
+        with ESMTP id S230036AbiJPRe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 13:34:19 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131802496A
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:34:18 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id i17so10526721lja.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4iSKyq/6RLyBw4TdJevIeK6LIwDkSY3maF+UHfhRrc=;
-        b=Kb3uE39EqEeKXPUs/mXs6k65peycq9pdE/WXMK4E2BFk1YiAINvgg+vkC0YAaXyJnp
-         VK5A3ChSRZG1GvlLyiVqIqR5FOG7BypHyXE38dY0/pytGejDjoy1MFeH0Fv01/KdamSk
-         dZEaHlsAJAeQjNRCuzfXMbSHy6BItSb+Zs8ov21H6w0Gj+ByuPNU/m8dOTkEA+lrlBqH
-         rF6WY3dsgRh0pnnkPbOdwVIrSy3hXsXiHkPJQJdUs7ysttYGu0er+okgYgRjQTy+uLr5
-         dPyr+xyJy5N4rXlgSGh7/EXSDczjfBivOJ82p8PRq8ByRq2YVEecIGSpp222OndxdRHd
-         XoHA==
+        Sun, 16 Oct 2022 13:34:26 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97D413D0C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:34:24 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id j17-20020a5d93d1000000b006bcdc6b49cbso3270737ioo.22
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:34:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U4iSKyq/6RLyBw4TdJevIeK6LIwDkSY3maF+UHfhRrc=;
-        b=SEk92lmHlHRc4s1VDD94LBhroMcKsaP7qkO1H+/v0/A/oqXkGdbEZsxxz/Z0UOoARx
-         41A1D9hKnuyBCej79wdYKzHFWdAqoCvFESYnhO8A7PeQfMawdLPxnO0rZgQ/OQI4B1pB
-         3iXA6a7zUimx/uTHf+JPbFTHhecxEFeyJDm/vcIu+HKaRTdBE5aSQPiPFkjcbjfS4Xct
-         r2N5F+SHaqD8XQCc8h/wMSNDJrtUv7xmQvghgp0uvWcPuui9aj6LTaEQmjSIySO+DqCA
-         /oGPjdjUxPvUzWEuvSpVRMLPkOqt8mwppWND8KrBPYa5+4q6lWxjFS0zxZthttlF0mRr
-         PH+g==
-X-Gm-Message-State: ACrzQf2qODEkpQj2WluhUqak50QYntHvnSMZlC5InTG8YAsTVzZZQl3z
-        77dgHzeW+P2PUQViB7w31TY=
-X-Google-Smtp-Source: AMsMyM4FwFL8YTyWV0uuDmptwQ58R53jPCOYdbjm/t3gf92/x+NDTiDZK/HMDmSdTIkPCQ0ey+Q6jw==
-X-Received: by 2002:a05:651c:114:b0:26f:a696:5a40 with SMTP id a20-20020a05651c011400b0026fa6965a40mr2909134ljb.350.1665941656107;
-        Sun, 16 Oct 2022 10:34:16 -0700 (PDT)
-Received: from ?IPV6:2a02:a31a:a240:1700:64bb:87df:aad7:a9f0? ([2a02:a31a:a240:1700:64bb:87df:aad7:a9f0])
-        by smtp.googlemail.com with ESMTPSA id v23-20020ac258f7000000b0048a8586293asm1131359lfo.48.2022.10.16.10.34.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 10:34:15 -0700 (PDT)
-From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
-X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <30dbbcc8-1d14-0fc8-ed7c-0c3f7d094ea3@gmail.com>
-Date:   Sun, 16 Oct 2022 19:34:12 +0200
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9HnUcMrpaOy4ZoL5ypHWvjmoyr0LqAIz7W4hYAK2fiI=;
+        b=37CuH2G1SJ/IocnNNrXX87phAxb4DmDIaJbiSKxcEzaji5RE4YRMypBeP5yi8+EVJV
+         NvKx3T/bblf4Izo3PjzFKO8yfGJ9olWUDi+83/b8d8E2u1Zren6er4Pe/U3ldGAdmASH
+         S+7HZt+HlR6BRUagLFIpEOeSG2j60WQIcovi1+YDBdw0S802qFKPxdDlM1RvDBbb7rBn
+         EyzB5iM6CvtVbFneYDWo4mT0/V9IxMKIhK5HKUUqKMFc7xEYACnwbU+InjW+tcdM5nKZ
+         Po+eC7Wytgj7/VDBWL02cwYpPeylQMDIZxZ8nH9ALp0voFCBcGakf23yNecHx18dGyf6
+         BNUw==
+X-Gm-Message-State: ACrzQf0jIm1pE6kxf5YgT7UhFmkR2V+LrooYbSWgTWL0p4oLYt+3skyc
+        fr3OTNdIvFLpnCC2mrTsxZrQ+GsH9jKvF3f3cDO0p40QYdIR
+X-Google-Smtp-Source: AMsMyM7qspteAsrK5Mgq3OaCHRR/wYcZjGnfTnfsk7GdfkdP3jG+nm1SS/vzaXgUf0BQGOpO5QgR8XlS8g1zTVGBw7BHfTVjcerF
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Reply-To: kfyatek+publicgit@gmail.com
-Subject: Re: [PATCH v5 06/22] drm/modes: Add a function to generate analog
- display modes
-Content-Language: pl
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Emma Anholt <emma@anholt.net>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Phil Elwell <phil@raspberrypi.com>
-References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
- <20220728-rpi-analog-tv-properties-v5-6-d841cc64fe4b@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v5-6-d841cc64fe4b@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:184c:b0:2fc:4f65:9dee with SMTP id
+ b12-20020a056e02184c00b002fc4f659deemr3194230ilv.154.1665941663602; Sun, 16
+ Oct 2022 10:34:23 -0700 (PDT)
+Date:   Sun, 16 Oct 2022 10:34:23 -0700
+In-Reply-To: <0000000000009d327505b0999237@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000013612005eb2a4525@google.com>
+Subject: Re: [syzbot] INFO: rcu detected stall in batadv_nc_worker (3)
+From:   syzbot <syzbot+69904c3b4a09e8fa2e1b@syzkaller.appspotmail.com>
+To:     a@unstable.cc, alsa-devel@alsa-project.org,
+        b.a.t.m.a.n@lists.open-mesh.org, broonie@kernel.org,
+        davem@davemloft.net, dvyukov@google.com, edumazet@google.com,
+        hdanton@sina.com, jhs@mojatatu.com, jiri@resnulli.us,
+        kuba@kernel.org, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        mareklindner@neomailbox.ch, netdev@vger.kernel.org,
+        pabeni@redhat.com, perex@perex.cz, povik+lin@cutebit.org,
+        steve@sk2.org, sven@narfation.org, sw@simonwunderlich.de,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        tiwai@suse.com, tonymarislogistics@yandex.com,
+        xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime & everyone,
+syzbot has bisected this issue to:
 
-Sorry for being inactive in the discussions about this patchset for the last
-couple of weeks.
+commit f8a4018c826fde6137425bbdbe524d5973feb173
+Author: Mark Brown <broonie@kernel.org>
+Date:   Thu Jun 2 13:53:04 2022 +0000
 
-> +const static struct analog_parameters tv_modes_parameters[] = {
-> +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_NTSC,
-> +			  NTSC_LINES_NUMBER,
-> +			  NTSC_LINE_DURATION_NS,
-> +			  PARAM_RANGE(NTSC_HACT_DURATION_MIN_NS,
-> +				      NTSC_HACT_DURATION_TYP_NS,
-> +				      NTSC_HACT_DURATION_MAX_NS),
-> +			  PARAM_RANGE(NTSC_HFP_DURATION_MIN_NS,
-> +				      NTSC_HFP_DURATION_TYP_NS,
-> +				      NTSC_HFP_DURATION_MAX_NS),
-> +			  PARAM_RANGE(NTSC_HSLEN_DURATION_MIN_NS,
-> +				      NTSC_HSLEN_DURATION_TYP_NS,
-> +				      NTSC_HSLEN_DURATION_MAX_NS),
-> +			  PARAM_RANGE(NTSC_HBP_DURATION_MIN_NS,
-> +				      NTSC_HBP_DURATION_TYP_NS,
-> +				      NTSC_HBP_DURATION_MAX_NS),
-> +			  PARAM_RANGE(NTSC_HBLK_DURATION_MIN_NS,
-> +				      NTSC_HBLK_DURATION_TYP_NS,
-> +				      NTSC_HBLK_DURATION_MAX_NS),
-> +			  16,
-> +			  PARAM_FIELD(3, 3),
-> +			  PARAM_FIELD(3, 3),
-> +			  PARAM_FIELD(16, 17)),
-> +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_PAL,
-> +			  PAL_LINES_NUMBER,
-> +			  PAL_LINE_DURATION_NS,
-> +			  PARAM_RANGE(PAL_HACT_DURATION_MIN_NS,
-> +				      PAL_HACT_DURATION_TYP_NS,
-> +				      PAL_HACT_DURATION_MAX_NS),
-> +			  PARAM_RANGE(PAL_HFP_DURATION_MIN_NS,
-> +				      PAL_HFP_DURATION_TYP_NS,
-> +				      PAL_HFP_DURATION_MAX_NS),
-> +			  PARAM_RANGE(PAL_HSLEN_DURATION_MIN_NS,
-> +				      PAL_HSLEN_DURATION_TYP_NS,
-> +				      PAL_HSLEN_DURATION_MAX_NS),
-> +			  PARAM_RANGE(PAL_HBP_DURATION_MIN_NS,
-> +				      PAL_HBP_DURATION_TYP_NS,
-> +				      PAL_HBP_DURATION_MAX_NS),
-> +			  PARAM_RANGE(PAL_HBLK_DURATION_MIN_NS,
-> +				      PAL_HBLK_DURATION_TYP_NS,
-> +				      PAL_HBLK_DURATION_MAX_NS),
-> +			  12,
-> +
-> +			  /*
-> +			   * The front porch is actually 6 short sync
-> +			   * pulses for the even field, and 5 for the
-> +			   * odd field. Each sync takes half a life so
-> +			   * the odd field front porch is shorter by
-> +			   * half a line.
-> +			   *
-> +			   * In progressive, we're supposed to use 6
-> +			   * pulses, so we're fine there
-> +			   */
-> +			  PARAM_FIELD(3, 2),
-> +
-> +			  /*
-> +			   * The vsync length is 5 long sync pulses,
-> +			   * each field taking half a line. We're
-> +			   * shorter for both fields by half a line.
-> +			   *
-> +			   * In progressive, we're supposed to use 5
-> +			   * pulses, so we're off by half
-> +			   * a line.
-> +			   *
-> +			   * In interlace, we're now off by half a line
-> +			   * for the even field and one line for the odd
-> +			   * field.
-> +			   */
-> +			  PARAM_FIELD(3, 3),
-> +
-> +			  /*
-> +			   * The back porch starts with post-equalizing
-> +			   * pulses, consisting in 5 short sync pulses
-> +			   * for the even field, 4 for the odd field. In
-> +			   * progressive, it's 5 short syncs.
-> +			   *
-> +			   * In progressive, we thus have 2.5 lines,
-> +			   * plus the 0.5 line we were missing
-> +			   * previously, so we should use 3 lines.
-> +			   *
-> +			   * In interlace, the even field is in the
-> +			   * exact same case than progressive. For the
-> +			   * odd field, we should be using 2 lines but
-> +			   * we're one line short, so we'll make up for
-> +			   * it here by using 3.
-> +			   *
-> +			   * The entire blanking area is supposed to
-> +			   * take 25 lines, so we also need to account
-> +			   * for the rest of the blanking area that
-> +			   * can't be in either the front porch or sync
-> +			   * period.
-> +			   */
-> +			  PARAM_FIELD(19, 20)),
-> +};
+    ASoC: tas2770: Use modern ASoC DAI format terminology
 
-Nit: setting vbp limits like that makes it impossible to use
-drm_analog_tv_mode() to generate modes that include the VBI for e.g. emitting
-teletext.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=164d4978880000
+start commit:   55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=154d4978880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=114d4978880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+dashboard link: https://syzkaller.appspot.com/bug?extid=69904c3b4a09e8fa2e1b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e2e478880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149ca17c880000
 
-This probably doesn't matter, as it can still be created as a custom mode from
-userspace, hence I'm mentioning it as a nit.
+Reported-by: syzbot+69904c3b4a09e8fa2e1b@syzkaller.appspotmail.com
+Fixes: f8a4018c826f ("ASoC: tas2770: Use modern ASoC DAI format terminology")
 
-> +		 * By convention, NSTC (aka 525/60) systems start with
-
-Typo: s/NSTC/NTSC/
-
-Best regards,
-Mateusz Kwiatkowski
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
