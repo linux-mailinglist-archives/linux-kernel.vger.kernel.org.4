@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3096000B9
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD476000C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJPPeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S229910AbiJPPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJPPeV (ORCPT
+        with ESMTP id S229786AbiJPPgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:34:21 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00E838A3B
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:34:17 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id o2so5350673qkk.10
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:34:17 -0700 (PDT)
+        Sun, 16 Oct 2022 11:36:42 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357D38A28;
+        Sun, 16 Oct 2022 08:36:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id u21so12878577edi.9;
+        Sun, 16 Oct 2022 08:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/HzaPuqNEIzv1PWmvD8WAnk/Y18nRQCpGE1l2eqH9ws=;
-        b=cgmcMRxhVutyoZcVTfiJ9EOzfMYm69fP9mG0tNU5Vj9SWYd6wQ/BrVP0hjEHPnYuy7
-         JybJDhxk9NjW4fA0UlweoG8ATmrTiTcZXuJYoLvZKLPpmwzYUyrWDX6VXc1/g1OvH6Hd
-         NJkVG4XSnY6xWOSUaIqXqJi3fzC5kC7M4AeUqixo4r/e+OKsjaSfvlOyDWnbkYWa1NhK
-         5Kf6ROPybvnEG1rAvVEXkace8tL+zgEphETag3XOiVpYTicT8HTpS4Fj9M0uKJ7yqex+
-         BqKX4owVWKL5PhvPd5FnqpkRDFq3oGSGSxKXWZxpEX1CblEQuDCWnCA/jG9jMQjsNmA4
-         LwEA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1OBWkds0Pt2bQp3eyvH72hH//WSRMxDqTTcvyzOiTY=;
+        b=FShg92RLlNiJ5TafP86/L9RhuD/LgC6/Ji+XUPcUpnDAG1GL4zom52xl/dwfgyFcYY
+         66tf/fV19lCdjnfc6PXE3RYENXKoEuYxEFo2K6z0aK8wAiyZqWPZU5EmAznoOACigRp2
+         lbxWGkoMPo5M5EpjgFr3jjnblUKX4lIzZoHpUz18u5sUZAXKjadlPtN7/HaGzD98jmKv
+         gtDwz+WBkGfUPm/qv1vUoJL13R46wq8X3TTHhBP3YTF1fDYOWfnznUi0nErrg5iRAVxY
+         N2nKJys5wQuZlpNvA6KH/Jxr0IwaH6zdqVOxFp7E+f39t7SFwLvSa+T/rV9J48v5v0c/
+         Zavw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/HzaPuqNEIzv1PWmvD8WAnk/Y18nRQCpGE1l2eqH9ws=;
-        b=z7pP+5Q5IWqFDt4EvKKhpVRj14+PXE1yKnruOCKwlRxGujCMOv0q9aRA9HGKWnXaeg
-         gR4xvW57NLsBv9ci6nqitrIUouTG/AUmRD2Pk7NieoUDWNg6chRgqv8pzoW/IbKiKr+n
-         mXoxQ7y1OnXjL+DwL9k2sSeWMXbF5JSRef5mnhcDPkQEgYH7gBcH+pqxnPYVoGOLmZBp
-         kbdsfs9yRUvGjZvIFnpnF9qDROgSNbVZt7iZAIEu+atIUbo4kzU5380ue3IUcHq3h7be
-         k9iGyFNPBjbBno+RIpHC95+ZItjU6PnfjZw/l05q2uzEw006kZv0ySzE1rbTg+MnKnTf
-         d4WA==
-X-Gm-Message-State: ACrzQf10NhNbZPvFFXOJjj4/lbLFa+8jbCR9p5yt8hGbhovznLhkzLqM
-        YbDmf+XCPV/uxJaYQVUKyMAUOw==
-X-Google-Smtp-Source: AMsMyM4u3CYE3ChHbdxdMXGxFHg+maC17Gk9XqoktcgBmxSXQeYMvpMNCexAD8IGCLH39CBN2uVplg==
-X-Received: by 2002:a05:620a:40d5:b0:6ee:e3f8:20d2 with SMTP id g21-20020a05620a40d500b006eee3f820d2mr1077035qko.14.1665934457113;
-        Sun, 16 Oct 2022 08:34:17 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id y21-20020a05620a44d500b006b61b2cb1d2sm7465845qkp.46.2022.10.16.08.34.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 08:34:16 -0700 (PDT)
-Message-ID: <199bed73-676b-850f-fe1e-f144e1b2f314@linaro.org>
-Date:   Sun, 16 Oct 2022 11:34:14 -0400
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F1OBWkds0Pt2bQp3eyvH72hH//WSRMxDqTTcvyzOiTY=;
+        b=sh1IoDhbUg+y+LMiyHiZYmoE2qaPbpfR3zh1XSPCInSmumBbm1nV8rnB4ZWItYM790
+         onD/iEJ6jQgVVERlVUZNmtRTVlMLcSf/4vlQ6hsbxb+UNbVnE3sq+mbKx/ZjOiSBogJB
+         pnpu83X5Z2tz+OtpBfPUEm0opXG0euoH8r51Ydp6T9EGC4+A7tdSY8TEjdSwfqwWHvUd
+         QwUxH2HMdH2yymNqsuxHpm/bSjHuuNg752c1SCU5YNl9IwDqLBqBww3WpW3dVsxGTCqp
+         c8C25Q2Y4GUztNiOnc7XUjYXubkYVTftBoFlLK2h6lUpBZ1oA1Wrv9SKqL/pD8S+wJpx
+         P5Jw==
+X-Gm-Message-State: ACrzQf0y1D9Iuk/TgnQ0VlJeU62rsRFxsEdEYcZVdwvyCPQW9D8aWTAR
+        5lPIqBYSadMTo7xZwR00AIU4rfaZ8USqxA==
+X-Google-Smtp-Source: AMsMyM61U3+jI8MWEihfJMx26dttGUB6RmOg49g+TvtQpDSAzgmH6Wv6elQvQNHBSIh9Cn88UzN2HQ==
+X-Received: by 2002:a05:6402:f96:b0:459:4180:6cf4 with SMTP id eh22-20020a0564020f9600b0045941806cf4mr6565731edb.64.1665934597066;
+        Sun, 16 Oct 2022 08:36:37 -0700 (PDT)
+Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
+        by smtp.gmail.com with ESMTPSA id y16-20020a056402359000b004589da5e5cesm5758781edc.41.2022.10.16.08.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 08:36:36 -0700 (PDT)
+From:   Siarhei Volkau <lis8215@gmail.com>
+Cc:     stable@vger.kernel.org, Siarhei Volkau <lis8215@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] pinctrl: Ingenic: JZ4755 bug fixes
+Date:   Sun, 16 Oct 2022 18:35:48 +0300
+Message-Id: <20221016153548.3024209-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V7 2/7] dt-bindings: remoteproc: imx_rproc: support
- i.MX8QM
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, andersson@kernel.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>, Rob Herring <robh@kernel.org>
-References: <20221014031037.1070424-1-peng.fan@oss.nxp.com>
- <20221014031037.1070424-3-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014031037.1070424-3-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/10/2022 23:10, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add i.MX8QM compatible
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> index 70322e57b6ff..64e783234e38 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> @@ -23,6 +23,7 @@ properties:
->        - fsl,imx8mp-cm7
->        - fsl,imx8mq-cm4
->        - fsl,imx8qxp-cm4
-> +      - fsl,imx8qm-cm4
+Fixes UART1 function bits and MMC groups typo.
 
-Keep alphabetical order.
+For pins 0x97,0x99 function 0 is designated to PWM3/PWM5
+respectively, function is 1 designated to the UART1.
 
->  
+Diff from v1:
+ - sent separately
+ - added tag Fixes
 
-Best regards,
-Krzysztof
+Fixes: b582b5a434d3 ("pinctrl: Ingenic: Add pinctrl driver for JZ4755.")
+Tested-by: Siarhei Volkau <lis8215@gmail.com>
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+---
+ drivers/pinctrl/pinctrl-ingenic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 3a9ee9c8a..2991fe0bb 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -667,7 +667,7 @@ static u8 jz4755_lcd_24bit_funcs[] = { 1, 1, 1, 1, 0, 0, };
+ static const struct group_desc jz4755_groups[] = {
+ 	INGENIC_PIN_GROUP("uart0-data", jz4755_uart0_data, 0),
+ 	INGENIC_PIN_GROUP("uart0-hwflow", jz4755_uart0_hwflow, 0),
+-	INGENIC_PIN_GROUP("uart1-data", jz4755_uart1_data, 0),
++	INGENIC_PIN_GROUP("uart1-data", jz4755_uart1_data, 1),
+ 	INGENIC_PIN_GROUP("uart2-data", jz4755_uart2_data, 1),
+ 	INGENIC_PIN_GROUP("ssi-dt-b", jz4755_ssi_dt_b, 0),
+ 	INGENIC_PIN_GROUP("ssi-dt-f", jz4755_ssi_dt_f, 0),
+@@ -721,7 +721,7 @@ static const char *jz4755_ssi_groups[] = {
+ 	"ssi-ce1-b", "ssi-ce1-f",
+ };
+ static const char *jz4755_mmc0_groups[] = { "mmc0-1bit", "mmc0-4bit", };
+-static const char *jz4755_mmc1_groups[] = { "mmc0-1bit", "mmc0-4bit", };
++static const char *jz4755_mmc1_groups[] = { "mmc1-1bit", "mmc1-4bit", };
+ static const char *jz4755_i2c_groups[] = { "i2c-data", };
+ static const char *jz4755_cim_groups[] = { "cim-data", };
+ static const char *jz4755_lcd_groups[] = {
+-- 
+2.36.1
 
