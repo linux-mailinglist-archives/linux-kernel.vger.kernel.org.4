@@ -2,97 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278985FFFDB
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDB75FFFDF
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJPOfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 10:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S229751AbiJPOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 10:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJPOfO (ORCPT
+        with ESMTP id S229577AbiJPOgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 10:35:14 -0400
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAE518B22;
-        Sun, 16 Oct 2022 07:35:11 -0700 (PDT)
-Date:   Sun, 16 Oct 2022 14:34:57 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1665930909; x=1666190109;
-        bh=SqCIFBMkKHUsYImTU6oEqN9NKkHFufrsS60FGxQHQ7I=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=VAy1RVcc8WKGNzoCSFD2gE1r05kzQaBJq2dW1GVTsM8hnBTob1GjTlFIp5Glv2e9+
-         XrY6meyuVIx2Cxj8AXnZHfwhmv/jGSyPQyeYW4jBssYlaN1lf/jmW6O+Ds9UnEFWjY
-         kQnrFpbohz7ckv38KhL/qA+pSKUgle7iaPVRmRyc=
-To:     caleb@connolly.tech
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     Dylan Van Assche <me@dylanvanassche.be>,
-        Alexander Martinz <amartinz@shiftphones.com>,
-        Andy Gross <agross@kernel.org>,
+        Sun, 16 Oct 2022 10:36:35 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F081A04A;
+        Sun, 16 Oct 2022 07:36:33 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 85E1FC78D1;
+        Sun, 16 Oct 2022 14:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1665930960; bh=FxEdVcMBYUuVeXSvY5pDonQ9Ob7oMZManOuvVk91svE=;
+        h=From:To:Cc:Subject:Date;
+        b=MMI3FMcgS0YvC7HS/awU8O3r/VpdW9MjCW++Fuza6o7aPNbgG5bquc7lDRA25ChAk
+         n/YFi5sxNQT5LW+fhTWO8E2dM1kviBa+iO+kvr4wBva1vVhapy2wxbXdRRxG61Aj8d
+         MRLMC23oGQNpAKsd+CVjVpQKMMrn//hOZ5c9+w7I=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH 7/7] arm64: dts: qcom: sdm845-shift-axolotl: fix Bluetooth firmware loading
-Message-ID: <20221016143300.1738550-8-caleb@connolly.tech>
-Feedback-ID: 10753939:user:proton
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: clock: Convert qcom,lcc to DT schema
+Date:   Sun, 16 Oct 2022 16:35:13 +0200
+Message-Id: <20221016143514.612851-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dylan Van Assche <me@dylanvanassche.be>
+Convert the text bindings for the lcc to yaml format. Doing this showed
+that clocks and clock-names were not documented, so fix that now.
 
-Add serial1 alias, firmware name and use 4 pin UART pinmux.
-
-Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
-Tested-by: Alexander Martinz <amartinz@shiftphones.com>
-Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Changes in v2:
+- drop minItems for clocks (as it equals maxItems)
+- drop "binding" word from title
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64=
-/boot/dts/qcom/sdm845-shift-axolotl.dts
-index 83261c9bb4f2..3e038156af4f 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
-@@ -22,6 +22,7 @@ / {
+ .../devicetree/bindings/clock/qcom,lcc.txt    | 22 -----
+ .../devicetree/bindings/clock/qcom,lcc.yaml   | 86 +++++++++++++++++++
+ 2 files changed, 86 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,lcc.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,lcc.yaml
 
- =09aliases {
- =09=09display0 =3D &framebuffer0;
-+=09=09serial1 =3D &uart6;
- =09=09serial0 =3D &uart9;
- =09};
-
-@@ -693,9 +694,17 @@ config {
- &uart6 {
- =09status =3D "okay";
-
-+=09pinctrl-0 =3D <&qup_uart6_4pin>;
+diff --git a/Documentation/devicetree/bindings/clock/qcom,lcc.txt b/Documentation/devicetree/bindings/clock/qcom,lcc.txt
+deleted file mode 100644
+index a3c78aa88038..000000000000
+--- a/Documentation/devicetree/bindings/clock/qcom,lcc.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Qualcomm LPASS Clock & Reset Controller Binding
+-------------------------------------------------
+-
+-Required properties :
+-- compatible : shall contain only one of the following:
+-
+-			"qcom,lcc-msm8960"
+-			"qcom,lcc-apq8064"
+-			"qcom,lcc-ipq8064"
+-			"qcom,lcc-mdm9615"
+-
+-- reg : shall contain base register location and length
+-- #clock-cells : shall contain 1
+-- #reset-cells : shall contain 1
+-
+-Example:
+-	clock-controller@28000000 {
+-		compatible = "qcom,lcc-ipq8064";
+-		reg = <0x28000000 0x1000>;
+-		#clock-cells = <1>;
+-		#reset-cells = <1>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/qcom,lcc.yaml b/Documentation/devicetree/bindings/clock/qcom,lcc.yaml
+new file mode 100644
+index 000000000000..8c783823e93c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,lcc.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,lcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- =09bluetooth {
- =09=09compatible =3D "qcom,wcn3990-bt";
-
-+=09=09/*
-+=09=09 * This path is relative to the qca/
-+=09=09 * subdir under lib/firmware.
-+=09=09 */
-+=09=09firmware-name =3D "axolotl/crnv21.bin";
++title: Qualcomm LPASS Clock & Reset Controller
 +
- =09=09vddio-supply =3D <&vreg_s4a_1p8>;
- =09=09vddxo-supply =3D <&vreg_l7a_1p8>;
- =09=09vddrf-supply =3D <&vreg_l17a_1p3>;
---
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++
++properties:
++  compatible:
++    enum:
++      - qcom,lcc-apq8064
++      - qcom,lcc-ipq8064
++      - qcom,lcc-mdm9615
++      - qcom,lcc-msm8960
++
++  clocks:
++    maxItems: 8
++
++  clock-names:
++    maxItems: 8
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++  - '#reset-cells'
++
++additionalProperties: false
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,lcc-apq8064
++              - qcom,lcc-msm8960
++    then:
++      properties:
++        clocks:
++          items:
++            - description: Board PXO source
++            - description: PLL 4 Vote clock
++            - description: MI2S codec clock
++            - description: Mic I2S codec clock
++            - description: Mic I2S spare clock
++            - description: Speaker I2S codec clock
++            - description: Speaker I2S spare clock
++            - description: PCM codec clock
++
++        clock-names:
++          items:
++            - const: pxo
++            - const: pll4_vote
++            - const: mi2s_codec_clk
++            - const: codec_i2s_mic_codec_clk
++            - const: spare_i2s_mic_codec_clk
++            - const: codec_i2s_spkr_codec_clk
++            - const: spare_i2s_spkr_codec_clk
++            - const: pcm_codec_clk
++
++      required:
++        - clocks
++        - clock-names
++
++examples:
++  - |
++    clock-controller@28000000 {
++        compatible = "qcom,lcc-ipq8064";
++        reg = <0x28000000 0x1000>;
++        #clock-cells = <1>;
++        #reset-cells = <1>;
++    };
+-- 
 2.38.0
-
 
