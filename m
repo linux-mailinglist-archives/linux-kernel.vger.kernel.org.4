@@ -2,157 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B075FFE68
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 11:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8BE5FFE77
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 11:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiJPJNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 05:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S229579AbiJPJfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 05:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJPJN1 (ORCPT
+        with ESMTP id S229567AbiJPJfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 05:13:27 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E273B46B;
-        Sun, 16 Oct 2022 02:13:25 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id s30so12259797eds.1;
-        Sun, 16 Oct 2022 02:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IW3EPR5jKO70Dh7Y08XV5EJBDFeZLamcX9yvxRHs2i4=;
-        b=hsuSx3BEUM9P5v4aqIgnycixlvLI9eDqSh8IjP+sM9IyK6ymwgGnjh7rpaJO/v9zRo
-         Mh3Z9JeUpEWSZ/UoIqm8Xgsrju1e7huxWqWFBZ1h8/swBZiJ4z9o+hs7CiVHAe/XWWu4
-         0xRsDUKffPhnpWCqJwUgPRVjbp8/J/O9h+afK6xO0nm57UE9QMLu0gXgXEDbS8SXt0qE
-         DU93pzQ80P2oCxJiPZ+v4RMQqRnpR5O1/uG953H1vRvGkz7N9/3kxIYIcwQPC29RKd4J
-         LApfzzmV3Sb6br91Hzqcjt43BTSWs5nTTyxBNrnMZ5HAVS5OMYKxAzRRxG9pytNDD3au
-         j9vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IW3EPR5jKO70Dh7Y08XV5EJBDFeZLamcX9yvxRHs2i4=;
-        b=uNdUnm9Fk/xwd41ayBVtZUVyBnvCJw+nDH4xT3An13c54eRNUH3BD+q55ofn0SgK8S
-         kzvF7isV5Eu4WiPJsWvkLVXKh5DYqgGOJTMgxUjmML7g4A+nxSbFgtG7wmXDbGFC8ei7
-         QdKkoSt4/TSS/OOAGB/gMH9ottYuNr/xDip0q7hHJrDODlYmdEBmRFPz3n5CaN81fBG1
-         liXi7fuU/QZ+YP8J3Xjze3GM+lW6IGFUwBK7IUyqpk31DgNS5K63ptcBG3KzbN63Tc4U
-         6jHzRu5wzqAM4zrP+Ntm16jVJhIra55UDIZqUyMQUvZZw6zHWO8WsWK2jmFjvTL97H4d
-         EHlg==
-X-Gm-Message-State: ACrzQf1OxGbYSshMYJBhUuIae42SeVLuGdBPhxNMIgrbJFhhien/C7bp
-        WXr/eDQMqnIXoWgKPE8qmkY=
-X-Google-Smtp-Source: AMsMyM4+tZXRdieCgwmJXCZ6T/lHdCcwYAYpb4bmgHmw0RsNPyJ07FzlcUTrRXjfilxcwguaSSN7Sg==
-X-Received: by 2002:a05:6402:33c4:b0:448:e63e:4f40 with SMTP id a4-20020a05640233c400b00448e63e4f40mr5382804edc.203.1665911604399;
-        Sun, 16 Oct 2022 02:13:24 -0700 (PDT)
-Received: from [192.168.0.100] (ip5f5abb9b.dynamic.kabel-deutschland.de. [95.90.187.155])
-        by smtp.gmail.com with ESMTPSA id b29-20020a170906729d00b00782ee6b34f2sm4288914ejl.183.2022.10.16.02.13.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 02:13:23 -0700 (PDT)
-Message-ID: <c8c03bd1-9fa4-fc79-d4fe-727753e1df2c@gmail.com>
-Date:   Sun, 16 Oct 2022 11:13:22 +0200
+        Sun, 16 Oct 2022 05:35:48 -0400
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BAA3B958;
+        Sun, 16 Oct 2022 02:35:46 -0700 (PDT)
+Message-ID: <b50af49c-7ef7-4377-7505-ef6163a12e4e@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1665912945;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hznDyQTGYxkoYJl9OjSws+TBlbjqWiZ+oT2KsO4G2lA=;
+        b=NYV6jwsKXMcQxXT/diZMMRKnecrSoH4oikGXxNF5mnm0mYZIsj/Ic9QToSGuTlxCtVw4+V
+        NFIKfMGVeZISKYr2jcvkv43TqFWWetZZClZyo03W5icdCdY5ARDki/e3ueBHAyiCYh9MJb
+        4CppGENdAdbj0HddIreZaNvmgRFsGymMkdD+rgs+dZ4FsBmTv0W1qN4M7yWoZyTKw5CaOd
+        2JkLG8/0uox4RQqvplqo8YU8BjM52Hxsf+huPb4tMHslcZMXanEVY19t14pA/qwGM8csB7
+        FMo4Yk/PixQsQ7jvZVcasWaSvaetnCuCHlOZruM9LfyuG8/4vsG1kP1BYZf46w==
+Date:   Sun, 16 Oct 2022 11:35:44 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 01/10] staging: r8188eu: fix led register settings
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, straube.linux@gmail.com
-References: <20221015151115.232095-1-martin@kaiser.cx>
- <20221015151115.232095-2-martin@kaiser.cx>
-Content-Language: en-US
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <20221015151115.232095-2-martin@kaiser.cx>
+Content-Language: da-DK
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Dongjin Kim <tobetter@gmail.com>
+References: <20220930051246.391614-1-aurelien@aurel32.net>
+ <8e84786d-8ae9-0f51-3438-24fb340199c6@manjaro.org>
+ <Y0GA92rYss1Wslgr@aurel32.net> <Y0sAXpecR7AVSOBI@aurel32.net>
+From:   Dan Johansen <strit@manjaro.org>
+Organization: Manjaro ARM
+Subject: Re: [PATCH v3 00/13] Add support for the Hardkernel ODROID-M1 board
+In-Reply-To: <Y0sAXpecR7AVSOBI@aurel32.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/15/22 17:11, Martin Kaiser wrote:
-> Using an InterTech DMG-02 dongle, the led remains on when the system goes
-> into standby mode. After wakeup, it's no longer possible to control the
-> led.
-> 
-> It turned out that the register settings to enable or disable the led were
-> not correct. They worked for some dongles like the Edimax V2 but not for
-> others like the InterTech DMG-02.
-> 
-> This patch fixes the register settings. Bit 3 in the led_cfg2 register
-> controls the led status, bit 5 must always be set to be able to control
-> the led, bit 6 has no influence on the led. Setting the mac_pinmux_cfg
-> register is not necessary.
-> 
-> These settings were tested with Edimax V2 and InterTech DMG-02.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 8cd574e6af54 ("staging: r8188eu: introduce new hal dir for RTL8188eu driver")
-> Suggested-by: Michael Straube <straube.linux@gmail.com>
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->   drivers/staging/r8188eu/core/rtw_led.c | 25 ++-----------------------
->   1 file changed, 2 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-> index 2527c252c3e9..5b214488571b 100644
-> --- a/drivers/staging/r8188eu/core/rtw_led.c
-> +++ b/drivers/staging/r8188eu/core/rtw_led.c
-> @@ -31,40 +31,19 @@ static void ResetLedStatus(struct led_priv *pLed)
->   
->   static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
->   {
-> -	u8	LedCfg;
-> -	int res;
-> -
->   	if (padapter->bDriverStopped)
->   		return;
->   
-> -	res = rtw_read8(padapter, REG_LEDCFG2, &LedCfg);
-> -	if (res)
-> -		return;
-> -
-> -	rtw_write8(padapter, REG_LEDCFG2, (LedCfg & 0xf0) | BIT(5) | BIT(6)); /*  SW control led0 on. */
-> +	rtw_write8(padapter, REG_LEDCFG2, BIT(5)); /*  SW control led0 on. */
->   	pLed->bLedOn = true;
->   }
->   
->   static void SwLedOff(struct adapter *padapter, struct led_priv *pLed)
->   {
-> -	u8	LedCfg;
-> -	int res;
-> -
->   	if (padapter->bDriverStopped)
->   		goto exit;
->   
-> -	res = rtw_read8(padapter, REG_LEDCFG2, &LedCfg);/* 0x4E */
-> -	if (res)
-> -		goto exit;
-> -
-> -	LedCfg &= 0x90; /*  Set to software control. */
-> -	rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
-> -	res = rtw_read8(padapter, REG_MAC_PINMUX_CFG, &LedCfg);
-> -	if (res)
-> -		goto exit;
-> -
-> -	LedCfg &= 0xFE;
-> -	rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
-> +	rtw_write8(padapter, REG_LEDCFG2, BIT(5) | BIT(3));
->   exit:
->   	pLed->bLedOn = false;
->   }
+Trying to apply the patchset, but patch 3 does not seem to apply on top 
+of patch 2 for me.
 
-I tested this also with a TP-Link TL-WN725N now and it works fine.
+We do patch in other rk3568 boards, which is messing up the Makefile 
+patching, so I needed to redo patch 2 to fit.
 
-Tested-by: Michael Straube <straube.linux@gmail.com> # InterTech DMG-02, 
-TP-Link TL-WN725N
+So it might an error on my part.
+
+Den 15.10.2022 kl. 20.47 skrev Aurelien Jarno:
+> On 2022-10-08 15:53, Aurelien Jarno wrote:
+>> On 2022-10-08 14:11, Dan Johansen wrote:
+>>> Den 30.09.2022 kl. 07.12 skrev Aurelien Jarno:
+>>>> On the ODROID forum, Dongjin Kim said he is not planning to submit a new
+>>>> version of the patchset adding support for the Hardkernel ODROID-M1
+>>>> board. I therefore decided to address the issues reported during the
+>>>> initial review, and I also did some small fixes either because some
+>>>> things changed in the meantime on the kernel side or because I noticed
+>>>> some warning or issues when using the hardware.
+>>>>
+>>>> I continued writing some additional patches to complete the ODROID M1
+>>>> DTS to almost fully support the hardware, the drivers being already
+>>>> present in the kernel.
+>>>>
+>>>> This new version includes feedback from the linux-rockchip mailing list
+>>>> and from the Odroid forum.
+>>>>
+>>>> Changes since v2:
+>>>> * Renamed "Rockchip RK3568 Hardkernel ODROID-M1" into "Hardkernel Odroid
+>>>>     M1" and fix the sorting.
+>>>> * Fix sorting of arch/arm64/boot/dts/rockchip/Makefile
+>>>> * Collected Acked-by and Tested-by
+>>> Even though I added my Tested-by to this series, it seems I didn't test it
+>>> on eMMC.
+>>>
+>>> This fails to boot for me on eMMC, but works on SD card and NVMe.
+>> Thanks for the feedback. I do not have an eMMC, so this the only part
+>> from the patchset that I haven't been able to test.
+>>
+>> First of all, which version have you tested? The v2 includes fixes for
+>> the eMMC, there was a conflict with the NOR flash. If the problem is
+>> still there in the v2, could you please send the boot log or the error
+>> message?
+> Sorry I meant v3 above. Anyway in the meantime I have bought an eMMC,
+> and I confirm that:
+> - it does no work with the v2 due to a conflict with the NOR flash
+>    driver
+> - it does work with the v3
+>
+> Therefore can you please retry with the v3?
+>
+> Thanks
+> Aurelien
+>
+-- 
+Kind regards
+*Dan Johansen*
+Project lead of the *Manjaro ARM* project
+Manjaro-ARM <https://manjaro.org>
