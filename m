@@ -2,56 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C32B60001D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00927600024
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJPO46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 10:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S229806AbiJPO6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 10:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJPO4z (ORCPT
+        with ESMTP id S229716AbiJPO6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 10:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67A63B95D;
-        Sun, 16 Oct 2022 07:56:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3B860BC8;
-        Sun, 16 Oct 2022 14:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D71BC433D6;
-        Sun, 16 Oct 2022 14:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665932213;
-        bh=57qM6HUpaEnGUo3CmkaIDIQQ+FdtDErLhqmXmdgGouY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GTCEbDvQN5b0Cxrjai8wcPGCbVFxD6K8xrzw9IHgoMYZZ5busluWSPPwCDiAe2LbA
-         UI/KkIiohnw2WQH9gUTFfQPN1LI2NFM5jG4OeShcwbcdvcbJRHOnur5JObVa8OnwwA
-         YrQmPSygUoeAaJ/phz9tEBcdtFqGCUdcx+Lhoxdc=
-Date:   Sun, 16 Oct 2022 16:57:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Michael Straube <straube.linux@gmail.com>,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk, martin@kaiser.cx,
-        paskripkin@gmail.com, gszymaszek@short.pl, fmdefrancesco@gmail.com,
-        makvihas@gmail.com, saurav.girepunje@gmail.com,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 5.19 01/63] staging: r8188eu: do not spam the
- kernel log
-Message-ID: <Y0wb5PymD6w7/wgk@kroah.com>
-References: <20221013001842.1893243-1-sashal@kernel.org>
- <60af3294445ba2d2289a32ef7e429111ff476b44.camel@perches.com>
- <Y0eYFF7Wl7Cb2hfK@kroah.com>
- <Y0wH1wFepv3pCyaG@sashalap>
+        Sun, 16 Oct 2022 10:58:19 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED223CBF3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 07:58:18 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id x13so5326579qkg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 07:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5X2LgtOwPri/UYN8IAbLuEcyYQbXzlZwIRbvemCz2RI=;
+        b=nze9AxaWNWdm/L+lavHQwKW28WH6TFv8P70jVeO0P4YEwaHTv2rHo2vZobeBDY7ZZ5
+         Nay9GGHPamN8VPRJHOguNjE6+6AxbpDfBQdo5bldWKac2iQZX3W7pV+7c+96TYekLZrp
+         RoJRWwHX9/aj3PjnUIUez91I2B/LkTBJ976/jIDUHTDKaUkR22nzpoYMqPrAQGBvh7R6
+         uZYt06EyY7vKYRWS84+8zT26fkFCcW3AjvBnfmtYSjoiRaGL1Bl4VlUN5rWaiqRGI6UQ
+         wlH5ky0PGJDD8DjL8r+DCXvbK2wPTPNj1JGe4bhB07Z3UvIR8lE3w2+L4WL85XEbL6P2
+         dEAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5X2LgtOwPri/UYN8IAbLuEcyYQbXzlZwIRbvemCz2RI=;
+        b=twNaIrLGfD1ogYRgOpza7UQe/DJHJlzmqnK8k4cKrodfxL7vYS8UW6HvtakOoD9kFj
+         RbhOFtSzCNVWgTCcYauCYs3j+V+0RcJRWK+VWUGyIDBnpHkSspzh58v/5p6U1+9sINPB
+         OxyfNScipfk8qxq8QqocbdLzs1SLk9UeTuJipLn2tAxoj7WBrkyPaYa6M7KCoC0xc2Ja
+         v3V7ODfUXHvY3tiTNzK6zL62jhvNv6iQGo2zZyLCUEpKsMEBfIU8XonNAR+qiNfPlXb8
+         9wfM55pytn4vXka7lP6T3NiF2AIik2FSZoFoSbfbU5iOzEIOx/prIwC1nYs0rmTiGxDG
+         V2jA==
+X-Gm-Message-State: ACrzQf1+kP+CYVeUAE1FxJ8d+E2yRrEAf+BvN6aii2VM/uF2hHUboHLi
+        GOzzv3fKvmVHc8JeKpr7bQ7zJQBusKWVfw==
+X-Google-Smtp-Source: AMsMyM6HxF7TzL4yr3cxH6AmFqwF1/eLHTjmwlsiuNtGriRKXTLNZemvNZN5OrPaOAbBPb3ex9t5aw==
+X-Received: by 2002:a05:620a:44c6:b0:6ee:7a7a:93d1 with SMTP id y6-20020a05620a44c600b006ee7a7a93d1mr4749518qkp.256.1665932297973;
+        Sun, 16 Oct 2022 07:58:17 -0700 (PDT)
+Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006e16dcf99c8sm7226095qko.71.2022.10.16.07.58.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 07:58:17 -0700 (PDT)
+Message-ID: <f047da0f-1c1d-27a5-d222-d781f20595d0@linaro.org>
+Date:   Sun, 16 Oct 2022 10:58:15 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0wH1wFepv3pCyaG@sashalap>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 7/7] arm64: dts: qcom: sdm845-shift-axolotl: fix Bluetooth
+ firmware loading
+Content-Language: en-US
+To:     Caleb Connolly <caleb@connolly.tech>
+Cc:     Dylan Van Assche <me@dylanvanassche.be>,
+        Alexander Martinz <amartinz@shiftphones.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+References: <20221016143300.1738550-8-caleb@connolly.tech>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221016143300.1738550-8-caleb@connolly.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,32 +82,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 09:32:07AM -0400, Sasha Levin wrote:
-> On Thu, Oct 13, 2022 at 06:46:12AM +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Oct 12, 2022 at 08:08:58PM -0700, Joe Perches wrote:
-> > > On Wed, 2022-10-12 at 20:17 -0400, Sasha Levin wrote:
-> > > > From: Michael Straube <straube.linux@gmail.com>
-> > > >
-> > > > [ Upstream commit 9a4d0d1c21b974454926c3b832b4728679d818eb ]
-> > > >
-> > > > Drivers should not spam the kernel log if they work properly. Convert
-> > > > the functions Hal_EfuseParseIDCode88E() and _netdev_open() to use
-> > > > netdev_dbg() instead of pr_info() so that developers can still enable
-> > > > it if they want to see this information.
-> > > 
-> > > Why should this be backported?
-> > 
-> > I agree, Sasha please drop this from all branches.
+On 16/10/2022 10:34, Caleb Connolly wrote:
+> From: Dylan Van Assche <me@dylanvanassche.be>
 > 
-> I'll drop it, but for the record: I've been picking up patches that help
-> with log spam like any other regular fixes. Being on the receiving end
-> of spammy kernel code and making debugging issues much harder, I think
-> it's as important (if not more) than some other classes of fixes we pick
-> up.
+> Add serial1 alias, firmware name and use 4 pin UART pinmux.
+> 
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> Tested-by: Alexander Martinz <amartinz@shiftphones.com>
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
 
-Ah, ok, fair enough.  You can leave this one in your queue if you still
-have it around.
+All your patches - except 1 - are not properly threaded.
 
-thanks,
+Best regards,
+Krzysztof
 
-greg k-h
