@@ -2,106 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F275FFF8D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ACB5FFF92
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiJPNXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S229643AbiJPN1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 09:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiJPNXM (ORCPT
+        with ESMTP id S229562AbiJPN1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 09:23:12 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C832DBB;
-        Sun, 16 Oct 2022 06:23:11 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2EDBE5C0065;
-        Sun, 16 Oct 2022 09:23:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 16 Oct 2022 09:23:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1665926588; x=
-        1666012988; bh=luOh1+tXqD7JMWO63diGmzw1lVMjKMj3+nXqqj2Jd70=; b=V
-        JKFc1tWmuQAc4v127ngF04vXL5JVjXdfS0zg5lUuQYjC87yz/n+NHZJ3PA3P+swu
-        /sTXP3WN9oxQZXh7mGYkbsK43JMklb7UNDDBh/mmasVfTKKd++Vrp5XCu3w20LYY
-        lJhXiHgwLRBRhbPE2hp+4gtBQluEZ3DSZZcDaAGGx060Mwsg5iUQrmT7U03H2ASc
-        EPpteLYSFDjLuqDXiVos4sWgMOMg+xecoHR+PvSOO+ZcBVbN5ozApw17wxse2nt2
-        +xn7vG0OKHhQradz7iny4eVeNvlqA5voxMDzf31Qq3S3d+EWEjywf4oG46IkBiDa
-        i+Gme8oJ/zPEqXAlBOGpQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665926588; x=1666012988; bh=luOh1+tXqD7JMWO63diGmzw1lVMj
-        KMj3+nXqqj2Jd70=; b=pWHazTuKjzH67V5VKZSaxNo5eNnpEq19tt0JhIszsFg7
-        W+OLBVTRoT7/E0dNwKPdTlI60ZM+l9JjkfhLqC45UtiliY+WwOJCqoUm8r+9Ou3x
-        RMAyDMNb0ksTbzl4iwKtomOtkq3NH39NJI7uAdUY626QqEVDqrIu0XYU//ts0mVt
-        09LzGnAKAqXpjTD1I5s7mEMiv6w+QdgfenJiSBM2GHS+pn53bWXzNcRPaYcXQUiL
-        hh+H23qvIG3eDjvF9XGocMw5nZRhJA4SobGf0vKpXvfX99ykmqDVkV+pnEFhF0r2
-        teEebRoMa8kKHFkp+/EcvCGTihVclI2VQguqCTrNmQ==
-X-ME-Sender: <xms:uwVMYx5TEhV8OBMN34G-Tu6mFP0LThe1cgep69vCunD7bvdXX-14hw>
-    <xme:uwVMY-5zGFvesB4mJippybwvToIG0TuPTXS-tMdfMSBD0yVS48KqwIIvpEK7qLDlU
-    xvZ0mfPwfNzCDPE3NU>
-X-ME-Received: <xmr:uwVMY4eIWfy-hGyF_9sLbta4RjidQ5cjP9frgd4G1wV5KslxysteAzR2dH90>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekjedgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheplfhoshhh
-    ucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduieegheeijeeuvdetudefvedtjeefgeeufefghfekgfelfeet
-    teelvddtffetgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:uwVMY6LXHxY8cOTSSJmJXWXP4jo72XYovaS_tr2nDXekK7f3OlHJ-w>
-    <xmx:uwVMY1Ig5og4cX74dxy3dpKrKnWKyY-YFUj9wRzkqK-j2WV2HCYekg>
-    <xmx:uwVMYzwLhHNm-Gu0ZpmaOTHIgL3QDmEOqEXhrGg1aMe18bmOD3mr4w>
-    <xmx:vAVMY8-gp3q3EUNtj94KoCGKsyeL2jm2m97mZYH-VHhxQAGUENnGwA>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Oct 2022 09:23:06 -0400 (EDT)
-Date:   Sun, 16 Oct 2022 14:23:02 +0100
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Olliver Schinagl <oliver+list@schinagl.nl>
-Cc:     Gary Guo <gary@garyguo.net>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/13] [RFC] Rust support
-Message-ID: <Y0wFtj615KqqvGob@localhost>
-References: <20210414184604.23473-1-ojeda@kernel.org>
- <fae4873e-2ff9-df35-0ab9-34bf4417b717@schinagl.nl>
- <CANiq72mRxM-7griYF+0FWqYoSoNL8ad=L-i6a2-GsaCeb0C6qQ@mail.gmail.com>
- <ba8cb315-9d73-2f45-8bf9-d9473d369dca@schinagl.nl>
- <CANiq72kz+Txauo+103_-fN_J8PhhCdJUH5XepShUQmJzW6a4tA@mail.gmail.com>
- <5c0bb1db-5589-32ca-ac22-4aafb3c15751@schinagl.nl>
- <20220728112114.0000003a@garyguo.net>
- <a4803f2e-2e46-1c7d-0e89-96f5cbb0ad11@schinagl.nl>
- <00604162-9157-3862-b463-de90cb17c69a@schinagl.nl>
+        Sun, 16 Oct 2022 09:27:45 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7152AC4;
+        Sun, 16 Oct 2022 06:27:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e18so12653690edj.3;
+        Sun, 16 Oct 2022 06:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C0pRjLS8S0PBxvIWJSoyY51V6LZOLpxOkz9SWeH8SHE=;
+        b=NCMNDhejEEGVm1W69lUOCI+DchetA+MgaOx5qqbVKe3kee03N9vBT8pYLlTixJD/9C
+         Yq8m8iZx3A5WzJfc5ll79p9U29FVKFQYGLcqFYsr6RvOQOJmyIfTbOR0MEDRsDCsbGqj
+         WUROdLUIdlHEwhng4cjnd8+XTYT486X8EjhpQaVeLQ3qQX0YiSY0uzETlA38HK6Y7ufl
+         Icc/Lxgo0htF5D96lu9fzo/Of/VZDkZO1ZIWbJHy5xK4fijJ9Go0/wa7yDY3F87zKCQq
+         svQ1Sf4aoTCrSnL7lMWs+oiARRhbDxddsa2Fh3UnCbad63h1M+5C9/IGNZAmKl7EXvwJ
+         YxIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C0pRjLS8S0PBxvIWJSoyY51V6LZOLpxOkz9SWeH8SHE=;
+        b=d9lJbBegXIUbLQ8l5AFNuDn0ar6oMkA1cdh+irCPpaaIugVa/qQrsZVYbjezcoYjDV
+         bxsPGHy6vsBMSO0nfGTCaDedP8Msk9zqm5qeKm3VMHcAeLwExSMy+h97avpCjKVMcRfV
+         a835qKUUb0f6+3/KW4ITTij0aNU174w16HOgiBr/2z0OJIst6k1DTzXQ8jAf6Mlli9l7
+         9wJ46KnecymG7KjDTJ9DK4aNGwGa3wnTJ3cxFFnxyoP7fQvmAGUlTLRgwd1dAU61P2GP
+         nHgbngPe9iQF6X42kYw/reaYr5I49W1wDE00RZQBLj3pFf5hFNsnMNA8Qvss5d5XNcZ+
+         ubow==
+X-Gm-Message-State: ACrzQf0FI5Qa0pPguPh8cntbCIqfa1WDgwFwQDh5P0KXmkn/4g1VO5j9
+        vpj63xZWAujQhIMvgyeOFAhhAvGajPQ=
+X-Google-Smtp-Source: AMsMyM4fSSRavTWL7SmHWcMKtrO3qApNIGTTdSzzFZPUnCfbxlbFWcRRVR9HBztsSUqXDWRt0O+w7g==
+X-Received: by 2002:a05:6402:3806:b0:450:bad8:8cd5 with SMTP id es6-20020a056402380600b00450bad88cd5mr6315125edb.305.1665926863106;
+        Sun, 16 Oct 2022 06:27:43 -0700 (PDT)
+Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
+        by smtp.gmail.com with ESMTPSA id y5-20020aa7ce85000000b0045c72bba0bfsm5572057edv.4.2022.10.16.06.27.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 06:27:42 -0700 (PDT)
+From:   Siarhei Volkau <lis8215@gmail.com>
+Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/7] ASoC: codecs: jz4725b: Various improvements and fixes
+Date:   Sun, 16 Oct 2022 16:26:41 +0300
+Message-Id: <20221016132648.3011729-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00604162-9157-3862-b463-de90cb17c69a@schinagl.nl>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 04:16:14PM +0200, Olliver Schinagl wrote:
-> +indent_style = "Visual"
+The patchset fixes:
+ - Line In path stays powered off during capturing or
+   bypass to mixer.
+ - incorrectly represented dB values in alsamixer, et al.
+ - incorrect represented Capture input selector in alsamixer
+   in Playback tab.
+ - wrong control selected as Capture Master
 
-Without commenting on the rest of this: visual indent style produces a
-*lot* of diff noise, and I'd strongly recommend against it. Because it
-lines things up, a change to one line can change many adjacent lines,
-and make it hard to see what actually changed.
+The patchset improves:
+ - Exposes output stage (post mixer) gain control and makes it new
+   Master playback gain, DAC gain was the previous master.
+   However, no Master mute now.
+ - Exposes all mixer inputs (both Mics, LineIn and DAC) with their
+   gain controls.
+ - Exposes microphones widgets: single/differential input, boost.
+
+Known issues:
+ - Bypass path enablement isn't applied immediately, for make
+   things going bit clock needs to be triggered for a bit,
+   e.g. by aplay dummy.wav
+   It might be a hardware bug, since the bit clock isn't
+   declared as required for codec operation.
+
+Tested on:
+ - Ritmix RZX-27 (jz4725b).
+ - Ritmix RZX-50 (jz4755).
+
+Diff from v2:
+ - add microphone widgets
+
+Diff from v1:
+ - each change in a separate patch
+
+Tested-by: Siarhei Volkau <lis8215@gmail.com>
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+
+Siarhei Volkau (7):
+  ASoC: codecs: jz4725b: add missed Line In power control bit
+  ASoC: codecs: jz4725b: fix reported volume for Master ctl
+  ASoC: codecs: jz4725b: use right control for Capture Volume
+  ASoC: codecs: jz4725b: fix capture selector naming
+  ASoC: codecs: jz4725b: use right control for Master Playback
+  ASoC: codecs: jz4725b: add missed Mixer inputs
+  ASoC: codecs: jz4725b: add missed microphone widgets
+
+ sound/soc/codecs/jz4725b.c | 109 +++++++++++++++++++++++++++++++------
+ 1 file changed, 92 insertions(+), 17 deletions(-)
+
+-- 
+2.36.1
+
