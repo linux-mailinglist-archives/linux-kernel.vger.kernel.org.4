@@ -2,128 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5112A5FFD63
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 07:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FA75FFD6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 08:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJPFt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 01:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S229755AbiJPGK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 02:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiJPFtu (ORCPT
+        with ESMTP id S229725AbiJPGKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 01:49:50 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2067.outbound.protection.outlook.com [40.107.101.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282EF1C40A;
-        Sat, 15 Oct 2022 22:49:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=inBVL7muKWv8CvmEdSpDZo8kaEd3R4VxazwjnLwc1cPjJ5b9J0mdnZ9sUVNnZsbuZSmMRkIEJuFkQNTVcIbxAk8Z5uFo9s/CcTUrfDJfZVhyX7FPX+MupzC29bf3ZrMPrTfQnNg7Hu8QXcKcYi2moRm+RuP1BqwimsdzkID9WE71jI1IdnrsChuOGvtaIL9lNp3Wgde6wdU3QC5od9yBrJyXCSwwo/B9dx7m9LPwDNvw6JHIvQ9QIKD2PVvBWhKTNAXel02M5lm0mjPDm4Q93E//TWeQ2dRy0W76gHaOazr3gbFp9R4pGqHIY62VcvJB7Ux9rPRzs1pd2OmqGgUsSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BiTc/vu11w1SHNZYbVMVl14MXo8s+r15rg8r2rVNBWU=;
- b=Zvf39mB3KRaq1mKJ0qE1Kg1E4EX/VUWHFwLrEG2xAuSUtbMo9jhbMdsRcMVCa3k/Ak2X2ahsa8RpK8P9rqmzH4xzsruiKA0LtYZhmdwZCvv1ujG5OdZkdcdMNgR6KAYkL67csiVa1+H+PssodWu0Y9cN2X4xa2GJvyg2xwLqPlth/Z6qrTRgpXbN3zx0gaZ6kAO0R2l6ljvTZfmVe6GvI2xAYJBgjD+FJ4CGqEFcK7ttOxeMslBD7U1LuzSQY3CYlAZMwY7Ouh5dlJJS5iWixgkhNpLNjRdAdo/bHPYTyoXdNu2RDL8pfLaOEWMU2nhd6OwffaAEJBd0PezUCzMk4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BiTc/vu11w1SHNZYbVMVl14MXo8s+r15rg8r2rVNBWU=;
- b=Ojv8dwjE5x0tbtQ/nmeBFlh94yDDNa124UgXqb2c53AaMq6MvvmeIPJDcEy2Fqxj8MfptGqSJPBxLAHZql3FMAF+ohk0DUqyuRxBZlyvnpC4xjujH2TKQwpSvQUbu6uvy/m34LSoL41WHjE4FLSCf9UkyM8c/oy2XUbfC7dUvUA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CY5PR12MB6323.namprd12.prod.outlook.com (2603:10b6:930:20::11)
- by CH2PR12MB4166.namprd12.prod.outlook.com (2603:10b6:610:78::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Sun, 16 Oct
- 2022 05:49:46 +0000
-Received: from CY5PR12MB6323.namprd12.prod.outlook.com
- ([fe80::3bd9:dc6b:7c66:d776]) by CY5PR12MB6323.namprd12.prod.outlook.com
- ([fe80::3bd9:dc6b:7c66:d776%7]) with mapi id 15.20.5709.017; Sun, 16 Oct 2022
- 05:49:45 +0000
-Message-ID: <b76e36d0-88d5-be32-a9b2-e3d476e44556@amd.com>
-Date:   Sun, 16 Oct 2022 11:19:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCHv4 0/8] Virtual NMI feature
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mlevitsk@redhat.com,
-        mail@maciej.szmigiero.name
-References: <20220829100850.1474-1-santosh.shukla@amd.com>
- <Yz8hIY9XdlycXE+N@google.com> <b8a6ac33-eb39-5bf3-db55-a2189d67d202@amd.com>
- <Y0Q/jVzFz3MoP26d@google.com>
-From:   Santosh Shukla <santosh.shukla@amd.com>
-In-Reply-To: <Y0Q/jVzFz3MoP26d@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0048.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::23) To CY5PR12MB6323.namprd12.prod.outlook.com
- (2603:10b6:930:20::11)
+        Sun, 16 Oct 2022 02:10:49 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78C23ED4A;
+        Sat, 15 Oct 2022 23:10:46 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sc25so18469600ejc.12;
+        Sat, 15 Oct 2022 23:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VNYgPu2luLZN8pmM/EkKUwwM/294BUfdBP1Pg+67IFg=;
+        b=Fz0SAL+d7+4q/aye92fODaFnRVi4m1eAizC01GVzYpe2sNI8sbdrzVXXR2WY5jA5u8
+         xQL7yGl/dth0DAx0noTFPiZ+JFX3/K637Lhw9Ja+BK0WlvUx4cs51yhMNJFiMDFiJDHL
+         XJINPDB59c1EoG2bth633p/oE4IIyEu4zvSOId/e8RK/+KMgayyi1feMOY9mALRZ2jfy
+         kEbmrKPzzGIHSiufnqpZz2PSIlWBxBds97CIOpTFup92H6XCD3Pt+kPlQ6DSxAQLrbAQ
+         b2kIBFFErFh6z7cNIUsB6sF5ylrysvcVqVazoQChDX5CF5Rt1uoqOygO8hxA03OEC+D+
+         e8sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VNYgPu2luLZN8pmM/EkKUwwM/294BUfdBP1Pg+67IFg=;
+        b=4ooPmeJ3arObEJKNzWKRYFwKrDyV5uJFD/9y+dE3F5NqaFG1vUOEsOBLwdAL3V0kJi
+         8Jg8CdLHQzbvRzElgFJueBCI1jnqa64OqFR70QSXrkvg5PDSQq+btQzo5bdz8KHZpkMo
+         JsiytZI6ggAmEkCG+baKz4dRzpkUO/MeAVBGeOZU82PBRfddyp4p211l7nt6iVCHVevH
+         KOXwxzEER/C9be2S1HYCe9CRNjHfQhRrREhhaYP7GK77pY4hWTqk/8OAj2DnBHmA05NX
+         poMAV2BL3/HoUxauMvqu29o791RwdyrxNJloE/wum4tpluEm89tcYiVKV30pXxWgWteH
+         p5Hg==
+X-Gm-Message-State: ACrzQf0XwoumdPubSdlvhpQGetUEA7DOMVH9BKRCtXq+AGD38eni5kVc
+        jY5JK6qhlorZQbUWkEGPDNjjH72GQHwikAj6P0kSEMLnKHY=
+X-Google-Smtp-Source: AMsMyM4BkFYho9W2l2W1YdIOMdSDjVek+RImZcsebBtusmjt0FvjV75svvXJ3uB2foCMTpYOte3nbBxwtmH1EBCPHks=
+X-Received: by 2002:a17:906:7945:b0:73b:e605:f31 with SMTP id
+ l5-20020a170906794500b0073be6050f31mr4230695ejo.129.1665900644905; Sat, 15
+ Oct 2022 23:10:44 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6323:EE_|CH2PR12MB4166:EE_
-X-MS-Office365-Filtering-Correlation-Id: b140110e-f942-47c3-bad8-08daaf3a3aba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GxWIId9s5/5xq07I/SlPyhpJPY2wfklr7OJ9LergxB8pfVVAtmdePpDuQ7BPXXVjtg+UB0IZHB1Ipq/8HFkL4sKfKl/QOlqryQbXLSibUQ9/cE8EnpwvlKfAYUHpV4Vbsp/GKC5FDAIMpH5DaQOw27GICSlwG3AYagFSdTeSm+/OsH5Cv6F4xbezohNaRLyQ76PdOs9zsKWvK/4rj4eQAc/vNmXm13G1N7QF8Wj/nZvosEDXevdcJMSiK4XEmqNlp0WCc4tRHpT5M42EwpU3TyTwQwizw/o1CZ6qRGyEZp+zhCD09Us7oZ37yd9eF1I/IeXZr7hAhFZDDtFCY0r3gMYJtgEwc8kLQtZqDmD3IPWcHuW0o3aX4thuu6MlbTNgbRQriJ0tY5A81JtLA74LYZ3XLnUjfePWGtOfshgHiHgtjudeWuQBHLHfv02hlLyEpbHQH6zy3QD2Pl8Jk3fbaxxJEvaVUW24Er/diPi4IaYpCpaUmISZBqe/n6V9e412Da94oo+fdQc8nTlgv02YbIfJfrxDbADjduzSnNy7DDGyQ37q484PwEKJ15UP1qG7Dy11O5dsd7x+F4DQLqOtfU4nN4miZmXiquMIHcaBHstR/295ud7c3LxdggRiu2LWmNGNW2twkF7CZMmr9KyXvdwcDCLII09Tprr2hZtNzYSewZePxQC6FU9Q2Db3pMUhXzSSCupJsMe+F45WpbQxAoVZ+JShJmorHxTjeoVMMMTR3dQW/djJMtu78x4T/D59qy00Ca5B6hoZ2KsDWpCutuxY0O5guV7bXkuCRO9X3uFRNkhJsmTWW4bNKeph/3cCVWCXuChevLu9wW2qN2bEbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6323.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199015)(6486002)(966005)(6916009)(54906003)(316002)(478600001)(6666004)(66556008)(66476007)(6512007)(5660300002)(66946007)(2906002)(8676002)(4326008)(186003)(53546011)(2616005)(6506007)(41300700001)(26005)(44832011)(8936002)(36756003)(86362001)(31696002)(83380400001)(31686004)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWFQd0hWZUVGTXZqWVJKb29GUkJpN2FpUHJkeDJpcDhJTzdGYjAxd3BKaDl3?=
- =?utf-8?B?eEhOUUp4Q25EYnNNeXdiSXh5SWRnelhYNm9iaEx3b1Z3NjlsREhJaEdxa2Fj?=
- =?utf-8?B?UXVTTjFMVXJOQVJaSXlsOEVnU3prbjRXNjBzWWF0Wkt2Y2ljdFkxQWtFK3Ni?=
- =?utf-8?B?WnVUNVFZMnZxTHFhNjk5bDZ5OUJrMHlMSWZUQy9NcHNZU1FLTmh0WUcwdXVl?=
- =?utf-8?B?OFhnU3ExV0dqd3JadWJ0c3ZYVyszZHdINWMrYkhCU3RBaU1penFhT3lGR3Jx?=
- =?utf-8?B?VlgrSm93WFpjY095T1FodlBUWXpudWJ6cGZMdzltd2FvVGNtaHp2Z211N2RH?=
- =?utf-8?B?YmdEQWhNRlI2dzRjYlJBQ1NEMDM0UHFNLzBOS214WjFmZkJDUlpVUUE2SzhE?=
- =?utf-8?B?S2haK1U3VldQRUQxYngzdW5rTGNjdWtHNXNQdmJ6TTl2V2JmeTRRdVdtN1g0?=
- =?utf-8?B?a1lyTWdvdVhlc1pxT0R1R0VoNDR4c1p6YTU0QnB0YWNJNlpDV3ZRc0NrWEZm?=
- =?utf-8?B?Vk1BUFd1eXpiZ2t5WFk5Vmh3T3lGMzFDbExBVTVaNkRxRXdTR2FUVjlRMjlx?=
- =?utf-8?B?cVlYeEU1czEyR25WRUhYMU5WK0h0dFR6SzNzZVJGdlo5YW00cmd0RHVWRjVi?=
- =?utf-8?B?dkV2MkVOV0lyd21pcXFLU0V5aVpGeVlDYVdndS9uRG1WNTJ4TW0zdFhWRUVL?=
- =?utf-8?B?QUFYYkE4UjMzRjBuWTk1TFN3aEl2WW14TnZMUEdpSEZGZDZhZ3l6V294WHRh?=
- =?utf-8?B?UE9JYlQ5T0FiczFNRWFWMG9BTTk3YWpoa3BwdEJQUk9nSDIyMGdoVG9FOXQ5?=
- =?utf-8?B?Y09GWSs5NVN0TmpHdXROdW15MG1wVGt6OUxwYWxjeTNhbFRYNS96a3ZrdnZU?=
- =?utf-8?B?VXZEV0Rlc2UrajJUY2pUVUNjNGF4U1lNSUdFV0pQN05JcjIzM3VScWsxaW9N?=
- =?utf-8?B?Z2VjbHk0U3R5d1A4S1ZIUkFNYTNiOFJJaDlSUS9YTzlEQXd3MHRabG1DZ3Qr?=
- =?utf-8?B?SzNPRnNFemYzaTZwWHNMV0xab1ZCUEE1RUxaNmNLdjJXYXdhd09WR3VTa2hI?=
- =?utf-8?B?STJRUWx3b1RBYXdLd1BUWmNhV0UxQW9OdGdCSmg4cTVKSkFobGN2K2F3enp5?=
- =?utf-8?B?Y3U3ODY2bVIwN2M1WVZ1YmFrSytPL1lMSjQxOFhGN3ltVks5TEtyZ2RqaEo2?=
- =?utf-8?B?MHdyMUw3V29pVUF0TzhTczJBT21BajQyVVN2NG1aNUJmZ29FOHdneTdRc1ZY?=
- =?utf-8?B?QW1UQmpUWjVpZUJBazVDTjhYNmRkWHA4Z3FKeG1LSmtjSFVPajFrVHp2ZVNx?=
- =?utf-8?B?UVVrS0tISk9ETDdSTm56UnRvSGtZdFJTQ2lzMG1UYUhXUEhnVVFNRHdKdXhH?=
- =?utf-8?B?NlYyZU5VTXlWQ21obTJkOGJHMGJxWWFKVjhtMHFMUkllMFh5T3pFVHFGdWpp?=
- =?utf-8?B?NDFaRGhVQ21mVE4yZ3BzWG50YWFBQk9vZXVLYWFiWVRsOTNJTTJuQ2twSHdm?=
- =?utf-8?B?ZW9hbTg0R04rZTJNVU4vTXkvUkhWYVNsVzRxd21xc1dqU25VQ0hCMXhOd2xR?=
- =?utf-8?B?NkpkRmxHSExTR0pXQW0vYkFJbm5KOFFPZjBqM1BTZlhubmtHekRUdHVPbXl2?=
- =?utf-8?B?dnhXRjduU3hiTUwwR21tRWMyUUtqRVBreEVOS1NtRUZ0cys2OGJzS0xDbE50?=
- =?utf-8?B?Ny9aM3paeFVrU3VYdFBYVDNWWlNwSzRlaWNmQmFQSHpkU0tiekZ0OUZZQzJr?=
- =?utf-8?B?TmdGT1ZLWmQwR081cEtSeXZINjhRQUwzWlc1bCtDckdIRXgzQ1Fad0VTUGVX?=
- =?utf-8?B?YTJzT2V3RDFGdE12ZXlBYklMenZMOTdTWjRGNEZpQVlQYjlCSnQ4U1BzMzVq?=
- =?utf-8?B?dWtOMWhKa0N3NURxSFVEa0h6TUQrUFZJWFl0N1ZScU82YlZac24ydStLQ0lM?=
- =?utf-8?B?MXhFdEkxdC85SkNzdGlpQXNEVGwyaEFLT3BUNnE0c3FxclBib00zcGgwTiti?=
- =?utf-8?B?bkNiSTZtL0ZqWG9CcWpRQnZXK0FkZ3VDYm8wZDUycUxIYzJXUVF4OGNucmMv?=
- =?utf-8?B?cUFrd3FZdXhjMXUvNmd6Y0dlMlhVSnFuWVBEbFg0bUwvNS9mR2hJeWNRMExu?=
- =?utf-8?Q?sb+wZ5z9ffvydzZ9tdCquW2qN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b140110e-f942-47c3-bad8-08daaf3a3aba
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6323.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2022 05:49:45.8532
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E8Zcj63djVj5Kx94CTX6OL1T4jgJmKMlBM9/N0V5PCL9ISXdb7dXkLtw4FS1ada3neLoIrIgp8mBveI8Lu5X/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4166
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20220923185358.11023-1-jagathjog1996@gmail.com> <20220923185358.11023-3-jagathjog1996@gmail.com>
+In-Reply-To: <20220923185358.11023-3-jagathjog1996@gmail.com>
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+Date:   Sun, 16 Oct 2022 11:40:33 +0530
+Message-ID: <CAM+2EuL8DOm9Xa8wgZGuOydf6+X6TxVXdbnUi2L3Cn_SVKHXzw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] rtc: max31329: Add Maxim max31329 real time clock
+To:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,43 +68,590 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alexandre,
 
-
-On 10/10/2022 9:21 PM, Sean Christopherson wrote:
-> On Mon, Oct 10, 2022, Santosh Shukla wrote:
->>
->>
->> On 10/7/2022 12:10 AM, Sean Christopherson wrote:
->>> On Mon, Aug 29, 2022, Santosh Shukla wrote:
->>>> If NMI virtualization enabled and NMI_INTERCEPT bit is unset
->>>> then HW will exit with #INVALID exit reason.
->>>>
->>>> To enable the VNMI capability, Hypervisor need to program
->>>> V_NMI_ENABLE bit 1.
->>>>
->>>> The presence of this feature is indicated via the CPUID function
->>>> 0x8000000A_EDX[25].
->>>
->>> Until there is publicly available documentation, I am not going to review this
->>> any further.  This goes for all new features, e.g. PerfMonv2[*].  I understand
->>> the need and desire to get code merged far in advance of hardware being available,
->>> but y'all clearly have specs, i.e. this is a very solvable problem.  Throw all the
->>> disclaimers you want on the specs to make it abundantly clear that they are for
->>> preview purposes or whatever, but reviewing KVM code without a spec just doesn't
->>> work for me.
->>>
->>
->> Sure Sean.
->>
->> I am told that the APM should be out in the next couple of weeks.
-> 
-> Probably too late to be of much value for virtual NMI support, but for future
-> features, it would be very helpful to release "preview" documentation ASAP so that
-> we don't have to wait for the next APM update, which IIUC only happens ~2 times a
-> year.
-
-Virtual NMI spec is at [1], Chapter - 15.21.10 NMI Virtualization.
+Is there any change needed for this v3 series?
 
 Thanks,
-Santosh
-[1] https://www.amd.com/en/support/tech-docs/amd64-architecture-programmers-manual-volumes-1-5
+Jagath
+
+On Sat, Sep 24, 2022 at 12:24 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+>
+> Add driver support for I2C based Maxim max31329 real time clock.
+>
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+> ---
+>  MAINTAINERS                |   7 +
+>  drivers/rtc/Kconfig        |  10 +
+>  drivers/rtc/Makefile       |   1 +
+>  drivers/rtc/rtc-max31329.c | 507 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 525 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-max31329.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7032fcb0fd0f..d92ddab0958d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12478,6 +12478,13 @@ F:     include/linux/mfd/max14577*.h
+>  F:     include/linux/mfd/max77686*.h
+>  F:     include/linux/mfd/max77693*.h
+>
+> +MAXIM MAX31329 RTC DRIVER
+> +M:     Jagath Jog J <jagathjog1996@gmail.com>
+> +L:     linux-rtc@vger.kernel.org
+> +S:     Maintained
+> +F:     Documentation/devicetree/bindings/rtc/maxim,max31329.yaml
+> +F:     drivers/rtc/max31329.c
+> +
+>  MAXIRADIO FM RADIO RECEIVER DRIVER
+>  M:     Hans Verkuil <hverkuil@xs4all.nl>
+>  L:     linux-media@vger.kernel.org
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index b8de25118ad0..d02cba94e121 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -393,6 +393,16 @@ config RTC_DRV_NCT3018Y
+>            This driver can also be built as a module, if so, the module will be
+>            called "rtc-nct3018y".
+>
+> +config RTC_DRV_MAX31329
+> +       tristate "Maxim MAX31329"
+> +       select REGMAP_I2C
+> +       help
+> +          If you say yes here you will get support for the
+> +          RTC of Maxim MAX31329.
+> +
+> +          This driver can also be build as a module. If so, the module
+> +          will be called rtc-max31329.
+> +
+>  config RTC_DRV_RK808
+>         tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+>         depends on MFD_RK808
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index aab22bc63432..741216d2f9ca 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -97,6 +97,7 @@ obj-$(CONFIG_RTC_DRV_MAX8907) += rtc-max8907.o
+>  obj-$(CONFIG_RTC_DRV_MAX8925)  += rtc-max8925.o
+>  obj-$(CONFIG_RTC_DRV_MAX8997)  += rtc-max8997.o
+>  obj-$(CONFIG_RTC_DRV_MAX8998)  += rtc-max8998.o
+> +obj-$(CONFIG_RTC_DRV_MAX31329)  += rtc-max31329.o
+>  obj-$(CONFIG_RTC_DRV_MESON_VRTC)+= rtc-meson-vrtc.o
+>  obj-$(CONFIG_RTC_DRV_MC13XXX)  += rtc-mc13xxx.o
+>  obj-$(CONFIG_RTC_DRV_MCP795)   += rtc-mcp795.o
+> diff --git a/drivers/rtc/rtc-max31329.c b/drivers/rtc/rtc-max31329.c
+> new file mode 100644
+> index 000000000000..fbbe439a9a3b
+> --- /dev/null
+> +++ b/drivers/rtc/rtc-max31329.c
+> @@ -0,0 +1,507 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * RTC driver for the Maxim MAX31329 Real-Time Clock
+> + * Copyright (c) 2022 Jagath Jog J
+> + *
+> + * Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX31329.pdf
+> + *
+> + */
+> +
+> +#include <linux/bcd.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +#include <linux/rtc.h>
+> +
+> +/* Register map */
+> +/* Config registers */
+> +#define MAX31329_STATUS_REG             0x00
+> +#define MAX31329_STATUS_A1F             BIT(0)
+> +#define MAX31329_STATUS_OSF             BIT(6)
+> +#define MAX31329_INT_EN_REG             0x01
+> +#define MAX31329_INT_EN_A1IE            BIT(0)
+> +#define MAX31329_RTC_RESET_REG          0x02
+> +#define MAX31329_RTC_CONFIG1_REG        0x03
+> +#define MAX31329_RTC_CONFIG2_REG        0x04
+> +#define MAX31329_RTC_CONFIG2_ENCLKIN    BIT(2)
+> +#define MAX31329_RTC_CONFIG2_ENCLKO     BIT(7)
+> +#define MAX31329_RTC_CFG2_CLKOHZ_MSK    GENMASK(6, 5)
+> +#define MAX31329_TIMER_CONFIG_REG       0x05
+> +
+> +/* Watch registers */
+> +#define MAX31329_SECONDS_REG            0x06
+> +#define MAX31329_MINUTES_REG            0x07
+> +#define MAX31329_HOURS_REG              0x08
+> +#define MAX31329_HOURS_F24_12           BIT(6)
+> +#define MAX31329_HOURS_AM_PM            BIT(5)
+> +#define MAX31329_DAY_REG                0x09
+> +#define MAX31329_DATE_REG               0x0A
+> +#define MAX31329_MONTH_REG              0x0B
+> +#define MAX31329_MONTH_CENTURY          BIT(7)
+> +#define MAX31329_YEAR_REG               0x0C
+> +#define MAX31329_WATCH_SEC_LEN          0x07
+> +#define REG_TO_OFFSET(_REG)             ((_REG) - MAX31329_SECONDS_REG)
+> +
+> +/* Alarm registers */
+> +#define MAX31329_ALM1_SEC_REG           0x0D
+> +#define MAX31329_ALM1_MIN_REG           0x0E
+> +#define MAX31329_ALM1_HRS_REG           0x0F
+> +#define MAX31329_ALM1_DAY_DATE_REG      0x10
+> +#define MAX31329_ALM1_MON_REG           0x11
+> +#define MAX31329_ALM1_YEAR_REG          0x12
+> +#define MAX31329_ALM1_SEC_LEN           0x06
+> +
+> +#define MAX31329_PWR_MGMT_REG           0x18
+> +#define MAX31329_TRICKLE_REG            0x19
+> +#define MAX31329_TRICKLE_EN             BIT(7)
+> +#define MAX31329_TRICKLE_DIODE_EN       BIT(2)
+> +#define MAX31329_D_TRICKLE_OHMS         GENMASK(3, 0)
+> +
+> +/* Ram registers */
+> +#define MAX31329_RAM0_START_REG         0x22
+> +#define MAX31329_RAM0_END_REG           0x61
+> +
+> +struct max31329_data {
+> +       struct regmap *regmap;
+> +       struct rtc_device *rtc;
+> +       int irq;
+> +#ifdef CONFIG_COMMON_CLK
+> +       struct clk_hw clkout_hw;
+> +#endif
+> +};
+> +
+> +/* resistance in kohms */
+> +static u32 max31329_trickle_ohms[] = {
+> +       3000,
+> +       6000,
+> +       11000
+> +};
+> +
+> +static const struct regmap_config config = {
+> +       .reg_bits = 8,
+> +       .val_bits = 8,
+> +       .max_register = MAX31329_RAM0_END_REG,
+> +};
+> +
+> +static int max31329_get_osc_status(struct device *dev)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       unsigned int status;
+> +       int ret;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_STATUS_REG, &status);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (status & MAX31329_STATUS_OSF)
+> +               return -EINVAL;
+> +
+> +       return 0;
+> +}
+> +
+> +static int max31329_alarm_irq_enable(struct device *dev, unsigned int enable)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +
+> +       return regmap_update_bits(max31329->regmap, MAX31329_INT_EN_REG,
+> +                                 MAX31329_INT_EN_A1IE,
+> +                                 enable ? MAX31329_INT_EN_A1IE : 0);
+> +}
+> +
+> +static int max31329_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       struct rtc_time *const tm = &alarm->time;
+> +       unsigned int aie_en, aie_flag;
+> +       int ret;
+> +       u8 regs[6];
+> +
+> +       ret = regmap_bulk_read(max31329->regmap, MAX31329_ALM1_SEC_REG, regs,
+> +                              MAX31329_ALM1_SEC_LEN);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_INT_EN_REG, &aie_en);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_STATUS_REG, &aie_flag);
+> +       if (ret)
+> +               return ret;
+> +
+> +       tm->tm_sec = bcd2bin(regs[REG_TO_OFFSET(MAX31329_SECONDS_REG)] & 0x7f);
+> +       tm->tm_min = bcd2bin(regs[REG_TO_OFFSET(MAX31329_MINUTES_REG)] & 0x7f);
+> +       tm->tm_hour = bcd2bin(regs[REG_TO_OFFSET(MAX31329_HOURS_REG)] & 0x3f);
+> +       tm->tm_mday = bcd2bin(regs[REG_TO_OFFSET(MAX31329_DATE_REG) - 1] & 0x3f);
+> +       tm->tm_mon = bcd2bin(regs[REG_TO_OFFSET(MAX31329_MONTH_REG) - 1] &
+> +                            0x1f) - 1;
+> +       tm->tm_year = bcd2bin(regs[REG_TO_OFFSET(MAX31329_YEAR_REG) - 1]) + 200;
+> +
+> +       alarm->enabled = FIELD_GET(MAX31329_INT_EN_A1IE, aie_en);
+> +       alarm->pending = FIELD_GET(MAX31329_STATUS_A1F, aie_flag) &&
+> +                                  alarm->enabled;
+> +
+> +       return 0;
+> +}
+> +
+> +static int max31329_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       const struct rtc_time *tm = &alrm->time;
+> +       u8 regs[6], year;
+> +       int ret;
+> +
+> +       regs[REG_TO_OFFSET(MAX31329_SECONDS_REG)] = bin2bcd(tm->tm_sec) & 0x7F;
+> +       regs[REG_TO_OFFSET(MAX31329_MINUTES_REG)] = bin2bcd(tm->tm_min) & 0x7f;
+> +       regs[REG_TO_OFFSET(MAX31329_HOURS_REG)] = bin2bcd(tm->tm_hour) & 0x3f;
+> +       regs[REG_TO_OFFSET(MAX31329_DATE_REG) - 1] = bin2bcd(tm->tm_mday) & 0x3f;
+> +       regs[REG_TO_OFFSET(MAX31329_MONTH_REG) - 1] = bin2bcd(tm->tm_mon + 1) & 0x1f;
+> +
+> +       if (tm->tm_year >= 200)
+> +               return -EINVAL;
+> +
+> +       year = bin2bcd(tm->tm_year - 100);
+> +       regs[REG_TO_OFFSET(MAX31329_YEAR_REG) - 1] = year;
+> +
+> +       ret = regmap_bulk_write(max31329->regmap, MAX31329_ALM1_SEC_REG, regs,
+> +                               MAX31329_ALM1_SEC_LEN);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return max31329_alarm_irq_enable(dev, alrm->enabled);
+> +}
+> +
+> +static int max31329_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       u8 data[7], century = 0;
+> +       int ret;
+> +
+> +       ret = max31329_get_osc_status(dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = regmap_bulk_read(max31329->regmap, MAX31329_SECONDS_REG, data,
+> +                              sizeof(data));
+> +       if (ret)
+> +               return ret;
+> +
+> +       tm->tm_sec = bcd2bin(data[REG_TO_OFFSET(MAX31329_SECONDS_REG)] & 0x7f);
+> +       tm->tm_min = bcd2bin(data[REG_TO_OFFSET(MAX31329_MINUTES_REG)] & 0x7f);
+> +       tm->tm_hour = bcd2bin(data[REG_TO_OFFSET(MAX31329_HOURS_REG)] & 0x3f);
+> +       /* Day of the week in linux range is 0~6 while 1~7 in RTC chip */
+> +       tm->tm_wday = bcd2bin(data[REG_TO_OFFSET(MAX31329_DAY_REG)] & 0x07) - 1;
+> +       tm->tm_mday = bcd2bin(data[REG_TO_OFFSET(MAX31329_DATE_REG)] & 0x3f);
+> +       /* linux tm_mon range:0~11, while month range is 1~12 in RTC chip */
+> +       tm->tm_mon = bcd2bin(data[REG_TO_OFFSET(MAX31329_MONTH_REG)] & 0x1f) - 1;
+> +
+> +       century = data[REG_TO_OFFSET(MAX31329_MONTH_REG)] & MAX31329_MONTH_CENTURY;
+> +       tm->tm_year = bcd2bin(data[REG_TO_OFFSET(MAX31329_YEAR_REG)]) +
+> +                            (century ? 200 : 100);
+> +
+> +       return 0;
+> +}
+> +
+> +static int max31329_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       u8 regs[7];
+> +
+> +       regs[REG_TO_OFFSET(MAX31329_SECONDS_REG)] = bin2bcd(tm->tm_sec);
+> +       regs[REG_TO_OFFSET(MAX31329_MINUTES_REG)] = bin2bcd(tm->tm_min);
+> +       regs[REG_TO_OFFSET(MAX31329_HOURS_REG)] = bin2bcd(tm->tm_hour);
+> +       regs[REG_TO_OFFSET(MAX31329_DAY_REG)] = bin2bcd(tm->tm_wday + 1);
+> +       regs[REG_TO_OFFSET(MAX31329_DATE_REG)] = bin2bcd(tm->tm_mday);
+> +       regs[REG_TO_OFFSET(MAX31329_MONTH_REG)] = bin2bcd(tm->tm_mon + 1);
+> +
+> +       if (tm->tm_year >= 200)
+> +               regs[REG_TO_OFFSET(MAX31329_MONTH_REG)] |= MAX31329_MONTH_CENTURY;
+> +       regs[REG_TO_OFFSET(MAX31329_YEAR_REG)] = bin2bcd(tm->tm_year % 100);
+> +
+> +       return regmap_bulk_write(max31329->regmap, MAX31329_SECONDS_REG, regs,
+> +                                MAX31329_WATCH_SEC_LEN);
+> +}
+> +
+> +static const struct rtc_class_ops max31329_rtc_ops = {
+> +       .read_time = max31329_read_time,
+> +       .set_time = max31329_set_time,
+> +       .read_alarm = max31329_read_alarm,
+> +       .set_alarm = max31329_set_alarm,
+> +       .alarm_irq_enable = max31329_alarm_irq_enable,
+> +};
+> +
+> +static irqreturn_t max31329_irq_handler(int irq, void *dev_id)
+> +{
+> +       struct device *dev = dev_id;
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       unsigned int flags, controls;
+> +       unsigned long events = 0;
+> +       int ret;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_INT_EN_REG, &controls);
+> +       if (ret)
+> +               return IRQ_NONE;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_STATUS_REG, &flags);
+> +       if (ret)
+> +               return IRQ_NONE;
+> +
+> +       if (flags & MAX31329_STATUS_A1F) {
+> +               flags &= ~MAX31329_STATUS_A1F;
+> +               controls &= ~MAX31329_INT_EN_A1IE;
+> +               events = RTC_AF | RTC_IRQF;
+> +       }
+> +
+> +       if (events) {
+> +               rtc_update_irq(max31329->rtc, 1, events);
+> +               regmap_write(max31329->regmap, MAX31329_STATUS_REG, flags);
+> +               regmap_write(max31329->regmap, MAX31329_INT_EN_REG, controls);
+> +               return IRQ_HANDLED;
+> +       }
+> +
+> +       return IRQ_NONE;
+> +}
+> +
+> +static void max31329_trickle_config(struct device *dev)
+> +{
+> +       struct max31329_data *max31329 = dev_get_drvdata(dev);
+> +       u8 trickle_reg;
+> +       int ret, i;
+> +       u32 ohms;
+> +
+> +       /* Configure the trickle charger. */
+> +       ret = device_property_read_u32(dev, "trickle-resistor-ohms", &ohms);
+> +       if (ret)
+> +               return;
+> +
+> +       trickle_reg = MAX31329_TRICKLE_EN;
+> +       for (i = 1; i <= ARRAY_SIZE(max31329_trickle_ohms); i++) {
+> +               if (max31329_trickle_ohms[i - 1] == ohms) {
+> +                       trickle_reg |= i;
+> +                       regmap_write(max31329->regmap, MAX31329_TRICKLE_REG,
+> +                                    trickle_reg);
+> +               }
+> +       }
+> +}
+> +
+> +static int max31329_nvram_write(void *priv, unsigned int offset, void *val,
+> +                               size_t bytes)
+> +{
+> +       struct regmap *max31329_regmap = (struct regmap *)priv;
+> +
+> +       return regmap_bulk_write(max31329_regmap,
+> +                                MAX31329_RAM0_START_REG + offset,
+> +                                val, bytes);
+> +}
+> +
+> +static int max31329_nvram_read(void *priv, unsigned int offset, void *val,
+> +                              size_t bytes)
+> +{
+> +       struct regmap *max31329_regmap = (struct regmap *)priv;
+> +
+> +       return regmap_bulk_read(max31329_regmap,
+> +                               MAX31329_RAM0_START_REG + offset,
+> +                               val, bytes);
+> +}
+> +
+> +#ifdef CONFIG_COMMON_CLK
+> +#define clkout_hw_to_max31329(hw) container_of(hw, struct max31329_data, clkout_hw)
+> +
+> +static int clkout_rates[] = {
+> +       1,
+> +       4096,
+> +       8192,
+> +       32768
+> +};
+> +
+> +static unsigned long max31329_clkout_recalc_rate(struct clk_hw *hw,
+> +                                                unsigned long parent_rate)
+> +{
+> +       struct max31329_data *max31329 = clkout_hw_to_max31329(hw);
+> +       int clkout, ret;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_RTC_CONFIG2_REG, &clkout);
+> +       if (ret)
+> +               return 0;
+> +
+> +       return clkout_rates[FIELD_GET(MAX31329_RTC_CFG2_CLKOHZ_MSK, clkout)];
+> +}
+> +
+> +static long max31329_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
+> +                                      unsigned long *prate)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
+> +               if (clkout_rates[i] >= rate)
+> +                       return clkout_rates[i];
+> +
+> +       return 0;
+> +}
+> +
+> +static int max31329_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
+> +                                   unsigned long parent_rate)
+> +{
+> +       struct max31329_data *max31329 = clkout_hw_to_max31329(hw);
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
+> +               if (rate == clkout_rates[i])
+> +                       return regmap_update_bits(max31329->regmap,
+> +                                                 MAX31329_RTC_CONFIG2_REG,
+> +                                                 MAX31329_RTC_CFG2_CLKOHZ_MSK,
+> +                                                 FIELD_PREP(MAX31329_RTC_CFG2_CLKOHZ_MSK,
+> +                                                            i));
+> +       return -EINVAL;
+> +}
+> +
+> +static int max31329_clkout_prepare(struct clk_hw *hw)
+> +{
+> +       struct max31329_data *max31329 = clkout_hw_to_max31329(hw);
+> +
+> +       return regmap_update_bits(max31329->regmap, MAX31329_RTC_CONFIG2_REG,
+> +                                 MAX31329_RTC_CONFIG2_ENCLKO,
+> +                                 MAX31329_RTC_CONFIG2_ENCLKO);
+> +}
+> +
+> +static void max31329_clkout_unprepare(struct clk_hw *hw)
+> +{
+> +       struct max31329_data *max31329 = clkout_hw_to_max31329(hw);
+> +
+> +       regmap_update_bits(max31329->regmap, MAX31329_RTC_CONFIG2_REG,
+> +                          MAX31329_RTC_CONFIG2_ENCLKO,
+> +                          FIELD_PREP(MAX31329_RTC_CONFIG2_ENCLKO, 0));
+> +}
+> +
+> +static int max31329_clkout_is_prepared(struct clk_hw *hw)
+> +{
+> +       struct max31329_data *max31329 = clkout_hw_to_max31329(hw);
+> +       int clkout, ret;
+> +
+> +       ret = regmap_read(max31329->regmap, MAX31329_RTC_CONFIG2_REG, &clkout);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return !!(clkout & MAX31329_RTC_CONFIG2_ENCLKO);
+> +}
+> +
+> +static const struct clk_ops max31329_clkout_ops = {
+> +       .prepare = max31329_clkout_prepare,
+> +       .unprepare = max31329_clkout_unprepare,
+> +       .is_prepared = max31329_clkout_is_prepared,
+> +       .recalc_rate = max31329_clkout_recalc_rate,
+> +       .round_rate = max31329_clkout_round_rate,
+> +       .set_rate = max31329_clkout_set_rate,
+> +};
+> +
+> +static struct clk *max31329_clkout_register_clk(struct max31329_data *max31329,
+> +                                               struct i2c_client *client)
+> +{
+> +       struct device_node *node = client->dev.of_node;
+> +       struct clk_init_data init;
+> +       struct clk *clk;
+> +
+> +       init.name = "max31329-clkout";
+> +       init.ops = &max31329_clkout_ops;
+> +       init.flags = 0;
+> +       init.parent_names = NULL;
+> +       init.num_parents = 0;
+> +       max31329->clkout_hw.init = &init;
+> +
+> +       /* optional override of the clockname */
+> +       of_property_read_string(node, "clock-output-names", &init.name);
+> +
+> +       clk = devm_clk_register(&client->dev, &max31329->clkout_hw);
+> +       if (!IS_ERR(clk))
+> +               of_clk_add_provider(node, of_clk_src_simple_get, clk);
+> +
+> +       return clk;
+> +}
+> +#endif
+> +
+> +static int max31329_probe(struct i2c_client *client,
+> +                         const struct i2c_device_id *id)
+> +{
+> +       struct max31329_data *max31329;
+> +       int ret;
+> +       struct nvmem_config nvmem_cfg = {
+> +               .name = "max31329_nvram",
+> +               .word_size = 1,
+> +               .stride = 1,
+> +               .size = 64,
+> +               .type = NVMEM_TYPE_BATTERY_BACKED,
+> +               .reg_read = max31329_nvram_read,
+> +               .reg_write = max31329_nvram_write,
+> +       };
+> +
+> +       max31329 = devm_kzalloc(&client->dev, sizeof(*max31329), GFP_KERNEL);
+> +       if (!max31329)
+> +               return -ENOMEM;
+> +
+> +       max31329->regmap = devm_regmap_init_i2c(client, &config);
+> +       if (IS_ERR(max31329->regmap))
+> +               return PTR_ERR(max31329->regmap);
+> +
+> +       dev_set_drvdata(&client->dev, max31329);
+> +
+> +       max31329->rtc = devm_rtc_allocate_device(&client->dev);
+> +       if (IS_ERR(max31329->rtc))
+> +               return PTR_ERR(max31329->rtc);
+> +
+> +       max31329->rtc->ops = &max31329_rtc_ops;
+> +       max31329->irq = client->irq;
+> +       max31329->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +       max31329->rtc->range_max = RTC_TIMESTAMP_END_2199;
+> +
+> +       if (max31329->irq) {
+> +               ret = devm_request_threaded_irq(&client->dev, max31329->irq,
+> +                                               NULL, max31329_irq_handler,
+> +                                               IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+> +                                               "max31329", &client->dev);
+> +               if (ret)
+> +                       return ret;
+> +       } else {
+> +               clear_bit(RTC_FEATURE_ALARM, max31329->rtc->features);
+> +               clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, max31329->rtc->features);
+> +       }
+> +
+> +       if (max31329->irq || device_property_read_bool(&client->dev,
+> +                                                      "wakeup-source"))
+> +               device_init_wakeup(&client->dev, true);
+> +
+> +       ret = devm_rtc_register_device(max31329->rtc);
+> +       if (ret)
+> +               return ret;
+> +
+> +       max31329_trickle_config(&client->dev);
+> +
+> +       nvmem_cfg.priv = max31329->regmap;
+> +       devm_rtc_nvmem_register(max31329->rtc, &nvmem_cfg);
+> +
+> +#ifdef CONFIG_COMMON_CLK
+> +       max31329_clkout_register_clk(max31329, client);
+> +#endif
+> +
+> +       return 0;
+> +}
+> +
+> +static const __maybe_unused struct of_device_id max31329_of_match[] = {
+> +       { .compatible = "maxim,max31329", },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, max31329_of_match);
+> +
+> +static struct i2c_driver max31329_driver = {
+> +       .driver = {
+> +               .name = "rtc-max31329",
+> +               .of_match_table = of_match_ptr(max31329_of_match),
+> +       },
+> +       .probe = max31329_probe,
+> +};
+> +module_i2c_driver(max31329_driver);
+> +
+> +MODULE_AUTHOR("Jagath Jog J <jagathjog1996@gmail.com>");
+> +MODULE_DESCRIPTION("Maxim MAX31329 RTC driver");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.17.1
+>
