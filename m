@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC055FFECE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 13:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D694F5FFEDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 13:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJPLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 07:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S229662AbiJPLL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 07:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJPLI5 (ORCPT
+        with ESMTP id S229594AbiJPLL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 07:08:57 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F5F33E23
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 04:08:56 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ok1Vm-0004V4-1l; Sun, 16 Oct 2022 13:08:54 +0200
-Message-ID: <e2cf3207-e9e9-5585-1a6e-9b39d96b4b54@leemhuis.info>
-Date:   Sun, 16 Oct 2022 13:08:53 +0200
+        Sun, 16 Oct 2022 07:11:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBD233E23;
+        Sun, 16 Oct 2022 04:11:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39956609AE;
+        Sun, 16 Oct 2022 11:11:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD39EC433C1;
+        Sun, 16 Oct 2022 11:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665918714;
+        bh=haZgvxjEjKaGrnWpf/XakHvzA6ss1pVHMfzXnUyCxsg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hTTrCsVzPfcijf8ZTSNizDVkrYqa2C04Rbi6ATJbieqribKliILfqN3RMucOdOhaO
+         ydM5U+vtAO8kSwaOP4uZdAYdZ3+N+ml9Uld0MgmFMYAHLqNZacyfhz3MpfmE23Xvdn
+         k1dX6HA2TfTIrlHIXi2C7VCfJ3moYpHL4z4UKTmeuu3Y5m1B8rW9vjVaRuIn6yh4ZY
+         Q/bGS0x7ySRQmptShyADHQmMny0YH1YKCpZOSwweA2pyzoO/22ED5crdb+tFwUy1a4
+         Pvp0gqUDebq2gZukUU2zh6s8bR7/9jequUSLyERrWrWvzEkqHlUg2wUpwoNjPkKUdg
+         JjsMKCwRPSxNw==
+Date:   Sun, 16 Oct 2022 12:12:19 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/10] iio: adxl367: Fix unsafe buffer attributes
+Message-ID: <20221016121219.4114cab2@jic23-huawei>
+In-Reply-To: <2e2d9ec34fb1df8ab8e2749199822db8cc91d302.1664782676.git.mazziesaccount@gmail.com>
+References: <cover.1664782676.git.mazziesaccount@gmail.com>
+        <2e2d9ec34fb1df8ab8e2749199822db8cc91d302.1664782676.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-Cc:     Denis Chancogne <denis.chancogne@free.fr>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Bug 216581 - Kernel panic on /init as busybox symbolic link with xen
- efi
-To:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1665918536;798a69f5;
-X-HE-SMSGID: 1ok1Vm-0004V4-1l
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,98 +59,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+On Mon, 3 Oct 2022 11:10:29 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216581 :
+> The devm_iio_kfifo_buffer_setup_ext() was changed by
+> commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
+> to silently expect that all attributes given in buffer_attrs array are
+> device-attributes. This expectation was not forced by the API - and some
+> drivers did register attributes created by IIO_CONST_ATTR().
+> 
+> The added attribute "wrapping" does not copy the pointer to stored
+> string constant and when the sysfs file is read the kernel will access
+> to invalid location.
+> 
+> Change the IIO_CONST_ATTRs from the driver to IIO_DEVICE_ATTR in order
+> to prevent the invalid memory access.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Fixes: 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
 
->  Denis Chancogne 2022-10-13 22:00:19 UTC
-> 
-> Created attachment 302995 [details]
-> /proc/cpuinfo, .config
-> 
-> Hi,
-> 
-> when I start Xen 4.15.3 in efi with kernel 5.18.19, all works well;
-> but since kernel 5.19, I have a kernel panic on my /init process as
-> busybox symbolic link inside initramfs.
-> 
-> This is the kernel log :
-> ...
-> [    6.265122] Run /init as init process
-> [    6.266027] traps: init[1] trap invalid opcode ip:5855d1 sp:7ffe5ceddeb0 error:0 in busybox[401000+1db000]
-> [    6.266553] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
-> [    6.267039] CPU: 3 PID: 1 Comm: init Tainted: G        W         5.19.0-dch #1
-> [    6.267522] Hardware name: Micro-Star International Co., Ltd. MS-7B84/B450M PRO-M2 (MS-7B84), BIOS 2.E0 06/12/2020
-> [    6.268010] Call Trace:
-> [    6.268495]  <TASK>
-> [    6.268974]  dump_stack_lvl+0x45/0x5e
-> [    6.269455]  panic+0x107/0x285
-> [    6.269923]  do_exit.cold+0x15/0x45
-> [    6.270389]  do_group_exit+0x28/0x90
-> [    6.270852]  get_signal+0x9f1/0xa40
-> [    6.271313]  arch_do_signal_or_restart+0x57/0x7b0
-> [    6.271771]  ? _raw_spin_unlock+0x10/0x30
-> [    6.272223]  ? finish_task_switch.isra.0+0x8e/0x270
-> [    6.272674]  ? __switch_to+0x186/0x400
-> [    6.273118]  exit_to_user_mode_prepare+0xc8/0x150
-> [    6.273564]  irqentry_exit_to_user_mode+0x5/0x20
-> [    6.274003]  asm_exc_invalid_op+0x16/0x20
-> [    6.274441] RIP: 0033:0x5855d1
-> [    6.274877] Code: f6 48 89 ef e8 90 79 03 00 48 c7 05 cd 2e 0c 00 01 00 00 00 48 89 2d 26 a2 0c 00 4c 8d 74 24 20 4c 8d 6c 24 40 4c 8d 64 24 18 <c5> f9 ef c0 48 b8 f6 75 ae 03 01 00 00 00 4c 8d 3d 8c 02 0a 00 c5
-> [    6.275776] RSP: 002b:00007ffe5ceddeb0 EFLAGS: 00010202
-> [    6.276221] RAX: 0000000000000000 RBX: 00000000004006c8 RCX: 0000000000000001
-> [    6.276670] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000648400
-> [    6.277116] RBP: 00000000009e0060 R08: 00007ffe5cfdf178 R09: 00000000effffef5
-> [    6.277561] R10: 0000000070000022 R11: 0000000000000032 R12: 00007ffe5ceddec8
-> [    6.278003] R13: 00007ffe5ceddef0 R14: 00007ffe5cedded0 R15: 000000006ffffeff
-> [    6.278442]  </TASK>
-> [    6.278903] Kernel Offset: disabled
-> 
-> I try to decode it :
-> 
-> All code
-> ========
->    0:   f6 48 89 ef             testb  $0xef,-0x77(%rax)
->    4:   e8 90 79 03 00          call   0x37999
->    9:   48 c7 05 cd 2e 0c 00    movq   $0x1,0xc2ecd(%rip)        # 0xc2ee1
->   10:   01 00 00 00 
->   14:   48 89 2d 26 a2 0c 00    mov    %rbp,0xca226(%rip)        # 0xca241
->   1b:   4c 8d 74 24 20          lea    0x20(%rsp),%r14
->   20:   4c 8d 6c 24 40          lea    0x40(%rsp),%r13
->   25:   4c 8d 64 24 18          lea    0x18(%rsp),%r12
->   2a:*  c5 f9 ef c0             vpxor  %xmm0,%xmm0,%xmm0                <-- trapping instruction
->   2e:   48 b8 f6 75 ae 03 01    movabs $0x103ae75f6,%rax
->   35:   00 00 00 
->   38:   4c 8d 3d 8c 02 0a 00    lea    0xa028c(%rip),%r15        # 0xa02cb
->   3f:   c5                      .byte 0xc5
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0:   c5 f9 ef c0             vpxor  %xmm0,%xmm0,%xmm0
->    4:   48 b8 f6 75 ae 03 01    movabs $0x103ae75f6,%rax
->    b:   00 00 00 
->    e:   4c 8d 3d 8c 02 0a 00    lea    0xa028c(%rip),%r15        # 0xa02a1
->   15:   c5                      .byte 0xc5
-> 
-> Regards,
-> Denis
-> PS:
->    denis@srv2 ~ $ gcc --version
->    gcc (Gentoo 11.3.0 p4) 11.3.0
+Seems like a safe enough change to take without additional review.
+Hence applied to the fixes-togreg branch of iio.git and marked
+for stable.
 
-See the ticket for more details.
+Thanks,
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+Jonathan
 
-#regzbot introduced: v5.18..v5.19
-#regzbot ignore-activity
+> 
+> ---
+> 
+> v2 => v3:
+> Split change to own patch for simpler fix backporting.
+> ---
+>  drivers/iio/accel/adxl367.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
+> index 47feb375b70b..7c7d78040793 100644
+> --- a/drivers/iio/accel/adxl367.c
+> +++ b/drivers/iio/accel/adxl367.c
+> @@ -1185,17 +1185,30 @@ static ssize_t adxl367_get_fifo_watermark(struct device *dev,
+>  	return sysfs_emit(buf, "%d\n", fifo_watermark);
+>  }
+>  
+> -static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
+> -static IIO_CONST_ATTR(hwfifo_watermark_max,
+> -		      __stringify(ADXL367_FIFO_MAX_WATERMARK));
+> +static ssize_t hwfifo_watermark_min_show(struct device *dev,
+> +					 struct device_attribute *attr,
+> +					 char *buf)
+> +{
+> +	return sysfs_emit(buf, "%s\n", "1");
+> +}
+> +
+> +static ssize_t hwfifo_watermark_max_show(struct device *dev,
+> +					 struct device_attribute *attr,
+> +					 char *buf)
+> +{
+> +	return sysfs_emit(buf, "%s\n", __stringify(ADXL367_FIFO_MAX_WATERMARK));
+> +}
+> +
+> +static IIO_DEVICE_ATTR_RO(hwfifo_watermark_min, 0);
+> +static IIO_DEVICE_ATTR_RO(hwfifo_watermark_max, 0);
+>  static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
+>  		       adxl367_get_fifo_watermark, NULL, 0);
+>  static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
+>  		       adxl367_get_fifo_enabled, NULL, 0);
+>  
+>  static const struct attribute *adxl367_fifo_attributes[] = {
+> -	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
+> -	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
+> +	&iio_dev_attr_hwfifo_watermark_min.dev_attr.attr,
+> +	&iio_dev_attr_hwfifo_watermark_max.dev_attr.attr,
+>  	&iio_dev_attr_hwfifo_watermark.dev_attr.attr,
+>  	&iio_dev_attr_hwfifo_enabled.dev_attr.attr,
+>  	NULL,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
