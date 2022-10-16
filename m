@@ -2,300 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDE85FFCE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 03:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEF15FFCEA
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 03:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiJPBdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 21:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S229679AbiJPBhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 21:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiJPBdW (ORCPT
+        with ESMTP id S229554AbiJPBhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 21:33:22 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5F341D28;
-        Sat, 15 Oct 2022 18:33:20 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3638330A;
-        Sun, 16 Oct 2022 03:33:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1665883997;
-        bh=ieNfBG7/of6KMXgXmOP56haDL3EhVK5nv2A5zcxE7BA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oyY4I9e0/GRssDO1YOZiM0nS+w9LkxnniO25CukfRZlmI4j6kbMsAbkl/vd++9a1l
-         ChMAdioeKq5ohcj91HCPkhNacL4j2wn/zKE4EEnJUjLgAkm7f2drfDc+C+SrTG9fbD
-         VIx4PV8P3pyHlCoorKI6KXO95jiXZgv00Ytnvwes=
-Date:   Sun, 16 Oct 2022 04:32:54 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     francesco.dolcini@toradex.com,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Marek Vasut <marex@denx.de>, max.krummenacher@toradex.com,
-        Rob Herring <robh@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sat, 15 Oct 2022 21:37:12 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3E43DF3A
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 18:37:11 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 5EB0132004ED;
+        Sat, 15 Oct 2022 21:37:10 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 15 Oct 2022 21:37:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1665884229; x=1665970629; bh=us
+        mHFGZvtUt3GSrq2Da8mcGY9SS5vOoXDl/cCx8LI4E=; b=D1iA3Gfp6IRKKyYKla
+        BGRWT6HV5ORZH3XntIHzxDDGMqcVx7p2s3/kC6hjta14oSTfn+j9WyjmvvuVyxPB
+        sx+IYrSNRlm977dUesZ0Hvv3gFIQ4sZbhyNPCf+ylitZCHlmnOhe2adbvv0D/zqW
+        mSD+VzB1UNtvf4FYjxm/XCpLfR/rzAJcQ7k9R8VkCBHuYvmF/MG2eyA19eKzxmO5
+        a8wLo32zN19JGyDI1dEFqZ4rhskaodQybEtQJ6SRc0348495RxwNpKBuQK1W1AMw
+        r2VcqR4K1Oy5i+ptOTf4Lh/ssHCBsh6+xLfS6CK4Ln8TkbZGHYM5b8RORNdYFtAV
+        RwCA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665884229; x=1665970629; bh=usmHFGZvtUt3GSrq2Da8mcGY9SS5
+        vOoXDl/cCx8LI4E=; b=gI8Q9MaeKVW5znaEdWUAn1R/4/m8GhHiqlrdrdkIECPV
+        VbGrYV36EbOjjZkAoGw2s3xv1enK+b+y1oyyrlQFY42TZ0m5WmY+b5SepEihJqwG
+        J4Vk3u607VvjrQVgEObD0mCwSDBO4vF2eaH0gYz11YdUfA+5Bs+1X5KkaIjxM5fy
+        gV4Wo7UuhWYTkHzm6zfrb7RgJiY4HMOg815V3x/+vssDb7pBY/gLkFeNcmq3tfZp
+        WQTwKjlsbZsOTAiORlfb4k9Cy6rSEjTz1QNq7FLmhji6H06cqAOmkwS+LYTAGjip
+        kk8kLOsMXmh6q6lV5pHx4C2LTqH1YcSL7xapIu/PDw==
+X-ME-Sender: <xms:RWBLY8RnzOVWus9YllghGCXsdDG_F36upd0Nj22k79zJzbq07jihfw>
+    <xme:RWBLY5xi6GXxPEKzUcMU6SxX5vDJE5NSAIaIw5mJuRztnCKRz4l5TVfC7xISl47Ph
+    S7nKj1jh8tfK1BdYws>
+X-ME-Received: <xmr:RWBLY518ulMsXKM94RXlbP3nvJuWy21yTj55IS3qwOJ5Ux7EkkaRrx1VzU7acdMkZ26XPpOJz3SFCfHpMJe8hUaH2SrvbHFPwFqN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekhedggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
+    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
+    hjpheqnecuggftrfgrthhtvghrnhepgeetuddtgffhfeeuiefggeeljeeuleelteelgfdu
+    gfdtkeeiffetleeugfdtffejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdprghrtg
+    hhihhvvgdrohhrghdpudefleegthgrrdhorhhgnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthh
+    hirdhjph
+X-ME-Proxy: <xmx:RWBLYwCJ-30EGDlAe1yFn39CNlCh2PY56FBnt221LYQawXE6_1UA-A>
+    <xmx:RWBLY1gZcym1328Ugoc_pGuOzJE__MX2wCdW5zUdk_MGuOetwCrfdQ>
+    <xmx:RWBLY8p2zTyh9ijua02YkuSLSfhQOrvwa1kRBHzeEl2hVNIVMHWMqw>
+    <xmx:RWBLY4v5FuNZxCTlhwq8tozncg2jAyYH0XNyNo5R70CXmrN7q7-bfw>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 15 Oct 2022 21:37:07 -0400 (EDT)
+Date:   Sun, 16 Oct 2022 10:37:05 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     George Hilliard <thirtythreeforty@gmail.com>
+Cc:     Clemens Ladisch <clemens@ladisch.de>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] dt-bindings: display: add new bus-format property
- for panel-dpi
-Message-ID: <Y0tfRhn/f1FiGDi4@pendragon.ideasonboard.com>
-References: <20220628181838.2031-1-max.oss.09@gmail.com>
- <20220628181838.2031-3-max.oss.09@gmail.com>
- <Y0gLdQleE64FQgn9@gaggiata.pivistrello.it>
- <CAPY8ntAszGzcp4XC=XKMHJvzCC9LHHf24pt=nZAUFKcK5=JM_Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] sound: dice: Firestudio Mobile
+Message-ID: <Y0tgQah2qTmOt6KA@workstation>
+Mail-Followup-To: George Hilliard <thirtythreeforty@gmail.com>,
+        Clemens Ladisch <clemens@ladisch.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20221015233330.8679-1-thirtythreeforty@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPY8ntAszGzcp4XC=XKMHJvzCC9LHHf24pt=nZAUFKcK5=JM_Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221015233330.8679-1-thirtythreeforty@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-On Fri, Oct 14, 2022 at 03:08:49PM +0100, Dave Stevenson wrote:
-> On Thu, 13 Oct 2022 at 13:58, Francesco Dolcini wrote:
-> > On Tue, Jun 28, 2022 at 08:18:36PM +0200, Max Krummenacher wrote:
-> > > From: Max Krummenacher <max.krummenacher@toradex.com>
-> > >
-> > > The property is used to set the enum bus_format and infer the bpc
-> > > for a panel defined by 'panel-dpi'.
-> > > This specifies how the panel is connected to the display interface.
-> > >
-> > > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> > >
-> >
-> > <snip>
-> >
-> > > diff --git a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> > > index dae0676b5c6e..52f5db03b6a8 100644
-> > > --- a/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> > > +++ b/Documentation/devicetree/bindings/display/panel/panel-dpi.yaml
-> > > @@ -26,7 +26,28 @@ properties:
-> > >    height-mm: true
-> > >    label: true
-> > >    panel-timing: true
-> > > -  port: true
-> > > +
-> > > +  port:
-> > > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +    description:
-> > > +      Input port node, receives the panel data.
-> > > +
-> > > +    properties:
-> > > +      endpoint:
-> > > +        $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> > > +
-> > > +        properties:
-> > > +          bus-format:
-> > > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > > +            minimum: 0x1001
-> > > +            maximum: 0x1fff
-> > > +            description: |
-> > > +              Describes how the display panel is connected to the display interface.
-> > > +              Valid values are defined in <dt-bindings/display/dt-media-bus-format.h>.
-> > > +              The mapping between the color/significance of the panel lines to the
-> > > +              parallel data lines are defined in:
-> > > +              https://www.kernel.org/doc/html/v5.17/userspace-api/media/v4l/subdev-formats.html#packed-rgb-formats
-> > > +
-> >
-> > Last month I had the chance to talk in person about this topic with
-> > Dave, Marek and Max in Dublin.
-> >
-> > My understanding is that this change is addressing a general need, Dave
-> > confirmed me they have a downstream patch for raspberrypi [1].
-> >
-> > From what I could tell the only concern is about the actual encoding of
-> > this `bus-format` property.
-> >
-> > I am personally convinced that a simple enum is the way to go, I think
-> > that Marek proposal is adding complexity and not flexibility (from my
-> > understanding Dave is on the same page, just correct me if I
-> > misunderstood you).
+On Sat, Oct 15, 2022 at 06:33:28PM -0500, George Hilliard wrote:
+> This short series adds a configuration block for the Firestudio Mobile I
+> just acquired.  Very similar to the Firestudio, but a lower port count.
 > 
-> Yes I agree with you here.
+> My understanding is that the Low, Medium, and High speeds refer to
+> 48kHz, 96kHz, and 192kHz sample rates, of which only the first two are
+> supported by this hardware line.  Please correct me if this is not
+> correct.
 > 
-> This binding is for the panel, and currently the only path to pass the
-> panel mode to the DPI transmitter is one or more MEDIA_BUS_FMT_* enums
-> in struct drm_display_info *bus_formats.
-> 
-> Looking at Marek's comment over DSI and data-lanes, yes both source
-> and sink could advertise a data-lanes property to cover the condition
-> where they aren't wired up in a 1:1 fashion. Reality is that most
-> drivers don't support reordering the lanes - looking at the bindings,
-> only one (msm) documents the use of data-lanes on the host side.
-> rcar_mipi_dsi looks at the number of lanes specified only, and then
-> checks that the number requested by the device is <= the number
-> configured.
-> 
-> As I see it, the comparison here is that this "bus-format" property is
-> the equivalent of the data-lanes on the sink, and is the desired
-> number of lanes value passed from sink to source (one integer, not a
-> mapping).
-> If the source can reorder the lanes, then that is a property of the
-> source. This binding is for the sink, and so isn't a reasonable
-> comparison. It also doesn't have to be called "bus-format" on the
-> source, and can take a totally different form.
-> I'll admit that I know data-lane configuration more from CSI2, but
-> within V4L2 it is the node that can support reordering that should
-> have the lanes in a non-incrementing order, and that is normally the
-> SoC rather than the sensor. The same would seem to apply here - it's
-> the SoC that can remap the signals, not the panel.
-> 
-> It could be argued that for DPI the panel should only advertise the
-> panel's bit depth for each channel, not the padding. The panel is
-> generic and could handle any wiring/padding options, and it isn't
-> necessarily a simple 16/18/24/32 bit bus representation, just a
-> collection of N wires.
-> Padding and wiring is a function of the DPI transmitter / SoC, or
-> potentially an interconnect node between the two.
+> Thanks!
 
-Sooo... I'm not sure where to start :-)
+Thanks for the patches, while the device, FireStudio Mobile, is
+already supported by ALSA dice driver since it has an entry of moddevice
+table which matches your device:
 
-I think the trouble when describing the connection between a source and
-a sink in DT is that none of the source or sink is an ideal place to
-describe properties of the connection.
+```
+	{
+		.match_flags = IEEE1394_MATCH_VERSION,
+		.version     = DICE_INTERFACE,
+	},
+```
 
-For DSI we have it relatively easy, as we only have to describe the
-number of lanes that are routed on the board and possibly how the lanes
-are rearranged. The former is a value that is common between the source
-and the sink, that's the easiest case, it can be specified in both DT
-nodes. The latter is a bit more complicated, and was solved by allowing
-specifying lane reordering on both the source and the sink. As there is
-typically only one of the two components that will support lane
-reordering (if any), DTs will usually specify a 1:1 mapping on one side,
-and possibly reorder on the other side. If both the source and the sink
-support reordering, setting data-lanes = <1 2> on both sides would lead
-to a different configuration than data-lanes = <2 1>, but both would
-work the same (I'm not sure why anyone would want the latter though).
-There may thus be multiple ways to describe a working setup, but that's
-fine, the complexity is manageable, and any hardware configuration can
-be described.
+I think you have the other troubles except for device detection.
 
-The nice thing with DSI is that the actual data format doesn't depend on
-the board configuration (provided of course that enough lanes are
-available to sustain the required bandwidth). For DPI, things can be
-more difficult. In the test below, "format" refers to how data bits are
-mapped to hardware lines, similarly in concept to the media bus codes.
 
-I see three different cases at the hardware level:
+In general protocol defined by TC Applied Technologies (the company
+which designed DICE ASICs and firmwares), two fields of content of
+configuration ROM have pre-defined values.
 
-- Either or both the sink or the source support a single format. This
-  means that the side that supports multiple formats will always use the
-  same format. If data lines are rearranged, the format output by the
-  source may not match the format received by the sink, but the hardware
-  configuration of both the sink and the source is effectively fixed to
-  system-specific values.
+One of the fields is version field of unit directory. The value is
+0x000001 (=DICE_INTERFACE). In your case, the content of unit directory
+is below. We can see the value of version field is 0x000001.
 
-- Both the sink and the source support multiple formats, but only one
-  combination of formats is possible with how the data lines are routed.
-  This case is very similar to the previous one at the hardware level,
-  only one configuration is possible.
+```
+               unit directory at 430
+               ---------------------------------------------------
+430  00048030  directory_length 4, crc 32816
+434  12000a92  specifier id: Presonus Corporation
+438  13000001  version
+43c  17000011  model
+440  8100000f  --> descriptor leaf at 47c
+```
 
-- Both the sink and the source support multiple formats, and multiple
-  format combinations can lead to working configurations. This isn't an
-  uncommon case, there are DPI panels with 24 data lines that can
-  support both RGB666 and RGB888.
+Another is EUI-64 field in bus information block. the part of field
+is used for 8 bit `category ID` and the value is 0. In your case,
+the value is below. The way to parese the field, please refer to
+`check_dice_category` function in `sound/firewire/dice/dice.c`[1].
 
-At the software level, there are also multiple options:
+```
+               ROM header and bus information block
+               ---------------------------------------------------
+400  0404bc6a  bus_info_length 4, crc_length 4, crc 48234
+404  31333934  bus_name "1394"
+408  e0008102  irmc 1, cmc 1, isc 1, bmc 0, cyc_clk_acc 0, max_rec 8 (512)
+40c  000a9204  company_id 000a92     | Presonus Corporation
+410  047da647  device_id 04047da647  | EUI-64 000a9204047da647
+```
 
-- Both sides could specify the device configuration in DT, using media
-  bus codes or any other set of standard or device-specific properties.
-  As this would specify a single configuration, it would map quite fine
-  to the first two hardware cases. Each driver would read its own
-  properties and configure the device accordingly. There would be no
-  need for communication between the drivers at runtime in this case.
+For the content of configuration ROM itself, documentation by 1394
+Trading Association (vendor association back in several years ago) will
+be a great help[2].
 
-  This could also support the third hardware case, but would limit it to
-  one of the supported configurations, without allowing the other ones
-  to be selected at runtime.
 
-  This scheme is similar to data-lanes, in the sense that each side
-  reads its own hardcoded configuration from DT. It does however differ
-  in that the data format gets hardcoded as well, unlike DSI where the
-  data formats needs to be communicated at runtime between the drivers.
-  As, like DSI, it requires both sides to specify their hardware
-  configuration in DT, interoperability between sources and sinks would
-  require all DT bindings for all DPI devices to adhere to this. They
-  may not have to specify their configuration using the same set of
-  properties, but they would all need to specify it in DT. This would
-  thus, I think, lead to a dead end for the third hardware case.
+As a supplement, TCAT general protocol has no way to share available
+stream formats at all of supported sampling transfer frequencies. It
+allows software just to read available stream formats at current
+sampling transfer frequency, while TCAT protocol extension has the
+function.  ALSA dice driver is programmed to try the extension to detect,
+then works at limitation mode at failure. The pre-defined table you coded
+is for the case that the extension is not supported by device, but
+your device supports the extension.
 
-- The two sides could communicate at runtime to dynamically negotiate
-  their configuration. Some form of runtime configuration is required to
-  fully support the third hardware case, and it could also support the
-  other two cases.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git/tree/sound/firewire/dice/dice.c#n33
+[2] https://web.archive.org/web/20210216003042/http://1394ta.org/wp-content/uploads/2015/07/1999027.pdf
 
-  The trouble here, beside how to express the required data in DT, is
-  how that communication would be handled. Let's consider a case where
-  data lines are "remapped":
 
-  - The display controller that has a D[23:0] output bus
-  - The panel that has a D[17:0] bus
-  - The data lines connections from the display controller to the panel
-    are D[23:18] -> D[17:12], D[15:10] -> D[11:6], D[7:2] -> D[5:0],
-    with the display controller's D[17:16], D[9:8] and D[1:0] outputs
-    unconnected
-  - The panel only supports RGB666
-  - The display controller supports both RGB888 and RGB666, and outputs
-    RGB666 as 00RRRRRR00GGGGGG00BBBBBB
+Thanks
 
-  This means that the only possibly configuration is the display
-  controller outputting RGB888 and the panel receiving RGB666. If we
-  expressed that as media bus codes in DT, the panel would would
-  communicate its RGB666 input format to the display controller, which
-  wouldn't know that it would have to output RGB888.
-
-  Of course, in this particular example, only one hardware configuration
-  is possible, so we could support it by specifying the media bus code
-  in both DT nodes, but that won't scale to cases where multiple
-  configurations are possible.
-
-The easy optin is to consider that most use cases are in the first two
-hardware categories, specify the media bus code in DT on both sides, and
-consider that support for the third category can be added later. I'm
-worried that we would then corner ourselves, as explained above, because
-this scheme requires all devices involved to specify their hardcoded
-configuration in DT. Will there then be a path forward that wouldn't
-break the DT ABI ? Even if there was, it would mean that all driver
-would then need to support two sets of DT properties, leading to a
-painful transition period on the driver side.
-
-> > The current proposal is already encoding the exact bit placing as
-> > described in Documentation/userspace-api/media/v4l/subdev-formats.rst [2],
-> > this enumeration can be extended to address any future needs
-> > and I would not invent a new one to define the exact same
-> > things (and using the same enum was also suggested by Rob).
-> >
-> > Marek: you told me that you had some concern about some valid use case
-> > not covered by this solution, would you mind explaining why that would
-> > not be covered with an addition on this enumeration?
-> 
-> All the MEDIA_BUS_FMT_* enums are explicitly defined with regard to
-> the colour component bit positions. Should someone be in the position
-> of needing to implement a YUV or similar DPI display, converting these
-> enums into the relevant new structure will be straightforward, so
-> backwards compatibility can be achieved easily.
-> 
-> > Any other opinion on this topic? How can we move this forward?
-> >
-> > Francesco
-> >
-> > [1] https://github.com/raspberrypi/linux/commit/8e43f1898191b43aa7ed6e6ca3a4cd28709af86d
-> > [2] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/subdev-formats.html
-
--- 
-Regards,
-
-Laurent Pinchart
+Takashi Sakamoto
