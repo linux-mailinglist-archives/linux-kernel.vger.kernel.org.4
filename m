@@ -2,211 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6850B5FFD18
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 05:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDCF5FFD1B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 05:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJPDAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 23:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S229671AbiJPDB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 23:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJPDAt (ORCPT
+        with ESMTP id S229643AbiJPDBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 23:00:49 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1178330F78;
-        Sat, 15 Oct 2022 20:00:47 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id f140so8300119pfa.1;
-        Sat, 15 Oct 2022 20:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wlvcEO+9PuSxbYdnGHPlMieasZnmCuZRr7tjo+EUTZ4=;
-        b=P7NF8G5OgZyMs2lCZSBkOvR/NVRTzKz1T2eYLDHuKbhwtjwonlgFMFWUpADU1c/mMi
-         JGHGKgG2aQagSs4iMMMDWtXoq3M+vrk4ushuFj4L+7MS21sD39vtKXBYu8rJ1vkbR5Jn
-         wTF8hpWtkaB3aU2ruPg1bWgT4S7nQjbjd72zCYDoUgXuQdffGdKaF5bsUaBfI8Igt2Fo
-         oxwBr46LzB845bqeGzK5hxZva1MFWCigVKJ36zMO3/1TN+KmWbOsr7IaKZyttcQ/kBxQ
-         c5ZFTn5UPG3AngP+ADZkP3iRlXl8i7MC7HC7ae4T9TD6QE5XeFXeJZTzmN7ioYdurNdN
-         hZ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wlvcEO+9PuSxbYdnGHPlMieasZnmCuZRr7tjo+EUTZ4=;
-        b=Vv2wlhkxeh2rGVWbXCYKqE1Po0DyMJkgdV4A/VSCa25csBgomGszMZLcvYEwSAukbn
-         6lfyk4CikmNRDCY7WuplCEOOjxEDVLN2oYfvK4n8+d1oAw7fsl3eHtIcjqvYVM3Q8o3y
-         vD33y5juOFiA+lPxp4DNzdWWCrI4W+y77iQUY/EZYu+bZPqcifZURHbYpx27gjdg+548
-         G9irr4PNMhwmz6yZqD8zyq7cfmCWkMMkWiNcGJThFaFCsJo2SOkN5q+e9fwiDgjOybuU
-         niL96TAO/TFueC+e3cHzdctq/ejKypQLncIfrm4c3oj8dFxQFYUxzkJvmtFTnmuCxJb9
-         Zj2A==
-X-Gm-Message-State: ACrzQf2GInYH8ukxKEV+8jXt+dKhyl2V/LWLLhuPSk7K7DR/3eNfIdVg
-        UOhvAB2QH1BTFVpXhsu3PzSHRKAwEcmJ/PiL
-X-Google-Smtp-Source: AMsMyM42HQvhN4Qf6kQM8OJ+sUZIakw4oPOV1cPWpFPNK5DdKUsuaswK+xNBZONlOJxGf19T61mezw==
-X-Received: by 2002:a63:4426:0:b0:464:4e1d:80e3 with SMTP id r38-20020a634426000000b004644e1d80e3mr5006879pga.106.1665889246467;
-        Sat, 15 Oct 2022 20:00:46 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-3.three.co.id. [180.214.232.3])
-        by smtp.gmail.com with ESMTPSA id g3-20020a656cc3000000b004588814ca73sm3684189pgw.21.2022.10.15.20.00.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Oct 2022 20:00:45 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 3853010026B; Sun, 16 Oct 2022 10:00:39 +0700 (WIB)
-Date:   Sun, 16 Oct 2022 10:00:39 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, luto@kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Andre Almeida <andrealmeid@igalia.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Melissa Wen <mwen@igalia.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Zebediah Figura <zfigura@codeweavers.com>
-Subject: Re: [PATCH V2] x86/split_lock: Add sysctl to control the misery mode
-Message-ID: <Y0tz1/pR/s7+j6s+@debian.me>
-References: <20221014180506.211592-1-gpiccoli@igalia.com>
+        Sat, 15 Oct 2022 23:01:53 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9C23608F;
+        Sat, 15 Oct 2022 20:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665889312; x=1697425312;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=O/YlblrzBj6zpfBdbzfIJ1q8Y/H7ZHYPzfW5/lC3O88=;
+  b=LOc0Z8UCFoWisYPgTOLg6+RheCbty/jc6v7Nu1TRs102mryW/3nnMgAx
+   b5kTCE3kqGclVhu2Dzqbr+l3u7Ajjd/pRYoddFUatOSiKUSyuyzmmQd6D
+   UIgcNBt623injnRgYHjuLX2uoY5X+iKyxef70SsUAwtW77VyFSKa/VnXn
+   IVyi2M5cUJHcNWj0VQtpxUBH3sfh38TzubDoREVgiOQP+kNx0zR0jr78d
+   /Pjz3txMeayY8SDGZB7daEaITFaV4F1+BraycPkAT+Tegg+xPBIChPQjN
+   33PHxgj+mKddv0FTnyE4ThfrhR84NlIAoMwnSPw3LaAgcuNmDSdkski3b
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10501"; a="369791219"
+X-IronPort-AV: E=Sophos;i="5.95,188,1661842800"; 
+   d="scan'208";a="369791219"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2022 20:01:52 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10501"; a="605763108"
+X-IronPort-AV: E=Sophos;i="5.95,188,1661842800"; 
+   d="scan'208";a="605763108"
+Received: from yueliu4-mobl1.ccr.corp.intel.com ([10.254.210.67])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2022 20:01:48 -0700
+Message-ID: <cc62b99f7762eeb5de271d87e1ceb8a69e56cb71.camel@intel.com>
+Subject: Re: [PATCH V4 1/4] hwmon/coretemp: Rename indx to index
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        jdelvare@suse.com, len.brown@intel.com
+Date:   Sun, 16 Oct 2022 11:01:45 +0800
+In-Reply-To: <ed901a64-7002-4a4e-1342-c06f9a398fd1@roeck-us.net>
+References: <20221014090147.1836-1-rui.zhang@intel.com>
+         <20221014090147.1836-2-rui.zhang@intel.com>
+         <ad558e83-3e42-aefd-754d-e71f49dda206@intel.com>
+         <ed901a64-7002-4a4e-1342-c06f9a398fd1@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="he7fAmT252Uv1Vmd"
-Content-Disposition: inline
-In-Reply-To: <20221014180506.211592-1-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Dave,
 
---he7fAmT252Uv1Vmd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for taking care of this.
+That totally works for me.
 
-On Fri, Oct 14, 2022 at 03:05:06PM -0300, Guilherme G. Piccoli wrote:
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/=
-admin-guide/sysctl/kernel.rst
-> index ee6572b1edad..508952e42914 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -1298,6 +1298,24 @@ watchdog work to be queued by the watchdog timer f=
-unction, otherwise the NMI
->  watchdog =E2=80=94 if enabled =E2=80=94 can detect a hard lockup conditi=
-on.
-> =20
-> =20
-> +split_lock_mitigate (x86 only)
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
+thanks,
+rui
 
-The heading underline above is too short (doesn't cover the whole text
-length), so I have applied the fixup:
 
----- >8 ----
+On Fri, 2022-10-14 at 10:20 -0700, Guenter Roeck wrote:
+> On 10/14/22 10:12, Dave Hansen wrote:
+> > On 10/14/22 02:01, Zhang Rui wrote:
+> > > Use variable name 'index' instead of 'indx' for the index in the
+> > > core_data[] array.
+> > > 
+> > > No functional change expected.
+> > > 
+> > > Cc: stable@vger.kernel.org
+> > > Suggested-by: Ingo Molnar <mingo@kernel.org>
+> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > 
+> > Hi,
+> > 
+> > Thanks for paring this series down.
+> > 
+> > I think I'm also going to pull this patch out of the series before
+> > I
+> > apply it and just rework 2/4 to apply cleanly without it.  I just
+> > can't
+> > put this in our "urgent" fixes pile and keep the stable@ tag on
+> > such a
+> > trivial rename and keep a straight face.
+> > 
+> 
+> To be fair, this patch was only submitted as a prerequisite to the
+> next
+> patch in the series because someone had objected to the use of both
+> 'indx'
+> and 'index' in the driver.
+> 
+> Guenter
+> 
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/ad=
-min-guide/sysctl/kernel.rst
-index c733d424d4e830..4824cfed71ab31 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -1315,7 +1315,7 @@ watchdog =E2=80=94 if enabled =E2=80=94 can detect a =
-hard lockup condition.
-=20
-=20
- split_lock_mitigate (x86 only)
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-=20
- For x86 CPUs supporting the split lock detection mechanism, this parameter
- allows the users to turn off what is called "the misery mode", which
-
-> +For x86 CPUs supporting the split lock detection mechanism, this paramet=
-er
-> +allows the users to turn off what is called "the misery mode", which
-> +introduces intentional delay in userspace applications that split locks.
-> +The goal of the misery mode is to prevent using such unaligned access to
-> +DoS the system dropping the performance overall, but some of these split
-> +locking programs are legacy and/or proprietary software that cannot be f=
-ixed,
-> +so using this sysctl is a way to allow them to run with a decent perform=
-ance.
-> +
-> +=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +0 Disables the misery mode - just warns the split lock on kernel log.
-> +1 Enables the misery mode (this is the default) - penalizes the split
-> +  lockers with intentional performance degradation.
-> +=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +
->  stack_erasing
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-
-The wording can be improved:
-
----- >8 ----
-
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/ad=
-min-guide/sysctl/kernel.rst
-index 4824cfed71ab31..961c19f4beae51 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -1320,15 +1320,15 @@ split_lock_mitigate (x86 only)
- For x86 CPUs supporting the split lock detection mechanism, this parameter
- allows the users to turn off what is called "the misery mode", which
- introduces intentional delay in userspace applications that split locks.
--The goal of the misery mode is to prevent using such unaligned access to
--DoS the system dropping the performance overall, but some of these split
--locking programs are legacy and/or proprietary software that cannot be fix=
-ed,
--so using this sysctl is a way to allow them to run with a decent performan=
-ce.
-+The goal of this mode is to prevent using such unaligned access to
-+drop the overall performance (and DoS the system). However, some of progra=
-ms
-+which uses split locking are legacy and/or proprietary software that cannot
-+be fixed, so disabling this sysctl can allow them to run with a decent
-+performance.
-=20
- =3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- 0 Disables the misery mode - just warns the split lock on kernel log.
--1 Enables the misery mode (this is the default) - penalizes the split
--  lockers with intentional performance degradation.
-+1 Enables the misery mode (default)
- =3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-=20
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---he7fAmT252Uv1Vmd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0tzzgAKCRD2uYlJVVFO
-o1cgAQDd/HW8c+Qs9uusV20c8oAtnOt6/XUnT+jKgpaIiu/fCAEAmcW8ipB1AlKn
-0Hgwi+pK4l9GDZm9Y85pbhEVqk+mVwQ=
-=fqhd
------END PGP SIGNATURE-----
-
---he7fAmT252Uv1Vmd--
