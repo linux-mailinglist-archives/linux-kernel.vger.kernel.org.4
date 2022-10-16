@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1AF600138
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06104600139
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 18:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiJPQXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 12:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S229928AbiJPQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 12:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiJPQXj (ORCPT
+        with ESMTP id S229934AbiJPQXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 16 Oct 2022 12:23:39 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABFE399FE
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D026D3CBCB
         for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:36 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id g16so1676756qtu.2
+Received: by mail-qk1-x72a.google.com with SMTP id j21so5395221qkk.9
         for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 09:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3EfL9qo+tnXRZw57qLV9hJU65qsx5ZhXUYQ5ALk358E=;
-        b=aG1SztSPzsEHQ6UyF3mg/FvXqmLt90142+V/pAZP8gyaChbHqOb0JvRkpyKllPzC/0
-         NsUqfEOUrvz4bqGs629mywrOqD8X26L7Hw+QXdt04gLDF11w59mT2iT4qjNcYWTFtL7+
-         /c3zl41xxn92HmAB8NjroDUWb5zQIEsMlY3bs=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2MoWqjHuV8nLLRCYHvb4Cnre7Xc0pX7FZvINFrXyaV4=;
+        b=yj/YGf+8EA2ZpPX+5IFaseWn+7sFZFipCIU5JHL04HFdaMTYUJQQ4hCZrnCkhzCiXI
+         WKJ5akQdzdCq4T8fLwF/E0+LjQ0eHnJ/viRtqu1ppvmLMWELcLSrbwMal8aPxNIfjDwO
+         zk+vuG4c0Kv+ddJgdg6JRrPhXXitTZs9uaV9A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3EfL9qo+tnXRZw57qLV9hJU65qsx5ZhXUYQ5ALk358E=;
-        b=0kTre2zFx7RYN2wLcPKNIvqsBkuYKGBSzaKcUwF7QgF1PATA/x5ZTF6wLR+fM0q8q1
-         m0K+YzpJIC4Rm2dJldmyRPBnRXcOLSxPDOL1DEBV3/9rJETDXbj+MyF+T6akzBnKVncT
-         +cfeHXflzzh/j9Xx644m3rBkDfygUMtYNiVPQmJe8gSNrFLiyX3fyRjONWUsCn5vhArg
-         EPLwmpJxo4gKrsELzRckUzmVj4v/5QrCKzS7ZyGgRReBFp0bGNv8uE6aEuxOP00n+Nhf
-         ejWCYgjoPLCnWOgMVciPWr+OUNLDIctbGOmz8QIAzm1sg+LckdTxvvlMuhJ3/2CngwFu
-         nX+A==
-X-Gm-Message-State: ACrzQf2aKacGc7SN2yN/2DnVX3qcFM+3Y+DQBWZlM3HNLhPmaWoAGXxq
-        FX8O8gJU/R92EAYqtd3l2DXI2QVXd7Z+Pg==
-X-Google-Smtp-Source: AMsMyM7xHf+OQjSR4doFrCyimeVba7DaDe41B4M4md/HAQyVUobN6EYfV/kWKshzEFsnQIbWDeHByQ==
-X-Received: by 2002:a05:622a:1493:b0:39c:e9e4:312 with SMTP id t19-20020a05622a149300b0039ce9e40312mr1389732qtx.49.1665937414900;
-        Sun, 16 Oct 2022 09:23:34 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2MoWqjHuV8nLLRCYHvb4Cnre7Xc0pX7FZvINFrXyaV4=;
+        b=4/0cYqhEzWTqgrQ47yDZ5DB4e97JCQ/lL6QzVZeaYqqvkJNfR+B4hTF9Eibg2j4Lq1
+         xW2jKLrRYXRnZeLkpaIpqsD4ZIPMQzXGrpu+qTcG/T7ODJgfLIjR57timrRgRsvYlyoa
+         qNP4YAn7DNVljmE82hzmQ2iVmcG9hIJXpgrBUSKxt7UzDzh7LcTJtK8duLQlpJWUoeKl
+         MsTDXZAnz0JrvQlrP5DCaF3mk9i6hv1Fr8Ot4Gdm86n3Txx+tFJuFknoPfV7WzqB5663
+         v+crWrDuM+t+Q2IHKr3L/QY89dq0G/v7wFkSnOb/cOi4kd+cgabUTVczOPA0lpSpNjzk
+         vDyQ==
+X-Gm-Message-State: ACrzQf0N4xscoteFX4v9TmuG2d7jk1U82w5WmdotlkVmxOktmns7/T3S
+        3tsvw3tOjuM8hzxAGScl0NckaA==
+X-Google-Smtp-Source: AMsMyM5LVAgHRQhBp2mTxAgaL/r8ze/khuNxMlzBf2KD69NQKJo3Wn9YtxLIi1gcPtC0ajxBKTzRRQ==
+X-Received: by 2002:a05:620a:1729:b0:6ee:cf01:6810 with SMTP id az41-20020a05620a172900b006eecf016810mr4905001qkb.555.1665937415383;
+        Sun, 16 Oct 2022 09:23:35 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
         by smtp.gmail.com with ESMTPSA id x19-20020ac87ed3000000b003436103df40sm6001207qtj.8.2022.10.16.09.23.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 09:23:34 -0700 (PDT)
+        Sun, 16 Oct 2022 09:23:35 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, frederic@kernel.org,
-        paulmck@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v9 00/13] rcu: call_rcu() power improvements
-Date:   Sun, 16 Oct 2022 16:22:52 +0000
-Message-Id: <20221016162305.2489629-1-joel@joelfernandes.org>
+        paulmck@kernel.org, Joel Fernandes <joel@joelfernandes.org>
+Subject: [PATCH v9 01/13] rcu: Fix missing nocb gp wake on rcu_barrier()
+Date:   Sun, 16 Oct 2022 16:22:53 +0000
+Message-Id: <20221016162305.2489629-2-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
+In-Reply-To: <20221016162305.2489629-1-joel@joelfernandes.org>
+References: <20221016162305.2489629-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,131 +69,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v9 version of RCU lazy patches based on rcu/next branch.
- Only change since v8 is this discussion:
- https://lore.kernel.org/rcu/20221011180142.2742289-1-joel@joelfernandes.org/T/#m8eff15110477f3430b3b02561b66f7b0d34a73b0
+From: Frederic Weisbecker <frederic@kernel.org>
 
-To facilitate easier merge, I dropped tracing and other patches and just
-implemented the new changes. I will post the tracing patches later along with
-rcutop as I need to add new tracepoints that Frederic suggested.
+In preparation of RCU lazy changes, wake up the RCU nocb gp thread if
+needed after an entrain. Otherwise, the RCU barrier callback can wait in
+the queue for several seconds before the lazy callbacks in front of it
+are serviced.
 
-Main recent changes:
-1. rcu_barrier() wake up only for lazy bypass list.
-2. Make all call_rcu() default-lazy and add call_rcu_flush() API.
-3. Take care of some callers using call_rcu_flush() API.
-4. Several refactorings suggested by Paul/Frederic.
-5. New call_rcu() to call_rcu_flush() conversions by Joel/Vlad/Paul.
+Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Change-Id: I830269cd41b18862a1a58b26ce3292c6c4457bc7
+---
+ kernel/rcu/tree.c      | 11 +++++++++++
+ kernel/rcu/tree.h      |  1 +
+ kernel/rcu/tree_nocb.h |  5 +++++
+ 3 files changed, 17 insertions(+)
 
-I am seeing good performance and power with these patches on real ChromeOS x86
-asymmetric hardware.
-
-Earlier cover letter with lots of details is here:
-https://lore.kernel.org/all/20220901221720.1105021-1-joel@joelfernandes.org/
-
-List of recent changes:
-    
-    [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
-      deferral levels wake much earlier so for those it is not needed. ]
-    
-    [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
-    
-    [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
-    
-    [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
-    
-    [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
-    
-    [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
-    
-    [ Paul/Frederic : Cosmetic changes, split out wakeup of nocb thread. ]
-    
-    [ Vlad/Joel : More call_rcu -> flush conversions ]
-
-    [ debug code for detecting "wake" in kernel's call_rcu() callbacks. ]
-
-The following 2 scripts can be used to check if any callbacks in the kernel are
-doing a wake up (it is best effort and may miss some things, but we found
-issues using it)
-
-1. Script to search for call_rcu() references and dump the callback list to a file:
-#!/bin/bash
-
-rm func-list
-touch func-list
-
-for f in $(find . \( -name "*.c" -o -name "*.h" \) | grep -v rcu); do
-
-	funcs=$(perl -0777 -ne 'while(m/call_rcu\([&]?.+,\s?(.+)\).*;/g){print "$1\n";}' $f)
-
-	if [ "x$funcs" != "x" ]; then
-		for func in $funcs; do
-			echo "$f $func" >> func-list
-			echo "$f $func"
-		done
-	fi
-
-done
-
-cat func-list | sort | uniq | tee func-list-sorted
-
-2. Script to search "wake" after callback references:
-
-#!/bin/bash
-
-while read fl; do
-	file=$(echo $fl | cut -d " " -f1)
-	func=$(echo $fl | cut -d " " -f2)
-
-	grep -A 30 $func $file | grep wake > /dev/null
-
-	if [ $? -eq 0 ]; then
-		echo "keyword wake found after function reference $func in $file"
-		echo "Output:"
-		grep -A 30 $func $file 
-		echo "==========================================================="
-	fi
-done < func-list-sorted
-
-Frederic Weisbecker (1):
-rcu: Fix missing nocb gp wake on rcu_barrier()
-
-Joel Fernandes (Google) (9):
-rcu: Make call_rcu() lazy to save power
-rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
-rcuscale: Add laziness and kfree tests
-percpu-refcount: Use call_rcu_flush() for atomic switch
-rcu/sync: Use call_rcu_flush() instead of call_rcu
-rcu/rcuscale: Use call_rcu_flush() for async reader test
-rcu/rcutorture: Use call_rcu_flush() where needed
-rxrpc: Use call_rcu_flush() instead of call_rcu()
-rcu/debug: Add wake-up debugging for lazy callbacks
-
-Uladzislau Rezki (2):
-scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
-workqueue: Make queue_rcu_work() use call_rcu_flush()
-
-Vineeth Pillai (1):
-rcu: shrinker for lazy rcu
-
-drivers/scsi/scsi_error.c |   2 +-
-include/linux/rcupdate.h  |   7 ++
-kernel/rcu/Kconfig        |  15 +++
-kernel/rcu/lazy-debug.h   | 154 +++++++++++++++++++++++++++
-kernel/rcu/rcu.h          |   8 ++
-kernel/rcu/rcuscale.c     |  70 +++++++++++-
-kernel/rcu/rcutorture.c   |  16 +--
-kernel/rcu/sync.c         |   2 +-
-kernel/rcu/tiny.c         |   2 +-
-kernel/rcu/tree.c         | 149 ++++++++++++++++++--------
-kernel/rcu/tree.h         |  12 ++-
-kernel/rcu/tree_exp.h     |   2 +-
-kernel/rcu/tree_nocb.h    | 217 ++++++++++++++++++++++++++++++++------
-kernel/workqueue.c        |   2 +-
-lib/percpu-refcount.c     |   3 +-
-net/rxrpc/conn_object.c   |   2 +-
-16 files changed, 565 insertions(+), 98 deletions(-)
-create mode 100644 kernel/rcu/lazy-debug.h
-
---
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 5ec97e3f7468..67a1ae5151f5 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3894,6 +3894,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ {
+ 	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
+ 	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
++	bool wake_nocb = false;
++	bool was_alldone = false;
+ 
+ 	lockdep_assert_held(&rcu_state.barrier_lock);
+ 	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
+@@ -3902,7 +3904,14 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ 	rdp->barrier_head.func = rcu_barrier_callback;
+ 	debug_rcu_head_queue(&rdp->barrier_head);
+ 	rcu_nocb_lock(rdp);
++	/*
++	 * Flush bypass and wakeup rcuog if we add callbacks to an empty regular
++	 * queue. This way we don't wait for bypass timer that can reach seconds
++	 * if it's fully lazy.
++	 */
++	was_alldone = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
+ 	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
++	wake_nocb = was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
+ 	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+ 		atomic_inc(&rcu_state.barrier_cpu_count);
+ 	} else {
+@@ -3910,6 +3919,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+ 		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
+ 	}
+ 	rcu_nocb_unlock(rdp);
++	if (wake_nocb)
++		wake_nocb_gp(rdp, false);
+ 	smp_store_release(&rdp->barrier_seq_snap, gseq);
+ }
+ 
+diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+index d4a97e40ea9c..925dd98f8b23 100644
+--- a/kernel/rcu/tree.h
++++ b/kernel/rcu/tree.h
+@@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
+ static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+ static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+ static void rcu_init_one_nocb(struct rcu_node *rnp);
++static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j);
+ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index f77a6d7e1356..094fd454b6c3 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
+ {
+ }
+ 
++static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
++{
++	return false;
++}
++
+ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 				  unsigned long j)
+ {
+-- 
 2.38.0.413.g74048e4d9e-goog
 
