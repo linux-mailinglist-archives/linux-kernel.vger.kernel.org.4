@@ -2,151 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF94600216
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB89C600220
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 19:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiJPRUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 13:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S229894AbiJPRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 13:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJPRUD (ORCPT
+        with ESMTP id S229790AbiJPRWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 13:20:03 -0400
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4B42EF33
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:20:01 -0700 (PDT)
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 29GHIHZR025460;
-        Sun, 16 Oct 2022 10:19:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PPS06212021;
- bh=C8YQKPWQX4S+/WaSnxZ9VpVIWtERex8NFF1ciCGBywU=;
- b=fA4CHHWJStTnuAyNXf8XwJaB/OuVayD9fWv+D3q7H72csVWPvfhWmLXpGHGHR0MeCAXc
- 1RLzoGxuS2PF9Kor5J3LsUrl8CuWle0EfhbCJ9AvsECflWySVnOSD45A19YRzqFY0MtD
- kciFfv2GVJi/3V2S5egjKl7njbWCTJ7ApaiIdD0GQPh6t8XB+FQeqdLYTBSanhQEAa5q
- bbxRsLJPNoFuUB4kVXfckP1f7H4wgxgOFVLVLFA1+mPg9bscTrekELjr92ihGf3g7paB
- 0AGorGigcV7UirS1KFrgQq1nL0XPyaQxjvyTAW9SjOwZws1TLptT6ERxhazrf7G6k/nX Vw== 
-Received: from ala-exchng02.corp.ad.wrs.com (unknown-82-254.windriver.com [147.11.82.254])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3k7r548yvn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sun, 16 Oct 2022 10:19:11 -0700
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 16 Oct 2022 10:19:10 -0700
-Received: from pek-ywang12-d1.wrs.com (147.11.136.210) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Sun, 16 Oct 2022 10:19:08 -0700
-From:   <yaliang.wang@windriver.com>
-To:     <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
-        <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <andy.yan@rock-chips.com>,
-        <cyrille.pitchen@wedev4u.fr>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] mtd: spi-nor: gigadevice: gd25q256: replace gd25q256_default_init with gd25q256_post_bfpt
-Date:   Mon, 17 Oct 2022 01:19:01 +0800
-Message-ID: <20221016171901.1483542-2-yaliang.wang@windriver.com>
+        Sun, 16 Oct 2022 13:22:33 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F530566
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:22:30 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id i12so6285475qvs.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 10:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5gbkkSbXqT43PmPto6mFBhamUZk4OeGT/iuTbMIcXNY=;
+        b=Z83lLugiejE4w80gq/rvtZZTGPNgW9Mjn55PiYiEbwnatskFW8B6NOBid+Di1mwy9L
+         3HPklr/j4Ztxg0xtIEB85fZlmQTzTSKC4cuUjGfdNjXssCnR7MVeCs+EAwXUlV5lzRx7
+         3gGYPTOd5Iciyi+BNUCoB5wIl52F0nz7SZP5ctPzR02Tte1F/KQf8JYtasFNEfIuHWNr
+         sGlTVnUnP1CJPDBcOZxOuw4VSYMNcoV7B5cLAmawdmGMlXXl7crIZA5TLuvzNV2PEN97
+         6qMvBe299BpA7MSJRV5Ekx1TCY4nd7qd+oGFSi9YPQNmV+7QHSiCitVxWF7vFfrP5YLP
+         gp+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5gbkkSbXqT43PmPto6mFBhamUZk4OeGT/iuTbMIcXNY=;
+        b=ImmG2DDyN6J6P+e0oGdvMfBn0L3SSh+9BNV/WoHB1pIUzY6qXzSZniq1uIRdmtDCfa
+         R968aTGnxNSntxPg/B+DLAqBVWWJ0nANMKQHHuogLOJSLl7tyJs2j3DMoi5zSOt2yTy0
+         UZ19fO5B1kMtY8N0iCFguMJ77exWqCgkkwTENDB+Zfnn4rdFPSLTUc4f/mA/9i7r+L7x
+         2HmWYQkXQ8OfnAaVWBXkrwIjs8uQcZ922iDKxQpxVcSQWyI31hiNv0zYNpBKHxwMsk5p
+         /b7JdUVg0pOg/P7k7awyArhopKJbBx6DVgyKDcwHK3iAOsB/DJVu3y08SCpQDp29SauO
+         xsSg==
+X-Gm-Message-State: ACrzQf2HXmbfZI6B3fLrFfzG+iwuzmgdgxjXG4rx5d2o0GG5Ph1Gkg0d
+        dtu7Lv4+RzEbNoscORLMGn1CUg==
+X-Google-Smtp-Source: AMsMyM5STrKtZsCS7HDu9wc1Ve/epP/Da6e6B/vg1bztG044hcO+Mo8667UbXkih9U9Uak0tjFKVqg==
+X-Received: by 2002:ad4:5d48:0:b0:4af:b6ef:eea9 with SMTP id jk8-20020ad45d48000000b004afb6efeea9mr5678320qvb.53.1665940949960;
+        Sun, 16 Oct 2022 10:22:29 -0700 (PDT)
+Received: from krzk-bin.hsd1.pa.comcast.net ([2601:42:0:3450:9b13:d679:7b5b:6921])
+        by smtp.gmail.com with ESMTPSA id r5-20020ac87945000000b003431446588fsm6051008qtt.5.2022.10.16.10.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 10:22:29 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 00/17] pinctrl/arm64: qcom: 4th set of Qualcomm TLMM pinctrl schema warnings
+Date:   Sun, 16 Oct 2022 13:21:55 -0400
+Message-Id: <20221016172212.49105-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221016171901.1483542-1-yaliang.wang@windriver.com>
-References: <1dddc60f-44fd-df65-f491-be8379fe2380@microchip.com>
- <20221016171901.1483542-1-yaliang.wang@windriver.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 8zFNHauVAo8DVMlSMScXmppRDd2G3SgH
-X-Proofpoint-ORIG-GUID: 8zFNHauVAo8DVMlSMScXmppRDd2G3SgH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-16_13,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011 suspectscore=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210160106
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yaliang Wang <Yaliang.Wang@windriver.com>
+Hi,
 
-When utilizing PARSE_SFDP to initialize the flash parameter, the
-deprecated initializing method spi_nor_init_params_deprecated() and the
-function spi_nor_manufacturer_init_params() within it will never be
-executed, which results in the default_init hook function will also never
-be executed.
+Changes since v2
+================
+1. Drop drive-strength, reword commit msg of "qcom,sm8250: use common TLMM pin
+   schema" and "qcom,sc7280: use common TLMM pin schema".
+2. Move "dt-bindings: pinctrl: qcom,sc7280: use common TLMM pin schema" to this
+   patchset. Previously it was part of:
+   https://lore.kernel.org/linux-devicetree/20220930192954.242546-1-krzysztof.kozlowski@linaro.org/
+3. Add tags.
 
-This is okay for 'D' generation of GD25Q256, because 'D' generation is
-implementing the JESD216B standards, it has QER field defined in BFPT,
-parsing the SFDP can properly set the quad_enable function. The 'E'
-generation also implements the JESD216B standards, and it has the same
-status register definitions as 'D' generation, parsing the SFDP to set
-the quad_enable function should also work for 'E' generation.
+Changes since v1
+================
+1. Check for function on non-GPIO pins was moved to common TLMM schema, thus
+   new patch #12: dt-bindings: pinctrl: qcom,sm8250: drop checks used in common
+   TLMM
 
-However, the same thing can't apply to 'C' generation. 'C' generation
-'GD25Q256C' implements the JESD216 standards, and it doesn't have the
-QER field defined in BFPT, since it does have QE bit in status register
-1, the quad_enable hook needs to be tweaked to properly set the
-quad_enable function, this can be done in post_bfpt fixup hook.
+2. Above also makes minor context changes in patch #13 "dt-bindings: pinctrl:
+   qcom,sm8250: fix matching pin config"
 
-Cc: stable@vger.kernel.org
-Fixes: 047275f7de18 ("mtd: spi-nor: gigadevice: gd25q256: Init flash based on SFDP")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Yaliang Wang <Yaliang.Wang@windriver.com>
----
- drivers/mtd/spi-nor/gigadevice.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+3. Add tags (I am using `b4 trailers` so they might appear in odd order).
 
-diff --git a/drivers/mtd/spi-nor/gigadevice.c b/drivers/mtd/spi-nor/gigadevice.c
-index 119b38e6fc2a..5fc5d2b2d15e 100644
---- a/drivers/mtd/spi-nor/gigadevice.c
-+++ b/drivers/mtd/spi-nor/gigadevice.c
-@@ -8,19 +8,33 @@
- 
- #include "core.h"
- 
--static void gd25q256_default_init(struct spi_nor *nor)
-+static int
-+gd25q256_post_bfpt(struct spi_nor *nor,
-+		   const struct sfdp_parameter_header *bfpt_header,
-+		   const struct sfdp_bfpt *bfpt)
- {
- 	/*
--	 * Some manufacturer like GigaDevice may use different
--	 * bit to set QE on different memories, so the MFR can't
--	 * indicate the quad_enable method for this case, we need
--	 * to set it in the default_init fixup hook.
-+	 * GD25Q256 'C' generation 'GD25Q256C' implements the JESD216
-+	 * standards, JESD216 doesn't define QER field in BFPT, but
-+	 * the 'GD25Q256C' does have QE bit defined in status register
-+	 * 1, this means parsing the BFPT can't properly set the
-+	 * quad_enable function, so we need to tweak the quad_enable
-+	 * function manually.
-+	 *
-+	 * GD25Q256 GENERATION|SFDP MAJOR VERSION|SFDP MINOR VERSION
-+	 *      GD25Q256C     |SFDP_JESD216_MAJOR|SFDP_JESD216_MINOR
-+	 *      GD25Q256D     |SFDP_JESD216_MAJOR|SFDP_JESD216B_MINOR
-+	 *      GD25Q256E     |SFDP_JESD216_MAJOR|SFDP_JESD216B_MINOR
- 	 */
--	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
-+	if (bfpt_header->major == SFDP_JESD216_MAJOR &&
-+	    bfpt_header->minor == SFDP_JESD216_MINOR)
-+		nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
-+
-+	return 0;
- }
- 
- static const struct spi_nor_fixups gd25q256_fixups = {
--	.default_init = gd25q256_default_init,
-+	.post_bfpt = gd25q256_post_bfpt,
- };
- 
- static const struct flash_info gigadevice_nor_parts[] = {
+Overview
+========
+This is the *fourth* patchset around Qualcomm pinctrl in recent days:
+1. First round of TLMM fixes: merged
+2. LPASS fixes:
+   https://lore.kernel.org/linux-devicetree/20220927153429.55365-1-krzysztof.kozlowski@linaro.org/T/#t
+3. ARMv7 TLMM fixes:
+   https://lore.kernel.org/linux-arm-msm/20221016170035.35014-1-krzysztof.kozlowski@linaro.org/T/#t
+4. ARMv8 remaining TLMM fixes: *THIS PATCHSET*
+5. Fifth clean - styles and using common TLMM schema:
+   https://lore.kernel.org/linux-arm-msm/20221011172358.69043-1-krzysztof.kozlowski@linaro.org/T/#m277d25a5f3e9d10ca8221a7fba62ca468a67a60b
+
+Dependencies
+============
+1. Almost no dependencies - logically the bindings patch "dt-bindings: pinctrl:
+   qcom,sm8250: drop checks used in common TLMM" depends on patchset #3 above.
+   This is not a hard-dependency, everything will compile nicely, no warnings.
+
+2. dt-bindings are independent of DTS patches.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (17):
+  arm64: dts: qcom: sm8250: align TLMM pin configuration with DT schema
+  arm64: dts: qcom: sm8250-sony-xperia-edo: fix touchscreen bias-disable
+  arm64: dts: qcom: sc8280xp: align TLMM pin configuration with DT
+    schema
+  arm64: dts: qcom: sc7280: align TLMM pin configuration with DT schema
+    (really)
+  arm64: dts: qcom: sc7280-herobrine: correct number of gpio-line-names
+  arm64: dts: qcom: sc7280-idp-ec-h1: add missing QUP GPIO functions
+  arm64: dts: qcom: msm8953: align TLMM pin configuration with DT schema
+  arm64: dts: qcom: sdm845: align TLMM pin configuration with DT schema
+  arm64: dts: qcom: sm6125-sony-xperia: add missing SD CD GPIO functions
+  arm64: dts: qcom: sm6125: align TLMM pin configuration with DT schema
+  dt-bindings: pinctrl: qcom,sm8250: add gpio-reserved-ranges and
+    gpio-line-names
+  dt-bindings: pinctrl: qcom,sm8250: use common TLMM pin schema
+  dt-bindings: pinctrl: qcom,sm8250: fix matching pin config
+  dt-bindings: pinctrl: qcom,sm8250: add input-enable
+  dt-bindings: pinctrl: qcom,sc7280: correct number of GPIOs
+  dt-bindings: pinctrl: qcom,sc7280: add bias-bus-hold and input-enable
+  dt-bindings: pinctrl: qcom,sc7280: use common TLMM pin schema
+
+ .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml |  28 +-
+ .../bindings/pinctrl/qcom,sm8250-pinctrl.yaml | 140 ++---
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         |  70 +--
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |  12 +-
+ arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts    |   8 +-
+ .../boot/dts/qcom/sc7280-herobrine-crd.dts    |   1 +
+ .../dts/qcom/sc7280-herobrine-evoker-r0.dts   |   1 -
+ .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 -
+ .../dts/qcom/sc7280-herobrine-villager.dtsi   |   1 -
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  44 +-
+ .../arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi |  10 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |  26 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  20 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          | 316 +++++-----
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  12 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |  12 +-
+ .../arm64/boot/dts/qcom/sdm845-lg-common.dtsi |   2 +-
+ .../qcom/sm6125-sony-xperia-seine-pdx201.dts  |   2 +
+ arch/arm64/boot/dts/qcom/sm6125.dtsi          |   4 +-
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts       |  38 +-
+ .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi |  18 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 556 +++++++-----------
+ 22 files changed, 582 insertions(+), 740 deletions(-)
+
 -- 
 2.34.1
 
