@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8847A6002D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FEF6002DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiJPSXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 14:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S229742AbiJPSYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 14:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiJPSXF (ORCPT
+        with ESMTP id S229696AbiJPSX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 14:23:05 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0941A45F78;
-        Sun, 16 Oct 2022 11:23:02 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 101-20020a9d0bee000000b00661b54d945fso4662761oth.13;
-        Sun, 16 Oct 2022 11:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wW7XFUIrfwAYj9V0BgTRJZPYfpuX+5gjcsBRlqmRR3c=;
-        b=JU3t4HRNM+9S9D0rHT+rK3o8ST81UnTQgBfh8fVYH3zJRD9lc2nScx9TUwfInn/Y8i
-         rnwHf6LF7QiRhuKpEdiq2XMqHTQzkvUVNdQKsje4bUd1cvetdei5A8y8Avo9o3m6I9Je
-         BVYCV8JMV62C1iAIhA0KspdlrHtyJW7XZwfkKCsnnY7KVg5AZKfBKd1ihwpDc/bCa7Nv
-         wujlkxtEdHTXvFTIpi66WVhuwukKYgdonQuNuDsbwxcL5MYZVrbsBH78EOpx/mdO2lhS
-         PWZFiuBx25QPV+ICluSljA3OV1Rbk9qkr43mjUusVk64uX6LlDq0As0Hoz6yguuboBfm
-         TJ3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wW7XFUIrfwAYj9V0BgTRJZPYfpuX+5gjcsBRlqmRR3c=;
-        b=WmxkUxlnwHMra+5eRg09eSr2yhv3+u5PVmqoZYy4QX/EJxRsMq7fNLmNgum8lQgY3E
-         OEnsKKftFlTQQtV8HC9XRts24j4Zj6GvmoA/O8IRW9d5oI3dmGP4PxA1gTomwpgwcJ7R
-         rm1/IC8SLlfzd15cxSbqoYvSp31eAZYFcYiF+hiO+XA0N7YE/F/Ku5uq/lA9XEUx/WiI
-         jZvQ7KpYG7wCN1ozy+rs7wOULyJ3YP7qFmH1Luf0WnrTLtZHPc6aHeaJ9FqRuyood5GB
-         8UO/Uvt9GwICJm6B6Q5mwCIosiZzHmGmDc1vPplhIMWkXwkVTuW7TUpSk4Vg2l9QmPfF
-         a+Og==
-X-Gm-Message-State: ACrzQf1WjqUITwTYmTl5iXRDiYQbetnBubol0PjbejEbBkS2LXzI8/tl
-        K+rmfCNwNpHfh6BkAGjZ/Dz3/8zF6EsjldJZbo4=
-X-Google-Smtp-Source: AMsMyM4nQJlVhF5jmHJN1j7Nm7J+AvU6gMopIMylRr6DV6jrnlnjX8VOMlWRdql4oP0xaM689bT/msJw+xzE7e0xOuk=
-X-Received: by 2002:a05:6830:141:b0:661:acd7:de with SMTP id
- j1-20020a056830014100b00661acd700demr3651892otp.367.1665944581210; Sun, 16
- Oct 2022 11:23:01 -0700 (PDT)
+        Sun, 16 Oct 2022 14:23:57 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269C94507B;
+        Sun, 16 Oct 2022 11:23:54 -0700 (PDT)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 29GINb2O032674;
+        Mon, 17 Oct 2022 03:23:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 29GINb2O032674
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1665944617;
+        bh=fRz3ySy23/ffC+gMEN6Ix4ccsH+L67FX85AWDvOKFP8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dG5x6oSvzyK0jY6Po8VHkVul8Z73cqvvfY0uq5MqnGBTyn4mcxQsRBOqM32iRIbqc
+         qIhzU+wy7U+WDgq3TgN6zrbhbufMe8cpTwoS3UkVWnTe8+Qa5sHfSJ6K6OwzptCfWf
+         5Zj4YyHI4AswPvS6Lw1MFT2FfqGwfN5XbeFHvjT6ldbIQe/CCcTvuEc0caKueYhGsp
+         2Y6zSpyS9QRYyEM0FHxISxXUL1bp9WtvKW6N6UQj0f7A2Lk3AMmECRE56r8PNN+dMg
+         Ic/CTfVobJxsDJVZj3sSVZJHrKlO+BrHh6nFQBgjBvke9IffduQ6fgQPQcFCHGrUk7
+         69r8WkeJ9UhyQ==
+X-Nifty-SrcIP: [209.85.160.41]
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-134072c15c1so11293026fac.2;
+        Sun, 16 Oct 2022 11:23:37 -0700 (PDT)
+X-Gm-Message-State: ACrzQf14KkT1z9z4Z37Zubp/3lDY2k/yizLdnrAdqy2ITuJH+3lJ4zHU
+        BMxyyqtQREV+U6ciOdoq/kpePnx0IfT99zli9D0=
+X-Google-Smtp-Source: AMsMyM6GRvVgXtI3ayO2vjiuPBvoDA4IVEzkiYVV0tBwypOIIW4e6YoM8Or3yA24icDQL2VRQQfGQFrPBzAw0kD++Z4=
+X-Received: by 2002:a05:6870:8a09:b0:132:554d:2f3d with SMTP id
+ p9-20020a0568708a0900b00132554d2f3dmr13479026oaq.194.1665944616376; Sun, 16
+ Oct 2022 11:23:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221014204210.383380-1-nathan@kernel.org> <CAKwvOdmvqoO1220ac7RVbVzvmbJB0wYq5WOfuz=T8hd+CkijBg@mail.gmail.com>
- <CAK7LNAQvpSFUiX9=92UnoZpJs=uzaZqpGG-r1dyeWsRXpS5fmw@mail.gmail.com>
- <CA+icZUWfB1pxTFc2VX4_J2dqZZkZ=raC=EVKuPDP0EdBy777OQ@mail.gmail.com> <Y0xLdOM0TAbcJHop@spud>
-In-Reply-To: <Y0xLdOM0TAbcJHop@spud>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 16 Oct 2022 20:22:24 +0200
-Message-ID: <CA+icZUWj52mQcQeSqCiD_DXrrj9YCLYfdNqvDpPMAF3s_6TMcw@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/Kconfig.debug: Add check for non-constant
- .{s,u}leb128 support to DWARF5
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+References: <20221011171427.58891-1-masahiroy@kernel.org> <CANiq72kvaPGr=2S6J7q7gfEg_CauHUfhuLmABpktfUPfK+_Hvg@mail.gmail.com>
+In-Reply-To: <CANiq72kvaPGr=2S6J7q7gfEg_CauHUfhuLmABpktfUPfK+_Hvg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 17 Oct 2022 03:22:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQkSbH-Gw3sgMzxHyA9pSf3gLVvbCLg3yvbO43_vi5=YA@mail.gmail.com>
+Message-ID: <CAK7LNAQkSbH-Gw3sgMzxHyA9pSf3gLVvbCLg3yvbO43_vi5=YA@mail.gmail.com>
+Subject: Re: [PATCH v2] Remove Intel compiler support
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Nick Terrell <terrelln@fb.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ia64@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Len Brown <lenb@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-kbuild@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Tom Rix <trix@redhat.com>, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,165 +74,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 8:20 PM Conor Dooley <conor@kernel.org> wrote:
+On Fri, Oct 14, 2022 at 11:40 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> On Sun, Oct 16, 2022 at 08:10:30PM +0200, Sedat Dilek wrote:
-> > On Sun, Oct 16, 2022 at 8:04 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > On Sat, Oct 15, 2022 at 6:52 AM Nick Desaulniers
-> > > <ndesaulniers@google.com> wrote:
-> > > >
-> > > > On Fri, Oct 14, 2022 at 1:48 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > >
-> > > > > When building with a RISC-V kernel with DWARF5 debug info using clang
-> > > > > and the GNU assembler, several instances of the following error appear:
-> > > > >
-> > > > >   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
-> > > > >
-> > > > > Dumping the .s file reveals these .uleb128 directives come from
-> > > > > .debug_loc and .debug_ranges:
-> > > > >
-> > > > >   .Ldebug_loc0:
-> > > > >           .byte   4                               # DW_LLE_offset_pair
-> > > > >           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
-> > > > >           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
-> > > > >           .byte   1                               # Loc expr size
-> > > > >           .byte   90                              # DW_OP_reg10
-> > > > >           .byte   0                               # DW_LLE_end_of_list
-> > > > >
-> > > > >   .Ldebug_ranges0:
-> > > > >           .byte   4                               # DW_RLE_offset_pair
-> > > > >           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
-> > > > >           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
-> > > > >           .byte   4                               # DW_RLE_offset_pair
-> > > > >           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
-> > > > >           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
-> > > > >           .byte   0                               # DW_RLE_end_of_list
-> > > > >
-> > > > > There is an outstanding binutils issue to support a non-constant operand
-> > > > > to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
-> > > > > be any movement on it, due to concerns over how it would work with
-> > > > > linker relaxation.
-> > > > >
-> > > > > To avoid these build errors, prevent DWARF5 from being selected when
-> > > > > using clang and an assembler that does not have support for these symbol
-> > > > > deltas, which can be easily checked in Kconfig with as-instr plus the
-> > > > > small test program from the dwz test suite from the binutils issue.
-> > > > >
-> > > > > Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> > > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1719
-> > > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > >
-> > > > Thanks for keeping these LLVM_IAS=0 builds alive a little longer.  My
-> > > > hope is the GNU binutils can relax their requirement for debug info
-> > > > sections to improve support for DWARF v5.
-> > > >
-> > > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > >
-> > >
-> > > Applied to linux-kbuild.
-> > > Thanks.
-> > >
+> On Tue, Oct 11, 2022 at 7:16 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 > >
-> > [1] says:
+> > diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> > index 898b3458b24a..9221302f6ae8 100644
+> > --- a/include/linux/compiler_attributes.h
+> > +++ b/include/linux/compiler_attributes.h
+> > @@ -64,16 +64,10 @@
+> >   * compiler should see some alignment anyway, when the return value is
+> >   * massaged by 'flags = ptr & 3; ptr &= ~3;').
+> >   *
+> > - * Optional: not supported by icc
+> > - *
+> >   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-assume_005faligned-function-attribute
+> >   * clang: https://clang.llvm.org/docs/AttributeReference.html#assume-aligned
+> >   */
+> > -#if __has_attribute(__assume_aligned__)
+> > -# define __assume_aligned(a, ...)       __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
+> > -#else
+> > -# define __assume_aligned(a, ...)
+> > -#endif
+> > +#define __assume_aligned(a, ...)        __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
+>
+> Thanks for cleaning the conditional inclusion here. I double-checked
+> it is indeed available for both GCC and Clang current minimum versions
+> just in case: https://godbolt.org/z/PxaqeEdcE.
+>
+> > diff --git a/lib/zstd/common/compiler.h b/lib/zstd/common/compiler.h
+> > index f5a9c70a228a..c281a6430cd4 100644
+> > --- a/lib/zstd/common/compiler.h
+> > +++ b/lib/zstd/common/compiler.h
+> > @@ -116,7 +116,7 @@
 > >
-> > "This looks good to me! Feel free to submit with a:
-> > Tested-by: Conor Dooley <conor.dooley@microchip.com>"
+> >  /* vectorization
+> >   * older GCC (pre gcc-4.3 picked as the cutoff) uses a different syntax */
+> > -#if !defined(__INTEL_COMPILER) && !defined(__clang__) && defined(__GNUC__)
+> > +#if !defined(__clang__) && defined(__GNUC__)
+> >  #  if (__GNUC__ == 4 && __GNUC_MINOR__ > 3) || (__GNUC__ >= 5)
+> >  #    define DONT_VECTORIZE __attribute__((optimize("no-tree-vectorize")))
+> >  #  else
 >
-> Hey Sedat,
+> These files come from upstream Zstandard -- should we keep those lines
+> to minimize divergence?
+> https://github.com/facebook/zstd/blob/v1.4.10/lib/common/compiler.h#L154.
 >
-> I actually didn't take a proper look at the v2 at all... I didn't realise
-> that Nathan dropped by T-b for v2 since he'd changed the patch enough to
-> feel that he should.
+> Commit e0c1b49f5b67 ("lib: zstd: Upgrade to latest upstream zstd
+> version 1.4.10") is the latest upgrade, and says:
 >
-> I'm not too worried about the removed T-b (espcially since Linus has
-> just merged Masahiro's PR containing this change).
+>     This patch is 100% generated from upstream zstd commit 20821a46f412 [0].
 >
-> Thanks though!
-> Conor.
+>     This patch is very large because it is transitioning from the custom
+>     kernel zstd to using upstream directly. The new zstd follows upstreams
+>     file structure which is different. Future update patches will be much
+>     smaller because they will only contain the changes from one upstream
+>     zstd release.
 >
+> So I think Nick would prefer to keep the changes as minimal as
+> possible with respect to upstream.
+>
+> Further reading seems to suggest this is the case, e.g. see this
+> commit upstream that introduces a space to match the kernel:
+> https://github.com/facebook/zstd/commit/b53da1f6f499f0d44c5f40795b080d967b24e5fa.
+>
+> > diff --git a/lib/zstd/compress/zstd_fast.c b/lib/zstd/compress/zstd_fast.c
+> > index 96b7d48e2868..800f3865119f 100644
+> > --- a/lib/zstd/compress/zstd_fast.c
+> > +++ b/lib/zstd/compress/zstd_fast.c
+> > @@ -80,13 +80,6 @@ ZSTD_compressBlock_fast_generic(
+> >      }
+> >
+> >      /* Main Search Loop */
+> > -#ifdef __INTEL_COMPILER
+> > -    /* From intel 'The vector pragma indicates that the loop should be
+> > -     * vectorized if it is legal to do so'. Can be used together with
+> > -     * #pragma ivdep (but have opted to exclude that because intel
+> > -     * warns against using it).*/
+> > -    #pragma vector always
+> > -#endif
+> >      while (ip1 < ilimit) {   /* < instead of <=, because check at ip0+2 */
+> >          size_t mLength;
+> >          BYTE const* ip2 = ip0 + 2;
+>
+> Ditto: https://github.com/facebook/zstd/blob/v1.4.10/lib/compress/zstd_fast.c#L83.
+>
+> Apart from the zstd divergence which I am not sure about, everything
+> looks good to me!
+>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> Cheers,
+> Miguel
 
-Yes, just saw the update on
-https://github.com/torvalds/linux/commits/master first.
 
--Sedat-
+Thanks for your close review.
 
-> >
-> > -sed@-
-> >
-> > [1] https://github.com/ClangBuiltLinux/linux/issues/1719#issuecomment-1261158627
-> >
-> > >
-> > >
-> > > > > ---
-> > > > >
-> > > > > v2:
-> > > > >     - Rebase on commit bb1435f3f575 ("Kconfig.debug: add toolchain
-> > > > >       checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT") from the kbuild
-> > > > >       tree.
-> > > > >     - Limit CONFIG_AS_HAS_NON_CONST_LEB128 dependency to GNU as. There
-> > > > >       is no point to applying this dependency to the integrated
-> > > > >       assembler because it will always pass.
-> > > > >     - Apply the CONFIG_AS_HAS_NON_CONST_LEB128 dependency to
-> > > > >       CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as well, due to the
-> > > > >       aforementioned kbuild change.
-> > > > >     - Move comment block to above CONFIG_AS_HAS_NON_CONST_LEB128, as the
-> > > > >       configuration is now used in two places.
-> > > > >     - Drop Conor's tested by, as the patch is different enough to
-> > > > >       potentially require new testing.
-> > > > >
-> > > > > v1: https://lore.kernel.org/20220928182523.3105953-1-nathan@kernel.org/
-> > > > >
-> > > > >  lib/Kconfig.debug | 9 +++++++--
-> > > > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > > > index db8d9271cabf..5c1c63575895 100644
-> > > > > --- a/lib/Kconfig.debug
-> > > > > +++ b/lib/Kconfig.debug
-> > > > > @@ -231,6 +231,11 @@ config DEBUG_INFO
-> > > > >           in the "Debug information" choice below, indicating that debug
-> > > > >           information will be generated for build targets.
-> > > > >
-> > > > > +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
-> > > > > +# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> > > > > +config AS_HAS_NON_CONST_LEB128
-> > > > > +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
-> > > > > +
-> > > > >  choice
-> > > > >         prompt "Debug information"
-> > > > >         depends on DEBUG_KERNEL
-> > > > > @@ -253,7 +258,7 @@ config DEBUG_INFO_NONE
-> > > > >  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> > > > >         bool "Rely on the toolchain's implicit default DWARF version"
-> > > > >         select DEBUG_INFO
-> > > > > -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
-> > > > > +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> > > > >         help
-> > > > >           The implicit default version of DWARF debug info produced by a
-> > > > >           toolchain changes over time.
-> > > > > @@ -277,7 +282,7 @@ config DEBUG_INFO_DWARF4
-> > > > >  config DEBUG_INFO_DWARF5
-> > > > >         bool "Generate DWARF Version 5 debuginfo"
-> > > > >         select DEBUG_INFO
-> > > > > -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
-> > > > > +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
-> > > > >         help
-> > > > >           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-> > > > >           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-> > > > >
-> > > > > base-commit: bb1435f3f575b5213eaf27434efa3971f51c01de
-> > > > > --
-> > > > > 2.38.0
-> > > > >
-> > > >
-> > > >
-> > > > --
-> > > > Thanks,
-> > > > ~Nick Desaulniers
-> > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > > Masahiro Yamada
+I will drop zstd changes and send v3.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
