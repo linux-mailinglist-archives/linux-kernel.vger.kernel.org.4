@@ -2,79 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493276000B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E5B6000C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJPPcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S229979AbiJPPmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJPPcq (ORCPT
+        with ESMTP id S229631AbiJPPmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:32:46 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9704F371A6
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:32:43 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id i9so6210338qvo.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n+glJUn1rJ1Nz2wNZdUlNIAxnWRCwagr6ACf9glezJI=;
-        b=klwSuUnkKoO0zTw1B5PLbnJhRCSHfBdQcpM3QHpPA0GC9UJTrQM0GTlzH0kQesQNZC
-         IE1R2q7MFkYvpxl8yQEX/HzuVlt76Q7ot4aCoVcHlX0VMfHbhHba2+NjR/mZMLktBKwg
-         +i4sirbI4oLqGOcYYZddBvMmMplvr8m3qOYDN60Zo7xyqHtoFzUuURvtd24O7bIw4gSv
-         yupvoo5bHeeTm87Xy8a+tcFQAFhCQT8yB6gLaf5/KfznzQHR0nJnPl5u/yQ+PCcJaewS
-         4vvOxWL5sleolma7WrGZZqPB1Rlv5NuHo+XFmaF9GA9wYbbffAdB/zX2fxeECcvM8/lL
-         9NxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+glJUn1rJ1Nz2wNZdUlNIAxnWRCwagr6ACf9glezJI=;
-        b=0z8/jb1Bfm7ikfRMRrSfMPI+3HQ5e6L9kkoTS9rqt9SKLBOxYA8Rk/Ow2lmCyhAH0M
-         CKfUhV6CyKfpEIA0qFn1hNECWQO3BZch/3+qtnnEoTWS1uYa8f1C4ZElaIZxpXOK2Zr0
-         R0iyhDEoICv+p/uRi6CsXT7OjQzkeFBV6pri0ZANuLB4Hnbfslehwm6u+jiVlleITnoa
-         lIdaMGVSeMIT54madOKET/+J8kU08RZw0L1R08Vk8avXVUYSikaGHAS5mTBneUOl5uFc
-         JK6u8CqyrW0BBtMnXLbJ3G7R5WpiAo2Bupu1CrKaeT/fqn59glgQWDf6ihkFt6wH/ej7
-         o6/Q==
-X-Gm-Message-State: ACrzQf3u/JxJlHHPF72MHkcwnO7UJLz5hiV9fskMBFGERPNCTdPEbNIx
-        94D17i0GxcDWoRM3Rut9kEuCEA==
-X-Google-Smtp-Source: AMsMyM6+xL+9BLXbh6JLTiiPjwMnLmR5mvBjXAqAvfz2PnC4/uaWBmYX29THEJDsXVqG/xZab/whEA==
-X-Received: by 2002:ad4:5aee:0:b0:4b4:595:fb54 with SMTP id c14-20020ad45aee000000b004b40595fb54mr5383329qvh.5.1665934362813;
-        Sun, 16 Oct 2022 08:32:42 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id i20-20020ac860d4000000b00399d5d564b7sm5892803qtm.56.2022.10.16.08.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 08:32:41 -0700 (PDT)
-Message-ID: <c2accc8b-f4eb-47ca-333f-eeb98da6a363@linaro.org>
-Date:   Sun, 16 Oct 2022 11:32:40 -0400
+        Sun, 16 Oct 2022 11:42:09 -0400
+X-Greylist: delayed 481 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Oct 2022 08:42:08 PDT
+Received: from synology.com (mail.synology.com [211.23.38.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEE531F8E
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:42:08 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.17.17.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by synology.com (Postfix) with ESMTPSA id CEF25486392C1;
+        Sun, 16 Oct 2022 23:34:04 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synology.com; s=123;
+        t=1665934446; bh=MYPL/h1Fe4xjX3VnmBoDeHLveLHO6/KOdHlEew/VoeQ=;
+        h=From:To:Cc:Subject:Date;
+        b=fmghXdQ+fw3bazsSVWRA/CUX4bJOr/f1ZPcZqpIUSM37pBj4mVTBNeb3b+cMFoKM/
+         zgK+0NOk2UUDiiqdxVZk36lzxQ/NcMmQItaW4B1uSX8gXYotX1eZPXBV2L+TI+FcN4
+         9qgHuWQ+hLXSWvSIASgfkFelaOXSwhCCs+bvR2zA=
+From:   bingjingc <bingjingc@synology.com>
+To:     fdmanana@kernel.org, josef@toxicpanda.com, dsterba@suse.com,
+        clm@fb.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     bingjingc@synology.com, bxxxjxxg@gmail.com
+Subject: [PATCH] btrfs: send: fix send failure of a subcase of orphan inodes
+Date:   Sun, 16 Oct 2022 23:33:46 +0800
+Message-Id: <20221016153346.2794-1-bingjingc@synology.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 3/4] dt-bindings: clock: Add Ingenic JZ4755 CGU header
-Content-Language: en-US
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20221016150110.3020451-1-lis8215@gmail.com>
- <20221016150110.3020451-4-lis8215@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016150110.3020451-4-lis8215@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Synology-MCP-Status: no
+X-Synology-Spam-Flag: no
+X-Synology-Spam-Status: score=0, required 6, WHITELIST_FROM_ADDRESS 0
+X-Synology-Virus-Status: no
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,26 +53,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/10/2022 11:01, Siarhei Volkau wrote:
-> This will be used from the devicetree bindings to specify the clocks
-> that should be obtained from the jz4755-cgu driver.
-> 
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> ---
->  .../dt-bindings/clock/ingenic,jz4755-cgu.h    | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> 
-> diff --git a/include/dt-bindings/clock/ingenic,jz4755-cgu.h b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> new file mode 100644
-> index 000000000..1ac13d61b
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> @@ -0,0 +1,49 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause) */
+From: BingJing Chang <bingjingc@synology.com>
 
-Why did you choose 2.0+?
+Commit 9ed0a72e5b35 ("btrfs: send: fix failures when processing inodes with
+no links") tries to fix all incremental send cases of orphan inodes the
+send operation will meet. However, there's still a bug causing the corner
+subcase fails with a ENOENT error.
 
-Best regards,
-Krzysztof
+Here's shortened steps of that subcase:
+
+  $ btrfs subvolume create vol
+  $ touch vol/foo
+
+  $ btrfs subvolume snapshot -r vol snap1
+  $ btrfs subvolume snapshot -r vol snap2
+
+  # Turn the second snapshot to RW mode and delete the file while
+  # holding an open file descriptor on it
+  $ btrfs property set snap2 ro false
+  $ exec 73<snap2/foo
+  $ rm snap2/foo
+
+  # Set the second snapshot back to RO mode and do an incremental send
+  # with an unusal reverse order
+  $ btrfs property set snap2 ro true
+  $ btrfs send -p snap2 snap1 > /dev/null
+  At subvol snap1
+  ERROR: send ioctl failed with -2: No such file or directory
+
+It's subcase 3 of BTRFS_COMPARE_TREE_CHANGED in the commit 9ed0a72e5b35
+("btrfs: send: fix failures when processing inodes with no links"). And
+it's not a common case. We still have not met it in the real world.
+Theoretically, this case can happen in a batch cascading snapshot backup.
+In cascading backups, the receive operation in the middle may cause orphan
+inodes to appear because of the open file descriptors on the snapshot files
+during receiving. And if we don't do the batch snapshot backups in their
+creation order, then we can have an inode, which is an orphan in the parent
+snapshot but refers to a file in the send snapshot. Since an orphan inode
+has no paths, the send operation will fail with a ENOENT error if it
+tries to generate a path for it.
+
+In that patch, this subcase will be treated as an inode with a new
+generation. However, when the routine tries to delete the old paths in
+the parent snapshot, the function process_all_refs() doesn't check whether
+there are paths recorded or not before it calls the function
+process_recorded_refs(). And the function process_recorded_refs() try
+to get the first path in the parent snapshot in the beginning. Since it has
+no paths in the parent snapshot, the send operation fails.
+
+To fix this, we can easily put a link count check to avoid entering the
+deletion routine like what we do a link count check to avoid creating a
+new one. Moreover, we can assume that the function process_all_refs()
+can always collect references to process because we know it has a
+positive link count.
+
+Signed-off-by: BingJing Chang <bingjingc@synology.com>
+---
+ fs/btrfs/send.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index 4ef4167072b8..1568fa977ca1 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -6665,17 +6665,19 @@ static int changed_inode(struct send_ctx *sctx,
+ 			/*
+ 			 * First, process the inode as if it was deleted.
+ 			 */
+-			sctx->cur_inode_gen = right_gen;
+-			sctx->cur_inode_new = false;
+-			sctx->cur_inode_deleted = true;
+-			sctx->cur_inode_size = btrfs_inode_size(
+-					sctx->right_path->nodes[0], right_ii);
+-			sctx->cur_inode_mode = btrfs_inode_mode(
+-					sctx->right_path->nodes[0], right_ii);
+-			ret = process_all_refs(sctx,
+-					BTRFS_COMPARE_TREE_DELETED);
+-			if (ret < 0)
+-				goto out;
++			if (old_nlinks > 0) {
++				sctx->cur_inode_gen = right_gen;
++				sctx->cur_inode_new = false;
++				sctx->cur_inode_deleted = true;
++				sctx->cur_inode_size = btrfs_inode_size(
++						sctx->right_path->nodes[0], right_ii);
++				sctx->cur_inode_mode = btrfs_inode_mode(
++						sctx->right_path->nodes[0], right_ii);
++				ret = process_all_refs(sctx,
++						BTRFS_COMPARE_TREE_DELETED);
++				if (ret < 0)
++					goto out;
++			}
+ 
+ 			/*
+ 			 * Now process the inode as if it was new.
+-- 
+2.37.1
 
