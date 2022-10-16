@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D29600052
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60DC600051
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiJPPDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S229950AbiJPPD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiJPPDP (ORCPT
+        with ESMTP id S229894AbiJPPDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:03:15 -0400
+        Sun, 16 Oct 2022 11:03:16 -0400
 Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866A3419B9;
-        Sun, 16 Oct 2022 08:03:11 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id d26so19844344eje.10;
-        Sun, 16 Oct 2022 08:03:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F0419A9;
+        Sun, 16 Oct 2022 08:03:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id r17so19857541eja.7;
+        Sun, 16 Oct 2022 08:03:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6FJ7/YP2hXS1vCrLDjBwuedubr0y59mrPeF+JZZ90fI=;
-        b=Oew1i3NVCMoZZdQLuEGDPYbnBZgkBemMYRY0r7R1w5Z/ERIcFek+s7X/04rra1pJDX
-         7LdhJxuTzW7INr9stEfrMMExZmWIre6R2pVnfciRy+uPNKIpsfBrFfQjDN5YWXyEVKWS
-         XJXGN0deN0tfUH8WV1QCo8qbidvFnvnjjWYqctNJ/iXAvcn1rmPjG6MIMLTxSaHEr6Gs
-         GdHh7pBhCvOrk3BQFlH4ZWvoKhkGrbuQnk2XxS6qD4wCEq3fEccchXOLsxnR8y541N+u
-         0up5oEEoBMUFW1mmJv5rhMsxEfPRJh2IwKvQaBXsPlPlG5HIjDxdqkupY/GMbkDXEpNw
-         sa8Q==
+        bh=uB/YFZqZEaKiFGlCwO3LrxhNU5OpxJ4tB5tamj6ARsY=;
+        b=XlKCTvyx4mNCaRV0wCHPRlfvy0I+BXCYT7azBCeF1sjnw72XKi6j32c/FaKi5J5q0D
+         5tPuneU5aI7Yhh1safVmV8+1rJnpK1bp9LMeOJUUJqmFQ7PkAm85ZiJu/Onr1+KrFaqu
+         XJX0OBVFjcaZKkLDZSNHJOgvCgxTIz0iY7DMYxL1Pkp7QsnDqAoQNcDN8bSg996ji69K
+         8UvQFVeTsJ737UybdDWWdEIdssl9QONCYD7IHboHds4msZsRl6xI5L9eBuo9EBadHzWR
+         uXuRDS+v5FpUXhnMwkd6jtHSPUZlL/i88kceSeVkKfF+Znl1gPBhlqKtPx2HKWhZPgt1
+         uc/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6FJ7/YP2hXS1vCrLDjBwuedubr0y59mrPeF+JZZ90fI=;
-        b=NaUTHKGtlGBrn+qJyBDAWdynLP3eKbvGYi4o++KX3yZgeKhuRW9/xzXdbYTnhrEXAG
-         5NnmUQ3eDlneUjm2F28c+J/yB67C67lZaVQoMYrcvFFkcwSdZDpvGd59i8Kv6/P+4oNR
-         44c0RIM8iGTdYICpjY26ZsvSXYCp71VbMCBVJeMLUsgiZFYz4OAXDjPtV8qssDmUPIxX
-         Cg5Mjl6phJpOV76ujApAz0lliCEOxp8DYjcQPYETtlSlP/cSp6xxjKXeuT52rm2pYGhP
-         iwReQptW8OCyPf8iMSEOo9od/u8yt00oO4K2NCz2hjPfIzW8Qf1H1fe+xIWQSb5jREGE
-         gJXg==
-X-Gm-Message-State: ACrzQf3tf1C/eKa1rw/j/SGJ6sBGST0rL93eyeOCsPbflBH4yRovaYcG
-        +iky9q05lN0qeyV/AGPlIbw=
-X-Google-Smtp-Source: AMsMyM4sA5Z6mE6yrCb0Y2Mfw0pJdyAkAD+acsbSybrO901BKkvarjRt9ycDR25jrs4FSidj7mR9nw==
-X-Received: by 2002:a17:907:a054:b0:78d:7822:3108 with SMTP id gz20-20020a170907a05400b0078d78223108mr5322987ejc.764.1665932589479;
-        Sun, 16 Oct 2022 08:03:09 -0700 (PDT)
+        bh=uB/YFZqZEaKiFGlCwO3LrxhNU5OpxJ4tB5tamj6ARsY=;
+        b=l0XfskRyr7xBpyV+Q0xQ6KzWULvyj118xumXsr+Lv9dpqMymTLZGxdamUz2GOkzc/G
+         QQfaD5Ge88ccN/dHnES/ITCVW1bJpSYplekuU9npKbfuNgAcpm9Z3rICylSmn9J+dmFv
+         w7JWXr6M2IJHfJkP3cNf/iINZ8JvYzExrewtIO+KL5iv/cUuKcWqoN8h/yu65+m/e0im
+         BKPiOPm6anumtYu6MHiqAhYUv3Gl3vPhEF7Yt62+chApPQtfjgamBPTNoVivHYU3DNzZ
+         25u52O0RN09GscGh8LFJNOK0Bom4Ha0GVBeGkP32iBO8l3xSHRp8wTASaF1x923yNdYu
+         ajjg==
+X-Gm-Message-State: ACrzQf31rzJCvuh6N2AZl+YHmzH7C6Dt/kOU4mvj7hFWPdaTxgJ5y6Cn
+        HqjETaQTae15FHSbi1IfmAY=
+X-Google-Smtp-Source: AMsMyM4R+IqmSByLB30ywIJPoa+9dZ2Txso0yYn1CA19X9qnOcMICH79ap/yXmbggu36r9q6XvwDNA==
+X-Received: by 2002:a17:907:3da5:b0:78e:793:4084 with SMTP id he37-20020a1709073da500b0078e07934084mr5563503ejc.285.1665932591555;
+        Sun, 16 Oct 2022 08:03:11 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
-        by smtp.gmail.com with ESMTPSA id u8-20020a17090657c800b0078c1e174e11sm4645699ejr.136.2022.10.16.08.03.08
+        by smtp.gmail.com with ESMTPSA id u8-20020a17090657c800b0078c1e174e11sm4645699ejr.136.2022.10.16.08.03.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 08:03:09 -0700 (PDT)
+        Sun, 16 Oct 2022 08:03:11 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,9 +61,9 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 1/4] MIPS: ingenic: add new machine type MACH_JZ4755
-Date:   Sun, 16 Oct 2022 18:01:06 +0300
-Message-Id: <20221016150110.3020451-2-lis8215@gmail.com>
+Subject: [PATCH v2 2/4] dt-bindings: ingenic: Add support for the JZ4755 CGU
+Date:   Sun, 16 Oct 2022 18:01:07 +0300
+Message-Id: <20221016150110.3020451-3-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221016150110.3020451-1-lis8215@gmail.com>
 References: <20221016150110.3020451-1-lis8215@gmail.com>
@@ -79,39 +80,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-which is close to jz4725b because it is actually a low price
-successor of the jz4755.
-It has the same MIPS32r1 core with Xburst(R) extension
-MXU version 1 release 2.
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 ---
- arch/mips/ingenic/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/clock/ingenic,cgu.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/ingenic/Kconfig b/arch/mips/ingenic/Kconfig
-index f595b339a..edd84cf13 100644
---- a/arch/mips/ingenic/Kconfig
-+++ b/arch/mips/ingenic/Kconfig
-@@ -4,6 +4,7 @@ config MACH_INGENIC_GENERIC
- 	bool
- 	select MACH_INGENIC
- 	select MACH_JZ4740
-+	select MACH_JZ4755
- 	select MACH_JZ4725B
- 	select MACH_JZ4770
- 	select MACH_JZ4780
-@@ -53,6 +54,10 @@ config MACH_JZ4740
- 	bool
- 	select SYS_HAS_CPU_MIPS32_R1
- 
-+config MACH_JZ4755
-+	bool
-+	select SYS_HAS_CPU_MIPS32_R1
-+
- config MACH_JZ4770
- 	bool
- 	select MIPS_CPU_SCACHE
+diff --git a/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml b/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
+index aa1df03ef..df256ebcd 100644
+--- a/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
++++ b/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
+@@ -22,6 +22,7 @@ select:
+         enum:
+           - ingenic,jz4740-cgu
+           - ingenic,jz4725b-cgu
++          - ingenic,jz4755-cgu
+           - ingenic,jz4760-cgu
+           - ingenic,jz4760b-cgu
+           - ingenic,jz4770-cgu
+@@ -51,6 +52,7 @@ properties:
+       - enum:
+           - ingenic,jz4740-cgu
+           - ingenic,jz4725b-cgu
++          - ingenic,jz4755-cgu
+           - ingenic,jz4760-cgu
+           - ingenic,jz4760b-cgu
+           - ingenic,jz4770-cgu
 -- 
 2.36.1
 
