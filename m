@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D36060003A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722B060004F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiJPPBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S229929AbiJPPDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiJPPBm (ORCPT
+        with ESMTP id S229888AbiJPPDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:01:42 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D3F34737
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:01:40 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id i9so6184734qvo.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Wm7NvqH1ePopXAneqvcSoIIU4C1K/1oJP6GjX0gQlU=;
-        b=LJmf2E6dF8jcDbNwqXdPwRL3yPNVesLg6HeAX9cvOk8YIMAvTQTwBTPvu/o2M/yyHJ
-         Cj1r5w0ha605YxEmDjThwmdspqYZ+9AvH8MyJJ02DFhWzuz/jk9hL7XsiKeXfkeoRKTR
-         lsPX72YQmTBicaXl8j4wmwpE2rPHV1YRo7RwSwuc8BSSj/8LmWWjUPZLdPJFA+K6Hi+U
-         ejp+2aL3aEXS0+CGVnqOXOrtw4u3m2a8I2UMGDU6QU6zNny0l8gqilsXmt2zHpVWgYm5
-         B5tozI+hjGoTqbCkulMeH2KtRWBGyNtnc5DJGGKOcHiUCaoXgm0YDUC3+4qlOCR481eG
-         ub2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Wm7NvqH1ePopXAneqvcSoIIU4C1K/1oJP6GjX0gQlU=;
-        b=O3/C6mSk2ZS8W2uD3Ya/spL6y+KrUeUC4BIqOJ/Xasl1KmyP/2dl1NLUzNwJ5Yzf8L
-         95qlob8WwS3l0Zwt8pRelw2ZrL7cOeF3lqHFZUzJtcWnozhxjFhvYHSSc9174X237nFd
-         iOY5BNvDDRx4F1qDA5n1uM8jc3CDQ8DYAdUGDAPsE0grHAKWNnNQTNIsSIC72tdEvRvJ
-         mzJ+1Snh7s3HqmOXuM7xDGDtHuLph1NhlAnsrx9+EmjKR8WGR6UWZOVDuTDYvjCKt87m
-         d5TrmfXsiJMsFfFfH2NRGZN1EkAdjmYkgZhRSg2YOdqWU3ZBLswZSUeo1k6DQ9S+OpbG
-         R0ng==
-X-Gm-Message-State: ACrzQf3dlwmkqfcRfIpRYRmEiNcLhn3e4T2ipcBNlBzBCG7r0Bo2tEQ2
-        zlyz9pdBS242SGbd61ssG2bDZQ==
-X-Google-Smtp-Source: AMsMyM4CN1gZt1ekjWKIkjRalQnK+kooXMchoouMVBXeZJ7PEf5KQYbsy21qnjEFPRsLixOF3sfWFQ==
-X-Received: by 2002:a0c:9122:0:b0:4b1:80fc:c405 with SMTP id q31-20020a0c9122000000b004b180fcc405mr5381324qvq.120.1665932499824;
-        Sun, 16 Oct 2022 08:01:39 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006e6a7c2a269sm7486671qkp.22.2022.10.16.08.01.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 08:01:38 -0700 (PDT)
-Message-ID: <883386a7-49b7-3465-3d62-76547f10d423@linaro.org>
-Date:   Sun, 16 Oct 2022 11:01:37 -0400
+        Sun, 16 Oct 2022 11:03:13 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439D74150C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:03:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1665932561; bh=Wg6GtD2ZzWSQ6Z/hu/RF4EtKjefFvDhYKsRPqn3anp8=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=owbrKLFcrfJU1G2j85Nua7FP6V3CtoEzK7eF1zqSaJJYW/5am+6bfbO2b9x9tiXsu
+         5MMHc0NmzHGZm8PwiDcTCaYUAMYaXi29SxuwflrlniN24E8Lx98s469JSWmqJmZK4X
+         9qSjCB5IOHQH8FMpoKO5GgFkb6dj7DtdNRJLFeVE=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via [213.182.55.206]
+        Sun, 16 Oct 2022 17:02:41 +0200 (CEST)
+X-EA-Auth: rqDcTQj11g/+I1KNqnWV0ELN5Jcrvy5Et74Xab4CYIiKU78hFJPEs2s2evli4I6kFMQfPGQEIwwtuOW6X69I1t0TYIa33UtB
+Date:   Sun, 16 Oct 2022 20:32:37 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     outreachy@lists.linux.dev, pure.logic@nexus-software.ie,
+        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: loopback: enclose macro statements in
+ do-while loop
+Message-ID: <Y0wdDTUBrUT/cr9w@lion2204>
+References: <Y0wS4HQo9m/W/TrQ@debian-BULLSEYE-live-builder-AMD64>
+ <alpine.DEB.2.22.394.2210161649400.2876@hadrien>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 2/5] arm64: dts: qcom: sc7280: Fix cpufreq-epss compatible
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221016090035.565350-1-luca@z3ntu.xyz>
- <20221016090035.565350-2-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016090035.565350-2-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2210161649400.2876@hadrien>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/10/2022 05:00, Luca Weiss wrote:
-> The bindings require a SoC-specific compatible to be used next to
-> qcom,cpufreq-epss. Add it to make dtbs_check happy.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
+On Sun, Oct 16, 2022 at 04:51:09PM +0200, Julia Lawall wrote:
+>
+>
+> On Sun, 16 Oct 2022, Deepak R Varma wrote:
+>
+> > Include multiple statements of macro definition inside do-while{0} loop
+> > to avoid possible partial program execution. Issue reported by
+> > checkpatch script:
+> >
+> > ERROR: Macros with multiple statements should be enclosed in a do - while loop
+>
+> I don't think this change will compile.  See if you can figure out why
+> not.
 
+It did compile. I built the greybus driver and loaded it as well with the
+modinfo tool. Can you please tell why you think it won't compile?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+./drv
 
-Best regards,
-Krzysztof
+>
+> julia
+>
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/greybus/loopback.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/staging/greybus/loopback.c b/drivers/staging/greybus/loopback.c
+> > index 1a61fce98056..37214cb43937 100644
+> > --- a/drivers/staging/greybus/loopback.c
+> > +++ b/drivers/staging/greybus/loopback.c
+> > @@ -163,9 +163,11 @@ static ssize_t name##_avg_show(struct device *dev,		\
+> >  static DEVICE_ATTR_RO(name##_avg)
+> >
+> >  #define gb_loopback_stats_attrs(field)				\
+> > +do {								\
+> >  	gb_loopback_ro_stats_attr(field, min, u);		\
+> >  	gb_loopback_ro_stats_attr(field, max, u);		\
+> > -	gb_loopback_ro_avg_attr(field)
+> > +	gb_loopback_ro_avg_attr(field);				\
+> > +} while (0)
+> >
+> >  #define gb_loopback_attr(field, type)					\
+> >  static ssize_t field##_show(struct device *dev,				\
+> > --
+> > 2.30.2
+> >
+> >
+> >
+> >
+> >
+
 
