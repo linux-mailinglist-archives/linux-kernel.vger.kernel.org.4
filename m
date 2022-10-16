@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EBA6002C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB17E6002C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiJPSM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 14:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S229792AbiJPSQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 14:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiJPSMy (ORCPT
+        with ESMTP id S229770AbiJPSQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 14:12:54 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA37B482
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:12:53 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id r22so11547647ljn.10
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:12:53 -0700 (PDT)
+        Sun, 16 Oct 2022 14:16:38 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E867E4456F
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:16:36 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id j23so11556205lji.8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vSRr/j+Evb9BMA2XLUvE7/B7qNHF/qpJdEql+dXYhK8=;
-        b=O1fhxdAF8qvfIwtjK6Ez9gV/11wN0p8lVgVvIuYj5OBpkQsM8+0lXbCMJ7ZJgOpumi
-         MDo0Ubxh4pse9UXyLDEhsl2RoO9/isoYMONvYusDoJRRBa99G77p/UNnKpHETdvqVGrE
-         efOT0lVGsrY8bHvbZ6QzyZ1EEpFJRJrDgSO5R7fsSgYJxbdBtPa7HkWmqJ/zhluEoYmC
-         R3NfKAEfIAphn8jXiTl0bHVS+bAqm/Lrab/+AaBV5mokSC9WSfepT0V8+Ae1dFUNwWcI
-         tUCVNq9MNJqRGP9fcjj4Ebk7j6QSDbfmLbg7TejANpbnQ3V10kWjLfk/LjfrkRtD2a+i
-         iM4g==
+        h=content-transfer-encoding:in-reply-to:references:reply-to:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=viplUm+By6s8XGYflV1jaRl8q/qb4f9y9KZgb4QOLdc=;
+        b=mmnJBH4qc8H6AxaIiyfc2vzVCocrgGCP4ib4yJyyUtnrahrAqqBoHWVhpiMA2Z0OW5
+         clJw0eZ5ImFHiphKJGDLJTJwrl5F5EZAB8AQSIvGjbloClAAQeXnYoMdHg/NyMaVmrrx
+         45BTHjzh4BuqwfEA8zksbvlOlz7BSnrV4ReNMW3BvXD5/BdkOdy0eitwWx2u8k03lLKz
+         u4xD5+hFv5grqx6LtotWs14ANU9Ev5Gf0+ICFYsqAftfjkrns9cCaltmHO+gJOc3vzza
+         mTmL+c/PPP4rkIb4BK/mG7N8kfZwWPjUvRAs2jmM/ra5H3udWtZwmKbAMNIDsTFpsFp0
+         IGyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vSRr/j+Evb9BMA2XLUvE7/B7qNHF/qpJdEql+dXYhK8=;
-        b=ygj/B8LGYkWMUatTQ4+bCbPoIBktECm0E/EaKBoFIdRb2UOgY8sL87cIjrL4xz+yKx
-         sv+Mz6CaJEJGzoXLK4sq6O81rZBvgPXgjquRtSsnnDmC7bN4SU7gVWDjrRI2burpMG1K
-         KWmf7+Vxnh8dypvexiBVCjQGe6GORhzgZbiCt3Dag2liIZotoSWl0CrlSU82uTJf8cGl
-         0z3xK+m68f8Wd0gYbKG89xvM2J/XiLqAsEUZ/CXcOyT6bdc1WRz1tr6INNJCuUchsLH/
-         slnI1G7aNcwqmNJtaDkWAJmgHeNbpuFhbNxI9M4aWHA67ecglJMUTUPzQtdTjvDoyf2N
-         bGIQ==
-X-Gm-Message-State: ACrzQf1IuA0WAzMZfjeyjnlkO9Cy9dO+u6oUbf7IZoDYw4DUYOjJOEti
-        /VxuEEOKF35MA+8LhWiDaKk=
-X-Google-Smtp-Source: AMsMyM6G7or2Zfll1bkzGF3XgYT5NLQwy7/HNt8cKpX2f0lKVqjZvpCuHpkEEnOFiBR1UkEUl448zw==
-X-Received: by 2002:a2e:54a:0:b0:26e:1ab:c507 with SMTP id 71-20020a2e054a000000b0026e01abc507mr2807766ljf.215.1665943971567;
-        Sun, 16 Oct 2022 11:12:51 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:references:reply-to:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=viplUm+By6s8XGYflV1jaRl8q/qb4f9y9KZgb4QOLdc=;
+        b=55Mrgv4m80DCo90tvQzfiMByST43Zsy2CLdB6yPAqIa+kuEs4f/iT0I9PuA+0A3U8H
+         sO806whakZ/t1u13tiXkgdYLhY+4KoiY/+hvd4zl3iFtcdfzyMb+MOqgMjP/0ZECWa54
+         BfTkOUNVBJA0vsMVwB3iNmCjq3fRjlAKPtvXUAQAHthrEUnHGZAGdOcAqz0hPclesQEx
+         BH4Oav5dxL9b54x6XH6/Ezu/eYe9l05l0D2S5PRBRK9SvsZiKgxrGikZRa7SCs7yrlPT
+         lBRLEe+3RRDnkOyveQqefbalRNng0CryqBQLLP1PQeFLeFB3G87cWIYr5uuVMSOWAr8M
+         1e0w==
+X-Gm-Message-State: ACrzQf0SFZzetmTaWdOH0PWYBUh5PeNuuQgwoufAaDJSnIJWk/zJg9HT
+        nH2cg8r/t/2LtsK6NnWzXnE=
+X-Google-Smtp-Source: AMsMyM4pArN3BwjOOqgh65fdbAs3K1mXozFp1Q1IXi9e4aIE3VoeXv03ELNht5+KUG+fPNd+NUMejg==
+X-Received: by 2002:a2e:91c8:0:b0:26e:977a:14b1 with SMTP id u8-20020a2e91c8000000b0026e977a14b1mr2876789ljg.379.1665944195109;
+        Sun, 16 Oct 2022 11:16:35 -0700 (PDT)
 Received: from ?IPV6:2a02:a31a:a240:1700:64bb:87df:aad7:a9f0? ([2a02:a31a:a240:1700:64bb:87df:aad7:a9f0])
-        by smtp.googlemail.com with ESMTPSA id 5-20020ac25f05000000b00492e3a8366esm1144735lfq.9.2022.10.16.11.12.49
+        by smtp.googlemail.com with ESMTPSA id p22-20020a2eba16000000b0026dffa29989sm1221591lja.23.2022.10.16.11.16.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 11:12:50 -0700 (PDT)
+        Sun, 16 Oct 2022 11:16:34 -0700 (PDT)
 From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
 X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <270c4a51-0a03-f048-46da-ab37900f8b91@gmail.com>
-Date:   Sun, 16 Oct 2022 20:12:48 +0200
+Message-ID: <31759a06-ddd0-6b78-0e10-8e8754f394f9@gmail.com>
+Date:   Sun, 16 Oct 2022 20:16:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.3.3
-Reply-To: kfyatek+publicgit@gmail.com
 Subject: Re: [PATCH v5 19/22] drm/vc4: vec: Check for VEC output constraints
 Content-Language: pl
 To:     Maxime Ripard <maxime@cerno.tech>,
@@ -87,9 +85,11 @@ Cc:     Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
         dri-devel@lists.freedesktop.org,
         Hans de Goede <hdegoede@redhat.com>,
         Phil Elwell <phil@raspberrypi.com>
+Reply-To: kfyatek+publicgit@gmail.com
 References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
  <20220728-rpi-analog-tv-properties-v5-19-d841cc64fe4b@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v5-19-d841cc64fe4b@cerno.tech>
+ <270c4a51-0a03-f048-46da-ab37900f8b91@gmail.com>
+In-Reply-To: <270c4a51-0a03-f048-46da-ab37900f8b91@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -104,9 +104,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Maxime,
 
-W dniu 13.10.2022 o 15:19, Maxime Ripard pisze:
-> From: Mateusz Kwiatkowski > > The VEC can accept pretty much any relatively reasonable mode, but still > has a bunch of constraints to meet. > > Let's create an atomic_check() implementation that will make sure we > don't end up accepting a non-functional mode. > > Acked-by: Noralf Trønnes > Signed-off-by: Mateusz Kwiatkowski > Signed-off-by: Maxime Ripard > --- > drivers/gpu/drm/vc4/vc4_vec.c | 48 +++++++++++++++++++++++++++++++++++++++++++ > 1 file changed, 48 insertions(+) > > diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c > index 90e375a8a8f9..1fcb7baf874e 100644 > --- a/drivers/gpu/drm/vc4/vc4_vec.c > +++ b/drivers/gpu/drm/vc4/vc4_vec.c > @@ -453,6 +453,7 @@ static int vc4_vec_encoder_atomic_check(struct drm_encoder *encoder, > struct drm_crtc_state *crtc_state, > struct drm_connector_state *conn_state) > { > + const struct drm_display_mode *mode = &crtc_state->adjusted_mode; > const struct vc4_vec_tv_mode *vec_mode; > > vec_mode =
-&vc4_vec_tv_modes[conn_state->tv.legacy_mode]; > @@ -461,6 +462,53 @@ static int vc4_vec_encoder_atomic_check(struct drm_encoder *encoder, > !drm_mode_equal(vec_mode->mode, &crtc_state->adjusted_mode)) > return -EINVAL; > > + if (mode->crtc_hdisplay % 4) > + return -EINVAL; > + > + if (!(mode->crtc_hsync_end - mode->crtc_hsync_start)) > + return -EINVAL; > + > + switch (mode->vtotal) { > + case 525: > + if (mode->crtc_vtotal > 262) > + return -EINVAL; > + > + if (mode->crtc_vdisplay < 1 || mode->crtc_vdisplay > 253) > + return -EINVAL; > + > + if (!(mode->crtc_vsync_start - mode->crtc_vdisplay)) > + return -EINVAL; > + > + if ((mode->crtc_vsync_end - mode->crtc_vsync_start) != 3) > + return -EINVAL; > + > + if ((mode->crtc_vtotal - mode->crtc_vsync_end) < 4) > + return -EINVAL; > + > + break; > + > + case 625: > + if (mode->crtc_vtotal > 312) > + return -EINVAL; > + > + if (mode->crtc_vdisplay < 1 || mode->crtc_vdisplay > 305) > + return -EINVAL; > + > + if
-(!(mode->crtc_vsync_start - mode->crtc_vdisplay)) > + return -EINVAL; > + > + if ((mode->crtc_vsync_end - mode->crtc_vsync_start) != 3) > + return -EINVAL; > + > + if ((mode->crtc_vtotal - mode->crtc_vsync_end) < 2) > + return -EINVAL; > + > + break; > + > + default: > + return -EINVAL; > + } > + > return 0; > } In my original version of this function (https://github.com/raspberrypi/linux/pull/4406/files) the switch is over reference_mode->vtotal, not mode->vtotal. This was intended to explicitly allow a different value of mode->vtotal, to support non-standard modes, such as "fake" 525 lines with SECAM encoding, or the progressive modes. You're switching over mode->vtotal, which makes specifying those impossible. I don't think we should limit the users like that. We're removing reference_mode in patch 20/22, so adding a switch over reference_mode->vtotal is probably not a good idea -- in that case I'd switch over mode->htotal instead: 858 for "NTSC" and 864 for "PAL". This
-may seem a bit weird, but any other value of htotal causes the VEC to output garbage anyway. Best regards, Mateusz Kwiatkowski
+Sorry about the mess that happened to the previous message. I hope this one
+will be delivered more cleanly.
 
+W dniu 13.10.2022 o 15:19, Maxime Ripard pisze:
+> From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+>
+> The VEC can accept pretty much any relatively reasonable mode, but still
+> has a bunch of constraints to meet.
+>
+> Let's create an atomic_check() implementation that will make sure we
+> don't end up accepting a non-functional mode.
+>
+> Acked-by: Noralf Trønnes <noralf@tronnes.org>
+> Signed-off-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/vc4/vc4_vec.c | 48 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+> index 90e375a8a8f9..1fcb7baf874e 100644
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -453,6 +453,7 @@ static int vc4_vec_encoder_atomic_check(struct drm_encoder *encoder,
+>                      struct drm_crtc_state *crtc_state,
+>                      struct drm_connector_state *conn_state)
+>  {
+> +    const struct drm_display_mode *mode = &crtc_state->adjusted_mode;
+>      const struct vc4_vec_tv_mode *vec_mode;
+>  
+>      vec_mode = &vc4_vec_tv_modes[conn_state->tv.legacy_mode];
+> @@ -461,6 +462,53 @@ static int vc4_vec_encoder_atomic_check(struct drm_encoder *encoder,
+>          !drm_mode_equal(vec_mode->mode, &crtc_state->adjusted_mode))
+>          return -EINVAL;
+>  
+> +    if (mode->crtc_hdisplay % 4)
+> +        return -EINVAL;
+> +
+> +    if (!(mode->crtc_hsync_end - mode->crtc_hsync_start))
+> +        return -EINVAL;
+> +
+> +    switch (mode->vtotal) {
+> +    case 525:
+> +        if (mode->crtc_vtotal > 262)
+> +            return -EINVAL;
+> +
+> +        if (mode->crtc_vdisplay < 1 || mode->crtc_vdisplay > 253)
+> +            return -EINVAL;
+> +
+> +        if (!(mode->crtc_vsync_start - mode->crtc_vdisplay))
+> +            return -EINVAL;
+> +
+> +        if ((mode->crtc_vsync_end - mode->crtc_vsync_start) != 3)
+> +            return -EINVAL;
+> +
+> +        if ((mode->crtc_vtotal - mode->crtc_vsync_end) < 4)
+> +            return -EINVAL;
+> +
+> +        break;
+> +
+> +    case 625:
+> +        if (mode->crtc_vtotal > 312)
+> +            return -EINVAL;
+> +
+> +        if (mode->crtc_vdisplay < 1 || mode->crtc_vdisplay > 305)
+> +            return -EINVAL;
+> +
+> +        if (!(mode->crtc_vsync_start - mode->crtc_vdisplay))
+> +            return -EINVAL;
+> +
+> +        if ((mode->crtc_vsync_end - mode->crtc_vsync_start) != 3)
+> +            return -EINVAL;
+> +
+> +        if ((mode->crtc_vtotal - mode->crtc_vsync_end) < 2)
+> +            return -EINVAL;
+> +
+> +        break;
+> +
+> +    default:
+> +        return -EINVAL;
+> +    }
+> +
+>      return 0;
+>  }
+>  
+>
+
+In my original version of this function
+(https://github.com/raspberrypi/linux/pull/4406/files) the switch is over
+reference_mode->vtotal, not mode->vtotal. This was intended to explicitly allow
+a different value of mode->vtotal, to support non-standard modes, such as "fake"
+525 lines with SECAM encoding, or the progressive modes.
+
+You're switching over mode->vtotal, which makes specifying those impossible.
+I don't think we should limit the users like that.
+
+We're removing reference_mode in patch 20/22, so adding a switch over
+reference_mode->vtotal is probably not a good idea -- in that case I'd switch
+over mode->htotal instead: 858 for "NTSC" and 864 for "PAL". This may seem a bit
+weird, but any other value of htotal causes the VEC to output garbage anyway.
+
+Best regards,
+Mateusz Kwiatkowski
