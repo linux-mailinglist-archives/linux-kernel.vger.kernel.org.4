@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C365FFE8C
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 11:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02F85FFE8E
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 11:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJPJ6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 05:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S229745AbiJPJ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 05:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJPJ6m (ORCPT
+        with ESMTP id S229712AbiJPJ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 05:58:42 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AC42F66B
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 02:58:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so8519944pjo.4
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 02:58:40 -0700 (PDT)
+        Sun, 16 Oct 2022 05:58:46 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A77336DDA
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 02:58:44 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 67so8675740pfz.12
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 02:58:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dGtXWioNl23rW8/5PZCxfXNs96/lCBczDCDN08pJgeE=;
-        b=gZoqZQA+VejqjudxyDRZRTdLGp7mPiU4gdY/9o/1PGcLZpSUxvYUJGs3xZzf8APrPA
-         ZIOu0QsWCBUzknjQPaagSvSPQj3khFXtqGAGuOAOltolU6nxckCTH98DLhVX5FjM2ZOg
-         y9UwjieMFvRH+0u9uyQhdzz9ZjciIG5iqqbUqQBvMVTQ+Y7RlFLLjM4HySBx1IIMtBRm
-         d5OZ39n8ce/HTThh6z8BJvr112L5v4BGIW43hX6QC0hdfYRxhVBUk8agPNH7Iy2QP19X
-         WYrxSK7rRrJSuuwDDwtT9c79VKBzloVRvzlpzG0BL19CeuSS4RVYOH1qqu1lT+WNcE9K
-         h2TA==
+        bh=apttPogZPuWSTkpcshSvusTStupOpIbnisKrYu+q1ls=;
+        b=qt8x47++WeLGlR1rL/oqJJ25Q0JgsCvq6siuhsG98podW+UGqu2ZlP2SzLF+MoEvct
+         cOIUaa3Cninhl65CPH3oT/WsflP6LN63T7AnJE5ShFdAwYqvtHWmPUlWEqHH2q+QYMV2
+         vW3ZO4+xBoEvxlEoB430Xi3X6ooC1tc3us3781R3vjBgIPSzP/1sZGQXK0iqCHOI+rkY
+         H5fxh38aacsI2JbDQ+yCdTnr0QrepPiaTp2ZRdo7LKsUGQdU/dDGFZW/vnGKkpLftblx
+         Pq1nFUsEPWQyfHxA49zQd5TqWnYiaT2rw3WdS+7tZZ7WPyFR+rIGsVWRInLqpdkqm3EW
+         WW5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dGtXWioNl23rW8/5PZCxfXNs96/lCBczDCDN08pJgeE=;
-        b=2zy91G05JvK11us2f8kK3UWKi18HSmECLQkNNUIfMZaVNOmZTV2yFEWlGQlc5nnGmK
-         Fgb+cWfKaRBVH4NaRPiNaVQo5zkX4CwRFozX8P2ODp2O8NP62lNqyB3Nh9DFM5sDCf1J
-         75Z7WZoV5FaYpqvuoeoMss2qPzTbsNpAGwPUh0tYxRwqN2J+mXaXaRkWkqM3sUHUrCwb
-         KI+kOGZvx+R0iskbzxN+wCpGvYxsIJNFMQ5FL9aPZNrw2CVYc7NbYcK/Q8BqoUuoQrLu
-         1J6tfVppDmlWULO0eKs8KHObFJPmfPnuWRBL05XH7MNhex/u2AgvDXMcF+parPCf9428
-         G5Dw==
-X-Gm-Message-State: ACrzQf1WMDxAVE6iQQ18v4wMu75kjkVkQ8jzDu2Ky+kdHuDriraTAeVl
-        Xo/768v/kCiNYO+xp+sRj51AOQ==
-X-Google-Smtp-Source: AMsMyM6ojMoUiIcg7QL4r+LLc0pcPfZjxl2ex/mtdiSuPBQKTtTD7up0m8auOOHFa5nT7sTX2zVs8w==
-X-Received: by 2002:a17:903:30d4:b0:184:fadd:ec27 with SMTP id s20-20020a17090330d400b00184faddec27mr6367766plc.44.1665914319981;
-        Sun, 16 Oct 2022 02:58:39 -0700 (PDT)
+        bh=apttPogZPuWSTkpcshSvusTStupOpIbnisKrYu+q1ls=;
+        b=DcLoTQJ6E2pjrK6WHeqKNkuOYu27MQEZHyla8OlfFjWHFDNql1pWM3B5VmTHJxWBBV
+         Vr7RxsxRGKwvtZWil9M3cg7CE+AhcnjD0qjXaupbkmV3BzlAAFrMP+ufSB3fO2Hu1/dd
+         NHUvzlUO8k7zdEt6Q5AQkH643jKM/trjNPdsE5zV1LsnNpMs6Ve2zzl8uOI7yPsbynWj
+         XsH0AFlF1NNRVLLDo+TCiOr9SeXdpwnsatrYlXHodVVHYcC7Yd937fosyTwKF5T798xs
+         DFX5cvIHEnFtOkll2uzZFjAPuhlhT2y72LgsKPLjoNxAQkEzAqtPNDrqydnoy+sOf1ec
+         +o7g==
+X-Gm-Message-State: ACrzQf06KXh665fkAh8rUD+vDGqYaZ/dgh3dF6J1pM3gNbNdDJQKFd1Q
+        S1QdXrUP63r+x8wPj99ci6v94Q==
+X-Google-Smtp-Source: AMsMyM4gvisI7aGA7JEPGiecuP1jgx0ISyLNihnFwAA6f/3j8BPT9SWUt4f8UgD/ylogFU9RqmW0Vg==
+X-Received: by 2002:a63:1e5a:0:b0:43c:b966:e2d6 with SMTP id p26-20020a631e5a000000b0043cb966e2d6mr5722678pgm.569.1665914323414;
+        Sun, 16 Oct 2022 02:58:43 -0700 (PDT)
 Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170902d49200b001745662d568sm4481838plg.278.2022.10.16.02.58.36
+        by smtp.gmail.com with ESMTPSA id c18-20020a170902d49200b001745662d568sm4481838plg.278.2022.10.16.02.58.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 02:58:39 -0700 (PDT)
+        Sun, 16 Oct 2022 02:58:42 -0700 (PDT)
 From:   Shawn Guo <shawn.guo@linaro.org>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     Kevin Hilman <khilman@kernel.org>,
@@ -58,13 +58,14 @@ Cc:     Kevin Hilman <khilman@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH 2/3] PM: domains: Consolidate genpd_restore_noirq() and genpd_resume_noirq()
-Date:   Sun, 16 Oct 2022 17:58:14 +0800
-Message-Id: <20221016095815.2550034-3-shawn.guo@linaro.org>
+Subject: [PATCH 3/3] PM: domains: Power off[on] domain in hibernate .freeze[thaw]_noirq hook
+Date:   Sun, 16 Oct 2022 17:58:15 +0800
+Message-Id: <20221016095815.2550034-4-shawn.guo@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221016095815.2550034-1-shawn.guo@linaro.org>
 References: <20221016095815.2550034-1-shawn.guo@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -75,94 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the logic between genpd_restore_noirq() and genpd_resume_noirq()
-are same except GENPD_STATE_OFF status reset for hibernation restore.
-The suspended_count decrement for restore should be the right thing to do
-anyway, considering there is an increment in genpd_finish_suspend() for
-hibernation.
+On platforms which use SHUTDOWN as hibernation mode, the genpd noirq
+hooks will be called like below.
 
-Consolidate genpd_restore_noirq() and genpd_resume_noirq() into
-genpd_finish_resume() and handle GENPD_STATE_OFF status reset for
-restore case specially.
+    genpd_freeze_noirq()         genpd_restore_noirq()
+          ↓                            ↑
+    Create snapshot image        Restore system
+          ↓                            ↑
+    genpd_thaw_noirq()           Read snapshot image
+          ↓                            ↑
+    Write snapshot image         Kernel boot
+          ↓                            ↑
+    power_down()                 Power on device
+
+As of today suspend hooks genpd_suspend[resume]_noirq() manages domain
+on/off state, but hibernate hooks genpd_freeze[thaw]_noirq() doesn't.
+This results in a different behavior of domain power state between suspend
+and hibernate freeze, i.e. domain is powered off for the former while on
+for the later.  It causes a problem on platforms like i.MX where the
+domain needs to be powered on/off by calling clock and regulator interface.
+When the platform restores from hibernation, the domain is off in hardware
+and genpd_restore_noirq() tries to power it on, but will never succeed
+because software state of domain (clock and regulator) is left on from the
+last hibernate freeze, so kernel thinks that clock and regulator are
+enabled while they are actually not turned on in hardware.  The
+consequence would be that devices in the power domain will access
+registers without clock or power, and cause hardware lockup.
+
+Power off[on] domain in hibernate .freeze[thaw]_noirq hook for reasons:
+
+- Align the behavior between suspend and hibernate freeze.
+- Have power state of domains stay in sync between hardware and software
+  for hibernate freeze, and thus fix the lockup issue seen on i.MX power
+  platform.
 
 Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 ---
- drivers/base/power/domain.c | 70 ++++++++++++++++++-------------------
- 1 file changed, 35 insertions(+), 35 deletions(-)
+ drivers/base/power/domain.c | 35 ++++-------------------------------
+ 1 file changed, 4 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 01f5644938e0..fc0ac9e6050e 100644
+index fc0ac9e6050e..2497a43737e0 100644
 --- a/drivers/base/power/domain.c
 +++ b/drivers/base/power/domain.c
-@@ -1247,12 +1247,14 @@ static int genpd_suspend_noirq(struct device *dev)
- }
- 
- /**
-- * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
-+ * genpd_resume_noirq - Completion of resume of device in an I/O PM domain.
-  * @dev: Device to resume.
-+ * @resume_noirq: Generic resume_noirq callback.
-  *
-  * Restore power to the device's PM domain, if necessary, and start the device.
+@@ -1323,24 +1323,11 @@ static int genpd_resume_noirq(struct device *dev)
   */
--static int genpd_resume_noirq(struct device *dev)
-+static int genpd_finish_resume(struct device *dev,
-+			       int (*resume_noirq)(struct device *dev))
+ static int genpd_freeze_noirq(struct device *dev)
  {
- 	struct generic_pm_domain *genpd;
- 	int ret;
-@@ -1264,9 +1266,25 @@ static int genpd_resume_noirq(struct device *dev)
- 		return -EINVAL;
- 
- 	if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
--		return pm_generic_resume_noirq(dev);
-+		return resume_noirq(dev);
- 
- 	genpd_lock(genpd);
-+
-+	/*
-+	 * Special handling for hibernation restore:
-+	 * At this point suspended_count == 0 means we are being run for the
-+	 * first time for the given domain in the present cycle.
-+	 */
-+	if (resume_noirq == pm_generic_restore_noirq &&
-+	    genpd->suspended_count++ == 0) {
-+		/*
-+		 * The boot kernel might put the domain into arbitrary state,
-+		 * so make it appear as powered off to genpd_sync_power_on(),
-+		 * so that it tries to power it on in case it was really off.
-+		 */
-+		genpd->status = GENPD_STATE_OFF;
-+	}
-+
- 	genpd_sync_power_on(genpd, true, 0);
- 	genpd->suspended_count--;
- 	genpd_unlock(genpd);
-@@ -1281,6 +1299,19 @@ static int genpd_resume_noirq(struct device *dev)
- 	return pm_generic_resume_noirq(dev);
- }
- 
-+/**
-+ * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
-+ * @dev: Device to resume.
-+ *
-+ * Restore power to the device's PM domain, if necessary, and start the device.
-+ */
-+static int genpd_resume_noirq(struct device *dev)
-+{
-+	dev_dbg(dev, "%s()\n", __func__);
-+
-+	return genpd_finish_resume(dev, pm_generic_resume_noirq);
-+}
-+
- /**
-  * genpd_freeze_noirq - Completion of freezing a device in an I/O PM domain.
-  * @dev: Device to freeze.
-@@ -1366,40 +1397,9 @@ static int genpd_poweroff_noirq(struct device *dev)
-  */
- static int genpd_restore_noirq(struct device *dev)
- {
--	struct generic_pm_domain *genpd;
+-	const struct generic_pm_domain *genpd;
 -	int ret = 0;
 -
  	dev_dbg(dev, "%s()\n", __func__);
@@ -171,22 +132,33 @@ index 01f5644938e0..fc0ac9e6050e 100644
 -	if (IS_ERR(genpd))
 -		return -EINVAL;
 -
--	/*
--	 * At this point suspended_count == 0 means we are being run for the
--	 * first time for the given domain in the present cycle.
--	 */
--	genpd_lock(genpd);
--	if (genpd->suspended_count++ == 0) {
--		/*
--		 * The boot kernel might put the domain into arbitrary state,
--		 * so make it appear as powered off to genpd_sync_power_on(),
--		 * so that it tries to power it on in case it was really off.
--		 */
--		genpd->status = GENPD_STATE_OFF;
--	}
+-	ret = pm_generic_freeze_noirq(dev);
+-	if (ret)
+-		return ret;
 -
--	genpd_sync_power_on(genpd, true, 0);
--	genpd_unlock(genpd);
+-	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+-	    !pm_runtime_status_suspended(dev))
+-		ret = genpd_stop_dev(genpd, dev);
+-
+-	return ret;
++	return genpd_finish_suspend(dev,
++				    pm_generic_freeze_noirq,
++				    pm_generic_thaw_noirq);
+ }
+ 
+ /**
+@@ -1352,23 +1339,9 @@ static int genpd_freeze_noirq(struct device *dev)
+  */
+ static int genpd_thaw_noirq(struct device *dev)
+ {
+-	const struct generic_pm_domain *genpd;
+-	int ret = 0;
+-
+ 	dev_dbg(dev, "%s()\n", __func__);
+ 
+-	genpd = dev_to_genpd(dev);
+-	if (IS_ERR(genpd))
+-		return -EINVAL;
 -
 -	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
 -	    !pm_runtime_status_suspended(dev)) {
@@ -195,8 +167,8 @@ index 01f5644938e0..fc0ac9e6050e 100644
 -			return ret;
 -	}
 -
--	return pm_generic_restore_noirq(dev);
-+	return genpd_finish_resume(dev, pm_generic_restore_noirq);
+-	return pm_generic_thaw_noirq(dev);
++	return genpd_finish_resume(dev, pm_generic_thaw_noirq);
  }
  
  /**
