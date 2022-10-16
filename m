@@ -2,54 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CD26002BA
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940196002B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJPSKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 14:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S229646AbiJPSKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 14:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiJPSKe (ORCPT
+        with ESMTP id S229663AbiJPSJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 14:10:34 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21A92FC0F;
-        Sun, 16 Oct 2022 11:10:21 -0700 (PDT)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 29GI9iws009462;
-        Mon, 17 Oct 2022 03:09:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 29GI9iws009462
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665943785;
-        bh=7hgllq+u5KafkXbLu/L7mhMYeT8lSvm1lZlkn+irFHM=;
-        h=From:Date:Subject:To:Cc:From;
-        b=GfAtMjvMR6BaY2pmFWaoFDhWb21k5YbVasS2VCeAP7jMylS9Jp3Q87WrjbT2v3ybE
-         aS6C2cR1zK4agSf84r0LX2EJSk8nqdJWpvu0LwGuG0FSa9F0Eu624C7yLgtOKIrNvM
-         cVsrSUBVycOrdity39B4LeLYcAYXaSP36QqxfiSdUqx8lOEvMf+nFxSJzwtwUt1c0r
-         xWwGuO3h7PvZs7jOx82uA7E/xrzmD7w6y/c3Pb6Fyf+owGDHEZO3m3HsKRHFdgyfpj
-         aUvOi/Q2EqB4fum2ZYQ+Ko2MZBy9ShWaGQxOK7kxCd+nmCUqyW6TOyn4U+T+QrCjYc
-         kdNyCg8YXF4Cg==
-X-Nifty-SrcIP: [209.85.210.49]
-Received: by mail-ot1-f49.google.com with SMTP id p24-20020a9d6958000000b00661c528849eso4652079oto.9;
+        Sun, 16 Oct 2022 14:09:49 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5362117AA4
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:09:47 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id w18so15154935wro.7
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lKX8sLbXqFEyfL/b3ZjUwDYXx8N7tsBaTEOHjLLDLgg=;
+        b=T0ksjtS64SgZg+ynjnhdZrQdSg4bAyz710FjraW3gjDq2p8ORsc6wHFhCa/aePZurJ
+         ytDBmb7rVC0T/RvAZclMcIDWL0AZp4gWSml78Zg26uo7JFkTQncC92Ks9Axb/Boshpkt
+         l8PMYuyCVxq4vpOSf/Uj09dbbfLKN94En1stpAWCvNLSJ7zRKP2uge/793nvWvw3N2aP
+         IuZPiWof0s6JKlg3QUW7yw0yYQt4Zi4/LW9sbZLXgnSFTyK2ohwpq6V9gFFPCRnm5dso
+         J0JURalvtRI5PamaE1DttY2ToJ50QaJs0Lo+lN6QQtByYr/wpjf5b0uTP5U7mP+fFwxR
+         h1UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lKX8sLbXqFEyfL/b3ZjUwDYXx8N7tsBaTEOHjLLDLgg=;
+        b=5klLUl0KUzHinOQevzEbU8d4g+qxJ1n1IBxPHT3xvAtFxHvL3jOecTurHO5sYeIu3J
+         UPX9QUzx7m0PAFNUL6Unn6wxAQMwtW4bYJ5vz1noioAo3nPPBHk9FClyWma9akmzQt1c
+         dC4lY/dFxtI87zQcAxf85HFob0S+lPDvXSaYwsqACjkSwmbsqdyXYcRkNuDjQ4CWYe4q
+         9Kq2ICSPTkNJk8KZuVdYvrXpsDPYpg7zgy5kQnTl4Nk2/FhxZurdg+JRbhCNEssaDOjd
+         /j8tFXI/cWthIMZ43scGWA9BNZ6zB2gwKXet4s82DuKSxU7Lu+e/0mvYxxlwyPbGuBEu
+         mJHw==
+X-Gm-Message-State: ACrzQf0rmvtKC6YEvnMerqwYBOj01hoRa2XynQ1xi4XOvLi4BvpYdXAV
+        JwuRq/HHiGjHsw97fDSsd8I=
+X-Google-Smtp-Source: AMsMyM5OBZbpCpK+rtWXQ5hh89eacxaqxDOXFM4ZEp/IMVaftu5b7+IXgZMPp0kzBWoOY7N/Fo2ArQ==
+X-Received: by 2002:adf:e2c8:0:b0:230:ba81:cf0c with SMTP id d8-20020adfe2c8000000b00230ba81cf0cmr4520684wrj.357.1665943785730;
+        Sun, 16 Oct 2022 11:09:45 -0700 (PDT)
+Received: from localhost.localdomain (host-95-250-231-122.retail.telecomitalia.it. [95.250.231.122])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b003c6f8d30e40sm156225wmn.31.2022.10.16.11.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 16 Oct 2022 11:09:44 -0700 (PDT)
-X-Gm-Message-State: ACrzQf00rkZV54KJWX2ZHVeTEh14COc06oxd5QZIProqKAAWm2/har/s
-        7CgcbWn9MEovHZo5Ua5XqrUylzvlO08e6nNLQOc=
-X-Google-Smtp-Source: AMsMyM68ZvVereSYU6w/ELszD8gcDD2ov1yZZh+drmvtGRbr1j5eeMbmlvgRP5uaz/Iu3yWGipaYtypHgQ9lGaLRaDQ=
-X-Received: by 2002:a05:6830:6384:b0:661:bee5:73ce with SMTP id
- ch4-20020a056830638400b00661bee573cemr3488230otb.343.1665943783691; Sun, 16
- Oct 2022 11:09:43 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [RESEND PATCH 0/3] drm/i915: Replace kmap() with kmap_local_page()
+Date:   Sun, 16 Oct 2022 20:09:35 +0200
+Message-Id: <20221016180938.17403-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 17 Oct 2022 03:09:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQThQhJRDsFrHo=3sYd5MTFq_R_7CNjpoPmsNeO7WWmGA@mail.gmail.com>
-Message-ID: <CAK7LNAQThQhJRDsFrHo=3sYd5MTFq_R_7CNjpoPmsNeO7WWmGA@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,75 +90,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+kmap() is being deprecated in favor of kmap_local_page().
 
-Please pull some Kbuild fixes.
-Thanks.
+There are two main problems with kmap(): (1) It comes with an overhead as
+mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
+Since its use in drm/i915 is safe everywhere, it should be preferred.
 
+Therefore, replace kmap() with kmap_local_page() in drm/i915.
 
+These changes should be tested in an 32 bits system, booting a kernel
+with HIGHMEM enabled. Unfortunately I have no i915 based hardware,
+therefore any help with testing would be greatly appreciated.
 
+I'm resending this little series because I suspect that it has been
+lost, since it was submitted on Aug 11, 2022. In the meantime I'm
+adding one more recipient (Anirudh) who is helping, along with others, Ira
+and me with these conversions / removals of kmap() and kmap_atomic() 
 
-The following changes since commit e2302539dd4f1c62d96651c07ddb05aa2461d29c:
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-  Merge tag 'xtensa-20221010' of
-https://github.com/jcmvbkbc/linux-xtensa (2022-10-10 14:21:11 -0700)
+Fabio M. De Francesco (3):
+  drm/i915: Replace kmap() with kmap_local_page()
+  drm/i915/gt: Replace kmap() with kmap_local_page()
+  drm/i915/gem: Replace kmap() with kmap_local_page()
 
-are available in the Git repository at:
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c          |  6 ++----
+ drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c |  8 ++++----
+ drivers/gpu/drm/i915/gt/intel_ggtt_fencing.c       |  4 ++--
+ drivers/gpu/drm/i915/gt/shmem_utils.c              | 11 ++++-------
+ drivers/gpu/drm/i915/i915_gem.c                    |  8 ++++----
+ 5 files changed, 16 insertions(+), 21 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v6.1
+-- 
+2.37.1
 
-for you to fetch changes up to 0a6de78cff600cb991f2a1b7ed376935871796a0:
-
-  lib/Kconfig.debug: Add check for non-constant .{s,u}leb128 support
-to DWARF5 (2022-10-17 02:06:47 +0900)
-
-----------------------------------------------------------------
-Kbuild fixes for v6.1
-
- - Fix CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y compile error for
-   the combination of Clang >= 14 and GAS <= 2.35.
-
- - Drop vmlinux.bz2 from the rpm package as it just annoyingly increased
-   the package size.
-
- - Fix modpost error under build environments using musl.
-
- - Make *.ll files keep value names for easier debugging
-
- - Fix single directory build
-
- - Prevent RISC-V from selecting the broken DWARF5 support when Clang
-   and GAS are used together.
-
-----------------------------------------------------------------
-Guru Das Srinagesh (1):
-      scripts/clang-tools: Convert clang-tidy args to list
-
-Masahiro Yamada (3):
-      Kconfig.debug: simplify the dependency of DEBUG_INFO_DWARF4/5
-      Kconfig.debug: add toolchain checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-      kbuild: fix single directory build
-
-Nathan Chancellor (1):
-      lib/Kconfig.debug: Add check for non-constant .{s,u}leb128
-support to DWARF5
-
-Nick Desaulniers (1):
-      kbuild: add -fno-discard-value-names to cmd_cc_ll_c
-
-Richard Acayan (1):
-      modpost: put modpost options before argument
-
-Zack Rusin (1):
-      kbuild: Stop including vmlinux.bz2 in the rpm's
-
- Makefile                               |  2 ++
- lib/Kconfig.debug                      | 10 ++++++++--
- scripts/Makefile.build                 |  2 +-
- scripts/Makefile.modpost               |  2 +-
- scripts/clang-tools/run-clang-tools.py | 11 ++++++-----
- scripts/package/mkspec                 |  2 --
- 6 files changed, 18 insertions(+), 11 deletions(-)
