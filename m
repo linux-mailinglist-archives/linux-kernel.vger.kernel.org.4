@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2345FFF24
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 14:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8B15FFF2C
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 14:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJPM13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 08:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S229729AbiJPMbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 08:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJPM11 (ORCPT
+        with ESMTP id S229607AbiJPMbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 08:27:27 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F5C3641A
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 05:27:26 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id y13-20020a056e021bed00b002faba3c4afbso7270397ilv.13
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 05:27:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=azz03TvcT1mxFATNvb208YrWn1K4n+hzSLCQr9VTN6k=;
-        b=VVPc/veurQqk3vMxZrNxv6kz+6kll96PcgSuMM+AL7YR+JL+1VLooEMHsgOvfLYz7W
-         mfyjB7iGHNgChJMzsZQkOkfFa66/58LZu7PlbVDvPBO4kXeYhwXU6yUSDUCsMODWOqCb
-         tUwOvvTQnaonu9sVX8WYkwC9dos94mgYmOOCFAqZBwjKXUkiAmEBSU9+B7OHL3emqPyM
-         f0jIO/VQ0tD5Haurolc7LGzGzLaF9NYz6wAQqmk6A8Q2tzc5xflirmdsb2tqfXwYmbZz
-         AWFSdkHn2nZU/kttaT7ZDnhINzJn9hiCvzEIygEVCC1Gokyqg9Xeis4Rq8dChq8m2zsP
-         BLtw==
-X-Gm-Message-State: ACrzQf0nOQN0+dLFr6ED3XXzHnfKZPQ+BIwvtUU2hhG8ptv/SDjaYexz
-        sbQR7iM603JtQXocODXPbFoD5jZKh1bmXxCWupVr+HnVpElu
-X-Google-Smtp-Source: AMsMyM4a7qhSCCRc/XX7AHGmeXm/qwLDPeYjDvsTKFvtFN/qC2w7LWgG2Thxypd6zZyBbZqrN3t7+OBFWv0JgQoPhibW9DGJS8dQ
+        Sun, 16 Oct 2022 08:31:17 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4855931DC2;
+        Sun, 16 Oct 2022 05:31:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EFD8933A41;
+        Sun, 16 Oct 2022 12:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1665923473; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=cmSrk5ohlKDQGsqQAPHO6K6HuIiAnaadRCI43kFH8yI=;
+        b=sLxV0XqaYkIuigPQf6GzDk6mQwSfUGFB6pJU9XIPGF1UVlu8cqh9bauGtXs/y4e+IJEIxC
+        q6P0xRECXcjQxMIuYNuIb6EYkLdI3i2Aq/PbcWHzuBFEl2uGoJJFdOpbMBXQYMqt6j4YNT
+        p3WrpMRVsMbf3NS/ePb8TWzAJZvn09c=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C942313A36;
+        Sun, 16 Oct 2022 12:31:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BUrqL5H5S2MyMAAAMHmgww
+        (envelope-from <petr.pavlu@suse.com>); Sun, 16 Oct 2022 12:31:13 +0000
+From:   Petr Pavlu <petr.pavlu@suse.com>
+To:     mcgrof@kernel.org
+Cc:     pmladek@suse.com, david@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH v3 0/4] module: Merge same-name module load requests
+Date:   Sun, 16 Oct 2022 14:30:27 +0200
+Message-Id: <20221016123031.3963-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-Received: by 2002:a6b:1d4:0:b0:6bb:f6c6:f03e with SMTP id
- 203-20020a6b01d4000000b006bbf6c6f03emr2659356iob.165.1665923246065; Sun, 16
- Oct 2022 05:27:26 -0700 (PDT)
-Date:   Sun, 16 Oct 2022 05:27:26 -0700
-In-Reply-To: <20221016044826.637-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004e0e4e05eb25fbe2@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in batadv_nc_worker (3)
-From:   syzbot <syzbot+69904c3b4a09e8fa2e1b@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Changes since v2 [1]:
+- Add kselftests to verify the expected behavior.
+- Split a clean-up change to the module_mutex comment into a separate patch.
+- Clarify a description of the main patch and mention that it fixes also
+  a recently reported problem with module vmap space allocation errors.
+- Improve some code comments.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+Changes since v1 [2]:
+- Change the error returned by a duplicate load when the main insert
+  fails from -ENODEV to -EBUSY.
+- Change the error returned by a duplicate load when a same-name module
+  is going from -EAGAIN to -EBUSY.
+- Use a per-shared_load_info completion object to inform waiting loads
+  when the main one is done.
+- Add a patch to correct wake up of module_wq.
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4079 } 2683 jiffies s: 2553 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+[1] https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/
+[2] https://lore.kernel.org/linux-modules/20220905084131.14567-1-petr.pavlu@suse.com/
 
+Petr Pavlu (4):
+  module: Correct wake up of module_wq
+  module: Update a comment describing what is protected by module_mutex
+  module: Merge same-name module load requests
+  selftests: kmod: Add tests for merging same-name module load requests
 
-Tested on:
+ kernel/module/main.c                          | 222 +++++++++++++-----
+ tools/testing/selftests/kmod/.gitignore       |   1 +
+ tools/testing/selftests/kmod/Makefile         |  17 +-
+ tools/testing/selftests/kmod/init_module.c    |  49 ++++
+ tools/testing/selftests/kmod/kmod.sh          | 139 +++++++++++
+ .../selftests/kmod/kmod_test_0014/Makefile    |  14 ++
+ .../kmod/kmod_test_0014/kmod_test_0014.c      |  29 +++
+ 7 files changed, 402 insertions(+), 69 deletions(-)
+ create mode 100644 tools/testing/selftests/kmod/.gitignore
+ create mode 100644 tools/testing/selftests/kmod/init_module.c
+ create mode 100644 tools/testing/selftests/kmod/kmod_test_0014/Makefile
+ create mode 100644 tools/testing/selftests/kmod/kmod_test_0014/kmod_test_0014.c
 
-commit:         55be6084 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=123f4ad6880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-dashboard link: https://syzkaller.appspot.com/bug?extid=69904c3b4a09e8fa2e1b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15e1f4e6880000
+-- 
+2.35.3
 
