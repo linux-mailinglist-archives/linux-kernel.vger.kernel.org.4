@@ -2,127 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECEE60034F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 22:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1313A600353
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 22:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJPUgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 16:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S229661AbiJPUlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 16:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiJPUgo (ORCPT
+        with ESMTP id S229472AbiJPUlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 16:36:44 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E8536DF8
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 13:36:43 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id j29-20020a056e02219d00b002f9b13c40c5so7792385ila.21
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 13:36:43 -0700 (PDT)
+        Sun, 16 Oct 2022 16:41:05 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AECB31DFE
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 13:41:01 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so11198415wmr.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 13:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ymjkPYRb1jiffzs0fKEUP23KqmJSlsFFFCh+eYBy8O4=;
+        b=nXCxuO9X4ibizj9Vey8FjbPLHMP6+YYXUBmed0clMQXFi/NBjm3gzuPDgcZXtxAyX+
+         C65CmZXnH09e3IMd2q1vJrJ0iKPDsNqKiX9vBFw+rSqd/A6EnfwSLrWO5AL6J16OASYr
+         A91tyPAWMJBg5buqFleCQs8QSTO32+Z0c3bW0yS42w29CXNlih5xflFzQ8hQQuf+ChmH
+         n9l8lxCqYGzjuGeVJmT7cmo3VlCkcYV13GkRG8kJLcjmRfYSbpvHedxXhlbuStIVxx+S
+         q9oFhllucNdKZZF8OQGp/DZEoB7RNwjgVZP2rGmhpbHOLolhl7Hc/GMzQPl3E/WanKYB
+         gQWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BH7dR4BzkTTqgkSy/nnKXnU8b30BbGbpigBEn+WNcv4=;
-        b=vk/49UiJniEw7glKMdSskFS5RbIs2r9XUP2lo/1sQPvhH+ADVgqJvSeVz8O9wP03zp
-         hMDKSr6+PBP5ALBMVraaFyxaNDoK28Wy3qySfr3j9rSCzvOL/GS61SxO031BxKPEC+hG
-         t+7sAy5sktLbER8SiUttBi3nJS2s8yEIk9qO0xmaGHkdg6w3GKCYFPaDJ1AwKDAvkvNA
-         9DDwtlX7Z0zS5FYe0SJxuYNTgDcDIFidOS/SvvH1g43Y+vZmMVdqeO9IYsLEneWAejpX
-         lRam8gbGct/INSXOLu/CroB8coQkIn9yXKsOFhjRjNjZJeuz2it0rzIvYibMqauVpLnF
-         q+4Q==
-X-Gm-Message-State: ACrzQf2dOP+8XF1O7N/bFAkVKyufSCCDXYSu0n6lXlxKX1bH0H1o0UzO
-        QR3eZ5fZSoG4jeBd6eCqEYvMSZvIZPaoa/REqObXzFVTQ5kh
-X-Google-Smtp-Source: AMsMyM58EZ5vnGEImsLM3Y0p4FJ8dZi9UaUgGWA2C27sy9URTMhK1CAwZuzCXIQprBHMI7awD+FNdJKKtsHTm7BiZr2Ab1UJLoO2
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ymjkPYRb1jiffzs0fKEUP23KqmJSlsFFFCh+eYBy8O4=;
+        b=nAw24pf8FKbSFz2WB0ryQ6ci9WqbTQYXVla8wAREUNdrbUTHghplL1B1DPeuvOGqcu
+         7174KXsk50llgG8mNakp8/DYJjeFDHws5w+c+9rWsjXNNGrO4KAtuC464QTrkN52GbR3
+         qrUOHm6Pd40qbjXrqUfYYmPUhj14+B9Vp8yM2mZfDYol4lDR1dsELjmbqfV+Nk8yr0tV
+         J7v16L5zq1cyc3gxdnWHm8LOpcL5zM2vLDsalbvrOWTGB/y24w+xHdoj+gsuEkBWp2yK
+         dJUXd6Zqi8B8Z1h4TXBZoPhYaDbl1CkKys3qerUdXSA5/tyeRYFL8wVKrfNpuKgvckoP
+         rfmg==
+X-Gm-Message-State: ACrzQf0vBwo9E24cS4VPjoAPhbnZ1rE1/d51eWjovUJcM9n2aEP2iYL1
+        LbioWkeKpkjnN21+Ne3frE8=
+X-Google-Smtp-Source: AMsMyM7iQJcp75/uyz3dxudBcfRcfLnc7W15SBQT3erH3pNo/RF/Xf88YrAIRNT1t/ZYdk2req+WZw==
+X-Received: by 2002:a05:600c:1c8f:b0:3c6:d732:9d6 with SMTP id k15-20020a05600c1c8f00b003c6d73209d6mr15553306wms.23.1665952859969;
+        Sun, 16 Oct 2022 13:40:59 -0700 (PDT)
+Received: from localhost.localdomain ([117.102.52.73])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05600c358800b003a541d893desm8648704wmq.38.2022.10.16.13.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 13:40:59 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     samuel.thibault@ens-lyon.org
+Cc:     gregkh@linuxfoundation.org, speakup@linux-speakup.org,
+        linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH v3] Accessiblity: speakup: specifying the default driver parameters among the module params
+Date:   Mon, 17 Oct 2022 01:39:36 +0500
+Message-Id: <20221016203936.5264-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3a15:b0:363:ecaf:2a53 with SMTP id
- cn21-20020a0566383a1500b00363ecaf2a53mr3789977jab.66.1665952602679; Sun, 16
- Oct 2022 13:36:42 -0700 (PDT)
-Date:   Sun, 16 Oct 2022 13:36:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000186e6c05eb2cd12e@google.com>
-Subject: [syzbot] WARNING in btrfs_sync_log
-From:   syzbot <syzbot+4406ed3884d139266b67@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is an enhancement which allows to specify the default driver
+parameters among the module parameters.
 
-syzbot found the following issue on:
+Adding default variables to the speakup_soft module
+allows to easily set that at boot, rather than
+setting the sys variables after boot.
+More details can be found here:
+https://github.com/linux-speakup/speakup/issues/7
 
-HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c65b84880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=4406ed3884d139266b67
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4406ed3884d139266b67@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 32768
-BTRFS info (device loop0): using xxhash64 (xxhash64-generic) checksum algorithm
-BTRFS info (device loop0): using free space tree
-BTRFS info (device loop0): enabling ssd optimizations
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 30197 at fs/btrfs/tree-log.c:3081 btrfs_sync_log+0x1ebd/0x2d40 fs/btrfs/tree-log.c:3081
-Modules linked in:
-CPU: 0 PID: 30197 Comm: syz-executor.0 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:btrfs_sync_log+0x1ebd/0x2d40 fs/btrfs/tree-log.c:3081
-Code: 2b 42 92 06 49 be 00 00 00 00 00 fc ff df 4c 8b 64 24 40 eb 19 e8 d3 a0 f4 fd 48 c7 c7 60 f5 db 8a 89 de 31 c0 e8 33 05 bd fd <0f> 0b b3 01 44 0f b6 c3 4c 89 e7 48 c7 c6 e0 f5 db 8a ba 09 0c 00
-RSP: 0018:ffffc90004ed74a0 EFLAGS: 00010246
-RAX: db16f372e186ad00 RBX: 00000000fffffff4 RCX: 0000000000040000
-RDX: ffffc90004022000 RSI: 000000000000385b RDI: 000000000000385c
-RBP: ffffc90004ed7930 R08: ffffffff816aa79d R09: ffffed1017344f13
-R10: ffffed1017344f13 R11: 1ffff11017344f12 R12: ffff88808a1dd540
-R13: 00000000fffffff4 R14: dffffc0000000000 R15: ffff88808a1dd590
-FS:  00007f7877fdd700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f3761c46000 CR3: 0000000079795000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_sync_file+0xdf4/0x1140 fs/btrfs/file.c:2242
- generic_write_sync include/linux/fs.h:2873 [inline]
- btrfs_do_write_iter+0xa6f/0x1370 fs/btrfs/file.c:1975
- call_write_iter include/linux/fs.h:2190 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7876e8b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7877fdd168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f7876fabf80 RCX: 00007f7876e8b5a9
-RDX: 0000000000000010 RSI: 0000000020000080 RDI: 0000000000000004
-RBP: 00007f7877fdd1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007ffca3e1f08f R14: 00007f7877fdd300 R15: 0000000000022000
- </TASK>
-
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes since v2:
+	- Removed an unnecessary comment.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes since v1:
+	- Added NB_ID as the last member of enum default_vars_id.
+	- Added NB_ID as the size of array vars.
+	- Made sure that that the enteries in vars are in correct order.
+---
+ drivers/accessibility/speakup/speakup_soft.c | 59 ++++++++++++++------
+ 1 file changed, 43 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/accessibility/speakup/speakup_soft.c b/drivers/accessibility/speakup/speakup_soft.c
+index 28c8f60370cf..6d446824677b 100644
+--- a/drivers/accessibility/speakup/speakup_soft.c
++++ b/drivers/accessibility/speakup/speakup_soft.c
+@@ -33,21 +33,30 @@ static struct miscdevice synth_device, synthu_device;
+ static int init_pos;
+ static int misc_registered;
+ 
+-static struct var_t vars[] = {
+-	/* DIRECT is put first so that module_param_named can access it easily */
+-	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
+-
+-	{ CAPS_START, .u.s = {"\x01+3p" } },
+-	{ CAPS_STOP, .u.s = {"\x01-3p" } },
+-	{ PAUSE, .u.n = {"\x01P" } },
+-	{ RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
+-	{ PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
+-	{ INFLECTION, .u.n = {"\x01%dr", 5, 0, 9, 0, 0, NULL } },
+-	{ VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
+-	{ TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
+-	{ PUNCT, .u.n = {"\x01%db", 0, 0, 3, 0, 0, NULL } },
+-	{ VOICE, .u.n = {"\x01%do", 0, 0, 7, 0, 0, NULL } },
+-	{ FREQUENCY, .u.n = {"\x01%df", 5, 0, 9, 0, 0, NULL } },
++
++enum default_vars_id {
++	DIRECT_ID = 0, CAPS_START_ID, CAPS_STOP_ID,
++	PAUSE_ID, RATE_ID, PITCH_ID, INFLECTION_ID,
++	VOL_ID, TONE_ID, PUNCT_ID, VOICE_ID,
++	FREQUENCY_ID, V_LAST_VAR_ID,
++	 NB_ID
++};
++
++
++static struct var_t vars[NB_ID] = {
++
++	[DIRECT_ID]  = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
++	[CAPS_START_ID] = { CAPS_START, .u.s = {"\x01+3p" } },
++	[CAPS_STOP_ID]  = { CAPS_STOP, .u.s = {"\x01-3p" } },
++	[PAUSE_ID]  = { PAUSE, .u.n = {"\x01P" } },
++	[RATE_ID]  = { RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
++	[PITCH_ID]  = { PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
++	[INFLECTION_ID]  = { INFLECTION, .u.n = {"\x01%dr", 5, 0, 9, 0, 0, NULL } },
++	[VOL_ID]  = { VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
++	[TONE_ID]  = { TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
++	[PUNCT_ID]  = { PUNCT, .u.n = {"\x01%db", 0, 0, 3, 0, 0, NULL } },
++	[VOICE_ID]  = { VOICE, .u.n = {"\x01%do", 0, 0, 7, 0, 0, NULL } },
++	[FREQUENCY_ID]  = { FREQUENCY, .u.n = {"\x01%df", 5, 0, 9, 0, 0, NULL } },
+ 	V_LAST_VAR
+ };
+ 
+@@ -451,10 +460,28 @@ static int softsynth_adjust(struct spk_synth *synth, struct st_var_header *var)
+ }
+ 
+ module_param_named(start, synth_soft.startup, short, 0444);
+-module_param_named(direct, vars[0].u.n.default_val, int, 0444);
++module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
++module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
++module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
++module_param_named(inflection, vars[INFLECTION_ID].u.n.default_val, int, 0444);
++module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
++module_param_named(tone, vars[TONE_ID].u.n.default_val, int, 0444);
++module_param_named(punct, vars[PUNCT_ID].u.n.default_val, int, 0444);
++module_param_named(voice, vars[VOICE_ID].u.n.default_val, int, 0444);
++module_param_named(frequency, vars[FREQUENCY_ID].u.n.default_val, int, 0444);
++
++
+ 
+ MODULE_PARM_DESC(start, "Start the synthesizer once it is loaded.");
+ MODULE_PARM_DESC(direct, "Set the direct variable on load.");
++MODULE_PARM_DESC(rate, "Sets the rate of the synthesizer.");
++MODULE_PARM_DESC(pitch, "Sets the pitch of the synthesizer.");
++MODULE_PARM_DESC(inflection, "Sets the inflection of the synthesizer.");
++MODULE_PARM_DESC(vol, "Sets the volume of the speech synthesizer.");
++MODULE_PARM_DESC(tone, "Sets the tone of the speech synthesizer.");
++MODULE_PARM_DESC(punct, "Sets the amount of punctuation spoken by the synthesizer.");
++MODULE_PARM_DESC(voice, "Sets the voice used by the synthesizer.");
++MODULE_PARM_DESC(frequency, "Sets the frequency of speech synthesizer.");
+ 
+ module_spk_synth(synth_soft);
+ 
+-- 
+2.25.1
+
