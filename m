@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D694F5FFEDB
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 13:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DA45FFEDD
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 13:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiJPLL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 07:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S229691AbiJPLMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 07:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJPLL4 (ORCPT
+        with ESMTP id S229666AbiJPLMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 07:11:56 -0400
+        Sun, 16 Oct 2022 07:12:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBD233E23;
-        Sun, 16 Oct 2022 04:11:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE7B32AB5;
+        Sun, 16 Oct 2022 04:12:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39956609AE;
-        Sun, 16 Oct 2022 11:11:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD39EC433C1;
-        Sun, 16 Oct 2022 11:11:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC5B560AFB;
+        Sun, 16 Oct 2022 11:12:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6377CC433D6;
+        Sun, 16 Oct 2022 11:12:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665918714;
-        bh=haZgvxjEjKaGrnWpf/XakHvzA6ss1pVHMfzXnUyCxsg=;
+        s=k20201202; t=1665918750;
+        bh=2w22Rvct4TRFUkN6xVjlfPIkEjaRnIDhj+c47zoeAA0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hTTrCsVzPfcijf8ZTSNizDVkrYqa2C04Rbi6ATJbieqribKliILfqN3RMucOdOhaO
-         ydM5U+vtAO8kSwaOP4uZdAYdZ3+N+ml9Uld0MgmFMYAHLqNZacyfhz3MpfmE23Xvdn
-         k1dX6HA2TfTIrlHIXi2C7VCfJ3moYpHL4z4UKTmeuu3Y5m1B8rW9vjVaRuIn6yh4ZY
-         Q/bGS0x7ySRQmptShyADHQmMny0YH1YKCpZOSwweA2pyzoO/22ED5crdb+tFwUy1a4
-         Pvp0gqUDebq2gZukUU2zh6s8bR7/9jequUSLyERrWrWvzEkqHlUg2wUpwoNjPkKUdg
-         JjsMKCwRPSxNw==
-Date:   Sun, 16 Oct 2022 12:12:19 +0100
+        b=Z2dAzCf7CM8FOAURYRwUTOlCzmVxVXfq18IFkLbQg53UfAKn4UejQcbN81/RHn17h
+         NvYUXsi+XdhDtz0ZCWC//DiFlZmmZ1Xf92svK0HkGi6+oG2uzfH10FZEoBrMmGWW2D
+         BSw/er9DYf4A6ly9xAY3qIofeRskZZNlRjyG6pb0rzktI1deOnE67omPRGayqp9Jsg
+         wi8Z0fJNPdO6OWfOG/AmbEWDKwu44U6qoTdVy5Uy70y2CVN7DbaOVHNgs5nqZ40wWq
+         NOVKvBmExTXThPwpGbFQvMQJloUnrw/Ynbiv5T1bGc1GRMtJiNZwyy6K7p5XHpPk4E
+         Tjd4/dQKICH6w==
+Date:   Sun, 16 Oct 2022 12:12:57 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/10] iio: adxl367: Fix unsafe buffer attributes
-Message-ID: <20221016121219.4114cab2@jic23-huawei>
-In-Reply-To: <2e2d9ec34fb1df8ab8e2749199822db8cc91d302.1664782676.git.mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 02/10] iio: adxl372: Fix unsafe buffer attributes
+Message-ID: <20221016121257.4a412573@jic23-huawei>
+In-Reply-To: <19158499623cdf7f9c5efae1f13c9f1a918ff75f.1664782676.git.mazziesaccount@gmail.com>
 References: <cover.1664782676.git.mazziesaccount@gmail.com>
-        <2e2d9ec34fb1df8ab8e2749199822db8cc91d302.1664782676.git.mazziesaccount@gmail.com>
+        <19158499623cdf7f9c5efae1f13c9f1a918ff75f.1664782676.git.mazziesaccount@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -59,10 +58,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Oct 2022 11:10:29 +0300
+On Mon, 3 Oct 2022 11:10:51 +0300
 Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> The devm_iio_kfifo_buffer_setup_ext() was changed by
+> The iio_triggered_buffer_setup_ext() was changed by
 > commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
 > to silently expect that all attributes given in buffer_attrs array are
 > device-attributes. This expectation was not forced by the API - and some
@@ -78,9 +77,7 @@ Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > Fixes: 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
 
-Seems like a safe enough change to take without additional review.
-Hence applied to the fixes-togreg branch of iio.git and marked
-for stable.
+Applied to the fixes-togreg branch of iio.git and marked for stable.
 
 Thanks,
 
@@ -92,20 +89,20 @@ Jonathan
 > v2 => v3:
 > Split change to own patch for simpler fix backporting.
 > ---
->  drivers/iio/accel/adxl367.c | 23 ++++++++++++++++++-----
+>  drivers/iio/accel/adxl372.c | 23 ++++++++++++++++++-----
 >  1 file changed, 18 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/iio/accel/adxl367.c b/drivers/iio/accel/adxl367.c
-> index 47feb375b70b..7c7d78040793 100644
-> --- a/drivers/iio/accel/adxl367.c
-> +++ b/drivers/iio/accel/adxl367.c
-> @@ -1185,17 +1185,30 @@ static ssize_t adxl367_get_fifo_watermark(struct device *dev,
->  	return sysfs_emit(buf, "%d\n", fifo_watermark);
+> diff --git a/drivers/iio/accel/adxl372.c b/drivers/iio/accel/adxl372.c
+> index e3ecbaee61f7..bc53af809d5d 100644
+> --- a/drivers/iio/accel/adxl372.c
+> +++ b/drivers/iio/accel/adxl372.c
+> @@ -998,17 +998,30 @@ static ssize_t adxl372_get_fifo_watermark(struct device *dev,
+>  	return sprintf(buf, "%d\n", st->watermark);
 >  }
 >  
 > -static IIO_CONST_ATTR(hwfifo_watermark_min, "1");
 > -static IIO_CONST_ATTR(hwfifo_watermark_max,
-> -		      __stringify(ADXL367_FIFO_MAX_WATERMARK));
+> -		      __stringify(ADXL372_FIFO_SIZE));
 > +static ssize_t hwfifo_watermark_min_show(struct device *dev,
 > +					 struct device_attribute *attr,
 > +					 char *buf)
@@ -117,17 +114,17 @@ Jonathan
 > +					 struct device_attribute *attr,
 > +					 char *buf)
 > +{
-> +	return sysfs_emit(buf, "%s\n", __stringify(ADXL367_FIFO_MAX_WATERMARK));
+> +	return sysfs_emit(buf, "%s\n", __stringify(ADXL372_FIFO_SIZE));
 > +}
 > +
 > +static IIO_DEVICE_ATTR_RO(hwfifo_watermark_min, 0);
 > +static IIO_DEVICE_ATTR_RO(hwfifo_watermark_max, 0);
 >  static IIO_DEVICE_ATTR(hwfifo_watermark, 0444,
->  		       adxl367_get_fifo_watermark, NULL, 0);
+>  		       adxl372_get_fifo_watermark, NULL, 0);
 >  static IIO_DEVICE_ATTR(hwfifo_enabled, 0444,
->  		       adxl367_get_fifo_enabled, NULL, 0);
+>  		       adxl372_get_fifo_enabled, NULL, 0);
 >  
->  static const struct attribute *adxl367_fifo_attributes[] = {
+>  static const struct attribute *adxl372_fifo_attributes[] = {
 > -	&iio_const_attr_hwfifo_watermark_min.dev_attr.attr,
 > -	&iio_const_attr_hwfifo_watermark_max.dev_attr.attr,
 > +	&iio_dev_attr_hwfifo_watermark_min.dev_attr.attr,
