@@ -2,87 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F84D5FFFAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45785FFFAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJPNcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 09:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S229737AbiJPNdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 09:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJPNcK (ORCPT
+        with ESMTP id S229600AbiJPNdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 09:32:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE411F60B;
-        Sun, 16 Oct 2022 06:32:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2984860B66;
-        Sun, 16 Oct 2022 13:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0BEC433C1;
-        Sun, 16 Oct 2022 13:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665927128;
-        bh=mvMBF0DOb6n13bDpC9zQpU7sToJw8MJ2EzOEAWLjFLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VXYT9eSiyCMtqsEeMsyzluzRElbNZoS+cMo3cALPFvFrg3b72jWOZLuKECw2958n4
-         nS73o0X0Okvlv+oiECfl0bStoN0Nu4V9KM+vjep6dhAIVhy6JfkSOgt+9/ta3QHaAv
-         JVFOOjgVwDVOsGf9CUe5lHAyszufWws4NqsORsWKOQj65E7m4VEEw/tx6kmHKRm0lm
-         Zj34ZONPH7yzVFEwtS5sXlrOEXfrIxaWr16ai1JmCSkFVPJ70MKAsAwzaWtr5WSRrJ
-         TjcomHPrDY7lfM0Yg3ngrAKwFO+RWGix/rBLBl5UjxFFEn+5eg0Y2SNhUkpSpMcOPW
-         owomn8svoqZpQ==
-Date:   Sun, 16 Oct 2022 09:32:07 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Michael Straube <straube.linux@gmail.com>,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk, martin@kaiser.cx,
-        paskripkin@gmail.com, gszymaszek@short.pl, fmdefrancesco@gmail.com,
-        makvihas@gmail.com, saurav.girepunje@gmail.com,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 5.19 01/63] staging: r8188eu: do not spam the
- kernel log
-Message-ID: <Y0wH1wFepv3pCyaG@sashalap>
-References: <20221013001842.1893243-1-sashal@kernel.org>
- <60af3294445ba2d2289a32ef7e429111ff476b44.camel@perches.com>
- <Y0eYFF7Wl7Cb2hfK@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y0eYFF7Wl7Cb2hfK@kroah.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 16 Oct 2022 09:33:19 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F631F60B;
+        Sun, 16 Oct 2022 06:33:18 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29G9FJQ5016722;
+        Sun, 16 Oct 2022 13:32:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=2hRzO31+Md1Q3g7FmcbREZ1Eseo7Rtjis60g3mWxP6c=;
+ b=k83KezfDLSMOMqTD9iQPXD5yZRCSjav1NmJXrSbo/fy8eilwjpAIEmWjuxVh+4DTEkGP
+ vfxdp3RZU1a7aOvUI6dGcICCTFG5SSc5cFNTWernxgSXTHUjBiu8qHXSa23DQlmOKTEH
+ FsjjRD+dFhp71BCji9c1VMfJxcfXpIfaQAvuookYpfoxMSVlKXnFmGvNoXqyJZ4ShzmQ
+ vhhsY5hTzSftdHDUK/TSBVB+euEg1ezZKI7v6lCLgXzYCUBo2HMMSW5ifkYW0pH8Wy6B
+ guZvEkNkZjKczkaZoMnKujgDgO+p3QHvGJCSNMskcGPd1XeJEWt14MS3B1DJIb47bq9M Tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86hjn5xp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 16 Oct 2022 13:32:54 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29GDOPCu008953;
+        Sun, 16 Oct 2022 13:32:54 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k86hjn5x3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 16 Oct 2022 13:32:54 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29GDKqwm031522;
+        Sun, 16 Oct 2022 13:32:52 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3k7m4jhmx8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 16 Oct 2022 13:32:52 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29GDWorR61997522
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 16 Oct 2022 13:32:50 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF8334C040;
+        Sun, 16 Oct 2022 13:32:49 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D64B64C044;
+        Sun, 16 Oct 2022 13:32:46 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.88.181])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun, 16 Oct 2022 13:32:46 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH 19/19] perf stat: Remove unused perf_counts.aggr field
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <20221014061550.463644-20-namhyung@kernel.org>
+Date:   Sun, 16 Oct 2022 19:02:44 +0530
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B51023CD-214D-4D85-8086-B7AA6B6701D8@linux.vnet.ibm.com>
+References: <20221014061550.463644-1-namhyung@kernel.org>
+ <20221014061550.463644-20-namhyung@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GX3PUlIjLwMNpWD9UETmwtZtyy8BcMH6
+X-Proofpoint-ORIG-GUID: 5FZPWWfwD-5cnHlSOPra7PjL2zc-F5Mf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-16_09,2022-10-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 impostorscore=0 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210160084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 06:46:12AM +0200, Greg Kroah-Hartman wrote:
->On Wed, Oct 12, 2022 at 08:08:58PM -0700, Joe Perches wrote:
->> On Wed, 2022-10-12 at 20:17 -0400, Sasha Levin wrote:
->> > From: Michael Straube <straube.linux@gmail.com>
->> >
->> > [ Upstream commit 9a4d0d1c21b974454926c3b832b4728679d818eb ]
->> >
->> > Drivers should not spam the kernel log if they work properly. Convert
->> > the functions Hal_EfuseParseIDCode88E() and _netdev_open() to use
->> > netdev_dbg() instead of pr_info() so that developers can still enable
->> > it if they want to see this information.
->>
->> Why should this be backported?
->
->I agree, Sasha please drop this from all branches.
 
-I'll drop it, but for the record: I've been picking up patches that help
-with log spam like any other regular fixes. Being on the receiving end
-of spammy kernel code and making debugging issues much harder, I think
-it's as important (if not more) than some other classes of fixes we pick
-up.
 
--- 
-Thanks,
-Sasha
+> On 14-Oct-2022, at 11:45 AM, Namhyung Kim <namhyung@kernel.org> wrote:
+>=20
+> The aggr field in the struct perf_counts is to keep the aggregated =
+value
+> in the AGGR_GLOBAL for the old code.  But it's not used anymore.
+>=20
+> Acked-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> tools/perf/util/counts.c |  1 -
+> tools/perf/util/counts.h |  1 -
+> tools/perf/util/stat.c   | 35 ++---------------------------------
+> 3 files changed, 2 insertions(+), 35 deletions(-)
+>=20
+> diff --git a/tools/perf/util/counts.c b/tools/perf/util/counts.c
+> index 7a447d918458..11cd85b278a6 100644
+> --- a/tools/perf/util/counts.c
+> +++ b/tools/perf/util/counts.c
+> @@ -48,7 +48,6 @@ void perf_counts__reset(struct perf_counts *counts)
+> {
+> 	xyarray__reset(counts->loaded);
+> 	xyarray__reset(counts->values);
+> -	memset(&counts->aggr, 0, sizeof(struct perf_counts_values));
+> }
+>=20
+> void evsel__reset_counts(struct evsel *evsel)
+> diff --git a/tools/perf/util/counts.h b/tools/perf/util/counts.h
+> index 5de275194f2b..42760242e0df 100644
+> --- a/tools/perf/util/counts.h
+> +++ b/tools/perf/util/counts.h
+> @@ -11,7 +11,6 @@ struct evsel;
+>=20
+> struct perf_counts {
+> 	s8			  scaled;
+> -	struct perf_counts_values aggr;
+> 	struct xyarray		  *values;
+> 	struct xyarray		  *loaded;
+> };
+> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> index 14c45f4cfdd3..6ab9c58beca7 100644
+> --- a/tools/perf/util/stat.c
+> +++ b/tools/perf/util/stat.c
+> @@ -308,8 +308,6 @@ static void evsel__copy_prev_raw_counts(struct =
+evsel *evsel)
+> 				*perf_counts(evsel->prev_raw_counts, =
+idx, thread);
+> 		}
+> 	}
+> -
+> -	evsel->counts->aggr =3D evsel->prev_raw_counts->aggr;
+> }
+>=20
+> void evlist__copy_prev_raw_counts(struct evlist *evlist)
+> @@ -320,26 +318,6 @@ void evlist__copy_prev_raw_counts(struct evlist =
+*evlist)
+> 		evsel__copy_prev_raw_counts(evsel);
+> }
+>=20
+> -void evlist__save_aggr_prev_raw_counts(struct evlist *evlist)
+> -{
+> -	struct evsel *evsel;
+> -
+> -	/*
+> -	 * To collect the overall statistics for interval mode,
+> -	 * we copy the counts from evsel->prev_raw_counts to
+> -	 * evsel->counts. The perf_stat_process_counter creates
+> -	 * aggr values from per cpu values, but the per cpu values
+> -	 * are 0 for AGGR_GLOBAL. So we use a trick that saves the
+> -	 * previous aggr value to the first member of perf_counts,
+> -	 * then aggr calculation in process_counter_values can work
+> -	 * correctly.
+> -	 */
+> -	evlist__for_each_entry(evlist, evsel) {
+> -		*perf_counts(evsel->prev_raw_counts, 0, 0) =3D
+> -			evsel->prev_raw_counts->aggr;
+> -	}
+> -}
+> -
+> static size_t pkg_id_hash(const void *__key, void *ctx __maybe_unused)
+> {
+> 	uint64_t *key =3D (uint64_t *) __key;
+> @@ -423,7 +401,6 @@ process_counter_values(struct perf_stat_config =
+*config, struct evsel *evsel,
+> 		       int cpu_map_idx, int thread,
+> 		       struct perf_counts_values *count)
+> {
+> -	struct perf_counts_values *aggr =3D &evsel->counts->aggr;
+> 	struct perf_stat_evsel *ps =3D evsel->stats;
+> 	static struct perf_counts_values zero;
+> 	bool skip =3D false;
+> @@ -493,12 +470,6 @@ process_counter_values(struct perf_stat_config =
+*config, struct evsel *evsel,
+> 		}
+> 	}
+>=20
+> -	if (config->aggr_mode =3D=3D AGGR_GLOBAL) {
+> -		aggr->val +=3D count->val;
+> -		aggr->ena +=3D count->ena;
+> -		aggr->run +=3D count->run;
+> -	}
+> -
+> 	return 0;
+> }
+>=20
+> @@ -523,13 +494,10 @@ static int process_counter_maps(struct =
+perf_stat_config *config,
+> int perf_stat_process_counter(struct perf_stat_config *config,
+> 			      struct evsel *counter)
+> {
+> -	struct perf_counts_values *aggr =3D &counter->counts->aggr;
+> 	struct perf_stat_evsel *ps =3D counter->stats;
+> -	u64 *count =3D counter->counts->aggr.values;
+> +	u64 *count;
+> 	int ret;
+>=20
+> -	aggr->val =3D aggr->ena =3D aggr->run =3D 0;
+> -
+> 	if (counter->per_pkg)
+> 		evsel__zero_per_pkg(counter);
+>=20
+> @@ -540,6 +508,7 @@ int perf_stat_process_counter(struct =
+perf_stat_config *config,
+> 	if (config->aggr_mode !=3D AGGR_GLOBAL)
+> 		return 0;
+>=20
+> +	count =3D ps->aggr[0].counts.values;
+
+Hi Namhyung,
+
+We are using ps->aggr[0] here always. Can you please clarify on why =
+first index is used here always.
+
+Thanks
+Athira
+> 	update_stats(&ps->res_stats, *count);
+>=20
+> 	if (verbose > 0) {
+> --=20
+> 2.38.0.413.g74048e4d9e-goog
+>=20
+
