@@ -2,148 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815FB5FFCC0
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 02:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C195FFCC2
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 02:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJPAdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Oct 2022 20:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S229608AbiJPAfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Oct 2022 20:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiJPAdU (ORCPT
+        with ESMTP id S229596AbiJPAfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Oct 2022 20:33:20 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39DD3C171;
-        Sat, 15 Oct 2022 17:33:19 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id j6so3199159uaa.10;
-        Sat, 15 Oct 2022 17:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UDacUmmZ7HxWAj/1LVMZcfDqYikzx/CSXHqsj+KHPVE=;
-        b=ngQx/7ePtLMoj/u1KOM/dqo0atMEUjEQWawWTtHCT6VN2bFcek7EXbXZFZQiLA4lSh
-         UK6HQeUH6o12dNoQFp8kOIhjvrZmBVa8oksueWT8MzFJl2/C0wC4QYUrQchmsD1SfgzX
-         xxGcOy/scXwgw8VNwIoAeuXZPcs22g9QOUtIFRCrhjCuJ+cAm15IkBxF0FySWRU//s5B
-         8XHD5t8pBAVhhHba63OFBdA60X2TQ/6osZnmwpQhdQJc2ZlKgwvExTuoBJFNyNS8VAn3
-         QtLSrEUH0DUal3BSnN1wK3EhVqOBoFzTrPJ4iwYpA9G4qGmdmg6xVUZTnahpwIj31twS
-         yY4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UDacUmmZ7HxWAj/1LVMZcfDqYikzx/CSXHqsj+KHPVE=;
-        b=AUgyVCHyvjuRmqtqGDStbZUCK2VH6YoUWPCvgF8ZjIzI50+DQ9RdDd0lQVbHxui87q
-         W4aHr++D6rXm/qCH2FIhmKVauhPGibDngy/SXFHzo7mLWvYw+DAzR3JHQdA01rcvBXFo
-         HaEvL/UoaPEnlxbr2vEwk56xLC4cNb881Ojy3+c+dJ0aQngbXuW8fzqjEfNa45gHZJm+
-         6xD7jsgZypZQ1lmbBYDVr64AdgJZMyoYlz4gX57tFD0Q+sARTlMzTy1+3sn74rc4hI5w
-         BGo2ziVeV8y3DfFunHRYx5Un3q8MrnbSARxkxrOaoC6sMaQl5CdHD1yfXG+o8CcC0OOh
-         o3Gw==
-X-Gm-Message-State: ACrzQf0dRXcyo9S/DPd1LE/XpbpdUrhoFe4z1IUqbbmxVfJhXWpVVoJ4
-        tlhNrp075bfT66JxQ+SQhnBKolRdwmO37MY8hHFDhshGhuY=
-X-Google-Smtp-Source: AMsMyM6L5LAp9jpA9ZHMsAqdnhx23KnjFyO5ZXE49e98haLJAiJxt76TcNKcvPXVP8FDf8vJqnMaXPFtvV4agYjspgQ=
-X-Received: by 2002:ab0:6f93:0:b0:3d7:b9af:39d4 with SMTP id
- f19-20020ab06f93000000b003d7b9af39d4mr1856092uav.84.1665880398635; Sat, 15
- Oct 2022 17:33:18 -0700 (PDT)
+        Sat, 15 Oct 2022 20:35:21 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B6264AB
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Oct 2022 17:35:20 -0700 (PDT)
+Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 29G0Y9Dk075454;
+        Sun, 16 Oct 2022 09:34:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
+ Sun, 16 Oct 2022 09:34:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 29G0Y99F075450
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 16 Oct 2022 09:34:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <5b6fa997-0803-946a-b731-1daca163624b@I-love.SAKURA.ne.jp>
+Date:   Sun, 16 Oct 2022 09:34:09 +0900
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 15 Oct 2022 19:33:08 -0500
-Message-ID: <CAH2r5mu+WTsmhrmJpGWqj4Wn9J2TQnEaqZv+pHLsLd91g=8wdA@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [syzbot] WARNING in c_start
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     syzbot <syzbot+d0fd2bf0dd6da72496dd@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        Andrew Jones <ajones@ventanamicro.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        caraitto@google.com, willemb@google.com, jonolson@google.com,
+        amritha.nambiar@intel.com, linux-kernel@vger.kernel.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <0000000000007647ec05eb05249c@google.com>
+ <Y0nTd9HSnnt/KDap@zn.tnic>
+ <2eaf1386-8ab0-bd65-acee-e29f1c5a6623@I-love.SAKURA.ne.jp>
+ <Y0qfLyhSoTodAdxu@zn.tnic> <Y0sbwpRcipI564yp@yury-laptop>
+ <23488f06-c4b4-8bd8-b0bc-85914ba4d1c6@I-love.SAKURA.ne.jp>
+ <9f3097cb-834d-4fcc-9d96-999ddeb4045e@infradead.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <9f3097cb-834d-4fcc-9d96-999ddeb4045e@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-ac1e8c6c95bf805c699656046aef0a05205edfbd:
+On 2022/10/16 9:28, Randy Dunlap wrote:
+>> +/*
+>> + * We want to avoid passing -1 as a valid cpu argument.
+>> + * But we should not crash the kernel until all in-tree callers are fixed.
+>> + */
+> 
+> Why not say that any negative cpu argument is invalid?
 
-  Merge tag '6.1-rc-smb3-client-fixes-part1' of
-git://git.samba.org/sfrench/cifs-2.6 (2022-10-10 20:04:22 -0700)
+Currently only -1 is accepted as exception.
 
-are available in the Git repository at:
+>>  	if (n != -1)
+>>  		cpumask_check(n);
+>> +	else
+>> +		report_negative_cpuid();
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc-smb3-client-fixes-part2
+> Or is it OK to pass -2 as the cpu arg?
 
-for you to fetch changes up to e3e9463414f610e91528f2b920b8cb655f4bae33:
+Passing -2 will hit WARN_ON_ONCE(cpu >= nr_cpumask_bits) path.
 
-  smb3: improve SMB3 change notification support (2022-10-15 10:05:53 -0500)
-
-----------------------------------------------------------------
-15 cifs/smb3 fixes including 2 for stable
-- fix a regression in guest mounts to old servers
-- improvements to directory leasing (caching directory entries safely
-beyond the root directory)
-- symlink improvement (reducing roundtrips needed to process symlinks)
-- an lseek fix (to problem where some dir entries could be skipped)
-- improved ioctl for returning more detailed information on directory
-change notifications
-- clarify multichannel interface query warning
-- cleanup fix (for better aligning buffers using ALIGN and round_up)
-- a compounding fix
-- fix some uninitialized variable bugs found by Coverity and the
-kernel test robot
-----------------------------------------------------------------
-Enzo Matsumiya (1):
-      cifs: use ALIGN() and round_up() macros
-
-Paulo Alcantara (5):
-      cifs: improve symlink handling for smb2+
-      cifs: fix uninitialised var in smb2_compound_op()
-      cifs: prevent copying past input buffer boundaries
-      cifs: fix static checker warning
-      cifs: fix double-fault crash during ntlmssp
-
-Ronnie Sahlberg (4):
-      cifs: fix skipping to incorrect offset in emit_cached_dirents
-      cifs: fix regression in very old smb1 mounts
-      cifs: enable caching of directories for which a lease is held
-      cifs: find and use the dentry for cached non-root directories also
-
-Steve French (5):
-      smb3: clarify multichannel warning
-      smb3: must initialize two ACL struct fields to zero
-      cifs: lease key is uninitialized in smb1 paths
-      cifs: lease key is uninitialized in two additional functions when smb1
-      smb3: improve SMB3 change notification support
-
- fs/cifs/cached_dir.c | 469
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------
- fs/cifs/cached_dir.h |  20 ++--
- fs/cifs/cifs_ioctl.h |   8 ++
- fs/cifs/cifsfs.c     |   9 +-
- fs/cifs/cifsglob.h   |  48 +++++++---
- fs/cifs/cifsproto.h  |  13 ++-
- fs/cifs/cifssmb.c    |   2 +-
- fs/cifs/connect.c    |  22 +++--
- fs/cifs/dir.c        |  32 +++----
- fs/cifs/file.c       |  45 ++++-----
- fs/cifs/inode.c      | 176 +++++++++++++++++++++--------------
- fs/cifs/ioctl.c      |  25 ++++-
- fs/cifs/link.c       | 107 +--------------------
- fs/cifs/readdir.c    |  31 +++++--
- fs/cifs/sess.c       |  34 +++----
- fs/cifs/smb1ops.c    |  56 ++++++-----
- fs/cifs/smb2file.c   | 127 ++++++++++++++++++++-----
- fs/cifs/smb2inode.c  | 170 +++++++++++++++++----------------
- fs/cifs/smb2misc.c   |   2 +-
- fs/cifs/smb2ops.c    | 149 +++++++++++------------------
- fs/cifs/smb2pdu.c    |  75 +++++++++------
- fs/cifs/smb2pdu.h    |   3 +
- fs/cifs/smb2proto.h  |  25 +++--
- 23 files changed, 922 insertions(+), 726 deletions(-)
-
-
--- 
-Thanks,
-
-Steve
