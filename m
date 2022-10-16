@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18775FFF99
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73D55FFF9A
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 15:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJPN2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 09:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        id S229744AbiJPN2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 09:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiJPN1u (ORCPT
+        with ESMTP id S229635AbiJPN1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 09:27:50 -0400
+        Sun, 16 Oct 2022 09:27:53 -0400
 Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12FC2AC4;
-        Sun, 16 Oct 2022 06:27:49 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id ot12so19656393ejb.1;
-        Sun, 16 Oct 2022 06:27:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A62B11828;
+        Sun, 16 Oct 2022 06:27:51 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id b2so19604728eja.6;
+        Sun, 16 Oct 2022 06:27:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L39wW3Ty3Fj+0JLtrs7YSIDPOeSCl+TCC41j4zAWphE=;
-        b=UbYHy/nX1Hbr3bCvUqAAtrbIHZ3vBejD2D7anTDSYRhHg8ljKzyf5t1oyeRScnEwYx
-         5U/lzKQ7sZdR4ZF1fWMWL1iraSVU5nUKfyEiGYP7dCXc6ywqFWFzhJxwjuzSvqVLY4Kn
-         3choB2XDXwSuWZthpBlk6N8xkz+iRqkS1PkKyNT6niCYPUF7kCuGKX9QFMfKCymlwm6f
-         vM8e6NowPsXsujD1xhH3avFQQwzIQftlgKkYQg3MTz1uw80N7Ux0WDgm89aKuY0mJcpD
-         PgkbAvm1ClCUUxX9NZrrkX5cZiPmNOQJkkzTdA9bRIl1xDw8wBkzZgAHiSx6A/qkxUmS
-         WdHQ==
+        bh=ZA0KpJu28BqLozBBPuBVAqokT3cgceSjy1up9PTHuYA=;
+        b=d0F1c3o0/2IEmFhVt8sfandi2JGjbMImQOINE1wpmbolCoo4w8vESRTGwbFuJV6AT6
+         8g9gz+S9ghdI+OxN6um0jK6bEClWqsHuYTIY/ACG69nrQdne7FtFoiD9zFHUqNQEaFET
+         DHSUjKLf5t9dvWjCPCcLSRXUn15x0BVMOHEkFEab/kZdaQVT0jZNVD08WpCKveZSfwd0
+         KrWg1qhLMHptUJc9FfQVq9hazG4ojzqqj6t7eq27vQNic0hvIPMEkJC3N3Tos7X8KG6H
+         Po909OSaYnkM64TwwkjY2vJ7rFaYMFA3fhO0qyWXTfLud2EMuSOHEeiHL+PjdNcC9e7P
+         ya8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L39wW3Ty3Fj+0JLtrs7YSIDPOeSCl+TCC41j4zAWphE=;
-        b=We+IvE9UZMfvKp1GE4FiYvKdCnSVfUnQdygGzL+0OnLmn1I3l4qz/X9D1cqvQkHDpS
-         yarRg1uawA6vl4AUisSGwGPFwqm8RW+JR2kJCZLSXrFZ/BN5riu6YHO6Zkm3QnqxzU10
-         X1Vl38FxsdKVr9OoM/WiM4imS9my/44hv/rXDlR3xzX9Kgkc30AbT+ndq4cL2jOsu70a
-         a7MzjaBkGg+qzB9r020jYOxV0tsof3f/V2d++d39bRt/daIn502pUbLOYgI5+FzQopFv
-         MwXVR52LMsUexdb0YhNiU8IQwOnevGYFqUtIqG08aIMCYFC4xqZEeIKc9ricXQIW4FLX
-         nj9A==
-X-Gm-Message-State: ACrzQf1vWxtZE8DAgdH0rRXlcE08OzSFH6E5SrODizE2pBtLbklfg2Ij
-        Lgo5N9vzjauBEu88mMU4yUQ=
-X-Google-Smtp-Source: AMsMyM55uI+TT2fahU0qyT+j83wICSjPO032S1YhR3CTKQ8pF0af2fSqEafbJgV6z99v5Q//2kDhbQ==
-X-Received: by 2002:a17:907:845:b0:731:2f6c:6dbd with SMTP id ww5-20020a170907084500b007312f6c6dbdmr5069253ejb.551.1665926868234;
-        Sun, 16 Oct 2022 06:27:48 -0700 (PDT)
+        bh=ZA0KpJu28BqLozBBPuBVAqokT3cgceSjy1up9PTHuYA=;
+        b=aG/NbpKZLcEmcagVJJYkc2qp3hifh/SSrphN0Da61waBgXtdj4Bj4nmuv2fz3tlJbg
+         S/QY4aIUmf2OSZa9+9IxU6f4uj7wIK5SEYhxtAT7jeJJSQX+PKsPOury2w83xZmd0P0o
+         pLCajLHpNREEU/Cg+X+mK1Uc6YR8y+AUoDMiahhXIjjvfc/nsG0v3jdamHB6KoR/f2w9
+         pLLawLTMEn7qR47xkzIrJ9AwYlYsgUko8ehzVgsyBeDrIUTK1fFm3FskBQG7NIVqDb6C
+         hJ2zj1E+Ukhjha1grTnP7YY64DUX+Q9U7nO62inixh0+X8EkE32raekecOZ4Ry0hkT82
+         uEBA==
+X-Gm-Message-State: ACrzQf0zC8WmrffvH2GmF30b4IBMfa1ZRfJwlu1rT5SY1MZxDfwm9ZZM
+        OLhZjGeMNKkx9Zdh3A4bIFdFuOa58939zA==
+X-Google-Smtp-Source: AMsMyM7vJ5B+t/BN2zg5D8USxC98nHmQpUv1w5LlTWAQwcXZawwS7Mn8bvBfRjAvNKqrFrmifJChgQ==
+X-Received: by 2002:a17:906:591:b0:73d:c3ef:84ae with SMTP id 17-20020a170906059100b0073dc3ef84aemr5202358ejn.155.1665926870045;
+        Sun, 16 Oct 2022 06:27:50 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa7ce85000000b0045c72bba0bfsm5572057edv.4.2022.10.16.06.27.46
+        by smtp.gmail.com with ESMTPSA id y5-20020aa7ce85000000b0045c72bba0bfsm5572057edv.4.2022.10.16.06.27.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 06:27:47 -0700 (PDT)
+        Sun, 16 Oct 2022 06:27:49 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -58,9 +58,9 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/7] ASoC: codecs: jz4725b: use right control for Capture Volume
-Date:   Sun, 16 Oct 2022 16:26:44 +0300
-Message-Id: <20221016132648.3011729-4-lis8215@gmail.com>
+Subject: [PATCH v3 4/7] ASoC: codecs: jz4725b: fix capture selector naming
+Date:   Sun, 16 Oct 2022 16:26:45 +0300
+Message-Id: <20221016132648.3011729-5-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221016132648.3011729-1-lis8215@gmail.com>
 References: <20221016132648.3011729-1-lis8215@gmail.com>
@@ -77,60 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Line In Bypass control is used as Master Capture at the moment
-this is completely incorrect.
+At the moment Capture source selector appears on Playback
+tab in the alsamixer and has a senseless name.
 
-Current control routed to Mixer instead of ADC, thus can't affect
-Capture path. ADC control shall be used instead.
-
-ADC volume control parameters are different, so the patch fixes that
-as well. Manual says (16.6.3.2 Programmable input attenuation amplifier:
-PGATM) that gain varies in range 0dB..22.5dB with 1.5dB step.
+Let's fix that.
 
 Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 ---
- sound/soc/codecs/jz4725b.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ sound/soc/codecs/jz4725b.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
-index 72549ee2e..4363d898a 100644
+index 4363d898a..d57c2c6a3 100644
 --- a/sound/soc/codecs/jz4725b.c
 +++ b/sound/soc/codecs/jz4725b.c
-@@ -136,13 +136,16 @@ enum {
- #define REG_CGR3_GO1L_OFFSET		0
- #define REG_CGR3_GO1L_MASK		(0x1f << REG_CGR3_GO1L_OFFSET)
+@@ -183,7 +183,7 @@ static SOC_VALUE_ENUM_SINGLE_DECL(jz4725b_codec_adc_src_enum,
+ 				  jz4725b_codec_adc_src_texts,
+ 				  jz4725b_codec_adc_src_values);
+ static const struct snd_kcontrol_new jz4725b_codec_adc_src_ctrl =
+-			SOC_DAPM_ENUM("Route", jz4725b_codec_adc_src_enum);
++	SOC_DAPM_ENUM("ADC Source Capture Route", jz4725b_codec_adc_src_enum);
  
-+#define REG_CGR10_GIL_OFFSET		0
-+#define REG_CGR10_GIR_OFFSET		4
-+
- struct jz_icdc {
- 	struct regmap *regmap;
- 	void __iomem *base;
- 	struct clk *clk;
- };
+ static const struct snd_kcontrol_new jz4725b_codec_mixer_controls[] = {
+ 	SOC_DAPM_SINGLE("Line In Bypass", JZ4725B_CODEC_REG_CR1,
+@@ -228,7 +228,7 @@ static const struct snd_soc_dapm_widget jz4725b_codec_dapm_widgets[] = {
+ 	SND_SOC_DAPM_ADC("ADC", "Capture",
+ 			 JZ4725B_CODEC_REG_PMR1, REG_PMR1_SB_ADC_OFFSET, 1),
  
--static const SNDRV_CTL_TLVD_DECLARE_DB_LINEAR(jz4725b_line_tlv, -1500, 600);
-+static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_adc_tlv,     0, 150, 0);
- static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(jz4725b_dac_tlv, -2250, 150, 0);
+-	SND_SOC_DAPM_MUX("ADC Source", SND_SOC_NOPM, 0, 0,
++	SND_SOC_DAPM_MUX("ADC Source Capture Route", SND_SOC_NOPM, 0, 0,
+ 			 &jz4725b_codec_adc_src_ctrl),
  
- static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
-@@ -151,11 +154,11 @@ static const struct snd_kcontrol_new jz4725b_codec_controls[] = {
- 		       REG_CGR1_GODL_OFFSET,
- 		       REG_CGR1_GODR_OFFSET,
- 		       0xf, 1, jz4725b_dac_tlv),
--	SOC_DOUBLE_R_TLV("Master Capture Volume",
--			 JZ4725B_CODEC_REG_CGR3,
--			 JZ4725B_CODEC_REG_CGR2,
--			 REG_CGR2_GO1R_OFFSET,
--			 0x1f, 1, jz4725b_line_tlv),
-+	SOC_DOUBLE_TLV("Master Capture Volume",
-+		       JZ4725B_CODEC_REG_CGR10,
-+		       REG_CGR10_GIL_OFFSET,
-+		       REG_CGR10_GIR_OFFSET,
-+		       0xf, 0, jz4725b_adc_tlv),
+ 	/* Mixer */
+@@ -287,11 +287,11 @@ static const struct snd_soc_dapm_route jz4725b_codec_dapm_routes[] = {
+ 	{"Mixer", NULL, "DAC to Mixer"},
  
- 	SOC_SINGLE("Master Playback Switch", JZ4725B_CODEC_REG_CR1,
- 		   REG_CR1_DAC_MUTE_OFFSET, 1, 1),
+ 	{"Mixer to ADC", NULL, "Mixer"},
+-	{"ADC Source", "Mixer", "Mixer to ADC"},
+-	{"ADC Source", "Line In", "Line In"},
+-	{"ADC Source", "Mic 1", "Mic 1"},
+-	{"ADC Source", "Mic 2", "Mic 2"},
+-	{"ADC", NULL, "ADC Source"},
++	{"ADC Source Capture Route", "Mixer", "Mixer to ADC"},
++	{"ADC Sourc Capture Routee", "Line In", "Line In"},
++	{"ADC Source Capture Route", "Mic 1", "Mic 1"},
++	{"ADC Source Capture Route", "Mic 2", "Mic 2"},
++	{"ADC", NULL, "ADC Source Capture Route"},
+ 
+ 	{"Out Stage", NULL, "Mixer"},
+ 	{"HP Out", NULL, "Out Stage"},
 -- 
 2.36.1
 
