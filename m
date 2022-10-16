@@ -2,120 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922F960006E
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2FA600078
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 17:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiJPPKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 11:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S229911AbiJPPNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 11:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiJPPKV (ORCPT
+        with ESMTP id S229607AbiJPPNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 11:10:21 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F19D2A256
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 08:10:19 -0700 (PDT)
+        Sun, 16 Oct 2022 11:13:39 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C2E2A97A;
+        Sun, 16 Oct 2022 08:13:38 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id s30so12875619eds.1;
+        Sun, 16 Oct 2022 08:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=XPhph1rFmRrdCiz77L1yEGfSbOW/K5zr5aPjTTaVh9Q=;
-  b=UmI8wDEHtXxMe8bPZKCUaYwlYmIG4/TIXOt7IOieQvYOTh3D3gTt7EJe
-   Ob8ETA8jE3UlWDSjMhnZvuOrCyTQ5HPDlV4TWs0JjkDI1MaUcFDp+qkeC
-   v4RLaBsn2M2AdaRW6vPy0ksxul6jKJ7xZhAigGUHS9egioBabk4ktR60A
-   w=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,189,1661810400"; 
-   d="scan'208";a="31574597"
-Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2022 17:10:17 +0200
-Date:   Sun, 16 Oct 2022 17:10:17 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Deepak R Varma <drv@mailo.com>
-cc:     outreachy@lists.linux.dev, pure.logic@nexus-software.ie,
-        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: greybus: loopback: enclose macro statements in
- do-while loop
-In-Reply-To: <Y0wdDTUBrUT/cr9w@lion2204>
-Message-ID: <alpine.DEB.2.22.394.2210161709440.2876@hadrien>
-References: <Y0wS4HQo9m/W/TrQ@debian-BULLSEYE-live-builder-AMD64> <alpine.DEB.2.22.394.2210161649400.2876@hadrien> <Y0wdDTUBrUT/cr9w@lion2204>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/C5lwk/nMs2ZM6+Ipbgdt5+++HkO09MsMac4cJsw0kY=;
+        b=HgvQG2CcfeYc2FI8sWyMP94qrofK/LCeIcTNxe/UZ3IfZG+b6kuCWdKMWGdIk5ejJh
+         UjZe9e7SMP/4c0N4YBcBwcwc+EuUSsnQEnkWrTtmE6f5dNeQrdoOp8UT8EWfsgasu3nT
+         jRWiPgRT2pmDuM0vEUmigqQJKnyoXsQKMfYBLXzJnwAkW37UV4RKQGyOqejc1SDExEls
+         2YTosA/BGOKsT35asDVE9Eh+t3K2VbUwZPn/tVIA7ZVON6G7d90Auj9R7MJ/gJSjAhbC
+         iPA1omuP+puKpBLtCd00DBe7N/cJWDP3uD4DsUGweF368mvZi55W07pL5K/yuxxl5qll
+         kN+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/C5lwk/nMs2ZM6+Ipbgdt5+++HkO09MsMac4cJsw0kY=;
+        b=hl3aCVGRCx+qO2Y/ndboOGhOyu8iDaYW/1FEgjJi4UzL59ri0XfJYGzpKM0bWJnG6x
+         OGFnRMVgHCVD1yTv7gj0m7hZg5ypoDqAu4N05dBz+MCk1tmGszWuJvBfikUKvDddEUw3
+         jOn/ufN1/qn6gZMd4d3rSFoWV6QCVOjf06BMGp2/GkiFvFHMkcnlA0Q7xn/JgOugQslG
+         6CRLC5E9RbzkzHp1sDCIthB4Fr/yLIEbJqIMofEYBiAOShs/DIe7+qvjjBrcHdlZja9k
+         eJ1bxnFt4Mav8dFURX8UKe0hQOFmy80dEs5xfttii47VY4UTQ3fxIYp1WTG8SsV51dHk
+         BLJw==
+X-Gm-Message-State: ACrzQf2OAb+uUXRCSPIzRS6Ot6/EEUPZAJTNaONPgkMY/OGS/k3SoaGV
+        nftXEyDNzt6ykAYa+PzUQSY=
+X-Google-Smtp-Source: AMsMyM4KVbqkL8u6VEhOb2AMIH24wsn3G/75t2Uq+V3U5os3+a7gJM3qsEQyIxetM82NiN10AByxuQ==
+X-Received: by 2002:a50:ec84:0:b0:459:ae8:8025 with SMTP id e4-20020a50ec84000000b004590ae88025mr6410063edr.321.1665933217388;
+        Sun, 16 Oct 2022 08:13:37 -0700 (PDT)
+Received: from hp-power-15.localdomain (mm-39-7-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.7.39])
+        by smtp.gmail.com with ESMTPSA id i8-20020a1709061e4800b0078d4c72e2cesm4702735ejj.44.2022.10.16.08.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Oct 2022 08:13:36 -0700 (PDT)
+From:   Siarhei Volkau <lis8215@gmail.com>
+Cc:     Siarhei Volkau <lis8215@gmail.com>, Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v2 0/2] Add Ingenic JZ4755 DMA support
+Date:   Sun, 16 Oct 2022 18:12:54 +0300
+Message-Id: <20221016151256.3021729-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch serie adds JZ4755 SoC DMA support.
 
+Diffs from 1-st patchset:
+ - DMA patches splitted into its own patchset
+ - acks collected
 
-On Sun, 16 Oct 2022, Deepak R Varma wrote:
+Siarhei Volkau (2):
+  dt-bindings: ingenic: Add support for the JZ4755 dmaengine
+  dmaengine: JZ4780: Add support for the JZ4755.
 
-> On Sun, Oct 16, 2022 at 04:51:09PM +0200, Julia Lawall wrote:
-> >
-> >
-> > On Sun, 16 Oct 2022, Deepak R Varma wrote:
-> >
-> > > Include multiple statements of macro definition inside do-while{0} loop
-> > > to avoid possible partial program execution. Issue reported by
-> > > checkpatch script:
-> > >
-> > > ERROR: Macros with multiple statements should be enclosed in a do - while loop
-> >
-> > I don't think this change will compile.  See if you can figure out why
-> > not.
->
-> It did compile. I built the greybus driver and loaded it as well with the
-> modinfo tool. Can you please tell why you think it won't compile?
+ Documentation/devicetree/bindings/dma/ingenic,dma.yaml | 1 +
+ drivers/dma/dma-jz4780.c                               | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-Do you have a .o file for the .c file that you changed?
+-- 
+2.36.1
 
-julia
-
->
-> ./drv
->
-> >
-> > julia
-> >
-> > >
-> > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > ---
-> > >  drivers/staging/greybus/loopback.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/staging/greybus/loopback.c b/drivers/staging/greybus/loopback.c
-> > > index 1a61fce98056..37214cb43937 100644
-> > > --- a/drivers/staging/greybus/loopback.c
-> > > +++ b/drivers/staging/greybus/loopback.c
-> > > @@ -163,9 +163,11 @@ static ssize_t name##_avg_show(struct device *dev,		\
-> > >  static DEVICE_ATTR_RO(name##_avg)
-> > >
-> > >  #define gb_loopback_stats_attrs(field)				\
-> > > +do {								\
-> > >  	gb_loopback_ro_stats_attr(field, min, u);		\
-> > >  	gb_loopback_ro_stats_attr(field, max, u);		\
-> > > -	gb_loopback_ro_avg_attr(field)
-> > > +	gb_loopback_ro_avg_attr(field);				\
-> > > +} while (0)
-> > >
-> > >  #define gb_loopback_attr(field, type)					\
-> > >  static ssize_t field##_show(struct device *dev,				\
-> > > --
-> > > 2.30.2
-> > >
-> > >
-> > >
-> > >
-> > >
->
->
->
