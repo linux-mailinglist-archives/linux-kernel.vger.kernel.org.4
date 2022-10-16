@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714FC600016
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BF2600020
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJPOxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 10:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S229763AbiJPO5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 10:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiJPOxi (ORCPT
+        with ESMTP id S229735AbiJPO5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 10:53:38 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA1B3F305
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 07:53:35 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id g11so6432950qts.1
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 07:53:35 -0700 (PDT)
+        Sun, 16 Oct 2022 10:57:17 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910DE3F1FD
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 07:57:15 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id 8so5346520qka.1
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 07:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M617hUvDTpcFldbMirW8IIk1uyeowTMveYy1yVY2fm0=;
-        b=oYhVG46jOla5tkhSF0Jlqh1Ynjmnbw+LFwUsB7noqbu1FtN/o3MmL7qYcuQH0uSLrc
-         GvnSlCwIAg0klW50RN7piUw2pKm1pRUAjggKPHWSrZ3wr+fQXRHIkzOmywtrkQc3Qi3v
-         10n5fzQ+MNMTwNwyimpRkOKhav1ndvI8sGJhxQc5uGCO7WrAF7LLTlSrIgaA+00GQ/yt
-         NehaavngrV8ziMgWWXnnSJrB6pEA9mzD5Y4HX6y5AdMQHS8jnpfijk4mp0vD7OLLXVvn
-         2IOiQ0rQowYB4v7k4K1cLwpWz+pOM83ZUOvAn0wkjA51hddD7S5pnnEh5DU26EtCPZZk
-         WPSQ==
+        bh=DSlW8PNJtwCgbiq6siD3FnHoq6S/nqAGOOpU/YoqzYs=;
+        b=vV/qQ6asJlxSPVcfjQJYDrv5VO6jXTRHaQoC52bpWb/eHqUFhRllYF01pr1+rac+An
+         4a43tN9UZBJuhbNv6wQpXtDGYee5PWgim5ry/pu1oXszsyNV6RMb7dyNK3pTxYl3t/ku
+         UKH8yef3b3ojfn3LJOJa/HIhSlMEZHxHXsFMjV0j75zf73GStE4tAJpZqTbjmXR9ABBP
+         Eot7sQoCUrR2lcEy2u6ZYnuVjR+MJ6Wh+e4/NdemIJ75gA2V93+bVXmcnxnf9lgRjyRC
+         AkYy3ARp6XEVn01Ncbikq1B0+oO/EKCc8v5rVQmgXCW9EnTen4Z+VzDQzKUlQrAfrYCq
+         25Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M617hUvDTpcFldbMirW8IIk1uyeowTMveYy1yVY2fm0=;
-        b=kNCqQQQ3hZF7qKC2kANGh/jh9Xvp7N+jmVbPKRE0S6uLjprNLKHczbgWYU2vM50/CW
-         e93a/KgfjtFPoRgaYz7mkOgNRecogicEswg6dG59msgg65ipKE7qSlGjZYjHndNZ5iGw
-         pAalXtMIh0IB9tP2h0hQMEMdxT+9jQ05XbhWph+pOAhRq1Dk4MgNudsHPnJ3eb19i8QL
-         300LwdNYbzHYUZcfycJ071O1uG+h/qfwJEdBwUNQEIoC79FUIDI3kZxaH5co02NIvyj+
-         QsVxfh2oTyxs9yy+Ri6OdooMNRdbG4KWY1mKoAvQdOzRwuDw5cPy4/tSd+E4nE9vlZ4L
-         Rzvw==
-X-Gm-Message-State: ACrzQf1bAPdZZb77iKEFp257FZbW7s9FCZy7lXik4dNK2Rl+0VBAhXRO
-        zsvAXSj1DmyhEhXUWdBkbyWSFA==
-X-Google-Smtp-Source: AMsMyM7EoF905CSD7P1QLRs54RDbWyurGOEQ+o4lDGC81gASGR8Yp7CprIB3QIAQlpjWkVq0WSEwrQ==
-X-Received: by 2002:a05:622a:651:b0:398:5034:9e85 with SMTP id a17-20020a05622a065100b0039850349e85mr5406552qtb.277.1665932014173;
-        Sun, 16 Oct 2022 07:53:34 -0700 (PDT)
+        bh=DSlW8PNJtwCgbiq6siD3FnHoq6S/nqAGOOpU/YoqzYs=;
+        b=j6+BhSUwWpsxigx6h6lHHZXbjcvfRrc2ecknVxVgod8Fn06J16h5ZmUCzOyGRL2fYh
+         dKxJWSq6tsEMa3GJ4ztIV7Rn1wYmpuT6sjlbhqHkL6e0tM5XGFGQsWNbQsxB6tODt3x0
+         bYgIS5+eIEC5n5E+239rOUPJ305u8AwwRBb1SxSKsS2YxUnTj19djGaMQNdcEsiC/VDZ
+         095yQMB2pWTDv5ZseatmtFvdq7a2vR8I0Frk4xcoLjankg1Q87n9914SmCwDgiYTbm+l
+         GgwKm0gEsbb9z6hvJHahKfPKOUshOhmV4wz2FhBz+40gji0JWf8wiRAMKlLEZJV5HxUK
+         F/bA==
+X-Gm-Message-State: ACrzQf2+exU38UsHZ4JU57/i0Ty3fUCTLs7oxBbB89CuEgXrtCLTq8km
+        CjFS2RlqIHMTo59YB+NPt2t1gQ==
+X-Google-Smtp-Source: AMsMyM6hqn8kDuZJ9eDHrtktckLJoboMd0BBFXslzzqDdEvIbqxijizIwlja+Z95nxMZVSviDpsd2A==
+X-Received: by 2002:a05:620a:25d4:b0:6bb:f596:97d0 with SMTP id y20-20020a05620a25d400b006bbf59697d0mr4868999qko.411.1665932234683;
+        Sun, 16 Oct 2022 07:57:14 -0700 (PDT)
 Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
-        by smtp.gmail.com with ESMTPSA id de4-20020a05620a370400b006e07228ed53sm6890016qkb.18.2022.10.16.07.53.31
+        by smtp.gmail.com with ESMTPSA id r18-20020ac85212000000b0039a17374294sm5965001qtn.78.2022.10.16.07.57.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Oct 2022 07:53:32 -0700 (PDT)
-Message-ID: <bc1aa679-7173-c9a3-c35c-1da8b6c6f1f2@linaro.org>
-Date:   Sun, 16 Oct 2022 10:53:28 -0400
+        Sun, 16 Oct 2022 07:57:13 -0700 (PDT)
+Message-ID: <82e4f75e-ddf1-de9c-f552-bde5e35009cb@linaro.org>
+Date:   Sun, 16 Oct 2022 10:57:12 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.2
-Subject: Re: [PATCH v7 1/2] dt-bindings: input: document Qualcomm PMI8998
- haptics driver
+Subject: Re: [PATCH 1/7] arm64: dts: qcom: sdm845: commonize bluetooth UART
+ pinmux
+Content-Language: en-US
 To:     Caleb Connolly <caleb@connolly.tech>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         devicetree@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeff LaBundy <jeff@labundy.com>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-References: <20221015172915.1436236-1-caleb@connolly.tech>
- <20221015172915.1436236-2-caleb@connolly.tech>
-Content-Language: en-US
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+References: <20221016143300.1738550-1-caleb@connolly.tech>
+ <20221016143300.1738550-2-caleb@connolly.tech>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221015172915.1436236-2-caleb@connolly.tech>
+In-Reply-To: <20221016143300.1738550-2-caleb@connolly.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,13 +83,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/10/2022 13:30, Caleb Connolly wrote:
-> Add bindings for qcom PMIC PMI8998 haptics driver.
+On 16/10/2022 10:33, Caleb Connolly wrote:
+> The 4-pin configuration for UART6 is used for all or almost all SDM845
+> devices with built in Bluetooth. Move the pinmux configuration to
+> sdm845.dtsi in preparation to be removed from individual devices in
+> future patches.
 > 
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 23 +++++++++++++++++++++++
 
+The move should happen here. Otherwise you add new nodes and we cannot
+see in one place how the old nodes look like.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index f0e286715d1b..8c69942b969b 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -2971,6 +2971,29 @@ pinmux {
+>  				};
+>  			};
+> 
+> +			qup_uart6_4pin: qup-uart6-4pin {
+
+-state suffix
+
+> +				pinmux {
+> +					pins = "gpio45", "gpio46", "gpio47", "gpio48";
+
+Drop pinmux node entirely and put function to others.
+
+> +					function = "qup6";
+> +				};
+> +
+> +				cts {
+
+-pins suffix
+
+> +					pins = "gpio45";
+> +					bias-pull-down;
+> +				};
+> +
+> +				rts-tx {
+
+-pins suffix
+
+> +					pins = "gpio46", "gpio47";
+> +					drive-strength = <2>;
+> +					bias-disable;
+> +				};
+> +
+> +				rx {
+
+-pins suffix
+
+> +					pins = "gpio48";
+> +					bias-pull-up;
+> +				};
+> +			};
+> +
+>  			qup_uart7_default: qup-uart7-default {
+>  				pinmux {
+>  					pins = "gpio95", "gpio96";
+> --
+> 2.38.0
+> 
+> 
 
 Best regards,
 Krzysztof
