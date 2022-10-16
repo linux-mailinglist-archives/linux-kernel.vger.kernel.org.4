@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618396002EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9A06002EF
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 20:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiJPSkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 14:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S229811AbiJPSpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 14:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJPSkC (ORCPT
+        with ESMTP id S229464AbiJPSpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 14:40:02 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0565620994;
-        Sun, 16 Oct 2022 11:40:00 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id y80so7580407iof.3;
-        Sun, 16 Oct 2022 11:39:59 -0700 (PDT)
+        Sun, 16 Oct 2022 14:45:10 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D222E9C0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:45:08 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id r13so15207770wrj.11
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Oct 2022 11:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=er//qg/gl4dGP2tGaPp0ROa9zLnweqgMmV1YWZYYP7c=;
-        b=VLlF0F3ix3yIubo5GyNOzrxMT9uWk3plyHN40JmolDouSrQ6S1EkrNOya03i9KYYee
-         Pdev33Tl7wz7AOBvwkIWQLGgDzO0xQkh+PhQREIzD1GZPnPRO/lcMf1VWMop9hq358fl
-         aXOTiHnPm7vzpKXFYAJcnkfoGhLNd0RFOM2wNTECtw4VAB3Z8WkZM6t4+8EN3t5JCW4L
-         0kDq5AgEHKFhEyBJPfvXQmLC4Jb6kCZhJVx/oy7N6XuJqZhwJVR2VkREM2wKA0uzh8Fk
-         UIavRDjcsJugiUVfEo2acS8siEp0mDsbdgjZfIVNnTI51xK3B2T9kTvnL0L4+W4wKQoU
-         tMlA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7hUvasE44hYvxTOWnqZWHCPPhE7X3bpjcc2vJnBfH9k=;
+        b=GkIABXBkGaCcT8QxtzXzhV9grSN8SBpQawQoAT5Mdeo/+A/EniJe0JJdxaKF8dVx/r
+         79aITc+u+mbuGJMR83E63bCgVhKnQTbhL1yw0RtZtuE2M7zzF8FLqJ7wHkhHytJzskvJ
+         ZUPj67+ntIO42TcasDiN3EgZe3G+7GnKViS9dMo+0WKcIX2hueO0wakb4ozXJ2vkjUZx
+         eKlC7MPvUBU7ZSuNVBihxYunjwEMxddgBa1g4OUrl9Fpk9eAEVHoeHs/WB/3ag17Nvrp
+         zBX9TnjcTcWsPPNFnZu+UY0Moh/7+AHBdmufMfgP4mS6po/G7atqt3c/ukpfxcKDKfzp
+         B1CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=er//qg/gl4dGP2tGaPp0ROa9zLnweqgMmV1YWZYYP7c=;
-        b=mMm23AdkgG1EnOyPnxxR3zgNWvxXWVThECAzYiCnBKBHI4P1kJb3NzA6i4MoP/lMwZ
-         7JhImFN/QqoBXAJDvFKDvRE8LPpgyIETuDJpCWD0QMjtwlAOgb4sOzYI+944OFg2vR1v
-         K5L5Vx7Lc+SG+ofpWwVy7Hwb8T6MqtCZGK+3CGRYqvuDz33bLIpzqOBSNa03IAUb0cuK
-         4/xzn9SsV8M/giTZWHVbz+5WYu1t1cn9EubagMfDP5w/V60Ba6Rbcyuo5GJAvg2nr6/q
-         i8gJP5ztRH2MWFsJXEUUDwO1fe2Hv4cYA10hbDY6S0c2qFUvW6njcP10nOAi0gNZSH0t
-         Frew==
-X-Gm-Message-State: ACrzQf0NAfdEwFvVIzjl/8Zkhf/RGf6li8JtmtP9Y23bXc8eg/b5UADb
-        UnNtauaM8lW9uK2lQ+9kW1aEB3/2GEv5EPnV0Ps=
-X-Google-Smtp-Source: AMsMyM418IYKdUWCL2jLsEzw/ZxVzVBP8CpmwVFc41Ps8SCy1jto6Dznc6/8LG+UqyyPQURKmvlBPoxB8eZ05lpVVqA=
-X-Received: by 2002:a6b:6716:0:b0:6bc:113c:22a2 with SMTP id
- b22-20020a6b6716000000b006bc113c22a2mr3022066ioc.12.1665945599378; Sun, 16
- Oct 2022 11:39:59 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7hUvasE44hYvxTOWnqZWHCPPhE7X3bpjcc2vJnBfH9k=;
+        b=FjoTnJufJD0yib9dnVpFrU5hEQDNlKcfVTBhvvij4KCe6kOzZSSrbQSJkTXovj9Dps
+         5VK66BqlG8Z0QtDrrL0Jm+XKtUVqZJ7LjdvM8P1Uq7WwajzTYhCneSeiDYb+AY8/KuRs
+         veaiLl904bnnOR4033fBYahfGBnmGzqAxyk24km6htWzWkHmU9umyc1zGGQYyXht35zT
+         X2EPh6U8ae9vLkSqrnzzHzny+6V+Ci2X1v3htQENp0IYjVlM7o1f6eAf5i46jvZSF+j6
+         rT7qaSvogi3qreUS4hY3QsuGaY1mRYj06V7dbYMrd2f0kd/FVt+iPQVPz9ztnFxQ+AHe
+         X23w==
+X-Gm-Message-State: ACrzQf2fjCtB1JxhZVF9sJvzIcsoeZdF4Ipgsf/HrcTnuZ3v2caarRYw
+        DRyjfl2zOe2ewORFdpUwusc=
+X-Google-Smtp-Source: AMsMyM6pjjFkyK6gzqx0jvtbLOA6j8uP0x7RX2AKopsDGd5fFVz43GdMFJob65/DMMJQliJvpTgZyw==
+X-Received: by 2002:a5d:4683:0:b0:22e:6be0:dfc6 with SMTP id u3-20020a5d4683000000b0022e6be0dfc6mr4311024wrq.573.1665945907145;
+        Sun, 16 Oct 2022 11:45:07 -0700 (PDT)
+Received: from [192.168.1.104] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id g17-20020a05600c4ed100b003b4ac05a8a4sm17339177wmq.27.2022.10.16.11.45.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 11:45:06 -0700 (PDT)
+Message-ID: <c0afd086-156e-7414-2082-a13f6a728f8f@gmail.com>
+Date:   Sun, 16 Oct 2022 20:45:05 +0200
 MIME-Version: 1.0
-References: <20221009181338.2896660-8-lis8215@gmail.com> <202210100607.YdxoR0tD-lkp@intel.com>
- <CAKNVLfaFvge4A8-QUzeq-JManpuYMGvyHXCJi-ew==CWN8-M=A@mail.gmail.com>
- <bb9f79d4-82a9-4790-b849-d517333ea2d4@app.fastmail.com> <GSPOJR.M4XZ4D03G60F@crapouillou.net>
- <CAKNVLfZukazKx2yDBrLZc7J9=3cCvMgZbdghtt1YO7WivdPjvw@mail.gmail.com>
-In-Reply-To: <CAKNVLfZukazKx2yDBrLZc7J9=3cCvMgZbdghtt1YO7WivdPjvw@mail.gmail.com>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Sun, 16 Oct 2022 21:39:48 +0300
-Message-ID: <CAKNVLfbePJQN07GfhqAs-opm23poWsL0o-DkV=n-f9+H7Y7rpg@mail.gmail.com>
-Subject: Re: [PATCH 7/8] serial: 8250/ingenic: Add support for the
- JZ4750/JZ4755 SoCs
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        kbuild-all@lists.01.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        GPIO SUBSYSTEM <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 00/10] staging: r8188eu: led layer fix and cleanups
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221015151115.232095-1-martin@kaiser.cx>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221015151115.232095-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,27 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D1=87=D1=82, 13 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 21:56, Siarhei Vol=
-kau <lis8215@gmail.com>:
+On 10/15/22 17:11, Martin Kaiser wrote:
+> Here's another series to clean up the led layer and fix a problem with
+> leds during suspend/resume on some devices.
+> 
+> Martin Kaiser (10):
+>    staging: r8188eu: fix led register settings
+>    staging: r8188eu: handle rtw_write8 errors in SwLedOn
+>    staging: r8188eu: fix status updates in SwLedOff
+>    staging: r8188eu: SwLedOn needs no padapter parameter
+>    staging: r8188eu: SwLedOff needs no padapter parameter
+>    staging: r8188eu: remove two unused defines
+>    staging: r8188eu: don't include rtw_led.h from rtw_cmd.h
+>    staging: r8188eu: remove padapter from struct led_priv
+>    staging: r8188eu: set two more state variables
+>    staging: r8188eu: summarize tx/rx and scan blinking
+> 
+>   drivers/staging/r8188eu/core/rtw_led.c    | 62 +++++++----------------
+>   drivers/staging/r8188eu/include/rtw_cmd.h |  5 --
+>   drivers/staging/r8188eu/include/rtw_led.h |  2 -
+>   3 files changed, 18 insertions(+), 51 deletions(-)
+> 
 
-> > Just disable the divider in ingenic_fixup_fdt() in
+Apply Patch:
+"staging: r8188eu: remove bLedLinkBlinkInProgress"
+before this series.
 
-> I'll check that.
-
-I checked that approach: serial seems to be working as expected,
-but not all the time: there's a time period when the CGU driver
-started but serial console driver is still early one.
-In my case UART produces garbage at that period since CGU
-needs to enable clock divider back: ext is 24MHz but 12MHz
-required for audio codec and USB to function properly.
-
-So I think Arnd's approach:
-
-> the hardware should already be in a working state,
-> with no need to touch it during early boot.
-
-shall resolve the problem, although I can't check it on all supported
-hardware.
-
-BR,
-Siarhei
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
