@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA8E5FFFEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B0A5FFFF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Oct 2022 16:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiJPOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Oct 2022 10:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S229745AbiJPOsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Oct 2022 10:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJPOsE (ORCPT
+        with ESMTP id S229660AbiJPOsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Oct 2022 10:48:04 -0400
+        Sun, 16 Oct 2022 10:48:05 -0400
 Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 698662AC62;
-        Sun, 16 Oct 2022 07:48:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 881B42EF02;
+        Sun, 16 Oct 2022 07:48:04 -0700 (PDT)
 Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net [86.14.22.118])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 078351401FE;
-        Sun, 16 Oct 2022 14:47:59 +0000 (UTC)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 3CAFF140236;
+        Sun, 16 Oct 2022 14:48:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1665931680;
+        s=donut; t=1665931682;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=hEmvd+bLXZkxs7tcafb47/EuNnXtF1xF7FdoA1UFwEg=;
-        b=cCEbjqP0ukPYqrd/2k/4yAWSjVrV+PmyqbpczV5rLaEaEbIV4AovGSKL1SYAe+qD5ByWZ6
-        QebMENFawCPWPp6/Z+1mQgPLitj1tSbjFq3qNLettPg3TdCDmt/cXGzeOH+ffLmVMbNpH7
-        hWYPTAig7KamU8YT7Z0j2+B65oZfT8A=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qykf9cobLBLPVoVdRp46OEJmyRQZ5GGRqXYXF3AhMqQ=;
+        b=c8kihdYuOdk+wvDvnRIOYzfEP/CE3sto28l9Tg2PdRQGotNs+L1vXsXBBpWALBBLZWnaGO
+        kn7UecA9sqhpj3EDqtB+p70ydLJjL4G5iPfdIJIaSaHbGBHpxteJKPzwOBwoxItg+OLLtH
+        1Tfq917jRP9lLTFRgoJOckX2J/LP088=
 From:   Caleb Connolly <kc@postmarketos.org>
 To:     caleb@connolly.tech
 Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -40,10 +41,12 @@ Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>
-Subject: [RESEND PATCH 0/7] arm64: dts: qcom: sdm845: commonize bluetooth pinconf
-Date:   Sun, 16 Oct 2022 15:47:06 +0100
-Message-Id: <20221016144714.1742824-1-kc@postmarketos.org>
+Subject: [RESEND PATCH 1/7] arm64: dts: qcom: sdm845: commonize bluetooth UART pinmux
+Date:   Sun, 16 Oct 2022 15:47:07 +0100
+Message-Id: <20221016144714.1742824-2-kc@postmarketos.org>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221016144714.1742824-1-kc@postmarketos.org>
+References: <20221016144714.1742824-1-kc@postmarketos.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,39 +60,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Caleb Connolly <caleb@connolly.tech>
 
-[resending from a different address as protonmail keeps deleting In-Reply-To headers]
+The 4-pin configuration for UART6 is used for all or almost all SDM845
+devices with built in Bluetooth. Move the pinmux configuration to
+sdm845.dtsi in preparation to be removed from individual devices in
+future patches.
 
-This series commonises the 4-pin pinconf used by almost all devices which have have
-Bluetooth on uart6 and removes the node from individual device DTS files.
+Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+---
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-It also updates the old hsuart alias definitions to serial1. I'm happy to drop this if it
-may causes issues with userspace, but it seemed to make sense to throw in while we're at it.
-
-This is a followup to Dmitry's suggestion on an earlier patch:
-https://lore.kernel.org/all/CAA8EJpqz32_LxmBVbcLt0sV=e1JzGtWEmMsKsQNoZzuGgLWbBQ@mail.gmail.com/
-
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Caleb Connolly (6):
-  arm64: dts: qcom: sdm845: commonize bluetooth UART pinmux
-  arm64: dts: qcom: sdm845-cheza: commonize uart6 pinconf
-  arm64: dts: qcom: sdm845-db845c: commonize uart6 pinconf
-  arm64: dts: qcom: sdm845-oneplus-common: commonize uart6 pinconf
-  arm64: dts: qcom: sdm845-xiaomi-beryllium: commonize uart6 pinconf
-  arm64: dts: qcom: sdm845-xiaomi-polaris: commonize uart6 pinconf
-
-Dylan Van Assche (1):
-  arm64: dts: qcom: sdm845-shift-axolotl: fix Bluetooth firmware loading
-
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    | 39 ++-----------------
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts    | 27 ++-----------
- .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 30 ++------------
- .../boot/dts/qcom/sdm845-shift-axolotl.dts    |  9 +++++
- .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts | 29 ++------------
- .../boot/dts/qcom/sdm845-xiaomi-polaris.dts   | 27 +------------
- arch/arm64/boot/dts/qcom/sdm845.dtsi          | 23 +++++++++++
- 7 files changed, 46 insertions(+), 138 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index f0e286715d1b..8c69942b969b 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2971,6 +2971,29 @@ pinmux {
+ 				};
+ 			};
+ 
++			qup_uart6_4pin: qup-uart6-4pin {
++				pinmux {
++					pins = "gpio45", "gpio46", "gpio47", "gpio48";
++					function = "qup6";
++				};
++
++				cts {
++					pins = "gpio45";
++					bias-pull-down;
++				};
++
++				rts-tx {
++					pins = "gpio46", "gpio47";
++					drive-strength = <2>;
++					bias-disable;
++				};
++
++				rx {
++					pins = "gpio48";
++					bias-pull-up;
++				};
++			};
++
+ 			qup_uart7_default: qup-uart7-default {
+ 				pinmux {
+ 					pins = "gpio95", "gpio96";
 -- 
 2.38.0
 
